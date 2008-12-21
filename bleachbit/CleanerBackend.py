@@ -1,8 +1,8 @@
-#!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
 ## BleachBit
 ## Copyright (C) 2008 Andrew Ziem
+## http://bleachbit.sourceforge.net
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
