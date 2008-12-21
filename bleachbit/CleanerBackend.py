@@ -247,7 +247,7 @@ class System(Cleaner):
         self.options["recent"] = ( _("Recent documents list"), False )
 
     def get_description(self):
-        return _("Clear system cache and recently used documents.  These locations are specified by XDG specifications and are used by some appplications on modern Linux systems.")
+        return _("Clear system cache and recently used documents.  These locations are specified by XDG specifications and are used by some applications on modern Linux systems.")
 
     def get_id(self):
         return 'system'

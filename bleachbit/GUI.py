@@ -299,7 +299,7 @@ class GUI:
     def about(self, x):
         """Create and show the about dialog"""
         a = gtk.AboutDialog()
-        a.set_comments(_("Program to clean unnessary files"))
+        a.set_comments(_("Program to clean unnecessary files"))
         a.set_copyright("Copyright (c) 2008 by Andrew Ziem")
         license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
         try:
