@@ -1,0 +1,13 @@
+Source: bleachbit
+Section: utils
+Priority: optional
+Maintainer: Andrew Ziem <ahz001@gmail.com>
+Build-Depends: debhelper (>= 4.1.16), python-gtk2, python
+Homepage: http://bleachbit.sourceforge.net
+
+Package: bleachbit
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Removes unnecessary files
+ Deletes unnecessary files to free disk space and maintan privacy
+

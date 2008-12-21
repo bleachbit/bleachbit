@@ -1,0 +1,11 @@
+include COPYING MANIFEST
+include MANIFEST.in
+include Makefile
+include bleachbit.desktop
+include bleachbit.spec
+include bin/bleachbit
+recursive-include bleachbit *py
+#include debian/*dsc
+#include debian/debian.changelog
+#include debian/debian.control
+#include debian/debian.rules
