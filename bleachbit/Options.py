@@ -43,9 +43,7 @@ class Options:
             self.config.add_section("bleachbit")
             return
         for option in self.config.options("bleachbit"):
-            print "debug: __init__ option = '%s'" % (option)
             self.options[option] = (self.get_config(option), False)
-        print self.options
 
     def get(self, key):
         return self.options[key][0]

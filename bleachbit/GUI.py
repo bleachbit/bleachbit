@@ -29,8 +29,9 @@ import gobject
 import sys
 import threading
 
-import CleanerBackend
 import FileUtilities
+import CleanerBackend
+import Update
 from Options import options
 from globals import *
 
@@ -184,6 +185,7 @@ class GUI:
 
 
     def get_selected_operations(self):
+        """Return a list of the IDs of the selected operations in the tree view"""
         r = []
         model = self.tree_store.get_model()
         iter = model.get_iter_root()
@@ -195,6 +197,7 @@ class GUI:
         return r
 
     def get_operation_options(self, operation):
+        """For the given operation ID, return a list of the selected option IDs."""
         r = []
         model = self.tree_store.get_model()
         iter = model.get_iter_root()
@@ -312,6 +315,10 @@ class GUI:
 
     def first_start(self):
         """Setup application for first start"""
+
+        if not online_update_notification_enabled:
+            return
+
         dialog = gtk.Dialog(title = _("Welcome"), parent = self.window, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
         dialog.set_default_size(300, -1)
 
@@ -391,14 +398,14 @@ class GUI:
 
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        run_button = gtk.ToolButton(icon_widget = icon,label="Delete")
+        run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
         run_button.show()
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
 
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        preview_button = gtk.ToolButton(icon_widget = preview_icon, label="Preview")
+        preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
         preview_button.show()
 
         preview_button.connect("clicked", self.preview_operations)
@@ -454,11 +461,40 @@ class GUI:
         self.progressbar.hide()
         return
 
+    def enable_online_update(self, url):
+        """Create a button to launch browser to initiate software update"""
+        icon = gtk.Image()
+        icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        update_button = gtk.ToolButton(icon_widget = icon, label = _("Update BleachBit"))
+        update_button.show_all()
+        update_button.connect("clicked", on_url, url)
+        self.toolbar.insert(update_button, -1)
+        try:
+            import pynotify
+        except:
+            print "debug: pynotify not available"
+        else:
+            if pynotify.init(APP_NAME):
+                n = pynotify.Notification(_("BleachBit update is available"), _("Click 'Update BleachBit' for more information"))
+                # this doesn't align the notification properly
+                #n.attach_to_widget(update_button)
+                n.attach_to_widget(self.toolbar)
+                n.show()
+
+    @threaded
+    def check_online_updates(self):
+        """Check for software updates in background"""
+        u = Update.Update()
+        if u.is_update_available():
+            gobject.idle_add(self.enable_online_update, u.get_update_url())
+
     def __init__(self):
         self.create_window()
         gtk.gdk.threads_init()
         if options.get("first_start"):
             self.first_start()
+        if online_update_notification_enabled and options.get("check_online_updates"):
+            self.check_online_updates()
 
     def quit_cb(self, b):
         """Quit callback"""

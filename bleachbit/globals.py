@@ -27,3 +27,10 @@ license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
 options_dir = os.path.expanduser("~/.config/bleachbit/")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
+update_url = "http://bleachbit.sourceforge.net/communicate.php"
+
+socket_timeout = 10
+
+# Setting below value to false disables update notification (useful
+# for packages in repositories).
+online_update_notification_enabled = True
