@@ -19,9 +19,6 @@
 
 
 
-# global variables
-APP_VERSION = "0.1.0"
-APP_NAME = "BleachBit"
 
 import gettext
 gettext.install("bleachbit")
@@ -34,6 +31,8 @@ import threading
 
 import CleanerBackend
 import FileUtilities
+from Options import options
+from globals import *
 
 
 
@@ -301,7 +300,6 @@ class GUI:
         a = gtk.AboutDialog()
         a.set_comments(_("Program to clean unnecessary files"))
         a.set_copyright("Copyright (c) 2008 by Andrew Ziem")
-        license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
         try:
             a.set_license(open(license_filename).read())
         except:
@@ -310,6 +308,34 @@ class GUI:
         a.set_website("http://bleachbit.sourceforge.net")
         a.run()
         a.hide()
+
+
+    def first_start(self):
+        """Setup application for first start"""
+        dialog = gtk.Dialog(title = _("Welcome"), parent = self.window, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+        dialog.set_default_size(300, -1)
+
+        hbox = gtk.HBox(homogeneous = False, spacing = 10)
+        icon = gtk.Image()
+        icon.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_DIALOG)
+        hbox.pack_start(icon, False)
+        question = gtk.Label(_("Should BleachBit periodically check for software updates via the Internet?"))
+        question.set_line_wrap(True)
+        hbox.pack_start(question, False)
+        dialog.vbox.pack_start(hbox, False)
+        dialog.vbox.set_spacing(10)
+
+        dialog.add_button(gtk.STOCK_YES, 1)
+        dialog.add_button(gtk.STOCK_NO, 0)
+
+        dialog.show_all()
+        r = dialog.run()
+        dialog.destroy()
+
+        options.set("check_online_updates", r == 1)
+        options.set("first_start", False)
+        return
+
 
 
     def create_operations_box(self):
@@ -431,6 +457,8 @@ class GUI:
     def __init__(self):
         self.create_window()
         gtk.gdk.threads_init()
+        if options.get("first_start"):
+            self.first_start()
 
     def quit_cb(self, b):
         """Quit callback"""
