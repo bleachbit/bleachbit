@@ -9,7 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-
+# This is the debhelper compatibility version to use.
+export DH_COMPAT=4
 
 
 
@@ -28,7 +29,6 @@ build-stamp: configure-stamp
 
 	# Add here commands to compile the package.
 	$(MAKE)
-	#docbook-to-man debian/bleachbit.sgml > bleachbit.1
 
 	touch $@
 
@@ -65,7 +65,7 @@ binary-arch: build install
 	dh_installexamples
 #	dh_install
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_python
 	dh_link
 	dh_compress
