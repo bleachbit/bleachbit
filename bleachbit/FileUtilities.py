@@ -29,134 +29,144 @@ import sys
 import subprocess
 
 if not "iglob" in dir(glob):
-	glob.iglob = glob.glob
+    glob.iglob = glob.glob
 
 class OpenFiles:
-        """Cached way to determine whether a file is open by active process"""
-        def __init__(self):
-                self.last_scan_time = None
-                self.files = []
+    """Cached way to determine whether a file is open by active process"""
+    def __init__(self):
+        self.last_scan_time = None
+        self.files = []
 
-        def file_qualifies(self, filename):
-                return not filename.startswith("/dev") and not filename.startswith("/proc")
+    def file_qualifies(self, filename):
+        """Return boolean wehether filename qualifies to enter cache (check against blacklist)"""
+        return not filename.startswith("/dev") and not filename.startswith("/proc")
 
-        def scan(self):
-                self.last_scan_time = datetime.datetime.now()
-                self.files = []
-                for file in glob.iglob("/proc/*/fd/*"):
-                        real_name = os.path.realpath(file)
-                        if self.file_qualifies(real_name):
-                                self.files.append(real_name)
-                                #print "debug: OpenFiles '%s'" % (real_name,)
-                        
-        def is_open(self, filename):
-                if None == self.last_scan_time or (datetime.datetime.now() - self.last_scan_time).seconds > 10:
-                        self.scan()
-                return filename in self.files
-                
-                
+    def scan(self):
+        """Update cache"""
+        self.last_scan_time = datetime.datetime.now()
+        self.files = []
+        for filename in glob.iglob("/proc/*/fd/*"):
+            real_name = os.path.realpath(filename)
+            if self.file_qualifies(real_name):
+                self.files.append(real_name)
 
-def ego_owner(file):
-        """Return whether current user owns the file"""
-        return os.stat(file).st_uid == os.getuid()
-             
+    def is_open(self, filename):
+        """Return boolean whether filename is open by running process"""
+        if None == self.last_scan_time or (datetime.datetime.now() - 
+            self.last_scan_time).seconds > 10:
+            self.scan()
+        return filename in self.files
+
+
+def ego_owner(filename):
+    """Return whether current user owns the file"""
+    return os.stat(filename).st_uid == os.getuid()
+
 
 def delete_file_directory(path):
-        """Delete path that is either file or directory"""
-        print "debug: removing '%s'" % (path,)
-        if is_file(path):
-            delete_file(path)
-        else:
-            os.rmdir(path)
+    """Delete path that is either file or directory"""
+    print "debug: removing '%s'" % (path,)
+    if is_file(path):
+        delete_file(path)
+    else:
+        os.rmdir(path)
 
-def delete_file(file):
-        """Remove a single file (enhanced for optional shredding)"""
-        # fixme directory
-        if False: # fixme get user setting
-                args = ["shred", file]
-                rc = subprocess.check_call(args)
-                if 0 != rc:
-                        raise Exception("shred subprocess returned non-zero error code " + str(rc))
-        os.remove(file)
+
+def delete_file(filename):
+    """Remove a single file (enhanced for optional shredding)"""
+    if False: # fixme get user setting
+        args = ["shred", filename]
+        ret = subprocess.check_call(args)
+        if 0 != ret:
+            raise Exception("shred subprocess returned non-zero error code " % (ret,))
+    os.remove(filename)
+
 
 def delete_files(files):
-        """Remove a list of files/directories and return (bytes deleted, number of files/directories deleted)"""
-        n_files = 0 # number of files
-        bytes = 0
-        for file in files:
-                bytes += size_of_file(file)
-                n_files +1 
-                delete_file(file)
-        return (bytes, n_files)
+    """Remove a list of files/directories and return (bytes deleted, number of files/directories deleted)"""
+    n_files = 0 # number of files
+    bytes = 0
+    for filename in files:
+        bytes += size_of_file(filename)
+        n_files += 1
+        delete_file(filename)
+    return (bytes, n_files)
 
 
-def list_children_in_directory(dir):
-        """List subdirectories and files in directory"""
-        r=[]
-        for root, dirs, files in os.walk(dir, topdown=False): 
-                for name in files: 
-                        r.append(os.path.join(root,name))
-                for dir in dirs:
-                        r.append(os.path.join(root,dir))
-        return r
+def list_children_in_directory(directory):
+    """List subdirectories and files in directory"""
+    ret = []
+    for root, dirs, files in os.walk(directory, topdown=False): 
+        for name in files:
+            ret.append(os.path.join(root, name))
+        for dir_ in dirs:
+            ret.append(os.path.join(root, dir_))
+    return ret
 
 
 def children_in_directory(top, list_directories = False):
-        """Iterate files and, optionally, subdirectories in directory"""
-        for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
-                if list_directories:
-                        for dirname in dirnames:
-                                yield os.path.join(dirpath, dirname)
-                for filename in filenames:
-                        yield os.path.join(dirpath, filename)      
+    """Iterate files and, optionally, subdirectories in directory"""
+    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
+        if list_directories:
+            for dirname in dirnames:
+                yield os.path.join(dirpath, dirname)
+            for filename in filenames:
+                yield os.path.join(dirpath, filename)
 
-def list_files_in_directory(dir):
-	r=[]
-	for root, dirs, files in os.walk(dir): 
-		for name in files: 
-			r.append(os.path.join(root,name))
-	return r
+
+def list_files_in_directory(dirname):
+    """Return a list of each file in dirname"""
+    ret = []
+    for root, dirs, files in os.walk(dirname):
+        for name in files:
+            ret.append(os.path.join(root, name))
+    return ret
+
 
 def bytes_to_human(bytes):
-        """Display a file size in human terms (megabytes, etc.)"""
-        if bytes >= 1024*1024*1024*1024:
-                return str(bytes/(1024*1024*1024*1024)) + "TB"
-        if bytes >= 1024*1024*1024:
-                return str(bytes/(1024*1024*1024)) + "GB"
-        if bytes >= 1024*1024:
-                return str(bytes/(1024*1024)) + "MB"
-        if bytes >= 1024:
-                return str(bytes/1024) + "KB"
-        return str(bytes) + "B"
+    """Display a file size in human terms (megabytes, etc.)"""
+    if bytes >= 1024*1024*1024*1024:
+        return str(bytes/(1024*1024*1024*1024)) + "TB"
+    if bytes >= 1024*1024*1024:
+        return str(bytes/(1024*1024*1024)) + "GB"
+    if bytes >= 1024*1024:
+        return str(bytes/(1024*1024)) + "MB"
+    if bytes >= 1024:
+        return str(bytes/1024) + "KB"
+    return str(bytes) + "B"
 
 def list_files_with_size(files):
-        """Given a list of files, return each one as text with its size"""
-        r = ""
-        total_size = 0
-	for file in files:
-                try:
-                        size =  os.stat(file).st_size
-        		r += bytes_to_human(size) + " " + file + "\n"
-                        total_size += size
-                except:
-                        r += str(sys.exc_info()[1]) + " " + file + "\n"
-        r += bytes_to_human(total_size) + " total"
-	return r
+    """Given a list of files, return string each one and its size"""
+    ret = ""
+    total_size = 0
+    for filename in files:
+        try:
+            size = os.stat(filename).st_size
+            ret += bytes_to_human(size) + " " + filename + "\n"
+            total_size += size
+        except:
+            ret += str(sys.exc_info()[1]) + " " + filename + "\n"
+    ret += bytes_to_human(total_size) + " total"
+    return ret
 
-def size_of_file(file):
-        """Return the size of a file or directory"""
-        return os.stat(file).st_size
+
+def size_of_file(filename):
+    """Return the size of a file or directory"""
+    return os.stat(filename).st_size
+
 
 def sum_size_of_files(files):
-	"""Given a list of files, return the size in bytes of all the files"""
-	s = 0
-	for file in files:
-		s += size_of_file(file)
-	return s
+    """Given a list of files, return the size in bytes of all the files"""
+    bytes = 0
+    for filename in files:
+        bytes += size_of_file(filename)
+    return bytes
 
-def is_file(f):
-	mode = os.lstat(f).st_mode
-	return stat.S_ISREG(mode)
+
+def is_file(filename):
+    """Return boolean whether f is a file"""
+    mode = os.lstat(filename).st_mode
+    return stat.S_ISREG(mode)
 
 
 
@@ -166,54 +176,62 @@ openfiles = OpenFiles()
 
 import unittest
 
-class TestUtilities(unittest.TestCase):
-	def test_list_files_in_directory(self):
-		home = os.path.expanduser("~/Desktop")
-		files = list_files_in_directory(home)
-		for file in files:
-			self.assert_(is_file(file))
+class TestFileUtilities(unittest.TestCase):
+    """Unit test for module FileUtilities"""
 
-	def test_sum_size_of_files(self):
-		home = os.path.expanduser("~/Desktop")
-		files = list_files_in_directory(home)
-		size = sum_size_of_files(files)
-		self.assert_(size >= 0)
-
-        def test_children_in_directory(self): 
-                dir = os.path.expanduser("~/.config")
-                for file in children_in_directory(dir, True):
-                        self.assert_ (type(file) is str)
-                for file in children_in_directory(dir, False):
-                        self.assert_ (type(file) is str)
+    def test_list_files_in_directory(self):
+        """Unit test for function list_files_in_directory()"""
+        home = os.path.expanduser("~/Desktop")
+        files = list_files_in_directory(home)
+        for filename in files:
+            self.assert_(is_file(filename))
 
 
-        def test_bytes_to_human(self):
-                tests = [ ("1B", bytes_to_human(1)),
-                          ("1KB", bytes_to_human(1024)),
-                          ("1MB", bytes_to_human(1024*1024)),
-                          ("1GB", bytes_to_human(1024*1024*1024)), 
-                          ("1TB", bytes_to_human(1024*1024*1024*1024)) ]
+    def test_sum_size_of_files(self):
+        """Unit test for function sum_size_of_files()"""
+        home = os.path.expanduser("~/Desktop")
+        files = list_files_in_directory(home)
+        size = sum_size_of_files(files)
+        self.assert_(size >= 0)
 
-                for test in tests:
-                        self.assertEqual(test[0], test[1])
 
-        def test_OpenFiles(self):
-                import tempfile
+    def test_children_in_directory(self): 
+        """Unit test for function children_in_directory()"""
+        dirname = os.path.expanduser("~/.config")
+        for filename in children_in_directory(dirname, True):
+            self.assert_ (type(filename) is str)
+        for filename in children_in_directory(dirname, False):
+            self.assert_ (type(filename) is str)
 
-                openfiles = OpenFiles()
-                (fd, filename) = tempfile.mkstemp()
-                self.assertEqual(openfiles.is_open(filename), True)
 
-                f = os.fdopen(fd)
-                f.close()
-                openfiles.scan()
-                self.assertEqual(openfiles.is_open(filename), False)
+    def test_bytes_to_human(self):
+        """Unit test for class bytes_to_human"""
+        tests = [ ("1B", bytes_to_human(1)),
+                  ("1KB", bytes_to_human(1024)),
+                  ("1MB", bytes_to_human(1024*1024)),
+                  ("1GB", bytes_to_human(1024*1024*1024)), 
+                  ("1TB", bytes_to_human(1024*1024*1024*1024)) ]
 
-                os.unlink(filename)
-                openfiles.scan()
-                self.assertEqual(openfiles.is_open(filename), False)
+        for test in tests:
+            self.assertEqual(test[0], test[1])
+
+    def test_OpenFiles(self):
+        """Unit test for class OpenFiles"""
+        import tempfile
+
+        (handle, filename) = tempfile.mkstemp()
+        self.assertEqual(openfiles.is_open(filename), True)
+
+        f = os.fdopen(handle)
+        f.close()
+        openfiles.scan()
+        self.assertEqual(openfiles.is_open(filename), False)
+
+        os.unlink(filename)
+        openfiles.scan()
+        self.assertEqual(openfiles.is_open(filename), False)
 
 
 if __name__ == '__main__':
-        unittest.main()
+    unittest.main()
 
