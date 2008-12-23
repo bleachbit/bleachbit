@@ -14,6 +14,7 @@ setup(name='bleachbit',
       author_email='ahz001@gmail.com',
       license='GPLv3',
       url='http://bleachbit.sourceforge.net',
+      platforms='Linux with Python v2 and PyGTK v2',
       data_files = data_files,
       packages = ['bleachbit'],
      )
