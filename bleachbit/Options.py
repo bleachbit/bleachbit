@@ -28,6 +28,8 @@ from globals import *
 boolean_keys = ['check_online_updates', 'first_start']
 
 class Options:
+    """A class for storing and retrieving user options preferences from
+    volatile and non-volatile memory."""
     def __init__(self):
         self.options = {}
 
@@ -37,7 +39,7 @@ class Options:
         self.add("version", APP_VERSION, False)
 
         # restore non-volatile options
-        self.config = ConfigParser.RawConfigParser()
+        self.config = ConfigParser.SafeConfigParser()
         self.config.read(options_file)
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
@@ -45,25 +47,53 @@ class Options:
         for option in self.config.options("bleachbit"):
             self.options[option] = (self.get_config(option), False)
 
+    def flush(self):
+        """Write non-volatile information to disk"""
+        if not os.path.exists(options_dir):
+            os.mkdir(options_dir)
+        f = open(options_file, 'wb')
+        self.config.write(f)
+
     def get(self, key):
+        """Retrieve  a general option from memory"""
         return self.options[key][0]
 
     def get_config(self, option):
+        """Retrieve a general option"""
         if option in boolean_keys:
             return self.config.getboolean('bleachbit', option)
         return self.config.get('bleachbit', option)
 
     def set(self, key, value):
+        """Set a general option"""
         self.options[key] = (value, self.options[key][1])
         if not self.options[key][1]:
-            self.config.set('bleachbit', key, value)
-            if not os.path.exists(options_dir):
-                os.mkdir(options_dir)
-            f = open(options_file, 'wb')
-            self.config.write(f)
+            self.config.set('bleachbit', key, str(value))
+            self.flush()
 
     def add(self, key, value, volatile = False):
+        """Add a default value for a general option"""
         self.options[key] = (value, volatile)
+
+    def set_tree(self, parent, child, value):
+        """Set an option for the tree view.  The child may be None."""
+        if not self.config.has_section("tree"):
+            self.config.add_section("tree")
+        id = parent
+        if None != child:
+            id = id + "." + child
+        self.config.set('tree', id, str(value))
+        self.flush()
+
+    def get_tree(self, parent, child):
+        """Retrieve an option for the tree view.  The child may be None."""
+        id = parent
+        if None != child:
+            id = id + "." + child
+        if not self.config.has_option('tree', id):
+            return None
+        return self.config.getboolean('tree', id)
+
 
 
 options = Options()

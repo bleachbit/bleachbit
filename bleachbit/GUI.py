@@ -90,12 +90,24 @@ class TreeInfoModel:
         for key in sorted(CleanerBackend.backends):
             c_name = CleanerBackend.backends[key].get_name()
             c_id = CleanerBackend.backends[key].get_id()
-            parent = self.tree_store.append(None, (c_name, None, c_id))
+            c_value = options.get_tree(c_name, None)
+            parent = self.tree_store.append(None, (c_name, c_value, c_id))
             for (o_id, o_name, o_value) in CleanerBackend.backends[key].get_options():
-                self.tree_store.append(parent, (o_name, None, o_id))                                
+                o_value = options.get_tree(c_name, o_id)
+                self.tree_store.append(parent, (o_name, o_value, o_id))
         if None == self.tree_store:
             raise Exception("cannot create tree store")
+        self.tree_store.connect("row-changed", self.on_row_changed)
         return
+
+    def on_row_changed(self, treemodel, path, iter):
+        parent = self.tree_store[path[0]][2]
+        child = None
+        if 2 == len(path):
+            child = self.tree_store[path][2]
+        value = self.tree_store[path][1]
+        print "debug: on_row_changed('%s', '%s', '%s', '%s')" % (path, parent, child, value)
+        options.set_tree(parent, child, value)
 
     def get_model(self):
         return self.tree_store
@@ -138,7 +150,6 @@ class TreeDisplayModel:
             any_true = False
             while sibling:
                 print "debug: col1_toggled_cb: %s = %s" % (model[sibling][0], model[sibling][1])
-                #mode[sibling][1] = False
                 if model[sibling][1]:
                     any_true = True
                 sibling = model.iter_next(sibling)
