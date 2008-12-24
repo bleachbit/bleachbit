@@ -189,6 +189,7 @@ class Firefox(Cleaner):
         # browser cache
         if self.options["cache"][1]:
             dirs = glob.glob(os.path.expanduser(self.profile_dir + "/Cache/"))
+            dirs += glob.glob(os.path.expanduser(self.profile_dir + "/OfflineCache/"))
             for dir in dirs:
                 for file in FileUtilities.children_in_directory(dir, False):
                     yield file
