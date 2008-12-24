@@ -330,7 +330,7 @@ class GUI:
 
     def about(self, __event):
         """Create and show the about dialog"""
-        gtk.about_dialog_set_url_hook(lambda dialog, link, user_data: open_url(link))
+        gtk.about_dialog_set_url_hook(lambda dialog, link: open_url(link))
         dialog = gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
         dialog.set_copyright("Copyright (c) 2008 by Andrew Ziem")
