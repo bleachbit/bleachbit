@@ -50,11 +50,11 @@ def on_url(about, link):
 gtk.about_dialog_set_url_hook(on_url)
 
 
-def threaded(f):
+def threaded(func):
     """Decoration to create a threaded function"""
     def wrapper(*args):
-        t = threading.Thread(target=f, args=args)
-        t.start()
+        thread = threading.Thread(target = func, args=args)
+        thread.start()
     return wrapper
 
 
@@ -69,7 +69,7 @@ def delete_confirmation_dialog(parent):
     hbox.pack_start(icon, False)
     question = gtk.Label(_("Are you sure you want to delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.  Files cannot be undeleted."))
     question.set_line_wrap(True)
-    hbox.pack_start(question, False)    
+    hbox.pack_start(question, False)
     dialog.vbox.pack_start(hbox, False)
     dialog.vbox.set_spacing(10)
 
@@ -78,9 +78,9 @@ def delete_confirmation_dialog(parent):
     dialog.set_default_response(gtk.RESPONSE_CANCEL)
 
     dialog.show_all()
-    r = dialog.run()
+    ret = dialog.run()
     dialog.destroy()
-    return r
+    return ret
 
 
 class TreeInfoModel:
@@ -100,7 +100,8 @@ class TreeInfoModel:
         self.tree_store.connect("row-changed", self.on_row_changed)
         return
 
-    def on_row_changed(self, treemodel, path, iter):
+    def on_row_changed(self, __treemodel, path, __iter):
+        """Event handler for when a row changes"""
         parent = self.tree_store[path[0]][2]
         child = None
         if 2 == len(path):
@@ -110,6 +111,7 @@ class TreeInfoModel:
         options.set_tree(parent, child, value)
 
     def get_model(self):
+        """Return the tree store"""
         return self.tree_store
 
 
@@ -186,9 +188,9 @@ class GUI:
         row = paths[0]
         #print "debug: on_selection_changed: paths = '%s', row='%s', model[paths][0]  = '%s'" % (paths,row, model[paths][0])
         name = model[row][0]
-        id = model[row][2]
+        cleaner_id = model[row][2]
         self.progressbar.hide()
-        description = CleanerBackend.backends[id].get_description()
+        description = CleanerBackend.backends[cleaner_id].get_description()
         #print "debug: on_selection_changed: row='%s', name='%s', desc='%s'," % ( row, name ,description)
         output = "Operation name: " + name + "\n"
         output += "Description: " + description 
@@ -197,35 +199,35 @@ class GUI:
 
     def get_selected_operations(self):
         """Return a list of the IDs of the selected operations in the tree view"""
-        r = []
+        ret = []
         model = self.tree_store.get_model()
-        iter = model.get_iter_root()
-        while iter:
+        __iter = model.get_iter_root()
+        while __iter:
             #print "debug: get_selected_operations: iter id = '%s', value='%s'" % (model[iter][2], model[iter][1])
-            if True == model[iter][1]:
-                r.append(model[iter][2])
-            iter = model.iter_next(iter)
+            if True == model[__iter][1]:
+                r.append(model[__iter][2])
+            __iter = model.iter_next(__iter)
         return r
 
     def get_operation_options(self, operation):
         """For the given operation ID, return a list of the selected option IDs."""
-        r = []
+        ret = []
         model = self.tree_store.get_model()
-        iter = model.get_iter_root()
-        while iter:
+        __iter = model.get_iter_root()
+        while __iter:
             #print "debug: get_operation_options: iter id = '%s', value='%s'" % (model[iter][2], model[iter][1])
-            if operation == model[iter][2]:
-                iterc = model.iter_children(iter)            
+            if operation == model[__iter][2]:
+                iterc = model.iter_children(__iter)
                 if None == iterc:
                     #print "debug: no children"
                     return None
                 while iterc:
-                    tuple = (model[iterc][2], model[iterc][1])
-                    #print "debug: get_operation_options: tuple = '%s'" % (tuple,)
-                    r.append(tuple)
+                    tup = (model[iterc][2], model[iterc][1])
+                    #print "debug: get_operation_options: tuple = '%s'" % (tup,)
+                    ret.append(tup)
                     iterc = model.iter_next(iterc)
-                return r
-            iter = model.iter_next(iter)
+                return ret
+            __iter = model.iter_next(__iter)
         return None
 
 
@@ -249,14 +251,13 @@ class GUI:
         self.preview_or_run_operations(False)
 
 
-    def clean_pathname(self, pathname, really_delete, iter):
+    def clean_pathname(self, pathname, really_delete, __iter):
         """Clean a single pathname"""
         total_bytes = 0
         try:
             bytes = FileUtilities.size_of_file(pathname)
         except:
             print "debug: error getting size of '%s'" % (pathname,)
-            pass
         else:
             try:
                 if really_delete:
@@ -267,22 +268,22 @@ class GUI:
                 total_bytes += bytes
                 line = FileUtilities.bytes_to_human(bytes) + " " + pathname + "\n"
             gtk.gdk.threads_enter()
-            self.textbuffer.insert(iter, line)
+            self.textbuffer.insert(__iter, line)
             gtk.gdk.threads_leave()
         return total_bytes
 
 
-    def clean_operation(self, operation, really_delete, iter):
+    def clean_operation(self, operation, really_delete, __iter):
         """Perform a single cleaning operation"""
         total_bytes = 0
-        options = self.get_operation_options(operation)
-        print "debug: clean_operation('%s'), options = '%s'" % (operation, options)
-        if options:
-            for (option,value) in options:
+        operation_options = self.get_operation_options(operation)
+        print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
+        if operation_options:
+            for (option, value) in operation_options:
                 CleanerBackend.backends[operation].set_option(option, value)
         try:
-            for file in CleanerBackend.backends[operation].list_files():
-                total_bytes += self.clean_pathname(file, really_delete, iter)
+            for pathname in CleanerBackend.backends[operation].list_files():
+                total_bytes += self.clean_pathname(pathname, really_delete, __iter)
         except:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
@@ -294,6 +295,7 @@ class GUI:
 
     @threaded
     def preview_or_run_operations(self, really_delete):
+        """Preview operations or run operations (delete files)"""
         operations = self.get_selected_operations()
         if 0 == len(operations):
             gtk.gdk.threads_enter()
@@ -329,7 +331,7 @@ class GUI:
         gtk.gdk.threads_leave()
 
 
-    def about(self, x):
+    def about(self, event):
         """Create and show the about dialog"""
         a = gtk.AboutDialog()
         a.set_comments(_("Program to clean unnecessary files"))
@@ -381,9 +383,9 @@ class GUI:
         scrolled_window = gtk.ScrolledWindow()
         scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.tree_store = TreeInfoModel()
-        Display = TreeDisplayModel()
+        display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
-        self.view = Display.make_view(mdl)
+        self.view = display.make_view(mdl)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrolled_window.add_with_viewport(self.view)
         return scrolled_window
@@ -477,13 +479,13 @@ class GUI:
 
         # add output display on right
         self.textbuffer = gtk.TextBuffer()
-        sw = gtk.ScrolledWindow()
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        swindow = gtk.ScrolledWindow()
+        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         textview = gtk.TextView(self.textbuffer)
         textview.set_editable(False)
-        sw.add(textview)
-        sw.show()
-        right_box.add(sw)
+        swindow.add(textview)
+        swindow.show()
+        right_box.add(swindow)
         hbox.add(right_box)
         textview.show()
 
@@ -506,18 +508,18 @@ class GUI:
             print "debug: pynotify not available"
         else:
             if pynotify.init(APP_NAME):
-                n = pynotify.Notification(_("BleachBit update is available"), _("Click 'Update BleachBit' for more information"))
+                notify = pynotify.Notification(_("BleachBit update is available"), _("Click 'Update BleachBit' for more information"))
                 # this doesn't align the notification properly
                 #n.attach_to_widget(update_button)
-                n.attach_to_widget(self.toolbar)
-                n.show()
+                notify.attach_to_widget(self.toolbar)
+                notify.show()
 
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        u = Update.Update()
-        if u.is_update_available():
-            gobject.idle_add(self.enable_online_update, u.get_update_url())
+        update = Update.Update()
+        if update.is_update_available():
+            gobject.idle_add(self.enable_online_update, update.get_update_url())
 
     def __init__(self):
         self.create_window()
@@ -527,7 +529,7 @@ class GUI:
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
 
-    def quit_cb(self, b):
+    def quit_cb(self, event):
         """Quit callback"""
         print 'Quitting program'
         gtk.main_quit()
