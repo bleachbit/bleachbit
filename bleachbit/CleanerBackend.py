@@ -405,6 +405,22 @@ class Opera(Cleaner):
                 yield file
 
 
+class realplayer(Cleaner):
+    """RealPlayer by RealNetworks"""
+
+    def get_description(self):
+        return _("Clear the RealPlayer cookies")
+
+    def get_id(self):
+        return 'realplayer'
+
+    def get_name(self):
+        return "RealPlayer"
+
+    def list_files(self):
+        yield os.path.expanduser("~/.config/real/rpcookies.txt")
+
+
 
 class rpmbuild(Cleaner):
     """Clear the rpmbuild build directory"""
@@ -533,6 +549,7 @@ backends["java"] = Java()
 backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
+backends["realplayer"] = realplayer()
 backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
