@@ -46,9 +46,13 @@ class OpenFiles:
         self.last_scan_time = datetime.datetime.now()
         self.files = []
         for filename in glob.iglob("/proc/*/fd/*"):
-            real_name = os.path.realpath(filename)
-            if self.file_qualifies(real_name):
-                self.files.append(real_name)
+            try:
+                target = os.path.realpath(filename)
+            except TypeError:
+                # happens, for example, when link points to '/etc/password\x00 (deleted)'
+                continue
+            if self.file_qualifies(target):
+                self.files.append(target)
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
