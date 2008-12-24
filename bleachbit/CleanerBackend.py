@@ -391,9 +391,11 @@ class Opera(Cleaner):
     def list_files(self):
         # browser cache
         if self.options["cache"][1]:
-            dir = os.path.expanduser(self.profile_dir + "cache4/")
-            for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+            dirs = [ os.path.expanduser(self.profile_dir + "cache4/"), \
+                os.path.expanduser(self.profile_dir + "opcache/") ]
+            for dir in dirs:
+                for file in FileUtilities.children_in_directory(dir, False):
+                    yield file
 
         files = []
 
