@@ -37,17 +37,17 @@ from globals import *
 
 
 
-def on_url(about, link):
-    """Event to open a URL"""
+def open_url(url):
+    """Open an HTTP URL"""
+    print "debug: on_url('%s')" % (url,)
     try:
         import gnomevfs
-        gnomevfs.url_show(link)
+        gnomevfs.url_show(url)
         return
     except:
         import webbrowser
-        webbrowser.open(link)
+        webbrowser.open(url)
 
-gtk.about_dialog_set_url_hook(on_url)
 
 
 def threaded(func):
@@ -333,6 +333,7 @@ class GUI:
 
     def about(self, event):
         """Create and show the about dialog"""
+        gtk.about_dialog_set_url_hook(lambda dialog, link, user_data: open_url(link))
         a = gtk.AboutDialog()
         a.set_comments(_("Program to clean unnecessary files"))
         a.set_copyright("Copyright (c) 2008 by Andrew Ziem")
@@ -500,7 +501,7 @@ class GUI:
         icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
         update_button = gtk.ToolButton(icon_widget = icon, label = _("Update BleachBit"))
         update_button.show_all()
-        update_button.connect("clicked", on_url, url)
+        update_button.connect("clicked", lambda toolbutton, url: open_url(url), url)
         self.toolbar.insert(update_button, -1)
         try:
             import pynotify
