@@ -19,7 +19,7 @@
 
 import os
 
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.1"
 APP_NAME = "BleachBit"
 
 license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
