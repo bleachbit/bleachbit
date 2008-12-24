@@ -64,9 +64,9 @@ class Cleaner:
     def run(self):
         """Execute the cleaning operation and iterate (bytes deleted, size of file)"""
         for file in self.list_files(self):
-                size = size_of_file.file(file)
-                FileUtilities.delete_file(file)
-                yield (size, file)
+            size = FileUtilities.size_of_file.file(file)
+            FileUtilities.delete_file(file)
+            yield (size, file)
 
     def set_option(self, option, value):
         assert self.options.has_key(option)
@@ -103,10 +103,10 @@ class Beagle(Cleaner):
 
     def list_files(self):
         dirs = [ "~/.beagle/Indexes", "~/.beagle/Log", "~/.beagle/TextCache" ]
-        for dir in dirs:
-            dir = os.path.expanduser(dir)
-            for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                yield filename
 
 
 
@@ -136,9 +136,9 @@ class Epihany(Cleaner):
         if self.options["cache"][1]:
             dirs = glob.glob(os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/Cache/"))
             dirs += glob.glob(os.path.expanduser("~/.gnome2/epiphany/favicon_cache/"))
-            for dir in dirs:
-                for file in FileUtilities.children_in_directory(dir, False):
-                    yield file
+            for dirname in dirs:
+                for filename in FileUtilities.children_in_directory(dirna,e, False):
+                    yield filename
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-favicon-cache.xml") ]
 
         # cookies
@@ -235,7 +235,7 @@ class Flash(Cleaner):
     def list_files(self):
         dir = os.path.expanduser("~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys")
         for file in FileUtilities.children_in_directory(dir, True):
-                yield file
+            yield file
 
 
 class System(Cleaner):
@@ -289,7 +289,7 @@ class Java(Cleaner):
     def list_files(self):
         dir = os.path.expanduser("~/.java/deployment/cache")
         for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+            yield file
 
 
 class KDE(Cleaner):
@@ -344,12 +344,12 @@ class OpenOfficeOrg(Cleaner):
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         dirs = []
         for prefix in self.prefixes:
-                dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
-                dirs.append(os.path.join(os.path.expanduser(prefix), "user/registry/cache/"))
+            dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
+            dirs.append(os.path.join(os.path.expanduser(prefix), "user/registry/cache/"))
         for dir in dirs:
-                d = os.path.expanduser(dir)
-                for file in FileUtilities.children_in_directory(d, False):
-                        yield file
+            d = os.path.expanduser(dir)
+            for file in FileUtilities.children_in_directory(d, False):
+                yield file
 
     def erase_history(self, path):
         """Erase the history node (most recently used documents"""
@@ -420,7 +420,7 @@ class rpmbuild(Cleaner):
     def list_files(self):
         dir = os.path.expanduser("~/rpmbuild/BUILD/")
         for file in FileUtilities.children_in_directory(dir, True):
-                yield file
+            yield file
 
 
 class Thumbnails(Cleaner):
@@ -438,7 +438,7 @@ class Thumbnails(Cleaner):
     def list_files(self):
         dir = os.path.expanduser("~/.thumbnails")
         for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+            yield file
 
 
 class tmp(Cleaner):
@@ -455,18 +455,18 @@ class tmp(Cleaner):
 
     def list_files(self):
         for file in FileUtilities.children_in_directory("/tmp/", True):
-                is_open = FileUtilities.openfiles.is_open(file)
-                ok = not is_open and os.path.isfile(file) and not os.path.islink(file) and FileUtilities.ego_owner(file)
-                # fixme whitelist 
-                #  Pulseaudio /tmp/pulse-${USER}/pid
-                # whitelist?
-                #  /tmp/gconfd-${USER}/lock/ior
-                #  /tmp/orbit-${USER}/bonobo-activation-register.lock
-                #  /tmp/orbit-${USER}/bonobo-activation-server-ior
-                #  /tmp/.X0-lock
-                #print "debug: Tmp: ok=%s file = '%s'" % (ok, file)
-                if ok:
-                        yield file
+            is_open = FileUtilities.openfiles.is_open(file)
+            ok = not is_open and os.path.isfile(file) and not os.path.islink(file) and FileUtilities.ego_owner(file)
+            # fixme whitelist 
+            #  Pulseaudio /tmp/pulse-${USER}/pid
+            # whitelist?
+            #  /tmp/gconfd-${USER}/lock/ior
+            #  /tmp/orbit-${USER}/bonobo-activation-register.lock
+            #  /tmp/orbit-${USER}/bonobo-activation-server-ior
+            #  /tmp/.X0-lock
+            #print "debug: Tmp: ok=%s file = '%s'" % (ok, file)
+            if ok:
+                yield file
 
 class Trash(Cleaner):
     """Clear the trash folder"""
@@ -483,13 +483,13 @@ class Trash(Cleaner):
     def list_files(self):
         dir = os.path.expanduser("~/.Trash")
         for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+            yield file
         # fixme http://www.ramendik.ru/docs/trashspec.html
         # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
         # GNOME 2.22, Fedora 9 ~/.local/share/Trash
         dir = os.path.expanduser("~/.local/share/Trash")
         for file in FileUtilities.children_in_directory(dir, False):
-                yield file
+            yield file
 
 
 class XChat(Cleaner):
@@ -510,9 +510,9 @@ class XChat(Cleaner):
     def list_files(self):
         dirs = ["~/.xchat2/scrollback/", "~/.xchat2/logs/"]
         for dir in dirs:
-                d = os.path.expanduser(dir)
-                for file in FileUtilities.children_in_directory(d, False):
-                        yield file
+            d = os.path.expanduser(dir)
+            for file in FileUtilities.children_in_directory(d, False):
+                yield file
 
 backends = {}
 backends["bash"] = Bash()
@@ -555,13 +555,13 @@ class TestUtilities(unittest.TestCase):
     def test_list_files(self):
         for key in sorted(backends):
             print "debug: test_list_files: key='%s'" % (key, )
-            for (id, name, value) in backends[key].get_options():
-                backends[key].set_option(id, True)
+            for (cleaner_id, __name, __value) in backends[key].get_options():
+                backends[key].set_option(cleaner_id, True)
             for file in backends[key].list_files():
                 self.assert_ (type(file) is str)
                 self.assert_ (os.path.exists(file), "In backend '%s' path does not exist: '%s' " % (key, file))
 
 
 if __name__ == '__main__':
-        unittest.main()
+    unittest.main()
 
