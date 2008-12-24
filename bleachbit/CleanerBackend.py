@@ -19,10 +19,11 @@
 
 
 
-import glob
-import os.path
 import gettext
 gettext.install("bleachbit")
+import glob
+import os.path
+import re
 import xml.dom.minidom
 
 import FileUtilities
@@ -137,7 +138,7 @@ class Epihany(Cleaner):
             dirs = glob.glob(os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/Cache/"))
             dirs += glob.glob(os.path.expanduser("~/.gnome2/epiphany/favicon_cache/"))
             for dirname in dirs:
-                for filename in FileUtilities.children_in_directory(dirna,e, False):
+                for filename in FileUtilities.children_in_directory(dirname, False):
                     yield filename
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-favicon-cache.xml") ]
 
@@ -453,20 +454,28 @@ class tmp(Cleaner):
     def get_name(self):
         return "tmp"
 
+    def whitelisted(self, pathname):
+        """Return boolean whether file is whitelisted"""
+        regexes = ['/tmp/pulse-[^/]+/pid',
+            '/tmp/gconfd-[^/]+/lock/ior',
+            '/tmp/orbit-[^/]+/bonobo-activation-register.lock',
+            '/tmp/orbit-[^/]+/bonobo-activation-server-ior',
+            '/tmp/.X0-lock' ]
+        for regex in regexes:
+            if None != re.match(regex, pathname):
+                return True
+        return False
+
+
     def list_files(self):
-        for file in FileUtilities.children_in_directory("/tmp/", True):
-            is_open = FileUtilities.openfiles.is_open(file)
-            ok = not is_open and os.path.isfile(file) and not os.path.islink(file) and FileUtilities.ego_owner(file)
-            # fixme whitelist 
-            #  Pulseaudio /tmp/pulse-${USER}/pid
-            # whitelist?
-            #  /tmp/gconfd-${USER}/lock/ior
-            #  /tmp/orbit-${USER}/bonobo-activation-register.lock
-            #  /tmp/orbit-${USER}/bonobo-activation-server-ior
-            #  /tmp/.X0-lock
-            #print "debug: Tmp: ok=%s file = '%s'" % (ok, file)
+        for pathname in FileUtilities.children_in_directory("/tmp/", True):
+            is_open = FileUtilities.openfiles.is_open(pathname)
+            ok = not is_open and os.path.isfile(pathname) and \
+                not os.path.islink(pathname) and \
+                FileUtilities.ego_owner(pathname) and \
+                not self.whitelisted(pathname)
             if ok:
-                yield file
+                yield pathname
 
 class Trash(Cleaner):
     """Clear the trash folder"""
