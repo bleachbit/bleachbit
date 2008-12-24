@@ -114,8 +114,8 @@ def children_in_directory(top, list_directories = False):
         if list_directories:
             for dirname in dirnames:
                 yield os.path.join(dirpath, dirname)
-            for filename in filenames:
-                yield os.path.join(dirpath, filename)
+        for filename in filenames:
+            yield os.path.join(dirpath, filename)
 
 
 def list_files_in_directory(dirname):
