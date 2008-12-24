@@ -119,6 +119,7 @@ class TreeDisplayModel:
     """Displays the info model in a view"""
 
     def make_view(self, model):
+        """Create and return a TreeView object"""
         self.view = gtk.TreeView(model)
 
         # first column
@@ -167,6 +168,7 @@ class TreeDisplayModel:
 
 
 class GUI:
+    """The main application GUI"""
 
     ui = \
         '''<ui>
@@ -205,9 +207,9 @@ class GUI:
         while __iter:
             #print "debug: get_selected_operations: iter id = '%s', value='%s'" % (model[iter][2], model[iter][1])
             if True == model[__iter][1]:
-                r.append(model[__iter][2])
+                ret.append(model[__iter][2])
             __iter = model.iter_next(__iter)
-        return r
+        return ret
 
     def get_operation_options(self, operation):
         """For the given operation ID, return a list of the selected option IDs."""
@@ -238,17 +240,12 @@ class GUI:
         self.toolbar.set_sensitive(true)
 
 
-    def run_operations(self, widget):
+    def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
         if not True == delete_confirmation_dialog(self.window):
             return
         self.preview_or_run_operations(True)
-
-
-    def preview_operations(self, widget):
-        """Event when the 'preview operations' toolbar button is clicked."""
-        self.preview_or_run_operations(False)
 
 
     def clean_pathname(self, pathname, really_delete, __iter):
@@ -307,7 +304,7 @@ class GUI:
         gtk.gdk.threads_enter()
         self.set_sensitive(False)
         self.textbuffer.set_text("")
-        iter = self.textbuffer.get_iter_at_offset(0)
+        __iter = self.textbuffer.get_iter_at_offset(0)
         self.progressbar.show()
         gtk.gdk.threads_leave()
         total_bytes = 0
@@ -320,31 +317,31 @@ class GUI:
             else:
                 self.progressbar.set_text(_("Please wait.  Scanning: ") + operation)
             gtk.gdk.threads_leave()
-            total_bytes += self.clean_operation(operation, really_delete, iter)
+            total_bytes += self.clean_operation(operation, really_delete, __iter)
             count += 1
         gtk.gdk.threads_enter()
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
         self.progressbar.set_text(_("Done."))
-        self.textbuffer.insert(iter, "\nTotal size:" + FileUtilities.bytes_to_human(total_bytes))
+        self.textbuffer.insert(__iter, "\nTotal size:" + FileUtilities.bytes_to_human(total_bytes))
         self.set_sensitive(True)
         gtk.gdk.threads_leave()
 
 
-    def about(self, event):
+    def about(self, __event):
         """Create and show the about dialog"""
         gtk.about_dialog_set_url_hook(lambda dialog, link, user_data: open_url(link))
-        a = gtk.AboutDialog()
-        a.set_comments(_("Program to clean unnecessary files"))
-        a.set_copyright("Copyright (c) 2008 by Andrew Ziem")
+        dialog = gtk.AboutDialog()
+        dialog.set_comments(_("Program to clean unnecessary files"))
+        dialog.set_copyright("Copyright (c) 2008 by Andrew Ziem")
         try:
-            a.set_license(open(license_filename).read())
+            dialog.set_license(open(license_filename).read())
         except:
-            a.set_license(_("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
-        a.set_name(APP_NAME)
-        a.set_website("http://bleachbit.sourceforge.net")
-        a.run()
-        a.hide()
+            dialog.set_license(_("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
+        dialog.set_name(APP_NAME)
+        dialog.set_website("http://bleachbit.sourceforge.net")
+        dialog.run()
+        dialog.hide()
 
 
     def first_start(self):
@@ -370,10 +367,10 @@ class GUI:
         dialog.add_button(gtk.STOCK_NO, 0)
 
         dialog.show_all()
-        r = dialog.run()
+        ret = dialog.run()
         dialog.destroy()
 
-        options.set("check_online_updates", r == 1)
+        options.set("check_online_updates", ret == 1)
         options.set("first_start", False)
         return
 
@@ -406,7 +403,7 @@ class GUI:
         self.actiongroup = actiongroup
 
         # Create actions
-        actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, '_Quit', None, 'Quit the Program', self.quit_cb), 
+        actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, '_Quit', None, 'Quit the Program', lambda *dummy: gtk.main_quit()),
                                 ('File', None, '_File'), 
                                 ('About', gtk.STOCK_ABOUT, '_About', None, 'Show about', self.about), 
                                 ('Help', None, '_Help')])
@@ -442,7 +439,7 @@ class GUI:
         preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
         preview_button.show()
 
-        preview_button.connect("clicked", self.preview_operations)
+        preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
         return toolbar
 
@@ -530,10 +527,6 @@ class GUI:
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
 
-    def quit_cb(self, event):
-        """Quit callback"""
-        print 'Quitting program'
-        gtk.main_quit()
 
 if __name__ == '__main__':
     gui = GUI()
