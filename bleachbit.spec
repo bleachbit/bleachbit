@@ -19,6 +19,8 @@ BuildArch:      noarch
 BuildRequires:  python-devel
 
 Requires:       gnome-python2-gnomevfs
+Requires:       pygtk2
+Requires:       python >= 2
 
 %if 0%{?suse_version}
 BuildRequires: update-desktop-files
