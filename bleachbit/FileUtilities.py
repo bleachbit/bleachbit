@@ -35,10 +35,10 @@ except:
     try:
         # this is the deprecated name
         import gnome.vfs
-    else:
-        gnomevfs = gnome.vfs
     except:
         HAVE_GNOME_VFS = False
+    else:
+        gnomevfs = gnome.vfs
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
@@ -78,40 +78,6 @@ class OpenFiles:
         return filename in self.files
 
 
-def ego_owner(filename):
-    """Return whether current user owns the file"""
-    return os.stat(filename).st_uid == os.getuid()
-
-
-def delete_file_directory(path):
-    """Delete path that is either file or directory"""
-    print "info: removing '%s'" % (path,)
-    if is_file(path):
-        delete_file(path)
-    else:
-        os.rmdir(path)
-
-
-def delete_file(filename):
-    """Remove a single file (enhanced for optional shredding)"""
-    if False: # fixme get user setting
-        args = ["shred", filename]
-        ret = subprocess.check_call(args)
-        if 0 != ret:
-            raise Exception("shred subprocess returned non-zero error code " % (ret,))
-    os.remove(filename)
-
-
-def children_in_directory(top, list_directories = False):
-    """Iterate files and, optionally, subdirectories in directory"""
-    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
-        if list_directories:
-            for dirname in dirnames:
-                yield os.path.join(dirpath, dirname)
-        for filename in filenames:
-            yield os.path.join(dirpath, filename)
-
-
 def bytes_to_human(bytes):
     """Display a file size in human terms (megabytes, etc.)"""
     if bytes >= 1024*1024*1024*1024:
@@ -125,15 +91,38 @@ def bytes_to_human(bytes):
     return str(bytes) + "B"
 
 
-def size_of_file(filename):
-    """Return the size of a file or directory"""
-    return os.stat(filename).st_size
+def children_in_directory(top, list_directories = False):
+    """Iterate files and, optionally, subdirectories in directory"""
+    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
+        if list_directories:
+            for dirname in dirnames:
+                yield os.path.join(dirpath, dirname)
+        for filename in filenames:
+            yield os.path.join(dirpath, filename)
 
 
-def is_file(filename):
-    """Return boolean whether f is a file"""
-    mode = os.lstat(filename).st_mode
-    return stat.S_ISREG(mode)
+def delete_file(filename):
+    """Remove a single file (enhanced for optional shredding)"""
+    if False: # fixme get user setting
+        args = ["shred", filename]
+        ret = subprocess.check_call(args)
+        if 0 != ret:
+            raise Exception("shred subprocess returned non-zero error code " % (ret,))
+    os.remove(filename)
+
+
+def delete_file_directory(path):
+    """Delete path that is either file or directory"""
+    print "info: removing '%s'" % (path,)
+    if is_file(path):
+        delete_file(path)
+    else:
+        os.rmdir(path)
+
+
+def ego_owner(filename):
+    """Return whether current user owns the file"""
+    return os.stat(filename).st_uid == os.getuid()
 
 
 def exists_in_path(filename):
@@ -153,15 +142,6 @@ def exe_exists(pathname):
         if not exists_in_path(pathname):
             return False
     return True
-
-
-def wine_to_linux_path(wineprefix, windows_pathname):
-    """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
-    drive_letter = windows_pathname[0]
-    windows_pathname = windows_pathname.replace(drive_letter + ":", \
-        "drive_" + drive_letter.lower())
-    windows_pathname = windows_pathname.replace("\\","/")
-    return os.path.join(wineprefix, windows_pathname)
 
 
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
@@ -236,24 +216,33 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
-openfiles = OpenFiles()
+def is_file(filename):
+    """Return boolean whether f is a file"""
+    mode = os.lstat(filename).st_mode
+    return stat.S_ISREG(mode)
 
+
+def size_of_file(filename):
+    """Return the size of a file or directory"""
+    return os.stat(filename).st_size
+
+
+def wine_to_linux_path(wineprefix, windows_pathname):
+    """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
+    drive_letter = windows_pathname[0]
+    windows_pathname = windows_pathname.replace(drive_letter + ":", \
+        "drive_" + drive_letter.lower())
+    windows_pathname = windows_pathname.replace("\\","/")
+    return os.path.join(wineprefix, windows_pathname)
+
+
+openfiles = OpenFiles()
 
 
 import unittest
 
 class TestFileUtilities(unittest.TestCase):
     """Unit test for module FileUtilities"""
-
-
-    def test_children_in_directory(self): 
-        """Unit test for function children_in_directory()"""
-        dirname = os.path.expanduser("~/.config")
-        for filename in children_in_directory(dirname, True):
-            self.assert_ (type(filename) is str)
-        for filename in children_in_directory(dirname, False):
-            self.assert_ (type(filename) is str)
-
 
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
@@ -266,6 +255,16 @@ class TestFileUtilities(unittest.TestCase):
         for test in tests:
             self.assertEqual(test[0], test[1])
 
+
+    def test_children_in_directory(self): 
+        """Unit test for function children_in_directory()"""
+        dirname = os.path.expanduser("~/.config")
+        for filename in children_in_directory(dirname, True):
+            self.assert_ (type(filename) is str)
+        for filename in children_in_directory(dirname, False):
+            self.assert_ (type(filename) is str)
+
+
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
         tests = [ ("/bin/sh", True), \
@@ -274,6 +273,7 @@ class TestFileUtilities(unittest.TestCase):
             ("/bin/doesnotexist", False) ]
         for test in tests:
             self.assertEqual(exe_exists(test[0]), test[1])
+
 
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
