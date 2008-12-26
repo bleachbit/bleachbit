@@ -19,7 +19,7 @@
 
 
 
-
+import ConfigParser
 import datetime
 import glob
 import os
@@ -173,6 +173,48 @@ def is_file(filename):
     return stat.S_ISREG(mode)
 
 
+def exists_in_path(filename):
+    """Returns boolean whether the filename exists in the path"""
+    for dirname in os.getenv('PATH').split(":"):
+        if os.path.exists(os.path.join(dirname, filename)):
+            return True
+    return False
+
+def is_broken_xdg_desktop(pathname):
+    """Returns boolean whether the given XDG desktop entry file is broken.
+    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
+    config = ConfigParser.RawConfigParser()
+    config.read(pathname)
+    if not config.has_section('Desktop Entry'):
+        print "debug: is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % (pathname)
+        return True
+    if not config.has_option('Desktop Entry', 'Type'):
+        print "debug: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
+        return True
+    type = config.get('Desktop Entry', 'Type').strip().lower()
+    if 'link' == type:
+        if not config.has_option('Desktop Entry', 'URL') and \
+            not config.has_option('Desktop Entry', 'URL[$e]'):
+            print "debug: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
+            return True
+        return False
+    if 'application' != type:
+        print "Warning: unhandled type '%s': file '%s'" % (type, pathname)
+        return False
+    if not config.has_option('Desktop Entry', 'Exec'):
+        print "debug: is_broken_xdg_menu: missing required option 'Exec': '%s'" % (pathname)
+        return True
+    exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
+    if os.path.isabs(exe):
+        if not os.path.exists(exe):
+            print "debug: is_broken_xdg_menu: exe '%s' does not exist '%s'" % (exe, pathname)
+            return True
+    else:
+        if not exists_in_path(exe):
+            print "debug: is_broken_xdg_menu: exe '%s' does not exist in path: '%s'" % (exe, pathname)
+            return True
+    return False
+
 
 openfiles = OpenFiles()
 
@@ -218,6 +260,20 @@ class TestFileUtilities(unittest.TestCase):
 
         for test in tests:
             self.assertEqual(test[0], test[1])
+
+    def test_is_broken_xdg_desktop(self):
+        """Unit test for is_broken_xdg_desktop()"""
+        menu_dirs = [ '/usr/share/applications', \
+            '/usr/share/autostart', \
+            '/usr/share/gnome/autostart', \
+            '/usr/share/gnome/apps', \
+            '/usr/share/applnk-redhat/', \
+            '/usr/local/share/applications/' ]
+        for dirname in menu_dirs:
+            for filename in filter(lambda fn: fn.endswith(".desktop"), \
+                children_in_directory(dirname, False)):
+                    self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+
 
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""

@@ -245,6 +245,7 @@ class System(Cleaner):
 
     def __init__(self):
         self.options = {}
+        self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["recent"] = ( _("Recent documents list"), False )
 
@@ -263,6 +264,26 @@ class System(Cleaner):
             dir = os.path.expanduser("~/.cache/")
             for file in FileUtilities.children_in_directory(dir, True):
                 yield file
+
+        # menu
+        menu_dirs = [ '~/.local/share/applications', \
+            '~/.config/autostart', \
+            '~/.gnome/apps/', \
+            '~/.gnome2/panel2.d/default/launchers', \
+            '~/.gnome2/vfolders/applications/', \
+            '~/.kde/share/apps/RecentDocuments/', \
+            '~/.kde/share/mimelnk', \
+            '~/.kde/share/mimelnk/application/ram.desktop', \
+            '~/.kde2/share/mimelnk/application/', \
+            '~/.kde2/share/applnk' ]
+
+        if self.options["desktop_entry"][1]:
+            for dirname in menu_dirs:
+                for filename in filter(lambda fn: fn.endswith(".desktop"), \
+                    FileUtilities.children_in_directory( \
+                    os.path.expanduser(dirname), False)):
+                    if FileUtilities.is_broken_xdg_desktop(filename):
+                        yield filename
 
         # most recently used documents list
         files = []
