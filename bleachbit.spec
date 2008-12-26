@@ -18,6 +18,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  python-devel
 
+Requires:       gnome-python2-gnomevfs
+
 %if 0%{?suse_version}
 BuildRequires: update-desktop-files
 %endif

@@ -198,6 +198,16 @@ def is_broken_xdg_desktop(pathname):
             print "debug: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
             return True
         return False
+    if 'mimetype' == type:
+        import gnomevfs
+        if not config.has_option('Desktop Entry', 'MimeType'):
+            print "debug: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
+            return True
+        mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
+        if 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
+            print "debug: is_broken_xdg_menu: MimeType '%s' does not registered '%s'" % (mimetype, pathname)
+            return True
+        return False
     if 'application' != type:
         print "Warning: unhandled type '%s': file '%s'" % (type, pathname)
         return False
@@ -267,6 +277,7 @@ class TestFileUtilities(unittest.TestCase):
             '/usr/share/autostart', \
             '/usr/share/gnome/autostart', \
             '/usr/share/gnome/apps', \
+            '/usr/share/mimelnk', \
             '/usr/share/applnk-redhat/', \
             '/usr/local/share/applications/' ]
         for dirname in menu_dirs:
