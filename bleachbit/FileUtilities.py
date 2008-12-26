@@ -244,6 +244,11 @@ import unittest
 class TestFileUtilities(unittest.TestCase):
     """Unit test for module FileUtilities"""
 
+    def __touch(self, filename):
+        """Create an empty file"""
+        f = open(filename, "w")
+
+
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
         tests = [ ("1B", bytes_to_human(1)),
@@ -258,11 +263,36 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_children_in_directory(self): 
         """Unit test for function children_in_directory()"""
+        import tempfile
+
         dirname = os.path.expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
             self.assert_ (type(filename) is str)
+            self.assert_ (os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
             self.assert_ (type(filename) is str)
+            self.assert_ (os.path.isabs(filename))
+            self.assert_ (not os.path.isdir(filename))
+
+        dirname = tempfile.mkdtemp()
+        foo = os.path.join(dirname, "foo")
+        self.__touch(foo)
+        for filename in children_in_directory(dirname, True):
+            self.assert_ (filename, foo)
+        for filename in children_in_directory(dirname, False):
+            self.assert_ (filename, foo)
+        os.remove(foo)
+
+        foobar = os.path.join(dirname, "foobar")
+        os.mkdir(foobar)
+        for filename in children_in_directory(dirname, True):
+            self.assert_ (filename, foobar)
+        for filename in children_in_directory(dirname, False):
+            self.assert_ (False)
+        os.rmdir(foobar)
+
+        os.rmdir(dirname)
+
 
 
     def test_exe_exists(self):
