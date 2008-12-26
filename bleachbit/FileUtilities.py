@@ -26,11 +26,11 @@ import os
 import os.path
 import shlex
 import stat
-import sys
 import subprocess
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
+
 
 class OpenFiles:
     """Cached way to determine whether a file is open by active process"""
@@ -87,28 +87,6 @@ def delete_file(filename):
     os.remove(filename)
 
 
-def delete_files(files):
-    """Remove a list of files/directories and return (bytes deleted, number of files/directories deleted)"""
-    n_files = 0 # number of files
-    bytes = 0
-    for filename in files:
-        bytes += size_of_file(filename)
-        n_files += 1
-        delete_file(filename)
-    return (bytes, n_files)
-
-
-def list_children_in_directory(directory):
-    """List subdirectories and files in directory"""
-    ret = []
-    for root, dirs, files in os.walk(directory, topdown=False): 
-        for name in files:
-            ret.append(os.path.join(root, name))
-        for dir_ in dirs:
-            ret.append(os.path.join(root, dir_))
-    return ret
-
-
 def children_in_directory(top, list_directories = False):
     """Iterate files and, optionally, subdirectories in directory"""
     for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
@@ -117,15 +95,6 @@ def children_in_directory(top, list_directories = False):
                 yield os.path.join(dirpath, dirname)
         for filename in filenames:
             yield os.path.join(dirpath, filename)
-
-
-def list_files_in_directory(dirname):
-    """Return a list of each file in dirname"""
-    ret = []
-    for root, dirs, files in os.walk(dirname):
-        for name in files:
-            ret.append(os.path.join(root, name))
-    return ret
 
 
 def bytes_to_human(bytes):
@@ -140,32 +109,10 @@ def bytes_to_human(bytes):
         return str(bytes/1024) + "KB"
     return str(bytes) + "B"
 
-def list_files_with_size(files):
-    """Given a list of files, return string each one and its size"""
-    ret = ""
-    total_size = 0
-    for filename in files:
-        try:
-            size = os.stat(filename).st_size
-            ret += bytes_to_human(size) + " " + filename + "\n"
-            total_size += size
-        except:
-            ret += str(sys.exc_info()[1]) + " " + filename + "\n"
-    ret += bytes_to_human(total_size) + " total"
-    return ret
-
 
 def size_of_file(filename):
     """Return the size of a file or directory"""
     return os.stat(filename).st_size
-
-
-def sum_size_of_files(files):
-    """Given a list of files, return the size in bytes of all the files"""
-    bytes = 0
-    for filename in files:
-        bytes += size_of_file(filename)
-    return bytes
 
 
 def is_file(filename):
@@ -273,21 +220,6 @@ import unittest
 
 class TestFileUtilities(unittest.TestCase):
     """Unit test for module FileUtilities"""
-
-    def test_list_files_in_directory(self):
-        """Unit test for function list_files_in_directory()"""
-        home = os.path.expanduser("~/Desktop")
-        files = list_files_in_directory(home)
-        for filename in files:
-            self.assert_(is_file(filename))
-
-
-    def test_sum_size_of_files(self):
-        """Unit test for function sum_size_of_files()"""
-        home = os.path.expanduser("~/Desktop")
-        files = list_files_in_directory(home)
-        size = sum_size_of_files(files)
-        self.assert_(size >= 0)
 
 
     def test_children_in_directory(self): 
