@@ -18,8 +18,20 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  python-devel
 
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 Requires:       gnome-python2-gnomevfs
-Requires:       pygtk2
+%elif 0%{?mandriva_version}
+Requires:       gnome-python
+%elif 0%{?suse_version}
+Requires:       python-gnome
+%endif
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+Requires:       pygtk2 >= 2.6
+%elif 0%{?mandriva_version}
+Requires:       pygtk2.0
+%elif 0%{?suse_version}
+Requires:       python-gtk >= 2.6
+%endif
 Requires:       python >= 2
 
 %if 0%{?suse_version}
