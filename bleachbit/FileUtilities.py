@@ -24,6 +24,7 @@ import datetime
 import glob
 import os
 import os.path
+import shlex
 import stat
 import sys
 import subprocess
@@ -180,6 +181,26 @@ def exists_in_path(filename):
             return True
     return False
 
+
+def exe_exists(pathname):
+    """Returns boolean whether executable exists"""
+    if os.path.isabs(pathname):
+        if not os.path.exists(pathname):
+            return False
+    else:
+        if not exists_in_path(pathname):
+            return False
+    return True
+
+
+def wine_to_linux_path(wineprefix, windows_pathname):
+    """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
+    drive_letter = windows_pathname[0]
+    windows_pathname = windows_pathname.replace(drive_letter + ":", "drive_" + drive_letter.lower())
+    windows_pathname = windows_pathname.replace("\\","/")
+    return os.path.join(wineprefix, windows_pathname)
+
+
 def is_broken_xdg_desktop(pathname):
     """Returns boolean whether the given XDG desktop entry file is broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
@@ -205,7 +226,7 @@ def is_broken_xdg_desktop(pathname):
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
         if 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
-            print "debug: is_broken_xdg_menu: MimeType '%s' does not registered '%s'" % (mimetype, pathname)
+            print "debug: is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname)
             return True
         return False
     if 'application' != type:
@@ -215,14 +236,32 @@ def is_broken_xdg_desktop(pathname):
         print "debug: is_broken_xdg_menu: missing required option 'Exec': '%s'" % (pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
-    if os.path.isabs(exe):
-        if not os.path.exists(exe):
-            print "debug: is_broken_xdg_menu: exe '%s' does not exist '%s'" % (exe, pathname)
+    if not exe_exists(exe):
+        print "debug: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (exe, pathname)
+        return True
+    if 'env' == exe:
+        # Wine v1.0 creates .desktop files like this
+        # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program Files\\foo\\foo.exe"
+        execs = shlex.split(config.get('Desktop Entry', 'Exec'))
+        wineprefix = None
+        del(execs[0])
+        while True:
+            if 0 <= execs[0].find("="):
+                (name, value) = execs[0].split("=")
+                if 'WINEPREFIX' == name:
+                    wineprefix = value
+                del(execs[0])
+            else:
+                break
+        if not exe_exists(execs[0]):
+            print "debug: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], pathname)
             return True
-    else:
-        if not exists_in_path(exe):
-            print "debug: is_broken_xdg_menu: exe '%s' does not exist in path: '%s'" % (exe, pathname)
-            return True
+        # check the Windows executable exists
+        if wineprefix:
+            windows_exe = wine_to_linux_path(wineprefix, execs[1])
+            if not os.path.exists(windows_exe):
+                print "debug: is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" % (windows_exe, pathname)
+                return True
     return False
 
 
@@ -271,6 +310,15 @@ class TestFileUtilities(unittest.TestCase):
         for test in tests:
             self.assertEqual(test[0], test[1])
 
+    def test_exe_exists(self):
+        """Unit test for exe_exists()"""
+        tests = [ ("/bin/sh", True), \
+            ("sh", True), \
+            ("doesnotexist", False), \
+            ("/bin/doesnotexist", False) ]
+        for test in tests:
+            self.assertEqual(exe_exists(test[0]), test[1])
+
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
         menu_dirs = [ '/usr/share/applications', \
@@ -284,6 +332,15 @@ class TestFileUtilities(unittest.TestCase):
             for filename in filter(lambda fn: fn.endswith(".desktop"), \
                 children_in_directory(dirname, False)):
                     self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+
+
+    def test_wine_to_linux_path(self):
+        """Unit test for wine_to_linux_path()"""
+        tests = [ ("/home/foo/.wine", \
+            "C:\\Program Files\\NSIS\\NSIS.exe", \
+            "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe") ]
+        for test in tests:
+            self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
 
 
     def test_OpenFiles(self):
