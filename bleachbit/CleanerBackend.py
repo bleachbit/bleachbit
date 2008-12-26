@@ -107,7 +107,8 @@ class Beagle(Cleaner):
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in FileUtilities.children_in_directory(dirname, False):
-                yield filename
+                if os.path.exists(filename):
+                    yield filename
 
 
 
