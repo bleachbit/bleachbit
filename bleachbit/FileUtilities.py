@@ -28,6 +28,18 @@ import shlex
 import stat
 import subprocess
 
+HAVE_GNOME_VFS = True
+try:
+    import gnomevfs
+except:
+    try:
+        # this is the deprecated name
+        import gnome.vfs
+    else:
+        gnomevfs = gnome.vfs
+    except:
+        HAVE_GNOME_VFS = False
+
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
@@ -39,8 +51,10 @@ class OpenFiles:
         self.files = []
 
     def file_qualifies(self, filename):
-        """Return boolean wehether filename qualifies to enter cache (check against blacklist)"""
-        return not filename.startswith("/dev") and not filename.startswith("/proc")
+        """Return boolean wehether filename qualifies to enter cache (check \
+        against blacklist)"""
+        return not filename.startswith("/dev") and \
+            not filename.startswith("/proc")
 
     def scan(self):
         """Update cache"""
@@ -50,7 +64,8 @@ class OpenFiles:
             try:
                 target = os.path.realpath(filename)
             except TypeError:
-                # happens, for example, when link points to '/etc/password\x00 (deleted)'
+                # happens, for example, when link points to
+                # '/etc/password\x00 (deleted)'
                 continue
             if self.file_qualifies(target):
                 self.files.append(target)
@@ -70,7 +85,7 @@ def ego_owner(filename):
 
 def delete_file_directory(path):
     """Delete path that is either file or directory"""
-    print "debug: removing '%s'" % (path,)
+    print "info: removing '%s'" % (path,)
     if is_file(path):
         delete_file(path)
     else:
@@ -143,48 +158,22 @@ def exe_exists(pathname):
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
-    windows_pathname = windows_pathname.replace(drive_letter + ":", "drive_" + drive_letter.lower())
+    windows_pathname = windows_pathname.replace(drive_letter + ":", \
+        "drive_" + drive_letter.lower())
     windows_pathname = windows_pathname.replace("\\","/")
     return os.path.join(wineprefix, windows_pathname)
 
 
-def is_broken_xdg_desktop(pathname):
-    """Returns boolean whether the given XDG desktop entry file is broken.
-    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
-    config = ConfigParser.RawConfigParser()
-    config.read(pathname)
-    if not config.has_section('Desktop Entry'):
-        print "debug: is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % (pathname)
-        return True
-    if not config.has_option('Desktop Entry', 'Type'):
-        print "debug: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
-        return True
-    type = config.get('Desktop Entry', 'Type').strip().lower()
-    if 'link' == type:
-        if not config.has_option('Desktop Entry', 'URL') and \
-            not config.has_option('Desktop Entry', 'URL[$e]'):
-            print "debug: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
-            return True
-        return False
-    if 'mimetype' == type:
-        import gnomevfs
-        if not config.has_option('Desktop Entry', 'MimeType'):
-            print "debug: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
-            return True
-        mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
-        if 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
-            print "debug: is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname)
-            return True
-        return False
-    if 'application' != type:
-        print "Warning: unhandled type '%s': file '%s'" % (type, pathname)
-        return False
+def __is_broken_xdg_desktop_application(config, desktop_pathname):
+    """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
-        print "debug: is_broken_xdg_menu: missing required option 'Exec': '%s'" % (pathname)
+        print "info: is_broken_xdg_menu: missing required option 'Exec': '%s'" \
+            % (desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not exe_exists(exe):
-        print "debug: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (exe, pathname)
+        print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" \
+            % (exe, desktop_pathname)
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
@@ -201,14 +190,49 @@ def is_broken_xdg_desktop(pathname):
             else:
                 break
         if not exe_exists(execs[0]):
-            print "debug: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], pathname)
+            print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                print "debug: is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" % (windows_exe, pathname)
+                print "info: is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" % (windows_exe, desktop_pathname)
                 return True
+    return False
+
+
+def is_broken_xdg_desktop(pathname):
+    """Returns boolean whether the given XDG desktop entry file is broken.
+    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
+    config = ConfigParser.RawConfigParser()
+    config.read(pathname)
+    if not config.has_section('Desktop Entry'):
+        print "info: is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % (pathname)
+        return True
+    if not config.has_option('Desktop Entry', 'Type'):
+        print "info: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
+        return True
+    file_type = config.get('Desktop Entry', 'Type').strip().lower()
+    if 'link' == file_type:
+        if not config.has_option('Desktop Entry', 'URL') and \
+            not config.has_option('Desktop Entry', 'URL[$e]'):
+            print "info: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
+            return True
+        return False
+    if 'mimetype' == file_type:
+        if not config.has_option('Desktop Entry', 'MimeType'):
+            print "info: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
+            return True
+        mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
+        if HAVE_GNOME_VFS and 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
+            print "info: is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname)
+            return True
+        return False
+    if 'application' != file_type:
+        print "Warning: unhandled type '%s': file '%s'" % (file_type, pathname)
+        return False
+    if __is_broken_xdg_desktop_application(config, pathname):
+        return True
     return False
 
 
@@ -263,7 +287,7 @@ class TestFileUtilities(unittest.TestCase):
         for dirname in menu_dirs:
             for filename in filter(lambda fn: fn.endswith(".desktop"), \
                 children_in_directory(dirname, False)):
-                    self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+                self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
 
     def test_wine_to_linux_path(self):
