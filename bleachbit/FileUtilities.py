@@ -222,11 +222,6 @@ def is_file(filename):
     return stat.S_ISREG(mode)
 
 
-def size_of_file(filename):
-    """Return the size of a file or directory"""
-    return os.stat(filename).st_size
-
-
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]

@@ -62,13 +62,6 @@ class Cleaner:
     def list_files(self):
         """Iterate files that would be removed"""
 
-    def run(self):
-        """Execute the cleaning operation and iterate (bytes deleted, size of file)"""
-        for file in self.list_files(self):
-            size = FileUtilities.size_of_file.file(file)
-            FileUtilities.delete_file(file)
-            yield (size, file)
-
     def set_option(self, option, value):
         assert self.options.has_key(option)
         print "debug: set_option: '%s' = '%s'" % (option, value)
