@@ -114,10 +114,10 @@ def delete_file(filename):
 def delete_file_directory(path):
     """Delete path that is either file or directory"""
     print "info: removing '%s'" % (path,)
-    if is_file(path):
-        delete_file(path)
-    else:
+    if os.path.isdir(path):
         os.rmdir(path)
+    else:
+        delete_file(path)
 
 
 def ego_owner(filename):
@@ -214,12 +214,6 @@ def is_broken_xdg_desktop(pathname):
     if __is_broken_xdg_desktop_application(config, pathname):
         return True
     return False
-
-
-def is_file(filename):
-    """Return boolean whether f is a file"""
-    mode = os.lstat(filename).st_mode
-    return stat.S_ISREG(mode)
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
