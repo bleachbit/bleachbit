@@ -167,6 +167,7 @@ class Firefox(Cleaner):
         self.options["download_history"] = ( _("Download history"), False)
         self.options["forms"] = ( _("Form history"), False)
         self.options["places"] = ( _("Places"), False)
+        self.options["session_restore"] = ( _("Session restore"), False)
         self.options["signons"] = ( _("Sign ons"), False)
         self.profile_dir = "~/.mozilla/firefox/*/"
 
@@ -209,6 +210,9 @@ class Firefox(Cleaner):
             # Firefox version 3
             files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
             files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite-journal"))
+        # session restore
+        if self.options["session_restore"][1]:
+            files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
         # sign ons
         if self.options["signons"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
