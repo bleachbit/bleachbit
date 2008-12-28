@@ -22,7 +22,11 @@ import os
 APP_VERSION = "0.2.0"
 APP_NAME = "BleachBit"
 
-license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
+# Mandriva, openSUSE
+license_filename = "/usr/share/doc/bleachbit/COPYING"
+if not os.path.exists(license_filename):
+    # CentOS, Fedora, RHEL
+    license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
 
 options_dir = os.path.expanduser("~/.config/bleachbit/")
 options_file = os.path.join(options_dir, "bleachbit.ini")
