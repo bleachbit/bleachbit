@@ -484,7 +484,7 @@ class tmp(Cleaner):
     """Delete certain files in /tmp/"""
 
     def get_description(self):
-        return _("Delete user-owned, unopened, regular files in /tmp/'")
+        return _("Delete user-owned, unopened, regular files in /tmp/ and /var/tmp/")
 
     def get_id(self):
         return 'tmp'
@@ -506,14 +506,16 @@ class tmp(Cleaner):
 
 
     def list_files(self):
-        for pathname in FileUtilities.children_in_directory("/tmp/", True):
-            is_open = FileUtilities.openfiles.is_open(pathname)
-            ok = not is_open and os.path.isfile(pathname) and \
-                not os.path.islink(pathname) and \
-                FileUtilities.ego_owner(pathname) and \
-                not self.whitelisted(pathname)
-            if ok:
-                yield pathname
+        dirnames = [ '/tmp', '/var/tmp' ]
+        for dirname in dirnames:
+            for path in FileUtilities.children_in_directory(dirname, True):
+                is_open = FileUtilities.openfiles.is_open(path)
+                ok = not is_open and os.path.isfile(path) and \
+                    not os.path.islink(path) and \
+                    FileUtilities.ego_owner(path) and \
+                    not self.whitelisted(path)
+                if ok:
+                    yield path
 
 class Trash(Cleaner):
     """Clear the trash folder"""
