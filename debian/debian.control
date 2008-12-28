@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 4.1.16), python
 Homepage: http://bleachbit.sourceforge.net
 
 Package: bleachbit
-Architecture: any
+Architecture: all
 Depends: python, python-gtk2
 Description: Removes unnecessary files
  Deletes unnecessary files to free disk space and maintan privacy

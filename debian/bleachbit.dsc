@@ -1,7 +1,7 @@
 Format: 1.0
 Source: bleachbit
 Binary: bleachbit
-Architecture: any
+Architecture: all
 Version: 0.2.0-1
 Maintainer: Andrew Ziem <ahz001@gmail.com>
 Homepage: http://bleachbit.sourceforge.net
