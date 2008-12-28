@@ -50,6 +50,7 @@ install: build
 
 	# Add here commands to install the package into debian/bleachbit.
 	$(MAKE) DESTDIR=$(CURDIR)/debian/bleachbit install
+	find debian/bleachbit/usr/lib -name "*.pyc" -exec rm -f '{}' ';'
 
 
 # Build architecture-independent files here.

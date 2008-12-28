@@ -2,12 +2,18 @@ Source: bleachbit
 Section: utils
 Priority: optional
 Maintainer: Andrew Ziem <ahz001@gmail.com>
-Build-Depends: debhelper (>= 4.1.16), python
+Build-Depends: debhelper (>= 4.1.16), python, python-central
 Homepage: http://bleachbit.sourceforge.net
+Standards-Version: 3.7.3
+XS-Python-Version: >= 2.4
 
 Package: bleachbit
 Architecture: all
-Depends: python, python-gtk2
+Depends: python, python-gtk2, ${python:Depends}
+XB-Python-Version: ${python:Versions}
 Description: Removes unnecessary files
- Deletes unnecessary files to free disk space and maintan privacy
-
+ BleachBit deletes unnecessary files to free valuable disk space and
+ maintain privacy. Rid your system of old junk including cache,
+ temporary files, and cookies. Designed for Linux systems, it wipes
+ clean Bash, Beagle, Epiphany, Firefox, Adobe Flash, Java, KDE,
+ OpenOffice.org, Opera, rpmbuild, XChat, and more.
