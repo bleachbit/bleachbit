@@ -440,7 +440,9 @@ class realplayer(Cleaner):
         return "RealPlayer"
 
     def list_files(self):
-        yield os.path.expanduser("~/.config/real/rpcookies.txt")
+        path = os.path.expanduser("~/.config/real/rpcookies.txt")
+        if os.path.exists(path):
+            yield path
 
 
 
