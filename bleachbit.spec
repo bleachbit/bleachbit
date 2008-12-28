@@ -66,7 +66,7 @@ Requires:       python-gnome
 Requires:       python-gtk >= 2.6
 %endif
 
-Requires:       python >= 2
+Requires:       python >= 2.4
 
 
 %description
