@@ -498,8 +498,8 @@ class tmp(Cleaner):
         """Return boolean whether file is whitelisted"""
         regexes = ['/tmp/pulse-[^/]+/pid',
             '/tmp/gconfd-[^/]+/lock/ior',
-            '/tmp/orbit-[^/]+/bonobo-activation-register.lock',
-            '/tmp/orbit-[^/]+/bonobo-activation-server-ior',
+            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
+            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
             '/tmp/.X0-lock' ]
         for regex in regexes:
             if None != re.match(regex, pathname):
@@ -632,6 +632,18 @@ class TestUtilities(unittest.TestCase):
                 self.assert_ (type(file) is str)
                 self.assert_ (os.path.exists(file), "In backend '%s' path does not exist: '%s' " % (key, file))
 
+    def test_whitelist(self):
+        tests = [ \
+            ('/tmp/gconfd-z/lock/ior', True), \
+            ('/tmp/orbit-z/bonobo-activation-server-ior', True), \
+            ('/tmp/orbit-z/bonobo-activation-register.lock', True), \
+            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior', True), \
+            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock', True), \
+            ('/tmp/pulse-foo/pid', True), \
+            ('/tmp/tmpsDOBFd', False) \
+            ]
+        for test in tests:
+            self.assertEqual(backends['tmp'].whitelisted(test[0]), test[1], test[0])
 
 if __name__ == '__main__':
     unittest.main()
