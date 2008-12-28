@@ -41,6 +41,7 @@ Requires:       pygtk2.0
 %endif
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  desktop-file-utils
 BuildRequires:  python-devel
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
@@ -73,6 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %endif
 
 %if 0%{?mandriva_version}
