@@ -543,6 +543,24 @@ class Trash(Cleaner):
             yield file
 
 
+class VIM(Cleaner):
+    """VIM (Vi IMproved)"""
+
+    def get_description(self):
+        return _("Clear ~/.viminfo which includes VIM file history, command history, and buffers")
+
+    def get_id(self):
+        return 'vim'
+
+    def get_name(self):
+        return "VIM"
+
+    def list_files(self):
+        path = os.path.expanduser("~/.viminfo")
+        if os.path.exists(path):
+            yield path
+
+
 class XChat(Cleaner):
     """Clear XChat logs and scrollback"""
 
@@ -581,6 +599,7 @@ backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
 backends["tmp"] = tmp()
 backends["trash"] = Trash()
+backends["vim"] = VIM()
 backends["xchat"] = XChat()
 
 
