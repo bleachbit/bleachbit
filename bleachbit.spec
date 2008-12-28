@@ -53,7 +53,6 @@ Requires(postun): desktop-file-utils
 %endif
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-BuildRequires:  desktop-file-utils
 BuildRequires:  python-devel
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
@@ -108,28 +107,24 @@ install *.pyc *.pyo %{buildroot}%{py_platsitedir}/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%post
+update-desktop-database &> /dev/null ||:
+
+%postun
+update-desktop-database &> /dev/null ||:
+%endif
+
 %if 0%{?mandriva_version}
 %post
 %{update_menus}
 %{update_desktop_database}
-%endif
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%post
-update-desktop-database &> /dev/null ||:
-%endif
-
-
-%if 0%{?mandriva_version}
 %postun
 %{clean_menus}
 %{clean_desktop_database}
 %endif
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%postun
-%update_desktop-database &> /dev/null ||:
-%endif
 
 
 %files
