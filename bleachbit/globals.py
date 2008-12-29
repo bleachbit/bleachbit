@@ -23,7 +23,7 @@ APP_VERSION = "0.2.0"
 APP_NAME = "BleachBit"
 
 # Debian, Ubuntu
-license_filename = "/usr/share/common-licenses/GPL-3/"
+license_filename = "/usr/share/common-licenses/GPL-3"
 if not os.path.exists(license_filename):
     # Mandriva, openSUSE
     license_filename = "/usr/share/doc/bleachbit/COPYING"
