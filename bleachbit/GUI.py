@@ -339,6 +339,7 @@ class GUI:
         except:
             dialog.set_license(_("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
         dialog.set_name(APP_NAME)
+        dialog.set_version(APP_VERSION)
         dialog.set_website("http://bleachbit.sourceforge.net")
         dialog.run()
         dialog.hide()
