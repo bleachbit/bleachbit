@@ -23,7 +23,7 @@
 import gettext
 gettext.install("bleachbit")
 import pygtk
-pygtk.require('2.6')
+pygtk.require('2.0')
 import gtk
 import gobject
 import sys
