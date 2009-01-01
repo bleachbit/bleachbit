@@ -18,10 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-
-import gettext
-gettext.install("bleachbit")
+from gettext import gettext as _
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -33,7 +30,7 @@ import FileUtilities
 import CleanerBackend
 import Update
 from Options import options
-from globals import *
+from globals import APP_NAME, APP_VERSION, online_update_notification_enabled
 
 
 
@@ -404,10 +401,10 @@ class GUI:
         self.actiongroup = actiongroup
 
         # Create actions
-        actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, '_Quit', None, 'Quit the Program', lambda *dummy: gtk.main_quit()),
-                                ('File', None, '_File'), 
-                                ('About', gtk.STOCK_ABOUT, '_About', None, 'Show about', self.about), 
-                                ('Help', None, '_Help')])
+        actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, _('_Quit'), None, _('Quit BleachBit'), lambda *dummy: gtk.main_quit()),
+                                ('File', None, _('_File')), 
+                                ('About', gtk.STOCK_ABOUT, _('_About'), None, _('Show about'), self.about), 
+                                ('Help', None, _("_Help"))])
         actiongroup.get_action('Quit').set_property('short-label', '_Quit')
 
         # Add the actiongroup to the uimanager
@@ -527,7 +524,6 @@ class GUI:
             self.first_start()
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
-
 
 if __name__ == '__main__':
     gui = GUI()

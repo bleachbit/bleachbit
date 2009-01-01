@@ -18,8 +18,6 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import gettext
-gettext.install("bleachbit")
 import platform
 import socket
 import sys

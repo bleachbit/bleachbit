@@ -1,0 +1,239 @@
+# Translation file for BleachBit
+# Copyright (C) 2008 Andrew Ziem
+# This file is distributed under the same license as the BleachBit package.
+# Andrew Ziem, 2008
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-12-31 18:53-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Andrew Ziem\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../bleachbit/CleanerBackend.py:89
+msgid "Clear Beagle indexes and logs"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:164
+#: ../bleachbit/CleanerBackend.py:246 ../bleachbit/CleanerBackend.py:320
+#: ../bleachbit/CleanerBackend.py:396 ../bleachbit/gettext_test2.py:5
+#: ../bleachbit/gettext_test.py:16
+msgid "Cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:165
+#: ../bleachbit/CleanerBackend.py:321 ../bleachbit/CleanerBackend.py:397
+msgid "Cookies"
+msgstr "Cookies"
+
+#: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:166
+msgid "Download history"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:168
+msgid "Places"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:170
+msgid "Sign ons"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:119
+msgid "Clear Epiphany's cache, cookies, download list, places, and sign ons."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:167
+msgid "Form history"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:169
+msgid "Session restore"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:174
+msgid ""
+"Clear Mozilla Firefox's cache, cookies, download list, forms, and places "
+"database.  The places database contains URLs including bookmarks and visited "
+"URLs."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:226
+msgid "Clear Adobe Flash's cache and settings"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:245
+msgid "Broken desktop entries"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:247
+msgid "Recent documents list"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:250
+msgid ""
+"Clear system cache and recently used documents.  These locations are "
+"specified by XDG specifications and are used by some applications on modern "
+"Linux systems."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:256
+msgid "System"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:301
+msgid "Clear Java's cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:324
+msgid ""
+"Clear KDE cache and temporary directories.  These are shared by applications "
+"including Konqueror."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:355
+msgid "Clear OpenOffice.org's registry cache and UNO package cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:401
+msgid "Clear Opera cache and cookies."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:433
+msgid "Clear the RealPlayer cookies"
+msgstr "Borrar las cookies de RealPlayer"
+
+#: ../bleachbit/CleanerBackend.py:452
+msgid "Clear the rpmbuild build directory"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:470
+msgid "Clear the thumbnails folder"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:488
+msgid "Delete user-owned, unopened, regular files in /tmp/ and /var/tmp/"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:525
+msgid "Clear the trash folder"
+msgstr "Vaciar la papalera"
+
+#: ../bleachbit/CleanerBackend.py:531
+msgid "Trash"
+msgstr "Papalera"
+
+#: ../bleachbit/CleanerBackend.py:549
+msgid ""
+"Clear ~/.viminfo which includes VIM file history, command history, and "
+"buffers"
+msgstr ""
+
+#: ../bleachbit/gettext_test2.py:4 ../bleachbit/gettext_test.py:15
+#: ../bleachbit/GUI.py:429
+msgid "Delete"
+msgstr "Borrar"
+
+#: ../bleachbit/GUI.py:59
+msgid "Delete confirmation"
+msgstr ""
+
+#: ../bleachbit/GUI.py:66
+msgid ""
+"Are you sure you want to delete files according to the selected operations?  "
+"The actual files that will be deleted may have changed since you ran the "
+"preview.  Files cannot be undeleted."
+msgstr ""
+
+#: ../bleachbit/GUI.py:281
+#, python-format
+msgid "Exception while getting running operation '%s': '%s'"
+msgstr ""
+
+#: ../bleachbit/GUI.py:295
+msgid "You must select an operation"
+msgstr ""
+
+#: ../bleachbit/GUI.py:312
+msgid "Please wait.  Scanning and deleting: "
+msgstr ""
+
+#: ../bleachbit/GUI.py:314
+msgid "Please wait.  Scanning: "
+msgstr "Esprar por favor.  Trabajando: "
+
+#: ../bleachbit/GUI.py:321
+msgid "Done."
+msgstr "Termina."
+
+#: ../bleachbit/GUI.py:331
+msgid "Program to clean unnecessary files"
+msgstr ""
+
+#: ../bleachbit/GUI.py:336
+msgid ""
+"GNU General Public License version 3 or later.\n"
+"See http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+
+#: ../bleachbit/GUI.py:350
+msgid "Welcome"
+msgstr "Bienvenidos"
+
+#: ../bleachbit/GUI.py:357
+msgid ""
+"Should BleachBit periodically check for software updates via the Internet?"
+msgstr ""
+
+#: ../bleachbit/GUI.py:403
+msgid "Quit"
+msgstr "Salir"
+
+#: ../bleachbit/GUI.py:403
+msgid "_Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py:403
+msgid "Quit BleachBit"
+msgstr ""
+
+#: ../bleachbit/GUI.py:405
+msgid "About"
+msgstr "Acerca de"
+
+#: ../bleachbit/GUI.py:405
+msgid "_About"
+msgstr "_Acerca de"
+
+#: ../bleachbit/GUI.py:405
+msgid "Show about"
+msgstr ""
+
+#: ../bleachbit/GUI.py:406
+msgid "Help"
+msgstr "Ayuda"
+
+#: ../bleachbit/GUI.py:436
+msgid "Preview"
+msgstr "Previsualización"
+
+#: ../bleachbit/GUI.py:496
+msgid "Update BleachBit"
+msgstr ""
+
+#: ../bleachbit/GUI.py:506
+msgid "BleachBit update is available"
+msgstr ""
+
+#: ../bleachbit/GUI.py:506
+msgid "Click 'Update BleachBit' for more information"
+msgstr ""
+
+#: ../bleachbit/Update.py:63
+msgid "Error when checking for updates: "
+msgstr ""

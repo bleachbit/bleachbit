@@ -17,6 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gettext
 import os
 
 APP_VERSION = "0.2.0"
@@ -41,3 +42,20 @@ socket_timeout = 10
 # Setting below value to false disables update notification (useful
 # for packages in repositories).
 online_update_notification_enabled = True
+
+if os.path.exists("../locale/"):
+    locale_dir = os.path.abspath("../locale/")
+    print "debug: locale_dir = '%s'" % (locale_dir, )
+else:
+    locale_dir = "/usr/share/locale/"
+
+try:
+    gettext.bindtextdomain('bleachbit', locale_dir)
+    gettext.textdomain('bleachbit')
+    gettext.install('bleachbit', locale_dir, unicode=1)
+except:
+    print "Warning: gettext() failed so translations will be unvailable"
+    def _(str):
+        """Dummy replacement for gettext"""
+        return str
+

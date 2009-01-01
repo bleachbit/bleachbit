@@ -18,9 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-import gettext
-gettext.install("bleachbit")
+from gettext import gettext as _
 import glob
 import os.path
 import re
@@ -529,7 +527,7 @@ class Trash(Cleaner):
         return 'trash'
 
     def get_name(self):
-        return "Trash"
+        return _("Trash")
 
     def list_files(self):
         dir = os.path.expanduser("~/.Trash")
