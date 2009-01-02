@@ -80,14 +80,14 @@ class OpenFiles:
 
 def bytes_to_human(bytes):
     """Display a file size in human terms (megabytes, etc.)"""
-    if bytes >= 1024*1024*1024*1024:
-        return str(bytes/(1024*1024*1024*1024)) + "TB"
-    if bytes >= 1024*1024*1024:
-        return str(bytes/(1024*1024*1024)) + "GB"
-    if bytes >= 1024*1024:
-        return str(bytes/(1024*1024)) + "MB"
+    if bytes >= 1024**4:
+        return "%.2fTB" % ((1.0*bytes)/(1024**4), )
+    if bytes >= 1024**3:
+        return "%.2fGB" % ((1.0*bytes)/(1024**3), )
+    if bytes >= 1024**2:
+        return "%.1fMB" % ((1.0*bytes)/(1024**2), )
     if bytes >= 1024:
-        return str(bytes/1024) + "KB"
+        return "%.1fKB" % ((1.0*bytes)/1024, )
     return str(bytes) + "B"
 
 
@@ -238,16 +238,38 @@ class TestFileUtilities(unittest.TestCase):
         f = open(filename, "w")
 
 
+    def human_to_bytes(self, string):
+        """Convert a string like 10.2GB into bytes"""
+        multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
+            'GB': 1024**3, 'TB': 1024**4 }
+        import re
+        matches = re.findall("^([0-9]*\.[0-9]{1,2})([KMGT]{0,1}B)$", string)
+        if 2 != len(matches[0]):
+            raise ValueError("Invalid input for '%s'" % (string))
+        return int(float(matches[0][0]) * multiplier[matches[0][1]])
+
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
+        # test one-way conversion for predefined values
         tests = [ ("1B", bytes_to_human(1)),
-                  ("1KB", bytes_to_human(1024)),
-                  ("1MB", bytes_to_human(1024*1024)),
-                  ("1GB", bytes_to_human(1024*1024*1024)), 
-                  ("1TB", bytes_to_human(1024*1024*1024*1024)) ]
+                  ("1.0KB", bytes_to_human(1024)),
+                  ("1.0MB", bytes_to_human(1024**2)),
+                  ("1.00GB", bytes_to_human(1024**3)),
+                  ("1.00TB", bytes_to_human(1024**4)) ]
 
         for test in tests:
             self.assertEqual(test[0], test[1])
+
+        # test roundtrip conversion for random values
+        import random
+        for n in range(0, 1000):
+            bytes = random.randrange(0, 1024**4)
+            human = bytes_to_human(bytes)
+            bytes2 = self.human_to_bytes(human)
+            error =  abs(float(bytes2 - bytes) / bytes)
+            self.assert_(abs(error) < 0.01, \
+                "%d (%s) is %.2f%% different than %d" % \
+                (bytes, human, error * 100, bytes2))
 
 
     def test_children_in_directory(self): 
