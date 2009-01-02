@@ -17,6 +17,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+File-related utilities
+"""
 
 
 import ConfigParser
@@ -25,7 +28,6 @@ import glob
 import os
 import os.path
 import shlex
-import stat
 import subprocess
 
 HAVE_GNOME_VFS = True
@@ -170,13 +172,16 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             else:
                 break
         if not exe_exists(execs[0]):
-            print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], desktop_pathname)
+            print "info: is_broken_xdg_menu: executable '%s'" \
+                "does not exist '%s'" % (execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                print "info: is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" % (windows_exe, desktop_pathname)
+                print "info: is_broken_xdg_menu: Windows executable" \
+                    "'%s' does not exist '%s'" % \
+                    (windows_exe, desktop_pathname)
                 return True
     return False
 
@@ -187,7 +192,8 @@ def is_broken_xdg_desktop(pathname):
     config = ConfigParser.RawConfigParser()
     config.read(pathname)
     if not config.has_section('Desktop Entry'):
-        print "info: is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % (pathname)
+        print "info: is_broken_xdg_menu: missing required section " \
+            "'Desktop Entry': '%s'" % (pathname)
         return True
     if not config.has_option('Desktop Entry', 'Type'):
         print "info: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
@@ -205,7 +211,8 @@ def is_broken_xdg_desktop(pathname):
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
         if HAVE_GNOME_VFS and 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
-            print "info: is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname)
+            print "info: is_broken_xdg_menu: MimeType '%s' not " \
+                "registered '%s'" % (mimetype, pathname)
             return True
         return False
     if 'application' != file_type:
@@ -238,7 +245,7 @@ class TestFileUtilities(unittest.TestCase):
         f = open(filename, "w")
 
 
-    def human_to_bytes(self, string):
+    def __human_to_bytes(self, string):
         """Convert a string like 10.2GB into bytes"""
         multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
             'GB': 1024**3, 'TB': 1024**4 }
@@ -247,6 +254,7 @@ class TestFileUtilities(unittest.TestCase):
         if 2 != len(matches[0]):
             raise ValueError("Invalid input for '%s'" % (string))
         return int(float(matches[0][0]) * multiplier[matches[0][1]])
+
 
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
@@ -265,7 +273,7 @@ class TestFileUtilities(unittest.TestCase):
         for n in range(0, 1000):
             bytes = random.randrange(0, 1024**4)
             human = bytes_to_human(bytes)
-            bytes2 = self.human_to_bytes(human)
+            bytes2 = self.__human_to_bytes(human)
             error =  abs(float(bytes2 - bytes) / bytes)
             self.assert_(abs(error) < 0.01, \
                 "%d (%s) is %.2f%% different than %d" % \
@@ -276,6 +284,7 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for function children_in_directory()"""
         import tempfile
 
+        # test an existing directory that usually exists
         dirname = os.path.expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
             self.assert_ (type(filename) is str)
@@ -285,22 +294,24 @@ class TestFileUtilities(unittest.TestCase):
             self.assert_ (os.path.isabs(filename))
             self.assert_ (not os.path.isdir(filename))
 
+        # test a constructed file in a constructed directory
         dirname = tempfile.mkdtemp()
-        foo = os.path.join(dirname, "foo")
-        self.__touch(foo)
+        filename = os.path.join(dirname, "somefile")
+        self.__touch(filename)
         for filename in children_in_directory(dirname, True):
-            self.assert_ (filename, foo)
+            self.assert_ (filename, filename)
         for filename in children_in_directory(dirname, False):
-            self.assert_ (filename, foo)
-        os.remove(foo)
+            self.assert_ (filename, filename)
+        os.remove(filename)
 
-        foobar = os.path.join(dirname, "foobar")
-        os.mkdir(foobar)
+        # test subdirectory
+        subdirname = os.path.join(dirname, "subdir")
+        os.mkdir(subdirname)
         for filename in children_in_directory(dirname, True):
-            self.assert_ (filename, foobar)
+            self.assert_ (filename, subdirname)
         for filename in children_in_directory(dirname, False):
             self.assert_ (False)
-        os.rmdir(foobar)
+        os.rmdir(subdirname)
 
         os.rmdir(dirname)
 
