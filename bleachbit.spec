@@ -143,6 +143,7 @@ update-desktop-database &> /dev/null ||:
 %endif
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/pixmaps/%{name}.png
 
 
 

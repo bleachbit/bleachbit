@@ -43,6 +43,14 @@ socket_timeout = 10
 # for packages in repositories).
 online_update_notification_enabled = True
 
+# application icon
+if os.path.exists("bleachbit.png"):
+    appicon_path = "bleachbit.png"
+    print "debug: appicon_path = '%s'" % (appicon_path, )
+else:
+    appicon_path = "/usr/share/pixmaps/bleachbit.png"
+
+# locale directory
 if os.path.exists("../locale/"):
     locale_dir = os.path.abspath("../locale/")
     print "debug: locale_dir = '%s'" % (locale_dir, )

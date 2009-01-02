@@ -31,7 +31,8 @@ import FileUtilities
 import CleanerBackend
 import Update
 from Options import options
-from globals import APP_NAME, APP_VERSION, online_update_notification_enabled
+from globals import APP_NAME, APP_VERSION, appicon_path, \
+    online_update_notification_enabled
 
 
 
@@ -449,6 +450,7 @@ class GUI:
 
         self.window.resize(800, 600)
         self.window.set_title(APP_NAME)
+        self.window.set_icon_from_file(appicon_path)
         vbox = gtk.VBox()
         self.window.add(vbox)
 

@@ -4,6 +4,7 @@ from distutils.core import setup
 
 data_files = []
 data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
+data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 data_files.append(('/usr/bin', ['bin/bleachbit']))
 
 setup(name='bleachbit',
