@@ -88,6 +88,9 @@ def bytes_to_human(bytes):
     storage_multipliers = { 1024**5 : 'PB', 1024**4 : 'TB', \
         1024**3 : 'GB', 1024**2: 'MB', 1024: 'KB', 1 : 'B' }
 
+    if 0 == bytes:
+        return "0"
+
     if bytes >= 1024**3:
         decimals = 2
     elif bytes >= 1024:
@@ -275,7 +278,8 @@ class TestFileUtilities(unittest.TestCase):
         locale.setlocale(locale.LC_NUMERIC, 'en_US')
 
         # test one-way conversion for predefined values
-        tests = [ ("1B", bytes_to_human(1)),
+        tests = [ ("0", bytes_to_human(0)),
+                  ("1B", bytes_to_human(1)),
                   ("1.0KB", bytes_to_human(1024)),
                   ("1.0MB", bytes_to_human(1024**2)),
                   ("1.00GB", bytes_to_human(1024**3)),
