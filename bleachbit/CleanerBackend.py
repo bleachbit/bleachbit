@@ -8,15 +8,18 @@
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Perform (or assist with) cleaning operations.
+"""
 
 from gettext import gettext as _
 import glob
@@ -54,7 +57,7 @@ class Cleaner:
         r = []
         if self.options:
             for key in sorted(self.options.keys()):
-                r.append((key, self.options[key][0], self.options[key][1]))                
+                r.append((key, self.options[key][0], self.options[key][1]))
         return r
 
     def list_files(self):
@@ -103,10 +106,11 @@ class Beagle(Cleaner):
 
 
 
-class Epihany(Cleaner):
+class Epiphany(Cleaner):
     """Epiphany"""
 
     def __init__(self):
+        Cleaner.__init__(self)
         self.options = {}
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["cookies"] = ( _("Cookies"), False )
@@ -150,15 +154,16 @@ class Epihany(Cleaner):
         if self.options["signons"][1]:
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/signons3.txt") ]
 
-        for file in files:
-            if os.path.exists(file):
-                yield file
+        for filename in files:
+            if os.path.exists(filename):
+                yield filename
 
 
 class Firefox(Cleaner):
     """Mozilla Firefox"""
 
     def __init__(self):
+        Cleaner.__init__(self)
         self.options = {}
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["cookies"] = ( _("Cookies"), False )
@@ -183,9 +188,9 @@ class Firefox(Cleaner):
         if self.options["cache"][1]:
             dirs = glob.glob(os.path.expanduser(self.profile_dir + "/Cache/"))
             dirs += glob.glob(os.path.expanduser(self.profile_dir + "/OfflineCache/"))
-            for dir in dirs:
-                for file in FileUtilities.children_in_directory(dir, False):
-                    yield file
+            for dirname in dirs:
+                for filename in FileUtilities.children_in_directory(dirname, False):
+                    yield filename
         files = []
         # cookies
         if self.options["cookies"][1]:
@@ -215,8 +220,8 @@ class Firefox(Cleaner):
         if self.options["signons"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
-        for file in files:
-            yield file
+        for filename in files:
+            yield filename
 
 class Flash(Cleaner):
     """Adobe Flash"""
@@ -231,22 +236,25 @@ class Flash(Cleaner):
         return "Flash"
 
     def list_files(self):
-        dir = os.path.expanduser("~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys")
-        for file in FileUtilities.children_in_directory(dir, True):
-            yield file
+        dirname = os.path.expanduser("~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys")
+        for filename in FileUtilities.children_in_directory(dirname, True):
+            yield filename
 
 
 class System(Cleaner):
     """Freedesktop (XDG)"""
 
     def __init__(self):
+        Cleaner.__init__(self)
         self.options = {}
         self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
-        self.options["cache"] = ( _("Cache"), False ) 
+        self.options["cache"] = ( _("Cache"), False )
         self.options["recent"] = ( _("Recent documents list"), False )
 
     def get_description(self):
-        return _("Clear system cache and recently used documents.  These locations are specified by XDG specifications and are used by some applications on modern Linux systems.")
+        return _("Clear system cache and recently used documents."
+            "  These locations are specified by XDG specifications" \
+            " and are used by some applications on modern Linux systems.")
 
     def get_id(self):
         return 'system'
@@ -257,9 +265,9 @@ class System(Cleaner):
     def list_files(self):
         # cache
         if self.options["cache"][1]:
-            dir = os.path.expanduser("~/.cache/")
-            for file in FileUtilities.children_in_directory(dir, True):
-                yield file
+            dirname = os.path.expanduser("~/.cache/")
+            for filename in FileUtilities.children_in_directory(dirname, True):
+                yield filename
 
         # menu
         menu_dirs = [ '~/.local/share/applications', \
@@ -287,9 +295,9 @@ class System(Cleaner):
             files += [ os.path.expanduser("~/.recently-used") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
-        for file in files:
-            if os.path.exists(file):
-                yield file
+        for filename in files:
+            if os.path.exists(filename):
+                yield filename
 
 
 
@@ -306,15 +314,16 @@ class Java(Cleaner):
         return "Java"
 
     def list_files(self):
-        dir = os.path.expanduser("~/.java/deployment/cache")
-        for file in FileUtilities.children_in_directory(dir, False):
-            yield file
+        dirname = os.path.expanduser("~/.java/deployment/cache")
+        for filename in FileUtilities.children_in_directory(dirname, False):
+            yield filename
 
 
 class KDE(Cleaner):
     """KDE"""
 
     def __init__(self):
+        Cleaner.__init__(self)
         self.options = {}
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["tmp"] = ( _("Cookies"), False )
@@ -332,14 +341,14 @@ class KDE(Cleaner):
         # cache
         if self.options["cache"][1]:
             dirs = glob.glob(os.path.expanduser("~/.kde/cache-*/"))
-            for dir in dirs:
-                for file in FileUtilities.children_in_directory(dir, False):
-                    yield file
+            for dirname in dirs:
+                for filename in FileUtilities.children_in_directory(dirname, False):
+                    yield filename
         # temporary
         if self.options["tmp"][1]:
             dirs = glob.glob(os.path.expanduser("~/.kde/tmp-*/"))
-            for dir in dirs:
-                for file in FileUtilities.children_in_directory(dir, False):
+            for dirname in dirs:
+                for file in FileUtilities.children_in_directory(dirname, False):
                     yield file
 
 class OpenOfficeOrg(Cleaner):
@@ -347,6 +356,7 @@ class OpenOfficeOrg(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
+        # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
         self.prefixes += [ "~/.ooo-dev3" ]
 
@@ -360,15 +370,13 @@ class OpenOfficeOrg(Cleaner):
         return "OpenOffice.org"
 
     def list_files(self):
-        # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         dirs = []
         for prefix in self.prefixes:
             dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
             dirs.append(os.path.join(os.path.expanduser(prefix), "user/registry/cache/"))
-        for dir in dirs:
-            d = os.path.expanduser(dir)
-            for file in FileUtilities.children_in_directory(d, False):
-                yield file
+        for dirname in dirs:
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                yield filename
 
     def erase_history(self, path):
         """Erase the history node (most recently used documents"""
@@ -391,6 +399,7 @@ class Opera(Cleaner):
     """Opera"""
 
     def __init__(self):
+        Cleaner.__init__(self)
         self.options = {}
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["cookies"] = ( _("Cookies"), False )
@@ -410,9 +419,9 @@ class Opera(Cleaner):
         if self.options["cache"][1]:
             dirs = [ os.path.expanduser(self.profile_dir + "cache4/"), \
                 os.path.expanduser(self.profile_dir + "opcache/") ]
-            for dir in dirs:
-                for file in FileUtilities.children_in_directory(dir, False):
-                    yield file
+            for dirname in dirs:
+                for filename in FileUtilities.children_in_directory(dirname, False):
+                    yield filename
 
         files = []
 
@@ -457,9 +466,9 @@ class rpmbuild(Cleaner):
         return "rpmbuild"
 
     def list_files(self):
-        dir = os.path.expanduser("~/rpmbuild/BUILD/")
-        for file in FileUtilities.children_in_directory(dir, True):
-            yield file
+        dirname = os.path.expanduser("~/rpmbuild/BUILD/")
+        for filename in FileUtilities.children_in_directory(dirname, True):
+            yield filename
 
 
 class Thumbnails(Cleaner):
@@ -475,9 +484,9 @@ class Thumbnails(Cleaner):
         return "Thumbnails"
 
     def list_files(self):
-        dir = os.path.expanduser("~/.thumbnails")
-        for file in FileUtilities.children_in_directory(dir, False):
-            yield file
+        dirname = os.path.expanduser("~/.thumbnails")
+        for filename in FileUtilities.children_in_directory(dirname, False):
+            yield filename
 
 
 class tmp(Cleaner):
@@ -530,15 +539,15 @@ class Trash(Cleaner):
         return _("Trash")
 
     def list_files(self):
-        dir = os.path.expanduser("~/.Trash")
-        for file in FileUtilities.children_in_directory(dir, False):
-            yield file
+        dirname = os.path.expanduser("~/.Trash")
+        for filename in FileUtilities.children_in_directory(dirname, False):
+            yield filename
         # fixme http://www.ramendik.ru/docs/trashspec.html
         # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
         # GNOME 2.22, Fedora 9 ~/.local/share/Trash
-        dir = os.path.expanduser("~/.local/share/Trash")
-        for file in FileUtilities.children_in_directory(dir, False):
-            yield file
+        dirname = os.path.expanduser("~/.local/share/Trash")
+        for filename in FileUtilities.children_in_directory(dirname, False):
+            yield filename
 
 
 class VIM(Cleaner):
@@ -576,15 +585,15 @@ class XChat(Cleaner):
 
     def list_files(self):
         dirs = ["~/.xchat2/scrollback/", "~/.xchat2/logs/"]
-        for dir in dirs:
-            d = os.path.expanduser(dir)
-            for file in FileUtilities.children_in_directory(d, False):
-                yield file
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                yield filename
 
 backends = {}
 backends["bash"] = Bash()
 backends["beagle"] = Beagle()
-backends["epiphany"] = Epihany()
+backends["epiphany"] = Epiphany()
 backends["firefox"] = Firefox()
 backends["flash"] = Flash()
 backends["java"] = Java()
@@ -616,8 +625,8 @@ class TestUtilities(unittest.TestCase):
 
     def test_get_options(self):
         for key in sorted(backends):
-            for (id, name, value) in backends[key].get_options():
-                self.assert_ (type(id) is str)
+            for (test_id, name, value) in backends[key].get_options():
+                self.assert_ (type(test_id) is str)
                 self.assert_ (type(name) is str)
                 self.assert_ (type(value) is bool)
 
@@ -626,9 +635,11 @@ class TestUtilities(unittest.TestCase):
             print "debug: test_list_files: key='%s'" % (key, )
             for (cleaner_id, __name, __value) in backends[key].get_options():
                 backends[key].set_option(cleaner_id, True)
-            for file in backends[key].list_files():
-                self.assert_ (type(file) is str)
-                self.assert_ (os.path.exists(file), "In backend '%s' path does not exist: '%s' " % (key, file))
+            for filename in backends[key].list_files():
+                self.assert_ (type(filename) is str)
+                self.assert_ (os.path.exists(filename), \
+                    "In backend '%s' path does not exist: '%s' \
+                    " % (key, filename))
 
     def test_whitelist(self):
         tests = [ \
