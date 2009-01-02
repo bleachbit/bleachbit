@@ -51,10 +51,12 @@ else:
     appicon_path = "/usr/share/pixmaps/bleachbit.png"
 
 # locale directory
-if os.path.exists("../locale/"):
-    locale_dir = os.path.abspath("../locale/")
+if os.path.exists("./locale/"):
+    # local locale
+    locale_dir = os.path.abspath("./locale/")
     print "debug: locale_dir = '%s'" % (locale_dir, )
 else:
+    # installed locale
     locale_dir = "/usr/share/locale/"
 
 try:
