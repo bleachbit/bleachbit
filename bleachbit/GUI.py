@@ -32,7 +32,7 @@ import CleanerBackend
 import Update
 from Options import options
 from globals import APP_NAME, APP_VERSION, appicon_path, \
-    online_update_notification_enabled
+    license_filename, online_update_notification_enabled
 
 
 
