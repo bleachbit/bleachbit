@@ -102,7 +102,9 @@ install *.pyc *.pyo %{buildroot}%{py_platsitedir}/%{name}
 %suse_update_desktop_file %{name}
 %endif
 
+make -C po install DESTDIR=$RPM_BUILD_ROOT
 
+%find_lang %{name}
 
 
 %clean
@@ -128,7 +130,7 @@ update-desktop-database &> /dev/null ||:
 
 
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING
 %if 0%{?mandriva_version}

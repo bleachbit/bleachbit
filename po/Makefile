@@ -1,6 +1,6 @@
 APP = bleachbit
-PO = $(wildcard *.po)
-MO = $(patsubst %.po,%.mo,$(PO))
+POFILES = $(wildcard *.po)
+MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 SRC = $(wildcard ../bleachbit/*.py)
 
 
@@ -13,11 +13,19 @@ refresh-po:
 
 %.mo: %.po
 	msgfmt --statistics -o $@ $<
+	# copy locally for running without installation
 	mkdir -p echo ../locale/$(@:.mo=)/LC_MESSAGES/
 	cp $@ ../locale/$(@:.mo=)/LC_MESSAGES/bleachbit.mo
+
+install: $(MOFILES)
+	@for MO in $(MOFILES); do \
+		DST=$(DESTDIR)/usr/share/locale/$${MO/.mo/}/LC_MESSAGES/; \
+		mkdir -p $$DST; \
+		cp $$MO $$DST/bleachbit.mo; \
+done
 
 clean:
 	@rm -fv *.mo
 
-all: $(APP).pot $(MO)
+all: $(APP).pot $(MOFILES)
 
