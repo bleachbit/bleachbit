@@ -25,6 +25,7 @@ File-related utilities
 import ConfigParser
 import datetime
 import glob
+import locale
 import os
 import os.path
 import shlex
@@ -44,6 +45,7 @@ except:
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
+
 
 
 class OpenFiles:
@@ -82,16 +84,26 @@ class OpenFiles:
 
 def bytes_to_human(bytes):
     """Display a file size in human terms (megabytes, etc.)"""
-    if bytes >= 1024**4:
-        return "%.2fTB" % ((1.0*bytes)/(1024**4), )
-    if bytes >= 1024**3:
-        return "%.2fGB" % ((1.0*bytes)/(1024**3), )
-    if bytes >= 1024**2:
-        return "%.1fMB" % ((1.0*bytes)/(1024**2), )
-    if bytes >= 1024:
-        return "%.1fKB" % ((1.0*bytes)/1024, )
-    return str(bytes) + "B"
 
+    storage_multipliers = { 1024**5 : 'PB', 1024**4 : 'TB', \
+        1024**3 : 'GB', 1024**2: 'MB', 1024: 'KB', 1 : 'B' }
+
+    if bytes >= 1024**3:
+        decimals = 2
+    elif bytes >= 1024:
+        decimals = 1
+    else:
+        decimals = 0
+
+    for key in sorted(storage_multipliers.keys(), reverse = True):
+        if bytes >= key:
+            abbrev = (1.0 * bytes) / key
+            suf = storage_multipliers[key]
+            format = "%." + str(decimals) + "f" + suf
+            if hasattr(locale, 'format_string'):
+                return locale.format_string(format, abbrev)
+            else:
+                return locale.format(format, abbrev)
 
 def children_in_directory(top, list_directories = False):
     """Iterate files and, optionally, subdirectories in directory"""
@@ -258,6 +270,10 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
+
+        old_locale = locale.getlocale(locale.LC_NUMERIC)
+        locale.setlocale(locale.LC_NUMERIC, 'en_US')
+
         # test one-way conversion for predefined values
         tests = [ ("1B", bytes_to_human(1)),
                   ("1.0KB", bytes_to_human(1024)),
@@ -278,6 +294,14 @@ class TestFileUtilities(unittest.TestCase):
             self.assert_(abs(error) < 0.01, \
                 "%d (%s) is %.2f%% different than %d" % \
                 (bytes, human, error * 100, bytes2))
+
+        # test localization
+        if hasattr(locale, 'format_string'):
+            locale.setlocale(locale.LC_NUMERIC, 'de_DE')
+            self.assertEqual("1,00TB", bytes_to_human(1024**4))
+
+        # clean up
+        locale.setlocale(locale.LC_NUMERIC, old_locale)
 
 
     def test_children_in_directory(self): 
