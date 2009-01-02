@@ -23,6 +23,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+import os
 import sys
 import threading
 
@@ -282,7 +283,7 @@ class GUI:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
             gtk.gdk.threads_enter()
-            self.textbuffer.insert(iter, err)
+            self.textbuffer.insert(__iter, err + "\n")
             gtk.gdk.threads_leave()
         return total_bytes
 
