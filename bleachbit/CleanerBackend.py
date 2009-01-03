@@ -66,7 +66,6 @@ class Cleaner:
 
     def set_option(self, option, value):
         assert self.options.has_key(option)
-        print "debug: set_option: '%s' = '%s'" % (option, value)
         self.options[option] = (self.options[option][0], value)
 
 
