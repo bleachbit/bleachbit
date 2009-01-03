@@ -28,6 +28,7 @@ import re
 import xml.dom.minidom
 
 import FileUtilities
+import globals
 
 
 class Cleaner:
@@ -115,11 +116,11 @@ class Epiphany(Cleaner):
         self.options["cache"] = ( _("Cache"), False ) 
         self.options["cookies"] = ( _("Cookies"), False )
         self.options["download_history"] = ( _("Download history"), False)
+        self.options["passwords"] = ( _("Passwords"), False)
         self.options["places"] = ( _("Places"), False)
-        self.options["signons"] = ( _("Sign ons"), False)
 
     def get_description(self):
-        return _("Clear Epiphany's cache, cookies, download list, places, and sign ons.")
+        return _("Clear Epiphany's cache, cookies, download list, places, and passwords.")
 
     def get_id(self):
         return 'epiphany'
@@ -144,19 +145,20 @@ class Epiphany(Cleaner):
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite") ]
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal") ]
 
+        # password
+        if self.options["passwords"][1]:
+            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/signons3.txt") ]
+
+        for filename in files:
+            if os.path.exists(filename):
+                yield filename
+
         # places database
         if self.options["places"][1]:
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite") ]
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal") ]
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-history.xml") ]
 
-        # sign ons
-        if self.options["signons"][1]:
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/signons3.txt") ]
-
-        for filename in files:
-            if os.path.exists(filename):
-                yield filename
 
 
 class Firefox(Cleaner):
@@ -165,13 +167,13 @@ class Firefox(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.options = {}
-        self.options["cache"] = ( _("Cache"), False ) 
+        self.options["cache"] = ( _("Cache"), False )
         self.options["cookies"] = ( _("Cookies"), False )
         self.options["download_history"] = ( _("Download history"), False)
         self.options["forms"] = ( _("Form history"), False)
-        self.options["places"] = ( _("Places"), False)
         self.options["session_restore"] = ( _("Session restore"), False)
-        self.options["signons"] = ( _("Sign ons"), False)
+        self.options["passwords"] = ( _("Passwords"), False)
+        self.options["places"] = ( _("Places"), False)
         self.profile_dir = "~/.mozilla/firefox/*/"
 
     def get_description(self):
@@ -206,6 +208,12 @@ class Firefox(Cleaner):
         if self.options["forms"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/formhistory.sqlite"))
             files += glob.glob(os.path.expanduser(self.profile_dir + "/formhistory.dat"))
+        # passwords
+        if self.options["passwords"][1]:
+            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
+            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
+        for filename in files:
+            yield filename
         # places database
         if self.options["places"][1]:
             # Firefox version 1
@@ -216,12 +224,6 @@ class Firefox(Cleaner):
         # session restore
         if self.options["session_restore"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
-        # sign ons
-        if self.options["signons"][1]:
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
-        for filename in files:
-            yield filename
 
 class Flash(Cleaner):
     """Adobe Flash"""
@@ -481,7 +483,7 @@ class Thumbnails(Cleaner):
         return 'thumbnails'
 
     def get_name(self):
-        return "Thumbnails"
+        return _("Thumbnails")
 
     def list_files(self):
         dirname = os.path.expanduser("~/.thumbnails")

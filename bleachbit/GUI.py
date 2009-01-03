@@ -322,7 +322,8 @@ class GUI:
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
         self.progressbar.set_text(_("Done."))
-        self.textbuffer.insert(__iter, "\nTotal size:" + FileUtilities.bytes_to_human(total_bytes))
+        self.textbuffer.insert(__iter, "\n" + _("Total size:") \
+             + FileUtilities.bytes_to_human(total_bytes))
         self.set_sensitive(True)
         gtk.gdk.threads_leave()
 
@@ -350,7 +351,7 @@ class GUI:
         if not online_update_notification_enabled:
             return
 
-        dialog = gtk.Dialog(title = _("Welcome"), parent = self.window, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+        dialog = gtk.Dialog(title = _("Software updates"), parent = self.window, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
         dialog.set_default_size(300, -1)
 
         hbox = gtk.HBox(homogeneous = False, spacing = 10)

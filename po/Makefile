@@ -2,23 +2,27 @@ APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 SRC = $(wildcard ../bleachbit/*.py)
+POTFILE = $(APP).pot
 
 
-$(APP).pot : $(SRC)
+$(POTFILE): $(SRC)
 	xgettext -o $(APP).pot --default-domain=$(APP) $(SRC)
 
-refresh-po:
-	#msgmerge bleachbit.pot es.po >es.pot
-	#mv es.pot es.po
+refresh-po: $(POTFILE)
+	for oldpo in $(POFILES); do \
+		lang=$${oldpo%.*}; \
+		msgmerge -v $${lang}.po $(POTFILE) > $${lang}.pot; \
+		mv $$lang.pot $$lang.po; \
+	done
 
 %.mo: %.po
 	msgfmt --statistics -o $@ $<
 	# copy locally for running without installation
-	mkdir -p echo ../locale/$(@:.mo=)/LC_MESSAGES/
-	cp $@ ../locale/$(@:.mo=)/LC_MESSAGES/bleachbit.mo
+	mkdir -p ../locale/$(@:.mo=)/LC_MESSAGES/
+	cp -lf $@ ../locale/$(@:.mo=)/LC_MESSAGES/bleachbit.mo
 
 install: $(MOFILES)
-	@for MO in $(MOFILES); do \
+	for MO in $(MOFILES); do \
 		DST=$(DESTDIR)/usr/share/locale/$${MO/.mo/}/LC_MESSAGES/; \
 		mkdir -p $$DST; \
 		cp $$MO $$DST/bleachbit.mo; \
