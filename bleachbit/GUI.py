@@ -89,10 +89,10 @@ class TreeInfoModel:
         for key in sorted(CleanerBackend.backends):
             c_name = CleanerBackend.backends[key].get_name()
             c_id = CleanerBackend.backends[key].get_id()
-            c_value = options.get_tree(c_name, None)
+            c_value = options.get_tree(c_id, None)
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
             for (o_id, o_name, o_value) in CleanerBackend.backends[key].get_options():
-                o_value = options.get_tree(c_name, o_id)
+                o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id))
         if None == self.tree_store:
             raise Exception("cannot create tree store")
