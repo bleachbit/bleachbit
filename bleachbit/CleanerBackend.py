@@ -404,7 +404,6 @@ class OpenOfficeOrg(Cleaner):
         for prefix in self.prefixes:
             path = os.path.join(os.path.expanduser(prefix), "user/registry/data/org/openoffice/Office/Common.xcu")
             if os.path.exists(path):
-                print "debug: ooo other_cleanup", path
                 if really_delete:
                     oldsize = os.path.getsize(path)
                     self.erase_history(path)
