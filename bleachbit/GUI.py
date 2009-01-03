@@ -276,6 +276,8 @@ class GUI:
         if operation_options:
             for (option, value) in operation_options:
                 CleanerBackend.backends[operation].set_option(option, value)
+
+        # standard operation
         try:
             for pathname in CleanerBackend.backends[operation].list_files():
                 total_bytes += self.clean_pathname(pathname, really_delete, __iter)
@@ -284,6 +286,27 @@ class GUI:
             print err
             gtk.gdk.threads_enter()
             self.textbuffer.insert(__iter, err + "\n")
+            gtk.gdk.threads_leave()
+
+        # special operation
+        try:
+            ret = CleanerBackend.backends[operation].other_cleanup(really_delete)
+        except:
+            err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
+            print err
+            gtk.gdk.threads_enter()
+            self.textbuffer.insert(__iter, err + "\n")
+            gtk.gdk.threads_leave()
+        else:
+            if None == ret:
+                return total_bytes
+            gtk.gdk.threads_enter()
+            if really_delete:
+                total_bytes += ret[0]
+                line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
+            else:
+                line = _("Special operation: ") + ret + "\n"
+            self.textbuffer.insert(__iter, line)
             gtk.gdk.threads_leave()
         return total_bytes
 

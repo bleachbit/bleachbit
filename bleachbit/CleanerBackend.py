@@ -64,6 +64,9 @@ class Cleaner:
     def list_files(self):
         """Iterate files that would be removed"""
 
+    def other_cleanup(self, really_delete):
+        """Perform an operation more specialized than removing a file"""
+
     def set_option(self, option, value):
         assert self.options.has_key(option)
         self.options[option] = (self.options[option][0], value)
@@ -250,7 +253,7 @@ class System(Cleaner):
         self.options = {}
         self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
         self.options["cache"] = ( _("Cache"), False )
-        self.options["recent"] = ( _("Recent documents list"), False )
+        self.options["recent_documents"] = ( _("Recent documents list"), False )
 
     def get_description(self):
         return _("Clear system cache and recently used documents."
@@ -292,7 +295,7 @@ class System(Cleaner):
 
         # most recently used documents list
         files = []
-        if self.options["recent"][1]:
+        if self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
@@ -357,6 +360,9 @@ class OpenOfficeOrg(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
+        self.options = {}
+        self.options["cache"] = ( _("Cache"), False )
+        self.options["recent_documents"] = ( _("Recent documents list"), False )
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
         self.prefixes += [ "~/.ooo-dev3" ]
@@ -371,6 +377,8 @@ class OpenOfficeOrg(Cleaner):
         return "OpenOffice.org"
 
     def list_files(self):
+        if not self.options["cache"][1]:
+            return
         dirs = []
         for prefix in self.prefixes:
             dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
@@ -380,7 +388,7 @@ class OpenOfficeOrg(Cleaner):
                 yield filename
 
     def erase_history(self, path):
-        """Erase the history node (most recently used documents"""
+        """Erase the history node (most recently used documents)"""
         dom1 = xml.dom.minidom.parse(path)
         for node in dom1.getElementsByTagName("node"):
             if node.hasAttribute("oor:name"):
@@ -390,10 +398,20 @@ class OpenOfficeOrg(Cleaner):
                     break
         dom1.writexml(open(path, "w"))
 
-    def other_cleanup(self):
+    def other_cleanup(self, really_delete = False):
+        if not self.options["recent_documents"][1]:
+            return
         for prefix in self.prefixes:
             path = os.path.join(os.path.expanduser(prefix), "user/registry/data/org/openoffice/Office/Common.xcu")
-            os.path.exists(path) and self.erase_history(path)
+            if os.path.exists(path):
+                print "debug: ooo other_cleanup", path
+                if really_delete:
+                    oldsize = os.path.getsize(path)
+                    self.erase_history(path)
+                    newsize = os.path.getsize(path)
+                    return (oldsize - newsize, path)
+                else:
+                    return path
 
 
 class Opera(Cleaner):
@@ -402,7 +420,7 @@ class Opera(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.options = {}
-        self.options["cache"] = ( _("Cache"), False ) 
+        self.options["cache"] = ( _("Cache"), False )
         self.options["cookies"] = ( _("Cookies"), False )
         self.profile_dir = "~/.opera/"
 
@@ -641,6 +659,14 @@ class TestUtilities(unittest.TestCase):
                 self.assert_ (os.path.exists(filename), \
                     "In backend '%s' path does not exist: '%s' \
                     " % (key, filename))
+
+    def test_other_cleanup(self):
+        """Test the method other_cleanup()"""
+        for key in sorted(backends):
+            for (cleaner_id, __name, __value) in backends[key].get_options():
+                backends[key].set_option(cleaner_id, True)
+            path = backends[key].other_cleanup(False)
+            self.assert_ (None == path or os.path.exists(path))
 
     def test_whitelist(self):
         tests = [ \
