@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 ## BleachBit
-## Copyright (C) 2008 Andrew Ziem
+## Copyright (C) 2009 Andrew Ziem
 ## http://bleachbit.sourceforge.net
 ##
 ## This program is free software: you can redistribute it and/or modify
@@ -355,7 +355,7 @@ class GUI:
         gtk.about_dialog_set_url_hook(lambda dialog, link: open_url(link))
         dialog = gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
-        dialog.set_copyright("Copyright (c) 2008 by Andrew Ziem")
+        dialog.set_copyright("Copyright (C) 2009 Andrew Ziem")
         try:
             dialog.set_license(open(license_filename).read())
         except:
