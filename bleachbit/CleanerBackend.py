@@ -86,7 +86,9 @@ class Bash(Cleaner):
         return "Bash"
 
     def list_files(self):
-        yield os.path.expanduser("~/.bash_history")
+        filename = os.path.expanduser("~/.bash_history")
+        if os.path.exists(filename):
+            yield filename
 
 class Beagle(Cleaner):
     """Beagle"""
