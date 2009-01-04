@@ -10,7 +10,7 @@ $(POTFILE): $(SRC)
 
 refresh-po: $(POTFILE)
 	for oldpo in $(POFILES); do \
-		lang=$${oldpo%.*}; \
+		lang=`basename $$oldpo .po`; \
 		msgmerge -v $${lang}.po $(POTFILE) > $${lang}.pot; \
 		mv $$lang.pot $$lang.po; \
 	done
@@ -23,7 +23,8 @@ refresh-po: $(POTFILE)
 
 install: $(MOFILES)
 	for MO in $(MOFILES); do \
-		DST=$(DESTDIR)/usr/share/locale/$${MO/.mo/}/LC_MESSAGES/; \
+		lang=`basename $$MO .mo`; \
+		DST=$(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
 		mkdir -p $$DST; \
 		cp $$MO $$DST/bleachbit.mo; \
 done
