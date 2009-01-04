@@ -1,10 +1,10 @@
-include COPYING MANIFEST
+include COPYING
+include MANIFEST
 include MANIFEST.in
 include Makefile
 include bleachbit.desktop
 include bleachbit.spec
 include bleachbit.png
-include bin/bleachbit
 include po/*po
 include po/Makefile
 recursive-include bleachbit *py

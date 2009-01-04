@@ -64,6 +64,7 @@ BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
+%py_requires
 %endif
 
 Requires:       python >= 2.4
@@ -84,21 +85,13 @@ privacy.
 %install
 rm -rf $RPM_BUILD_ROOT
 
+make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
+
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %endif
 
-%if 0%{?mandriva_version}
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
-dir -d %{buildroot}%{py_platsitedir}/%{name}
-%python_compile_opt
-%python_compile
-install *.pyc *.pyo %{buildroot}%{py_platsitedir}/%{name}
-%endif
-
 %if 0%{?suse_version}
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT --prefix /usr/
 %suse_update_desktop_file %{name}
 %endif
 
@@ -133,16 +126,9 @@ update-desktop-database &> /dev/null ||:
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING
-%if 0%{?mandriva_version}
-%{py_platsitedir}/%{name}-*egg-info
-%{py_platsitedir}/%{name}/*.py
-%{py_platsitedir}/%{name}/*.pyc
-%{py_platsitedir}/%{name}/*.pyo
-%else
-%{python_sitelib}/*
-%endif
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
 
 
