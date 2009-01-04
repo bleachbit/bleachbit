@@ -275,7 +275,7 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for class bytes_to_human"""
 
         old_locale = locale.getlocale(locale.LC_NUMERIC)
-        locale.setlocale(locale.LC_NUMERIC, 'en_US')
+        locale.setlocale(locale.LC_NUMERIC, 'en_US.utf8')
 
         # test one-way conversion for predefined values
         tests = [ ("0", bytes_to_human(0)),
@@ -301,8 +301,12 @@ class TestFileUtilities(unittest.TestCase):
 
         # test localization
         if hasattr(locale, 'format_string'):
-            locale.setlocale(locale.LC_NUMERIC, 'de_DE')
-            self.assertEqual("1,00TB", bytes_to_human(1024**4))
+            try:
+                locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
+            except:
+                print "Warning: exception when setlocale to de_DE.utf8"
+            else:
+                self.assertEqual("1,00TB", bytes_to_human(1024**4))
 
         # clean up
         locale.setlocale(locale.LC_NUMERIC, old_locale)
