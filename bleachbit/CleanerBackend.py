@@ -26,6 +26,7 @@ import glob
 import os.path
 import re
 import subprocess
+import sys
 import xml.dom.minidom
 
 import FileUtilities
@@ -493,7 +494,8 @@ class rpmbuild(Cleaner):
             dirname = subprocess.Popen(args, stdout=subprocess.PIPE).\
                 communicate()[0]
         except:
-            raise
+            print "warning: exception '%s' running '%s'" % \
+                (str(sys.exc_info()[1]), " ".join(args))
         else:
             dirnames.add(dirname + "/BUILD")
         for dirname in dirnames:
