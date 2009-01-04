@@ -74,10 +74,10 @@ class Cleaner:
 
 
 class Bash(Cleaner):
-    """Clear the Bash history"""
+    """Delete the Bash history"""
 
     def get_description(self):
-        return 'Clear the Bash history'
+        return _("Delete the Bash history")
 
     def get_id(self):
         return 'bash'
@@ -94,7 +94,7 @@ class Beagle(Cleaner):
     """Beagle"""
 
     def get_description(self):
-        return _("Clear Beagle indexes and logs")
+        return _("Delete Beagle indexes and logs")
 
     def get_id(self):
         return 'beagle'
@@ -125,7 +125,7 @@ class Epiphany(Cleaner):
         self.options["places"] = ( _("Places"), False)
 
     def get_description(self):
-        return _("Clear Epiphany's cache, cookies, download list, places, and passwords.")
+        return _("Delete Epiphany's cache, cookies, download list, places, and passwords.")
 
     def get_id(self):
         return 'epiphany'
@@ -165,7 +165,6 @@ class Epiphany(Cleaner):
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-history.xml") ]
 
 
-
 class Firefox(Cleaner):
     """Mozilla Firefox"""
 
@@ -182,7 +181,7 @@ class Firefox(Cleaner):
         self.profile_dir = "~/.mozilla/firefox/*/"
 
     def get_description(self):
-        return _("Clear Mozilla Firefox's cache, cookies, download list, forms, and places database.  The places database contains URLs including bookmarks and visited URLs.")
+        return _("Delete Mozilla Firefox's cache, cookies, download list, forms, and places database.  The places database contains URLs including bookmarks and visited URLs.")
 
     def get_id(self):
         return 'firefox'
@@ -230,11 +229,12 @@ class Firefox(Cleaner):
         if self.options["session_restore"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
 
+
 class Flash(Cleaner):
     """Adobe Flash"""
 
     def get_description(self):
-        return _("Clear Adobe Flash's cache and settings")
+        return _("Delete Adobe Flash's cache and settings")
 
     def get_id(self):
         return 'flash'
@@ -259,7 +259,7 @@ class System(Cleaner):
         self.options["recent_documents"] = ( _("Recent documents list"), False )
 
     def get_description(self):
-        return _("Clear system cache and recently used documents."
+        return _("Delete system cache and recently used documents."
             "  These locations are specified by XDG specifications" \
             " and are used by some applications on modern Linux systems.")
 
@@ -309,10 +309,10 @@ class System(Cleaner):
 
 
 class Java(Cleaner):
-    """Clear the Java cache"""
+    """Delete the Java cache"""
 
     def get_description(self):
-        return _("Clear Java's cache")
+        return _("Delete Java's cache")
 
     def get_id(self):
         return 'java'
@@ -336,7 +336,7 @@ class KDE(Cleaner):
         self.options["tmp"] = ( _("Cookies"), False )
 
     def get_description(self):
-        return _("Clear KDE cache and temporary directories.  These are shared by applications including Konqueror.")
+        return _("Delete KDE cache and temporary directories.  These are shared by applications including Konqueror.")
 
     def get_id(self):
         return 'kde'
@@ -359,7 +359,7 @@ class KDE(Cleaner):
                     yield file
 
 class OpenOfficeOrg(Cleaner):
-    """Clear OpenOffice.org cache"""
+    """Delete OpenOffice.org cache"""
 
     def __init__(self):
         Cleaner.__init__(self)
@@ -371,7 +371,7 @@ class OpenOfficeOrg(Cleaner):
         self.prefixes += [ "~/.ooo-dev3" ]
 
     def get_description(self):
-        return _("Clear OpenOffice.org's registry cache and UNO package cache")
+        return _("Delete OpenOffice.org's registry cache, UNO package cache, and recent documents list.")
 
     def get_id(self):
         return 'openofficeorg'
@@ -427,7 +427,7 @@ class Opera(Cleaner):
         self.profile_dir = "~/.opera/"
 
     def get_description(self):
-        return _("Clear Opera cache and cookies.")
+        return _("Delete Opera cache and cookies.")
 
     def get_id(self):
         return 'opera'
@@ -459,7 +459,7 @@ class realplayer(Cleaner):
     """RealPlayer by RealNetworks"""
 
     def get_description(self):
-        return _("Clear the RealPlayer cookies")
+        return _("Delete the RealPlayer cookies")
 
     def get_id(self):
         return 'realplayer'
@@ -475,10 +475,10 @@ class realplayer(Cleaner):
 
 
 class rpmbuild(Cleaner):
-    """Clear the rpmbuild build directory"""
+    """Delete the rpmbuild build directory"""
 
     def get_description(self):
-        return _("Clear the rpmbuild build directory")
+        return _("Delete the files in the rpmbuild build directory")
 
     def get_id(self):
         return 'rpmbuild'
@@ -502,10 +502,10 @@ class rpmbuild(Cleaner):
 
 
 class Thumbnails(Cleaner):
-    """Clear the thumbnails folder"""
+    """Delete the thumbnails folder"""
 
     def get_description(self):
-        return _("Clear the thumbnails folder")
+        return _("Delete thumbnails in the thumbnails folder")
 
     def get_id(self):
         return 'thumbnails'
@@ -557,10 +557,10 @@ class tmp(Cleaner):
                     yield path
 
 class Trash(Cleaner):
-    """Clear the trash folder"""
+    """Delete the trash folder"""
 
     def get_description(self):
-        return _("Clear the trash folder")
+        return _("Delete the files in the trash folder")
 
     def get_id(self):
         return 'trash'
@@ -584,7 +584,7 @@ class VIM(Cleaner):
     """VIM (Vi IMproved)"""
 
     def get_description(self):
-        return _("Clear ~/.viminfo which includes VIM file history, command history, and buffers")
+        return _("Delete ~/.viminfo which includes VIM file history, command history, and buffers")
 
     def get_id(self):
         return 'vim'
@@ -599,7 +599,7 @@ class VIM(Cleaner):
 
 
 class XChat(Cleaner):
-    """Clear XChat logs and scrollback"""
+    """Delete XChat logs and scrollback"""
 
     def available(self):
         return True
@@ -608,7 +608,7 @@ class XChat(Cleaner):
         return 'xchat'
 
     def get_description(self):
-        return 'Clear XChat logs and scrollback'
+        return _("Delete XChat logs and scrollback")
 
     def get_name(self):
         return "XChat"
