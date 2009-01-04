@@ -25,6 +25,7 @@ from gettext import gettext as _
 import glob
 import os.path
 import re
+import subprocess
 import xml.dom.minidom
 
 import FileUtilities
@@ -484,9 +485,18 @@ class rpmbuild(Cleaner):
         return "rpmbuild"
 
     def list_files(self):
-        dirname = os.path.expanduser("~/rpmbuild/BUILD/")
-        for filename in FileUtilities.children_in_directory(dirname, True):
-            yield filename
+        dirnames = set([ os.path.expanduser("~/rpmbuild/BUILD/") ])
+        try:
+            args = ["rpm", "--eval", "%_topdir"]
+            dirname = subprocess.Popen(args, stdout=subprocess.PIPE).\
+                communicate()[0]
+        except:
+            raise
+        else:
+            dirnames.add(dirname + "/BUILD")
+        for dirname in dirnames:
+            for filename in FileUtilities.children_in_directory(dirname, True):
+                yield filename
 
 
 class Thumbnails(Cleaner):
