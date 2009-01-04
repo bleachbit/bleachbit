@@ -124,14 +124,14 @@ class TreeDisplayModel:
 
         # first column
         self.renderer0 = gtk.CellRendererText()
-        self.column0 = gtk.TreeViewColumn("Name", self.renderer0, text=0)
+        self.column0 = gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
         self.view.append_column(self.column0)
 
         # second column
         self.renderer1 = gtk.CellRendererToggle()
         self.renderer1.set_property('activatable', True)
         self.renderer1.connect('toggled', self.col1_toggled_cb, model)
-        self.column1 = gtk.TreeViewColumn("Active", self.renderer1)
+        self.column1 = gtk.TreeViewColumn(_("Active"), self.renderer1)
         self.column1.add_attribute(self.renderer1, "active", 1)
         self.view.append_column(self.column1)
 
