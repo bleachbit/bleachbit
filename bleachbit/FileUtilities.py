@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# -*- coding: UTF8 -*-
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
@@ -31,6 +32,7 @@ import os.path
 import shlex
 import subprocess
 
+
 HAVE_GNOME_VFS = True
 try:
     import gnomevfs
@@ -46,6 +48,7 @@ except:
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
+from Options import options
 
 
 class OpenFiles:
@@ -118,14 +121,19 @@ def children_in_directory(top, list_directories = False):
             yield os.path.join(dirpath, filename)
 
 
-def delete_file(filename):
+def delete_file(filename, shred = False):
     """Remove a single file (enhanced for optional shredding)"""
-    if False: # fixme get user setting
-        args = ["shred", filename]
+    if options.get('shred') or shred:
+        # http://en.wikipedia.org/wiki/Data_remanence
+        # 2006 NIST Special Publication 800-88 (p. 7): "Studies have
+        # shown that most of today's media can be effectively cleared
+        # by one overwrite"
+        args = ["shred", "--remove", "--iterations=1", "--zero", filename]
         ret = subprocess.check_call(args)
         if 0 != ret:
             raise Exception("shred subprocess returned non-zero error code " % (ret,))
-    os.remove(filename)
+    else:
+        os.remove(filename)
 
 
 def delete_file_directory(path):
@@ -348,6 +356,37 @@ class TestFileUtilities(unittest.TestCase):
         os.rmdir(dirname)
 
 
+    def test_delete_file(self):
+        """Unit test for method delete_file()"""
+
+        import tempfile
+
+        hebrew = "עִבְרִית"
+        katanana = "アメリカ"
+        umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
+
+        tests = [ ('.suffix', 'prefix'), # simple
+                  ("\t", "\t"), # tab
+                  ("~`!@#$%^&*()-_+=", "x"), # non-alphanumeric characters
+                  ("[]{};':,.?<>\|", "x"), # non-alphanumeric characters
+                  ("x".zfill(100), ".y".zfill(100)), # long
+                  (" ", " "), # space
+                  ('"', "'"), # quotation marks
+                  (u'a', u'a'), # simple unicode
+                  (hebrew, hebrew),
+                  (katanana, katanana),
+                  (umlauts, umlauts) ]
+        for test in tests:
+            for shred in [True, False]:
+                (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
+                self.assert_(os.path.exists(filename))
+                for x in range(0, 4096/5):
+                    bytes = os.write(fd, "top secret")
+                    self.assertEqual(bytes, 10)
+                os.close(fd)
+                self.assert_(os.path.exists(filename))
+                delete_file(filename, shred)
+                self.assert_(not os.path.exists(filename))
 
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
