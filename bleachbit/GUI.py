@@ -505,6 +505,7 @@ class GUI:
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         textview = gtk.TextView(self.textbuffer)
         textview.set_editable(False)
+        textview.set_wrap_mode(gtk.WRAP_WORD)
         swindow.add(textview)
         swindow.show()
         right_box.add(swindow)
