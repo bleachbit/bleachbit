@@ -446,24 +446,31 @@ class GUI:
         """Create the toolbar"""
         toolbar = gtk.Toolbar()
         toolbar.set_orientation(gtk.ORIENTATION_HORIZONTAL)
-        #toolbar.set_style(gtk.TOOLBAR_TEXT)
         toolbar.set_style(gtk.TOOLBAR_BOTH)
         toolbar.set_border_width(5)
 
+        # create tooltips
+        tooltips = gtk.Tooltips()
+        tooltips.enable()
+
+        # create the delete button
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
         run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
         run_button.show()
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
+        run_button.set_tooltip(tooltips, _("Delete files in the selected operations"))
 
+        # create the preview button
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
         preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
         preview_button.show()
-
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
+        preview_button.set_tooltip(tooltips, _("Preview files in the selected operations (without deleting any files)"))
+
         return toolbar
 
     def create_window(self):
