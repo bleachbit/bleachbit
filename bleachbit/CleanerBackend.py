@@ -301,6 +301,7 @@ class System(Cleaner):
         files = []
         if self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
+            files += [ os.path.expanduser("~/.recently-used.xbel") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
         for filename in files:
