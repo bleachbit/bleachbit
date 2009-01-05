@@ -58,6 +58,38 @@ def threaded(func):
     return wrapper
 
 
+def preferences_dialog(parent):
+    """Present the preferences dialog and save changes"""
+
+    def toggle_callback(a, b):
+        options.toggle(b)
+
+    dialog = gtk.Dialog(title = _("Preferences"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dialog.set_default_size(500, -1)
+
+    cb_autohide = gtk.CheckButton(_("Automatically hide invalid operations"))
+    cb_autohide.set_active(options.get('auto_hide'))
+    cb_autohide.connect('toggled', toggle_callback, 'auto_hide')
+    dialog.vbox.pack_start(cb_autohide, False)
+
+    cb_updates = gtk.CheckButton(_("Check perodicially for updates via the Internet"))
+    cb_updates.set_active(options.get('check_online_updates'))
+    cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
+    dialog.vbox.pack_start(cb_updates, False)
+
+    cb_shred = gtk.CheckButton(_("Shred files to hide contents (warning: ineffective on many file systems)"))
+    cb_shred.set_active(options.get('shred'))
+    cb_shred.connect('toggled', toggle_callback, 'shred')
+    dialog.vbox.pack_start(cb_shred, False)
+
+    dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+    dialog.show_all()
+    ret = dialog.run()
+    dialog.destroy()
+    return ret
+
+
+
 def delete_confirmation_dialog(parent):
     """Return boolean whether OK to delete files."""
     dialog = gtk.Dialog(title = _("Delete confirmation"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
@@ -166,7 +198,6 @@ class TreeDisplayModel:
         return
 
 
-
 class GUI:
     """The main application GUI"""
 
@@ -176,7 +207,10 @@ class GUI:
       <menu action="File">
         <menuitem action="Quit"/>
       </menu>
-      <menu action="Help">      
+      <menu action="Edit">
+        <menuitem action="Preferences"/>
+      </menu>
+      <menu action="Help">
         <menuitem action="About"/>
       </menu>
     </menubar>
@@ -411,6 +445,10 @@ class GUI:
         scrolled_window.add_with_viewport(self.view)
         return scrolled_window
 
+    def cb_preferences_dialog(self, action):
+        """Callback for preferences dialog"""
+        preferences_dialog(self.window)
+
 
     def create_menubar(self):
         """Create the menu bar (file, help)"""
@@ -426,10 +464,14 @@ class GUI:
         self.actiongroup = actiongroup
 
         # Create actions
-        actiongroup.add_actions([('Quit', gtk.STOCK_QUIT, _('_Quit'), None, _('Quit BleachBit'), lambda *dummy: gtk.main_quit()),
-                                ('File', None, _('_File')), 
-                                ('About', gtk.STOCK_ABOUT, _('_About'), None, _('Show about'), self.about), 
-                                ('Help', None, _("_Help"))])
+        entries = [('Quit', gtk.STOCK_QUIT, _('_Quit'), None, _('Quit BleachBit'), lambda *dummy: gtk.main_quit()),
+                   ('File', None, _('_File')),
+                   ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, _("Configure BleachBit"), self.cb_preferences_dialog),
+#                   ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences")),
+                   ('Edit', None, _("_Edit")),
+                   ('About', gtk.STOCK_ABOUT, _('_About'), None, _('Show about'), self.about),
+                   ('Help', None, _("_Help"))]
+        actiongroup.add_actions(entries)
         actiongroup.get_action('Quit').set_property('short-label', '_Quit')
 
         # Add the actiongroup to the uimanager
