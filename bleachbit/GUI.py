@@ -463,7 +463,7 @@ class GUI:
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
         self.progressbar.set_text(_("Done."))
-        self.textbuffer.insert(__iter, "\n" + _("Total size:") \
+        self.textbuffer.insert(__iter, "\n" + _("Total size: ") \
              + FileUtilities.bytes_to_human(total_bytes))
         self.set_sensitive(True)
         gtk.gdk.threads_leave()
