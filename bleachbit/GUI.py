@@ -352,7 +352,9 @@ class GUI:
 
     def set_sensitive(self, true):
         """Disable commands while an operation is running"""
-        self.window.set_sensitive(true)
+        self.actiongroup.set_sensitive(true)
+        self.toolbar.set_sensitive(true)
+        self.view.set_sensitive(true)
 
 
     def run_operations(self, __widget):
