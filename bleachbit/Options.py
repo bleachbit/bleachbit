@@ -58,11 +58,6 @@ class Options:
             self.set(key, value)
 
 
-    def get_config(self, option):
-        """Temporary for transition"""
-        return self.get(option)
-
-
     def get(self, option):
         """Retrieve a general option"""
         if option in boolean_keys:
@@ -110,19 +105,19 @@ import unittest
 class TestOptions(unittest.TestCase):
     def test_Options(self):
         o = options
-        v = o.get_config("check_online_updates")
+        v = o.get("check_online_updates")
 
         # toggle a boolean
         o.toggle('check_online_updates')
-        self.assertEqual(not v, o.get_config("check_online_updates"))
+        self.assertEqual(not v, o.get("check_online_updates"))
 
         # restore original boolean
         o.set("check_online_updates", v)
-        self.assertEqual(v, o.get_config("check_online_updates"))
+        self.assertEqual(v, o.get("check_online_updates"))
 
         # these should always be set
         for b in boolean_keys:
-            self.assert_(type(o.get_config(b)) is bool)
+            self.assert_(type(o.get(b)) is bool)
 
         # tree
         o.set_tree("parent", "child", True)
