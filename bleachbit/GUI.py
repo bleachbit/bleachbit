@@ -292,6 +292,14 @@ class GUI:
     </ui>'''
 
 
+    def append_text(self, text, tag = None, __iter = None):
+        if not __iter:
+            __iter = self.textbuffer.get_end_iter()
+        if tag:
+            self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
+        else:
+            self.textbuffer.insert(__iter, text)
+
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""
         model = self.view.get_model()
@@ -303,9 +311,9 @@ class GUI:
         self.progressbar.hide()
         description = CleanerBackend.backends[cleaner_id].get_description()
         #print "debug: on_selection_changed: row='%s', name='%s', desc='%s'," % ( row, name ,description)
-        output = "Operation name: " + name + "\n"
-        output += "Description: " + description 
-        self.textbuffer.set_text(output)
+        self.textbuffer.set_text("")
+        self.append_text(_("Operation name: ") + name + "\n", 'operation')
+        self.append_text(_("Description: ") + description)
 
 
     def get_selected_operations(self):
@@ -363,16 +371,18 @@ class GUI:
         except:
             print "debug: error getting size of '%s'" % (pathname,)
         else:
+            tag = None
             try:
                 if really_delete:
                     FileUtilities.delete(pathname)
             except:
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
+                tag = 'error'
             else:
                 total_bytes += bytes
                 line = FileUtilities.bytes_to_human(bytes) + " " + pathname + "\n"
             gtk.gdk.threads_enter()
-            self.textbuffer.insert(__iter, line)
+            self.append_text(line, tag, __iter)
             gtk.gdk.threads_leave()
         return total_bytes
 
@@ -394,7 +404,7 @@ class GUI:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
             gtk.gdk.threads_enter()
-            self.textbuffer.insert(__iter, err + "\n")
+            self.append_text(err + "\n", 'error', __iter)
             gtk.gdk.threads_leave()
 
         # special operation
@@ -404,7 +414,7 @@ class GUI:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
             gtk.gdk.threads_enter()
-            self.textbuffer.insert(__iter, err + "\n")
+            self.append_text(err + "\n", 'error', __iter)
             gtk.gdk.threads_leave()
         else:
             if None == ret:
@@ -630,6 +640,19 @@ class GUI:
         swindow.add(textview)
         right_box.add(swindow)
         hbox.add(right_box)
+
+        # add markup tags
+        tt = self.textbuffer.get_tag_table()
+
+        style_operation = gtk.TextTag('operation')
+        style_operation.set_property('size-points', 14)
+        style_operation.set_property('weight', 700)
+        tt.add(style_operation)
+
+        style_operation = gtk.TextTag('error')
+        style_operation.set_property('foreground', '#b00000')
+        tt.add(style_operation)
+
 
         # done
         self.window.show_all()
