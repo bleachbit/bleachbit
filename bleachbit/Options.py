@@ -95,7 +95,7 @@ class Options:
         if None != child:
             id = id + "." + child
         self.config.set('tree', id, str(value))
-        self.flush()
+        self.__flush()
 
 
     def toggle(self, key):
@@ -123,6 +123,14 @@ class TestOptions(unittest.TestCase):
         # these should always be set
         for b in boolean_keys:
             self.assert_(type(o.get_config(b)) is bool)
+
+        # tree
+        o.set_tree("parent", "child", True)
+        self.assertEqual(o.get_tree("parent", "child"), True)
+        o.set_tree("parent", "child", False)
+        self.assertEqual(o.get_tree("parent", "child"), False)
+        o.config.remove_option("tree", "parent.child")
+        self.assertEqual(o.get_tree("parent", "child"), None)
 
 
 if __name__ == '__main__':
