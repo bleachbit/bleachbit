@@ -65,6 +65,13 @@ class Options:
         return self.config.get('bleachbit', option)
 
 
+    def get_locale(self, id):
+        """Retrieve value for whether to preserve the locale"""
+        if not self.config.has_option('preserve_locales', id):
+            return False
+        return self.config.getboolean('preserve_locales', id)
+
+
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
         id = parent
@@ -80,6 +87,16 @@ class Options:
         self.config.set('bleachbit', key, str(value))
         self.__flush()
 
+
+    def set_locale(self, id, value):
+        """Set the value for a locale (whether to preserve it)"""
+        if not self.config.has_section('preserve_locales'):
+            self.config.add_section('preserve_locales')
+        if self.config.has_option('preserve_locales', id) and not value:
+            self.config.remove_option('preserve_locales', id)
+        else:
+            self.config.set('preserve_locales', id, str(value))
+        self.__flush()
 
 
     def set_tree(self, parent, child, value):

@@ -58,40 +58,110 @@ def threaded(func):
     return wrapper
 
 
-def preferences_dialog(parent):
+class PreferencesDialog:
     """Present the preferences dialog and save changes"""
 
-    def toggle_callback(a, b):
-        options.toggle(b)
+    def __init__(self, parent):
+        self.dialog = gtk.Dialog(title = _("Preferences"), \
+            parent = parent, \
+            flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+        self.dialog.set_default_size(500, 400)
 
-    dialog = gtk.Dialog(title = _("Preferences"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
-    dialog.set_default_size(500, -1)
+        self.tooltips = gtk.Tooltips()
+        self.tooltips.enable()
 
-    tooltips = gtk.Tooltips()
-    tooltips.enable()
+        notebook = gtk.Notebook()
+        notebook.append_page(self.__general_page(), gtk.Label(_("General")))
+        notebook.append_page(self.__locales_page(), gtk.Label(_("Locales")))
 
-    cb_autohide = gtk.CheckButton(_("Automatically hide invalid operations"))
-    cb_autohide.set_active(options.get('auto_hide'))
-    cb_autohide.connect('toggled', toggle_callback, 'auto_hide')
-    tooltips.set_tip(cb_autohide, _("Reduce clutter by hiding operations which will not return any results."))
-    dialog.vbox.pack_start(cb_autohide, False)
+        self.dialog.vbox.pack_start(notebook, False)
+        self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
 
-    cb_updates = gtk.CheckButton(_("Check perodicially for software updates via the Internet"))
-    cb_updates.set_active(options.get('check_online_updates'))
-    cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
-    dialog.vbox.pack_start(cb_updates, False)
 
-    cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
-    cb_shred.set_active(options.get('shred'))
-    cb_shred.connect('toggled', toggle_callback, 'shred')
-    tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
-    dialog.vbox.pack_start(cb_shred, False)
+    def __general_page(self):
+        """Return a widget containing the general page"""
 
-    dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
-    dialog.show_all()
-    ret = dialog.run()
-    dialog.destroy()
-    return ret
+        def toggle_callback(cell, path):
+            """Callback function to toggle option b"""
+            options.toggle(path)
+
+        vbox = gtk.VBox()
+
+        cb_autohide = gtk.CheckButton(_("Automatically hide invalid operations"))
+        cb_autohide.set_active(options.get('auto_hide'))
+        cb_autohide.connect('toggled', toggle_callback, 'auto_hide')
+        self.tooltips.set_tip(cb_autohide, _("Reduce clutter by hiding operations which will not return any results."))
+        vbox.pack_start(cb_autohide, False)
+
+        cb_updates = gtk.CheckButton(_("Check perodicially for software updates via the Internet"))
+        cb_updates.set_active(options.get('check_online_updates'))
+        cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
+        vbox.pack_start(cb_updates, False)
+
+        cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
+        cb_shred.set_active(options.get('shred'))
+        cb_shred.connect('toggled', toggle_callback, 'shred')
+        self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
+        vbox.pack_start(cb_shred, False)
+
+        return vbox
+
+    def __locales_page(self):
+        """Return widget containing the locales page"""
+
+        def preserve_toggled_cb(cell, path, liststore):
+            """Callback for toggling the 'preserve' column"""
+            __iter = liststore.get_iter_from_string(path)
+            value = not liststore.get_value(__iter, 0)
+            liststore.set(__iter, 0, value)
+            langid = liststore[path][1]
+            options.set_locale(langid, value)
+
+        vbox = gtk.VBox()
+
+        notice = gtk.Label(_("All locales will be deleted except those checked."))
+        vbox.pack_start(notice)
+
+        # populate data
+        import Unix
+        locales = Unix.Locales()
+        liststore = gtk.ListStore('gboolean', str, str)
+        for lang in locales.iterate_languages():
+            preserve = options.get_locale(lang)
+            native = locales.native_name(lang)
+            liststore.append( [ preserve, lang, native ] )
+
+        # create treeview
+        treeview = gtk.TreeView(liststore)
+
+        # create column views
+        self.renderer0 = gtk.CellRendererToggle()
+        self.renderer0.set_property('activatable', True)
+        self.renderer0.connect('toggled', preserve_toggled_cb, liststore)
+        self.column0 = gtk.TreeViewColumn(_("Preserve"), self.renderer0, active=0)
+        treeview.append_column(self.column0)
+
+        self.renderer1 = gtk.CellRendererText()
+        self.column1 = gtk.TreeViewColumn(_("Language code"), self.renderer1, text=1)
+        treeview.append_column(self.column1)
+
+        self.renderer2 = gtk.CellRendererText()
+        self.column2 = gtk.TreeViewColumn(_("Language name"), self.renderer2, text=2)
+        treeview.append_column(self.column2)
+
+        # finish
+        swindow = gtk.ScrolledWindow()
+        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        swindow.set_size_request(500, 400)
+        swindow.add_with_viewport(treeview)
+        vbox.pack_start(swindow, False)
+        return vbox
+
+    def run(self):
+        """Run the dialog"""
+        self.dialog.show_all()
+        self.dialog.run()
+        self.dialog.destroy()
 
 
 
@@ -452,7 +522,8 @@ class GUI:
 
     def cb_preferences_dialog(self, action):
         """Callback for preferences dialog"""
-        preferences_dialog(self.window)
+        pref = PreferencesDialog(self.window)
+        pref.run()
 
 
     def create_menubar(self):
