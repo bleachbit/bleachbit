@@ -290,7 +290,7 @@ class GUI:
         else:
             try:
                 if really_delete:
-                    FileUtilities.delete_file_directory(pathname)
+                    FileUtilities.delete(pathname)
             except:
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
             else:

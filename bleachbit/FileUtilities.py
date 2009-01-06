@@ -30,6 +30,7 @@ import locale
 import os
 import os.path
 import shlex
+import stat
 import subprocess
 
 
@@ -121,28 +122,28 @@ def children_in_directory(top, list_directories = False):
             yield os.path.join(dirpath, filename)
 
 
-def delete_file(filename, shred = False):
-    """Remove a single file (enhanced for optional shredding)"""
-    if options.get('shred') or shred:
-        # http://en.wikipedia.org/wiki/Data_remanence
-        # 2006 NIST Special Publication 800-88 (p. 7): "Studies have
-        # shown that most of today's media can be effectively cleared
-        # by one overwrite"
-        args = ["shred", "--remove", "--iterations=0", "--zero", filename]
-        ret = subprocess.check_call(args)
-        if 0 != ret:
-            raise Exception("shred subprocess returned non-zero error code " % (ret,))
-    else:
-        os.remove(filename)
-
-
-def delete_file_directory(path):
-    """Delete path that is either file or directory"""
+def delete(path, shred = False):
+    """Delete path that is either file, directory, link or FIFO"""
     print "info: removing '%s'" % (path,)
-    if os.path.isdir(path):
+    mode = os.stat(path)[stat.ST_MODE]
+    if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
+        os.remove(path)
+    elif stat.S_ISDIR(mode):
         os.rmdir(path)
+    elif stat.S_ISREG(mode):
+        if options.get('shred') or shred:
+            # http://en.wikipedia.org/wiki/Data_remanence
+            # 2006 NIST Special Publication 800-88 (p. 7): "Studies have
+            # shown that most of today's media can be effectively cleared
+            # by one overwrite"
+            args = ["shred", "--remove", "--iterations=0", "--zero", path]
+            ret = subprocess.check_call(args)
+            if 0 != ret:
+                raise Exception("shred subprocess returned non-zero error code " % (ret,))
+        else:
+            os.remove(path)
     else:
-        delete_file(path)
+        raise Exception("Unsupported special file type")
 
 
 def ego_owner(filename):
@@ -356,8 +357,8 @@ class TestFileUtilities(unittest.TestCase):
         os.rmdir(dirname)
 
 
-    def test_delete_file(self):
-        """Unit test for method delete_file()"""
+    def test_delete(self):
+        """Unit test for method delete()"""
 
         import tempfile
 
@@ -385,8 +386,31 @@ class TestFileUtilities(unittest.TestCase):
                     self.assertEqual(bytes, 10)
                 os.close(fd)
                 self.assert_(os.path.exists(filename))
-                delete_file(filename, shred)
+                delete(filename, shred)
                 self.assert_(not os.path.exists(filename))
+
+        # test symlink
+        (fd, filename) = tempfile.mkstemp()
+        os.close(fd)
+        self.assert_(os.path.exists(filename))
+        linkname = '/tmp/bleachbitsymlinktest'
+        os.symlink(filename, linkname)
+        self.assert_(os.path.exists(linkname))
+        delete(linkname)
+        self.assert_(os.path.exists(filename))
+        self.assert_(not os.path.exists(linkname))
+        delete(filename)
+        self.assert_(not os.path.exists(filename))
+
+        # test fifo
+        args = ["mkfifo", filename]
+        ret = subprocess.check_call(args)
+        self.assertEqual(ret, 0)
+        self.assert_(os.path.exists(filename))
+        delete(filename)
+        self.assert_(not os.path.exists(filename))
+
+
 
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
