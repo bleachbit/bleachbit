@@ -128,7 +128,7 @@ def delete_file(filename, shred = False):
         # 2006 NIST Special Publication 800-88 (p. 7): "Studies have
         # shown that most of today's media can be effectively cleared
         # by one overwrite"
-        args = ["shred", "--remove", "--iterations=1", "--zero", filename]
+        args = ["shred", "--remove", "--iterations=0", "--zero", filename]
         ret = subprocess.check_call(args)
         if 0 != ret:
             raise Exception("shred subprocess returned non-zero error code " % (ret,))
