@@ -27,6 +27,7 @@ Integration specific to Unix-like operating systems
 import os
 import re
 
+import FileUtilities
 
 class Locales:
 
@@ -64,21 +65,30 @@ class Locales:
         'vi' : 'Tiếng Việt', \
         'zh' : '中文' }
 
+    __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
+                '/usr/local/share/locale/',
+                '/usr/share/locale/' ]
+
+    __ignore = ['all_languages', 'C', 'l10n', 'locale.alias']
+
 
     def __init__(self):
         self.__languages = []
+        if os.path.exists('/usr/share/gnome/help'):
+            for gapp in os.listdir('/usr/share/gnome/help'):
+                dirname = os.path.join('/usr/share/gnome/help', gapp)
+                self.__basedirs.append(dirname)
         self.__scan()
         pass
 
 
     def __scan(self):
-        locales = os.listdir('/usr/share/locale')
-        try:
-            locales += os.listdir(os.path.expanduser('~/.local/share/locale/'))
-        except:
-            pass
+        locales = []
+        for basedir in self.__basedirs:
+            if os.path.exists(basedir):
+                locales += os.listdir(basedir)
         for locale in locales:
-            if locale in ['all_languages', 'C', 'l10n', 'locale.alias']:
+            if locale in self.__ignore:
                 continue
             lang = self.language_code(locale)
             if not lang in self.__languages:
@@ -95,9 +105,24 @@ class Locales:
 
 
     def iterate_languages(self):
-        """Return each language"""
+        """Return each language code"""
         for lang in self.__languages:
             yield lang
+
+
+    def iterate_localization_directories(self, filter_callback):
+        """Return each localization directory"""
+        for basedir in self.__basedirs:
+            for locale_code in os.listdir(basedir):
+                if locale_code in self.__ignore:
+                    continue
+                language_code = self.language_code(locale_code)
+                if None != filter_callback and filter_callback(locale_code, language_code):
+                    continue
+                locale_dirname = os.path.join(basedir, locale_code)
+                for path in FileUtilities.children_in_directory(locale_dirname, True):
+                    yield path
+                yield locale_dirname
 
 
     def native_name(self, language_code):

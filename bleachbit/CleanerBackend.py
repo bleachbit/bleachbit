@@ -31,6 +31,7 @@ import xml.dom.minidom
 
 import FileUtilities
 import globals
+from Options import options
 
 
 class Cleaner:
@@ -257,6 +258,7 @@ class System(Cleaner):
         self.options = {}
         self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
         self.options["cache"] = ( _("Cache"), False )
+        self.options["localizations"] = ( _("Localizations"), False )
         self.options["recent_documents"] = ( _("Recent documents list"), False )
 
     def get_description(self):
@@ -296,6 +298,14 @@ class System(Cleaner):
                     os.path.expanduser(dirname), False)):
                     if FileUtilities.is_broken_xdg_desktop(filename):
                         yield filename
+
+        # unwanted locales
+        if self.options["localizations"][1]:
+            import Unix
+            locales = Unix.Locales()
+            callback = lambda locale, language: options.get_locale(language)
+            for path in locales.iterate_localization_directories(callback):
+                yield path
 
         # most recently used documents list
         files = []
