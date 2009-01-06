@@ -575,7 +575,6 @@ class GUI:
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
         run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
-        run_button.show()
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
         run_button.set_tooltip(tooltips, _("Delete files in the selected operations"))
@@ -584,7 +583,6 @@ class GUI:
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
         preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
-        preview_button.show()
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
         preview_button.set_tooltip(tooltips, _("Preview files in the selected operations (without deleting any files)"))
@@ -612,12 +610,10 @@ class GUI:
         # split main window
         hbox = gtk.HBox(homogeneous=False, spacing=10)
         vbox.pack_start(hbox, True)
-        hbox.show()
 
         # add operations to left
         operations = self.create_operations_box()
         hbox.pack_start(operations, False)
-        operations.show()
 
         # create the right side of the window
         right_box = gtk.VBox()
@@ -632,10 +628,8 @@ class GUI:
         textview.set_editable(False)
         textview.set_wrap_mode(gtk.WRAP_WORD)
         swindow.add(textview)
-        swindow.show()
         right_box.add(swindow)
         hbox.add(right_box)
-        textview.show()
 
         # done
         self.window.show_all()
