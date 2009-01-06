@@ -67,19 +67,24 @@ def preferences_dialog(parent):
     dialog = gtk.Dialog(title = _("Preferences"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
     dialog.set_default_size(500, -1)
 
+    tooltips = gtk.Tooltips()
+    tooltips.enable()
+
     cb_autohide = gtk.CheckButton(_("Automatically hide invalid operations"))
     cb_autohide.set_active(options.get('auto_hide'))
     cb_autohide.connect('toggled', toggle_callback, 'auto_hide')
+    tooltips.set_tip(cb_autohide, _("Reduce clutter by hiding operations which will not return any results."))
     dialog.vbox.pack_start(cb_autohide, False)
 
-    cb_updates = gtk.CheckButton(_("Check perodicially for updates via the Internet"))
+    cb_updates = gtk.CheckButton(_("Check perodicially for software updates via the Internet"))
     cb_updates.set_active(options.get('check_online_updates'))
     cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
     dialog.vbox.pack_start(cb_updates, False)
 
-    cb_shred = gtk.CheckButton(_("Shred files to hide contents (warning: ineffective on many file systems)"))
+    cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
     cb_shred.set_active(options.get('shred'))
     cb_shred.connect('toggled', toggle_callback, 'shred')
+    tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
     dialog.vbox.pack_start(cb_shred, False)
 
     dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
