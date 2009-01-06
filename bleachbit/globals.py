@@ -20,7 +20,7 @@
 import gettext
 import os
 
-APP_VERSION = "0.2.1"
+APP_VERSION = "0.3.0"
 APP_NAME = "BleachBit"
 
 # Debian, Ubuntu
