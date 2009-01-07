@@ -174,7 +174,7 @@ def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
     __stat = os.lstat(path)
-    return __stat.st_size
+    return __stat.st_blocks * 512
 
 
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
@@ -281,10 +281,10 @@ class TestFileUtilities(unittest.TestCase):
         multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
             'GB': 1024**3, 'TB': 1024**4 }
         import re
-        matches = re.findall("^([0-9]*\.[0-9]{1,2})([KMGT]{0,1}B)$", string)
-        if 2 != len(matches[0]):
+        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
+        if 2 > len(matches[0]):
             raise ValueError("Invalid input for '%s'" % (string))
-        return int(float(matches[0][0]) * multiplier[matches[0][1]])
+        return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
 
 
     def test_bytes_to_human(self):
@@ -433,10 +433,16 @@ class TestFileUtilities(unittest.TestCase):
         import tempfile
 
         # create regular file
-        (handle, filename) = tempfile.mkstemp()
+        (handle, filename) = tempfile.mkstemp("regulartest")
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
-        self.assertEqual(getsize(filename), 123450)
+        output = subprocess.Popen(["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
+        output = output.replace("\n", "")
+        du_size = output.split("\t")[0] + "B"
+        print "output = '%s', size='%s'" % (output, du_size)
+        du_bytes = self.__human_to_bytes(du_size)
+        print output, du_size, du_bytes
+        self.assertEqual(getsize(filename), du_bytes)
 
         # create a symlink
         linkname = '/tmp/bleachbitsymlinktest'
@@ -445,8 +451,8 @@ class TestFileUtilities(unittest.TestCase):
         delete(filename)
 
         # create sparse file
-        (handle, filename) = tempfile.mkstemp()
-        os.lseek(handle, 1024**2, os.SEEK_CUR)
+        (handle, filename) = tempfile.mkstemp("sparsetest")
+        os.ftruncate(handle, 1024**2)
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
         delete(filename)
