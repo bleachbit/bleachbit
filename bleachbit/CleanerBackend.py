@@ -392,6 +392,12 @@ class OpenOfficeOrg(Cleaner):
         return "OpenOffice.org"
 
     def list_files(self):
+        if self.options["recent_documents"][1] and not self.options["cache"][1]:
+            for prefix in self.prefixes:
+                path = os.path.join(os.path.expanduser(prefix), "user/registry/cache/org.openoffice.Office.Common.dat")
+                if os.path.exists(path):
+                    yield path
+
         if not self.options["cache"][1]:
             return
         dirs = []
