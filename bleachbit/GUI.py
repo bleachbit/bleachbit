@@ -369,7 +369,7 @@ class GUI:
         """Clean a single pathname"""
         total_bytes = 0
         try:
-            bytes = os.path.getsize(pathname)
+            bytes = FileUtilities.getsize(pathname)
         except:
             print "debug: error getting size of '%s'" % (pathname,)
         else:

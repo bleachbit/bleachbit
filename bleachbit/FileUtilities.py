@@ -170,6 +170,13 @@ def exe_exists(pathname):
     return True
 
 
+def getsize(path):
+    """Return the actual file size considering spare files
+       and symlinks"""
+    __stat = os.lstat(path)
+    return __stat.st_size
+
+
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
@@ -420,6 +427,29 @@ class TestFileUtilities(unittest.TestCase):
             ("/bin/doesnotexist", False) ]
         for test in tests:
             self.assertEqual(exe_exists(test[0]), test[1])
+
+
+    def test_getsize(self):
+        import tempfile
+
+        # create regular file
+        (handle, filename) = tempfile.mkstemp()
+        os.write(handle, "abcdefghij" * 12345)
+        os.close(handle)
+        self.assertEqual(getsize(filename), 123450)
+
+        # create a symlink
+        linkname = '/tmp/bleachbitsymlinktest'
+        os.symlink(filename, linkname)
+        self.assert_(getsize(linkname) < 8192, "Symlink size is %d" % getsize(filename))
+        delete(filename)
+
+        # create sparse file
+        (handle, filename) = tempfile.mkstemp()
+        os.lseek(handle, 1024**2, os.SEEK_CUR)
+        os.close(handle)
+        self.assertEqual(getsize(filename), 0)
+        delete(filename)
 
 
     def test_is_broken_xdg_desktop(self):
