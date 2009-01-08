@@ -488,38 +488,6 @@ class GUI:
         dialog.hide()
 
 
-    def first_start(self):
-        """Setup application for first start"""
-
-        if not online_update_notification_enabled:
-            return
-
-        dialog = gtk.Dialog(title = _("Software updates"), parent = self.window, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
-        dialog.set_default_size(300, -1)
-
-        hbox = gtk.HBox(homogeneous = False, spacing = 10)
-        icon = gtk.Image()
-        icon.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_DIALOG)
-        hbox.pack_start(icon, False)
-        question = gtk.Label(_("Should BleachBit periodically check for software updates via the Internet?"))
-        question.set_line_wrap(True)
-        hbox.pack_start(question, False)
-        dialog.vbox.pack_start(hbox, False)
-        dialog.vbox.set_spacing(10)
-
-        dialog.add_button(gtk.STOCK_YES, 1)
-        dialog.add_button(gtk.STOCK_NO, 0)
-
-        dialog.show_all()
-        ret = dialog.run()
-        dialog.destroy()
-
-        options.set("check_online_updates", ret == 1)
-        options.set("first_start", False)
-        return
-
-
-
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
         scrolled_window = gtk.ScrolledWindow()
@@ -692,7 +660,8 @@ class GUI:
         self.create_window()
         gtk.gdk.threads_init()
         if options.get("first_start"):
-            self.first_start()
+            pref = PreferencesDialog(self.window)
+            pref.run()
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
 

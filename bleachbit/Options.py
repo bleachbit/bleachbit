@@ -32,15 +32,17 @@ class Options:
         self.config.read(options_file)
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
-            return
 
         # set defaults
         self.__set_default("auto_hide", False)
         self.__set_default("check_online_updates", True)
-        self.__set_default("first_start", True)
         self.__set_default("shred", False)
 
         # set verison
+        if not self.config.has_option('bleachbit', 'version') or \
+            self.get('version') != APP_VERSION:
+            # BleachBit upgrade or first start ever
+            self.set('first_start', True)
         self.set("version", APP_VERSION)
 
 
