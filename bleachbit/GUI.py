@@ -65,7 +65,7 @@ class PreferencesDialog:
         self.dialog = gtk.Dialog(title = _("Preferences"), \
             parent = parent, \
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
-        self.dialog.set_default_size(500, 400)
+        self.dialog.set_default_size(500, 300)
 
         self.tooltips = gtk.Tooltips()
         self.tooltips.enable()
@@ -152,7 +152,7 @@ class PreferencesDialog:
         # finish
         swindow = gtk.ScrolledWindow()
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        swindow.set_size_request(500, 400)
+        swindow.set_size_request(500, 300)
         swindow.add_with_viewport(treeview)
         vbox.pack_start(swindow, False)
         return vbox
