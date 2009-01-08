@@ -131,6 +131,9 @@ class Locales:
         return None
 
 
+locales = Locales()
+
+
 import unittest
 
 class TestLocales(unittest.TestCase):

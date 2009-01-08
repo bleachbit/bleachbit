@@ -302,9 +302,8 @@ class System(Cleaner):
         # unwanted locales
         if self.options["localizations"][1]:
             import Unix
-            locales = Unix.Locales()
             callback = lambda locale, language: options.get_locale(language)
-            for path in locales.iterate_localization_directories(callback):
+            for path in Unix.locales.iterate_localization_directories(callback):
                 yield path
 
         # most recently used documents list

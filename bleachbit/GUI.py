@@ -124,11 +124,10 @@ class PreferencesDialog:
 
         # populate data
         import Unix
-        locales = Unix.Locales()
         liststore = gtk.ListStore('gboolean', str, str)
-        for lang in locales.iterate_languages():
+        for lang in Unix.locales.iterate_languages():
             preserve = options.get_locale(lang)
-            native = locales.native_name(lang)
+            native = Unix.locales.native_name(lang)
             liststore.append( [ preserve, lang, native ] )
 
         # create treeview
