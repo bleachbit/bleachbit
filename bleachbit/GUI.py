@@ -662,6 +662,7 @@ class GUI:
         if options.get("first_start"):
             pref = PreferencesDialog(self.window)
             pref.run()
+            options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
 
