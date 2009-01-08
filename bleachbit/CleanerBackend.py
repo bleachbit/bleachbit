@@ -23,6 +23,7 @@ Perform (or assist with) cleaning operations.
 
 from gettext import gettext as _
 import glob
+import gtk
 import os.path
 import re
 import subprocess
@@ -257,6 +258,7 @@ class System(Cleaner):
         Cleaner.__init__(self)
         self.options = {}
         self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
+        self.options["clipboard"] = ( _("Clipboard"), False )
         self.options["cache"] = ( _("Cache"), False )
         self.options["localizations"] = ( _("Localizations"), False )
         self.options["recent_documents"] = ( _("Recent documents list"), False )
@@ -317,6 +319,13 @@ class System(Cleaner):
             if os.path.exists(filename):
                 yield filename
 
+    def other_cleanup(self, really_delete):
+        if self.options["clipboard"][1]:
+            if really_delete:
+                clipboard = gtk.clipboard_get()
+                clipboard.set_text("")
+                return (0, _("Clipboard"))
+            return _("Clipboard")
 
 
 class Java(Cleaner):
