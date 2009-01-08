@@ -89,7 +89,7 @@ class Options:
         if None != child:
             id = id + "." + child
         if not self.config.has_option('tree', id):
-            return None
+            return False
         return self.config.getboolean('tree', id)
 
 
@@ -117,7 +117,10 @@ class Options:
         id = parent
         if None != child:
             id = id + "." + child
-        self.config.set('tree', id, str(value))
+        if self.config.has_option('tree', id) and not value:
+            self.config.remove_option('tree', id)
+        else:
+            self.config.set('tree', id, str(value))
         self.__flush()
 
 
@@ -153,7 +156,7 @@ class TestOptions(unittest.TestCase):
         o.set_tree("parent", "child", False)
         self.assertEqual(o.get_tree("parent", "child"), False)
         o.config.remove_option("tree", "parent.child")
-        self.assertEqual(o.get_tree("parent", "child"), None)
+        self.assertEqual(o.get_tree("parent", "child"), False)
 
 
 if __name__ == '__main__':
