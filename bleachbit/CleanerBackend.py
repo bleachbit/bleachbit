@@ -304,7 +304,7 @@ class System(Cleaner):
         # unwanted locales
         if self.options["localizations"][1]:
             import Unix
-            callback = lambda locale, language: options.get_locale(language)
+            callback = lambda locale, language: options.get_language(language)
             for path in Unix.locales.localization_paths(callback):
                 yield path
 
