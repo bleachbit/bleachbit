@@ -234,6 +234,7 @@ class TreeDisplayModel:
         self.renderer0 = gtk.CellRendererText()
         self.column0 = gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
         self.view.append_column(self.column0)
+        self.view.set_search_column(0)
 
         # second column
         self.renderer1 = gtk.CellRendererToggle()
@@ -304,7 +305,11 @@ class GUI:
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""
         model = self.view.get_model()
-        paths = selection.get_selected_rows()[1][0]
+        selected_rows = selection.get_selected_rows()
+        if 0 == len(selected_rows[1]):
+            # happens when searching in the tree view
+            return
+        paths = selected_rows[1][0]
         row = paths[0]
         #print "debug: on_selection_changed: paths = '%s', row='%s', model[paths][0]  = '%s'" % (paths,row, model[paths][0])
         name = model[row][0]
@@ -502,7 +507,7 @@ class GUI:
         mdl = self.tree_store.get_model()
         self.view = display.make_view(mdl)
         self.view.get_selection().connect("changed", self.on_selection_changed)
-        scrolled_window.add_with_viewport(self.view)
+        scrolled_window.add(self.view)
         return scrolled_window
 
     def cb_preferences_dialog(self, action):
