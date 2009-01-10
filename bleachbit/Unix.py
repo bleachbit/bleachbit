@@ -82,13 +82,14 @@ class Locales:
                     continue
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
-        self.__scan()
+        self.__scanned = False
         self.__config = ConfigParser.RawConfigParser()
         self.__config_read = False
         pass
 
 
     def __scan(self):
+        """Create a list of languages"""
         locales = []
         for basedir in self.__basedirs:
             if os.path.exists(basedir):
@@ -100,10 +101,11 @@ class Locales:
             if not lang in self.__languages:
                 self.__languages.append(lang)
         self.__languages = sorted(self.__languages)
+        self.__scanned = True
 
 
     def language_code(self, locale):
-        """Convert the locale code to a language code"""
+        """Convert the locale code to a language code (generally ISO 639)"""
         if 'klingon' == locale:
             return locale
         matches = re.findall("^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$", locale)
@@ -113,13 +115,15 @@ class Locales:
 
 
     def iterate_languages(self):
-        """Return each language code"""
+        """Return each language code (generally ISO 639)"""
+        if False == self.__scanned:
+            self.__scan()
         for lang in self.__languages:
             yield lang
 
 
     def __localization_path(self, basedir, language_filter, dir_filter):
-        """Process a single directory tree"""
+        """Return localization paths in a single directory tree"""
         if not os.path.exists(basedir):
             return
         for path in os.listdir(basedir):
@@ -133,6 +137,7 @@ class Locales:
             for path in FileUtilities.children_in_directory(locale_dirname, True):
                 yield path
             yield locale_dirname
+
 
     def localization_paths(self, language_filter):
         """Return paths containing localization files"""
@@ -199,6 +204,7 @@ class Locales:
 
 
     def native_name(self, language_code):
+        """Return the name of the language in its own language"""
         if language_code in self.__native_locale_names:
             return self.__native_locale_names[language_code]
         if os.path.exists('/usr/share/locale/all_languages'):
