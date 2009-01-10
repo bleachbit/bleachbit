@@ -72,7 +72,7 @@ class PreferencesDialog:
 
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
-        notebook.append_page(self.__locales_page(), gtk.Label(_("Locales")))
+        notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
 
         self.dialog.vbox.pack_start(notebook, False)
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
@@ -106,8 +106,8 @@ class PreferencesDialog:
 
         return vbox
 
-    def __locales_page(self):
-        """Return widget containing the locales page"""
+    def __languages_page(self):
+        """Return widget containing the languages page"""
 
         def preserve_toggled_cb(cell, path, liststore):
             """Callback for toggling the 'preserve' column"""
@@ -115,18 +115,18 @@ class PreferencesDialog:
             value = not liststore.get_value(__iter, 0)
             liststore.set(__iter, 0, value)
             langid = liststore[path][1]
-            options.set_locale(langid, value)
+            options.set_language(langid, value)
 
         vbox = gtk.VBox()
 
-        notice = gtk.Label(_("All locales will be deleted except those checked."))
+        notice = gtk.Label(_("All languages will be deleted except those checked."))
         vbox.pack_start(notice)
 
         # populate data
         import Unix
         liststore = gtk.ListStore('gboolean', str, str)
         for lang in Unix.locales.iterate_languages():
-            preserve = options.get_locale(lang)
+            preserve = options.get_language(lang)
             native = Unix.locales.native_name(lang)
             liststore.append( [ preserve, lang, native ] )
 
@@ -145,7 +145,7 @@ class PreferencesDialog:
         treeview.append_column(self.column1)
 
         self.renderer2 = gtk.CellRendererText()
-        self.column2 = gtk.TreeViewColumn(_("Language name"), self.renderer2, text=2)
+        self.column2 = gtk.TreeViewColumn(_("Name"), self.renderer2, text=2)
         treeview.append_column(self.column2)
 
         # finish

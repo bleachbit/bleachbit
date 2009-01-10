@@ -38,13 +38,13 @@ class Options:
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
 
-        if not self.config.has_section('preserve_locales'):
+        if not self.config.has_section('preserve_languages'):
             import locale
             import Unix
             __locale = locale.getdefaultlocale()[0]
             lang = Unix.locales.language_code(__locale)
             print "debug: automatically preserving language '%s'" % (lang,)
-            self.set_locale(lang, True)
+            self.set_language(lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
@@ -76,11 +76,11 @@ class Options:
         return self.config.get('bleachbit', option)
 
 
-    def get_locale(self, id):
-        """Retrieve value for whether to preserve the locale"""
-        if not self.config.has_option('preserve_locales', id):
+    def get_language(self, id):
+        """Retrieve value for whether to preserve the language"""
+        if not self.config.has_option('preserve_languages', id):
             return False
-        return self.config.getboolean('preserve_locales', id)
+        return self.config.getboolean('preserve_languages', id)
 
 
     def get_tree(self, parent, child):
@@ -99,14 +99,14 @@ class Options:
         self.__flush()
 
 
-    def set_locale(self, id, value):
+    def set_language(self, id, value):
         """Set the value for a locale (whether to preserve it)"""
-        if not self.config.has_section('preserve_locales'):
-            self.config.add_section('preserve_locales')
-        if self.config.has_option('preserve_locales', id) and not value:
-            self.config.remove_option('preserve_locales', id)
+        if not self.config.has_section('preserve_languages'):
+            self.config.add_section('preserve_languages')
+        if self.config.has_option('preserve_languages', id) and not value:
+            self.config.remove_option('preserve_languages', id)
         else:
-            self.config.set('preserve_locales', id, str(value))
+            self.config.set('preserve_languages', id, str(value))
         self.__flush()
 
 
@@ -149,6 +149,15 @@ class TestOptions(unittest.TestCase):
         # these should always be set
         for b in boolean_keys:
             self.assert_(type(o.get(b)) is bool)
+
+        # language
+        value = o.get_language('en')
+        self.assert_(type(value) is bool)
+        o.set_language('en', True)
+        self.assertEqual(o.get_language('en'), True)
+        o.set_language('en', False)
+        self.assertEqual(o.get_language('en'), False)
+        o.set_language('en', value)
 
         # tree
         o.set_tree("parent", "child", True)
