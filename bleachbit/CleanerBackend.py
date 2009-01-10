@@ -39,7 +39,10 @@ class Cleaner:
     """Base class for a cleaner"""
 
     def __init__(self):
-        self.options = None
+        self.options = {}
+
+    def add_option(self, option_id, name, description):
+        self.options[option_id] = ( name, False, description )
 
     def available(self):
         """Is the cleaner available?"""
@@ -58,7 +61,7 @@ class Cleaner:
         return None
 
     def get_options(self):
-        """Return user-configurable options in 3-tuple (id, name, value)"""
+        """Return user-configurable options in 3-tuple (id, name, enabled)"""
         r = []
         if self.options:
             for key in sorted(self.options.keys()):
@@ -71,9 +74,11 @@ class Cleaner:
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
 
-    def set_option(self, option, value):
-        assert self.options.has_key(option)
-        self.options[option] = (self.options[option][0], value)
+    def set_option(self, option_id, value):
+        """Enable or disable an option"""
+        assert self.options.has_key(option_id)
+        self.options[option_id] = (self.options[option_id][0], \
+            value, self.options[option_id][2])
 
 
 class Bash(Cleaner):
@@ -120,12 +125,11 @@ class Epiphany(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.options = {}
-        self.options["cache"] = ( _("Cache"), False ) 
-        self.options["cookies"] = ( _("Cookies"), False )
-        self.options["download_history"] = ( _("Download history"), False)
-        self.options["passwords"] = ( _("Passwords"), False)
-        self.options["places"] = ( _("Places"), False)
+        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
+        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
+        self.add_option('download_history', _('Download_history'), _('List of files downloaded'))
+        self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
+        self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
 
     def get_description(self):
         return _("Delete Epiphany's cache, cookies, download list, places, and passwords.")
@@ -173,14 +177,14 @@ class Firefox(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.options = {}
-        self.options["cache"] = ( _("Cache"), False )
-        self.options["cookies"] = ( _("Cookies"), False )
-        self.options["download_history"] = ( _("Download history"), False)
-        self.options["forms"] = ( _("Form history"), False)
-        self.options["session_restore"] = ( _("Session restore"), False)
-        self.options["passwords"] = ( _("Passwords"), False)
-        self.options["places"] = ( _("Places"), False)
+        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
+        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
+        self.add_option('download_history', _('Download_history'), _('List of files downloaded'))
+        self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the searchbar'))
+        self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
+        self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
+        self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
+
         self.profile_dir = "~/.mozilla/firefox/*/"
 
     def get_description(self):
@@ -252,21 +256,18 @@ class Flash(Cleaner):
 
 
 class System(Cleaner):
-    """Freedesktop (XDG)"""
+    """System in general"""
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.options = {}
-        self.options["desktop_entry"] = ( _("Broken desktop entries"), False )
-        self.options["clipboard"] = ( _("Clipboard"), False )
-        self.options["cache"] = ( _("Cache"), False )
-        self.options["localizations"] = ( _("Localizations"), False )
-        self.options["recent_documents"] = ( _("Recent documents list"), False )
+        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .deskop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
+        self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+        self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
+        self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+        self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
 
     def get_description(self):
-        return _("Delete system cache and recently used documents."
-            "  These locations are specified by XDG specifications" \
-            " and are used by some applications on modern Linux systems.")
+        return _("The system in general")
 
     def get_id(self):
         return 'system'
@@ -351,12 +352,11 @@ class KDE(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.options = {}
-        self.options["cache"] = ( _("Cache"), False ) 
-        self.options["tmp"] = ( _("Cookies"), False )
+        self.add_option('cache', _('Cache'), _('KDE cache including Konqueror.  Often contains sparse files where the apparent file size does not match the actual disk usage.'))
+        self.add_option('tmp', _('Temporary files'), _('Temporary files stored by KDE under the home directory'))
 
     def get_description(self):
-        return _("Delete KDE cache and temporary directories.  These are shared by applications including Konqueror.")
+        return _("KDE desktop environment")
 
     def get_id(self):
         return 'kde'
@@ -384,8 +384,9 @@ class OpenOfficeOrg(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.options = {}
-        self.options["cache"] = ( _("Cache"), False )
-        self.options["recent_documents"] = ( _("Recent documents list"), False )
+        self.add_option('cache', _('Cache'), _('Cached registry and package data'))
+        self.add_option('recent_documents', _('Recent documents list'), _("OpenOffice.org's list of recently used documents."))
+
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
         self.prefixes += [ "~/.ooo-dev3" ]
@@ -447,9 +448,9 @@ class Opera(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.options = {}
-        self.options["cache"] = ( _("Cache"), False )
-        self.options["cookies"] = ( _("Cookies"), False )
+        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
+        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
+        self.add_option('', _(''), _(''))
         self.profile_dir = "~/.opera/"
 
     def get_description(self):
