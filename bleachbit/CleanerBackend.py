@@ -167,15 +167,16 @@ class Epiphany(Cleaner):
         if self.options["passwords"][1]:
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/signons3.txt") ]
 
-        for filename in files:
-            if os.path.exists(filename):
-                yield filename
-
         # places database
         if self.options["places"][1]:
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite") ]
             files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal") ]
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-history.xml") ]
+
+        # finish
+        for filename in files:
+            if os.path.exists(filename):
+                yield filename
 
 
 class Firefox(Cleaner):
@@ -229,8 +230,6 @@ class Firefox(Cleaner):
         if self.options["passwords"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
-        for filename in files:
-            yield filename
         # places database
         if self.options["places"][1]:
             # Firefox version 1
@@ -241,6 +240,9 @@ class Firefox(Cleaner):
         # session restore
         if self.options["session_restore"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
+        # finish
+        for filename in files:
+            yield filename
 
 
 class Flash(Cleaner):
