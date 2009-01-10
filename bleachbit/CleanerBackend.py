@@ -49,7 +49,7 @@ class Cleaner:
         return True
 
     def get_description(self):
-        """Brief description"""
+        """Brief description of the cleaner"""
         return ""
 
     def get_id(self):
@@ -59,6 +59,12 @@ class Cleaner:
     def get_name(self):
         """Return the human name of this cleaner"""
         return None
+
+    def get_option_descriptions(self):
+        """Yield the names and descriptions of each option in a 2-tuple"""
+        if self.options:
+            for key in sorted(self.options.keys()):
+                yield ((self.options[key][0], self.options[key][2]))
 
     def get_options(self):
         """Return user-configurable options in 3-tuple (id, name, enabled)"""
@@ -127,7 +133,7 @@ class Epiphany(Cleaner):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
         self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
-        self.add_option('download_history', _('Download_history'), _('List of files downloaded'))
+        self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
 
@@ -179,7 +185,7 @@ class Firefox(Cleaner):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
         self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
-        self.add_option('download_history', _('Download_history'), _('List of files downloaded'))
+        self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the searchbar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
@@ -260,7 +266,7 @@ class System(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .deskop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
+        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
         self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
@@ -450,7 +456,6 @@ class Opera(Cleaner):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisted pages'))
         self.add_option('cookies', _('Cookies'), _('HTTP cookies contain web site prefereneces, authentication, and tracking identification'))
-        self.add_option('', _(''), _(''))
         self.profile_dir = "~/.opera/"
 
     def get_description(self):

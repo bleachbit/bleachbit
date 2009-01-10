@@ -31,6 +31,7 @@ import threading
 import FileUtilities
 import CleanerBackend
 import Update
+from CleanerBackend import backends
 from Options import options
 from globals import APP_NAME, APP_VERSION, appicon_path, \
     license_filename, online_update_notification_enabled
@@ -193,12 +194,12 @@ class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
     def __init__(self):
         self.tree_store = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT)
-        for key in sorted(CleanerBackend.backends):
-            c_name = CleanerBackend.backends[key].get_name()
-            c_id = CleanerBackend.backends[key].get_id()
+        for key in sorted(backends):
+            c_name = backends[key].get_name()
+            c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
-            for (o_id, o_name, o_value) in CleanerBackend.backends[key].get_options():
+            for (o_id, o_name, o_value) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id))
         if None == self.tree_store:
@@ -308,11 +309,15 @@ class GUI:
         name = model[row][0]
         cleaner_id = model[row][2]
         self.progressbar.hide()
-        description = CleanerBackend.backends[cleaner_id].get_description()
+        description = backends[cleaner_id].get_description()
         #print "debug: on_selection_changed: row='%s', name='%s', desc='%s'," % ( row, name ,description)
         self.textbuffer.set_text("")
-        self.append_text(_("Operation name: ") + name + "\n", 'operation')
-        self.append_text(_("Description: ") + description)
+        self.append_text(name + "\n", 'operation')
+        self.append_text(description + "\n\n\n")
+        for (label, description) in backends[cleaner_id].get_option_descriptions():
+            self.append_text(label + ': ', 'option_label')
+            self.append_text(description + "\n\n")
+
 
 
     def get_selected_operations(self):
@@ -395,11 +400,11 @@ class GUI:
         print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
         if operation_options:
             for (option, value) in operation_options:
-                CleanerBackend.backends[operation].set_option(option, value)
+                backends[operation].set_option(option, value)
 
         # standard operation
         try:
-            for pathname in CleanerBackend.backends[operation].list_files():
+            for pathname in backends[operation].list_files():
                 total_bytes += self.clean_pathname(pathname, really_delete, __iter)
         except:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
@@ -410,7 +415,7 @@ class GUI:
 
         # special operation
         try:
-            ret = CleanerBackend.backends[operation].other_cleanup(really_delete)
+            ret = backends[operation].other_cleanup(really_delete)
         except:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
@@ -618,6 +623,10 @@ class GUI:
         style_operation.set_property('size-points', 14)
         style_operation.set_property('weight', 700)
         tt.add(style_operation)
+
+        style_option_label = gtk.TextTag('option_label')
+        style_option_label.set_property('weight', 700)
+        tt.add(style_option_label)
 
         style_operation = gtk.TextTag('error')
         style_operation.set_property('foreground', '#b00000')
