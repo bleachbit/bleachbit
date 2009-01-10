@@ -101,7 +101,7 @@ class Bash(Cleaner):
 
     def list_files(self):
         filename = os.path.expanduser("~/.bash_history")
-        if os.path.exists(filename):
+        if os.path.lexists(filename):
             yield filename
 
 class Beagle(Cleaner):
@@ -121,7 +121,7 @@ class Beagle(Cleaner):
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in FileUtilities.children_in_directory(dirname, False):
-                if os.path.exists(filename):
+                if os.path.lexists(filename):
                     yield filename
 
 
@@ -175,7 +175,7 @@ class Epiphany(Cleaner):
 
         # finish
         for filename in files:
-            if os.path.exists(filename):
+            if os.path.lexists(filename):
                 yield filename
 
 
@@ -325,7 +325,7 @@ class System(Cleaner):
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
         for filename in files:
-            if os.path.exists(filename):
+            if os.path.lexists(filename):
                 yield filename
 
     def other_cleanup(self, really_delete):
@@ -412,7 +412,7 @@ class OpenOfficeOrg(Cleaner):
         if self.options["recent_documents"][1] and not self.options["cache"][1]:
             for prefix in self.prefixes:
                 path = os.path.join(os.path.expanduser(prefix), "user/registry/cache/org.openoffice.Office.Common.dat")
-                if os.path.exists(path):
+                if os.path.lexists(path):
                     yield path
 
         if not self.options["cache"][1]:
@@ -441,7 +441,7 @@ class OpenOfficeOrg(Cleaner):
             return
         for prefix in self.prefixes:
             path = os.path.join(os.path.expanduser(prefix), "user/registry/data/org/openoffice/Office/Common.xcu")
-            if os.path.exists(path):
+            if os.path.lexists(path):
                 if really_delete:
                     oldsize = os.path.getsize(path)
                     self.erase_history(path)
@@ -485,7 +485,7 @@ class Opera(Cleaner):
             files += [os.path.expanduser(self.profile_dir + "cookies4.dat")]
 
         for file in files:
-            if os.path.exists(file):
+            if os.path.lexists(file):
                 yield file
 
 
@@ -503,7 +503,7 @@ class realplayer(Cleaner):
 
     def list_files(self):
         path = os.path.expanduser("~/.config/real/rpcookies.txt")
-        if os.path.exists(path):
+        if os.path.lexists(path):
             yield path
 
 
@@ -629,7 +629,7 @@ class VIM(Cleaner):
 
     def list_files(self):
         path = os.path.expanduser("~/.viminfo")
-        if os.path.exists(path):
+        if os.path.lexists(path):
             yield path
 
 
@@ -704,7 +704,7 @@ class TestUtilities(unittest.TestCase):
                 backends[key].set_option(cleaner_id, True)
             for filename in backends[key].list_files():
                 self.assert_ (type(filename) is str)
-                self.assert_ (os.path.exists(filename), \
+                self.assert_ (os.path.lexists(filename), \
                     "In backend '%s' path does not exist: '%s' \
                     " % (key, filename))
 
