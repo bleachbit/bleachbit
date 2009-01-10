@@ -125,7 +125,7 @@ def children_in_directory(top, list_directories = False):
 def delete(path, shred = False):
     """Delete path that is either file, directory, link or FIFO"""
     print "info: removing '%s'" % (path,)
-    mode = os.stat(path)[stat.ST_MODE]
+    mode = os.lstat(path)[stat.ST_MODE]
     if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
         os.remove(path)
     elif stat.S_ISDIR(mode):
@@ -148,7 +148,7 @@ def delete(path, shred = False):
 
 def ego_owner(filename):
     """Return whether current user owns the file"""
-    return os.stat(filename).st_uid == os.getuid()
+    return os.lstat(filename).st_uid == os.getuid()
 
 
 def exists_in_path(filename):
@@ -401,13 +401,23 @@ class TestFileUtilities(unittest.TestCase):
         os.close(fd)
         self.assert_(os.path.exists(filename))
         linkname = '/tmp/bleachbitsymlinktest'
+        if os.path.lexists(linkname):
+            delete(linkname)
+        self.assert_(not os.path.lexists(linkname))
         os.symlink(filename, linkname)
-        self.assert_(os.path.exists(linkname))
+        self.assert_(os.path.lexists(linkname))
         delete(linkname)
         self.assert_(os.path.exists(filename))
-        self.assert_(not os.path.exists(linkname))
+        self.assert_(not os.path.lexists(linkname))
         delete(filename)
         self.assert_(not os.path.exists(filename))
+
+        # test broken symlink
+        os.symlink(filename, linkname)
+        self.assert_(os.path.lexists(linkname))
+        self.assert_(not os.path.exists(linkname))
+        delete(linkname)
+        self.assert_(not os.path.exists(linkname))
 
         # test fifo
         args = ["mkfifo", filename]
