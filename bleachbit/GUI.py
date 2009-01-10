@@ -142,18 +142,19 @@ class PreferencesDialog:
         treeview.append_column(self.column0)
 
         self.renderer1 = gtk.CellRendererText()
-        self.column1 = gtk.TreeViewColumn(_("Language code"), self.renderer1, text=1)
+        self.column1 = gtk.TreeViewColumn(_("Code"), self.renderer1, text=1)
         treeview.append_column(self.column1)
 
         self.renderer2 = gtk.CellRendererText()
         self.column2 = gtk.TreeViewColumn(_("Name"), self.renderer2, text=2)
         treeview.append_column(self.column2)
+        treeview.set_search_column(2)
 
         # finish
         swindow = gtk.ScrolledWindow()
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         swindow.set_size_request(500, 300)
-        swindow.add_with_viewport(treeview)
+        swindow.add(treeview)
         vbox.pack_start(swindow, False)
         return vbox
 
