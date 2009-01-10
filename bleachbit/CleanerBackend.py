@@ -641,7 +641,9 @@ class XChat(Cleaner):
         return "XChat"
 
     def list_files(self):
-        dirs = ["~/.xchat2/scrollback/", "~/.xchat2/logs/"]
+        dirs = [ "~/.xchat2/scrollback/" ]
+        dirs += [ "~/.xchat2/logs/" ] # Seen before XChat version 2.8.6
+        dirs += [ "~/.xchat2/xchatlogs" ] # Seen first in XChat version 2.8.6
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in FileUtilities.children_in_directory(dirname, False):
