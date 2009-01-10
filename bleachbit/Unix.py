@@ -27,6 +27,7 @@ Integration specific to Unix-like operating systems
 import glob
 import os
 import re
+import ConfigParser
 
 import FileUtilities
 
@@ -82,6 +83,8 @@ class Locales:
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
         self.__scan()
+        self.__config = ConfigParser.RawConfigParser()
+        self.__config_read = False
         pass
 
 
@@ -198,6 +201,16 @@ class Locales:
     def native_name(self, language_code):
         if language_code in self.__native_locale_names:
             return self.__native_locale_names[language_code]
+        if os.path.exists('/usr/share/locale/all_languages'):
+            if not self.__config_read:
+                self.__config.read('/usr/share/locale/all_languages')
+                self.__config_read = True
+            option = 'Name[%s]' % (language_code, )
+            if self.__config.has_option(language_code, option):
+                value = self.__config.get(language_code, option)
+                # cache
+                self.__native_locale_names[language_code] = value
+                return value
         return None
 
 
