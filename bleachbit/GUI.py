@@ -575,7 +575,8 @@ class GUI:
 
         self.window.resize(800, 600)
         self.window.set_title(APP_NAME)
-        self.window.set_icon_from_file(appicon_path)
+        if os.path.exists(appicon_path):
+            self.window.set_icon_from_file(appicon_path)
         vbox = gtk.VBox()
         self.window.add(vbox)
 
