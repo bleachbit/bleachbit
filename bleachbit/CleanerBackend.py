@@ -705,8 +705,8 @@ class TestUtilities(unittest.TestCase):
         for key in sorted(backends):
             for (cleaner_id, __name, __value) in backends[key].get_options():
                 backends[key].set_option(cleaner_id, True)
-            path = backends[key].other_cleanup(False)
-            self.assert_ (None == path or os.path.exists(path))
+            description = backends[key].other_cleanup(False)
+            self.assert_ (None == description or type(description) is str)
 
     def test_whitelist(self):
         tests = [ \
