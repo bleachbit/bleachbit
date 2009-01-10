@@ -69,6 +69,7 @@ class Locales:
 
     __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
                 '/usr/local/share/locale/',
+                '/usr/share/doc/kde/HTML/',
                 '/usr/share/locale/' ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
@@ -153,9 +154,14 @@ class Locales:
         dir_filter = lambda d: d.endswith('tmpl')
         for path in self.__localization_path('/usr/share/cups/templates/', language_filter, dir_filter):
             yield path
-        # example: /usr/share/cups/www/es/images/button-add-printer.gif
+        # Fedora 10
+        #   example: /usr/share/cups/www/es/images/button-add-printer.gif
         dir_filter = lambda d: d in ['cups.css', 'cups-printable.css', 'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
         for path in self.__localization_path('/usr/share/cups/www/', language_filter, dir_filter):
+            yield path
+        # Ubuntu 8.10
+        #   example: /usr/share/cups/doc-root/es/images/button-add-printer.gif
+        for path in self.__localization_path('/usr/share/cups/doc-root/', language_filter, dir_filter):
             yield path
 
         # foomatic
