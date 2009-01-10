@@ -77,6 +77,8 @@ class Locales:
         self.__languages = []
         if os.path.exists('/usr/share/gnome/help'):
             for gapp in os.listdir('/usr/share/gnome/help'):
+                if 'libs' == gapp:
+                    continue
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
         self.__scan()
@@ -115,6 +117,8 @@ class Locales:
 
     def __localization_path(self, basedir, language_filter, dir_filter):
         """Process a single directory tree"""
+        if not os.path.exists(basedir):
+            return
         for path in os.listdir(basedir):
             if None != dir_filter and dir_filter(path):
                 continue
