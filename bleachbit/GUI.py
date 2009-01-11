@@ -88,12 +88,6 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
-        cb_autohide = gtk.CheckButton(_("Automatically hide invalid operations"))
-        cb_autohide.set_active(options.get('auto_hide'))
-        cb_autohide.connect('toggled', toggle_callback, 'auto_hide')
-        self.tooltips.set_tip(cb_autohide, _("Reduce clutter by hiding operations which will not return any results."))
-        vbox.pack_start(cb_autohide, False)
-
         cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
         cb_updates.set_active(options.get('check_online_updates'))
         cb_updates.connect('toggled', toggle_callback, 'check_online_updates')

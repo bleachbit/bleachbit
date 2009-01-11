@@ -26,7 +26,7 @@ import ConfigParser
 
 from globals import APP_VERSION, options_dir, options_file
 
-boolean_keys = ['auto_hide', 'check_online_updates', 'first_start', 'shred']
+boolean_keys = ['check_online_updates', 'first_start', 'shred']
 
 class Options:
     """Store and retrieve user preferences"""
@@ -38,7 +38,6 @@ class Options:
             self.config.add_section("bleachbit")
 
         # set defaults
-        self.__set_default("auto_hide", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
 
