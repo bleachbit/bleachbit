@@ -17,6 +17,7 @@ refresh-po: $(POTFILE)
 
 spelling: $(POTFILE)
 	grep msgid $(POTFILE) | cut -c 8- | aspell list
+	grep msgstr es.po | cut -c 8- | LANG=es_ES.utf8 aspell list
 
 %.mo: %.po
 	msgfmt --statistics -o $@ $<
