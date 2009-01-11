@@ -94,7 +94,7 @@ class PreferencesDialog:
         self.tooltips.set_tip(cb_autohide, _("Reduce clutter by hiding operations which will not return any results."))
         vbox.pack_start(cb_autohide, False)
 
-        cb_updates = gtk.CheckButton(_("Check perodicially for software updates via the Internet"))
+        cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
         cb_updates.set_active(options.get('check_online_updates'))
         cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
         vbox.pack_start(cb_updates, False)
