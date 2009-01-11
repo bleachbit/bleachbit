@@ -15,6 +15,9 @@ refresh-po: $(POTFILE)
 		mv $$lang.pot $$lang.po; \
 	done
 
+spelling: $(POTFILE)
+	grep msgid $(POTFILE) | cut -c 8- | aspell list
+
 %.mo: %.po
 	msgfmt --statistics -o $@ $<
 	# copy locally for running without installation
