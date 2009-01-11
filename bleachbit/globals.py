@@ -68,7 +68,7 @@ try:
     gettext.install('bleachbit', locale_dir, unicode=1)
 except:
     print "Warning: gettext() failed so translations will be unvailable"
-    def _(str):
+    def _(msg):
         """Dummy replacement for gettext"""
-        return str
+        return msg
 
