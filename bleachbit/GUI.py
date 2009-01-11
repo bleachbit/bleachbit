@@ -669,7 +669,7 @@ class GUI:
         """Check for software updates in background"""
         update = Update.Update()
         if update.is_update_available():
-            gobject.idle_add(self.enable_online_update, update.get_update_url())
+            gobject.idle_add(self.enable_online_update, update.get_update_info_url())
 
     def __init__(self):
         self.create_window()

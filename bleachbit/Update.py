@@ -27,7 +27,9 @@ import sys
 import urllib2
 import xml.dom.minidom
 
-from globals import *
+import globals
+from globals import APP_VERSION, socket_timeout
+
 
 def user_agent():
     """Return the user agent string"""
@@ -46,13 +48,13 @@ class Update:
 
     def __init__(self):
         self.update_available = None
-        self.update_url = None
+        self.update_info_url = None
 
 
-    def get_update_url(self):
-        """Return the URL with information about the update.  
+    def get_update_info_url(self):
+        """Return the URL with information about the update.
         If no update is available, URL may be none."""
-        return self.update_url
+        return self.update_info_url
 
 
     def is_update_available(self):
@@ -61,7 +63,7 @@ class Update:
         opener.addheaders = [('User-Agent', user_agent())]
         socket.setdefaulttimeout(socket_timeout)
         try:
-            handle = opener.open(update_url)
+            handle = opener.open(globals.update_check_url)
             dom = xml.dom.minidom.parse(handle)
         except:
             print _("Error when checking for updates: "), str(sys.exc_info()[1])
@@ -70,7 +72,7 @@ class Update:
         if 0 == len(elements):
             self.update_available = False
         else:
-            self.update_url = elements[0].firstChild.data
+            self.update_info_url = elements[0].firstChild.data
             self.update_available = True
         dom.unlink()
         return self.update_available
@@ -87,6 +89,10 @@ class TestUpdate(unittest.TestCase):
         available = update.is_update_available()
         print "Update available = ", available
         self.assert_ (type(available) is bool)
+
+        # test failure
+        globals.update_check_url = "http://www.surelydoesnotexist.com/foo"
+        self.assertEqual(update.is_update_available(), False)
 
 
     def test_user_agent(self):

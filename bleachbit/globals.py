@@ -38,7 +38,7 @@ if not os.path.exists(license_filename):
 options_dir = os.path.expanduser("~/.config/bleachbit/")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
-update_url = "http://bleachbit.sourceforge.net/communicate.php"
+update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
 
 socket_timeout = 10
 
