@@ -74,8 +74,13 @@ Requires:       python >= 2.4
 
 
 %description
-BleachBit removes unnecessary files, frees space, and maintains your
-privacy.
+BleachBit deletes unnecessary files to free valuable disk space and
+maintain privacy. Rid your system of old junk including broken
+menu entries, cache, cookies, localizations, and temporary files.
+Designed for Linux  systems, it wipes clean Bash, Beagle, Epiphany,
+Firefox, Flash, GNOME, Java, KDE, OpenOffice.org, Opera, RealPlayer,
+VIM, XChat, and more.
+
 
 %prep
 %setup -q

@@ -13,7 +13,8 @@ Depends: python, python-gtk2 (>= 2.6), ${python:Depends}, menu
 XB-Python-Version: ${python:Versions}
 Description: Removes unnecessary files
  BleachBit deletes unnecessary files to free valuable disk space and
- maintain privacy. Rid your system of old junk including cache,
- temporary files, and cookies. Designed for Linux systems, it wipes
- clean Bash, Beagle, Epiphany, Firefox, Adobe Flash, Java, KDE,
- OpenOffice.org, Opera, rpmbuild, XChat, and more.
+ maintain privacy. Rid your system of old junk including broken
+ menu entries, cache, cookies, localizations, and temporary files.
+ Designed for Linux  systems, it wipes clean Bash, Beagle, Epiphany,
+ Firefox, Flash, GNOME, Java, KDE, OpenOffice.org, Opera, RealPlayer,
+ VIM, XChat, and more.
