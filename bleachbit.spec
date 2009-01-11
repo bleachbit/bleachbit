@@ -57,6 +57,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  python-devel
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
+Requires:       usermode
 %endif
 
 %if 0%{?suse_version}
@@ -81,6 +82,26 @@ privacy.
 %build
 %{__python} setup.py build
 
+cp %{name}.desktop %{name}-root.desktop
+sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
+
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+
+cat > bleachbit.pam <<EOF
+#%PAM-1.0
+auth		include		config-util
+account		include		config-util
+session		include		config-util
+EOF
+
+cat > bleachbit.console <<EOF
+USER=root
+PROGRAM=/usr/share/bleachbit/GUI.py
+SESSION=true
+EOF
+
+%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -89,6 +110,22 @@ make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+
+sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' %{name}-root.desktop
+
+desktop-file-install \
+	--dir=%{buildroot}/%{_datadir}/applications/ \
+	--vendor="" %{name}-root.desktop
+
+# consolehelper and userhelper
+ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
+mkdir -p %{buildroot}/%{_sbindir}
+ln -s ../..%{_datadir}/%{name}/GUI.py %{buildroot}/%{_sbindir}/%{name}-root
+mkdir -p %{buildroot}%{_sysconfdir}/pam.d
+install -m 644 %{name}.pam %{buildroot}%{_sysconfdir}/pam.d/%{name}-root
+mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
+install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/%{name}-root
+
 %endif
 
 %if 0%{?suse_version}
@@ -126,8 +163,15 @@ update-desktop-database &> /dev/null ||:
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
+%config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
+%endif
 %{_bindir}/%{name}
+%{_bindir}/%{name}-root
+%{_sbindir}/%{name}-root
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/%{name}-root.desktop
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
 
