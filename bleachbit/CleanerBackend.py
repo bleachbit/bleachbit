@@ -307,9 +307,8 @@ class System(Cleaner):
 
         if self.options["desktop_entry"][1]:
             for dirname in menu_dirs:
-                for filename in filter(lambda fn: fn.endswith(".desktop"), \
-                    children_in_directory( \
-                    os.path.expanduser(dirname), False)):
+                for filename in [fn for fn in children_in_directory(dirname, False) \
+                    if fn.endswith('.desktop') ]:
                     if FileUtilities.is_broken_xdg_desktop(filename):
                         yield filename
 
