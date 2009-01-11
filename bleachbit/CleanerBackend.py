@@ -32,6 +32,7 @@ import xml.dom.minidom
 
 import FileUtilities
 import globals
+from FileUtilities import children_in_directory
 from Options import options
 
 
@@ -120,7 +121,7 @@ class Beagle(Cleaner):
         dirs = [ "~/.beagle/Indexes", "~/.beagle/Log", "~/.beagle/TextCache" ]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 if os.path.lexists(filename):
                     yield filename
 
@@ -153,7 +154,7 @@ class Epiphany(Cleaner):
             dirs = glob.glob(os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/Cache/"))
             dirs += glob.glob(os.path.expanduser("~/.gnome2/epiphany/favicon_cache/"))
             for dirname in dirs:
-                for filename in FileUtilities.children_in_directory(dirname, False):
+                for filename in children_in_directory(dirname, False):
                     yield filename
             files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-favicon-cache.xml") ]
 
@@ -209,7 +210,7 @@ class Firefox(Cleaner):
             dirs = glob.glob(os.path.expanduser(self.profile_dir + "/Cache/"))
             dirs += glob.glob(os.path.expanduser(self.profile_dir + "/OfflineCache/"))
             for dirname in dirs:
-                for filename in FileUtilities.children_in_directory(dirname, False):
+                for filename in children_in_directory(dirname, False):
                     yield filename
         files = []
         # cookies
@@ -259,7 +260,7 @@ class Flash(Cleaner):
 
     def list_files(self):
         dirname = os.path.expanduser("~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys")
-        for filename in FileUtilities.children_in_directory(dirname, True):
+        for filename in children_in_directory(dirname, True):
             yield filename
 
 
@@ -289,7 +290,7 @@ class System(Cleaner):
         # cache
         if self.options["cache"][1]:
             dirname = os.path.expanduser("~/.cache/")
-            for filename in FileUtilities.children_in_directory(dirname, True):
+            for filename in children_in_directory(dirname, True):
                 yield filename
 
         # menu
@@ -307,7 +308,7 @@ class System(Cleaner):
         if self.options["desktop_entry"][1]:
             for dirname in menu_dirs:
                 for filename in filter(lambda fn: fn.endswith(".desktop"), \
-                    FileUtilities.children_in_directory( \
+                    children_in_directory( \
                     os.path.expanduser(dirname), False)):
                     if FileUtilities.is_broken_xdg_desktop(filename):
                         yield filename
@@ -331,7 +332,7 @@ class System(Cleaner):
         if self.options["trash"][1]:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
-                for path in FileUtilities.children_in_directory(dirname, True):
+                for path in children_in_directory(dirname, True):
                     is_open = FileUtilities.openfiles.is_open(path)
                     ok = not is_open and os.path.isfile(path) and \
                         not os.path.islink(path) and \
@@ -342,7 +343,7 @@ class System(Cleaner):
         # trash
         if self.options["trash"][1]:
             dirname = os.path.expanduser("~/.Trash")
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 yield filename
             # fixme http://www.ramendik.ru/docs/trashspec.html
             # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
@@ -350,7 +351,7 @@ class System(Cleaner):
             # * GNOME 2.22, Fedora 9
             # * KDE 4.1.3, Ubuntu 8.10
             dirname = os.path.expanduser("~/.local/share/Trash")
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 yield filename
 
         # finish
@@ -394,7 +395,7 @@ class Java(Cleaner):
 
     def list_files(self):
         dirname = os.path.expanduser("~/.java/deployment/cache")
-        for filename in FileUtilities.children_in_directory(dirname, False):
+        for filename in children_in_directory(dirname, False):
             yield filename
 
 
@@ -420,14 +421,14 @@ class KDE(Cleaner):
         if self.options["cache"][1]:
             dirs = glob.glob(os.path.expanduser("~/.kde/cache-*/"))
             for dirname in dirs:
-                for filename in FileUtilities.children_in_directory(dirname, False):
+                for filename in children_in_directory(dirname, False):
                     yield filename
         # temporary
         if self.options["tmp"][1]:
             dirs = glob.glob(os.path.expanduser("~/.kde/tmp-*/"))
             for dirname in dirs:
-                for file in FileUtilities.children_in_directory(dirname, False):
-                    yield file
+                for path in children_in_directory(dirname, False):
+                    yield path
 
 class OpenOfficeOrg(Cleaner):
     """Delete OpenOffice.org cache"""
@@ -465,7 +466,7 @@ class OpenOfficeOrg(Cleaner):
             dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
             dirs.append(os.path.join(os.path.expanduser(prefix), "user/registry/cache/"))
         for dirname in dirs:
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 yield filename
 
     def erase_history(self, path):
@@ -518,18 +519,18 @@ class Opera(Cleaner):
             dirs = [ os.path.expanduser(self.profile_dir + "cache4/"), \
                 os.path.expanduser(self.profile_dir + "opcache/") ]
             for dirname in dirs:
-                for filename in FileUtilities.children_in_directory(dirname, False):
+                for filename in children_in_directory(dirname, False):
                     yield filename
-
+ 
         files = []
 
         # cookies
         if self.options["cookies"][1]:
             files += [os.path.expanduser(self.profile_dir + "cookies4.dat")]
 
-        for file in files:
-            if os.path.lexists(file):
-                yield file
+        for path in files:
+            if os.path.lexists(path):
+                yield path
 
 
 class realplayer(Cleaner):
@@ -575,7 +576,7 @@ class rpmbuild(Cleaner):
         else:
             dirnames.add(dirname + "/BUILD")
         for dirname in dirnames:
-            for filename in FileUtilities.children_in_directory(dirname, True):
+            for filename in children_in_directory(dirname, True):
                 yield filename
 
 
@@ -593,7 +594,7 @@ class Thumbnails(Cleaner):
 
     def list_files(self):
         dirname = os.path.expanduser("~/.thumbnails")
-        for filename in FileUtilities.children_in_directory(dirname, False):
+        for filename in children_in_directory(dirname, False):
             yield filename
 
 
@@ -636,7 +637,7 @@ class XChat(Cleaner):
         dirs += [ "~/.xchat2/xchatlogs" ] # Seen first in XChat version 2.8.6
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 yield filename
 
 backends = {}
