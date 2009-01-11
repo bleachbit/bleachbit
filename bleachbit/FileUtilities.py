@@ -430,7 +430,7 @@ class TestFileUtilities(unittest.TestCase):
 
 
     def test_exe_exists(self):
-        """Unit test for exe_exists()"""
+        """Unit test for method exe_exists()"""
         tests = [ ("/bin/sh", True), \
             ("sh", True), \
             ("doesnotexist", False), \
@@ -440,6 +440,7 @@ class TestFileUtilities(unittest.TestCase):
 
 
     def test_getsize(self):
+        """Unit test for method getsize()"""
         import tempfile
 
         # create regular file
@@ -478,8 +479,8 @@ class TestFileUtilities(unittest.TestCase):
             '/usr/share/applnk-redhat/', \
             '/usr/local/share/applications/' ]
         for dirname in menu_dirs:
-            for filename in filter(lambda fn: fn.endswith(".desktop"), \
-                children_in_directory(dirname, False)):
+            for filename in [fn for fn in children_in_directory(dirname, False) \
+                if fn.endswith('.desktop')]:
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
 
