@@ -23,6 +23,10 @@ configure-stamp:
 
 
 build: build-stamp
+	cp bleachbit.desktop bleachbit-root.desktop
+	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' bleachbit-root.desktop
+	sed -i -e 's/Exec=bleachbit$$/Exec=gksu bleachbit/g' bleachbit-root.desktop
+
 
 build-stamp: configure-stamp  
 	dh_testdir
@@ -51,6 +55,10 @@ install: build
 	# Add here commands to install the package into debian/bleachbit.
 	$(MAKE) DESTDIR=$(CURDIR)/debian/bleachbit prefix=/usr install
 	find debian/bleachbit/usr/share/bleachbit -name "*.pyc" -exec rm -f '{}' ';'
+
+	desktop-file-install \
+	--dir=$(CURDIR)/debian/bleachbit/usr/share/applications/ \
+	--vendor="" bleachbit-root.desktop
 
 
 # Build architecture-independent files here.
