@@ -58,7 +58,7 @@ class Options:
     def __flush(self):
         """Write information to disk"""
         if not os.path.exists(options_dir):
-            os.mkdir(options_dir)
+            os.makedir(options_dir, 0700)
         f = open(options_file, 'wb')
         self.config.write(f)
 
