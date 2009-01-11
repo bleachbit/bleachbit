@@ -61,10 +61,12 @@ Requires:       usermode
 %endif
 
 %if 0%{?suse_version}
+BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
+Requires:       xdg-utils
 %py_requires
 %endif
 
@@ -128,9 +130,15 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 
 %endif
 
+
 %if 0%{?suse_version}
 %suse_update_desktop_file %{name}
+sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
+desktop-file-install \
+	--dir=%{buildroot}/%{_datadir}/applications/ \
+	--vendor="" %{name}-root.desktop
 %endif
+
 
 make -C po install DESTDIR=$RPM_BUILD_ROOT
 
@@ -166,10 +174,10 @@ update-desktop-database &> /dev/null ||:
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
-%endif
-%{_bindir}/%{name}
 %{_bindir}/%{name}-root
 %{_sbindir}/%{name}-root
+%endif
+%{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/applications/%{name}-root.desktop
 %{_datadir}/%{name}/
