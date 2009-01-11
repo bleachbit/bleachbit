@@ -31,7 +31,19 @@ import ConfigParser
 
 import FileUtilities
 
+
+def locale_to_language(locale):
+    """Convert the locale code to a language code (generally ISO 639)"""
+    if 'klingon' == locale:
+        return locale
+    matches = re.findall("^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$", locale)
+    if 1 > len(matches):
+        raise ValueError("Invalid locale_code '%s'" % (locale,))
+    return matches[0][0]
+
+
 class Locales:
+    """Find languages and localization files"""
 
     __native_locale_names = \
     { 'ar' : 'العربية', \
@@ -86,33 +98,22 @@ class Locales:
         self.__scanned = False
         self.__config = ConfigParser.RawConfigParser()
         self.__config_read = False
-        pass
 
 
     def __scan(self):
         """Create a list of languages"""
-        locales = []
+        _locales = []
         for basedir in self.__basedirs:
             if os.path.exists(basedir):
-                locales += os.listdir(basedir)
-        for locale in locales:
+                _locales += os.listdir(basedir)
+        for locale in _locales:
             if locale in self.__ignore:
                 continue
-            lang = self.language_code(locale)
+            lang = locale_to_language(locale)
             if not lang in self.__languages:
                 self.__languages.append(lang)
         self.__languages = sorted(self.__languages)
         self.__scanned = True
-
-
-    def language_code(self, locale):
-        """Convert the locale code to a language code (generally ISO 639)"""
-        if 'klingon' == locale:
-            return locale
-        matches = re.findall("^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$", locale)
-        if 1 > len(matches):
-            raise ValueError("Invalid locale_code '%s'" % (locale,))
-        return matches[0][0]
 
 
     def iterate_languages(self):
@@ -131,7 +132,7 @@ class Locales:
             if None != dir_filter and dir_filter(path):
                 continue
             locale_code = path
-            language_code = self.language_code(path)
+            language_code = locale_to_language(path)
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             locale_dirname = os.path.join(basedir, locale_code)
@@ -175,7 +176,7 @@ class Locales:
             locale_code = os.path.basename(path)
             if locale_code.startswith('iso14') or locale_code.startswith('translit'):
                 continue
-            language_code = self.language_code(locale_code)
+            language_code = locale_to_language(locale_code)
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             yield path
@@ -192,7 +193,7 @@ class Locales:
             locale_code = path[path.rfind("-") + 1 : path.rfind(".") ]
             if 'C' == locale_code:
                 continue
-            language_code = self.language_code(locale_code)
+            language_code = locale_to_language(locale_code)
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             yield path
@@ -201,12 +202,10 @@ class Locales:
         # example: /usr/share/tcl8.5/msgs/es_mx.msg
         for path in glob.glob('/usr/share/tcl*/msgs/*.msg'): 
             locale_code = os.path.splitext(os.path.basename(path))[0]
-            language_code = self.language_code(locale_code)
+            language_code = locale_to_language(locale_code)
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             yield path
-
-
 
 
     def native_name(self, language_code):
@@ -231,20 +230,24 @@ locales = Locales()
 
 import unittest
 
-class TestLocales(unittest.TestCase):
-    """Unit tests for class Locale"""
+class TestUnix(unittest.TestCase):
+    """Unit tests for module Unix"""
 
     def setUp(self):
-        """Initialize"""
+        """Initialize unit tests"""
         self.locales = Locales()
 
 
     def iterate_languages(self):
+        """Unit test for the method iterate_languages()"""
         for language in self.locales.iterate_languages():
             self.assert_(type(language) is str)
+            self.assert_(len(str) > 0)
+            self.assert_(len(str) < 9)
 
-    def test_language_code(self):
-        """Test method language_code()"""
+
+    def test_locale_to_language(self):
+        """Test method locale_to_language()"""
         tests = [ ('en', 'en'),
             ('en_US', 'en'),
             ('en_US@piglatin', 'en'),
@@ -254,17 +257,17 @@ class TestLocales(unittest.TestCase):
             ('sr_Latn', 'sr'),
             ('zh_TW.Big5', 'zh') ]
         for test in tests:
-            self.assertEqual(self.locales.language_code(test[0]), test[1])
+            self.assertEqual(locale_to_language(test[0]), test[1])
 
-        self.assertRaises(ValueError, self.locales.language_code, 'default')
-        self.assertRaises(ValueError, self.locales.language_code, 'C')
-        self.assertRaises(ValueError, self.locales.language_code, 'English')
+        self.assertRaises(ValueError, locale_to_language, 'default')
+        self.assertRaises(ValueError, locale_to_language, 'C')
+        self.assertRaises(ValueError, locale_to_language, 'English')
 
 
     def test_localization_paths(self):
         """Test method localization_paths()"""
         for path in locales.localization_paths(lambda x, y: False):
-            print "debug: ", path
+            self.assert_(os.path.lexists(path))
 
 
     def test_native_name(self):

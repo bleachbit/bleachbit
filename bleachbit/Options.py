@@ -46,7 +46,7 @@ class Options:
             import locale
             import Unix
             __locale = locale.getdefaultlocale()[0]
-            lang = Unix.locales.language_code(__locale)
+            lang = Unix.locale_to_language(__locale)
             print "debug: automatically preserving language '%s'" % (lang,)
             self.set_language(lang, True)
 
