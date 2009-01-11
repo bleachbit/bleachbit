@@ -272,6 +272,8 @@ class System(Cleaner):
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
         self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+        self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
+        self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
         self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
 
     def get_description(self):
@@ -324,6 +326,34 @@ class System(Cleaner):
             files += [ os.path.expanduser("~/.recently-used.xbel") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
+
+        # temporary
+        if self.options["trash"][1]:
+            dirnames = [ '/tmp', '/var/tmp' ]
+            for dirname in dirnames:
+                for path in FileUtilities.children_in_directory(dirname, True):
+                    is_open = FileUtilities.openfiles.is_open(path)
+                    ok = not is_open and os.path.isfile(path) and \
+                        not os.path.islink(path) and \
+                        FileUtilities.ego_owner(path) and \
+                        not self.whitelisted(path)
+                    if ok:
+                        yield path
+        # trash
+        if self.options["trash"][1]:
+            dirname = os.path.expanduser("~/.Trash")
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                yield filename
+            # fixme http://www.ramendik.ru/docs/trashspec.html
+            # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
+            # ~/.local/share/Trash
+            # * GNOME 2.22, Fedora 9
+            # * KDE 4.1.3, Ubuntu 8.10
+            dirname = os.path.expanduser("~/.local/share/Trash")
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                yield filename
+
+        # finish
         for filename in files:
             if os.path.lexists(filename):
                 yield filename
@@ -335,6 +365,19 @@ class System(Cleaner):
                 clipboard.set_text("")
                 return (0, _("Clipboard"))
             return _("Clipboard")
+
+
+    def whitelisted(self, pathname):
+        """Return boolean whether file is whitelisted"""
+        regexes = ['/tmp/pulse-[^/]+/pid',
+            '/tmp/gconfd-[^/]+/lock/ior',
+            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
+            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
+            '/tmp/.X0-lock' ]
+        for regex in regexes:
+            if None != re.match(regex, pathname):
+                return True
+        return False
 
 
 class Java(Cleaner):
@@ -554,67 +597,6 @@ class Thumbnails(Cleaner):
             yield filename
 
 
-class tmp(Cleaner):
-    """Delete certain files in /tmp/"""
-
-    def get_description(self):
-        return _("Delete user-owned, unopened, regular files in /tmp/ and /var/tmp/")
-
-    def get_id(self):
-        return 'tmp'
-
-    def get_name(self):
-        return "tmp"
-
-    def whitelisted(self, pathname):
-        """Return boolean whether file is whitelisted"""
-        regexes = ['/tmp/pulse-[^/]+/pid',
-            '/tmp/gconfd-[^/]+/lock/ior',
-            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
-            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
-            '/tmp/.X0-lock' ]
-        for regex in regexes:
-            if None != re.match(regex, pathname):
-                return True
-        return False
-
-
-    def list_files(self):
-        dirnames = [ '/tmp', '/var/tmp' ]
-        for dirname in dirnames:
-            for path in FileUtilities.children_in_directory(dirname, True):
-                is_open = FileUtilities.openfiles.is_open(path)
-                ok = not is_open and os.path.isfile(path) and \
-                    not os.path.islink(path) and \
-                    FileUtilities.ego_owner(path) and \
-                    not self.whitelisted(path)
-                if ok:
-                    yield path
-
-class Trash(Cleaner):
-    """Delete the trash folder"""
-
-    def get_description(self):
-        return _("Delete the files in the trash folder")
-
-    def get_id(self):
-        return 'trash'
-
-    def get_name(self):
-        return _("Trash")
-
-    def list_files(self):
-        dirname = os.path.expanduser("~/.Trash")
-        for filename in FileUtilities.children_in_directory(dirname, False):
-            yield filename
-        # fixme http://www.ramendik.ru/docs/trashspec.html
-        # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
-        # GNOME 2.22, Fedora 9 ~/.local/share/Trash
-        dirname = os.path.expanduser("~/.local/share/Trash")
-        for filename in FileUtilities.children_in_directory(dirname, False):
-            yield filename
-
-
 class VIM(Cleaner):
     """VIM (Vi IMproved)"""
 
@@ -671,8 +653,6 @@ backends["realplayer"] = realplayer()
 backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
-backends["tmp"] = tmp()
-backends["trash"] = Trash()
 backends["vim"] = VIM()
 backends["xchat"] = XChat()
 
@@ -727,7 +707,7 @@ class TestUtilities(unittest.TestCase):
             ('/tmp/tmpsDOBFd', False) \
             ]
         for test in tests:
-            self.assertEqual(backends['tmp'].whitelisted(test[0]), test[1], test[0])
+            self.assertEqual(backends['system'].whitelisted(test[0]), test[1], test[0])
 
 if __name__ == '__main__':
     unittest.main()
