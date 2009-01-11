@@ -139,7 +139,7 @@ class Epiphany(Cleaner):
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
 
     def get_description(self):
-        return _("Delete Epiphany's cache, cookies, download list, places, and passwords.")
+        return _("Epiphany web browser")
 
     def get_id(self):
         return 'epiphany'
@@ -196,7 +196,7 @@ class Firefox(Cleaner):
         self.profile_dir = "~/.mozilla/firefox/*/"
 
     def get_description(self):
-        return _("Delete Mozilla Firefox's cache, cookies, download list, forms, and places database.  The places database contains URLs including bookmarks and visited URLs.")
+        return _("Mozilla Firefox web browser")
 
     def get_id(self):
         return 'firefox'
@@ -443,7 +443,7 @@ class OpenOfficeOrg(Cleaner):
         self.prefixes += [ "~/.ooo-dev3" ]
 
     def get_description(self):
-        return _("Delete OpenOffice.org's registry cache, UNO package cache, and recent documents list.")
+        return _("OpenOffice.org office suite")
 
     def get_id(self):
         return 'openofficeorg'
@@ -504,7 +504,7 @@ class Opera(Cleaner):
         self.profile_dir = "~/.opera/"
 
     def get_description(self):
-        return _("Delete Opera cache and cookies.")
+        return _("Opera web browser")
 
     def get_id(self):
         return 'opera'
@@ -536,7 +536,7 @@ class realplayer(Cleaner):
     """RealPlayer by RealNetworks"""
 
     def get_description(self):
-        return _("Delete the RealPlayer cookies")
+        return _("Delete RealPlayer's cookies")
 
     def get_id(self):
         return 'realplayer'
