@@ -8,19 +8,23 @@
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""
+Store and retreieve user preferences
+"""
 
 import os
 import ConfigParser
 
-from globals import *
+from globals import APP_VERSION, options_dir, options_file
 
 boolean_keys = ['auto_hide', 'check_online_updates', 'first_start', 'shred']
 
@@ -59,8 +63,8 @@ class Options:
         """Write information to disk"""
         if not os.path.exists(options_dir):
             os.makedirs(options_dir, 0700)
-        f = open(options_file, 'wb')
-        self.config.write(f)
+        _file = open(options_file, 'wb')
+        self.config.write(_file)
 
 
     def __set_default(self, key, value):
@@ -76,21 +80,21 @@ class Options:
         return self.config.get('bleachbit', option)
 
 
-    def get_language(self, id):
+    def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
-        if not self.config.has_option('preserve_languages', id):
+        if not self.config.has_option('preserve_languages', langid):
             return False
-        return self.config.getboolean('preserve_languages', id)
+        return self.config.getboolean('preserve_languages', langid)
 
 
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
-        id = parent
+        option = parent
         if None != child:
-            id = id + "." + child
-        if not self.config.has_option('tree', id):
+            option += "." + child
+        if not self.config.has_option('tree', option):
             return False
-        return self.config.getboolean('tree', id)
+        return self.config.getboolean('tree', option)
 
 
     def set(self, key, value):
@@ -99,14 +103,14 @@ class Options:
         self.__flush()
 
 
-    def set_language(self, id, value):
+    def set_language(self, langid, value):
         """Set the value for a locale (whether to preserve it)"""
         if not self.config.has_section('preserve_languages'):
             self.config.add_section('preserve_languages')
-        if self.config.has_option('preserve_languages', id) and not value:
-            self.config.remove_option('preserve_languages', id)
+        if self.config.has_option('preserve_languages', langid) and not value:
+            self.config.remove_option('preserve_languages', langid)
         else:
-            self.config.set('preserve_languages', id, str(value))
+            self.config.set('preserve_languages', langid, str(value))
         self.__flush()
 
 
@@ -114,13 +118,13 @@ class Options:
         """Set an option for the tree view.  The child may be None."""
         if not self.config.has_section("tree"):
             self.config.add_section("tree")
-        id = parent
+        option = parent
         if None != child:
-            id = id + "." + child
-        if self.config.has_option('tree', id) and not value:
-            self.config.remove_option('tree', id)
+            option = option + "." + child
+        if self.config.has_option('tree', option) and not value:
+            self.config.remove_option('tree', option)
         else:
-            self.config.set('tree', id, str(value))
+            self.config.set('tree', option, str(value))
         self.__flush()
 
 
@@ -134,21 +138,24 @@ options = Options()
 import unittest
 
 class TestOptions(unittest.TestCase):
+    """Unit tests for class Options"""
+
     def test_Options(self):
+        """Unit test for class Options"""
         o = options
-        v = o.get("check_online_updates")
+        value = o.get("check_online_updates")
 
         # toggle a boolean
         o.toggle('check_online_updates')
-        self.assertEqual(not v, o.get("check_online_updates"))
+        self.assertEqual(not value, o.get("check_online_updates"))
 
         # restore original boolean
-        o.set("check_online_updates", v)
-        self.assertEqual(v, o.get("check_online_updates"))
+        o.set("check_online_updates", value)
+        self.assertEqual(value, o.get("check_online_updates"))
 
         # these should always be set
-        for b in boolean_keys:
-            self.assert_(type(o.get(b)) is bool)
+        for bkey in boolean_keys:
+            self.assert_(type(o.get(bkey)) is bool)
 
         # language
         value = o.get_language('en')
@@ -169,5 +176,5 @@ class TestOptions(unittest.TestCase):
 
 
 if __name__ == '__main__':
-        unittest.main()
+    unittest.main()
 
