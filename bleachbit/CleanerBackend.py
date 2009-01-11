@@ -361,8 +361,10 @@ class System(Cleaner):
     def other_cleanup(self, really_delete):
         if self.options["clipboard"][1]:
             if really_delete:
+                gtk.gdk.threads_enter()
                 clipboard = gtk.clipboard_get()
                 clipboard.set_text("")
+                gtk.gdk.threads_leave()
                 return (0, _("Clipboard"))
             return _("Clipboard")
 
