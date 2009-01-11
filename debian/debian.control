@@ -9,7 +9,7 @@ XS-Python-Version: >= 2.4
 
 Package: bleachbit
 Architecture: all
-Depends: python, python-gtk2 (>= 2.6), ${python:Depends}
+Depends: python, python-gtk2 (>= 2.6), ${python:Depends}, menu
 XB-Python-Version: ${python:Versions}
 Description: Removes unnecessary files
  BleachBit deletes unnecessary files to free valuable disk space and
