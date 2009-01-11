@@ -346,17 +346,17 @@ class TestFileUtilities(unittest.TestCase):
         dirname = tempfile.mkdtemp()
         filename = os.path.join(dirname, "somefile")
         self.__touch(filename)
-        for filename in children_in_directory(dirname, True):
-            self.assert_ (filename, filename)
-        for filename in children_in_directory(dirname, False):
-            self.assert_ (filename, filename)
+        for loopfilename in children_in_directory(dirname, True):
+            self.assertEqual (loopfilename, filename)
+        for loopfilename in children_in_directory(dirname, False):
+            self.assertEqual (loopfilename, filename)
         os.remove(filename)
 
         # test subdirectory
         subdirname = os.path.join(dirname, "subdir")
         os.mkdir(subdirname)
         for filename in children_in_directory(dirname, True):
-            self.assert_ (filename, subdirname)
+            self.assertEqual (filename, subdirname)
         for filename in children_in_directory(dirname, False):
             self.assert_ (False)
         os.rmdir(subdirname)
