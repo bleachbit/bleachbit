@@ -92,7 +92,7 @@ VIM, XChat, and more.
 cp %{name}.desktop %{name}-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
 
 cat > bleachbit.pam <<EOF
 #%PAM-1.0
@@ -176,7 +176,7 @@ update-desktop-database &> /dev/null ||:
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
 %{_bindir}/%{name}-root
