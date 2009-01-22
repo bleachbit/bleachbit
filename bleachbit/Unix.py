@@ -109,7 +109,11 @@ class Locales:
         for locale in _locales:
             if locale in self.__ignore:
                 continue
-            lang = locale_to_language(locale)
+            try:
+                lang = locale_to_language(locale)
+            except:
+                print "Warning: invalid path '%s' where expecting a locale" % locale
+                continue
             if not lang in self.__languages:
                 self.__languages.append(lang)
         self.__languages = sorted(self.__languages)
