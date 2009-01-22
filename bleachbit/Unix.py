@@ -132,7 +132,11 @@ class Locales:
             if None != dir_filter and dir_filter(path):
                 continue
             locale_code = path
-            language_code = locale_to_language(path)
+            try:
+                language_code = locale_to_language(path)
+            except:
+                 print "Warning: invalid path '%s' where expecting a locale" % path
+                 continue
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             locale_dirname = os.path.join(basedir, locale_code)
