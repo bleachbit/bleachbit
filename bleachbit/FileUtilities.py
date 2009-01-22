@@ -291,7 +291,7 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for class bytes_to_human"""
 
         old_locale = locale.getlocale(locale.LC_NUMERIC)
-        locale.setlocale(locale.LC_NUMERIC, 'en_US.utf8')
+        locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
         # test one-way conversion for predefined values
         tests = [ ("0", bytes_to_human(0)),
