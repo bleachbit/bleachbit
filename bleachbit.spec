@@ -48,6 +48,7 @@ BuildRequires:  libpython2.5-devel
 Requires:       gnome-python
 Requires:       gnome-python-gnomevfs
 Requires:       pygtk2.0 >= 2.6
+Requires:       usermode-consoleonly
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 %endif
