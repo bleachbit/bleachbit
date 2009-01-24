@@ -88,10 +88,12 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
-        cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
-        cb_updates.set_active(options.get('check_online_updates'))
-        cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
-        vbox.pack_start(cb_updates, False)
+        if online_update_notification_enabled:
+            cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
+            cb_updates.set_active(options.get('check_online_updates'))
+            cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
+            self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
+            vbox.pack_start(cb_updates, False)
 
         cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
         cb_shred.set_active(options.get('shred'))
