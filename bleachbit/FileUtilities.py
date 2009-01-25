@@ -137,7 +137,7 @@ def delete(path, shred = False):
             # shown that most of today's media can be effectively cleared
             # by one overwrite"
             args = ["shred", "--remove", "--iterations=0", "--zero", path]
-            ret = subprocess.check_call(args)
+            ret = subprocess.call(args)
             if 0 != ret:
                 raise Exception("shred subprocess returned non-zero error code " % (ret,))
         else:
@@ -421,7 +421,7 @@ class TestFileUtilities(unittest.TestCase):
 
         # test fifo
         args = ["mkfifo", filename]
-        ret = subprocess.check_call(args)
+        ret = subprocess.call(args)
         self.assertEqual(ret, 0)
         self.assert_(os.path.exists(filename))
         delete(filename)
