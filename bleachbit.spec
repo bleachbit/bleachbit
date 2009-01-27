@@ -44,6 +44,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
 %if 0%{?mandriva_version}
+BuildRequires:  desktop-file-utils
 BuildRequires:  libpython2.5-devel
 Requires:       gnome-python
 Requires:       gnome-python-gnomevfs
@@ -62,6 +63,7 @@ Requires:       usermode
 %endif
 
 %if 0%{?suse_version}
+BuildRequires:  desktop-file-utils
 BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
