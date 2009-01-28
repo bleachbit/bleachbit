@@ -201,7 +201,11 @@ class Locales:
             locale_code = path[path.rfind("-") + 1 : path.rfind(".") ]
             if 'C' == locale_code:
                 continue
-            language_code = locale_to_language(locale_code)
+            try:
+                language_code = locale_to_language(locale_code)
+            except:
+                print "Warning: OMF path '%s' does not look like a locale" % path
+                continue
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             yield path
