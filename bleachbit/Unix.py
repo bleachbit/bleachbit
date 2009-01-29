@@ -82,7 +82,8 @@ class Locales:
     __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
                 '/usr/local/share/locale/',
                 '/usr/share/doc/kde/HTML/',
-                '/usr/share/locale/' ]
+                '/usr/share/locale/',
+                '/usr/lib/openoffice/share/template/wizard/letter' ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
@@ -95,6 +96,12 @@ class Locales:
                     continue
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
+        ooopath = '/usr/lib/openoffice/share/config/soffice.cfg/modules/'
+        if os.path.exists(ooopath):
+            for ooomodule in os.listdir(ooopath):
+                dirname = os.path.join(ooopath, ooomodule + '/accelerator/')
+                self.__basedirs.append(dirname)
+
         self.__scanned = False
         self.__config = ConfigParser.RawConfigParser()
         self.__config_read = False
