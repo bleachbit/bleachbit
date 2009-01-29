@@ -45,6 +45,9 @@ class Options:
             import locale
             import Unix
             __locale = locale.getdefaultlocale()[0]
+            if None == __locale:
+                __locale = 'en_US.UTF-8'
+                print "warning: No default locale found.  Assuming '%s'" % __locale
             lang = Unix.locale_to_language(__locale)
             print "debug: automatically preserving language '%s'" % (lang,)
             self.set_language(lang, True)
