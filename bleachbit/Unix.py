@@ -83,7 +83,11 @@ class Locales:
                 '/usr/local/share/locale/',
                 '/usr/share/doc/kde/HTML/',
                 '/usr/share/locale/',
-                '/usr/lib/openoffice/share/template/wizard/letter' ]
+                '/usr/lib/openoffice/share/template/wizard/letter',
+                '/opt/ooo-dev/basis3.0/share/template/',
+                '/opt/ooo-dev/basis3.0/share/template/wizard/letter',
+                '/opt/openoffice.org/basis3.0/share/template/',
+                '/opt/openoffice.org/basis3.0/share/template/wizard/letter/' ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
@@ -96,11 +100,20 @@ class Locales:
                     continue
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
-        ooopath = '/usr/lib/openoffice/share/config/soffice.cfg/modules/'
-        if os.path.exists(ooopath):
-            for ooomodule in os.listdir(ooopath):
-                dirname = os.path.join(ooopath, ooomodule + '/accelerator/')
-                self.__basedirs.append(dirname)
+
+        ooocfgs = [  '/usr/lib/openoffice/share/config/soffice.cfg/',
+            '/usr/lib/openoffice.org/basis3.0/share/config/soffice.cfg/',
+            '/opt/ooo-dev/basis3.0/share/config/soffice.cfg/',
+            '/opt/openoffice.org/basis3.0/share/config/soffice.cfg/' ]
+        for ooocfg in ooocfgs:
+            oooglobal = os.path.join(ooocfg, 'global/accelerator')
+            if os.path.exists(oooglobal):
+                self.__basedirs.append(oooglobal)
+            ooomodules = os.path.join(ooocfg, 'modules')
+            if os.path.exists(ooomodules):
+                for ooomodule in os.listdir(ooomodules):
+                    dirname = os.path.join(ooomodules, ooomodule + '/accelerator/')
+                    self.__basedirs.append(dirname)
 
         self.__scanned = False
         self.__config = ConfigParser.RawConfigParser()
