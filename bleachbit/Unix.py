@@ -104,9 +104,13 @@ class Locales:
             '/opt/openoffice.org/basis3.0/share/' ] # Sun
 
         for ooosharedir in ooosharedirs:
-            suffixes = [ 'config/soffice.cfg/global/accelerator/',
+            suffixes = [ 'autotext/',
+                'config/soffice.cfg/global/accelerator/',
+                'registry/res/',
+                'samples/',
                 'template/',
-                'template/wizard/letter/' ]
+                'template/wizard/letter/',
+                'wordbook/' ]
             for suffix in suffixes:
                 ooodir = os.path.join(ooosharedir, suffix)
                 if os.path.exists(ooodir):
