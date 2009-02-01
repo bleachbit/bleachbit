@@ -80,6 +80,7 @@ class Cleaner:
 
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
+        yield 
 
     def set_option(self, option_id, value):
         """Enable or disable an option"""
@@ -213,6 +214,7 @@ class Firefox(Cleaner):
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
+        self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
         self.profile_dir = "~/.mozilla/firefox/*/"
 
@@ -265,6 +267,18 @@ class Firefox(Cleaner):
         # finish
         for filename in files:
             yield filename
+
+    def other_cleanup(self, really_delete = False):
+        if self.options['vacuum'][1]:
+            dbs = glob.glob(os.path.expanduser(self.profile_dir + '/*.sqlite'))
+            for db in dbs:
+                if really_delete:
+                    oldsize = os.path.getsize(db)
+                    FileUtilities.vacuum_sqlite3(db)
+                    newsize = os.path.getsize(db)
+                    yield (oldsize - newsize, db)
+                else:
+                    yield db
 
 
 class Flash(Cleaner):
@@ -406,8 +420,8 @@ class System(Cleaner):
                 clipboard = gtk.clipboard_get()
                 clipboard.set_text("")
                 gtk.gdk.threads_leave()
-                return (0, _("Clipboard"))
-            return _("Clipboard")
+                yield (0, _("Clipboard"))
+            yield _("Clipboard")
 
 
     def whitelisted(self, pathname):
@@ -573,9 +587,9 @@ class OpenOfficeOrg(Cleaner):
                     oldsize = os.path.getsize(path)
                     self.erase_history(path)
                     newsize = os.path.getsize(path)
-                    return (oldsize - newsize, path)
+                    yield (oldsize - newsize, path)
                 else:
-                    return path
+                    yield path
 
 
 class Opera(Cleaner):
@@ -803,8 +817,8 @@ class TestUtilities(unittest.TestCase):
         for key in sorted(backends):
             for (cleaner_id, __name, __value) in backends[key].get_options():
                 backends[key].set_option(cleaner_id, True)
-            description = backends[key].other_cleanup(False)
-            self.assert_ (None == description or type(description) is str)
+            for description in backends[key].other_cleanup(False):
+                self.assert_(type(description) is str or None == description)
 
     def test_whitelist(self):
         tests = [ \

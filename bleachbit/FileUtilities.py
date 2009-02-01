@@ -254,6 +254,19 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
+def vacuum_sqlite3(path):
+    """Vacuum SQLite database"""
+    import sqlite3
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('vacuum')
+    except sqlite3.OperationalError, e:
+        raise sqlite3.OperationalError('%s: %s' % (e, path))
+    cursor.close()
+    conn.close()
+
+
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
@@ -483,6 +496,34 @@ class TestFileUtilities(unittest.TestCase):
                 if fn.endswith('.desktop')]:
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
+
+    def test_vacuum_sqlite3(self):
+        """Unit test for method vacuum_sqlite3()"""
+
+        import sqlite3
+
+        path = 'bleachbit.tmp.sqlite3'
+        if os.path.lexists(path):
+            delete(path)
+
+        conn = sqlite3.connect(path)
+        conn.execute('create table numbers (number)')
+        conn.commit()
+        empty_size = getsize(path)
+        def number_generator():
+            for x in range(1, 10000):
+                yield (x, )
+        conn.executemany('insert into numbers (number) values ( ? ) ', number_generator())
+        conn.commit()
+        self.assert_( empty_size < getsize(path))
+        conn.execute('delete from numbers')
+        conn.commit()
+        conn.close()
+
+        vacuum_sqlite3(path)
+        self.assertEqual(empty_size , getsize(path))
+
+        delete(path)
 
     def test_wine_to_linux_path(self):
         """Unit test for wine_to_linux_path()"""
