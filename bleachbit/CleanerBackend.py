@@ -90,10 +90,10 @@ class Cleaner:
 
 ## Adobe Reader Clean Up by juancarlospaco@hotmail.com
 class AdobeReader(Cleaner):
-    """Delete the Adobe Reader cache"""
+    """Adobe Reader"""
 
     def get_description(self):
-        return _("Delete the Adobe Reader cache")
+        return _("Delete Adobe Reader's cache")
 
     def get_id(self):
         return 'adobereader'
@@ -106,12 +106,11 @@ class AdobeReader(Cleaner):
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename
+                yield filename
 
 
 class Bash(Cleaner):
-    """Delete the Bash history"""
+    """BASH GNU Bourne-Again SHell"""
 
     def get_description(self):
         return _("Delete the Bash history")
@@ -126,6 +125,7 @@ class Bash(Cleaner):
         filename = os.path.expanduser("~/.bash_history")
         if os.path.lexists(filename):
             yield filename
+
 
 class Beagle(Cleaner):
     """Beagle"""
@@ -420,31 +420,28 @@ class GIMP(Cleaner):
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename
+                yield filename
 
 
 ## google earth temp&cache folder clean up by juancarlospaco@hotmail.com
-class googleearth(cleaner):
-    """delete the google earth temp and cache folders"""
+class GoogleEarth(Cleaner):
+    """Google Earth"""
 
     def get_description(self):
-        return _("delete the google earth temp and cache folders")
+        return _("Delete the contents of Google Earth's cache and temporary files")
 
     def get_id(self):
         return 'googleearth'
 
     def get_name(self):
-        return "googleearth"
+        return 'Google Earth'
 
     def list_files(self):
-        #----google-hearth-temp-cache-folders
         dirs = [ "~/.googleearth/cache", "~/.googleearth/temp" ]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, false):
-                if os.path.lexists(filename):
-                    yield filename         
+            for filename in children_in_directory(dirname, False):
+                yield filename 
 
 
 class Java(Cleaner):
