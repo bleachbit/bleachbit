@@ -421,7 +421,8 @@ class System(Cleaner):
                 clipboard.set_text("")
                 gtk.gdk.threads_leave()
                 yield (0, _("Clipboard"))
-            yield _("Clipboard")
+            else:
+                yield _("Clipboard")
 
 
     def whitelisted(self, pathname):
