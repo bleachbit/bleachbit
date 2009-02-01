@@ -27,6 +27,7 @@ import gobject
 import os
 import sys
 import threading
+import traceback
 
 import FileUtilities
 import CleanerBackend
@@ -377,6 +378,7 @@ class GUI:
         try:
             bytes = FileUtilities.getsize(pathname)
         except:
+            traceback.print_exc()
             print "debug: error getting size of '%s'" % (pathname,)
         else:
             tag = None
@@ -384,6 +386,7 @@ class GUI:
                 if really_delete:
                     FileUtilities.delete(pathname)
             except:
+                traceback.print_exc()
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
                 tag = 'error'
             else:
@@ -411,6 +414,7 @@ class GUI:
         except:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
+            traceback.print_exc()
             gtk.gdk.threads_enter()
             self.append_text(err + "\n", 'error', __iter)
             gtk.gdk.threads_leave()
@@ -420,6 +424,7 @@ class GUI:
             for ret in backends[operation].other_cleanup(really_delete):
                 if None == ret:
                     return total_bytes
+                print operation, really_delete, ret
                 gtk.gdk.threads_enter()
                 if really_delete:
                     total_bytes += ret[0]
@@ -432,6 +437,7 @@ class GUI:
         except:
             err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
             print err
+            traceback.print_exc()
             gtk.gdk.threads_enter()
             self.append_text(err + "\n", 'error', __iter)
             gtk.gdk.threads_leave()
