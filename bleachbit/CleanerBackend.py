@@ -639,22 +639,20 @@ class VIM(Cleaner):
             yield path
 
 
-## Wine Clean Up by juancarlospaco@hotmail.com
-class Wine(Cleaner):
-    """Delete the Wine Temp and Winetricks Temp folders contents"""
+class winetricks(Cleaner):
+    """Delete contents of the winetricks temp folders"""
 
     def get_description(self):
-        return _("Delete the Wine Temp and Winetricks Temp folders")
+        return _("Delete the temporary from winetricks")
 
     def get_id(self):
-        return 'wine'
+        return 'winetricks'
 
     def get_name(self):
-        return "Wine"
+        return 'winetricks'
 
     def list_files(self):
-        #----------------Wine-Temp-Folder--------PCHEALT-created-by-some-programs---------WineTricks-Temp-Folder-------WineTricks-Cache-Folder
-        dirs = [ "~/.wine/drive_c/windows/temp", "~/.wine/drive_c/windows/PCHEALTH", "~/.wine/drive_c/winetrickstmp", "~/.winetrickscache" ]
+        dirs = [ "~/.wine/drive_c/winetrickstmp", "~/.winetrickscache" ]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
@@ -702,6 +700,7 @@ backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
 backends["vim"] = VIM()
+backends["winetricks"] = winetricks()
 backends["xchat"] = XChat()
 
 
