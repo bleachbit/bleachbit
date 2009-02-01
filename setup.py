@@ -27,7 +27,7 @@ data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
 data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 
 setup(name='bleachbit',
-      version='0.3.0',
+      version='0.3.1',
       description='Free space and maintain privacy',
       long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Opera, Epihany, Adobe Flash, Java, GNOME, and more.",
       author='Andrew Ziem',
