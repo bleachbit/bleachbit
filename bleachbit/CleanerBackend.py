@@ -285,6 +285,28 @@ class Flash(Cleaner):
             yield filename
 
 
+## SecondLife Viewer Cache Folder Clean Up by juancarlospaco@hotmail.com
+class SecondLifeViewer(Cleaner):
+    """Delete the SecondLife Viewer Cache Folder"""
+
+    def get_description(self):
+        return _("Delete the SecondLife Viewer Cache Folder")
+
+    def get_id(self):
+        return 'secondlifeviewer'
+
+    def get_name(self):
+        return "SecondLifeViewer"
+
+    def list_files(self):
+        dirs = [ "~/.secondlife/cache" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                if os.path.lexists(filename):
+                    yield filename     
+
+
 class System(Cleaner):
     """System in general"""
 
@@ -739,6 +761,7 @@ backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
 backends["realplayer"] = realplayer()
 backends["rpmbuild"] = rpmbuild()
+backends["secondlifeviewer"] = SecondLifeViewer()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
 backends["vim"] = VIM()
