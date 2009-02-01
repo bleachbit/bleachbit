@@ -88,22 +88,21 @@ class Cleaner:
             value, self.options[option_id][2])
 
 
-## Adobe PDF Reader Clean Up by juancarlospaco@hotmail.com
+## Adobe Reader Clean Up by juancarlospaco@hotmail.com
 class AdobeReader(Cleaner):
-    """Delete the Adobe PDF Reader Cache"""
+    """Delete the Adobe Reader cache"""
 
     def get_description(self):
-        return _("Delete the Adobe PDF Reader Cache")
+        return _("Delete the Adobe Reader cache")
 
     def get_id(self):
         return 'adobereader'
 
     def get_name(self):
-        return "AdobeReader"
+        return "Adobe Reader"
 
     def list_files(self):
-        #--------Adobe-Reader-from-7-to-10-versions-Cache-Folder
-        dirs = [ "~/.adobe/Acrobat/7.0/Cache", "~/.adobe/Acrobat/8.0/Cache", "~/.adobe/Acrobat/9.0/Cache", "~/.adobe/Acrobat/10.0/Cache" ]
+        dirs = [ "~/.adobe/Acrobat/7.0/Cache", "~/.adobe/Acrobat/8.0/Cache" ]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
@@ -665,6 +664,7 @@ class XChat(Cleaner):
                 yield filename
 
 backends = {}
+backends["adobereader"] = AdobeReader()
 backends["bash"] = Bash()
 backends["beagle"] = Beagle()
 backends["epiphany"] = Epiphany()
