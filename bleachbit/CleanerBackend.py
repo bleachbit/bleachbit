@@ -148,7 +148,6 @@ class Beagle(Cleaner):
                     yield filename
 
 
-
 class Epiphany(Cleaner):
     """Epiphany"""
 
@@ -402,6 +401,29 @@ class System(Cleaner):
             if None != re.match(regex, pathname):
                 return True
         return False
+
+
+## Gimp Temp Folder Clean Up by juancarlospaco@hotmail.com
+class Gimp(Cleaner):
+    """Delete the Gimp Temp Folder"""
+
+    def get_description(self):
+        return _("Delete the Gimp Temp Folder")
+
+    def get_id(self):
+        return 'gimp'
+
+    def get_name(self):
+        return "Gimp"
+
+    def list_files(self):
+        #----Gimp-2.6-to-3.0-Temp-Folder
+        dirs = [ "~/.gimp-2.6/tmp", "~/.gimp-2.8/tmp""~/.gimp-3.0/tmp"]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                if os.path.lexists(filename):
+                    yield filename         
 
 
 class Java(Cleaner):
