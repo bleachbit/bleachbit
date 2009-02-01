@@ -81,13 +81,14 @@ class Locales:
 
     __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
                 '/usr/local/share/locale/',
-		'/usr/share/apps/ksgmltools2/customization/',
+                '/usr/share/apps/ksgmltools2/customization/',
                 '/usr/share/doc/kde/HTML/',
                 '/usr/share/doc/HTML/release-notes/', # Fedora 10
-		'/usr/share/doc/thunar-data/html',
-		'/usr/share/kde4/apps/ksgmltools2/customization',
+                '/usr/share/doc/thunar-data/html',
+                '/usr/share/gnucash/accounts',
+                '/usr/share/kde4/apps/ksgmltools2/customization',
                 '/usr/share/locale/',
-		'/usr/share/speedcrunch/books/' ] 
+                '/usr/share/speedcrunch/books/' ] 
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
