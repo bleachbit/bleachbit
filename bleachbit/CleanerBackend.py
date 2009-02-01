@@ -88,6 +88,29 @@ class Cleaner:
             value, self.options[option_id][2])
 
 
+## Adobe PDF Reader Clean Up by juancarlospaco@hotmail.com
+class AdobeReader(Cleaner):
+    """Delete the Adobe PDF Reader Cache"""
+
+    def get_description(self):
+        return _("Delete the Adobe PDF Reader Cache")
+
+    def get_id(self):
+        return 'adobereader'
+
+    def get_name(self):
+        return "AdobeReader"
+
+    def list_files(self):
+        #--------Adobe-Reader-from-7-to-10-versions-Cache-Folder
+        dirs = [ "~/.adobe/Acrobat/7.0/Cache", "~/.adobe/Acrobat/8.0/Cache", "~/.adobe/Acrobat/9.0/Cache", "~/.adobe/Acrobat/10.0/Cache" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                if os.path.lexists(filename):
+                    yield filename
+
+
 class Bash(Cleaner):
     """Delete the Bash history"""
 
