@@ -639,6 +639,29 @@ class VIM(Cleaner):
             yield path
 
 
+## Wine Clean Up by juancarlospaco@hotmail.com
+class Wine(Cleaner):
+    """Delete the Wine Temp and Winetricks Temp folders contents"""
+
+    def get_description(self):
+        return _("Delete the Wine Temp and Winetricks Temp folders")
+
+    def get_id(self):
+        return 'wine'
+
+    def get_name(self):
+        return "Wine"
+
+    def list_files(self):
+        #----------------Wine-Temp-Folder--------PCHEALT-created-by-some-programs---------WineTricks-Temp-Folder-------WineTricks-Cache-Folder
+        dirs = [ "~/.wine/drive_c/windows/temp", "~/.wine/drive_c/windows/PCHEALTH", "~/.wine/drive_c/winetrickstmp", "~/.winetrickscache" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                if os.path.lexists(filename):
+                    yield filename
+
+
 class XChat(Cleaner):
     """Delete XChat logs and scrollback"""
 
