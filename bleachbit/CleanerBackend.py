@@ -285,26 +285,24 @@ class Flash(Cleaner):
             yield filename
 
 
-## SecondLife Viewer Cache Folder Clean Up by juancarlospaco@hotmail.com
 class SecondLifeViewer(Cleaner):
-    """Delete the SecondLife Viewer Cache Folder"""
+    """Second Life Viewer"""
 
     def get_description(self):
-        return _("Delete the SecondLife Viewer Cache Folder")
+        return _("Delete Second Life Viewer's cache and temporary files")
 
     def get_id(self):
         return 'secondlifeviewer'
 
     def get_name(self):
-        return "SecondLifeViewer"
+        return _("Second Life Viewer")
 
     def list_files(self):
-        dirs = [ "~/.secondlife/cache" ]
+        dirs = [ "~/.secondlife/cache", "~/.secondlife/logs"]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename     
+                yield filename
 
 
 class System(Cleaner):
