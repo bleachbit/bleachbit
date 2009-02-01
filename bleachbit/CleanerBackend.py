@@ -424,6 +424,29 @@ class GIMP(Cleaner):
                     yield filename
 
 
+## google earth temp&cache folder clean up by juancarlospaco@hotmail.com
+class googleearth(cleaner):
+    """delete the google earth temp and cache folders"""
+
+    def get_description(self):
+        return _("delete the google earth temp and cache folders")
+
+    def get_id(self):
+        return 'googleearth'
+
+    def get_name(self):
+        return "googleearth"
+
+    def list_files(self):
+        #----google-hearth-temp-cache-folders
+        dirs = [ "~/.googleearth/cache", "~/.googleearth/temp" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, false):
+                if os.path.lexists(filename):
+                    yield filename         
+
+
 class Java(Cleaner):
     """Delete the Java cache"""
 
@@ -711,6 +734,7 @@ backends["beagle"] = Beagle()
 backends["epiphany"] = Epiphany()
 backends["firefox"] = Firefox()
 backends["gimp"] = GIMP()
+backends["googleearth"] = GoogleEarth()
 backends["flash"] = Flash()
 backends["java"] = Java()
 backends["kde"] = KDE()
