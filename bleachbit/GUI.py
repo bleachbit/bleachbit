@@ -424,7 +424,6 @@ class GUI:
             for ret in backends[operation].other_cleanup(really_delete):
                 if None == ret:
                     return total_bytes
-                print operation, really_delete, ret
                 gtk.gdk.threads_enter()
                 if really_delete:
                     total_bytes += ret[0]
