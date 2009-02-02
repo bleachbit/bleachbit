@@ -274,29 +274,44 @@ class Firefox(Cleaner):
             yield filename
 
 
-    def delete_url_history(path):
+    def delete_url_history(self, path):
         """Delete URL history in Firefox 3 places.sqlite"""
-        cmd_suffix = "where id in (select " \
-            "moz_places.id from moz_places left join moz_annos on " \
-            "moz_annos.place_id = moz_places.id left join " \
-            "moz_inputhistory on moz_annos.place_id = moz_places.id " \
-            "where moz_annos.id is null and moz_inputhistory.input " \
-            " is null);"
+        places_suffix = "where id in (select " \
+            "moz_places.id from moz_places " \
+            "left join moz_inputhistory on moz_inputhistory.place_id = moz_places.id " \
+            "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
+            "where moz_inputhistory.input is null " \
+            "and moz_bookmarks.id is null) "
 
         if options.get('shred'):
-            shred_cmd = "update moz_places " \
+            shred_places_cmd = "update moz_places " \
                 "set url = randomblob(length(url)), " \
                 "rev_host = randomblob(length(rev_host)), " \
-                "title = randomblob(length(title))" + cmd_suffix
-            FileUtilities.execute_sqlite3(path, shred_cmd)
+                "title = randomblob(length(title))" + places_suffix
+            FileUtilities.execute_sqlite3(path, shred_places_cmd)
 
-        delete_cmd = "delete from moz_places " + cmd_suffix
-        FileUtilities.execute_sqlite3(path, delete_cmd)
+        delete_places_cmd = "delete from moz_places " + places_suffix
+        FileUtilities.execute_sqlite3(path, delete_places_cmd)
+
+        annos_suffix =  "where id in (select moz_annos.id " \
+            "from moz_annos " \
+            "left join moz_places " \
+            "on moz_annos.place_id = moz_places.id " \
+            "where moz_places.id is null)"
+
+        if options.get('shred'):
+            shred_annos_cmd = "update moz_annos " \
+                "set content = randomblob(length(content)) " \
+                + annos_suffix
+            FileUtilities.execute_sqlite3(path, shred_annos_cmd)
+
+        delete_annos_cmd = "delete from moz_annos " + annos_suffix
+        FileUtilities.execute_sqlite3(path, delete_annos_cmd)
 
 
     def other_cleanup(self, really_delete = False):
         # URL history
-        if self.options['url_history'][1]:
+        if self.options['url_history'][1] and not self.options["places"][1]:
             paths = glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
             for path in paths:
                 if really_delete:

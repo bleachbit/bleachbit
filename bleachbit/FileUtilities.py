@@ -169,6 +169,7 @@ def execute_sqlite3(path, cmd):
     except sqlite3.OperationalError, e:
         raise sqlite3.OperationalError('%s: %s' % (e, path))
     cursor.close()
+    conn.commit()
     conn.close()
 
 
