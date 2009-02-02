@@ -214,6 +214,7 @@ class Firefox(Cleaner):
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
+        self.add_option('url_history', _('URL history'), _('Delete list of visited URLs'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
         self.profile_dir = "~/.mozilla/firefox/*/"
@@ -268,17 +269,50 @@ class Firefox(Cleaner):
         for filename in files:
             yield filename
 
+
+    def delete_url_history(path):
+        """Delete URL history in Firefox 3 places.sqlite"""
+        import sqlite3
+        conn = sqlite3.connect(path)
+        cursor = conn.cursor()
+        cmd = "delete from moz_places where id in (select " \
+            "moz_places.id from moz_places left join moz_annos on " \
+            "moz_annos.place_id = moz_places.id left join " \
+            "moz_inputhistory on moz_annos.place_id = moz_places.id " \
+            "where moz_annos.id is null and moz_inputhistory.input " \
+            " is null);"
+        try:
+            cursor.execute(cmd)
+        except sqlite3.OperationalError, e:
+            raise sqlite3.OperationalError('%s: %s' % (e, path))
+        cursor.close()
+        conn.close()
+
+
     def other_cleanup(self, really_delete = False):
+        # URL history
+        if self.options['url_history'][1]:
+            paths = glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
+            for path in paths:
+                if really_delete:
+                    oldsize = os.path.getsize(path)
+                    self.delete_url_history(path)
+                    newsize = os.path.getsize(path)
+                    yield (oldsize - newsize, path)
+                else:
+                    yield path
+
+        # vacuum
         if self.options['vacuum'][1]:
             dbs = glob.glob(os.path.expanduser(self.profile_dir + '/*.sqlite'))
-            for db in dbs:
+            for path in dbs:
                 if really_delete:
-                    oldsize = os.path.getsize(db)
-                    FileUtilities.vacuum_sqlite3(db)
-                    newsize = os.path.getsize(db)
-                    yield (oldsize - newsize, db)
+                    oldsize = os.path.getsize(path)
+                    FileUtilities.vacuum_sqlite3(path)
+                    newsize = os.path.getsize(path)
+                    yield (oldsize - newsize, path)
                 else:
-                    yield db
+                    yield path
 
 
 class Flash(Cleaner):
