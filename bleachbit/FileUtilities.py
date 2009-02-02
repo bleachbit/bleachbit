@@ -159,15 +159,16 @@ def exe_exists(pathname):
     return True
 
 
-def execute_sqlite3(path, cmd):
-    """Execute 'cmd' on SQLite database 'path'"""
+def execute_sqlite3(path, cmds):
+    """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
-    try:
-        cursor.execute(cmd)
-    except sqlite3.OperationalError, e:
-        raise sqlite3.OperationalError('%s: %s' % (e, path))
+    for cmd in cmds.split(';'):
+        try:
+            cursor.execute(cmd)
+        except sqlite3.OperationalError, e:
+            raise sqlite3.OperationalError('%s: %s' % (e, path))
     cursor.close()
     conn.commit()
     conn.close()
