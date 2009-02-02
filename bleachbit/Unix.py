@@ -29,7 +29,20 @@ import os
 import re
 import ConfigParser
 
-import FileUtilities
+from FileUtilities import children_in_directory, exe_exists
+
+HAVE_GNOME_VFS = True
+try:
+    import gnomevfs
+except:
+    try:
+        # this is the deprecated name
+        import gnome.vfs
+    except:
+        HAVE_GNOME_VFS = False
+    else:
+        gnomevfs = gnome.vfs
+
 
 
 def locale_to_language(locale):
@@ -175,7 +188,7 @@ class Locales:
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             locale_dirname = os.path.join(basedir, locale_code)
-            for path in FileUtilities.children_in_directory(locale_dirname, True):
+            for path in children_in_directory(locale_dirname, True):
                 yield path
             yield locale_dirname
 
@@ -268,6 +281,92 @@ class Locales:
         return None
 
 
+def __is_broken_xdg_desktop_application(config, desktop_pathname):
+    """Returns boolean whether application deskop entry file is broken"""
+    if not config.has_option('Desktop Entry', 'Exec'):
+        print "info: is_broken_xdg_menu: missing required option 'Exec': '%s'" \
+            % (desktop_pathname)
+        return True
+    exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
+    if not exe_exists(exe):
+        print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" \
+            % (exe, desktop_pathname)
+        return True
+    if 'env' == exe:
+        # Wine v1.0 creates .desktop files like this
+        # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program Files\\foo\\foo.exe"
+        execs = shlex.split(config.get('Desktop Entry', 'Exec'))
+        wineprefix = None
+        del(execs[0])
+        while True:
+            if 0 <= execs[0].find("="):
+                (name, value) = execs[0].split("=")
+                if 'WINEPREFIX' == name:
+                    wineprefix = value
+                del(execs[0])
+            else:
+                break
+        if not exe_exists(execs[0]):
+            print "info: is_broken_xdg_menu: executable '%s'" \
+                "does not exist '%s'" % (execs[0], desktop_pathname)
+            return True
+        # check the Windows executable exists
+        if wineprefix:
+            windows_exe = wine_to_linux_path(wineprefix, execs[1])
+            if not os.path.exists(windows_exe):
+                print "info: is_broken_xdg_menu: Windows executable" \
+                    "'%s' does not exist '%s'" % \
+                    (windows_exe, desktop_pathname)
+                return True
+    return False
+
+
+def is_broken_xdg_desktop(pathname):
+    """Returns boolean whether the given XDG desktop entry file is broken.
+    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
+    config = ConfigParser.RawConfigParser()
+    config.read(pathname)
+    if not config.has_section('Desktop Entry'):
+        print "info: is_broken_xdg_menu: missing required section " \
+            "'Desktop Entry': '%s'" % (pathname)
+        return True
+    if not config.has_option('Desktop Entry', 'Type'):
+        print "info: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
+        return True
+    file_type = config.get('Desktop Entry', 'Type').strip().lower()
+    if 'link' == file_type:
+        if not config.has_option('Desktop Entry', 'URL') and \
+            not config.has_option('Desktop Entry', 'URL[$e]'):
+            print "info: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
+            return True
+        return False
+    if 'mimetype' == file_type:
+        if not config.has_option('Desktop Entry', 'MimeType'):
+            print "info: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
+            return True
+        mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
+        if HAVE_GNOME_VFS and 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
+            print "info: is_broken_xdg_menu: MimeType '%s' not " \
+                "registered '%s'" % (mimetype, pathname)
+            return True
+        return False
+    if 'application' != file_type:
+        print "Warning: unhandled type '%s': file '%s'" % (file_type, pathname)
+        return False
+    if __is_broken_xdg_desktop_application(config, pathname):
+        return True
+    return False
+
+
+def wine_to_linux_path(wineprefix, windows_pathname):
+    """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
+    drive_letter = windows_pathname[0]
+    windows_pathname = windows_pathname.replace(drive_letter + ":", \
+        "drive_" + drive_letter.lower())
+    windows_pathname = windows_pathname.replace("\\","/")
+    return os.path.join(wineprefix, windows_pathname)
+
+
 locales = Locales()
 
 
@@ -279,6 +378,21 @@ class TestUnix(unittest.TestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
+
+
+    def test_is_broken_xdg_desktop(self):
+        """Unit test for is_broken_xdg_desktop()"""
+        menu_dirs = [ '/usr/share/applications', \
+            '/usr/share/autostart', \
+            '/usr/share/gnome/autostart', \
+            '/usr/share/gnome/apps', \
+            '/usr/share/mimelnk', \
+            '/usr/share/applnk-redhat/', \
+            '/usr/local/share/applications/' ]
+        for dirname in menu_dirs:
+            for filename in [fn for fn in children_in_directory(dirname, False) \
+                if fn.endswith('.desktop')]:
+                self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
 
     def iterate_languages(self):
@@ -319,6 +433,15 @@ class TestUnix(unittest.TestCase):
             ('es', 'Español') ]
         for test in tests:
             self.assertEqual(self.locales.native_name(test[0]), test[1])
+
+
+    def test_wine_to_linux_path(self):
+        """Unit test for wine_to_linux_path()"""
+        tests = [ ("/home/foo/.wine", \
+            "C:\\Program Files\\NSIS\\NSIS.exe", \
+            "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe") ]
+        for test in tests:
+            self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
 
 
 if __name__ == '__main__':

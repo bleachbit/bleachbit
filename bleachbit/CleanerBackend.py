@@ -402,7 +402,7 @@ class System(Cleaner):
             for dirname in menu_dirs:
                 for filename in [fn for fn in children_in_directory(dirname, False) \
                     if fn.endswith('.desktop') ]:
-                    if FileUtilities.is_broken_xdg_desktop(filename):
+                    if Unix.is_broken_xdg_desktop(filename):
                         yield filename
 
         # unwanted locales
