@@ -159,6 +159,19 @@ def exe_exists(pathname):
     return True
 
 
+def execute_sqlite3(path, cmd):
+    """Execute 'cmd' on SQLite database 'path'"""
+    import sqlite3
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(cmd)
+    except sqlite3.OperationalError, e:
+        raise sqlite3.OperationalError('%s: %s' % (e, path))
+    cursor.close()
+    conn.close()
+
+
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
@@ -168,15 +181,7 @@ def getsize(path):
 
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
-    import sqlite3
-    conn = sqlite3.connect(path)
-    cursor = conn.cursor()
-    try:
-        cursor.execute('vacuum')
-    except sqlite3.OperationalError, e:
-        raise sqlite3.OperationalError('%s: %s' % (e, path))
-    cursor.close()
-    conn.close()
+    execute_sqlite3(path, 'vacuum')
 
 
 openfiles = OpenFiles()

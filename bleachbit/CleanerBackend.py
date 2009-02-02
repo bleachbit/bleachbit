@@ -276,21 +276,22 @@ class Firefox(Cleaner):
 
     def delete_url_history(path):
         """Delete URL history in Firefox 3 places.sqlite"""
-        import sqlite3
-        conn = sqlite3.connect(path)
-        cursor = conn.cursor()
-        cmd = "delete from moz_places where id in (select " \
+        cmd_suffix = "where id in (select " \
             "moz_places.id from moz_places left join moz_annos on " \
             "moz_annos.place_id = moz_places.id left join " \
             "moz_inputhistory on moz_annos.place_id = moz_places.id " \
             "where moz_annos.id is null and moz_inputhistory.input " \
             " is null);"
-        try:
-            cursor.execute(cmd)
-        except sqlite3.OperationalError, e:
-            raise sqlite3.OperationalError('%s: %s' % (e, path))
-        cursor.close()
-        conn.close()
+
+        if options.get('shred'):
+            shred_cmd = "update moz_places " \
+                "set url = randomblob(length(url)), " \
+                "rev_host = randomblob(length(rev_host)), " \
+                "title = randomblob(length(title))" + cmd_suffix
+            FileUtilities.execute_sqlite3(path, shred_cmd)
+
+        delete_cmd = "delete from moz_places " + cmd_suffix
+        FileUtilities.execute_sqlite3(path, delete_cmd)
 
 
     def other_cleanup(self, really_delete = False):
