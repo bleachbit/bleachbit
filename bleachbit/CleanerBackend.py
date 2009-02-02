@@ -257,14 +257,18 @@ class Firefox(Cleaner):
             files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
         # places database
         if self.options["places"][1]:
-            # Firefox version 1
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/history.dat"))
             # Firefox version 3
             files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
             files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite-journal"))
+            # see also option 'url_history'
         # session restore
         if self.options["session_restore"][1]:
             files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
+        # URL history
+        if self.options["session_restore"][1]:
+            # Firefox version 1
+            files += glob.glob(os.path.expanduser(self.profile_dir + "/history.dat"))
+            # see also function other_cleanup()
         # finish
         for filename in files:
             yield filename
