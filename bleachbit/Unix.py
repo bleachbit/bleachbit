@@ -29,7 +29,7 @@ import os
 import re
 import ConfigParser
 
-from FileUtilities import children_in_directory, exe_exists
+import FileUtilities
 
 HAVE_GNOME_VFS = True
 try:
@@ -188,7 +188,7 @@ class Locales:
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             locale_dirname = os.path.join(basedir, locale_code)
-            for path in children_in_directory(locale_dirname, True):
+            for path in FileUtilities.children_in_directory(locale_dirname, True):
                 yield path
             yield locale_dirname
 
@@ -288,7 +288,7 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             % (desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
-    if not exe_exists(exe):
+    if not FileUtilities.exe_exists(exe):
         print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" \
             % (exe, desktop_pathname)
         return True
@@ -306,7 +306,7 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
                 del(execs[0])
             else:
                 break
-        if not exe_exists(execs[0]):
+        if not FileUtilities.exe_exists(execs[0]):
             print "info: is_broken_xdg_menu: executable '%s'" \
                 "does not exist '%s'" % (execs[0], desktop_pathname)
             return True
@@ -390,7 +390,7 @@ class TestUnix(unittest.TestCase):
             '/usr/share/applnk-redhat/', \
             '/usr/local/share/applications/' ]
         for dirname in menu_dirs:
-            for filename in [fn for fn in children_in_directory(dirname, False) \
+            for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False) \
                 if fn.endswith('.desktop')]:
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
