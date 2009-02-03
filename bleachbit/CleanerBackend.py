@@ -798,7 +798,7 @@ class winetricks(Cleaner):
     """Delete contents of the winetricks temp folders"""
 
     def get_description(self):
-        return _("Delete the temporary from winetricks")
+        return _("Delete the temporary files from winetricks")
 
     def get_id(self):
         return 'winetricks'
