@@ -80,7 +80,7 @@ class Cleaner:
 
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
-        yield 
+        yield None
 
     def set_option(self, option_id, value):
         """Enable or disable an option"""
