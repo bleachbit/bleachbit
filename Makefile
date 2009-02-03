@@ -14,6 +14,8 @@ build:
 clean:
 	rm -f {.,bleachbit}/*{pyc,pyo}
 	rm -f dist/bleachbit-*.tar.bz2
+	make -C po clean
+	rm -rf locale
 
 install:
 	# "binary"
