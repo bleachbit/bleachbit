@@ -161,7 +161,14 @@ def exe_exists(pathname):
 
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
-    import sqlite3
+    try:
+        import sqlite3
+    except ImportError, e:
+        import sys
+        if sys.version_info[0] == 2 and sys.version_info[1] < 5:
+            raise RuntimeError(_("Cannot import Python module sqlite3: Python 2.5 or later is required."))
+        else:
+            raise e
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
     for cmd in cmds.split(';'):
@@ -396,7 +403,15 @@ class TestFileUtilities(unittest.TestCase):
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
 
-        import sqlite3
+        try:
+            import sqlite3
+        except ImportError, e:
+            import sys
+            if sys.version_info[0] == 2 and sys.version_info[1] < 5:
+                print "Warning: Skipping test_vacuum_sqlite3() on old Python"
+                return
+            else:
+                raise e
 
         path = 'bleachbit.tmp.sqlite3'
         if os.path.lexists(path):
