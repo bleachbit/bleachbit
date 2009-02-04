@@ -5,10 +5,14 @@ SRC = $(wildcard ../bleachbit/*.py)
 POTFILE = $(APP).pot
 
 
+.PHONY: refresh-po spelling local install clean all
+
 $(POTFILE): $(SRC)
+	@echo "* Generating $(APP).pot"
 	xgettext -o $(APP).pot --default-domain=$(APP) $(SRC)
 
 refresh-po: $(POTFILE)
+	@echo "* Refreshing .po files"
 	for oldpo in $(POFILES); do \
 		lang=`basename $$oldpo .po`; \
 		msgmerge -v $${lang}.po $(POTFILE) > $${lang}.pot; \
@@ -16,16 +20,29 @@ refresh-po: $(POTFILE)
 	done
 
 spelling: $(POTFILE)
+	@echo "* Checking spelling"
+	@echo
+	@echo "** English"
 	grep msgid $(POTFILE) | cut -c 8- | aspell list
+	@echo 
+	@echo "** Spanish"
 	grep msgstr es.po | cut -c 8- | LANG=es_ES.utf8 aspell list
 
 %.mo: %.po
+	@echo "* Generating $@"
 	msgfmt --statistics -o $@ $<
-	# copy locally for running without installation
-	mkdir -p ../locale/$(@:.mo=)/LC_MESSAGES/
-	cp -lf $@ ../locale/$(@:.mo=)/LC_MESSAGES/bleachbit.mo
+
+local: $(MOFILES)
+	@echo "* Copy locally for running without system installation"
+	for mofile in $(MOFILES); do \
+		lang=`basename $$mofile .mo`; \
+		mkdir -p ../locale/$$lang/LC_MESSAGES/; \
+		cp -lf $$mofile ../locale/$$lang/LC_MESSAGES/bleachbit.mo; \
+	done
+	@echo "Now you can run cd ..; python bleachbit/GUI.py"
 
 install: $(MOFILES)
+	echo "* Installing in $(DESTDIR)/usr/share/locale"
 	for MO in $(MOFILES); do \
 		lang=`basename $$MO .mo`; \
 		DST=$(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
@@ -34,7 +51,10 @@ install: $(MOFILES)
 done
 
 clean:
+	echo "* Cleaning"
 	@rm -fv *.mo
+	@rm -fv $(APP).pot
+	@rm -rfv ../locale
 
 all: $(APP).pot $(MOFILES)
 
