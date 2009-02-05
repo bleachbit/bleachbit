@@ -361,6 +361,29 @@ class Firefox(Cleaner):
                     yield path
 
 
+class Exaile(Cleaner):
+    """Exaile music player"""
+
+    def get_description(self):
+        return _("Delete Exaile's cache, album cover art, debug log, and downloaded podcasts")
+
+    def get_id(self):
+        return 'exaile'
+
+    def get_name(self):
+        return "Exaile"
+
+    def list_files(self):
+        dirs = [ "~/.exaile/cache", "~/.exaile/covers", "~/.exaile/podcasts" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                yield filename
+        filename = os.path.expanduser("~/.exaile/exaile.log")
+        if os.path.lexists(filename):
+            yield filename
+
+
 class Flash(Cleaner):
     """Adobe Flash"""
 
@@ -870,6 +893,7 @@ backends["adobereader"] = AdobeReader()
 backends["bash"] = Bash()
 backends["beagle"] = Beagle()
 backends["epiphany"] = Epiphany()
+backends["exaile"] = Exaile()
 backends["firefox"] = Firefox()
 backends["gimp"] = GIMP()
 backends["googleearth"] = GoogleEarth()
