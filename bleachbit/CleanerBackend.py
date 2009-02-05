@@ -484,9 +484,13 @@ class System(Cleaner):
             # ~/.local/share/Trash
             # * GNOME 2.22, Fedora 9
             # * KDE 4.1.3, Ubuntu 8.10
-            dirname = os.path.expanduser("~/.local/share/Trash")
-            for filename in children_in_directory(dirname, False):
+            dirname = os.path.expanduser("~/.local/share/Trash/files")
+            for filename in children_in_directory(dirname, True):
                 yield filename
+            dirname = os.path.expanduser("~/.local/share/Trash/info")
+            for filename in children_in_directory(dirname, True):
+                yield filename
+
 
         # finish
         for filename in files:
