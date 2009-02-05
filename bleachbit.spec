@@ -73,8 +73,6 @@ Requires:       xdg-utils
 %py_requires
 %endif
 
-Requires:       python >= 2.4
-
 
 %description
 BleachBit deletes unnecessary files to free valuable disk space and
@@ -140,11 +138,12 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 
 
 %if 0%{?suse_version}
-%suse_update_desktop_file %{name}
 sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
 	--vendor="" %{name}-root.desktop
+%suse_update_desktop_file %{name}
+%suse_update_desktop_file %{name}-root
 %endif
 
 
