@@ -89,6 +89,13 @@ class Options:
         return self.config.getboolean('preserve_languages', langid)
 
 
+    def get_languages(self):
+        """Return a list of all selected languages"""
+        if not self.config.has_section('preserve_languages'):
+            return None
+        return self.config.options('preserve_languages')
+
+
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
         option = parent

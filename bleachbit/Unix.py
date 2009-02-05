@@ -30,6 +30,7 @@ import re
 import ConfigParser
 
 import FileUtilities
+from Options import options
 
 HAVE_GNOME_VFS = True
 try:
@@ -160,7 +161,10 @@ class Locales:
                 continue
             if not lang in self.__languages:
                 self.__languages.append(lang)
-        self.__languages = sorted(self.__languages)
+        selected_languages = options.get_languages()
+        if None != selected_languages:
+            self.__languages += selected_languages
+        self.__languages = sorted(set(self.__languages))
         self.__scanned = True
 
 
