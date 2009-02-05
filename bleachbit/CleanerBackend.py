@@ -379,148 +379,6 @@ class Flash(Cleaner):
             yield filename
 
 
-class SecondLifeViewer(Cleaner):
-    """Second Life Viewer"""
-
-    def get_description(self):
-        return _("Delete Second Life Viewer's cache and temporary files")
-
-    def get_id(self):
-        return 'secondlifeviewer'
-
-    def get_name(self):
-        return _("Second Life Viewer")
-
-    def list_files(self):
-        dirs = [ "~/.secondlife/cache", "~/.secondlife/logs"]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
-
-class System(Cleaner):
-    """System in general"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
-        self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
-        self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
-        self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
-        self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
-        self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
-
-    def get_description(self):
-        return _("The system in general")
-
-    def get_id(self):
-        return 'system'
-
-    def get_name(self):
-        return _("System")
-
-    def list_files(self):
-        # cache
-        if self.options["cache"][1]:
-            dirname = os.path.expanduser("~/.cache/")
-            for filename in children_in_directory(dirname, True):
-                yield filename
-
-        # menu
-        menu_dirs = [ '~/.local/share/applications', \
-            '~/.config/autostart', \
-            '~/.gnome/apps/', \
-            '~/.gnome2/panel2.d/default/launchers', \
-            '~/.gnome2/vfolders/applications/', \
-            '~/.kde/share/apps/RecentDocuments/', \
-            '~/.kde/share/mimelnk', \
-            '~/.kde/share/mimelnk/application/ram.desktop', \
-            '~/.kde2/share/mimelnk/application/', \
-            '~/.kde2/share/applnk' ]
-
-        if self.options["desktop_entry"][1]:
-            for dirname in menu_dirs:
-                for filename in [fn for fn in children_in_directory(dirname, False) \
-                    if fn.endswith('.desktop') ]:
-                    if Unix.is_broken_xdg_desktop(filename):
-                        yield filename
-
-        # unwanted locales
-        if self.options["localizations"][1]:
-            import Unix
-            callback = lambda locale, language: options.get_language(language)
-            for path in Unix.locales.localization_paths(callback):
-                yield path
-
-        # most recently used documents list
-        files = []
-        if self.options["recent_documents"][1]:
-            files += [ os.path.expanduser("~/.recently-used") ]
-            files += [ os.path.expanduser("~/.recently-used.xbel") ]
-
-        # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
-
-        # temporary
-        if self.options["tmp"][1]:
-            dirnames = [ '/tmp', '/var/tmp' ]
-            for dirname in dirnames:
-                for path in children_in_directory(dirname, True):
-                    is_open = FileUtilities.openfiles.is_open(path)
-                    ok = not is_open and os.path.isfile(path) and \
-                        not os.path.islink(path) and \
-                        FileUtilities.ego_owner(path) and \
-                        not self.whitelisted(path)
-                    if ok:
-                        yield path
-        # trash
-        if self.options["trash"][1]:
-            dirname = os.path.expanduser("~/.Trash")
-            for filename in children_in_directory(dirname, False):
-                yield filename
-            # fixme http://www.ramendik.ru/docs/trashspec.html
-            # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
-            # ~/.local/share/Trash
-            # * GNOME 2.22, Fedora 9
-            # * KDE 4.1.3, Ubuntu 8.10
-            dirname = os.path.expanduser("~/.local/share/Trash/files")
-            for filename in children_in_directory(dirname, True):
-                yield filename
-            dirname = os.path.expanduser("~/.local/share/Trash/info")
-            for filename in children_in_directory(dirname, True):
-                yield filename
-
-
-        # finish
-        for filename in files:
-            if os.path.lexists(filename):
-                yield filename
-
-    def other_cleanup(self, really_delete):
-        if self.options["clipboard"][1]:
-            if really_delete:
-                gtk.gdk.threads_enter()
-                clipboard = gtk.clipboard_get()
-                clipboard.set_text("")
-                gtk.gdk.threads_leave()
-                yield (0, _("Clipboard"))
-            else:
-                yield _("Clipboard")
-
-
-    def whitelisted(self, pathname):
-        """Return boolean whether file is whitelisted"""
-        regexes = ['/tmp/pulse-[^/]+/pid',
-            '/tmp/gconfd-[^/]+/lock/ior',
-            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
-            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
-            '/tmp/.X0-lock' ]
-        for regex in regexes:
-            if None != re.match(regex, pathname):
-                return True
-        return False
-
 
 class GIMP(Cleaner):
     """GIMP - The GNU Image Manipulation Program"""
@@ -760,6 +618,150 @@ class rpmbuild(Cleaner):
         for dirname in dirnames:
             for filename in children_in_directory(dirname, True):
                 yield filename
+
+
+class SecondLifeViewer(Cleaner):
+    """Second Life Viewer"""
+
+    def get_description(self):
+        return _("Delete Second Life Viewer's cache and temporary files")
+
+    def get_id(self):
+        return 'secondlifeviewer'
+
+    def get_name(self):
+        return _("Second Life Viewer")
+
+    def list_files(self):
+        dirs = [ "~/.secondlife/cache", "~/.secondlife/logs"]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                yield filename
+
+
+class System(Cleaner):
+    """System in general"""
+
+    def __init__(self):
+        Cleaner.__init__(self)
+        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
+        self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+        self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
+        self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+        self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
+        self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
+        self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
+
+    def get_description(self):
+        return _("The system in general")
+
+    def get_id(self):
+        return 'system'
+
+    def get_name(self):
+        return _("System")
+
+    def list_files(self):
+        # cache
+        if self.options["cache"][1]:
+            dirname = os.path.expanduser("~/.cache/")
+            for filename in children_in_directory(dirname, True):
+                yield filename
+
+        # menu
+        menu_dirs = [ '~/.local/share/applications', \
+            '~/.config/autostart', \
+            '~/.gnome/apps/', \
+            '~/.gnome2/panel2.d/default/launchers', \
+            '~/.gnome2/vfolders/applications/', \
+            '~/.kde/share/apps/RecentDocuments/', \
+            '~/.kde/share/mimelnk', \
+            '~/.kde/share/mimelnk/application/ram.desktop', \
+            '~/.kde2/share/mimelnk/application/', \
+            '~/.kde2/share/applnk' ]
+
+        if self.options["desktop_entry"][1]:
+            for dirname in menu_dirs:
+                for filename in [fn for fn in children_in_directory(dirname, False) \
+                    if fn.endswith('.desktop') ]:
+                    if Unix.is_broken_xdg_desktop(filename):
+                        yield filename
+
+        # unwanted locales
+        if self.options["localizations"][1]:
+            import Unix
+            callback = lambda locale, language: options.get_language(language)
+            for path in Unix.locales.localization_paths(callback):
+                yield path
+
+        # most recently used documents list
+        files = []
+        if self.options["recent_documents"][1]:
+            files += [ os.path.expanduser("~/.recently-used") ]
+            files += [ os.path.expanduser("~/.recently-used.xbel") ]
+
+        # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
+
+        # temporary
+        if self.options["tmp"][1]:
+            dirnames = [ '/tmp', '/var/tmp' ]
+            for dirname in dirnames:
+                for path in children_in_directory(dirname, True):
+                    is_open = FileUtilities.openfiles.is_open(path)
+                    ok = not is_open and os.path.isfile(path) and \
+                        not os.path.islink(path) and \
+                        FileUtilities.ego_owner(path) and \
+                        not self.whitelisted(path)
+                    if ok:
+                        yield path
+        # trash
+        if self.options["trash"][1]:
+            dirname = os.path.expanduser("~/.Trash")
+            for filename in children_in_directory(dirname, False):
+                yield filename
+            # fixme http://www.ramendik.ru/docs/trashspec.html
+            # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
+            # ~/.local/share/Trash
+            # * GNOME 2.22, Fedora 9
+            # * KDE 4.1.3, Ubuntu 8.10
+            dirname = os.path.expanduser("~/.local/share/Trash/files")
+            for filename in children_in_directory(dirname, True):
+                yield filename
+            dirname = os.path.expanduser("~/.local/share/Trash/info")
+            for filename in children_in_directory(dirname, True):
+                yield filename
+
+
+        # finish
+        for filename in files:
+            if os.path.lexists(filename):
+                yield filename
+
+    def other_cleanup(self, really_delete):
+        if self.options["clipboard"][1]:
+            if really_delete:
+                gtk.gdk.threads_enter()
+                clipboard = gtk.clipboard_get()
+                clipboard.set_text("")
+                gtk.gdk.threads_leave()
+                yield (0, _("Clipboard"))
+            else:
+                yield _("Clipboard")
+
+
+    def whitelisted(self, pathname):
+        """Return boolean whether file is whitelisted"""
+        regexes = ['/tmp/pulse-[^/]+/pid',
+            '/tmp/gconfd-[^/]+/lock/ior',
+            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
+            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
+            '/tmp/.X0-lock' ]
+        for regex in regexes:
+            if None != re.match(regex, pathname):
+                return True
+        return False
+
 
 
 class Thumbnails(Cleaner):
