@@ -63,7 +63,9 @@ Requires:       usermode
 %endif
 
 %if 0%{?suse_version}
+%if 0%{?suse_version} > 910
 BuildRequires:  desktop-file-utils
+%endif
 BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
@@ -139,9 +141,15 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 
 %if 0%{?suse_version}
 sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
+
+%if 0%{?suse_version} > 910
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
 	--vendor="" %{name}-root.desktop
+%else
+#SLES 9
+cp %{name}-root.desktop %{buildroot}/%{_datadir}/applications/
+%endif
 %suse_update_desktop_file %{name}
 %suse_update_desktop_file %{name}-root
 %endif
