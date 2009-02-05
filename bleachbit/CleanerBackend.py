@@ -463,7 +463,7 @@ class System(Cleaner):
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
         # temporary
-        if self.options["trash"][1]:
+        if self.options["tmp"][1]:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
