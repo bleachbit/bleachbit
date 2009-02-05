@@ -780,6 +780,28 @@ class Thumbnails(Cleaner):
             yield filename
 
 
+## Transmission Clean Up by juancarlospaco@hotmail.com
+class Transmission(Cleaner):
+    """Delete Transmission's Blocklist, Resume and Cached Torrents folder"""
+
+    def get_description(self):
+        return _("Delete Transmission's Blocklist, Resume and Cached Torrents folder")
+
+    def get_id(self):
+        return 'transmission'
+
+    def get_name(self):
+        return "Transmission"
+
+    def list_files(self):
+        dirs = [ "~/.config/transmission/blocklists", "~/.config/transmission/resume", "~/.config/transmission/torrents" ]
+        for dirname in dirs:
+            dirname = os.path.expanduser(dirname)
+            for filename in children_in_directory(dirname, False):
+                if os.path.lexists(filename):
+                    yield filename 
+
+
 class VIM(Cleaner):
     """VIM (Vi IMproved)"""
 
@@ -861,6 +883,7 @@ backends["rpmbuild"] = rpmbuild()
 backends["secondlifeviewer"] = SecondLifeViewer()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
+backends["transmission"] = Transmission()
 backends["vim"] = VIM()
 backends["winetricks"] = winetricks()
 backends["xchat"] = XChat()
