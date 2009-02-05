@@ -780,12 +780,11 @@ class Thumbnails(Cleaner):
             yield filename
 
 
-## Transmission Clean Up by juancarlospaco@hotmail.com
 class Transmission(Cleaner):
-    """Delete Transmission's Blocklist, Resume and Cached Torrents folder"""
+    """Transmission client for BitTorrent"""
 
     def get_description(self):
-        return _("Delete Transmission's Blocklist, Resume and Cached Torrents folder")
+        return _("Delete Transmission's blocklist and fast resume cache")
 
     def get_id(self):
         return 'transmission'
@@ -794,12 +793,11 @@ class Transmission(Cleaner):
         return "Transmission"
 
     def list_files(self):
-        dirs = [ "~/.config/transmission/blocklists", "~/.config/transmission/resume", "~/.config/transmission/torrents" ]
+        dirs = [ "~/.config/transmission/blocklists", "~/.config/transmission/resume"]
         for dirname in dirs:
             dirname = os.path.expanduser(dirname)
             for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename 
+                yield filename
 
 
 class VIM(Cleaner):
