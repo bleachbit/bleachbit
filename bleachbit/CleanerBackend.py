@@ -687,7 +687,7 @@ class System(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.add_option('apt-autoclean', _('APT Autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
+        self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
         self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
@@ -786,9 +786,9 @@ class System(Cleaner):
         if self.options["apt-autoclean"][1]:
             if really_delete:
                 bytes = Unix.apt_autoclean()
-                yield (bytes, _("APT Autoclean"))
+                yield (bytes, _("APT autoclean"))
             else:
-                yield _("APT Autoclean")
+                yield _("APT autoclean")
         if self.options["clipboard"][1]:
             if really_delete:
                 gtk.gdk.threads_enter()
