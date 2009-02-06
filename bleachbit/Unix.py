@@ -27,6 +27,7 @@ Integration specific to Unix-like operating systems
 import glob
 import os
 import re
+import subprocess
 import ConfigParser
 
 import FileUtilities
@@ -285,6 +286,32 @@ class Locales:
         return None
 
 
+def apt_autoclean():
+    """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
+        of freed space"""
+
+    args = ['apt-get', 'autoclean']
+
+    p = subprocess.Popen(args, \
+        stderr =  subprocess.STDOUT, stdout = subprocess.PIPE)
+
+    total_bytes = 0
+
+    while True:
+        line = p.stdout.readline().replace("\n", "")
+        if line.startswith('E: '):
+            raise RuntimeError(line)
+        match = re.search("^Del .*\[([0-9.]+[a-zA-Z]{2})\]", line)
+        if match:
+            pkg_bytes_str = match.groups(0)[0]
+            pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
+            total_bytes += pkg_bytes
+        if "" == line and p.poll() != None:
+            break
+
+    return total_bytes
+
+
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
@@ -382,6 +409,15 @@ class TestUnix(unittest.TestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
+
+
+    def test_apt_autoclean(self):
+        """Unit test for method apt_autoclean()"""
+        if 0 == os.geteuid():
+            bytes = apt_autoclean()
+            self.assert_(type(bytes) is int)
+        else:
+            self.assertRaises(OSError, apt_autoclean)
 
 
     def test_is_broken_xdg_desktop(self):

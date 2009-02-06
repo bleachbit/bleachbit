@@ -188,6 +188,17 @@ def getsize(path):
     return __stat.st_blocks * 512
 
 
+def human_to_bytes(string):
+    """Convert a string like 10.2GB into bytes"""
+    multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
+        'GB': 1024**3, 'TB': 1024**4 }
+    import re
+    matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
+    if 2 > len(matches[0]):
+        raise ValueError("Invalid input for '%s'" % (string))
+    return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
+
+
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
@@ -206,15 +217,6 @@ class TestFileUtilities(unittest.TestCase):
         f = open(filename, "w")
 
 
-    def __human_to_bytes(self, string):
-        """Convert a string like 10.2GB into bytes"""
-        multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
-            'GB': 1024**3, 'TB': 1024**4 }
-        import re
-        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
-        if 2 > len(matches[0]):
-            raise ValueError("Invalid input for '%s'" % (string))
-        return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
 
 
     def test_bytes_to_human(self):
@@ -239,7 +241,7 @@ class TestFileUtilities(unittest.TestCase):
         for n in range(0, 1000):
             bytes = random.randrange(0, 1024**4)
             human = bytes_to_human(bytes)
-            bytes2 = self.__human_to_bytes(human)
+            bytes2 = human_to_bytes(human)
             error =  abs(float(bytes2 - bytes) / bytes)
             self.assert_(abs(error) < 0.01, \
                 "%d (%s) is %.2f%% different than %d" % \
@@ -381,7 +383,7 @@ class TestFileUtilities(unittest.TestCase):
         output = output.replace("\n", "")
         du_size = output.split("\t")[0] + "B"
         print "output = '%s', size='%s'" % (output, du_size)
-        du_bytes = self.__human_to_bytes(du_size)
+        du_bytes = human_to_bytes(du_size)
         print output, du_size, du_bytes
         self.assertEqual(getsize(filename), du_bytes)
 
