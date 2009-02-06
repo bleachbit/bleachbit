@@ -188,6 +188,14 @@ def getsize(path):
     return __stat.st_blocks * 512
 
 
+def getsizedir(path):
+    """Return the size of the contents of a directory"""
+    total_bytes = 0
+    for node in children_in_directory(path, list_directories = False):
+        total_bytes += getsize(node)
+    return total_bytes
+
+
 def human_to_bytes(string):
     """Convert a string like 10.2GB into bytes"""
     multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \

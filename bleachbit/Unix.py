@@ -290,6 +290,9 @@ def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
         of freed space"""
 
+    if not FileUtilities.exe_exists('apt'):
+        raise RuntimeError(_('Executable not found: %s') % 'apt')
+
     args = ['apt-get', 'autoclean']
 
     p = subprocess.Popen(args, \
@@ -398,6 +401,30 @@ def wine_to_linux_path(wineprefix, windows_pathname):
     return os.path.join(wineprefix, windows_pathname)
 
 
+def yum_clean():
+    """Run 'yum clean all' and return size in bytes recovered"""
+    if os.path.exists('/var/run/yum.pid'):
+        raise RuntimeError(_("Another process is currently using yum"))
+    if not FileUtilities.exe_exists('yum'):
+        raise RuntimeError(_('Executable not found: %s') % 'yum')
+    old_size = FileUtilities.getsizedir('/var/cache/yum')
+    args  = ['yum', 'clean', 'all']
+    p = subprocess.Popen(args, stderr=subprocess.STDOUT, \
+        stdout=subprocess.PIPE)
+    while True:
+        line = p.stdout.readline().replace("\n", "")
+        if -1 != line.find('You need to be root'):
+            raise RuntimeError(line)
+        if -1 != line.find('Another app is currently holding'):
+            print "debug: yum: '%s'" % line
+            old_size = FileUtilities.getsizedir('/var/cache/yum')
+        if "" == line and p.poll() != None:
+            break
+    print 'debug: yum process return code = %d', p.returncode
+    new_size = FileUtilities.getsizedir('/var/cache/yum')
+    return old_size - new_size
+
+
 locales = Locales()
 
 
@@ -482,6 +509,15 @@ class TestUnix(unittest.TestCase):
             "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe") ]
         for test in tests:
             self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
+
+    def test_yum_clean(self):
+        if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
+            or not FileUtilities.exe_exists('yum'):
+            self.assertRaises(RuntimeError, yum_clean)
+        else:
+            bytes = yum_clean()
+            self.assert_(type(bytes) is int)
+            print 'debug: yum bytes cleaned %d', bytes
 
 
 if __name__ == '__main__':

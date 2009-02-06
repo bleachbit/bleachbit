@@ -695,6 +695,7 @@ class System(Cleaner):
         self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
         self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
         self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
+        self.add_option('yum', _('Yum clean'), _("Delete all Yum's cache"))
 
     def get_description(self):
         return _("The system in general")
@@ -797,6 +798,12 @@ class System(Cleaner):
                 yield (0, _("Clipboard"))
             else:
                 yield _("Clipboard")
+        if self.options["yum"][1]:
+            if really_delete:
+                bytes = Unix.yum_clean()
+                yield (bytes, _("Yum clean"))
+            else:
+                yield _("Yum clean")
 
 
     def whitelisted(self, pathname):
