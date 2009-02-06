@@ -399,12 +399,12 @@ class TestUnix(unittest.TestCase):
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
 
-    def iterate_languages(self):
+    def test_iterate_languages(self):
         """Unit test for the method iterate_languages()"""
         for language in self.locales.iterate_languages():
             self.assert_(type(language) is str)
-            self.assert_(len(str) > 0)
-            self.assert_(len(str) < 9)
+            self.assert_(len(language) > 0)
+            self.assert_(len(language) < 9)
 
 
     def test_locale_to_language(self):
