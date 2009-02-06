@@ -440,11 +440,11 @@ class TestUnix(unittest.TestCase):
 
     def test_apt_autoclean(self):
         """Unit test for method apt_autoclean()"""
-        if 0 == os.geteuid():
+        if 0 != os.geteuid() or not FileUtilities.exe_exists('apt'):
+            self.assertRaises(RuntimeError, apt_autoclean)
+        else:
             bytes = apt_autoclean()
             self.assert_(type(bytes) is int)
-        else:
-            self.assertRaises(OSError, apt_autoclean)
 
 
     def test_is_broken_xdg_desktop(self):
