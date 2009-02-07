@@ -692,6 +692,7 @@ class System(Cleaner):
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
         self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+        self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
         self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
         self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
         self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
@@ -734,7 +735,6 @@ class System(Cleaner):
 
         # unwanted locales
         if self.options["localizations"][1]:
-            import Unix
             callback = lambda locale, language: options.get_language(language)
             for path in Unix.locales.localization_paths(callback):
                 yield path
@@ -746,6 +746,11 @@ class System(Cleaner):
             files += [ os.path.expanduser("~/.recently-used.xbel") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
+
+        if self.options["rotated_logs"][1]:
+            for path in Unix.rotated_logs():
+                yield path
+
 
         # temporary
         if self.options["tmp"][1]:

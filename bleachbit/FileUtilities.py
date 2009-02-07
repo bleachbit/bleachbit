@@ -29,6 +29,7 @@ import glob
 import locale
 import os
 import os.path
+import re
 import shlex
 import stat
 import subprocess
@@ -194,6 +195,18 @@ def getsizedir(path):
     for node in children_in_directory(path, list_directories = False):
         total_bytes += getsize(node)
     return total_bytes
+
+
+def globex(pathname, regex):
+    """Yield a list of files with pathname and filter by regex"""
+    if type(pathname) is tuple:
+        for singleglob in pathname:
+             for path in globex(singleglob, regex):
+                yield path
+    else:
+        for path in glob.iglob(pathname):
+            if re.search(regex, path):
+                yield path
 
 
 def human_to_bytes(string):
@@ -409,6 +422,10 @@ class TestFileUtilities(unittest.TestCase):
         delete(filename)
 
 
+    def test_globex(self):
+        """Unit test for method globex()"""
+        for path in globex('/bin/*', '/ls$'):
+            self.assertEqual(path, '/bin/ls')
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

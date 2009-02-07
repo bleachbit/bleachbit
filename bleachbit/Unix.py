@@ -392,6 +392,28 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
+def rotated_logs():
+    """Yield a list of rotated (i.e., old) logs in /var/log/"""
+    # Ubuntu 9.04
+    # /var/log/dmesg.0
+    # /var/log/dmesg.1.gz
+    # Fedora 10
+    # /var/log/messages-20090118
+    globpaths = ( '/var/log/*.[0-9]', \
+         '/var/log/*/*.[0-9]', \
+        '/var/log/*.gz', \
+        '/var/log/*/*gz', \
+        '/var/log/*/*.old', \
+        '/var/log/*.old' )
+    for globpath in globpaths:
+        for path in glob.iglob(globpath):
+            yield path
+    regex = '-[0-9]{8}$'
+    globpaths = ( '/var/log/*-*', '/var/log/*/*-*' )
+    for path in FileUtilities.globex(globpaths, regex):
+        yield path
+
+
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
@@ -500,6 +522,12 @@ class TestUnix(unittest.TestCase):
             ('es', 'Español') ]
         for test in tests:
             self.assertEqual(self.locales.native_name(test[0]), test[1])
+
+
+    def test_rotated_logs(self):
+        """Unit test for method rotated_logs()"""
+        for path in rotated_logs():
+            self.assert_(os.path.exists(path))
 
 
     def test_wine_to_linux_path(self):
