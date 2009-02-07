@@ -27,6 +27,7 @@ Integration specific to Unix-like operating systems
 import glob
 import os
 import re
+import shlex
 import subprocess
 import ConfigParser
 
@@ -51,7 +52,8 @@ def locale_to_language(locale):
     """Convert the locale code to a language code (generally ISO 639)"""
     if 'klingon' == locale:
         return locale
-    matches = re.findall("^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$", locale)
+    pattern = "^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$"
+    matches = re.findall(pattern, locale)
     if 1 > len(matches):
         raise ValueError("Invalid locale_code '%s'" % (locale,))
     return matches[0][0]
@@ -188,8 +190,8 @@ class Locales:
             try:
                 language_code = locale_to_language(path)
             except:
-                 print "Warning: invalid path '%s' where expecting a locale" % path
-                 continue
+                print "Warning: invalid path '%s' where expecting a locale" % path
+                continue
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
             locale_dirname = os.path.join(basedir, locale_code)
@@ -295,13 +297,13 @@ def apt_autoclean():
 
     args = ['apt-get', 'autoclean']
 
-    p = subprocess.Popen(args, \
+    process = subprocess.Popen(args, \
         stderr =  subprocess.STDOUT, stdout = subprocess.PIPE)
 
     total_bytes = 0
 
     while True:
-        line = p.stdout.readline().replace("\n", "")
+        line = process.stdout.readline().replace("\n", "")
         if line.startswith('E: '):
             raise RuntimeError(line)
         match = re.search("^Del .*\[([0-9.]+[a-zA-Z]{2})\]", line)
@@ -309,7 +311,7 @@ def apt_autoclean():
             pkg_bytes_str = match.groups(0)[0]
             pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
             total_bytes += pkg_bytes
-        if "" == line and p.poll() != None:
+        if "" == line and process.poll() != None:
             break
 
     return total_bytes
@@ -493,7 +495,7 @@ class TestUnix(unittest.TestCase):
 
 
     def test_locale_to_language(self):
-        """Test method locale_to_language()"""
+        """Unit test for locale_to_language()"""
         tests = [ ('en', 'en'),
             ('en_US', 'en'),
             ('en_US@piglatin', 'en'),
@@ -511,13 +513,13 @@ class TestUnix(unittest.TestCase):
 
 
     def test_localization_paths(self):
-        """Test method localization_paths()"""
+        """Unit test for localization_paths()"""
         for path in locales.localization_paths(lambda x, y: False):
             self.assert_(os.path.lexists(path))
 
 
     def test_native_name(self):
-        """Test method native_name()"""
+        """Unit test for native_name()"""
         tests = [ ('en', 'English'),
             ('es', 'Español') ]
         for test in tests:
@@ -525,7 +527,7 @@ class TestUnix(unittest.TestCase):
 
 
     def test_rotated_logs(self):
-        """Unit test for method rotated_logs()"""
+        """Unit test for rotated_logs()"""
         for path in rotated_logs():
             self.assert_(os.path.exists(path))
 
@@ -539,6 +541,7 @@ class TestUnix(unittest.TestCase):
             self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
 
     def test_yum_clean(self):
+        """Unit test for yum_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
             or not FileUtilities.exe_exists('yum'):
             self.assertRaises(RuntimeError, yum_clean)

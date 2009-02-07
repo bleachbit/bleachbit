@@ -23,14 +23,12 @@ File-related utilities
 """
 
 
-import ConfigParser
 import datetime
 import glob
 import locale
 import os
 import os.path
 import re
-import shlex
 import stat
 import subprocess
 
@@ -164,19 +162,19 @@ def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
     try:
         import sqlite3
-    except ImportError, e:
+    except ImportError, exc:
         import sys
         if sys.version_info[0] == 2 and sys.version_info[1] < 5:
             raise RuntimeError(_("Cannot import Python module sqlite3: Python 2.5 or later is required."))
         else:
-            raise e
+            raise exc
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.OperationalError, e:
-            raise sqlite3.OperationalError('%s: %s' % (e, path))
+        except sqlite3.OperationalError, exc:
+            raise sqlite3.OperationalError('%s: %s' % (exc, path))
     cursor.close()
     conn.commit()
     conn.close()
@@ -201,7 +199,7 @@ def globex(pathname, regex):
     """Yield a list of files with pathname and filter by regex"""
     if type(pathname) is tuple:
         for singleglob in pathname:
-             for path in globex(singleglob, regex):
+            for path in globex(singleglob, regex):
                 yield path
     else:
         for path in glob.iglob(pathname):
@@ -213,7 +211,6 @@ def human_to_bytes(string):
     """Convert a string like 10.2GB into bytes"""
     multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
         'GB': 1024**3, 'TB': 1024**4 }
-    import re
     matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
     if 2 > len(matches[0]):
         raise ValueError("Invalid input for '%s'" % (string))

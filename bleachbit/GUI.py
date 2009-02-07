@@ -30,7 +30,6 @@ import threading
 import traceback
 
 import FileUtilities
-import CleanerBackend
 import Update
 from CleanerBackend import backends
 from Options import options
