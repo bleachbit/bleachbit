@@ -99,6 +99,8 @@ class Locales:
     __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
                 '/usr/local/share/locale/',
                 '/usr/share/apps/ksgmltools2/customization/',
+                '/usr/share/calendar', # Ubuntu 8.10
+                '/usr/share/cups/locale', # Ubuntu 8.10
                 '/usr/share/doc/kde/HTML/',
                 '/usr/share/doc/HTML/release-notes/', # Fedora 10
                 '/usr/share/doc/thunar-data/html',
@@ -244,6 +246,18 @@ class Locales:
         # example: /usr/share/man/es/man1/man.1.gz
         dir_filter = lambda d: d.startswith('man')
         for path in self.__localization_path('/usr/share/man/', language_filter, dir_filter):
+            yield path
+
+        # myspell hyphenation
+        # example: /usr/share/myspell/dicts/hyph_es_ES.dic
+        for path in glob.iglob('/usr/share/myspell/dicts/hyph_??_??.dic'):
+            match = re.search('([a-z]{2}_[A-Z]{2}).dic', path)
+            if None == match:
+                continue
+            locale_code = match.groups(0)[0]
+            language_code = locale_to_language(locale_code)
+            if None != language_filter and language_filter(locale_code, language_code):
+                continue
             yield path
 
         # OMF
