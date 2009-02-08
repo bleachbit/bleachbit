@@ -59,6 +59,17 @@ def locale_to_language(locale):
     return matches[0][0]
 
 
+def locale_globex(globpath, regex):
+    """List a path by glob, filter by regex, and return tuple
+    in format (locale, pathname)"""
+    for pathname in FileUtilities.globex(globpath, regex):
+        match = re.search(regex, pathname)
+        if None == match:
+            continue
+        locale_code = match.groups(0)[0]
+        yield (locale_code, pathname)
+
+
 class Locales:
     """Find languages and localization files"""
 
@@ -205,84 +216,76 @@ class Locales:
     def localization_paths(self, language_filter):
         """Return paths containing localization files"""
 
-        # general
+        ##
+        ## general
+        ##
         for basedir in self.__basedirs:
             dir_filter = lambda d: d in self.__ignore
             for path in self.__localization_path(basedir, language_filter, dir_filter):
                 yield path
 
-        # CUPS
+        ###
+        ### the locale is the directory name
+        ###
+
+        lps = []
+
+        # CUPS, Fedora 10
         # example: /usr/share/cups/templates/es/jobs.tmpl
-        dir_filter = lambda d: d.endswith('tmpl')
-        for path in self.__localization_path('/usr/share/cups/templates/', language_filter, dir_filter):
-            yield path
-        # Fedora 10
-        #   example: /usr/share/cups/www/es/images/button-add-printer.gif
-        dir_filter = lambda d: d in ['cups.css', 'cups-printable.css', 'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
-        for path in self.__localization_path('/usr/share/cups/www/', language_filter, dir_filter):
-            yield path
-        # Ubuntu 8.10
-        #   example: /usr/share/cups/doc-root/es/images/button-add-printer.gif
-        for path in self.__localization_path('/usr/share/cups/doc-root/', language_filter, dir_filter):
-            yield path
+        lps += ( ('/usr/share/cups/templates/', lambda d: d.endswith('tmpl')) , )
+
+        # CUPS, Fedora 10
+        # example: /usr/share/cups/www/es/images/button-add-printer.gif
+        dir_filter = lambda d: d in ['cups.css', 'cups-printable.css', \
+            'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
+        lps += ( ('/usr/share/cups/www/', dir_filter) , )
+
+        # CUPS, Ubuntu 8.10
+        # example: /usr/share/cups/doc-root/es/images/button-add-printer.gif
+        lps += ( ('/usr/share/cups/doc-root/', dir_filter) , )
 
         # foomatic
         dir_filter = lambda d: 2 != len(d)
-        for path in self.__localization_path('/usr/share/foomatic/db/source/PPD/Kyocera/', language_filter, dir_filter):
-            yield path
-
-        # glibc-common
-        # example: /usr/share/i18n/locales/es_ES@euro
-        for path in glob.iglob('/usr/share/i18n/locales/*_*'):
-            locale_code = os.path.basename(path)
-            if locale_code.startswith('iso14') or locale_code.startswith('translit'):
-                continue
-            language_code = locale_to_language(locale_code)
-            if None != language_filter and language_filter(locale_code, language_code):
-                continue
-            yield path
+        lps += ( ('/usr/share/foomatic/db/source/PPD/Kyocera/', dir_filter) , )
 
         # man pages
         # example: /usr/share/man/es/man1/man.1.gz
         dir_filter = lambda d: d.startswith('man')
-        for path in self.__localization_path('/usr/share/man/', language_filter, dir_filter):
-            yield path
+        lps += ( ('/usr/share/man/', dir_filter) , )
 
-        # myspell hyphenation
+        # process lps
+        for lp in lps:
+            for path in self.__localization_path(lp[0], language_filter, lp[1]):
+                yield path
+
+
+        ###
+        ### locale_globex
+        ###
+        globexs = []
+
+        # example: /usr/share/i18n/locales/es_ES@euro
+        globexs += ( ('/usr/share/i18n/locales/??_*', 'locales/([a-z]{2}_[A-Z]{2})'), )
         # example: /usr/share/myspell/dicts/hyph_es_ES.dic
-        for path in glob.iglob('/usr/share/myspell/dicts/hyph_??_??.dic'):
-            match = re.search('([a-z]{2}_[A-Z]{2}).dic', path)
-            if None == match:
-                continue
-            locale_code = match.groups(0)[0]
-            language_code = locale_to_language(locale_code)
-            if None != language_filter and language_filter(locale_code, language_code):
-                continue
-            yield path
-
-        # OMF
+        globexs += ( ('/usr/share/myspell/dicts/hyph_??_??.dic', '([a-z]{2}_[A-Z]{2}).dic$' ), )
         # example: /usr/share/omf/gedit/gedit-es.omf
-        for path in glob.iglob('/usr/share/omf/*/*-*.omf'):
-            locale_code = path[path.rfind("-") + 1 : path.rfind(".") ]
-            if 'C' == locale_code:
-                continue
-            try:
-                language_code = locale_to_language(locale_code)
-            except:
-                print "Warning: OMF path '%s' does not look like a locale" % path
-                continue
-            if None != language_filter and language_filter(locale_code, language_code):
-                continue
-            yield path
-
-        # TCL
+        globexs += ( ('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$'), )
+        # TCL on Fedora 10a
+        # example: /usr/share/tcl8.5/msgs/es.msg
         # example: /usr/share/tcl8.5/msgs/es_mx.msg
-        for path in glob.iglob('/usr/share/tcl*/msgs/*.msg'): 
-            locale_code = os.path.splitext(os.path.basename(path))[0]
-            language_code = locale_to_language(locale_code)
-            if None != language_filter and language_filter(locale_code, language_code):
-                continue
-            yield path
+        globexs += ( ('/usr/share/tcl*/msgs/?*.msg', '/([a-z]{2}(_[a-z]{2})?).msg$'), )
+
+
+        print globexs
+
+        # process reglobs
+        for (globpath, regex) in globexs:
+            for (locale_code, path) in locale_globex(globpath, regex):
+                language_code = locale_to_language(locale_code)
+                if None != language_filter and language_filter(locale_code, language_code):
+                    continue
+                yield path
+
 
 
     def native_name(self, language_code):
@@ -525,6 +528,18 @@ class TestUnix(unittest.TestCase):
         self.assertRaises(ValueError, locale_to_language, 'C')
         self.assertRaises(ValueError, locale_to_language, 'English')
 
+    def test_locale_globex(self):
+        """Unit test for locale_globex"""
+        pathname = '/usr/share/omf/gedit/gedit-es.omf'
+
+        def test_yield(pathname, regex):
+            """Replacement for globex()"""
+            yield pathname
+        old_globex = FileUtilities.globex
+        FileUtilities.globex = test_yield
+
+        func = locale_globex('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$')
+        self.assertEqual(func.next(), ('es', pathname))
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
