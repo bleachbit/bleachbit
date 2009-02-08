@@ -378,9 +378,18 @@ class TestFileUtilities(unittest.TestCase):
         self.assert_(not os.path.exists(filename))
 
 
+    def test_ego_owner(self):
+        """Unit test for ego_owner()"""
+        self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
+
+
+    def test_exists_in_path(self):
+        """Unit test for exists_in_path()"""
+        self.assert_(exists_in_path('ls'))
+
 
     def test_exe_exists(self):
-        """Unit test for method exe_exists()"""
+        """Unit test for exe_exists()"""
         tests = [ ("/bin/sh", True), \
             ("sh", True), \
             ("doesnotexist", False), \
@@ -417,6 +426,12 @@ class TestFileUtilities(unittest.TestCase):
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
         delete(filename)
+
+
+    def test_getsizedir(self):
+        """Unit test for getsizedir()"""
+        self.assert_(getsizedir('/bin/') > 0)
+
 
 
     def test_globex(self):
