@@ -292,8 +292,8 @@ def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
         of freed space"""
 
-    if not FileUtilities.exe_exists('apt'):
-        raise RuntimeError(_('Executable not found: %s') % 'apt')
+    if not FileUtilities.exe_exists('apt-get'):
+        raise RuntimeError(_('Executable not found: %s') % 'apt-get')
 
     args = ['apt-get', 'autoclean']
 
@@ -464,7 +464,7 @@ class TestUnix(unittest.TestCase):
 
     def test_apt_autoclean(self):
         """Unit test for method apt_autoclean()"""
-        if 0 != os.geteuid() or not FileUtilities.exe_exists('apt'):
+        if 0 != os.geteuid() or not FileUtilities.exe_exists('apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
         else:
             bytes = apt_autoclean()
