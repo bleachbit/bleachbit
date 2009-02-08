@@ -975,8 +975,8 @@ class TestUtilities(unittest.TestCase):
     def test_list_files(self):
         for key in sorted(backends):
             print "debug: test_list_files: key='%s'" % (key, )
-            for (cleaner_id, __name, __value) in backends[key].get_options():
-                backends[key].set_option(cleaner_id, True)
+            for (option_id, __name, __value) in backends[key].get_options():
+                backends[key].set_option(option_id, True)
             for filename in backends[key].list_files():
                 self.assert_ (type(filename) is str)
                 self.assert_ (os.path.lexists(filename), \
