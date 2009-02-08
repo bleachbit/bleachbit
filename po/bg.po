@@ -7,68 +7,68 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 08:32-0700\n"
-"PO-Revision-Date: 2009-01-23 15:59+0200\n"
-"Last-Translator: Svetoslav Stefanov <lfu.project@gmail.com>\n"
+"POT-Creation-Date: 2009-02-06 23:19-0700\n"
+"PO-Revision-Date: 2009-02-08 12:53+0000\n"
+"Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
 "Language-Team: Svetoslav Stefanov <lfu.project@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Bulgarian\n"
+"X-Launchpad-Export-Date: 2009-02-08 15:04+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Country: BULGARIA\n"
+"X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../bleachbit/CleanerBackend.py:97
+#: ../bleachbit/CleanerBackend.py:98
 msgid "Delete Adobe Reader's cache"
 msgstr "Изтриване кеша на Adobe Reader"
 
-#: ../bleachbit/CleanerBackend.py:117
+#: ../bleachbit/CleanerBackend.py:118
 msgid "Delete the Bash history"
 msgstr "Изтриване на историята на Bash"
 
-#: ../bleachbit/CleanerBackend.py:135
+#: ../bleachbit/CleanerBackend.py:136
 msgid "Delete Beagle indexes and logs"
 msgstr "Изтриване на индексите и дневниците на Beagle"
 
-#: ../bleachbit/CleanerBackend.py:157 ../bleachbit/CleanerBackend.py:210
-#: ../bleachbit/CleanerBackend.py:409 ../bleachbit/CleanerBackend.py:585
-#: ../bleachbit/CleanerBackend.py:617 ../bleachbit/CleanerBackend.py:681
+#: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
+#: ../bleachbit/CleanerBackend.py:471 ../bleachbit/CleanerBackend.py:503
+#: ../bleachbit/CleanerBackend.py:567 ../bleachbit/CleanerBackend.py:693
 msgid "Cache"
 msgstr "Кеш"
 
-#: ../bleachbit/CleanerBackend.py:157 ../bleachbit/CleanerBackend.py:210
-#: ../bleachbit/CleanerBackend.py:681
-msgid "Web cache reduces time to display revisited pages"
-msgstr "Уеб кешът намалява времето за показване на вече посещаваните страници"
-
 #: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
-#: ../bleachbit/CleanerBackend.py:682
+#: ../bleachbit/CleanerBackend.py:567
+msgid "Web cache reduces time to display revisited pages"
+msgstr ""
+"Уеб кешът намалява времето за показване на вече посещаваните страници"
+
+#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:568
 msgid "Cookies"
 msgstr "Бисквитки"
 
-#: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
-#: ../bleachbit/CleanerBackend.py:682
-#, fuzzy
+#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:568
 msgid ""
 "HTTP cookies contain information such as web site prefereneces, "
 "authentication, and tracking identification"
 msgstr ""
-"HTTP бисквитките съдържат информация като настройки на уеб страницата, "
-"удостоверяване и проследяваща идентификация"
 
-#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:213
 msgid "Download history"
 msgstr "История на изтеглянията"
 
-#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:213
 msgid "List of files downloaded"
 msgstr "Списък с изтеглените файлове"
 
-#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:215
+#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
 msgid "Passwords"
 msgstr "Пароли"
 
-#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:215
+#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -76,77 +76,156 @@ msgstr ""
 "База данни с имена и пароли, както и списък със страници, които не бива да "
 "запазват пароли"
 
-#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
+#: ../bleachbit/CleanerBackend.py:162 ../bleachbit/CleanerBackend.py:217
 msgid "Places"
 msgstr "Места"
 
-#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
+#: ../bleachbit/CleanerBackend.py:162 ../bleachbit/CleanerBackend.py:217
 msgid ""
 "A database of URLs including bookmarks and a history of visited web sites"
 msgstr ""
 "База данни с адреси, включително отметки и история на посетените уеб страници"
 
-#: ../bleachbit/CleanerBackend.py:164
+#: ../bleachbit/CleanerBackend.py:165
 msgid "Epiphany web browser"
 msgstr "Уеб четецът Epiphany"
 
-#: ../bleachbit/CleanerBackend.py:213
+#: ../bleachbit/CleanerBackend.py:214
 msgid "Form history"
 msgstr "История на формите"
 
-#: ../bleachbit/CleanerBackend.py:213
+#: ../bleachbit/CleanerBackend.py:214
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "История на формите, въведени в уеб страниците и в полето за търсене"
 
-#: ../bleachbit/CleanerBackend.py:214
+#: ../bleachbit/CleanerBackend.py:215
 msgid "Session restore"
 msgstr "Възстановяване на сесията"
 
-#: ../bleachbit/CleanerBackend.py:214
-#, fuzzy
+#: ../bleachbit/CleanerBackend.py:215
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Зарежда сесията след затваряне или срив на уеб четеца"
+msgstr "Зарежда началната сесия след затваряне или срив на уеб четеца"
 
-#: ../bleachbit/CleanerBackend.py:217
-#, fuzzy
+#: ../bleachbit/CleanerBackend.py:218
 msgid "URL history"
-msgstr "История на формите"
+msgstr "История на посетените адреси"
 
-#: ../bleachbit/CleanerBackend.py:217
+#: ../bleachbit/CleanerBackend.py:218
 msgid "List of visited web pages"
-msgstr ""
+msgstr "Списък на посетените страници"
 
-#: ../bleachbit/CleanerBackend.py:218
+#: ../bleachbit/CleanerBackend.py:219
 msgid "Vacuum"
-msgstr ""
+msgstr "Вакуум"
 
-#: ../bleachbit/CleanerBackend.py:218
+#: ../bleachbit/CleanerBackend.py:219
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Изчистване фрагментацията на базата данни, за да се освободи място и да се "
+"подобри скоростта, без да се премахват никакви данни"
 
-#: ../bleachbit/CleanerBackend.py:223
+#: ../bleachbit/CleanerBackend.py:224
 msgid "Mozilla Firefox web browser"
 msgstr "Уеб четецът Mozilla Firefox"
 
-#: ../bleachbit/CleanerBackend.py:368
+#: ../bleachbit/CleanerBackend.py:369
+msgid ""
+"Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
+msgstr ""
+"Изчистване кеша на Exaile, обложките на албуми, дневниците и изтеглените "
+"подкасти"
+
+#: ../bleachbit/CleanerBackend.py:392
 msgid "Delete Adobe Flash's cache and settings"
 msgstr "Изтриване кеша и настройките на Adobe Flash"
 
-#: ../bleachbit/CleanerBackend.py:386
+#: ../bleachbit/CleanerBackend.py:411
+msgid "Delete GIMP's temporary folder"
+msgstr "Изчистване временната папка на GIMP"
+
+#: ../bleachbit/CleanerBackend.py:432
+msgid "Delete the contents of Google Earth's cache and temporary files"
+msgstr "Изчистване съдържанието на кеша и временните файлове на Google Earth"
+
+#: ../bleachbit/CleanerBackend.py:452
+msgid "Delete Java's cache"
+msgstr "Изтриване кеша на Java"
+
+#: ../bleachbit/CleanerBackend.py:471
+msgid ""
+"KDE cache including Konqueror.  Often contains sparse files where the "
+"apparent file size does not match the actual disk usage."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:472 ../bleachbit/CleanerBackend.py:696
+msgid "Temporary files"
+msgstr "Временни файлове"
+
+#: ../bleachbit/CleanerBackend.py:472
+msgid "Temporary files stored by KDE under the home directory"
+msgstr "Временни файлове, съхранявани в домашната папка от KDE"
+
+#: ../bleachbit/CleanerBackend.py:475
+msgid "KDE desktop environment"
+msgstr "Работната среда KDE"
+
+#: ../bleachbit/CleanerBackend.py:503
+msgid "Cached registry and package data"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:504 ../bleachbit/CleanerBackend.py:698
+msgid "Recent documents list"
+msgstr "Списък с последно отваряни документи"
+
+#: ../bleachbit/CleanerBackend.py:504
+msgid "OpenOffice.org's list of recently used documents."
+msgstr "Списък с последно отваряните документи на OpenOffice.org"
+
+#: ../bleachbit/CleanerBackend.py:511
+msgid "OpenOffice.org office suite"
+msgstr "Офис пакетът OpenOffice.org"
+
+#: ../bleachbit/CleanerBackend.py:572
+msgid "Opera web browser"
+msgstr "Уеб четецът Opera"
+
+#: ../bleachbit/CleanerBackend.py:604
+msgid "Delete RealPlayer's cookies"
+msgstr "Изтриване бисквитките на RealPlayer"
+
+#: ../bleachbit/CleanerBackend.py:623
+msgid "Delete the files in the rpmbuild build directory"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:651
 msgid "Delete Second Life Viewer's cache and temporary files"
-msgstr ""
+msgstr "Изтриване кеша и временните файлове на клиента за Second Life"
 
-#: ../bleachbit/CleanerBackend.py:392
+#: ../bleachbit/CleanerBackend.py:657
 msgid "Second Life Viewer"
-msgstr ""
+msgstr "Клиент за Second Life"
 
-#: ../bleachbit/CleanerBackend.py:407
+#: ../bleachbit/CleanerBackend.py:671
+msgid "Delete Skype's chat logs"
+msgstr "Изтриване дневниците на разговорите в Skype"
+
+#: ../bleachbit/CleanerBackend.py:690 ../bleachbit/CleanerBackend.py:794
+#: ../bleachbit/CleanerBackend.py:796
+msgid "APT autoclean"
+msgstr "Автоматично изчистване на APT"
+
+#: ../bleachbit/CleanerBackend.py:690
+msgid "Run apt-get autoclean to delete old downloaded archive files"
+msgstr ""
+"Изпълнение на apt-get autoclean за изтриване на старите изтеглени файлове"
+
+#: ../bleachbit/CleanerBackend.py:691
 msgid "Broken desktop entries"
 msgstr "Развалени препратки"
 
-#: ../bleachbit/CleanerBackend.py:407
+#: ../bleachbit/CleanerBackend.py:691
 msgid ""
 "Unusable .desktop files (menu entries and file associtations) that are "
 "either invalid structurally or point to non-existant locations"
@@ -154,127 +233,90 @@ msgstr ""
 "Непотребни .desktop файлове (стартери в менюто и файлови асоциации), който "
 "са структурно невалидни или сочат към несъществуващи цели"
 
-#: ../bleachbit/CleanerBackend.py:408 ../bleachbit/CleanerBackend.py:503
-#: ../bleachbit/CleanerBackend.py:505
+#: ../bleachbit/CleanerBackend.py:692 ../bleachbit/CleanerBackend.py:803
+#: ../bleachbit/CleanerBackend.py:805
 msgid "Clipboard"
 msgstr "Буфер за обмен"
 
-#: ../bleachbit/CleanerBackend.py:408
-msgid "The desktop environment's clipboard used for copy and paste operations"
+#: ../bleachbit/CleanerBackend.py:692
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Буферът за обмен на работната среда, служещ за операциите копиране и "
 "поставяне"
 
-#: ../bleachbit/CleanerBackend.py:409
+#: ../bleachbit/CleanerBackend.py:693
 msgid "Cache location specified by XDG and used by various applications"
 msgstr ""
 "Местоположението на кеша според XDG спецификациите, използвано от различни "
 "приложения"
 
-#: ../bleachbit/CleanerBackend.py:410
+#: ../bleachbit/CleanerBackend.py:694
 msgid "Localizations"
 msgstr "Локализации"
 
-#: ../bleachbit/CleanerBackend.py:410
+#: ../bleachbit/CleanerBackend.py:694
 msgid "Data used to operate the system in various languages and countries"
 msgstr ""
 "Данни, използвани за да работи системата на различни езици и в различни "
 "страни"
 
-#: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:586
-msgid "Temporary files"
-msgstr "Временни файлове"
+#: ../bleachbit/CleanerBackend.py:695
+msgid "Rotated logs"
+msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:411
+#: ../bleachbit/CleanerBackend.py:695
+msgid "Old system logs"
+msgstr "Стари системни дневници"
+
+#: ../bleachbit/CleanerBackend.py:696
 msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
 msgstr ""
-"Изтриване на притежаваните от потребителя, неотворени, обикновени файлове в /"
-"tmp и /var/tmp"
+"Изтриване на притежаваните от потребителя, неотворени, обикновени файлове в "
+"/tmp и /var/tmp"
 
-#: ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:697
 msgid "Trash"
 msgstr "Кошче"
 
-#: ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:697
 msgid "Temporary storage for deleted files"
 msgstr "Избор на папка за временни файлове."
 
-#: ../bleachbit/CleanerBackend.py:413 ../bleachbit/CleanerBackend.py:618
-msgid "Recent documents list"
-msgstr "Списък с последно отваряни документи"
-
-#: ../bleachbit/CleanerBackend.py:413
+#: ../bleachbit/CleanerBackend.py:698
 msgid "A common list of recently used documents"
 msgstr "Общ списък с последно отваряните документи"
 
-#: ../bleachbit/CleanerBackend.py:416
+#: ../bleachbit/CleanerBackend.py:699 ../bleachbit/CleanerBackend.py:809
+#: ../bleachbit/CleanerBackend.py:811
+msgid "Yum clean"
+msgstr "Изчистване на мениджъра на пакети Yum"
+
+#: ../bleachbit/CleanerBackend.py:699
+msgid "Delete all Yum's cache"
+msgstr "Изчистване кеша на Yum"
+
+#: ../bleachbit/CleanerBackend.py:702
 msgid "The system in general"
 msgstr "Системата като цяло"
 
-#: ../bleachbit/CleanerBackend.py:422
+#: ../bleachbit/CleanerBackend.py:708
 msgid "System"
 msgstr "Система"
 
-#: ../bleachbit/CleanerBackend.py:525
-msgid "Delete GIMP's temporary folder"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:546
-msgid "Delete the contents of Google Earth's cache and temporary files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:566
-msgid "Delete Java's cache"
-msgstr "Изтриване кеша на Java"
-
-#: ../bleachbit/CleanerBackend.py:585
-msgid ""
-"KDE cache including Konqueror.  Often contains sparse files where the "
-"apparent file size does not match the actual disk usage."
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:586
-msgid "Temporary files stored by KDE under the home directory"
-msgstr "Временни файлове, съхранявани в домашната папка от KDE"
-
-#: ../bleachbit/CleanerBackend.py:589
-msgid "KDE desktop environment"
-msgstr "Работната среда KDE"
-
-#: ../bleachbit/CleanerBackend.py:617
-#, fuzzy
-msgid "Cached registry and package data"
-msgstr "Кеширани данни на регистъра и пакетите"
-
-#: ../bleachbit/CleanerBackend.py:618
-msgid "OpenOffice.org's list of recently used documents."
-msgstr "Списък с последно отваряните документи на OpenOffice.org"
-
-#: ../bleachbit/CleanerBackend.py:625
-msgid "OpenOffice.org office suite"
-msgstr "Офис пакетът OpenOffice.org"
-
-#: ../bleachbit/CleanerBackend.py:686
-msgid "Opera web browser"
-msgstr "Уеб четецът Opera"
-
-#: ../bleachbit/CleanerBackend.py:718
-msgid "Delete RealPlayer's cookies"
-msgstr "Изтриване бисквитките на RealPlayer"
-
-#: ../bleachbit/CleanerBackend.py:737
-msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:765
+#: ../bleachbit/CleanerBackend.py:832
 msgid "Delete thumbnails in the thumbnails folder"
 msgstr "Изтриване на миниатюрите"
 
-#: ../bleachbit/CleanerBackend.py:771
+#: ../bleachbit/CleanerBackend.py:838
 msgid "Thumbnails"
 msgstr "Миниатюри"
 
-#: ../bleachbit/CleanerBackend.py:783
+#: ../bleachbit/CleanerBackend.py:850
+msgid "Delete Transmission's blocklist and fast resume cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:870
 msgid ""
 "Delete ~/.viminfo which includes VIM file history, command history, and "
 "buffers"
@@ -282,13 +324,19 @@ msgstr ""
 "Изтриване на файла ~/.viminfo, който съдържа историята, историята на "
 "командите и буферите на VIM"
 
-#: ../bleachbit/CleanerBackend.py:801
+#: ../bleachbit/CleanerBackend.py:888
 msgid "Delete the temporary files from winetricks"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:828
+#: ../bleachbit/CleanerBackend.py:915
 msgid "Delete XChat logs and scrollback"
 msgstr "Изтриване на дневниците и историята на XChat"
+
+#: ../bleachbit/FileUtilities.py:170
+msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
+msgstr ""
+"Модулът на Python sqlite3 не може да се внесе: Изисква се Python 2.5 или по-"
+"късна версия."
 
 #: ../bleachbit/GUI.py:67 ../bleachbit/GUI.py:538
 msgid "Preferences"
@@ -311,6 +359,8 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"Ако е намерено обновление, ще ви се даде възможност да видите информация за "
+"него. След това ще можете ръчно да изтеглите и инсталирате обновлението."
 
 #: ../bleachbit/GUI.py:99
 msgid "Overwrite files to hide contents (ineffective in some situations)"
@@ -367,7 +417,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:432
 msgid "Special operation: "
-msgstr "Специална операция:"
+msgstr "Специална операция: "
 
 #: ../bleachbit/GUI.py:453
 msgid "You must select an operation"
@@ -375,11 +425,11 @@ msgstr "Трябва да изберете операция"
 
 #: ../bleachbit/GUI.py:470
 msgid "Please wait.  Scanning and deleting: "
-msgstr "Моля изчакайте. Сканиране и изтриване:"
+msgstr "Моля изчакайте. Сканиране и изтриване: "
 
 #: ../bleachbit/GUI.py:472
 msgid "Please wait.  Scanning: "
-msgstr "Моля изчакайте. Сканиране:"
+msgstr "Моля изчакайте. Сканиране: "
 
 #: ../bleachbit/GUI.py:479
 msgid "Done."
@@ -387,7 +437,7 @@ msgstr "Готово."
 
 #: ../bleachbit/GUI.py:480
 msgid "Total size: "
-msgstr "Общ размер:"
+msgstr "Общ размер: "
 
 #: ../bleachbit/GUI.py:490
 msgid "Program to clean unnecessary files"
@@ -398,10 +448,13 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License версия 3 или по-късна.\n"
+"Вижте http://www.gnu.org/licenses/gpl-3.0.txt"
 
 #: ../bleachbit/GUI.py:497
 msgid "translator-credits"
 msgstr "Svetoslav Stefanov"
+
 
 #: ../bleachbit/GUI.py:536
 msgid "_Quit"
@@ -463,6 +516,15 @@ msgstr "Налично е обновление на BleachBit"
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Цъкнете 'Обновяване на BleachBit' за допълнителна информация"
 
+#: ../bleachbit/Unix.py:294 ../bleachbit/Unix.py:431
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Не е открит изпълнимият файл: %s"
+
+#: ../bleachbit/Unix.py:429
+msgid "Another process is currently using yum"
+msgstr "В момента друг процес използва Yum"
+
 #: ../bleachbit/Update.py:69
 msgid "Error when checking for updates: "
-msgstr "Грешка при проверка за обновления:"
+msgstr "Грешка при проверка за обновления: "
