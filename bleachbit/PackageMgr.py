@@ -19,6 +19,7 @@
 
 import subprocess
 
+import FileUtilities
 
 class RPM:
     def __init__(self):
@@ -67,11 +68,20 @@ class TestRPM(unittest.TestCase):
         self.rpm = RPM()
 
     def test_is_installed(self):
+        """Unit test for is_installed()"""
+        if not FileUtilities.exe_exists('rpm'):
+            self.assertRaises(OSError, self.rpm.scan)
+            return
+
         self.rpm.scan()
         self.assertEqual(self.rpm.is_installed("bash"), True)
         self.assertEqual(self.rpm.is_installed("doesnotexist"), False)
 
-    def test_list_pckages(self):
+    def test_list_packages(self):
+        """Unit test for RPM.list_packages()"""
+        if not FileUtilities.exe_exists('rpm'):
+            self.assertRaises(OSError, self.rpm.list_packages().next)
+            return
         # check return value and expect no exceptions
         count = 0
         for pkg in self.rpm.list_packages():
