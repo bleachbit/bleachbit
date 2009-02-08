@@ -122,6 +122,11 @@ class Locales:
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
+    ooosharedirs = [ '/usr/lib/openoffice/share/', # Ubuntu 8
+        '/usr/lib/openoffice.org/basis3.0/share/', # Fedora 10
+        '/opt/ooo-dev/basis3.0/share', # Sun development snapshot
+        '/opt/openoffice.org/basis3.0/share/' ] # Sun
+
 
     def __init__(self):
         self.__languages = []
@@ -132,13 +137,7 @@ class Locales:
                 dirname = os.path.join('/usr/share/gnome/help', gapp)
                 self.__basedirs.append(dirname)
 
-
-        ooosharedirs = [ '/usr/lib/openoffice/share/', # Ubuntu 8
-            '/usr/lib/openoffice.org/basis3.0/share/', # Fedora 10
-            '/opt/ooo-dev/basis3.0/share', # Sun development snapshot
-            '/opt/openoffice.org/basis3.0/share/' ] # Sun
-
-        for ooosharedir in ooosharedirs:
+        for ooosharedir in self.ooosharedirs:
             suffixes = [ 'autotext/',
                 'config/soffice.cfg/global/accelerator/',
                 'registry/res/',
@@ -194,6 +193,11 @@ class Locales:
 
     def __localization_path(self, basedir, language_filter, dir_filter):
         """Return localization paths in a single directory tree"""
+        if -1 != basedir.find('*'):
+            for basedir2 in glob.iglob(basedir):
+                for path in self.__localization_path(basedir2, language_filter, dir_filter):
+                    yield path
+            return
         if not os.path.exists(basedir):
             return
         for path in os.listdir(basedir):
@@ -244,6 +248,10 @@ class Locales:
         # example: /usr/share/cups/doc-root/es/images/button-add-printer.gif
         lps += ( ('/usr/share/cups/doc-root/', dir_filter) , )
 
+        # Evolution
+        # /usr/share/evolution/2.22/help/quickref/es/quickref.pdf
+        lps += ( ('/usr/share/evolution/*/help/quickref/', dir_filter) , )
+
         # foomatic
         dir_filter = lambda d: 2 != len(d)
         lps += ( ('/usr/share/foomatic/db/source/PPD/Kyocera/', dir_filter) , )
@@ -270,13 +278,14 @@ class Locales:
         globexs += ( ('/usr/share/myspell/dicts/hyph_??_??.dic', '([a-z]{2}_[A-Z]{2}).dic$' ), )
         # example: /usr/share/omf/gedit/gedit-es.omf
         globexs += ( ('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$'), )
+        # OpenOffice.org
+        # example /usr/lib/openoffice/share/autocorr/acor_es-ES.dat
+        for ooosharedir in self.ooosharedirs:
+            globexs += ( (ooosharedir + '/autocorr/acor_*.dat', 'acor_([a-z]{2}(-[A-Z]{2})?).dat$'), )
         # TCL on Fedora 10a
         # example: /usr/share/tcl8.5/msgs/es.msg
         # example: /usr/share/tcl8.5/msgs/es_mx.msg
         globexs += ( ('/usr/share/tcl*/msgs/?*.msg', '/([a-z]{2}(_[a-z]{2})?).msg$'), )
-
-
-        print globexs
 
         # process reglobs
         for (globpath, regex) in globexs:
