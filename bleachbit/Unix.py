@@ -235,17 +235,17 @@ class Locales:
         lps = []
 
         # CUPS, Fedora 10
-        # example: /usr/share/cups/templates/es/jobs.tmpl
+        # /usr/share/cups/templates/es/jobs.tmpl
         lps += ( ('/usr/share/cups/templates/', lambda d: d.endswith('tmpl')) , )
 
         # CUPS, Fedora 10
-        # example: /usr/share/cups/www/es/images/button-add-printer.gif
+        # /usr/share/cups/www/es/images/button-add-printer.gif
         dir_filter = lambda d: d in ['cups.css', 'cups-printable.css', \
             'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
         lps += ( ('/usr/share/cups/www/', dir_filter) , )
 
         # CUPS, Ubuntu 8.10
-        # example: /usr/share/cups/doc-root/es/images/button-add-printer.gif
+        # /usr/share/cups/doc-root/es/images/button-add-printer.gif
         lps += ( ('/usr/share/cups/doc-root/', dir_filter) , )
 
         # Evolution
@@ -257,7 +257,7 @@ class Locales:
         lps += ( ('/usr/share/foomatic/db/source/PPD/Kyocera/', dir_filter) , )
 
         # man pages
-        # example: /usr/share/man/es/man1/man.1.gz
+        # /usr/share/man/es/man1/man.1.gz
         dir_filter = lambda d: d.startswith('man')
         lps += ( ('/usr/share/man/', dir_filter) , )
 
@@ -272,19 +272,27 @@ class Locales:
         ###
         globexs = []
 
-        # example: /usr/share/i18n/locales/es_ES@euro
+        # /usr/share/i18n/locales/es_ES@euro
         globexs += ( ('/usr/share/i18n/locales/??_*', 'locales/([a-z]{2}_[A-Z]{2})'), )
-        # example: /usr/share/myspell/dicts/hyph_es_ES.dic
+        # /usr/share/ppd/splix/samsung/ml1740fr.ppd
+        globexs += ( ('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$' ), )
+        # /usr/share/espeak-data/es_dict
+        globexs += ( ('/usr/share/espeak-data/??_dict', '/([a-z]{2,3})_dict$' ), )
+        # /usr/share/espeak-data/voices/es-la
+        globexs += ( ('/usr/share/espeak-data/voices/*', '/([a-z]{2,3}(-[a-z]{2})?)$' ), )
+        # /usr/share/hplip/data/localization/hplip_es.qm
+        globexs += ( ('/usr/share/hplip/data/localization/hplip_??.qm', '_([a-z]{2}).qm$' ), )
+        # /usr/share/myspell/dicts/hyph_es_ES.dic
         globexs += ( ('/usr/share/myspell/dicts/hyph_??_??.dic', '([a-z]{2}_[A-Z]{2}).dic$' ), )
-        # example: /usr/share/omf/gedit/gedit-es.omf
+        # /usr/share/omf/gedit/gedit-es.omf
         globexs += ( ('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$'), )
         # OpenOffice.org
-        # example /usr/lib/openoffice/share/autocorr/acor_es-ES.dat
+        # /usr/lib/openoffice/share/autocorr/acor_es-ES.dat
         for ooosharedir in self.ooosharedirs:
             globexs += ( (ooosharedir + '/autocorr/acor_*.dat', 'acor_([a-z]{2}(-[A-Z]{2})?).dat$'), )
         # TCL on Fedora 10a
-        # example: /usr/share/tcl8.5/msgs/es.msg
-        # example: /usr/share/tcl8.5/msgs/es_mx.msg
+        # /usr/share/tcl8.5/msgs/es.msg
+        # /usr/share/tcl8.5/msgs/es_mx.msg
         globexs += ( ('/usr/share/tcl*/msgs/?*.msg', '/([a-z]{2}(_[a-z]{2})?).msg$'), )
 
         # process reglobs
