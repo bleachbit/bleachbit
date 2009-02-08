@@ -22,11 +22,15 @@ Store and retreieve user preferences
 """
 
 import os
+import pwd
 import ConfigParser
 
 from globals import APP_VERSION, options_dir, options_file
 
+
 boolean_keys = ['check_online_updates', 'first_start', 'shred']
+
+
 
 class Options:
     """Store and retrieve user preferences"""
@@ -64,10 +68,25 @@ class Options:
 
     def __flush(self):
         """Write information to disk"""
+        mkdir = False
         if not os.path.exists(options_dir):
             os.makedirs(options_dir, 0700)
+            mkdir = True
+        mkfile = not os.path.exists(options_file)
         _file = open(options_file, 'wb')
         self.config.write(_file)
+        # If using sudo, avoid creating a directory that the
+        # original account cannot read.
+        if sudo_mode():
+            try:
+                uid = pwd.getpwnam(os.getlogin())[3]
+                if mkfile:
+                   os.chown(options_file, uid, -1)
+                if mkdir:
+                   os.chown(options_dir, uid, -1)
+            except:
+                print 'Failed fixing permissions created by sudo'
+                traceback.print_exc()
 
 
     def __set_default(self, key, value):
@@ -143,6 +162,11 @@ class Options:
         self.set(key, not self.get(key))
 
 
+def sudo_mode():
+    """Return whether running in sudo mode"""
+    return os.getlogin() != pwd.getpwuid(os.getuid())[0]
+
+
 options = Options()
 
 import unittest
@@ -184,6 +208,9 @@ class TestOptions(unittest.TestCase):
         o.config.remove_option("tree", "parent.child")
         self.assertEqual(o.get_tree("parent", "child"), False)
 
+    def test_sudo_mode(self):
+        """Unit test for sudo_mode()"""
+        self.assert_(type(sudo_mode()) is bool)
 
 if __name__ == '__main__':
     unittest.main()
