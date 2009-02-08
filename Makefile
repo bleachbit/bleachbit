@@ -12,7 +12,7 @@ build:
 	echo Nothing to build
 
 clean:
-	@rm -vf {.,bleachbit}/*{pyc,pyo}
+	@rm -vf {.,bleachbit}/*{pyc,pyo,~}
 	@rm -vf dist/bleachbit-*.tar.bz2
 	@rm -vf MANIFEST
 	make -C po clean
