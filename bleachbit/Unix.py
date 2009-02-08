@@ -547,16 +547,24 @@ class TestUnix(unittest.TestCase):
 
     def test_locale_globex(self):
         """Unit test for locale_globex"""
-        pathname = '/usr/share/omf/gedit/gedit-es.omf'
+
+        locale = locale_globex('/bin/ls', '(ls)$').next()
+        self.assertEqual(locale, ('ls', '/bin/ls'))
+
+        fakepath = '/usr/share/omf/gedit/gedit-es.omf'
 
         def test_yield(pathname, regex):
             """Replacement for globex()"""
-            yield pathname
+            yield fakepath
+
         old_globex = FileUtilities.globex
         FileUtilities.globex = test_yield
 
         func = locale_globex('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$')
-        self.assertEqual(func.next(), ('es', pathname))
+        actual = func.next()
+        expect = ('es', fakepath)
+        self.assertEqual(actual, expect, "Expected '%s' but got '%s'" % (expect, actual))
+        FileUtilities.globex = old_globex
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -575,7 +583,8 @@ class TestUnix(unittest.TestCase):
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
-            self.assert_(os.path.exists(path))
+            self.assert_(os.path.exists(path), \
+                "Rotated log path '%s' does not exist" % path)
 
 
     def test_wine_to_linux_path(self):
