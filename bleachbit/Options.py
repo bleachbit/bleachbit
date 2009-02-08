@@ -44,8 +44,11 @@ class Options:
         if not self.config.has_section('preserve_languages'):
             import locale
             lang = locale.getdefaultlocale()[0]
+            pos = lang.find('_')
+            if -1 != pos:
+                lang = lang [0 : pos]
             if None == lang:
-                lang = 'en_US'
+                lang = 'en'
                 print "warning: No default language found.  Assuming '%s'" % lang
             print "info: automatically preserving language '%s'" % (lang,)
             self.set_language(lang, True)
