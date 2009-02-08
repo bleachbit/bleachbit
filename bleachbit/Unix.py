@@ -263,7 +263,7 @@ class Locales:
 
         # TCL
         # example: /usr/share/tcl8.5/msgs/es_mx.msg
-        for path in glob.glob('/usr/share/tcl*/msgs/*.msg'): 
+        for path in glob.iglob('/usr/share/tcl*/msgs/*.msg'): 
             locale_code = os.path.splitext(os.path.basename(path))[0]
             language_code = locale_to_language(locale_code)
             if None != language_filter and language_filter(locale_code, language_code):
