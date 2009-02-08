@@ -12,10 +12,11 @@ build:
 	echo Nothing to build
 
 clean:
-	rm -f {.,bleachbit}/*{pyc,pyo}
-	rm -f dist/bleachbit-*.tar.bz2
+	@rm -vf {.,bleachbit}/*{pyc,pyo}
+	@rm -vf dist/bleachbit-*.tar.bz2
+	@rm -vf MANIFEST
 	make -C po clean
-	rm -rf locale
+	@rm -vrf locale
 
 install:
 	# "binary"
