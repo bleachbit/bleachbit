@@ -50,7 +50,7 @@ tests:
 		echo testing "$$f"; \
 		python "$$f"; \
 		rc=$$?; \
-		[ $$rc -gt 0 ] && notify-send -u critical "error executing test for $$f"; \
+		[ $$rc -gt 0 ] && echo -e \\a && notify-send -u critical "error executing test for $$f"; \
 	done
 
 
