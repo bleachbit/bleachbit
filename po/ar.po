@@ -7,269 +7,311 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-02-03 07:45-0700\n"
-"PO-Revision-Date: 2009-02-04 21:15+0000\n"
+"POT-Creation-Date: 2009-02-06 23:19-0700\n"
+"PO-Revision-Date: 2009-02-09 10:48+0000\n"
 "Last-Translator: MaXeR <Unknown>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-05 14:28+0000\n"
+"X-Launchpad-Export-Date: 2009-02-09 15:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../bleachbit/CleanerBackend.py:97
+#: ../bleachbit/CleanerBackend.py:98
 msgid "Delete Adobe Reader's cache"
 msgstr "حذف ملفات Adobe Reade المؤقتة"
 
-#: ../bleachbit/CleanerBackend.py:117
+#: ../bleachbit/CleanerBackend.py:118
 msgid "Delete the Bash history"
 msgstr "حذف ملفات Bash المؤقتة"
 
-#: ../bleachbit/CleanerBackend.py:135
+#: ../bleachbit/CleanerBackend.py:136
 msgid "Delete Beagle indexes and logs"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:157 ../bleachbit/CleanerBackend.py:210
-#: ../bleachbit/CleanerBackend.py:409 ../bleachbit/CleanerBackend.py:585
-#: ../bleachbit/CleanerBackend.py:617 ../bleachbit/CleanerBackend.py:681
+#: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
+#: ../bleachbit/CleanerBackend.py:471 ../bleachbit/CleanerBackend.py:503
+#: ../bleachbit/CleanerBackend.py:567 ../bleachbit/CleanerBackend.py:693
 msgid "Cache"
 msgstr "الذاكرة المخبأة"
 
-#: ../bleachbit/CleanerBackend.py:157 ../bleachbit/CleanerBackend.py:210
-#: ../bleachbit/CleanerBackend.py:681
-msgid "Web cache reduces time to display revisited pages"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
-#: ../bleachbit/CleanerBackend.py:682
+#: ../bleachbit/CleanerBackend.py:567
+msgid "Web cache reduces time to display revisited pages"
+msgstr "ذاكرة الويب المخبأة تقلل وقت إعادة عرض الصفحات التي تم زياتها سابقاً"
+
+#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:568
 msgid "Cookies"
 msgstr "ملفّات تعريف الارتباط"
 
-#: ../bleachbit/CleanerBackend.py:158 ../bleachbit/CleanerBackend.py:211
-#: ../bleachbit/CleanerBackend.py:682
+#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:568
 msgid ""
 "HTTP cookies contain information such as web site prefereneces, "
 "authentication, and tracking identification"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:213
 msgid "Download history"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:159 ../bleachbit/CleanerBackend.py:212
+#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:213
 msgid "List of files downloaded"
 msgstr "قائمة الملفات المُحمّلة"
 
-#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:215
+#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
 msgid "Passwords"
 msgstr "كلمات المرور"
 
-#: ../bleachbit/CleanerBackend.py:160 ../bleachbit/CleanerBackend.py:215
+#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
+#: ../bleachbit/CleanerBackend.py:162 ../bleachbit/CleanerBackend.py:217
 msgid "Places"
 msgstr "أماكن"
 
-#: ../bleachbit/CleanerBackend.py:161 ../bleachbit/CleanerBackend.py:216
+#: ../bleachbit/CleanerBackend.py:162 ../bleachbit/CleanerBackend.py:217
 msgid ""
 "A database of URLs including bookmarks and a history of visited web sites"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:164
+#: ../bleachbit/CleanerBackend.py:165
 msgid "Epiphany web browser"
 msgstr "متصف الويب Epiphany"
 
-#: ../bleachbit/CleanerBackend.py:213
+#: ../bleachbit/CleanerBackend.py:214
 msgid "Form history"
 msgstr "مدخلات النماذج"
 
-#: ../bleachbit/CleanerBackend.py:213
+#: ../bleachbit/CleanerBackend.py:214
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:214
+#: ../bleachbit/CleanerBackend.py:215
 msgid "Session restore"
 msgstr "إستعادة الجلسة"
 
-#: ../bleachbit/CleanerBackend.py:214
+#: ../bleachbit/CleanerBackend.py:215
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:217
+#: ../bleachbit/CleanerBackend.py:218
 msgid "URL history"
 msgstr "روابط الإنترنت"
 
-#: ../bleachbit/CleanerBackend.py:217
+#: ../bleachbit/CleanerBackend.py:218
 msgid "List of visited web pages"
 msgstr "قائمة من صفحات الويب التي تم زيارتها"
 
-#: ../bleachbit/CleanerBackend.py:218
+#: ../bleachbit/CleanerBackend.py:219
 msgid "Vacuum"
-msgstr ""
+msgstr "فراغ"
 
-#: ../bleachbit/CleanerBackend.py:218
+#: ../bleachbit/CleanerBackend.py:219
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"مسح تقسيم قاعدة البيانات لتقليل الفراغات و تحسين السرعة دون حذف أي بيانات"
 
-#: ../bleachbit/CleanerBackend.py:223
+#: ../bleachbit/CleanerBackend.py:224
 msgid "Mozilla Firefox web browser"
 msgstr "متصفح الويب موزيلا فايرفوكس"
 
-#: ../bleachbit/CleanerBackend.py:368
+#: ../bleachbit/CleanerBackend.py:369
+msgid ""
+"Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
+msgstr ""
+"حذف الذاكرة المخبأة، أغلفة الألبومات، سجل المصحح و التدوينات الصوتية "
+"المحمّلة من Exaile"
+
+#: ../bleachbit/CleanerBackend.py:392
 msgid "Delete Adobe Flash's cache and settings"
 msgstr "حذف إعدادات ملفات Adobe Flash المؤقتة"
 
-#: ../bleachbit/CleanerBackend.py:386
-msgid "Delete Second Life Viewer's cache and temporary files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:392
-msgid "Second Life Viewer"
-msgstr "عارض سكند لايف"
-
-#: ../bleachbit/CleanerBackend.py:407
-msgid "Broken desktop entries"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:407
-msgid ""
-"Unusable .desktop files (menu entries and file associtations) that are "
-"either invalid structurally or point to non-existant locations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:408 ../bleachbit/CleanerBackend.py:503
-#: ../bleachbit/CleanerBackend.py:505
-msgid "Clipboard"
-msgstr "الحافظة"
-
-#: ../bleachbit/CleanerBackend.py:408
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:409
-msgid "Cache location specified by XDG and used by various applications"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:410
-msgid "Localizations"
-msgstr "الترجمات"
-
-#: ../bleachbit/CleanerBackend.py:410
-msgid "Data used to operate the system in various languages and countries"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:586
-msgid "Temporary files"
-msgstr "الملفات المؤقتة"
-
 #: ../bleachbit/CleanerBackend.py:411
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:412
-msgid "Trash"
-msgstr "المهملات"
-
-#: ../bleachbit/CleanerBackend.py:412
-msgid "Temporary storage for deleted files"
-msgstr "المخزّنات المؤقتة للملفات المحذوفة"
-
-#: ../bleachbit/CleanerBackend.py:413 ../bleachbit/CleanerBackend.py:618
-msgid "Recent documents list"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:413
-msgid "A common list of recently used documents"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:416
-msgid "The system in general"
-msgstr "النظام بشكل عام"
-
-#: ../bleachbit/CleanerBackend.py:422
-msgid "System"
-msgstr "النّظام"
-
-#: ../bleachbit/CleanerBackend.py:525
 msgid "Delete GIMP's temporary folder"
 msgstr "حذف الملفات المؤقتة لبرنامج GIMP"
 
-#: ../bleachbit/CleanerBackend.py:546
+#: ../bleachbit/CleanerBackend.py:432
 msgid "Delete the contents of Google Earth's cache and temporary files"
 msgstr "حذف المحتوى و الملفات المؤقتة و المخبأة لبرنامج Google Earth"
 
-#: ../bleachbit/CleanerBackend.py:566
+#: ../bleachbit/CleanerBackend.py:452
 msgid "Delete Java's cache"
 msgstr "حذف ملفات الجافا المؤقتة"
 
-#: ../bleachbit/CleanerBackend.py:585
+#: ../bleachbit/CleanerBackend.py:471
 msgid ""
 "KDE cache including Konqueror.  Often contains sparse files where the "
 "apparent file size does not match the actual disk usage."
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:586
+#: ../bleachbit/CleanerBackend.py:472 ../bleachbit/CleanerBackend.py:696
+msgid "Temporary files"
+msgstr "الملفات المؤقتة"
+
+#: ../bleachbit/CleanerBackend.py:472
 msgid "Temporary files stored by KDE under the home directory"
 msgstr "الملفات المؤقتة المخزنة بواسطة KDE تحت المجلد الأساسي (Home)"
 
-#: ../bleachbit/CleanerBackend.py:589
+#: ../bleachbit/CleanerBackend.py:475
 msgid "KDE desktop environment"
 msgstr "بيئة سطح مكتب KDE"
 
-#: ../bleachbit/CleanerBackend.py:617
+#: ../bleachbit/CleanerBackend.py:503
 msgid "Cached registry and package data"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:618
+#: ../bleachbit/CleanerBackend.py:504 ../bleachbit/CleanerBackend.py:698
+msgid "Recent documents list"
+msgstr "قائمة المستندات المفتوحة مؤخراً"
+
+#: ../bleachbit/CleanerBackend.py:504
 msgid "OpenOffice.org's list of recently used documents."
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:625
+#: ../bleachbit/CleanerBackend.py:511
 msgid "OpenOffice.org office suite"
 msgstr "طقم المكتب OpenOffice.org"
 
-#: ../bleachbit/CleanerBackend.py:686
+#: ../bleachbit/CleanerBackend.py:572
 msgid "Opera web browser"
 msgstr "متصفح الويب أوبرا"
 
-#: ../bleachbit/CleanerBackend.py:718
+#: ../bleachbit/CleanerBackend.py:604
 msgid "Delete RealPlayer's cookies"
-msgstr ""
+msgstr "حذف كوكيز ريل بلاير"
 
-#: ../bleachbit/CleanerBackend.py:737
+#: ../bleachbit/CleanerBackend.py:623
 msgid "Delete the files in the rpmbuild build directory"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:765
+#: ../bleachbit/CleanerBackend.py:651
+msgid "Delete Second Life Viewer's cache and temporary files"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:657
+msgid "Second Life Viewer"
+msgstr "عارض سكند لايف"
+
+#: ../bleachbit/CleanerBackend.py:671
+msgid "Delete Skype's chat logs"
+msgstr "حذف سجل محادثات سكايب"
+
+#: ../bleachbit/CleanerBackend.py:690 ../bleachbit/CleanerBackend.py:794
+#: ../bleachbit/CleanerBackend.py:796
+msgid "APT autoclean"
+msgstr "تنظيف APT تلقائياً"
+
+#: ../bleachbit/CleanerBackend.py:690
+msgid "Run apt-get autoclean to delete old downloaded archive files"
+msgstr "تشغيل apt-get autoclean لحذف ملفات الإرشيف القديمة المحمّلة"
+
+#: ../bleachbit/CleanerBackend.py:691
+msgid "Broken desktop entries"
+msgstr "روابط سطح المكتب المكسورة"
+
+#: ../bleachbit/CleanerBackend.py:691
+msgid ""
+"Unusable .desktop files (menu entries and file associtations) that are "
+"either invalid structurally or point to non-existant locations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:692 ../bleachbit/CleanerBackend.py:803
+#: ../bleachbit/CleanerBackend.py:805
+msgid "Clipboard"
+msgstr "الحافظة"
+
+#: ../bleachbit/CleanerBackend.py:692
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:693
+msgid "Cache location specified by XDG and used by various applications"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:694
+msgid "Localizations"
+msgstr "الترجمات"
+
+#: ../bleachbit/CleanerBackend.py:694
+msgid "Data used to operate the system in various languages and countries"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:695
+msgid "Rotated logs"
+msgstr "السجلات المتناوبة"
+
+#: ../bleachbit/CleanerBackend.py:695
+msgid "Old system logs"
+msgstr "السجلات القديمة للنظام"
+
+#: ../bleachbit/CleanerBackend.py:696
+msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:697
+msgid "Trash"
+msgstr "المهملات"
+
+#: ../bleachbit/CleanerBackend.py:697
+msgid "Temporary storage for deleted files"
+msgstr "المخزّنات المؤقتة للملفات المحذوفة"
+
+#: ../bleachbit/CleanerBackend.py:698
+msgid "A common list of recently used documents"
+msgstr "قائمة من المستندات المستخدمة مؤخراً"
+
+#: ../bleachbit/CleanerBackend.py:699 ../bleachbit/CleanerBackend.py:809
+#: ../bleachbit/CleanerBackend.py:811
+msgid "Yum clean"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:699
+msgid "Delete all Yum's cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:702
+msgid "The system in general"
+msgstr "النظام بشكل عام"
+
+#: ../bleachbit/CleanerBackend.py:708
+msgid "System"
+msgstr "النّظام"
+
+#: ../bleachbit/CleanerBackend.py:832
 msgid "Delete thumbnails in the thumbnails folder"
 msgstr "حذف المُصغّرات في مجلد المُصغّرات"
 
-#: ../bleachbit/CleanerBackend.py:771
+#: ../bleachbit/CleanerBackend.py:838
 msgid "Thumbnails"
 msgstr "المُصغّرات"
 
-#: ../bleachbit/CleanerBackend.py:783
+#: ../bleachbit/CleanerBackend.py:850
+msgid "Delete Transmission's blocklist and fast resume cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:870
 msgid ""
 "Delete ~/.viminfo which includes VIM file history, command history, and "
 "buffers"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:801
+#: ../bleachbit/CleanerBackend.py:888
 msgid "Delete the temporary files from winetricks"
 msgstr "حذف المفات المؤقتة من winetricks"
 
-#: ../bleachbit/CleanerBackend.py:828
+#: ../bleachbit/CleanerBackend.py:915
 msgid "Delete XChat logs and scrollback"
 msgstr ""
 
-#: ../bleachbit/FileUtilities.py:169
+#: ../bleachbit/FileUtilities.py:170
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 
@@ -442,6 +484,15 @@ msgstr "تحديث بليتش بت متوفر"
 #: ../bleachbit/GUI.py:664
 msgid "Click 'Update BleachBit' for more information"
 msgstr "اضغط على 'تحديث بليتش بت' لمعلومات أوسع"
+
+#: ../bleachbit/Unix.py:294 ../bleachbit/Unix.py:431
+#, python-format
+msgid "Executable not found: %s"
+msgstr ""
+
+#: ../bleachbit/Unix.py:429
+msgid "Another process is currently using yum"
+msgstr ""
 
 #: ../bleachbit/Update.py:69
 msgid "Error when checking for updates: "
