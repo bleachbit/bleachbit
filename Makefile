@@ -44,6 +44,13 @@ install:
 	make -C po install DESTDIR=$(DESTDIR)
 
 tests:
-	cd bleachbit && grep -l unittest *py | xargs -L 1 python
+	cd bleachbit && \
+	for f in `grep -l unittest *py`; \
+	do \
+		echo testing "$$f"; \
+		python "$$f"; \
+		rc=$$?; \
+		[ $$rc -gt 0 ] && notify-send -u critical "error executing test for $$f"; \
+	done
 
 
