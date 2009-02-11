@@ -23,6 +23,7 @@ Store and retreieve user preferences
 
 import os
 import pwd
+import traceback
 import ConfigParser
 
 from globals import APP_VERSION, options_dir, options_file
@@ -164,7 +165,18 @@ class Options:
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    return os.getlogin() != pwd.getpwuid(os.getuid())[0]
+    try:
+        login1 = os.getlogin()
+    except:
+        login1 = os.getenv('LOGNAME')
+
+    try:
+        login2 = pwd.getpwuid(os.getuid())[0]
+        return login1 != login2
+    except:
+        traceback.print_exc()
+        return False
+
 
 
 options = Options()
