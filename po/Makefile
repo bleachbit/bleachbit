@@ -7,9 +7,13 @@ POTFILE = $(APP).pot
 
 .PHONY: refresh-po spelling local install clean all
 
-$(POTFILE): $(SRC)
+cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
+	python ../bleachbit/CleanerML.py pot
+
+$(POTFILE): $(SRC) cleanerml.pot
 	@echo "* Generating $(APP).pot"
-	xgettext -o $(APP).pot --default-domain=$(APP) $(SRC)
+	cp cleanerml.pot $(APP).pot
+	xgettext -o $(APP).pot --join-existing --default-domain=$(APP) $(SRC)
 
 refresh-po: $(POTFILE)
 	@echo "* Refreshing .po files"
@@ -53,7 +57,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(APP).pot
+	@rm -fv $(APP).pot cleanerml.pot
 	@rm -rfv ../locale
 
 all: $(APP).pot $(MOFILES)
