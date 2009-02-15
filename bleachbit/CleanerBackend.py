@@ -41,7 +41,16 @@ class Cleaner:
     """Base class for a cleaner"""
 
     def __init__(self):
+        self.actions = []
+        self.id = None
+        self.description = None
+        self.name = None
         self.options = {}
+
+    def add_action(self, option_id, action):
+        """Register 'action' (instance of class Action) to be executed
+        for ''option_id'"""
+        self.actions += ( (option_id, action), )
 
     def add_option(self, option_id, name, description):
         self.options[option_id] = ( name, False, description )
@@ -52,15 +61,15 @@ class Cleaner:
 
     def get_description(self):
         """Brief description of the cleaner"""
-        return ""
+        return self.description
 
     def get_id(self):
         """Return the unique name of this cleaner"""
-        return None
+        return self.id
 
     def get_name(self):
         """Return the human name of this cleaner"""
-        return None
+        return self.name
 
     def get_option_descriptions(self):
         """Yield the names and descriptions of each option in a 2-tuple"""
@@ -78,6 +87,11 @@ class Cleaner:
 
     def list_files(self):
         """Iterate files that would be removed"""
+        for action in self.actions:
+            option_id = action[0]
+            if self.options[option_id][1]:
+                for pathname in action[1].list_files():
+                    yield pathname
 
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
