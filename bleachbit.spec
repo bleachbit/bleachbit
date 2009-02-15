@@ -71,9 +71,12 @@ BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
-Requires:       xdg-utils
 %py_requires
+%if 0%{?suse_version} >= 1030
+Requires:       xdg-utils
 %endif
+%endif
+
 
 
 %description
@@ -139,19 +142,18 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 %endif
 
 
-%if 0%{?suse_version}
+%if 0%{?suse_version} >= 1030
 sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
 
-%if 0%{?suse_version} > 910
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
 	--vendor="" %{name}-root.desktop
-%else
-#SLES 9
-cp %{name}-root.desktop %{buildroot}/%{_datadir}/applications/
-%endif
-%suse_update_desktop_file %{name}
+
 %suse_update_desktop_file %{name}-root
+%endif
+
+%if 0%{?suse_version}
+%suse_update_desktop_file %{name}
 %endif
 
 
@@ -194,7 +196,9 @@ update-desktop-database &> /dev/null ||:
 %endif
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version} ||  0%{?suse_version} >= 1030
 %{_datadir}/applications/%{name}-root.desktop
+%endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
 
