@@ -674,6 +674,8 @@ class GUI:
             gobject.idle_add(self.enable_online_update, update.get_update_info_url())
 
     def __init__(self):
+        import CleanerML
+        CleanerML.load_cleaners()
         self.create_window()
         gtk.gdk.threads_init()
         if options.get("first_start"):
