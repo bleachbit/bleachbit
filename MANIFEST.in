@@ -5,6 +5,7 @@ include Makefile
 include bleachbit.desktop
 include bleachbit.spec
 include bleachbit.png
+include cleaners/*xml
 include po/*po
 include po/Makefile
 recursive-include bleachbit *py

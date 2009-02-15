@@ -35,6 +35,9 @@ install:
 	python -O -c "import compileall; compileall.compile_dir('.')" && \
 	python -c "import compileall; compileall.compile_dir('.')"
 
+	# cleaners
+	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
+	$(INSTALL_DATA) cleaners/*xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
