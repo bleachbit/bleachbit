@@ -102,6 +102,11 @@ def bytes_to_human(bytes):
 
 def children_in_directory(top, list_directories = False):
     """Iterate files and, optionally, subdirectories in directory"""
+    if type(top) is tuple:
+        for top_ in top:
+            for pathname in children_in_directory(top_, list_directories):
+                yield pathname
+        return
     for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
         if list_directories:
             for dirname in dirnames:
