@@ -189,7 +189,7 @@ class Firefox(Cleaner):
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
-        self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
+        self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
