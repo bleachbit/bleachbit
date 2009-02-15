@@ -26,8 +26,8 @@
     <option id="online_databases">
       <label>Online databases</label>
       <description>Cache of Jamendo and Mangatune databases</description>
-      <action type="children">~/.gnome2/rhythmbox/jamendo/</action>
-      <action type="children">~/.gnome2/rhythmbox/magnatune/</action>
+      <action type="children" directories="false">~/.gnome2/rhythmbox/jamendo/</action>
+      <action type="children" directories="false">~/.gnome2/rhythmbox/magnatune/</action>
     </option>
   </cleaner>
 </cleaners>

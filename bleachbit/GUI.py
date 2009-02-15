@@ -315,10 +315,14 @@ class GUI:
         #print "debug: on_selection_changed: row='%s', name='%s', desc='%s'," % ( row, name ,description)
         self.textbuffer.set_text("")
         self.append_text(name + "\n", 'operation')
+        if not description:
+            description = ""
         self.append_text(description + "\n\n\n")
         for (label, description) in backends[cleaner_id].get_option_descriptions():
-            self.append_text(label + ': ', 'option_label')
-            self.append_text(description + "\n\n")
+            self.append_text(label, 'option_label')
+            if description:
+                self.append_text(': ', 'option_label')
+                self.append_text(description + "\n\n")
 
 
 

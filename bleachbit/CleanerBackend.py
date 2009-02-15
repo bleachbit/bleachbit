@@ -902,8 +902,6 @@ class XChat(Cleaner):
                 yield filename
 
 backends = {}
-backends["adobereader"] = AdobeReader()
-backends["bash"] = Bash()
 backends["beagle"] = Beagle()
 backends["epiphany"] = Epiphany()
 backends["exaile"] = Exaile()

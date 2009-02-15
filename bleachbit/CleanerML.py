@@ -81,7 +81,9 @@ class CleanerML:
         self.cleaner.id = cleaner.getAttribute('id')
         print "debug: handleCleaner = ",self.cleaner.id 
         self.handleCleanerLabel(cleaner.getElementsByTagName('label')[0])
-        self.handleCleanerDescription(cleaner.getElementsByTagName('description')[0])
+        description = cleaner.getElementsByTagName('description')
+        if description:
+            self.handleCleanerDescription(description[0])
         self.handleCleanerOptions(cleaner.getElementsByTagName('option'))
 
 
@@ -103,7 +105,9 @@ class CleanerML:
             self.option_id = option.getAttribute('id')
 
             self.handleCleanerOptionLabel(option.getElementsByTagName('label')[0])
-            self.handleCleanerOptionDescription(option.getElementsByTagName('description')[0])
+            description = option.getElementsByTagName('description')
+            if description:
+                self.handleCleanerOptionDescription(description[0])
 
             for action in option.getElementsByTagName('action'):
                 self.handleCleanerOptionAction(action)

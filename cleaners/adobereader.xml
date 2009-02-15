@@ -24,8 +24,8 @@
     <label>Adobe Reader</label>
     <option id="cache">
       <label>Cache</label>
-      <action type="children">~/.adobe/Acrobat/7.0/Cache</action>
-      <action type="children">~/.adobe/Acrobat/8.0/Cache</action>
+      <action type="children" directories="false">~/.adobe/Acrobat/7.0/Cache</action>
+      <action type="children" directories="false">~/.adobe/Acrobat/8.0/Cache</action>
     </option>
   </cleaner>
 </cleaners>
