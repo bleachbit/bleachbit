@@ -1,0 +1,11 @@
+PHONY: pretty
+
+pretty:
+	for f in *xml; \
+	do \
+		xmllint --format "$$f"  > "$$f.pretty"; \
+		diff=`diff -q "$$f" "$$f.pretty" | grep -o differ`; \
+		[[ "$$diff" != "differ" ]] && echo "$$f" already pretty && rm "$$f.pretty"; \
+		[[ -s "$$f.pretty" ]] && echo "$$f" is pretty now && mv "$$f.pretty" "$$f" ; \
+	done \
+	
