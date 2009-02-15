@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaners>
+  <cleaner id="elinks">
+    <label>ELinks</label>
+    <description>Text mode web browser</description>
+    <option id="history">
+      <label>History</label>
+      <description>Cookies, visited URLs, and search history</description>
+      <action type="file">~/.elinks/cookies</action>
+      <action type="file">~/.elinks/globhist</action>
+      <action type="file">~/.elinks/gotohist</action>
+      <action type="file">~/.elinks/searchhist</action>
+    </option>
+  </cleaner>
+</cleaners>

@@ -104,45 +104,6 @@ class Cleaner:
             value, self.options[option_id][2])
 
 
-## Adobe Reader Clean Up by juancarlospaco@hotmail.com
-class AdobeReader(Cleaner):
-    """Adobe Reader"""
-
-    def get_description(self):
-        return _("Delete Adobe Reader's cache")
-
-    def get_id(self):
-        return 'adobereader'
-
-    def get_name(self):
-        return "Adobe Reader"
-
-    def list_files(self):
-        dirs = [ "~/.adobe/Acrobat/7.0/Cache", "~/.adobe/Acrobat/8.0/Cache" ]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
-
-class Bash(Cleaner):
-    """BASH GNU Bourne-Again SHell"""
-
-    def get_description(self):
-        return _("Delete the Bash history")
-
-    def get_id(self):
-        return 'bash'
-
-    def get_name(self):
-        return "Bash"
-
-    def list_files(self):
-        filename = os.path.expanduser("~/.bash_history")
-        if os.path.lexists(filename):
-            yield filename
-
-
 class Beagle(Cleaner):
     """Beagle"""
 
