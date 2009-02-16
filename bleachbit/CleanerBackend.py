@@ -420,24 +420,6 @@ class GoogleEarth(Cleaner):
                 yield filename 
 
 
-class Java(Cleaner):
-    """Delete the Java cache"""
-
-    def get_description(self):
-        return _("Delete Java's cache")
-
-    def get_id(self):
-        return 'java'
-
-    def get_name(self):
-        return "Java"
-
-    def list_files(self):
-        dirname = os.path.expanduser("~/.java/deployment/cache")
-        for filename in children_in_directory(dirname, False):
-            yield filename
-
-
 class KDE(Cleaner):
     """KDE"""
 
@@ -870,7 +852,6 @@ backends["firefox"] = Firefox()
 backends["gimp"] = GIMP()
 backends["googleearth"] = GoogleEarth()
 backends["flash"] = Flash()
-backends["java"] = Java()
 backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
