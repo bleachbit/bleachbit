@@ -322,7 +322,8 @@ class GUI:
             self.append_text(label, 'option_label')
             if description:
                 self.append_text(': ', 'option_label')
-                self.append_text(description + "\n\n")
+                self.append_text(description)
+            self.append_text("\n\n")
 
 
 
