@@ -207,12 +207,12 @@ class TreeInfoModel:
         return
 
 
-   def get_model(self):
+    def get_model(self):
         """Return the tree store"""
         return self.tree_store
 
 
-   def on_row_changed(self, __treemodel, path, __iter):
+    def on_row_changed(self, __treemodel, path, __iter):
         """Event handler for when a row changes"""
         parent = self.tree_store[path[0]][2]
         child = None
