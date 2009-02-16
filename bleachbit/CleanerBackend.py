@@ -619,26 +619,6 @@ class rpmbuild(Cleaner):
                 yield filename
 
 
-class SecondLifeViewer(Cleaner):
-    """Second Life Viewer"""
-
-    def get_description(self):
-        return _("Delete Second Life Viewer's cache and temporary files")
-
-    def get_id(self):
-        return 'secondlifeviewer'
-
-    def get_name(self):
-        return _("Second Life Viewer")
-
-    def list_files(self):
-        dirs = [ "~/.secondlife/cache", "~/.secondlife/logs"]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
-
 class Skype(Cleaner):
     """Skype"""
 
@@ -915,7 +895,6 @@ backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
 backends["realplayer"] = realplayer()
 backends["rpmbuild"] = rpmbuild()
-backends["secondlifeviewer"] = SecondLifeViewer()
 backends["skype"] = Skype()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
