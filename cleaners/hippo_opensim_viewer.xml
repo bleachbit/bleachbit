@@ -27,5 +27,9 @@
       <label>Cache</label>
       <action type="children" directories="false">~/.hippo_opensim_viewer/cache/</action>
     </option>
+    <option id="Logs">
+      <label>Logs</label>
+      <action type="children" directories="false">~/.hippo_opensim_viewer/logs/</action>
+    </option>
   </cleaner>
 </cleaners>
