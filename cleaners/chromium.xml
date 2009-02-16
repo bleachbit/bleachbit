@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaners>
+  <cleaner id="chromium">
+    <label>Chromium</label>
+    <description>Web browser</description>
+    <option id="cache">
+      <label>Cache</label>
+      <description>Web cache reduces time to display revisited pages</description>
+      <action type="children" directories="false">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache</action>
+    </option>
+    <option id="cookies">
+      <label>Cookies</label>
+      <description>HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification</description>
+      <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cookies</action>
+    </option>
+    <option id="history">
+      <label>History</label>
+      <description>Includes bookmarks, downloads, and visited sites</description>
+      <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History</action>
+      <action type="glob">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*</action>
+    </option>
+    <option id="current_session">
+      <label>Current session</label>
+      <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Current Session</action>
+    </option>
+  </cleaner>
+</cleaners>
