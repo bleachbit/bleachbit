@@ -202,9 +202,17 @@ class TreeInfoModel:
         if None == self.tree_store:
             raise Exception("cannot create tree store")
         self.tree_store.connect("row-changed", self.on_row_changed)
+        self.tree_store.set_sort_func(3, self.sort_func)
+        self.tree_store.set_sort_column_id(3, gtk.SORT_ASCENDING)
         return
 
-    def on_row_changed(self, __treemodel, path, __iter):
+
+   def get_model(self):
+        """Return the tree store"""
+        return self.tree_store
+
+
+   def on_row_changed(self, __treemodel, path, __iter):
         """Event handler for when a row changes"""
         parent = self.tree_store[path[0]][2]
         child = None
@@ -214,9 +222,17 @@ class TreeInfoModel:
         print "debug: on_row_changed('%s', '%s', '%s', '%s')" % (path, parent, child, value)
         options.set_tree(parent, child, value)
 
-    def get_model(self):
-        """Return the tree store"""
-        return self.tree_store
+
+    def sort_func(self, model, iter1, iter2):
+        """Sort the tree by the display name"""
+        s1 = model[iter1][0].lower()
+        s2 = model[iter2][0].lower()
+        if s1 == s2:
+            return 0
+        if s1 > s2:
+            return 1
+        return -1
+
 
 
 class TreeDisplayModel:
