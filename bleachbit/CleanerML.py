@@ -79,7 +79,6 @@ class CleanerML:
 
     def handleCleaner(self, cleaner):
         self.cleaner.id = cleaner.getAttribute('id')
-        print "debug: handleCleaner = ",self.cleaner.id 
         self.handleCleanerLabel(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
         if description:
@@ -89,16 +88,13 @@ class CleanerML:
 
     def handleCleanerLabel(self, label):
         self.cleaner.name = _(getText(label.childNodes))
-        print 'debug handleCleanerLabel=', self.cleaner.name
 
 
     def handleCleanerDescription(self, description):
         self.cleaner.description = _(getText(description.childNodes))
-        print 'debug handleCleanerDescriptions=', self.cleaner.description
 
 
     def handleCleanerOptions(self, options):
-        print "options=",options
         for option in options:
 
             self.action = Action()
@@ -118,18 +114,15 @@ class CleanerML:
 
     def handleCleanerOptionLabel(self, label):
         self.option_name = _(getText(label.childNodes))
-        print "debug handleCleanerOptionLabel", self.option_name
 
 
     def handleCleanerOptionDescription(self, description):
         self.option_description = _(getText(description.childNodes))
-        print "debug: handleCleanerOptionDescription", self.option_description
 
 
     def handleCleanerOptionAction(self, action):
         type = action.getAttribute('type')
         pathname = getText(action.childNodes)
-        print "add action", self.option_id, type, pathname
         if 'children' == type:
             children = boolstr_to_bool(action.getAttribute('directories'))
             self.action.add_list_children(pathname, children)
