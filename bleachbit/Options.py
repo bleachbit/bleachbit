@@ -41,6 +41,8 @@ class Options:
         self.config.read(options_file)
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
+        if not self.config.has_section("hashpath"):
+            self.config.add_section("hashpath")
 
         # set defaults
         self.__set_default("check_online_updates", True)
@@ -96,11 +98,11 @@ class Options:
             self.set(key, value)
 
 
-    def get(self, option):
+    def get(self, option, section = 'bleachbit'):
         """Retrieve a general option"""
         if option in boolean_keys:
-            return self.config.getboolean('bleachbit', option)
-        return self.config.get('bleachbit', option)
+            return self.config.getboolean(section, option)
+        return self.config.get(section, option)
 
 
     def get_language(self, langid):
@@ -127,9 +129,9 @@ class Options:
         return self.config.getboolean('tree', option)
 
 
-    def set(self, key, value):
+    def set(self, key, value, section = 'bleachbit'):
         """Set a general option"""
-        self.config.set('bleachbit', key, str(value))
+        self.config.set(section, key, str(value))
         self.__flush()
 
 

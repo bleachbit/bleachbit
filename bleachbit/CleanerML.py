@@ -132,14 +132,21 @@ class CleanerML:
             self.action.add_list_glob(pathname)
 
 
-def load_cleaners():
-    """Scan for CleanerML and load them"""
+def list_cleanerml_files(local_only = False):
+    """List CleanerML files"""
     cleanerdirs = ( 'cleaners', \
-        '~/.config/bleachbit/cleaners', \
-        '/usr/share/bleachbit/cleaners' )
+        '~/.config/bleachbit/cleaners' )
+    if not local_only:
+        cleanerdirs += ( '/usr/share/bleachbit/cleaners', )
     for pathname in children_in_directory(cleanerdirs):
         if not pathname.endswith('.xml'):
             continue
+        yield pathname
+
+
+def load_cleaners():
+    """Scan for CleanerML and load them"""
+    for pathname in list_cleanerml_files():
         try:
             xmlcleaner = CleanerML(pathname)
         except:
