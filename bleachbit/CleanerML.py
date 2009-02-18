@@ -25,8 +25,6 @@ import os
 import traceback
 import xml.dom.minidom
 
-
-import globals
 import CleanerBackend
 from Action import Action
 from FileUtilities import children_in_directory
@@ -73,11 +71,13 @@ class CleanerML:
 
 
     def handleCleaners(self, cleaners):
+        """<cleaners> element"""
         for cleaner in cleaners.getElementsByTagName('cleaner'):
             self.handleCleaner(cleaner)
 
 
     def handleCleaner(self, cleaner):
+        """<cleaner> element"""
         self.cleaner.id = cleaner.getAttribute('id')
         self.handleCleanerLabel(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
@@ -87,14 +87,17 @@ class CleanerML:
 
 
     def handleCleanerLabel(self, label):
+        """<label> element under <cleaner>"""
         self.cleaner.name = _(getText(label.childNodes))
 
 
     def handleCleanerDescription(self, description):
+        """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
 
 
     def handleCleanerOptions(self, options):
+        """<option> elements"""
         for option in options:
 
             self.action = Action()
@@ -113,14 +116,17 @@ class CleanerML:
 
 
     def handleCleanerOptionLabel(self, label):
+        """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
 
 
     def handleCleanerOptionDescription(self, description):
+        """<description> element under <option>"""
         self.option_description = _(getText(description.childNodes))
 
 
     def handleCleanerOptionAction(self, action):
+        """<action> element under <option>"""
         type = action.getAttribute('type')
         pathname = getText(action.childNodes)
         if 'children' == type:
@@ -163,7 +169,7 @@ def load_cleaners():
 
 
 def pot_fragment(string):
-    """Create a string fragment for generaring .pot files"""
+    """Create a string fragment for generating .pot files"""
     ret = '''# ../cleaners/*xml
 msgid "%s"
 msgstr ""
@@ -199,6 +205,7 @@ class TestCleanerML(unittest.TestCase):
     """Test cases for CleanerML"""
 
     def test_CleanerML(self):
+        """Unit test for class CleanerML"""
         xmlcleaner = CleanerML("cleaner.xml")
 
         self.assert_(isinstance(xmlcleaner, CleanerML))
@@ -210,6 +217,7 @@ class TestCleanerML(unittest.TestCase):
 
         for pathname in xmlcleaner.cleaner.list_files():
             self.assert_(os.path.exists(pathname))
+
 
     def test_create_pot(self):
         """Unit test for create_pot()"""
