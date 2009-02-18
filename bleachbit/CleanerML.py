@@ -141,6 +141,11 @@ def list_cleanerml_files(local_only = False):
     for pathname in children_in_directory(cleanerdirs):
         if not pathname.endswith('.xml'):
             continue
+        import stat
+        st = os.stat(pathname)
+        if stat.S_IMODE(st[stat.ST_MODE]) & 2:
+            print "warning: ignoring cleaner '%s' because it is world writable" % pathname
+            continue
         yield pathname
 
 
