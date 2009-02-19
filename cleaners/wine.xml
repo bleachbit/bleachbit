@@ -19,13 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="wine">
-    <label>WINE</label>
-    <option id="tmp">
-      <label>Temporary files</label>
-      <description>Delete the temporary files</description>
-      <action type="children" directories="false">~/.wine/drive_c/windows/temp/</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="wine">
+  <label>WINE</label>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action type="children" directories="false">~/.wine/drive_c/windows/temp/</action>
+  </option>
+</cleaner>

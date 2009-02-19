@@ -19,14 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="recoll">
-    <label>Recoll</label>
-    <description>Search tool</description>
-    <option id="index">
-      <label>Index</label>
-      <description>Delete the search index, a database of words and the files they contain</description>
-      <action type="children" directories="false">~/.recoll/xapiandb/</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="recoll">
+  <label>Recoll</label>
+  <description>Search tool</description>
+  <option id="index">
+    <label>Index</label>
+    <description>Delete the search index, a database of words and the files they contain</description>
+    <action type="children" directories="false">~/.recoll/xapiandb/</action>
+  </option>
+</cleaner>

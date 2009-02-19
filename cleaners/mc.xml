@@ -19,14 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="midnightcommander">
-    <label>Midnight Commander</label>
-    <description>Visual shell for the console</description>
-    <option id="history">
-      <label>History</label>
-      <description>Delete the usage history</description>
-      <action type="file">~/.mc/history</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="midnightcommander">
+  <label>Midnight Commander</label>
+  <description>Visual shell for the console</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the usage history</description>
+    <action type="file">~/.mc/history</action>
+  </option>
+</cleaner>

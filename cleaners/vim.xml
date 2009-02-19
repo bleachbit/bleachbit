@@ -19,14 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="vim">
-    <label>VIM</label>
-    <description>Editor</description>
-    <option id="history">
-      <label>History</label>
-      <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
-      <action type="file">~/.viminfo</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="vim">
+  <label>VIM</label>
+  <description>Editor</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
+    <action type="file">~/.viminfo</action>
+  </option>
+</cleaner>

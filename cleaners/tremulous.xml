@@ -19,14 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="tremulous">
-    <label>Tremulous</label>
-    <description>Game</description>
-    <option id="cache">
-      <label>Cache</label>
-      <description>Delete the list of game servers</description>
-      <action type="file">~/.tremulous/servercache.dat</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="tremulous">
+  <label>Tremulous</label>
+  <description>Game</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the list of game servers</description>
+    <action type="file">~/.tremulous/servercache.dat</action>
+  </option>
+</cleaner>

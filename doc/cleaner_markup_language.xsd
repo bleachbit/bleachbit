@@ -20,54 +20,48 @@
 
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:element name="cleaners">
+  <xs:element name="cleaner">
     <xs:complexType>
-      <xs:all>
-        <xs:element name="cleaner">
+      <xs:sequence>
+        <xs:element name="label">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="translate" type="xs:boolean" default="false"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="option" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="label">
+              <xs:element name="label" type="xs:string"/>
+              <xs:element name="description" type="xs:string" maxOccurs="1"/>
+              <xs:element name="action" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
-                      <xs:attribute name="translate" type="xs:boolean" default="false"/>
+                      <xs:attribute name="type" use="required">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:string">
+                            <xs:enumeration value="children"/>
+                            <xs:enumeration value="glob"/>
+                            <xs:enumeration value="file"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
+                      <xs:attribute name="directories" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-              <xs:element name="option" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="label" type="xs:string"/>
-                    <xs:element name="description" type="xs:string" maxOccurs="1"/>
-                    <xs:element name="action" maxOccurs="unbounded">
-                      <xs:complexType>
-                        <xs:simpleContent>
-                          <xs:extension base="xs:string">
-                            <xs:attribute name="type" use="required">
-                              <xs:simpleType>
-                                <xs:restriction base="xs:string">
-                                  <xs:enumeration value="children"/>
-                                  <xs:enumeration value="glob"/>
-                                  <xs:enumeration value="file"/>
-                                </xs:restriction>
-                              </xs:simpleType>
-                            </xs:attribute>
-                            <xs:attribute name="directories" type="xs:string"/>
-                          </xs:extension>
-                        </xs:simpleContent>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:attribute name="id" type="xs:string" use="required"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
           </xs:complexType>
         </xs:element>
-      </xs:all>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

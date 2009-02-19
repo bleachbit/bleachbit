@@ -19,52 +19,50 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="unique_id">
-    <!-- The label is the application name such as Bash or GIMP.
+<cleaner id="unique_id">
+  <!-- The label is the application name such as Bash or GIMP.
          Use the same capitialization as the application uses to
          refer to itself. By default, this is the only string
          that is not translated.  To translate it, set
          the attribute translate="true". -->
-    <label>Application name</label>
-    <!-- Include a brief description of the application such as
+  <label>Application name</label>
+  <!-- Include a brief description of the application such as
          'web browser' or 'game.'  Where possible, use the same
          description as another cleaner to avoid unnecessary
          translations.  If the description is unavailable, omit
          the whole element. -->
-    <description>Description of the application</description>
-    <!-- A cleaner has one or more options.  If the actions
+  <description>Description of the application</description>
+  <!-- A cleaner has one or more options.  If the actions
          change significantly, you may change the option ID to
          avoid causing the user to deleting files unintentionally. -->
-    <option id="unique_id">
-      <!-- The option label must be specific and should quickly give
+  <option id="unique_id">
+    <!-- The option label must be specific and should quickly give
            the user the jist of what the action does.  Where possible,
            use the same description as another cleaner to avoid
            unnecessary translations.  Good option labels include
            "logs," "cache," and "cookies." -->
-      <label>Cleaning action</label>
-      <!-- The description precises describes what will happen.  It
+    <label>Cleaning action</label>
+    <!-- The description precises describes what will happen.  It
            should begin with a verb such as "delete." -->
-      <description>Delete the web cache, which reduces time to display revisited pages</description>
-      <!-- An option has one or more actions.  
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <!-- An option has one or more actions.  
 
            There are three different types of actions.  In each case,
            you should make the pattern as specific as possible to
            avoid deleting files unintentionally.
 
            type="file" deletes a single file -->
-      <action type="file">/tmp/secret.log</action>
-      <!-- type="children" deletes all files under the directory (but
+    <action type="file">/tmp/secret.log</action>
+    <!-- type="children" deletes all files under the directory (but
            not the parent).  In this case, the attribute 'directories'
            is required to specify whether to delete directories too
            (or if false, leave the directories empty). -->
-      <action type="children" directories="false">/var/tmp/</action>
-      <!-- type="glob" deletes all pathnames matching the shell glob
+    <action type="children" directories="false">/var/tmp/</action>
+    <!-- type="glob" deletes all pathnames matching the shell glob
            pattern described in the Python documentation.
            http://www.python.org/doc/2.5.2/lib/module-glob.html -->
-      <action type="glob">/tmp/*.bak</action>
-      <action type="glob">/var/log/*.[0-9].gz</action>
-      <action type="glob">/tmp/?.bak</action>
-    </option>
-  </cleaner>
-</cleaners>
+    <action type="glob">/tmp/*.bak</action>
+    <action type="glob">/var/log/*.[0-9].gz</action>
+    <action type="glob">/tmp/?.bak</action>
+  </option>
+</cleaner>

@@ -19,14 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="adobereader">
-    <label>Adobe Reader</label>
-    <option id="cache">
-      <label>Cache</label>
-      <description>Delete the cache</description>
-      <action type="children" directories="false">~/.adobe/Acrobat/7.0/Cache</action>
-      <action type="children" directories="false">~/.adobe/Acrobat/8.0/Cache</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="adobereader">
+  <label>Adobe Reader</label>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action type="children" directories="false">~/.adobe/Acrobat/7.0/Cache</action>
+    <action type="children" directories="false">~/.adobe/Acrobat/8.0/Cache</action>
+  </option>
+</cleaner>

@@ -19,13 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="java">
-    <label>Java</label>
-    <option id="Cache">
-      <label>Cache</label>
-      <description>Delete the cache</description>
-      <action type="children" directories="false">~/.java/deployment/cache</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="java">
+  <label>Java</label>
+  <option id="Cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action type="children" directories="false">~/.java/deployment/cache</action>
+  </option>
+</cleaner>

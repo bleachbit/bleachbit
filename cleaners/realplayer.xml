@@ -19,13 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="realplayer">
-    <label>RealPlayer</label>
-    <option id="cookies">
-      <label>Cookies</label>
-      <description>Delete the cookies</description>
-      <action type="file">~/.config/real/rpcookies.txt</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="realplayer">
+  <label>RealPlayer</label>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete the cookies</description>
+    <action type="file">~/.config/real/rpcookies.txt</action>
+  </option>
+</cleaner>

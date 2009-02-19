@@ -69,18 +69,12 @@ class CleanerML:
 
         dom = xml.dom.minidom.parse(pathname)
 
-        self.handle_cleaners(dom.getElementsByTagName('cleaners')[0])
+        self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])
 
 
     def get_cleaner(self):
         """Return the created cleaner"""
         return self.cleaner
-
-
-    def handle_cleaners(self, cleaners):
-        """<cleaners> element"""
-        for cleaner in cleaners.getElementsByTagName('cleaner'):
-            self.handle_cleaner(cleaner)
 
 
     def handle_cleaner(self, cleaner):

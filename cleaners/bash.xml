@@ -19,13 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="bash">
-    <label>Bash</label>
-    <option id="history">
-      <label>History</label>
-      <description>Delete the command history</description>
-      <action type="file">~/.bash_history</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="bash">
+  <label>Bash</label>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the command history</description>
+    <action type="file">~/.bash_history</action>
+  </option>
+</cleaner>

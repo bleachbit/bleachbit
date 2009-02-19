@@ -19,17 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="elinks">
-    <label>ELinks</label>
-    <description>Web browser</description>
-    <option id="history">
-      <label>History</label>
-      <description>Delete the cookies, visited URLs, and search history</description>
-      <action type="file">~/.elinks/cookies</action>
-      <action type="file">~/.elinks/globhist</action>
-      <action type="file">~/.elinks/gotohist</action>
-      <action type="file">~/.elinks/searchhist</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="elinks">
+  <label>ELinks</label>
+  <description>Web browser</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the cookies, visited URLs, and search history</description>
+    <action type="file">~/.elinks/cookies</action>
+    <action type="file">~/.elinks/globhist</action>
+    <action type="file">~/.elinks/gotohist</action>
+    <action type="file">~/.elinks/searchhist</action>
+  </option>
+</cleaner>

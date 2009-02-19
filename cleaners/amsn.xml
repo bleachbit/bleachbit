@@ -19,15 +19,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaners>
-  <cleaner id="amsn">
-    <label>amsn</label>
-    <description>Chat client</description>
-    <option id="logs">
-      <label>Chat logs</label>
-      <description>Delete the chat logs</description>
-      <action type="glob">~/.amsn/*/logs/date</action>
-      <action type="glob">~/.amsn/*/logs/*log</action>
-    </option>
-  </cleaner>
-</cleaners>
+<cleaner id="amsn">
+  <label>amsn</label>
+  <description>Chat client</description>
+  <option id="logs">
+    <label>Chat logs</label>
+    <description>Delete the chat logs</description>
+    <action type="glob">~/.amsn/*/logs/date</action>
+    <action type="glob">~/.amsn/*/logs/*log</action>
+  </option>
+</cleaner>
