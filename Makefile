@@ -47,6 +47,7 @@ install:
 	make -C po install DESTDIR=$(DESTDIR)
 
 tests:
+	make -C cleaners tests
 	cd bleachbit && \
 	for f in `grep -l unittest *py`; \
 	do \
