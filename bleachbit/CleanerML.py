@@ -62,7 +62,7 @@ class CleanerML:
 
         dom = xml.dom.minidom.parse(pathname)
 
-        self.handleCleaners(dom.getElementsByTagName('cleaners')[0])
+        self.handle_cleaners(dom.getElementsByTagName('cleaners')[0])
 
 
     def getCleaner(self):
@@ -70,62 +70,62 @@ class CleanerML:
         return self.cleaner
 
 
-    def handleCleaners(self, cleaners):
+    def handle_cleaners(self, cleaners):
         """<cleaners> element"""
         for cleaner in cleaners.getElementsByTagName('cleaner'):
-            self.handleCleaner(cleaner)
+            self.handle_cleaner(cleaner)
 
 
-    def handleCleaner(self, cleaner):
+    def handle_cleaner(self, cleaner):
         """<cleaner> element"""
         self.cleaner.id = cleaner.getAttribute('id')
-        self.handleCleanerLabel(cleaner.getElementsByTagName('label')[0])
+        self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
         if description:
-            self.handleCleanerDescription(description[0])
-        self.handleCleanerOptions(cleaner.getElementsByTagName('option'))
+            self.handle_cleaner_description(description[0])
+        self.handle_cleaner_options(cleaner.getElementsByTagName('option'))
 
 
-    def handleCleanerLabel(self, label):
+    def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
         self.cleaner.name = _(getText(label.childNodes))
 
 
-    def handleCleanerDescription(self, description):
+    def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
 
 
-    def handleCleanerOptions(self, options):
+    def handle_cleaner_options(self, options):
         """<option> elements"""
         for option in options:
 
             self.action = Action()
             self.option_id = option.getAttribute('id')
 
-            self.handleCleanerOptionLabel(option.getElementsByTagName('label')[0])
+            self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
             description = option.getElementsByTagName('description')
             if description:
-                self.handleCleanerOptionDescription(description[0])
+                self.handle_cleaner_option_description(description[0])
 
             for action in option.getElementsByTagName('action'):
-                self.handleCleanerOptionAction(action)
+                self.handle_cleaner_option_action(action)
 
             self.cleaner.add_option(self.option_id, self.option_name, self.option_description)
             self.cleaner.add_action(self.option_id, self.action)
 
 
-    def handleCleanerOptionLabel(self, label):
+    def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
 
 
-    def handleCleanerOptionDescription(self, description):
+    def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
         self.option_description = _(getText(description.childNodes))
 
 
-    def handleCleanerOptionAction(self, action):
+    def handle_cleaner_option_action(self, action):
         """<action> element under <option>"""
         type = action.getAttribute('type')
         pathname = getText(action.childNodes)
