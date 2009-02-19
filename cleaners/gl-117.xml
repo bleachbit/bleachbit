@@ -19,13 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-
 <cleaners>
   <cleaner id="gl-117">
     <label>GL-117</label>
     <description>Game</description>
     <option id="log">
-      <label>Log</label>
+      <label>Debug log</label>
       <action type="file">~/.gl-117/logfile.txt</action>
     </option>
   </cleaner>

@@ -23,7 +23,7 @@
   <cleaner id="wine">
     <label>WINE</label>
     <option id="tmp">
-      <label>temporary files</label>
+      <label>Temporary files</label>
       <action type="children" directories="false">~/.wine/drive_c/windows/temp/</action>
     </option>
   </cleaner>
