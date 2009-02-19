@@ -65,7 +65,7 @@ class CleanerML:
         self.handle_cleaners(dom.getElementsByTagName('cleaners')[0])
 
 
-    def getCleaner(self):
+    def get_cleaner(self):
         """Return the created cleaner"""
         return self.cleaner
 
@@ -166,7 +166,7 @@ def load_cleaners():
             print "Error reading file '%s'" % pathname
             traceback.print_exc()
         else:
-            cleaner = xmlcleaner.getCleaner()
+            cleaner = xmlcleaner.get_cleaner()
             CleanerBackend.backends[cleaner.id] = cleaner
 
 
@@ -192,7 +192,7 @@ def create_pot():
         except:
             print "error reading '%s'" % pathname
         else:
-            cleaner = xmlcleaner.getCleaner()
+            cleaner = xmlcleaner.get_cleaner()
             cleaners += ( ( cleaner, ) )
 
     strings = []
