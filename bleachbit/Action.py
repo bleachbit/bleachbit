@@ -55,7 +55,6 @@ class Action:
         """List files by previously-defined actions 
         (those actions which list files for deletion)"""
         for action in self.actions:
-            print "action=", action
             action_type = action[0]
             action_path = action[1]
             if 'list_children' == action_type:
