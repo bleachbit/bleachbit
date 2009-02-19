@@ -127,15 +127,17 @@ class CleanerML:
 
     def handle_cleaner_option_action(self, action):
         """<action> element under <option>"""
-        type = action.getAttribute('type')
+        atype = action.getAttribute('type')
         pathname = getText(action.childNodes)
-        if 'children' == type:
+        if 'children' == atype:
             children = boolstr_to_bool(action.getAttribute('directories'))
             self.action.add_list_children(pathname, children)
-        if 'file' == type:
+        elif 'file' == atype:
             self.action.add_list_file(pathname)
-        if 'glob' == type:
+        elif 'glob' == atype:
             self.action.add_list_glob(pathname)
+        else:
+            raise RuntimeError("Invalid action type '%s'" % atype)
 
 
 def list_cleanerml_files(local_only = False):
@@ -183,9 +185,15 @@ def create_pot():
     cleaners = []
 
     for pathname in children_in_directory('../cleaners'):
-        xmlcleaner = CleanerML(pathname)
-        cleaner = xmlcleaner.getCleaner()
-        cleaners += ( ( cleaner, ) )
+        if not pathname.lower().endswith(".xml"):
+            continue
+        try:
+            xmlcleaner = CleanerML(pathname)
+        except:
+            print "error reading '%s'" % pathname
+        else:
+            cleaner = xmlcleaner.getCleaner()
+            cleaners += ( ( cleaner, ) )
 
     strings = []
 
@@ -206,7 +214,7 @@ class TestCleanerML(unittest.TestCase):
 
     def test_CleanerML(self):
         """Unit test for class CleanerML"""
-        xmlcleaner = CleanerML("cleaner.xml")
+        xmlcleaner = CleanerML("../doc/example_cleaner.xml")
 
         self.assert_(isinstance(xmlcleaner, CleanerML))
         self.assert_(isinstance(xmlcleaner.cleaner, CleanerBackend.Cleaner))
@@ -219,9 +227,37 @@ class TestCleanerML(unittest.TestCase):
             self.assert_(os.path.exists(pathname))
 
 
+
+    def test_boolstr_to_bool(self):
+        """Unit test for boolstr_to_bool()"""
+        tests = [ ('True', True), \
+            ('False', False) ]
+
+        for (arg, output) in tests:
+            self.assertEqual(boolstr_to_bool(arg), output)
+            self.assertEqual(boolstr_to_bool(arg.lower()), output)
+            self.assertEqual(boolstr_to_bool(arg.upper()), output)
+
+
     def test_create_pot(self):
         """Unit test for create_pot()"""
         create_pot()
+
+
+    def test_list_cleanerml_files(self):
+        """Unit test for list_cleanerml_files()"""
+        for pathname in list_cleanerml_files():
+            self.assert_(os.path.exists(pathname))
+
+
+    def test_load_cleaners(self):
+        """Unit test for load_cleaners()"""
+        load_cleaners()
+
+
+    def test_pot_fragment(self):
+        """Unit test for pot_fragment()"""
+        self.assert_(type(pot_fragment("Foo")) is str)
 
 
 if __name__ == '__main__':
