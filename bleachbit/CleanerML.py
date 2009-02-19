@@ -51,14 +51,21 @@ def boolstr_to_bool(value):
 class CleanerML:
     """Create a cleaner from CleanerML"""
 
-    def __init__(self, pathname):
-        """Create cleaner from XML in pathname"""
+    def __init__(self, pathname, xlate_cb = None):
+        """Create cleaner from XML in pathname.
+
+        If xlate_cb is set, use it as a callback for each
+        translate-able string.
+        """
 
         self.action = None
         self.cleaner = CleanerBackend.Cleaner()
         self.option_id = None
         self.option_name = None
         self.option_description = None
+        self.xlate_cb = xlate_cb
+        if None == self.xlate_cb:
+            self.xlate_cb = lambda x: None # do nothing
 
         dom = xml.dom.minidom.parse(pathname)
 
@@ -89,11 +96,15 @@ class CleanerML:
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
         self.cleaner.name = _(getText(label.childNodes))
+        translate = label.getAttribute('translate')
+        if translate and boolstr_to_bool(translate):
+            self.xlate_cb(self.cleaner.name)
 
 
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
+        self.xlate_cb(self.cleaner.description)
 
 
     def handle_cleaner_options(self, options):
@@ -118,11 +129,13 @@ class CleanerML:
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
+        self.xlate_cb(self.option_name)
 
 
     def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
         self.option_description = _(getText(description.childNodes))
+        self.xlate_cb(self.option_description)
 
 
     def handle_cleaner_option_action(self, action):
@@ -182,27 +195,22 @@ msgstr ""
 
 def create_pot():
     """Create a .pot for translation using gettext"""
+
     cleaners = []
+    strings = []
 
     for pathname in children_in_directory('../cleaners'):
         if not pathname.lower().endswith(".xml"):
             continue
         try:
-            xmlcleaner = CleanerML(pathname)
+            xmlcleaner = CleanerML(pathname, \
+                lambda newstr: strings.append(newstr))
         except:
             print "error reading '%s'" % pathname
-        else:
-            cleaner = xmlcleaner.get_cleaner()
-            cleaners += ( ( cleaner, ) )
-
-    strings = []
-
-    for cleaner in cleaners:
-        strings += ( cleaner.get_name(), )
-        strings += ( cleaner.get_description(), )
+            traceback.print_exc()
 
     f = open('../po/cleanerml.pot', 'w')
-    for string in strings:
+    for string in sorted(set(strings)):
         f.write(pot_fragment(string))
     f.close()
 
