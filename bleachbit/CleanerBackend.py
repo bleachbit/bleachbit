@@ -104,27 +104,6 @@ class Cleaner:
             value, self.options[option_id][2])
 
 
-class Beagle(Cleaner):
-    """Beagle"""
-
-    def get_description(self):
-        return _("Delete Beagle indexes and logs")
-
-    def get_id(self):
-        return 'beagle'
-
-    def get_name(self):
-        return "Beagle"
-
-    def list_files(self):
-        dirs = [ "~/.beagle/Indexes", "~/.beagle/Log", "~/.beagle/TextCache" ]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename
-
-
 class Epiphany(Cleaner):
     """Epiphany"""
 
@@ -781,24 +760,6 @@ class Transmission(Cleaner):
                 yield filename
 
 
-class VIM(Cleaner):
-    """VIM (Vi IMproved)"""
-
-    def get_description(self):
-        return _("Delete ~/.viminfo which includes VIM file history, command history, and buffers")
-
-    def get_id(self):
-        return 'vim'
-
-    def get_name(self):
-        return "VIM"
-
-    def list_files(self):
-        path = os.path.expanduser("~/.viminfo")
-        if os.path.lexists(path):
-            yield path
-
-
 class winetricks(Cleaner):
     """Delete contents of the winetricks temp folders"""
 
@@ -845,7 +806,6 @@ class XChat(Cleaner):
                 yield filename
 
 backends = {}
-backends["beagle"] = Beagle()
 backends["epiphany"] = Epiphany()
 backends["exaile"] = Exaile()
 backends["firefox"] = Firefox()
@@ -860,7 +820,6 @@ backends["skype"] = Skype()
 backends["system"] = System()
 backends["thumbnails"] = Thumbnails()
 backends["transmission"] = Transmission()
-backends["vim"] = VIM()
 backends["winetricks"] = winetricks()
 backends["xchat"] = XChat()
 
