@@ -222,6 +222,23 @@ def human_to_bytes(string):
     return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
 
 
+def listdir(directory):
+    """Return full path of files in directory.
+
+    Path may be a tuple of directories."""
+
+    if type(directory) is tuple:
+        for dir in directory:
+            for pathname in listdir(dir):
+                yield pathname
+        return
+    dir = os.path.expanduser(directory)
+    if not os.path.lexists(dir):
+        return
+    for filename in os.listdir(dir):
+        yield os.path.join(dir, filename)
+
+
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
@@ -443,6 +460,14 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for method globex()"""
         for path in globex('/bin/*', '/ls$'):
             self.assertEqual(path, '/bin/ls')
+
+
+    def test_listdir(self):
+        """Unit test for listdir()"""
+        for pathname in listdir(('/tmp','~/.config/')):
+            self.assert_(os.path.lexists(pathname), \
+                "does not exist: %s" % pathname)
+
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

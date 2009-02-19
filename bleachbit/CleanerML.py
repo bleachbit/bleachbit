@@ -27,7 +27,7 @@ import xml.dom.minidom
 
 import CleanerBackend
 from Action import Action
-from FileUtilities import children_in_directory
+from FileUtilities import listdir
 
 
 def getText(nodelist):
@@ -107,11 +107,12 @@ class CleanerML:
 
             self.action = Action()
             self.option_id = option.getAttribute('id')
+            self.option_description = None
+            self.option_name = None
 
             self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
             description = option.getElementsByTagName('description')
-            if description:
-                self.handle_cleaner_option_description(description[0])
+            self.handle_cleaner_option_description(description[0])
 
             for action in option.getElementsByTagName('action'):
                 self.handle_cleaner_option_action(action)
@@ -153,8 +154,8 @@ def list_cleanerml_files(local_only = False):
         '~/.config/bleachbit/cleaners' )
     if not local_only:
         cleanerdirs += ( '/usr/share/bleachbit/cleaners', )
-    for pathname in children_in_directory(cleanerdirs):
-        if not pathname.endswith('.xml'):
+    for pathname in listdir(cleanerdirs):
+        if not pathname.lower().endswith('.xml'):
             continue
         import stat
         st = os.stat(pathname)
@@ -193,7 +194,7 @@ def create_pot():
     cleaners = []
     strings = []
 
-    for pathname in children_in_directory('../cleaners'):
+    for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):
             continue
         try:
