@@ -24,6 +24,7 @@
     <label>Java</label>
     <option id="Cache">
       <label>Cache</label>
+      <description>Delete the cache</description>
       <action type="children" directories="false">~/.java/deployment/cache</action>
     </option>
   </cleaner>

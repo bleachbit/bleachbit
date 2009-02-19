@@ -24,16 +24,19 @@
     <label>Vuze</label>
     <option id="cache">
       <label>Cache</label>
+      <description>Delete the cache</description>
       <action type="file">~/.azureus/ipfilter.cache</action>
     </option>
     <option id="logs">
       <label>Logs</label>
+      <description>Delete the logs</description>
       <action type="children" directories="true">~/.azureus/logs/</action>
       <action type="file">~/.azureus/update.log</action>
       <action type="file">~/.azureus/tracker.log</action>
     </option>
     <option id="tmp">
       <label>Temporary files</label>
+      <description>Delete the temporary files</description>
       <action type="children" directories="false">~/.azureus/tmp/</action>
     </option>
   </cleaner>

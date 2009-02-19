@@ -43,10 +43,9 @@
            unnecessary translations.  Good option labels include
            "logs," "cache," and "cookies." -->
       <label>Cleaning action</label>
-      <!-- If the label is not precise, describe what the actions do
-           in this description.  If the description is not necessary,
-           omit the whole element. -->
-      <description>Web cache reduces time to display revisited pages</description>
+      <!-- The description precises describes what will happen.  It
+           should begin with a verb such as "delete." -->
+      <description>Delete the web cache, which reduces time to display revisited pages</description>
       <!-- An option has one or more actions.  
 
            There are three different types of actions.  In each case,

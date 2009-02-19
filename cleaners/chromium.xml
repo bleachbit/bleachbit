@@ -25,22 +25,23 @@
     <description>Web browser</description>
     <option id="cache">
       <label>Cache</label>
-      <description>Web cache reduces time to display revisited pages</description>
+      <description>Delete the web cache, which reduces time to display revisited pages</description>
       <action type="children" directories="false">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache</action>
     </option>
     <option id="cookies">
       <label>Cookies</label>
-      <description>HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification</description>
+      <description>Delete the HTTP cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
       <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cookies</action>
     </option>
     <option id="history">
       <label>History</label>
-      <description>Includes bookmarks, downloads, and visited sites</description>
+      <description>Delete the history, which includes bookmarks, downloads, and visited sites</description>
       <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History</action>
       <action type="glob">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*</action>
     </option>
     <option id="current_session">
       <label>Current session</label>
+      <description>Delete the current session</description>
       <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Current Session</action>
     </option>
   </cleaner>

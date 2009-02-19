@@ -25,14 +25,17 @@
     <description>Search tool</description>
     <option id="cache">
       <label>Cache</label>
+      <description>Delete the cache</description>
       <action type="children" directories="false">~/.beagle/TextCache</action>
     </option>
     <option id="indexes">
-      <label>search indexes</label>
+      <label>Search indexes</label>
+      <description>Delete the search indexes</description>
       <action type="children" directories="true">~/.beagle/Indexes</action>
     </option>
     <option id="logs">
       <label>Debug logs</label>
+      <description>Delete the debug logs</description>
       <action type="children" directories="false">~/.beagle/Log</action>
     </option>
   </cleaner>

@@ -25,6 +25,7 @@
     <description>Chat client</description>
     <option id="logs">
       <label>Chat logs</label>
+      <description>Delete the chat logs</description>
       <action type="glob">~/.config/emesene1.0/*/logs/*</action>
       <action type="glob">~/.config/emesene2/*/log</action>
       <action type="glob">~/.config/emesene2/*/log-journal</action>

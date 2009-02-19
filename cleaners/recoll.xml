@@ -25,7 +25,7 @@
     <description>Search tool</description>
     <option id="index">
       <label>Index</label>
-      <description>Database of words and the files they contain</description>
+      <description>Delete the search index, a database of words and the files they contain</description>
       <action type="children" directories="false">~/.recoll/xapiandb/</action>
     </option>
   </cleaner>

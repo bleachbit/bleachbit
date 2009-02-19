@@ -25,6 +25,7 @@
     <description>Chat client</description>
     <option id="logs">
       <label>Chat logs</label>
+      <description>Delete the chat logs</description>
       <action type="glob">~/.amsn/*/logs/date</action>
       <action type="glob">~/.amsn/*/logs/*log</action>
     </option>

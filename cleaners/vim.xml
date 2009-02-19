@@ -25,7 +25,7 @@
     <description>Editor</description>
     <option id="history">
       <label>History</label>
-      <description>~/.viminfo which includes file history, command history, and buffers</description>
+      <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
       <action type="file">~/.viminfo</action>
     </option>
   </cleaner>

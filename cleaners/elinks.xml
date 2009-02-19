@@ -25,7 +25,7 @@
     <description>Web browser</description>
     <option id="history">
       <label>History</label>
-      <description>Cookies, visited URLs, and search history</description>
+      <description>Delete the cookies, visited URLs, and search history</description>
       <action type="file">~/.elinks/cookies</action>
       <action type="file">~/.elinks/globhist</action>
       <action type="file">~/.elinks/gotohist</action>

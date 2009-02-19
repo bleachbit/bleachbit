@@ -25,10 +25,12 @@
     <description>Game</description>
     <option id="Cache">
       <label>Cache</label>
+      <description>Delete the cache</description>
       <action type="children" directories="false">~/.secondlife/cache/</action>
     </option>
     <option id="Logs">
-      <label>Logs</label>
+      <label>Debug logs</label>
+      <description>Delete the debug logs</description>
       <action type="children" directories="false">~/.secondlife/logs/</action>
     </option>
   </cleaner>

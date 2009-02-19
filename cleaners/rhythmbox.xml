@@ -19,13 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-
 <cleaners>
   <cleaner id="rhythmbox">
     <label>Rhythmbox</label>
     <option id="online_databases">
       <label>Online databases</label>
-      <description>Cache of Jamendo and Mangatune databases</description>
+      <description>Delete the cache of Jamendo and Mangatune databases</description>
       <action type="children" directories="false">~/.gnome2/rhythmbox/jamendo/</action>
       <action type="children" directories="false">~/.gnome2/rhythmbox/magnatune/</action>
     </option>

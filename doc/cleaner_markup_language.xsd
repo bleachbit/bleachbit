@@ -40,7 +40,7 @@
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="label" type="xs:string"/>
-                    <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="description" type="xs:string" maxOccurs="1"/>
                     <xs:element name="action" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:simpleContent>
