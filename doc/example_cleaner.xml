@@ -23,7 +23,9 @@
   <cleaner id="unique_id">
     <!-- The label is the application name such as Bash or GIMP.
          Use the same capitialization as the application uses to
-         refer to itself. -->
+         refer to itself. By default, this is the only string
+         that is not translated.  To translate it, set
+         the attribute translate="true". -->
     <label>Application name</label>
     <!-- Include a brief description of the application such as
          'web browser' or 'game.'  Where possible, use the same
