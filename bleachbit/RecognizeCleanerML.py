@@ -21,10 +21,19 @@
 Check local CleanerML files as a security measure
 """
 
-import hashlib
 import os
 import random
 import ConfigParser
+
+try:
+    import hashlib
+except:
+    HAVE_HASHLIB = False
+    import md5
+    import sha
+else:
+    HAVE_HASHLIB = True
+
 
 import pygtk
 pygtk.require('2.0')
@@ -67,6 +76,18 @@ def cleaner_change_dialog(pathname, status, parent):
     return ret
 
 
+def hashdigest(string):
+    """Return hex digest of hash for a string"""
+
+    if HAVE_HASHLIB:
+        # Python 2.5 to 2.6
+        return hashlib.sha512(string).hexdigest()
+    else:
+        # Python 2.4
+        return md5.new(string).hexdigest() + \
+            sha.new(string).hexdigest()
+
+
 class RecognizeCleanerML:
     """Check local CleanerML files as a security measure"""
     def __init__(self, parent_window = None):
@@ -74,7 +95,7 @@ class RecognizeCleanerML:
         try:
             self.salt = options.get('hashsalt')
         except ConfigParser.NoOptionError, e:
-            self.salt = hashlib.sha512(str(random.random())).hexdigest()
+            self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.new_hash = None
         self.__scan()
@@ -83,7 +104,7 @@ class RecognizeCleanerML:
     def __recognized(self, pathname):
         """Is pathname recognized?"""
         body = file(pathname).read()
-        self.new_hash = hashlib.sha512(self.salt + body).hexdigest()
+        self.new_hash = hashdigest(self.salt + body).hexdigest()
         try:
             known_hash = options.get(pathname, 'hashpath')
         except ConfigParser.NoOptionError, e:
@@ -107,3 +128,24 @@ class RecognizeCleanerML:
                     os.remove(pathname)
                 else:
                     options.set(pathname, self.new_hash, 'hashpath')
+
+
+import unittest
+
+class TestRecognizeCleanerML(unittest.TestCase):
+    """Test cases for RecognizeCleanerML"""
+
+    def test_hash(self):
+        """Unit test for hash()"""
+        digest = hashdigest('bleachbit')
+        if HAVE_HASHLIB:
+            self.assertEqual(len(digest), 128)
+            self.assertEqual(digest[1:10], '6382c203e')
+        else:
+            self.assertEqual(len(digest), 72)
+            self.assertEqual(digest[1:10], '0d4a3172f')
+
+
+if __name__ == '__main__':
+    unittest.main()
+
