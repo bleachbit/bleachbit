@@ -104,7 +104,7 @@ class RecognizeCleanerML:
     def __recognized(self, pathname):
         """Is pathname recognized?"""
         body = file(pathname).read()
-        self.new_hash = hashdigest(self.salt + body).hexdigest()
+        self.new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get(pathname, 'hashpath')
         except ConfigParser.NoOptionError, e:
