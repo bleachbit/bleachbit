@@ -20,14 +20,18 @@
 
 
 from gettext import gettext as _
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
 import os
 import sys
 import threading
 import traceback
+import warnings
+
+warnings.simplefilter('error')
+import pygtk
+pygtk.require('2.0')
+import gtk
+import gobject
+warnings.simplefilter('default')
 
 import FileUtilities
 import Update
@@ -695,8 +699,6 @@ class GUI:
             gobject.idle_add(self.enable_online_update, update.get_update_info_url())
 
     def __init__(self):
-        if None == os.getenv('DISPLAY'):
-            sys.exit(_('Bleachbit requires a graphical display'))
         import RecognizeCleanerML
         rcml = RecognizeCleanerML.RecognizeCleanerML()
         import CleanerML
