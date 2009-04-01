@@ -695,6 +695,8 @@ class GUI:
             gobject.idle_add(self.enable_online_update, update.get_update_info_url())
 
     def __init__(self):
+        if None == os.getenv('DISPLAY'):
+            sys.exit(_('Bleachbit requires a graphical display'))
         import RecognizeCleanerML
         rcml = RecognizeCleanerML.RecognizeCleanerML()
         import CleanerML
