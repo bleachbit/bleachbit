@@ -447,7 +447,8 @@ def rotated_logs():
     regex = '-[0-9]{8}$'
     globpaths = ( '/var/log/*-*', '/var/log/*/*-*' )
     for path in FileUtilities.globex(globpaths, regex):
-        yield path
+        if not path.startswith("/var/log/removed_"): # for Slackware, Launchpad #367575
+            yield path
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
