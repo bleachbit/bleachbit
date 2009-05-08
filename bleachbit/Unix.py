@@ -447,7 +447,8 @@ def rotated_logs():
     regex = '-[0-9]{8}$'
     globpaths = ( '/var/log/*-*', '/var/log/*/*-*' )
     for path in FileUtilities.globex(globpaths, regex):
-        if not path.startswith("/var/log/removed_"): # for Slackware, Launchpad #367575
+        whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
+        if None == re.match(whitelist_re, path): # for Slackware, Launchpad #367575
             yield path
 
 
