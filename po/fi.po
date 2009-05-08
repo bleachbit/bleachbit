@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-02-18 23:20-0700\n"
-"PO-Revision-Date: 2009-04-05 20:53+0000\n"
+"PO-Revision-Date: 2009-04-17 14:12+0000\n"
 "Last-Translator: papukaija <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-04-12 00:08+0000\n"
+"X-Launchpad-Export-Date: 2009-05-07 14:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
@@ -100,14 +100,17 @@ msgid "Delete the temporary files"
 msgstr "Poista väliaikaiset tiedostot"
 
 msgid "Delete the usage history"
-msgstr ""
+msgstr "Poista käyttö historia"
 
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
+"Poista webhistoria, joka nopeuttaa jo vierailtujen sivujen näyttämistä"
 
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"Poista ~/.viminfo, joka sisätää tiedosto historian, komentojen historian ja "
+"välimuistin"
 
 msgid "Editor"
 msgstr "Muokkaaja"
@@ -137,23 +140,13 @@ msgstr "Haku työkalu"
 msgid "Temporary files"
 msgstr "Väliaikaiset tiedostot"
 
-msgid "Visual shell for the console"
-msgstr ""
-
 msgid "Web browser"
 msgstr "Web selain"
 
 #: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
 #: ../bleachbit/CleanerBackend.py:503
 msgid "Web cache reduces time to display revisited pages"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
-msgid ""
-"HTTP cookies contain information such as web site prefereneces, "
-"authentication, and tracking identification"
-msgstr ""
+msgstr "Webhistoria, joka nopeuttaa jo vierailtujen sivujen näyttämistä"
 
 #: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
 msgid "Download history"
@@ -167,36 +160,46 @@ msgstr "Lista ladatuista tiedostoista"
 msgid "Passwords"
 msgstr "Salasanat"
 
+#: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:171
+msgid "Places"
+msgstr "Sijainnint"
+
+#: ../bleachbit/CleanerBackend.py:119
+msgid "Epiphany web browser"
+msgstr "Epiphany web-selain"
+
+#: ../bleachbit/CleanerBackend.py:168
+msgid "Form history"
+msgstr "Lomakehistoria"
+
+#: ../bleachbit/CleanerBackend.py:169
+msgid "Session restore"
+msgstr "Istunnon palautus"
+
+msgid "Visual shell for the console"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
+#: ../bleachbit/CleanerBackend.py:504
+msgid ""
+"HTTP cookies contain information such as web site prefereneces, "
+"authentication, and tracking identification"
+msgstr ""
+
 #: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:171
-msgid "Places"
-msgstr "Sijainnint"
-
 #: ../bleachbit/CleanerBackend.py:116
 msgid ""
 "A database of URLs including bookmarks and a history of visited web sites"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:119
-msgid "Epiphany web browser"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:168
-msgid "Form history"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:168
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:169
-msgid "Session restore"
-msgstr "Istunnon palautus"
 
 #: ../bleachbit/CleanerBackend.py:169
 msgid "Loads the initial session after the browser closes or crashes"
