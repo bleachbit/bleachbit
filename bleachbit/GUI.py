@@ -21,9 +21,7 @@
 
 from gettext import gettext as _
 import os
-import sys
 import threading
-import traceback
 import warnings
 
 warnings.simplefilter('error')
@@ -33,7 +31,6 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-import FileUtilities
 import Update
 from CleanerBackend import backends
 from Options import options
@@ -396,115 +393,19 @@ class GUI:
         self.preview_or_run_operations(True)
 
 
-    def clean_pathname(self, pathname, really_delete, __iter):
-        """Clean a single pathname"""
-        total_bytes = 0
-        try:
-            bytes = FileUtilities.getsize(pathname)
-        except:
-            traceback.print_exc()
-            print "debug: error getting size of '%s'" % (pathname,)
-        else:
-            tag = None
-            try:
-                if really_delete:
-                    FileUtilities.delete(pathname)
-            except:
-                traceback.print_exc()
-                line = str(sys.exc_info()[1]) + " " + pathname + "\n"
-                tag = 'error'
-            else:
-                total_bytes += bytes
-                line = FileUtilities.bytes_to_human(bytes) + " " + pathname + "\n"
-            gtk.gdk.threads_enter()
-            self.append_text(line, tag, __iter)
-            gtk.gdk.threads_leave()
-        return total_bytes
 
 
-    def clean_operation(self, operation, really_delete, __iter):
-        """Perform a single cleaning operation"""
-        total_bytes = 0
-        operation_options = self.get_operation_options(operation)
-        print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
-        if operation_options:
-            for (option, value) in operation_options:
-                backends[operation].set_option(option, value)
 
-        # standard operation
-        try:
-            for pathname in backends[operation].list_files():
-                total_bytes += self.clean_pathname(pathname, really_delete, __iter)
-        except:
-            err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
-            print err
-            traceback.print_exc()
-            gtk.gdk.threads_enter()
-            self.append_text(err + "\n", 'error', __iter)
-            gtk.gdk.threads_leave()
-
-        # special operation
-        try:
-            for ret in backends[operation].other_cleanup(really_delete):
-                if None == ret:
-                    return total_bytes
-                gtk.gdk.threads_enter()
-                if really_delete:
-                    total_bytes += ret[0]
-                    line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
-                else:
-                    line = _("Special operation: ") + ret + "\n"
-                self.textbuffer.insert(__iter, line)
-
-                gtk.gdk.threads_leave()
-        except:
-            err = _("Exception while getting running operation '%s': '%s'") % (operation, str(sys.exc_info()[1]))
-            print err
-            traceback.print_exc()
-            gtk.gdk.threads_enter()
-            self.append_text(err + "\n", 'error', __iter)
-            gtk.gdk.threads_leave()
-
-        return total_bytes
-
-
-    @threaded
     def preview_or_run_operations(self, really_delete):
         """Preview operations or run operations (delete files)"""
-        operations = self.get_selected_operations()
-        if 0 == len(operations):
-            gtk.gdk.threads_enter()
-            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, _("You must select an operation"))
-            dialog.run()
-            dialog.destroy()
-            gtk.gdk.threads_leave()
-            return
-        gtk.gdk.threads_enter()
-        self.set_sensitive(False)
-        self.textbuffer.set_text("")
-        __iter = self.textbuffer.get_iter_at_offset(0)
-        self.progressbar.show()
-        gtk.gdk.threads_leave()
-        total_bytes = 0
-        count = 0
-        for operation in operations:
-            gtk.gdk.threads_enter()
-            self.progressbar.set_fraction(1.0 * count / len(operations))
-            if really_delete:
-                self.progressbar.set_text(_("Please wait.  Scanning and deleting: ") + operation)
-            else:
-                self.progressbar.set_text(_("Please wait.  Scanning: ") + operation)
-            gtk.gdk.threads_leave()
-            total_bytes += self.clean_operation(operation, really_delete, __iter)
-            count += 1
-        gtk.gdk.threads_enter()
-        self.progressbar.set_text("")
-        self.progressbar.set_fraction(1)
-        self.progressbar.set_text(_("Done."))
-        self.textbuffer.insert(__iter, "\n" + _("Total size: ") \
-             + FileUtilities.bytes_to_human(total_bytes))
-        self.set_sensitive(True)
-        gtk.gdk.threads_leave()
+        import Worker
+        try:
+            self.worker = Worker.Worker(self, really_delete)
+        except:
+            pass
+        else:
+            worker = self.worker.run()
+            gobject.idle_add(worker.next)
 
 
     def about(self, __event):
