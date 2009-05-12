@@ -32,7 +32,6 @@ import subprocess
 import ConfigParser
 
 import FileUtilities
-from Options import options
 
 HAVE_GNOME_VFS = True
 try:
@@ -176,7 +175,8 @@ class Locales:
                 continue
             if not lang in self.__languages:
                 self.__languages.append(lang)
-        selected_languages = options.get_languages()
+        import Options
+        selected_languages = Options.options.get_languages()
         if None != selected_languages:
             self.__languages += selected_languages
         self.__languages = sorted(set(self.__languages))
@@ -452,21 +452,6 @@ def rotated_logs():
             yield path
 
 
-def sudo_mode():
-    """Return whether running in sudo mode"""
-    try:
-        login1 = os.getlogin()
-    except:
-        login1 = os.getenv('LOGNAME')
-
-    try:
-        login2 = pwd.getpwuid(os.getuid())[0]
-        return login1 != login2
-    except:
-        traceback.print_exc()
-        return False
-
-		
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
@@ -602,11 +587,6 @@ class TestUnix(unittest.TestCase):
         for path in rotated_logs():
             self.assert_(os.path.exists(path), \
                 "Rotated log path '%s' does not exist" % path)
-
-
-    def test_sudo_mode(self):
-        """Unit test for sudo_mode()"""
-        self.assert_(type(sudo_mode()) is bool)
 
 
     def test_wine_to_linux_path(self):

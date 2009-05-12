@@ -25,10 +25,6 @@ import os
 import traceback
 import ConfigParser
 import sys
-if sys.platform == 'linux2':
-    import pwd
-    import Unix
-
 from globals import APP_VERSION, options_dir, options_file
 
 
@@ -84,7 +80,8 @@ class Options:
         self.config.write(_file)
         # If using sudo, avoid creating a directory that the
         # original account cannot read.
-        if sys.platform == 'linux2' and Unix.sudo_mode():
+        if sys.platform == 'linux2' and sudo_mode():
+            import pwd
             try:
                 uid = pwd.getpwnam(os.getlogin())[3]
                 if mkfile:
@@ -169,6 +166,22 @@ class Options:
         self.set(key, not self.get(key))
 
 
+def sudo_mode():
+    """Return whether running in sudo mode"""
+    try:
+        login1 = os.getlogin()
+    except:
+        login1 = os.getenv('LOGNAME')
+
+    try:
+        import pwd
+        login2 = pwd.getpwuid(os.getuid())[0]
+        return login1 != login2
+    except:
+        import traceback
+        traceback.print_exc()
+        return False
+
 
 
 
@@ -213,7 +226,12 @@ class TestOptions(unittest.TestCase):
         o.config.remove_option("tree", "parent.child")
         self.assertEqual(o.get_tree("parent", "child"), False)
 
-    
+
+    def test_sudo_mode(self):
+        """Unit test for sudo_mode()"""
+        self.assert_(type(sudo_mode()) is bool)
+
+
 if __name__ == '__main__':
     unittest.main()
 
