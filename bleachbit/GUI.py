@@ -605,7 +605,7 @@ class GUI:
         import CleanerML
         CleanerML.load_cleaners()
         self.create_window()
-        gtk.gdk.threads_init()
+        gobject.threads_init()
         if options.get("first_start"):
             pref = PreferencesDialog(self.window)
             pref.run()
