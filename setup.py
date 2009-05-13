@@ -21,10 +21,33 @@
 
 
 from distutils.core import setup
+import sys
+if sys.platform == 'win32':
+    try:
+        import py2exe
+    except:
+        print 'warning: py2exe not available'
+    
 
 data_files = []
-data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
-data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
+if sys.platform == 'linux2':
+    data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
+
+windows = []
+options = []
+if sys.platform == 'win32':
+    windows = [
+                {
+                        'script' : 'bleachbit.py',
+                }
+            ]
+    options = {
+                  'py2exe': {
+                      'packages' : 'encodings',
+                      'includes' : 'cairo, pango, pangocairo, atk, gobject',
+                  }
+              }
 
 setup(name='bleachbit',
       version='0.4.2',
@@ -34,8 +57,10 @@ setup(name='bleachbit',
       author_email='ahz001@gmail.com',
       license='GPLv3',
       url='http://bleachbit.sourceforge.net',
-      platforms='Linux with Python v2.4+ and PyGTK v2',
+      platforms='Linux and Windows with Python v2.4+ and PyGTK v2',
       data_files = data_files,
+      options = options,
+      windows = windows,
       packages = ['bleachbit'],
      )
 
