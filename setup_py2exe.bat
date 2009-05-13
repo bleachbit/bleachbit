@@ -18,16 +18,16 @@ REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 echo Deleting dist
-del /q /s dist
+del /q /s dist > nul
 
 echo Running py2exe
 setup.py py2exe
 if not exist dist\bleachbit.exe goto exit
 
 echo Copying GTK files
-mkdir dist/etc
+mkdir dist\etc
 xcopy c:\gtk\etc dist\etc /i /s
-mdir dist\lib
+mkdir dist\lib
 xcopy c:\gtk\lib dist\lib /i /s
 mkdir dist\share
 xcopy c:\gtk\share dist\share /i /s
