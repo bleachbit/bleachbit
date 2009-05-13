@@ -40,6 +40,8 @@ if sys.platform == 'win32':
     windows = [
                 {
                         'script' : 'bleachbit.py',
+                        'icon_resources' : [(1, 'bleachbit.ico')]
+
                 }
             ]
     options = {
