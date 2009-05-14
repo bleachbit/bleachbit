@@ -101,6 +101,8 @@ class Options:
 
     def get(self, option, section = 'bleachbit'):
         """Retrieve a general option"""
+        if section == 'hashpath' and option[1] == ':':
+            option = option[0] + option[2:]
         if option in boolean_keys:
             return self.config.getboolean(section, option)
         return self.config.get(section, option)
@@ -132,6 +134,8 @@ class Options:
 
     def set(self, key, value, section = 'bleachbit'):
         """Set a general option"""
+        if section == 'hashpath' and key[1] == ':':
+            key = key[0] + key[2:]
         self.config.set(section, key, str(value))
         self.__flush()
 
@@ -209,6 +213,12 @@ class TestOptions(unittest.TestCase):
         for bkey in boolean_keys:
             self.assert_(type(o.get(bkey)) is bool)
 
+        # ConfigParser naturally treats colons as delimiters
+        value = 'abc'
+        key = 'c:\\test\\foo.xml'
+        o.set(key, value, 'hashpath')
+        self.assertEqual(value, o.get(key, 'hashpath'))
+        
         # language
         value = o.get_language('en')
         self.assert_(type(value) is bool)
@@ -229,6 +239,8 @@ class TestOptions(unittest.TestCase):
 
     def test_sudo_mode(self):
         """Unit test for sudo_mode()"""
+        if not sys.platform == 'linux2':
+            return
         self.assert_(type(sudo_mode()) is bool)
 
 
