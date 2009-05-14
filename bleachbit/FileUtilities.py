@@ -31,6 +31,7 @@ import os.path
 import re
 import stat
 import subprocess
+import sys
 
 
 
@@ -146,7 +147,10 @@ def ego_owner(filename):
 
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
-    for dirname in os.getenv('PATH').split(":"):
+    delimiter = ':'
+    if sys.platform == 'win32':
+        delimiter = ';'
+    for dirname in os.getenv('PATH').split(delimiter):
         if os.path.exists(os.path.join(dirname, filename)):
             return True
     return False
@@ -188,8 +192,11 @@ def execute_sqlite3(path, cmds):
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
-    __stat = os.lstat(path)
-    return __stat.st_blocks * 512
+    if sys.platform == 'linux2':
+        __stat = os.lstat(path)
+        return __stat.st_blocks * 512
+    return os.path.getsize(path)
+        
 
 
 def getsizedir(path):
@@ -368,6 +375,9 @@ class TestFileUtilities(unittest.TestCase):
                 delete(filename, shred)
                 self.assert_(not os.path.exists(filename))
 
+        if sys.platform == 'win32':
+            return
+
         # test symlink
         (fd, filename) = tempfile.mkstemp()
         os.close(fd)
@@ -407,7 +417,10 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
-        self.assert_(exists_in_path('ls'))
+        filename = 'ls'
+        if sys.platform == 'win32':
+            filename = 'cmd.exe'
+        self.assert_(exists_in_path(filename))
 
 
     def test_exe_exists(self):
@@ -416,6 +429,11 @@ class TestFileUtilities(unittest.TestCase):
             ("sh", True), \
             ("doesnotexist", False), \
             ("/bin/doesnotexist", False) ]
+        if sys.platform == 'win32':
+            tests = [ ('c:\\windows\\system32\\cmd.exe', True), \
+                      ('cmd.exe', True),
+                      ('doesnotexist', False),
+                      ('c:\\windows\\doesnotexist.exe', False) ]
         for test in tests:
             self.assertEqual(exe_exists(test[0]), test[1])
 
@@ -428,6 +446,12 @@ class TestFileUtilities(unittest.TestCase):
         (handle, filename) = tempfile.mkstemp("regulartest")
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
+
+        if sys.platform == 'win32':
+            self.assertEqual(getsize(filename), 10 * 12345)
+            return
+
+        
         output = subprocess.Popen(["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
         output = output.replace("\n", "")
         du_size = output.split("\t")[0] + "B"
@@ -436,6 +460,7 @@ class TestFileUtilities(unittest.TestCase):
         print output, du_size, du_bytes
         self.assertEqual(getsize(filename), du_bytes)
 
+        
         # create a symlink
         linkname = '/tmp/bleachbitsymlinktest'
         os.symlink(filename, linkname)
@@ -452,7 +477,10 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
-        self.assert_(getsizedir('/bin/') > 0)
+        path = '/bin'
+        if sys.platform == 'win32':
+            path = 'c:\\windows\\system32'
+        self.assert_(getsizedir(path) > 0)
 
 
 
