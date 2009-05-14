@@ -22,6 +22,7 @@ Create cleaners from CleanerML (markup language)
 """
 
 import os
+import sys
 import traceback
 import xml.dom.minidom
 
@@ -159,7 +160,7 @@ def list_cleanerml_files(local_only = False):
             continue
         import stat
         st = os.stat(pathname)
-        if stat.S_IMODE(st[stat.ST_MODE]) & 2:
+        if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
             print "warning: ignoring cleaner '%s' because it is world writable" % pathname
             continue
         yield pathname
