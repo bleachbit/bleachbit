@@ -27,7 +27,7 @@ if sys.platform == 'win32':
         import py2exe
     except:
         print 'warning: py2exe not available'
-    
+
 
 data_files = []
 if sys.platform == 'linux2':
@@ -37,19 +37,19 @@ if sys.platform == 'linux2':
 windows = []
 options = []
 if sys.platform == 'win32':
-    windows = [
-                {
-                        'script' : 'bleachbit.py',
-                        'icon_resources' : [(1, 'bleachbit.ico')]
-
-                }
-            ]
-    options = {
-                  'py2exe': {
-                      'packages' : 'encodings',
-                      'includes' : 'cairo, pango, pangocairo, atk, gobject',
-                  }
-              }
+    windows = dict(
+                        script = 'bleachbit.py',
+                        icon_resources = [(1, 'bleachbit.ico')]
+            )
+    options = dict(
+                  py2exe = dict(
+                      packages = 'encodings',
+                      includes = 'cairo, pango, pangocairo, atk, gobject',
+                      excludes = ['_ssl', 'pyreadline', 'difflib', 'doctest',
+                        'optparse', 'pickle', 'calendar'],
+                      compressed=True
+                  )
+              )
 
 setup(name='bleachbit',
       version='0.4.2',
