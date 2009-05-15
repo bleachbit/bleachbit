@@ -31,7 +31,12 @@ import sys
 import xml.dom.minidom
 
 import FileUtilities
-import Unix
+try:
+    import Unix
+except:
+    if not sys.platform == 'win32':
+        raise
+    HAVE_UNIX = False
 import globals
 from FileUtilities import children_in_directory
 from Options import options
@@ -583,17 +588,18 @@ class System(Cleaner):
     """System in general"""
 
     def __init__(self):
-        Cleaner.__init__(self)
-        self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
-        self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
+        Cleaner.__init__(self)        
+        if sys.platform == 'linux':
+            self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
+            self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
+            self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
+            self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+            self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
+            self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
+            self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
+            self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
+            self.add_option('yum', _('Yum clean'), _("Delete all Yum's cache"))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
-        self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
-        self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
-        self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
-        self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
-        self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
-        self.add_option('yum', _('Yum clean'), _("Delete all Yum's cache"))
 
     def get_description(self):
         return _("The system in general")
@@ -606,7 +612,7 @@ class System(Cleaner):
 
     def list_files(self):
         # cache
-        if self.options["cache"][1]:
+        if sys.platform == 'linux2' and self.options["cache"][1]:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 yield filename
@@ -623,7 +629,7 @@ class System(Cleaner):
             '~/.kde2/share/mimelnk/application/', \
             '~/.kde2/share/applnk' ]
 
-        if self.options["desktop_entry"][1]:
+        if sys.platform == 'linux2' and self.options["desktop_entry"][1]:
             for dirname in menu_dirs:
                 for filename in [fn for fn in children_in_directory(dirname, False) \
                     if fn.endswith('.desktop') ]:
@@ -631,26 +637,26 @@ class System(Cleaner):
                         yield filename
 
         # unwanted locales
-        if self.options["localizations"][1]:
+        if sys.platform == 'linux2' and self.options["localizations"][1]:
             callback = lambda locale, language: options.get_language(language)
             for path in Unix.locales.localization_paths(callback):
                 yield path
 
         # most recently used documents list
         files = []
-        if self.options["recent_documents"][1]:
+        if sys.platform == 'linux2' and self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
             files += [ os.path.expanduser("~/.recently-used.xbel") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
-        if self.options["rotated_logs"][1]:
+        if sys.platform == 'linux2' and self.options["rotated_logs"][1]:
             for path in Unix.rotated_logs():
                 yield path
 
 
         # temporary
-        if self.options["tmp"][1]:
+        if sys.platform == 'linux2' and self.options["tmp"][1]:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
@@ -662,7 +668,7 @@ class System(Cleaner):
                     if ok:
                         yield path
         # trash
-        if self.options["trash"][1]:
+        if sys.platform == 'linux2' and self.options["trash"][1]:
             dirname = os.path.expanduser("~/.Trash")
             for filename in children_in_directory(dirname, False):
                 yield filename
@@ -685,7 +691,7 @@ class System(Cleaner):
                 yield filename
 
     def other_cleanup(self, really_delete):
-        if self.options["apt-autoclean"][1]:
+        if sys.platform == 'linux2' and self.options["apt-autoclean"][1]:
             if really_delete:
                 bytes = Unix.apt_autoclean()
                 yield (bytes, _("APT autoclean"))
@@ -700,7 +706,7 @@ class System(Cleaner):
                 yield (0, _("Clipboard"))
             else:
                 yield _("Clipboard")
-        if self.options["yum"][1]:
+        if sys.platform == 'linux2' and self.options["yum"][1]:
             if really_delete:
                 bytes = Unix.yum_clean()
                 yield (bytes, _("Yum clean"))
@@ -806,21 +812,25 @@ class XChat(Cleaner):
                 yield filename
 
 backends = {}
-backends["epiphany"] = Epiphany()
-backends["exaile"] = Exaile()
+if sys.platform == 'linux2':
+    backends["epiphany"] = Epiphany()
+    backends["exaile"] = Exaile()
 backends["firefox"] = Firefox()
 backends["gimp"] = GIMP()
 backends["googleearth"] = GoogleEarth()
 backends["flash"] = Flash()
-backends["kde"] = KDE()
+if sys.platform == 'linux2':
+    backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
-backends["rpmbuild"] = rpmbuild()
+if sys.platform == 'linux2':
+    backends["rpmbuild"] = rpmbuild()
 backends["skype"] = Skype()
 backends["system"] = System()
-backends["thumbnails"] = Thumbnails()
-backends["transmission"] = Transmission()
-backends["winetricks"] = winetricks()
+if sys.platform == 'linux2':
+    backends["thumbnails"] = Thumbnails()
+    backends["transmission"] = Transmission()
+    backends["winetricks"] = winetricks()
 backends["xchat"] = XChat()
 
 
