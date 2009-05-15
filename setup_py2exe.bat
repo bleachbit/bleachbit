@@ -33,7 +33,7 @@ mkdir dist\share
 xcopy c:\gtk\share dist\share /i /s
 
 echo Compressing executables
-upx -9 dist\*dll dist\*exe
+upx --best dist\*.*
 
 :exit
 
