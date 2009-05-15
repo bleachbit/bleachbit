@@ -37,10 +37,10 @@ if sys.platform == 'linux2':
 windows = []
 options = []
 if sys.platform == 'win32':
-    windows = dict(
+    windows = [dict(
                         script = 'bleachbit.py',
                         icon_resources = [(1, 'bleachbit.ico')]
-            )
+            )]
     options = dict(
                   py2exe = dict(
                       packages = 'encodings',
