@@ -34,7 +34,7 @@ mkdir dist\share
 xcopy c:\gtk\share dist\share /i /s
 
 echo Compressing executables
-upx --best dist\*.*
+upx --best dist\*.* dist\lib\pango\1.6.0\modules\*.dll dist\lib\gtk-2.0\2.10.0\loaders\*.dll
 
 :exit
 
