@@ -22,52 +22,56 @@
 
   !include "MUI2.nsh"
 
+  
 ;--------------------------------
 ;General
 
   ;Name and file
   Name "BleachbBit"
-  OutFile "BleachBit-installer.exe"
+  OutFile "BleachBit-setup.exe"
 
   ;Default installation folder
-   InstallDir "$PROGRAMFILES\BleachBit"
+  InstallDir "$PROGRAMFILES\BleachBit"
   
   ;Get installation folder from registry if available
   InstallDirRegKey HKCU "Software\BleachBit" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel user
+  
+  ;Best compression
+  SetCompressor /SOLID lzma
 
+  
 ;--------------------------------
 ;Interface Settings
 
   !define MUI_ABORTWARNING
 
+  
 ;--------------------------------
 ;Pages
 
   !insertmacro MUI_PAGE_LICENSE "COPYING"
-  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
   
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
+
   
 ;--------------------------------
 ;Languages
  
   !insertmacro MUI_LANGUAGE "English"
-
-
   
   
- 
-# default section
+;--------------------------------
+;Default section
 section
     setOutPath $INSTDIR
-	;File /r "dist\*.*"
-	File  "dist\*.*"
+	File /r "dist\*.*"
+	;File  "dist\*.*"
 	File "bleachbit.png"
 	
 	setOutPath $INSTDIR\cleaners
@@ -90,3 +94,4 @@ section "Uninstall"
 	RMDir /r "$INSTDIR"   
 	DeleteRegKey HKCU "Software\BleachBit"
 sectionEnd
+
