@@ -17,7 +17,8 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-echo Deleting dist
+echo Deleting directories build and dist
+del /q /s build > nul
 del /q /s dist > nul
 
 echo Running py2exe
