@@ -27,14 +27,16 @@ if not exist dist\bleachbit.exe goto exit
 
 echo Copying GTK files
 mkdir dist\etc
-xcopy c:\gtk\etc dist\etc /i /s
+xcopy c:\gtk\etc dist\etc /i /s /q
 mkdir dist\lib
-xcopy c:\gtk\lib dist\lib /i /s
+xcopy c:\gtk\lib dist\lib /i /s /q
 mkdir dist\share
-xcopy c:\gtk\share dist\share /i /s
+xcopy c:\gtk\share dist\share /i /s /q
 
 echo Compressing executables
 upx --best dist\*.* dist\lib\pango\1.6.0\modules\*.dll dist\lib\gtk-2.0\2.10.0\loaders\*.dll
+
+"c:\program files\nsis\makensis.exe" bleachbit.nsi
 
 :exit
 

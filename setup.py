@@ -37,19 +37,21 @@ if sys.platform == 'linux2':
 windows = []
 options = []
 if sys.platform == 'win32':
-    windows = [dict(
-                        script = 'bleachbit.py',
-                        icon_resources = [(1, 'bleachbit.ico')]
-            )]
+    windows = [ dict(
+        script = 'bleachbit.py',
+        icon_resources = [(1, 'bleachbit.ico')]
+        )]
     options = dict(
-                  py2exe = dict(
-                      packages = 'encodings',
-                      includes = 'cairo, pango, pangocairo, atk, gobject',
-                      excludes = ['_ssl', 'pyreadline', 'difflib', 'doctest',
-                        'optparse', 'pickle', 'calendar'],
-                      compressed=True
-                  )
-              )
+        py2exe = dict(
+            packages = 'encodings',
+            optimize = 2, # extra optimization (like python -OO)
+            includes = ['cairo', 'pango', 'pangocairo', 'atk', 'gobject'],
+            excludes = ['_ssl', 'pyreadline', 'difflib', 'doctest',
+                'optparse', 'pickle', 'calendar', 
+                'ftplib', 'ssl', 'bleachbit.Unix'],
+            compressed = True # create a compressed zipfile
+            )
+        )
 
 setup(name='bleachbit',
       version='0.4.2',
