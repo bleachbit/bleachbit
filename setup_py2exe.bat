@@ -21,7 +21,7 @@ echo Deleting dist
 del /q /s dist > nul
 
 echo Running py2exe
-setup.py py2exe
+setup.py -OO py2exe
 if not exist dist\bleachbit.exe goto exit
 
 echo Copying GTK files
