@@ -74,7 +74,8 @@ class PreferencesDialog:
 
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
-        notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
+        if sys.platform == 'linux2':
+            notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
 
         self.dialog.vbox.pack_start(notebook, False)
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
@@ -606,7 +607,7 @@ class GUI:
         CleanerML.load_cleaners()
         self.create_window()
         gobject.threads_init()
-        if options.get("first_start"):
+        if options.get("first_start") and sys.platform == 'linux2':
             pref = PreferencesDialog(self.window)
             pref.run()
             options.set('first_start', False)
