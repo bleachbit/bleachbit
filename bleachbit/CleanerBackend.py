@@ -596,8 +596,8 @@ class System(Cleaner):
     """System in general"""
 
     def __init__(self):
-        Cleaner.__init__(self)        
-        if sys.platform == 'linux':
+        Cleaner.__init__(self)
+        if sys.platform == 'linux2':
             self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
             self.add_option('desktop_entry', _('Broken desktop entries'), _('Unusable .desktop files (menu entries and file associtations) that are either invalid structurally or point to non-existant locations'))
             self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
