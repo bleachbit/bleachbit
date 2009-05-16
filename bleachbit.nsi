@@ -1,17 +1,19 @@
+;  vim: ts=4:sw=4:expandtab
+;
 ;  BleachBit
 ;  Copyright (C) 2009 Andrew Ziem
 ;  http://bleachbit.sourceforge.net
-; 
+;
 ;  This program is free software: you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published by
 ;  the Free Software Foundation, either version 3 of the License, or
 ;  (at your option) any later version.
-; 
+;
 ;  This program is distributed in the hope that it will be useful,
 ;  but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;  GNU General Public License for more details.
-; 
+;
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -32,66 +34,67 @@
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\BleachBit"
-  
+
   ;Get installation folder from registry if available
   InstallDirRegKey HKCU "Software\BleachBit" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel user
-  
+
   ;Best compression
   SetCompressor /SOLID lzma
 
-  
+
 ;--------------------------------
 ;Interface Settings
 
   !define MUI_ABORTWARNING
 
-  
+
 ;--------------------------------
 ;Pages
 
   !insertmacro MUI_PAGE_LICENSE "COPYING"
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
-  
+
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
 
-  
+
 ;--------------------------------
 ;Languages
- 
+
   !insertmacro MUI_LANGUAGE "English"
-  
-  
+
+
 ;--------------------------------
 ;Default section
 section
-    setOutPath $INSTDIR
-	File /r "dist\*.*"
-	;File  "dist\*.*"
-	File "bleachbit.png"
-	
-	setOutPath $INSTDIR\cleaners
-	File ".\cleaners\*.xml"
- 
-    writeUninstaller "$INSTDIR\uninstall.exe"
- 
-	CreateDirectory "$SMPROGRAMS\BleachBit"
-    createShortCut "$SMPROGRAMS\BleachBit\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-	createShortCut "$SMPROGRAMS\BleachBit\BleachBit.lnk" "$INSTDIR\BleachBit.exe"
+    SetOutPath $INSTDIR
+    File /r "dist\*.*"
+    File "bleachbit.png"
+    File "COPYING"
+
+    SetOutPath $INSTDIR\cleaners
+    File ".\cleaners\*.xml"
+
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+
+    CreateDirectory "$SMPROGRAMS\BleachBit"
+    CreateShortCut "$SMPROGRAMS\BleachBit\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+    CreateShortCut "$SMPROGRAMS\BleachBit\BleachBit.lnk" "$INSTDIR\BleachBit.exe"
 sectionEnd
 
- 
+
 ;--------------------------------
 ;Uninstaller Section
 
-section "Uninstall"
- 
+UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+
+Section "Uninstall"
     RMDir /r "$SMPROGRAMS\Bleachbit"
-	RMDir /r "$INSTDIR"   
-	DeleteRegKey HKCU "Software\BleachBit"
-sectionEnd
+    RMDir /r "$INSTDIR"
+    DeleteRegKey HKCU "Software\BleachBit"
+SectionEnd
 
