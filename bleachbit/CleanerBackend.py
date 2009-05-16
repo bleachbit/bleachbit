@@ -90,6 +90,10 @@ class Cleaner:
                 r.append((key, self.options[key][0], self.options[key][1]))
         return r
 
+    def is_usable(self):
+        """Return whether the cleaner is usable (has actions)"""
+        return len(self.actions) > 0
+
     def list_files(self):
         """Iterate files that would be removed"""
         for action in self.actions:

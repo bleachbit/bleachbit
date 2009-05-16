@@ -78,8 +78,22 @@ class CleanerML:
         return self.cleaner
 
 
+    def os_match(self, os):
+        """Return boolean whether operating system matches"""
+        if len(os) == 0:
+            return True
+        if os == 'linux' and sys.platform == 'linux2':
+            return True
+        if os == 'windows' and sys.platform == 'win32':
+            return True
+        return False
+
+
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""
+        os = cleaner.getAttribute('os')
+        if not self.os_match(os):
+            return
         self.cleaner.id = cleaner.getAttribute('id')
         self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
@@ -176,7 +190,10 @@ def load_cleaners():
             traceback.print_exc()
         else:
             cleaner = xmlcleaner.get_cleaner()
-            CleanerBackend.backends[cleaner.id] = cleaner
+            if cleaner.is_usable():
+                CleanerBackend.backends[cleaner.id] = cleaner
+            else:
+                print "debug: '%s' is not usable" % pathname
 
 
 def pot_fragment(string):
