@@ -197,9 +197,9 @@ class Firefox(Cleaner):
         if sys.platform == 'linux2':
             cache_base = self.profile_dir
         if sys.platform == 'win32':
-            cache_base = "~\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\Cache"
+            cache_base = "~\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
         if self.options["cache"][1]:
-            dirs = FileUtilities.expand_glob_join(cache_base, "Cache")
+            dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
