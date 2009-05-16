@@ -177,7 +177,10 @@ class Firefox(Cleaner):
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
-        self.profile_dir = "~/.mozilla/firefox/*/"
+        if sys.platform == 'linux2':
+            self.profile_dir = "~/.mozilla/firefox/*/"
+        if sys.platform == 'win32':
+            self.profile_dir = "~\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
 
     def get_description(self):
         return _("Mozilla Firefox web browser")
@@ -190,44 +193,49 @@ class Firefox(Cleaner):
 
     def list_files(self):
         # browser cache
+        cache_base = None
+        if sys.platform == 'linux2':
+            cache_base = self.profile_dir
+        if sys.platform == 'win32':
+            cache_base = "~\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\Cache"
         if self.options["cache"][1]:
-            dirs = glob.glob(os.path.expanduser(self.profile_dir + "/Cache/"))
-            dirs += glob.glob(os.path.expanduser(self.profile_dir + "/OfflineCache/"))
+            dirs = FileUtilities.expand_glob_join(cache_base, "Cache")
+            dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield filename
         files = []
         # cookies
         if self.options["cookies"][1]:
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/cookies.txt"))
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/cookies.sqlite"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.txt")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.sqlite")
         # download history
         if self.options["download_history"][1]:
             # Firefox version 1
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/downloads.rdf"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "downloads.rdf")
             # Firefox version 3
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/downloads.sqlite"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "downloads.sqlite")
         # forms
         if self.options["forms"][1]:
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/formhistory.sqlite"))
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/formhistory.dat"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "formhistory.dat")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "formhistory.sqlite")
         # passwords
         if self.options["passwords"][1]:
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons.txt"))
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/signons[2-3].txt"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "signons.txt")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "signons[2-3].txt")
         # places database
         if self.options["places"][1]:
             # Firefox version 3
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite-journal"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite-journal")
             # see also option 'url_history'
         # session restore
         if self.options["session_restore"][1]:
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/sessionstore.js"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")
         # URL history
         if self.options["session_restore"][1]:
             # Firefox version 1
-            files += glob.glob(os.path.expanduser(self.profile_dir + "/history.dat"))
+            files += FileUtilities.expand_glob_join(self.profile_dir, "history.dat")
             # see also function other_cleanup()
         # finish
         for filename in files:

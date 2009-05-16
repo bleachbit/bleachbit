@@ -101,6 +101,7 @@ def bytes_to_human(bytes):
             else:
                 return locale.format(format, abbrev)
 
+
 def children_in_directory(top, list_directories = False):
     """Iterate files and, optionally, subdirectories in directory"""
     if type(top) is tuple:
@@ -189,6 +190,15 @@ def execute_sqlite3(path, cmds):
     conn.close()
 
 
+def expand_glob_join(pathname1, pathname2):
+    """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
+    ret = []
+    pathname3 = os.path.expanduser(os.path.join(pathname1, pathname2))
+    for pathname4 in glob.iglob(pathname3):
+       ret.append(pathname4)
+    return ret
+
+
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
@@ -196,7 +206,6 @@ def getsize(path):
         __stat = os.lstat(path)
         return __stat.st_blocks * 512
     return os.path.getsize(path)
-        
 
 
 def getsizedir(path):
@@ -438,6 +447,13 @@ class TestFileUtilities(unittest.TestCase):
             self.assertEqual(exe_exists(test[0]), test[1])
 
 
+    def def_expand_glob_join(self):
+        if sys.platform == 'linux2':
+            expand_glob_join('/bin', '*sh')
+        if sys.platform == 'win32':
+            expand_glob_join('c:\windows', '*.exe')
+
+
     def test_getsize(self):
         """Unit test for method getsize()"""
         import tempfile
@@ -451,7 +467,6 @@ class TestFileUtilities(unittest.TestCase):
             self.assertEqual(getsize(filename), 10 * 12345)
             return
 
-        
         output = subprocess.Popen(["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
         output = output.replace("\n", "")
         du_size = output.split("\t")[0] + "B"
@@ -460,7 +475,6 @@ class TestFileUtilities(unittest.TestCase):
         print output, du_size, du_bytes
         self.assertEqual(getsize(filename), du_bytes)
 
-        
         # create a symlink
         linkname = '/tmp/bleachbitsymlinktest'
         os.symlink(filename, linkname)
