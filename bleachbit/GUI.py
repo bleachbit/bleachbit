@@ -21,6 +21,7 @@
 
 from gettext import gettext as _
 import os
+import sys
 import threading
 import warnings
 

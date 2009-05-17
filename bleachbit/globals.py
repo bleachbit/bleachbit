@@ -19,6 +19,7 @@
 
 import gettext
 import os
+import sys
 
 APP_VERSION = "0.5.0"
 APP_NAME = "BleachBit"
@@ -34,8 +35,15 @@ if not os.path.exists(license_filename):
 if not os.path.exists(license_filename):
     # CentOS, Fedora, RHEL
     license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
+if not os.path.exists(license_filename):
+    # Windows
+    license_filename = "c:\\Program Files\\BleachBit\\COPYING"
 
-options_dir = os.path.expanduser("~/.config/bleachbit/")
+options_dir = None
+if sys.platform == 'linux2':
+    options_dir = os.path.expanduser("~/.config/bleachbit/")
+if sys.platform == 'win32':
+    options_dir = os.path.expanduser("~\\Application Data\BleachBit\\")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
@@ -51,7 +59,10 @@ if os.path.exists("bleachbit.png"):
     appicon_path = "bleachbit.png"
     print "debug: appicon_path = '%s'" % (appicon_path, )
 else:
-    appicon_path = "/usr/share/pixmaps/bleachbit.png"
+    if sys.platform == 'linux2':
+        appicon_path = "/usr/share/pixmaps/bleachbit.png"
+    if sys.platform == 'win32':
+        appicon_path = "c:\\Program Files\\BleachBit\\bleachbit.png"
 
 # locale directory
 if os.path.exists("./locale/"):
@@ -60,7 +71,10 @@ if os.path.exists("./locale/"):
     print "debug: locale_dir = '%s'" % (locale_dir, )
 else:
     # installed locale
-    locale_dir = "/usr/share/locale/"
+    if sys.platform == 'linux2':
+        locale_dir = "/usr/share/locale/"
+    if sys.platform == 'win32':
+        locale_dir = "c:\\Program Files\\BleachBit\\share\\locale\\"
 
 try:
     gettext.bindtextdomain('bleachbit', locale_dir)
