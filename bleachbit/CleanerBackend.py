@@ -232,6 +232,7 @@ class Firefox(Cleaner):
             # Firefox version 3
             files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite")
             files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite-journal")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "bookmarkbackups/*ookmark*json")
             # see also option 'url_history'
         # session restore
         if self.options["session_restore"][1]:
