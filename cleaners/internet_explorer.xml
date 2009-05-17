@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="internet_explorer" os="windows">
+  <label>Internet Explorer</label>
+  <description>Web browser</description>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification</description>
+    <action type="children" directories="false">~\Cookies\</action>
+  </option>
+  <option id="temporary_files">
+    <label>Temporary files</label>
+    <description>Web cache reduces time to display revisited pages</description>
+    <action type="children" directories="false">~\Local Settings\Temporary Internet Files\</action>
+  </option>
+</cleaner>
