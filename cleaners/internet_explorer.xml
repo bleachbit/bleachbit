@@ -26,10 +26,19 @@
     <label>Cookies</label>
     <description>HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification</description>
     <action type="children" directories="false">~\Cookies\</action>
+    <action type="children" directories="false">~\AppData\Roaming\Microsoft\Windows\Cookies\</action>
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Web cache reduces time to display revisited pages</description>
     <action type="children" directories="false">~\Local Settings\Temporary Internet Files\</action>
+    <action type="children" directories="false">~\AppData\Local\Microsoft\Windows\Temporary Internet Files\</action>
   </option>
+  <option id="history">
+    <label>History</label>
+    <description>List of visited web pages</description>
+    <action type="children" directories="false">~\Local Settings\History\</action>
+    <action type="children" directories="false">~\AppData\Local\Microsoft\Windows\History\</action>
+  </option>
+
 </cleaner>
