@@ -17,12 +17,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import gettext
 import os
 import sys
 
+
 APP_VERSION = "0.5.0"
 APP_NAME = "BleachBit"
+
+update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
+
+socket_timeout = 10
+
+# Setting below value to false disables update notification (useful
+# for packages in repositories).
+online_update_notification_enabled = True
+
+
+###
+### Paths
+###
 
 # Debian, Ubuntu
 license_filename = "/usr/share/common-licenses/GPL-3"
@@ -39,6 +54,7 @@ if not os.path.exists(license_filename):
     # Windows
     license_filename = "c:\\Program Files\\BleachBit\\COPYING"
 
+# configuration
 options_dir = None
 if sys.platform == 'linux2':
     options_dir = os.path.expanduser("~/.config/bleachbit/")
@@ -46,13 +62,15 @@ if sys.platform == 'win32':
     options_dir = os.path.expanduser("~\\Application Data\BleachBit\\")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
-update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
+# personal cleaners
+personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
-socket_timeout = 10
-
-# Setting below value to false disables update notification (useful
-# for packages in repositories).
-online_update_notification_enabled = True
+# system cleaners
+system_cleaners_dir = None
+if sys.platform == 'linux2':
+    system_cleaners_dir = '/usr/share/bleachbit/cleaners'
+if sys.platform == 'win32':
+    system_cleaners_dir ='c:\\Program Files\\BleachBit\\share\\cleaners\\'
 
 # application icon
 if os.path.exists("bleachbit.png"):
@@ -62,7 +80,7 @@ else:
     if sys.platform == 'linux2':
         appicon_path = "/usr/share/pixmaps/bleachbit.png"
     if sys.platform == 'win32':
-        appicon_path = "c:\\Program Files\\BleachBit\\bleachbit.png"
+        appicon_path = "c:\\Program Files\\BleachBit\\share\\bleachbit.png"
 
 # locale directory
 if os.path.exists("./locale/"):
@@ -75,6 +93,10 @@ else:
         locale_dir = "/usr/share/locale/"
     if sys.platform == 'win32':
         locale_dir = "c:\\Program Files\\BleachBit\\share\\locale\\"
+
+###
+### gettext
+###
 
 try:
     gettext.bindtextdomain('bleachbit', locale_dir)
