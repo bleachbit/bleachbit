@@ -57,6 +57,13 @@
   !insertmacro MUI_PAGE_LICENSE "COPYING"
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+  
+		!define MUI_FINISHPAGE_NOAUTOCLOSE
+        !define MUI_FINISHPAGE_RUN "$INSTDIR\BleachBit.exe"
+        !define MUI_FINISHPAGE_LINK         "Visit the BleachBit web site"
+        !define MUI_FINISHPAGE_LINK_LOCATION          "http://bleachbit.sourceforge.net"
+        !insertmacro MUI_PAGE_FINISH
+
 
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
