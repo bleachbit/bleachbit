@@ -82,10 +82,10 @@ section
     File /r "dist\*.*"
     File "COPYING"
 
-	SetOutPath $INSTDIR\share\
-	File "bleachbit.png"
-	
-    SetOutPath $INSTDIR\share\cleaners\
+    SetOutPath "$INSTDIR\share\"
+    File "bleachbit.png"
+
+    SetOutPath "$INSTDIR\share\cleaners\"
     File ".\cleaners\*.xml"
 
     WriteUninstaller "$INSTDIR\uninstall.exe"
