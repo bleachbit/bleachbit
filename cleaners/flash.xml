@@ -19,11 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="realplayer">
-  <label>RealPlayer</label>
+<cleaner id="flash">
+  <label>Flash</label>
+  <description>Multimedia viewer mainly for the Web</description>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
-    <action type="file">~/.config/real/rpcookies.txt</action>
+    <action type="children" directories="true">~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/</action>
+    <action type="children" directories="true">~/.macromedia/Flash_Player/#SharedObjects/</action>
+    <action type="children" directories="true">~\Application Data\Macromedia\Flash Player\#SharedObjects\</action>
+    <action type="children" directories="true">~\Application Data\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\</action>
   </option>
 </cleaner>

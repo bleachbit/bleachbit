@@ -119,7 +119,7 @@ class Epiphany(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
-        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification'))
+        self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
@@ -172,7 +172,7 @@ class Firefox(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
-        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification'))
+        self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
@@ -357,25 +357,6 @@ class Exaile(Cleaner):
             yield filename
 
 
-class Flash(Cleaner):
-    """Adobe Flash"""
-
-    def get_description(self):
-        return _("Delete Adobe Flash's cache and settings")
-
-    def get_id(self):
-        return 'flash'
-
-    def get_name(self):
-        return "Flash"
-
-    def list_files(self):
-        dirname = os.path.expanduser("~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys")
-        for filename in children_in_directory(dirname, True):
-            yield filename
-
-
-
 class GIMP(Cleaner):
     """GIMP - The GNU Image Manipulation Program"""
 
@@ -519,7 +500,7 @@ class Opera(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
-        self.add_option('cookies', _('Cookies'), _('HTTP cookies contain information such as web site prefereneces, authentication, and tracking identification'))
+        self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
         self.profile_dir = "~/.opera/"
 
     def get_description(self):
@@ -831,7 +812,6 @@ if sys.platform == 'linux2':
 backends["firefox"] = Firefox()
 backends["gimp"] = GIMP()
 backends["googleearth"] = GoogleEarth()
-backends["flash"] = Flash()
 if sys.platform == 'linux2':
     backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
