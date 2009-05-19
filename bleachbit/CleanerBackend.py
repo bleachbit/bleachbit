@@ -357,27 +357,6 @@ class Exaile(Cleaner):
             yield filename
 
 
-## google earth temp&cache folder clean up by juancarlospaco@hotmail.com
-class GoogleEarth(Cleaner):
-    """Google Earth"""
-
-    def get_description(self):
-        return _("Delete the contents of Google Earth's cache and temporary files")
-
-    def get_id(self):
-        return 'googleearth'
-
-    def get_name(self):
-        return 'Google Earth'
-
-    def list_files(self):
-        dirs = [ "~/.googleearth/cache", "~/.googleearth/temp" ]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename 
-
-
 class KDE(Cleaner):
     """KDE"""
 
