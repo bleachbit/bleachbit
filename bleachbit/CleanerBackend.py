@@ -769,7 +769,6 @@ if sys.platform == 'linux2':
     backends["epiphany"] = Epiphany()
     backends["exaile"] = Exaile()
 backends["firefox"] = Firefox()
-backends["googleearth"] = GoogleEarth()
 if sys.platform == 'linux2':
     backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
