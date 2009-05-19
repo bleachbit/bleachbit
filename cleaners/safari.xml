@@ -22,17 +22,17 @@
 <cleaner id="safari" os="windows">
   <label>Safari</label>
   <description>Web browser</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Web cache reduces time to display revisited pages</description>
+    <action type="file">~\Local Settings\Application Data\Apple Computer\Safari\Cache.db</action>
+    <action type="file">~\AppData\Local\Apple Computer\Safari\Cache.db</action>
+  </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <action type="file">~\Application Data\Apple Computer\Safari\Cookies\Cookies.plist</action>
     <action type="file">~\AppData\Roaming\Apple Computer\Safari\Cookies\Cookies.plist</action>
-  </option>
-  <option id="temporary_files">
-    <label>Temporary files</label>
-    <description>Web cache reduces time to display revisited pages</description>
-    <action type="file">~\Local Settings\Application Data\Apple Computer\Safari\Cache.db</action>
-    <action type="file">~\AppData\Local\Apple Computer\Safari\Cache.db</action>
   </option>
   <option id="history">
     <label>History</label>
