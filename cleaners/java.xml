@@ -24,6 +24,7 @@
   <option id="Cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.java/deployment/cache</action>
+    <action type="children" directories="false">~/.java/deployment/cache/</action>
+    <action type="children" directories="false">~\Application Data\Sun\Java\Deployment\cache\</action>
   </option>
 </cleaner>
