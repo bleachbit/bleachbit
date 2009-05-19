@@ -98,11 +98,12 @@ class PreferencesDialog:
             self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
-        cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
-        cb_shred.set_active(options.get('shred'))
-        cb_shred.connect('toggled', toggle_callback, 'shred')
-        self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
-        vbox.pack_start(cb_shred, False)
+        if sys.platform == 'linux2':
+            cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
+            cb_shred.set_active(options.get('shred'))
+            cb_shred.connect('toggled', toggle_callback, 'shred')
+            self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
+            vbox.pack_start(cb_shred, False)
 
         return vbox
 
