@@ -357,26 +357,6 @@ class Exaile(Cleaner):
             yield filename
 
 
-class GIMP(Cleaner):
-    """GIMP - The GNU Image Manipulation Program"""
-
-    def get_description(self):
-        return _("Delete GIMP's temporary folder")
-
-    def get_id(self):
-        return 'gimp'
-
-    def get_name(self):
-        return 'GIMP'
-
-    def list_files(self):
-        dirs = [ "~/.gimp-2.4/tmp", "~/.gimp-2.6/tmp"]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
-
 ## google earth temp&cache folder clean up by juancarlospaco@hotmail.com
 class GoogleEarth(Cleaner):
     """Google Earth"""
@@ -810,7 +790,6 @@ if sys.platform == 'linux2':
     backends["epiphany"] = Epiphany()
     backends["exaile"] = Exaile()
 backends["firefox"] = Firefox()
-backends["gimp"] = GIMP()
 backends["googleearth"] = GoogleEarth()
 if sys.platform == 'linux2':
     backends["kde"] = KDE()

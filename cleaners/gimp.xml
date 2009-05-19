@@ -19,11 +19,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="bash" os="windows">
-  <label>Bash</label>
-  <option id="history">
-    <label>History</label>
-    <description>Delete the command history</description>
-    <action type="file">~/.bash_history</action>
+<cleaner id="gimp">
+  <label>GIMP</label>
+  <description>Image editor</description>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action type="children" directories="false">~/.gimp-2.4/tmp/</action>
+    <!-- GIMP uses identical paths on Fedora 10 and Windows XP -->
+    <action type="children" directories="false">~/.gimp-2.6/tmp/</action>
   </option>
 </cleaner>
