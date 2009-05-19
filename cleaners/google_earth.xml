@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="google_earth">
+  <label>Google Earth</label>
+  <description>Virtual globe viewer</description>
+  <option id="temporary_files">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action type="file">~/.googleearth/Cache/dbCache.dat</action>
+    <action type="file">~/.googleearth/Cache/dbCache.dat.index</action>
+    <action type="file">~\Application Data\Google\GoogleEarth\dbCache.dat</action>
+    <action type="file">~\Application Data\Google\GoogleEarth\dbCache.dat.index</action>
+  </option>
+</cleaner>
