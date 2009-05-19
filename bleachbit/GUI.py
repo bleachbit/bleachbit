@@ -222,7 +222,6 @@ class TreeInfoModel:
         if 2 == len(path):
             child = self.tree_store[path][2]
         value = self.tree_store[path][1]
-        print "debug: on_row_changed('%s', '%s', '%s', '%s')" % (path, parent, child, value)
         options.set_tree(parent, child, value)
 
 
@@ -276,16 +275,15 @@ class TreeDisplayModel:
             sibling = model.iter_nth_child(parent, 0)
             any_true = False
             while sibling:
-                print "debug: col1_toggled_cb: %s = %s" % (model[sibling][0], model[sibling][1])
                 if model[sibling][1]:
                     any_true = True
                 sibling = model.iter_next(sibling)
             if not any_true:
-                model[parent][1] = False                
+                model[parent][1] = False
         # if toggled and has children, do the same for each child
         child = model.iter_children(i)
         while child:
-            model[child][1] = model[path][1]            
+            model[child][1] = model[path][1]
             child = model.iter_next(child)
         return
 
@@ -395,9 +393,6 @@ class GUI:
         self.preview_or_run_operations(True)
 
 
-
-
-
     def preview_or_run_operations(self, really_delete):
         """Preview operations or run operations (delete files)"""
         import Worker
@@ -463,7 +458,6 @@ class GUI:
         entries = [('Quit', gtk.STOCK_QUIT, _('_Quit'), None, _('Quit BleachBit'), lambda *dummy: gtk.main_quit()),
                    ('File', None, _('_File')),
                    ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, _("Configure BleachBit"), self.cb_preferences_dialog),
-#                   ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences")),
                    ('Edit', None, _("_Edit")),
                    ('About', gtk.STOCK_ABOUT, _('_About'), None, _('Show about'), self.about),
                    ('Help', None, _("_Help"))]
