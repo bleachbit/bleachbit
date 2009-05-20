@@ -25,6 +25,7 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action type="file">~/.azureus/ipfilter.cache</action>
+    <action type="file">~\Application Data\Azureus\ipfilter.cache</action>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -32,10 +33,12 @@
     <action type="children" directories="true">~/.azureus/logs/</action>
     <action type="file">~/.azureus/update.log</action>
     <action type="file">~/.azureus/tracker.log</action>
+    <action type="children" directories="true">~\Application Data\Azureus\logs\</action>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action type="children" directories="false">~/.azureus/tmp/</action>
+    <action type="children" directories="false">~\Application Data\Azureus\tmp\</action>
   </option>
 </cleaner>
