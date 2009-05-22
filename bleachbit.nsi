@@ -52,18 +52,26 @@
 
 
 ;--------------------------------
+;Language Selection Dialog Settings
+
+  ;Remember the installer language
+  !define MUI_LANGDLL_REGISTRY_ROOT "HKCU" 
+  !define MUI_LANGDLL_REGISTRY_KEY "Software\BleachBit" 
+  !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+
+
+;--------------------------------
 ;Pages
 
   !insertmacro MUI_PAGE_LICENSE "COPYING"
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
   
-		!define MUI_FINISHPAGE_NOAUTOCLOSE
-        !define MUI_FINISHPAGE_RUN "$INSTDIR\BleachBit.exe"
-        !define MUI_FINISHPAGE_LINK         "Visit the BleachBit web site"
-        !define MUI_FINISHPAGE_LINK_LOCATION          "http://bleachbit.sourceforge.net"
-        !insertmacro MUI_PAGE_FINISH
-
+  !define MUI_FINISHPAGE_NOAUTOCLOSE
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\BleachBit.exe"
+  !define MUI_FINISHPAGE_LINK "Visit the BleachBit web site"
+  !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit.sourceforge.net"
+  !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
@@ -73,6 +81,22 @@
 ;Languages
 
   !insertmacro MUI_LANGUAGE "English"
+  !insertmacro MUI_LANGUAGE "Arabic"
+  !insertmacro MUI_LANGUAGE "Bulgarian"
+  !insertmacro MUI_LANGUAGE "Catalan"
+  !insertmacro MUI_LANGUAGE "Czech"
+  !insertmacro MUI_LANGUAGE "Danish"
+  !insertmacro MUI_LANGUAGE "Finnish"
+  !insertmacro MUI_LANGUAGE "French"
+  !insertmacro MUI_LANGUAGE "German"
+  !insertmacro MUI_LANGUAGE "Hebrew"
+  !insertmacro MUI_LANGUAGE "Italian"
+  !insertmacro MUI_LANGUAGE "Portuguese"
+  !insertmacro MUI_LANGUAGE "PortugueseBR"
+  !insertmacro MUI_LANGUAGE "Russian"
+  !insertmacro MUI_LANGUAGE "Slovak"
+  !insertmacro MUI_LANGUAGE "Spanish"
+  !insertmacro MUI_LANGUAGE "Turkish"
 
 
 ;--------------------------------
@@ -97,6 +121,16 @@ sectionEnd
 
 
 ;--------------------------------
+;Installer Functions
+
+Function .onInit
+
+  !insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+
+;--------------------------------
 ;Uninstaller Section
 
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
@@ -106,4 +140,14 @@ Section "Uninstall"
     RMDir /r "$INSTDIR"
     DeleteRegKey HKCU "Software\BleachBit"
 SectionEnd
+
+
+;--------------------------------
+;Uninstaller Functions
+
+Function un.onInit
+
+  !insertmacro MUI_UNGETLANGUAGE
+  
+FunctionEnd
 
