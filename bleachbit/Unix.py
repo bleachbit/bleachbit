@@ -171,7 +171,6 @@ class Locales:
             try:
                 lang = locale_to_language(locale)
             except:
-                print "Warning: invalid path '%s' where expecting a locale" % locale
                 continue
             if not lang in self.__languages:
                 self.__languages.append(lang)
@@ -207,7 +206,6 @@ class Locales:
             try:
                 language_code = locale_to_language(path)
             except:
-                print "Warning: invalid path '%s' where expecting a locale" % path
                 continue
             if None != language_filter and language_filter(locale_code, language_code):
                 continue
