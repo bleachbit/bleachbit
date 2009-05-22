@@ -398,8 +398,11 @@ class OpenOfficeOrg(Cleaner):
         self.add_option('recent_documents', _('Recent documents list'), _("OpenOffice.org's list of recently used documents."))
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
-        self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
-        self.prefixes += [ "~/.ooo-dev3" ]
+        if sys.platform == 'linux':
+            self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
+            self.prefixes += [ "~/.ooo-dev3" ]
+        if sys.platform == 'win32':
+            self.prefixes = [ "~\\Application Data\\OpenOffice.org\\3", "~\\Application Data\\OpenOffice.org2" ]
 
     def get_description(self):
         return _("OpenOffice.org office suite")
