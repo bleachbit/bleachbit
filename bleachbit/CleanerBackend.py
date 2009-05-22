@@ -522,24 +522,6 @@ class rpmbuild(Cleaner):
                 yield filename
 
 
-class Skype(Cleaner):
-    """Skype"""
-
-    def get_description(self):
-        return _("Delete Skype's chat logs")
-
-    def get_id(self):
-        return 'skype'
-
-    def get_name(self):
-        return 'Skype'
-
-    def list_files(self):
-        paths = glob.iglob(os.path.expanduser('~/.Skype/*/chatmsg[0-9]*.dbb'))
-        for path in paths:
-            yield path
-
-
 class System(Cleaner):
     """System in general"""
 
@@ -778,7 +760,6 @@ backends["openofficeorg"] = OpenOfficeOrg()
 backends["opera"] = Opera()
 if sys.platform == 'linux2':
     backends["rpmbuild"] = rpmbuild()
-backends["skype"] = Skype()
 backends["system"] = System()
 if sys.platform == 'linux2':
     backends["thumbnails"] = Thumbnails()
