@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-02-18 23:20-0700\n"
-"PO-Revision-Date: 2009-02-12 15:50+0000\n"
+"PO-Revision-Date: 2009-05-12 19:13+0000\n"
 "Last-Translator: MaXeR <Unknown>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-23 04:44+0000\n"
+"X-Launchpad-Export-Date: 2009-05-22 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
@@ -23,133 +23,19 @@ msgstr ""
 msgid "Cache"
 msgstr "الذاكرة المخبأة"
 
-msgid "Chat client"
-msgstr ""
-
-msgid "Chat logs"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
 #: ../bleachbit/CleanerBackend.py:504
 msgid "Cookies"
 msgstr "ملفّات تعريف الارتباط"
 
-msgid "Current session"
-msgstr ""
-
-msgid "Debug log"
-msgstr ""
-
-msgid "Debug logs"
-msgstr ""
-
-msgid ""
-"Delete the HTTP cookies, which contain information such as web site "
-"prefereneces, authentication, and tracking identification"
-msgstr ""
-
-msgid "Delete the cache"
-msgstr ""
-
-msgid "Delete the cache of Jamendo and Mangatune databases"
-msgstr ""
-
-msgid "Delete the chat logs"
-msgstr ""
-
-msgid "Delete the command history"
-msgstr ""
-
-msgid "Delete the cookies"
-msgstr ""
-
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
-
-msgid "Delete the current session"
-msgstr ""
-
-msgid "Delete the debug log"
-msgstr ""
-
-msgid "Delete the debug logs"
-msgstr ""
-
-msgid ""
-"Delete the history, which includes bookmarks, downloads, and visited sites"
-msgstr ""
-
-msgid "Delete the list of game servers"
-msgstr ""
-
-msgid "Delete the logs"
-msgstr ""
-
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr ""
-
-msgid "Delete the search indexes"
-msgstr ""
-
-msgid "Delete the temporary files"
-msgstr ""
-
-msgid "Delete the usage history"
-msgstr ""
-
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr ""
-
-msgid "Editor"
-msgstr ""
-
-msgid "Game"
-msgstr ""
-
-msgid "History"
-msgstr ""
-
-msgid "Index"
-msgstr ""
-
-msgid "Logs"
-msgstr ""
-
-msgid "Online databases"
-msgstr ""
-
-msgid "Search indexes"
-msgstr ""
-
-msgid "Search tool"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:408 ../bleachbit/CleanerBackend.py:593
 msgid "Temporary files"
 msgstr "الملفات المؤقتة"
-
-msgid "Visual shell for the console"
-msgstr ""
-
-msgid "Web browser"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
 #: ../bleachbit/CleanerBackend.py:503
 msgid "Web cache reduces time to display revisited pages"
 msgstr "ذاكرة الويب المخبأة تقلل وقت إعادة عرض الصفحات التي تم زياتها سابقاً"
-
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
-msgid ""
-"HTTP cookies contain information such as web site prefereneces, "
-"authentication, and tracking identification"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
 msgid "Download history"
@@ -163,20 +49,9 @@ msgstr "قائمة الملفات المُحمّلة"
 msgid "Passwords"
 msgstr "كلمات المرور"
 
-#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:171
 msgid "Places"
 msgstr "أماكن"
-
-#: ../bleachbit/CleanerBackend.py:116
-msgid ""
-"A database of URLs including bookmarks and a history of visited web sites"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:119
 msgid "Epiphany web browser"
@@ -193,16 +68,6 @@ msgstr "محفوظات النماذج المدخلة في مواقع الويب 
 #: ../bleachbit/CleanerBackend.py:169
 msgid "Session restore"
 msgstr "إستعادة الجلسة"
-
-#: ../bleachbit/CleanerBackend.py:169
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:171
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"web sites"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:172
 msgid "URL history"
@@ -246,12 +111,6 @@ msgstr "حذف الملفات المؤقتة لبرنامج GIMP"
 msgid "Delete the contents of Google Earth's cache and temporary files"
 msgstr "حذف المحتوى و الملفات المؤقتة و المخبأة لبرنامج Google Earth"
 
-#: ../bleachbit/CleanerBackend.py:407
-msgid ""
-"KDE cache including Konqueror.  Often contains sparse files where the "
-"apparent file size does not match the actual disk usage."
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:408
 msgid "Temporary files stored by KDE under the home directory"
 msgstr "الملفات المؤقتة المخزنة بواسطة KDE تحت المجلد الأساسي (Home)"
@@ -280,10 +139,6 @@ msgstr "طقم المكتب OpenOffice.org"
 msgid "Opera web browser"
 msgstr "متصفح الويب أوبرا"
 
-#: ../bleachbit/CleanerBackend.py:540
-msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:568
 msgid "Delete Skype's chat logs"
 msgstr "حذف سجل محادثات سكايب"
@@ -301,33 +156,14 @@ msgstr "تشغيل apt-get autoclean لحذف ملفات الإرشيف القد
 msgid "Broken desktop entries"
 msgstr "روابط سطح المكتب المكسورة"
 
-#: ../bleachbit/CleanerBackend.py:588
-msgid ""
-"Unusable .desktop files (menu entries and file associtations) that are "
-"either invalid structurally or point to non-existant locations"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:589 ../bleachbit/CleanerBackend.py:700
 #: ../bleachbit/CleanerBackend.py:702
 msgid "Clipboard"
 msgstr "الحافظة"
 
-#: ../bleachbit/CleanerBackend.py:589
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:590
-msgid "Cache location specified by XDG and used by various applications"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:591
 msgid "Localizations"
 msgstr "الترجمات"
-
-#: ../bleachbit/CleanerBackend.py:591
-msgid "Data used to operate the system in various languages and countries"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:592
 msgid "Rotated logs"
@@ -336,10 +172,6 @@ msgstr "السجلات المتناوبة"
 #: ../bleachbit/CleanerBackend.py:592
 msgid "Old system logs"
 msgstr "السجلات القديمة للنظام"
-
-#: ../bleachbit/CleanerBackend.py:593
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:594
 msgid "Trash"
@@ -378,21 +210,9 @@ msgstr "حذف المُصغّرات في مجلد المُصغّرات"
 msgid "Thumbnails"
 msgstr "المُصغّرات"
 
-#: ../bleachbit/CleanerBackend.py:747
-msgid "Delete Transmission's blocklist and fast resume cache"
-msgstr ""
-
 #: ../bleachbit/CleanerBackend.py:767
 msgid "Delete the temporary files from winetricks"
 msgstr "حذف المفات المؤقتة من winetricks"
-
-#: ../bleachbit/CleanerBackend.py:794
-msgid "Delete XChat logs and scrollback"
-msgstr ""
-
-#: ../bleachbit/FileUtilities.py:173
-msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
-msgstr ""
 
 #: ../bleachbit/GUI.py:66 ../bleachbit/GUI.py:558
 msgid "Preferences"
@@ -418,16 +238,6 @@ msgstr ""
 "إذا وجد تحديث, سيتم عرض معلومات عن. بعد ذلك, يمكنك تحميل و تركيب التحديث "
 "يدوياً."
 
-#: ../bleachbit/GUI.py:98
-msgid "Overwrite files to hide contents (ineffective in some situations)"
-msgstr ""
-
-#: ../bleachbit/GUI.py:101
-msgid ""
-"Overwriting is ineffective on some file systems and with certain BleachBit "
-"operations.  Overwriting is significantly slower."
-msgstr ""
-
 #: ../bleachbit/GUI.py:119
 msgid "All languages will be deleted except those checked."
 msgstr "كل اللغات سيتم حذفها ما عدا اللغات المختارة بعلامة \"صح\"."
@@ -448,21 +258,9 @@ msgstr "الاسم"
 msgid "Delete confirmation"
 msgstr "تأكيد الحذف"
 
-#: ../bleachbit/GUI.py:174
-msgid ""
-"Are you sure you want to delete files according to the selected operations?  "
-"The actual files that will be deleted may have changed since you ran the "
-"preview.  Files cannot be undeleted."
-msgstr ""
-
 #: ../bleachbit/GUI.py:255
 msgid "Active"
 msgstr "نشط"
-
-#: ../bleachbit/GUI.py:435 ../bleachbit/GUI.py:457
-#, python-format
-msgid "Exception while getting running operation '%s': '%s'"
-msgstr ""
 
 #: ../bleachbit/GUI.py:452
 msgid "Special operation: "
@@ -499,12 +297,6 @@ msgid ""
 msgstr ""
 "رخصة GNU العمومية نسخة ٣ أو أحدث.\n"
 "انظر http://www.gnu.org/licenses/gpl-3.0.txt"
-
-#: ../bleachbit/GUI.py:517
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  MaXeR https://launchpad.net/~themaxer"
 
 #: ../bleachbit/GUI.py:556
 msgid "_Quit"
@@ -566,6 +358,222 @@ msgstr "تحديث بليتش بت متوفر"
 msgid "Click 'Update BleachBit' for more information"
 msgstr "اضغط على 'تحديث بليتش بت' لمعلومات أوسع"
 
+#: ../bleachbit/Unix.py:465
+msgid "Another process is currently using yum"
+msgstr "عملية أخرى تستخدم Yum حالياً"
+
+#: ../bleachbit/Update.py:69
+msgid "Error when checking for updates: "
+msgstr "خطأ عند البحث عن تحديثات: "
+
+msgid "Chat client"
+msgstr "عميل محادثة"
+
+msgid "Chat logs"
+msgstr "سجلات المحادثة"
+
+msgid "Current session"
+msgstr "الجلسة الحالية"
+
+msgid "Debug log"
+msgstr ""
+
+msgid "Debug logs"
+msgstr ""
+
+msgid ""
+"Delete the HTTP cookies, which contain information such as web site "
+"prefereneces, authentication, and tracking identification"
+msgstr ""
+
+msgid "Delete the cache"
+msgstr "حذف الملفات المخبأة"
+
+msgid "Delete the cache of Jamendo and Mangatune databases"
+msgstr ""
+
+msgid "Delete the chat logs"
+msgstr "حذف سجلات المحادثة"
+
+msgid "Delete the command history"
+msgstr "حذف سجلات الأوامر"
+
+msgid "Delete the cookies"
+msgstr ""
+
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr ""
+
+msgid "Delete the current session"
+msgstr "حذف الجلسة الحالية"
+
+msgid "Delete the debug log"
+msgstr ""
+
+msgid "Delete the debug logs"
+msgstr ""
+
+msgid ""
+"Delete the history, which includes bookmarks, downloads, and visited sites"
+msgstr ""
+
+msgid "Delete the list of game servers"
+msgstr ""
+
+msgid "Delete the logs"
+msgstr "حذف السجلات"
+
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+
+msgid "Delete the search indexes"
+msgstr ""
+
+msgid "Delete the temporary files"
+msgstr ""
+
+msgid "Delete the usage history"
+msgstr ""
+
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "Game"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid "Logs"
+msgstr ""
+
+msgid "Online databases"
+msgstr ""
+
+msgid "Search indexes"
+msgstr ""
+
+msgid "Search tool"
+msgstr ""
+
+msgid "Visual shell for the console"
+msgstr ""
+
+msgid "Web browser"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
+#: ../bleachbit/CleanerBackend.py:504
+msgid ""
+"HTTP cookies contain information such as web site prefereneces, "
+"authentication, and tracking identification"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:116
+msgid ""
+"A database of URLs including bookmarks and a history of visited web sites"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:169
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:171
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"web sites"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:407
+msgid ""
+"KDE cache including Konqueror.  Often contains sparse files where the "
+"apparent file size does not match the actual disk usage."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:540
+msgid "Delete the files in the rpmbuild build directory"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:588
+msgid ""
+"Unusable .desktop files (menu entries and file associtations) that are "
+"either invalid structurally or point to non-existant locations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:589
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:590
+msgid "Cache location specified by XDG and used by various applications"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:591
+msgid "Data used to operate the system in various languages and countries"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:593
+msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:747
+msgid "Delete Transmission's blocklist and fast resume cache"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:794
+msgid "Delete XChat logs and scrollback"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:173
+msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
+msgstr ""
+
+#: ../bleachbit/GUI.py:98
+msgid "Overwrite files to hide contents (ineffective in some situations)"
+msgstr ""
+
+#: ../bleachbit/GUI.py:101
+msgid ""
+"Overwriting is ineffective on some file systems and with certain BleachBit "
+"operations.  Overwriting is significantly slower."
+msgstr ""
+
+#: ../bleachbit/GUI.py:174
+msgid ""
+"Are you sure you want to delete files according to the selected operations?  "
+"The actual files that will be deleted may have changed since you ran the "
+"preview.  Files cannot be undeleted."
+msgstr ""
+
+#: ../bleachbit/GUI.py:435 ../bleachbit/GUI.py:457
+#, python-format
+msgid "Exception while getting running operation '%s': '%s'"
+msgstr ""
+
+#: ../bleachbit/GUI.py:517
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  MaXeR https://launchpad.net/~themaxer"
+
 #: ../bleachbit/RecognizeCleanerML.py:50
 msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
@@ -582,11 +590,3 @@ msgstr ""
 #, python-format
 msgid "Executable not found: %s"
 msgstr ""
-
-#: ../bleachbit/Unix.py:465
-msgid "Another process is currently using yum"
-msgstr "عملية أخرى تستخدم Yum حالياً"
-
-#: ../bleachbit/Update.py:69
-msgid "Error when checking for updates: "
-msgstr "خطأ عند البحث عن تحديثات: "
