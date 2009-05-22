@@ -62,6 +62,7 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="id" type="xs:string" use="required"/>
+      <xs:attribute name="os" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
