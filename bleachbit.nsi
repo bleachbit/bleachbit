@@ -39,7 +39,7 @@
   InstallDirRegKey HKCU "Software\BleachBit" ""
 
   ;Request application privileges for Windows Vista
-  RequestExecutionLevel user
+  RequestExecutionLevel admin
 
   ;Best compression
   SetCompressor /SOLID lzma
