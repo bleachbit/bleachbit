@@ -197,13 +197,13 @@ def load_cleaners():
                 print "debug: '%s' is not usable" % pathname
 
 
-def pot_fragment(string):
+def pot_fragment(msgid, pathname):
     """Create a string fragment for generating .pot files"""
-    ret = '''# ../cleaners/*xml
+    ret = '''#: %s
 msgid "%s"
 msgstr ""
 
-''' % string
+''' % (pathname, msgid)
     return ret
 
 
@@ -211,21 +211,23 @@ def create_pot():
     """Create a .pot for translation using gettext"""
 
     cleaners = []
-    strings = []
+
+    f = open('../po/cleanerml.pot', 'w')
 
     for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):
             continue
+        strings = []
         try:
             xmlcleaner = CleanerML(pathname, \
                 lambda newstr: strings.append(newstr))
         except:
             print "error reading '%s'" % pathname
             traceback.print_exc()
+        else:
+            for string in sorted(set(strings)):
+                f.write(pot_fragment(string, pathname))
 
-    f = open('../po/cleanerml.pot', 'w')
-    for string in sorted(set(strings)):
-        f.write(pot_fragment(string))
     f.close()
 
 
