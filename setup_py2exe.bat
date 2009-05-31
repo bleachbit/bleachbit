@@ -22,7 +22,7 @@ del /q /s build > nul
 del /q /s dist > nul
 
 echo Running py2exe
-c:\python26\python.exe -OO setup.py py2exe
+c:\python25\python.exe -OO setup.py py2exe
 if not exist dist\bleachbit.exe goto exit
 
 echo Copying GTK files
@@ -36,6 +36,10 @@ xcopy c:\gtk\share dist\share /i /s /q
 echo Compressing executables
 upx --best dist\*.* dist\lib\pango\1.6.0\modules\*.dll dist\lib\gtk-2.0\2.10.0\loaders\*.dll
 
+echo Purging unnecessary locales
+c:\python25\python.exe setup_clean.py
+
+echo Building installer
 "c:\program files\nsis\makensis.exe" bleachbit.nsi
 
 :exit
