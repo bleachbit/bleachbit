@@ -8,12 +8,12 @@
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -39,6 +39,14 @@ online_update_notification_enabled = True
 ### Paths
 ###
 
+# Windows
+bleachbit_exe_path = None
+if hasattr(sys, 'frozen'):
+    # running frozen in py2exe
+    bleachbit_exe_path = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
+else:
+    bleachbit_exe_path = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
+
 # Debian, Ubuntu
 license_filename = "/usr/share/common-licenses/GPL-3"
 if not os.path.exists(license_filename):
@@ -50,16 +58,16 @@ if not os.path.exists(license_filename):
 if not os.path.exists(license_filename):
     # CentOS, Fedora, RHEL
     license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
-if not os.path.exists(license_filename):
+if not os.path.exists(license_filename) and sys.platform == 'win32':
     # Windows
-    license_filename = "c:\\Program Files\\BleachBit\\COPYING"
+    license_filename = os.path.join(bleachbit_exe_path, 'COPYING')
 
 # configuration
 options_dir = None
 if sys.platform == 'linux2':
     options_dir = os.path.expanduser("~/.config/bleachbit/")
 if sys.platform == 'win32':
-    options_dir = os.path.expanduser("~\\Application Data\BleachBit\\")
+    options_dir = os.path.expandvars("${APPDATA}\\BleachBit\\")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # personal cleaners
@@ -70,7 +78,7 @@ system_cleaners_dir = None
 if sys.platform == 'linux2':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 if sys.platform == 'win32':
-    system_cleaners_dir ='c:\\Program Files\\BleachBit\\share\\cleaners\\'
+    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 
 # application icon
 if os.path.exists("bleachbit.png"):
@@ -80,7 +88,7 @@ else:
     if sys.platform == 'linux2':
         appicon_path = "/usr/share/pixmaps/bleachbit.png"
     if sys.platform == 'win32':
-        appicon_path = "c:\\Program Files\\BleachBit\\share\\bleachbit.png"
+        appicon_path = os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')
 
 # locale directory
 if os.path.exists("./locale/"):
@@ -92,7 +100,8 @@ else:
     if sys.platform == 'linux2':
         locale_dir = "/usr/share/locale/"
     if sys.platform == 'win32':
-        locale_dir = "c:\\Program Files\\BleachBit\\share\\locale\\"
+        locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
+
 
 ###
 ### gettext
