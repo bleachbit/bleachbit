@@ -654,11 +654,16 @@ class System(Cleaner):
 
     def whitelisted(self, pathname):
         """Return boolean whether file is whitelisted"""
-        regexes = ['/tmp/pulse-[^/]+/pid',
-            '/tmp/gconfd-[^/]+/lock/ior',
-            '/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock',
-            '/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior',
-            '/tmp/.X0-lock' ]
+        regexes = [
+            '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
+            '^/tmp/.vbox-[^/]+-ipc/lock$',
+            '^/tmp/.wine-[0-9]+/server-.*/lock$',
+            '^/tmp/.X0-lock$',
+            '^/tmp/gconfd-[^/]+/lock/ior$',
+            '^/tmp/ksocket-[^/]+/(Arts_SoundServerV2|secret-cookie)$',
+            '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
+            '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
+            '^/tmp/pulse-[^/]+/pid$' ]
         for regex in regexes:
             if None != re.match(regex, pathname):
                 return True
@@ -809,9 +814,15 @@ class TestUtilities(unittest.TestCase):
 
     def test_whitelist(self):
         tests = [ \
-            ('/tmp/gconfd-z/lock/ior', True), \
-            ('/tmp/orbit-z/bonobo-activation-server-ior', True), \
-            ('/tmp/orbit-z/bonobo-activation-register.lock', True), \
+            ('/tmp/.truecrypt_aux_mnt1/control', True), \
+            ('/tmp/.truecrypt_aux_mnt1/volume', True), \
+            ('/tmp/.vbox-foo-ipc/lock', True), \
+            ('/tmp/.wine-500/server-806-102400f/lock', True), \
+            ('/tmp/gconfd-foo/lock/ior', True), \
+            ('/tmp/ksocket-foo/Arts_SoundServerV2', True), \
+            ('/tmp/ksocket-foo/secret-cookie', True), \
+            ('/tmp/orbit-foo/bonobo-activation-server-ior', True), \
+            ('/tmp/orbit-foo/bonobo-activation-register.lock', True), \
             ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior', True), \
             ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock', True), \
             ('/tmp/pulse-foo/pid', True), \
