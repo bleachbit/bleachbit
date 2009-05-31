@@ -744,30 +744,6 @@ class winetricks(Cleaner):
                     yield filename
 
 
-class XChat(Cleaner):
-    """Delete XChat logs and scrollback"""
-
-    def available(self):
-        return True
-
-    def get_id(self):
-        return 'xchat'
-
-    def get_description(self):
-        return _("Delete XChat logs and scrollback")
-
-    def get_name(self):
-        return "XChat"
-
-    def list_files(self):
-        dirs = [ "~/.xchat2/scrollback/" ]
-        dirs += [ "~/.xchat2/logs/" ] # Seen before XChat version 2.8.6
-        dirs += [ "~/.xchat2/xchatlogs" ] # Seen first in XChat version 2.8.6
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
 backends = {}
 if sys.platform == 'linux2':
     backends["epiphany"] = Epiphany()
@@ -784,7 +760,6 @@ if sys.platform == 'linux2':
     backends["thumbnails"] = Thumbnails()
     backends["transmission"] = Transmission()
     backends["winetricks"] = winetricks()
-backends["xchat"] = XChat()
 
 
 import unittest

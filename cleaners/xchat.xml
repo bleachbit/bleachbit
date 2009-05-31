@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="xchat">
+  <label>XChat</label>
+  <description>Chat client</description>
+  <option id="logs">
+    <label>Chat logs</label>
+    <description>Delete the chat logs</description>
+    <action type="children" directories="true">~/.xchat2/scrollback/</action>
+    <action type="glob">~/.xchat2/logs/*log</action>
+    <!-- ~/.xchat2/logs/*log seen before XChat version 2.8.6.  Not present in XChat 2.4.0 Windows. -->
+    <action type="glob">~/.xchat2/xchatlogs/*log</action>
+    <!-- ~/.xchat2/xchatlogs/*log seen first in XChat version 2.8.6 -->
+    <action type="children" directories="true">~\Application Data\X-Chat 2\scrollback\</action>
+    <action type="glob">~\Application Data\X-Chat 2\xchatlogs\*log</action>
+  </option>
+</cleaner>
