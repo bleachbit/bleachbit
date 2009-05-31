@@ -281,7 +281,7 @@ class TestCleanerML(unittest.TestCase):
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
-        self.assert_(type(pot_fragment("Foo")) is str)
+        self.assert_(type(pot_fragment("Foo", 'bar.xml')) is str)
 
 
 if __name__ == '__main__':
