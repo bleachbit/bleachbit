@@ -470,44 +470,6 @@ class OpenOfficeOrg(Cleaner):
                     yield path
 
 
-class Opera(Cleaner):
-    """Opera"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
-        self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
-        self.profile_dir = "~/.opera/"
-
-    def get_description(self):
-        return _("Opera web browser")
-
-    def get_id(self):
-        return 'opera'
-
-    def get_name(self):
-        return "Opera"
-
-    def list_files(self):
-        # browser cache
-        if self.options["cache"][1]:
-            dirs = [ os.path.expanduser(self.profile_dir + "cache4/"), \
-                os.path.expanduser(self.profile_dir + "opcache/") ]
-            for dirname in dirs:
-                for filename in children_in_directory(dirname, False):
-                    yield filename
- 
-        files = []
-
-        # cookies
-        if self.options["cookies"][1]:
-            files += [os.path.expanduser(self.profile_dir + "cookies4.dat")]
-
-        for path in files:
-            if os.path.lexists(path):
-                yield path
-
-
 class rpmbuild(Cleaner):
     """Delete the rpmbuild build directory"""
 
@@ -752,7 +714,6 @@ backends["firefox"] = Firefox()
 if sys.platform == 'linux2':
     backends["kde"] = KDE()
 backends["openofficeorg"] = OpenOfficeOrg()
-backends["opera"] = Opera()
 if sys.platform == 'linux2':
     backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
