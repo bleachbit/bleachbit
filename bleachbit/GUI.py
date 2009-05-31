@@ -23,6 +23,7 @@ from gettext import gettext as _
 import os
 import sys
 import threading
+import types
 import warnings
 
 warnings.simplefilter('error')
@@ -241,7 +242,7 @@ class TreeInfoModel:
 class TreeDisplayModel:
     """Displays the info model in a view"""
 
-    def make_view(self, model):
+    def make_view(self, model, parent):
         """Create and return a TreeView object"""
         self.view = gtk.TreeView(model)
 
@@ -254,7 +255,7 @@ class TreeDisplayModel:
         # second column
         self.renderer1 = gtk.CellRendererToggle()
         self.renderer1.set_property('activatable', True)
-        self.renderer1.connect('toggled', self.col1_toggled_cb, model)
+        self.renderer1.connect('toggled', self.col1_toggled_cb, model, parent)
         self.column1 = gtk.TreeViewColumn(_("Active"), self.renderer1)
         self.column1.add_attribute(self.renderer1, "active", 1)
         self.view.append_column(self.column1)
@@ -263,9 +264,40 @@ class TreeDisplayModel:
         self.view.expand_all()
         return self.view
 
-    def col1_toggled_cb(self, cell, path, model):
-        """When toggles the checkbox"""
-        model[path][1] = not model[path][1]
+    def set_cleaner(self, path, model, parent_window, value = None):
+        """Activate or deactive option of cleaner."""
+        if None == value:
+            # if not value given, toggle current value
+            value = not model[path][1]
+        assert(type(value) is types.BooleanType)
+        assert(type(model) is gtk.TreeStore)
+        cleaner_id = None
+        i = path
+        if type(i) is str:
+            # type is either str or gtk.TreeIter
+            i = model.get_iter(path)
+        parent = model.iter_parent(i)
+        if None != parent:
+            # this is an option (child), not a cleaner (parent)
+            cleaner_id = model[parent][2]
+            option_id = model[path][2]
+        if cleaner_id and value == True:
+            # when toggling an option, present any warnings
+            warning = backends[cleaner_id].get_warning(option_id)
+            if warning:
+                dialog = gtk.MessageDialog(parent_window, gtk.DIALOG_MODAL, \
+                    gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, \
+                    warning)
+                resp = dialog.run()
+                dialog.destroy()
+                if gtk.RESPONSE_CANCEL == resp:
+                    # user cancelled, so don't toggle option
+                    return
+        model[path][1] = value
+
+    def col1_toggled_cb(self, cell, path, model, parent_window):
+        """Callback for toggling cleaners"""
+        self.set_cleaner(path, model, parent_window)
         i = model.get_iter(path)
         # if toggled on, enable the parent
         parent = model.iter_parent(i)
@@ -284,7 +316,7 @@ class TreeDisplayModel:
         # if toggled and has children, do the same for each child
         child = model.iter_children(i)
         while child:
-            model[child][1] = model[path][1]
+            self.set_cleaner(child, model, parent_window, model[path][1])
             child = model.iter_next(child)
         return
 
@@ -431,7 +463,7 @@ class GUI:
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
-        self.view = display.make_view(mdl)
+        self.view = display.make_view(mdl, self.window)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrolled_window.add(self.view)
         return scrolled_window

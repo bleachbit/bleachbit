@@ -51,6 +51,7 @@ class Cleaner:
         self.description = None
         self.name = None
         self.options = {}
+        self.warnings = {}
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
@@ -59,6 +60,7 @@ class Cleaner:
 
     def add_option(self, option_id, name, description):
         self.options[option_id] = ( name, False, description )
+
 
     def available(self):
         """Is the cleaner available?"""
@@ -90,6 +92,13 @@ class Cleaner:
                 r.append((key, self.options[key][0], self.options[key][1]))
         return r
 
+    def get_warning(self, option_id):
+        """Return a warning as string."""
+        if option_id in self.warnings:
+            return self.warnings[option_id]
+        else:
+            return None
+
     def is_usable(self):
         """Return whether the cleaner is usable (has actions)"""
         return len(self.actions) > 0
@@ -111,6 +120,10 @@ class Cleaner:
         assert self.options.has_key(option_id)
         self.options[option_id] = (self.options[option_id][0], \
             value, self.options[option_id][2])
+
+    def set_warning(self, option_id, description):
+        """Set a warning to be displayed when option is selected interactively"""
+        self.warnings[option_id] = description
 
 
 class Epiphany(Cleaner):
@@ -178,6 +191,7 @@ class Firefox(Cleaner):
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
+        self.set_warning('places', _('Deleting Places deletes bookmarks.'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
@@ -775,7 +789,7 @@ backends["xchat"] = XChat()
 
 import unittest
 
-class TestUtilities(unittest.TestCase):
+class TestCleanerBackend(unittest.TestCase):
     def test_get_name(self):
         for key in sorted(backends):
             for name in backends[key].get_name():
