@@ -46,4 +46,5 @@ def clean_dist_locale():
             print cmd
             os.system(cmd)
 
-clean_dist_locale()
+if __name__ == '__main__':
+    clean_dist_locale()
