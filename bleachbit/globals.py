@@ -23,7 +23,7 @@ import os
 import sys
 
 
-APP_VERSION = "0.5.0"
+APP_VERSION = "0.5.1"
 APP_NAME = "BleachBit"
 
 update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
