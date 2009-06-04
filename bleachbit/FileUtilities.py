@@ -290,8 +290,9 @@ class TestFileUtilities(unittest.TestCase):
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
 
-        old_locale = locale.getlocale(locale.LC_NUMERIC)
-        locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
+        if sys.platform == 'linux2':
+            old_locale = locale.getlocale(locale.LC_NUMERIC)
+            locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
         # test one-way conversion for predefined values
         tests = [ ("0", bytes_to_human(0)),
@@ -325,7 +326,8 @@ class TestFileUtilities(unittest.TestCase):
                 self.assertEqual("1,00TB", bytes_to_human(1024**4))
 
         # clean up
-        locale.setlocale(locale.LC_NUMERIC, old_locale)
+        if sys.platform == 'linux2':
+            locale.setlocale(locale.LC_NUMERIC, old_locale)
 
 
     def test_children_in_directory(self): 
