@@ -127,16 +127,8 @@ def delete(path, shred = False):
         os.rmdir(path)
     elif stat.S_ISREG(mode):
         if options.get('shred') or shred:
-            # http://en.wikipedia.org/wiki/Data_remanence
-            # 2006 NIST Special Publication 800-88 (p. 7): "Studies have
-            # shown that most of today's media can be effectively cleared
-            # by one overwrite"
-            args = ["shred", "--remove", "--iterations=0", "--zero", path]
-            ret = subprocess.call(args)
-            if 0 != ret:
-                raise Exception("shred subprocess returned non-zero error code " % (ret,))
-        else:
-            os.remove(path)
+            wipe_contents(path)
+        os.remove(path)
     else:
         raise Exception("Unsupported special file type")
 
@@ -253,6 +245,26 @@ def listdir(directory):
         return
     for filename in os.listdir(dir):
         yield os.path.join(dir, filename)
+
+
+def wipe_contents(path):
+    """Wipe files contents
+
+    http://en.wikipedia.org/wiki/Data_remanence
+    2006 NIST Special Publication 800-88 (p. 7): "Studies have
+    shown that most of today's media can be effectively cleared
+    by one overwrite"
+    """
+    size = getsize(path)
+    f = open(path, 'wb')
+    blanks =  chr(0) * 4096
+    while size > 0:
+        f.write(blanks)
+        size -= 4096
+    f.flush()
+    f.truncate(0)
+    f.flush()
+    f.close()
 
 
 def vacuum_sqlite3(path):
@@ -509,6 +521,31 @@ class TestFileUtilities(unittest.TestCase):
         for pathname in listdir(('/tmp','~/.config/')):
             self.assert_(os.path.lexists(pathname), \
                 "does not exist: %s" % pathname)
+
+
+    def test_wipe_contents(self):
+        """Unit test for wipe_delete()"""
+
+        # create test file
+        import tempfile
+        (handle, filename) = tempfile.mkstemp("wipetest")
+        os.write(handle, "abcdefghij" * 12345)
+        os.close(handle)
+
+        # wipe it
+        wipe_contents(filename)
+
+        # check it
+        f = open(filename, 'rb')
+        while True:
+            byte = f.read(1)
+            if "" == byte:
+                break
+            self.assertEqual(byte, chr(0))
+        f.close()
+
+        # clean up
+        os.remove(filename)
 
 
     def test_vacuum_sqlite3(self):
