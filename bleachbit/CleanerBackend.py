@@ -684,28 +684,6 @@ class Transmission(Cleaner):
             for filename in children_in_directory(dirname, False):
                 yield filename
 
-
-class winetricks(Cleaner):
-    """Delete contents of the winetricks temp folders"""
-
-    def get_description(self):
-        return _("Delete the temporary files from winetricks")
-
-    def get_id(self):
-        return 'winetricks'
-
-    def get_name(self):
-        return 'winetricks'
-
-    def list_files(self):
-        dirs = [ "~/.wine/drive_c/winetrickstmp", "~/.winetrickscache" ]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                if os.path.lexists(filename):
-                    yield filename
-
-
 backends = {}
 if sys.platform == 'linux2':
     backends["epiphany"] = Epiphany()
@@ -720,7 +698,6 @@ backends["system"] = System()
 if sys.platform == 'linux2':
     backends["thumbnails"] = Thumbnails()
     backends["transmission"] = Transmission()
-    backends["winetricks"] = winetricks()
 
 
 import unittest
