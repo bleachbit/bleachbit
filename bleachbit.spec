@@ -34,7 +34,7 @@ Group:          Applications/System
 %endif
 License:        GPLv3
 URL:            http://bleachbit.sourceforge.net
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        %{name}-%{version}.tar.gz
 %if 0%{?mandriva_version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}
 %else
