@@ -26,12 +26,12 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action type="children" directories="false">~/.secondlife/cache/</action>
-    <action type="children" directories="false">~/Application Data\SecondLife\cache\</action>
+    <action type="children" directories="false">~\Application Data\SecondLife\cache\</action>
   </option>
   <option id="Logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
     <action type="children" directories="false">~/.secondlife/logs/</action>
-    <action type="children" directories="false">~/.Application Data\SecondLife\logs\</action>
+    <action type="children" directories="false">~\Application Data\SecondLife\logs\</action>
   </option>
 </cleaner>
