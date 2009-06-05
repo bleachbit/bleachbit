@@ -28,6 +28,8 @@ APP_NAME = "BleachBit"
 
 update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
 
+release_notes_url = "http://bleachbit.sourceforge.net/release_notes.php?version=" + str(APP_VERSION)
+
 socket_timeout = 10
 
 # Setting below value to false disables update notification (useful

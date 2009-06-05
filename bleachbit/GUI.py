@@ -38,7 +38,7 @@ from CleanerBackend import backends
 import FileUtilities
 from Options import options
 from globals import APP_NAME, APP_VERSION, appicon_path, \
-    license_filename, online_update_notification_enabled
+    license_filename, online_update_notification_enabled, release_notes_url
 
 
 
@@ -341,6 +341,7 @@ class GUI:
             <menuitem action="Preferences"/>
         </menu>
         <menu action="Help">
+            <menuitem action="ReleaseNotes"/>
             <menuitem action="About"/>
         </menu>
     </menubar>
@@ -523,6 +524,7 @@ class GUI:
                     ('File', None, _('_File')),
                     ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, None, self.cb_preferences_dialog),
                     ('Edit', None, _("_Edit")),
+                    ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None, lambda link: open_url(release_notes_url)),
                     ('About', gtk.STOCK_ABOUT, _('_About'), None, None, self.about),
                     ('Help', None, _("_Help")))
         actiongroup.add_actions(entries)
