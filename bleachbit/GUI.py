@@ -35,6 +35,7 @@ warnings.simplefilter('default')
 
 import Update
 from CleanerBackend import backends
+import FileUtilities
 from Options import options
 from globals import APP_NAME, APP_VERSION, appicon_path, \
     license_filename, online_update_notification_enabled
@@ -166,7 +167,7 @@ class PreferencesDialog:
 
 
 
-def delete_confirmation_dialog(parent):
+def delete_confirmation_dialog(parent, mention_preview):
     """Return boolean whether OK to delete files."""
     dialog = gtk.Dialog(title = _("Delete confirmation"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
     dialog.set_default_size(300, -1)
@@ -175,7 +176,12 @@ def delete_confirmation_dialog(parent):
     icon = gtk.Image()
     icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
     hbox.pack_start(icon, False)
-    question = gtk.Label(_("Are you sure you want to delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.  Files cannot be undeleted."))
+    if mention_preview:
+        question_text = _("Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
+    else:
+        question_text = _("Are you sure you want to permanently delete these files?")
+
+    question = gtk.Label(question_text)
     question.set_line_wrap(True)
     hbox.pack_start(question, False)
     dialog.vbox.pack_start(hbox, False)
@@ -324,19 +330,21 @@ class GUI:
     """The main application GUI"""
 
     ui = \
-        '''<ui>
+'''
+<ui>
     <menubar name="MenuBar">
-      <menu action="File">
-        <menuitem action="Quit"/>
-      </menu>
-      <menu action="Edit">
-        <menuitem action="Preferences"/>
-      </menu>
-      <menu action="Help">
-        <menuitem action="About"/>
-      </menu>
+        <menu action="File">
+            <menuitem action="ShredFiles"/>
+            <menuitem action="Quit"/>
+        </menu>
+        <menu action="Edit">
+            <menuitem action="Preferences"/>
+        </menu>
+        <menu action="Help">
+            <menuitem action="About"/>
+        </menu>
     </menubar>
-    </ui>'''
+</ui>'''
 
 
     def append_text(self, text, tag = None, __iter = None):
@@ -420,7 +428,7 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not True == delete_confirmation_dialog(self.window):
+        if not True == delete_confirmation_dialog(self.window, True):
             return
         self.preview_or_run_operations(True)
 
@@ -467,10 +475,32 @@ class GUI:
         scrolled_window.add(self.view)
         return scrolled_window
 
+
     def cb_preferences_dialog(self, action):
         """Callback for preferences dialog"""
         pref = PreferencesDialog(self.window)
         pref.run()
+
+
+    def cb_shred_file(self, action):
+        """Callback for shredding a file"""
+        chooser = gtk.FileChooserDialog(title = _("Choose files to shred"),
+            parent = self.window,
+            action = gtk.FILE_CHOOSER_ACTION_OPEN,
+            buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
+        chooser.set_select_multiple(True)
+        resp = chooser.run()
+        paths =  chooser.get_filenames()
+        chooser.destroy()
+
+        if gtk.RESPONSE_OK != resp:
+            return
+
+        if not True == delete_confirmation_dialog(self.window, mention_preview = False):
+            return
+
+        for path in paths:
+            FileUtilities.delete(path, shred = True)
 
 
     def create_menubar(self):
@@ -487,12 +517,14 @@ class GUI:
         self.actiongroup = actiongroup
 
         # Create actions
-        entries = [('Quit', gtk.STOCK_QUIT, _('_Quit'), None, _('Quit BleachBit'), lambda *dummy: gtk.main_quit()),
-                   ('File', None, _('_File')),
-                   ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, _("Configure BleachBit"), self.cb_preferences_dialog),
-                   ('Edit', None, _("_Edit")),
-                   ('About', gtk.STOCK_ABOUT, _('_About'), None, _('Show about'), self.about),
-                   ('Help', None, _("_Help"))]
+        entries = (
+                    ('ShredFiles', gtk.STOCK_DELETE, _('_Shred files'), None, None, self.cb_shred_file),
+                    ('Quit', gtk.STOCK_QUIT, _('_Quit'), None, None, lambda *dummy: gtk.main_quit()),
+                    ('File', None, _('_File')),
+                    ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, None, self.cb_preferences_dialog),
+                    ('Edit', None, _("_Edit")),
+                    ('About', gtk.STOCK_ABOUT, _('_About'), None, None, self.about),
+                    ('Help', None, _("_Help")))
         actiongroup.add_actions(entries)
         actiongroup.get_action('Quit').set_property('short-label', '_Quit')
 
@@ -505,6 +537,7 @@ class GUI:
         # Create a MenuBar
         menubar = uimanager.get_widget('/MenuBar')
         return menubar
+
 
     def create_toolbar(self):
         """Create the toolbar"""
