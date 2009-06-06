@@ -27,7 +27,7 @@
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <action type="children" directories="true">~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/</action>
     <action type="children" directories="true">~/.macromedia/Flash_Player/#SharedObjects/</action>
-    <action type="children" directories="true">~\Application Data\Macromedia\Flash Player\#SharedObjects\</action>
-    <action type="children" directories="true">~\Application Data\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\</action>
+    <action type="children" directories="true">$APPDATA\Macromedia\Flash Player\#SharedObjects\</action>
+    <action type="children" directories="true">$APPDATA\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\</action>
   </option>
 </cleaner>

@@ -34,6 +34,6 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <action type="file">~/.opera/cookies4.dat</action>
-    <action type="file">~/Application Data\Opera\Opera\profile\cookies4.dat</action>
+    <action type="file">$APPDATA\Opera\Opera\profile\cookies4.dat</action>
   </option>
 </cleaner>
