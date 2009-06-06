@@ -25,6 +25,8 @@
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
     <action type="glob">~/.Skype/*/chatmsg[0-9]*.dbb</action>
-    <action type="glob">~\Application Data\Skype\*\chatmsg[0-9]*.dbb</action>
+    <action type="glob">~/.Skype/*/chatsync/*/*.dat</action>
+    <action type="glob">$APPDATA\Skype\*\chatmsg[0-9]*.dbb</action>
+    <action type="glob">$APPDATA\Skype\*\chatsync\*\*.dat</action>
   </option>
 </cleaner>
