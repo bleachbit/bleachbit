@@ -56,18 +56,18 @@ class Action:
         (those actions which list files for deletion)"""
         for action in self.actions:
             action_type = action[0]
-            action_path = action[1]
+            action_path = os.path.expanduser(os.path.expandvars(action[1]))
             if 'list_children' == action_type:
-                rootpath = os.path.expanduser(action_path)
+                rootpath = action_path
                 directories = action[2]
                 for pathname in children_in_directory(rootpath, directories):
                     yield pathname
             elif 'list_file' == action_type:
-                pathname = os.path.expanduser(action_path)
+                pathname = action_path
                 if os.path.lexists(pathname):
                     yield pathname
             elif 'list_glob' == action_type:
-                for pathname in glob.iglob(os.path.expanduser(action_path)):
+                for pathname in glob.iglob(action_path):
                   yield pathname
             else:
                 raise RuntimeError("Unknown action type: '%s'" % action_type)

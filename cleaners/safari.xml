@@ -31,15 +31,13 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
-    <action type="file">~\Application Data\Apple Computer\Safari\Cookies\Cookies.plist</action>
-    <action type="file">~\AppData\Roaming\Apple Computer\Safari\Cookies\Cookies.plist</action>
+    <action type="file">$APPDATA\Apple Computer\Safari\Cookies\Cookies.plist</action>
   </option>
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action type="file">~\Application Data\Apple Computer\Safari\History.plist</action>
+    <action type="file">$APPDATA\Apple Computer\Safari\History.plist</action>
     <action type="children" directories="false">~\Local Settings\Application Data\Apple Computer\Safari\History\</action>
-    <action type="file">~\AppData\Roaming\Apple Computer\Safari\History.plist</action>
     <action type="children" directories="false">~\AppData\Local\Apple Computer\Safari\History\</action>
   </option>
 </cleaner>

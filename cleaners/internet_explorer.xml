@@ -26,7 +26,7 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <action type="children" directories="false">~\Cookies\</action>
-    <action type="children" directories="false">~\AppData\Roaming\Microsoft\Windows\Cookies\</action>
+    <action type="children" directories="false">$APPDATA\Microsoft\Windows\Cookies\</action>
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
