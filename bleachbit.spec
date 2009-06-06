@@ -149,11 +149,11 @@ desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
 	--vendor="" %{name}-root.desktop
 
-%suse_update_desktop_file %{name}-root
+%suse_update_desktop_file -i %{name}-root Utility Filesystem
 %endif
 
 %if 0%{?suse_version}
-%suse_update_desktop_file %{name}
+%suse_update_desktop_file %{name} Utility Filesystem
 %endif
 
 
