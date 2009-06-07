@@ -2,9 +2,16 @@ include COPYING
 include MANIFEST
 include MANIFEST.in
 include Makefile
+include README
 include bleachbit.desktop
+include bleachbit.ico
+include bleachbit.nsi
 include bleachbit.spec
 include bleachbit.png
+include bleachbit.py
+include setup.py
+include setup_clean.py
+include setup_py2exe.bat
 include cleaners/*xml
 include cleaners/Makefile
 include doc/cleaner_markup_language.xsd
