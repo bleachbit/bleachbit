@@ -19,12 +19,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="nexuiz">
+<cleaner id="nexuiz" os="linux">
   <label>Nexuiz</label>
-  <description>game</description>
+  <description>Game</description>
   <option id="cache">
-    <label>Map cache</label>
-    <description>Delete the Nexuiz map cache</description>
+    <label>Cache</label>
+    <description>Delete the cache</description>
     <action  type="children" directories="false">~/.nexuiz/data/dlcache</action>
   </option>
 </cleaner>
