@@ -19,17 +19,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="gftp">
+<cleaner id="gftp" os="linux">
   <label>gFTP</label>
-  <description>FTP client</description>
+  <description>File transfer client</description>
   <option id="logs">
     <label>Logs</label>
-    <description>Delete the gFTP cache</description>
+    <description>Delete the logs</description>
     <action type="file">~/.gftp/gftp.log</action>
   </option>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the gFTP logs</description>
-    <action  type="children" directories="false">~/.gftp/cache</action>
+    <description>Delete the cache</description>
+    <action type="children" directories="false">~/.gftp/cache</action>
   </option>
 </cleaner>
