@@ -98,7 +98,7 @@ class CleanerML:
         self.cleaner.id = cleaner.getAttribute('id')
         self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
-        if description:
+        if description and description[0].parentNode == cleaner:
             self.handle_cleaner_description(description[0])
         self.handle_cleaner_options(cleaner.getElementsByTagName('option'))
 
