@@ -654,26 +654,6 @@ class System(Cleaner):
         return False
 
 
-
-class Transmission(Cleaner):
-    """Transmission client for BitTorrent"""
-
-    def get_description(self):
-        return _("Delete Transmission's blocklist and fast resume cache")
-
-    def get_id(self):
-        return 'transmission'
-
-    def get_name(self):
-        return "Transmission"
-
-    def list_files(self):
-        dirs = [ "~/.config/transmission/blocklists", "~/.config/transmission/resume"]
-        for dirname in dirs:
-            dirname = os.path.expanduser(dirname)
-            for filename in children_in_directory(dirname, False):
-                yield filename
-
 backends = {}
 if sys.platform == 'linux2':
     backends["epiphany"] = Epiphany()
@@ -685,8 +665,6 @@ backends["openofficeorg"] = OpenOfficeOrg()
 if sys.platform == 'linux2':
     backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
-if sys.platform == 'linux2':
-    backends["transmission"] = Transmission()
 
 
 import unittest
