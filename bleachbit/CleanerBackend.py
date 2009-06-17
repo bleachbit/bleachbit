@@ -509,11 +509,11 @@ class System(Cleaner):
             self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
             self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
             self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
-            self.add_option('tmp', _('Temporary files'), _('User-owned, unopened, regular files in /tmp/ and /var/tmp/'))
             self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
             self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
             self.add_option('yum', _('Yum clean'), _("Delete all Yum's cache"))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+        self.add_option('tmp', _('Temporary files'), _('Delete temporary files created by various programs'))
 
     def get_description(self):
         return _("The system in general")
@@ -581,6 +581,13 @@ class System(Cleaner):
                         not self.whitelisted(path)
                     if ok:
                         yield path
+
+        if sys.platform == 'win32' and self.options["tmp"][1]:
+            dirname = os.path.expanduser("~\\Local Settings\\Temp\\")
+            for filename in children_in_directory(dirname, True):
+                yield filename
+
+
         # trash
         if sys.platform == 'linux2' and self.options["trash"][1]:
             dirname = os.path.expanduser("~/.Trash")
