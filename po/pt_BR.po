@@ -7,19 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-05 04:55-0600\n"
-"PO-Revision-Date: 2009-05-30 21:13+0000\n"
-"Last-Translator: Alex B. Oliveira <alexme7@gmail.com>\n"
+"POT-Creation-Date: 2009-06-07 13:44-0600\n"
+"PO-Revision-Date: 2009-06-10 13:13+0000\n"
+"Last-Translator: A. Gabriel <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-06 20:44+0000\n"
+"X-Launchpad-Export-Date: 2009-06-17 03:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/beagle.xml
 #: ../cleaners/opera.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/gftp.xml ../cleaners/chrome.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:134
 #: ../bleachbit/CleanerBackend.py:187 ../bleachbit/CleanerBackend.py:379
 #: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:509
@@ -36,8 +37,8 @@ msgid "Game"
 msgstr "Jogo"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:135
-#: ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -46,8 +47,8 @@ msgid "Current session"
 msgstr "Sessão atual"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:135
-#: ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid ""
 "Delete cookies, which contain information such as web site prefereneces, "
 "authentication, and tracking identification"
@@ -59,24 +60,25 @@ msgstr ""
 msgid "Delete the current session"
 msgstr "Apagar a sessão atual"
 
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
 msgstr ""
 "Apagar o histórico, o que incluí os marcadores, downloads e sites visitados"
 
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Apagar o cache da web, o que reduz o tempo de espera no acesso às páginas já "
 "visitadas"
 
 #: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
-#: ../cleaners/bash.xml ../cleaners/elinks.xml
+#: ../cleaners/bash.xml ../cleaners/elinks.xml ../cleaners/chrome.xml
 msgid "History"
 msgstr "Histórico"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/elinks.xml
+#: ../cleaners/chrome.xml
 msgid "Web browser"
 msgstr "Navegador da web"
 
@@ -112,7 +114,7 @@ msgstr "Saídas de debug"
 
 #: ../cleaners/beagle.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/secondlife_viewer.xml
+#: ../cleaners/gftp.xml ../cleaners/secondlife_viewer.xml
 msgid "Delete the cache"
 msgstr "Remover o cache"
 
@@ -148,10 +150,12 @@ msgid "Online databases"
 msgstr "Bancos de dados on-line"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml
 msgid "Delete the logs"
 msgstr "Apagar os registros"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml
 msgid "Logs"
 msgstr "Registros"
 
@@ -159,6 +163,10 @@ msgstr "Registros"
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
 msgid "Delete the temporary files"
 msgstr "Apagar os arquivos temporários"
+
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Cliente de transferência de arquivos"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
@@ -199,6 +207,14 @@ msgstr "Visualizador de multimídia principalmente para a Web"
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "Apagar os cookies, URLs visitados e histórico de pesquisas"
+
+#: ../cleaners/chrome.xml
+msgid "Delete the current and last sessions"
+msgstr "Remover as últimas sessões inclusive a atual"
+
+#: ../cleaners/chrome.xml
+msgid "Session"
+msgstr "Sessão"
 
 #: ../cleaners/recoll.xml
 msgid ""
@@ -281,7 +297,7 @@ msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:194
 msgid "Deleting Places deletes bookmarks."
-msgstr ""
+msgstr "Removendo marcadores de Locais"
 
 #: ../bleachbit/CleanerBackend.py:195
 msgid "URL history"
@@ -521,10 +537,13 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"Tem certeza que deseja remover esses arquivos de forma permanente de acordo "
+"com as operações selecionadas? Os arquivos que serão removidos podem ter "
+"sido alterados desde a última pré-visualização."
 
 #: ../bleachbit/GUI.py:182
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "Tem certeza de que deseja remover esses arquivos permanentemente?"
 
 #: ../bleachbit/GUI.py:264
 msgid "Active"
@@ -552,11 +571,11 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:488
 msgid "Choose files to shred"
-msgstr ""
+msgstr "Escolher arquivos a serem eliminados"
 
 #: ../bleachbit/GUI.py:522
 msgid "_Shred Files"
-msgstr ""
+msgstr "El_iminar arquivos"
 
 #: ../bleachbit/GUI.py:523
 msgid "_Quit"
@@ -572,7 +591,7 @@ msgstr "_Editar"
 
 #: ../bleachbit/GUI.py:527
 msgid "_Release Notes"
-msgstr ""
+msgstr "_Notas de lançamento"
 
 #: ../bleachbit/GUI.py:528
 msgid "_About"
@@ -636,35 +655,35 @@ msgstr "Executável não encontrado: %s"
 msgid "Another process is currently using yum"
 msgstr "Outro processo está usando yum atualmente"
 
-#: ../bleachbit/Update.py:69
+#: ../bleachbit/Update.py:73
 msgid "Error when checking for updates: "
 msgstr "Erro ao verificar se há atualizações: "
 
-#: ../bleachbit/Worker.py:46
+#: ../bleachbit/Worker.py:45
 msgid "You must select an operation"
 msgstr "Você deve selecionar uma operação"
 
-#: ../bleachbit/Worker.py:75 ../bleachbit/Worker.py:94
+#: ../bleachbit/Worker.py:74 ../bleachbit/Worker.py:93
 #, python-format
 msgid "Exception while getting running operation '%s': '%s'"
 msgstr "Exeção enquanto está executando a operação '%s': '%s'"
 
-#: ../bleachbit/Worker.py:90
+#: ../bleachbit/Worker.py:89
 msgid "Special operation: "
 msgstr "Operação especial: "
 
-#: ../bleachbit/Worker.py:131
+#: ../bleachbit/Worker.py:130
 msgid "Please wait.  Scanning and deleting: "
 msgstr "Aguarde. Scaniando e deletando: "
 
-#: ../bleachbit/Worker.py:134
+#: ../bleachbit/Worker.py:133
 msgid "Please wait.  Scanning: "
 msgstr "Aguarde. Scaniando: "
 
-#: ../bleachbit/Worker.py:147
+#: ../bleachbit/Worker.py:146
 msgid "Done."
 msgstr "Concluído."
 
-#: ../bleachbit/Worker.py:148
+#: ../bleachbit/Worker.py:147
 msgid "Total size: "
 msgstr "Tamanho total: "
