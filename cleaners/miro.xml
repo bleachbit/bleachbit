@@ -19,14 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="miro" os="linux">
+<cleaner id="miro">
   <label>Miro</label>
   <description>Multimedia viewer</description>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.miro/icon-cache</action>
-    <action type="children" directories="false">~/.miro/mozilla/Cache</action>
+    <action type="children" directories="false">~/.miro/icon-cache/</action>
+    <action type="children" directories="false">~/.miro/mozilla/Cache/</action>
+    <action type="children" directories="false">$APPDATA\Participatory Culture Foundation\Miro\Support\icon-cache\</action>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -34,5 +35,9 @@
     <action type="file">~/.miro/miro-downloader-log</action>
     <action type="file">~/.miro/miro-log</action>
     <action type="file">~/.miro/miro-log.1</action>
+    <action type="file">~\Local Settings\Temp\Miro-downloader.log</action>
+    <action type="file">~\Local Settings\Temp\Miro.log</action>
+    <action type="file">~\Local Settings\Temp\Miro.log.1</action>
+    <action type="file">~\Local Settings\Temp\Miro_Download_Daemon_a.txt</action>
   </option>
 </cleaner>
