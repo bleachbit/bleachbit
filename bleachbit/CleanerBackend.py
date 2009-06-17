@@ -138,7 +138,7 @@ class Epiphany(Cleaner):
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
 
     def get_description(self):
-        return _("Epiphany web browser")
+        return _("Web browser")
 
     def get_id(self):
         return 'epiphany'
@@ -201,7 +201,7 @@ class Firefox(Cleaner):
             self.profile_dir = "~\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
 
     def get_description(self):
-        return _("Mozilla Firefox web browser")
+        return _("Web browser")
 
     def get_id(self):
         return 'firefox'
@@ -402,14 +402,15 @@ class KDE(Cleaner):
                 for path in children_in_directory(dirname, False):
                     yield path
 
+
 class OpenOfficeOrg(Cleaner):
     """Delete OpenOffice.org cache"""
 
     def __init__(self):
         Cleaner.__init__(self)
         self.options = {}
-        self.add_option('cache', _('Cache'), _('Cached registry and package data'))
-        self.add_option('recent_documents', _('Recent documents list'), _("OpenOffice.org's list of recently used documents."))
+        self.add_option('cache', _('Cache'), _('Delete the cache'))
+        self.add_option('recent_documents', _('Recent documents list'), _("Delete the list of recently used documents"))
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if sys.platform == 'linux2':
@@ -419,7 +420,7 @@ class OpenOfficeOrg(Cleaner):
             self.prefixes = [ "~\\Application Data\\OpenOffice.org\\3", "~\\Application Data\\OpenOffice.org2" ]
 
     def get_description(self):
-        return _("OpenOffice.org office suite")
+        return _("Office suite")
 
     def get_id(self):
         return 'openofficeorg'
@@ -511,7 +512,7 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
             self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
             self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
-            self.add_option('yum', _('Yum clean'), _("Delete all Yum's cache"))
+            self.add_option('yum', _('Yum clean'), _("Delete the cache"))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('tmp', _('Temporary files'), _('Delete temporary files created by various programs'))
 
