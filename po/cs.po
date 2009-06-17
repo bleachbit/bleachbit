@@ -7,19 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-05 04:55-0600\n"
-"PO-Revision-Date: 2009-06-06 02:24+0000\n"
+"POT-Creation-Date: 2009-06-07 13:44-0600\n"
+"PO-Revision-Date: 2009-06-16 00:48+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-06 20:44+0000\n"
+"X-Launchpad-Export-Date: 2009-06-17 03:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/beagle.xml
 #: ../cleaners/opera.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/gftp.xml ../cleaners/chrome.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:134
 #: ../bleachbit/CleanerBackend.py:187 ../bleachbit/CleanerBackend.py:379
 #: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:509
@@ -36,8 +37,8 @@ msgid "Game"
 msgstr "Hra"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:135
-#: ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -46,34 +47,37 @@ msgid "Current session"
 msgstr "Aktuální sezení"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:135
-#: ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid ""
 "Delete cookies, which contain information such as web site prefereneces, "
 "authentication, and tracking identification"
 msgstr ""
+"Smazat cookies, která obsahují informace jako nastavení webových stránek, "
+"autentizace a identifikace pro trackery"
 
 #: ../cleaners/chromium.xml
 msgid "Delete the current session"
 msgstr "Smazat aktuální sezení"
 
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
 msgstr ""
 "Smazat historii obsahující záložky, historii stahování a navštívené stránky"
 
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Smazat webovou cache, která zrychluje načítání již navštívených stránek"
 
 #: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
-#: ../cleaners/bash.xml ../cleaners/elinks.xml
+#: ../cleaners/bash.xml ../cleaners/elinks.xml ../cleaners/chrome.xml
 msgid "History"
 msgstr "Historie"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/elinks.xml
+#: ../cleaners/chrome.xml
 msgid "Web browser"
 msgstr "Webový prohlížeč"
 
@@ -110,7 +114,7 @@ msgstr "Ladící záznamy"
 
 #: ../cleaners/beagle.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/secondlife_viewer.xml
+#: ../cleaners/gftp.xml ../cleaners/secondlife_viewer.xml
 msgid "Delete the cache"
 msgstr "Vymazat cache"
 
@@ -144,10 +148,12 @@ msgid "Online databases"
 msgstr "Online databáze"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml
 msgid "Delete the logs"
 msgstr "Smazat záznamy"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml
 msgid "Logs"
 msgstr "Záznamy"
 
@@ -155,6 +161,10 @@ msgstr "Záznamy"
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
 msgid "Delete the temporary files"
 msgstr "Smazat dočasné soubory"
+
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Klient  pro přenos souborů"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
@@ -190,11 +200,19 @@ msgstr "Smazat historii příkazů"
 
 #: ../cleaners/flash.xml
 msgid "Multimedia viewer mainly for the Web"
-msgstr "Multimediální prohlížeč, hlavně pro web"
+msgstr "Multimediální prohlížeč, zejména pro web"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "Smazat cookies, navštívené stránky a historii hledání"
+
+#: ../cleaners/chrome.xml
+msgid "Delete the current and last sessions"
+msgstr "Smazat aktuální a poslední sezení"
+
+#: ../cleaners/chrome.xml
+msgid "Session"
+msgstr "Sezení"
 
 #: ../cleaners/recoll.xml
 msgid ""
@@ -207,7 +225,7 @@ msgstr "Index"
 
 #: ../bleachbit.desktop:1
 msgid "Unnecessary file cleaner"
-msgstr "Čistič nepotřebných souborů"
+msgstr "Čistič disku od nepotřebných souborů"
 
 #: ../bleachbit.desktop:1
 msgid "Free space and maintain privacy"
@@ -285,7 +303,7 @@ msgstr "Seznam navštívených stránek"
 
 #: ../bleachbit/CleanerBackend.py:196
 msgid "Vacuum"
-msgstr "Vakuum"
+msgstr "Defragmentace databáze"
 
 #: ../bleachbit/CleanerBackend.py:196
 msgid ""
@@ -310,6 +328,8 @@ msgid ""
 "KDE cache including Konqueror.  Often contains sparse files where the "
 "apparent file size does not match the actual disk usage."
 msgstr ""
+"KDE cache včetně Konqueroru. Často obsahují řídké soubory, kde zřejmá "
+"velikost souboru neodpovídá skutečnému využití disku."
 
 #: ../bleachbit/CleanerBackend.py:380
 msgid "Temporary files stored by KDE under the home directory"
@@ -321,7 +341,7 @@ msgstr "Desktopové prostředí KDE"
 
 #: ../bleachbit/CleanerBackend.py:411
 msgid "Cached registry and package data"
-msgstr ""
+msgstr "Cache registru a balíček dat"
 
 #: ../bleachbit/CleanerBackend.py:412 ../bleachbit/CleanerBackend.py:514
 msgid "Recent documents list"
@@ -337,12 +357,12 @@ msgstr "Kancelářský balík OpenOffice.org"
 
 #: ../bleachbit/CleanerBackend.py:477
 msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
+msgstr "Smazat soubory v build složce rpmbuild"
 
 #: ../bleachbit/CleanerBackend.py:507 ../bleachbit/CleanerBackend.py:611
 #: ../bleachbit/CleanerBackend.py:613
 msgid "APT autoclean"
-msgstr "APT autoclean"
+msgstr "Automatické čištění APT"
 
 #: ../bleachbit/CleanerBackend.py:507
 msgid "Run apt-get autoclean to delete old downloaded archive files"
@@ -362,7 +382,7 @@ msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:509
 msgid "Cache location specified by XDG and used by various applications"
-msgstr ""
+msgstr "Umístění cache specifikované XDG a používané různými aplikacemi"
 
 #: ../bleachbit/CleanerBackend.py:510
 msgid "Localizations"
@@ -374,7 +394,7 @@ msgstr "Data použitá pro provoz systému v různých jazycích a zemích"
 
 #: ../bleachbit/CleanerBackend.py:511
 msgid "Rotated logs"
-msgstr ""
+msgstr "Otočené záznamy"
 
 #: ../bleachbit/CleanerBackend.py:511
 msgid "Old system logs"
@@ -431,7 +451,7 @@ msgstr "Smazat náhledy ve složce s náhledy"
 
 #: ../bleachbit/CleanerBackend.py:660
 msgid "Thumbnails"
-msgstr "Náhledy"
+msgstr "Náhledy souborů"
 
 #: ../bleachbit/CleanerBackend.py:672
 msgid "Delete Transmission's blocklist and fast resume cache"
@@ -504,6 +524,8 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"Opravdu chcete smazat vámi označené soubory? Smazané soubory již nelze "
+"obnovit. Chcete-li vidět, o jaké soubory se jedná, klikněte na \"Náhled\""
 
 #: ../bleachbit/GUI.py:182
 msgid "Are you sure you want to permanently delete these files?"
@@ -617,35 +639,35 @@ msgstr "Spustitelný soubor nenalezen: %s"
 msgid "Another process is currently using yum"
 msgstr "Nějaký proces momentálně používá Yum"
 
-#: ../bleachbit/Update.py:69
+#: ../bleachbit/Update.py:73
 msgid "Error when checking for updates: "
 msgstr "Chyba při kontrole aktualizací: "
 
-#: ../bleachbit/Worker.py:46
+#: ../bleachbit/Worker.py:45
 msgid "You must select an operation"
-msgstr "Musíte vybrat operaci"
+msgstr "Musíte zvolit operaci"
 
-#: ../bleachbit/Worker.py:75 ../bleachbit/Worker.py:94
+#: ../bleachbit/Worker.py:74 ../bleachbit/Worker.py:93
 #, python-format
 msgid "Exception while getting running operation '%s': '%s'"
 msgstr "Výjimka při spouštění operace '%s': '%s'"
 
-#: ../bleachbit/Worker.py:90
+#: ../bleachbit/Worker.py:89
 msgid "Special operation: "
 msgstr "Zvláštní operace: "
 
-#: ../bleachbit/Worker.py:131
+#: ../bleachbit/Worker.py:130
 msgid "Please wait.  Scanning and deleting: "
 msgstr "Čekejte prosím, prohledávám a mažu: "
 
-#: ../bleachbit/Worker.py:134
+#: ../bleachbit/Worker.py:133
 msgid "Please wait.  Scanning: "
 msgstr "Čekejte prosím, prohledávám: "
 
-#: ../bleachbit/Worker.py:147
+#: ../bleachbit/Worker.py:146
 msgid "Done."
-msgstr "Hotovo!"
+msgstr "Vykonáno!"
 
-#: ../bleachbit/Worker.py:148
+#: ../bleachbit/Worker.py:147
 msgid "Total size: "
 msgstr "Celková velikost: "
