@@ -115,6 +115,9 @@ EOF
 
 %endif
 
+grep -l os=.windows. cleaners/*xml | xargs rm -f
+
+
 
 %install
 rm -rf $RPM_BUILD_ROOT

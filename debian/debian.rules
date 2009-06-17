@@ -26,6 +26,7 @@ build: build-stamp
 	cp bleachbit.desktop bleachbit-root.desktop
 	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' bleachbit-root.desktop
 	sed -i -e 's/^Exec=bleachbit$$/Exec=su-to-root -X -c bleachbit/g' bleachbit-root.desktop
+	grep -l os=.windows. cleaners/*xml | xargs rm -f
 
 
 build-stamp: configure-stamp  
