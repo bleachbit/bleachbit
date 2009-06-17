@@ -655,24 +655,6 @@ class System(Cleaner):
 
 
 
-class Thumbnails(Cleaner):
-    """Delete the thumbnails folder"""
-
-    def get_description(self):
-        return _("Delete thumbnails in the thumbnails folder")
-
-    def get_id(self):
-        return 'thumbnails'
-
-    def get_name(self):
-        return _("Thumbnails")
-
-    def list_files(self):
-        dirname = os.path.expanduser("~/.thumbnails")
-        for filename in children_in_directory(dirname, False):
-            yield filename
-
-
 class Transmission(Cleaner):
     """Transmission client for BitTorrent"""
 
@@ -704,7 +686,6 @@ if sys.platform == 'linux2':
     backends["rpmbuild"] = rpmbuild()
 backends["system"] = System()
 if sys.platform == 'linux2':
-    backends["thumbnails"] = Thumbnails()
     backends["transmission"] = Transmission()
 
 
