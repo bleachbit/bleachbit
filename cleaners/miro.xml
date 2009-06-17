@@ -19,13 +19,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="miro">
+<cleaner id="miro" os="linux">
   <label>Miro</label>
-  <description>Miro Internet TV</description>
+  <description>Multimedia viewer</description>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the Miro cache</description>
+    <description>Delete the cache</description>
     <action  type="children" directories="false">~/.miro/icon-cache</action>
     <action  type="children" directories="false">~/.miro/mozilla/Cache</action>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action  type="file">~/.miro/miro-downloader-log</action>
+    <action  type="file">~/.miro/miro-log</action>
+    <action  type="file">~/.miro/miro-log.1</action>
   </option>
 </cleaner>
