@@ -90,6 +90,7 @@
   !insertmacro MUI_LANGUAGE "French"
   !insertmacro MUI_LANGUAGE "German"
   !insertmacro MUI_LANGUAGE "Hebrew"
+  !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro MUI_LANGUAGE "Portuguese"
   !insertmacro MUI_LANGUAGE "PortugueseBR"
