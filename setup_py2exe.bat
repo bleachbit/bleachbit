@@ -17,6 +17,14 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+set UPX_EXE=upx
+set UPX_OPTS=--best --crp-ms=999999 --all-methods --all-filters --no-lzma
+set PYTHON_DIR=c:\python25
+set GTK_DIR=c:\gtk
+set NSIS_EXE="c:\program files\nsis\makensis.exe"
+
+
+echo Checking for translations
 set CANARY=locale
 if not exist %CANARY% goto error
 
@@ -25,10 +33,11 @@ del /q /s build > nul
 del /q /s dist > nul
 
 echo Pre-compressing executables
-upx.exe --best c:\python25\dlls\*.pyd C:\Python25\Lib\site-packages\gtk-2.0\*.pyd C:\Python25\Lib\site-packages\gtk-2.0\gtk\*.pyd c:\gtk\bin\*.* c:\gtk\lib\gtk-2.0\modules\*.dll c:\gtk\lib\gtk-2.0\2.10.0\engines\*.dll c:\gtk\lib\gtk-2.0\2.10.0\loaders\*.dll
+for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% "%%e" %UPX_OPTS%
+for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% "%%e" %UPX_OPTS%
 
 echo Running py2exe
-c:\python25\python.exe -OO setup.py py2exe
+%PYTHONDIR%\python.exe -OO setup.py py2exe
 set CANARY=dist\bleachbit.exe
 if not exist %CANARY% goto error
 
@@ -41,10 +50,10 @@ mkdir dist\share
 xcopy c:\gtk\share dist\share /i /s /q
 
 echo Compressing executables
-upx --best dist\*.* dist\lib\gtk-2.0\2.10.0\loaders\*.dll dist\lib\gtk-2.0\modules\*.* dist\lib\gtk-2.0\2.10.0\engines\*.*
+for /r %%e dist (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
 
 echo Purging unnecessary locales
-c:\python25\python.exe setup_clean.py
+%PYTHONDIR%\python.exe setup_clean.py
 
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
@@ -52,7 +61,7 @@ set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
 if not exist %CANARY% goto error
 
 echo Building installer
-"c:\program files\nsis\makensis.exe" bleachbit.nsi
+%NSIS_EXE% bleachbit.nsi
 
 echo Success!
 goto exit
