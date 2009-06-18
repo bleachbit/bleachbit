@@ -11,11 +11,11 @@ cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
 	python ../bleachbit/CleanerML.py pot
 
 desktop.pot: ../bleachbit.desktop
-	echo "#: ../bleachbit.desktop:1" > desktop.pot
+	echo "#: ../bleachbit.desktop" > desktop.pot
 	echo "msgid \"`perl -n -e '/GenericName=(.*)$$/ && print "$$1\n"' ../bleachbit.desktop`\"" >> desktop.pot
 	echo "msgstr \"\"" >> desktop.pot
 	echo >> desktop.pot
-	echo "#: ../bleachbit.desktop:1" >> desktop.pot
+	echo "#: ../bleachbit.desktop" >> desktop.pot
 	echo "msgid \"`perl -n -e '/Comment=(.*)$$/ && print "$$1\n"' ../bleachbit.desktop`\"" >> desktop.pot
 	echo "msgstr \"\"" >> desktop.pot
 	echo >> desktop.pot
