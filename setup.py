@@ -40,8 +40,8 @@ if 'py2exe' in sys.argv:
         'script' : 'bleachbit.py',
         'icon_resources' : [(1, 'bleachbit.ico')]
         }]
-    options = {
-        py2exe : {
+    args['options'] = {
+        'py2exe' : {
             'packages' : 'encodings',
             'optimize' : 2, # extra optimization (like python -OO)
             'includes' : ['cairo', 'pango', 'pangocairo', 'atk', 'gobject'],
@@ -52,6 +52,7 @@ if 'py2exe' in sys.argv:
             }
         }
 
+print args
 
 setup( name = 'bleachbit',
        version = APP_VERSION,
