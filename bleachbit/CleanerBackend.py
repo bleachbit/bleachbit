@@ -198,7 +198,7 @@ class Firefox(Cleaner):
         if sys.platform == 'linux2':
             self.profile_dir = "~/.mozilla/firefox/*/"
         if sys.platform == 'win32':
-            self.profile_dir = "~\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
+            self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
 
     def get_description(self):
         return _("Web browser")
@@ -215,7 +215,7 @@ class Firefox(Cleaner):
         if sys.platform == 'linux2':
             cache_base = self.profile_dir
         if sys.platform == 'win32':
-            cache_base = "~\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
+            cache_base = "$USERPROFILE\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
         if self.options["cache"][1]:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
@@ -417,7 +417,7 @@ class OpenOfficeOrg(Cleaner):
             self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
             self.prefixes += [ "~/.ooo-dev3" ]
         if sys.platform == 'win32':
-            self.prefixes = [ "~\\Application Data\\OpenOffice.org\\3", "~\\Application Data\\OpenOffice.org2" ]
+            self.prefixes = [ "$USERPROFILE\\Application Data\\OpenOffice.org\\3", "~\\Application Data\\OpenOffice.org2" ]
 
     def get_description(self):
         return _("Office suite")
@@ -584,7 +584,7 @@ class System(Cleaner):
                         yield path
 
         if sys.platform == 'win32' and self.options["tmp"][1]:
-            dirname = os.path.expanduser("~\\Local Settings\\Temp\\")
+            dirname = os.path.expanduser("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
                 yield filename
 
