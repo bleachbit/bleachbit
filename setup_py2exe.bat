@@ -17,6 +17,9 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+set CANARY=locale
+if not exist %CANARY% goto error
+
 echo Deleting directories build and dist
 del /q /s build > nul
 del /q /s dist > nul
@@ -26,7 +29,8 @@ upx.exe --best c:\python25\dlls\*.pyd C:\Python25\Lib\site-packages\gtk-2.0\*.py
 
 echo Running py2exe
 c:\python25\python.exe -OO setup.py py2exe
-if not exist dist\bleachbit.exe goto exit
+set CANARY=dist\bleachbit.exe
+if not exist %CANARY% goto error
 
 echo Copying GTK files
 mkdir dist\etc
@@ -42,8 +46,21 @@ upx --best dist\*.* dist\lib\gtk-2.0\2.10.0\loaders\*.dll dist\lib\gtk-2.0\modul
 echo Purging unnecessary locales
 c:\python25\python.exe setup_clean.py
 
+echo Copying BleachBit localizations
+xcopy locale dist\share\locale /i /s /q
+set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
+if not exist %CANARY% goto error
+
 echo Building installer
 "c:\program files\nsis\makensis.exe" bleachbit.nsi
+
+echo Success!
+goto exit
+
+
+:error
+echo %CANARY% not found
+echo Process aborted because of error!
 
 :exit
 
