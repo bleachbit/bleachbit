@@ -22,7 +22,7 @@ del /q /s build > nul
 del /q /s dist > nul
 
 echo Pre-compressing executables
-upx.exe --best c:\python25\dlls\*.pyd c:\gtk\bin\*.* c:\gtk\lib\gtk-2.0\modules\*.dll c:\gtk\lib\gtk-2.0\2.10.0\engines\*.dll c:\gtk\lib\gtk-2.0\2.10.0\loaders\*.dll
+upx.exe --best c:\python25\dlls\*.pyd C:\Python25\Lib\site-packages\gtk-2.0\*.pyd C:\Python25\Lib\site-packages\gtk-2.0\gtk\*.pyd c:\gtk\bin\*.* c:\gtk\lib\gtk-2.0\modules\*.dll c:\gtk\lib\gtk-2.0\2.10.0\engines\*.dll c:\gtk\lib\gtk-2.0\2.10.0\loaders\*.dll
 
 echo Running py2exe
 c:\python25\python.exe -OO setup.py py2exe
