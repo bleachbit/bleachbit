@@ -3,7 +3,7 @@
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
-## http://bleachbit.sourceforge.net
+## http://bleachbit-project.appspot.com
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import Update
 from CleanerBackend import backends
 import FileUtilities
 from Options import options
-from globals import APP_NAME, APP_VERSION, appicon_path, \
+from globals import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     license_filename, online_update_notification_enabled, release_notes_url
 
 
@@ -459,7 +459,7 @@ class GUI:
         dialog.set_name(APP_NAME)
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_version(APP_VERSION)
-        dialog.set_website("http://bleachbit.sourceforge.net")
+        dialog.set_website(APP_URL)
         dialog.run()
         dialog.hide()
 

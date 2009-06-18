@@ -2,7 +2,7 @@
 ;
 ;  BleachBit
 ;  Copyright (C) 2009 Andrew Ziem
-;  http://bleachbit.sourceforge.net
+;  http://bleachbit-project.appspot.com
 ;
 ;  This program is free software: you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\BleachBit.exe"
   !define MUI_FINISHPAGE_LINK "Visit the BleachBit web site"
-  !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit.sourceforge.net"
+  !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit-project.appspot.com"
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_CONFIRM

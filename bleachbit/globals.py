@@ -2,7 +2,7 @@
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
-## http://bleachbit.sourceforge.net
+## http://bleachbit-project.appspot.com
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import sys
 
 APP_VERSION = "0.5.2"
 APP_NAME = "BleachBit"
+APP_URL = "http://bleachbit-project.appspot.com"
 
 update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
 

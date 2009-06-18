@@ -3,7 +3,7 @@
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
-## http://bleachbit.sourceforge.net
+## http://bleachbit-project.appspot.com
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from bleachbit.globals import APP_VERSION
+from bleachbit.globals import APP_VERSION, APP_URL
 from distutils.core import setup
 import sys
 if sys.platform == 'win32':
@@ -62,7 +62,7 @@ setup( name = 'bleachbit',
        author_email = "ahz001@gmail.com",
        download_url = "http://bleachbit-project.appspot.com/download/",
        license = "GPLv3",
-       url = "http://bleachbit-project.appspot.com",
+       url = APP_URL,
        platforms = 'Linux and Windows with Python v2.4+ and PyGTK v2',
        packages = ['bleachbit'],
        **args)
