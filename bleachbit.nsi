@@ -29,14 +29,15 @@
 ;General
 
   ;Name and file
-  Name "BleachbBit"
-  OutFile "BleachBit-setup.exe"
+  !define prodname "BleachBit"
+  Name "${prodname}"
+  OutFile "${prodname}-setup.exe"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\BleachBit"
+  InstallDir "$PROGRAMFILES\${prodname}"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\BleachBit" ""
+  InstallDirRegKey HKCU "Software\${prodname}" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
@@ -55,8 +56,8 @@
 ;Language Selection Dialog Settings
 
   ;Remember the installer language
-  !define MUI_LANGDLL_REGISTRY_ROOT "HKCU" 
-  !define MUI_LANGDLL_REGISTRY_KEY "Software\BleachBit" 
+  !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+  !define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
   !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 
@@ -68,8 +69,8 @@
   !insertmacro MUI_PAGE_INSTFILES
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\BleachBit.exe"
-  !define MUI_FINISHPAGE_LINK "Visit the BleachBit web site"
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+  !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site"
   !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit-project.appspot.com"
   !insertmacro MUI_PAGE_FINISH
 
@@ -116,9 +117,26 @@ section
 
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
-    CreateDirectory "$SMPROGRAMS\BleachBit"
-    CreateShortCut "$SMPROGRAMS\BleachBit\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-    CreateShortCut "$SMPROGRAMS\BleachBit\BleachBit.lnk" "$INSTDIR\BleachBit.exe"
+    CreateDirectory "$SMPROGRAMS\${prodname}"
+    CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
+
+    # register uninstaller in Add/Remove Programs
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "DisplayName" "${prodname}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "HelpLink" "http://bleachbit-project.appspot.com/"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "NoModify" "1"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "NoRepair" "1"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "UninstallString" "$INSTDIR\uninstall.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "URLInfoAbout" "http://bleachbit-project.appspot.com/"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "URLUpdateInfo" "http://bleachbit-project.appspot.com/"
+
 sectionEnd
 
 
@@ -138,9 +156,11 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
-    RMDir /r "$SMPROGRAMS\Bleachbit"
+    RMDir /r "$SMPROGRAMS\${prodname}"
     RMDir /r "$INSTDIR"
-    DeleteRegKey HKCU "Software\BleachBit"
+    DeleteRegKey HKCU "Software\${prodname}"
+    # remove registration in Add/Remove Programs
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
 SectionEnd
 
 
@@ -150,6 +170,6 @@ SectionEnd
 Function un.onInit
 
   !insertmacro MUI_UNGETLANGUAGE
-  
+
 FunctionEnd
 
