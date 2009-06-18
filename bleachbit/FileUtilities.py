@@ -368,6 +368,12 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for method delete()"""
+        self.delete_helper(shred = False)
+        self.delete_helper(shred = True)
+
+
+    def delete_helper(self, shred):
+        """Called by test_delete() with shred = False and = True"""
 
         import tempfile
 
@@ -387,19 +393,25 @@ class TestFileUtilities(unittest.TestCase):
                   (katanana, katanana),
                   (umlauts, umlauts) ]
         for test in tests:
-            for shred in [True, False]:
-                (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
-                self.assert_(os.path.exists(filename))
-                for x in range(0, 4096/5):
-                    bytes = os.write(fd, "top secret")
-                    self.assertEqual(bytes, 10)
-                os.close(fd)
-                self.assert_(os.path.exists(filename))
-                delete(filename, shred)
-                self.assert_(not os.path.exists(filename))
+            (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
+            self.assert_(os.path.exists(filename))
+            for x in range(0, 4096/5):
+                bytes = os.write(fd, "top secret")
+                self.assertEqual(bytes, 10)
+            os.close(fd)
+            self.assert_(os.path.exists(filename))
+            delete(filename, shred)
+            self.assert_(not os.path.exists(filename))
 
         if sys.platform == 'win32':
             return
+
+        # test file with mode 0444/-r--r--r--
+        (fd, filename) = tempfile.mkstemp()
+        os.close(fd)
+        os.chmod(filename, 0444)
+        delete(filename, shred)
+        self.assert_(not os.path.exists(filename))
 
         # test symlink
         (fd, filename) = tempfile.mkstemp()
@@ -407,21 +419,21 @@ class TestFileUtilities(unittest.TestCase):
         self.assert_(os.path.exists(filename))
         linkname = '/tmp/bleachbitsymlinktest'
         if os.path.lexists(linkname):
-            delete(linkname)
+            delete(linkname, shred)
         self.assert_(not os.path.lexists(linkname))
         os.symlink(filename, linkname)
         self.assert_(os.path.lexists(linkname))
-        delete(linkname)
+        delete(linkname, shred)
         self.assert_(os.path.exists(filename))
         self.assert_(not os.path.lexists(linkname))
-        delete(filename)
+        delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
         # test broken symlink
         os.symlink(filename, linkname)
         self.assert_(os.path.lexists(linkname))
         self.assert_(not os.path.exists(linkname))
-        delete(linkname)
+        delete(linkname, shred)
         self.assert_(not os.path.exists(linkname))
 
         # test fifo
@@ -429,7 +441,7 @@ class TestFileUtilities(unittest.TestCase):
         ret = subprocess.call(args)
         self.assertEqual(ret, 0)
         self.assert_(os.path.exists(filename))
-        delete(filename)
+        delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
 
