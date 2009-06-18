@@ -52,8 +52,6 @@ if 'py2exe' in sys.argv:
             }
         }
 
-print args
-
 setup( name = 'bleachbit',
        version = APP_VERSION,
        description = "Free space and maintain privacy",
