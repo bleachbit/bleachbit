@@ -256,7 +256,14 @@ def wipe_contents(path):
     by one overwrite"
     """
     size = getsize(path)
-    f = open(path, 'wb')
+    try:
+        f = open(path, 'wb')
+    except IOError, e:
+        if 13 == e.errno: # permission denied
+            os.chmod(path, 0200) # user write only
+            f = open(path, 'wb')
+        else:
+            raise
     blanks =  chr(0) * 4096
     while size > 0:
         f.write(blanks)
@@ -368,7 +375,9 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for method delete()"""
+        print "testing delete() with shred = False"
         self.delete_helper(shred = False)
+        print "testing delete() with shred = True"
         self.delete_helper(shred = True)
 
 
