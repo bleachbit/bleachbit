@@ -252,7 +252,7 @@ class Firefox(Cleaner):
         if self.options["session_restore"][1]:
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")
         # URL history
-        if self.options["session_restore"][1]:
+        if self.options["url_history"][1]:
             # Firefox version 1
             files += FileUtilities.expand_glob_join(self.profile_dir, "history.dat")
             # see also function other_cleanup()
@@ -325,8 +325,7 @@ class Firefox(Cleaner):
     def other_cleanup(self, really_delete = False):
         # URL history
         if self.options['url_history'][1] and not self.options["places"][1]:
-            paths = glob.glob(os.path.expanduser(self.profile_dir + "/places.sqlite"))
-            for path in paths:
+            for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
                 if really_delete:
                     oldsize = os.path.getsize(path)
                     self.delete_url_history(path)
@@ -337,8 +336,7 @@ class Firefox(Cleaner):
 
         # vacuum
         if self.options['vacuum'][1]:
-            dbs = glob.glob(os.path.expanduser(self.profile_dir + '/*.sqlite'))
-            for path in dbs:
+            for path in FileUtilities.expand_glob_join(self.profile_dir, "*.sqlite"):
                 if really_delete:
                     oldsize = os.path.getsize(path)
                     FileUtilities.vacuum_sqlite3(path)
