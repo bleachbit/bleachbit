@@ -603,6 +603,12 @@ class System(Cleaner):
             dirname = os.path.expanduser("~/.local/share/Trash/info")
             for filename in children_in_directory(dirname, True):
                 yield filename
+            dirname = os.path.expanduser("~/.local/share/Trash/expunged")
+            # desrt@irc.gimpnet.org tells me that the trash
+            # backend puts files in here temporary, but in some situations
+            # the files are stuck.
+            for filename in children_in_directory(dirname, True):
+                yield filename
 
 
         # finish
