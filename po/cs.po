@@ -7,23 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-07 13:44-0600\n"
-"PO-Revision-Date: 2009-06-16 00:48+0000\n"
+"POT-Creation-Date: 2009-06-17 14:47-0600\n"
+"PO-Revision-Date: 2009-06-18 18:05+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-17 03:08+0000\n"
+"X-Launchpad-Export-Date: 2009-06-19 12:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/beagle.xml
-#: ../cleaners/opera.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/gftp.xml ../cleaners/chrome.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:134
-#: ../bleachbit/CleanerBackend.py:187 ../bleachbit/CleanerBackend.py:379
-#: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:509
+#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/chrome.xml ../cleaners/secondlife_viewer.xml
+#: ../bleachbit/CleanerBackend.py:134 ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/CleanerBackend.py:379 ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:510
 msgid "Cache"
 msgstr "Cache"
 
@@ -31,7 +33,7 @@ msgstr "Cache"
 msgid "Delete the list of game servers"
 msgstr "Smazat seznam herních serverů"
 
-#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml
+#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 msgid "Game"
 msgstr "Hra"
@@ -77,7 +79,8 @@ msgid "History"
 msgstr "Historie"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/elinks.xml
-#: ../cleaners/chrome.xml
+#: ../cleaners/chrome.xml ../bleachbit/CleanerBackend.py:141
+#: ../bleachbit/CleanerBackend.py:204
 msgid "Web browser"
 msgstr "Webový prohlížeč"
 
@@ -91,6 +94,29 @@ msgstr ""
 #: ../cleaners/vim.xml
 msgid "Editor"
 msgstr "Editor"
+
+#: ../cleaners/miro.xml ../cleaners/beagle.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:515
+msgid "Delete the cache"
+msgstr "Vymazat cache"
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "Delete the logs"
+msgstr "Smazat záznamy"
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "Logs"
+msgstr "Záznamy"
+
+#: ../cleaners/miro.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "Multimediální prohlížeč"
 
 #: ../cleaners/gl-117.xml
 msgid "Debug log"
@@ -108,15 +134,24 @@ msgstr "Smazat historii používání"
 msgid "Visual shell for the console"
 msgstr "Vizuální shell pro konzoli"
 
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Chatový klient"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat logs"
+msgstr "Záznamy z chatu"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Delete the chat logs"
+msgstr "Smazat záznamy z chatu"
+
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
 msgstr "Ladící záznamy"
-
-#: ../cleaners/beagle.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/gftp.xml ../cleaners/secondlife_viewer.xml
-msgid "Delete the cache"
-msgstr "Vymazat cache"
 
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
@@ -147,44 +182,32 @@ msgstr "Smazat cache databází Jamendo a Magnatune"
 msgid "Online databases"
 msgstr "Online databáze"
 
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/gftp.xml
-msgid "Delete the logs"
-msgstr "Smazat záznamy"
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Klient  pro přenos souborů"
 
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/gftp.xml
-msgid "Logs"
-msgstr "Záznamy"
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Záložní soubory"
+
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Smazat záložní soubory"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
 msgid "Delete the temporary files"
 msgstr "Smazat dočasné soubory"
 
-#: ../cleaners/vuze.xml ../cleaners/gftp.xml
-msgid "File transfer client"
-msgstr "Klient  pro přenos souborů"
-
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:380 ../bleachbit/CleanerBackend.py:512
+#: ../bleachbit/CleanerBackend.py:380 ../bleachbit/CleanerBackend.py:517
 msgid "Temporary files"
 msgstr "Dočasné soubory"
 
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-msgid "Chat client"
-msgstr "Chatový klient"
-
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/skype.xml
-msgid "Chat logs"
-msgstr "Záznamy z chatu"
-
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/skype.xml
-msgid "Delete the chat logs"
-msgstr "Smazat záznamy z chatu"
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Náhledy souborů"
 
 #: ../cleaners/gimp.xml
 msgid "Image editor"
@@ -197,10 +220,6 @@ msgstr "Virtuální prohlížeč zeměkoule"
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
 msgstr "Smazat historii příkazů"
-
-#: ../cleaners/flash.xml
-msgid "Multimedia viewer mainly for the Web"
-msgstr "Multimediální prohlížeč, zejména pro web"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -261,10 +280,6 @@ msgid ""
 msgstr ""
 "Databáze webových stránek, včetně záložek a historie navštívených stránek"
 
-#: ../bleachbit/CleanerBackend.py:141
-msgid "Epiphany web browser"
-msgstr "Webový prohlížeč Epiphany"
-
 #: ../bleachbit/CleanerBackend.py:190
 msgid "Form history"
 msgstr "Historie formulářů"
@@ -313,10 +328,6 @@ msgstr ""
 "Defragmentovat databázi- tím se zmenší její velikost a zvýší rychlost, aniž "
 "by došlo ke smazání jakýchkoliv dat"
 
-#: ../bleachbit/CleanerBackend.py:204
-msgid "Mozilla Firefox web browser"
-msgstr "Webový prohlížeč Mozilla Firefox"
-
 #: ../bleachbit/CleanerBackend.py:355
 msgid ""
 "Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
@@ -337,42 +348,38 @@ msgstr "Dočasné soubory KDE v domovské složce"
 
 #: ../bleachbit/CleanerBackend.py:383
 msgid "KDE desktop environment"
-msgstr "Desktopové prostředí KDE"
+msgstr "Pracovní prostředí KDE"
 
-#: ../bleachbit/CleanerBackend.py:411
-msgid "Cached registry and package data"
-msgstr "Cache registru a balíček dat"
-
-#: ../bleachbit/CleanerBackend.py:412 ../bleachbit/CleanerBackend.py:514
+#: ../bleachbit/CleanerBackend.py:413 ../bleachbit/CleanerBackend.py:514
 msgid "Recent documents list"
 msgstr "Seznam nedávných dokumentů"
 
-#: ../bleachbit/CleanerBackend.py:412
-msgid "OpenOffice.org's list of recently used documents."
-msgstr "Seznam nedávných dokumentů OpenOffice.org"
+#: ../bleachbit/CleanerBackend.py:413
+msgid "Delete the list of recently used documents"
+msgstr "Smazat seznam naposledy použitých dokumentů"
 
-#: ../bleachbit/CleanerBackend.py:422
-msgid "OpenOffice.org office suite"
-msgstr "Kancelářský balík OpenOffice.org"
+#: ../bleachbit/CleanerBackend.py:423
+msgid "Office suite"
+msgstr "Kancelářské programy"
 
-#: ../bleachbit/CleanerBackend.py:477
+#: ../bleachbit/CleanerBackend.py:478
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "Smazat soubory v build složce rpmbuild"
 
-#: ../bleachbit/CleanerBackend.py:507 ../bleachbit/CleanerBackend.py:611
-#: ../bleachbit/CleanerBackend.py:613
+#: ../bleachbit/CleanerBackend.py:508 ../bleachbit/CleanerBackend.py:619
+#: ../bleachbit/CleanerBackend.py:621
 msgid "APT autoclean"
 msgstr "Automatické čištění APT"
 
-#: ../bleachbit/CleanerBackend.py:507
-msgid "Run apt-get autoclean to delete old downloaded archive files"
-msgstr "Spusťte 'apt-get autoclean' pro vymazání starých stažených balíků"
-
 #: ../bleachbit/CleanerBackend.py:508
+msgid "Run apt-get autoclean to delete old downloaded archive files"
+msgstr "Spustí se 'apt-get autoclean' pro vymazání starých stažených balíků"
+
+#: ../bleachbit/CleanerBackend.py:509
 msgid "Broken desktop entries"
 msgstr "Chybné položky plochy"
 
-#: ../bleachbit/CleanerBackend.py:508
+#: ../bleachbit/CleanerBackend.py:509
 msgid ""
 "Unusable .desktop files (menu entries and file associtations) that are "
 "either invalid structurally or point to non-existant locations"
@@ -380,30 +387,25 @@ msgstr ""
 "Nepoužitelné soubory .desktop (položky menu a asociace souboru), které jsou "
 "buď strukturálně neplatné, nebo odkazují na neexistující umístění"
 
-#: ../bleachbit/CleanerBackend.py:509
+#: ../bleachbit/CleanerBackend.py:510
 msgid "Cache location specified by XDG and used by various applications"
 msgstr "Umístění cache specifikované XDG a používané různými aplikacemi"
 
-#: ../bleachbit/CleanerBackend.py:510
+#: ../bleachbit/CleanerBackend.py:511
 msgid "Localizations"
 msgstr "Lokalizace"
 
-#: ../bleachbit/CleanerBackend.py:510
+#: ../bleachbit/CleanerBackend.py:511
 msgid "Data used to operate the system in various languages and countries"
 msgstr "Data použitá pro provoz systému v různých jazycích a zemích"
 
-#: ../bleachbit/CleanerBackend.py:511
+#: ../bleachbit/CleanerBackend.py:512
 msgid "Rotated logs"
 msgstr "Otočené záznamy"
 
-#: ../bleachbit/CleanerBackend.py:511
+#: ../bleachbit/CleanerBackend.py:512
 msgid "Old system logs"
 msgstr "Staré systémové záznamy"
-
-#: ../bleachbit/CleanerBackend.py:512
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
-"Uživatelem vlastněné, neotevřené, regulérní soubory v /tmp/ a /var/tmp/"
 
 #: ../bleachbit/CleanerBackend.py:513
 msgid "Trash"
@@ -417,17 +419,13 @@ msgstr "Dočasná úschovna pro smazané soubory"
 msgid "A common list of recently used documents"
 msgstr "Společný seznam naposledy použitých dokumentů"
 
-#: ../bleachbit/CleanerBackend.py:515 ../bleachbit/CleanerBackend.py:626
-#: ../bleachbit/CleanerBackend.py:628
+#: ../bleachbit/CleanerBackend.py:515 ../bleachbit/CleanerBackend.py:634
+#: ../bleachbit/CleanerBackend.py:636
 msgid "Yum clean"
 msgstr "Vyčistit Yum"
 
-#: ../bleachbit/CleanerBackend.py:515
-msgid "Delete all Yum's cache"
-msgstr "Smazat všechny cache Yumu"
-
-#: ../bleachbit/CleanerBackend.py:516 ../bleachbit/CleanerBackend.py:620
-#: ../bleachbit/CleanerBackend.py:622
+#: ../bleachbit/CleanerBackend.py:516 ../bleachbit/CleanerBackend.py:628
+#: ../bleachbit/CleanerBackend.py:630
 msgid "Clipboard"
 msgstr "Schránka"
 
@@ -437,25 +435,17 @@ msgid ""
 msgstr ""
 "Schránka desktopových prostředí používaná pro operace kopírovat & vložit"
 
-#: ../bleachbit/CleanerBackend.py:519
+#: ../bleachbit/CleanerBackend.py:517
+msgid "Delete temporary files created by various programs"
+msgstr "Smazat dočasné soubory vytvořené různými programy"
+
+#: ../bleachbit/CleanerBackend.py:520
 msgid "The system in general"
 msgstr "Systém obecně"
 
-#: ../bleachbit/CleanerBackend.py:525
+#: ../bleachbit/CleanerBackend.py:526
 msgid "System"
 msgstr "Systém"
-
-#: ../bleachbit/CleanerBackend.py:654
-msgid "Delete thumbnails in the thumbnails folder"
-msgstr "Smazat náhledy ve složce s náhledy"
-
-#: ../bleachbit/CleanerBackend.py:660
-msgid "Thumbnails"
-msgstr "Náhledy souborů"
-
-#: ../bleachbit/CleanerBackend.py:672
-msgid "Delete Transmission's blocklist and fast resume cache"
-msgstr "Smazat seznam blokovaných a cache pro rychlou obnovu"
 
 #: ../bleachbit/FileUtilities.py:170
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -552,7 +542,8 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Roman Horník https://launchpad.net/~roman.hornik"
+"  Roman Horník https://launchpad.net/~roman.hornik\n"
+"  milboy https://launchpad.net/~milboys"
 
 #: ../bleachbit/GUI.py:488
 msgid "Choose files to shred"

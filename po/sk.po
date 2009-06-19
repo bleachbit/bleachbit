@@ -7,581 +7,659 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-02-18 23:20-0700\n"
-"PO-Revision-Date: 2009-05-21 16:34+0000\n"
-"Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
+"POT-Creation-Date: 2009-06-17 14:47-0600\n"
+"PO-Revision-Date: 2009-06-18 08:32+0000\n"
+"Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-05-22 13:56+0000\n"
+"X-Launchpad-Export-Date: 2009-06-19 12:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
-#: ../bleachbit/CleanerBackend.py:407 ../bleachbit/CleanerBackend.py:439
-#: ../bleachbit/CleanerBackend.py:503 ../bleachbit/CleanerBackend.py:590
+#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/chrome.xml ../cleaners/secondlife_viewer.xml
+#: ../bleachbit/CleanerBackend.py:134 ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/CleanerBackend.py:379 ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:510
 msgid "Cache"
 msgstr "Cache"
 
-msgid "Chat client"
-msgstr "Chatový klient"
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Odstrániť zoznam herných serverov"
 
-msgid "Chat logs"
-msgstr "Chatové záznamy"
+#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+msgid "Game"
+msgstr "Hra"
 
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid "Cookies"
 msgstr "Cookies"
 
+#: ../cleaners/chromium.xml
 msgid "Current session"
 msgstr "Aktuálna relácie"
 
-msgid "Debug log"
-msgstr ""
-
-msgid "Debug logs"
-msgstr ""
-
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/flash.xml
+#: ../cleaners/chrome.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:135 ../bleachbit/CleanerBackend.py:188
 msgid ""
-"Delete the HTTP cookies, which contain information such as web site "
-"prefereneces, authentication, and tracking identification"
+"Delete cookies, which contain information such as web site prefereneces, "
+"authentication, and tracking identification"
 msgstr ""
-"Odstrániť HTTP cookies, ktoré obsahujú informácie, ako sú preferencie "
-"webových stránok, autentifikácie a identifikácie sledovanie"
+"Odstrániť cookies, ktoré obsahujú informácie ako nastavenie webových "
+"stránok, autentifikácie, identifikácie a sledovania"
 
-msgid "Delete the cache"
-msgstr "Vymazať cache"
-
-msgid "Delete the cache of Jamendo and Mangatune databases"
-msgstr "Smazat cache z databáz Jamendo a Magnatune"
-
-msgid "Delete the chat logs"
-msgstr "Zmazať záznamy z chatu"
-
-msgid "Delete the command history"
-msgstr "Zmazať históriu príkazov"
-
-msgid "Delete the cookies"
-msgstr "Zmazať cookies"
-
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Zmazať cookies, navštívené stránky a históriu hľadanie"
-
+#: ../cleaners/chromium.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Zmazať aktuálne sedenie"
 
-msgid "Delete the debug log"
-msgstr ""
-
-msgid "Delete the debug logs"
-msgstr ""
-
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
-msgstr ""
+msgstr "Odstrániť históriu so záložkami, sťahovania a navštívené stránky"
 
-msgid "Delete the list of game servers"
-msgstr ""
-
-msgid "Delete the logs"
-msgstr ""
-
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr ""
-
-msgid "Delete the search indexes"
-msgstr ""
-
-msgid "Delete the temporary files"
-msgstr ""
-
-msgid "Delete the usage history"
-msgstr ""
-
+#: ../cleaners/chromium.xml ../cleaners/chrome.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
+"Zmazať webovú cache, ktorá urýchľuje načítanie už navštívených stránok"
 
+#: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
+#: ../cleaners/bash.xml ../cleaners/elinks.xml ../cleaners/chrome.xml
+msgid "History"
+msgstr "História"
+
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/elinks.xml
+#: ../cleaners/chrome.xml ../bleachbit/CleanerBackend.py:141
+#: ../bleachbit/CleanerBackend.py:204
+msgid "Web browser"
+msgstr "Webový prehliadač"
+
+#: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"Odstrániť ~/.viminfo ktorý obsahuje históriu, históriu príkazov a buffery"
 
+#: ../cleaners/vim.xml
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
-msgid "Game"
-msgstr ""
+#: ../cleaners/miro.xml ../cleaners/beagle.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:515
+msgid "Delete the cache"
+msgstr "Vymazať cache"
 
-msgid "History"
-msgstr ""
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "Delete the logs"
+msgstr "Odstrániť záznamy"
 
-msgid "Index"
-msgstr ""
-
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
 msgid "Logs"
-msgstr ""
+msgstr "Záznamy"
 
-msgid "Online databases"
-msgstr ""
+#: ../cleaners/miro.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "Multimedialny prehliadač"
 
-msgid "Search indexes"
-msgstr ""
+#: ../cleaners/gl-117.xml
+msgid "Debug log"
+msgstr "Ladiaci záznam"
 
-msgid "Search tool"
-msgstr ""
+#: ../cleaners/gl-117.xml
+msgid "Delete the debug log"
+msgstr "Odstrániť ladiaci záznam"
 
-#: ../bleachbit/CleanerBackend.py:408 ../bleachbit/CleanerBackend.py:593
-msgid "Temporary files"
-msgstr ""
+#: ../cleaners/mc.xml
+msgid "Delete the usage history"
+msgstr "Zmazať históriu používania"
 
+#: ../cleaners/mc.xml
 msgid "Visual shell for the console"
-msgstr ""
+msgstr "Vizuálny shell pre konzolu"
 
-msgid "Web browser"
-msgstr ""
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Chatový klient"
 
-#: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
-#: ../bleachbit/CleanerBackend.py:503
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat logs"
+msgstr "Chatové záznamy"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Delete the chat logs"
+msgstr "Zmazať záznamy z chatu"
+
+#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+msgid "Debug logs"
+msgstr "Ladiace záznamy"
+
+#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+msgid "Delete the debug logs"
+msgstr "Odstrániť ladiace záznamy"
+
+#: ../cleaners/beagle.xml
+msgid "Delete the search indexes"
+msgstr "Odstrániť vyhľadávacie registre"
+
+#: ../cleaners/beagle.xml
+msgid "Search indexes"
+msgstr "Vyhľadávacie registre"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "Vyhľadávacie nástroje"
+
+#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:134
+#: ../bleachbit/CleanerBackend.py:187
 msgid "Web cache reduces time to display revisited pages"
-msgstr ""
+msgstr "Web cache urýchľuje čas zobrazenia už navštívených stránok"
 
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
+#: ../cleaners/rhythmbox.xml
+msgid "Delete the cache of Jamendo and Mangatune databases"
+msgstr "Smazat cache z databáz Jamendo a Magnatune"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Online databases"
+msgstr "Online databázy"
+
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Klient pre prenos súborov"
+
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Záloha súborov"
+
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Odstrániť zálohu súborov"
+
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml
+msgid "Delete the temporary files"
+msgstr "Odstrániť dočasné súbory"
+
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:380 ../bleachbit/CleanerBackend.py:517
+msgid "Temporary files"
+msgstr "Dočasné súbory"
+
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Náhľad"
+
+#: ../cleaners/gimp.xml
+msgid "Image editor"
+msgstr "Editor obrázkov"
+
+#: ../cleaners/google_earth.xml
+msgid "Virtual globe viewer"
+msgstr "Virtuálny prehliadač zemegule"
+
+#: ../cleaners/bash.xml
+msgid "Delete the command history"
+msgstr "Zmazať históriu príkazov"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Zmazať cookies, navštívené stránky a históriu hľadanie"
+
+#: ../cleaners/chrome.xml
+msgid "Delete the current and last sessions"
+msgstr "Zmazať aktuálne a posledné sedenie"
+
+#: ../cleaners/chrome.xml
+msgid "Session"
+msgstr "Sedenie"
+
+#: ../cleaners/recoll.xml
 msgid ""
-"HTTP cookies contain information such as web site prefereneces, "
-"authentication, and tracking identification"
-msgstr ""
+"Delete the search index, a database of words and the files they contain"
+msgstr "Zmazať vyhľadávací register, databázu slov a obsahujúce súbory"
 
-#: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
+#: ../cleaners/recoll.xml
+msgid "Index"
+msgstr "Index"
+
+#: ../bleachbit.desktop:1
+msgid "Unnecessary file cleaner"
+msgstr "Čistenie nepotrebných súborov"
+
+#: ../bleachbit.desktop:1
+msgid "Free space and maintain privacy"
+msgstr "Voľné miesto a zachovanie súkromia"
+
+#: ../bleachbit/CleanerBackend.py:136 ../bleachbit/CleanerBackend.py:189
 msgid "Download history"
-msgstr ""
+msgstr "História sťahovania"
 
-#: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
+#: ../bleachbit/CleanerBackend.py:136 ../bleachbit/CleanerBackend.py:189
 msgid "List of files downloaded"
-msgstr ""
+msgstr "Zoznam stiahnutých súborov"
 
-#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
+#: ../bleachbit/CleanerBackend.py:137 ../bleachbit/CleanerBackend.py:192
 msgid "Passwords"
-msgstr ""
+msgstr "Heslá"
 
-#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
+#: ../bleachbit/CleanerBackend.py:137 ../bleachbit/CleanerBackend.py:192
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Databáza užívateľských mien a hesiel rovnako ako zoznam stránok, ktoré by "
+"nemali ukladať heslá"
 
-#: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:171
+#: ../bleachbit/CleanerBackend.py:138 ../bleachbit/CleanerBackend.py:193
 msgid "Places"
-msgstr ""
+msgstr "Miesta"
 
-#: ../bleachbit/CleanerBackend.py:116
+#: ../bleachbit/CleanerBackend.py:138
 msgid ""
 "A database of URLs including bookmarks and a history of visited web sites"
 msgstr ""
+"Databáza URL vrátane záložiek a histórie navštívených webových stránok"
 
-#: ../bleachbit/CleanerBackend.py:119
-msgid "Epiphany web browser"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:168
+#: ../bleachbit/CleanerBackend.py:190
 msgid "Form history"
-msgstr ""
+msgstr "História formulárov"
 
-#: ../bleachbit/CleanerBackend.py:168
+#: ../bleachbit/CleanerBackend.py:190
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
+"História formulárov zapísaná vo webových stránkach a v políčku vyhľadávania"
 
-#: ../bleachbit/CleanerBackend.py:169
+#: ../bleachbit/CleanerBackend.py:191
 msgid "Session restore"
-msgstr ""
+msgstr "Obnova sedenia"
 
-#: ../bleachbit/CleanerBackend.py:169
+#: ../bleachbit/CleanerBackend.py:191
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
+msgstr "Obnoviť predchádzajúcu reláciu po ukončení alebo páde prehliadača"
 
-#: ../bleachbit/CleanerBackend.py:171
+#: ../bleachbit/CleanerBackend.py:193
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
+"Databáza URL vrátane záložiek, ikoniek a histórie navštívených webových "
+"stránok"
 
-#: ../bleachbit/CleanerBackend.py:172
+#: ../bleachbit/CleanerBackend.py:194
+msgid "Deleting Places deletes bookmarks."
+msgstr "Zmazaním miest zmažete aj záložky"
+
+#: ../bleachbit/CleanerBackend.py:195
 msgid "URL history"
-msgstr ""
+msgstr "URL história"
 
-#: ../bleachbit/CleanerBackend.py:172
+#: ../bleachbit/CleanerBackend.py:195
 msgid "List of visited web pages"
-msgstr ""
+msgstr "Zoznam navštívených webových stránok"
 
-#: ../bleachbit/CleanerBackend.py:173
+#: ../bleachbit/CleanerBackend.py:196
 msgid "Vacuum"
-msgstr ""
+msgstr "Prázdne miesto"
 
-#: ../bleachbit/CleanerBackend.py:173
+#: ../bleachbit/CleanerBackend.py:196
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Čistenie databázy defragmentovaním čo redukuje miesto a zvyšuje rýchlosť bez "
+"odstránenia dát"
 
-#: ../bleachbit/CleanerBackend.py:178
-msgid "Mozilla Firefox web browser"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:323
+#: ../bleachbit/CleanerBackend.py:355
 msgid ""
 "Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
 msgstr ""
+"Zmazať Exaile's cache, obrázky obalov albumov  ladiace záznamy a stiahnuté "
+"podcasty"
 
-#: ../bleachbit/CleanerBackend.py:346
-msgid "Delete Adobe Flash's cache and settings"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:365
-msgid "Delete GIMP's temporary folder"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:386
-msgid "Delete the contents of Google Earth's cache and temporary files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:407
+#: ../bleachbit/CleanerBackend.py:379
 msgid ""
 "KDE cache including Konqueror.  Often contains sparse files where the "
 "apparent file size does not match the actual disk usage."
 msgstr ""
+"KDE cache vrátane Konqueroru. Často obsahuje roztrúsené súbory, kde zrejme "
+"veľkosť súboru nezodpovedá skutočnému využitiu disku."
 
-#: ../bleachbit/CleanerBackend.py:408
+#: ../bleachbit/CleanerBackend.py:380
 msgid "Temporary files stored by KDE under the home directory"
-msgstr ""
+msgstr "Dočasné súbory KDE uložené v home priečinku"
 
-#: ../bleachbit/CleanerBackend.py:411
+#: ../bleachbit/CleanerBackend.py:383
 msgid "KDE desktop environment"
-msgstr ""
+msgstr "KDE desktop prostredie"
 
-#: ../bleachbit/CleanerBackend.py:439
-msgid "Cached registry and package data"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:440 ../bleachbit/CleanerBackend.py:595
+#: ../bleachbit/CleanerBackend.py:413 ../bleachbit/CleanerBackend.py:514
 msgid "Recent documents list"
-msgstr ""
+msgstr "Zoznam nedávnych dokumentov"
 
-#: ../bleachbit/CleanerBackend.py:440
-msgid "OpenOffice.org's list of recently used documents."
-msgstr ""
+#: ../bleachbit/CleanerBackend.py:413
+msgid "Delete the list of recently used documents"
+msgstr "Zmazať zoznam nedávno použitých dokumentov"
 
-#: ../bleachbit/CleanerBackend.py:447
-msgid "OpenOffice.org office suite"
-msgstr ""
+#: ../bleachbit/CleanerBackend.py:423
+msgid "Office suite"
+msgstr "Kancelárske programy"
+
+#: ../bleachbit/CleanerBackend.py:478
+msgid "Delete the files in the rpmbuild build directory"
+msgstr "Odstrániť súbory v adresári rpmbuild"
+
+#: ../bleachbit/CleanerBackend.py:508 ../bleachbit/CleanerBackend.py:619
+#: ../bleachbit/CleanerBackend.py:621
+msgid "APT autoclean"
+msgstr "APT autočistenie"
 
 #: ../bleachbit/CleanerBackend.py:508
-msgid "Opera web browser"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:540
-msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:568
-msgid "Delete Skype's chat logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:587 ../bleachbit/CleanerBackend.py:691
-#: ../bleachbit/CleanerBackend.py:693
-msgid "APT autoclean"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:587
 msgid "Run apt-get autoclean to delete old downloaded archive files"
-msgstr ""
+msgstr "Spustiť apt-get autočistenie k vymazaniu starých stiahnutých súborov"
 
-#: ../bleachbit/CleanerBackend.py:588
+#: ../bleachbit/CleanerBackend.py:509
 msgid "Broken desktop entries"
-msgstr ""
+msgstr "Chybné položky plochy"
 
-#: ../bleachbit/CleanerBackend.py:588
+#: ../bleachbit/CleanerBackend.py:509
 msgid ""
 "Unusable .desktop files (menu entries and file associtations) that are "
 "either invalid structurally or point to non-existant locations"
 msgstr ""
+"Nepoužiteľné .desktop súbory (položky menu a asociácie súborov) ktoré sú "
+"štrukturálne neplatné alebo odkazujú na neexistujúce umiestnenia"
 
-#: ../bleachbit/CleanerBackend.py:589 ../bleachbit/CleanerBackend.py:700
-#: ../bleachbit/CleanerBackend.py:702
-msgid "Clipboard"
+#: ../bleachbit/CleanerBackend.py:510
+msgid "Cache location specified by XDG and used by various applications"
 msgstr ""
+"Umiestnenie cache špecifikovanej XDG a používanej rôznymi aplikáciami"
 
-#: ../bleachbit/CleanerBackend.py:589
+#: ../bleachbit/CleanerBackend.py:511
+msgid "Localizations"
+msgstr "Lokalizácia"
+
+#: ../bleachbit/CleanerBackend.py:511
+msgid "Data used to operate the system in various languages and countries"
+msgstr "Dáta používané na prevádzku systému v rôznych jazykoch a krajinách"
+
+#: ../bleachbit/CleanerBackend.py:512
+msgid "Rotated logs"
+msgstr "Otočené záznamy"
+
+#: ../bleachbit/CleanerBackend.py:512
+msgid "Old system logs"
+msgstr "Staré systémové záznamy"
+
+#: ../bleachbit/CleanerBackend.py:513
+msgid "Trash"
+msgstr "Kôš"
+
+#: ../bleachbit/CleanerBackend.py:513
+msgid "Temporary storage for deleted files"
+msgstr "Dočasné úložisko pre zmazané súbory"
+
+#: ../bleachbit/CleanerBackend.py:514
+msgid "A common list of recently used documents"
+msgstr "Spoločný zoznam naposledy použitých dokumentov"
+
+#: ../bleachbit/CleanerBackend.py:515 ../bleachbit/CleanerBackend.py:634
+#: ../bleachbit/CleanerBackend.py:636
+msgid "Yum clean"
+msgstr "Yum čistenie"
+
+#: ../bleachbit/CleanerBackend.py:516 ../bleachbit/CleanerBackend.py:628
+#: ../bleachbit/CleanerBackend.py:630
+msgid "Clipboard"
+msgstr "Schránka"
+
+#: ../bleachbit/CleanerBackend.py:516
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
+"Schránka desktopových prostredí používaná pre operácie kopírovať a vložiť"
 
-#: ../bleachbit/CleanerBackend.py:590
-msgid "Cache location specified by XDG and used by various applications"
-msgstr ""
+#: ../bleachbit/CleanerBackend.py:517
+msgid "Delete temporary files created by various programs"
+msgstr "Odstrániť dočasné súbory vytvorené rôznymi programami"
 
-#: ../bleachbit/CleanerBackend.py:591
-msgid "Localizations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:591
-msgid "Data used to operate the system in various languages and countries"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:592
-msgid "Rotated logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:592
-msgid "Old system logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:593
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:594
-msgid "Trash"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:594
-msgid "Temporary storage for deleted files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:595
-msgid "A common list of recently used documents"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:596 ../bleachbit/CleanerBackend.py:706
-#: ../bleachbit/CleanerBackend.py:708
-msgid "Yum clean"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:596
-msgid "Delete all Yum's cache"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:599
+#: ../bleachbit/CleanerBackend.py:520
 msgid "The system in general"
-msgstr ""
+msgstr "Systém všeobecne"
 
-#: ../bleachbit/CleanerBackend.py:605
+#: ../bleachbit/CleanerBackend.py:526
 msgid "System"
-msgstr ""
+msgstr "Systém"
 
-#: ../bleachbit/CleanerBackend.py:729
-msgid "Delete thumbnails in the thumbnails folder"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:735
-msgid "Thumbnails"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:747
-msgid "Delete Transmission's blocklist and fast resume cache"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:767
-msgid "Delete the temporary files from winetricks"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:794
-msgid "Delete XChat logs and scrollback"
-msgstr ""
-
-#: ../bleachbit/FileUtilities.py:173
+#: ../bleachbit/FileUtilities.py:170
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
+"Nemôžem importovať sqlite3 modul Pythonu: je potrebný Python 2.5 alebo vyšší."
 
-#: ../bleachbit/GUI.py:66 ../bleachbit/GUI.py:558
+#: ../bleachbit/GUI.py:70 ../bleachbit/GUI.py:525
 msgid "Preferences"
-msgstr ""
+msgstr "Nastavenia"
 
-#: ../bleachbit/GUI.py:75
+#: ../bleachbit/GUI.py:79
 msgid "General"
-msgstr ""
+msgstr "Hlavné"
 
-#: ../bleachbit/GUI.py:76
+#: ../bleachbit/GUI.py:81
 msgid "Languages"
-msgstr ""
+msgstr "Jazyky"
 
-#: ../bleachbit/GUI.py:92
+#: ../bleachbit/GUI.py:97
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
+msgstr "Pravidelne overovať aktualizácie prostredníctvom internetu"
 
-#: ../bleachbit/GUI.py:95
+#: ../bleachbit/GUI.py:100
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"Ak je aktualizácia nájdená, budete mať možnosť zobraziť o nej informácie. "
+"Potom môzete aktualizácie ručne stiahnuť a nainštalovať ."
 
-#: ../bleachbit/GUI.py:98
+#: ../bleachbit/GUI.py:103
 msgid "Overwrite files to hide contents (ineffective in some situations)"
-msgstr ""
+msgstr "Prepíše súbory na skrytie obsahu (neúčinné v niektorých situáciách)"
 
-#: ../bleachbit/GUI.py:101
+#: ../bleachbit/GUI.py:106
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"Prepisovanie je na niekterých súborových systémoch a s niekterými BleachBit "
+"operáciami neúčinné. Prepisovanie je naviac výrazne pomalejšie."
 
-#: ../bleachbit/GUI.py:119
+#: ../bleachbit/GUI.py:124
 msgid "All languages will be deleted except those checked."
-msgstr ""
+msgstr "Všetky jazykové balíčky okrem označených budú zmazané."
 
-#: ../bleachbit/GUI.py:137
+#: ../bleachbit/GUI.py:142
 msgid "Preserve"
-msgstr ""
+msgstr "Zachovanie"
 
-#: ../bleachbit/GUI.py:141
+#: ../bleachbit/GUI.py:146
 msgid "Code"
-msgstr ""
+msgstr "Kód"
 
-#: ../bleachbit/GUI.py:145 ../bleachbit/GUI.py:247
+#: ../bleachbit/GUI.py:150 ../bleachbit/GUI.py:256
 msgid "Name"
-msgstr ""
+msgstr "Názov"
 
-#: ../bleachbit/GUI.py:167
+#: ../bleachbit/GUI.py:172
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Odstrániť potvrdenie"
 
-#: ../bleachbit/GUI.py:174
+#: ../bleachbit/GUI.py:180
 msgid ""
-"Are you sure you want to delete files according to the selected operations?  "
-"The actual files that will be deleted may have changed since you ran the "
-"preview.  Files cannot be undeleted."
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
 msgstr ""
+"Ste si istý že chcete navžy odstrániť vami označené súbory? Zmazané súbory "
+"sa nedajú obnoviť. Ak chcete vidieť o aké súbory sa jedná, pozrite si náhľad."
 
-#: ../bleachbit/GUI.py:255
+#: ../bleachbit/GUI.py:182
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Ste si istý, že chcete navždy odstrániť tieto súbory?"
+
+#: ../bleachbit/GUI.py:264
 msgid "Active"
-msgstr ""
+msgstr "Aktívny"
 
-#: ../bleachbit/GUI.py:435 ../bleachbit/GUI.py:457
-#, python-format
-msgid "Exception while getting running operation '%s': '%s'"
-msgstr ""
-
-#: ../bleachbit/GUI.py:452
-msgid "Special operation: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:473
-msgid "You must select an operation"
-msgstr ""
-
-#: ../bleachbit/GUI.py:490
-msgid "Please wait.  Scanning and deleting: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:492
-msgid "Please wait.  Scanning: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:499
-msgid "Done."
-msgstr ""
-
-#: ../bleachbit/GUI.py:500
-msgid "Total size: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:510
+#: ../bleachbit/GUI.py:453
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program na mazanie nepotrebných súborov"
 
-#: ../bleachbit/GUI.py:515
+#: ../bleachbit/GUI.py:458
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License version 3 alebo vyšší.\n"
+"Pozri http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:460
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Roman Horník https://launchpad.net/~roman-hornik"
+"  Roman Horník https://launchpad.net/~roman.hornik\n"
+"  milboy https://launchpad.net/~milboys"
 
-#: ../bleachbit/GUI.py:556
+#: ../bleachbit/GUI.py:488
+msgid "Choose files to shred"
+msgstr "Vyberte súbory, ktoré majú byť rozdrvené"
+
+#: ../bleachbit/GUI.py:522
+msgid "_Shred Files"
+msgstr "_Rozdrvené súbory"
+
+#: ../bleachbit/GUI.py:523
 msgid "_Quit"
-msgstr ""
+msgstr "_Koniec"
 
-#: ../bleachbit/GUI.py:556
-msgid "Quit BleachBit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:557
+#: ../bleachbit/GUI.py:524
 msgid "_File"
-msgstr ""
+msgstr "_Súbor"
+
+#: ../bleachbit/GUI.py:526
+msgid "_Edit"
+msgstr "_Úpravy"
+
+#: ../bleachbit/GUI.py:527
+msgid "_Release Notes"
+msgstr "_Poznámky k vydaniu"
+
+#: ../bleachbit/GUI.py:528
+msgid "_About"
+msgstr "_O programe"
+
+#: ../bleachbit/GUI.py:529
+msgid "_Help"
+msgstr "_Pomocník"
 
 #: ../bleachbit/GUI.py:558
-msgid "Configure BleachBit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:560
-msgid "_Edit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:561
-msgid "_About"
-msgstr ""
-
-#: ../bleachbit/GUI.py:561
-msgid "Show about"
-msgstr ""
-
-#: ../bleachbit/GUI.py:562
-msgid "_Help"
-msgstr ""
-
-#: ../bleachbit/GUI.py:590
 msgid "Delete"
-msgstr ""
+msgstr "Odstrániť"
 
-#: ../bleachbit/GUI.py:593
+#: ../bleachbit/GUI.py:561
 msgid "Delete files in the selected operations"
-msgstr ""
+msgstr "Odstrániť súbory vo vybraných operáciach"
 
-#: ../bleachbit/GUI.py:598
+#: ../bleachbit/GUI.py:566
 msgid "Preview"
-msgstr ""
+msgstr "Náhľad"
 
-#: ../bleachbit/GUI.py:601
+#: ../bleachbit/GUI.py:569
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"Náhľad súborov vo vybraných operáciach (bez odstránenia nejakých súborov)"
 
-#: ../bleachbit/GUI.py:674
+#: ../bleachbit/GUI.py:642
 msgid "Update BleachBit"
-msgstr ""
+msgstr "Aktualizovať BleachBit"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:652
 msgid "BleachBit update is available"
-msgstr ""
+msgstr "Je k dispozícii aktualizácia BleachBit"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:652
 msgid "Click 'Update BleachBit' for more information"
-msgstr ""
+msgstr "Klikni na ''Aktualizácia BleachBit'' pre viac informácií"
 
-#: ../bleachbit/RecognizeCleanerML.py:50
+#: ../bleachbit/RecognizeCleanerML.py:59
 msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr ""
+"Nasledujúca definícia čistenia bola zmenená. Škodlivé definície môžu "
+"poškodiť váš počítač."
 
-#: ../bleachbit/RecognizeCleanerML.py:52
+#: ../bleachbit/RecognizeCleanerML.py:61
 msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr ""
+"Nasledujúca definícia čistenia je nová. Škodlivé definície môžu poškodiť váš "
+"počítač."
 
-#: ../bleachbit/Unix.py:330 ../bleachbit/Unix.py:467
+#: ../bleachbit/Unix.py:328 ../bleachbit/Unix.py:467
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "Spustiteľný súbor nenájdený: %s"
 
 #: ../bleachbit/Unix.py:465
 msgid "Another process is currently using yum"
-msgstr ""
+msgstr "Iný proces v súčasnosti používa yum"
 
-#: ../bleachbit/Update.py:69
+#: ../bleachbit/Update.py:73
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Chyba pri kontrole aktualizácií: "
+
+#: ../bleachbit/Worker.py:45
+msgid "You must select an operation"
+msgstr "Musíte vybrať operáciu"
+
+#: ../bleachbit/Worker.py:74 ../bleachbit/Worker.py:93
+#, python-format
+msgid "Exception while getting running operation '%s': '%s'"
+msgstr "Výnimka pri spustení operácie '%s': '%s'"
+
+#: ../bleachbit/Worker.py:89
+msgid "Special operation: "
+msgstr "Zvláštne operácie: "
+
+#: ../bleachbit/Worker.py:130
+msgid "Please wait.  Scanning and deleting: "
+msgstr "Prosím čakajte. Vyhľadávam a vymazávam: "
+
+#: ../bleachbit/Worker.py:133
+msgid "Please wait.  Scanning: "
+msgstr "Prosím čakajte. Vyhľadávam: "
+
+#: ../bleachbit/Worker.py:146
+msgid "Done."
+msgstr "Hotovo."
+
+#: ../bleachbit/Worker.py:147
+msgid "Total size: "
+msgstr "Celková veľkosť: "
