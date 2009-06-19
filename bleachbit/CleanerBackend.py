@@ -196,7 +196,7 @@ class Firefox(Cleaner):
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
         if sys.platform == 'linux2':
-            self.profile_dir = "~/.mozilla/firefox/*/"
+            self.profile_dir = "~/.mozilla/firefox*/*/"
         if sys.platform == 'win32':
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
 
