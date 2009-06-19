@@ -25,8 +25,8 @@
   <option id="cache">
     <label>Cache</label>
     <description>Web cache reduces time to display revisited pages</description>
-    <action type="file">~\Local Settings\Application Data\Apple Computer\Safari\Cache.db</action>
-    <action type="file">~\AppData\Local\Apple Computer\Safari\Cache.db</action>
+    <action type="file">$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\Cache.db</action>
+    <action type="file">$USERPROFILE\AppData\Local\Apple Computer\Safari\Cache.db</action>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -37,7 +37,7 @@
     <label>History</label>
     <description>List of visited web pages</description>
     <action type="file">$APPDATA\Apple Computer\Safari\History.plist</action>
-    <action type="children" directories="false">~\Local Settings\Application Data\Apple Computer\Safari\History\</action>
-    <action type="children" directories="false">~\AppData\Local\Apple Computer\Safari\History\</action>
+    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\History\</action>
+    <action type="children" directories="false">$USERPROFILE\AppData\Local\Apple Computer\Safari\History\</action>
   </option>
 </cleaner>

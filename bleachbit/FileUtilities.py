@@ -185,7 +185,7 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = os.path.expanduser(os.path.join(pathname1, pathname2))
+    pathname3 = os.path.expanduser(os.path.expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
        ret.append(pathname4)
     return ret
@@ -482,7 +482,7 @@ class TestFileUtilities(unittest.TestCase):
             self.assertEqual(exe_exists(test[0]), test[1])
 
 
-    def def_expand_glob_join(self):
+    def test_expand_glob_join(self):
         if sys.platform == 'linux2':
             expand_glob_join('/bin', '*sh')
         if sys.platform == 'win32':

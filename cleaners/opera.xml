@@ -27,8 +27,8 @@
     <description>Web cache reduces time to display revisited pages</description>
     <action type="children" directories="false">~/.opera/cache4/</action>
     <action type="children" directories="false">~/.opera/opcache/</action>
-    <action type="children" directories="false">~\Local Settings\Application Data\Opera\Opera\profile\cache4\</action>
-    <action type="children" directories="false">~\Local Settings\Application Data\Opera\Opera\profile\opcache\</action>
+    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Opera\Opera\profile\cache4\</action>
+    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Opera\Opera\profile\opcache\</action>
   </option>
   <option id="cookies">
     <label>Cookies</label>

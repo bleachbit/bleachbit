@@ -431,16 +431,16 @@ class OpenOfficeOrg(Cleaner):
     def list_files(self):
         if self.options["recent_documents"][1] and not self.options["cache"][1]:
             for prefix in self.prefixes:
-                path = os.path.join(os.path.expanduser(prefix), "user/registry/cache/org.openoffice.Office.Common.dat")
-                if os.path.lexists(path):
-                    yield path
+                for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Common.dat"):
+                    if os.path.lexists(path):
+                        yield path
 
         if not self.options["cache"][1]:
             return
         dirs = []
         for prefix in self.prefixes:
-            dirs.append(os.path.join(os.path.expanduser(prefix), "user/uno_packages/cache/"))
-            dirs.append(os.path.join(os.path.expanduser(prefix), "user/registry/cache/"))
+            dirs += FileUtilities.expand_glob_join(prefix, "user/uno_packages/cache/")
+            dirs += FileUtilities.expand_glob_join(prefix, "user/registry/cache/")
         for dirname in dirs:
             for filename in children_in_directory(dirname, False):
                 yield filename
@@ -584,7 +584,7 @@ class System(Cleaner):
                         yield path
 
         if sys.platform == 'win32' and self.options["tmp"][1]:
-            dirname = os.path.expanduser("$USERPROFILE\\Local Settings\\Temp\\")
+            dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
                 yield filename
 
