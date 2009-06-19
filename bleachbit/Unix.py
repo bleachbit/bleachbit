@@ -276,6 +276,8 @@ class Locales:
         globexs += ( ('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$' ), )
         # /usr/share/espeak-data/es_dict
         globexs += ( ('/usr/share/espeak-data/??_dict', '/([a-z]{2,3})_dict$' ), )
+        # /usr/share/espeak-data/voices/en/en-n
+        globexs += ( ('/usr/share/espeak-data/voices/en/*', '/(en)-?[a-z]{0,2}$' ), )
         # /usr/share/espeak-data/voices/es-la
         globexs += ( ('/usr/share/espeak-data/voices/*', '/([a-z]{2,3}(-[a-z]{2})?)$' ), )
         # /usr/share/hplip/data/localization/hplip_es.qm
@@ -297,6 +299,8 @@ class Locales:
         for (globpath, regex) in globexs:
             for (locale_code, path) in locale_globex(globpath, regex):
                 language_code = locale_to_language(locale_code)
+		if 'mb' == language_code: # not a real code but found in espeak Ubuntu 9.04
+		    continue
                 if None != language_filter and language_filter(locale_code, language_code):
                     continue
                 yield path
