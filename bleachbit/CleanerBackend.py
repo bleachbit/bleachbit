@@ -415,7 +415,7 @@ class OpenOfficeOrg(Cleaner):
             self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
             self.prefixes += [ "~/.ooo-dev3" ]
         if sys.platform == 'win32':
-            self.prefixes = [ "$USERPROFILE\\Application Data\\OpenOffice.org\\3", "~\\Application Data\\OpenOffice.org2" ]
+            self.prefixes = [ "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2" ]
 
     def get_description(self):
         return _("Office suite")
