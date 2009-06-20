@@ -702,8 +702,7 @@ import unittest
 class TestCleanerBackend(unittest.TestCase):
     def test_get_name(self):
         for key in sorted(backends):
-            for name in backends[key].get_name():
-                self.assert_ (type(name) is str)
+            self.assert_ (type(backends[key].get_name()) is str)
 
     def test_get_descrption(self):
         for key in sorted(backends):
