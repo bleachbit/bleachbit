@@ -179,7 +179,11 @@ def execute_sqlite3(path, cmds):
         try:
             cursor.execute(cmd)
         except sqlite3.OperationalError, exc:
-            raise sqlite3.OperationalError('%s: %s' % (exc, path))
+            if exc.message.find('no such function: ') >= 0:
+                # fixme: determine why randomblob and zeroblob are not available
+                print 'warning: %s' % exc.message
+            else:
+                raise sqlite3.OperationalError('%s: %s' % (exc, path))
     cursor.close()
     conn.commit()
     conn.close()
