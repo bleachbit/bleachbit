@@ -427,6 +427,16 @@ class OpenOfficeOrg(Cleaner):
         return "OpenOffice.org"
 
     def list_files(self):
+        if self.options["recent_documents"][1]:
+             for prefix in self.prefixes:
+                for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Histories.xcu"):
+                    if os.path.lexists(path):
+                        yield path
+                for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Histories.dat"):
+                    if os.path.lexists(path):
+                        yield path
+
+
         if self.options["recent_documents"][1] and not self.options["cache"][1]:
             for prefix in self.prefixes:
                 for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Common.dat"):
