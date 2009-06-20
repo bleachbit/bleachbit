@@ -7,23 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-07 13:44-0600\n"
-"PO-Revision-Date: 2009-06-07 16:45+0000\n"
+"POT-Creation-Date: 2009-06-17 14:47-0600\n"
+"PO-Revision-Date: 2009-06-20 05:11+0000\n"
 "Last-Translator: MixCool <lars.thoms@mixcool.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-17 03:08+0000\n"
+"X-Launchpad-Export-Date: 2009-06-20 23:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/beagle.xml
-#: ../cleaners/opera.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/gftp.xml ../cleaners/chrome.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:134
-#: ../bleachbit/CleanerBackend.py:187 ../bleachbit/CleanerBackend.py:379
-#: ../bleachbit/CleanerBackend.py:411 ../bleachbit/CleanerBackend.py:509
+#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/chrome.xml ../cleaners/secondlife_viewer.xml
+#: ../bleachbit/CleanerBackend.py:134 ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/CleanerBackend.py:379 ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:510
 msgid "Cache"
 msgstr "Cache"
 
@@ -31,7 +33,7 @@ msgstr "Cache"
 msgid "Delete the list of game servers"
 msgstr "Gameserver-Liste löschen"
 
-#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml
+#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 msgid "Game"
 msgstr "Spiel"
@@ -67,7 +69,8 @@ msgid "History"
 msgstr "Historie"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/elinks.xml
-#: ../cleaners/chrome.xml
+#: ../cleaners/chrome.xml ../bleachbit/CleanerBackend.py:141
+#: ../bleachbit/CleanerBackend.py:204
 msgid "Web browser"
 msgstr "Web-Browser"
 
@@ -81,6 +84,25 @@ msgstr ""
 #: ../cleaners/vim.xml
 msgid "Editor"
 msgstr "Editor"
+
+#: ../cleaners/miro.xml ../cleaners/beagle.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:412
+#: ../bleachbit/CleanerBackend.py:515
+msgid "Delete the cache"
+msgstr "Cache löschen"
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "Delete the logs"
+msgstr "Logs löschen"
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "Logs"
+msgstr "Logs"
 
 #: ../cleaners/gl-117.xml
 msgid "Debug log"
@@ -98,15 +120,24 @@ msgstr "Lösche die Gebrauchs-Historie"
 msgid "Visual shell for the console"
 msgstr "Virtuelle shell für die Konsole"
 
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Chat client"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat logs"
+msgstr "Chat Logs"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Delete the chat logs"
+msgstr "Chat Logs löschen"
+
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
 msgstr "Debug Logs"
-
-#: ../cleaners/beagle.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/gftp.xml ../cleaners/secondlife_viewer.xml
-msgid "Delete the cache"
-msgstr "Cache löschen"
 
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
@@ -137,16 +168,6 @@ msgstr "Cache der Jamendo und Magnatune Datenbanken löschen"
 msgid "Online databases"
 msgstr "Online Datenbank"
 
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/gftp.xml
-msgid "Delete the logs"
-msgstr "Logs löschen"
-
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/gftp.xml
-msgid "Logs"
-msgstr "Logs"
-
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
 msgid "Delete the temporary files"
@@ -154,23 +175,13 @@ msgstr "Lösche die temporären Dateien"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:380 ../bleachbit/CleanerBackend.py:512
+#: ../bleachbit/CleanerBackend.py:380 ../bleachbit/CleanerBackend.py:517
 msgid "Temporary files"
 msgstr "Temporäre Dateien"
 
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-msgid "Chat client"
-msgstr "Chat client"
-
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/skype.xml
-msgid "Chat logs"
-msgstr "Chat Logs"
-
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/skype.xml
-msgid "Delete the chat logs"
-msgstr "Chat Logs löschen"
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Vorschaubilder"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
@@ -221,10 +232,6 @@ msgid ""
 msgstr ""
 "Einen Datenbank von URLs, inklusive Lesezeichen und Historie besuchter Seiten"
 
-#: ../bleachbit/CleanerBackend.py:141
-msgid "Epiphany web browser"
-msgstr "Epiphany Web-Browser"
-
 #: ../bleachbit/CleanerBackend.py:190
 msgid "Form history"
 msgstr "Formular-Historie"
@@ -272,10 +279,6 @@ msgstr ""
 "Bereinige die Datenbankfragmentation um platz zu sparen und die "
 "Geschwindigkeit ohne Datenverlust zu erhöhen"
 
-#: ../bleachbit/CleanerBackend.py:204
-msgid "Mozilla Firefox web browser"
-msgstr "Mozilla Firefox Web-Browser"
-
 #: ../bleachbit/CleanerBackend.py:355
 msgid ""
 "Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
@@ -299,37 +302,29 @@ msgstr ""
 msgid "KDE desktop environment"
 msgstr "KDE-Desktop-Umgebung"
 
-#: ../bleachbit/CleanerBackend.py:412 ../bleachbit/CleanerBackend.py:514
+#: ../bleachbit/CleanerBackend.py:413 ../bleachbit/CleanerBackend.py:514
 msgid "Recent documents list"
 msgstr "Liste der zuletzt verwendeten Dokumente"
 
-#: ../bleachbit/CleanerBackend.py:412
-msgid "OpenOffice.org's list of recently used documents."
-msgstr "OpenOffice.orgs liste von zuletzt geöffneten Dokumenten"
-
-#: ../bleachbit/CleanerBackend.py:422
-msgid "OpenOffice.org office suite"
-msgstr "OpenOffice.org Office suite"
-
-#: ../bleachbit/CleanerBackend.py:477
+#: ../bleachbit/CleanerBackend.py:478
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "Lösche die Dateien im rpmbuild build-Verzeichnis"
 
-#: ../bleachbit/CleanerBackend.py:507 ../bleachbit/CleanerBackend.py:611
-#: ../bleachbit/CleanerBackend.py:613
+#: ../bleachbit/CleanerBackend.py:508 ../bleachbit/CleanerBackend.py:619
+#: ../bleachbit/CleanerBackend.py:621
 msgid "APT autoclean"
 msgstr "APT autoclean"
 
-#: ../bleachbit/CleanerBackend.py:507
+#: ../bleachbit/CleanerBackend.py:508
 msgid "Run apt-get autoclean to delete old downloaded archive files"
 msgstr ""
 "Führe apt-get autoclean aus um alte heruntergeladene Pakete zu löschen"
 
-#: ../bleachbit/CleanerBackend.py:508
+#: ../bleachbit/CleanerBackend.py:509
 msgid "Broken desktop entries"
 msgstr "Fehlerhafte Desktop-Einträge"
 
-#: ../bleachbit/CleanerBackend.py:508
+#: ../bleachbit/CleanerBackend.py:509
 msgid ""
 "Unusable .desktop files (menu entries and file associtations) that are "
 "either invalid structurally or point to non-existant locations"
@@ -337,35 +332,29 @@ msgstr ""
 "Unbenutzbare .desktop-Dateien (Menüeinträge und Dateitypen), welche entweder "
 "strukturell beschädigt sind oder auf nicht-existierende Ziele zeigen"
 
-#: ../bleachbit/CleanerBackend.py:509
+#: ../bleachbit/CleanerBackend.py:510
 msgid "Cache location specified by XDG and used by various applications"
 msgstr ""
 "Cache-Ort, welcher von XDG festgelegt und von vielen Applikationen benutzt "
 "wird"
 
-#: ../bleachbit/CleanerBackend.py:510
+#: ../bleachbit/CleanerBackend.py:511
 msgid "Localizations"
 msgstr "Lokalisierungen"
 
-#: ../bleachbit/CleanerBackend.py:510
+#: ../bleachbit/CleanerBackend.py:511
 msgid "Data used to operate the system in various languages and countries"
 msgstr ""
 "Daten, welche benutzt werden um das System in verschiedenen Sprachen und "
 "Ländern zu benutzen"
 
-#: ../bleachbit/CleanerBackend.py:511
+#: ../bleachbit/CleanerBackend.py:512
 msgid "Rotated logs"
 msgstr "Rotierende Logs"
 
-#: ../bleachbit/CleanerBackend.py:511
+#: ../bleachbit/CleanerBackend.py:512
 msgid "Old system logs"
 msgstr "Alte System-Logs"
-
-#: ../bleachbit/CleanerBackend.py:512
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
-"Normale, ungeöffnete Dateien in /tmp/ und /var/tmp/, welche dem Nutzer "
-"gehören"
 
 #: ../bleachbit/CleanerBackend.py:513
 msgid "Trash"
@@ -379,17 +368,13 @@ msgstr "Temporärer Speicher für gelöschte Dateien"
 msgid "A common list of recently used documents"
 msgstr "Eine gewöhnliche Liste von zuletzt benutzen Dokumenten"
 
-#: ../bleachbit/CleanerBackend.py:515 ../bleachbit/CleanerBackend.py:626
-#: ../bleachbit/CleanerBackend.py:628
+#: ../bleachbit/CleanerBackend.py:515 ../bleachbit/CleanerBackend.py:634
+#: ../bleachbit/CleanerBackend.py:636
 msgid "Yum clean"
 msgstr "Yum clean"
 
-#: ../bleachbit/CleanerBackend.py:515
-msgid "Delete all Yum's cache"
-msgstr "Yums gesamten Cache löschen"
-
-#: ../bleachbit/CleanerBackend.py:516 ../bleachbit/CleanerBackend.py:620
-#: ../bleachbit/CleanerBackend.py:622
+#: ../bleachbit/CleanerBackend.py:516 ../bleachbit/CleanerBackend.py:628
+#: ../bleachbit/CleanerBackend.py:630
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
@@ -400,25 +385,13 @@ msgstr ""
 "Die Zwischenablage der Desktop-Umgebung, welche zum kopieren und einfügen "
 "benutzt wird"
 
-#: ../bleachbit/CleanerBackend.py:519
+#: ../bleachbit/CleanerBackend.py:520
 msgid "The system in general"
 msgstr "Das System im Allgemeinen"
 
-#: ../bleachbit/CleanerBackend.py:525
+#: ../bleachbit/CleanerBackend.py:526
 msgid "System"
 msgstr "System"
-
-#: ../bleachbit/CleanerBackend.py:654
-msgid "Delete thumbnails in the thumbnails folder"
-msgstr "Lösche Voransichten und Voransichts-Ordner"
-
-#: ../bleachbit/CleanerBackend.py:660
-msgid "Thumbnails"
-msgstr "Vorschaubilder"
-
-#: ../bleachbit/CleanerBackend.py:672
-msgid "Delete Transmission's blocklist and fast resume cache"
-msgstr "Lösche Transmissions Blocklist und 'fast resume'-Cache"
 
 #: ../bleachbit/FileUtilities.py:170
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -619,9 +592,21 @@ msgstr ""
 "authentifizierungen und \t\r\n"
 "Tracking-Identifizierungen enthalten"
 
-#: ../cleaners/vuze.xml ../cleaners/gftp.xml
-msgid "File transfer client"
+#: ../cleaners/miro.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
 msgstr ""
+
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Dateiübertragungs-Client"
+
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Sicherungskopien"
+
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Lösche die Sicherungskopien"
 
 #: ../cleaners/gimp.xml
 msgid "Image editor"
@@ -629,11 +614,7 @@ msgstr "Bildbearbeitungsprogramm"
 
 #: ../cleaners/google_earth.xml
 msgid "Virtual globe viewer"
-msgstr ""
-
-#: ../cleaners/flash.xml
-msgid "Multimedia viewer mainly for the Web"
-msgstr "Multimedia Betrachter, hauptsächlich für das Web"
+msgstr "Virtueller Globusbetrachter"
 
 #: ../cleaners/chrome.xml
 msgid "Delete the current and last sessions"
@@ -653,11 +634,19 @@ msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:194
 msgid "Deleting Places deletes bookmarks."
+msgstr "Das Löschen der Orte löscht die Favoriten."
+
+#: ../bleachbit/CleanerBackend.py:413
+msgid "Delete the list of recently used documents"
+msgstr "Lösche die Liste der zuletzt benutzten Dokumente"
+
+#: ../bleachbit/CleanerBackend.py:423
+msgid "Office suite"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:411
-msgid "Cached registry and package data"
-msgstr "Gecachte Registrierungs- und Paketdaten"
+#: ../bleachbit/CleanerBackend.py:517
+msgid "Delete temporary files created by various programs"
+msgstr "Lösche die temporären Dareien mehrerer unterschiedlicher Programme"
 
 #: ../bleachbit/GUI.py:180
 msgid ""
