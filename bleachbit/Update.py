@@ -42,11 +42,10 @@ def user_agent():
     if sys.platform == 'linux2':
         dist = platform.dist()
         __os = dist[0] + '/' + dist[1] + '-' + dist[2]
-    cpu = platform.machine() # e.g., i686
     import locale
     __locale = locale.getdefaultlocale()[0] # e.g., en_US
 
-    agent = "BleachBit/%s (%s; %s, %s; %s)" % (ver, __platform, __os, cpu, __locale)
+    agent = "BleachBit/%s (%s; %s; %s)" % (ver, __platform, __os, __locale)
     return agent
 
 
