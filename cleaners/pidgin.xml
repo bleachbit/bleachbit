@@ -26,6 +26,6 @@
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
     <action type="children" directories="true">~/.purple/logs/</action>
-    <action type="children" directories="true">$APPDATA\.pidgin\logs\</action>
+    <action type="children" directories="true">$APPDATA\.purple\logs\</action>
   </option>
 </cleaner>
