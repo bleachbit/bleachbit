@@ -36,6 +36,9 @@ def user_agent():
     ver = APP_VERSION
     __platform = platform.system() # Linux or Windows
     __os = platform.uname()[2] # e.g., 2.6.28-12-generic or XP
+    if sys.platform == "win32":
+        # Python 2.5.4 shows uname()[2) as Vista on Windows 7
+        __os = platform.uname()[3][0:3] # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
     if sys.platform == 'linux2':
         dist = platform.dist()
         __os = dist[0] + '/' + dist[1] + '-' + dist[2]
