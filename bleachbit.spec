@@ -56,6 +56,7 @@ Requires(postun): desktop-file-utils
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
 BuildRequires:  python-devel
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
