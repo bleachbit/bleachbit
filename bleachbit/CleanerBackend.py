@@ -458,15 +458,15 @@ class OpenOfficeOrg(Cleaner):
         if not self.options["recent_documents"][1]:
             return
         for prefix in self.prefixes:
-            path = os.path.join(os.path.expanduser(prefix), "user/registry/data/org/openoffice/Office/Common.xcu")
-            if os.path.lexists(path):
-                if really_delete:
-                    oldsize = os.path.getsize(path)
-                    self.erase_history(path)
-                    newsize = os.path.getsize(path)
-                    yield (oldsize - newsize, path)
-                else:
-                    yield path
+            for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Common.xcu"):
+                if os.path.lexists(path):
+                    if really_delete:
+                        oldsize = os.path.getsize(path)
+                        self.erase_history(path)
+                        newsize = os.path.getsize(path)
+                        yield (oldsize - newsize, path)
+                    else:
+                        yield path
 
 
 class rpmbuild(Cleaner):
