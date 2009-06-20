@@ -33,7 +33,6 @@ from globals import APP_VERSION, socket_timeout
 
 def user_agent():
     """Return the user agent string"""
-    ver = APP_VERSION
     __platform = platform.system() # Linux or Windows
     __os = platform.uname()[2] # e.g., 2.6.28-12-generic or XP
     if sys.platform == "win32":
@@ -45,7 +44,7 @@ def user_agent():
     import locale
     __locale = locale.getdefaultlocale()[0] # e.g., en_US
 
-    agent = "BleachBit/%s (%s; %s; %s)" % (ver, __platform, __os, __locale)
+    agent = "BleachBit/%s (%s; %s; %s)" % (APP_VERSION, __platform, __os, __locale)
     return agent
 
 
