@@ -611,6 +611,9 @@ class System(Cleaner):
             dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
                 yield filename
+            dirname = os.path.expandvars("$windir\\\temp\\")
+            for filename in children_in_directory(dirname, True):
+                yield filename
 
 
         # trash
