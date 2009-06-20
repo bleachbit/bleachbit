@@ -101,6 +101,9 @@ def bytes_to_human(bytes):
             else:
                 return locale.format(format, abbrev)
 
+    if bytes < 0:
+        return "-" + bytes_to_human(abs(bytes))
+
 
 def children_in_directory(top, list_directories = False):
     """Iterate files and, optionally, subdirectories in directory"""
@@ -292,8 +295,6 @@ class TestFileUtilities(unittest.TestCase):
         f = open(filename, "w")
 
 
-
-
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
 
@@ -302,7 +303,8 @@ class TestFileUtilities(unittest.TestCase):
             locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
         # test one-way conversion for predefined values
-        tests = [ ("0", bytes_to_human(0)),
+        tests = [ ("-1B", bytes_to_human(-1)),
+                  ("0", bytes_to_human(0)),
                   ("1B", bytes_to_human(1)),
                   ("1.0KB", bytes_to_human(1024)),
                   ("1.0MB", bytes_to_human(1024**2)),
