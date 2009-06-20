@@ -280,6 +280,12 @@ class Firefox(Cleaner):
                 "rev_host = randomblob(length(rev_host)), " \
                 "title = randomblob(length(title))" + places_suffix
             cmds += shred_places_cmd
+            shred_places_cmd = "update moz_places " \
+                "set url = zeroblob(length(url)), " \
+                "rev_host = zeroblob(length(rev_host)), " \
+                "title = zeroblob(length(title))" + places_suffix
+            cmds += shred_places_cmd
+
 
         delete_places_cmd = "delete from moz_places " + places_suffix
         cmds += delete_places_cmd
@@ -296,6 +302,10 @@ class Firefox(Cleaner):
                 "set content = randomblob(length(content)) " \
                 + annos_suffix
             cmds += shred_annos_cmd
+            shred_annos_cmd = "update moz_annos " \
+                "set content = zeroblob(length(content)) " \
+                + annos_suffix
+            cmds += shred_annos_cmd
 
         delete_annos_cmd = "delete from moz_annos " + annos_suffix
         cmds += delete_annos_cmd
@@ -310,6 +320,12 @@ class Firefox(Cleaner):
                 "data = randomblob(length(data)) " \
                 +  fav_suffix
             cmds += shred_fav_cmd
+            shred_fav_cmd = "update moz_favicons " \
+                "set url = zeroblob(length(url)), " \
+                "data = zeroblob(length(data)) " \
+                +  fav_suffix
+            cmds += shred_fav_cmd
+
 
         delete_fav_cmd = "delete from moz_favicons " + fav_suffix
         cmds += delete_fav_cmd
