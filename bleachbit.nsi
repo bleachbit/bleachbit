@@ -115,6 +115,7 @@ section
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
     CreateDirectory "$SMPROGRAMS\${prodname}"
+    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
     CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
 
