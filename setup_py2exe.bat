@@ -19,7 +19,7 @@ REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 set GTK_DIR=c:\gtk
 set NSIS_EXE="c:\program files\nsis\makensis.exe"
-set PYTHON_DIR=c:\python%PYTHON_VER%
+set PYTHON_DIR=c:\python25
 set PYTHON_VER=25
 set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
 set UPX_EXE=upx
