@@ -34,7 +34,6 @@ echo Checking for GTK
 set CANARY=%GTK_DIR%
 if not exist %CANARY% goto error
 
-
 echo Deleting directories build and dist
 del /q /s build > nul
 del /q /s dist > nul
@@ -68,6 +67,17 @@ xcopy locale dist\share\locale /i /s /q
 set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
 if not exist %CANARY% goto error
 
+echo Copying BleachBit cleaners
+xcopy cleaners dist\share\cleaners /i /s /q
+
+echo Checking for CleanerML
+set CANARY=dist\share\cleaners\internet_explorer.xml
+if not exist %CANARY% goto error
+
+echo Checking for Linux-only cleaners
+if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
+if exist dist\share\cleaners\wine.xml pause
+
 if not exist "%SZ_EXE%" echo %SZ_EXE% does not exist
 if not exist "%SZ_EXE%" goto nsis
 
@@ -82,6 +92,7 @@ del ..\library.zip
 echo "Size after 7zip recompression
 dir ..\library.zip
 cd ..\..
+rd /s /q dist\library
 set CANARY=dist\library.zip
 if not exist %CANARY% goto error
 

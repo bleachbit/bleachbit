@@ -112,9 +112,6 @@ section
     SetOutPath "$INSTDIR\share\"
     File "bleachbit.png"
 
-    SetOutPath "$INSTDIR\share\cleaners\"
-    File ".\cleaners\*.xml"
-
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
     CreateDirectory "$SMPROGRAMS\${prodname}"
