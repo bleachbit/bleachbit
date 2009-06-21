@@ -36,7 +36,7 @@ del /q /s dist > nul
 echo Pre-compressing executables
 for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% "%%e" %UPX_OPTS%
 for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% "%%e" %UPX_OPTS%
-for /r %windir%\system32\python%PYTHON_VER%.dll %%e in (*.exe,*.dll) do %UPX_EXE% "%%e" %UPX_OPTS%
+%UPX_EXE%  %windir%\system32\python%PYTHON_VER%.dll %UPX_OPTS%
 
 echo Running py2exe
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
