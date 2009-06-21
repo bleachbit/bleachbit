@@ -79,6 +79,7 @@ echo Checking for Linux-only cleaners
 if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
 if exist dist\share\cleaners\wine.xml pause
 
+echo Recompressing library.zip with 7-Zip
 if not exist %SZ_EXE% echo %SZ_EXE% does not exist
 if not exist %SZ_EXE% goto nsis
 
@@ -89,7 +90,7 @@ cd library
 echo "Size before 7zip recompression
 dir ..\library.zip
 del ..\library.zip
-%SZ_EXE% a -tzip -mx=9 ..\library.zip
+%SZ_EXE% a -tzip -mx=9 -mfb=255 ..\library.zip
 echo "Size after 7zip recompression
 dir ..\library.zip
 cd ..\..
