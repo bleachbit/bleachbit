@@ -18,7 +18,7 @@ REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 set UPX_EXE=upx
-set UPX_OPTS=--best --crp-ms=999999 --all-methods --all-filters --no-lzma
+set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 set PYTHON_VER=25
 set PYTHON_DIR=c:\python%PYTHON_VER%
 set GTK_DIR=c:\gtk
