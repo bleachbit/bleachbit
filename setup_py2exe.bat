@@ -17,26 +17,32 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-set UPX_EXE=upx
-set UPX_OPTS=--best --crp-ms=999999 --nrv2e
-set PYTHON_VER=25
-set PYTHON_DIR=c:\python%PYTHON_VER%
 set GTK_DIR=c:\gtk
 set NSIS_EXE="c:\program files\nsis\makensis.exe"
+set PYTHON_DIR=c:\python%PYTHON_VER%
+set PYTHON_VER=25
+set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
+set UPX_EXE=upx
+set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
 
 echo Checking for translations
 set CANARY=locale
 if not exist %CANARY% goto error
 
+echo Checking for GTK
+set CANARY=%GTK_DIR%
+if not exist %CANARY% goto error
+
+
 echo Deleting directories build and dist
 del /q /s build > nul
 del /q /s dist > nul
 
 echo Pre-compressing executables
-for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% "%%e" %UPX_OPTS%
-for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% "%%e" %UPX_OPTS%
-%UPX_EXE%  %windir%\system32\python%PYTHON_VER%.dll %UPX_OPTS%
+for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% %UPX_OPTS% "%%e"
+for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% %UPX_OPTS% "%%e"
+%UPX_EXE% %UPX_OPTS% %windir%\system32\python%PYTHON_VER%.dll %windir%\system32\pywintypes%PYTHON_VER%.dll
 
 echo Running py2exe
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
@@ -45,14 +51,15 @@ if not exist %CANARY% goto error
 
 echo Copying GTK files
 mkdir dist\etc
-xcopy c:\gtk\etc dist\etc /i /s /q
+xcopy %GTK_DIR%\etc dist\etc /i /s /q
 mkdir dist\lib
-xcopy c:\gtk\lib dist\lib /i /s /q
+xcopy %GTK_DIR%\lib dist\lib /i /s /q
 mkdir dist\share
-xcopy c:\gtk\share dist\share /i /s /q
+xcopy %GTK_DIR%\share dist\share /i /s /q
 
 echo Compressing executables
 for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
+pause
 
 echo Purging unnecessary locales
 %PYTHON_DIR%\python.exe setup_clean.py
@@ -62,8 +69,29 @@ xcopy locale dist\share\locale /i /s /q
 set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
 if not exist %CANARY% goto error
 
+if not exist "%SZ_EXE%" echo %7Z_EXE% does not exist
+if not exist "%SZ_EXE%" goto nsis
+
+cd dist
+mkdir library
+cd library
+%SZ_EXE% x ..\library.zip
+echo "Size before 7zip recompression
+dir ..\library.zip
+del ..\library.zip
+%SZ_EXE% a -tzip -mx=9 ..\library.zip
+echo "Size after 7zip recompression
+dir ..\library.zip
+cd ..\..
+set CANARY=dist\library.zip
+if not exist %CANARY% goto error
+
+
+:nsis
 echo Building installer
 %NSIS_EXE% bleachbit.nsi
+
+
 
 echo Success!
 goto exit
