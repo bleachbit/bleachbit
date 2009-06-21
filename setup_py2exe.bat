@@ -41,7 +41,8 @@ del /q /s dist > nul
 echo Pre-compressing executables
 for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% %UPX_OPTS% "%%e"
 for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% %UPX_OPTS% "%%e"
-%UPX_EXE% %UPX_OPTS% %windir%\system32\python%PYTHON_VER%.dll %windir%\system32\pywintypes%PYTHON_VER%.dll
+REM do not pre-compress python25.dll because py2exe modifies it
+%UPX_EXE% %UPX_OPTS% %windir%\system32\pywintypes%PYTHON_VER%.dll
 
 echo Running py2exe
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
@@ -78,8 +79,8 @@ echo Checking for Linux-only cleaners
 if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
 if exist dist\share\cleaners\wine.xml pause
 
-if not exist "%SZ_EXE%" echo %SZ_EXE% does not exist
-if not exist "%SZ_EXE%" goto nsis
+if not exist %SZ_EXE% echo %SZ_EXE% does not exist
+if not exist %SZ_EXE% goto nsis
 
 cd dist
 mkdir library
