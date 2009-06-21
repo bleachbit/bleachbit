@@ -59,7 +59,6 @@ xcopy %GTK_DIR%\share dist\share /i /s /q
 
 echo Compressing executables
 for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
-pause
 
 echo Purging unnecessary locales
 %PYTHON_DIR%\python.exe setup_clean.py
@@ -69,7 +68,7 @@ xcopy locale dist\share\locale /i /s /q
 set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
 if not exist %CANARY% goto error
 
-if not exist "%SZ_EXE%" echo %7Z_EXE% does not exist
+if not exist "%SZ_EXE%" echo %SZ_EXE% does not exist
 if not exist "%SZ_EXE%" goto nsis
 
 cd dist
