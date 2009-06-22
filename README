@@ -9,7 +9,7 @@ BleachBit cleans files to free disk space and to maintain privacy.
 *** Web page
 ***
 
-http://bleachbit.sourceforge.net
+http://bleachbit-project.appspot.com
 
 
 ***
@@ -20,6 +20,11 @@ To run BleachBit without installation, unpack the tarball
 and then run these commands.
 
 make -C po local
-python bleachbit/GUI.py
+python bleachbit.py
+
+Then, review the preferences.
+
+Then, select some options, and click Preview.  Review
+the files, toggle options accordingly, and click Delete.
 
 
