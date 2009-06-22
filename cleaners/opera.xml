@@ -24,7 +24,7 @@
   <description>Web browser</description>
   <option id="cache">
     <label>Cache</label>
-    <description>Web cache reduces time to display revisited pages</description>
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action type="children" directories="false">~/.opera/cache4/</action>
     <action type="children" directories="false">~/.opera/opcache/</action>
     <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Opera\Opera\profile\cache4\</action>

@@ -21,9 +21,9 @@
 -->
 <cleaner id="rhythmbox" os="linux">
   <label>Rhythmbox</label>
-  <option id="online_databases">
-    <label>Online databases</label>
-    <description>Delete the cache of Jamendo and Mangatune databases</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
     <action type="children" directories="false">~/.gnome2/rhythmbox/jamendo/</action>
     <action type="children" directories="false">~/.gnome2/rhythmbox/magnatune/</action>
   </option>

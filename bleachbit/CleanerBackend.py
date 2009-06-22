@@ -131,7 +131,7 @@ class Firefox(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
+        self.add_option('cache', _('Cache'), _('Delete the web cache, which reduces time to display revisited pages'))
         self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
