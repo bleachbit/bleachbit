@@ -129,6 +129,11 @@ class CleanerML:
             self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
             description = option.getElementsByTagName('description')
             self.handle_cleaner_option_description(description[0])
+            warning = option.getElementsByTagName('warning')
+            if warning:
+                self.handle_cleaner_option_warning(warning[0])
+                if self.option_warning:
+                    self.cleaner.set_warning(self.option_id, self.option_warning)
 
             for action in option.getElementsByTagName('action'):
                 self.handle_cleaner_option_action(action)
@@ -148,6 +153,10 @@ class CleanerML:
         self.option_description = _(getText(description.childNodes))
         self.xlate_cb(self.option_description)
 
+    def handle_cleaner_option_warning(self, warning):
+        """<warning> element under <option>"""
+        self.option_warning = _(getText(warning.childNodes))
+        self.xlate_cb(self.option_warning)
 
     def handle_cleaner_option_action(self, action):
         """<action> element under <option>"""

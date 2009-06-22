@@ -126,59 +126,6 @@ class Cleaner:
         self.warnings[option_id] = description
 
 
-class Epiphany(Cleaner):
-    """Epiphany"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.add_option('cache', _('Cache'), _('Web cache reduces time to display revisited pages'))
-        self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification'))
-        self.add_option('download_history', _('Download history'), _('List of files downloaded'))
-        self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
-        self.add_option('places', _('Places'), _('A database of URLs including bookmarks and a history of visited web sites'))
-
-    def get_description(self):
-        return _("Web browser")
-
-    def get_id(self):
-        return 'epiphany'
-
-    def get_name(self):
-        return "Epiphany"
-
-    def list_files(self):
-        files = []
-        # browser cache
-        if self.options["cache"][1]:
-            dirs = glob.glob(os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/Cache/"))
-            dirs += glob.glob(os.path.expanduser("~/.gnome2/epiphany/favicon_cache/"))
-            for dirname in dirs:
-                for filename in children_in_directory(dirname, False):
-                    yield filename
-            files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-favicon-cache.xml") ]
-
-        # cookies
-        if self.options["cookies"][1]:
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/cookies.txt") ]
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite") ]
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal") ]
-
-        # password
-        if self.options["passwords"][1]:
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/signons3.txt") ]
-
-        # places database
-        if self.options["places"][1]:
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite") ]
-            files += [ os.path.expanduser("~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal") ]
-            files += [ os.path.expanduser("~/.gnome2/epiphany/ephy-history.xml") ]
-
-        # finish
-        for filename in files:
-            if os.path.lexists(filename):
-                yield filename
-
-
 class Firefox(Cleaner):
     """Mozilla Firefox"""
 
@@ -665,8 +612,6 @@ class System(Cleaner):
 
 
 backends = {}
-if sys.platform == 'linux2':
-    backends["epiphany"] = Epiphany()
 backends["firefox"] = Firefox()
 if sys.platform == 'linux2':
     backends["kde"] = KDE()

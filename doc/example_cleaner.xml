@@ -45,7 +45,11 @@
     <!-- The description precises describes what will happen.  It
            should begin with a verb such as "delete." -->
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <!-- An option has one or more actions.  
+    <!-- Each option may have one warning shown to the user when
+         selected interactively (in the GUI) to alert him of a
+         special consideration or potential risk. -->
+    <warning>Deleting the cache will slow down application usage</warning>
+    <!-- An option has one or more actions.
 
            There are three different types of actions.  In each case,
            you should make the pattern as specific as possible to

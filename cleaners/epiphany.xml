@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit-project.appspot.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="epiphany" os="linux">
+  <label>Epiphany</label>
+  <description>Web browser</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action type="file">~/.gnome2/epiphany/ephy-favicon-cache.xml</action>
+    <action type="children" directories="false">~/.gnome2/epiphany/favicon_cache/</action>
+    <action type="children" directories="false">~/.gnome2/epiphany/mozilla/epiphany/Cache/</action>
+  </option>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.txt</action>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite</action>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal</action>
+  </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/signons3.txt</action>
+  </option>
+  <option id="places">
+    <label>Places</label>
+    <description>A database of URLs including bookmarks, favicons, and a history of visited web sites</description>
+    <warning>Deleting Places deletes bookmarks.</warning>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/places.sqlite</action>
+    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal</action>
+    <action type="file">~/.gnome2/epiphany/ephy-history.xml</action>
+  </option>
+</cleaner>
