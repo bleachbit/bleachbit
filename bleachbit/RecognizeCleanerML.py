@@ -56,6 +56,11 @@ def cleaner_change_dialog(pathname, status, parent):
     icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
     hbox.pack_start(icon, False)
     if CHANGED == status:
+        # Translators: Cleaner definitions are the CleanerML XML files
+        # BleachBit uses to define how to clean an application.  For
+        # example, GIMP, Google Chrome, and Opera each have their own
+        # cleaner definition.  Anyone may write his own cleaner
+        # definition.
         msg = _("The following cleaner definition file has changed.  Malicious definitions can damage your computer.")
     elif NEW == status:
         msg = _("The following cleaner definition file is new.  Malicious definitions can damage your computer.")
