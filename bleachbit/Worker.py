@@ -71,7 +71,10 @@ class Worker:
                     yield True
                     start_time = time.time()
         except:
-            err = _("Exception while getting running operation '%s': '%s'") \
+            # Translators: This indicates an error.  The first %s
+            # may be 'firefox' (for example) and the second something
+            # like 'Permission denied'
+            err = _("Exception while running operation '%s': '%s'") \
                 % (operation, str(sys.exc_info()[1]))
             print err
             traceback.print_exc()
@@ -90,7 +93,7 @@ class Worker:
                 self.gui.textbuffer.insert(self.__iter, line)
                 yield True
         except:
-            err = _("Exception while getting running operation '%s': '%s'") \
+            err = _("Exception while running operation '%s': '%s'") \
                 % (operation, str(sys.exc_info()[1]))
             print err
             traceback.print_exc()
