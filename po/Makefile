@@ -68,7 +68,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(APP).pot cleanerml.pot
+	@rm -fv $(APP).pot cleanerml.pot desktop.pot
 	@rm -rfv ../locale
 
 all: $(APP).pot $(MOFILES)
