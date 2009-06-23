@@ -161,6 +161,7 @@ class CleanerML:
     def handle_cleaner_option_action(self, action):
         """<action> element under <option>"""
         atype = action.getAttribute('type')
+        aname = action.getAttribute('name')
         pathname = getText(action.childNodes)
         if 'children' == atype:
             children = boolstr_to_bool(action.getAttribute('directories'))
@@ -169,6 +170,8 @@ class CleanerML:
             self.action.add_list_file(pathname)
         elif 'glob' == atype:
             self.action.add_list_glob(pathname)
+        elif 'winreg' == atype:
+            self.action.add_windows_registry(pathname, aname)
         else:
             raise RuntimeError("Invalid action type '%s'" % atype)
 

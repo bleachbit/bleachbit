@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -68,5 +68,11 @@
     <action type="glob">/tmp/*.bak</action>
     <action type="glob">/var/log/*.[0-9].gz</action>
     <action type="glob">/tmp/?.bak</action>
+    <!-- type="winreg" without the attribute 'name' deletes 
+           Windows registry keys -->
+    <action type="winreg">HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU</action>
+    <!-- type="winreg" with the attribute 'name' deletes a 
+           named value under a Windows registry key -->
+    <action type="winreg" name="CurrentVersion">HKCU\Software\BleachBit</action>
   </option>
 </cleaner>

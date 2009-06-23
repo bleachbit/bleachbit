@@ -23,9 +23,13 @@ Actions that perform cleaning
 
 import glob
 import os
+import sys
 
 import globals
 from FileUtilities import children_in_directory
+
+if 'win32' == sys.platform:
+    import Windows
 
 
 class Action:
@@ -51,8 +55,13 @@ class Action:
         self.actions += ( ('list_glob', pathname), )
 
 
+    def add_windows_registry(self, key, name = None):
+        """Add action to delete a Windows registry key or named value"""
+        self.actions += ( ('winreg', key, name), )
+
+
     def list_files(self):
-        """List files by previously-defined actions 
+        """List files by previously-defined actions
         (those actions which list files for deletion)"""
         for action in self.actions:
             action_type = action[0]
@@ -69,9 +78,41 @@ class Action:
             elif 'list_glob' == action_type:
                 for pathname in glob.iglob(action_path):
                   yield pathname
+            elif 'winreg' == action_type:
+                pass
             else:
                 raise RuntimeError("Unknown action type: '%s'" % action_type)
 
+
+    def other_cleanup(self, really_delete = False):
+        """List special operations by previously-defined actions"""
+        for action in self.actions:
+            action_type = action[0]
+            action_path = os.path.expanduser(os.path.expandvars(action[1]))
+            if action_type in ('list_children', 'list_file', 'list_glob'):
+                pass
+            elif 'winreg' == action_type:
+                key = action[1]
+                name = None
+                if len(action) > 2:
+                    name = action[2]
+                str = None # string representation
+                ret = None # return value meaning 'deleted' or 'delete-able'
+                if name:
+                    str = '%s<%s>' % (key, name)
+                    ret = Windows.delete_registry_value(key, name, really_delete)
+                else:
+                    ret = Windows.delete_registry_key(key, really_delete)
+                    str = key
+                if not ret:
+                    # nothing to delete or nothing was deleted
+                    return
+                if really_delete:
+                    yield (0, str)
+                else:
+                    yield str
+            else:
+                raise RuntimeError("Unknown action type: '%s'" % action_type)
 
 
 import unittest

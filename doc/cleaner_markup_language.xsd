@@ -49,10 +49,12 @@
                             <xs:enumeration value="children"/>
                             <xs:enumeration value="glob"/>
                             <xs:enumeration value="file"/>
+                            <xs:enumeration value="winreg"/>
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>
                       <xs:attribute name="directories" type="xs:string"/>
+                      <xs:attribute name="name" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>

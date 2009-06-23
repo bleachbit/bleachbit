@@ -113,7 +113,11 @@ class Cleaner:
 
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
-        yield None
+        for action in self.actions:
+            option_id = action[0]
+            if self.options[option_id][1]:
+                for pathname in action[1].other_cleanup(really_delete):
+                    yield pathname
 
     def set_option(self, option_id, value):
         """Enable or disable an option"""

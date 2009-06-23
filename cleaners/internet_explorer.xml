@@ -39,5 +39,7 @@
     <description>List of visited web pages</description>
     <action type="children" directories="false">$USERPROFILE\Local Settings\History\</action>
     <action type="children" directories="false">$USERPROFILE\AppData\Local\Microsoft\Windows\History\</action>
+    <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
+    <action type="winreg">HKCU\Software\Microsoft\Internet Explorer\TypedURLs</action>
   </option>
 </cleaner>
