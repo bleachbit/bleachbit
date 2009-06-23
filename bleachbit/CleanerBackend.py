@@ -316,8 +316,8 @@ class KDE(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        self.add_option('cache', _('Cache'), _('KDE cache including Konqueror.  Often contains sparse files where the apparent file size does not match the actual disk usage.'))
-        self.add_option('tmp', _('Temporary files'), _('Temporary files stored by KDE under the home directory'))
+        self.add_option('cache', _('Cache'), _('Delete the cache'))
+        self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
     def get_description(self):
         return _("KDE desktop environment")
