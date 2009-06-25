@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,12 +19,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="amule" os="linux">
-  <label>Amule</label>
-  <description>P2P</description>
+<cleaner id="amule">
+  <label>aMule</label>
+  <description>File transfer client</description>
   <option id="logs">
-    <label>P2P Logs</label>
-    <description>Delete the Amule logs</description>
+    <label>Logs</label>
+    <description>Delete the logs</description>
     <action type="file">~/.aMule/logfile</action>
+    <action type="file">~/.aMule/logfile.bak</action>
+    <action type="file">$APPDATA\aMule\logfile</action>
+    <action type="file">$APPDATA\aMule\logfile.bak</action>
+  </option>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action type="children" directories="false">~/.aMule/Temp/</action>
+    <action type="children" directories="false">$APPDATA\aMule\Temp\</action>
   </option>
 </cleaner>
