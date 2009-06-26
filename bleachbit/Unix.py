@@ -275,7 +275,7 @@ class Locales:
         # /usr/share/ppd/splix/samsung/ml1740fr.ppd
         globexs += ( ('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$' ), )
         # /usr/share/espeak-data/es_dict
-        globexs += ( ('/usr/share/espeak-data/??_dict', '/([a-z]{2,3})_dict$' ), )
+        globexs += ( ('/usr/share/espeak-data/*_dict', '/([a-z]{2,3})_dict$' ), )
         # /usr/share/espeak-data/voices/en/en-n
         globexs += ( ('/usr/share/espeak-data/voices/en/*', '/(en)-?[a-z]{0,2}$' ), )
         # /usr/share/espeak-data/voices/es-la
