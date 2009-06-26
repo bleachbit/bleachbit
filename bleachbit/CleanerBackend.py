@@ -468,7 +468,7 @@ class System(Cleaner):
             # types, so clicking on an .html file in Nautilus brings up
             # Firefox.
             # More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-            self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associtations'))
+            self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
             self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
             self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
             # Translators: 'Rotated logs' refers to old system log files.
