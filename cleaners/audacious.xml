@@ -21,10 +21,19 @@
 -->
 <cleaner id="audacious" os="linux">
   <label>Audacious</label>
-  <description>Audacious multimedia player</description>
-  <option id="thumbs">
-    <label>Thumbnails</label>
-    <description>Delete the Audacious thumbnails</description>
-    <action type="children" directories="false">~/.cache/audacious/thumbs</action>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action type="children" directories="false">~/.cache/audacious/thumbs/</action>
+  </option>
+  <option id="log">
+    <label>Log</label>
+    <description>Delete the logs</description>
+    <action type="file">~/.config/audacious/log</action>
+  </option>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
+    <action type="file">~/.config/audacious/playlist.xspf</action>
   </option>
 </cleaner>
