@@ -7,31 +7,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-22 15:05-0600\n"
-"PO-Revision-Date: 2009-06-23 19:11+0000\n"
-"Last-Translator: Moltenice80 <moltenice80@gmail.com>\n"
+"POT-Creation-Date: 2009-06-25 21:39-0600\n"
+"PO-Revision-Date: 2009-06-26 14:33+0000\n"
+"Last-Translator: charlie <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-24 13:12+0000\n"
+"X-Launchpad-Export-Date: 2009-06-26 16:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
-#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/beagle.xml
+#: ../cleaners/opera.xml ../cleaners/rhythmbox.xml ../cleaners/epiphany.xml
 #: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
 #: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
 #: ../cleaners/chrome.xml ../cleaners/secondlife_viewer.xml
-#: ../bleachbit/CleanerBackend.py:134 ../bleachbit/CleanerBackend.py:319
-#: ../bleachbit/CleanerBackend.py:352 ../bleachbit/CleanerBackend.py:468
+#: ../bleachbit/CleanerBackend.py:138 ../bleachbit/CleanerBackend.py:323
+#: ../bleachbit/CleanerBackend.py:356 ../bleachbit/CleanerBackend.py:472
 msgid "Cache"
-msgstr "Gyorsító tár"
+msgstr "Gyorsítótár"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "A játék kiszolgálók listájának törlése"
+msgstr "Játék szerverek listájának törlése"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -40,7 +41,7 @@ msgstr "Játék"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/flash.xml ../cleaners/chrome.xml ../cleaners/realplayer.xml
-#: ../bleachbit/CleanerBackend.py:135
+#: ../bleachbit/CleanerBackend.py:139
 msgid "Cookies"
 msgstr "Sütik"
 
@@ -50,7 +51,7 @@ msgstr "Jelenlegi munkamenet"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/flash.xml ../cleaners/chrome.xml ../cleaners/realplayer.xml
-#: ../bleachbit/CleanerBackend.py:135
+#: ../bleachbit/CleanerBackend.py:139
 msgid ""
 "Delete cookies, which contain information such as web site prefereneces, "
 "authentication, and tracking identification"
@@ -70,20 +71,21 @@ msgstr ""
 "oldalak"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/chrome.xml ../bleachbit/CleanerBackend.py:134
+#: ../cleaners/chrome.xml ../bleachbit/CleanerBackend.py:138
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Web-es gyorsítótár törlése,  amelyik csökkenti az újra meglátogatott oldal "
 "megjelenítési idejét"
 
 #: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
-#: ../cleaners/bash.xml ../cleaners/elinks.xml ../cleaners/chrome.xml
+#: ../cleaners/bash.xml ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../cleaners/chrome.xml
 msgid "History"
 msgstr "Előzmények"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/elinks.xml ../cleaners/chrome.xml
-#: ../bleachbit/CleanerBackend.py:153
+#: ../cleaners/links2.xml ../cleaners/elinks.xml ../cleaners/chrome.xml
+#: ../bleachbit/CleanerBackend.py:157
 msgid "Web browser"
 msgstr "Webböngésző"
 
@@ -91,32 +93,36 @@ msgstr "Webböngésző"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"~/.viminfo fájl törlése, mely a Vim munkamenetet, előzményeket tárolja."
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
 msgstr "Szerkesztő"
 
-#: ../cleaners/miro.xml ../cleaners/beagle.xml ../cleaners/transmission.xml
-#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:352
-#: ../bleachbit/CleanerBackend.py:479
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/xine.xml
+#: ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:323
+#: ../bleachbit/CleanerBackend.py:356 ../bleachbit/CleanerBackend.py:483
 msgid "Delete the cache"
 msgstr "Gyorsítótár törlése"
 
-#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+#: ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "Delete the logs"
-msgstr ""
+msgstr "Naplók törlése"
 
 #: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/gftp.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml
 msgid "Logs"
-msgstr ""
+msgstr "Naplók"
 
-#: ../cleaners/miro.xml ../cleaners/flash.xml
+#: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
 msgstr ""
 
@@ -128,9 +134,21 @@ msgstr "Nyomkövetési napló"
 msgid "Delete the debug log"
 msgstr "Nyomkövetési napló törlése"
 
-#: ../cleaners/mc.xml
-msgid "Delete the usage history"
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+msgid "Delete the most recently used list"
 msgstr ""
+
+#: ../cleaners/audacious.xml
+msgid "Log"
+msgstr "Napló"
+
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+msgid "Most recently used"
+msgstr "Legtöbbet használt"
+
+#: ../cleaners/mc.xml ../cleaners/links2.xml
+msgid "Delete the usage history"
+msgstr "Törli a használati előzményeket"
 
 #: ../cleaners/mc.xml
 msgid "Visual shell for the console"
@@ -139,17 +157,17 @@ msgstr ""
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml
 msgid "Chat client"
-msgstr ""
+msgstr "Chat kliens"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "Chat naplók"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "Csvegési naplók törlése"
 
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
@@ -171,326 +189,323 @@ msgstr "Keresési indexek"
 msgid "Search tool"
 msgstr "Kereső eszköz"
 
-#: ../cleaners/rhythmbox.xml
-msgid "Delete the cache of Jamendo and Mangatune databases"
-msgstr ""
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml
+msgid "File transfer client"
+msgstr "Fájl letöltő, feltöltő kliens"
 
-#: ../cleaners/rhythmbox.xml
-msgid "Online databases"
-msgstr ""
-
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:140
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:144
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
+"Az adatbázis, mely tartalmazza az előzményeket, a könyvjelzőket, faviconokat."
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:139
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:143
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Az adatbázis, mely tartalmazza az elmentett felhasználó neveket és "
+"jelszavakat, valamint azon oldalak listáját, melyen soha ne mentse a jelszót."
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:141
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:145
 msgid "Deleting Places deletes bookmarks."
-msgstr ""
+msgstr "Helyek törlésével, törlöd a könyvjelzőket is!"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:139
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:143
 msgid "Passwords"
-msgstr ""
+msgstr "Jelszavak"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:140
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:144
 msgid "Places"
-msgstr ""
-
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml ../cleaners/gftp.xml
-msgid "File transfer client"
-msgstr ""
+msgstr "Helyek"
 
 #: ../cleaners/vuze.xml
 msgid "Backup files"
-msgstr ""
+msgstr "Biztonsági mentések"
 
 #: ../cleaners/vuze.xml
 msgid "Delete the backup files"
-msgstr ""
+msgstr "Törli a biztonsági mentéseket"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:324
 msgid "Delete the temporary files"
-msgstr ""
+msgstr "Átmeneti fájlok törlése"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:320 ../bleachbit/CleanerBackend.py:481
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:324 ../bleachbit/CleanerBackend.py:485
 msgid "Temporary files"
-msgstr ""
+msgstr "Átmeneti fájlok"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
-
-#: ../cleaners/exaile.xml
-msgid "Delete log"
-msgstr ""
+msgstr "Letöltött podcastok törlése"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
-
-#: ../cleaners/exaile.xml
-msgid "Log"
-msgstr "Napló"
+msgstr "Letöltött podcastok"
 
 #: ../cleaners/thumbnails.xml
 msgid "Thumbnails"
-msgstr ""
+msgstr "Bélyegképek"
 
 #: ../cleaners/gimp.xml
 msgid "Image editor"
-msgstr ""
+msgstr "Képszerkesztő"
 
 #: ../cleaners/google_earth.xml
 msgid "Virtual globe viewer"
-msgstr ""
+msgstr "Virtuális földgömb"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
-msgstr ""
+msgstr "Parancs előzmények törlése"
 
-#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:353
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:357
 msgid "Delete the list of recently used documents"
 msgstr "Törli a legutóbb használt dokumentumok listáját"
 
-#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:353
-#: ../bleachbit/CleanerBackend.py:476
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:357
+#: ../bleachbit/CleanerBackend.py:480
 msgid "Recent documents list"
-msgstr ""
+msgstr "Utoljóra megnyitott fájlok listása"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
+msgstr "Törli a sütiket, látogatott oldalakat és a keresési előzményeket"
 
 #: ../cleaners/chrome.xml
 msgid "Delete the current and last sessions"
-msgstr ""
+msgstr "Törli a jelenlegi és az előző munkamenetet"
 
 #: ../cleaners/chrome.xml
 msgid "Session"
-msgstr ""
+msgstr "Munkamenet"
 
 #: ../cleaners/recoll.xml
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
+"Törli a keresési indexet, mely szavak és az őket tartalmazó fájlok adatbázisa"
 
 #: ../cleaners/recoll.xml
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "Szükségtelen fájl törlő"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr ""
+msgstr "Hely felszabadítása és magánszférájának fenntartása"
 
-#: ../bleachbit/CleanerBackend.py:136
+#: ../bleachbit/CleanerBackend.py:140
 msgid "Download history"
-msgstr ""
+msgstr "Letöltési előzmények"
 
-#: ../bleachbit/CleanerBackend.py:136
+#: ../bleachbit/CleanerBackend.py:140
 msgid "List of files downloaded"
-msgstr ""
+msgstr "A letöltött fájlok listája"
 
-#: ../bleachbit/CleanerBackend.py:137
+#: ../bleachbit/CleanerBackend.py:141
 msgid "Form history"
-msgstr ""
+msgstr "Űrlapok előzményei"
 
-#: ../bleachbit/CleanerBackend.py:137
+#: ../bleachbit/CleanerBackend.py:141
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:138
+#: ../bleachbit/CleanerBackend.py:142
 msgid "Session restore"
-msgstr ""
+msgstr "Munkamenet visszaállítása"
 
-#: ../bleachbit/CleanerBackend.py:138
+#: ../bleachbit/CleanerBackend.py:142
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr ""
+"Visszatölti a munkamenetet miután a böngésző bezáródik vagy összeomlik"
 
-#: ../bleachbit/CleanerBackend.py:142
+#: ../bleachbit/CleanerBackend.py:146
 msgid "URL history"
-msgstr ""
+msgstr "URL előzmények"
 
-#: ../bleachbit/CleanerBackend.py:142
+#: ../bleachbit/CleanerBackend.py:146
 msgid "List of visited web pages"
-msgstr ""
+msgstr "A látogatott oldalak listája"
 
-#: ../bleachbit/CleanerBackend.py:145
+#: ../bleachbit/CleanerBackend.py:149
 msgid "Vacuum"
-msgstr ""
+msgstr "Vákuum"
 
-#: ../bleachbit/CleanerBackend.py:145
+#: ../bleachbit/CleanerBackend.py:149
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Az adatbázis töredezettségének megszüntetése, adatok törlése nélkül, a jobb "
+"helykihasználás és sebesség érdekében"
 
-#: ../bleachbit/CleanerBackend.py:319
-msgid ""
-"KDE cache including Konqueror.  Often contains sparse files where the "
-"apparent file size does not match the actual disk usage."
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:320
-msgid "Temporary files stored by KDE under the home directory"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:323
+#: ../bleachbit/CleanerBackend.py:327
 msgid "KDE desktop environment"
-msgstr ""
+msgstr "KDE asztali környezet"
 
-#: ../bleachbit/CleanerBackend.py:363
+#: ../bleachbit/CleanerBackend.py:367
 msgid "Office suite"
-msgstr ""
+msgstr "Irodai programcsomak"
 
-#: ../bleachbit/CleanerBackend.py:428
+#: ../bleachbit/CleanerBackend.py:432
 msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
+msgstr "Törli a fájlokat az rpmbuild build könyvtárából"
 
-#: ../bleachbit/CleanerBackend.py:460 ../bleachbit/CleanerBackend.py:592
-#: ../bleachbit/CleanerBackend.py:594
+#: ../bleachbit/CleanerBackend.py:464 ../bleachbit/CleanerBackend.py:596
+#: ../bleachbit/CleanerBackend.py:598
 msgid "APT autoclean"
-msgstr ""
+msgstr "APT autoclean"
 
-#: ../bleachbit/CleanerBackend.py:460
+#: ../bleachbit/CleanerBackend.py:464
 msgid "Run apt-get autoclean to delete old downloaded archive files"
 msgstr ""
+"Futtassa az apt-get autoclean parancsot a régi letöltött csomagok törléséhez"
 
-#: ../bleachbit/CleanerBackend.py:467
+#: ../bleachbit/CleanerBackend.py:471
 msgid "Broken desktop files"
+msgstr "Hibás asztali fájlok"
+
+#: ../bleachbit/CleanerBackend.py:471
+msgid "Delete broken application menu entries and file associations"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:467
-msgid "Delete broken application menu entries and file associtations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:468
+#: ../bleachbit/CleanerBackend.py:472
 msgid "Cache location specified by XDG and used by various applications"
 msgstr ""
+"A gyorsítótár XDG által meghatározott helye, melyet különböző alkalmazások "
+"használnak."
 
-#: ../bleachbit/CleanerBackend.py:469
+#: ../bleachbit/CleanerBackend.py:473
 msgid "Localizations"
-msgstr ""
+msgstr "Lokalizáció"
 
-#: ../bleachbit/CleanerBackend.py:469
+#: ../bleachbit/CleanerBackend.py:473
 msgid "Data used to operate the system in various languages and countries"
 msgstr ""
+"A rendszer különböző nyelveken és országokban való működtetéséhez szükséges "
+"adatok"
 
-#: ../bleachbit/CleanerBackend.py:474
+#: ../bleachbit/CleanerBackend.py:478
 msgid "Rotated logs"
 msgstr ""
 
-#: ../bleachbit/CleanerBackend.py:474
+#: ../bleachbit/CleanerBackend.py:478
 msgid "Old system logs"
-msgstr ""
+msgstr "Régi rendszernaplók"
 
-#: ../bleachbit/CleanerBackend.py:475
+#: ../bleachbit/CleanerBackend.py:479
 msgid "Trash"
-msgstr ""
+msgstr "Kuka"
 
-#: ../bleachbit/CleanerBackend.py:475
+#: ../bleachbit/CleanerBackend.py:479
 msgid "Temporary storage for deleted files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:476
-msgid "A common list of recently used documents"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:479 ../bleachbit/CleanerBackend.py:607
-#: ../bleachbit/CleanerBackend.py:609
-msgid "Yum clean"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:480 ../bleachbit/CleanerBackend.py:601
-#: ../bleachbit/CleanerBackend.py:603
-msgid "Clipboard"
-msgstr ""
+msgstr "A törölt fájlok átmeneti tárolója"
 
 #: ../bleachbit/CleanerBackend.py:480
+msgid "A common list of recently used documents"
+msgstr "A legutóbbi dokumentumok általános listája"
+
+#: ../bleachbit/CleanerBackend.py:483 ../bleachbit/CleanerBackend.py:611
+#: ../bleachbit/CleanerBackend.py:613
+msgid "Yum clean"
+msgstr "Yum törlés"
+
+#: ../bleachbit/CleanerBackend.py:484 ../bleachbit/CleanerBackend.py:605
+#: ../bleachbit/CleanerBackend.py:607
+msgid "Clipboard"
+msgstr "Vágólap"
+
+#: ../bleachbit/CleanerBackend.py:484
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
+"Az asztali környezet vágólapja, melyet másolás és beillesztés műveletekre "
+"használnak"
 
-#: ../bleachbit/CleanerBackend.py:481
+#: ../bleachbit/CleanerBackend.py:485
 msgid "Delete temporary files created by various programs"
-msgstr ""
+msgstr "Törli a különféle programok által létrehozott ideiglenes fájlokat"
 
-#: ../bleachbit/CleanerBackend.py:484
+#: ../bleachbit/CleanerBackend.py:488
 msgid "The system in general"
-msgstr ""
+msgstr "A rendszer általában"
 
-#: ../bleachbit/CleanerBackend.py:490
+#: ../bleachbit/CleanerBackend.py:494
 msgid "System"
-msgstr ""
+msgstr "Rendszer"
 
 #: ../bleachbit/FileUtilities.py:173
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
+"Nem lehet beimportálni a sqlite3 Python modult: Python 2.5 vagy újabb "
+"telepítése szükséges"
 
 #: ../bleachbit/GUI.py:70 ../bleachbit/GUI.py:525
 msgid "Preferences"
-msgstr ""
+msgstr "Beállítások"
 
 #: ../bleachbit/GUI.py:79
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: ../bleachbit/GUI.py:81
 msgid "Languages"
-msgstr ""
+msgstr "Nyelvek"
 
 #: ../bleachbit/GUI.py:97
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
+msgstr "Rendszeresen keressen frissítéseket az internet segítségével"
 
 #: ../bleachbit/GUI.py:100
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"Ha elérhető frissítés, megtekintheted a frissítés információit, azután "
+"töltsd le a legfrissebb telepítőt és telepítsd."
 
 #: ../bleachbit/GUI.py:103
 msgid "Overwrite files to hide contents (ineffective in some situations)"
 msgstr ""
+"Felülírja a fájlokat, hogy elrejtse tartalmukat (néhány esetben hatástalan)"
 
 #: ../bleachbit/GUI.py:106
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"A felülírás hatástalan néhány fájlrendszeren és bizonyos BleachBit "
+"műveleteknél. A felülírás lényegesen lassabb."
 
 #: ../bleachbit/GUI.py:124
 msgid "All languages will be deleted except those checked."
-msgstr ""
+msgstr "Minden nyelv törlődik a kijelölteken kívül."
 
 #: ../bleachbit/GUI.py:142
 msgid "Preserve"
-msgstr ""
+msgstr "Megőrzés"
 
 #: ../bleachbit/GUI.py:146
 msgid "Code"
-msgstr ""
+msgstr "Kód"
 
 #: ../bleachbit/GUI.py:150 ../bleachbit/GUI.py:256
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: ../bleachbit/GUI.py:172
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Törlés megerősítése"
 
 #: ../bleachbit/GUI.py:180
 msgid ""
@@ -498,31 +513,36 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"Biztos, hogy véglegesen törlöd a kijelölt fájlokat? Az előnézet óta "
+"megváltozhatott a törlésre kerülő fájlok listája."
 
 #: ../bleachbit/GUI.py:182
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "Biztos benne, hogy véglegesen törölni akarja ezeket a fájlokat?"
 
 #: ../bleachbit/GUI.py:264
 msgid "Active"
-msgstr ""
+msgstr "Aktív"
 
 #: ../bleachbit/GUI.py:453
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program a szükségtelen fájlok eltávolítására"
 
 #: ../bleachbit/GUI.py:458
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU GPL v3 vagy későbbi.\n"
+"Lásd: http://www.gnu.hu/gplv3.html"
 
 #: ../bleachbit/GUI.py:460
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Moltenice80 https://launchpad.net/~moltenice80\n"
-"  alfa00red https://launchpad.net/~alfa00red"
+"  alfa00red https://launchpad.net/~alfa00red\n"
+"  charlie https://launchpad.net/~csardijanos"
 
 #: ../bleachbit/GUI.py:488
 msgid "Choose files to shred"
@@ -530,35 +550,35 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:522
 msgid "_Shred Files"
-msgstr ""
+msgstr "_Megosztott fájlok"
 
 #: ../bleachbit/GUI.py:523
 msgid "_Quit"
-msgstr ""
+msgstr "_Kilépés"
 
 #: ../bleachbit/GUI.py:524
 msgid "_File"
-msgstr ""
+msgstr "_Fájl"
 
 #: ../bleachbit/GUI.py:526
 msgid "_Edit"
-msgstr ""
+msgstr "_Szerkesztés"
 
 #: ../bleachbit/GUI.py:527
 msgid "_Release Notes"
-msgstr ""
+msgstr "_Kiadási megjegyzések"
 
 #: ../bleachbit/GUI.py:528
 msgid "_About"
-msgstr ""
+msgstr "_Névjegy"
 
 #: ../bleachbit/GUI.py:529
 msgid "_Help"
-msgstr ""
+msgstr "_Súgó"
 
 #: ../bleachbit/GUI.py:558
 msgid "Delete"
-msgstr ""
+msgstr "Törlés"
 
 #: ../bleachbit/GUI.py:561
 msgid "Delete files in the selected operations"
@@ -566,23 +586,23 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:566
 msgid "Preview"
-msgstr ""
+msgstr "Előnézet"
 
 #: ../bleachbit/GUI.py:569
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr ""
+msgstr "A (törlésre) kiválasztott fájlok listájának megtekintése."
 
 #: ../bleachbit/GUI.py:642
 msgid "Update BleachBit"
-msgstr ""
+msgstr "BleachBit frissítése"
 
 #: ../bleachbit/GUI.py:652
 msgid "BleachBit update is available"
-msgstr ""
+msgstr "BleachBit frissítés érhető el"
 
 #: ../bleachbit/GUI.py:652
 msgid "Click 'Update BleachBit' for more information"
-msgstr ""
+msgstr "Több információért kattintson a \"BleachBit frissítése\" gombra"
 
 #: ../bleachbit/RecognizeCleanerML.py:64
 msgid ""
@@ -596,44 +616,44 @@ msgid ""
 "damage your computer."
 msgstr ""
 
-#: ../bleachbit/Unix.py:332 ../bleachbit/Unix.py:471
+#: ../bleachbit/Unix.py:334 ../bleachbit/Unix.py:473
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "A futtatható állomány nem található: %s"
 
-#: ../bleachbit/Unix.py:469
+#: ../bleachbit/Unix.py:471
 msgid "Another process is currently using yum"
-msgstr ""
+msgstr "Egy másik folyamat használja a következőt: yum"
 
 #: ../bleachbit/Update.py:74
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Hiba a frissítések keresése közben: "
 
 #: ../bleachbit/Worker.py:45
 msgid "You must select an operation"
-msgstr ""
+msgstr "Választani kell egy műveletet"
 
 #: ../bleachbit/Worker.py:77 ../bleachbit/Worker.py:96
 #, python-format
 msgid "Exception while running operation '%s': '%s'"
-msgstr ""
+msgstr "Hiba a '%s' parancs végrehajtása közben: '%s'"
 
 #: ../bleachbit/Worker.py:92
 msgid "Special operation: "
-msgstr ""
+msgstr "Különleges művelet: "
 
 #: ../bleachbit/Worker.py:133
 msgid "Please wait.  Scanning and deleting: "
-msgstr ""
+msgstr "Egy kis türelmet... Keresés és törlés: "
 
 #: ../bleachbit/Worker.py:136
 msgid "Please wait.  Scanning: "
-msgstr ""
+msgstr "Egy kis türelmet... Keresés: "
 
 #: ../bleachbit/Worker.py:149
 msgid "Done."
-msgstr ""
+msgstr "Kész."
 
 #: ../bleachbit/Worker.py:150
 msgid "Total size: "
-msgstr ""
+msgstr "Teljes méret: "
