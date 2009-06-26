@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 -->
 <cleaner id="links2" os="linux">
   <label>Links 2</label>
-  <description>Web browser running in both graphics and text mode</description>
+  <description>Web browser</description>
   <option id="history">
     <label>History</label>
-    <description>Delete the visited URLs history</description>
+    <description>Delete the usage history</description>
     <action type="file">~/.links2/links.his</action>
   </option>
 </cleaner>
