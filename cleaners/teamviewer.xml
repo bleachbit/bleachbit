@@ -28,7 +28,7 @@
   </option>
   <option id="mru">
     <label>Most recently used</label>
-    <description>Delete the most receantly used list</description>
+    <description>Delete the most recently used list</description>
     <action type="file">$APPDATA\TeamViewer\Connections.txt</action>
     <action type="winreg" name="Last_Machine_Connections">HKCU\Software\TeamViewer\Version4</action>
   </option>
