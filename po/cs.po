@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-06-22 15:05-0600\n"
-"PO-Revision-Date: 2009-06-23 00:27+0000\n"
+"PO-Revision-Date: 2009-06-25 22:47+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-23 04:36+0000\n"
+"X-Launchpad-Export-Date: 2009-06-26 01:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -42,7 +42,7 @@ msgstr "Hra"
 #: ../cleaners/flash.xml ../cleaners/chrome.xml ../cleaners/realplayer.xml
 #: ../bleachbit/CleanerBackend.py:135
 msgid "Cookies"
-msgstr "Cookies"
+msgstr "Cookies (v Epiphany \"Koláčky\")"
 
 #: ../cleaners/chromium.xml
 msgid "Current session"
@@ -144,7 +144,7 @@ msgstr "Chatový klient"
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr "Záznamy z chatu"
+msgstr "Záznamy chatů"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -248,7 +248,7 @@ msgstr "Záznam"
 
 #: ../cleaners/thumbnails.xml
 msgid "Thumbnails"
-msgstr "Náhledy souborů"
+msgstr "Miniatury"
 
 #: ../cleaners/gimp.xml
 msgid "Image editor"
@@ -281,7 +281,7 @@ msgstr "Smazat aktuální a poslední sezení"
 
 #: ../cleaners/chrome.xml
 msgid "Session"
-msgstr "Sezení"
+msgstr "Relace"
 
 #: ../cleaners/recoll.xml
 msgid ""
@@ -290,7 +290,7 @@ msgstr "Smazat vyhledávací rejstřík, databázi slov a soubory, které obsahu
 
 #: ../cleaners/recoll.xml
 msgid "Index"
-msgstr "Index"
+msgstr "Rejstřík"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -358,7 +358,7 @@ msgstr "Dočasné soubory KDE v domovské složce"
 
 #: ../bleachbit/CleanerBackend.py:323
 msgid "KDE desktop environment"
-msgstr "Pracovní prostředí KDE"
+msgstr "Desktopové prostředí KDE"
 
 #: ../bleachbit/CleanerBackend.py:363
 msgid "Office suite"
@@ -452,7 +452,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:70 ../bleachbit/GUI.py:525
 msgid "Preferences"
-msgstr "_Nastavení"
+msgstr "_Možnosti"
 
 #: ../bleachbit/GUI.py:79
 msgid "General"
@@ -553,7 +553,7 @@ msgstr "_Sešrotovat soubory"
 
 #: ../bleachbit/GUI.py:523
 msgid "_Quit"
-msgstr "_Konec"
+msgstr "_Ukončit"
 
 #: ../bleachbit/GUI.py:524
 msgid "_File"
@@ -655,7 +655,7 @@ msgstr "Čekejte prosím, prohledávám: "
 
 #: ../bleachbit/Worker.py:149
 msgid "Done."
-msgstr "Vykonáno!"
+msgstr "Hotovo."
 
 #: ../bleachbit/Worker.py:150
 msgid "Total size: "
