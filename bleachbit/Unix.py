@@ -280,6 +280,8 @@ class Locales:
         globexs += ( ('/usr/share/espeak-data/voices/en/*', '/(en)-?[a-z]{0,2}$' ), )
         # /usr/share/espeak-data/voices/es-la
         globexs += ( ('/usr/share/espeak-data/voices/*', '/([a-z]{2,3}(-[a-z]{2})?)$' ), )
+        # /usr/share/espeak-data/voices/mb/mb-ro1-en, do not match mb-us*
+        globexs += ( ('/usr/share/espeak-data/voices/mb/mb-*', '/mb-([a-tv-z][a-z])[0-9](-[a-z]{2,3})?$' ), )
         # /usr/share/hplip/data/localization/hplip_es.qm
         globexs += ( ('/usr/share/hplip/data/localization/hplip_??.qm', '_([a-z]{2}).qm$' ), )
         # /usr/share/myspell/dicts/hyph_es_ES.dic
