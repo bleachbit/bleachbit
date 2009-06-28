@@ -38,6 +38,7 @@ except:
         raise
     HAVE_UNIX = False
 import globals
+import Windows
 from FileUtilities import children_in_directory
 from Options import options
 
@@ -481,6 +482,8 @@ class System(Cleaner):
             # Translators: Yum is a software program that manages packages on
             # CentOS, Fedora, and Red Hat.
             self.add_option('yum', _('Yum clean'), _("Delete the cache"))
+        if sys.platform == 'win32':
+            self.add_option('mru', _('Most recently used'), _('Delete the most recently used list'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('tmp', _('Temporary files'), _('Delete temporary files created by various programs'))
 
@@ -596,6 +599,7 @@ class System(Cleaner):
                 yield (bytes, _("APT autoclean"))
             else:
                 yield _("APT autoclean")
+
         if self.options["clipboard"][1]:
             if really_delete:
                 gtk.gdk.threads_enter()
@@ -605,6 +609,36 @@ class System(Cleaner):
                 yield (0, _("Clipboard"))
             else:
                 yield _("Clipboard")
+
+        if sys.platform == 'win32' and self.options['mru'][1]:
+
+                # reference: http://support.microsoft.com/kb/142298
+                keys = ( \
+                    # common open dialog
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
+                    # common save as dialog
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
+                    # find Files command
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
+                    # find Computer command
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
+                    # printer ports
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU',
+                    # recent documents in start menu
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs',
+                    # run command
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU')
+                for key in keys:
+                    ret = Windows.delete_registry_key(key, really_delete)
+                    if not ret:
+                        # nothing to delete or nothing was deleted
+                        continue
+                    if really_delete:
+                        yield (0, key)
+                    else:
+                        yield key
+
+
         if sys.platform == 'linux2' and self.options["yum"][1]:
             if really_delete:
                 bytes = Unix.yum_clean()

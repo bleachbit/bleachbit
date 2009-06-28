@@ -88,8 +88,10 @@ def delete_registry_key(parent_key, really_delete):
     if not really_delete:
         return True
     keys_size = _winreg.QueryInfoKey(hkey)[0]
+    child_keys = []
     for i in range(keys_size):
-        child_key = parent_key + '\\' + _winreg.EnumKey(hkey, i)
+        child_keys.append(parent_key + '\\' + _winreg.EnumKey(hkey, i))
+    for child_key in child_keys:
         delete_registry_key(child_key, True)
     _winreg.DeleteKey(hive, parent_sub_key)
     return True
