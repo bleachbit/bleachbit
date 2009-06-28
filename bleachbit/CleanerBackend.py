@@ -31,15 +31,15 @@ import sys
 import xml.dom.minidom
 
 import FileUtilities
-try:
+
+if 'linux2' == sys.platform:
     import Unix
-except:
-    if not sys.platform == 'win32':
-        raise
-    HAVE_UNIX = False
-import globals
-import Windows
+
+if 'win32' == sys.platform:
+    import Windows
+
 from FileUtilities import children_in_directory
+import globals
 from Options import options
 
 
