@@ -614,6 +614,8 @@ class System(Cleaner):
 
                 # reference: http://support.microsoft.com/kb/142298
                 keys = ( \
+                    # search assistant
+                    'HKCU\Software\Microsoft\Search Assistant\ACMru',
                     # common open dialog
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
                     # common save as dialog
