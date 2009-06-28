@@ -29,6 +29,7 @@ import os
 import re
 import shlex
 import subprocess
+import sys
 import ConfigParser
 
 import FileUtilities
@@ -612,6 +613,6 @@ class TestUnix(unittest.TestCase):
             print 'debug: yum bytes cleaned %d', bytes
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and 'linux2' == sys.platform:
     unittest.main()
 
