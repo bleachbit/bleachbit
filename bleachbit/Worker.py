@@ -35,6 +35,7 @@ from CleanerBackend import backends
 class Worker:
     """Perform the preview or delete operations"""
     def __init__(self, gui, really_delete):
+        self.total_size_cb = None
         self.gui = gui
         self.really_delete = really_delete
         self.operations = gui.get_selected_operations()
@@ -51,6 +52,13 @@ class Worker:
         self.__iter = gui.textbuffer.get_iter_at_offset(0)
         gui.progressbar.show()
         self.total_bytes = 0
+
+
+    def set_total_size_cb(self, cb):
+        """Set the callback function for updating the total
+           size cleaned."""
+        self.total_size_cb = cb
+        cb(0)
 
 
     def clean_operation(self, operation):
@@ -88,6 +96,8 @@ class Worker:
                 if self.really_delete:
                     self.total_bytes += ret[0]
                     line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
+                    if None != self.total_size_cb and self.really_delete:
+                        self.total_size_cb(self.total_bytes)
                 else:
                     line = _("Special operation: ") + ret + "\n"
                 self.gui.textbuffer.insert(self.__iter, line)
@@ -119,8 +129,11 @@ class Worker:
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
                 tag = 'error'
             else:
+                size_text = FileUtilities.bytes_to_human(bytes)
+                line = "%s %s\n" % (size_text, pathname)
                 self.total_bytes += bytes
-                line = FileUtilities.bytes_to_human(bytes) + " " + pathname + "\n"
+                if None != self.total_size_cb and self.really_delete:
+                    self.total_size_cb(self.total_bytes)
             self.gui.append_text(line, tag, self.__iter)
 
 

@@ -442,6 +442,7 @@ class GUI:
         except:
             pass
         else:
+            self.worker.set_total_size_cb(self.cb_total_size)
             worker = self.worker.run()
             gobject.idle_add(worker.next)
 
@@ -502,6 +503,15 @@ class GUI:
 
         for path in paths:
             FileUtilities.delete(path, shred = True)
+
+
+    def cb_total_size(self, bytes):
+        """Callback to update the total size cleaned"""
+        context_id = self.status_bar.get_context_id('size')
+        text = FileUtilities.bytes_to_human(bytes)
+        if 0 == bytes:
+            text = ""
+        self.status_bar.push(context_id, text)
 
 
     def create_menubar(self):
@@ -629,6 +639,9 @@ class GUI:
         style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
 
+        # add status bar
+        self.status_bar = gtk.Statusbar()
+        vbox.pack_start(self.status_bar, False)
 
         # done
         self.window.show_all()
