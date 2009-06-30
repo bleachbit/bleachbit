@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-25 21:39-0600\n"
-"PO-Revision-Date: 2009-06-27 21:17+0000\n"
-"Last-Translator: juancarlospaco <juancarlospaco@hotmail.com>\n"
+"PO-Revision-Date: 2009-06-30 13:16+0000\n"
+"Last-Translator: Alexsp92 <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-28 00:08+0000\n"
+"X-Launchpad-Export-Date: 2009-06-30 16:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -82,6 +82,8 @@ msgstr "Navegador web"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"Borrar ~/.viminfo lo que incluye la historia de archivos, la historia de "
+"comandos, y los buffers"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -433,6 +435,7 @@ msgstr ""
 "Andrew Ziem, JuanCarlosPaco\n"
 "\n"
 "Launchpad Contributions:\n"
+"  Alexsp92 https://launchpad.net/~alexsp92\n"
 "  Andrew Ziem https://launchpad.net/~ahziem1\n"
 "  juancarlospaco https://launchpad.net/~juancarlospaco"
 
@@ -660,11 +663,11 @@ msgstr "Borrar la lista de usados recientemente"
 
 #: ../cleaners/audacious.xml
 msgid "Log"
-msgstr ""
+msgstr "Registro"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml
 msgid "Most recently used"
-msgstr ""
+msgstr "Usados más recientemente"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
@@ -685,11 +688,11 @@ msgstr "Borrar archivos de copia de seguridad"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Borrar podcasts descargados"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Podcasts descargados"
 
 #: ../cleaners/gimp.xml
 msgid "Image editor"
@@ -725,11 +728,11 @@ msgstr "Suite ofimatica"
 
 #: ../bleachbit/CleanerBackend.py:471
 msgid "Broken desktop files"
-msgstr ""
+msgstr "Archivos de Escritorio rotos"
 
 #: ../bleachbit/CleanerBackend.py:471
 msgid "Delete broken application menu entries and file associations"
-msgstr ""
+msgstr "Eliminar entradas de aplicaciones y asociaciones de archivo rotos"
 
 #: ../bleachbit/CleanerBackend.py:485
 msgid "Delete temporary files created by various programs"
@@ -764,4 +767,4 @@ msgstr "_Notas de Version"
 #: ../bleachbit/Worker.py:77 ../bleachbit/Worker.py:96
 #, python-format
 msgid "Exception while running operation '%s': '%s'"
-msgstr ""
+msgstr "Excepción mientras se operaba '%s': '%s'"
