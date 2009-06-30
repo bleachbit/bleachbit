@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-06-25 21:39-0600\n"
-"PO-Revision-Date: 2009-06-29 00:59+0000\n"
+"PO-Revision-Date: 2009-06-29 16:18+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-29 02:12+0000\n"
+"X-Launchpad-Export-Date: 2009-06-29 19:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -186,7 +186,7 @@ msgstr "Vyhledávací rejstříky"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr "Vyhledávací nástroj"
+msgstr "Nástroj na vyhledávání"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
@@ -301,7 +301,7 @@ msgstr "Čistič disku od nepotřebných souborů"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr "Uvolnit prostor na disku a udržet soukromí"
+msgstr "Uvolní místo na disku a udrží soukromí"
 
 #: ../bleachbit/CleanerBackend.py:140
 msgid "Download history"
@@ -317,7 +317,7 @@ msgstr "Historie formulářů"
 
 #: ../bleachbit/CleanerBackend.py:141
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "Historie vyhledávání"
+msgstr "Historie formulářů na webových stránkách a ve vyhledávači"
 
 #: ../bleachbit/CleanerBackend.py:142
 msgid "Session restore"
@@ -344,8 +344,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Defragmentovat databázi- tím se zmenší její velikost a zvýší rychlost, aniž "
-"by došlo ke smazání jakýchkoliv dat"
+"Defragmentací databáze zmenšíte její velikost a zvýšíte rychlost, aniž by "
+"došlo ke smazání jakýchkoliv dat"
 
 #: ../bleachbit/CleanerBackend.py:327
 msgid "KDE desktop environment"
@@ -353,7 +353,7 @@ msgstr "Desktopové prostředí KDE"
 
 #: ../bleachbit/CleanerBackend.py:367
 msgid "Office suite"
-msgstr "Kancelářské programy"
+msgstr "Kancelářský balík"
 
 #: ../bleachbit/CleanerBackend.py:432
 msgid "Delete the files in the rpmbuild build directory"
@@ -443,7 +443,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:70 ../bleachbit/GUI.py:525
 msgid "Preferences"
-msgstr "_Možnosti"
+msgstr "_Předvolby"
 
 #: ../bleachbit/GUI.py:79
 msgid "General"
@@ -462,8 +462,8 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
-"Je-li aktualizace nalezena, budete mít možnost zobrazit si o ní informace. "
-"Poté můžete ručně stáhnout a nainstalovat aktualizace."
+"Je-li nová verze BleachBitu dostupná, budete mít možnost zobrazit si o ní "
+"informace. Poté si ji můžete ručně stáhnout a nainstalovat."
 
 #: ../bleachbit/GUI.py:103
 msgid "Overwrite files to hide contents (ineffective in some situations)"
@@ -503,7 +503,7 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
-"Opravdu chcete smazat vámi označené soubory? Smazané soubory již nelze "
+"Opravdu chcete smazat vámi označené soubory? Smazané soubory již nelze nijak "
 "obnovit. Chcete-li vidět, o jaké soubory se jedná, klikněte na \"Náhled\""
 
 #: ../bleachbit/GUI.py:182
@@ -552,15 +552,15 @@ msgstr "_Soubor"
 
 #: ../bleachbit/GUI.py:526
 msgid "_Edit"
-msgstr "Úpravy"
+msgstr "Úp_ravy"
 
 #: ../bleachbit/GUI.py:527
 msgid "_Release Notes"
-msgstr "_Poznámky k vydání"
+msgstr "Po_známky k vydání"
 
 #: ../bleachbit/GUI.py:528
 msgid "_About"
-msgstr "_O programu..."
+msgstr "_O programu"
 
 #: ../bleachbit/GUI.py:529
 msgid "_Help"
@@ -588,7 +588,7 @@ msgstr "Aktualizovat BleachBit"
 
 #: ../bleachbit/GUI.py:652
 msgid "BleachBit update is available"
-msgstr "Aktualizace pro BleachBit jsou připraveny"
+msgstr "Jsou dostupné aktualizace BleachBitu"
 
 #: ../bleachbit/GUI.py:652
 msgid "Click 'Update BleachBit' for more information"
@@ -646,7 +646,7 @@ msgstr "Čekejte prosím, prohledávám: "
 
 #: ../bleachbit/Worker.py:149
 msgid "Done."
-msgstr "Hotovo."
+msgstr "Hotovo!"
 
 #: ../bleachbit/Worker.py:150
 msgid "Total size: "
