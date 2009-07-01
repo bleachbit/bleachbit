@@ -29,14 +29,11 @@ build: build-stamp
 	# remove Windows-specific cleaners
 	grep -l os=.windows. cleaners/*xml | xargs rm -f
 	# remove Windows-specific modules
-	rm bleachbit/Windows.py
+	-rm -f bleachbit/Windows.py
 
 
 build-stamp: configure-stamp  
 	dh_testdir
-
-	# Add here commands to compile the package.
-	$(MAKE)
 
 	touch $@
 

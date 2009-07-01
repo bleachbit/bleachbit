@@ -119,7 +119,7 @@ EOF
 # remove Windows-specific cleaners
 grep -l os=.windows. cleaners/*xml | xargs rm -f
 # remove Windows-specific modules
-rm bleachbit/Windows.py
+rm -f bleachbit/Windows.py
 
 
 %install
