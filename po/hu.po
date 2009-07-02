@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-06-25 21:39-0600\n"
-"PO-Revision-Date: 2009-06-26 14:33+0000\n"
-"Last-Translator: charlie <Unknown>\n"
+"PO-Revision-Date: 2009-07-01 19:48+0000\n"
+"Last-Translator: Moltenice80 <moltenice80@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-06-26 16:40+0000\n"
+"X-Launchpad-Export-Date: 2009-07-01 21:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -32,7 +32,7 @@ msgstr "Gyorsítótár"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Játék szerverek listájának törlése"
+msgstr "Törli a játékszerverek listáját"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -56,8 +56,8 @@ msgid ""
 "Delete cookies, which contain information such as web site prefereneces, "
 "authentication, and tracking identification"
 msgstr ""
-"Olyan sütik törlése melyek webes előzményeket,  hitelesítéseket és "
-"nyomkövető azonosítókat tartalmaz"
+"Olyan sütik törlése, melyek weboldal beállításokat, hitelesítéseket és "
+"követő azonosítókat tartalmaznak"
 
 #: ../cleaners/chromium.xml
 msgid "Delete the current session"
@@ -136,7 +136,7 @@ msgstr "Nyomkövetési napló törlése"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Törli a legutóbbi dokumentumok listáját"
 
 #: ../cleaners/audacious.xml
 msgid "Log"
@@ -378,6 +378,7 @@ msgstr "Hibás asztali fájlok"
 #: ../bleachbit/CleanerBackend.py:471
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
+"Törli az Alkalmazások menü hibás bejegyzéseit és a hibás fájltársításokat"
 
 #: ../bleachbit/CleanerBackend.py:472
 msgid "Cache location specified by XDG and used by various applications"
@@ -582,7 +583,7 @@ msgstr "Törlés"
 
 #: ../bleachbit/GUI.py:561
 msgid "Delete files in the selected operations"
-msgstr ""
+msgstr "Törli a kiválasztott műveletekben meghatározott fájlokat"
 
 #: ../bleachbit/GUI.py:566
 msgid "Preview"
