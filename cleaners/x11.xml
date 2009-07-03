@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="xserver" os="linux">
-  <label>X Server</label>
-  <option id="history">
-    <label>List of X server errors</label>
-    <description>Delete the file with a list of X server errors</description>
+<cleaner id="x11" os="linux">
+  <label>X11</label>
+  <option id="debug_log">
+    <label>Debug log</label>
+    <description>Delete the debug log</description>
     <action type="file">~/.xsession-errors</action>
   </option>
 </cleaner>
