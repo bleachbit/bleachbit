@@ -28,7 +28,7 @@ import sys
 from globals import APP_VERSION, options_dir, options_file
 
 
-boolean_keys = ['check_online_updates', 'first_start', 'shred']
+boolean_keys = ('auto_hide', 'check_online_updates', 'first_start', 'shred')
 
 
 
@@ -44,6 +44,7 @@ class Options:
             self.config.add_section("hashpath")
 
         # set defaults
+        self.__set_default("auto_hide", True)
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
 

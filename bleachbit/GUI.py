@@ -66,7 +66,9 @@ def threaded(func):
 class PreferencesDialog:
     """Present the preferences dialog and save changes"""
 
-    def __init__(self, parent):
+    def __init__(self, parent, cb_refresh_operations):
+        self.cb_refresh_operations = cb_refresh_operations
+
         self.dialog = gtk.Dialog(title = _("Preferences"), \
             parent = parent, \
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
@@ -90,6 +92,8 @@ class PreferencesDialog:
         def toggle_callback(cell, path):
             """Callback function to toggle option b"""
             options.toggle(path)
+            if 'auto_hide' == path:
+                self.cb_refresh_operations()
 
         vbox = gtk.VBox()
 
@@ -100,7 +104,12 @@ class PreferencesDialog:
             self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
-        cb_shred = gtk.CheckButton(_("Overwrite files to hide contents (ineffective in some situations)"))
+        cb_auto_hide = gtk.CheckButton(_("Hide irrelevant cleaners"))
+        cb_auto_hide.set_active(options.get('auto_hide'))
+        cb_auto_hide.connect('toggled', toggle_callback, 'auto_hide')
+        vbox.pack_start(cb_auto_hide, False)
+
+        cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', toggle_callback, 'shred')
         self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
@@ -201,20 +210,12 @@ class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
     def __init__(self):
         self.tree_store = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT)
-        for key in sorted(backends):
-            c_name = backends[key].get_name()
-            c_id = backends[key].get_id()
-            c_value = options.get_tree(c_id, None)
-            parent = self.tree_store.append(None, (c_name, c_value, c_id))
-            for (o_id, o_name, o_value) in backends[key].get_options():
-                o_value = options.get_tree(c_id, o_id)
-                self.tree_store.append(parent, (o_name, o_value, o_id))
         if None == self.tree_store:
             raise Exception("cannot create tree store")
-        self.tree_store.connect("row-changed", self.on_row_changed)
+        self.row_changed_handler_id = None
+        self.refresh_rows()
         self.tree_store.set_sort_func(3, self.sort_func)
         self.tree_store.set_sort_column_id(3, gtk.SORT_ASCENDING)
-        return
 
 
     def get_model(self):
@@ -230,6 +231,27 @@ class TreeInfoModel:
             child = self.tree_store[path][2]
         value = self.tree_store[path][1]
         options.set_tree(parent, child, value)
+
+
+    def refresh_rows(self):
+        """Clear rows (cleaners) and add them fresh"""
+        if None != self.row_changed_handler_id:
+            self.tree_store.disconnect(self.row_changed_handler_id)
+        self.tree_store.clear()
+        for key in sorted(backends):
+            c_name = backends[key].get_name()
+            c_id = backends[key].get_id()
+            c_value = options.get_tree(c_id, None)
+            if not c_value and options.get('auto_hide') \
+                and backends[key].auto_hide():
+                print "info: automatically hiding cleaner '%s'" % (c_id)
+                continue
+            parent = self.tree_store.append(None, (c_name, c_value, c_id))
+            for (o_id, o_name, o_value) in backends[key].get_options():
+                o_value = options.get_tree(c_id, o_id)
+                self.tree_store.append(parent, (o_name, o_value, o_id))
+        self.row_changed_handler_id = self.tree_store.connect("row-changed", \
+            self.on_row_changed)
 
 
     def sort_func(self, model, iter1, iter2):
@@ -480,8 +502,14 @@ class GUI:
 
     def cb_preferences_dialog(self, action):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(self.window)
+        pref = PreferencesDialog(self.window, self.cb_refresh_operations)
         pref.run()
+
+
+    def cb_refresh_operations(self):
+        """Callback to refresh the list of cleaners"""
+        self.tree_store.refresh_rows()
+        self.view.expand_all()
 
 
     def cb_shred_file(self, action):
@@ -683,7 +711,7 @@ class GUI:
         self.create_window()
         gobject.threads_init()
         if options.get("first_start") and sys.platform == 'linux2':
-            pref = PreferencesDialog(self.window)
+            pref = PreferencesDialog(self.window, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):

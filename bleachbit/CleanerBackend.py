@@ -62,6 +62,22 @@ class Cleaner:
     def add_option(self, option_id, name, description):
         self.options[option_id] = ( name, False, description )
 
+    def auto_hide(self):
+        """Return boolean whether it is OK to automatically hide this
+        cleaner"""
+        ret = True
+        for (option_id, __name, __value) in self.get_options():
+            self.set_option(option_id, True)
+        for pathname in self.list_files():
+            ret = False
+            break
+        if ret:
+            for pathname in self.other_cleanup(really_delete = False):
+                ret = False
+                break
+        for (option_id, __name, __value) in self.get_options():
+            self.set_option(option_id, False)
+        return ret
 
     def available(self):
         """Is the cleaner available?"""
@@ -680,6 +696,11 @@ backends["system"] = System()
 import unittest
 
 class TestCleanerBackend(unittest.TestCase):
+
+    def test_auto_hide(self):
+        for key in sorted(backends):
+            self.assert_ (type(backends[key].auto_hide()) is bool)
+
     def test_get_name(self):
         for key in sorted(backends):
             self.assert_ (type(backends[key].get_name()) is str)
