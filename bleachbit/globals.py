@@ -23,7 +23,7 @@ import os
 import sys
 
 
-APP_VERSION = "0.5.3"
+APP_VERSION = "0.5.4"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit-project.appspot.com"
 
