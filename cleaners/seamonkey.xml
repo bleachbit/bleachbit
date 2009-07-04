@@ -25,7 +25,15 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action type="children" directories="false">~/.mozilla/default/Cache/</action>
+    <!-- example: //home/bob/.mozilla/default/Cache/B4D1D17Fd01 -->
+    <!-- example: //home/bob/.mozilla/default/Cache/_CACHE_MAP_ -->
+    <!-- example: //home/bob/.mozilla/test/Cache/7CD2831Ed01 -->
+    <!-- The dilemma is if using '*' instead of 'default' to catch
+         all SeaMonkey profiles, it catches non-SeaMonkey profiles
+         such as 'eclipse' and 'firefox'.  Using profiles is rare,
+         so we don't. -->
+    <action type="glob">~/.mozilla/default/Cache/???????????</action>
+    <action type="glob">~/.mozilla/default/Cache/_CACHE_???_</action>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
@@ -37,6 +45,7 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/cookies.txt -->
+    <!-- example: /home/bob/.mozilla/test/pfr72dbv.slt/cookies.txt -->
     <action type="glob">~/.mozilla/default/*/cookies.txt</action>
   </option>
   <option id="history">
