@@ -39,18 +39,18 @@
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/chatzilla/logs/client.2009-07-03.log -->
-    <action type="glob">~/.mozilla/default/*/chatzilla/logs/client.????-??-??.log</action>
+    <action type="glob">~/.mozilla/*/????????.slt/chatzilla/logs/client.????-??-??.log</action>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/cookies.txt -->
     <!-- example: /home/bob/.mozilla/test/pfr72dbv.slt/cookies.txt -->
-    <action type="glob">~/.mozilla/default/*/cookies.txt</action>
+    <action type="glob">~/.mozilla/*/????????.slt/cookies.txt</action>
   </option>
   <option id="history">
     <label>History</label>
     <description>Delete the list of visited web pages</description>
-    <action type="glob">~/.mozilla/default/*/history.dat</action>
+    <action type="glob">~/.mozilla/*/????????.slt/history.dat</action>
   </option>
 </cleaner>
