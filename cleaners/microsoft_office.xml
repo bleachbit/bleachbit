@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit-project.appspot.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="Microsoft Office" os="windows">
+  <label>Microsoft Office</label>
+  <description>Office suite</description>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
+    <action type="children" directories="false">$APPDATA\Microsoft\Office\Recent\</action>
+    <!-- Microsoft Office 2003 -->
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Excel\File MRU</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\PowerPoint\File MRU</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Publisher\Recent File List</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Query\Data Sources</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Word\File MRU</action>
+    <!-- Microsoft Office 2007 -->
+    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Common\Open Find</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Excel\File MRU</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\PowerPoint\File MRU</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Publisher\Recent File List</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Word\File MRU</action>
+    <action type="winreg" name="MRU1">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU2">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU3">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU4">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU5">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU6">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU7">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU8">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRU9">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate1">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate2">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate3">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate4">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate5">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate6">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate7">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate8">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="MRUDate9">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
+    <action type="winreg" name="LastFile1">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile2">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile3">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile4">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile5">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile6">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile7">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile8">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action type="winreg" name="LastFile9">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+  </option>
+</cleaner>
