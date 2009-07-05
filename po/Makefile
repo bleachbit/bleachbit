@@ -30,7 +30,7 @@ refresh-po: $(POTFILE)
 	@echo "* Refreshing .po files"
 	for oldpo in $(POFILES); do \
 		lang=`basename $$oldpo .po`; \
-		msgmerge -v $${lang}.po $(POTFILE) > $${lang}.pot; \
+		msgmerge --no-fuzzy-matching -v $${lang}.po $(POTFILE) > $${lang}.pot; \
 		mv $$lang.pot $$lang.po; \
 	done
 
