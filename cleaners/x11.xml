@@ -21,9 +21,9 @@
 -->
 <cleaner id="x11" os="linux">
   <label>X11</label>
-  <option id="debug_log">
-    <label>Debug log</label>
-    <description>Delete the debug log</description>
+  <option id="debug_logs">
+    <label>Debug logs</label>
+    <description>Delete the debug logs</description>
     <action type="file">~/.xsession-errors</action>
   </option>
 </cleaner>
