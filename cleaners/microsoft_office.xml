@@ -27,11 +27,14 @@
     <description>Delete the most recently used list</description>
     <action type="children" directories="false">$APPDATA\Microsoft\Office\Recent\</action>
     <!-- Microsoft Office 2003 -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Excel\File MRU</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\PowerPoint\File MRU</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Common\Internet\Server Cache</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Common\Open Find</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Excel\Recent Files</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\PowerPoint\Recent File List</action>
     <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Publisher\Recent File List</action>
     <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Query\Data Sources</action>
     <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Word\File MRU</action>
+    <action type="winreg" name="UseRWHlinkNavigation">HKCU\Software\Microsoft\Office\11.0\Common\Internet</action>
     <!-- Microsoft Office 2007 -->
     <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Common\Open Find</action>
     <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Excel\File MRU</action>
