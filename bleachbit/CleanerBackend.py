@@ -636,8 +636,10 @@ class System(Cleaner):
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
                     # common save as dialog
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
-                    # find Files command
+                    # find files command
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
+                    # map network drives
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
                     # find Computer command
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
                     # printer ports
