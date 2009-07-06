@@ -26,10 +26,15 @@
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
     <action type="children" directories="false">$APPDATA\Microsoft\Office\Recent\</action>
+    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Editor\Recently Used URLs</action>
     <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent File List</action>
+    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recently Created Servers</action>
     <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Page List</action>
     <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Web List</action>
     <!-- Microsoft Office 2000 -->
+    <action type="winreg">HKCU\Software\Microsoft\Office\9.0\Excel\Recent Files</action>
+    <action type="winreg">HKCU\Software\Microsoft\Office\9.0\PowerPoint\Recent File List</action>
+    <action type="winreg"></action>
     <action type="winreg">HKCU\Software\Microsoft\Office\9.0\Publisher\Recent File List</action>
     <!-- Microsoft Office XP -->
     <action type="winreg">HKCU\Software\Microsoft\Office\10.0\Common\Open Find</action>
