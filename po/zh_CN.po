@@ -7,23 +7,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-07-03 16:21-0600\n"
-"PO-Revision-Date: 2009-07-04 08:58+0000\n"
-"Last-Translator: Jackychan <Unknown>\n"
+"POT-Creation-Date: 2009-07-05 11:32-0600\n"
+"PO-Revision-Date: 2009-07-05 22:38+0000\n"
+"Last-Translator: mao_king <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-04 23:08+0000\n"
+"X-Launchpad-Export-Date: 2009-07-06 02:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
-#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/beagle.xml
-#: ../cleaners/opera.xml ../cleaners/rhythmbox.xml ../cleaners/epiphany.xml
-#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/google_chrome.xml ../cleaners/amsn.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml
+#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/seamonkey.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/epiphany.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/google_chrome.xml
+#: ../cleaners/amsn.xml ../cleaners/thumbnails.xml ../cleaners/java.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:155
 #: ../bleachbit/CleanerBackend.py:340 ../bleachbit/CleanerBackend.py:373
@@ -40,9 +40,10 @@ msgstr ""
 msgid "Game"
 msgstr ""
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:156
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
 msgid "Cookies"
 msgstr ""
 
@@ -50,9 +51,10 @@ msgstr ""
 msgid "Current session"
 msgstr ""
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:156
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
 msgid ""
 "Delete cookies, which contain information such as web site prefereneces, "
 "authentication, and tracking identification"
@@ -67,22 +69,24 @@ msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
 msgstr ""
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/CleanerBackend.py:155
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../bleachbit/CleanerBackend.py:155
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
+msgstr "删除那些网页缓冲文件（这些缓冲文件可以减少下次访问该网页的时间）"
 
 #: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
-#: ../cleaners/google_chrome.xml ../cleaners/bash.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
+#: ../cleaners/bash.xml ../cleaners/links2.xml ../cleaners/elinks.xml
 msgid "History"
 msgstr ""
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml
 #: ../bleachbit/CleanerBackend.py:174
 msgid "Web browser"
-msgstr ""
+msgstr "浏览器"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -91,7 +95,7 @@ msgstr ""
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
-msgstr ""
+msgstr "编辑器"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/xine.xml
 #: ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
@@ -114,19 +118,21 @@ msgstr ""
 #: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
 #: ../cleaners/amule.xml
 msgid "Logs"
-msgstr ""
+msgstr "系统日志"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
 msgstr ""
 
-#: ../cleaners/gl-117.xml
-msgid "Debug log"
-msgstr ""
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Debug logs"
+msgstr "调试日志"
 
-#: ../cleaners/gl-117.xml
-msgid "Delete the debug log"
-msgstr ""
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Delete the debug logs"
+msgstr "删除调试日志"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml
 #: ../bleachbit/CleanerBackend.py:502
@@ -148,34 +154,30 @@ msgstr ""
 
 #: ../cleaners/mc.xml
 msgid "Visual shell for the console"
-msgstr ""
+msgstr "控制台可视化界面"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml
 msgid "Chat client"
 msgstr ""
 
-#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/amsn.xml ../cleaners/skype.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Chat logs"
 msgstr "聊天日志"
 
-#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/amsn.xml ../cleaners/skype.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
 msgstr "删除聊天日志"
 
-#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
-msgid "Debug logs"
-msgstr "调试日志"
-
-#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
-msgid "Delete the debug logs"
-msgstr "删除调试日志"
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "删除已访问网页列表"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr ""
+msgstr "删除搜索索引"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
@@ -194,7 +196,7 @@ msgstr "文件下载客户端"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
-msgstr ""
+msgstr "一个包含书签、网站图标和已访问网站的历史记录的URL的数据库"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:160
 msgid ""
@@ -213,6 +215,14 @@ msgstr "密码"
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:161
 msgid "Places"
 msgstr "地址"
+
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr ""
+
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr ""
 
 #: ../cleaners/vuze.xml
 msgid "Backup files"
@@ -515,7 +525,8 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Jackychan https://launchpad.net/~chenyonghui1028"
+"  Jackychan https://launchpad.net/~chenyonghui1028\n"
+"  mao_king https://launchpad.net/~mao-king"
 
 #: ../bleachbit/GUI.py:517
 msgid "Choose files to shred"
