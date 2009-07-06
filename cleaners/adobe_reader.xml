@@ -31,4 +31,14 @@
     <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\8.0\Cache</action>
     <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\9.0\Cache</action>
   </option>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
+    <action type="file">~/.adobe/Acrobat/7.0/Preferences/reader_prefs</action>
+    <action type="file">~/.adobe/Acrobat/8.0/Preferences/reader_prefs</action>
+    <action type="file">~/.adobe/Acrobat/9.0/Preferences/reader_prefs</action>
+    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles</action>
+    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\8.0\AVGeneral\cRecentFiles</action>
+    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles</action>
+  </option>
 </cleaner>
