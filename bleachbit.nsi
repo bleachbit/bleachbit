@@ -24,7 +24,7 @@
 
   !include "MUI2.nsh"
 
-  
+
 ;--------------------------------
 ;General
 
@@ -65,6 +65,7 @@
 ;Pages
 
   !insertmacro MUI_PAGE_LICENSE "COPYING"
+  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
 
@@ -104,7 +105,9 @@
 
 ;--------------------------------
 ;Default section
-section
+Section Core (Required)
+    SectionIn RO
+
     SetOutPath $INSTDIR
     File /r "dist\*.*"
     File "COPYING"
@@ -114,10 +117,9 @@ section
 
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
+    SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
-    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
     CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
 
     # register uninstaller in Add/Remove Programs
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
@@ -134,9 +136,20 @@ section
         "URLInfoAbout" "http://bleachbit-project.appspot.com/"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "URLUpdateInfo" "http://bleachbit-project.appspot.com/"
+SectionEnd
 
-sectionEnd
 
+SectionGroup Shortcuts
+    Section "Start menu" SectionStart
+        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
+    SectionEnd
+
+    Section "Desktop" SectionDesktop
+        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+        CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    SectionEnd
+SectionGroupEnd
 
 ;--------------------------------
 ;Installer Functions
@@ -154,6 +167,7 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
+    Delete "$DESKTOP\BleachBit.lnk"
     RMDir /r "$SMPROGRAMS\${prodname}"
     RMDir /r "$INSTDIR"
     DeleteRegKey HKCU "Software\${prodname}"
