@@ -162,6 +162,24 @@ Function .onInit
 
   !insertmacro MUI_LANGDLL_DISPLAY
 
+  ; uninstall old before installing new
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+     "UninstallString"
+
+  StrCmp $R0 "" new_install
+
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
+    upgrading, or click 'Cancel' to abort the upgrade." \
+    IDOK uninstall_old
+    Abort
+
+  uninstall_old:
+  ExecWait '$R0 _?=$INSTDIR'
+
+  new_install:
+
+
 FunctionEnd
 
 
