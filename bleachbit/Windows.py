@@ -39,8 +39,12 @@ These are the terms:
 
 
 import sys
+from gettext import gettext as _
 if 'win32' == sys.platform:
     import _winreg
+    import win32api
+    import win32file
+    from win32com.shell import shell,shellcon
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -95,6 +99,20 @@ def delete_registry_key(parent_key, really_delete):
         delete_registry_key(child_key, True)
     _winreg.DeleteKey(hive, parent_sub_key)
     return True
+
+
+def empty_recycle_bin(really_delete):
+    """Empty the recycle bin or preview its size"""
+    for drive in win32api.GetLogicalDriveStrings().split('\x00'):
+        if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
+            bytes = shell.SHQueryRecycleBin(drive)[0]
+            if really_delete:
+                flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
+                shell.SHEmptyRecycleBin(None, drive, flags)
+                yield (bytes, _("Recycle bin %s") % drive)
+            else:
+                yield _("Recycle bin %s") % drive
+
 
 
 def split_registry_key(full_key):
@@ -167,6 +185,13 @@ class TestWindows(unittest.TestCase):
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, False), False)
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, True), False)
 
+
+    def test_empty_recycle_bin(self):
+        """Unit test for empty_recycle_bin"""
+        ret = empty_recycle_bin(really_delete = False).next()
+        self.assert_ (type(ret) is str)
+        for ret in empty_recycle_bin(False):
+            self.assert_ (type(ret) is str)
 
 
     def test_split_registry_key(self):
