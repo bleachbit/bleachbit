@@ -28,6 +28,7 @@ import os.path
 import re
 import subprocess
 import sys
+import traceback
 import xml.dom.minidom
 
 import FileUtilities
@@ -68,13 +69,16 @@ class Cleaner:
         ret = True
         for (option_id, __name, __value) in self.get_options():
             self.set_option(option_id, True)
-        for pathname in self.list_files():
-            ret = False
-            break
-        if ret:
-            for pathname in self.other_cleanup(really_delete = False):
+        try:
+            for pathname in self.list_files():
                 ret = False
                 break
+            if ret:
+                for pathname in self.other_cleanup(really_delete = False):
+                    ret = False
+                    break
+        except:
+            traceback.print_exc()
         for (option_id, __name, __value) in self.get_options():
             self.set_option(option_id, False)
         return ret
