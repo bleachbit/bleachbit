@@ -143,7 +143,7 @@ Section Core (Required)
 SectionEnd
 
 
-SectionGroup Shortcuts
+SectionGroup /e Shortcuts
     Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
