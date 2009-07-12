@@ -7,579 +7,676 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-02-18 23:20-0700\n"
-"PO-Revision-Date: 2009-02-05 23:45+0000\n"
-"Last-Translator: alperyilmaz <Unknown>\n"
+"POT-Creation-Date: 2009-07-05 11:32-0600\n"
+"PO-Revision-Date: 2009-07-11 16:50+0000\n"
+"Last-Translator: Ckurdu <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-23 04:44+0000\n"
+"X-Launchpad-Export-Date: 2009-07-12 05:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
-#: ../bleachbit/CleanerBackend.py:407 ../bleachbit/CleanerBackend.py:439
-#: ../bleachbit/CleanerBackend.py:503 ../bleachbit/CleanerBackend.py:590
-msgid "Cache"
-msgstr ""
-
-msgid "Chat client"
-msgstr ""
-
-msgid "Chat logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
-msgid "Cookies"
-msgstr ""
-
-msgid "Current session"
-msgstr ""
-
-msgid "Debug log"
-msgstr ""
-
-msgid "Debug logs"
-msgstr ""
-
-msgid ""
-"Delete the HTTP cookies, which contain information such as web site "
-"prefereneces, authentication, and tracking identification"
-msgstr ""
-
-msgid "Delete the cache"
-msgstr ""
-
-msgid "Delete the cache of Jamendo and Mangatune databases"
-msgstr ""
-
-msgid "Delete the chat logs"
-msgstr ""
-
-msgid "Delete the command history"
-msgstr ""
-
-msgid "Delete the cookies"
-msgstr ""
-
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
-
-msgid "Delete the current session"
-msgstr ""
-
-msgid "Delete the debug log"
-msgstr ""
-
-msgid "Delete the debug logs"
-msgstr ""
-
-msgid ""
-"Delete the history, which includes bookmarks, downloads, and visited sites"
-msgstr ""
-
-msgid "Delete the list of game servers"
-msgstr ""
-
-msgid "Delete the logs"
-msgstr ""
-
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr ""
-
-msgid "Delete the search indexes"
-msgstr ""
-
-msgid "Delete the temporary files"
-msgstr ""
-
-msgid "Delete the usage history"
-msgstr ""
-
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr ""
-
-msgid "Editor"
-msgstr ""
-
-msgid "Game"
-msgstr ""
-
-msgid "History"
-msgstr ""
-
-msgid "Index"
-msgstr ""
-
-msgid "Logs"
-msgstr ""
-
-msgid "Online databases"
-msgstr ""
-
-msgid "Search indexes"
-msgstr ""
-
-msgid "Search tool"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:408 ../bleachbit/CleanerBackend.py:593
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:341 ../bleachbit/CleanerBackend.py:504
 msgid "Temporary files"
 msgstr "Geçici dosyalar"
 
-msgid "Visual shell for the console"
-msgstr ""
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Küçük Resimler"
 
-msgid "Web browser"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:112 ../bleachbit/CleanerBackend.py:165
-#: ../bleachbit/CleanerBackend.py:503
-msgid "Web cache reduces time to display revisited pages"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:113 ../bleachbit/CleanerBackend.py:166
-#: ../bleachbit/CleanerBackend.py:504
-msgid ""
-"HTTP cookies contain information such as web site prefereneces, "
-"authentication, and tracking identification"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
-msgid "Download history"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:114 ../bleachbit/CleanerBackend.py:167
-msgid "List of files downloaded"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
-msgid "Passwords"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:115 ../bleachbit/CleanerBackend.py:170
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:116 ../bleachbit/CleanerBackend.py:171
-msgid "Places"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:116
-msgid ""
-"A database of URLs including bookmarks and a history of visited web sites"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:119
-msgid "Epiphany web browser"
-msgstr "Epiphany web tarayıcı"
-
-#: ../bleachbit/CleanerBackend.py:168
-msgid "Form history"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:168
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:169
-msgid "Session restore"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:169
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:171
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"web sites"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:172
-msgid "URL history"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:172
+#: ../bleachbit/CleanerBackend.py:163
 msgid "List of visited web pages"
 msgstr "Ziyaret edilmiş adreslerin listesi"
 
-#: ../bleachbit/CleanerBackend.py:173
+#: ../bleachbit/CleanerBackend.py:166
 msgid "Vacuum"
 msgstr "Vakum"
 
-#: ../bleachbit/CleanerBackend.py:173
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:178
-msgid "Mozilla Firefox web browser"
-msgstr "Mozilla Firefox web tarayıcısı"
-
-#: ../bleachbit/CleanerBackend.py:323
-msgid ""
-"Delete Exaile's cache, album cover art, debug log, and downloaded podcasts"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:346
-msgid "Delete Adobe Flash's cache and settings"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:365
-msgid "Delete GIMP's temporary folder"
-msgstr "GIMP geçici klasörünü sil"
-
-#: ../bleachbit/CleanerBackend.py:386
-msgid "Delete the contents of Google Earth's cache and temporary files"
-msgstr "Google Earth'e ait önbellek ve geçici dosyalarını sil"
-
-#: ../bleachbit/CleanerBackend.py:407
-msgid ""
-"KDE cache including Konqueror.  Often contains sparse files where the "
-"apparent file size does not match the actual disk usage."
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:408
-msgid "Temporary files stored by KDE under the home directory"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:411
+#: ../bleachbit/CleanerBackend.py:344
 msgid "KDE desktop environment"
 msgstr "KDE masaüstü ortamı"
 
-#: ../bleachbit/CleanerBackend.py:439
-msgid "Cached registry and package data"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:440 ../bleachbit/CleanerBackend.py:595
-msgid "Recent documents list"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:440
-msgid "OpenOffice.org's list of recently used documents."
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:447
-msgid "OpenOffice.org office suite"
-msgstr "OpenOffice.org ofis programı"
-
-#: ../bleachbit/CleanerBackend.py:508
-msgid "Opera web browser"
-msgstr "Opera web tarayıcı"
-
-#: ../bleachbit/CleanerBackend.py:540
+#: ../bleachbit/CleanerBackend.py:449
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "rpmbuild klasöründeki kurulum dosyaları sil"
 
-#: ../bleachbit/CleanerBackend.py:568
-msgid "Delete Skype's chat logs"
-msgstr "Skype sohbet kayıtlarını sil"
-
-#: ../bleachbit/CleanerBackend.py:587 ../bleachbit/CleanerBackend.py:691
-#: ../bleachbit/CleanerBackend.py:693
-msgid "APT autoclean"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:587
-msgid "Run apt-get autoclean to delete old downloaded archive files"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:588
-msgid "Broken desktop entries"
-msgstr "Bozuk masaüstü öğeleri"
-
-#: ../bleachbit/CleanerBackend.py:588
-msgid ""
-"Unusable .desktop files (menu entries and file associtations) that are "
-"either invalid structurally or point to non-existant locations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:589 ../bleachbit/CleanerBackend.py:700
-#: ../bleachbit/CleanerBackend.py:702
-msgid "Clipboard"
-msgstr "Pano"
-
-#: ../bleachbit/CleanerBackend.py:589
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:590
-msgid "Cache location specified by XDG and used by various applications"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:591
-msgid "Localizations"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:591
-msgid "Data used to operate the system in various languages and countries"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:592
-msgid "Rotated logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:592
-msgid "Old system logs"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:593
-msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:594
+#: ../bleachbit/CleanerBackend.py:496
 msgid "Trash"
 msgstr "Çöp Kutusu"
 
-#: ../bleachbit/CleanerBackend.py:594
+#: ../bleachbit/CleanerBackend.py:496
 msgid "Temporary storage for deleted files"
 msgstr "Silinmiş dosyaların geçici olarak saklandığı yer"
 
-#: ../bleachbit/CleanerBackend.py:595
-msgid "A common list of recently used documents"
-msgstr ""
+#: ../bleachbit/CleanerBackend.py:503 ../bleachbit/CleanerBackend.py:625
+#: ../bleachbit/CleanerBackend.py:627
+msgid "Clipboard"
+msgstr "Pano"
 
-#: ../bleachbit/CleanerBackend.py:596 ../bleachbit/CleanerBackend.py:706
-#: ../bleachbit/CleanerBackend.py:708
-msgid "Yum clean"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:596
-msgid "Delete all Yum's cache"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:599
-msgid "The system in general"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:605
+#: ../bleachbit/CleanerBackend.py:513
 msgid "System"
 msgstr "Sistem"
-
-#: ../bleachbit/CleanerBackend.py:729
-msgid "Delete thumbnails in the thumbnails folder"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:735
-msgid "Thumbnails"
-msgstr "Küçük resimler"
-
-#: ../bleachbit/CleanerBackend.py:747
-msgid "Delete Transmission's blocklist and fast resume cache"
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:767
-msgid "Delete the temporary files from winetricks"
-msgstr "winetricks konumundaki geçici dosyaları sil"
-
-#: ../bleachbit/CleanerBackend.py:794
-msgid "Delete XChat logs and scrollback"
-msgstr ""
 
 #: ../bleachbit/FileUtilities.py:173
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "sqlite3 Python modülü bulunamıyor: Python 2.5 veya üstü gerekli"
 
-#: ../bleachbit/GUI.py:66 ../bleachbit/GUI.py:558
+#: ../bleachbit/GUI.py:72 ../bleachbit/GUI.py:563
 msgid "Preferences"
 msgstr "Ayarlar"
 
-#: ../bleachbit/GUI.py:75
+#: ../bleachbit/GUI.py:81
 msgid "General"
 msgstr "Genel"
 
-#: ../bleachbit/GUI.py:76
+#: ../bleachbit/GUI.py:83
 msgid "Languages"
 msgstr "Diller"
 
-#: ../bleachbit/GUI.py:92
+#: ../bleachbit/GUI.py:133
+msgid "All languages will be deleted except those checked."
+msgstr "Seçilen lisanların dışındaki bütün lisanları sil"
+
+#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/seamonkey.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/epiphany.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/google_chrome.xml
+#: ../cleaners/amsn.xml ../cleaners/thumbnails.xml ../cleaners/java.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:155
+#: ../bleachbit/CleanerBackend.py:340 ../bleachbit/CleanerBackend.py:373
+#: ../bleachbit/CleanerBackend.py:489
+msgid "Cache"
+msgstr "Önbellek"
+
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Oyun sunucu listesini sil"
+
+#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+msgid "Game"
+msgstr "Oyun"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
+msgid "Cookies"
+msgstr "Çerezler"
+
+#: ../cleaners/chromium.xml
+msgid "Current session"
+msgstr "Aktif oturum"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
+msgid ""
+"Delete cookies, which contain information such as web site prefereneces, "
+"authentication, and tracking identification"
+msgstr ""
+"Çerezleri sil. Çerezler web sitesi ayarları, kullanıcı doğrulama ve iz sürme "
+"bilgilerini istemcide depolayan dosyalardır."
+
+#: ../cleaners/chromium.xml
+msgid "Delete the current session"
+msgstr "Aktif oturumu sil"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid ""
+"Delete the history, which includes bookmarks, downloads, and visited sites"
+msgstr ""
+"Yer imlerini, yüklenen dosyaları ve ziyaret edilmiş siteleri barındıran "
+"geçmişi sil"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../bleachbit/CleanerBackend.py:155
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Web önbelleğini sil. Web önbelleği yeniden ziyaret edilen sayfaların "
+"görüntülenme süresini azaltır."
+
+#: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
+#: ../cleaners/bash.xml ../cleaners/links2.xml ../cleaners/elinks.xml
+msgid "History"
+msgstr "Geçmiş"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../bleachbit/CleanerBackend.py:174
+msgid "Web browser"
+msgstr "Web tarayıcı"
+
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr ""
+"~/.viminfo klasörünü sil. Bu klasörde geçmiş, komut geçmişi ve tampon "
+"dosyaları bulunur."
+
+#: ../cleaners/vim.xml ../cleaners/gedit.xml
+msgid "Editor"
+msgstr "Editör"
+
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/xine.xml
+#: ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:340
+#: ../bleachbit/CleanerBackend.py:373 ../bleachbit/CleanerBackend.py:500
+msgid "Delete the cache"
+msgstr "Önbelleği sil"
+
+#: ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+msgid "Delete the logs"
+msgstr "Günlük kayıtlarını sil."
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml
+msgid "Logs"
+msgstr "Günlük Kayıtları"
+
+#: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "Çoklu ortam gösterici"
+
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Debug logs"
+msgstr "Hata ayıklama günlükleri"
+
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Delete the debug logs"
+msgstr "Hata ayıklama günlüklerini sil"
+
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../bleachbit/CleanerBackend.py:502
+msgid "Delete the most recently used list"
+msgstr "Sıklıkla kullanılan menü listesini sil"
+
+#: ../cleaners/audacious.xml
+msgid "Log"
+msgstr "Günlük"
+
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../bleachbit/CleanerBackend.py:502
+msgid "Most recently used"
+msgstr "En son kullanılan"
+
+#: ../cleaners/mc.xml ../cleaners/links2.xml
+msgid "Delete the usage history"
+msgstr "Kullanım geçmişini sil"
+
+#: ../cleaners/mc.xml
+msgid "Visual shell for the console"
+msgstr "Konsol için görsel kabuk"
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "İstemci sohbeti"
+
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat logs"
+msgstr "Sohbet günlükleri"
+
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Delete the chat logs"
+msgstr "Sohbet günlüklerini sil"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Ziyaret edilmiş web sayfalarını sil"
+
+#: ../cleaners/beagle.xml
+msgid "Delete the search indexes"
+msgstr "Arama indekslerini sil"
+
+#: ../cleaners/beagle.xml
+msgid "Search indexes"
+msgstr "Arama indeksleri"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "Arama aracı"
+
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml
+msgid "File transfer client"
+msgstr "Dosya transfer istemcisi"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:161
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"web sites"
+msgstr ""
+"Yer imlerini , favikonlarını ve ziyaret edilmiş web sitelerinin geçmişini "
+"içeren bir veritabanı"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:160
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"Kullanıcı adları ve  şifreleri bunun yanında şifreleri depolanmaması gereken "
+"sitelerin listesini içeren bir veritabanı."
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:162
+msgid "Deleting Places deletes bookmarks."
+msgstr "Yer imlerini silmek için silinen konumlar"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:160
+msgid "Passwords"
+msgstr "Şifreler"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:161
+msgid "Places"
+msgstr "Konumlar"
+
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Arama geçmişini sil"
+
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Arama Geçmişi"
+
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Yedek dosyaları"
+
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Yedekleme dosyalarını sil"
+
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:341
+msgid "Delete the temporary files"
+msgstr "Geçici dosyaları sil"
+
+#: ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "İndirilmiş yayın akış içeriklerini sil"
+
+#: ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "İndirilmiş yayın akış içerikleri"
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete the current and last sessions"
+msgstr "Son ve aktif oturumları sil"
+
+#: ../cleaners/google_chrome.xml
+msgid "Session"
+msgstr "Oturum"
+
+#: ../cleaners/gimp.xml
+msgid "Image editor"
+msgstr "Resim editör"
+
+#: ../cleaners/google_earth.xml
+msgid "Virtual globe viewer"
+msgstr "Sanal küre(dünya) görüntüleyici"
+
+#: ../cleaners/bash.xml
+msgid "Delete the command history"
+msgstr "Bu komutu geçmişten sil"
+
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:374
+msgid "Delete the list of recently used documents"
+msgstr "Son kullanılan doküman listesini sil"
+
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:374
+#: ../bleachbit/CleanerBackend.py:497
+msgid "Recent documents list"
+msgstr "En son doküman listesi"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Çerezleri, ziyaret edilmiş URLleri ve arama geçmişini sil"
+
+#: ../cleaners/recoll.xml
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Arama indeksini sil. Arama indesksi dosya ve kelimeler içeren bir "
+"veritabanıdır."
+
+#: ../cleaners/recoll.xml
+msgid "Index"
+msgstr "Indeks"
+
+#: ../bleachbit.desktop
+msgid "Unnecessary file cleaner"
+msgstr "Gereksiz dosya temizleyici"
+
+#: ../bleachbit.desktop
+msgid "Free space and maintain privacy"
+msgstr "Yer temizle ve gizliliğini koru"
+
+#: ../bleachbit/CleanerBackend.py:157
+msgid "Download history"
+msgstr "İndirme geçmişi"
+
+#: ../bleachbit/CleanerBackend.py:157
+msgid "List of files downloaded"
+msgstr "İndirilen dosyalar listesi"
+
+#: ../bleachbit/CleanerBackend.py:158
+msgid "Form history"
+msgstr "Form geçmişi"
+
+#: ../bleachbit/CleanerBackend.py:158
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "Web sitelerine ve arama çubuğuna girilen formların geçmişi"
+
+#: ../bleachbit/CleanerBackend.py:159
+msgid "Session restore"
+msgstr "Oturumu tazele"
+
+#: ../bleachbit/CleanerBackend.py:159
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr ""
+"Tarayıcı hata sonucu veya normal bir şekilde kapandıktan sonra başlangıç "
+"oturumunu yükler"
+
+#: ../bleachbit/CleanerBackend.py:163
+msgid "URL history"
+msgstr "URL geçmişi"
+
+#: ../bleachbit/CleanerBackend.py:166
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"Veritabanı parçalanmasını düzenleyerek hiçbir bilgi silmeden kullanılan "
+"alanı azaltın ve hızı arttırın."
+
+#: ../bleachbit/CleanerBackend.py:384
+msgid "Office suite"
+msgstr "Ofis suit"
+
+#: ../bleachbit/CleanerBackend.py:481 ../bleachbit/CleanerBackend.py:615
+#: ../bleachbit/CleanerBackend.py:617
+msgid "APT autoclean"
+msgstr "APT otomatik temizleme"
+
+#: ../bleachbit/CleanerBackend.py:481
+msgid "Run apt-get autoclean to delete old downloaded archive files"
+msgstr ""
+"Eski indirilmiş arşiv dosyalarını silmek için apt-get otomatik temizleyiciyi "
+"çalıştır"
+
+#: ../bleachbit/CleanerBackend.py:488
+msgid "Broken desktop files"
+msgstr "Bozulmuş masaüstü dosyaları"
+
+#: ../bleachbit/CleanerBackend.py:488
+msgid "Delete broken application menu entries and file associations"
+msgstr "Bozulmuş uygulama menüsü girdilerini ve dosya ilişkilerini sil"
+
+#: ../bleachbit/CleanerBackend.py:489
+msgid "Cache location specified by XDG and used by various applications"
+msgstr ""
+"XDG tarafından belirlenen ve çeşitli programlar tarafından kullanılan "
+"önbellek yeri"
+
+#: ../bleachbit/CleanerBackend.py:490
+msgid "Localizations"
+msgstr "Yerelleştirmeler"
+
+#: ../bleachbit/CleanerBackend.py:490
+msgid "Data used to operate the system in various languages and countries"
+msgstr "Sistemin birçok dil ve ülkede çalışabilmesi için kullanılan veri"
+
+#: ../bleachbit/CleanerBackend.py:495
+msgid "Rotated logs"
+msgstr "Yönlendirilmiş günlükler"
+
+#: ../bleachbit/CleanerBackend.py:495
+msgid "Old system logs"
+msgstr "Eski sistem günlükleri"
+
+#: ../bleachbit/CleanerBackend.py:497
+msgid "A common list of recently used documents"
+msgstr "Son kullanılan dokümanların genel bir listesi"
+
+#: ../bleachbit/CleanerBackend.py:500 ../bleachbit/CleanerBackend.py:663
+#: ../bleachbit/CleanerBackend.py:665
+msgid "Yum clean"
+msgstr "Yum temizliği"
+
+#: ../bleachbit/CleanerBackend.py:503
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr "Masaüstü ortamının kopyalama ve yapıştırma için kullanılan panosu"
+
+#: ../bleachbit/CleanerBackend.py:504
+msgid "Delete temporary files created by various programs"
+msgstr "Çeşitli programlar tarafından oluşturulan geçiçi dosyaları sil"
+
+#: ../bleachbit/CleanerBackend.py:507
+msgid "The system in general"
+msgstr "Genel olarak sistem"
+
+#: ../bleachbit/GUI.py:101
 msgid "Check periodically for software updates via the Internet"
 msgstr ""
+"Belirli aralıklarla internetten programa ait güncellemeleri kontrol et"
 
-#: ../bleachbit/GUI.py:95
+#: ../bleachbit/GUI.py:104
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"Eğer bir güncelleştirme bulunursa size güncelleme hakkında bilgi "
+"görüntülenme seçeneği sunulacak. Böylece siz elle indirip güncellemeyi "
+"yükleyebilirsiniz."
 
-#: ../bleachbit/GUI.py:98
-msgid "Overwrite files to hide contents (ineffective in some situations)"
-msgstr ""
+#: ../bleachbit/GUI.py:107
+msgid "Hide irrelevant cleaners"
+msgstr "İlgisiz temizlikleri gizle"
 
-#: ../bleachbit/GUI.py:101
+#: ../bleachbit/GUI.py:112
+msgid "Overwrite files to hide contents"
+msgstr "İçerikleri gizlemek için dosyaların üzerine yaz"
+
+#: ../bleachbit/GUI.py:115
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"Üzerine yazma bazı dosya sistemlerinde ve belirli BleachBit operasyonlarında "
+"etkisizdir. Üzerine yazma önemli bir şekilde daha yavaştır."
 
-#: ../bleachbit/GUI.py:119
-msgid "All languages will be deleted except those checked."
-msgstr "Seçilen lisanların dışındaki bütün lisanları sil"
-
-#: ../bleachbit/GUI.py:137
+#: ../bleachbit/GUI.py:151
 msgid "Preserve"
-msgstr ""
+msgstr "Koru"
 
-#: ../bleachbit/GUI.py:141
+#: ../bleachbit/GUI.py:155
 msgid "Code"
-msgstr ""
+msgstr "Kod"
 
-#: ../bleachbit/GUI.py:145 ../bleachbit/GUI.py:247
+#: ../bleachbit/GUI.py:159 ../bleachbit/GUI.py:278
 msgid "Name"
-msgstr ""
+msgstr "İsim"
 
-#: ../bleachbit/GUI.py:167
+#: ../bleachbit/GUI.py:181
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Doğrulamayı sil"
 
-#: ../bleachbit/GUI.py:174
+#: ../bleachbit/GUI.py:189
 msgid ""
-"Are you sure you want to delete files according to the selected operations?  "
-"The actual files that will be deleted may have changed since you ran the "
-"preview.  Files cannot be undeleted."
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
 msgstr ""
+"Seçili operasyonlara göre dosyaları kalıcı olarak silmek istediğinizden emin "
+"misiniz? Önizlemeyi çalıştırdığınız süre boyunca, silinecek olan gerçek "
+"dosyalar değişmiş olabilir."
 
-#: ../bleachbit/GUI.py:255
+#: ../bleachbit/GUI.py:191
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Kalıcı olarak bu dosyaları silmek istediğinizden emin misiniz?"
+
+#: ../bleachbit/GUI.py:286
 msgid "Active"
-msgstr ""
+msgstr "Etkin"
 
-#: ../bleachbit/GUI.py:435 ../bleachbit/GUI.py:457
-#, python-format
-msgid "Exception while getting running operation '%s': '%s'"
-msgstr ""
-
-#: ../bleachbit/GUI.py:452
-msgid "Special operation: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:473
-msgid "You must select an operation"
-msgstr ""
-
-#: ../bleachbit/GUI.py:490
-msgid "Please wait.  Scanning and deleting: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:492
-msgid "Please wait.  Scanning: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:499
-msgid "Done."
-msgstr ""
-
-#: ../bleachbit/GUI.py:500
-msgid "Total size: "
-msgstr ""
-
-#: ../bleachbit/GUI.py:510
+#: ../bleachbit/GUI.py:476
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Gereksiz dosyaları temizleyen program"
 
-#: ../bleachbit/GUI.py:515
+#: ../bleachbit/GUI.py:481
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU (General Public License) Genel Açık Lisans versiyon 3 veya sonrası.\n"
+"Gözat http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:483
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Ckurdu https://launchpad.net/~ufuk-ckurdu\n"
 "  alperyilmaz https://launchpad.net/~alperyilmaz"
 
-#: ../bleachbit/GUI.py:556
-msgid "_Quit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:556
-msgid "Quit BleachBit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:557
-msgid "_File"
-msgstr ""
-
-#: ../bleachbit/GUI.py:558
-msgid "Configure BleachBit"
-msgstr ""
+#: ../bleachbit/GUI.py:517
+msgid "Choose files to shred"
+msgstr "Parçalanıcak dosyaları seç"
 
 #: ../bleachbit/GUI.py:560
-msgid "_Edit"
-msgstr ""
+msgid "_Shred Files"
+msgstr "Dosyaları Parça_la"
 
 #: ../bleachbit/GUI.py:561
-msgid "_About"
-msgstr ""
-
-#: ../bleachbit/GUI.py:561
-msgid "Show about"
-msgstr ""
+msgid "_Quit"
+msgstr "_Kapat"
 
 #: ../bleachbit/GUI.py:562
+msgid "_File"
+msgstr "_Dosya"
+
+#: ../bleachbit/GUI.py:564
+msgid "_Edit"
+msgstr "Düz_en"
+
+#: ../bleachbit/GUI.py:565
+msgid "_Release Notes"
+msgstr "_Sürüm Notları"
+
+#: ../bleachbit/GUI.py:566
+msgid "_About"
+msgstr "H_akkında"
+
+#: ../bleachbit/GUI.py:567
 msgid "_Help"
-msgstr ""
+msgstr "_Yardım"
 
-#: ../bleachbit/GUI.py:590
+#: ../bleachbit/GUI.py:596
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
-#: ../bleachbit/GUI.py:593
+#: ../bleachbit/GUI.py:599
 msgid "Delete files in the selected operations"
-msgstr ""
+msgstr "Seçili operasyonlardaki dosyaları sil"
 
-#: ../bleachbit/GUI.py:598
+#: ../bleachbit/GUI.py:604
 msgid "Preview"
-msgstr ""
+msgstr "Ön İzleme"
 
-#: ../bleachbit/GUI.py:601
+#: ../bleachbit/GUI.py:607
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"Seçili operasyonlardaki dosyaların önizlemesini yapın (Hiçbir dosya "
+"silinmeyecek)"
 
-#: ../bleachbit/GUI.py:674
+#: ../bleachbit/GUI.py:683
 msgid "Update BleachBit"
-msgstr ""
+msgstr "BleachBit'i güncelle"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:693
 msgid "BleachBit update is available"
-msgstr ""
+msgstr "BleachBit için bir güncelleme mevcut"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:693
 msgid "Click 'Update BleachBit' for more information"
-msgstr ""
+msgstr "Daha fazla bilgi için 'BleachBit'i güncelle' yi tıklayın"
 
-#: ../bleachbit/RecognizeCleanerML.py:50
+#: ../bleachbit/RecognizeCleanerML.py:64
 msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr ""
+"Aşağıdaki temizleme tanım dosyası değişmiş durumda. Kötü içerikli "
+"tanımlamalar bilgisayarınıza zarar verebilir."
 
-#: ../bleachbit/RecognizeCleanerML.py:52
+#: ../bleachbit/RecognizeCleanerML.py:66
 msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr ""
+"Aşağıdaki temizlik tanımlama dosyası yeni. Kötü niyetli tanımlamalar "
+"bilgisayarınıza zarar verebilir."
 
-#: ../bleachbit/Unix.py:330 ../bleachbit/Unix.py:467
+#: ../bleachbit/Unix.py:335 ../bleachbit/Unix.py:474
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "Çalıştırılabilir dosya bulunamadı : %s"
 
-#: ../bleachbit/Unix.py:465
+#: ../bleachbit/Unix.py:472
 msgid "Another process is currently using yum"
-msgstr ""
+msgstr "Diğer bir işlem aktif olarak yum'u kullanıyor"
 
-#: ../bleachbit/Update.py:69
+#: ../bleachbit/Update.py:74
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Güncellemeleri kontrol ederken bir hata meydana geldi "
+
+#: ../bleachbit/Worker.py:46
+msgid "You must select an operation"
+msgstr "Bir operasyon seçmelisiniz."
+
+#: ../bleachbit/Worker.py:85 ../bleachbit/Worker.py:106
+#, python-format
+msgid "Exception while running operation '%s': '%s'"
+msgstr "Operasyon sırasında bir istisna meydana geldi '%s': '%s'"
+
+#: ../bleachbit/Worker.py:102
+msgid "Special operation: "
+msgstr "Özel operasyon "
+
+#: ../bleachbit/Worker.py:146
+msgid "Please wait.  Scanning and deleting: "
+msgstr "Lütfen bekleyin. Dosyalar taranıp siliniyor. "
+
+#: ../bleachbit/Worker.py:149
+msgid "Please wait.  Scanning: "
+msgstr "Lütfen bekleyin. Dosyalar taranıyor. "
+
+#: ../bleachbit/Worker.py:162
+msgid "Done."
+msgstr "Tamamlandı."
+
+#: ../bleachbit/Worker.py:163
+msgid "Total size: "
+msgstr "Toplam boyut: "
