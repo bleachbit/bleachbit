@@ -88,7 +88,6 @@ class Action:
         """List special operations by previously-defined actions"""
         for action in self.actions:
             action_type = action[0]
-            action_path = os.path.expanduser(os.path.expandvars(action[1]))
             if action_type in ('list_children', 'list_file', 'list_glob'):
                 pass
             elif 'winreg' == action_type:
