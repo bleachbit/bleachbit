@@ -105,7 +105,7 @@ class Action:
                     str = key
                 if not ret:
                     # nothing to delete or nothing was deleted
-                    return
+                    continue
                 if really_delete:
                     yield (0, str)
                 else:
