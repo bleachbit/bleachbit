@@ -69,7 +69,7 @@ set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
 if not exist %CANARY% goto error
 
 echo Copying BleachBit cleaners
-xcopy cleaners dist\share\cleaners /i /s /q
+xcopy cleaners\*xml dist\share\cleaners\ /i /s /q
 
 echo Checking for CleanerML
 set CANARY=dist\share\cleaners\internet_explorer.xml
