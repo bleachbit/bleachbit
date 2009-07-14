@@ -39,10 +39,10 @@ del /q /s build > nul
 del /q /s dist > nul
 
 echo Pre-compressing executables
-for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% %UPX_OPTS% "%%e"
-for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% %UPX_OPTS% "%%e"
+if not "%1" == "fast" for /r %PYTHON_DIR% %%e in (*.pyd) do %UPX_EXE% %UPX_OPTS% "%%e"
+if not "%1" == "fast" for /r %GTK_DIR% %%e in (*.exe,*.dll) do %UPX_EXE% %UPX_OPTS% "%%e"
 REM do not pre-compress python25.dll because py2exe modifies it
-%UPX_EXE% %UPX_OPTS% %windir%\system32\pywintypes%PYTHON_VER%.dll
+if not "%1" == "fast" %UPX_EXE% %UPX_OPTS% %windir%\system32\pywintypes%PYTHON_VER%.dll
 
 echo Running py2exe
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
@@ -58,7 +58,7 @@ mkdir dist\share
 xcopy %GTK_DIR%\share dist\share /i /s /q
 
 echo Compressing executables
-for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
+if not "%1" == "fast" for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
 
 echo Purging unnecessary locales
 %PYTHON_DIR%\python.exe setup_clean.py
@@ -80,6 +80,7 @@ if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleane
 if exist dist\share\cleaners\wine.xml pause
 
 echo Recompressing library.zip with 7-Zip
+if "%1" == "fast" goto nsis
 if not exist %SZ_EXE% echo %SZ_EXE% does not exist
 if not exist %SZ_EXE% goto nsis
 
@@ -101,7 +102,8 @@ if not exist %CANARY% goto error
 
 :nsis
 echo Building installer
-%NSIS_EXE% bleachbit.nsi
+if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" bleachbit.nsi
+if not "%1" == "fast" %NSIS_EXE% bleachbit.nsi
 
 
 
