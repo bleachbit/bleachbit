@@ -637,20 +637,24 @@ class System(Cleaner):
                     'HKCU\Software\Microsoft\Search Assistant\ACMru',
                     # common open dialog
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
+                    # Windows Vista/7
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU',
                     # common save as dialog
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
+                    # Windows Vista/7
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU',
                     # find files command
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
-                    # map network drives
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
                     # find Computer command
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
+                    # map network drives
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
                     # printer ports
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU',
                     # recent documents in start menu
                     'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs',
                     # run command
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU')
+                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
                 for key in keys:
                     ret = Windows.delete_registry_key(key, really_delete)
                     if not ret:
