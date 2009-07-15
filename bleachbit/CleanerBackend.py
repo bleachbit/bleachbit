@@ -414,7 +414,6 @@ class OpenOfficeOrg(Cleaner):
             return
         dirs = []
         for prefix in self.prefixes:
-            dirs += FileUtilities.expand_glob_join(prefix, "user/uno_packages/cache/")
             dirs += FileUtilities.expand_glob_join(prefix, "user/registry/cache/")
         for dirname in dirs:
             for filename in children_in_directory(dirname, False):
