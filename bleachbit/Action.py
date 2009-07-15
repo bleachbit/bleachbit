@@ -91,6 +91,8 @@ class Action:
             if action_type in ('list_children', 'list_file', 'list_glob'):
                 pass
             elif 'winreg' == action_type:
+                if 'win32' != sys.platform:
+                    continue
                 key = action[1]
                 name = None
                 if len(action) > 2:
