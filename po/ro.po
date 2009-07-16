@@ -1,0 +1,657 @@
+# Romanian translation for bleachbit
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the bleachbit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bleachbit\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-07-05 11:32-0600\n"
+"PO-Revision-Date: 2009-07-16 10:09+0000\n"
+"Last-Translator: Catalin Fluturel <fkt@flexco.ro>\n"
+"Language-Team: Romanian <ro@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2009-07-16 14:56+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/seamonkey.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/epiphany.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/google_chrome.xml
+#: ../cleaners/amsn.xml ../cleaners/thumbnails.xml ../cleaners/java.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:155
+#: ../bleachbit/CleanerBackend.py:340 ../bleachbit/CleanerBackend.py:373
+#: ../bleachbit/CleanerBackend.py:489
+msgid "Cache"
+msgstr "Cache"
+
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Stergeti lista de game servere"
+
+#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+msgid "Game"
+msgstr "Joc"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
+msgid "Cookies"
+msgstr "Cookie-uri"
+
+#: ../cleaners/chromium.xml
+msgid "Current session"
+msgstr "Sesiune curenta"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/CleanerBackend.py:156
+msgid ""
+"Delete cookies, which contain information such as web site prefereneces, "
+"authentication, and tracking identification"
+msgstr ""
+"Stergeti cookie-urile - care contin informatii precum preferinte de website, "
+"date de autentificare si modalitati de urmarire"
+
+#: ../cleaners/chromium.xml
+msgid "Delete the current session"
+msgstr "Stergeti sesiunea curenta"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid ""
+"Delete the history, which includes bookmarks, downloads, and visited sites"
+msgstr ""
+"Stergeti istoricul - care include semnele de carte, descarcarile si site-"
+"urile vizitate"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../bleachbit/CleanerBackend.py:155
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Stergeti memoria cache - care reduce timpul in care sunt afisate paginile "
+"revizitate"
+
+#: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
+#: ../cleaners/bash.xml ../cleaners/links2.xml ../cleaners/elinks.xml
+msgid "History"
+msgstr "Istoric"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../bleachbit/CleanerBackend.py:174
+msgid "Web browser"
+msgstr "Navigator web"
+
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr ""
+
+#: ../cleaners/vim.xml ../cleaners/gedit.xml
+msgid "Editor"
+msgstr "Editor"
+
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/xine.xml
+#: ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/amsn.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/adobe_reader.xml ../cleaners/gftp.xml
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:340
+#: ../bleachbit/CleanerBackend.py:373 ../bleachbit/CleanerBackend.py:500
+msgid "Delete the cache"
+msgstr "Stergeti memoria cache"
+
+#: ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+msgid "Delete the logs"
+msgstr "Stergeti jurnalele de inregistrari"
+
+#: ../cleaners/miro.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml
+msgid "Logs"
+msgstr "Jurnale"
+
+#: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr ""
+
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Debug logs"
+msgstr "Jurnale de depanare"
+
+#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Delete the debug logs"
+msgstr "Stergeti jurnalele de depanare"
+
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../bleachbit/CleanerBackend.py:502
+msgid "Delete the most recently used list"
+msgstr "Stergeti lista celor mai recente utilizari"
+
+#: ../cleaners/audacious.xml
+msgid "Log"
+msgstr "Jurnal"
+
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../bleachbit/CleanerBackend.py:502
+msgid "Most recently used"
+msgstr "Cele mai recente utilizari"
+
+#: ../cleaners/mc.xml ../cleaners/links2.xml
+msgid "Delete the usage history"
+msgstr "Stergeti istoricul de utilizari"
+
+#: ../cleaners/mc.xml
+msgid "Visual shell for the console"
+msgstr ""
+
+#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Client chat"
+
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat logs"
+msgstr "Jurnale de chat"
+
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Delete the chat logs"
+msgstr "Stergeti jurnalele de chat"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Stergeti lista paginilor web vizitate"
+
+#: ../cleaners/beagle.xml
+msgid "Delete the search indexes"
+msgstr "Stergeti indexul cautarilor"
+
+#: ../cleaners/beagle.xml
+msgid "Search indexes"
+msgstr "Index cautare"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "Unealta de cautare"
+
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml
+msgid "File transfer client"
+msgstr ""
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:161
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"web sites"
+msgstr ""
+"O baza de date cu URL-uri - ce pot include semne de carte, icon-uri favorite "
+"si site-urile vizitate"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:160
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"O baza de date cu nume  de utilizator si parole, de asemenea o lista cu site-"
+"uri ce nu ar trebui sa stocheze parole"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:162
+msgid "Deleting Places deletes bookmarks."
+msgstr ""
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:160
+msgid "Passwords"
+msgstr "Parole"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:161
+msgid "Places"
+msgstr "Locații"
+
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Stergeti istoricul cautarilor"
+
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Istoricul căutărilor"
+
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Fişiere copie de siguranţă (backup)"
+
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Stergeti fisierele copiilor se siguranta (backup)"
+
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:341
+msgid "Delete the temporary files"
+msgstr "Stergeti fisierele temporare"
+
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:341 ../bleachbit/CleanerBackend.py:504
+msgid "Temporary files"
+msgstr "Fișiere temporare"
+
+#: ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr ""
+
+#: ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete the current and last sessions"
+msgstr "Stergeti sesiunea curenta si cea precedenta"
+
+#: ../cleaners/google_chrome.xml
+msgid "Session"
+msgstr "Sesiune"
+
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Miniaturi"
+
+#: ../cleaners/gimp.xml
+msgid "Image editor"
+msgstr "Editor imagini"
+
+#: ../cleaners/google_earth.xml
+msgid "Virtual globe viewer"
+msgstr ""
+
+#: ../cleaners/bash.xml
+msgid "Delete the command history"
+msgstr "Stergeti istoricul comenzilor"
+
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:374
+msgid "Delete the list of recently used documents"
+msgstr "Stergeti lista cu ultimele documente utilizate"
+
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:374
+#: ../bleachbit/CleanerBackend.py:497
+msgid "Recent documents list"
+msgstr "Lista cu documente recente"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Stergeti cookie-uri, URL-uri vizitate, si istoricul de cautare"
+
+#: ../cleaners/recoll.xml
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Stergeti indexul de cautare - o baza de date a cuvintelor cautate si a "
+"fisierelor ce le contin"
+
+#: ../cleaners/recoll.xml
+msgid "Index"
+msgstr "Index"
+
+#: ../bleachbit.desktop
+msgid "Unnecessary file cleaner"
+msgstr "Stergerea fisierelor care nu mai sunt necesare"
+
+#: ../bleachbit.desktop
+msgid "Free space and maintain privacy"
+msgstr "Spatiu liber si pastrarea intimitatii"
+
+#: ../bleachbit/CleanerBackend.py:157
+msgid "Download history"
+msgstr "Istoricul descarcarilor"
+
+#: ../bleachbit/CleanerBackend.py:157
+msgid "List of files downloaded"
+msgstr "Lista fisierelor descarcate"
+
+#: ../bleachbit/CleanerBackend.py:158
+msgid "Form history"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:158
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:159
+msgid "Session restore"
+msgstr "Restaurare sesiune"
+
+#: ../bleachbit/CleanerBackend.py:159
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr "Incarca sesiunea initiala dupa ce navigatorul web s-a inchis"
+
+#: ../bleachbit/CleanerBackend.py:163
+msgid "URL history"
+msgstr "Istoric URL-uri"
+
+#: ../bleachbit/CleanerBackend.py:163
+msgid "List of visited web pages"
+msgstr "Lista paginilor web vizitate"
+
+#: ../bleachbit/CleanerBackend.py:166
+msgid "Vacuum"
+msgstr "Vacuum"
+
+#: ../bleachbit/CleanerBackend.py:166
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:344
+msgid "KDE desktop environment"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:384
+msgid "Office suite"
+msgstr "Suita office"
+
+#: ../bleachbit/CleanerBackend.py:449
+msgid "Delete the files in the rpmbuild build directory"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:481 ../bleachbit/CleanerBackend.py:615
+#: ../bleachbit/CleanerBackend.py:617
+msgid "APT autoclean"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:481
+msgid "Run apt-get autoclean to delete old downloaded archive files"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:488
+msgid "Broken desktop files"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:488
+msgid "Delete broken application menu entries and file associations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:489
+msgid "Cache location specified by XDG and used by various applications"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:490
+msgid "Localizations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:490
+msgid "Data used to operate the system in various languages and countries"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:495
+msgid "Rotated logs"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:495
+msgid "Old system logs"
+msgstr "Vechi jurnale de sistem"
+
+#: ../bleachbit/CleanerBackend.py:496
+msgid "Trash"
+msgstr "Gunoi"
+
+#: ../bleachbit/CleanerBackend.py:496
+msgid "Temporary storage for deleted files"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:497
+msgid "A common list of recently used documents"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:500 ../bleachbit/CleanerBackend.py:663
+#: ../bleachbit/CleanerBackend.py:665
+msgid "Yum clean"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:503 ../bleachbit/CleanerBackend.py:625
+#: ../bleachbit/CleanerBackend.py:627
+msgid "Clipboard"
+msgstr "Clipboard"
+
+#: ../bleachbit/CleanerBackend.py:503
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:504
+msgid "Delete temporary files created by various programs"
+msgstr "Stergeti fisierele tempoare create de diverse programe"
+
+#: ../bleachbit/CleanerBackend.py:507
+msgid "The system in general"
+msgstr "Sistem in general"
+
+#: ../bleachbit/CleanerBackend.py:513
+msgid "System"
+msgstr "Sistem"
+
+#: ../bleachbit/FileUtilities.py:173
+msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
+msgstr ""
+
+#: ../bleachbit/GUI.py:72 ../bleachbit/GUI.py:563
+msgid "Preferences"
+msgstr "Preferinte"
+
+#: ../bleachbit/GUI.py:81
+msgid "General"
+msgstr "General"
+
+#: ../bleachbit/GUI.py:83
+msgid "Languages"
+msgstr ""
+
+#: ../bleachbit/GUI.py:101
+msgid "Check periodically for software updates via the Internet"
+msgstr "Verifica periodic, via Internet, aparitia unor noi versiuni"
+
+#: ../bleachbit/GUI.py:104
+msgid ""
+"If an update is found, you will be given the option to view information "
+"about it.  Then, you may manually download and install the update."
+msgstr ""
+"Daca este gasita o versiune noua, veti avea optiunea sa vedeti mai multe "
+"informatii despre aceasta. Dupa care, manual, puteti descarca si instala "
+"noua versiune."
+
+#: ../bleachbit/GUI.py:107
+msgid "Hide irrelevant cleaners"
+msgstr ""
+
+#: ../bleachbit/GUI.py:112
+msgid "Overwrite files to hide contents"
+msgstr ""
+
+#: ../bleachbit/GUI.py:115
+msgid ""
+"Overwriting is ineffective on some file systems and with certain BleachBit "
+"operations.  Overwriting is significantly slower."
+msgstr ""
+
+#: ../bleachbit/GUI.py:133
+msgid "All languages will be deleted except those checked."
+msgstr "Toate limbile vor fi sterse cu exceptia celor selectate."
+
+#: ../bleachbit/GUI.py:151
+msgid "Preserve"
+msgstr "Păstrează"
+
+#: ../bleachbit/GUI.py:155
+msgid "Code"
+msgstr "Cod"
+
+#: ../bleachbit/GUI.py:159 ../bleachbit/GUI.py:278
+msgid "Name"
+msgstr "Nume"
+
+#: ../bleachbit/GUI.py:181
+msgid "Delete confirmation"
+msgstr "Confirmare de stergere"
+
+#: ../bleachbit/GUI.py:189
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+
+#: ../bleachbit/GUI.py:191
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Esti sigur ca vrei stergi definitiv aceste fisiere ?"
+
+#: ../bleachbit/GUI.py:286
+msgid "Active"
+msgstr "Activ"
+
+#: ../bleachbit/GUI.py:476
+msgid "Program to clean unnecessary files"
+msgstr "Program de eliminare a fisierelor care nu mai sunt necesare"
+
+#: ../bleachbit/GUI.py:481
+msgid ""
+"GNU General Public License version 3 or later.\n"
+"See http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+
+#: ../bleachbit/GUI.py:483
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Catalin Fluturel https://launchpad.net/~fkt"
+
+#: ../bleachbit/GUI.py:517
+msgid "Choose files to shred"
+msgstr "Alegeti fisierele de distrus"
+
+#: ../bleachbit/GUI.py:560
+msgid "_Shred Files"
+msgstr "_Fisiere distruse"
+
+#: ../bleachbit/GUI.py:561
+msgid "_Quit"
+msgstr "_Iesire"
+
+#: ../bleachbit/GUI.py:562
+msgid "_File"
+msgstr "_Fisier"
+
+#: ../bleachbit/GUI.py:564
+msgid "_Edit"
+msgstr "_Editare"
+
+#: ../bleachbit/GUI.py:565
+msgid "_Release Notes"
+msgstr ""
+
+#: ../bleachbit/GUI.py:566
+msgid "_About"
+msgstr "_Despre"
+
+#: ../bleachbit/GUI.py:567
+msgid "_Help"
+msgstr "_Ajutor"
+
+#: ../bleachbit/GUI.py:596
+msgid "Delete"
+msgstr "Sterge"
+
+#: ../bleachbit/GUI.py:599
+msgid "Delete files in the selected operations"
+msgstr ""
+
+#: ../bleachbit/GUI.py:604
+msgid "Preview"
+msgstr "Previzualizare"
+
+#: ../bleachbit/GUI.py:607
+msgid "Preview files in the selected operations (without deleting any files)"
+msgstr ""
+
+#: ../bleachbit/GUI.py:683
+msgid "Update BleachBit"
+msgstr ""
+
+#: ../bleachbit/GUI.py:693
+msgid "BleachBit update is available"
+msgstr ""
+
+#: ../bleachbit/GUI.py:693
+msgid "Click 'Update BleachBit' for more information"
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:64
+msgid ""
+"The following cleaner definition file has changed.  Malicious definitions "
+"can damage your computer."
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:66
+msgid ""
+"The following cleaner definition file is new.  Malicious definitions can "
+"damage your computer."
+msgstr ""
+
+#: ../bleachbit/Unix.py:335 ../bleachbit/Unix.py:474
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Fisier exeeutabil negasit: %s"
+
+#: ../bleachbit/Unix.py:472
+msgid "Another process is currently using yum"
+msgstr "Un alt proces ruleaza in acest moment yum"
+
+#: ../bleachbit/Update.py:74
+msgid "Error when checking for updates: "
+msgstr ""
+
+#: ../bleachbit/Worker.py:46
+msgid "You must select an operation"
+msgstr "Trebuie sa alegeti o operatie"
+
+#: ../bleachbit/Worker.py:85 ../bleachbit/Worker.py:106
+#, python-format
+msgid "Exception while running operation '%s': '%s'"
+msgstr ""
+
+#: ../bleachbit/Worker.py:102
+msgid "Special operation: "
+msgstr "Operatie speciala: "
+
+#: ../bleachbit/Worker.py:146
+msgid "Please wait.  Scanning and deleting: "
+msgstr ""
+
+#: ../bleachbit/Worker.py:149
+msgid "Please wait.  Scanning: "
+msgstr ""
+
+#: ../bleachbit/Worker.py:162
+msgid "Done."
+msgstr "Gata."
+
+#: ../bleachbit/Worker.py:163
+msgid "Total size: "
+msgstr "Mărime totală: "
