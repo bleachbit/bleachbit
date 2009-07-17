@@ -79,7 +79,7 @@ class Worker:
                     yield True
                     start_time = time.time()
         except:
-            # Translators: This indicates an error.  The first %s
+            # TRANSLATORS: This indicates an error.  The first %s
             # may be 'firefox' (for example) and the second something
             # like 'Permission denied'
             err = _("Exception while running operation '%s': '%s'") \

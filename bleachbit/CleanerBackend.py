@@ -165,7 +165,7 @@ class Firefox(Cleaner):
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
         self.set_warning('places', _('Deleting Places deletes bookmarks.'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
-        # Translators: Vacuum is a verb.  You could translate the words
+        # TRANSLATORS: Vacuum is a verb.  You could translate the words
         # 'compact' or 'optimize' instead.
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
@@ -479,10 +479,10 @@ class System(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         if sys.platform == 'linux2':
-            # Translators: APT is a software program that manages
+            # TRANSLATORS: APT is a software program that manages
             # packages on Debian and Ubuntu.
             self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
-            # Translators: desktop entries are .desktop files in Linux tha
+            # TRANSLATORS: desktop entries are .desktop files in Linux tha
             # make up the application menu (the menu that shows BleachBit,
             # Firefox, and others.  The .desktop files also associate file
             # types, so clicking on an .html file in Nautilus brings up
@@ -491,15 +491,15 @@ class System(Cleaner):
             self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
             self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
             self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
-            # Translators: 'Rotated logs' refers to old system log files.
+            # TRANSLATORS: 'Rotated logs' refers to old system log files.
             # Linux systems often have a scheduled job to rotate the logs
             # which means compress all except the newest log and then delete
-            # the oldest log.
+            # the oldest log.  You could translate this 'old logs.'
             self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
             self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
             self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
-            # Translators: Yum is a software program that manages packages on
-            # CentOS, Fedora, and Red Hat.
+            # TRANSLATORS: Yum is a software program (similar to APT)
+            # that manages packages on CentOS, Fedora, and Red Hat.
             self.add_option('yum', _('Yum clean'), _("Delete the cache"))
         if sys.platform == 'win32':
             self.add_option('mru', _('Most recently used'), _('Delete the most recently used list'))

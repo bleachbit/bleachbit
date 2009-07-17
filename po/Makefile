@@ -24,7 +24,11 @@ desktop.pot: ../bleachbit.desktop
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 	@echo "* Generating $(APP).pot"
 	cat cleanerml.pot desktop.pot > $(APP).pot
-	xgettext -o $(APP).pot --join-existing --default-domain=$(APP) $(SRC)
+	xgettext -o $(APP).pot \
+		--join-existing \
+		--add-comments=TRANSLATORS \
+		--default-domain=$(APP) \
+		$(SRC)
 
 refresh-po: $(POTFILE)
 	@echo "* Refreshing .po files"
