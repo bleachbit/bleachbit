@@ -375,7 +375,7 @@ class OpenOfficeOrg(Cleaner):
         Cleaner.__init__(self)
         self.options = {}
         self.add_option('cache', _('Cache'), _('Delete the cache'))
-        self.add_option('recent_documents', _('Recent documents list'), _("Delete the list of recently used documents"))
+        self.add_option('recent_documents', _('Most recently used'), _("Delete the list of recently used documents"))
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if sys.platform == 'linux2':
@@ -489,22 +489,24 @@ class System(Cleaner):
             # Firefox.
             # More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
             self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
-            self.add_option('cache', _('Cache'), _('Cache location specified by XDG and used by various applications'))
-            self.add_option('localizations', _('Localizations'), _('Data used to operate the system in various languages and countries'))
+            self.add_option('cache', _('Cache'), _('Delete the cache'))
+            # TRANSLATORS: Localizations are files supporting specific
+            # languages, so applications appear in Spanish, etc.
+            self.add_option('localizations', _('Localizations'), _('Delete files for unwanted languages'))
             # TRANSLATORS: 'Rotated logs' refers to old system log files.
             # Linux systems often have a scheduled job to rotate the logs
             # which means compress all except the newest log and then delete
             # the oldest log.  You could translate this 'old logs.'
-            self.add_option('rotated_logs', _('Rotated logs'), _('Old system logs'))
-            self.add_option('trash', _('Trash'), _('Temporary storage for deleted files'))
-            self.add_option('recent_documents', _('Recent documents list'), _('A common list of recently used documents'))
+            self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
+            self.add_option('trash', _('Trash'), _('Empty the trash'))
+            self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             # TRANSLATORS: Yum is a software program (similar to APT)
             # that manages packages on CentOS, Fedora, and Red Hat.
             self.add_option('yum', _('Yum clean'), _("Delete the cache"))
         if sys.platform == 'win32':
-            self.add_option('mru', _('Most recently used'), _('Delete the most recently used list'))
+            self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        self.add_option('tmp', _('Temporary files'), _('Delete temporary files created by various programs'))
+        self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
     def get_description(self):
         return _("The system in general")

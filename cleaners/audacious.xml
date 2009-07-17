@@ -27,13 +27,13 @@
     <action type="children" directories="false">~/.cache/audacious/thumbs/</action>
   </option>
   <option id="log">
-    <label>Log</label>
+    <label>Logs</label>
     <description>Delete the logs</description>
     <action type="file">~/.config/audacious/log</action>
   </option>
   <option id="mru">
     <label>Most recently used</label>
-    <description>Delete the most recently used list</description>
+    <description>Delete the list of recently used documents</description>
     <action type="file">~/.config/audacious/playlist.xspf</action>
   </option>
 </cleaner>
