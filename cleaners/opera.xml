@@ -52,8 +52,10 @@
     <label>URL history</label>
     <description>List of visited web pages</description>
     <action type="file">~/.opera/global.dat</action>
+    <action type="file">~/.opera/typed_history.xml</action>
     <action type="file">~/.opera/vlink4.dat</action>
     <action type="file">$APPDATA\Opera\Opera\profile\global.dat</action>
+    <action type="file">$APPDATA\Opera\Opera\profile\typed_history.xml</action>
     <action type="file">$APPDATA\Opera\Opera\profile\vlink4.dat</action>
   </option>
 </cleaner>
