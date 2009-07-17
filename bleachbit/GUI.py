@@ -109,6 +109,8 @@ class PreferencesDialog:
         cb_auto_hide.connect('toggled', toggle_callback, 'auto_hide')
         vbox.pack_start(cb_auto_hide, False)
 
+        # TRANSLATORS: Overwriting is the same as shredding.  It is a way
+        # to prevent recovery of the data.
         cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', toggle_callback, 'shred')
