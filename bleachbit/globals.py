@@ -120,3 +120,28 @@ except:
         """Dummy replacement for gettext"""
         return msg
 
+
+###
+### XML
+###
+
+
+def boolstr_to_bool(value):
+    """Convert a string boolean to a Python boolean"""
+    if 'true' == value.lower():
+        return True
+    if 'false' == value.lower():
+        return False
+    raise RuntimeError('Invalid boolean: %s' % value)
+
+
+def getText(nodelist):
+    """Return the text data in an XML node 
+    http://docs.python.org/library/xml.dom.minidom.html"""
+    rc = ""
+    for node in nodelist:
+        if node.nodeType == node.TEXT_NODE:
+            rc = rc + node.data
+    return rc
+
+

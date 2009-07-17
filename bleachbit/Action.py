@@ -32,102 +32,205 @@ if 'win32' == sys.platform:
     import Windows
 
 
-class Action:
-    """Generic cleaning action"""
+
+###
+### Plugin framework
+### http://martyalchin.com/2008/jan/10/simple-plugin-framework/
+###
+
+class PluginMount(type):
+    """A simple plugin framework"""
+
+
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'plugins'):
+            cls.plugins = []
+        else:
+            cls.plugins.append(cls)
+
+
+
+class ActionProvider:
+    """Abstract base class for performing individual cleaning actions"""
+    __metaclass__ = PluginMount
+
+
+    def __init__(self, action_node):
+        """Create ActionProvider from CleanerML <action>"""
+        pass
+
+
+    def list_files(self):
+        """Yield each pathname to be deleted"""
+        raise StopIteration
+
+
+    def other_cleanup(self, really_delete):
+        """Perform specialized cleanup (more complex than deleting a file)"""
+        raise StopIteration
+
+
+
+###
+### Action providers
+###
+
+class Children(ActionProvider):
+    """Action to list a directory"""
+    action_key = 'children'
+
+
+    def __init__(self, action_element):
+        self.rootpath = globals.getText(action_element.childNodes)
+        self.rootpath = os.path.expanduser(os.path.expandvars(self.rootpath))
+        del_dir_str = action_element.getAttribute('directories')
+        self.del_dir = globals.boolstr_to_bool(del_dir_str)
+
+
+    def list_files(self):
+        for pathname in children_in_directory(self.rootpath, self.del_dir):
+            yield pathname
+
+
+
+class File(ActionProvider):
+    """Action to list a single file"""
+    action_key = 'file'
+
+
+    def __init__(self, action_element):
+        self.pathname = globals.getText(action_element.childNodes)
+
+
+    def list_files(self):
+        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
+        if os.path.lexists(expanded):
+            yield expanded
+
+
+
+class Glob(ActionProvider):
+    """Action to list files by Unix-shell-like glob"""
+    action_key = 'glob'
+
+
+    def __init__(self, action_element):
+        self.pathname = globals.getText(action_element.childNodes)
+
+
+    def list_files(self):
+        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
+        for pathname in glob.iglob(expanded):
+            yield pathname
+
+
+
+class Winreg(ActionProvider):
+    """Action to clean the Windows Registry"""
+    action_key = 'winreg'
+
+    def __init__(self, action_element):
+        self.keyname = globals.getText(action_element.childNodes)
+        self.name = action_element.getAttribute('name')
+
+
+    def other_cleanup(self, really_delete):
+        name = None
+        _str = None # string representation
+        ret = None # return value meaning 'deleted' or 'delete-able'
+        if name:
+            _str = '%s<%s>' % (self.keyname, name)
+            ret = Windows.delete_registry_value(self.keyname, name, really_delete)
+        else:
+            ret = Windows.delete_registry_key(self.keyname, really_delete)
+            _str = self.keyname
+        if not ret:
+            # nothing to delete or nothing was deleted
+            return
+        if really_delete:
+            yield (0, _str)
+        else:
+            yield _str
+
+
+###
+### ActionContainer class
+###
+
+class ActionContainer:
+    """Generic cleaning action which may execute multiple
+       action providers"""
+
 
     def __init__(self):
         """Initialize"""
-        self.actions = []
+        self.providers = []
 
 
-    def add_list_children(self, pathname, list_directories = False):
-        """Add action to list children of 'pathname'"""
-        self.actions += ( ('list_children', pathname, list_directories), )
-
-
-    def add_list_file(self, pathname):
-        """Add action to list 'pathname'"""
-        self.actions += ( ('list_file', pathname), )
-
-
-    def add_list_glob(self, pathname):
-        """Add action to list files by glob of 'pathname'"""
-        self.actions += ( ('list_glob', pathname), )
-
-
-    def add_windows_registry(self, key, name = None):
-        """Add action to delete a Windows registry key or named value"""
-        self.actions += ( ('winreg', key, name), )
+    def add_action_provider(self, actionprovider):
+        """Add action provider"""
+        self.providers += ( actionprovider, )
 
 
     def list_files(self):
         """List files by previously-defined actions
         (those actions which list files for deletion)"""
-        for action in self.actions:
-            action_type = action[0]
-            action_path = os.path.expanduser(os.path.expandvars(action[1]))
-            if 'list_children' == action_type:
-                rootpath = action_path
-                directories = action[2]
-                for pathname in children_in_directory(rootpath, directories):
-                    yield pathname
-            elif 'list_file' == action_type:
-                pathname = action_path
-                if os.path.lexists(pathname):
-                    yield pathname
-            elif 'list_glob' == action_type:
-                for pathname in glob.iglob(action_path):
-                  yield pathname
-            elif 'winreg' == action_type:
-                pass
-            else:
-                raise RuntimeError("Unknown action type: '%s'" % action_type)
+        for provider in self.providers:
+            for pathname in provider.list_files():
+                yield pathname
 
 
     def other_cleanup(self, really_delete = False):
         """List special operations by previously-defined actions"""
-        for action in self.actions:
-            action_type = action[0]
-            if action_type in ('list_children', 'list_file', 'list_glob'):
-                pass
-            elif 'winreg' == action_type:
-                if 'win32' != sys.platform:
-                    continue
-                key = action[1]
-                name = None
-                if len(action) > 2:
-                    name = action[2]
-                str = None # string representation
-                ret = None # return value meaning 'deleted' or 'delete-able'
-                if name:
-                    str = '%s<%s>' % (key, name)
-                    ret = Windows.delete_registry_value(key, name, really_delete)
-                else:
-                    ret = Windows.delete_registry_key(key, really_delete)
-                    str = key
-                if not ret:
-                    # nothing to delete or nothing was deleted
-                    continue
-                if really_delete:
-                    yield (0, str)
-                else:
-                    yield str
-            else:
-                raise RuntimeError("Unknown action type: '%s'" % action_type)
+        for provider in self.providers:
+            for ret in provider.other_cleanup(really_delete):
+                yield ret
 
 
 import unittest
 
 class TestAction(unittest.TestCase):
+    """Test case for module Action"""
 
-    def test_Action(self):
-        action = Action()
-        action.add_list_children('/bin')
-        action.add_list_children('/sbin')
-        action.add_list_file('~/.bash_history')
-        action.add_list_glob('/sbin/fsck*')
-        for pathname in action.list_files():
-            self.assert_(os.path.lexists(pathname))
+
+    def setUp(self):
+        """Prepare for unit tests"""
+        self.actions = []
+        if 'linux2' == sys.platform:
+            self.actions.append('<action type="file">~/.bash_history</action>')
+            self.actions.append('<action type="glob">/sbin/*sh</action>')
+            self.actions.append('<action type="children" directories="false">/sbin/</action>')
+            self.actions.append('<action type="children" directories="true">/var/log/</action>')
+        if 'win32' == sys.platform:
+            self.actions.append('<action type="file">$WINDIR\\notepad.exe</action>')
+            self.actions.append('<action type="glob">$WINDIR\\system32\\*.dll</action>')
+            self.actions.append( \
+                '<action type="children" directories="false">$WINDIR\\system\\</action>')
+            self.actions.append( \
+                '<action type="children" directories="true">$WINDIR\\system32\\</action>')
+
+        self.assert_(len(self.actions) > 0)
+
+
+    def test_ActionContainer(self):
+        """Test class ActionContainer"""
+        from xml.dom.minidom import parseString
+        for action_str in self.actions:
+            container = ActionContainer()
+            dom = parseString(action_str)
+            action_node = dom.childNodes[0]
+            atype = action_node.getAttribute('type')
+            provider = None
+            for actionplugin in ActionProvider.plugins:
+                if actionplugin.action_key == atype:
+                    provider = actionplugin(action_node)
+            container.add_action_provider(provider)
+            pathname = container.list_files().next()
+            self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
+            for pathname in container.list_files():
+                self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
+            for pathname in container.other_cleanup(really_delete = False):
+                self.assert_(type(pathname) is str)
 
 
 if __name__ == '__main__':

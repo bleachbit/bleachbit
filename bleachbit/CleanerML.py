@@ -27,27 +27,10 @@ import traceback
 import xml.dom.minidom
 
 import globals
+from globals import  boolstr_to_bool, getText
 import CleanerBackend
-from Action import Action
+from Action import ActionContainer, ActionProvider
 from FileUtilities import listdir
-
-
-def getText(nodelist):
-    """"http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = ""
-    for node in nodelist:
-        if node.nodeType == node.TEXT_NODE:
-            rc = rc + node.data
-    return rc
-
-
-def boolstr_to_bool(value):
-    """Convert a string boolean to a Python boolean"""
-    if 'true' == value.lower():
-        return True
-    if 'false' == value.lower():
-        return False
-    raise RuntimeError('Invalid boolean: %s' % value)
 
 
 class CleanerML:
@@ -121,7 +104,7 @@ class CleanerML:
         """<option> elements"""
         for option in options:
 
-            self.action = Action()
+            self.action = ActionContainer()
             self.option_id = option.getAttribute('id')
             self.option_description = None
             self.option_name = None
@@ -158,22 +141,14 @@ class CleanerML:
         self.option_warning = _(getText(warning.childNodes))
         self.xlate_cb(self.option_warning)
 
-    def handle_cleaner_option_action(self, action):
+    def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""
-        atype = action.getAttribute('type')
-        aname = action.getAttribute('name')
-        pathname = getText(action.childNodes)
-        if 'children' == atype:
-            children = boolstr_to_bool(action.getAttribute('directories'))
-            self.action.add_list_children(pathname, children)
-        elif 'file' == atype:
-            self.action.add_list_file(pathname)
-        elif 'glob' == atype:
-            self.action.add_list_glob(pathname)
-        elif 'winreg' == atype:
-            self.action.add_windows_registry(pathname, aname)
-        else:
-            raise RuntimeError("Invalid action type '%s'" % atype)
+        atype = action_node.getAttribute('type')
+        provider = None
+        for actionplugin in ActionProvider.plugins:
+            if actionplugin.action_key == atype:
+                provider = actionplugin(action_node)
+        self.action.add_action_provider(provider)
 
 
 def list_cleanerml_files(local_only = False):
