@@ -79,11 +79,13 @@ class Worker:
                     yield True
                     start_time = time.time()
         except:
-            # TRANSLATORS: This indicates an error.  The first %s
-            # may be 'firefox' (for example) and the second something
-            # like 'Permission denied'
-            err = _("Exception while running operation '%s': '%s'") \
-                % (operation, str(sys.exc_info()[1]))
+            # TRANSLATORS: This indicates an error.  The special
+            # keyword %(operation)s will be replaced by 'firefox'
+            # or 'opera' or some other cleaner ID.  The special
+            # keyword %(msg)s will be replaced by a message like
+            # 'Permission denied.'
+            err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
+                %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
             print err
             traceback.print_exc()
             self.gui.append_text(err + "\n", 'error', self.__iter)
@@ -103,8 +105,8 @@ class Worker:
                 self.gui.textbuffer.insert(self.__iter, line)
                 yield True
         except:
-            err = _("Exception while running operation '%s': '%s'") \
-                % (operation, str(sys.exc_info()[1]))
+            err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
+                %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
             print err
             traceback.print_exc()
             self.gui.append_text(err + "\n", 'error', self.__iter)
