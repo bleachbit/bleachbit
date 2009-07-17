@@ -101,6 +101,13 @@ def delete_registry_key(parent_key, really_delete):
     return True
 
 
+def get_fixed_drives():
+    """Yield each fixed drive"""
+    for drive in win32api.GetLogicalDriveStrings().split('\x00'):
+        if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
+            yield drive
+
+
 def empty_recycle_bin(really_delete):
     """Empty the recycle bin or preview its size"""
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):
@@ -184,6 +191,15 @@ class TestWindows(unittest.TestCase):
         self.assertEqual(delete_registry_value('HKCU\\' + key, 'doesnotexist', True), False)
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, False), False)
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, True), False)
+
+
+    def test_get_fixed_drives(self):
+        """Unit test for get_fixed_drives"""
+        drives = []
+        for drive in get_fixed_drives():
+            drives.append(drive)
+        print drives
+        self.assert_("c:\\" in drives)
 
 
     def test_empty_recycle_bin(self):
