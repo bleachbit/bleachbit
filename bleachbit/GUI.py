@@ -104,13 +104,18 @@ class PreferencesDialog:
             self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
+        # TRANSLATORS: This means to hide cleaners which would do
+        # nothing.  For example, if Firefox were never used on
+        # this system, this option would hide Firefox to simplify
+        # the list of cleaners.
         cb_auto_hide = gtk.CheckButton(_("Hide irrelevant cleaners"))
         cb_auto_hide.set_active(options.get('auto_hide'))
         cb_auto_hide.connect('toggled', toggle_callback, 'auto_hide')
         vbox.pack_start(cb_auto_hide, False)
 
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
-        # to prevent recovery of the data.
+        # to prevent recovery of the data. You could also translate
+        # 'Shred files to prevent recovery.'
         cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', toggle_callback, 'shred')
@@ -482,6 +487,10 @@ class GUI:
         except:
             dialog.set_license(_("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
         dialog.set_name(APP_NAME)
+        # TRANSLASTORS: Maintain the names of translators here.
+        # Launchpad does this automatically for translations
+        # typed in Launchpad. This is a special string shown 
+        # in the 'About' box.
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_version(APP_VERSION)
         dialog.set_website(APP_URL)
