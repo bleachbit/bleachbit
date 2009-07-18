@@ -116,6 +116,7 @@ def empty_recycle_bin(really_delete):
             if really_delete:
                 flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
                 shell.SHEmptyRecycleBin(None, drive, flags)
+                # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
                 yield (bytes, _("Recycle bin %s") % drive)
             else:
                 yield _("Recycle bin %s") % drive
