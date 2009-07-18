@@ -22,6 +22,7 @@
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
   <description>Web browser</description>
+  <running type="exe">chrome.exe</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
