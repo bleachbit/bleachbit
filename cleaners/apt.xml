@@ -21,8 +21,8 @@
 -->
 <cleaner id="apt" os="linux">
   <label>APT</label>
-  <running type="exe">apt-get</action>
-  <running type="exe">synaptic</action> <!-- gnome-app-install uses synaptic -->
+  <running type="exe">apt-get</running>
+  <running type="exe">synaptic</running> <!-- gnome-app-install uses synaptic -->
   <option id="cache">
     <!-- The same as 'apt-get clean'.  See 'man apt-get'. -->
     <label>Cache</label>
