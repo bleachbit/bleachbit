@@ -384,6 +384,9 @@ class GUI:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:
             self.textbuffer.insert(__iter, text)
+        # scroll to end
+        self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+
 
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""
@@ -655,10 +658,10 @@ class GUI:
         self.textbuffer = gtk.TextBuffer()
         swindow = gtk.ScrolledWindow()
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        textview = gtk.TextView(self.textbuffer)
-        textview.set_editable(False)
-        textview.set_wrap_mode(gtk.WRAP_WORD)
-        swindow.add(textview)
+        self.textview = gtk.TextView(self.textbuffer)
+        self.textview.set_editable(False)
+        self.textview.set_wrap_mode(gtk.WRAP_WORD)
+        swindow.add(self.textview)
         right_box.add(swindow)
         hbox.add(right_box)
 

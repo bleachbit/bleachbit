@@ -108,7 +108,7 @@ class Worker:
                         self.total_size_cb(self.total_bytes)
                 else:
                     line = _("Special operation: ") + ret + "\n"
-                self.gui.textbuffer.insert(self.__iter, line)
+                self.gui.append_text(line)
                 yield True
         except:
             err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
@@ -168,7 +168,8 @@ class Worker:
         self.gui.progressbar.set_text("")
         self.gui.progressbar.set_fraction(1)
         self.gui.progressbar.set_text(_("Done."))
-        self.gui.textbuffer.insert(self.__iter, "\n" + _("Total size: ") \
-             + FileUtilities.bytes_to_human(self.total_bytes))
+        self.gui.append_text("\n%s%s" % ( _("Total size: "), \
+             FileUtilities.bytes_to_human(self.total_bytes)))
+        self.gui.textview.scroll_mark_onscreen(self.gui.textbuffer.get_insert())
         self.gui.set_sensitive(True)
 
