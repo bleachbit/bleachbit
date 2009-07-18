@@ -33,6 +33,22 @@
           </xs:complexType>
         </xs:element>
         <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="running" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="type" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:enumeration value="exe"/>
+                      <xs:enumeration value="pathname"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="option" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
@@ -46,6 +62,7 @@
                       <xs:attribute name="type" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
+                            <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="children"/>
                             <xs:enumeration value="glob"/>
                             <xs:enumeration value="file"/>
