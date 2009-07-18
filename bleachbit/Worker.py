@@ -63,6 +63,12 @@ class Worker:
 
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
+        if backends[operation].is_running() and self.really_delete:
+            # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+            err = "%s cannot be cleaned because it is currently running" \
+                % backends[operation].get_name()
+            self.gui.append_text(err + "\n", 'error', self.__iter)
+            return
         operation_options = self.gui.get_operation_options(operation)
         print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
         if operation_options:

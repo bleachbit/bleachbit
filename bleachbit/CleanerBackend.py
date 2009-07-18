@@ -53,6 +53,7 @@ class Cleaner:
         self.description = None
         self.name = None
         self.options = {}
+        self.running = []
         self.warnings = {}
 
     def add_action(self, option_id, action):
@@ -62,6 +63,10 @@ class Cleaner:
 
     def add_option(self, option_id, name, description):
         self.options[option_id] = ( name, False, description )
+
+    def add_running(self, type, pathname):
+        """Add a way to detect this program is currently running"""
+        self.running += ( (type, pathname), )
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -120,6 +125,20 @@ class Cleaner:
         else:
             return None
 
+    def is_running(self):
+        """Return whether the program is currently running"""
+        for running in self.running:
+            type = running[0]
+            pathname = running[1]
+            if 'pathname' == type:
+                expanded = os.path.expanduser(os.path.expandvars(pathname))
+                for globbed in glob.iglob(expanded):
+                    if os.path.exists(globbed):
+                        return True
+            else:
+                raise RuntimeError("Unknown running-detection type '%s'" % type)
+        return False
+
     def is_usable(self):
         """Return whether the cleaner is usable (has actions)"""
         return len(self.actions) > 0
@@ -171,8 +190,11 @@ class Firefox(Cleaner):
 
         if sys.platform == 'linux2':
             self.profile_dir = "~/.mozilla/firefox*/*/"
+            self.add_running('pathname', self.profile_dir + 'lock')
+            self.add_running('pathname', self.profile_dir + '.parentlock')
         if sys.platform == 'win32':
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
+            self.add_running('pathname', self.profile_dir + 'parent.lock')
 
     def get_description(self):
         return _("Web browser")

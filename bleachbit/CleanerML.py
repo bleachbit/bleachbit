@@ -84,6 +84,7 @@ class CleanerML:
         if description and description[0].parentNode == cleaner:
             self.handle_cleaner_description(description[0])
         self.handle_cleaner_options(cleaner.getElementsByTagName('option'))
+        self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
 
 
     def handle_cleaner_label(self, label):
@@ -98,6 +99,15 @@ class CleanerML:
         """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
         self.xlate_cb(self.cleaner.description)
+
+
+    def handle_cleaner_running(self, running_elements):
+        """<running> element under <cleaner>"""
+        # example: <running type="command">opera</running>
+        for running in running_elements:
+            type = running.getAttribute('type')
+            value = getText(running.childNodes)
+            self.cleaner.add_running(type, value)
 
 
     def handle_cleaner_options(self, options):
