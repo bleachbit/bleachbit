@@ -253,8 +253,8 @@ class TestWindows(unittest.TestCase):
         drives = []
         for drive in get_fixed_drives():
             drives.append(drive)
-        print drives
-        self.assert_("c:\\" in drives)
+            self.assertEqual(drive, drive.upper())
+        self.assert_("C:\\" in drives)
 
 
     def test_empty_recycle_bin(self):
