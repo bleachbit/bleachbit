@@ -22,6 +22,7 @@
 <cleaner id="epiphany" os="linux">
   <label>Epiphany</label>
   <description>Web browser</description>
+  <running type="exe">epiphany</running>
   <running type="pathname">~/.gnome2/epiphany/mozilla/epiphany/.parentlock</running>
   <running type="pathname">~/.gnome2/epiphany/mozilla/epiphany/lock</running>
   <option id="cache">

@@ -433,6 +433,23 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
+def is_running(exename):
+    """Check whether exename is running"""
+    for filename in glob.iglob("/proc/*/exe"):
+        try:
+            target = os.path.realpath(filename)
+        except TypeError:
+            # happens, for example, when link points to
+            # '/etc/password\x00 (deleted)'
+            continue
+        except OSError:
+            # 13 = permission denied
+            continue
+        if exename == os.path.basename(target):
+            return True
+    return False
+
+
 def rotated_logs():
     """Yield a list of rotated (i.e., old) logs in /var/log/"""
     # Ubuntu 9.04
@@ -525,6 +542,11 @@ class TestUnix(unittest.TestCase):
             for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False) \
                 if fn.endswith('.desktop')]:
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+
+
+    def test_is_running(self):
+        exe = os.path.basename(sys.executable)
+        self.assertEqual(True, is_running(exe))
 
 
     def test_iterate_languages(self):

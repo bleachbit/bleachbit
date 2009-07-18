@@ -130,7 +130,10 @@ class Cleaner:
         for running in self.running:
             type = running[0]
             pathname = running[1]
-            if 'pathname' == type:
+            if 'exe' == type and sys.platform == 'linux2':
+                if Unix.is_running(pathname):
+                    return True
+            elif 'pathname' == type:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
@@ -190,6 +193,8 @@ class Firefox(Cleaner):
 
         if sys.platform == 'linux2':
             self.profile_dir = "~/.mozilla/firefox*/*/"
+            self.add_running('exe', 'firefox')
+            self.add_running('exe', 'firefox-bin')
             self.add_running('pathname', self.profile_dir + 'lock')
             self.add_running('pathname', self.profile_dir + '.parentlock')
         if sys.platform == 'win32':
