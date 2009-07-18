@@ -133,6 +133,9 @@ class Cleaner:
             if 'exe' == type and sys.platform == 'linux2':
                 if Unix.is_running(pathname):
                     return True
+            elif 'exe' == type and sys.platform == 'win32':
+                if pathname in Windows.enumerate_processes():
+                    return True
             elif 'pathname' == type:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
@@ -199,6 +202,7 @@ class Firefox(Cleaner):
             self.add_running('pathname', self.profile_dir + '.parentlock')
         if sys.platform == 'win32':
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
+            self.add_running('exe', 'firefox.exe')
             self.add_running('pathname', self.profile_dir + 'parent.lock')
 
     def get_description(self):

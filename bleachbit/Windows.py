@@ -44,7 +44,13 @@ if 'win32' == sys.platform:
     import _winreg
     import win32api
     import win32file
-    from win32com.shell import shell,shellcon
+    import win32process
+
+    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
+    from win32com.shell import shell, shellcon
+
+    psapi = windll.psapi
+    kernel = windll.kernel32
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -99,6 +105,44 @@ def delete_registry_key(parent_key, really_delete):
         delete_registry_key(child_key, True)
     _winreg.DeleteKey(hive, parent_sub_key)
     return True
+
+
+def enumerate_processes():
+    """Return list of module names (e.g., firefox.exe) of running
+    processes
+
+    Originally by Eric Koome
+    license GPL
+    http://code.activestate.com/recipes/305279/
+    """
+
+    hModule = c_ulong()
+    count = c_ulong()
+    modname = c_buffer(30)
+    PROCESS_QUERY_INFORMATION = 0x0400
+    PROCESS_VM_READ = 0x0010
+
+    modnames = []
+
+    for pid in win32process.EnumProcesses():
+
+        # Get handle to the process based on PID
+        hProcess = kernel.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                                      False, pid)
+        if hProcess:
+            psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
+            psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
+            clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
+            if len(clean_modname) > 0:
+                modnames.append(clean_modname)
+
+            # Clean up
+            for i in range(modname._length_):
+                modname[i]='\x00'
+
+            kernel.CloseHandle(hProcess)
+
+    return modnames
 
 
 def get_fixed_drives():
@@ -192,6 +236,16 @@ class TestWindows(unittest.TestCase):
         self.assertEqual(delete_registry_value('HKCU\\' + key, 'doesnotexist', True), False)
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, False), False)
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, True), False)
+
+
+    def test_enumerate_processes(self):
+        processes = enumerate_processes()
+        for process in processes:
+            self.assertEqual(process, process.lower())
+            self.assert_(len(process) > 0)
+        expected = ('lsass.exe', 'services.exe', 'svchost.exe')
+        for exp in expected:
+            self.assert_(exp in processes)
 
 
     def test_get_fixed_drives(self):
