@@ -302,8 +302,8 @@ class Locales:
         for (globpath, regex) in globexs:
             for (locale_code, path) in locale_globex(globpath, regex):
                 language_code = locale_to_language(locale_code)
-        if 'mb' == language_code: # not a real code but found in espeak Ubuntu 9.04
-            continue
+                if 'mb' == language_code: # not a real code but found in espeak Ubuntu 9.04
+                    continue
                 if None != language_filter and language_filter(locale_code, language_code):
                     continue
                 yield path
