@@ -19,12 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="apt-get" os="linux">
-  <label>apt-get</label>
-  <description>APT package handling utility</description>
-  <option id="Cache">
+<cleaner id="apt" os="linux">
+  <label>APT</label>
+  <running type="exe">apt-get</action>
+  <running type="exe">synaptic</action> <!-- gnome-app-install uses synaptic -->
+  <option id="cache">
+    <!-- The same as 'apt-get clean'.  See 'man apt-get'. -->
     <label>Cache</label>
     <description>Delete the cache</description>
     <action type="glob">/var/cache/apt/archives/*deb</action>
+    <action type="glob">/var/cache/apt/archives/partial/*deb</action>
   </option>
 </cleaner>
