@@ -26,7 +26,7 @@ import os
 import sys
 
 import globals
-from FileUtilities import children_in_directory
+import FileUtilities
 
 if 'win32' == sys.platform:
     import Windows
@@ -75,6 +75,26 @@ class ActionProvider:
 ### Action providers
 ###
 
+
+class AptAutoclean(ActionProvider):
+    """Action to run 'apt-get autoclean'"""
+    action_key = 'apt.autoclean'
+
+
+    def __init__(self, action_element):
+        pass
+
+
+    def other_cleanup(self, really_delete):
+        if really_delete:
+            import Unix
+            yield (Unix.apt_autoclean(), _("APT autoclean"))
+        else:
+            # Checking allows auto-hide to work for non-APT systems
+            if FileUtilities.exe_exists('apt-get'):
+                yield _("APT autoclean")
+
+
 class Children(ActionProvider):
     """Action to list a directory"""
     action_key = 'children'
@@ -88,7 +108,7 @@ class Children(ActionProvider):
 
 
     def list_files(self):
-        for pathname in children_in_directory(self.rootpath, self.del_dir):
+        for pathname in FileUtilities.children_in_directory(self.rootpath, self.del_dir):
             yield pathname
 
 

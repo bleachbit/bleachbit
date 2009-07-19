@@ -510,9 +510,6 @@ class System(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
         if sys.platform == 'linux2':
-            # TRANSLATORS: APT is a software program that manages
-            # packages on Debian and Ubuntu.
-            self.add_option('apt-autoclean', _('APT autoclean'), _('Run apt-get autoclean to delete old downloaded archive files'))
             # TRANSLATORS: desktop entries are .desktop files in Linux tha
             # make up the application menu (the menu that shows BleachBit,
             # Firefox, and others.  The .desktop files also associate file
@@ -645,13 +642,6 @@ class System(Cleaner):
                 yield filename
 
     def other_cleanup(self, really_delete):
-        if sys.platform == 'linux2' and self.options["apt-autoclean"][1]:
-            if really_delete:
-                bytes = Unix.apt_autoclean()
-                yield (bytes, _("APT autoclean"))
-            else:
-                yield _("APT autoclean")
-
         if self.options["clipboard"][1]:
             if really_delete:
                 gtk.gdk.threads_enter()

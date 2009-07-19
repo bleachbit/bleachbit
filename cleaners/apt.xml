@@ -23,11 +23,16 @@
   <label>APT</label>
   <running type="exe">apt-get</running>
   <running type="exe">synaptic</running> <!-- gnome-app-install uses synaptic -->
-  <option id="cache">
-    <!-- The same as 'apt-get clean'.  See 'man apt-get'. -->
-    <label>Cache</label>
+  <option id="clean">
+    <label>clean</label>
     <description>Delete the cache</description>
     <action type="glob">/var/cache/apt/archives/*deb</action>
     <action type="glob">/var/cache/apt/archives/partial/*deb</action>
   </option>
+  <option id="autoclean">
+    <label>autoclean</label>
+    <description>Delete obsolete files</description>
+    <action type="apt.autoclean" />
+  </option>
+
 </cleaner>
