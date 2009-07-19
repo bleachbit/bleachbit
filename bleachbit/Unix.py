@@ -345,6 +345,7 @@ def apt_autoclean():
         line = process.stdout.readline().replace("\n", "")
         if line.startswith('E: '):
             raise RuntimeError(line)
+        # Del cups-common 1.3.9-17ubuntu3 [1165kB]
         match = re.search("^Del .*\[([0-9.]+[a-zA-Z]{2})\]", line)
         if match:
             pkg_bytes_str = match.groups(0)[0]
