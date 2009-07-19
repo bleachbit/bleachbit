@@ -517,7 +517,8 @@ def wine_to_linux_path(wineprefix, windows_pathname):
 def yum_clean():
     """Run 'yum clean all' and return size in bytes recovered"""
     if os.path.exists('/var/run/yum.pid'):
-        raise RuntimeError(_("Another process is currently using yum"))
+        msg = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
+        raise RuntimeError(msg)
     if not FileUtilities.exe_exists('yum'):
         raise RuntimeError(_('Executable not found: %s') % 'yum')
     old_size = FileUtilities.getsizedir('/var/cache/yum')
