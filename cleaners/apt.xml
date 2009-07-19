@@ -22,7 +22,8 @@
 <cleaner id="apt" os="linux">
   <label>APT</label>
   <running type="exe">apt-get</running>
-  <running type="exe">synaptic</running> <!-- gnome-app-install uses synaptic -->
+  <running type="exe">synaptic</running>
+  <!-- gnome-app-install uses synaptic -->
   <option id="clean">
     <label translate="false">clean</label>
     <description>Delete the cache</description>
@@ -32,7 +33,6 @@
   <option id="autoclean">
     <label translate="false">autoclean</label>
     <description>Delete obsolete files</description>
-    <action type="apt.autoclean" />
+    <action type="apt.autoclean"/>
   </option>
-
 </cleaner>
