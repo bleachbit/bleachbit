@@ -43,6 +43,7 @@ from gettext import gettext as _
 if 'win32' == sys.platform:
     import _winreg
     import win32api
+    import win32con
     import win32file
     import win32process
 
@@ -51,6 +52,12 @@ if 'win32' == sys.platform:
 
     psapi = windll.psapi
     kernel = windll.kernel32
+
+
+def delete_locked_file(pathname):
+    """Delete a file that is currently in use"""
+    if os.path.exists(pathname):
+        win32api.MoveFileEx(pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -184,6 +191,13 @@ import unittest
 
 class TestWindows(unittest.TestCase):
     """Unit tests for module Windows"""
+
+
+    def test_delete_locked_file(self):
+        """Unit test for delete_locked_file"""
+        fn = "c:\\bleachbit_deleteme_later"
+        f = open(fn, "w")
+        f.close()
 
 
     def test_delete_registry_key(self):

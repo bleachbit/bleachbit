@@ -31,6 +31,10 @@ import gtk
 import FileUtilities
 from CleanerBackend import backends
 
+if 'linux2' == sys.platform:
+    class WindowsError(Exception):
+        def __str__(self):
+            return 'this is a dummy class for Linux'
 
 class Worker:
     """Perform the preview or delete operations"""
@@ -129,19 +133,35 @@ class Worker:
             self.gui.append_text(line, 'error', self.__iter)
         else:
             tag = None
+            error = False
             try:
                 if self.really_delete:
                     FileUtilities.delete(pathname)
+            except WindowsError, e:
+                # WindowsError: [Error 32] The process cannot access the file because it is being
+                # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
+                if 32 == e.errno:
+                    Windows.delete_locked_file(pathname)
+                size_text = FileUtilities.bytes_to_human(bytes)
+                # TRANSLATORS: This indicates the file will be deleted
+                # when Windows reboots.  The special keyword %(size)s
+                # changes to a size such as 320.1KB.
+                line = _("Marked for deletion: %(size)s %(pathname)s\n") % \
+                    { 'size' : size_text, 'pathname' : pathname }
             except:
                 traceback.print_exc()
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
                 tag = 'error'
+                error = True
             else:
                 size_text = FileUtilities.bytes_to_human(bytes)
                 line = "%s %s\n" % (size_text, pathname)
+
+            if not error:
                 self.total_bytes += bytes
                 if None != self.total_size_cb and self.really_delete:
                     self.total_size_cb(self.total_bytes)
+
             self.gui.append_text(line, tag, self.__iter)
 
 
