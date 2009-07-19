@@ -52,7 +52,15 @@
         <xs:element name="option" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="label" type="xs:string"/>
+              <xs:element name="label">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="translate" type="xs:boolean" default="false"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="description" type="xs:string" maxOccurs="1"/>
               <xs:element name="warning" type="xs:string" minOccurs="0" maxOccurs="1"/>
               <xs:element name="action" maxOccurs="unbounded">

@@ -24,13 +24,13 @@
   <running type="exe">apt-get</running>
   <running type="exe">synaptic</running> <!-- gnome-app-install uses synaptic -->
   <option id="clean">
-    <label>clean</label>
+    <label translate="false">clean</label>
     <description>Delete the cache</description>
     <action type="glob">/var/cache/apt/archives/*deb</action>
     <action type="glob">/var/cache/apt/archives/partial/*deb</action>
   </option>
   <option id="autoclean">
-    <label>autoclean</label>
+    <label translate="false">autoclean</label>
     <description>Delete obsolete files</description>
     <action type="apt.autoclean" />
   </option>

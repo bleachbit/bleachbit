@@ -138,7 +138,9 @@ class CleanerML:
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
-        self.xlate_cb(self.option_name)
+        translate = label.getAttribute('translate')
+        if translate and boolstr_to_bool(translate):
+            self.xlate_cb(self.option_name)
 
 
     def handle_cleaner_option_description(self, description):
