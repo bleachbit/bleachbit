@@ -28,6 +28,9 @@ import sys
 import globals
 import FileUtilities
 
+if 'linux2' == sys.platform:
+    import Unix
+
 if 'win32' == sys.platform:
     import Windows
 
@@ -87,12 +90,29 @@ class AptAutoclean(ActionProvider):
 
     def other_cleanup(self, really_delete):
         if really_delete:
-            import Unix
-            yield (Unix.apt_autoclean(), _("APT autoclean"))
+            yield (Unix.apt_autoclean(), "apt-get autoclean")
         else:
             # Checking allows auto-hide to work for non-APT systems
             if FileUtilities.exe_exists('apt-get'):
-                yield _("APT autoclean")
+                yield "apt-get autoclean"
+
+
+class AptAutoremove(ActionProvider):
+    """Action to run 'apt-get autoremove'"""
+    action_key = 'apt.autoremove'
+
+
+    def __init__(self, action_element):
+        pass
+
+
+    def other_cleanup(self, really_delete):
+        if really_delete:
+            yield (Unix.apt_autoremove(), "apt-get autoremove")
+        else:
+            # Checking allows auto-hide to work for non-APT systems
+            if FileUtilities.exe_exists('apt-get'):
+                yield "apt-get autoremove"
 
 
 class Children(ActionProvider):

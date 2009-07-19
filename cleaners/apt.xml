@@ -35,4 +35,9 @@
     <description>Delete obsolete files</description>
     <action type="apt.autoclean"/>
   </option>
+  <option id="autoremove">
+    <label translate="false">autoremove</label>
+    <description>Delete obsolete files</description>
+    <action type="apt.autoremove"/>
+  </option>
 </cleaner>

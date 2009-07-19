@@ -356,6 +356,36 @@ def apt_autoclean():
     return total_bytes
 
 
+def apt_autoremove():
+    """Run 'apt-get auturemove' and return the size (un-rounded, in bytes)
+        of freed space"""
+
+    if not FileUtilities.exe_exists('apt-get'):
+        raise RuntimeError(_('Executable not found: %s') % 'apt-get')
+
+    args = ['apt-get', '--yes', 'autoremove']
+
+    process = subprocess.Popen(args, \
+        stderr =  subprocess.STDOUT, stdout = subprocess.PIPE)
+
+    total_bytes = 0
+
+    while True:
+        line = process.stdout.readline().replace("\n", "")
+        if line.startswith('E: '):
+            raise RuntimeError(line)
+        # After this operation, 74.7MB disk space will be freed.
+        match = re.search(", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
+        if match:
+            pkg_bytes_str = match.groups(0)[0]
+            pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
+            total_bytes += pkg_bytes
+        if "" == line and process.poll() != None:
+            break
+
+    return total_bytes
+
+
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
