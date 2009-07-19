@@ -132,14 +132,17 @@ class Cleaner:
             pathname = running[1]
             if 'exe' == type and sys.platform == 'linux2':
                 if Unix.is_running(pathname):
+                    print "debug: process '%s' is runnning" % pathname
                     return True
             elif 'exe' == type and sys.platform == 'win32':
                 if pathname in Windows.enumerate_processes():
+                    print "debug: process '%s' is runnning" % pathname
                     return True
             elif 'pathname' == type:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
+                        print "debug: file '%s' exists indicating '%s' is running" % (globbed, self.name)
                         return True
             else:
                 raise RuntimeError("Unknown running-detection type '%s'" % type)
