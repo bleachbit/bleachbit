@@ -19,6 +19,7 @@
 
 
 import gettext
+import locale
 import os
 import sys
 
@@ -109,6 +110,9 @@ else:
 ###
 ### gettext
 ###
+
+if 'win32' == sys.platform:
+    os.environ['LANG'] = locale.getdefaultlocale()[0]
 
 try:
     gettext.bindtextdomain('bleachbit', locale_dir)
