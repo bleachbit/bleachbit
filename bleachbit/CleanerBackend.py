@@ -202,7 +202,6 @@ class Firefox(Cleaner):
             self.add_running('exe', 'firefox')
             self.add_running('exe', 'firefox-bin')
             self.add_running('pathname', self.profile_dir + 'lock')
-            self.add_running('pathname', self.profile_dir + '.parentlock')
         if sys.platform == 'win32':
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
             self.add_running('exe', 'firefox.exe')
