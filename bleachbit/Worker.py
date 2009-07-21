@@ -115,7 +115,7 @@ class Worker:
                         self.total_size_cb(self.total_bytes)
                 else:
                     line = _("Special operation: ") + ret + "\n"
-                self.gui.append_text(line)
+                self.gui.append_text(line, None, self.__iter)
                 if None != self.total_size_cb and self.really_delete:
                     self.total_size_cb(self.total_bytes)
                 yield True
@@ -192,8 +192,8 @@ class Worker:
         self.gui.progressbar.set_text("")
         self.gui.progressbar.set_fraction(1)
         self.gui.progressbar.set_text(_("Done."))
-        self.gui.append_text("\n%s%s" % ( _("Total size: "), \
-             FileUtilities.bytes_to_human(self.total_bytes)))
+        line = "\n%s%s" % ( _("Total size: "), FileUtilities.bytes_to_human(self.total_bytes))
+        self.gui.append_text(line, None, self.__iter)
         if None != self.total_size_cb and self.really_delete:
             self.total_size_cb(self.total_bytes)
         self.gui.textview.scroll_mark_onscreen(self.gui.textbuffer.get_insert())
