@@ -86,6 +86,9 @@ class Worker:
             for pathname in backends[operation].list_files():
                 self.clean_pathname(pathname)
                 if time.time() - start_time >= 0.25:
+                    if None != self.total_size_cb and self.really_delete:
+                        self.total_size_cb(self.total_bytes)
+                    # return control to PyGTK idle loop
                     yield True
                     start_time = time.time()
         except:
@@ -113,6 +116,8 @@ class Worker:
                 else:
                     line = _("Special operation: ") + ret + "\n"
                 self.gui.append_text(line)
+                if None != self.total_size_cb and self.really_delete:
+                    self.total_size_cb(self.total_bytes)
                 yield True
         except:
             err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
@@ -160,8 +165,6 @@ class Worker:
 
             if not error:
                 self.total_bytes += bytes
-                if None != self.total_size_cb and self.really_delete:
-                    self.total_size_cb(self.total_bytes)
 
             self.gui.append_text(line, tag, self.__iter)
 
@@ -191,6 +194,8 @@ class Worker:
         self.gui.progressbar.set_text(_("Done."))
         self.gui.append_text("\n%s%s" % ( _("Total size: "), \
              FileUtilities.bytes_to_human(self.total_bytes)))
+        if None != self.total_size_cb and self.really_delete:
+            self.total_size_cb(self.total_bytes)
         self.gui.textview.scroll_mark_onscreen(self.gui.textbuffer.get_insert())
         self.gui.set_sensitive(True)
 
