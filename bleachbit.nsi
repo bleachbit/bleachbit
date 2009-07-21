@@ -94,7 +94,6 @@
   !insertmacro MUI_LANGUAGE "German"
   !insertmacro MUI_LANGUAGE "Galician"
   !insertmacro MUI_LANGUAGE "Hebrew"
-  !insertmacro MUI_LANGUAGE "Hindi"
   !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro MUI_LANGUAGE "Korean"
