@@ -140,8 +140,9 @@ class Worker:
             except WindowsError, e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-                if 32 == e.errno:
-                    Windows.delete_locked_file(pathname)
+                if 32 != e.errno:
+                    raise
+                Windows.delete_locked_file(pathname)
                 size_text = FileUtilities.bytes_to_human(bytes)
                 # TRANSLATORS: This indicates the file will be deleted
                 # when Windows reboots.  The special keyword %(size)s
