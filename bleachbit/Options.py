@@ -25,7 +25,7 @@ import os
 import traceback
 import ConfigParser
 import sys
-from globals import APP_VERSION, options_dir, options_file
+from Common import APP_VERSION, options_dir, options_file
 
 
 boolean_keys = ('auto_hide', 'check_online_updates', 'first_start', 'shred')

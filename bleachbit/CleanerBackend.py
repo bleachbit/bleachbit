@@ -40,7 +40,6 @@ if 'win32' == sys.platform:
     import Windows
 
 from FileUtilities import children_in_directory
-import globals
 from Options import options
 
 

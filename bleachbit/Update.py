@@ -27,8 +27,7 @@ import sys
 import urllib2
 import xml.dom.minidom
 
-import globals
-from globals import APP_VERSION, socket_timeout
+import Common
 
 
 def user_agent():
@@ -44,7 +43,8 @@ def user_agent():
     import locale
     __locale = locale.getdefaultlocale()[0] # e.g., en_US
 
-    agent = "BleachBit/%s (%s; %s; %s)" % (APP_VERSION, __platform, __os, __locale)
+    agent = "BleachBit/%s (%s; %s; %s)" % (Common.APP_VERSION, \
+        __platform, __os, __locale)
     return agent
 
 
@@ -66,9 +66,9 @@ class Update:
         """Return boolean whether update is available"""
         opener = urllib2.build_opener()
         opener.addheaders = [('User-Agent', user_agent())]
-        socket.setdefaulttimeout(socket_timeout)
+        socket.setdefaulttimeout(Common.socket_timeout)
         try:
-            handle = opener.open(globals.update_check_url)
+            handle = opener.open(Common.update_check_url)
             dom = xml.dom.minidom.parse(handle)
         except:
             print _("Error when checking for updates: "), str(sys.exc_info()[1])
@@ -96,7 +96,7 @@ class TestUpdate(unittest.TestCase):
         self.assert_ (type(available) is bool)
 
         # test failure
-        globals.update_check_url = "http://www.surelydoesnotexist.com/foo"
+        Common.update_check_url = "http://www.surelydoesnotexist.com/foo"
         self.assertEqual(update.is_update_available(), False)
 
 

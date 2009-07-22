@@ -26,10 +26,11 @@ import sys
 import traceback
 import xml.dom.minidom
 
-import globals
-from globals import  boolstr_to_bool, getText
 import CleanerBackend
+import Common
+
 from Action import ActionContainer, ActionProvider
+from General import boolstr_to_bool, getText
 from FileUtilities import listdir
 
 
@@ -166,9 +167,9 @@ class CleanerML:
 def list_cleanerml_files(local_only = False):
     """List CleanerML files"""
     cleanerdirs = ( 'cleaners', \
-        globals.personal_cleaners_dir )
+        Common.personal_cleaners_dir )
     if not local_only:
-        cleanerdirs += ( globals.system_cleaners_dir, )
+        cleanerdirs += ( Common.system_cleaners_dir, )
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue

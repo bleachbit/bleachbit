@@ -17,6 +17,10 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Code that is commonly shared throughout BleachBit
+"""
+
 
 import gettext
 import locale
@@ -37,7 +41,6 @@ socket_timeout = 10
 # Setting below value to false disables update notification (useful
 # for packages in repositories).
 online_update_notification_enabled = True
-
 
 ###
 ### Paths
@@ -111,9 +114,6 @@ else:
 ### gettext
 ###
 
-if 'win32' == sys.platform:
-    os.environ['LANG'] = locale.getdefaultlocale()[0]
-
 try:
     gettext.bindtextdomain('bleachbit', locale_dir)
     gettext.textdomain('bleachbit')
@@ -123,29 +123,4 @@ except:
     def _(msg):
         """Dummy replacement for gettext"""
         return msg
-
-
-###
-### XML
-###
-
-
-def boolstr_to_bool(value):
-    """Convert a string boolean to a Python boolean"""
-    if 'true' == value.lower():
-        return True
-    if 'false' == value.lower():
-        return False
-    raise RuntimeError('Invalid boolean: %s' % value)
-
-
-def getText(nodelist):
-    """Return the text data in an XML node 
-    http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = ""
-    for node in nodelist:
-        if node.nodeType == node.TEXT_NODE:
-            rc = rc + node.data
-    return rc
-
 

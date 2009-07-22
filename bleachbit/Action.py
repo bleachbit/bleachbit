@@ -25,8 +25,8 @@ import glob
 import os
 import sys
 
-import globals
 import FileUtilities
+import General
 
 if 'linux2' == sys.platform:
     import Unix
@@ -121,10 +121,10 @@ class Children(ActionProvider):
 
 
     def __init__(self, action_element):
-        self.rootpath = globals.getText(action_element.childNodes)
+        self.rootpath = General.getText(action_element.childNodes)
         self.rootpath = os.path.expanduser(os.path.expandvars(self.rootpath))
         del_dir_str = action_element.getAttribute('directories')
-        self.del_dir = globals.boolstr_to_bool(del_dir_str)
+        self.del_dir = General.boolstr_to_bool(del_dir_str)
 
 
     def list_files(self):
@@ -139,7 +139,7 @@ class File(ActionProvider):
 
 
     def __init__(self, action_element):
-        self.pathname = globals.getText(action_element.childNodes)
+        self.pathname = General.getText(action_element.childNodes)
 
 
     def list_files(self):
@@ -155,7 +155,7 @@ class Glob(ActionProvider):
 
 
     def __init__(self, action_element):
-        self.pathname = globals.getText(action_element.childNodes)
+        self.pathname = General.getText(action_element.childNodes)
 
 
     def list_files(self):
@@ -170,7 +170,7 @@ class SqliteVacuum(ActionProvider):
     action_key = 'sqlite.vacuum'
 
     def __init__(self, action_element):
-        self.pathname = globals.getText(action_element.childNodes)
+        self.pathname = General.getText(action_element.childNodes)
 
 
     def other_cleanup(self, really_delete):
@@ -193,7 +193,7 @@ class Winreg(ActionProvider):
     action_key = 'winreg'
 
     def __init__(self, action_element):
-        self.keyname = globals.getText(action_element.childNodes)
+        self.keyname = General.getText(action_element.childNodes)
         self.name = action_element.getAttribute('name')
 
 

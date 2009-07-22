@@ -54,7 +54,7 @@ except ImportError:
 ### end win32com.shell workaround for py2exe
 ###
 
-from bleachbit.globals import APP_VERSION, APP_URL
+import bleachbit.Common
 from distutils.core import setup
 if sys.platform == 'win32':
     try:
@@ -87,14 +87,14 @@ if 'py2exe' in sys.argv:
         }
 
 setup( name = 'bleachbit',
-       version = APP_VERSION,
+       version = bleachbit.Common.APP_VERSION,
        description = "Free space and maintain privacy",
        long_description = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
        author = "Andrew Ziem",
        author_email = "ahz001@gmail.com",
        download_url = "http://bleachbit-project.appspot.com/download/",
        license = "GPLv3",
-       url = APP_URL,
+       url = bleachbit.Common.APP_URL,
        platforms = 'Linux and Windows with Python v2.4+ and PyGTK v2',
        packages = ['bleachbit'],
        **args)

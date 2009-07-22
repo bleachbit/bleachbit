@@ -37,9 +37,8 @@ import Update
 from CleanerBackend import backends
 import FileUtilities
 from Options import options
-from globals import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+from Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     license_filename, online_update_notification_enabled, release_notes_url
-
 
 
 def open_url(url):
