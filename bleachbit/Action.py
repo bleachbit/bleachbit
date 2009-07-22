@@ -165,6 +165,29 @@ class Glob(ActionProvider):
 
 
 
+class SqliteVacuum(ActionProvider):
+    """Action to vacuum SQLite databases"""
+    action_key = 'sqlite.vacuum'
+
+    def __init__(self, action_element):
+        self.pathname = globals.getText(action_element.childNodes)
+
+
+    def other_cleanup(self, really_delete):
+        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
+        for pathname in glob.iglob(expanded):
+            if really_delete:
+                old_size = FileUtilities.getsize(pathname)
+                FileUtilities.vacuum_sqlite3(pathname)
+                new_size = FileUtilities.getsize(pathname)
+                # TRANSLATORS: Vacuumed may also be translated 'compacted'
+                # or 'optimized.'  The '%s' is a file name.
+                yield (old_size - new_size, _("Vacuumed: %s") % pathname)
+            else:
+                yield _("Vacuumed: %s") % pathname
+
+
+
 class Winreg(ActionProvider):
     """Action to clean the Windows Registry"""
     action_key = 'winreg'
