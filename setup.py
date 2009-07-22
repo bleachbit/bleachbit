@@ -41,7 +41,7 @@ try:
     import win32com
     for p in win32com.__path__[1:]:
         modulefinder.AddPackagePath("win32com", p)
-    for extra in ["win32com.shell","win32com.mapi"]:
+    for extra in ["win32com.shell", "win32com.mapi"]:
         __import__(extra)
         m = sys.modules[extra]
         for p in m.__path__[1:]:
@@ -59,7 +59,7 @@ from distutils.core import setup
 if sys.platform == 'win32':
     try:
         import py2exe
-    except:
+    except ImportError:
         print 'warning: py2exe not available'
 
 

@@ -61,11 +61,12 @@ class Cleaner:
         self.actions += ( (option_id, action), )
 
     def add_option(self, option_id, name, description):
+        """Register option (such as 'cache')"""
         self.options[option_id] = ( name, False, description )
 
-    def add_running(self, type, pathname):
+    def add_running(self, detection_type, pathname):
         """Add a way to detect this program is currently running"""
-        self.running += ( (type, pathname), )
+        self.running += ( (detection_type, pathname), )
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -86,10 +87,6 @@ class Cleaner:
         for (option_id, __name, __value) in self.get_options():
             self.set_option(option_id, False)
         return ret
-
-    def available(self):
-        """Is the cleaner available?"""
-        return True
 
     def get_description(self):
         """Brief description of the cleaner"""
@@ -427,7 +424,7 @@ class OpenOfficeOrg(Cleaner):
 
     def list_files(self):
         if self.options["recent_documents"][1]:
-             for prefix in self.prefixes:
+            for prefix in self.prefixes:
                 for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Histories.xcu"):
                     if os.path.lexists(path):
                         yield path
@@ -655,40 +652,39 @@ class System(Cleaner):
                 yield _("Clipboard")
 
         if sys.platform == 'win32' and self.options['mru'][1]:
-
-                # reference: http://support.microsoft.com/kb/142298
-                keys = ( \
-                    # search assistant
-                    'HKCU\Software\Microsoft\Search Assistant\ACMru',
-                    # common open dialog
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
-                    # Windows Vista/7
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU',
-                    # common save as dialog
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
-                    # Windows Vista/7
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU',
-                    # find files command
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
-                    # find Computer command
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
-                    # map network drives
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
-                    # printer ports
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU',
-                    # recent documents in start menu
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs',
-                    # run command
-                    'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
-                for key in keys:
-                    ret = Windows.delete_registry_key(key, really_delete)
-                    if not ret:
-                        # nothing to delete or nothing was deleted
-                        continue
-                    if really_delete:
-                        yield (0, key)
-                    else:
-                        yield key
+            # reference: http://support.microsoft.com/kb/142298
+            keys = ( \
+                # search assistant
+                'HKCU\Software\Microsoft\Search Assistant\ACMru',
+                # common open dialog
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
+                # Windows Vista/7
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU',
+                # common save as dialog
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
+                # Windows Vista/7
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU',
+                # find files command
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
+                # find Computer command
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
+                # map network drives
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
+                # printer ports
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU',
+                # recent documents in start menu
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs',
+                # run command
+                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
+            for key in keys:
+                ret = Windows.delete_registry_key(key, really_delete)
+                if not ret:
+                    # nothing to delete or nothing was deleted
+                    continue
+                if really_delete:
+                    yield (0, key)
+                else:
+                    yield key
 
 
         if sys.platform == 'win32' and self.options['recycle_bin'][1]:

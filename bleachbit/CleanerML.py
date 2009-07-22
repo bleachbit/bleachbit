@@ -63,21 +63,20 @@ class CleanerML:
         return self.cleaner
 
 
-    def os_match(self, os):
+    def os_match(self, os_str):
         """Return boolean whether operating system matches"""
-        if len(os) == 0:
+        if len(os_str) == 0:
             return True
-        if os == 'linux' and sys.platform == 'linux2':
+        if os_str == 'linux' and sys.platform == 'linux2':
             return True
-        if os == 'windows' and sys.platform == 'win32':
+        if os_str == 'windows' and sys.platform == 'win32':
             return True
         return False
 
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""
-        os = cleaner.getAttribute('os')
-        if not self.os_match(os):
+        if not self.os_match(cleaner.getAttribute('os')):
             return
         self.cleaner.id = cleaner.getAttribute('id')
         self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
@@ -106,9 +105,9 @@ class CleanerML:
         """<running> element under <cleaner>"""
         # example: <running type="command">opera</running>
         for running in running_elements:
-            type = running.getAttribute('type')
+            detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
-            self.cleaner.add_running(type, value)
+            self.cleaner.add_running(detection_type, value)
 
 
     def handle_cleaner_options(self, options):
@@ -210,8 +209,6 @@ msgstr ""
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    cleaners = []
-
     f = open('../po/cleanerml.pot', 'w')
 
     for pathname in listdir('../cleaners'):
@@ -219,7 +216,7 @@ def create_pot():
             continue
         strings = []
         try:
-            xmlcleaner = CleanerML(pathname, \
+            CleanerML(pathname, \
                 lambda newstr: strings.append(newstr))
         except:
             print "error reading '%s'" % pathname
@@ -285,7 +282,6 @@ class TestCleanerML(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    import sys
     if 2 == len(sys.argv) and 'pot' == sys.argv[1]:
         create_pot()
     else:
