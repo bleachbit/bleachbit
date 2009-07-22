@@ -174,11 +174,14 @@ class Worker:
         count = 0
         for operation in self.operations:
             self.gui.progressbar.set_fraction(1.0 * count / len(self.operations))
+            name = backends[operation].get_name()
             if self.really_delete:
-                self.gui.progressbar.set_text(_("Please wait.  Scanning and deleting: ") \
-                    + operation)
+                # TRANSLATORS: %s is replaced with Firefox, System, etc.
+                msg = _("Please wait.  Cleaning %s.") % name
             else:
-                self.gui.progressbar.set_text(_("Please wait.  Scanning: ") + operation)
+                # TRANSLATORS: %s is replaced with Firefox, System, etc.
+                msg = _("Please wait.  Previewing %s.") % name
+            self.gui.progressbar.set_text(msg)
             for dummy in self.clean_operation(operation):
                 yield True
             count += 1
