@@ -152,8 +152,9 @@ class Worker:
                 # TRANSLATORS: This indicates the file will be deleted
                 # when Windows reboots.  The special keyword %(size)s
                 # changes to a size such as 320.1KB.
-                line = _("Marked for deletion: %(size)s %(pathname)s\n") % \
+                line = _("Marked for deletion: %(size)s %(pathname)s") % \
                     { 'size' : size_text, 'pathname' : pathname }
+                line += "\n"
             except:
                 traceback.print_exc()
                 line = str(sys.exc_info()[1]) + " " + pathname + "\n"
