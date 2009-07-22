@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit-project.appspot.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="liferea">
+  <label>Liferea</label>
+  <running type="exe">liferea-bin</running>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action type="children" directories="false">~/.liferea_1.4/cache/</action>
+    <action type="children" directories="false">~/.liferea_1.4/mozilla/liferea/Cache/</action>
+  </option>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
+    <action type="file">~/.liferea_1.4/mozilla/liferea/cookies.sqlite</action>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action type="sqlite.vacuum">~/.liferea_1.4/liferea.db</action>
+    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/cookies.sqlite</action>
+    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/permissions.sqlite</action>
+    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/places.sqlite</action>
+  </option>
+</cleaner>
