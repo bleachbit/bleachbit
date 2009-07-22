@@ -397,16 +397,20 @@ class TestFileUtilities(unittest.TestCase):
         umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
         tests = [ ('.suffix', 'prefix'), # simple
-                  ("\t", "\t"), # tab
-                  ("~`!@#$%^&*()-_+=", "x"), # non-alphanumeric characters
-                  ("[]{};':,.?<>\|", "x"), # non-alphanumeric characters
                   ("x".zfill(100), ".y".zfill(100)), # long
                   (" ", " "), # space
-                  ('"', "'"), # quotation marks
+                  ("'", "'"), # quotation mark
+                  ("~`!@#$%^&()-_+=", "x"), # non-alphanumeric characters
+                  ("[]{};',.", "x"), # non-alphanumeric characters
                   (u'a', u'a'), # simple unicode
                   (hebrew, hebrew),
                   (katanana, katanana),
                   (umlauts, umlauts) ]
+        if 'linux2' == sys.platform:
+            # Windows doesn't allow these characters
+            tests.append( ('"', '*') )
+            tests.append( ('\t', '\\') )
+            tests.append( (':?', '<>|') )
         for test in tests:
             (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
             self.assert_(os.path.exists(filename))
@@ -462,6 +466,8 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
+        if 'win32' == sys.platform:
+            return
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
 
@@ -616,6 +622,9 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
+        if 'win32' == sys.platform:
+            return
+
         import tempfile
 
         (handle, filename) = tempfile.mkstemp()
