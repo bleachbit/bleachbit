@@ -129,8 +129,12 @@ def delete(path, shred = False):
     elif stat.S_ISDIR(mode):
         os.rmdir(path)
     elif stat.S_ISREG(mode):
-        if options.get('shred') or shred:
-            wipe_contents(path)
+        if shred or options.get('shred'):
+            try:
+                wipe_contents(path)
+            except IOError, e:
+                # permission denied (13) happens shredding MSIE 8 on Windows 7
+                print "debug: IOError #%s shredding '%s'" % (e.errno, path)
         os.remove(path)
     else:
         raise Exception("Unsupported special file type")
