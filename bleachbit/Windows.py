@@ -257,9 +257,7 @@ class TestWindows(unittest.TestCase):
         for process in processes:
             self.assertEqual(process, process.lower())
             self.assert_(len(process) > 0)
-        expected = ('lsass.exe', 'services.exe', 'svchost.exe')
-        for exp in expected:
-            self.assert_(exp in processes)
+        self.assert_('explorer.exe' in processes)
 
 
     def test_get_fixed_drives(self):
