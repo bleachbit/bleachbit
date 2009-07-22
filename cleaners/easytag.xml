@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@
 -->
 <cleaner id="easytag" os="linux">
   <label>Easytag</label>
-  <description>ID3 Tag editor</description>
   <option id="logs">
     <label>Logs</label>
-    <description>Delete the Easytag Logs</description>
+    <description>Delete the debug logs</description>
     <action type="file">~/.easytag/easytag.log</action>
-    </option> 
+  </option>
 </cleaner>
