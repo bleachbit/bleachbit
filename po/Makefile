@@ -23,12 +23,17 @@ desktop.pot: ../bleachbit.desktop
 
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 	@echo "* Generating $(APP).pot"
+	echo " Words before update: " \
+		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
 	cat cleanerml.pot desktop.pot > $(APP).pot
 	xgettext -o $(APP).pot \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--default-domain=$(APP) \
 		$(SRC)
+	echo " Words after update: " \
+		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
+
 
 refresh-po: $(POTFILE)
 	@echo "* Refreshing .po files"
