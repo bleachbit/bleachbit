@@ -531,8 +531,8 @@ class System(Cleaner):
             self.add_option('yum', _('Yum clean'), _("Delete the cache"))
         if sys.platform == 'win32':
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
+            self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
     def get_description(self):
