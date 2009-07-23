@@ -31,6 +31,9 @@ import gtk
 import FileUtilities
 from CleanerBackend import backends
 
+if 'win32' == sys.platform:
+    import Windows
+
 if 'linux2' == sys.platform:
     class WindowsError(Exception):
         def __str__(self):
@@ -136,18 +139,23 @@ class Worker:
             line = str(sys.exc_info()[1]) + " " + pathname + "\n"
             print line
             self.gui.append_text(line, 'error', self.__iter)
-        else:
-            tag = None
-            error = False
+            return
+
+        tag = None
+        error = False
+        try:
+            if self.really_delete:
+                FileUtilities.delete(pathname)
+        except WindowsError, e:
+            # WindowsError: [Error 32] The process cannot access the file because it is being
+            # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
+            if 32 != e.winerror:
+                raise
             try:
-                if self.really_delete:
-                    FileUtilities.delete(pathname)
-            except WindowsError, e:
-                # WindowsError: [Error 32] The process cannot access the file because it is being
-                # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-                if 32 != e.errno:
-                    raise
                 Windows.delete_locked_file(pathname)
+            except:
+                error = True
+            else:
                 size_text = FileUtilities.bytes_to_human(bytes)
                 # TRANSLATORS: This indicates the file will be deleted
                 # when Windows reboots.  The special keyword %(size)s
@@ -155,19 +163,20 @@ class Worker:
                 line = _("Marked for deletion: %(size)s %(pathname)s") % \
                     { 'size' : size_text, 'pathname' : pathname }
                 line += "\n"
-            except:
-                traceback.print_exc()
-                line = str(sys.exc_info()[1]) + " " + pathname + "\n"
-                tag = 'error'
-                error = True
-            else:
-                size_text = FileUtilities.bytes_to_human(bytes)
-                line = "%s %s\n" % (size_text, pathname)
+        except:
+            error = True
+        else:
+            size_text = FileUtilities.bytes_to_human(bytes)
+            line = "%s %s\n" % (size_text, pathname)
 
-            if not error:
-                self.total_bytes += bytes
+        if error:
+            traceback.print_exc()
+            line = "%s %s\n" % (str(sys.exc_info()[1]), pathname)
+            tag = 'error'
+        else:
+            self.total_bytes += bytes
 
-            self.gui.append_text(line, tag, self.__iter)
+        self.gui.append_text(line, tag, self.__iter)
 
 
     def run(self):

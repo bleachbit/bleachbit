@@ -37,9 +37,11 @@ These are the terms:
 
 """
 
-
+import os
 import sys
+
 from gettext import gettext as _
+
 if 'win32' == sys.platform:
     import _winreg
     import win32api
@@ -198,6 +200,7 @@ class TestWindows(unittest.TestCase):
         fn = "c:\\bleachbit_deleteme_later"
         f = open(fn, "w")
         f.close()
+        delete_locked_file(fn)
 
 
     def test_delete_registry_key(self):
