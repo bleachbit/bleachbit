@@ -32,6 +32,8 @@ APP_VERSION = "0.5.5"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit-project.appspot.com"
 
+print "info: starting %s version %s" % (APP_NAME, APP_VERSION)
+
 update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
 
 release_notes_url = "http://bleachbit.sourceforge.net/release_notes.php?version=" + str(APP_VERSION)
