@@ -25,10 +25,10 @@ import os
 import sys
 import traceback
 import xml.dom.minidom
-
 import CleanerBackend
 import Common
 
+from gettext import gettext as _
 from Action import ActionContainer, ActionProvider
 from General import boolstr_to_bool, getText
 from FileUtilities import listdir
@@ -139,7 +139,7 @@ class CleanerML:
         """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
         translate = label.getAttribute('translate')
-        if translate and boolstr_to_bool(translate):
+        if not translate or boolstr_to_bool(translate):
             self.xlate_cb(self.option_name)
 
 
