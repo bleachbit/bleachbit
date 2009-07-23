@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
 
 -->
 <cleaner id="d4x" os="linux">
-  <label>d4x</label>
-  <description>Downloader for X</description>
+  <label>Downloaded for X</label>
   <option id="history">
     <label>History</label>
-    <description>Delete the history and cookies</description>
+    <description>Delete the usage history</description>
     <action type="glob">~/.ntrc_2/history*</action>
     <action type="file">~/.ntrc_2/cookies.txt</action>
   </option>
