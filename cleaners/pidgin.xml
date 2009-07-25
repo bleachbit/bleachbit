@@ -24,7 +24,8 @@
   <description>Chat client</description>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the avatars cache</description>
+    <description>Delete the cache</description>
+    <!-- avatars -->
     <action type="children" directories="true">~/.purple/icons/</action>
     <action type="children" directories="true">$APPDATA\.purple\icons\</action>
   </option>
