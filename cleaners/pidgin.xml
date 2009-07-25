@@ -22,6 +22,12 @@
 <cleaner id="pidgin">
   <label>Pidgin</label>
   <description>Chat client</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the avatars cache</description>
+    <action type="children" directories="true">~/.purple/icons/</action>
+    <action type="children" directories="true">$APPDATA\.purple\icons\</action>
+  </option>
   <option id="logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
