@@ -383,8 +383,12 @@ class GUI:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:
             self.textbuffer.insert(__iter, text)
-        # scroll to end
-        self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+        # Scroll to end.  If the command is run directly instead of
+	# through the idle loop, it may only scroll most of the way
+	# as seen on Ubuntu 9.04 with Italian and Spanish.
+        gobject.idle_add(lambda : \
+		self.textview.scroll_mark_onscreen( \
+		self.textbuffer.get_insert()))
 
 
     def on_selection_changed(self, selection):
