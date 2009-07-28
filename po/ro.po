@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-07-23 09:07-0600\n"
-"PO-Revision-Date: 2009-07-27 14:47+0000\n"
+"PO-Revision-Date: 2009-07-27 15:05+0000\n"
 "Last-Translator: Catalin Fluturel <fkt@flexco.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-27 14:52+0000\n"
+"X-Launchpad-Export-Date: 2009-07-27 18:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -32,6 +32,18 @@ msgstr ""
 #: ../bleachbit/CleanerBackend.py:518
 msgid "Cache"
 msgstr "Cache"
+
+#: ../bleachbit/GUI.py:530
+msgid "Choose files to shred"
+msgstr "Alegeti fisierele de distrus"
+
+#: ../bleachbit/GUI.py:573
+msgid "_Shred Files"
+msgstr "_Suprascrie fisierele"
+
+#: ../bleachbit/GUI.py:575
+msgid "_File"
+msgstr "_Fisier"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -209,7 +221,7 @@ msgstr "Unealta de cautare"
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "File transfer client"
-msgstr ""
+msgstr "Client pentru transfer de fisiere"
 
 #: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
 msgid "Download history"
@@ -245,7 +257,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:190
 msgid "Deleting Places deletes bookmarks."
-msgstr ""
+msgstr "Stergand Places stergeti semnele de carte"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
 msgid "Passwords"
@@ -371,7 +383,7 @@ msgstr "Suita office"
 
 #: ../bleachbit/CleanerBackend.py:481
 msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
+msgstr "Sterge fisierele din directorul rpmbuild"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -381,11 +393,12 @@ msgstr ""
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/CleanerBackend.py:517
 msgid "Broken desktop files"
-msgstr ""
+msgstr "Fisiere desktop nefunctionale"
 
 #: ../bleachbit/CleanerBackend.py:517
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
+"Sterge intrarile din meniu si asocierile pentru aplicatiile nefunctionale"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -440,7 +453,7 @@ msgstr "Clipboard"
 #: ../bleachbit/CleanerBackend.py:535
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
+msgstr "Clipboard folosit pentru operatii de copy, paste"
 
 #: ../bleachbit/CleanerBackend.py:539
 msgid "The system in general"
@@ -453,6 +466,8 @@ msgstr "Sistem"
 #: ../bleachbit/FileUtilities.py:177
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
+"Nu pot importa modulul sqlite3 pentru Python: Este necesara versiunea Python "
+"2.5."
 
 #: ../bleachbit/GUI.py:71 ../bleachbit/GUI.py:576
 msgid "Preferences"
@@ -558,21 +573,9 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Catalin Fluturel https://launchpad.net/~fkt"
 
-#: ../bleachbit/GUI.py:530
-msgid "Choose files to shred"
-msgstr "Alegeti fisierele de distrus"
-
-#: ../bleachbit/GUI.py:573
-msgid "_Shred Files"
-msgstr "_Fisiere distruse"
-
 #: ../bleachbit/GUI.py:574
 msgid "_Quit"
 msgstr "_Iesire"
-
-#: ../bleachbit/GUI.py:575
-msgid "_File"
-msgstr "_Fisier"
 
 #: ../bleachbit/GUI.py:577
 msgid "_Edit"
@@ -678,7 +681,7 @@ msgstr "Trebuie sa alegeti o operatie"
 #: ../bleachbit/Worker.py:103 ../bleachbit/Worker.py:126
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "A aparut o exceptie in timp ce curatam %(operation)s: %(msg)s"
 
 #: ../bleachbit/Worker.py:120
 msgid "Special operation: "
@@ -690,7 +693,7 @@ msgstr "Operatie speciala: "
 #: ../bleachbit/Worker.py:163
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
-msgstr ""
+msgstr "Marcat pentru stergere: %(size)s %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:190
