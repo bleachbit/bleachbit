@@ -24,6 +24,7 @@ Check for updates via the Internet
 import platform
 import socket
 import sys
+import traceback
 import urllib2
 import xml.dom.minidom
 
@@ -40,8 +41,12 @@ def user_agent():
     if sys.platform == 'linux2':
         dist = platform.dist()
         __os = dist[0] + '/' + dist[1] + '-' + dist[2]
-    import locale
-    __locale = locale.getdefaultlocale()[0] # e.g., en_US
+    __locale = ""
+    try:
+        import locale
+        __locale = locale.getdefaultlocale()[0] # e.g., en_US
+    except:
+        traceback.print_exc()
 
     agent = "BleachBit/%s (%s; %s; %s)" % (Common.APP_VERSION, \
         __platform, __os, __locale)
