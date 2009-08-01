@@ -50,6 +50,7 @@ set CANARY=dist\bleachbit.exe
 if not exist %CANARY% goto error
 
 echo Copying GTK files
+copy %GTK_DIR%\bin\intl.dll dist
 mkdir dist\etc
 xcopy %GTK_DIR%\etc dist\etc /i /s /q
 mkdir dist\lib
