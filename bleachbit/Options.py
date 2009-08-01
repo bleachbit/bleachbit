@@ -37,7 +37,10 @@ class Options:
     def __init__(self):
         # restore options from disk
         self.config = ConfigParser.SafeConfigParser()
-        self.config.read(options_file)
+        try:
+            self.config.read(options_file)
+        except:
+            traceback.print_exc()
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):
