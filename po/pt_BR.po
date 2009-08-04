@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-07-23 09:07-0600\n"
-"PO-Revision-Date: 2009-07-23 21:16+0000\n"
-"Last-Translator: Felipe Tanus <Unknown>\n"
+"PO-Revision-Date: 2009-08-03 14:33+0000\n"
+"Last-Translator: Alex B. Oliveira <alexme7@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-23 22:00+0000\n"
+"X-Launchpad-Export-Date: 2009-08-03 17:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -178,7 +178,7 @@ msgstr "Apagar os registros de conversas"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "Excluir a lista de páginas visitadas"
 
 #: ../cleaners/liferea.xml ../bleachbit/CleanerBackend.py:194
 msgid ""
@@ -289,11 +289,11 @@ msgstr "Arquivos temporários"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Excluir podcasts baixados"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Podecasts baixados"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
@@ -342,7 +342,7 @@ msgstr "Espaço livre e manter privacidade"
 #: ../bleachbit/Action.py:185 ../bleachbit/Action.py:187
 #, python-format
 msgid "Vacuumed: %s"
-msgstr ""
+msgstr "Otimizado: %s"
 
 #: ../bleachbit/CleanerBackend.py:186
 msgid "Form history"
@@ -382,11 +382,12 @@ msgstr "Deletar os arquivos no rpmbuild no diretório de construção"
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/CleanerBackend.py:517
 msgid "Broken desktop files"
-msgstr ""
+msgstr "Arquivos quebrados do desktop"
 
 #: ../bleachbit/CleanerBackend.py:517
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
+"Excluir entradas defeituosas do menu de aplicações e associação de arquivos"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -396,7 +397,7 @@ msgstr "Localizações"
 
 #: ../bleachbit/CleanerBackend.py:521
 msgid "Delete files for unwanted languages"
-msgstr ""
+msgstr "Excluir arquivos desnecessários de outras línguas"
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -416,7 +417,7 @@ msgstr "Lixo"
 
 #: ../bleachbit/CleanerBackend.py:528
 msgid "Empty the trash"
-msgstr ""
+msgstr "Esvaziar o lixo"
 
 #. TRANSLATORS: Yum is a software program (similar to APT)
 #. that manages packages on CentOS, Fedora, and Red Hat.
@@ -490,14 +491,14 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GUI.py:110
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Ocultar irrelevâncias na limpeza"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GUI.py:118
 msgid "Overwrite files to hide contents"
-msgstr ""
+msgstr "Sobreescrever arquivos para impedir a recuperação"
 
 #: ../bleachbit/GUI.py:121
 msgid ""
@@ -661,6 +662,8 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
+"%s não pode ser limpo porque está sendo executado. Feche-o, e tente "
+"novamente."
 
 #: ../bleachbit/Update.py:74
 msgid "Error when checking for updates: "
