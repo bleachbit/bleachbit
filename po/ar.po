@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-07-23 09:07-0600\n"
-"PO-Revision-Date: 2009-07-26 08:46+0000\n"
-"Last-Translator: Dilmi Fethi <delphiexile@gmail.com>\n"
+"PO-Revision-Date: 2009-08-04 11:57+0000\n"
+"Last-Translator: MaXeR <Unknown>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-26 14:56+0000\n"
+"X-Launchpad-Export-Date: 2009-08-04 17:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -166,7 +166,7 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
-"إذا وجد تحديث, سيتم عرض معلومات عن. بعد ذلك, يمكنك تحميل و تركيب التحديث "
+"إذا وجد تحديث، سيتم عرض معلومات عنه. بعد ذلك، يمكنك تحميل و تركيب التحديث "
 "يدوياً."
 
 #: ../bleachbit/GUI.py:139
@@ -305,21 +305,20 @@ msgstr "حذف الجلسة الحالية"
 msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
 msgstr ""
-"حذف التاريخ ، الذي يتضمن العناوين المفضلة، التحميلات، والمواقع المُزارة"
+"حذف المحفوظات ، التي تتضمن العناوين المفضلة، التحميلات، والمواقع المُزارة"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../bleachbit/CleanerBackend.py:183
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"حذف ذاكرة التخزين المؤقت الخاص بالويب، الذي يقلل من الوقت لإعادة عرض الصفحات "
-"التي سبق زيارتها"
+"حذف ذاكرة الويب المخبأة، التي تختصر الوقت لعرض الصفحات التي سبق زيارتها"
 
 #: ../cleaners/chromium.xml ../cleaners/vim.xml ../cleaners/mc.xml
 #: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
 #: ../cleaners/bash.xml ../cleaners/links2.xml ../cleaners/elinks.xml
 msgid "History"
-msgstr "المؤرخات"
+msgstr "المحفوظات"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -332,6 +331,7 @@ msgstr "متصفح ويب"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"حذف ~/.viminfo والذي يتضمن محفوظات الملفات، محفوظات الأوامر، الذاكرة الوسيطة"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -370,7 +370,7 @@ msgstr "عارض وسائط"
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "سجلات التصحيح"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/easytag.xml ../cleaners/secondlife_viewer.xml
@@ -391,7 +391,7 @@ msgstr "الاكثر استخداماً مؤخراً"
 
 #: ../cleaners/mc.xml ../cleaners/links2.xml
 msgid "Delete the usage history"
-msgstr ""
+msgstr "حذف محفوظات الإستخدام"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml
@@ -414,11 +414,11 @@ msgstr "حذف قائمة صفحات الويب التي سبق زيارتها"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr ""
+msgstr "حذف فهارس البحث"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
-msgstr ""
+msgstr "فهارس البحث"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
@@ -447,7 +447,7 @@ msgstr ""
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr ""
+msgstr "حذف الملفات الملغية (القديمة)"
 
 #: ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
@@ -499,6 +499,7 @@ msgstr ""
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
+"حذف فهارس البحث، قاعدة بيانات من الكلمات والملفات التي تتضمّن هذه الكلمات"
 
 #: ../cleaners/recoll.xml
 msgid "Index"
@@ -517,7 +518,7 @@ msgstr "تفريغ المساحة والحفاظ على الخصوصية"
 #: ../bleachbit/Action.py:185 ../bleachbit/Action.py:187
 #, python-format
 msgid "Vacuumed: %s"
-msgstr ""
+msgstr "المُفرّغ: %s"
 
 #: ../bleachbit/CleanerBackend.py:187
 msgid "Loads the initial session after the browser closes or crashes"
@@ -559,11 +560,11 @@ msgstr "تفريغ سلة المهملات"
 
 #: ../bleachbit/CleanerBackend.py:534
 msgid "Recycle bin"
-msgstr ""
+msgstr "سلة المحذوفات"
 
 #: ../bleachbit/CleanerBackend.py:534
 msgid "Empty the recycle bin"
-msgstr ""
+msgstr "تفريغ سلة المحذوفات"
 
 #: ../bleachbit/CleanerBackend.py:535
 msgid ""
@@ -580,7 +581,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GUI.py:110
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "إخفاء التنظيفات غير الملاحظة"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -615,11 +616,11 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:530
 msgid "Choose files to shred"
-msgstr ""
+msgstr "إختر ملفات للمشاركة"
 
 #: ../bleachbit/GUI.py:573
 msgid "_Shred Files"
-msgstr ""
+msgstr "_ملفات المشاركة"
 
 #: ../bleachbit/GUI.py:578
 msgid "_Release Notes"
