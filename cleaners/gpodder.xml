@@ -21,12 +21,14 @@
 -->
 <cleaner id="gpodder">
   <label>gPodder</label>
-  <description>Podcast client</description>
-  <running type="exe">gpodder</running>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action type="glob">~/.config/gpodder/cache/*xml</action>
+  </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
     <action type="sqlite.vacuum">~/.config/gpodder/database.sqlite</action>
   </option>
 </cleaner>
-
