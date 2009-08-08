@@ -130,6 +130,17 @@ class Options:
         return self.config.options('preserve_languages')
 
 
+    def get_list(self, option):
+        """Return an option which is a list data type"""
+        section = "list/%s" % option
+        if not self.config.has_section(section):
+            return None
+        values = []
+        for option in sorted(self.config.options(section)):
+            values.append(self.config.get(section, option))
+        return values
+
+
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
         option = parent
@@ -145,6 +156,19 @@ class Options:
         if section == 'hashpath' and key[1] == ':':
             key = key[0] + key[2:]
         self.config.set(section, key, str(value))
+        self.__flush()
+
+
+    def set_list(self, key, values):
+        """Set a value which is a list data type"""
+        section = "list/%s" % key
+        if self.config.has_section(section):
+            self.config.remove_section(section)
+        self.config.add_section(section)
+        counter = 0
+        for value in values:
+            self.config.set(section, str(counter), value)
+            counter += 1
         self.__flush()
 
 
@@ -217,6 +241,11 @@ class TestOptions(unittest.TestCase):
         o.set("check_online_updates", value)
         self.assertEqual(value, o.get("check_online_updates"))
 
+        # try a list
+        list_values = ['a','b','c'] 
+        o.set_list("list_test", list_values)
+        self.assertEqual(list_values, o.get_list("list_test"))
+
         # these should always be set
         for bkey in boolean_keys:
             self.assert_(type(o.get(bkey)) is bool)
@@ -226,7 +255,7 @@ class TestOptions(unittest.TestCase):
         key = 'c:\\test\\foo.xml'
         o.set(key, value, 'hashpath')
         self.assertEqual(value, o.get(key, 'hashpath'))
-        
+
         # language
         value = o.get_language('en')
         self.assert_(type(value) is bool)
