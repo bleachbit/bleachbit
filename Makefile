@@ -52,7 +52,7 @@ tests:
 	for f in `grep -l unittest *py`; \
 	do \
 		echo testing "$$f"; \
-		python "$$f"; \
+		python "$$f" -v; \
 		rc=$$?; \
 		[ $$rc -gt 0 ] && echo -e \\a && notify-send -u critical "error executing test for $$f" && exit 1; \
 	done; \
