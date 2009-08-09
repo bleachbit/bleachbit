@@ -72,6 +72,7 @@ BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
+Requires:       python-xml
 %py_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
