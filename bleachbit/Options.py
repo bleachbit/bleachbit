@@ -45,6 +45,10 @@ class Options:
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
+        if not self.config.has_section("list/shred_drives"):
+            if 'win32' == sys.platform:
+                import Windows
+                self.set_list('shred_drives', Windows.get_fixed_drives())
 
         # set defaults
         self.__set_default("auto_hide", True)
