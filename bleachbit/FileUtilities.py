@@ -32,6 +32,7 @@ import re
 import stat
 import subprocess
 import sys
+import tempfile
 
 
 
@@ -285,6 +286,34 @@ def wipe_contents(path):
     f.close()
 
 
+def wipe_path(pathname, idle_cb = None):
+    """Wipe the free space in the path"""
+    (fd, filename) = tempfile.mkstemp(dir = pathname)
+    last_idle = datetime.datetime.now()
+    # blocks
+    blanks = chr(0) * 4096
+    try:
+        while True:
+            os.write(fd, blanks)
+            if idle_cb and (last_idle - datetime.datetime.now()).seconds > 1:
+                # keep the GUI responding
+                idle_cb()
+    except OSError, e:
+        if 28 != e.errno:
+            raise
+    # individual characters
+    try:
+        while True:
+            os.write(fd, chr(0))
+    except OSError, e:
+        if 28 != e.errno:
+            raise
+    os.fdatasync(fd)
+    os.ftruncate(fd, 0)
+    os.close(fd)
+    os.remove(filename)
+
+
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
@@ -349,7 +378,6 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_children_in_directory(self): 
         """Unit test for function children_in_directory()"""
-        import tempfile
 
         # test an existing directory that usually exists
         dirname = os.path.expanduser("~/.config")
@@ -394,7 +422,6 @@ class TestFileUtilities(unittest.TestCase):
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
 
-        import tempfile
 
         hebrew = "עִבְרִית"
         katanana = "アメリカ"
@@ -587,6 +614,12 @@ class TestFileUtilities(unittest.TestCase):
         os.remove(filename)
 
 
+    def test_wipe_path(self):
+        """Unit test for wipe_path()"""
+        pathname = tempfile.gettempdir()
+        wipe_path(pathname)
+
+
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
 
@@ -645,5 +678,13 @@ class TestFileUtilities(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) == 2 and sys.argv[1] == 'full':
+        print 'info: Running all tests.'
+        del sys.argv[1]
+        print sys.argv
+    else:
+        print "warning: Skipping some tests.  Use argument 'full' to run them."
+        del TestFileUtilities.test_wipe_path
     unittest.main()
+
 

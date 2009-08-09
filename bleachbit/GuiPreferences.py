@@ -37,6 +37,7 @@ class PreferencesDialog:
     def __init__(self, parent, cb_refresh_operations):
         self.cb_refresh_operations = cb_refresh_operations
 
+        self.parent = parent
         self.dialog = gtk.Dialog(title = _("Preferences"), \
             parent = parent, \
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
@@ -47,6 +48,7 @@ class PreferencesDialog:
 
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
+        notebook.append_page(self.__drives_page(), gtk.Label(_("Drives")))
         if sys.platform == 'linux2':
             notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
 
@@ -89,6 +91,70 @@ class PreferencesDialog:
         cb_shred.connect('toggled', toggle_callback, 'shred')
         self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False)
+
+
+        return vbox
+
+    def __drives_page(self):
+        """Return widget containing the drives page"""
+
+        def add_drive_cb(button):
+            """Callback for adding a drive"""
+            chooser = gtk.FileChooserDialog( parent = self.parent, \
+                title = _("Choose a folder"),
+                buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
+                gtk.STOCK_ADD, gtk.RESPONSE_ACCEPT), \
+                action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+
+            resp = chooser.run()
+            pathname = chooser.get_filename()
+            chooser.hide()
+            chooser.destroy()
+            if gtk.RESPONSE_ACCEPT == resp:
+                liststore.append([pathname])
+                pathnames.append(pathname)
+                options.set_list('shred_drives', pathnames)
+
+
+        def remove_drive_cb(button):
+            """Callback for removing a drive"""
+            treeselection = treeview.get_selection()
+            (model, iter) = treeselection.get_selected()
+            pathname = model[0][0]
+            liststore.remove(iter)
+            pathnames.remove(pathname)
+            options.set_list('shred_drives', pathnames)
+
+
+        vbox = gtk.VBox()
+
+        notice = gtk.Label(_("Choose a writeable directory for each drive for which to shred free space."))
+        vbox.pack_start(notice, False)
+
+        liststore = gtk.ListStore(str)
+
+        pathnames = sorted(options.get_list('shred_drives'))
+        if not pathnames:
+            pathnames = []
+        for pathname in pathnames:
+            liststore.append([pathname])
+        treeview = gtk.TreeView(model = liststore)
+        crt = gtk.CellRendererText()
+        tvc = gtk.TreeViewColumn(None, crt, text = 0)
+        treeview.append_column(tvc)
+
+        vbox.pack_start(treeview)
+
+        button_add = gtk.Button(_("Add"))
+        button_add.connect("clicked", add_drive_cb)
+        button_remove = gtk.Button(_("Remove"))
+        button_remove.connect("clicked", remove_drive_cb)
+
+        button_box = gtk.HButtonBox()
+        button_box.set_layout(gtk.BUTTONBOX_START)
+        button_box.pack_start(button_add)
+        button_box.pack_start(button_remove)
+        vbox.pack_start(button_box, False)
 
         return vbox
 

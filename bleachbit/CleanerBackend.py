@@ -533,6 +533,8 @@ class System(Cleaner):
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+        self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
+        self.set_warning('free_disk_space', _('This option is slow.'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
     def get_description(self):
@@ -650,6 +652,23 @@ class System(Cleaner):
                 yield (0, _("Clipboard"))
             else:
                 yield _("Clipboard")
+
+
+        def idle_cb():
+            """A callback to keep the window responding"""
+            while gtk.events_pending():
+                gtk.main_iteration()
+
+        if self.options["free_disk_space"][1]:
+            for pathname in options.get_list('shred_drives'):
+                # TRANSLATORS: 'Free' could also be translated 'unallocated.' 
+                # %s expands to a path such as C:\ or /tmp/
+                display = _("Overwrite free disk space %s") % pathname
+                if really_delete:
+                    FileUtilities.wipe_path(pathname, idle_cb = idle_cb)
+                    yield (0, display)
+                else:
+                    yield display
 
         if sys.platform == 'win32' and self.options['mru'][1]:
             # reference: http://support.microsoft.com/kb/142298
