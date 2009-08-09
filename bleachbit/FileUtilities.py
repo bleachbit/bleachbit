@@ -288,30 +288,30 @@ def wipe_contents(path):
 
 def wipe_path(pathname, idle_cb = None):
     """Wipe the free space in the path"""
-    (fd, filename) = tempfile.mkstemp(dir = pathname)
+    f = tempfile.TemporaryFile(dir = pathname)
     last_idle = datetime.datetime.now()
     # blocks
     blanks = chr(0) * 4096
     try:
         while True:
-            os.write(fd, blanks)
+            f.write(blanks)
             if idle_cb and (last_idle - datetime.datetime.now()).seconds > 1:
                 # keep the GUI responding
                 idle_cb()
-    except OSError, e:
+    except IOError, e:
         if 28 != e.errno:
             raise
     # individual characters
     try:
         while True:
-            os.write(fd, chr(0))
-    except OSError, e:
+            f.write(chr(0))
+    except IOError, e:
         if 28 != e.errno:
             raise
-    os.fdatasync(fd)
-    os.ftruncate(fd, 0)
-    os.close(fd)
-    os.remove(filename)
+    f.flush()
+    f.truncate(0)
+    f.close()
+    # file is removed implicitly
 
 
 def vacuum_sqlite3(path):
