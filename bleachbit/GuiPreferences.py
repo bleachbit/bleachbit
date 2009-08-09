@@ -133,7 +133,9 @@ class PreferencesDialog:
 
         liststore = gtk.ListStore(str)
 
-        pathnames = sorted(options.get_list('shred_drives'))
+        pathnames = options.get_list('shred_drives')
+        if pathnames:
+            pathnames = sorted(pathnames)
         if not pathnames:
             pathnames = []
         for pathname in pathnames:

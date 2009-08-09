@@ -659,8 +659,9 @@ class System(Cleaner):
             while gtk.events_pending():
                 gtk.main_iteration()
 
-        if self.options["free_disk_space"][1]:
-            for pathname in options.get_list('shred_drives'):
+        shred_drives = options.get_list('shred_drives')
+        if self.options["free_disk_space"][1] and shred_drives:
+            for pathname in shred_drives:
                 # TRANSLATORS: 'Free' could also be translated 'unallocated.' 
                 # %s expands to a path such as C:\ or /tmp/
                 display = _("Overwrite free disk space %s") % pathname
