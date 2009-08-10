@@ -23,6 +23,7 @@ from gettext import gettext as _
 import os
 import sys
 import threading
+import traceback
 import types
 import warnings
 
@@ -33,6 +34,7 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
+import CleanerBackend
 import Update
 from CleanerBackend import backends
 import FileUtilities
@@ -307,11 +309,11 @@ class GUI:
         model = self.tree_store.get_model()
         __iter = model.get_iter_root()
         while __iter:
-            #print "debug: get_selected_operations: iter id = '%s', value='%s'" % (model[iter][2], model[iter][1])
             if True == model[__iter][1]:
                 ret.append(model[__iter][2])
             __iter = model.iter_next(__iter)
         return ret
+
 
     def get_operation_options(self, operation):
         """For the given operation ID, return a list of the selected option IDs."""
@@ -319,15 +321,12 @@ class GUI:
         model = self.tree_store.get_model()
         __iter = model.get_iter_root()
         while __iter:
-            #print "debug: get_operation_options: iter id = '%s', value='%s'" % (model[iter][2], model[iter][1])
             if operation == model[__iter][2]:
                 iterc = model.iter_children(__iter)
                 if None == iterc:
-                    #print "debug: no children"
                     return None
                 while iterc:
                     tup = (model[iterc][2], model[iterc][1])
-                    #print "debug: get_operation_options: tuple = '%s'" % (tup,)
                     ret.append(tup)
                     iterc = model.iter_next(iterc)
                 return ret
@@ -350,12 +349,20 @@ class GUI:
         self.preview_or_run_operations(True)
 
 
-    def preview_or_run_operations(self, really_delete):
+    def preview_or_run_operations(self, really_delete, operations = None):
         """Preview operations or run operations (delete files)"""
+
+        assert(type(really_delete) is bool)
         import Worker
+        if None == operations:
+            operations = {}
+            for operation in self.get_selected_operations():
+                operations[operation] = self.get_operation_options(operation)
+        assert(type(operations) is dict)
         try:
-            self.worker = Worker.Worker(self, really_delete)
+            self.worker = Worker.Worker(self, really_delete, operations)
         except:
+            traceback.print_exc()
             pass
         else:
             self.worker.set_total_size_cb(self.cb_total_size)
@@ -413,23 +420,47 @@ class GUI:
 
     def cb_shred_file(self, action):
         """Callback for shredding a file"""
+
+        # get list of files
         chooser = gtk.FileChooserDialog(title = _("Choose files to shred"),
             parent = self.window,
             action = gtk.FILE_CHOOSER_ACTION_OPEN,
             buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
         chooser.set_select_multiple(True)
         resp = chooser.run()
-        paths =  chooser.get_filenames()
+        paths = chooser.get_filenames()
         chooser.destroy()
 
         if gtk.RESPONSE_OK != resp:
             return
 
-        if not True == delete_confirmation_dialog(self.window, mention_preview = False):
+        # create a temporary cleaner object
+        cleaner = CleanerBackend.Cleaner()
+        cleaner.add_option('files', 'files', '')
+        cleaner.name = ''
+        import Action
+        actioncontainer = Action.ActionContainer()
+        class CustomFileAction(Action.ActionProvider):
+            def list_files(self):
+                for path in paths:
+                    yield path
+        provider = CustomFileAction(None)
+        actioncontainer.add_action_provider(provider)
+        cleaner.add_action('files', actioncontainer)
+        backends['_gui'] = cleaner
+
+        # preview and confirm
+        operations = { '_gui' : [ ( 'files', True) ] }
+        self.preview_or_run_operations(False, operations)
+
+        if True == delete_confirmation_dialog(self.window, mention_preview = False):
+            # delete
+            self.preview_or_run_operations(True, operations)
             return
 
-        for path in paths:
-            FileUtilities.delete(path, shred = True)
+        # clean up temporary cleaner
+        del backends['_gui']
+
 
 
     def cb_total_size(self, bytes):

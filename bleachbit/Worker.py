@@ -41,11 +41,11 @@ if 'linux2' == sys.platform:
 
 class Worker:
     """Perform the preview or delete operations"""
-    def __init__(self, gui, really_delete):
+    def __init__(self, gui, really_delete, operations):
         self.total_size_cb = None
         self.gui = gui
         self.really_delete = really_delete
-        self.operations = gui.get_selected_operations()
+        self.operations = operations
         if 0 == len(self.operations):
             dialog = gtk.MessageDialog(gui.window, gtk.DIALOG_MODAL \
                 | gtk.DIALOG_DESTROY_WITH_PARENT, \
@@ -70,7 +70,7 @@ class Worker:
 
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
-        operation_options = self.gui.get_operation_options(operation)
+        operation_options = self.operations[operation]
         print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
         if self.really_delete and backends[operation].is_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
