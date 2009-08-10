@@ -36,6 +36,7 @@ if 'win32' == sys.platform:
 
 if 'linux2' == sys.platform:
     class WindowsError(Exception):
+        """Dummy class for Linux"""
         def __str__(self):
             return 'this is a dummy class for Linux'
 
@@ -133,7 +134,7 @@ class Worker:
     def clean_pathname(self, pathname):
         """Clean a single pathname"""
         try:
-            bytes = FileUtilities.getsize(pathname)
+            size_bytes = FileUtilities.getsize(pathname)
         except:
             traceback.print_exc()
             line = str(sys.exc_info()[1]) + " " + pathname + "\n"
@@ -156,7 +157,7 @@ class Worker:
             except:
                 error = True
             else:
-                size_text = FileUtilities.bytes_to_human(bytes)
+                size_text = FileUtilities.bytes_to_human(size_bytes)
                 # TRANSLATORS: This indicates the file will be deleted
                 # when Windows reboots.  The special keyword %(size)s
                 # changes to a size such as 320.1KB.
@@ -166,7 +167,7 @@ class Worker:
         except:
             error = True
         else:
-            size_text = FileUtilities.bytes_to_human(bytes)
+            size_text = FileUtilities.bytes_to_human(size_bytes)
             line = "%s %s\n" % (size_text, pathname)
 
         if error:
@@ -174,7 +175,7 @@ class Worker:
             line = "%s %s\n" % (str(sys.exc_info()[1]), pathname)
             tag = 'error'
         else:
-            self.total_bytes += bytes
+            self.total_bytes += size_bytes
 
         self.gui.append_text(line, tag, self.__iter)
 
