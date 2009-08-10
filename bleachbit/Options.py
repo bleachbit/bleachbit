@@ -49,6 +49,9 @@ class Options:
             if 'win32' == sys.platform:
                 import Windows
                 self.set_list('shred_drives', Windows.get_fixed_drives())
+            if 'linux2' == sys.platform:
+                import Unix
+                self.set_list('shred_drives', Unix.guess_overwrite_paths())
 
         # set defaults
         self.__set_default("auto_hide", True)

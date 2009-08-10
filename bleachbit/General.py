@@ -23,6 +23,10 @@ General code
 """
 
 
+import subprocess
+
+
+
 ###
 ### XML
 ###
@@ -45,5 +49,18 @@ def getText(nodelist):
         if node.nodeType == node.TEXT_NODE:
             rc = rc + node.data
     return rc
+
+###
+### General
+###
+
+def run_external(args):
+    """Run external command and return (return code, stdout, stderr)"""
+    print 'debug: running cmd ', args
+    p = subprocess.Popen(args, stdout = subprocess.PIPE, \
+        stderr = subprocess.PIPE)
+    p.wait()
+    outputs = p.communicate()
+    return (p.returncode, outputs[0], outputs[1])
 
 

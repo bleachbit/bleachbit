@@ -33,6 +33,7 @@ import sys
 import ConfigParser
 
 import FileUtilities
+import General
 
 HAVE_GNOME_VFS = True
 try:
@@ -46,6 +47,27 @@ except:
     else:
         gnomevfs = gnome.vfs
 
+
+def free_space(pathname):
+    """Return free space in bytes"""
+    args = ['df', '-B', '1', pathname]
+    (rc, stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        return None
+    line = stdout.split('\n')[1]
+    match = re.search("^[/a-z0-9]+\s+[0-9]+\s+[0-9]+([0-9]+)", line)
+    if not match:
+        return None
+    return int(match.groups(0)[0])
+
+
+def guess_overwrite_paths():
+    """Guess which partitions to overwrite (to hide deleted files)"""
+    home = os.path.expanduser("~")
+    if free_space(home) == free_space('/tmp/'):
+        return [ home ]
+    else:
+        return [ home, '/tmp' ]
 
 
 def locale_to_language(locale):
@@ -559,6 +581,21 @@ class TestUnix(unittest.TestCase):
         else:
             bytes = apt_autoclean()
             self.assert_(type(bytes) is int)
+
+
+    def test_free_space(self):
+        """Unit test for free_space()"""
+        home = os.path.expanduser("~")
+        result = free_space(home)
+        self.assertNotEqual(result, None)
+        self.assert_(result > -1)
+        self.assert_(type(result) is int)
+
+
+    def test_guess_overwrite_paths(self):
+        """Unit test for guess_overwrite_paths()"""
+        for path in guess_overwrite_paths():
+            self.assert_(os.path.isdir(path))
 
 
     def test_is_broken_xdg_desktop(self):
