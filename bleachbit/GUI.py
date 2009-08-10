@@ -9,12 +9,12 @@
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -97,6 +97,8 @@ def delete_confirmation_dialog(parent, mention_preview):
 
 class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
+
+
     def __init__(self):
         self.tree_store = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT)
         if None == self.tree_store:
@@ -158,6 +160,7 @@ class TreeInfoModel:
 class TreeDisplayModel:
     """Displays the info model in a view"""
 
+
     def make_view(self, model, parent):
         """Create and return a TreeView object"""
         self.view = gtk.TreeView(model)
@@ -179,6 +182,7 @@ class TreeDisplayModel:
         # finish
         self.view.expand_all()
         return self.view
+
 
     def set_cleaner(self, path, model, parent_window, value = None):
         """Activate or deactive option of cleaner."""
@@ -210,6 +214,7 @@ class TreeDisplayModel:
                     # user cancelled, so don't toggle option
                     return
         model[path][1] = value
+
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
@@ -267,11 +272,11 @@ class GUI:
         else:
             self.textbuffer.insert(__iter, text)
         # Scroll to end.  If the command is run directly instead of
-	# through the idle loop, it may only scroll most of the way
-	# as seen on Ubuntu 9.04 with Italian and Spanish.
+        # through the idle loop, it may only scroll most of the way
+        # as seen on Ubuntu 9.04 with Italian and Spanish.
         gobject.idle_add(lambda : \
-		self.textview.scroll_mark_onscreen( \
-		self.textbuffer.get_insert()))
+        self.textview.scroll_mark_onscreen( \
+        self.textbuffer.get_insert()))
 
 
     def on_selection_changed(self, selection):
@@ -283,12 +288,10 @@ class GUI:
             return
         paths = selected_rows[1][0]
         row = paths[0]
-        #print "debug: on_selection_changed: paths = '%s', row='%s', model[paths][0]  = '%s'" % (paths,row, model[paths][0])
         name = model[row][0]
         cleaner_id = model[row][2]
         self.progressbar.hide()
         description = backends[cleaner_id].get_description()
-        #print "debug: on_selection_changed: row='%s', name='%s', desc='%s'," % ( row, name ,description)
         self.textbuffer.set_text("")
         self.append_text(name + "\n", 'operation')
         if not description:
@@ -538,6 +541,7 @@ class GUI:
 
         return toolbar
 
+
     def create_window(self):
         """Create the main application window"""
         self.window = gtk.Window()
@@ -626,12 +630,14 @@ class GUI:
                 notify.attach_to_widget(self.toolbar)
                 notify.show()
 
+
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
         update = Update.Update()
         if update.is_update_available():
             gobject.idle_add(self.enable_online_update, update.get_update_info_url())
+
 
     def __init__(self):
         import RecognizeCleanerML
@@ -646,6 +652,7 @@ class GUI:
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
+
 
 if __name__ == '__main__':
     gui = GUI()
