@@ -119,9 +119,9 @@ class PreferencesDialog:
         def remove_drive_cb(button):
             """Callback for removing a drive"""
             treeselection = treeview.get_selection()
-            (model, iter) = treeselection.get_selected()
+            (model, _iter) = treeselection.get_selected()
             pathname = model[0][0]
-            liststore.remove(iter)
+            liststore.remove(_iter)
             pathnames.remove(pathname)
             options.set_list('shred_drives', pathnames)
 
