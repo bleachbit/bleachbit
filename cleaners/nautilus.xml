@@ -3,7 +3,7 @@
 
     BleachBit
     Copyright (C) 2009 Andrew Ziem
-    http://bleachbit.sourceforge.net
+    http://bleachbit-project.appspot.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,15 +21,10 @@
 -->
 <cleaner id="nautilus" os="linux">
   <label>Nautilus</label>
-  <description>GNOME file manager</description>
-  <option id="cache">
-    <label>Cache</label>
-    <description>Delete the cache</description>
-    <action type="glob">~/.nautilus/saved-session-*</action>
-  </option>
-  <option id="positions">
-    <label>Positions</label>
-    <description>Delete the positions of files in directories and emblems of directories</description>
-    <action type="glob">~/.nautilus/metafiles/*</action>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the usage history</description>
+    <action type="glob">~/.nautilus/saved-session-??????</action>
+    <action type="glob">~/.nautilus/metafiles/*:*.xml</action>
   </option>
 </cleaner>
