@@ -582,7 +582,6 @@ class System(Cleaner):
         files = []
         if sys.platform == 'linux2' and self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
-            files += [ os.path.expanduser("~/.recently-used.xbel") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
@@ -643,6 +642,7 @@ class System(Cleaner):
                 yield filename
 
     def other_cleanup(self, really_delete):
+        # clipboard
         if self.options["clipboard"][1]:
             if really_delete:
                 gtk.gdk.threads_enter()
@@ -654,6 +654,18 @@ class System(Cleaner):
                 yield _("Clipboard")
 
 
+        # recent documents
+        if sys.platform == 'linux2' and self.options["recent_documents"][1]:
+            pathname = os.path.expanduser("~/.recently-used.xbel")
+            if really_delete:
+                oldsize = os.path.getsize(pathname)
+                FileUtilities.delete(pathname, shred = True)
+                yield (oldsize, pathname)
+            else:
+                yield pathname
+
+
+        # overwrite free space
         def idle_cb():
             """A callback to keep the window responding"""
             while gtk.events_pending():
@@ -671,6 +683,7 @@ class System(Cleaner):
                 else:
                     yield display
 
+        # Windows MRU
         if sys.platform == 'win32' and self.options['mru'][1]:
             # reference: http://support.microsoft.com/kb/142298
             keys = ( \
