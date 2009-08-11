@@ -656,6 +656,9 @@ class System(Cleaner):
 
         # recent documents
         if sys.platform == 'linux2' and self.options["recent_documents"][1]:
+            # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
+            # in memory if it is simply deleted, so it must be shredded
+            # (or at least truncated).
             pathname = os.path.expanduser("~/.recently-used.xbel")
             if really_delete:
                 oldsize = os.path.getsize(pathname)
