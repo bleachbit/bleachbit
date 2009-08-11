@@ -27,7 +27,6 @@ import datetime
 import glob
 import locale
 import os
-import os.path
 import re
 import stat
 import subprocess
@@ -96,11 +95,11 @@ def bytes_to_human(bytes):
         if bytes >= key:
             abbrev = (1.0 * bytes) / key
             suf = storage_multipliers[key]
-            format = "%." + str(decimals) + "f" + suf
+            strformat = "%." + str(decimals) + "f" + suf
             if hasattr(locale, 'format_string'):
-                return locale.format_string(format, abbrev)
+                return locale.format_string(strformat, abbrev)
             else:
-                return locale.format(format, abbrev)
+                return locale.format(strformat, abbrev)
 
     if bytes < 0:
         return "-" + bytes_to_human(abs(bytes))
@@ -173,7 +172,6 @@ def execute_sqlite3(path, cmds):
     try:
         import sqlite3
     except ImportError, exc:
-        import sys
         if sys.version_info[0] == 2 and sys.version_info[1] < 5:
             raise RuntimeError(_("Cannot import Python module sqlite3: Python 2.5 or later is required."))
         else:
@@ -199,7 +197,7 @@ def expand_glob_join(pathname1, pathname2):
     ret = []
     pathname3 = os.path.expanduser(os.path.expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
-       ret.append(pathname4)
+        ret.append(pathname4)
     return ret
 
 
@@ -248,15 +246,15 @@ def listdir(directory):
     Path may be a tuple of directories."""
 
     if type(directory) is tuple:
-        for dir in directory:
-            for pathname in listdir(dir):
+        for dirname in directory:
+            for pathname in listdir(dirname):
                 yield pathname
         return
-    dir = os.path.expanduser(directory)
-    if not os.path.lexists(dir):
+    dirname = os.path.expanduser(directory)
+    if not os.path.lexists(dirname):
         return
-    for filename in os.listdir(dir):
-        yield os.path.join(dir, filename)
+    for filename in os.listdir(dirname):
+        yield os.path.join(dirname, filename)
 
 
 def wipe_contents(path):
@@ -354,13 +352,13 @@ class TestFileUtilities(unittest.TestCase):
         # test roundtrip conversion for random values
         import random
         for n in range(0, 1000):
-            bytes = random.randrange(0, 1024**4)
-            human = bytes_to_human(bytes)
+            bytes1 = random.randrange(0, 1024**4)
+            human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
-            error =  abs(float(bytes2 - bytes) / bytes)
+            error =  abs(float(bytes2 - bytes1) / bytes1)
             self.assert_(abs(error) < 0.01, \
                 "%d (%s) is %.2f%% different than %d" % \
-                (bytes, human, error * 100, bytes2))
+                (bytes1, human, error * 100, bytes2))
 
         # test localization
         if hasattr(locale, 'format_string'):
@@ -445,9 +443,9 @@ class TestFileUtilities(unittest.TestCase):
         for test in tests:
             (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
             self.assert_(os.path.exists(filename))
-            for x in range(0, 4096/5):
-                bytes = os.write(fd, "top secret")
-                self.assertEqual(bytes, 10)
+            for x in range(0, 4096):
+                bytes_written = os.write(fd, "top secret")
+                self.assertEqual(bytes_written, 10)
             os.close(fd)
             self.assert_(os.path.exists(filename))
             delete(filename, shred)
@@ -526,6 +524,7 @@ class TestFileUtilities(unittest.TestCase):
 
 
     def test_expand_glob_join(self):
+        """Unit test for expand_glob_join()"""
         if sys.platform == 'linux2':
             expand_glob_join('/bin', '*sh')
         if sys.platform == 'win32':
@@ -534,8 +533,6 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_getsize(self):
         """Unit test for method getsize()"""
-        import tempfile
-
         # create regular file
         (handle, filename) = tempfile.mkstemp("regulartest")
         os.write(handle, "abcdefghij" * 12345)
@@ -593,7 +590,6 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for wipe_delete()"""
 
         # create test file
-        import tempfile
         (handle, filename) = tempfile.mkstemp("wipetest")
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
@@ -626,7 +622,6 @@ class TestFileUtilities(unittest.TestCase):
         try:
             import sqlite3
         except ImportError, e:
-            import sys
             if sys.version_info[0] == 2 and sys.version_info[1] < 5:
                 print "Warning: Skipping test_vacuum_sqlite3() on old Python"
                 return
@@ -661,8 +656,6 @@ class TestFileUtilities(unittest.TestCase):
         """Unit test for class OpenFiles"""
         if 'win32' == sys.platform:
             return
-
-        import tempfile
 
         (handle, filename) = tempfile.mkstemp()
         self.assertEqual(openfiles.is_open(filename), True)

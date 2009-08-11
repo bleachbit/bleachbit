@@ -34,13 +34,14 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-import CleanerBackend
-import Update
-from CleanerBackend import backends
-import FileUtilities
-from Options import options
 from Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     license_filename, online_update_notification_enabled, release_notes_url
+from CleanerBackend import backends
+from GuiPreferences import PreferencesDialog
+from Options import options
+import CleanerBackend
+import FileUtilities
+import Update
 
 
 def open_url(url):
@@ -201,7 +202,7 @@ class TreeDisplayModel:
             # this is an option (child), not a cleaner (parent)
             cleaner_id = model[parent][2]
             option_id = model[path][2]
-        if cleaner_id and value == True:
+        if cleaner_id and value:
             # when toggling an option, present any warnings
             warning = backends[cleaner_id].get_warning(option_id)
             if warning:
@@ -312,7 +313,7 @@ class GUI:
         model = self.tree_store.get_model()
         __iter = model.get_iter_root()
         while __iter:
-            if True == model[__iter][1]:
+            if model[__iter][1]:
                 ret.append(model[__iter][2])
             __iter = model.iter_next(__iter)
         return ret
@@ -347,7 +348,7 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not True == delete_confirmation_dialog(self.window, True):
+        if not delete_confirmation_dialog(self.window, True):
             return
         self.preview_or_run_operations(True)
 
@@ -366,7 +367,8 @@ class GUI:
             self.worker = Worker.Worker(self, really_delete, operations)
         except:
             traceback.print_exc()
-            pass
+            err = str(sys.exc_info()[1])
+            self.append_text(err + "\n", 'error')
         else:
             self.worker.set_total_size_cb(self.cb_total_size)
             worker = self.worker.run()
@@ -410,7 +412,6 @@ class GUI:
 
     def cb_preferences_dialog(self, action):
         """Callback for preferences dialog"""
-        from GuiPreferences import PreferencesDialog
         pref = PreferencesDialog(self.window, self.cb_refresh_operations)
         pref.run()
 
@@ -456,7 +457,7 @@ class GUI:
         operations = { '_gui' : [ ( 'files', True) ] }
         self.preview_or_run_operations(False, operations)
 
-        if True == delete_confirmation_dialog(self.window, mention_preview = False):
+        if delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
             self.preview_or_run_operations(True, operations)
             return
@@ -641,7 +642,7 @@ class GUI:
 
     def __init__(self):
         import RecognizeCleanerML
-        rcml = RecognizeCleanerML.RecognizeCleanerML()
+        RecognizeCleanerML.RecognizeCleanerML()
         import CleanerML
         CleanerML.load_cleaners()
         self.create_window()
