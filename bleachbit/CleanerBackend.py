@@ -526,9 +526,6 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
-            # TRANSLATORS: Yum is a software program (similar to APT)
-            # that manages packages on CentOS, Fedora, and Red Hat.
-            self.add_option('yum', _('Yum clean'), _("Delete the cache"))
         if sys.platform == 'win32':
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
@@ -727,13 +724,6 @@ class System(Cleaner):
             for ret in Windows.empty_recycle_bin(really_delete):
                 yield ret
 
-
-        if sys.platform == 'linux2' and self.options["yum"][1]:
-            if really_delete:
-                bytes = Unix.yum_clean()
-                yield (bytes, _("Yum clean"))
-            else:
-                yield _("Yum clean")
 
 
     def whitelisted(self, pathname):

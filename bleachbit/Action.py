@@ -216,6 +216,25 @@ class Winreg(ActionProvider):
             yield _str
 
 
+class YumCleanAll(ActionProvider):
+    """Action to run 'yum clean all'"""
+    action_key = 'yum.clean_all'
+
+
+    def __init__(self, action_element):
+        pass
+
+
+    def other_cleanup(self, really_delete):
+        if really_delete:
+            yield (Unix.yum_clean(), "yum clean all")
+        else:
+            # Checking allows auto-hide to work for non-APT systems
+            if FileUtilities.exe_exists('yum'):
+                yield "yum clean all"
+
+
+
 ###
 ### ActionContainer class
 ###

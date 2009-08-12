@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit-project.appspot.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="yum" os="linux">
+  <label>yum</label>
+  <option id="clean_all">
+    <label translate="false">clean all</label>
+    <description>Delete the cache</description>
+    <action type="yum.clean_all"/>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action type="sqlite.vacuum">/var/cache/yum/*/*.sqlite</action>
+  </option>
+</cleaner>
