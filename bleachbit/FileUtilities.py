@@ -75,25 +75,27 @@ class OpenFiles:
         return filename in self.files
 
 
-def bytes_to_human(bytes):
+def bytes_to_human(bytes_i):
     """Display a file size in human terms (megabytes, etc.)"""
 
     storage_multipliers = { 1024**5 : 'PB', 1024**4 : 'TB', \
         1024**3 : 'GB', 1024**2: 'MB', 1024: 'KB', 1 : 'B' }
 
-    if 0 == bytes:
+    assert(type(bytes_i) is int or type(bytes_i) is long)
+
+    if 0 == bytes_i:
         return "0"
 
-    if bytes >= 1024**3:
+    if bytes_i >= 1024**3:
         decimals = 2
-    elif bytes >= 1024:
+    elif bytes_i >= 1024:
         decimals = 1
     else:
         decimals = 0
 
     for key in sorted(storage_multipliers.keys(), reverse = True):
-        if bytes >= key:
-            abbrev = (1.0 * bytes) / key
+        if bytes_i >= key:
+            abbrev = (1.0 * bytes_i) / key
             suf = storage_multipliers[key]
             strformat = "%." + str(decimals) + "f" + suf
             if hasattr(locale, 'format_string'):
@@ -101,8 +103,8 @@ def bytes_to_human(bytes):
             else:
                 return locale.format(strformat, abbrev)
 
-    if bytes < 0:
-        return "-" + bytes_to_human(abs(bytes))
+    if bytes_i < 0:
+        return "-" + bytes_to_human(abs(bytes_i))
 
 
 def children_in_directory(top, list_directories = False):
@@ -327,7 +329,7 @@ class TestFileUtilities(unittest.TestCase):
 
     def __touch(self, filename):
         """Create an empty file"""
-        f = open(filename, "w")
+        open(filename, "w")
 
 
     def test_bytes_to_human(self):
