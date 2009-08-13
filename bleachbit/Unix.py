@@ -544,7 +544,7 @@ def yum_clean():
     if not FileUtilities.exe_exists('yum'):
         raise RuntimeError(_('Executable not found: %s') % 'yum')
     old_size = FileUtilities.getsizedir('/var/cache/yum')
-    args  = ['yum', 'clean', 'all']
+    args  = ['yum', "--enablerepo=*", 'clean', 'all']
     p = subprocess.Popen(args, stderr=subprocess.STDOUT, \
         stdout=subprocess.PIPE)
     while True:
@@ -556,7 +556,7 @@ def yum_clean():
             old_size = FileUtilities.getsizedir('/var/cache/yum')
         if "" == line and p.poll() != None:
             break
-    print 'debug: yum process return code = %d', p.returncode
+    print 'debug: yum process return code = %d' % p.returncode
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
