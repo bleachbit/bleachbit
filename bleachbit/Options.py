@@ -100,9 +100,9 @@ class Options:
             try:
                 uid = pwd.getpwnam(os.getlogin())[3]
                 if mkfile:
-                   os.chown(options_file, uid, -1)
+                    os.chown(options_file, uid, -1)
                 if mkdir:
-                   os.chown(options_dir, uid, -1)
+                    os.chown(options_dir, uid, -1)
             except:
                 print 'Failed fixing permissions created by sudo'
                 traceback.print_exc()
@@ -221,7 +221,6 @@ def sudo_mode():
         login2 = pwd.getpwuid(os.getuid())[0]
         return login1 != login2
     except:
-        import traceback
         traceback.print_exc()
         return False
 
@@ -249,7 +248,7 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(value, o.get("check_online_updates"))
 
         # try a list
-        list_values = ['a','b','c'] 
+        list_values = ['a', 'b', 'c']
         o.set_list("list_test", list_values)
         self.assertEqual(list_values, o.get_list("list_test"))
 

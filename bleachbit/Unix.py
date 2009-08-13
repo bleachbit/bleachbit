@@ -207,7 +207,7 @@ class Locales:
 
     def iterate_languages(self):
         """Return each language code (generally ISO 639)"""
-        if False == self.__scanned:
+        if not self.__scanned:
             self.__scan()
         for lang in self.__languages:
             yield lang
@@ -579,8 +579,8 @@ class TestUnix(unittest.TestCase):
         if 0 != os.geteuid() or not FileUtilities.exe_exists('apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
         else:
-            bytes = apt_autoclean()
-            self.assert_(type(bytes) is int)
+            bytes_freed = apt_autoclean()
+            self.assert_(type(bytes_freed) is int)
 
 
     def test_free_space(self):
@@ -699,9 +699,9 @@ class TestUnix(unittest.TestCase):
             or not FileUtilities.exe_exists('yum'):
             self.assertRaises(RuntimeError, yum_clean)
         else:
-            bytes = yum_clean()
-            self.assert_(type(bytes) is int)
-            print 'debug: yum bytes cleaned %d', bytes
+            bytes_freed = yum_clean()
+            self.assert_(type(bytes_freed) is int)
+            print 'debug: yum bytes cleaned %d', bytes_freed
 
 
 if __name__ == '__main__' and 'linux2' == sys.platform:
