@@ -49,6 +49,7 @@ class CleanerML:
         self.option_id = None
         self.option_name = None
         self.option_description = None
+        self.option_warning = None
         self.xlate_cb = xlate_cb
         if None == self.xlate_cb:
             self.xlate_cb = lambda x: None # do nothing
