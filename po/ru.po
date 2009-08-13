@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-12 11:41+0000\n"
-"Last-Translator: S. Matrunchyk aka SkyMan <Unknown>\n"
+"PO-Revision-Date: 2009-08-13 13:30+0000\n"
+"Last-Translator: Ilia Lilov aka lilovip <lilovil@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-12 14:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-13 14:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -508,15 +508,16 @@ msgstr ""
 
 #: ../bleachbit/CleanerBackend.py:533
 msgid "Free disk space"
-msgstr ""
+msgstr "Свободное дисковое пространство"
 
 #: ../bleachbit/CleanerBackend.py:533
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
+"Перезаписать свободное дисковое пространство чтобы скрыть удалённые файлы"
 
 #: ../bleachbit/CleanerBackend.py:534
 msgid "This option is slow."
-msgstr ""
+msgstr "Эта опция - медленная"
 
 #: ../bleachbit/CleanerBackend.py:538
 msgid "The system in general"
@@ -527,7 +528,7 @@ msgstr "Система вцелом"
 #: ../bleachbit/CleanerBackend.py:679
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "Перезаписать свободное дисковое пространство в %s"
 
 #: ../bleachbit/FileUtilities.py:176
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -537,7 +538,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:51
 msgid "Drives"
-msgstr ""
+msgstr "Диски"
 
 #: ../bleachbit/GuiPreferences.py:71
 msgid "Check periodically for software updates via the Internet"
@@ -576,21 +577,23 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:104
 msgid "Choose a folder"
-msgstr ""
+msgstr "Выберите папку"
 
 #: ../bleachbit/GuiPreferences.py:131
 msgid ""
 "Choose a writeable directory for each drive for which to overwrite free "
 "space."
 msgstr ""
+"Выберите каталог с разрешённой записью для каждого диска, для которого "
+"перезаписывается свободное пространство."
 
 #: ../bleachbit/GuiPreferences.py:150
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: ../bleachbit/GuiPreferences.py:152
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: ../bleachbit/GuiPreferences.py:177
 msgid "All languages will be deleted except those checked."
