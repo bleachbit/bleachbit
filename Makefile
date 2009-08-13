@@ -17,6 +17,7 @@ clean:
 	@rm -vf MANIFEST
 	make -C po clean
 	@rm -vrf locale
+	@rm -vfr {*/,./}*.{pychecker,pylint,pyflakes}.log
 
 install:
 	# "binary"
@@ -45,6 +46,16 @@ install:
 
 	# translations
 	make -C po install DESTDIR=$(DESTDIR)
+
+lint:
+	for f in *py */*py; \
+	do \
+		echo "$$f" ; \
+		pychecker "$$f" > "$$f".pychecker.log ; \
+		pyflakes "$$f" > "$$f".pyflakes.log ; \
+		pylint "$$f" > "$$f".pylint.log ; \
+	done; \
+	exit 0
 
 tests:
 	make -C cleaners tests
