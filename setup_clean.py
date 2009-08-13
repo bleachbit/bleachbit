@@ -19,16 +19,19 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
-import glob
-
 
 """
 Clean the GTK+ locales shipped
 """
 
 
+import os
+import glob
+
+
+
 def supported_languages():
+    """Return list of supported languages by scanning ./po/"""
     langs = []
     for pathname in glob.glob('po/*.po'):
         basename = os.path.basename(pathname)
@@ -37,6 +40,7 @@ def supported_languages():
 
 
 def clean_dist_locale():
+    """Clean dist/share/locale"""
     langs = supported_languages()
     basedir = 'dist\\share\\locale'
     for pathname in os.listdir(basedir):
@@ -45,6 +49,7 @@ def clean_dist_locale():
             cmd = 'rd /s /q ' + os.path.join(basedir, pathname)
             print cmd
             os.system(cmd)
+
 
 if __name__ == '__main__':
     clean_dist_locale()
