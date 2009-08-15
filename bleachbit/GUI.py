@@ -86,14 +86,14 @@ def delete_confirmation_dialog(parent, mention_preview):
     dialog.vbox.pack_start(hbox, False)
     dialog.vbox.set_spacing(10)
 
-    dialog.add_button(gtk.STOCK_CANCEL, False)
-    dialog.add_button(gtk.STOCK_DELETE, True)
+    dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+    dialog.add_button(gtk.STOCK_DELETE, gtk.RESPONSE_ACCEPT)
     dialog.set_default_response(gtk.RESPONSE_CANCEL)
 
     dialog.show_all()
     ret = dialog.run()
     dialog.destroy()
-    return ret
+    return ret == gtk.RESPONSE_ACCEPT
 
 
 class TreeInfoModel:
