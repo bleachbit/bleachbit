@@ -211,7 +211,7 @@ class TreeDisplayModel:
                     warning)
                 resp = dialog.run()
                 dialog.destroy()
-                if gtk.RESPONSE_CANCEL == resp:
+                if gtk.RESPONSE_OK != resp:
                     # user cancelled, so don't toggle option
                     return
         model[path][1] = value
