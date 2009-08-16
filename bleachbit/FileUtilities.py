@@ -308,7 +308,13 @@ def wipe_path(pathname, idle_cb = None):
     except IOError, e:
         if 28 != e.errno:
             raise
-    f.flush()
+    try:
+        f.flush()
+    except:
+        # IOError: [Errno 28] No space left on device
+        # seen on Microsoft Windows XP SP3 with ~30GB free space but
+        # not on another XP SP3 with 64MB free space
+        print "info: exception on f.flush()"
     f.truncate(0)
     f.close()
     # file is removed implicitly
