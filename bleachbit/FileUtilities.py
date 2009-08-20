@@ -286,38 +286,56 @@ def wipe_contents(path):
     f.close()
 
 
-def wipe_path(pathname, idle_cb = None):
+def wipe_path(pathname, idle_cb = None, ):
     """Wipe the free space in the path"""
-    f = tempfile.TemporaryFile(dir = pathname)
-    last_idle = datetime.datetime.now()
-    # blocks
-    blanks = chr(0) * 4096
-    try:
-        while True:
-            f.write(blanks)
-            if idle_cb and (last_idle - datetime.datetime.now()).seconds > 1:
-                # keep the GUI responding
-                idle_cb()
-    except IOError, e:
-        if 28 != e.errno:
-            raise
-    # individual characters
-    try:
-        while True:
-            f.write(chr(0))
-    except IOError, e:
-        if 28 != e.errno:
-            raise
-    try:
-        f.flush()
-    except:
-        # IOError: [Errno 28] No space left on device
-        # seen on Microsoft Windows XP SP3 with ~30GB free space but
-        # not on another XP SP3 with 64MB free space
-        print "info: exception on f.flush()"
-    f.truncate(0)
-    f.close()
-    # file is removed implicitly
+    print "debug: wipe_path('%s')" % pathname
+    files = []
+    total_bytes = 0
+    # repeat to clear inodes (Linux) / MFT (Master File Table on Windows)
+    while True:
+        try:
+            f = tempfile.TemporaryFile(dir = pathname)
+        except OSError, e:
+            if 24 == e.errno:
+                can_create = False
+                break
+            else:
+                raise
+        last_idle = datetime.datetime.now()
+        # blocks
+        blanks = chr(0) * 4096
+        try:
+            while True:
+                f.write(blanks)
+                if idle_cb and (last_idle - datetime.datetime.now()).seconds > 1:
+                    # keep the GUI responding
+                    idle_cb()
+        except IOError, e:
+            if 28 != e.errno:
+                raise
+        # individual characters
+        try:
+            while True:
+                f.write(chr(0))
+        except IOError, e:
+            if 28 != e.errno:
+                raise
+        try:
+            f.flush()
+        except:
+            # IOError: [Errno 28] No space left on device
+            # seen on Microsoft Windows XP SP3 with ~30GB free space but
+            # not on another XP SP3 with 64MB free space
+            print "info: exception on f.flush()"
+        files.append(f)
+        total_bytes += f.tell()
+    # statistics
+    print 'debug: wrote %d files and %d bytes' % (len(files), total_bytes)
+    # truncate and close files
+    for f in files:
+        f.truncate(0)
+        f.close()
+    # files are removed implicitly
 
 
 def vacuum_sqlite3(path):
