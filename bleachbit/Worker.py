@@ -148,6 +148,13 @@ class Worker:
             if self.really_delete:
                 FileUtilities.delete(pathname)
         except WindowsError, e:
+            # WindowsError: [Error 145] The directory is not empty:
+            # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
+            # Error 145 may happen if the files are scheduled for deletion
+            # during reboot.
+            if 145 == e.winerror:
+                print "info: directory '%s' is not empty" % (pathname)
+                pass
             # WindowsError: [Error 32] The process cannot access the file because it is being
             # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
             if 32 != e.winerror:
