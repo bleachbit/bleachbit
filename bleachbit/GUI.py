@@ -498,7 +498,7 @@ class GUI:
                     ('File', None, _('_File')),
                     ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, None, self.cb_preferences_dialog),
                     ('Edit', None, _("_Edit")),
-                    ('HelpContents', gtk.STOCK_HELP, _('Contents'), 'F1', None, lambda link: open_url(help_contents_url)),
+                    ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None, lambda link: open_url(help_contents_url)),
                     ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None, lambda link: open_url(release_notes_url)),
                     ('About', gtk.STOCK_ABOUT, _('_About'), None, None, self.about),
                     ('Help', None, _("_Help")))
