@@ -88,7 +88,15 @@ class Worker:
         start_time = time.time()
         try:
             for pathname in backends[operation].list_files():
-                self.clean_pathname(pathname)
+                try:
+                    self.clean_pathname(pathname)
+                except:
+                    err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
+                        %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
+                    print err
+                    traceback.print_exc()
+                    self.gui.append_text(err + "\n", 'error', self.__iter)
+
                 if time.time() - start_time >= 0.25:
                     if None != self.total_size_cb and self.really_delete:
                         self.total_size_cb(self.total_bytes)
@@ -154,10 +162,9 @@ class Worker:
             # during reboot.
             if 145 == e.winerror:
                 print "info: directory '%s' is not empty" % (pathname)
-                pass
             # WindowsError: [Error 32] The process cannot access the file because it is being
             # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-            if 32 != e.winerror:
+            elif 32 != e.winerror:
                 raise
             try:
                 Windows.delete_locked_file(pathname)
