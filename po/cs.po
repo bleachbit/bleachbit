@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-16 08:03+0000\n"
+"PO-Revision-Date: 2009-08-23 17:51+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-16 13:04+0000\n"
+"X-Launchpad-Export-Date: 2009-08-23 22:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -48,9 +48,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Vyluxuje databázi od bordelu a trochu to tam porovná, čímž se může zmenšit "
-"její velikost a zvýšit rychlost prohlížeče, aniž by došlo ke smazání "
-"jakýchkoliv potřebných dat"
+"Vyčistí a defragmentuje databázi, čímž se může rapidně urychlit práce s ní, "
+"aniž by byla smazána data v ní obsažená"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/pidgin.xml ../cleaners/liferea.xml
@@ -70,7 +69,7 @@ msgstr "Vymazat cache"
 #: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
 #: ../bleachbit/CleanerBackend.py:194
 msgid "Vacuum"
-msgstr "Uklízečka"
+msgstr "Defragmentace databáze"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -193,7 +192,7 @@ msgstr "Záznamy chatu"
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr "Smazat záznamy z chatu"
+msgstr "Smazat záznamy chatu"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
@@ -201,7 +200,7 @@ msgstr "Smazat seznam navštívených webových stránek"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr "Smazat rejstříky hledání"
+msgstr "Smazat rejstříky vyhledávání"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
@@ -302,7 +301,7 @@ msgstr "Stažené podcasty"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr "Smazat aktuální a poslední sezení"
+msgstr "Smazat aktuální a poslední relaci"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
@@ -346,7 +345,7 @@ msgstr "Uvolní místo na disku a udrží soukromí"
 #: ../bleachbit/Action.py:185 ../bleachbit/Action.py:187
 #, python-format
 msgid "Vacuumed: %s"
-msgstr "Uklizeno: %s"
+msgstr "Defragmentováno: %s"
 
 #: ../bleachbit/CleanerBackend.py:186
 msgid "Form history"
@@ -449,7 +448,7 @@ msgstr "Skrýt smazané soubory přepsáním volného místa na disku"
 
 #: ../bleachbit/CleanerBackend.py:534
 msgid "This option is slow."
-msgstr "Tato možnost je pomalá."
+msgstr "Tato volba je velice pomalá!"
 
 #: ../bleachbit/CleanerBackend.py:538
 msgid "The system in general"
@@ -481,7 +480,7 @@ msgstr "Obecné"
 
 #: ../bleachbit/GuiPreferences.py:51
 msgid "Drives"
-msgstr "Drajvy"
+msgstr "Disky / oddíly"
 
 #: ../bleachbit/GuiPreferences.py:53
 msgid "Languages"
@@ -531,8 +530,8 @@ msgid ""
 "Choose a writeable directory for each drive for which to overwrite free "
 "space."
 msgstr ""
-"Zvolte zapisovatelnou složku pro každý drajv, pro který se přepíše volné "
-"místo."
+"Zvolte zapisovatelnou složku pro každý disk či oddíl, pro který se přepíše "
+"volné místo."
 
 #: ../bleachbit/GuiPreferences.py:150
 msgid "Add"
@@ -540,7 +539,7 @@ msgstr "Přidat"
 
 #: ../bleachbit/GuiPreferences.py:152
 msgid "Remove"
-msgstr "Odstranit"
+msgstr "Odebrat"
 
 #: ../bleachbit/GuiPreferences.py:177
 msgid "All languages will be deleted except those checked."
@@ -626,7 +625,7 @@ msgstr "Po_známky k vydání"
 
 #: ../bleachbit/GUI.py:500
 msgid "_About"
-msgstr "_O programu"
+msgstr "_O aplikaci"
 
 #: ../bleachbit/GUI.py:501
 msgid "_Help"
