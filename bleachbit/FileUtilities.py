@@ -296,8 +296,9 @@ def wipe_path(pathname, idle_cb = None, ):
         try:
             f = tempfile.TemporaryFile(dir = pathname)
         except OSError, e:
-            if 24 == e.errno:
-                can_create = False
+            # Linux gives errno 24
+            # Windows gives errno 28 No space left on device
+            if e.errno in (24, 28):
                 break
             else:
                 raise
