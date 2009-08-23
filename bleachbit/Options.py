@@ -17,15 +17,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 """
 Store and retreieve user preferences
 """
+
 
 import os
 import traceback
 import ConfigParser
 import sys
-from Common import APP_VERSION, options_dir, options_file
+
+import Common
 
 
 boolean_keys = ('auto_hide', 'check_online_updates', 'first_start', 'shred')
@@ -38,7 +41,7 @@ class Options:
         # restore options from disk
         self.config = ConfigParser.SafeConfigParser()
         try:
-            self.config.read(options_file)
+            self.config.read(Common.options_file)
         except:
             traceback.print_exc()
         if not self.config.has_section("bleachbit"):
@@ -59,39 +62,30 @@ class Options:
         self.__set_default("shred", False)
 
         if not self.config.has_section('preserve_languages'):
-            import locale
-            lang = None
-            try:
-                lang = locale.getdefaultlocale()[0]
-            except:
-                traceback.print_exc()
-            if None == lang:
-                lang = 'en'
-                print "warning: No default language found.  Assuming '%s'" % lang
-            else:
-                pos = lang.find('_')
-                if -1 != pos:
-                    lang = lang [0 : pos]
+            lang = Common.user_locale
+            pos = lang.find('_')
+            if -1 != pos:
+                lang = lang [0 : pos]
             print "info: automatically preserving language '%s'" % lang
             self.set_language(lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
-            self.get('version') != APP_VERSION:
+            self.get('version') != Common.APP_VERSION:
             self.set('first_start', True)
 
         # set version
-        self.set("version", APP_VERSION)
+        self.set("version", Common.APP_VERSION)
 
 
     def __flush(self):
         """Write information to disk"""
         mkdir = False
-        if not os.path.exists(options_dir):
-            os.makedirs(options_dir, 0700)
+        if not os.path.exists(Common.options_dir):
+            os.makedirs(Common.options_dir, 0700)
             mkdir = True
-        mkfile = not os.path.exists(options_file)
-        _file = open(options_file, 'wb')
+        mkfile = not os.path.exists(Common.options_file)
+        _file = open(Common.options_file, 'wb')
         self.config.write(_file)
         # If using sudo, avoid creating a directory that the
         # original account cannot read.
@@ -100,9 +94,9 @@ class Options:
             try:
                 uid = pwd.getpwnam(os.getlogin())[3]
                 if mkfile:
-                    os.chown(options_file, uid, -1)
+                    os.chown(Common.options_file, uid, -1)
                 if mkdir:
-                    os.chown(options_dir, uid, -1)
+                    os.chown(Common.options_dir, uid, -1)
             except:
                 print 'Failed fixing permissions created by sudo'
                 traceback.print_exc()

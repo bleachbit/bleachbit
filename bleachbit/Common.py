@@ -34,9 +34,8 @@ APP_URL = "http://bleachbit-project.appspot.com"
 
 print "info: starting %s version %s" % (APP_NAME, APP_VERSION)
 
-update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
-
 release_notes_url = "http://bleachbit.sourceforge.net/release_notes.php?version=" + str(APP_VERSION)
+update_check_url = "http://bleachbit.sourceforge.net/communicate.php"
 
 socket_timeout = 10
 
@@ -116,8 +115,16 @@ else:
 ### gettext
 ###
 
+try:
+    user_locale = locale.getdefaultlocale()[0]
+except:
+    traceback.print_exc()
+if None == user_locale:
+    user_locale = 'en_US'
+    print "warning: No default locale found.  Assuming '%s'" % user_locale
+
 if 'win32' == sys.platform:
-    os.environ['LANG'] = locale.getdefaultlocale()[0]
+    os.environ['LANG'] = user_locale
 
 try:
     gettext.bindtextdomain('bleachbit', locale_dir)
