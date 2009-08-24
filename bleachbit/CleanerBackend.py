@@ -590,9 +590,7 @@ class System(Cleaner):
 
             for path in paths:
                 expanded = os.path.expandvars(path)
-                print expanded
                 for globbed in glob.iglob(expanded):
-                    print globbed
                     files += [ globbed ]
 
         # most recently used documents list
