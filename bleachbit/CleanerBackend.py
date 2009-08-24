@@ -579,8 +579,9 @@ class System(Cleaner):
         # Windows logs
         files = []
         if sys.platform == 'win32' and self.options['logs'][1]:
-            paths = ('%windir%\\*.log', \
-                '$windir\\Debug\\.*log', \
+            paths = ( \
+                '$windir\\*.log', \
+                '$windir\\Debug\\*.log', \
                 '$windir\\Debug\\Setup\\UpdSh.log', \
                 '$windir\\Debug\\UserMode\\*.log', \
                 '$windir\\Debug\\UserMode\\userenv.bak', \
