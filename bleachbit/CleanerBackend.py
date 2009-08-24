@@ -580,14 +580,25 @@ class System(Cleaner):
         files = []
         if sys.platform == 'win32' and self.options['logs'][1]:
             paths = ( \
+                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
+                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
                 '$windir\\*.log', \
+                '$windir\\OEWABLog.txt', \
+                '$windir\\SchedLgU.txt', \
+                '$windir\\ntbtlog.txt', \
+                '$windir\\setuplog.txt', \
                 '$windir\\Debug\\*.log', \
                 '$windir\\Debug\\Setup\\UpdSh.log', \
                 '$windir\\Debug\\UserMode\\*.log', \
                 '$windir\\Debug\\UserMode\\userenv.bak', \
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log', \
-                '$windir\\system32\\TZLog.log',
-                '$windir\\wbem\\Logs\\*.log', )
+                '$windir\\security\\logs\\*.log', \
+                '$windir\\security\\logs\\*.old', \
+                '$windir\\system32\\TZLog.log', \
+                '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
+                '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', )
+                '$windir\\system32\\wbem\\Logs\\*.lo_', \
+                '$windir\\system32\\wbem\\Logs\\*.log', \
 
             for path in paths:
                 expanded = os.path.expandvars(path)
