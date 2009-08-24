@@ -527,6 +527,7 @@ class System(Cleaner):
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
         if sys.platform == 'win32':
+            self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
@@ -575,8 +576,26 @@ class System(Cleaner):
             for path in Unix.locales.localization_paths(callback):
                 yield path
 
-        # most recently used documents list
+        # Windows logs
         files = []
+        if sys.platform == 'win32' and self.options['logs'][1]:
+            paths = ('%windir%\\*.log', \
+                '$windir\\Debug\\.*log', \
+                '$windir\\Debug\\Setup\\UpdSh.log', \
+                '$windir\\Debug\\UserMode\\*.log', \
+                '$windir\\Debug\\UserMode\\userenv.bak', \
+                '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log', \
+                '$windir\\system32\\TZLog.log',
+                '$windir\\wbem\\Logs\\*.log', )
+
+            for path in paths:
+                expanded = os.path.expandvars(path)
+                print expanded
+                for globbed in glob.iglob(expanded):
+                    print globbed
+                    files += [ globbed ]
+
+        # most recently used documents list
         if sys.platform == 'linux2' and self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
 
