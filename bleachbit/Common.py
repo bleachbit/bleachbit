@@ -2,7 +2,7 @@
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
-## http://bleachbit-project.appspot.com
+## http://bleachbit.sourceforge.net
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import sys
 
 APP_VERSION = "0.6.2"
 APP_NAME = "BleachBit"
-APP_URL = "http://bleachbit-project.appspot.com"
+APP_URL = "http://bleachbit.sourceforge.net"
 
 print "info: starting %s version %s" % (APP_NAME, APP_VERSION)
 
