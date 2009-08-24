@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-13 13:30+0000\n"
-"Last-Translator: Ilia Lilov aka lilovip <lilovil@gmail.com>\n"
+"POT-Creation-Date: 2009-08-23 17:34-0600\n"
+"PO-Revision-Date: 2009-08-24 18:24+0000\n"
+"Last-Translator: S. Matrunchyk aka SkyMan <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-13 14:16+0000\n"
+"X-Launchpad-Export-Date: 2009-08-24 18:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -33,149 +33,14 @@ msgstr ""
 msgid "Cache"
 msgstr "Кеш"
 
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Удалить список игровых серверов"
+
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 msgid "Game"
 msgstr "Игра"
-
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
-msgid "Cookies"
-msgstr "Cookies"
-
-#: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
-#: ../cleaners/mc.xml ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/nautilus.xml ../cleaners/bash.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml
-msgid "History"
-msgstr "История"
-
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/links2.xml ../cleaners/elinks.xml
-#: ../bleachbit/CleanerBackend.py:207
-msgid "Web browser"
-msgstr "Веб браузер"
-
-#: ../cleaners/vim.xml ../cleaners/gedit.xml
-msgid "Editor"
-msgstr "Редактор"
-
-#: ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/easytag.xml ../cleaners/gftp.xml
-#: ../cleaners/amule.xml
-msgid "Logs"
-msgstr "Журналы"
-
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
-msgid "Passwords"
-msgstr "Пароли"
-
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
-msgid "Places"
-msgstr "Места"
-
-#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
-msgid "Temporary files"
-msgstr "Временные файлы"
-
-#: ../cleaners/thumbnails.xml
-msgid "Thumbnails"
-msgstr "Иконки"
-
-#: ../cleaners/recoll.xml
-msgid "Index"
-msgstr "Индекс"
-
-#: ../bleachbit/CleanerBackend.py:377
-msgid "KDE desktop environment"
-msgstr "Рабочий стол окружения KDE"
-
-#: ../bleachbit/CleanerBackend.py:528
-msgid "Trash"
-msgstr "Удалённое"
-
-#: ../bleachbit/CleanerBackend.py:532 ../bleachbit/CleanerBackend.py:649
-#: ../bleachbit/CleanerBackend.py:651
-msgid "Clipboard"
-msgstr "Буфер"
-
-#: ../bleachbit/CleanerBackend.py:544
-msgid "System"
-msgstr "Система"
-
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
-msgid "Preferences"
-msgstr "Настройки"
-
-#: ../bleachbit/GuiPreferences.py:50
-msgid "General"
-msgstr "Общее"
-
-#: ../bleachbit/GuiPreferences.py:53
-msgid "Languages"
-msgstr "Языки"
-
-#: ../bleachbit/GuiPreferences.py:195
-msgid "Preserve"
-msgstr "Сохранить"
-
-#: ../bleachbit/GuiPreferences.py:199
-msgid "Code"
-msgstr "Код"
-
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
-msgid "Name"
-msgstr "Имя"
-
-#: ../bleachbit/GUI.py:179
-msgid "Active"
-msgstr "Активный"
-
-#: ../bleachbit/GUI.py:495
-msgid "_Quit"
-msgstr "В_ыйти"
-
-#: ../bleachbit/GUI.py:496
-msgid "_File"
-msgstr "_Файл"
-
-#: ../bleachbit/GUI.py:498
-msgid "_Edit"
-msgstr "_Изменить"
-
-#: ../bleachbit/GUI.py:500
-msgid "_About"
-msgstr "_О программе"
-
-#: ../bleachbit/GUI.py:501
-msgid "_Help"
-msgstr "_Помощь"
-
-#: ../bleachbit/GUI.py:530
-msgid "Preview"
-msgstr "Предпросмотр"
-
-#: ../bleachbit/GUI.py:538
-msgid "Delete"
-msgstr "Удалить"
-
-#: ../bleachbit/Worker.py:208
-msgid "Done."
-msgstr "Выполнено."
-
-#: ../bleachbit/Worker.py:209
-msgid "Total size: "
-msgstr "Общий размер: "
-
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "Удалить список игровых серверов"
 
 #: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
 #: ../bleachbit/CleanerBackend.py:194
@@ -205,6 +70,13 @@ msgstr "Удалить кэш"
 #: ../bleachbit/CleanerBackend.py:194
 msgid "Vacuum"
 msgstr "Пылесос"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
+#: ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
+#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
+msgid "Cookies"
+msgstr "Cookies"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 msgid "Current session"
@@ -237,6 +109,20 @@ msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Удалить кэш веб, который уменьшает время отображения посещённых страниц"
 
+#: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
+#: ../cleaners/mc.xml ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
+#: ../cleaners/nautilus.xml ../cleaners/bash.xml ../cleaners/links2.xml
+#: ../cleaners/elinks.xml
+msgid "History"
+msgstr "История"
+
+#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../bleachbit/CleanerBackend.py:207
+msgid "Web browser"
+msgstr "Веб браузер"
+
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/links2.xml
 msgid "Delete the usage history"
@@ -248,11 +134,22 @@ msgid ""
 msgstr ""
 "Удалить ~/.viminfo, включающий историю файлов, историю команд и буферы"
 
+#: ../cleaners/vim.xml ../cleaners/gedit.xml
+msgid "Editor"
+msgstr "Редактор"
+
 #: ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "Delete the logs"
 msgstr "Удалить журналы"
+
+#: ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
+#: ../cleaners/exaile.xml ../cleaners/easytag.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml
+msgid "Logs"
+msgstr "Журналы"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
@@ -352,6 +249,14 @@ msgstr ""
 msgid "Deleting Places deletes bookmarks."
 msgstr "\"Удаление Мест\" удаляет закладки."
 
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
+msgid "Passwords"
+msgstr "Пароли"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
+msgid "Places"
+msgstr "Места"
+
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
 msgstr "Удалить устаревшие файлы"
@@ -378,6 +283,12 @@ msgstr "Удалить файлы резервной копии"
 msgid "Delete the temporary files"
 msgstr "Удалить временные файлы"
 
+#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
+msgid "Temporary files"
+msgstr "Временные файлы"
+
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
 msgstr "Удалить скачанные подкасты"
@@ -393,6 +304,10 @@ msgstr "Удалить текущую и последнюю сессии"
 #: ../cleaners/google_chrome.xml
 msgid "Session"
 msgstr "Сессия"
+
+#: ../cleaners/thumbnails.xml
+msgid "Thumbnails"
+msgstr "Иконки"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
@@ -411,6 +326,10 @@ msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Удалить поисковый индекс, базу данных слов и файлы, которые они содержат"
+
+#: ../cleaners/recoll.xml
+msgid "Index"
+msgstr "Индекс"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -442,6 +361,10 @@ msgstr "Восстановление сеанса"
 #: ../bleachbit/CleanerBackend.py:187
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Загружает исходный сеанс после закрытия или падения браузера"
+
+#: ../bleachbit/CleanerBackend.py:377
+msgid "KDE desktop environment"
+msgstr "Рабочий стол окружения KDE"
 
 #: ../bleachbit/CleanerBackend.py:417
 msgid "Office suite"
@@ -488,6 +411,10 @@ msgid "Delete old system logs"
 msgstr "Удалить старые системные журналы"
 
 #: ../bleachbit/CleanerBackend.py:528
+msgid "Trash"
+msgstr "Удалённое"
+
+#: ../bleachbit/CleanerBackend.py:528
 msgid "Empty the trash"
 msgstr "Очистить мусор"
 
@@ -498,6 +425,11 @@ msgstr "Корзина"
 #: ../bleachbit/CleanerBackend.py:531
 msgid "Empty the recycle bin"
 msgstr "Очистить корзину"
+
+#: ../bleachbit/CleanerBackend.py:532 ../bleachbit/CleanerBackend.py:649
+#: ../bleachbit/CleanerBackend.py:651
+msgid "Clipboard"
+msgstr "Буфер"
 
 #: ../bleachbit/CleanerBackend.py:532
 msgid ""
@@ -523,6 +455,10 @@ msgstr "Эта опция - медленная"
 msgid "The system in general"
 msgstr "Система вцелом"
 
+#: ../bleachbit/CleanerBackend.py:544
+msgid "System"
+msgstr "Система"
+
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
 #: ../bleachbit/CleanerBackend.py:679
@@ -530,15 +466,27 @@ msgstr "Система вцелом"
 msgid "Overwrite free disk space %s"
 msgstr "Перезаписать свободное дисковое пространство в %s"
 
-#: ../bleachbit/FileUtilities.py:176
+#: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Не удаётся импортировать модуль Python sqlite3: необходим Python 2.5 или "
 "старше"
 
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
+msgid "Preferences"
+msgstr "Настройки"
+
+#: ../bleachbit/GuiPreferences.py:50
+msgid "General"
+msgstr "Общее"
+
 #: ../bleachbit/GuiPreferences.py:51
 msgid "Drives"
 msgstr "Диски"
+
+#: ../bleachbit/GuiPreferences.py:53
+msgid "Languages"
+msgstr "Языки"
 
 #: ../bleachbit/GuiPreferences.py:71
 msgid "Check periodically for software updates via the Internet"
@@ -599,11 +547,23 @@ msgstr "Удалить"
 msgid "All languages will be deleted except those checked."
 msgstr "Все языки будут удалены кроме отмеченных здесь."
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GuiPreferences.py:195
+msgid "Preserve"
+msgstr "Сохранить"
+
+#: ../bleachbit/GuiPreferences.py:199
+msgid "Code"
+msgstr "Код"
+
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
+msgid "Name"
+msgstr "Имя"
+
+#: ../bleachbit/GUI.py:72
 msgid "Delete confirmation"
 msgstr "Удалить подтверждение"
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:80
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -613,15 +573,19 @@ msgstr ""
 "операциям? Файлы, которые будут удалены, могли быть изменены после вашего "
 "последнего просмотра."
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Вы уверены, что хотите навсегда удалить эти файлы?"
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:180
+msgid "Active"
+msgstr "Активный"
+
+#: ../bleachbit/GUI.py:384
 msgid "Program to clean unnecessary files"
 msgstr "Программа для удаления ненужных файлов"
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:389
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -629,7 +593,7 @@ msgstr ""
 "GNU General Public License версии 3 или выше.\n"
 "Прочтите http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:395
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -638,35 +602,67 @@ msgstr ""
 "  Sergei Sedov https://launchpad.net/~serg-sedov\n"
 "  Vadim Peretokin https://launchpad.net/~vperetokin"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:431
 msgid "Choose files to shred"
 msgstr "Выберите файлы для уничтожения"
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:496
 msgid "_Shred Files"
 msgstr "_Shred Files"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:497
+msgid "_Quit"
+msgstr "В_ыйти"
+
+#: ../bleachbit/GUI.py:498
+msgid "_File"
+msgstr "_Файл"
+
+#: ../bleachbit/GUI.py:500
+msgid "_Edit"
+msgstr "_Изменить"
+
+#: ../bleachbit/GUI.py:501
+msgid "Help Contents"
+msgstr "Содержание Справки"
+
+#: ../bleachbit/GUI.py:502
 msgid "_Release Notes"
 msgstr "_Примечания к выпуску"
 
+#: ../bleachbit/GUI.py:503
+msgid "_About"
+msgstr "_О программе"
+
+#: ../bleachbit/GUI.py:504
+msgid "_Help"
+msgstr "_Помощь"
+
 #: ../bleachbit/GUI.py:533
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: ../bleachbit/GUI.py:536
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Просмотреть файлы в выбранных операциях (без удаления файлов)"
 
 #: ../bleachbit/GUI.py:541
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../bleachbit/GUI.py:544
 msgid "Delete files in the selected operations"
 msgstr "Удалить файлы в выбранных операциях"
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:621
 msgid "Update BleachBit"
 msgstr "Обновить BleachBit"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "BleachBit update is available"
 msgstr "Доступно обновление для BleachBit"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Нажмите 'Обновить BleachBit' для получения информации"
 
@@ -725,31 +721,40 @@ msgstr "Вы должны выбрать операцию"
 #. or 'opera' or some other cleaner ID.  The special
 #. keyword %(msg)s will be replaced by a message like
 #. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
+#: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Ошибка во время выполнения операции '%(operation)s': '%(msg)s'"
 
-#: ../bleachbit/Worker.py:121
+#: ../bleachbit/Worker.py:129
 msgid "Special operation: "
 msgstr "Специальная операция: "
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr "Отмечено для удаления: %(size)s %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:205
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Пожалуйста, подождите. Очистка %s."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Пожалуйста, подождите. Предпросмотр %s."
+
+#: ../bleachbit/Worker.py:222
+msgid "Done."
+msgstr "Выполнено."
+
+#: ../bleachbit/Worker.py:223
+msgid "Total size: "
+msgstr "Общий размер: "
