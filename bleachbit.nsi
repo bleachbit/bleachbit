@@ -2,7 +2,7 @@
 ;
 ;  BleachBit
 ;  Copyright (C) 2009 Andrew Ziem
-;  http://bleachbit-project.appspot.com
+;  http://bleachbit.sourceforge.net
 ;
 ;  This program is free software: you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
   !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site"
-  !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit-project.appspot.com"
+  !define MUI_FINISHPAGE_LINK_LOCATION "http://bleachbit.sourceforge.net"
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -133,7 +133,7 @@ Section Core (Required)
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "DisplayName" "${prodname}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "HelpLink" "http://bleachbit-project.appspot.com/"
+        "HelpLink" "http://bleachbit.sourceforge.net/help"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "NoModify" "1"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
@@ -141,9 +141,9 @@ Section Core (Required)
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "UninstallString" "$INSTDIR\uninstall.exe"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "URLInfoAbout" "http://bleachbit-project.appspot.com/"
+        "URLInfoAbout" "http://bleachbit.sourceforge.net/"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "URLUpdateInfo" "http://bleachbit-project.appspot.com/"
+        "URLUpdateInfo" "http://bleachbit.sourceforge.net/download"
 SectionEnd
 
 
