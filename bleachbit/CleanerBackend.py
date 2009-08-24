@@ -596,9 +596,9 @@ class System(Cleaner):
                 '$windir\\security\\logs\\*.old', \
                 '$windir\\system32\\TZLog.log', \
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
-                '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', )
+                '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
                 '$windir\\system32\\wbem\\Logs\\*.lo_', \
-                '$windir\\system32\\wbem\\Logs\\*.log', \
+                '$windir\\system32\\wbem\\Logs\\*.log', )
 
             for path in paths:
                 expanded = os.path.expandvars(path)
