@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-22 13:59+0000\n"
-"Last-Translator: Jean-Luc Aufranc <jean-luc.aufranc@cnx-translation.com>\n"
+"POT-Creation-Date: 2009-08-23 17:34-0600\n"
+"PO-Revision-Date: 2009-08-24 18:25+0000\n"
+"Last-Translator: S. Matrunchyk aka SkyMan <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-23 02:08+0000\n"
+"X-Launchpad-Export-Date: 2009-08-24 18:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -472,13 +472,13 @@ msgstr "Système"
 msgid "Overwrite free disk space %s"
 msgstr "Ecraser l'espace libre du disque %s"
 
-#: ../bleachbit/FileUtilities.py:176
+#: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Ne peut importer le module sqlite3 de python : Python 2.5 ou supérieur est "
 "requis"
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
 msgid "Preferences"
 msgstr "Préférences"
 
@@ -565,15 +565,15 @@ msgstr "Conserver"
 msgid "Code"
 msgstr "Code"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
 msgid "Name"
 msgstr "Nom"
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GUI.py:72
 msgid "Delete confirmation"
 msgstr "Confirmation de suppression"
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:80
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -583,19 +583,19 @@ msgstr ""
 "aux opérations sélectionnées ? Les fichiers actuels, qui vont être "
 "supprimés, peuvent avoir changés depuis le lancement de l'aperçu."
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Etes-vous sûr de vouloir supprimer définitive ces fichiers ?"
 
-#: ../bleachbit/GUI.py:179
+#: ../bleachbit/GUI.py:180
 msgid "Active"
 msgstr "Actif"
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:384
 msgid "Program to clean unnecessary files"
 msgstr "Programme pour supprimer les fichiers inutiles"
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:389
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -603,7 +603,7 @@ msgstr ""
 "Licence Publique Générale GNU version 3 ou ultérieure. \n"
 "Voir http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:395
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -615,68 +615,73 @@ msgstr ""
 "  Matthieu Martin https://launchpad.net/~matthieu-martin\n"
 "  Nizar Kerkeni https://launchpad.net/~nizarus\n"
 "  Pierre Slamich https://launchpad.net/~pierre-slamich\n"
+"  S. Matrunchyk aka SkyMan https://launchpad.net/~skymanphp\n"
 "  Sultan Rahi https://launchpad.net/~elbrazotontodelaley-deactivatedaccount\n"
 "  j0nnnnn0 https://launchpad.net/~j0nnnnn0"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:431
 msgid "Choose files to shred"
 msgstr "Choisir les fichiers à déchiqueter (via shred)"
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:496
 msgid "_Shred Files"
 msgstr "_Fichiers déchiquetés"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:498
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "_Edit"
 msgstr "_Éditer"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:501
+msgid "Help Contents"
+msgstr "Aide: Sommaire et Index"
+
+#: ../bleachbit/GUI.py:502
 msgid "_Release Notes"
 msgstr "Notes de versions"
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:503
 msgid "_About"
 msgstr "_À propos"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:504
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:533
 msgid "Preview"
 msgstr "Prévisualiser"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Prévisualiser les fichiers qui seraient concernés par cette opération (sans "
 "les effacer réellement)"
 
-#: ../bleachbit/GUI.py:538
+#: ../bleachbit/GUI.py:541
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:544
 msgid "Delete files in the selected operations"
 msgstr "Supprimer les fichiers correspondant aux opérations sélectionnées"
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:621
 msgid "Update BleachBit"
 msgstr "Mettre à jour BleachBit"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "BleachBit update is available"
 msgstr "Une mise à jour de BleachBit est disponible"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Cliquez sur 'Mettre à jour BleachBit' pour plus d'informations"
 
@@ -735,40 +740,41 @@ msgstr "Vous devez choisir une opération"
 #. or 'opera' or some other cleaner ID.  The special
 #. keyword %(msg)s will be replaced by a message like
 #. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
+#: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr ""
 "Une erreur est survenue pendant le traitement de '%(operation)s' : '%(msg)s'"
 
-#: ../bleachbit/Worker.py:121
+#: ../bleachbit/Worker.py:129
 msgid "Special operation: "
 msgstr "Opération spéciale : "
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr "Marqué pour effacement : %(size)s %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:205
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Veuillez patienter, nettoyage de %s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Veuillez patienter, prévisualisation de %s"
 
-#: ../bleachbit/Worker.py:208
+#: ../bleachbit/Worker.py:222
 msgid "Done."
 msgstr "Effectué."
 
-#: ../bleachbit/Worker.py:209
+#: ../bleachbit/Worker.py:223
 msgid "Total size: "
 msgstr "Taille totale : "
