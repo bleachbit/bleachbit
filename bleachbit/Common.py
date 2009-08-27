@@ -26,6 +26,7 @@ import gettext
 import locale
 import os
 import sys
+import traceback
 
 
 APP_VERSION = "0.6.2"
