@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-14 02:41+0000\n"
+"POT-Creation-Date: 2009-08-23 17:34-0600\n"
+"PO-Revision-Date: 2009-08-27 04:46+0000\n"
 "Last-Translator: Miro Glavić <glavicmiro@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-14 03:08+0000\n"
+"X-Launchpad-Export-Date: 2009-08-27 12:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -470,12 +470,12 @@ msgstr "Sustav"
 msgid "Overwrite free disk space %s"
 msgstr "Prepiši preko slobodnog prostora na disku %s"
 
-#: ../bleachbit/FileUtilities.py:176
+#: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Nemoguće uvesti Python modul sqlite3: Python 2.5 ili kasniji je potreban."
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
 msgid "Preferences"
 msgstr "Postavke"
 
@@ -557,15 +557,15 @@ msgstr "Sačuvaj"
 msgid "Code"
 msgstr "Kod"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
 msgid "Name"
 msgstr "Ime"
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GUI.py:72
 msgid "Delete confirmation"
 msgstr "Potvrda brisanja"
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:80
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -575,19 +575,19 @@ msgstr ""
 "operacijama? Stvarne datoteke koje će biti obrisane su možda promijenjene od "
 "zadnjeg pregleda."
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Jeste li sigurni da hoćete zauvijek obrisati ove datoteke?"
 
-#: ../bleachbit/GUI.py:179
+#: ../bleachbit/GUI.py:180
 msgid "Active"
 msgstr "Aktivan"
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:384
 msgid "Program to clean unnecessary files"
 msgstr "Program za čišćenje nepotrebnih datoteka"
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:389
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -595,69 +595,73 @@ msgstr ""
 "GNU General Public License verzija 3 ili kasnije.\n"
 "Pogledajte http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:395
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Miro Glavić https://launchpad.net/~klek"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:431
 msgid "Choose files to shred"
 msgstr "Odaberite datoteke za uništenje"
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:496
 msgid "_Shred Files"
 msgstr "_Uništi Datoteke"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "_Quit"
 msgstr "_Završi"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:498
 msgid "_File"
 msgstr "_Datoteka"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:501
+msgid "Help Contents"
+msgstr "Sadržaj pomoći"
+
+#: ../bleachbit/GUI.py:502
 msgid "_Release Notes"
 msgstr "_Otpusne Zabilješke"
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:503
 msgid "_About"
 msgstr "_O"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:504
 msgid "_Help"
 msgstr "_Pomoć"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:533
 msgid "Preview"
 msgstr "Pregled"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Pregledajte datoteke u odabranim operacijama (bez brisanja datoteka)"
 
-#: ../bleachbit/GUI.py:538
+#: ../bleachbit/GUI.py:541
 msgid "Delete"
 msgstr "Obriši"
 
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:544
 msgid "Delete files in the selected operations"
 msgstr "Obriši datoteke u odabranim operacijama"
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:621
 msgid "Update BleachBit"
 msgstr "Ažuriraj BleachBit"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "BleachBit update is available"
 msgstr "BleachBit ažuriranje je raspoloživo"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Kliknite 'Ažuriraj BleachBit' za više informacija"
 
@@ -716,39 +720,40 @@ msgstr "Morate odabrati operaciju"
 #. or 'opera' or some other cleaner ID.  The special
 #. keyword %(msg)s will be replaced by a message like
 #. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
+#: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Izuzetak kod izvršenja operacije '%(operation)s': '%(msg)s'"
 
-#: ../bleachbit/Worker.py:121
+#: ../bleachbit/Worker.py:129
 msgid "Special operation: "
 msgstr "Posebna operacija: "
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr "Označeno za brisanje: %(size)s %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:205
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Molimo sačekajte. Čišćenje %s."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Molimo sačekajte. Pregledavanje %s."
 
-#: ../bleachbit/Worker.py:208
+#: ../bleachbit/Worker.py:222
 msgid "Done."
 msgstr "Završeno"
 
-#: ../bleachbit/Worker.py:209
+#: ../bleachbit/Worker.py:223
 msgid "Total size: "
 msgstr "Ukupna veličina: "
