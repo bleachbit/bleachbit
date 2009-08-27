@@ -117,6 +117,8 @@ try:
     user_locale = locale.getdefaultlocale()[0]
 except:
     traceback.print_exc()
+    user_locale = None
+
 if None == user_locale:
     user_locale = 'en_US'
     print "warning: No default locale found.  Assuming '%s'" % user_locale
