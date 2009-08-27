@@ -13,8 +13,8 @@ build:
 
 clean:
 	@rm -vf {.,bleachbit}/*{pyc,pyo,~}
-	@rm -vf dist/bleachbit-*.tar.bz2
-	@rm -vf MANIFEST
+	@rm -vf build dist # created by py2exe
+	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
 	@rm -vrf locale
 	@rm -vfr {*/,./}*.{pychecker,pylint,pyflakes}.log
