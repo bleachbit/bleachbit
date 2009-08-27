@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-23 17:34-0600\n"
-"PO-Revision-Date: 2009-08-27 12:43+0000\n"
-"Last-Translator: MaXeR <Unknown>\n"
+"PO-Revision-Date: 2009-08-27 15:36+0000\n"
+"Last-Translator: Nizar Kerkeni <nizar.kerkeni@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-27 12:56+0000\n"
+"X-Launchpad-Export-Date: 2009-08-27 22:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -114,7 +114,7 @@ msgstr ""
 #: ../cleaners/nautilus.xml ../cleaners/bash.xml ../cleaners/links2.xml
 #: ../cleaners/elinks.xml
 msgid "History"
-msgstr "المحفوظات"
+msgstr "التأريخ"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -560,10 +560,12 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"هل أنت متأكد من أنك تريد حذف الملفات بصفة دائمة وفقا للعمليات المختارة؟ "
+"الملفات الحالية التي سيتم حذفها قد تغيرت منذ تشغيلك المعاينة."
 
 #: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد حذف هذه الملفات بشكل دائم؟"
 
 #: ../bleachbit/GUI.py:180
 msgid "Active"
@@ -663,12 +665,16 @@ msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr ""
+"ملف تعريفات التنظيف التالي قد تغير. التعريفات الخبيثة يمكن ان تلحق الضرر "
+"بجهاز الكمبيوتر الخاص بك."
 
 #: ../bleachbit/RecognizeCleanerML.py:66
 msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr ""
+"ملف تعريفات التنظيف التالي جديد. التعريفات الخبيثة يمكن ان تلحق الضرر بجهاز "
+"الكمبيوتر الخاص بك."
 
 #: ../bleachbit/Unix.py:357 ../bleachbit/Unix.py:387 ../bleachbit/Unix.py:545
 #, python-format
@@ -706,7 +712,7 @@ msgstr "يجب أن تختار عملية"
 #: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "استثناء أثناء تشغيل العملية '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py:129
 msgid "Special operation: "
@@ -718,7 +724,7 @@ msgstr "عمليات خاصة: "
 #: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
-msgstr ""
+msgstr "معلمة للحذف: %(size)s %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:205
@@ -730,7 +736,7 @@ msgstr "الرجاء الإنتظار.  تنظيف %s."
 #: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "يرجى الانتظار. معاينة %s."
 
 #: ../bleachbit/Worker.py:222
 msgid "Done."
