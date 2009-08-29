@@ -48,10 +48,10 @@ spelling: $(POTFILE)
 	@echo "* Checking spelling"
 	@echo
 	@echo "** English"
-	grep msgid $(POTFILE) | cut -c 8- | aspell list
+	msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | aspell  list | sort -u
 	@echo 
 	@echo "** Spanish"
-	grep msgstr es.po | cut -c 8- | LANG=es_ES.utf8 aspell list
+	msggrep -Kie . --no-wrap es.po  | grep ^msgstr  | cut -c 9- | LANG=es_ES.utf-8 aspell  list | sort -u
 
 %.mo: %.po
 	@echo "* Generating $@"
