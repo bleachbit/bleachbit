@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-23 17:51+0000\n"
+"POT-Creation-Date: 2009-08-23 17:34-0600\n"
+"PO-Revision-Date: 2009-08-29 17:01+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-23 22:44+0000\n"
+"X-Launchpad-Export-Date: 2009-08-30 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -465,12 +465,12 @@ msgstr "Systém"
 msgid "Overwrite free disk space %s"
 msgstr "Přepsat volné místo na disku %s"
 
-#: ../bleachbit/FileUtilities.py:176
+#: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Nemohu importovat sqlite3 modul Pythonu: je potřeba Python 2.5 a vyšší."
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
 msgid "Preferences"
 msgstr "_Předvolby"
 
@@ -553,15 +553,15 @@ msgstr "Zachovat"
 msgid "Code"
 msgstr "Kód"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
 msgid "Name"
 msgstr "Název"
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GUI.py:72
 msgid "Delete confirmation"
 msgstr "Potvrďte smazání"
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:80
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -571,20 +571,20 @@ msgstr ""
 "obnovit. Chcete-li vidět, o jaké soubory se jedná, nejprve klikněte na "
 "\"Náhled\""
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
 msgstr ""
 "Jste si opravdu jisti, že chcete tyto soubory trvale odstranit z disku?"
 
-#: ../bleachbit/GUI.py:179
+#: ../bleachbit/GUI.py:180
 msgid "Active"
 msgstr "Aktivní"
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:384
 msgid "Program to clean unnecessary files"
 msgstr "Velice užitečný program na mazání nepotřebných souborů"
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:389
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -592,70 +592,74 @@ msgstr ""
 "GNU General Public License verze 3 a vyšší.\n"
 "Viz. http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:395
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Roman Horník https://launchpad.net/~roman.hornik\n"
 "  milboy https://launchpad.net/~milboys"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:431
 msgid "Choose files to shred"
 msgstr "Vyberte soubory k sešrotování"
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:496
 msgid "_Shred Files"
 msgstr "_Sešrotovat soubory"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "_Quit"
 msgstr "U_končit"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:498
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "_Edit"
 msgstr "Úp_ravy"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:501
+msgid "Help Contents"
+msgstr "Obsah nápovědy"
+
+#: ../bleachbit/GUI.py:502
 msgid "_Release Notes"
 msgstr "Po_známky k vydání"
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:503
 msgid "_About"
 msgstr "_O aplikaci"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:504
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:533
 msgid "Preview"
 msgstr "Náhled"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Náhled souborů ve vybraných operacích (bez mazání)"
 
-#: ../bleachbit/GUI.py:538
+#: ../bleachbit/GUI.py:541
 msgid "Delete"
 msgstr "Smazat"
 
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:544
 msgid "Delete files in the selected operations"
 msgstr "Smazat soubory ve vybraných operacích"
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:621
 msgid "Update BleachBit"
 msgstr "Aktualizovat BleachBit"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "BleachBit update is available"
 msgstr "Jsou dostupné aktualizace BleachBitu"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Pro více informací klikněte na \"Aktualizovat BleachBit\""
 
@@ -714,39 +718,40 @@ msgstr "Nejprve musíte zvolit operaci"
 #. or 'opera' or some other cleaner ID.  The special
 #. keyword %(msg)s will be replaced by a message like
 #. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
+#: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Výjimka při spuštění operace '%(operation)s\": \"%(msg)s\""
 
-#: ../bleachbit/Worker.py:121
+#: ../bleachbit/Worker.py:129
 msgid "Special operation: "
 msgstr "Zvláštní operace: "
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr "Označeno pro smazání: %(size)s- %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:205
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Čekejte prosím, pročišťuji %s."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Čekejte prosím, provádím náhled pro %s."
 
-#: ../bleachbit/Worker.py:208
+#: ../bleachbit/Worker.py:222
 msgid "Done."
 msgstr "Hotovo!"
 
-#: ../bleachbit/Worker.py:209
+#: ../bleachbit/Worker.py:223
 msgid "Total size: "
 msgstr "Celková velikost: "
