@@ -28,16 +28,30 @@ Command line interface
 import optparse
 import sys
 
+from CleanerBackend import backends
 import Common
 
+
+def list_cleaners():
+    """List available cleaners"""
+    import CleanerML
+    CleanerML.load_cleaners()
+    for key in sorted(backends):
+        c_name = backends[key].get_name()
+        c_id = backends[key].get_id()
+        for (o_id, o_name, o_value) in backends[key].get_options():
+            print "%s.%s" % (c_id, o_id)
 
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
     parser = optparse.OptionParser()
+    parser.add_option("-l", "--list-cleaners", action="store_true", 
+        help="Output version information and exit")
     parser.add_option("-v", "--version", action="store_true", 
         help="Output version information and exit")
     (options, args) = parser.parse_args()
+    print options
     if options.version:
         print """
 BleachBit version %s
@@ -46,6 +60,8 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         sys.exit(0)
+    if options.list_cleaners:
+        list_cleaners()
 
 
 
