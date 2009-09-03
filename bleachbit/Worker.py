@@ -25,15 +25,15 @@ Perform the preview or delete operations
 
 
 from gettext import gettext as _
+import gtk
+import os
 import sys
 import traceback
-
-import gtk
 
 import FileUtilities
 from CleanerBackend import backends
 
-if 'win32' == sys.platform:
+if 'nt' == os.name:
     import Windows
 else:
     class WindowsError(Exception):
