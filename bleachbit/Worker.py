@@ -70,6 +70,19 @@ class Worker:
         cb(0)
 
 
+    def print_exception(self, operation):
+        """Display exception"""
+        # TRANSLATORS: This indicates an error.  The special keyword
+        # %(operation)s will be replaced by 'firefox' or 'opera' or
+        # some other cleaner ID.  The special keyword %(msg)s will be
+        # replaced by a message such as 'Permission denied.'
+        err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
+            %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
+        print err
+        traceback.print_exc()
+        self.gui.append_text(err + "\n", 'error', self.__iter)
+
+
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
@@ -92,11 +105,7 @@ class Worker:
                 try:
                     self.clean_pathname(pathname)
                 except:
-                    err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
-                        %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
-                    print err
-                    traceback.print_exc()
-                    self.gui.append_text(err + "\n", 'error', self.__iter)
+                    self.print_exception(operation)
 
                 if time.time() - start_time >= 0.25:
                     if None != self.total_size_cb and self.really_delete:
@@ -105,16 +114,7 @@ class Worker:
                     yield True
                     start_time = time.time()
         except:
-            # TRANSLATORS: This indicates an error.  The special
-            # keyword %(operation)s will be replaced by 'firefox'
-            # or 'opera' or some other cleaner ID.  The special
-            # keyword %(msg)s will be replaced by a message like
-            # 'Permission denied.'
-            err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
-                %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
-            print err
-            traceback.print_exc()
-            self.gui.append_text(err + "\n", 'error', self.__iter)
+            self.print_exception(operation)
 
         # special operation
         try:
@@ -133,11 +133,7 @@ class Worker:
                     self.total_size_cb(self.total_bytes)
                 yield True
         except:
-            err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
-                %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
-            print err
-            traceback.print_exc()
-            self.gui.append_text(err + "\n", 'error', self.__iter)
+            self.print_exception(operation)
 
 
     def clean_pathname(self, pathname):
