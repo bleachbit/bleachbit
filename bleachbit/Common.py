@@ -70,9 +70,9 @@ if not os.path.exists(license_filename) and sys.platform == 'win32':
 
 # configuration
 options_dir = None
-if sys.platform == 'linux2':
+if 'posix' == os.name:
     options_dir = os.path.expanduser("~/.config/bleachbit/")
-if sys.platform == 'win32':
+elif 'nt' == os.name:
     options_dir = os.path.expandvars("${APPDATA}\\BleachBit\\")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
@@ -83,7 +83,7 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 system_cleaners_dir = None
 if sys.platform == 'linux2':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
-if sys.platform == 'win32':
+elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 
 # application icon
