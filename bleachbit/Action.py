@@ -17,9 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Actions that perform cleaning
 """
+
+
 
 import glob
 import os
@@ -28,11 +32,10 @@ import sys
 import FileUtilities
 import General
 
-if 'linux2' == sys.platform:
-    import Unix
-
-if 'win32' == sys.platform:
+if 'nt' == os.name:
     import Windows
+else:
+    import Unix
 
 
 
@@ -278,18 +281,18 @@ class TestAction(unittest.TestCase):
     def setUp(self):
         """Prepare for unit tests"""
         self.actions = []
-        if 'linux2' == sys.platform:
-            self.actions.append('<action type="file">~/.bash_history</action>')
-            self.actions.append('<action type="glob">/sbin/*sh</action>')
-            self.actions.append('<action type="children" directories="false">/sbin/</action>')
-            self.actions.append('<action type="children" directories="true">/var/log/</action>')
-        if 'win32' == sys.platform:
+        if 'nt' == os.name:
             self.actions.append('<action type="file">$WINDIR\\notepad.exe</action>')
             self.actions.append('<action type="glob">$WINDIR\\system32\\*.dll</action>')
             self.actions.append( \
                 '<action type="children" directories="false">$WINDIR\\system\\</action>')
             self.actions.append( \
                 '<action type="children" directories="true">$WINDIR\\system32\\</action>')
+        elif 'posix' == os.name:
+            self.actions.append('<action type="file">~/.bash_history</action>')
+            self.actions.append('<action type="glob">/sbin/*sh</action>')
+            self.actions.append('<action type="children" directories="false">/sbin/</action>')
+            self.actions.append('<action type="children" directories="true">/var/log/</action>')
 
         self.assert_(len(self.actions) > 0)
 
