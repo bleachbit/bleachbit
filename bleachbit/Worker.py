@@ -45,29 +45,25 @@ else:
 
 class Worker:
     """Perform the preview or delete operations"""
-    def __init__(self, gui, really_delete, operations):
+    def __init__(self, ui, really_delete, operations):
         """Create a Worker
 
-        gui: a bleachbit.GUI.GUI object
+        ui: an instance with methods
+            append_text()
+            update_progress_bar()
+            update_total_size()
         really_delete: (boolean) preview or make real changes?
-        operations: dictionary where operation-id is the key and 
+        operations: dictionary where operation-id is the key and
             operation-id are values
         """
-        self.total_size_cb = None
-        self.gui = gui
+        self.ui = ui
         self.really_delete = really_delete
         self.operations = operations
-        self.__iter = gui.textbuffer.get_iter_at_offset(0)
         self.total_bytes = 0
         if 0 == len(self.operations):
             raise("No work to do")
 
 
-    def set_total_size_cb(self, cb):
-        """Set the callback function for updating the total
-           size cleaned."""
-        self.total_size_cb = cb
-        cb(0)
 
 
     def print_exception(self, operation):
@@ -80,7 +76,7 @@ class Worker:
             %  { 'operation': operation, 'msg' : str(sys.exc_info()[1]) }
         print err
         traceback.print_exc()
-        self.gui.append_text(err + "\n", 'error', self.__iter)
+        self.ui.append_text(err + "\n", 'error')
 
 
     def clean_operation(self, operation):
@@ -91,7 +87,7 @@ class Worker:
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
                 % backends[operation].get_name()
-            self.gui.append_text(err + "\n", 'error', self.__iter)
+            self.ui.append_text(err + "\n", 'error')
             return
         if operation_options:
             for (option, value) in operation_options:
@@ -108,8 +104,8 @@ class Worker:
                     self.print_exception(operation)
 
                 if time.time() - start_time >= 0.25:
-                    if None != self.total_size_cb and self.really_delete:
-                        self.total_size_cb(self.total_bytes)
+                    if self.really_delete:
+                        self.ui.update_total_size(self.total_bytes)
                     # return control to PyGTK idle loop
                     yield True
                     start_time = time.time()
@@ -124,13 +120,13 @@ class Worker:
                 if self.really_delete:
                     self.total_bytes += ret[0]
                     line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
-                    if None != self.total_size_cb and self.really_delete:
-                        self.total_size_cb(self.total_bytes)
+                    if self.really_delete:
+                        self.ui.update_total_size(self.total_bytes)
                 else:
                     line = _("Special operation: ") + ret + "\n"
-                self.gui.append_text(line, None, self.__iter)
-                if None != self.total_size_cb and self.really_delete:
-                    self.total_size_cb(self.total_bytes)
+                self.ui.append_text(line)
+                if self.really_delete:
+                    self.ui.update_total_size(self.total_bytes)
                 yield True
         except:
             self.print_exception(operation)
@@ -144,7 +140,7 @@ class Worker:
             traceback.print_exc()
             line = str(sys.exc_info()[1]) + " " + pathname + "\n"
             print line
-            self.gui.append_text(line, 'error', self.__iter)
+            self.ui.append_text(line, 'error')
             return
 
         tag = None
@@ -188,14 +184,14 @@ class Worker:
         else:
             self.total_bytes += size_bytes
 
-        self.gui.append_text(line, tag, self.__iter)
+        self.ui.append_text(line, tag)
 
 
     def run(self):
         """Perform the main cleaning process"""
         count = 0
         for operation in self.operations:
-            self.gui.progressbar.set_fraction(1.0 * count / len(self.operations))
+            self.ui.update_progress_bar(1.0 * count / len(self.operations))
             name = backends[operation].get_name()
             if self.really_delete:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
@@ -203,7 +199,7 @@ class Worker:
             else:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
                 msg = _("Please wait.  Previewing %s.") % name
-            self.gui.progressbar.set_text(msg)
+            self.ui.update_progress_bar(msg)
             for dummy in self.clean_operation(operation):
                 yield True
             count += 1
@@ -213,12 +209,12 @@ class Worker:
 
 
     def finish(self):
-        """Finish the cleaning process.  Restore the previous GUI state."""
+        """Finish the cleaning process."""
 
         line = "\n%s%s" % ( _("Total size: "), FileUtilities.bytes_to_human(self.total_bytes))
-        self.gui.append_text(line, None, self.__iter)
-        if None != self.total_size_cb and self.really_delete:
-            self.total_size_cb(self.total_bytes)
-        self.gui.cb_worker_done()
+        self.ui.append_text(line)
+        if self.really_delete:
+            self.ui.update_total_size(self.total_bytes)
+        self.ui.worker_done()
 
 

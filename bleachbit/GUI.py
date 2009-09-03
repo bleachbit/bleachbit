@@ -268,6 +268,7 @@ class GUI:
 
 
     def append_text(self, text, tag = None, __iter = None):
+        """Add some text to the main log"""
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
         if tag:
@@ -383,12 +384,11 @@ class GUI:
             err = str(sys.exc_info()[1])
             self.append_text(err + "\n", 'error')
         else:
-            self.worker.set_total_size_cb(self.cb_total_size)
             worker = self.worker.run()
             gobject.idle_add(worker.next)
 
 
-    def cb_worker_done(self):
+    def worker_done(self):
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
@@ -488,8 +488,17 @@ class GUI:
         del backends['_gui']
 
 
+    def update_progress_bar(self, status):
+        """Callback to update the progress bar with number or text"""
+        if type(status) is float:
+            self.progressbar.set_fraction(status)
+        elif type(status) is str:
+            self.progressbar.set_text(status)
+        else:
+            raise RuntimeError('unexcepted type: ' + str(type(status)))
 
-    def cb_total_size(self, bytes):
+
+    def update_total_size(self, bytes):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
         text = FileUtilities.bytes_to_human(bytes)
