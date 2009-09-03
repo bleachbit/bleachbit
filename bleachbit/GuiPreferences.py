@@ -129,7 +129,7 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
-        notice = gtk.Label(_("Choose a writeable directory for each drive for which to overwrite free space."))
+        notice = gtk.Label(_("Choose a writable directory for each drive for which to overwrite free space."))
         vbox.pack_start(notice, False)
 
         liststore = gtk.ListStore(str)
