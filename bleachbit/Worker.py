@@ -137,11 +137,7 @@ class Worker:
         try:
             size_bytes = FileUtilities.getsize(pathname)
         except:
-            traceback.print_exc()
-            line = str(sys.exc_info()[1]) + " " + pathname + "\n"
-            print line
-            self.ui.append_text(line, 'error')
-            return
+            self.print_exception(operation)
 
         tag = None
         error = False
