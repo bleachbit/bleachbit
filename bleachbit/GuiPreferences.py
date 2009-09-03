@@ -24,6 +24,7 @@ Preferences dialog
 
 
 import gtk
+import os
 import sys
 
 from Common import online_update_notification_enabled
@@ -49,7 +50,7 @@ class PreferencesDialog:
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
         notebook.append_page(self.__drives_page(), gtk.Label(_("Drives")))
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
 
         self.dialog.vbox.pack_start(notebook, False)
