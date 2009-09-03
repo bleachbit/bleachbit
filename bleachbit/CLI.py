@@ -47,9 +47,9 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
     parser = optparse.OptionParser()
     parser.add_option("-l", "--list-cleaners", action = "store_true",
-        help = "List cleaners")
+        help = "list cleaners")
     parser.add_option("-v", "--version", action = "store_true",
-        help = "Output version information and exit")
+        help = "output version information and exit")
     (options, args) = parser.parse_args()
     print options
     if options.version:
