@@ -25,7 +25,6 @@ Perform the preview or delete operations
 
 
 from gettext import gettext as _
-import gtk
 import os
 import sys
 import traceback
@@ -52,6 +51,7 @@ class Worker:
             append_text()
             update_progress_bar()
             update_total_size()
+            worker_done()
         really_delete: (boolean) preview or make real changes?
         operations: dictionary where operation-id is the key and
             operation-id are values
@@ -206,29 +206,37 @@ class Worker:
                 yield True
             count += 1
 
-        # finished
+        # print final stats
+        bytes = FileUtilities.bytes_to_human(self.total_bytes)
+        if self.really_delete:
+            # TRANSLATORS: This refers to disk space that was
+            # really recoveered (in other words, not a preview)
+            line =  _("Disk space recovered: %s") % bytes
+        else:
+            # TRANSLATORS: This refers to a preview (no real
+            # changes were made yet)
+            line =  _("Disk space to be recovered: %s") % bytes
+        self.ui.append_text("\n%s" % line)
+        if self.really_delete:
+            # TRANSLATORS: This refers to the number of files really
+            # deleted (in other words, not a preview).
+            line = _("Files deleted: %d") % self.total_deleted
+        else:
+            # TRANSLATORS: This refers to the number of files that
+            # would be deleted (in other words, simply a preview).
+            line = _("Files to be deleted: %d") % self.total_deleted
+        self.ui.append_text("\n%s" % line)
+        if self.total_special > 0:
+            line =  _("Special operations: %d") % self.total_special
+            self.ui.append_text("\n%s" % line)
+        if self.total_errors > 0:
+            line = _("Errors: %d") % self.total_errors
+            self.ui.append_text("\n%s" % line, 'error')
 
         if self.really_delete:
             self.ui.update_total_size(self.total_bytes)
         self.ui.worker_done(self, self.really_delete)
 
         yield False
-
-
-    def get_stat(self, stat):
-        """Return a statistic
-
-        stat: one of these: bytes, deleted, special"""
-
-        if 'bytes' == stat:
-            return self.total_bytes
-        elif 'deleted' == stat:
-            return self.total_deleted
-        elif 'errors' == stat:
-            return self.total_errors
-        elif 'special' == stat:
-            return self.total_special
-        else:
-            raise RuntimeError('unknown stat: ' + stat)
 
 
