@@ -150,7 +150,7 @@ def ego_owner(filename):
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
     delimiter = ':'
-    if sys.platform == 'win32':
+    if 'nt' == os.name:
         delimiter = ';'
     for dirname in os.getenv('PATH').split(delimiter):
         if os.path.exists(os.path.join(dirname, filename)):
@@ -206,7 +206,7 @@ def expand_glob_join(pathname1, pathname2):
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
-    if sys.platform == 'linux2':
+    if 'posix' == os.name:
         __stat = os.lstat(path)
         return __stat.st_blocks * 512
     return os.path.getsize(path)
@@ -360,7 +360,7 @@ class TestFileUtilities(unittest.TestCase):
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
 
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             old_locale = locale.getlocale(locale.LC_NUMERIC)
             locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
@@ -397,7 +397,7 @@ class TestFileUtilities(unittest.TestCase):
                 self.assertEqual("1,00TB", bytes_to_human(1024**4))
 
         # clean up
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             locale.setlocale(locale.LC_NUMERIC, old_locale)
 
 
@@ -462,8 +462,8 @@ class TestFileUtilities(unittest.TestCase):
                   (hebrew, hebrew),
                   (katanana, katanana),
                   (umlauts, umlauts) ]
-        if 'linux2' == sys.platform:
-            # Windows doesn't allow these characters
+        if 'posix' == os.name:
+            # Windows doesn't allow these characters but Unix systems do
             tests.append( ('"', '*') )
             tests.append( ('\t', '\\') )
             tests.append( (':?', '<>|') )
@@ -478,7 +478,7 @@ class TestFileUtilities(unittest.TestCase):
             delete(filename, shred)
             self.assert_(not os.path.exists(filename))
 
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             return
 
         # test file with mode 0444/-r--r--r--
@@ -522,7 +522,7 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
-        if 'win32' == sys.platform:
+        if 'nt' == os.name:
             return
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
@@ -530,7 +530,7 @@ class TestFileUtilities(unittest.TestCase):
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
         filename = 'ls'
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             filename = 'cmd.exe'
         self.assert_(exists_in_path(filename))
 
@@ -541,7 +541,7 @@ class TestFileUtilities(unittest.TestCase):
             ("sh", True), \
             ("doesnotexist", False), \
             ("/bin/doesnotexist", False) ]
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             tests = [ ('c:\\windows\\system32\\cmd.exe', True), \
                       ('cmd.exe', True),
                       ('doesnotexist', False),
@@ -552,9 +552,9 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_expand_glob_join(self):
         """Unit test for expand_glob_join()"""
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             expand_glob_join('/bin', '*sh')
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             expand_glob_join('c:\windows', '*.exe')
 
 
@@ -565,7 +565,7 @@ class TestFileUtilities(unittest.TestCase):
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
 
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             self.assertEqual(getsize(filename), 10 * 12345)
             return
 
@@ -594,7 +594,7 @@ class TestFileUtilities(unittest.TestCase):
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
         path = '/bin'
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             path = 'c:\\windows\\system32'
         self.assert_(getsizedir(path) > 0)
 
@@ -681,7 +681,7 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
-        if 'win32' == sys.platform:
+        if 'nt' == os.name:
             return
 
         (handle, filename) = tempfile.mkstemp()
