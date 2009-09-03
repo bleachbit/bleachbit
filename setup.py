@@ -67,6 +67,10 @@ data_files = []
 if sys.platform == 'linux2':
     data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
+if sys.platform >= 'netbsd5':
+    data_files.append(('/usr/pkg/share/applications',['./bleachbit.desktop']))
+    data_files.append(('/usr/pkg/share/pixmaps/',['./bleachbit.png']))
+
 
 args = {}
 if 'py2exe' in sys.argv:
