@@ -366,7 +366,7 @@ class GUI:
                 operations[operation] = self.get_operation_options(operation)
         assert(type(operations) is dict)
         if 0 == len(operations):
-            dialog = gtk.MessageDialog(gui.window, gtk.DIALOG_MODAL \
+            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL \
                 | gtk.DIALOG_DESTROY_WITH_PARENT, \
                 gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, \
                 _("You must select an operation"))
@@ -374,6 +374,9 @@ class GUI:
             dialog.destroy()
             return
         try:
+            self.set_sensitive(False)
+            self.textbuffer.set_text("")
+            self.progressbar.show()
             self.worker = Worker.Worker(self, really_delete, operations)
         except:
             traceback.print_exc()
@@ -383,6 +386,15 @@ class GUI:
             self.worker.set_total_size_cb(self.cb_total_size)
             worker = self.worker.run()
             gobject.idle_add(worker.next)
+
+
+    def cb_worker_done(self):
+        """Callback for when Worker is done"""
+        self.progressbar.set_text("")
+        self.progressbar.set_fraction(1)
+        self.progressbar.set_text(_("Done."))
+        self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+        self.set_sensitive(True)
 
 
     def about(self, __event):

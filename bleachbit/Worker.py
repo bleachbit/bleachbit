@@ -57,10 +57,7 @@ class Worker:
         self.gui = gui
         self.really_delete = really_delete
         self.operations = operations
-        gui.set_sensitive(False)
-        gui.textbuffer.set_text("")
         self.__iter = gui.textbuffer.get_iter_at_offset(0)
-        gui.progressbar.show()
         self.total_bytes = 0
         if 0 == len(self.operations):
             raise("No work to do")
@@ -221,13 +218,11 @@ class Worker:
 
     def finish(self):
         """Finish the cleaning process.  Restore the previous GUI state."""
-        self.gui.progressbar.set_text("")
-        self.gui.progressbar.set_fraction(1)
-        self.gui.progressbar.set_text(_("Done."))
+
         line = "\n%s%s" % ( _("Total size: "), FileUtilities.bytes_to_human(self.total_bytes))
         self.gui.append_text(line, None, self.__iter)
         if None != self.total_size_cb and self.really_delete:
             self.total_size_cb(self.total_bytes)
-        self.gui.textview.scroll_mark_onscreen(self.gui.textbuffer.get_insert())
-        self.gui.set_sensitive(True)
+        self.gui.cb_worker_done()
+
 
