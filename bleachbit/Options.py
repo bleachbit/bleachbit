@@ -49,10 +49,10 @@ class Options:
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
         if not self.config.has_section("list/shred_drives"):
-            if 'win32' == sys.platform:
+            if 'nt' == os.name:
                 import Windows
                 self.set_list('shred_drives', Windows.get_fixed_drives())
-            if 'linux2' == sys.platform:
+            if 'posix' == os.name:
                 import Unix
                 self.set_list('shred_drives', Unix.guess_overwrite_paths())
 
