@@ -25,6 +25,7 @@ Command line interface
 
 
 
+from gettext import gettext as _
 import optparse
 import sys
 
@@ -47,9 +48,9 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
     parser = optparse.OptionParser()
     parser.add_option("-l", "--list-cleaners", action = "store_true",
-        help = "list cleaners")
+        help = _("list cleaners") )
     parser.add_option("-v", "--version", action = "store_true",
-        help = "output version information and exit")
+        help = _("output version information and exit") )
     (options, args) = parser.parse_args()
     print options
     if options.version:
