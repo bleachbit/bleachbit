@@ -33,10 +33,9 @@ import xml.dom.minidom
 
 import FileUtilities
 
-if 'linux2' == sys.platform:
+if 'posix' == os.name:
     import Unix
-
-if 'win32' == sys.platform:
+elif 'nt' == os.name:
     import Windows
 
 from FileUtilities import children_in_directory
@@ -126,11 +125,11 @@ class Cleaner:
         for running in self.running:
             type = running[0]
             pathname = running[1]
-            if 'exe' == type and sys.platform == 'linux2':
+            if 'exe' == type and 'posix' == os.name:
                 if Unix.is_running(pathname):
                     print "debug: process '%s' is runnning" % pathname
                     return True
-            elif 'exe' == type and sys.platform == 'win32':
+            elif 'exe' == type and 'nt' == os.name:
                 if pathname in Windows.enumerate_processes():
                     print "debug: process '%s' is runnning" % pathname
                     return True
@@ -193,12 +192,12 @@ class Firefox(Cleaner):
         # 'compact' or 'optimize' instead.
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             self.profile_dir = "~/.mozilla/firefox*/*/"
             self.add_running('exe', 'firefox')
             self.add_running('exe', 'firefox-bin')
             self.add_running('pathname', self.profile_dir + 'lock')
-        if sys.platform == 'win32':
+        elif 'nt' == os.name:
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
             self.add_running('exe', 'firefox.exe')
             self.add_running('pathname', self.profile_dir + 'parent.lock')
@@ -215,9 +214,9 @@ class Firefox(Cleaner):
     def list_files(self):
         # browser cache
         cache_base = None
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             cache_base = self.profile_dir
-        if sys.platform == 'win32':
+        elif 'nt' == os.name:
             cache_base = "$USERPROFILE\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
         if self.options["cache"][1]:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
@@ -407,10 +406,10 @@ class OpenOfficeOrg(Cleaner):
         self.add_option('recent_documents', _('Most recently used'), _("Delete the list of recently used documents"))
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             self.prefixes = [ "~/.ooo-2.0", "~/.openoffice.org2", "~/.openoffice.org2.0", "~/.openoffice.org/3" ]
             self.prefixes += [ "~/.ooo-dev3" ]
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             self.prefixes = [ "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2" ]
 
     def get_description(self):
@@ -507,7 +506,7 @@ class System(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
-        if sys.platform == 'linux2':
+        if 'posix' == os.name:
             # TRANSLATORS: desktop entries are .desktop files in Linux tha
             # make up the application menu (the menu that shows BleachBit,
             # Firefox, and others.  The .desktop files also associate file
@@ -526,7 +525,7 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
-        if sys.platform == 'win32':
+        if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
@@ -546,7 +545,7 @@ class System(Cleaner):
 
     def list_files(self):
         # cache
-        if sys.platform == 'linux2' and self.options["cache"][1]:
+        if 'posix' == os.name and self.options["cache"][1]:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 yield filename
@@ -563,7 +562,7 @@ class System(Cleaner):
             '~/.kde2/share/mimelnk/application/', \
             '~/.kde2/share/applnk' ]
 
-        if sys.platform == 'linux2' and self.options["desktop_entry"][1]:
+        if 'posix' == os.name and self.options["desktop_entry"][1]:
             for dirname in menu_dirs:
                 for filename in [fn for fn in children_in_directory(dirname, False) \
                     if fn.endswith('.desktop') ]:
@@ -571,14 +570,14 @@ class System(Cleaner):
                         yield filename
 
         # unwanted locales
-        if sys.platform == 'linux2' and self.options["localizations"][1]:
+        if 'posix' == os.name and self.options["localizations"][1]:
             callback = lambda locale, language: options.get_language(language)
             for path in Unix.locales.localization_paths(callback):
                 yield path
 
         # Windows logs
         files = []
-        if sys.platform == 'win32' and self.options['logs'][1]:
+        if 'nt' == os.name and self.options['logs'][1]:
             paths = ( \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
@@ -606,18 +605,18 @@ class System(Cleaner):
                     files += [ globbed ]
 
         # most recently used documents list
-        if sys.platform == 'linux2' and self.options["recent_documents"][1]:
+        if 'posix' == os.name and self.options["recent_documents"][1]:
             files += [ os.path.expanduser("~/.recently-used") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
-        if sys.platform == 'linux2' and self.options["rotated_logs"][1]:
+        if 'posix' == os.name and self.options["rotated_logs"][1]:
             for path in Unix.rotated_logs():
                 yield path
 
 
         # temporary
-        if sys.platform == 'linux2' and self.options["tmp"][1]:
+        if 'posix' == os.name and self.options["tmp"][1]:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
@@ -629,7 +628,7 @@ class System(Cleaner):
                     if ok:
                         yield path
 
-        if sys.platform == 'win32' and self.options["tmp"][1]:
+        if 'nt' == os.name and self.options["tmp"][1]:
             dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
                 yield filename
@@ -639,7 +638,7 @@ class System(Cleaner):
 
 
         # trash
-        if sys.platform == 'linux2' and self.options["trash"][1]:
+        if 'posix' == os.name and self.options["trash"][1]:
             dirname = os.path.expanduser("~/.Trash")
             for filename in children_in_directory(dirname, False):
                 yield filename
@@ -681,7 +680,7 @@ class System(Cleaner):
 
 
         # recent documents
-        if sys.platform == 'linux2' and self.options["recent_documents"][1]:
+        if 'posix' == os.name and self.options["recent_documents"][1]:
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
             # in memory if it is simply deleted, so it must be shredded
             # (or at least truncated).
@@ -713,7 +712,7 @@ class System(Cleaner):
                     yield display
 
         # Windows MRU
-        if sys.platform == 'win32' and self.options['mru'][1]:
+        if 'nt' == os.name and self.options['mru'][1]:
             # reference: http://support.microsoft.com/kb/142298
             keys = ( \
                 # search assistant
@@ -749,7 +748,7 @@ class System(Cleaner):
                     yield key
 
 
-        if sys.platform == 'win32' and self.options['recycle_bin'][1]:
+        if 'nt' == os.name and self.options['recycle_bin'][1]:
             for ret in Windows.empty_recycle_bin(really_delete):
                 yield ret
 
@@ -775,11 +774,10 @@ class System(Cleaner):
 
 backends = {}
 backends["firefox"] = Firefox()
-if sys.platform == 'linux2':
+if 'posix' == os.name:
     backends["kde"] = KDE()
-backends["openofficeorg"] = OpenOfficeOrg()
-if sys.platform == 'linux2':
     backends["rpmbuild"] = rpmbuild()
+backends["openofficeorg"] = OpenOfficeOrg()
 backends["system"] = System()
 
 
