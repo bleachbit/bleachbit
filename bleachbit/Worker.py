@@ -35,12 +35,11 @@ from CleanerBackend import backends
 
 if 'win32' == sys.platform:
     import Windows
-
-if 'linux2' == sys.platform:
+else:
     class WindowsError(Exception):
-        """Dummy class for Linux"""
+        """Dummy class for non-Windows systems"""
         def __str__(self):
-            return 'this is a dummy class for Linux'
+            return 'this is a dummy class for non-Windows systems'
 
 
 
