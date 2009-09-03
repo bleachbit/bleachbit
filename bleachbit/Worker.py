@@ -57,19 +57,13 @@ class Worker:
         self.gui = gui
         self.really_delete = really_delete
         self.operations = operations
-        if 0 == len(self.operations):
-            dialog = gtk.MessageDialog(gui.window, gtk.DIALOG_MODAL \
-                | gtk.DIALOG_DESTROY_WITH_PARENT, \
-                gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, \
-                _("You must select an operation"))
-            dialog.run()
-            dialog.destroy()
-            raise RuntimeError('No operation selected')
         gui.set_sensitive(False)
         gui.textbuffer.set_text("")
         self.__iter = gui.textbuffer.get_iter_at_offset(0)
         gui.progressbar.show()
         self.total_bytes = 0
+        if 0 == len(self.operations):
+            raise("No work to do")
 
 
     def set_total_size_cb(self, cb):

@@ -365,6 +365,14 @@ class GUI:
             for operation in self.get_selected_operations():
                 operations[operation] = self.get_operation_options(operation)
         assert(type(operations) is dict)
+        if 0 == len(operations):
+            dialog = gtk.MessageDialog(gui.window, gtk.DIALOG_MODAL \
+                | gtk.DIALOG_DESTROY_WITH_PARENT, \
+                gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, \
+                _("You must select an operation"))
+            dialog.run()
+            dialog.destroy()
+            return
         try:
             self.worker = Worker.Worker(self, really_delete, operations)
         except:
