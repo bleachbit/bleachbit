@@ -23,7 +23,11 @@ Perform (or assist with) cleaning operations.
 
 from gettext import gettext as _
 import glob
-import gtk
+try:
+    import gtk
+    HAVE_GTK = True
+except:
+    HAVE_GTK = False
 import os.path
 import re
 import subprocess
@@ -529,7 +533,8 @@ class System(Cleaner):
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
-        self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+        if HAVE_GTK:
+            self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
         self.set_warning('free_disk_space', _('This option is slow.'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
@@ -696,6 +701,8 @@ class System(Cleaner):
         # overwrite free space
         def idle_cb():
             """A callback to keep the window responding"""
+            if not HAVE_GTK:
+                return
             while gtk.events_pending():
                 gtk.main_iteration()
 
