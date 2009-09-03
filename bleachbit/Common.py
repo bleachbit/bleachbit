@@ -53,20 +53,20 @@ if hasattr(sys, 'frozen'):
 else:
     bleachbit_exe_path = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
 
-# Debian, Ubuntu
-license_filename = "/usr/share/common-licenses/GPL-3"
-if not os.path.exists(license_filename):
-    # openSUSE 1.11
-    license_filename = "/usr/share/doc/packages/bleachbit/COPYING"
-if not os.path.exists(license_filename):
-    # Mandriva
-    license_filename = "/usr/share/doc/bleachbit/COPYING"
-if not os.path.exists(license_filename):
-    # CentOS, Fedora, RHEL
-    license_filename = "/usr/share/doc/bleachbit-" + APP_VERSION + "/COPYING"
-if not os.path.exists(license_filename) and sys.platform == 'win32':
-    # Windows
-    license_filename = os.path.join(bleachbit_exe_path, 'COPYING')
+# license
+license_filename = None
+license_filenames = ('/usr/share/common-licenses/GPL-3', # Debian, Ubuntu
+    os.path.join(bleachbit_exe_path, 'COPYING'), # Microsoft Windows
+    '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING', # CentOS, Fedora, RHEL
+    '/usr/share/doc/packages/bleachbit/COPYING', # OpenSUSE 11.1
+    '/usr/share/doc/bleachbit/COPYING', # Mandriva
+    '/usr/pkg/share/doc/bleachbit/COPYING' ) # NetBSD 5
+for lf in license_filenames:
+    if os.path.exists(lf):
+        license_filename = lf
+        break
+if None == license_filename:
+    print 'warning: cannot find GPLv3 license text file'
 
 # configuration
 options_dir = None
@@ -85,6 +85,8 @@ if sys.platform == 'linux2':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
+elif sys.platform[:6] == 'netbsd':
+    system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 
 # application icon
 if os.path.exists("bleachbit.png"):
@@ -93,20 +95,24 @@ if os.path.exists("bleachbit.png"):
 else:
     if sys.platform == 'linux2':
         appicon_path = "/usr/share/pixmaps/bleachbit.png"
-    if sys.platform == 'win32':
+    elif sys.platform == 'win32':
         appicon_path = os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')
+    elif sys.platform[:6] == 'netbsd':
+        appicon_path = "/usr/pkg/share/pixmaps/bleachbit.png"
 
 # locale directory
 if os.path.exists("./locale/"):
-    # local locale
+    # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
     print "debug: locale_dir = '%s'" % (locale_dir, )
 else:
-    # installed locale
+    # system-wide installed locale
     if sys.platform == 'linux2':
         locale_dir = "/usr/share/locale/"
-    if sys.platform == 'win32':
+    elif sys.platform == 'win32':
         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
+    elif sys.platform[:6] == 'netbsd':
+         locale_dir = "/usr/pkg/share/locale/"
 
 
 ###
