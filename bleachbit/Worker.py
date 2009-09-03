@@ -17,6 +17,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Perform the preview or delete operations
 """
@@ -40,9 +42,18 @@ if 'linux2' == sys.platform:
         def __str__(self):
             return 'this is a dummy class for Linux'
 
+
+
 class Worker:
     """Perform the preview or delete operations"""
     def __init__(self, gui, really_delete, operations):
+        """Create a Worker
+
+        gui: a bleachbit.GUI.GUI object
+        really_delete: (boolean) preview or make real changes?
+        operations: dictionary where operation-id is the key and 
+            operation-id are values
+        """
         self.total_size_cb = None
         self.gui = gui
         self.really_delete = really_delete
