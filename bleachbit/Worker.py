@@ -60,10 +60,11 @@ class Worker:
         self.really_delete = really_delete
         self.operations = operations
         self.total_bytes = 0
+        self.total_deleted = 0
+        self.total_errors = 0
+        self.total_special = 0 # special operations
         if 0 == len(self.operations):
             raise("No work to do")
-
-
 
 
     def print_exception(self, operation):
@@ -77,6 +78,7 @@ class Worker:
         print err
         traceback.print_exc()
         self.ui.append_text(err + "\n", 'error')
+        self.total_errors += 1
 
 
     def clean_operation(self, operation):
@@ -88,6 +90,7 @@ class Worker:
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
                 % backends[operation].get_name()
             self.ui.append_text(err + "\n", 'error')
+            self.total_errors += 1
             return
         if operation_options:
             for (option, value) in operation_options:
@@ -117,6 +120,7 @@ class Worker:
             for ret in backends[operation].other_cleanup(self.really_delete):
                 if None == ret:
                     return
+                self.total_special += 1
                 if self.really_delete:
                     self.total_bytes += ret[0]
                     line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
@@ -177,8 +181,10 @@ class Worker:
             traceback.print_exc()
             line = "%s %s\n" % (str(sys.exc_info()[1]), pathname)
             tag = 'error'
+            self.total_errors += 1
         else:
             self.total_bytes += size_bytes
+            self.total_deleted += 1
 
         self.ui.append_text(line, tag)
 
@@ -200,17 +206,29 @@ class Worker:
                 yield True
             count += 1
 
-        self.finish()
+        # finished
+
+        if self.really_delete:
+            self.ui.update_total_size(self.total_bytes)
+        self.ui.worker_done(self, self.really_delete)
+
         yield False
 
 
-    def finish(self):
-        """Finish the cleaning process."""
+    def get_stat(self, stat):
+        """Return a statistic
 
-        line = "\n%s%s" % ( _("Total size: "), FileUtilities.bytes_to_human(self.total_bytes))
-        self.ui.append_text(line)
-        if self.really_delete:
-            self.ui.update_total_size(self.total_bytes)
-        self.ui.worker_done()
+        stat: one of these: bytes, deleted, special"""
+
+        if 'bytes' == stat:
+            return self.total_bytes
+        elif 'deleted' == stat:
+            return self.total_deleted
+        elif 'errors' == stat:
+            return self.total_errors
+        elif 'special' == stat:
+            return self.total_special
+        else:
+            raise RuntimeError('unknown stat: ' + stat)
 
 

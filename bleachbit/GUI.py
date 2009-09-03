@@ -388,13 +388,41 @@ class GUI:
             gobject.idle_add(worker.next)
 
 
-    def worker_done(self):
+    def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
         self.progressbar.set_text(_("Done."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
+
+        # print stats
+        bytes = FileUtilities.bytes_to_human(worker.get_stat('bytes'))
+        if really_delete:
+            # TRANSLATORS: 
+            line =  _("Disk space recovered: %s") % bytes
+        else:
+            line =  _("Disk space to be recovered: %s") % bytes
+        self.append_text("\n%s" % line)
+        deleted = worker.get_stat('deleted')
+        if really_delete:
+            # TRANSLATORS: This refers to the number of files really
+            # deleted (in other words, not a preview).
+            line = _("Files deleted: %d") % deleted
+        else:
+            # TRANSLATORS: This refers to the number of files that
+            # would be deleted (in other words, simply a preview).
+            line = _("Files to be deleted: %d") % deleted
+        self.append_text("\n%s" % line)
+        special = worker.get_stat('special')
+        if special > 0:
+            line =  _("Special operations: %d") % special
+            self.append_text("\n%s" % line)
+        errors = worker.get_stat('errors')
+        if errors > 0:
+            line = _("Errors: %d") % errors
+            self.append_text("\n%s" % line, 'error')
+
 
 
     def about(self, __event):
