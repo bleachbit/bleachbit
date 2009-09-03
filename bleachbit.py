@@ -23,8 +23,15 @@
 Launcher
 """
 
-import bleachbit.GUI
-import gtk
 
-gui = bleachbit.GUI.GUI()
-gtk.main()
+import sys
+
+
+if 1 == len(sys.argv):
+    import gtk
+    import bleachbit.GUI
+    gui = bleachbit.GUI.GUI()
+    gtk.main()
+else:
+    import bleachbit.CLI
+    bleachbit.CLI.process_cmd_line()

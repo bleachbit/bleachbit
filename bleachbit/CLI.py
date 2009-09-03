@@ -64,6 +64,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         list_cleaners()
 
 
-
-process_cmd_line()
+if __name__ == '__main__':
+    process_cmd_line()
 
