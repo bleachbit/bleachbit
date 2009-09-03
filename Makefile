@@ -13,7 +13,7 @@ build:
 
 clean:
 	@rm -vf {.,bleachbit}/*{pyc,pyo,~}
-	@rm -vf build dist # created by py2exe
+	@rm -vrf build dist # created by py2exe
 	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
 	@rm -vrf locale
