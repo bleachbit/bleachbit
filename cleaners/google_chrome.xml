@@ -31,7 +31,7 @@
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
+    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action type="file">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Cookies</action>
     <action type="file">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Extension Cookies</action>
     <action type="file">~/.config/google-chrome/Default/Cookies</action>

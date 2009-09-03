@@ -24,7 +24,7 @@
   <description>Web browser</description>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as web site prefereneces, authentication, and tracking identification</description>
+    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action type="children" directories="false">$USERPROFILE\Cookies\</action>
     <action type="children" directories="false">$APPDATA\Microsoft\Windows\Cookies\</action>
   </option>
