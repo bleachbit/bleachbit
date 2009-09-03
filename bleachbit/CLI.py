@@ -46,10 +46,10 @@ def list_cleaners():
 def process_cmd_line():
     """Parse the command line and execute given commands."""
     parser = optparse.OptionParser()
-    parser.add_option("-l", "--list-cleaners", action="store_true", 
-        help="Output version information and exit")
-    parser.add_option("-v", "--version", action="store_true", 
-        help="Output version information and exit")
+    parser.add_option("-l", "--list-cleaners", action = "store_true",
+        help = "List cleaners")
+    parser.add_option("-v", "--version", action = "store_true",
+        help = "Output version information and exit")
     (options, args) = parser.parse_args()
     print options
     if options.version:
@@ -62,6 +62,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         sys.exit(0)
     if options.list_cleaners:
         list_cleaners()
+        sys.exit(0)
 
 
 if __name__ == '__main__':
