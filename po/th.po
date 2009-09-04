@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-18 01:57+0000\n"
+"POT-Creation-Date: 2009-08-23 17:34-0600\n"
+"PO-Revision-Date: 2009-09-04 12:52+0000\n"
 "Last-Translator: shane.fox <Unknown>\n"
 "Language-Team: Thai <th@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-18 04:32+0000\n"
+"X-Launchpad-Export-Date: 2009-09-04 17:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -35,7 +35,7 @@ msgstr "แคช"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr ""
+msgstr "ลบรายชื่อเกมส์เซอร์เวอร์"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -60,7 +60,7 @@ msgstr ""
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:373
 #: ../bleachbit/CleanerBackend.py:406 ../bleachbit/CleanerBackend.py:518
 msgid "Delete the cache"
-msgstr ""
+msgstr "ลบเคช"
 
 #. TRANSLATORS: Vacuum is a verb.  You could translate the words
 #. 'compact' or 'optimize' instead.
@@ -96,13 +96,13 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history, which includes bookmarks, downloads, and visited sites"
-msgstr ""
+msgstr "ลบประวัติศาสตร์ ซึ่งรวมถึง บุกมาร์ก ดาวน์โลด และไซต์ที่เข้าชมแล้ว"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../bleachbit/CleanerBackend.py:183
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
+msgstr "ลบเว็บเคช ซึ่งลดเวลาในการแสดงหน้าที่เข้าชมแล้ว"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/mc.xml ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
@@ -116,7 +116,7 @@ msgstr "ประวัติ"
 #: ../cleaners/links2.xml ../cleaners/elinks.xml
 #: ../bleachbit/CleanerBackend.py:207
 msgid "Web browser"
-msgstr ""
+msgstr "เว็บบราวเซอร์"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/links2.xml
@@ -452,11 +452,11 @@ msgstr ""
 msgid "Overwrite free disk space %s"
 msgstr ""
 
-#: ../bleachbit/FileUtilities.py:176
+#: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
 msgid "Preferences"
 msgstr ""
 
@@ -533,102 +533,106 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
 msgid "Name"
 msgstr ""
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GUI.py:72
 msgid "Delete confirmation"
 msgstr ""
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:80
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:82
 msgid "Are you sure you want to permanently delete these files?"
 msgstr ""
 
-#: ../bleachbit/GUI.py:179
+#: ../bleachbit/GUI.py:180
 msgid "Active"
 msgstr ""
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:384
 msgid "Program to clean unnecessary files"
 msgstr ""
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:389
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:395
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  shane.fox https://launchpad.net/~shanefox"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:431
 msgid "Choose files to shred"
 msgstr ""
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:496
 msgid "_Shred Files"
 msgstr ""
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "_Quit"
 msgstr "_ออก"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:498
 msgid "_File"
 msgstr ""
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "_Edit"
 msgstr "_แก้ไข"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:501
+msgid "Help Contents"
+msgstr ""
+
+#: ../bleachbit/GUI.py:502
 msgid "_Release Notes"
 msgstr ""
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:503
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:504
 msgid "_Help"
 msgstr ""
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:533
 msgid "Preview"
 msgstr ""
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 
-#: ../bleachbit/GUI.py:538
+#: ../bleachbit/GUI.py:541
 msgid "Delete"
 msgstr "ลบ"
 
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:544
 msgid "Delete files in the selected operations"
 msgstr ""
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:621
 msgid "Update BleachBit"
 msgstr ""
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "BleachBit update is available"
 msgstr ""
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:631
 msgid "Click 'Update BleachBit' for more information"
 msgstr ""
 
@@ -681,39 +685,40 @@ msgstr ""
 #. or 'opera' or some other cleaner ID.  The special
 #. keyword %(msg)s will be replaced by a message like
 #. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
+#: ../bleachbit/Worker.py:135
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr ""
 
-#: ../bleachbit/Worker.py:121
+#: ../bleachbit/Worker.py:129
 msgid "Special operation: "
 msgstr ""
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr ""
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:205
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr ""
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr ""
 
-#: ../bleachbit/Worker.py:208
+#: ../bleachbit/Worker.py:222
 msgid "Done."
 msgstr ""
 
-#: ../bleachbit/Worker.py:209
+#: ../bleachbit/Worker.py:223
 msgid "Total size: "
 msgstr ""
