@@ -64,7 +64,7 @@ class Worker:
         self.total_errors = 0
         self.total_special = 0 # special operations
         if 0 == len(self.operations):
-            raise("No work to do")
+            raise RuntimeError("No work to do")
 
 
     def print_exception(self, operation):
