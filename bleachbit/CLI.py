@@ -50,10 +50,15 @@ class CliCallback:
         pass
 
 
-def list_cleaners():
-    """List available cleaners"""
+def init_cleaners():
+    """Prepare the cleaners for use"""
     import CleanerML
     CleanerML.load_cleaners()
+
+
+def list_cleaners():
+    """List available cleaners"""
+    init_cleaners()
     for key in sorted(backends):
         c_name = backends[key].get_name()
         c_id = backends[key].get_id()
@@ -61,14 +66,41 @@ def list_cleaners():
             print "%s.%s" % (c_id, o_id)
 
 
-def preview():
+def preview(operations):
     """Preview deletes and other changes"""
     import Worker
-    operations = {'firefox' : [ ('vacuum', True) ] }
     cb = CliCallback()
     worker = Worker.Worker(cb, False, operations).run()
     while worker.next():
         pass
+
+
+def args_to_operations(args):
+    """Read arguments and return list of operations"""
+    init_cleaners()
+    operations = {}
+    for arg in args:
+        if 2 != len(arg.split('.')):
+            print _("not a valid cleaner: %s") % arg
+            continue
+        (cleaner_id, option_id) = arg.split('.')
+        # default to false
+        if not operations.has_key(cleaner_id):
+            operations[cleaner_id] = []
+            for option in backends[cleaner_id].get_options():
+                operations[cleaner_id].append( [ option_id, False ] )
+        # change the specified option
+        for option in operations[cleaner_id]:
+            try:
+                operations[cleaner_id].remove( [ option_id, False ] )
+            except ValueError:
+                pass
+            try:
+                operations[cleaner_id].remove( [ option_id, True ] ) # prevent duplicates
+            except ValueError:
+                pass
+            operations[cleaner_id].append( [ option_id, True ] )
+    return operations
 
 
 def process_cmd_line():
@@ -93,7 +125,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         list_cleaners()
         sys.exit(0)
     if options.preview:
-        preview()
+        operations = args_to_operations(args)
+        preview(operations)
 
 
 if __name__ == '__main__':
