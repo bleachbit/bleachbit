@@ -84,11 +84,19 @@ def args_to_operations(args):
             print _("not a valid cleaner: %s") % arg
             continue
         (cleaner_id, option_id) = arg.split('.')
+        default = False
+        # enable all options (for example, firefox.*)
+        if '*' == option_id:
+            default = True
+            if operations.has_key(cleaner_id):
+                del operations[cleaner_id]
         # default to false
         if not operations.has_key(cleaner_id):
             operations[cleaner_id] = []
-            for option in backends[cleaner_id].get_options():
-                operations[cleaner_id].append( [ option_id, False ] )
+            for (option_id2, o_name, o_value) in backends[cleaner_id].get_options():
+                operations[cleaner_id].append( [ option_id2, default ] )
+        if '*' == option_id:
+           continue
         # change the specified option
         for option in operations[cleaner_id]:
             try:
