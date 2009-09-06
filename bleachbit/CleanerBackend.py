@@ -190,7 +190,7 @@ class Firefox(Cleaner):
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
-        self.set_warning('places', _('Deleting Places deletes bookmarks.'))
+        self.set_warning('places', _('This option deletes all bookmarks.'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         # TRANSLATORS: Vacuum is a verb.  You could translate the words
         # 'compact' or 'optimize' instead.
