@@ -105,7 +105,10 @@ def args_to_operations(args):
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
-    parser = optparse.OptionParser()
+    # TRANSLATORS: This is the command line usage.  Don't translate
+    # %prog
+    usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
+    parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action = "store_true",
         help = _("list cleaners"))
     parser.add_option("-p", "--preview", action = "store_true",
