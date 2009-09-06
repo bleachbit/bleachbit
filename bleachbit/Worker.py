@@ -210,7 +210,7 @@ class Worker:
         bytes = FileUtilities.bytes_to_human(self.total_bytes)
         if self.really_delete:
             # TRANSLATORS: This refers to disk space that was
-            # really recoveered (in other words, not a preview)
+            # really recovered (in other words, not a preview)
             line =  _("Disk space recovered: %s") % bytes
         else:
             # TRANSLATORS: This refers to a preview (no real
