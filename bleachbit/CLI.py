@@ -66,11 +66,11 @@ def list_cleaners():
             print "%s.%s" % (c_id, o_id)
 
 
-def preview(operations):
+def preview_or_delete(operations, really_delete):
     """Preview deletes and other changes"""
     import Worker
     cb = CliCallback()
-    worker = Worker.Worker(cb, False, operations).run()
+    worker = Worker.Worker(cb, really_delete, operations).run()
     while worker.next():
         pass
 
@@ -111,6 +111,8 @@ def process_cmd_line():
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action = "store_true",
         help = _("list cleaners"))
+    parser.add_option("-d", "--delete", action = "store_true",
+        help = _("delete files and make other permanent changes"))
     parser.add_option("-p", "--preview", action = "store_true",
         help = _("preview files to be deleted and other changes"))
     parser.add_option("-v", "--version", action = "store_true",
@@ -129,7 +131,12 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         sys.exit(0)
     if options.preview:
         operations = args_to_operations(args)
-        preview(operations)
+        preview_or_delete(operations, False)
+        sys.exit(0)
+    if options.delete:
+        operations = args_to_operations(args)
+        preview_or_delete(operations, True)
+        sys.exit(0)
 
 
 if __name__ == '__main__':
