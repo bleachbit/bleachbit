@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-23 17:34-0600\n"
-"PO-Revision-Date: 2009-09-05 13:18+0000\n"
+"PO-Revision-Date: 2009-09-06 13:08+0000\n"
 "Last-Translator: shane.fox <Unknown>\n"
 "Language-Team: Thai <th@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-05 22:36+0000\n"
+"X-Launchpad-Export-Date: 2009-09-06 18:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -179,20 +179,20 @@ msgstr ""
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "บันทึกแชท"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "ลบบันทึกแชท"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "ลบรายชื่อของเว็บเพจที่เข้าชมแล้ว"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr ""
+msgstr "ลบดัชนีค้นหา"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
@@ -205,35 +205,37 @@ msgstr "เครื่องมือค้นหา"
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "File transfer client"
-msgstr ""
+msgstr "โปรแกรมย้ายไฟล์"
 
 #: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
 msgid "Download history"
-msgstr ""
+msgstr "ดาวน์โหลดประวัติ"
 
 #: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
 msgid "List of files downloaded"
-msgstr ""
+msgstr "บันชีไฟล์ที่ดาวน์โหลดแล้ว"
 
 #: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
 msgid "List of visited web pages"
-msgstr ""
+msgstr "บันชีเว็บเพจที่เข้าชมแล้ว"
 
 #: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
 msgid "URL history"
-msgstr ""
+msgstr "ประวัติ URL"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
+"ฐานข้อมูลของ URL ประกอบด้วย บุ๊คมาร์ค แฟไวคอน และประวัติเว็บไซต์ที่เข้าชมแล้ว"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"ฐานข้อมูลของชื่อผู้ใช้ และรหัสผ่าน รวมถึงบัญชีของไซต์ที่ไม่น่าจะเก็บรหัสผ่าน"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:190
 msgid "Deleting Places deletes bookmarks."
@@ -241,11 +243,11 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
 msgid "Passwords"
-msgstr ""
+msgstr "รหัสผ่าน"
 
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
 msgid "Places"
-msgstr ""
+msgstr "สถานที่ต่างๆ"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
