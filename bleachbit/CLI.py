@@ -145,6 +145,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         operations = args_to_operations(args)
         preview_or_delete(operations, True)
         sys.exit(0)
+    parser.print_help()
 
 
 if __name__ == '__main__':
