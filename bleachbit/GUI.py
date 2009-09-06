@@ -492,7 +492,7 @@ class GUI:
         """Callback to update the progress bar with number or text"""
         if type(status) is float:
             self.progressbar.set_fraction(status)
-        elif type(status) is str:
+        elif (type(status) is str) or (type(status) is unicode):
             self.progressbar.set_text(status)
         else:
             raise RuntimeError('unexcepted type: ' + str(type(status)))
