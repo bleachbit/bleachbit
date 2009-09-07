@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-23 17:34-0600\n"
-"PO-Revision-Date: 2009-08-29 17:01+0000\n"
+"POT-Creation-Date: 2009-09-06 16:48-0600\n"
+"PO-Revision-Date: 2009-09-06 23:04+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-30 02:20+0000\n"
+"X-Launchpad-Export-Date: 2009-09-07 02:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -27,9 +27,9 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/amsn.xml
 #: ../cleaners/thumbnails.xml ../cleaners/java.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:183
-#: ../bleachbit/CleanerBackend.py:373 ../bleachbit/CleanerBackend.py:406
-#: ../bleachbit/CleanerBackend.py:518
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:186
+#: ../bleachbit/CleanerBackend.py:376 ../bleachbit/CleanerBackend.py:409
+#: ../bleachbit/CleanerBackend.py:521
 msgid "Cache"
 msgstr "Cache"
 
@@ -43,7 +43,7 @@ msgid "Game"
 msgstr "Hra"
 
 #: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
-#: ../bleachbit/CleanerBackend.py:194
+#: ../bleachbit/CleanerBackend.py:197
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -59,22 +59,22 @@ msgstr ""
 #: ../cleaners/evolution.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
 #: ../cleaners/thumbnails.xml ../cleaners/java.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:373
-#: ../bleachbit/CleanerBackend.py:406 ../bleachbit/CleanerBackend.py:518
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:376
+#: ../bleachbit/CleanerBackend.py:409 ../bleachbit/CleanerBackend.py:521
 msgid "Delete the cache"
 msgstr "Vymazat cache"
 
 #. TRANSLATORS: Vacuum is a verb.  You could translate the words
 #. 'compact' or 'optimize' instead.
 #: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
-#: ../bleachbit/CleanerBackend.py:194
+#: ../bleachbit/CleanerBackend.py:197
 msgid "Vacuum"
 msgstr "Defragmentace databáze"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
+#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:187
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -85,9 +85,9 @@ msgstr "Aktuální sezení"
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
+#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:187
 msgid ""
-"Delete cookies, which contain information such as web site prefereneces, "
+"Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
 "Smazat cookies, která obsahují informace jako nastavení webových stránek, "
@@ -105,7 +105,7 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../bleachbit/CleanerBackend.py:183
+#: ../bleachbit/CleanerBackend.py:186
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Smazat webovou cache, která urychluje načítání již navštívených stránek"
@@ -120,7 +120,7 @@ msgstr "Historie"
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/links2.xml ../cleaners/elinks.xml
-#: ../bleachbit/CleanerBackend.py:207
+#: ../bleachbit/CleanerBackend.py:210
 msgid "Web browser"
 msgstr "Webový prohlížeč"
 
@@ -143,13 +143,14 @@ msgstr "Editor"
 #: ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../bleachbit/CleanerBackend.py:533
 msgid "Delete the logs"
 msgstr "Smazat záznamy"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/easytag.xml ../cleaners/gftp.xml
-#: ../cleaners/amule.xml
+#: ../cleaners/amule.xml ../bleachbit/CleanerBackend.py:533
 msgid "Logs"
 msgstr "Záznamy"
 
@@ -168,14 +169,14 @@ msgid "Delete the debug logs"
 msgstr "Smazat ladící záznamy"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/gedit.xml
-#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:407
-#: ../bleachbit/CleanerBackend.py:527 ../bleachbit/CleanerBackend.py:530
+#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:410
+#: ../bleachbit/CleanerBackend.py:530 ../bleachbit/CleanerBackend.py:534
 msgid "Delete the list of recently used documents"
 msgstr "Smazat seznam naposledy použitých souborů"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml
-#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:407
-#: ../bleachbit/CleanerBackend.py:530
+#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:410
+#: ../bleachbit/CleanerBackend.py:534
 msgid "Most recently used"
 msgstr "Nejčastěji použité soubory"
 
@@ -215,23 +216,23 @@ msgstr "Nástroj na vyhledávání"
 msgid "File transfer client"
 msgstr "Klient  pro přenos souborů"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
+#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:188
 msgid "Download history"
 msgstr "Historie stahování"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
+#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:188
 msgid "List of files downloaded"
 msgstr "Seznam stažených souborů"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
+#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:194
 msgid "List of visited web pages"
 msgstr "Seznam navštívených stránek"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
+#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:194
 msgid "URL history"
 msgstr "Historie stránek"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:192
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
@@ -239,7 +240,7 @@ msgstr ""
 "Databáze webových stránek včetně záložek, ikonek a historie navštívených "
 "stránek"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:191
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -247,15 +248,15 @@ msgstr ""
 "Databáze uživatelských jmen a hesel, stejně jako seznam stránek, které by "
 "neměly ukládat hesla"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:190
+#: ../cleaners/epiphany.xml
 msgid "Deleting Places deletes bookmarks."
 msgstr "Smazáním míst smažete i záložky!"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:191
 msgid "Passwords"
 msgstr "Hesla"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:192
 msgid "Places"
 msgstr "Místa"
 
@@ -281,13 +282,13 @@ msgstr "Smazat záložní soubory"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
+#: ../bleachbit/CleanerBackend.py:377 ../bleachbit/CleanerBackend.py:540
 msgid "Delete the temporary files"
 msgstr "Smazat dočasné soubory"
 
 #: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
+#: ../bleachbit/CleanerBackend.py:377 ../bleachbit/CleanerBackend.py:540
 msgid "Temporary files"
 msgstr "Dočasné soubory"
 
@@ -315,7 +316,7 @@ msgstr "Náhledy souborů"
 msgid "Delete the command history"
 msgstr "Smazat historii příkazů"
 
-#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:527
+#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:530
 msgid "Recent documents list"
 msgstr "Seznam nedávných dokumentů"
 
@@ -342,36 +343,40 @@ msgstr "Uvolní místo na disku a udrží soukromí"
 
 #. TRANSLATORS: Vacuumed may also be translated 'compacted'
 #. or 'optimized.'  The '%s' is a file name.
-#: ../bleachbit/Action.py:185 ../bleachbit/Action.py:187
+#: ../bleachbit/Action.py:188 ../bleachbit/Action.py:190
 #, python-format
 msgid "Vacuumed: %s"
 msgstr "Defragmentováno: %s"
 
-#: ../bleachbit/CleanerBackend.py:186
+#: ../bleachbit/CleanerBackend.py:189
 msgid "Form history"
 msgstr "Historie formulářů"
 
-#: ../bleachbit/CleanerBackend.py:186
+#: ../bleachbit/CleanerBackend.py:189
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "Historie formulářů na webových stránkách a ve vyhledávači"
 
-#: ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/CleanerBackend.py:190
 msgid "Session restore"
 msgstr "Obnova sezení"
 
-#: ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/CleanerBackend.py:190
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Obnovuje předchozí relaci po ukončení nebo pádu prohlížeče"
 
-#: ../bleachbit/CleanerBackend.py:377
+#: ../bleachbit/CleanerBackend.py:193
+msgid "This option deletes all bookmarks."
+msgstr ""
+
+#: ../bleachbit/CleanerBackend.py:380
 msgid "KDE desktop environment"
 msgstr "Pracovní prostředí KDE"
 
-#: ../bleachbit/CleanerBackend.py:417
+#: ../bleachbit/CleanerBackend.py:420
 msgid "Office suite"
 msgstr "Kancelářský balík"
 
-#: ../bleachbit/CleanerBackend.py:481
+#: ../bleachbit/CleanerBackend.py:484
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "Smazat soubory v build složce rpmbuild"
 
@@ -381,21 +386,21 @@ msgstr "Smazat soubory v build složce rpmbuild"
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/CleanerBackend.py:517
+#: ../bleachbit/CleanerBackend.py:520
 msgid "Broken desktop files"
 msgstr "Poškozené soubory plochy"
 
-#: ../bleachbit/CleanerBackend.py:517
+#: ../bleachbit/CleanerBackend.py:520
 msgid "Delete broken application menu entries and file associations"
 msgstr "Odstranit poškozené položky menu a přidružené soubory"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/CleanerBackend.py:521
+#: ../bleachbit/CleanerBackend.py:524
 msgid "Localizations"
 msgstr "Lokalizace"
 
-#: ../bleachbit/CleanerBackend.py:521
+#: ../bleachbit/CleanerBackend.py:524
 msgid "Delete files for unwanted languages"
 msgstr "Smazat soubory nepotřebných překladů různých programů"
 
@@ -403,94 +408,123 @@ msgstr "Smazat soubory nepotřebných překladů různých programů"
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/CleanerBackend.py:526
+#: ../bleachbit/CleanerBackend.py:529
 msgid "Rotated logs"
 msgstr "Staré systémové záznamy"
 
-#: ../bleachbit/CleanerBackend.py:526
+#: ../bleachbit/CleanerBackend.py:529
 msgid "Delete old system logs"
 msgstr "Smazat staré systémové záznamy"
 
-#: ../bleachbit/CleanerBackend.py:528
+#: ../bleachbit/CleanerBackend.py:531
 msgid "Trash"
 msgstr "Koš"
 
-#: ../bleachbit/CleanerBackend.py:528
+#: ../bleachbit/CleanerBackend.py:531
 msgid "Empty the trash"
 msgstr "Vysypat koš"
 
-#: ../bleachbit/CleanerBackend.py:531
+#: ../bleachbit/CleanerBackend.py:535
 msgid "Recycle bin"
 msgstr "Koš"
 
-#: ../bleachbit/CleanerBackend.py:531
+#: ../bleachbit/CleanerBackend.py:535
 msgid "Empty the recycle bin"
 msgstr "Vysypat koš"
 
-#: ../bleachbit/CleanerBackend.py:532 ../bleachbit/CleanerBackend.py:649
-#: ../bleachbit/CleanerBackend.py:651
+#: ../bleachbit/CleanerBackend.py:537 ../bleachbit/CleanerBackend.py:682
+#: ../bleachbit/CleanerBackend.py:684
 msgid "Clipboard"
 msgstr "Schránka"
 
-#: ../bleachbit/CleanerBackend.py:532
+#: ../bleachbit/CleanerBackend.py:537
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Schránka desktopových prostředí používaná pro operace kopírovat & vložit"
 
-#: ../bleachbit/CleanerBackend.py:533
+#: ../bleachbit/CleanerBackend.py:538
 msgid "Free disk space"
 msgstr "Uvolnit místo na disku"
 
-#: ../bleachbit/CleanerBackend.py:533
+#: ../bleachbit/CleanerBackend.py:538
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Skrýt smazané soubory přepsáním volného místa na disku"
 
-#: ../bleachbit/CleanerBackend.py:534
+#: ../bleachbit/CleanerBackend.py:539
 msgid "This option is slow."
 msgstr "Tato volba je velice pomalá!"
 
-#: ../bleachbit/CleanerBackend.py:538
+#: ../bleachbit/CleanerBackend.py:543
 msgid "The system in general"
 msgstr "Systém obecně"
 
-#: ../bleachbit/CleanerBackend.py:544
+#: ../bleachbit/CleanerBackend.py:549
 msgid "System"
 msgstr "Systém"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/CleanerBackend.py:679
+#: ../bleachbit/CleanerBackend.py:714
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Přepsat volné místo na disku %s"
+
+#: ../bleachbit/CLI.py:84
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "neplatný čistič: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog.  The part 'cleaner.option1' refers to a cleaner ID
+#. and an option ID, so for example the user may run
+#. 'bleachbit --delete firefox.cache' to delete the Firefox cache.
+#: ../bleachbit/CLI.py:120
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "použití: %prog [volby] cistic.volba1 cistic.volba2"
+
+#: ../bleachbit/CLI.py:123
+msgid "list cleaners"
+msgstr "seznam čističů"
+
+#: ../bleachbit/CLI.py:125
+msgid "delete files and make other permanent changes"
+msgstr "smazat soubory a provést další nezvratné změny"
+
+#: ../bleachbit/CLI.py:127
+msgid "preview files to be deleted and other changes"
+msgstr "zobrazit soubory, které budou smazány či jinak pozměněny"
+
+#: ../bleachbit/CLI.py:129
+msgid "output version information and exit"
+msgstr "zobrazit informaci o verzi a skončit"
 
 #: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Nemohu importovat sqlite3 modul Pythonu: je potřeba Python 2.5 a vyšší."
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:499
+#: ../bleachbit/GuiPreferences.py:42 ../bleachbit/GUI.py:528
 msgid "Preferences"
 msgstr "_Předvolby"
 
-#: ../bleachbit/GuiPreferences.py:50
+#: ../bleachbit/GuiPreferences.py:51
 msgid "General"
 msgstr "Obecné"
 
-#: ../bleachbit/GuiPreferences.py:51
+#: ../bleachbit/GuiPreferences.py:52
 msgid "Drives"
 msgstr "Disky / oddíly"
 
-#: ../bleachbit/GuiPreferences.py:53
+#: ../bleachbit/GuiPreferences.py:54
 msgid "Languages"
 msgstr "Jazyky"
 
-#: ../bleachbit/GuiPreferences.py:71
+#: ../bleachbit/GuiPreferences.py:72
 msgid "Check periodically for software updates via the Internet"
 msgstr "Pravidelně ověřovat aktualizace BleachBitu přes internet"
 
-#: ../bleachbit/GuiPreferences.py:74
+#: ../bleachbit/GuiPreferences.py:75
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -502,18 +536,18 @@ msgstr ""
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:81
+#: ../bleachbit/GuiPreferences.py:82
 msgid "Hide irrelevant cleaners"
 msgstr "Skrýt pro vás nepoužitelné čističe"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:89
+#: ../bleachbit/GuiPreferences.py:90
 msgid "Overwrite files to hide contents"
 msgstr "Sešrotovat soubory tak, aby bylo zabráněno jejich obnovení"
 
-#: ../bleachbit/GuiPreferences.py:92
+#: ../bleachbit/GuiPreferences.py:93
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -521,39 +555,38 @@ msgstr ""
 "Přepisování je na některých souborových systémech a s některými BleachBit "
 "operacemi neúčinné. Přepisování je navíc výrazně pomalejší."
 
-#: ../bleachbit/GuiPreferences.py:104
+#: ../bleachbit/GuiPreferences.py:105
 msgid "Choose a folder"
 msgstr "Zvolte složku"
 
-#: ../bleachbit/GuiPreferences.py:131
+#: ../bleachbit/GuiPreferences.py:132
 msgid ""
-"Choose a writeable directory for each drive for which to overwrite free "
-"space."
+"Choose a writable directory for each drive for which to overwrite free space."
 msgstr ""
 "Zvolte zapisovatelnou složku pro každý disk či oddíl, pro který se přepíše "
 "volné místo."
 
-#: ../bleachbit/GuiPreferences.py:150
+#: ../bleachbit/GuiPreferences.py:151
 msgid "Add"
 msgstr "Přidat"
 
-#: ../bleachbit/GuiPreferences.py:152
+#: ../bleachbit/GuiPreferences.py:153
 msgid "Remove"
 msgstr "Odebrat"
 
-#: ../bleachbit/GuiPreferences.py:177
+#: ../bleachbit/GuiPreferences.py:178
 msgid "All languages will be deleted except those checked."
 msgstr "Všechny jazykové balíky kromě označených budou smazány"
 
-#: ../bleachbit/GuiPreferences.py:195
+#: ../bleachbit/GuiPreferences.py:196
 msgid "Preserve"
 msgstr "Zachovat"
 
-#: ../bleachbit/GuiPreferences.py:199
+#: ../bleachbit/GuiPreferences.py:200
 msgid "Code"
 msgstr "Kód"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
+#: ../bleachbit/GuiPreferences.py:204 ../bleachbit/GUI.py:172
 msgid "Name"
 msgstr "Název"
 
@@ -580,11 +613,19 @@ msgstr ""
 msgid "Active"
 msgstr "Aktivní"
 
-#: ../bleachbit/GUI.py:384
+#: ../bleachbit/GUI.py:373
+msgid "You must select an operation"
+msgstr "Nejprve musíte zvolit operaci"
+
+#: ../bleachbit/GUI.py:395
+msgid "Done."
+msgstr "Hotovo!"
+
+#: ../bleachbit/GUI.py:404
 msgid "Program to clean unnecessary files"
 msgstr "Velice užitečný program na mazání nepotřebných souborů"
 
-#: ../bleachbit/GUI.py:389
+#: ../bleachbit/GUI.py:409
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -592,74 +633,74 @@ msgstr ""
 "GNU General Public License verze 3 a vyšší.\n"
 "Viz. http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:395
+#: ../bleachbit/GUI.py:415
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Roman Horník https://launchpad.net/~roman.hornik\n"
 "  milboy https://launchpad.net/~milboys"
 
-#: ../bleachbit/GUI.py:431
+#: ../bleachbit/GUI.py:451
 msgid "Choose files to shred"
 msgstr "Vyberte soubory k sešrotování"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:525
 msgid "_Shred Files"
 msgstr "_Sešrotovat soubory"
 
-#: ../bleachbit/GUI.py:497
+#: ../bleachbit/GUI.py:526
 msgid "_Quit"
 msgstr "U_končit"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:527
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:529
 msgid "_Edit"
 msgstr "Úp_ravy"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:530
 msgid "Help Contents"
 msgstr "Obsah nápovědy"
 
-#: ../bleachbit/GUI.py:502
+#: ../bleachbit/GUI.py:531
 msgid "_Release Notes"
 msgstr "Po_známky k vydání"
 
-#: ../bleachbit/GUI.py:503
+#: ../bleachbit/GUI.py:532
 msgid "_About"
 msgstr "_O aplikaci"
 
-#: ../bleachbit/GUI.py:504
+#: ../bleachbit/GUI.py:533
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:562
 msgid "Preview"
 msgstr "Náhled"
 
-#: ../bleachbit/GUI.py:536
+#: ../bleachbit/GUI.py:565
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Náhled souborů ve vybraných operacích (bez mazání)"
 
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:570
 msgid "Delete"
 msgstr "Smazat"
 
-#: ../bleachbit/GUI.py:544
+#: ../bleachbit/GUI.py:573
 msgid "Delete files in the selected operations"
 msgstr "Smazat soubory ve vybraných operacích"
 
-#: ../bleachbit/GUI.py:621
+#: ../bleachbit/GUI.py:650
 msgid "Update BleachBit"
 msgstr "Aktualizovat BleachBit"
 
-#: ../bleachbit/GUI.py:631
+#: ../bleachbit/GUI.py:660
 msgid "BleachBit update is available"
 msgstr "Jsou dostupné aktualizace BleachBitu"
 
-#: ../bleachbit/GUI.py:631
+#: ../bleachbit/GUI.py:660
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Pro více informací klikněte na \"Aktualizovat BleachBit\""
 
@@ -690,7 +731,7 @@ msgid "Executable not found: %s"
 msgstr "Spustitelný soubor nenalezen: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:542 ../bleachbit/Worker.py:78
+#: ../bleachbit/Unix.py:542 ../bleachbit/Worker.py:90
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -699,7 +740,7 @@ msgstr ""
 "Nelze spustit čistič pro %s, neboť tato aplikace právě běží. Ukončete ji a "
 "zkuste to znovu."
 
-#: ../bleachbit/Update.py:79
+#: ../bleachbit/Update.py:84
 msgid "Error when checking for updates: "
 msgstr "Chyba při kontrole aktualizací: "
 
@@ -709,49 +750,73 @@ msgstr "Chyba při kontrole aktualizací: "
 msgid "Recycle bin %s"
 msgstr "Koš na %s"
 
-#: ../bleachbit/Worker.py:54
-msgid "You must select an operation"
-msgstr "Nejprve musíte zvolit operaci"
-
-#. TRANSLATORS: This indicates an error.  The special
-#. keyword %(operation)s will be replaced by 'firefox'
-#. or 'opera' or some other cleaner ID.  The special
-#. keyword %(msg)s will be replaced by a message like
-#. 'Permission denied.'
-#: ../bleachbit/Worker.py:94 ../bleachbit/Worker.py:112
-#: ../bleachbit/Worker.py:135
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:76
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Výjimka při spuštění operace '%(operation)s\": \"%(msg)s\""
 
-#: ../bleachbit/Worker.py:129
+#: ../bleachbit/Worker.py:130
 msgid "Special operation: "
 msgstr "Zvláštní operace: "
 
 #. TRANSLATORS: This indicates the file will be deleted
 #. when Windows reboots.  The special keyword %(size)s
 #. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:178
+#: ../bleachbit/Worker.py:171
 #, python-format
 msgid "Marked for deletion: %(size)s %(pathname)s"
 msgstr "Označeno pro smazání: %(size)s- %(pathname)s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:205
+#: ../bleachbit/Worker.py:200
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Čekejte prosím, pročišťuji %s."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:208
+#: ../bleachbit/Worker.py:203
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Čekejte prosím, provádím náhled pro %s."
 
-#: ../bleachbit/Worker.py:222
-msgid "Done."
-msgstr "Hotovo!"
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:214
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Na disku bylo uvolněno: %s"
 
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:218
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Na disku bude přibližně uvolněno: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py:223
-msgid "Total size: "
-msgstr "Celková velikost: "
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Souborů smazáno: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:227
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Souborů bude smazáno: %d"
+
+#: ../bleachbit/Worker.py:230
+#, python-format
+msgid "Special operations: %d"
+msgstr "Zvláštních operací: %d"
+
+#: ../bleachbit/Worker.py:233
+#, python-format
+msgid "Errors: %d"
+msgstr "Chyb: %d"
