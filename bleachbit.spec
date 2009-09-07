@@ -113,7 +113,7 @@ EOF
 
 cat > bleachbit.console <<EOF
 USER=root
-PROGRAM=/usr/share/bleachbit/GUI.py
+PROGRAM=/usr/bin/bleachbit
 SESSION=true
 EOF
 
@@ -142,7 +142,7 @@ desktop-file-install \
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
 mkdir -p %{buildroot}/%{_sbindir}
-ln -s ../..%{_datadir}/%{name}/GUI.py %{buildroot}/%{_sbindir}/%{name}-root
+ln -s ../..%{_bindir}/%{name} %{buildroot}/%{_sbindir}/%{name}-root
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
 install -m 644 %{name}.pam %{buildroot}%{_sysconfdir}/pam.d/%{name}-root
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps

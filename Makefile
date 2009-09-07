@@ -22,7 +22,8 @@ clean:
 install:
 	# "binary"
 	mkdir -p $(DESTDIR)$(bindir)
-	ln -f -s ../..$(datadir)/bleachbit/GUI.py $(DESTDIR)$(bindir)/bleachbit
+	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
+	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
 
 	# .desktop
 	mkdir -p $(DESTDIR)$(datadir)/applications
@@ -31,7 +32,6 @@ install:
 	# Python code
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit
 	$(INSTALL_DATA) bleachbit/*.py $(DESTDIR)$(datadir)/bleachbit
-	chmod 0755 $(DESTDIR)$(datadir)/bleachbit/GUI.py
 	cd $(DESTDIR)$(datadir)/bleachbit && \
 	python -O -c "import compileall; compileall.compile_dir('.')" && \
 	python -c "import compileall; compileall.compile_dir('.')"

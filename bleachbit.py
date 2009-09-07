@@ -19,12 +19,22 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 """
 Launcher
 """
 
 
+
+import os
 import sys
+
+if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
+    # This path contains bleachbit/{C,G}LI.py .  This section is
+    # unnecessary if installing BleachBit in site-packages.
+    sys.path.append('/usr/share/')
+
+
 
 
 if 1 == len(sys.argv):
@@ -35,3 +45,4 @@ if 1 == len(sys.argv):
 else:
     import bleachbit.CLI
     bleachbit.CLI.process_cmd_line()
+
