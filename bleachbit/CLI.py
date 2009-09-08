@@ -28,9 +28,11 @@ Command line interface
 from gettext import gettext as _
 import optparse
 import sys
+import unittest
 
 from CleanerBackend import backends
 import Common
+
 
 
 class CliCallback:
@@ -150,6 +152,21 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
     parser.print_help()
 
 
+
+
+class TestCLI(unittest.TestCase):
+    """Unit test for module CLI"""
+
+    def test_init_cleaners(self):
+        init_cleaners()
+
+
+
 if __name__ == '__main__':
-    process_cmd_line()
+    if len(sys.argv) == 2 and sys.argv[1] == 'tests':
+        print 'info: running CLI unit tests'
+        del sys.argv[1]
+        unittest.main()
+    else:
+        process_cmd_line()
 
