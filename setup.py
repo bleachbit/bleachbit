@@ -78,14 +78,17 @@ if 'py2exe' in sys.argv:
         'script' : 'bleachbit.py',
         'icon_resources' : [(1, 'bleachbit.ico')]
         }]
+    args['console'] = [{
+        'script' : 'bleachbit_console.py',
+        'icon_resources' : [(1, 'bleachbit.ico')]
+        }]
     args['options'] = {
         'py2exe' : {
             'packages' : 'encodings',
             'optimize' : 2, # extra optimization (like python -OO)
             'includes' : ['cairo', 'pango', 'pangocairo', 'atk', 'gobject'],
             'excludes' : ['_ssl', 'pyreadline', 'difflib', 'doctest',
-                'optparse', 'pickle', 'calendar', 
-                'ftplib', 'ssl', 'bleachbit.Unix'],
+                'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
             'compressed' : True # create a compressed zipfile
             }
         }

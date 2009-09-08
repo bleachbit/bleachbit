@@ -45,7 +45,9 @@ REM do not pre-compress python25.dll because py2exe modifies it
 if not "%1" == "fast" %UPX_EXE% %UPX_OPTS% %windir%\system32\pywintypes%PYTHON_VER%.dll
 
 echo Running py2exe
+copy bleachbit.py bleachbit_console.py
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
+del bleachbit_console.py
 set CANARY=dist\bleachbit.exe
 if not exist %CANARY% goto error
 
