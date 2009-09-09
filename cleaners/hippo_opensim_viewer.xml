@@ -22,13 +22,13 @@
 <cleaner id="hippo_opensim_viewer">
   <label>Hippo OpenSim Viewer</label>
   <description>Game</description>
-  <option id="Cache">
+  <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
     <action type="children" directories="false">~/.hippo_opensim_viewer/cache/</action>
     <action type="children" directories="false">$USERPROFILE\Application Data\Hippo_OpenSim_Viewer\cache\</action>
   </option>
-  <option id="Logs">
+  <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
     <action type="children" directories="false">~/.hippo_opensim_viewer/logs/</action>
