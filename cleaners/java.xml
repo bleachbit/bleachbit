@@ -21,7 +21,7 @@
 -->
 <cleaner id="java">
   <label>Java</label>
-  <option id="Cache">
+  <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
     <action type="children" directories="false">~/.java/deployment/cache/</action>
