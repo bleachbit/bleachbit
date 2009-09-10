@@ -161,6 +161,16 @@ class TestCLI(unittest.TestCase):
         init_cleaners()
 
 
+    def test_invalid_locale(self):
+        import os
+        import subprocess
+        os.environ['LANG'] = 'blahfoo'
+        output = subprocess.Popen([sys.executable, 'CLI.py', '--version'],
+            stdout = subprocess.PIPE,
+            stderr = subprocess.PIPE).communicate()
+        self.assertNotEqual(output[0].find('Copyright'), - 1)
+
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == 'tests':
