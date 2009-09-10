@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 16:48-0600\n"
-"PO-Revision-Date: 2009-09-09 05:05+0000\n"
+"PO-Revision-Date: 2009-09-09 19:21+0000\n"
 "Last-Translator: Miro Glavić <glavicmiro@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-09 13:52+0000\n"
+"X-Launchpad-Export-Date: 2009-09-09 21:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -90,6 +90,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
+"Obriši kolačiće koji sadrže informacije kao postavke internet stranica, "
+"autorizacije i praćenje identiteta"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 msgid "Delete the current session"
@@ -484,7 +486,7 @@ msgstr "nije važeći čistač: %s"
 #. 'bleachbit --delete firefox.cache' to delete the Firefox cache.
 #: ../bleachbit/CLI.py:120
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
+msgstr "upotreba: %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:123
 msgid "list cleaners"
@@ -500,7 +502,7 @@ msgstr "pregledaj datoteke za brisanje i druge promjene"
 
 #: ../bleachbit/CLI.py:129
 msgid "output version information and exit"
-msgstr ""
+msgstr "iznesi informacije o inačici i izađi"
 
 #: ../bleachbit/FileUtilities.py:178
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -566,6 +568,8 @@ msgstr "Odaberi mapu"
 msgid ""
 "Choose a writable directory for each drive for which to overwrite free space."
 msgstr ""
+"Odaberi direktorij za ispis svakog diska kojem treba prepisati slobodan "
+"prostor."
 
 #: ../bleachbit/GuiPreferences.py:151
 msgid "Add"
