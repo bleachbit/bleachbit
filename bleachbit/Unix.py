@@ -547,8 +547,11 @@ def yum_clean():
     args  = ['yum', "--enablerepo=*", 'clean', 'all']
     p = subprocess.Popen(args, stderr=subprocess.STDOUT, \
         stdout=subprocess.PIPE)
+    non_blank_line = ""
     while True:
         line = p.stdout.readline().replace("\n", "")
+        if len(line) > 2:
+            non_blank_line = line
         if -1 != line.find('You need to be root'):
             raise RuntimeError(line)
         if -1 != line.find('Another app is currently holding'):
@@ -557,6 +560,8 @@ def yum_clean():
         if "" == line and p.poll() != None:
             break
     print 'debug: yum process return code = %d' % p.returncode
+    if p.returncode > 0:
+        raise RuntimeError(non_blank_line)
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
