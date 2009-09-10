@@ -58,14 +58,21 @@ def init_cleaners():
     CleanerML.load_cleaners()
 
 
-def list_cleaners():
-    """List available cleaners"""
+def cleaners_list():
+    """Yield each cleaner-option pair"""
     init_cleaners()
+    cleaners = []
     for key in sorted(backends):
         c_name = backends[key].get_name()
         c_id = backends[key].get_id()
         for (o_id, o_name, o_value) in backends[key].get_options():
-            print "%s.%s" % (c_id, o_id)
+            yield "%s.%s" % (c_id, o_id)
+
+
+def list_cleaners():
+    """Display available cleaners"""
+    for cleaner in cleaners_list():
+        print cleaner
 
 
 def preview_or_delete(operations, really_delete):
@@ -157,19 +164,43 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
 class TestCLI(unittest.TestCase):
     """Unit test for module CLI"""
 
+
+    def __execute(self, args):
+        """Execute subprocess and return output"""
+        import subprocess
+        return subprocess.Popen(args,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.PIPE).communicate()
+
+
+    def test_cleaners_list(self):
+        """Unit test for cleaners_list()"""
+        for cleaner in cleaners_list():
+            self.assert_ (type(cleaner) is str)
+
+
     def test_init_cleaners(self):
+        """Unit test for init_cleaners()"""
         init_cleaners()
 
 
     def test_invalid_locale(self):
+        """Unit test for invalid locales"""
         import os
-        import subprocess
         os.environ['LANG'] = 'blahfoo'
-        output = subprocess.Popen([sys.executable, 'CLI.py', '--version'],
-            stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE).communicate()
+        args = [sys.executable, 'CLI.py', '--version']
+        output = self.__execute(args)
         self.assertNotEqual(output[0].find('Copyright'), - 1)
 
+
+    def test_preview(self):
+        """Unit test for --preview option"""
+        args = [sys.executable, 'CLI.py', '--preview', 'opera.cache']
+        output = self.__execute(args)
+        pos = output[1].find('Traceback (most recent call last)')
+        if pos > -1:
+            print output[1]
+        self.assertEqual(pos, -1)
 
 
 if __name__ == '__main__':
