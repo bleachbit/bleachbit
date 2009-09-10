@@ -116,9 +116,9 @@ def args_to_operations(args):
 def process_cmd_line():
     """Parse the command line and execute given commands."""
     # TRANSLATORS: This is the command line usage.  Don't translate
-    # %prog.  The part 'cleaner.option1' refers to a cleaner ID
-    # and an option ID, so for example the user may run
-    # 'bleachbit --delete firefox.cache' to delete the Firefox cache.
+    # %prog, but do translate usage, options, cleaner, and option.
+    # More information about the command line is here
+    # http://bleachbit.sourceforge.net/documentation/command-line
     usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action = "store_true",
