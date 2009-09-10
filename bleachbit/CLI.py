@@ -195,12 +195,20 @@ class TestCLI(unittest.TestCase):
 
     def test_preview(self):
         """Unit test for --preview option"""
-        args = [sys.executable, 'CLI.py', '--preview', 'opera.cache']
-        output = self.__execute(args)
-        pos = output[1].find('Traceback (most recent call last)')
-        if pos > -1:
-            print output[1]
-        self.assertEqual(pos, -1)
+        args_list = []
+        big_args = [sys.executable, 'CLI.py', '--preview', ]
+        for cleaner in cleaners_list():
+            args_list.append([sys.executable, 'CLI.py', '--preview', cleaner])
+            big_args.append(cleaner)
+        args_list.append(big_args)
+
+        for args in args_list:
+            print args
+            output = self.__execute(args)
+            pos = output[1].find('Traceback (most recent call last)')
+            if pos > -1:
+                print output[1]
+            self.assertEqual(pos, -1)
 
 
 if __name__ == '__main__':
