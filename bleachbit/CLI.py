@@ -176,7 +176,7 @@ class TestCLI(unittest.TestCase):
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
-            self.assert_ (type(cleaner) is str)
+            self.assert_ (type(cleaner) is str or type(cleaner) is unicode)
 
 
     def test_init_cleaners(self):
@@ -212,7 +212,7 @@ class TestCLI(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2 and sys.argv[1] == 'tests':
+    if len(sys.argv) >= 2 and sys.argv[1] == 'tests':
         print 'info: running CLI unit tests'
         del sys.argv[1]
         unittest.main()
