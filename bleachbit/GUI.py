@@ -548,8 +548,6 @@ class GUI:
     def create_toolbar(self):
         """Create the toolbar"""
         toolbar = gtk.Toolbar()
-        toolbar.set_orientation(gtk.ORIENTATION_HORIZONTAL)
-        toolbar.set_style(gtk.TOOLBAR_BOTH)
         toolbar.set_border_width(5)
 
         # create tooltips
@@ -563,6 +561,7 @@ class GUI:
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
         preview_button.set_tooltip(tooltips, _("Preview files in the selected operations (without deleting any files)"))
+        preview_button.set_is_important(True)
 
         # create the delete button
         icon = gtk.Image()
@@ -571,6 +570,7 @@ class GUI:
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
         run_button.set_tooltip(tooltips, _("Delete files in the selected operations"))
+        run_button.set_is_important(True)
 
         return toolbar
 
@@ -650,6 +650,7 @@ class GUI:
         update_button = gtk.ToolButton(icon_widget = icon, label = _("Update BleachBit"))
         update_button.show_all()
         update_button.connect("clicked", lambda toolbutton, url: open_url(url), url)
+        update_button.set_is_important(True)
         self.toolbar.insert(update_button, -1)
         try:
             import pynotify
