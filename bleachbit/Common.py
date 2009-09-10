@@ -26,7 +26,6 @@ import gettext
 import locale
 import os
 import sys
-import traceback
 
 
 APP_VERSION = "0.6.4"
@@ -122,7 +121,7 @@ else:
 try:
     user_locale = locale.getdefaultlocale()[0]
 except:
-    traceback.print_exc()
+    print 'warning: error getting locale: %s' % str(sys.exc_info()[1])
     user_locale = None
 
 if None == user_locale:
