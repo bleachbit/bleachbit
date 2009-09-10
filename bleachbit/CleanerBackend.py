@@ -673,7 +673,7 @@ class System(Cleaner):
 
     def other_cleanup(self, really_delete):
         # clipboard
-        if self.options["clipboard"][1]:
+        if HAVE_GTK and self.options["clipboard"][1]:
             if really_delete:
                 gtk.gdk.threads_enter()
                 clipboard = gtk.clipboard_get()
