@@ -137,8 +137,8 @@ def recompile_mo(langdir, app, langid, dst):
         raise RuntimeError(ret[2])
 
     # clean up
-#    os.remove(po)
-#    os.remove(po2)
+    os.remove(po)
+    os.remove(po2)
 
 
 def supported_languages():
@@ -168,6 +168,7 @@ def clean_dist_locale():
             cmd = 'rd /s /q ' + langdir
             print cmd
             os.system(cmd)
+    os.rmdir(tmpd)
 
 
 if 2 == len(sys.argv) and sys.argv[1] == 'clean-dist':
