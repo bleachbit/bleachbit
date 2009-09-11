@@ -22,6 +22,7 @@
 
 import bleachbit.Common
 import bleachbit.General
+import bleachbit.FileUtilities
 import glob
 import os
 import sys
@@ -103,7 +104,14 @@ if 'py2exe' in sys.argv:
 def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
 
+    if not bleachbit.FileUtilities.exe_exists('msgunfmt'):
+        print 'warning: msgunfmt missing: skipping recompile'
+        return
+
     mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
+    if not os.path.exists(mo_pathname):
+        print 'info: does not exist: %s' % mo_pathname
+        return
 
     # decompile .mo to .po
     po = os.path.join(dst, langid + '.po')
