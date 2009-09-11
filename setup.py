@@ -104,14 +104,14 @@ def supported_languages():
     for pathname in glob.glob('po/*.po'):
         basename = os.path.basename(pathname)
         langs.append(os.path.splitext(basename)[0])
-    return langs
+    return sorted(langs)
 
 
 def clean_dist_locale():
     """Clean dist/share/locale"""
     langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
-    for pathname in os.listdir(basedir):
+    for pathname in sorted(os.listdir(basedir)):
         print "debug: GTK language = '%s'" % pathname
         if not pathname in langs:
             cmd = 'rd /s /q ' + os.path.join(basedir, pathname)
