@@ -19,7 +19,11 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
+import glob
+import os
 import sys
+
 
 ##
 ## begin win32com.shell workaround for py2exe
@@ -92,6 +96,32 @@ if 'py2exe' in sys.argv:
             'compressed' : True # create a compressed zipfile
             }
         }
+
+
+def supported_languages():
+    """Return list of supported languages by scanning ./po/"""
+    langs = []
+    for pathname in glob.glob('po/*.po'):
+        basename = os.path.basename(pathname)
+        langs.append(os.path.splitext(basename)[0])
+    return langs
+
+
+def clean_dist_locale():
+    """Clean dist/share/locale"""
+    langs = supported_languages()
+    basedir = os.path.normpath('dist/share/locale')
+    for pathname in os.listdir(basedir):
+        print "debug: GTK language = '%s'" % pathname
+        if not pathname in langs:
+            cmd = 'rd /s /q ' + os.path.join(basedir, pathname)
+            print cmd
+            os.system(cmd)
+
+
+if 2 == len(sys.argv) and sys.argv[1] == 'clean-dist':
+    clean_dist_locale()
+    sys.exit(0)
 
 setup( name = 'bleachbit',
        version = bleachbit.Common.APP_VERSION,

@@ -63,7 +63,7 @@ echo Compressing executables
 if not "%1" == "fast" for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
 
 echo Purging unnecessary locales
-%PYTHON_DIR%\python.exe setup_clean.py
+%PYTHON_DIR%\python.exe setup.py clean-dist
 
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
