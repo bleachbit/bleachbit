@@ -20,9 +20,18 @@
 
 
 
+import bleachbit.Common
+import bleachbit.General
 import glob
 import os
 import sys
+import tempfile
+from distutils.core import setup
+if sys.platform == 'win32':
+    try:
+        import py2exe
+    except ImportError:
+        print 'warning: py2exe not available'
 
 
 ##
@@ -58,13 +67,6 @@ except ImportError:
 ### end win32com.shell workaround for py2exe
 ###
 
-import bleachbit.Common
-from distutils.core import setup
-if sys.platform == 'win32':
-    try:
-        import py2exe
-    except ImportError:
-        print 'warning: py2exe not available'
 
 
 data_files = []
@@ -98,6 +100,39 @@ if 'py2exe' in sys.argv:
         }
 
 
+def recompile_mo(langdir, app, langid, dst):
+    """Recompile gettext .mo file"""
+
+    mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
+
+    # decompile .mo to .po
+    po = os.path.join(dst, langid + '.po')
+    args = ['msgunfmt', '-o', po,
+        mo_pathname ]
+    ret = bleachbit.General.run_external(args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # shrink .po
+    po2 = os.path.join(dst, langid + '.po2')
+    args = ['msgmerge', '--no-fuzzy-matching', po,
+        os.path.normpath('windows/%s.pot' % app),
+        '-o', po2 ]
+    ret = bleachbit.General.run_external(args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # compile smaller .po to smaller .mo
+    args = ['msgfmt', po2, '-o', mo_pathname ]
+    ret = bleachbit.General.run_external(args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # clean up
+#    os.remove(po)
+#    os.remove(po2)
+
+
 def supported_languages():
     """Return list of supported languages by scanning ./po/"""
     langs = []
@@ -109,12 +144,20 @@ def supported_languages():
 
 def clean_dist_locale():
     """Clean dist/share/locale"""
+    tmpd = tempfile.mkdtemp('gtk_locale')
     langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
-    for pathname in sorted(os.listdir(basedir)):
-        print "debug: GTK language = '%s'" % pathname
-        if not pathname in langs:
-            cmd = 'rd /s /q ' + os.path.join(basedir, pathname)
+    for langid in os.listdir(basedir):
+        print "debug: GTK language = '%s'" % langid
+        langdir = os.path.join(basedir, langid)
+        if langid in langs:
+            # reduce the size of the .mo file
+            recompile_mo(langdir, 'gtk20', langid, tmpd)
+            # edit .pot
+            # recompile
+        else:
+            # remove language supported by GTK+ but not by BleachBit
+            cmd = 'rd /s /q ' + langdir
             print cmd
             os.system(cmd)
 
