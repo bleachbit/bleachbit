@@ -64,7 +64,7 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_LICENSE "COPYING"
+  !insertmacro MUI_PAGE_LICENSE "..\COPYING"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
@@ -117,11 +117,11 @@ Section Core (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
-    File /r "dist\*.*"
-    File "COPYING"
+    File /r "..\dist\*.*"
+    File "..\COPYING"
 
     SetOutPath "$INSTDIR\share\"
-    File "bleachbit.png"
+    File "..\bleachbit.png"
 
     WriteUninstaller "$INSTDIR\uninstall.exe"
 

@@ -76,11 +76,11 @@ args = {}
 if 'py2exe' in sys.argv:
     args['windows'] = [{
         'script' : 'bleachbit.py',
-        'icon_resources' : [(1, 'bleachbit.ico')]
+        'icon_resources' : [(1, 'windows/bleachbit.ico')]
         }]
     args['console'] = [{
         'script' : 'bleachbit_console.py',
-        'icon_resources' : [(1, 'bleachbit.ico')]
+        'icon_resources' : [(1, 'windows/bleachbit.ico')]
         }]
     args['options'] = {
         'py2exe' : {

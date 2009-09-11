@@ -25,7 +25,6 @@ set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
 set UPX_EXE=upx
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
-
 echo Checking for translations
 set CANARY=locale
 if not exist %CANARY% goto error
@@ -105,8 +104,8 @@ if not exist %CANARY% goto error
 
 :nsis
 echo Building installer
-if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" bleachbit.nsi
-if not "%1" == "fast" %NSIS_EXE% bleachbit.nsi
+if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" windows\bleachbit.nsi
+if not "%1" == "fast" %NSIS_EXE% windows\bleachbit.nsi
 
 
 
