@@ -548,7 +548,6 @@ class GUI:
     def create_toolbar(self):
         """Create the toolbar"""
         toolbar = gtk.Toolbar()
-        toolbar.set_border_width(5)
 
         # create tooltips
         tooltips = gtk.Tooltips()
