@@ -587,6 +587,7 @@ class System(Cleaner):
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
                 '$windir\\*.log', \
+                '$windir\\imsins.BAK', \
                 '$windir\\OEWABLog.txt', \
                 '$windir\\SchedLgU.txt', \
                 '$windir\\ntbtlog.txt', \
