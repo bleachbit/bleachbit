@@ -36,19 +36,26 @@ import Common
 
 
 class CliCallback:
+    """Command line's callback passed to Worker"""
+
+
     def append_text(self, msg, tag = None):
+        """Write text to the terminal"""
         print msg.strip('\n')
 
+
     def update_progress_bar(self, status):
-        # not used
+        """Not used"""
         pass
+
 
     def update_total_size(self, size):
-        # not used
+        """Not used"""
         pass
 
+
     def worker_done(self, worker, really_delete):
-        # not used
+        """Not used"""
         pass
 
 
@@ -105,7 +112,7 @@ def args_to_operations(args):
             for (option_id2, o_name, o_value) in backends[cleaner_id].get_options():
                 operations[cleaner_id].append( [ option_id2, default ] )
         if '*' == option_id:
-           continue
+            continue
         # change the specified option
         for option in operations[cleaner_id]:
             try:

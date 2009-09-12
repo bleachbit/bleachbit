@@ -127,24 +127,24 @@ class Cleaner:
     def is_running(self):
         """Return whether the program is currently running"""
         for running in self.running:
-            type = running[0]
+            test = running[0]
             pathname = running[1]
-            if 'exe' == type and 'posix' == os.name:
+            if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
                     print "debug: process '%s' is runnning" % pathname
                     return True
-            elif 'exe' == type and 'nt' == os.name:
+            elif 'exe' == test and 'nt' == os.name:
                 if pathname in Windows.enumerate_processes():
                     print "debug: process '%s' is runnning" % pathname
                     return True
-            elif 'pathname' == type:
+            elif 'pathname' == test:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
                         print "debug: file '%s' exists indicating '%s' is running" % (globbed, self.name)
                         return True
             else:
-                raise RuntimeError("Unknown running-detection type '%s'" % type)
+                raise RuntimeError("Unknown running-detection test '%s'" % test)
         return False
 
     def is_usable(self):

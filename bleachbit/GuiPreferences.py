@@ -25,7 +25,6 @@ Preferences dialog
 
 import gtk
 import os
-import sys
 
 from Common import online_update_notification_enabled
 from Options import options
