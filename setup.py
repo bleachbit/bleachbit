@@ -20,6 +20,12 @@
 
 
 
+"""
+Build BleachBit tarballs and exe
+"""
+
+
+
 import bleachbit.Common
 import bleachbit.General
 import bleachbit.FileUtilities
@@ -74,9 +80,9 @@ data_files = []
 if sys.platform == 'linux2':
     data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
-if sys.platform >= 'netbsd5':
-    data_files.append(('/usr/pkg/share/applications',['./bleachbit.desktop']))
-    data_files.append(('/usr/pkg/share/pixmaps/',['./bleachbit.png']))
+elif sys.platform[:6] == 'netbsd':
+    data_files.append(('/usr/pkg/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
 
 
 args = {}
@@ -115,24 +121,24 @@ def recompile_mo(langdir, app, langid, dst):
 
     # decompile .mo to .po
     po = os.path.join(dst, langid + '.po')
-    args = ['msgunfmt', '-o', po,
+    __args = ['msgunfmt', '-o', po,
         mo_pathname ]
-    ret = bleachbit.General.run_external(args)
+    ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
 
     # shrink .po
     po2 = os.path.join(dst, langid + '.po2')
-    args = ['msgmerge', '--no-fuzzy-matching', po,
+    __args = ['msgmerge', '--no-fuzzy-matching', po,
         os.path.normpath('windows/%s.pot' % app),
         '-o', po2 ]
-    ret = bleachbit.General.run_external(args)
+    ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
 
     # compile smaller .po to smaller .mo
-    args = ['msgfmt', po2, '-o', mo_pathname ]
-    ret = bleachbit.General.run_external(args)
+    __args = ['msgfmt', po2, '-o', mo_pathname ]
+    ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
 
