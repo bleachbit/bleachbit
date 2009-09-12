@@ -207,15 +207,15 @@ class Worker:
             count += 1
 
         # print final stats
-        bytes = FileUtilities.bytes_to_human(self.total_bytes)
+        bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
         if self.really_delete:
             # TRANSLATORS: This refers to disk space that was
             # really recovered (in other words, not a preview)
-            line =  _("Disk space recovered: %s") % bytes
+            line =  _("Disk space recovered: %s") % bytes_delete
         else:
             # TRANSLATORS: This refers to a preview (no real
             # changes were made yet)
-            line =  _("Disk space to be recovered: %s") % bytes
+            line =  _("Disk space to be recovered: %s") % bytes_delete
         self.ui.append_text("\n%s" % line)
         if self.really_delete:
             # TRANSLATORS: This refers to the number of files really
