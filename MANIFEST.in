@@ -10,12 +10,12 @@ include bleachbit.spec
 include cleaners/*xml
 include cleaners/Makefile
 include setup.py
-include setup_clean.py
-include setup_py2exe.bat
 include doc/cleaner_markup_language.xsd
 include doc/example_cleaner.xml
 include po/*po
 include po/Makefile
 include windows/bleachbit.ico
 include windows/bleachbit.nsi
+include windows/gtk20.pot
+include windows/setup_py2exe.bat
 recursive-include bleachbit *py
