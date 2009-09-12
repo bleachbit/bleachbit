@@ -17,7 +17,8 @@ clean:
 	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
 	@rm -vrf locale
-	@rm -vfr {*/,./}*.{pychecker,pylint,pyflakes}.log
+	@rm -vrf {*/,./}*.{pychecker,pylint,pyflakes}.log
+	@rm -vrf windows/BleachBit-setup.exe
 
 install:
 	# "binary"
