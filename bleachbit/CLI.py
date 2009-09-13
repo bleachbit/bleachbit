@@ -27,6 +27,7 @@ Command line interface
 
 from gettext import gettext as _
 import optparse
+import os
 import sys
 import unittest
 
@@ -203,7 +204,9 @@ class TestCLI(unittest.TestCase):
         args_list.append(big_args)
 
         for args in args_list:
-            output = General.run_external(args, stdout = None)
+            devnull = open(os.devnull, 'w')
+            output = General.run_external(args, stdout = devnull)
+            devnull.close()
             pos = output[2].find('Traceback (most recent call last)')
             if pos > -1:
                 print output[2]
