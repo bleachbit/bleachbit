@@ -651,13 +651,15 @@ class GUI:
         update_button.connect("clicked", lambda toolbutton, url: open_url(url), url)
         update_button.set_is_important(True)
         self.toolbar.insert(update_button, -1)
+        msg = _("BleachBit update is available")
         try:
             import pynotify
         except:
             print "debug: pynotify not available"
+            self.append_text(msg)
         else:
             if pynotify.init(APP_NAME):
-                notify = pynotify.Notification(_("BleachBit update is available"), _("Click 'Update BleachBit' for more information"))
+                notify = pynotify.Notification(msg, _("Click 'Update BleachBit' for more information"))
                 # this doesn't align the notification properly
                 #n.attach_to_widget(update_button)
                 notify.attach_to_widget(self.toolbar)
