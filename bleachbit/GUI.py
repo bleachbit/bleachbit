@@ -465,14 +465,12 @@ class GUI:
         cleaner.add_option('files', 'files', '')
         cleaner.name = ''
         import Action
-        actioncontainer = Action.ActionContainer()
         class CustomFileAction(Action.ActionProvider):
             def list_files(self):
                 for path in paths:
                     yield path
         provider = CustomFileAction(None)
-        actioncontainer.add_action_provider(provider)
-        cleaner.add_action('files', actioncontainer)
+        cleaner.add_action('files', provider)
         backends['_gui'] = cleaner
 
         # preview and confirm

@@ -29,7 +29,7 @@ import CleanerBackend
 import Common
 
 from gettext import gettext as _
-from Action import ActionContainer, ActionProvider
+from Action import ActionProvider
 from General import boolstr_to_bool, getText
 from FileUtilities import listdir
 
@@ -115,7 +115,6 @@ class CleanerML:
         """<option> elements"""
         for option in options:
 
-            self.action = ActionContainer()
             self.option_id = option.getAttribute('id')
             self.option_description = None
             self.option_name = None
@@ -133,7 +132,6 @@ class CleanerML:
                 self.handle_cleaner_option_action(action)
 
             self.cleaner.add_option(self.option_id, self.option_name, self.option_description)
-            self.cleaner.add_action(self.option_id, self.action)
 
 
     def handle_cleaner_option_label(self, label):
@@ -161,7 +159,7 @@ class CleanerML:
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == atype:
                 provider = actionplugin(action_node)
-        self.action.add_action_provider(provider)
+        self.cleaner.add_action(self.option_id, provider)
 
 
 def list_cleanerml_files(local_only = False):

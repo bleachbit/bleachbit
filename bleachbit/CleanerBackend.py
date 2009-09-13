@@ -60,7 +60,8 @@ class Cleaner:
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
-        for ''option_id'"""
+        for ''option_id'.  The actions must implement list_files and
+        other_cleanup()"""
         self.actions += ( (option_id, action), )
 
     def add_option(self, option_id, name, description):
@@ -792,6 +793,46 @@ backends["system"] = System()
 import unittest
 
 class TestCleanerBackend(unittest.TestCase):
+
+
+    def test_add_action(self):
+        """Unit test for CleanerBackend.add_action()"""
+        self.actions = []
+        if 'nt' == os.name:
+            self.actions.append('<action type="file">$WINDIR\\notepad.exe</action>')
+            self.actions.append('<action type="glob">$WINDIR\\system32\\*.dll</action>')
+            self.actions.append( \
+                '<action type="children" directories="false">$WINDIR\\system\\</action>')
+            self.actions.append( \
+                '<action type="children" directories="true">$WINDIR\\system32\\</action>')
+        elif 'posix' == os.name:
+            self.actions.append('<action type="file">~/.bash_history</action>')
+            self.actions.append('<action type="glob">/sbin/*sh</action>')
+            self.actions.append('<action type="children" directories="false">/sbin/</action>')
+            self.actions.append('<action type="children" directories="true">/var/log/</action>')
+
+        self.assert_(len(self.actions) > 0)
+
+        from xml.dom.minidom import parseString
+        from Action import ActionProvider
+        for action_str in self.actions:
+            cleaner = Cleaner()
+            dom = parseString(action_str)
+            action_node = dom.childNodes[0]
+            atype = action_node.getAttribute('type')
+            provider = None
+            for actionplugin in ActionProvider.plugins:
+                if actionplugin.action_key == atype:
+                    provider = actionplugin(action_node)
+            cleaner.add_action('option1', provider)
+            cleaner.add_option('option1', 'name1', 'description1')
+            cleaner.set_option('option1', True)
+            pathname = cleaner.list_files().next()
+            self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
+            for pathname in cleaner.list_files():
+                self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
+            for pathname in cleaner.other_cleanup(really_delete = False):
+                self.assert_(type(pathname) is str)
 
     def test_auto_hide(self):
         for key in sorted(backends):
