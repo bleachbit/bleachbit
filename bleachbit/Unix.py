@@ -619,7 +619,9 @@ class TestUnix(unittest.TestCase):
 
 
     def test_is_running(self):
-        exe = os.path.basename(sys.executable)
+        # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
+        # from /usr/bin/python to python2.6
+        exe = os.path.basename(os.path.realpath(sys.executable))
         self.assertEqual(True, is_running(exe))
 
 
