@@ -145,6 +145,8 @@ def process_cmd_line():
         help = _("preview files to be deleted and other changes"))
     parser.add_option("-v", "--version", action = "store_true",
         help = _("output version information and exit"))
+    parser.add_option('-o', '--overwrite', action = 'store_true',
+        help = _('overwrite files to hide contents'))
     (options, args) = parser.parse_args()
     if options.version:
         print """
@@ -161,6 +163,9 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
         operations = args_to_operations(args)
         preview_or_delete(operations, False)
         sys.exit(0)
+    if options.overwrite:
+        import Options
+        Options.options.set('shred', True, commit = False)
     if options.delete:
         operations = args_to_operations(args)
         preview_or_delete(operations, True)
