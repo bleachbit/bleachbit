@@ -187,9 +187,10 @@ class TestCLI(unittest.TestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
-        import os
         os.environ['LANG'] = 'blahfoo'
-        args = [sys.executable, 'CLI.py', '--version']
+        # tests are run from the parent directory
+        path = os.path.join('bleachbit', 'CLI.py')
+        args = [sys.executable, path, '--version']
         output = General.run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
 
@@ -197,9 +198,10 @@ class TestCLI(unittest.TestCase):
     def test_preview(self):
         """Unit test for --preview option"""
         args_list = []
-        big_args = [sys.executable, 'CLI.py', '--preview', ]
+        path = os.path.join('bleachbit', 'CLI.py')
+        big_args = [sys.executable, path, '--preview', ]
         for cleaner in cleaners_list():
-            args_list.append([sys.executable, 'CLI.py', '--preview', cleaner])
+            args_list.append([sys.executable, path, '--preview', cleaner])
             big_args.append(cleaner)
         args_list.append(big_args)
 
