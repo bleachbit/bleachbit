@@ -69,5 +69,6 @@ tests:
 		[ $$rc -gt 0 ] && echo -e \\a && notify-send -u critical "error executing test for $$f" && exit 1; \
 	done; \
 	exit 0
+	python bleachbit/CLI.py tests
 
 
