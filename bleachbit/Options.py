@@ -37,45 +37,10 @@ boolean_keys = ('auto_hide', 'check_online_updates', 'first_start', 'shred')
 
 class Options:
     """Store and retrieve user preferences"""
+
+
     def __init__(self):
-        # restore options from disk
-        self.config = ConfigParser.SafeConfigParser()
-        try:
-            self.config.read(Common.options_file)
-        except:
-            traceback.print_exc()
-        if not self.config.has_section("bleachbit"):
-            self.config.add_section("bleachbit")
-        if not self.config.has_section("hashpath"):
-            self.config.add_section("hashpath")
-        if not self.config.has_section("list/shred_drives"):
-            if 'nt' == os.name:
-                import Windows
-                self.set_list('shred_drives', Windows.get_fixed_drives())
-            if 'posix' == os.name:
-                import Unix
-                self.set_list('shred_drives', Unix.guess_overwrite_paths())
-
-        # set defaults
-        self.__set_default("auto_hide", True)
-        self.__set_default("check_online_updates", True)
-        self.__set_default("shred", False)
-
-        if not self.config.has_section('preserve_languages'):
-            lang = Common.user_locale
-            pos = lang.find('_')
-            if -1 != pos:
-                lang = lang [0 : pos]
-            print "info: automatically preserving language '%s'" % lang
-            self.set_language(lang, True)
-
-        # BleachBit upgrade or first start ever
-        if not self.config.has_option('bleachbit', 'version') or \
-            self.get('version') != Common.APP_VERSION:
-            self.set('first_start', True)
-
-        # set version
-        self.set("version", Common.APP_VERSION)
+        self.restore()
 
 
     def __flush(self):
@@ -152,12 +117,54 @@ class Options:
         return self.config.getboolean('tree', option)
 
 
-    def set(self, key, value, section = 'bleachbit'):
+    def restore(self):
+        """Restore saved options from disk"""
+        self.config = ConfigParser.SafeConfigParser()
+        try:
+            self.config.read(Common.options_file)
+        except:
+            traceback.print_exc()
+        if not self.config.has_section("bleachbit"):
+            self.config.add_section("bleachbit")
+        if not self.config.has_section("hashpath"):
+            self.config.add_section("hashpath")
+        if not self.config.has_section("list/shred_drives"):
+            if 'nt' == os.name:
+                import Windows
+                self.set_list('shred_drives', Windows.get_fixed_drives())
+            if 'posix' == os.name:
+                import Unix
+                self.set_list('shred_drives', Unix.guess_overwrite_paths())
+
+        # set defaults
+        self.__set_default("auto_hide", True)
+        self.__set_default("check_online_updates", True)
+        self.__set_default("shred", False)
+
+        if not self.config.has_section('preserve_languages'):
+            lang = Common.user_locale
+            pos = lang.find('_')
+            if -1 != pos:
+                lang = lang [0 : pos]
+            print "info: automatically preserving language '%s'" % lang
+            self.set_language(lang, True)
+
+        # BleachBit upgrade or first start ever
+        if not self.config.has_option('bleachbit', 'version') or \
+            self.get('version') != Common.APP_VERSION:
+            self.set('first_start', True)
+
+        # set version
+        self.set("version", Common.APP_VERSION)
+
+
+    def set(self, key, value, section = 'bleachbit', commit = True):
         """Set a general option"""
         if section == 'hashpath' and key[1] == ':':
             key = key[0] + key[2:]
         self.config.set(section, key, str(value))
-        self.__flush()
+        if commit:
+            self.__flush()
 
 
     def set_list(self, key, values):
@@ -240,6 +247,17 @@ class TestOptions(unittest.TestCase):
         # restore original boolean
         o.set("check_online_updates", value)
         self.assertEqual(value, o.get("check_online_updates"))
+
+        # test auto commit
+        shred = o.get("shred")
+        o.set("shred", False)
+        self.assertEqual(o.get("shred"), False)
+        o.set("shred", True, commit = False)
+        self.assertEqual(o.get("shred"), True)
+        o.restore()
+        self.assertEqual(o.get("shred"), False)
+        o.set("shred", shred)
+        self.assertEqual(o.get("shred"), shred)
 
         # try a list
         list_values = ['a', 'b', 'c']
