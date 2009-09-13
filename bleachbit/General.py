@@ -31,7 +31,6 @@ import subprocess
 ### XML
 ###
 
-
 def boolstr_to_bool(value):
     """Convert a string boolean to a Python boolean"""
     if 'true' == value.lower():
@@ -49,6 +48,8 @@ def getText(nodelist):
         if node.nodeType == node.TEXT_NODE:
             rc = rc + node.data
     return rc
+
+
 
 ###
 ### General
@@ -69,4 +70,29 @@ def run_external(args, stdout = subprocess.PIPE):
     outputs = p.communicate()
     return (p.returncode, outputs[0], outputs[1])
 
+
+
+###
+### Tests
+###
+
+import unittest
+
+class TestGeneral(unittest.TestCase):
+    """Test case for module General"""
+
+
+    def test_boolstr_to_bool(self):
+        """Test case for method boolstr_to_bool"""
+        tests = ( ('True', True),
+            ('true', True ),
+            ('False', False ),
+            ('false', False ) )
+
+        for test in tests:
+            self.assertEqual(boolstr_to_bool(test[0]), test[1])
+
+
+if __name__ == '__main__':
+    unittest.main()
 
