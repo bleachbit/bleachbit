@@ -479,7 +479,9 @@ class GUI:
 
         if delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
+            options.set('shred', True, commit = False)
             self.preview_or_run_operations(True, operations)
+            options.restore()
             return
 
         # clean up temporary cleaner
