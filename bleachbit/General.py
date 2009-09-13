@@ -54,12 +54,18 @@ def getText(nodelist):
 ### General
 ###
 
-def run_external(args):
+def run_external(args, stdout = subprocess.PIPE):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
-    p = subprocess.Popen(args, stdout = subprocess.PIPE, \
+    p = subprocess.Popen(args, stdout = stdout, \
         stderr = subprocess.PIPE)
-    p.wait()
+    try:
+        p.wait()
+    except KeyboardInterrupt:
+        out = p.communicate()
+        print out[0]
+        print out[1]
+        raise
     outputs = p.communicate()
     return (p.returncode, outputs[0], outputs[1])
 

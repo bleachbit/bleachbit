@@ -32,6 +32,7 @@ import unittest
 
 from CleanerBackend import backends
 import Common
+import General
 
 
 
@@ -172,14 +173,6 @@ class TestCLI(unittest.TestCase):
     """Unit test for module CLI"""
 
 
-    def __execute(self, args):
-        """Execute subprocess and return output"""
-        import subprocess
-        return subprocess.Popen(args,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE).communicate()
-
-
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
@@ -196,8 +189,8 @@ class TestCLI(unittest.TestCase):
         import os
         os.environ['LANG'] = 'blahfoo'
         args = [sys.executable, 'CLI.py', '--version']
-        output = self.__execute(args)
-        self.assertNotEqual(output[0].find('Copyright'), - 1)
+        output = General.run_external(args)
+        self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
 
 
     def test_preview(self):
@@ -210,11 +203,10 @@ class TestCLI(unittest.TestCase):
         args_list.append(big_args)
 
         for args in args_list:
-            print args
-            output = self.__execute(args)
-            pos = output[1].find('Traceback (most recent call last)')
+            output = General.run_external(args, stdout = None)
+            pos = output[2].find('Traceback (most recent call last)')
             if pos > -1:
-                print output[1]
+                print output[2]
             self.assertEqual(pos, -1)
 
 
