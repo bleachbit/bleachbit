@@ -711,11 +711,14 @@ class System(Cleaner):
         shred_drives = options.get_list('shred_drives')
         if self.options["free_disk_space"][1] and shred_drives:
             for pathname in shred_drives:
-                # TRANSLATORS: 'Free' could also be translated 'unallocated.' 
+                # TRANSLATORS: 'Free' could also be translated 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
                 display = _("Overwrite free disk space %s") % pathname
                 if really_delete:
-                    FileUtilities.wipe_path(pathname, idle_cb = idle_cb)
+                    for dummy in FileUtilities.wipe_path(pathname, idle = True):
+                        # Yield control to GTK idle because this process
+                        # is very slow.
+                        yield True
                     yield (0, display)
                 else:
                     yield display

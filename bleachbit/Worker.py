@@ -120,6 +120,11 @@ class Worker:
             for ret in backends[operation].other_cleanup(self.really_delete):
                 if None == ret:
                     return
+                if True == ret:
+                    # There is more work to do, but yield control to
+                    # GTK idle to keep GUI responding and allow abort.
+                    yield True
+                    continue
                 self.total_special += 1
                 if self.really_delete:
                     self.total_bytes += ret[0]

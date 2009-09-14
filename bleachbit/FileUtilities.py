@@ -286,7 +286,7 @@ def wipe_contents(path):
     f.close()
 
 
-def wipe_path(pathname, idle_cb = None, ):
+def wipe_path(pathname, idle = False ):
     """Wipe the free space in the path"""
     print "debug: wipe_path('%s')" % pathname
     files = []
@@ -308,9 +308,9 @@ def wipe_path(pathname, idle_cb = None, ):
         try:
             while True:
                 f.write(blanks)
-                if idle_cb and (last_idle - datetime.datetime.now()).seconds > 1:
-                    # keep the GUI responding
-                    idle_cb()
+                if idle and (last_idle - datetime.datetime.now()).seconds > 1:
+                    # Keep the GUI responding, and allow the user to abort.
+                    yield True
         except IOError, e:
             if 28 != e.errno:
                 raise
