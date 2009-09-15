@@ -18,12 +18,10 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 """
 General code
 """
-
-
-import subprocess
 
 
 
@@ -58,6 +56,7 @@ def getText(nodelist):
 def run_external(args, stdout = subprocess.PIPE):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
+    import subprocess
     p = subprocess.Popen(args, stdout = stdout, \
         stderr = subprocess.PIPE)
     try:
