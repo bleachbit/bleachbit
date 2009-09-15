@@ -57,7 +57,7 @@ def run_external(args, stdout = False):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
     import subprocess
-    if False = stdout:
+    if False == stdout:
         stdout = subprocess.PIPE
     p = subprocess.Popen(args, stdout = stdout, \
         stderr = subprocess.PIPE)
