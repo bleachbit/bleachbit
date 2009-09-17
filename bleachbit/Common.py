@@ -111,7 +111,7 @@ else:
     elif sys.platform == 'win32':
         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
     elif sys.platform[:6] == 'netbsd':
-         locale_dir = "/usr/pkg/share/locale/"
+        locale_dir = "/usr/pkg/share/locale/"
 
 
 ###
