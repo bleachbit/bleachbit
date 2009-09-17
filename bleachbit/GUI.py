@@ -34,15 +34,15 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+from bleachbit.Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, online_update_notification_enabled, \
     release_notes_url
-from CleanerBackend import backends
-from GuiPreferences import PreferencesDialog
-from Options import options
-import CleanerBackend
-import FileUtilities
-import Update
+from bleachbit.CleanerBackend import backends
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options
+import bleachbit.CleanerBackend
+import bleachbit.FileUtilities
+import bleachbit.Update
 
 
 def open_url(url):
@@ -360,7 +360,7 @@ class GUI:
         """Preview operations or run operations (delete files)"""
 
         assert(type(really_delete) is bool)
-        import Worker
+        import bleachbit.Worker
         if None == operations:
             operations = {}
             for operation in self.get_selected_operations():
@@ -378,7 +378,7 @@ class GUI:
             self.set_sensitive(False)
             self.textbuffer.set_text("")
             self.progressbar.show()
-            self.worker = Worker.Worker(self, really_delete, operations)
+            self.worker = bleachbit.Worker.Worker(self, really_delete, operations)
         except:
             traceback.print_exc()
             err = str(sys.exc_info()[1])
@@ -464,7 +464,7 @@ class GUI:
         cleaner = CleanerBackend.Cleaner()
         cleaner.add_option('files', 'files', '')
         cleaner.name = ''
-        import Action
+        import bleachbit.Action
         class CustomFileAction(Action.ActionProvider):
             def list_files(self):
                 for path in paths:
@@ -675,9 +675,9 @@ class GUI:
 
 
     def __init__(self):
-        import RecognizeCleanerML
+        import bleachbit.RecognizeCleanerML
         RecognizeCleanerML.RecognizeCleanerML()
-        import CleanerML
+        import bleachbit.CleanerML
         CleanerML.load_cleaners()
         self.create_window()
         gobject.threads_init()
