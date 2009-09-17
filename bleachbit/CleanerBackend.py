@@ -700,14 +700,6 @@ class System(Cleaner):
                 yield pathname
 
 
-        # overwrite free space
-        def idle_cb():
-            """A callback to keep the window responding"""
-            if not HAVE_GTK:
-                return
-            while gtk.events_pending():
-                gtk.main_iteration()
-
         shred_drives = options.get_list('shred_drives')
         if self.options["free_disk_space"][1] and shred_drives:
             for pathname in shred_drives:
