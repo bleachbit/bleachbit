@@ -42,7 +42,6 @@ from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Options import options
 import bleachbit.CleanerBackend
 import bleachbit.FileUtilities
-import bleachbit.Update
 
 
 def open_url(url):
@@ -461,11 +460,11 @@ class GUI:
             return
 
         # create a temporary cleaner object
-        cleaner = CleanerBackend.Cleaner()
+        cleaner = bleachbit.CleanerBackend.Cleaner()
         cleaner.add_option('files', 'files', '')
         cleaner.name = ''
         import bleachbit.Action
-        class CustomFileAction(Action.ActionProvider):
+        class CustomFileAction(bleachbit.Action.ActionProvider):
             def list_files(self):
                 for path in paths:
                     yield path
@@ -501,7 +500,7 @@ class GUI:
     def update_total_size(self, bytes):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
-        text = FileUtilities.bytes_to_human(bytes)
+        text = bleachbit.FileUtilities.bytes_to_human(bytes)
         if 0 == bytes:
             text = ""
         self.status_bar.push(context_id, text)
@@ -669,16 +668,17 @@ class GUI:
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        update = Update.Update()
+        import bleachbit.Update
+        update = bleachbit.Update.Update()
         if update.is_update_available():
             gobject.idle_add(self.enable_online_update, update.get_update_info_url())
 
 
     def __init__(self):
         import bleachbit.RecognizeCleanerML
-        RecognizeCleanerML.RecognizeCleanerML()
+        bleachbit.RecognizeCleanerML.RecognizeCleanerML()
         import bleachbit.CleanerML
-        CleanerML.load_cleaners()
+        bleachbit.CleanerML.load_cleaners()
         self.create_window()
         gobject.threads_init()
         if options.get("first_start") and sys.platform == 'linux2':
