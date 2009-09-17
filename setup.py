@@ -174,21 +174,24 @@ def clean_dist_locale():
             os.system(cmd)
     os.rmdir(tmpd)
 
+def run_setup():
+    setup( name = 'bleachbit',
+           version = bleachbit.Common.APP_VERSION,
+           description = "Free space and maintain privacy",
+           long_description = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
+           author = "Andrew Ziem",
+           author_email = "ahz001@gmail.com",
+           download_url = "http://bleachbit.sourceforge.net/download",
+           license = "GPLv3",
+           url = bleachbit.Common.APP_URL,
+           platforms = 'Linux and Windows with Python v2.4+ and PyGTK v2',
+           packages = ['bleachbit'],
+           **args)
 
-if 2 == len(sys.argv) and sys.argv[1] == 'clean-dist':
-    clean_dist_locale()
-    sys.exit(0)
 
-setup( name = 'bleachbit',
-       version = bleachbit.Common.APP_VERSION,
-       description = "Free space and maintain privacy",
-       long_description = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
-       author = "Andrew Ziem",
-       author_email = "ahz001@gmail.com",
-       download_url = "http://bleachbit.sourceforge.net/download",
-       license = "GPLv3",
-       url = bleachbit.Common.APP_URL,
-       platforms = 'Linux and Windows with Python v2.4+ and PyGTK v2',
-       packages = ['bleachbit'],
-       **args)
+if __name__ == '__main__':
+    if 2 == len(sys.argv) and sys.argv[1] == 'clean-dist':
+        clean_dist_locale()
+    else:
+        run_setup()
 
