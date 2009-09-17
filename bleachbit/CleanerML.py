@@ -164,7 +164,7 @@ class CleanerML:
 
 def list_cleanerml_files(local_only = False):
     """List CleanerML files"""
-    cleanerdirs = ( 'cleaners', \
+    cleanerdirs = ( Common.local_cleaners_dir, \
         Common.personal_cleaners_dir )
     if not local_only:
         cleanerdirs += ( Common.system_cleaners_dir, )

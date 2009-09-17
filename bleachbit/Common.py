@@ -50,6 +50,7 @@ if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
 else:
+    # __file__ is absolute path to bleachbit/Common.py
     bleachbit_exe_path = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
 
 # license
@@ -87,17 +88,20 @@ elif sys.platform == 'win32':
 elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 
+# local cleaners directory (for running from source tree)
+local_cleaners_dir =  os.path.normpath(os.path.join(bleachbit_exe_path, '../cleaners'))
+
 # application icon
-if os.path.exists("bleachbit.png"):
-    appicon_path = "bleachbit.png"
-    print "debug: appicon_path = '%s'" % (appicon_path, )
-else:
-    if sys.platform == 'linux2':
-        appicon_path = "/usr/share/pixmaps/bleachbit.png"
-    elif sys.platform == 'win32':
-        appicon_path = os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')
-    elif sys.platform[:6] == 'netbsd':
-        appicon_path = "/usr/pkg/share/pixmaps/bleachbit.png"
+__icons = ( '/usr/share/pixmaps/bleachbit.png', # Linux
+    os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'), # Windows
+    '/usr/pkg/share/pixmaps/bleachbit.png', # NetBSD
+    os.path.normpath(os.path.join(bleachbit_exe_path, '../bleachbit.png'))) # local
+appicon_path = None
+for __icon in __icons:
+    if os.path.exists(__icon):
+        appicon_path = __icon
+print "debug: appicon_path = '%s'" % (appicon_path, )
+
 
 # locale directory
 if os.path.exists("./locale/"):
