@@ -102,7 +102,7 @@ class Worker:
         try:
             for pathname in backends[operation].list_files():
                 try:
-                    self.clean_pathname(pathname)
+                    self.clean_pathname(pathname, operation)
                 except:
                     self.print_exception(operation)
 
@@ -141,7 +141,7 @@ class Worker:
             self.print_exception(operation)
 
 
-    def clean_pathname(self, pathname):
+    def clean_pathname(self, pathname, operation):
         """Clean a single pathname"""
         try:
             size_bytes = FileUtilities.getsize(pathname)
