@@ -27,7 +27,6 @@ Actions that perform cleaning
 
 import glob
 import os
-import sys
 
 import FileUtilities
 import General
