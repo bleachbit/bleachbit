@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-09-13 23:04-0600\n"
-"PO-Revision-Date: 2009-09-16 18:58+0000\n"
-"Last-Translator: Luca Falavigna <dktrkranz@ubuntu.com>\n"
+"POT-Creation-Date: 2009-09-17 16:14-0600\n"
+"PO-Revision-Date: 2009-09-18 06:44+0000\n"
+"Last-Translator: Milo Casagrande <milo@casagrande.name>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-16 20:28+0000\n"
+"X-Launchpad-Export-Date: 2009-09-18 17:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -35,7 +35,7 @@ msgstr "Cache"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Cancella la lista dei sever di gioco"
+msgstr "Elimina l'elenco dei sever di gioco"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -90,7 +90,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Cancella i cookie che contengono informazioni come preferenze dei siti web, "
+"Elimina i cookie che contengono informazioni come preferenze dei siti web, "
 "credenziali d'accesso e di identificazione"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
@@ -250,10 +250,6 @@ msgstr ""
 "Database di nomi utente e password e lista di siti che non devono "
 "memorizzare le password"
 
-#: ../cleaners/epiphany.xml
-msgid "Deleting Places deletes bookmarks."
-msgstr "Cancellando Risorse si cancellano i bookmark."
-
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:192
 msgid "Passwords"
 msgstr "Password"
@@ -261,6 +257,10 @@ msgstr "Password"
 #: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:193
 msgid "Places"
 msgstr "Risorse"
+
+#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:194
+msgid "This option deletes all bookmarks."
+msgstr "Questa opzione cancella tutti i segnalibri"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -346,7 +346,7 @@ msgstr "Libera spazio e mantiene la privacy"
 
 #. TRANSLATORS: Vacuumed may also be translated 'compacted'
 #. or 'optimized.'  The '%s' is a file name.
-#: ../bleachbit/Action.py:188 ../bleachbit/Action.py:190
+#: ../bleachbit/Action.py:187 ../bleachbit/Action.py:189
 #, python-format
 msgid "Vacuumed: %s"
 msgstr "Ottimizzato: %s"
@@ -367,10 +367,6 @@ msgstr "Ripristino sessione"
 #: ../bleachbit/CleanerBackend.py:191
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Carica la sessione iniziale dopo la chiusura o un blocco del browser"
-
-#: ../bleachbit/CleanerBackend.py:194
-msgid "This option deletes all bookmarks."
-msgstr "Questa opzione cancella tutti i segnalibri"
 
 #: ../bleachbit/CleanerBackend.py:381
 msgid "KDE desktop environment"
@@ -471,7 +467,7 @@ msgstr "Sistema"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/CleanerBackend.py:716
+#: ../bleachbit/CleanerBackend.py:708
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Sovrascrivi lo spazio libero su %s"
@@ -515,7 +511,7 @@ msgstr ""
 "Impossibile importare il modulo Python sqlite3: è necessario Python 2.5 o "
 "superiore."
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:528
+#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:527
 msgid "Preferences"
 msgstr "Preferenze"
 
@@ -600,15 +596,15 @@ msgstr "Mantieni"
 msgid "Code"
 msgstr "Codice"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:172
+#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
 msgid "Name"
 msgstr "Nome"
 
-#: ../bleachbit/GUI.py:72
+#: ../bleachbit/GUI.py:71
 msgid "Delete confirmation"
 msgstr "Conferma di cancellazione"
 
-#: ../bleachbit/GUI.py:80
+#: ../bleachbit/GUI.py:79
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -618,104 +614,105 @@ msgstr ""
 "operazioni selezionate? I file che saranno rimossi possono essere cambiati "
 "dall'ultima volta che hai eseguito l'anteprima."
 
-#: ../bleachbit/GUI.py:82
+#: ../bleachbit/GUI.py:81
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Sei sicuro di voler cancellare definitivamente questi file?"
 
-#: ../bleachbit/GUI.py:180
+#: ../bleachbit/GUI.py:179
 msgid "Active"
 msgstr "Attivo"
 
-#: ../bleachbit/GUI.py:373
+#: ../bleachbit/GUI.py:372
 msgid "You must select an operation"
 msgstr "Devi selezionare un'operazione"
 
-#: ../bleachbit/GUI.py:395
+#: ../bleachbit/GUI.py:394
 msgid "Done."
 msgstr "Fatto."
 
-#: ../bleachbit/GUI.py:404
+#: ../bleachbit/GUI.py:403
 msgid "Program to clean unnecessary files"
 msgstr "Programma per la cancellazione di file inutili"
 
-#: ../bleachbit/GUI.py:409
+#: ../bleachbit/GUI.py:408
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr "Licenza GNU General Public Liccense, versione 3 o superiore."
 
-#: ../bleachbit/GUI.py:415
+#: ../bleachbit/GUI.py:414
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Luca Falavigna https://launchpad.net/~dktrkranz\n"
 "  Marco Donato Torsello https://launchpad.net/~md1512\n"
+"  Milo Casagrande https://launchpad.net/~milo\n"
 "  Santiago https://launchpad.net/~keteremillpario\n"
 "  briga https://launchpad.net/~paolo-paolopelloni"
 
-#: ../bleachbit/GUI.py:451
+#: ../bleachbit/GUI.py:450
 msgid "Choose files to shred"
 msgstr "Scegli i file da cancellare con sovrascrittura"
 
-#: ../bleachbit/GUI.py:525
+#: ../bleachbit/GUI.py:524
 msgid "_Shred Files"
 msgstr "Cancella e _sovrascrivi i file"
 
-#: ../bleachbit/GUI.py:526
+#: ../bleachbit/GUI.py:525
 msgid "_Quit"
 msgstr "_Esci"
 
-#: ../bleachbit/GUI.py:527
+#: ../bleachbit/GUI.py:526
 msgid "_File"
 msgstr "_File"
 
-#: ../bleachbit/GUI.py:529
+#: ../bleachbit/GUI.py:528
 msgid "_Edit"
 msgstr "_Modifica"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:529
 msgid "Help Contents"
 msgstr "Aiuto in linea"
 
-#: ../bleachbit/GUI.py:531
+#: ../bleachbit/GUI.py:530
 msgid "_Release Notes"
 msgstr "Note di _rilascio"
 
-#: ../bleachbit/GUI.py:532
+#: ../bleachbit/GUI.py:531
 msgid "_About"
 msgstr "_Informazioni"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:532
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: ../bleachbit/GUI.py:559
+#: ../bleachbit/GUI.py:558
 msgid "Preview"
 msgstr "Anteprima"
 
-#: ../bleachbit/GUI.py:562
+#: ../bleachbit/GUI.py:561
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Anteprima dei file delle operazioni selezionate (nessun filve verrà "
 "cancellato)"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:567
 msgid "Delete"
 msgstr "Cancella"
 
-#: ../bleachbit/GUI.py:571
+#: ../bleachbit/GUI.py:570
 msgid "Delete files in the selected operations"
 msgstr "Cancella i file delle operazioni selezionate"
 
-#: ../bleachbit/GUI.py:649
+#: ../bleachbit/GUI.py:648
 msgid "Update BleachBit"
 msgstr "Aggiorna BleachBit"
 
-#: ../bleachbit/GUI.py:654
+#: ../bleachbit/GUI.py:653
 msgid "BleachBit update is available"
 msgstr "E' disponibile un aggiornamento di BleachBit"
 
-#: ../bleachbit/GUI.py:662
+#: ../bleachbit/GUI.py:661
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Per maggiori informazioni, clicca su 'Aggiorna BleachBit'"
 
