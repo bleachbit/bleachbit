@@ -68,6 +68,11 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Safe Browsing Bloom</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Archived History</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Cookies</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Extension Cookies</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History Index ????-??</action>
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History</action>
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Thumbnails</action>
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Web Data</action>
