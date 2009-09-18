@@ -41,6 +41,7 @@
     <label>History</label>
     <description>Delete the history, which includes bookmarks, downloads, and visited sites</description>
     <action type="file">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Archived History</action>
+    <action type="file">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History</action>
     <action type="glob">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History Index ????-??</action>
     <action type="glob">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History Index ????-??-journal</action>
     <action type="file">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History-journal</action>
@@ -63,5 +64,14 @@
     <action type="file">~/.config/google-chrome/Default/Current Tabs</action>
     <action type="file">~/.config/google-chrome/Default/Last Session</action>
     <action type="file">~/.config/google-chrome/Default/Last Tabs</action>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\History</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Thumbnails</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Web Data</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db</action>
+    <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db</action>
   </option>
 </cleaner>
