@@ -220,6 +220,25 @@ class TestCLI(unittest.TestCase):
             self.assertEqual(pos, -1)
 
 
+    def test_delete(self):
+        """Unit test for --delete option"""
+        import tempfile
+        import FileUtilities
+        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        # replace delete function for testing
+        save_delete = FileUtilities.delete
+        deleted_paths = []
+        def dummy_delete(path, shred = False):
+            deleted_paths.append(path)
+        FileUtilities.delete = dummy_delete
+        operations = args_to_operations(['system.tmp'])
+        preview_or_delete(operations, True)
+        FileUtilities.delete = save_delete
+        self.assert_(filename in deleted_paths)
+        os.remove(filename)
+
+
 if __name__ == '__main__':
     if len(sys.argv) >= 2 and sys.argv[1] == 'tests':
         print 'info: running CLI unit tests'
