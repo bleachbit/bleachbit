@@ -40,6 +40,9 @@ if not "iglob" in dir(glob):
 
 from Options import options
 
+if 'posix' == os.name:
+    from General import WindowsError
+
 
 class OpenFiles:
     """Cached way to determine whether a file is open by active process"""
@@ -137,7 +140,17 @@ def delete(path, shred = False):
             except IOError, e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 print "debug: IOError #%s shredding '%s'" % (e.errno, path)
-        os.remove(path)
+        try:
+            os.remove(path)
+        except WindowsError, e:
+            # WindowsError: [Error 145] The directory is not empty:
+            # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
+            # Error 145 may happen if the files are scheduled for deletion
+            # during reboot.
+            if 145 == e.winerror:
+                print "info: directory '%s' is not empty" % (pathname)
+            else:
+                raise
     else:
         raise Exception("Unsupported special file type")
 

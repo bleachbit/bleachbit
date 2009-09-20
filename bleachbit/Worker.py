@@ -35,10 +35,7 @@ from Cleaner import backends
 if 'nt' == os.name:
     import Windows
 else:
-    class WindowsError(Exception):
-        """Dummy class for non-Windows systems"""
-        def __str__(self):
-            return 'this is a dummy class for non-Windows systems'
+    from General import WindowsError
 
 
 
@@ -154,15 +151,9 @@ class Worker:
             if self.really_delete:
                 FileUtilities.delete(pathname)
         except WindowsError, e:
-            # WindowsError: [Error 145] The directory is not empty:
-            # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
-            # Error 145 may happen if the files are scheduled for deletion
-            # during reboot.
-            if 145 == e.winerror:
-                print "info: directory '%s' is not empty" % (pathname)
             # WindowsError: [Error 32] The process cannot access the file because it is being
             # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-            elif 32 != e.winerror:
+            if 32 != e.winerror:
                 raise
             try:
                 Windows.delete_locked_file(pathname)

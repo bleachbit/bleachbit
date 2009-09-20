@@ -53,6 +53,13 @@ def getText(nodelist):
 ### General
 ###
 
+class WindowsError(Exception):
+    """Dummy class for non-Windows systems"""
+    def __str__(self):
+        return 'this is a dummy class for non-Windows systems'
+
+
+
 def run_external(args, stdout = False):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
