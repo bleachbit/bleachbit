@@ -20,7 +20,7 @@
 
 
 """
-Special cleaning operations
+Cross-platform, special cleaning operations
 """
 
 
