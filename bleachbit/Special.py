@@ -105,3 +105,17 @@ def delete_mozilla_url_history(path):
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
 
+
+
+def delete_ooo_history(path):
+    """Erase the Openoffice.org MRU in Common.xcu"""
+    import xml.dom.minidom
+    dom1 = xml.dom.minidom.parse(path)
+    for node in dom1.getElementsByTagName("node"):
+        if node.hasAttribute("oor:name"):
+            if "History" == node.getAttribute("oor:name"):
+                node.parentNode.removeChild(node)
+                node.unlink()
+                break
+    dom1.writexml(open(path, "w"))
+

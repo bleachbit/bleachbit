@@ -33,9 +33,9 @@ import re
 import subprocess
 import sys
 import traceback
-import xml.dom.minidom
 
 import FileUtilities
+import Special
 
 if 'posix' == os.name:
     import Unix
@@ -275,7 +275,6 @@ class Firefox(Cleaner):
             for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
                 if really_delete:
                     oldsize = os.path.getsize(path)
-                    import Special
                     Special.delete_mozilla_url_history(path)
                     newsize = os.path.getsize(path)
                     yield (oldsize - newsize, path)
@@ -377,16 +376,6 @@ class OpenOfficeOrg(Cleaner):
             for filename in children_in_directory(dirname, False):
                 yield filename
 
-    def erase_history(self, path):
-        """Erase the history node (most recently used documents)"""
-        dom1 = xml.dom.minidom.parse(path)
-        for node in dom1.getElementsByTagName("node"):
-            if node.hasAttribute("oor:name"):
-                if "History" == node.getAttribute("oor:name"):
-                    node.parentNode.removeChild(node)
-                    node.unlink()
-                    break
-        dom1.writexml(open(path, "w"))
 
     def other_cleanup(self, really_delete = False):
         if not self.options["recent_documents"][1]:
@@ -396,7 +385,7 @@ class OpenOfficeOrg(Cleaner):
                 if os.path.lexists(path):
                     if really_delete:
                         oldsize = os.path.getsize(path)
-                        self.erase_history(path)
+                        Special.delete_ooo_history(path)
                         newsize = os.path.getsize(path)
                         yield (oldsize - newsize, path)
                     else:
