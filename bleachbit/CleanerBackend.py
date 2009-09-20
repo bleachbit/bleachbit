@@ -293,38 +293,6 @@ class Firefox(Cleaner):
                     yield path
 
 
-class KDE(Cleaner):
-    """KDE"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.add_option('cache', _('Cache'), _('Delete the cache'))
-        self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
-
-    def get_description(self):
-        return _("KDE desktop environment")
-
-    def get_id(self):
-        return 'kde'
-
-    def get_name(self):
-        return "KDE"
-
-    def list_files(self):
-        # cache
-        if self.options["cache"][1]:
-            dirs = glob.glob(os.path.expanduser("~/.kde/cache-*/"))
-            for dirname in dirs:
-                for filename in children_in_directory(dirname, False):
-                    yield filename
-        # temporary
-        if self.options["tmp"][1]:
-            dirs = glob.glob(os.path.expanduser("~/.kde/tmp-*/"))
-            for dirname in dirs:
-                for path in children_in_directory(dirname, False):
-                    yield path
-
-
 class OpenOfficeOrg(Cleaner):
     """Delete OpenOffice.org cache"""
 
@@ -693,7 +661,6 @@ class System(Cleaner):
 backends = {}
 backends["firefox"] = Firefox()
 if 'posix' == os.name:
-    backends["kde"] = KDE()
     backends["rpmbuild"] = rpmbuild()
 backends["openofficeorg"] = OpenOfficeOrg()
 backends["system"] = System()
