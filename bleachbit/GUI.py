@@ -37,10 +37,10 @@ warnings.simplefilter('default')
 from bleachbit.Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, online_update_notification_enabled, \
     release_notes_url
-from bleachbit.CleanerBackend import backends
+from bleachbit.Cleaner import backends
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Options import options
-import bleachbit.CleanerBackend
+import bleachbit.Cleaner
 import bleachbit.FileUtilities
 
 
@@ -460,7 +460,7 @@ class GUI:
             return
 
         # create a temporary cleaner object
-        cleaner = bleachbit.CleanerBackend.Cleaner()
+        cleaner = bleachbit.Cleaner.Cleaner()
         cleaner.add_option('files', 'files', '')
         cleaner.name = ''
         import bleachbit.Action

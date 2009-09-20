@@ -31,7 +31,7 @@ import os
 import sys
 import unittest
 
-from CleanerBackend import backends
+from Cleaner import backends
 import Common
 import General
 

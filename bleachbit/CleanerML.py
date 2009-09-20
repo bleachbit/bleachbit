@@ -25,7 +25,7 @@ import os
 import sys
 import traceback
 import xml.dom.minidom
-import CleanerBackend
+import Cleaner
 import Common
 
 from gettext import gettext as _
@@ -45,7 +45,7 @@ class CleanerML:
         """
 
         self.action = None
-        self.cleaner = CleanerBackend.Cleaner()
+        self.cleaner = Cleaner.Cleaner()
         self.option_id = None
         self.option_name = None
         self.option_description = None
@@ -190,7 +190,7 @@ def load_cleaners():
         else:
             cleaner = xmlcleaner.get_cleaner()
             if cleaner.is_usable():
-                CleanerBackend.backends[cleaner.id] = cleaner
+                Cleaner.backends[cleaner.id] = cleaner
             else:
                 print "debug: '%s' is not usable" % pathname
 
@@ -237,7 +237,7 @@ class TestCleanerML(unittest.TestCase):
         xmlcleaner = CleanerML("../doc/example_cleaner.xml")
 
         self.assert_(isinstance(xmlcleaner, CleanerML))
-        self.assert_(isinstance(xmlcleaner.cleaner, CleanerBackend.Cleaner))
+        self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
 
         for (option_id, __name, __value) in xmlcleaner.cleaner.get_options():
             # enable all options

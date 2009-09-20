@@ -30,7 +30,7 @@ import sys
 import traceback
 
 import FileUtilities
-from CleanerBackend import backends
+from Cleaner import backends
 
 if 'nt' == os.name:
     import Windows

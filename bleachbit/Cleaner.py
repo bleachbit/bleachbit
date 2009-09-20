@@ -668,11 +668,11 @@ backends["system"] = System()
 
 import unittest
 
-class TestCleanerBackend(unittest.TestCase):
+class TestCleaner(unittest.TestCase):
 
 
     def test_add_action(self):
-        """Unit test for CleanerBackend.add_action()"""
+        """Unit test for Cleaner.add_action()"""
         self.actions = []
         if 'nt' == os.name:
             self.actions.append('<action type="file">$WINDIR\\notepad.exe</action>')
