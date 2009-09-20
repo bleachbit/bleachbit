@@ -268,82 +268,6 @@ class Firefox(Cleaner):
             yield filename
 
 
-    def delete_url_history(self, path):
-        """Delete URL history in Firefox 3 places.sqlite"""
-
-        # delete the URLs in moz_places
-        places_suffix = "where id in (select " \
-            "moz_places.id from moz_places " \
-            "left join moz_inputhistory on moz_inputhistory.place_id = moz_places.id " \
-            "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
-            "where moz_inputhistory.input is null " \
-            "and moz_bookmarks.id is null); "
-
-        cmds = ""
-
-        if options.get('shred'):
-            shred_places_cmd = "update moz_places " \
-                "set url = randomblob(length(url)), " \
-                "rev_host = randomblob(length(rev_host)), " \
-                "title = randomblob(length(title))" + places_suffix
-            cmds += shred_places_cmd
-            shred_places_cmd = "update moz_places " \
-                "set url = zeroblob(length(url)), " \
-                "rev_host = zeroblob(length(rev_host)), " \
-                "title = zeroblob(length(title))" + places_suffix
-            cmds += shred_places_cmd
-
-
-        delete_places_cmd = "delete from moz_places " + places_suffix
-        cmds += delete_places_cmd
-
-        # delete any orphaned annotations in moz_annos
-        annos_suffix =  "where id in (select moz_annos.id " \
-            "from moz_annos " \
-            "left join moz_places " \
-            "on moz_annos.place_id = moz_places.id " \
-            "where moz_places.id is null); "
-
-        if options.get('shred'):
-            shred_annos_cmd = "update moz_annos " \
-                "set content = randomblob(length(content)) " \
-                + annos_suffix
-            cmds += shred_annos_cmd
-            shred_annos_cmd = "update moz_annos " \
-                "set content = zeroblob(length(content)) " \
-                + annos_suffix
-            cmds += shred_annos_cmd
-
-        delete_annos_cmd = "delete from moz_annos " + annos_suffix
-        cmds += delete_annos_cmd
-
-        # delete any orphaned favicons
-        fav_suffix = "where id not in (select favicon_id " \
-            "from moz_places ); "
-
-        if options.get('shred'):
-            shred_fav_cmd = "update moz_favicons " \
-                "set url = randomblob(length(url)), " \
-                "data = randomblob(length(data)) " \
-                +  fav_suffix
-            cmds += shred_fav_cmd
-            shred_fav_cmd = "update moz_favicons " \
-                "set url = zeroblob(length(url)), " \
-                "data = zeroblob(length(data)) " \
-                +  fav_suffix
-            cmds += shred_fav_cmd
-
-
-        delete_fav_cmd = "delete from moz_favicons " + fav_suffix
-        cmds += delete_fav_cmd
-
-        # delete any orphaned history visits
-        cmds += "delete from moz_historyvisits where place_id not " \
-            "in (select id from moz_places); "
-
-        # execute the commands
-        FileUtilities.execute_sqlite3(path, cmds)
-
 
     def other_cleanup(self, really_delete = False):
         # URL history
@@ -351,7 +275,8 @@ class Firefox(Cleaner):
             for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
                 if really_delete:
                     oldsize = os.path.getsize(path)
-                    self.delete_url_history(path)
+                    import Special
+                    Special.delete_mozilla_url_history(path)
                     newsize = os.path.getsize(path)
                     yield (oldsize - newsize, path)
                 else:
