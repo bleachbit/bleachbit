@@ -340,6 +340,11 @@ class OpenOfficeOrg(Cleaner):
 class rpmbuild(Cleaner):
     """Delete the rpmbuild build directory"""
 
+    def __init__(self):
+        Cleaner.__init__(self)
+        self.options = {}
+        self.add_option('cache', _('Cache'), _('Delete the cache'))
+
     def get_description(self):
         return _("Delete the files in the rpmbuild build directory")
 
@@ -349,7 +354,10 @@ class rpmbuild(Cleaner):
     def get_name(self):
         return "rpmbuild"
 
-    def list_files(self):
+    def get_commands(self, option_id):
+        if not 'cache' == option_id:
+            raise StopIteration
+
         dirnames = set([ os.path.expanduser("~/rpmbuild/BUILD/") ])
         try:
             args = ["rpm", "--eval", "%_topdir"]
@@ -362,7 +370,7 @@ class rpmbuild(Cleaner):
             dirnames.add(dirname + "/BUILD")
         for dirname in dirnames:
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
 
 
 class System(Cleaner):
