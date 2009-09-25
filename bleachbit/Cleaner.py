@@ -604,7 +604,7 @@ class System(Cleaner):
                 # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
                 label = _("Recycle bin %s") % drive
                 def emptyrecyclebin():
-                    return Windows.empty_recycle_bin(drive, really_delete)
+                    return Windows.empty_recycle_bin(drive, True)
                 # fixme: enable size preview
                 yield Command.Function(None, emptyrecyclebin, label)
 
