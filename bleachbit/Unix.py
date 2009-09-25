@@ -585,7 +585,7 @@ class TestUnix(unittest.TestCase):
             self.assertRaises(RuntimeError, apt_autoclean)
         else:
             bytes_freed = apt_autoclean()
-            self.assert_(type(bytes_freed) is int)
+            self.assert_(isinstance(bytes_freed, (int, long)))
 
 
     def test_free_space(self):
@@ -594,7 +594,7 @@ class TestUnix(unittest.TestCase):
         result = free_space(home)
         self.assertNotEqual(result, None)
         self.assert_(result > -1)
-        self.assert_(type(result) is int)
+        self.assert_(isinstance(result, (int, long)))
 
 
     def test_guess_overwrite_paths(self):
@@ -707,7 +707,7 @@ class TestUnix(unittest.TestCase):
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
-            self.assert_(type(bytes_freed) is int)
+            self.assert_(isinstance(bytes_freed, (int, long)))
             print 'debug: yum bytes cleaned %d', bytes_freed
 
 

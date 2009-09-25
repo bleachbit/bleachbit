@@ -108,7 +108,7 @@ class Function:
                             # return control to GTK idle loop
                             yield True
                 # either way, func_ret should be an integer
-                assert(isinstance(func_ret, int))
+                assert(isinstance(func_ret, (int, long)))
                 ret['size'] = func_ret
             else:
                 # Function takes a path.  We check the size.

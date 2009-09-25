@@ -86,7 +86,7 @@ def bytes_to_human(bytes_i):
     storage_multipliers = { 1024**5 : 'PB', 1024**4 : 'TB', \
         1024**3 : 'GB', 1024**2: 'MB', 1024: 'KB', 1 : 'B' }
 
-    assert(type(bytes_i) is int or type(bytes_i) is long)
+    assert(isinstance(bytes_i, (int, long)))
 
     if 0 == bytes_i:
         return "0"
