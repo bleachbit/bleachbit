@@ -223,9 +223,9 @@ class TestWorker(unittest.TestCase):
         while run.next():
             pass
         self.assertEqual(w.total_deleted, 2)
-        self.assertEqual(w.total_special, 2)
+        self.assertEqual(w.total_special, 3)
         self.assertEqual(w.total_errors, 2)
-        self.assertEqual(w.total_bytes, 4096+10)
+        self.assertEqual(w.total_bytes, 4096+10+10)
 
 
 if __name__ == '__main__':

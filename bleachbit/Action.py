@@ -196,10 +196,14 @@ class TestActionProvider(ActionProvider):
             pass
         # self.pathname must exist because it checks the file size
         yield Command.Function(self.pathname, pathfunc, 'pathfunc')
-        # function without path, should succeed
-        def func():
+        # function generator without path, should succeed
+        def funcgenerator():
+            yield 10
+        yield Command.Function(None, funcgenerator, 'funcgenerator')
+        # plain function without path, should succeed
+        def intfunc():
             return 10
-        yield Command.Function(None, func, 'func')
+        yield Command.Function(None, intfunc, 'intfunc')
         # truncate real file
         yield Command.Truncate(self.pathname)
         # real file, should succeed

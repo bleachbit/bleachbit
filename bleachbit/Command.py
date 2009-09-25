@@ -100,10 +100,15 @@ class Function:
         if really_delete:
             if None == self.path:
                 # Function takes no path.  It returns the size.
-                for func_ret in self.func():
-                    if True == func_ret:
-                        # return control to GTK idle loop
-                        yield True
+                func_ret = self.func()
+                if isinstance(func_ret, types.GeneratorType):
+                    # function returned generator
+                    for func_ret in self.func():
+                        if True == func_ret:
+                            # return control to GTK idle loop
+                            yield True
+                # either way, func_ret should be an integer
+                assert(isinstance(func_ret, int))
                 ret['size'] = func_ret
             else:
                 # Function takes a path.  We check the size.
