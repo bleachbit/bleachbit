@@ -262,7 +262,7 @@ class Firefox(Cleaner):
             for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
                     yield Command.Function(path, \
                         Special.delete_mozilla_url_history,
-                        _('Delete history'))
+                        _('Delete the usage history'))
 
         # vacuum
         if 'vacuum' == option_id:
