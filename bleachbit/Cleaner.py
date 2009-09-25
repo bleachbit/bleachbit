@@ -597,7 +597,7 @@ class System(Cleaner):
                 # run command
                 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
             for key in keys:
-                yield Command.Winreg(key)
+                yield Command.Winreg(key, None)
 
         if 'nt' == os.name and 'recycle_bin' == option_id:
             for drive in Windows.get_fixed_drives():
@@ -728,7 +728,8 @@ class TestCleaner(unittest.TestCase):
                     filename = result['path']
                     self.assert_(isinstance(filename,str) or \
                         None == filename, str(result))
-                    if isinstance(filename, str):
+                    if isinstance(filename, str) and \
+                        not filename[0:2] == 'HK':
                         self.assert_ (os.path.lexists(filename), \
                             "In backend '%s' path does not exist: '%s' \
                             " % (key, filename))
