@@ -295,46 +295,39 @@ class OpenOfficeOrg(Cleaner):
     def get_name(self):
         return "OpenOffice.org"
 
-    def list_files(self):
-        if self.options["recent_documents"][1]:
+    def get_commands(self, option_id):
+        if 'recent_documents' == option_id:
             for prefix in self.prefixes:
                 for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Histories.xcu"):
                     if os.path.lexists(path):
-                        yield path
+                        yield Command.Delete(path)
                 for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Histories.dat"):
                     if os.path.lexists(path):
-                        yield path
+                        yield Command.Delete(path)
 
 
-        if self.options["recent_documents"][1] and not self.options["cache"][1]:
+        if 'recent_documents' == option_id and not 'cache' == option_id:
             for prefix in self.prefixes:
                 for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Common.dat"):
                     if os.path.lexists(path):
-                        yield path
+                        yield Command.Delete(path)
 
-        if not self.options["cache"][1]:
-            return
-        dirs = []
-        for prefix in self.prefixes:
-            dirs += FileUtilities.expand_glob_join(prefix, "user/registry/cache/")
-        for dirname in dirs:
-            for filename in children_in_directory(dirname, False):
-                yield filename
+        if 'cache' == option_id:
+            dirs = []
+            for prefix in self.prefixes:
+                dirs += FileUtilities.expand_glob_join(prefix, "user/registry/cache/")
+            for dirname in dirs:
+                for filename in children_in_directory(dirname, False):
+                    yield Command.Delete(filename)
 
 
-    def other_cleanup(self, really_delete = False):
-        if not self.options["recent_documents"][1]:
-            return
-        for prefix in self.prefixes:
-            for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Common.xcu"):
-                if os.path.lexists(path):
-                    if really_delete:
-                        oldsize = os.path.getsize(path)
-                        Special.delete_ooo_history(path)
-                        newsize = os.path.getsize(path)
-                        yield (oldsize - newsize, path)
-                    else:
-                        yield path
+        if 'recent_documents' == option_id:
+            for prefix in self.prefixes:
+                for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Common.xcu"):
+                    if os.path.lexists(path):
+                        yield Command.Function(path, \
+                            Special.delete_ooo_history,
+                            _('Delete the usage history'))
 
 
 class rpmbuild(Cleaner):
