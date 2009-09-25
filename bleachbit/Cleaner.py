@@ -79,7 +79,8 @@ class Cleaner:
         for (option_id, __name) in self.get_options():
             try:
                 for cmd in self.get_commands(option_id):
-                    return False
+                    for ret in cmd.execute(False):
+                        return False
             except:
                 print 'warning: exception in auto_hide(), cleaner=%s, option=%s' % (self.name, option_id)
                 traceback.print_exc()
