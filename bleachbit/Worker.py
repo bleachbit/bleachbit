@@ -224,13 +224,14 @@ class TestWorker(unittest.TestCase):
         while run.next():
             pass
         self.assert_(not os.path.exists(filename))
-        self.assertEqual(w.total_deleted, 2)
         self.assertEqual(w.total_special, 3)
         self.assertEqual(w.total_errors, 2)
         if 'posix' == os.name:
             self.assertEqual(w.total_bytes, 4096+10+10)
+            self.assertEqual(w.total_deleted, 2)
         elif 'nt' == os.name:
-            self.assertEqual(w.total_bytes, 3+10+10)
+            self.assertEqual(w.total_bytes, 3+3+10+10)
+            self.assertEqual(w.total_deleted, 3)
 
 
 if __name__ == '__main__':

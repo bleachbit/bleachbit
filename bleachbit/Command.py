@@ -64,7 +64,7 @@ class Delete:
                 if 32 != e.winerror:
                     raise
                 try:
-                    Windows.delete_locked_file(pathname)
+                    Windows.delete_locked_file(self.path)
                 except:
                     raise
                 else:
