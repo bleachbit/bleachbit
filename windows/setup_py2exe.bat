@@ -107,6 +107,9 @@ rd /s /q dist\library
 set CANARY=dist\library.zip
 if not exist %CANARY% goto error
 
+echo Building portable
+cd dist
+%SZ_EXE% a -mx=9 -md=32m ..\BleachBit-portable.zip
 
 :nsis
 echo Building installer
