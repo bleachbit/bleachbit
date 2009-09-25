@@ -34,21 +34,24 @@ except:
 else:
     HAVE_HASHLIB = True
 
-
-import pygtk
-pygtk.require('2.0')
-import gtk
-
 from CleanerML import list_cleanerml_files
 from Options import options
+
+
 
 KNOWN = 1
 CHANGED = 2
 NEW = 3
 
 
+
 def cleaner_change_dialog(pathname, status, parent):
     """Present a dialog regarding the change of a cleaner definition"""
+
+    import pygtk
+    pygtk.require('2.0')
+    import gtk
+
     dialog = gtk.Dialog(title = "BleachBit", parent = parent, \
         flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
     hbox = gtk.HBox(homogeneous = False, spacing = 10)

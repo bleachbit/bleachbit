@@ -28,12 +28,11 @@ Actions that perform cleaning
 import glob
 import os
 
+import Command
 import FileUtilities
 import General
 
-if 'nt' == os.name:
-    import Windows
-else:
+if 'posix' == os.name:
     import Unix
 
 
@@ -65,14 +64,8 @@ class ActionProvider:
         pass
 
 
-    def list_files(self):
-        """Yield each pathname to be deleted"""
-        raise StopIteration
-
-
-    def other_cleanup(self, really_delete):
-        """Perform specialized cleanup (more complex than deleting a file)"""
-        raise StopIteration
+    def get_commands(self):
+        """Yield each command (which can be previewed or executed)"""
 
 
 
@@ -90,13 +83,12 @@ class AptAutoclean(ActionProvider):
         pass
 
 
-    def other_cleanup(self, really_delete):
-        if really_delete:
-            yield (Unix.apt_autoclean(), "apt-get autoclean")
-        else:
-            # Checking allows auto-hide to work for non-APT systems
-            if FileUtilities.exe_exists('apt-get'):
-                yield "apt-get autoclean"
+    def get_commands(self):
+        # Checking executable allows auto-hide to work for non-APT systems
+        if FileUtilities.exe_exists('apt-get'):
+            yield Command.Function(None, \
+                Unix.apt_autoclean, \
+                'apt-get autoclean')
 
 
 class AptAutoremove(ActionProvider):
@@ -107,14 +99,12 @@ class AptAutoremove(ActionProvider):
     def __init__(self, action_element):
         pass
 
-
-    def other_cleanup(self, really_delete):
-        if really_delete:
-            yield (Unix.apt_autoremove(), "apt-get autoremove")
-        else:
-            # Checking allows auto-hide to work for non-APT systems
-            if FileUtilities.exe_exists('apt-get'):
-                yield "apt-get autoremove"
+    def get_commands(self):
+        # Checking executable allows auto-hide to work for non-APT systems
+        if FileUtilities.exe_exists('apt-get'):
+            yield Command.Function(None, \
+                Unix.apt_autoremove, \
+                'apt-get autoremove')
 
 
 class Children(ActionProvider):
@@ -129,9 +119,9 @@ class Children(ActionProvider):
         self.del_dir = General.boolstr_to_bool(del_dir_str)
 
 
-    def list_files(self):
+    def get_commands(self):
         for pathname in FileUtilities.children_in_directory(self.rootpath, self.del_dir):
-            yield pathname
+            yield Command.Delete(pathname)
 
 
 
@@ -144,10 +134,10 @@ class File(ActionProvider):
         self.pathname = General.getText(action_element.childNodes)
 
 
-    def list_files(self):
+    def get_commands(self):
         expanded = os.path.expanduser(os.path.expandvars(self.pathname))
         if os.path.lexists(expanded):
-            yield expanded
+            yield Command.Delete(expanded)
 
 
 
@@ -160,10 +150,10 @@ class Glob(ActionProvider):
         self.pathname = General.getText(action_element.childNodes)
 
 
-    def list_files(self):
+    def get_commands(self):
         expanded = os.path.expanduser(os.path.expandvars(self.pathname))
         for pathname in glob.iglob(expanded):
-            yield pathname
+            yield Command.Delete(pathname)
 
 
 
@@ -174,20 +164,46 @@ class SqliteVacuum(ActionProvider):
     def __init__(self, action_element):
         self.pathname = General.getText(action_element.childNodes)
 
-
-    def other_cleanup(self, really_delete):
+    def get_commands(self):
         expanded = os.path.expanduser(os.path.expandvars(self.pathname))
         for pathname in glob.iglob(expanded):
-            if really_delete:
-                old_size = FileUtilities.getsize(pathname)
-                FileUtilities.vacuum_sqlite3(pathname)
-                new_size = FileUtilities.getsize(pathname)
-                # TRANSLATORS: Vacuumed may also be translated 'compacted'
-                # or 'optimized.'  The '%s' is a file name.
-                yield (old_size - new_size, _("Vacuumed: %s") % pathname)
-            else:
-                yield _("Vacuumed: %s") % pathname
+            yield Command.Function( \
+                pathname, \
+                FileUtilities.vacuum_sqlite3, \
+                # TRANSLATORS: Vacuum is a verb.  The term is jargon
+                # from the SQLite database.  Microsoft Access uses
+                # the term 'Compact Database' (which you may translate
+                # instead).  Another synonym is 'defragment.'
+               _('Vacuum'))
 
+
+class TestActionProvider(ActionProvider):
+    """Test ActionProvider"""
+    action_key = 'test'
+
+    def __init__(self, action_element):
+        self.pathname = General.getText(action_element.childNodes)
+
+    def get_commands(self):
+        # non-existent file, should fail and continue
+        yield Command.Delete("doesnotexist")
+        # access denied, should fail and continue
+        def accessdenied():
+            raise OSError(13, 'Permission denied: /foo/bar')
+        yield Command.Function(None, accessdenied, 'Test access denied')
+        # function with path, should succeed
+        def pathfunc(path):
+            pass
+        # self.pathname must exist because it checks the file size
+        yield Command.Function(self.pathname, pathfunc, 'pathfunc')
+        # function without path, should succeed
+        def func():
+            return 10
+        yield Command.Function(None, func, 'func')
+        # truncate real file
+        yield Command.Truncate(self.pathname)
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
 
 
 class Winreg(ActionProvider):
@@ -199,23 +215,9 @@ class Winreg(ActionProvider):
         self.name = action_element.getAttribute('name')
 
 
-    def other_cleanup(self, really_delete):
-        name = None
-        _str = None # string representation
-        ret = None # return value meaning 'deleted' or 'delete-able'
-        if name:
-            _str = '%s<%s>' % (self.keyname, name)
-            ret = Windows.delete_registry_value(self.keyname, name, really_delete)
-        else:
-            ret = Windows.delete_registry_key(self.keyname, really_delete)
-            _str = self.keyname
-        if not ret:
-            # nothing to delete or nothing was deleted
-            return
-        if really_delete:
-            yield (0, _str)
-        else:
-            yield _str
+    def get_commands(self):
+        yield Command.Winreg(self.keyname, self.name)
+
 
 
 class YumCleanAll(ActionProvider):
@@ -226,15 +228,15 @@ class YumCleanAll(ActionProvider):
     def __init__(self, action_element):
         pass
 
+    def get_commands(self):
+        # Checking allows auto-hide to work for non-APT systems
+        if not FileUtilities.exe_exists('yum'):
+            raise StopIteration
 
-    def other_cleanup(self, really_delete):
-        if really_delete:
-            yield (Unix.yum_clean(), "yum clean all")
-        else:
-            # Checking allows auto-hide to work for non-APT systems
-            if FileUtilities.exe_exists('yum'):
-                yield "yum clean all"
-
+        yield Command.Function( \
+                None, \
+                Unix.yum_clean, \
+                'yum clean all')
 
 
 

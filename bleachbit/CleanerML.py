@@ -239,13 +239,14 @@ class TestCleanerML(unittest.TestCase):
         self.assert_(isinstance(xmlcleaner, CleanerML))
         self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
 
-        for (option_id, __name, __value) in xmlcleaner.cleaner.get_options():
-            # enable all options
-            xmlcleaner.cleaner.set_option(option_id, True)
-
-        for pathname in xmlcleaner.cleaner.list_files():
-            self.assert_(os.path.exists(pathname))
-
+        for (option_id, __name) in xmlcleaner.cleaner.get_options():
+            for cmd in xmlcleaner.cleaner.get_commands(option_id):
+                for result in cmd.execute(False):
+                    path = result['path']
+                    msg = "Path does not exist '%s' for option '%s'" \
+                        % (path, option_id)
+                    self.assert_(os.path.exists(path) or \
+                        'HK' == path[0:2] , msg)
 
 
     def test_boolstr_to_bool(self):

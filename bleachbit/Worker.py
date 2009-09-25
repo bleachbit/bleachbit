@@ -28,6 +28,7 @@ from gettext import gettext as _
 import os
 import sys
 import traceback
+import unittest
 
 import FileUtilities
 from Cleaner import backends
@@ -60,6 +61,7 @@ class Worker:
         self.total_deleted = 0
         self.total_errors = 0
         self.total_special = 0 # special operations
+        self.yield_time = None
         if 0 == len(self.operations):
             raise RuntimeError("No work to do")
 
@@ -78,6 +80,43 @@ class Worker:
         self.total_errors += 1
 
 
+    def execute(self, cmd):
+        """Execute or preview the command"""
+        ret = None
+        line = None
+        tag = None
+        try:
+            for ret in cmd.execute(self.really_delete):
+                if True == ret:
+                    # temporarily pass control to the GTK idle loop
+                    yield True
+        except Exception, e:
+            # 2 = does not exist
+            # 13 = permission denied
+            if not (isinstance(e, OSError) and e.errno in (2, 13)):
+                traceback.print_exc()
+            line = "%s\n" % (str(sys.exc_info()[1]))
+            tag = 'error'
+            self.total_errors += 1
+        else:
+            if None == ret:
+                return
+            if type(ret['size']) is int:
+                size = FileUtilities.bytes_to_human(ret['size'])
+                self.total_bytes += ret['size']
+            else:
+                size = "?B"
+            if ret['path']:
+                path = ' ' + ret['path']
+            else:
+                path = ''
+            line = "%s %s %s\n" % (ret['label'], size, path)
+            self.total_deleted += ret['n_deleted']
+            self.total_special += ret['n_special']
+
+        self.ui.append_text(line, tag)
+
+
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
@@ -89,100 +128,27 @@ class Worker:
             self.ui.append_text(err + "\n", 'error')
             self.total_errors += 1
             return
-        if operation_options:
-            for (option, value) in operation_options:
-                backends[operation].set_option(option, value)
-
-        # standard operation
         import time
-        start_time = time.time()
-        try:
-            for pathname in backends[operation].list_files():
-                try:
-                    self.clean_pathname(pathname, operation)
-                except:
-                    self.print_exception(operation)
+        self.yield_time = time.time()
 
-                if time.time() - start_time >= 0.25:
-                    if self.really_delete:
-                        self.ui.update_total_size(self.total_bytes)
-                    # return control to PyGTK idle loop
-                    yield True
-                    start_time = time.time()
-        except:
-            self.print_exception(operation)
-
-        # special operation
-        try:
-            for ret in backends[operation].other_cleanup(self.really_delete):
-                if None == ret:
-                    return
-                if True == ret:
-                    # There is more work to do, but yield control to
-                    # GTK idle to keep GUI responding and allow abort.
-                    yield True
+        if operation_options:
+            for (option_id, value) in operation_options:
+                # fixme: remove the values (true/false)
+                if not value:
+                    # option is disabled, so skip it
                     continue
-                self.total_special += 1
-                if self.really_delete:
-                    self.total_bytes += ret[0]
-                    line = "* " + FileUtilities.bytes_to_human(ret[0]) + " " + ret[1] + "\n"
-                    if self.really_delete:
-                        self.ui.update_total_size(self.total_bytes)
-                else:
-                    line = _("Special operation: ") + ret + "\n"
-                self.ui.append_text(line)
-                if self.really_delete:
-                    self.ui.update_total_size(self.total_bytes)
-                yield True
-        except:
-            self.print_exception(operation)
-
-
-    def clean_pathname(self, pathname, operation):
-        """Clean a single pathname"""
-        try:
-            size_bytes = FileUtilities.getsize(pathname)
-        except:
-            self.print_exception(operation)
-
-        tag = None
-        error = False
-        try:
-            if self.really_delete:
-                FileUtilities.delete(pathname)
-        except WindowsError, e:
-            # WindowsError: [Error 32] The process cannot access the file because it is being
-            # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-            if 32 != e.winerror:
-                raise
-            try:
-                Windows.delete_locked_file(pathname)
-            except:
-                error = True
-            else:
-                size_text = FileUtilities.bytes_to_human(size_bytes)
-                # TRANSLATORS: This indicates the file will be deleted
-                # when Windows reboots.  The special keyword %(size)s
-                # changes to a size such as 320.1KB.
-                line = _("Marked for deletion: %(size)s %(pathname)s") % \
-                    { 'size' : size_text, 'pathname' : pathname }
-                line += "\n"
-        except:
-            error = True
-        else:
-            size_text = FileUtilities.bytes_to_human(size_bytes)
-            line = "%s %s\n" % (size_text, pathname)
-
-        if error:
-            traceback.print_exc()
-            line = "%s %s\n" % (str(sys.exc_info()[1]), pathname)
-            tag = 'error'
-            self.total_errors += 1
-        else:
-            self.total_bytes += size_bytes
-            self.total_deleted += 1
-
-        self.ui.append_text(line, tag)
+                for cmd in backends[operation].get_commands(option_id):
+                    for ret in self.execute(cmd):
+                        if True == ret:
+                            # Return control to PyGTK idle loop to keep
+                            # it responding allow the user to abort
+                            self.yield_time = time.time()
+                            yield True
+                    if time.time() - self.yield_time > 0.25:
+                        if self.really_delete:
+                            self.ui.update_total_size(self.total_bytes)
+                        yield True
+                        self.yield_time = time.time()
 
 
     def run(self):
@@ -235,4 +201,33 @@ class Worker:
 
         yield False
 
+
+class TestWorker(unittest.TestCase):
+    """Unit test for module Worker"""
+
+    def test_TestActionProvider(self):
+        """Test Worker using Action.TestActionProvider"""
+        import CLI
+        import Cleaner
+        import tempfile
+        ui = CLI.CliCallback()
+        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        os.write(fd, '123')
+        os.close(fd)
+        astr = '<action type="test">%s</action>' % filename
+        cleaner = Cleaner.TestCleaner.action_to_cleaner(astr)
+        backends['test'] = cleaner
+        operations = { 'test' : [ ('option1', True ) ] }
+        w = Worker(ui, True, operations)
+        run = w.run()
+        while run.next():
+            pass
+        self.assertEqual(w.total_deleted, 2)
+        self.assertEqual(w.total_special, 2)
+        self.assertEqual(w.total_errors, 2)
+        self.assertEqual(w.total_bytes, 4096+10)
+
+
+if __name__ == '__main__':
+    unittest.main()
 

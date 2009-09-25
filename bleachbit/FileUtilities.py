@@ -9,18 +9,21 @@
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 
 """
 File-related utilities
 """
+
 
 
 import datetime
@@ -33,8 +36,6 @@ import subprocess
 import sys
 import tempfile
 
-
-
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
@@ -42,6 +43,7 @@ from Options import options
 
 if 'posix' == os.name:
     from General import WindowsError
+
 
 
 class OpenFiles:
@@ -98,13 +100,9 @@ def bytes_to_human(bytes_i):
 
     for key in sorted(storage_multipliers.keys(), reverse = True):
         if bytes_i >= key:
-            abbrev = (1.0 * bytes_i) / key
+            abbrev = round((1.0 * bytes_i) / key, decimals)
             suf = storage_multipliers[key]
-            strformat = "%." + str(decimals) + "f" + suf
-            if hasattr(locale, 'format_string'):
-                return locale.format_string(strformat, abbrev)
-            else:
-                return locale.format(strformat, abbrev)
+            return locale.str(abbrev) + suf
 
     if bytes_i < 0:
         return "-" + bytes_to_human(abs(bytes_i))
@@ -381,10 +379,13 @@ class TestFileUtilities(unittest.TestCase):
         tests = [ ("-1B", bytes_to_human(-1)),
                   ("0", bytes_to_human(0)),
                   ("1B", bytes_to_human(1)),
-                  ("1.0KB", bytes_to_human(1024)),
-                  ("1.0MB", bytes_to_human(1024**2)),
-                  ("1.00GB", bytes_to_human(1024**3)),
-                  ("1.00TB", bytes_to_human(1024**4)) ]
+                  ("1KB", bytes_to_human(1024)),
+                  ("1.1KB", bytes_to_human(1110)),
+                  ("1MB", bytes_to_human(1024**2)),
+                  ("1.2MB", bytes_to_human(1289748)),
+                  ("1GB", bytes_to_human(1024**3)),
+                  ("1.23GB", bytes_to_human(1320702444)),
+                  ("1TB", bytes_to_human(1024**4)) ]
 
         for test in tests:
             self.assertEqual(test[0], test[1])
@@ -407,7 +408,7 @@ class TestFileUtilities(unittest.TestCase):
             except:
                 print "Warning: exception when setlocale to de_DE.utf8"
             else:
-                self.assertEqual("1,00TB", bytes_to_human(1024**4))
+                self.assertEqual("1,01GB", bytes_to_human(1024**3 + 5812389))
 
         # clean up
         if 'posix' == os.name:

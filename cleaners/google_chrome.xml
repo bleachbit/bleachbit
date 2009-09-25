@@ -23,6 +23,7 @@
   <label>Google Chrome</label>
   <description>Web browser</description>
   <running type="exe">chrome.exe</running>
+  <running type="exe">chrome</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
@@ -78,5 +79,13 @@
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Web Data</action>
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db</action>
     <action type="sqlite.vacuum">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Safe Browsing Bloom</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/Archived History</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/Cookies</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/Extension Cookies</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/History</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/History Index ????-??</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/Thumbnails</action>
+    <action type="sqlite.vacuum">~/.config/google-chrome/Default/Web Data</action>
   </option>
 </cleaner>

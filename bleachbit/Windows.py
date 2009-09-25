@@ -161,19 +161,13 @@ def get_fixed_drives():
             yield drive
 
 
-def empty_recycle_bin(really_delete):
+def empty_recycle_bin(drive, really_delete):
     """Empty the recycle bin or preview its size"""
-    for drive in win32api.GetLogicalDriveStrings().split('\x00'):
-        if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
-            bytes_used = shell.SHQueryRecycleBin(drive)[0]
-            if really_delete:
-                flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
-                shell.SHEmptyRecycleBin(None, drive, flags)
-                # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-                yield (bytes_used, _("Recycle bin %s") % drive)
-            else:
-                yield _("Recycle bin %s") % drive
-
+    bytes_used = shell.SHQueryRecycleBin(drive)[0]
+    if really_delete:
+        flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
+        shell.SHEmptyRecycleBin(None, drive, flags)
+    return bytes_used
 
 
 def split_registry_key(full_key):

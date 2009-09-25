@@ -34,6 +34,7 @@ import subprocess
 import sys
 import traceback
 
+import Command
 import FileUtilities
 import Special
 
@@ -66,7 +67,7 @@ class Cleaner:
 
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
-        self.options[option_id] = ( name, False, description )
+        self.options[option_id] = ( name, description )
 
     def add_running(self, detection_type, pathname):
         """Add a way to detect this program is currently running"""
@@ -75,22 +76,23 @@ class Cleaner:
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
         cleaner"""
-        ret = True
-        for (option_id, __name, __value) in self.get_options():
-            self.set_option(option_id, True)
-        try:
-            for pathname in self.list_files():
-                ret = False
-                break
-            if ret:
-                for pathname in self.other_cleanup(really_delete = False):
-                    ret = False
-                    break
-        except:
-            traceback.print_exc()
-        for (option_id, __name, __value) in self.get_options():
-            self.set_option(option_id, False)
-        return ret
+        for (option_id, __name) in self.get_options():
+            try:
+                for cmd in self.get_commands(option_id):
+                    return False
+            except:
+                print 'warning: exception in auto_hide(), cleaner=%s, option=%s' % (self.name, option_id)
+                traceback.print_exc()
+        return True
+
+    def get_commands(self, option_id):
+        """Get list of Command instances for option 'option_id'"""
+        for action in self.actions:
+            if option_id == action[0]:
+                for cmd in action[1].get_commands():
+                    yield cmd
+        if not self.options.has_key(option_id):
+            raise RuntimeError("Unknown option '%s'" % option_id)
 
     def get_description(self):
         """Brief description of the cleaner"""
@@ -108,15 +110,14 @@ class Cleaner:
         """Yield the names and descriptions of each option in a 2-tuple"""
         if self.options:
             for key in sorted(self.options.keys()):
-                yield ((self.options[key][0], self.options[key][2]))
+                yield ((self.options[key][0], self.options[key][1]))
 
     def get_options(self):
-        """Return user-configurable options in 3-tuple (id, name, enabled)"""
-        r = []
+        """Return user-configurable options in 2-tuple (id, name)"""
         if self.options:
             for key in sorted(self.options.keys()):
-                r.append((key, self.options[key][0], self.options[key][1]))
-        return r
+                yield (key, self.options[key][0])
+
 
     def get_warning(self, option_id):
         """Return a warning as string."""
@@ -154,25 +155,15 @@ class Cleaner:
 
     def list_files(self):
         """Iterate files that would be removed"""
-        for action in self.actions:
-            option_id = action[0]
-            if self.options[option_id][1]:
-                for pathname in action[1].list_files():
-                    yield pathname
+        raise NotImplementedError('deleted')
 
     def other_cleanup(self, really_delete):
         """Perform an operation more specialized than removing a file"""
-        for action in self.actions:
-            option_id = action[0]
-            if self.options[option_id][1]:
-                for pathname in action[1].other_cleanup(really_delete):
-                    yield pathname
+        raise NotImplementedError('deleted')
 
     def set_option(self, option_id, value):
         """Enable or disable an option"""
-        assert self.options.has_key(option_id)
-        self.options[option_id] = (self.options[option_id][0], \
-            value, self.options[option_id][2])
+        raise NotImplementedError('deleted')
 
     def set_warning(self, option_id, description):
         """Set a warning to be displayed when option is selected interactively"""
@@ -193,8 +184,6 @@ class Firefox(Cleaner):
         self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
         self.set_warning('places', _('This option deletes all bookmarks.'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
-        # TRANSLATORS: Vacuum is a verb.  You could translate the words
-        # 'compact' or 'optimize' instead.
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
         if 'posix' == os.name:
@@ -216,81 +205,69 @@ class Firefox(Cleaner):
     def get_name(self):
         return "Firefox"
 
-    def list_files(self):
+    def get_commands(self, option_id):
         # browser cache
         cache_base = None
         if 'posix' == os.name:
             cache_base = self.profile_dir
         elif 'nt' == os.name:
             cache_base = "$USERPROFILE\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
-        if self.options["cache"][1]:
+        if 'cache' == option_id:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
-                    yield filename
+                    yield Command.Delete(filename)
         files = []
         # cookies
-        if self.options["cookies"][1]:
+        if 'cookies' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.sqlite")
         # download history
-        if self.options["download_history"][1]:
+        if 'download_history' == option_id:
             # Firefox version 1
             files += FileUtilities.expand_glob_join(self.profile_dir, "downloads.rdf")
             # Firefox version 3
             files += FileUtilities.expand_glob_join(self.profile_dir, "downloads.sqlite")
         # forms
-        if self.options["forms"][1]:
+        if 'forms' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "formhistory.dat")
             files += FileUtilities.expand_glob_join(self.profile_dir, "formhistory.sqlite")
         # passwords
-        if self.options["passwords"][1]:
+        if 'passwords' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons.txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons[2-3].txt")
         # places database
-        if self.options["places"][1]:
+        if 'places' == option_id:
             # Firefox version 3
             files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite")
             files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite-journal")
             files += FileUtilities.expand_glob_join(self.profile_dir, "bookmarkbackups/*ookmark*json")
             # see also option 'url_history'
         # session restore
-        if self.options["session_restore"][1]:
+        if 'session_restore' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")
         # URL history
-        if self.options["url_history"][1]:
+        if 'url_history' == option_id:
             # Firefox version 1
             files += FileUtilities.expand_glob_join(self.profile_dir, "history.dat")
             # see also function other_cleanup()
         # finish
         for filename in files:
-            yield filename
+            yield Command.Delete(filename)
 
-
-
-    def other_cleanup(self, really_delete = False):
         # URL history
-        if self.options['url_history'][1] and not self.options["places"][1]:
+        if 'url_history' == option_id:
             for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
-                if really_delete:
-                    oldsize = os.path.getsize(path)
-                    Special.delete_mozilla_url_history(path)
-                    newsize = os.path.getsize(path)
-                    yield (oldsize - newsize, path)
-                else:
-                    yield path
+                    yield Command.Function(path, \
+                        Special.delete_mozilla_url_history,
+                        _('Delete history'))
 
         # vacuum
-        if self.options['vacuum'][1]:
+        if 'vacuum' == option_id:
             for path in FileUtilities.expand_glob_join(self.profile_dir, "*.sqlite"):
-                if really_delete:
-                    oldsize = os.path.getsize(path)
-                    FileUtilities.vacuum_sqlite3(path)
-                    newsize = os.path.getsize(path)
-                    yield (oldsize - newsize, path)
-                else:
-                    yield path
+                yield Command.Function(path, \
+                    FileUtilities.vacuum_sqlite3, _("Vacuum"))
 
 
 class OpenOfficeOrg(Cleaner):
@@ -431,12 +408,12 @@ class System(Cleaner):
     def get_name(self):
         return _("System")
 
-    def list_files(self):
+    def get_commands(self, option_id):
         # cache
-        if 'posix' == os.name and self.options["cache"][1]:
+        if 'posix' == os.name and 'cache' == option_id:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
 
         # menu
         menu_dirs = [ '~/.local/share/applications', \
@@ -450,22 +427,22 @@ class System(Cleaner):
             '~/.kde2/share/mimelnk/application/', \
             '~/.kde2/share/applnk' ]
 
-        if 'posix' == os.name and self.options["desktop_entry"][1]:
+        if 'posix' == os.name and 'desktop_entry' == option_id:
             for dirname in menu_dirs:
                 for filename in [fn for fn in children_in_directory(dirname, False) \
                     if fn.endswith('.desktop') ]:
                     if Unix.is_broken_xdg_desktop(filename):
-                        yield filename
+                        yield Command.Delete(filename)
 
         # unwanted locales
-        if 'posix' == os.name and self.options["localizations"][1]:
+        if 'posix' == os.name and 'localizations' == option_id:
             callback = lambda locale, language: options.get_language(language)
             for path in Unix.locales.localization_paths(callback):
-                yield path
+                yield Command.Delete(path)
 
         # Windows logs
         files = []
-        if 'nt' == os.name and self.options['logs'][1]:
+        if 'nt' == os.name and 'logs' == option_id:
             paths = ( \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
@@ -494,18 +471,18 @@ class System(Cleaner):
                     files += [ globbed ]
 
         # most recently used documents list
-        if 'posix' == os.name and self.options["recent_documents"][1]:
+        if 'posix' == os.name and 'recent_documents' == option_id:
             files += [ os.path.expanduser("~/.recently-used") ]
 
         # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
-        if 'posix' == os.name and self.options["rotated_logs"][1]:
+        if 'posix' == os.name and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
-                yield path
+                yield Command.Delete(path)
 
 
         # temporary
-        if 'posix' == os.name and self.options["tmp"][1]:
+        if 'posix' == os.name and 'tmp' == option_id:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
@@ -515,22 +492,22 @@ class System(Cleaner):
                         FileUtilities.ego_owner(path) and \
                         not self.whitelisted(path)
                     if ok:
-                        yield path
+                        yield Command.Delete(path)
 
-        if 'nt' == os.name and self.options["tmp"][1]:
+        if 'nt' == os.name and 'tmp' == option_id:
             dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
             dirname = os.path.expandvars("$windir\\temp\\")
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
 
 
         # trash
-        if 'posix' == os.name and self.options["trash"][1]:
+        if 'posix' == os.name and 'trash' == option_id:
             dirname = os.path.expanduser("~/.Trash")
             for filename in children_in_directory(dirname, False):
-                yield filename
+                yield Command.Delete(filename)
             # fixme http://www.ramendik.ru/docs/trashspec.html
             # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
             # ~/.local/share/Trash
@@ -538,67 +515,63 @@ class System(Cleaner):
             # * KDE 4.1.3, Ubuntu 8.10
             dirname = os.path.expanduser("~/.local/share/Trash/files")
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
             dirname = os.path.expanduser("~/.local/share/Trash/info")
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
             dirname = os.path.expanduser("~/.local/share/Trash/expunged")
             # desrt@irc.gimpnet.org tells me that the trash
             # backend puts files in here temporary, but in some situations
             # the files are stuck.
             for filename in children_in_directory(dirname, True):
-                yield filename
+                yield Command.Delete(filename)
 
-
-        # finish
+        # return queued files
         for filename in files:
             if os.path.lexists(filename):
-                yield filename
+                yield Command.Delete(filename)
 
-    def other_cleanup(self, really_delete):
         # clipboard
-        if HAVE_GTK and self.options["clipboard"][1]:
-            if really_delete:
+        if HAVE_GTK and 'clipboard' == option_id:
+            def clear_clipboard():
                 gtk.gdk.threads_enter()
                 clipboard = gtk.clipboard_get()
                 clipboard.set_text("")
                 gtk.gdk.threads_leave()
-                yield (0, _("Clipboard"))
-            else:
-                yield _("Clipboard")
+                return 0
+            yield Command.Function(None, clear_clipboard, _('Clipboard'))
 
 
         # recent documents
-        if 'posix' == os.name and self.options["recent_documents"][1]:
+        if 'posix' == os.name and 'recent_documents' == option_id:
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
             # in memory if it is simply deleted, so it must be shredded
             # (or at least truncated).
             pathname = os.path.expanduser("~/.recently-used.xbel")
-            if really_delete:
-                oldsize = os.path.getsize(pathname)
-                FileUtilities.delete(pathname, shred = True)
-                yield (oldsize, pathname)
+            if options.get('shred'):
+                yield Command.Shred(pathname)
             else:
-                yield pathname
+                yield Command.Truncate(pathname)
 
 
+        # overwrite free space
         shred_drives = options.get_list('shred_drives')
-        if self.options["free_disk_space"][1] and shred_drives:
+        if 'free_disk_space' == option_id and shred_drives:
             for pathname in shred_drives:
                 # TRANSLATORS: 'Free' could also be translated 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
                 display = _("Overwrite free disk space %s") % pathname
-                if really_delete:
-                    for dummy in FileUtilities.wipe_path(pathname, idle = True):
+                def wipe_path_func():
+                    for ret in FileUtilities.wipe_path(pathname, idle = True):
                         # Yield control to GTK idle because this process
                         # is very slow.
-                        yield True
-                    yield (0, display)
-                else:
-                    yield display
+                        yield ret
+                    yield 0
+                yield Command.Function(None, wipe_path_func, display)
+
 
         # Windows MRU
-        if 'nt' == os.name and self.options['mru'][1]:
+        if 'nt' == os.name and 'mru' == option_id:
             # reference: http://support.microsoft.com/kb/142298
             keys = ( \
                 # search assistant
@@ -624,20 +597,16 @@ class System(Cleaner):
                 # run command
                 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
             for key in keys:
-                ret = Windows.delete_registry_key(key, really_delete)
-                if not ret:
-                    # nothing to delete or nothing was deleted
-                    continue
-                if really_delete:
-                    yield (0, key)
-                else:
-                    yield key
+                yield Command.Winreg(key)
 
-
-        if 'nt' == os.name and self.options['recycle_bin'][1]:
-            for ret in Windows.empty_recycle_bin(really_delete):
-                yield ret
-
+        if 'nt' == os.name and 'recycle_bin' == option_id:
+            for drive in Windows.get_fixed_drives():
+                # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+                label = _("Recycle bin %s") % drive
+                def emptyrecyclebin():
+                    return Windows.empty_recycle_bin(drive, really_delete)
+                # fixme: enable size preview
+                yield Command.Function(None, emptyrecyclebin, label)
 
 
     def whitelisted(self, pathname):
@@ -670,6 +639,23 @@ import unittest
 
 class TestCleaner(unittest.TestCase):
 
+    @staticmethod
+    def action_to_cleaner(action_str):
+        """Given an action XML fragment, return a cleaner"""
+        from xml.dom.minidom import parseString
+        from Action import ActionProvider
+        cleaner = Cleaner()
+        dom = parseString(action_str)
+        action_node = dom.childNodes[0]
+        atype = action_node.getAttribute('type')
+        provider = None
+        for actionplugin in ActionProvider.plugins:
+            if actionplugin.action_key == atype:
+                provider = actionplugin(action_node)
+        cleaner.add_action('option1', provider)
+        cleaner.add_option('option1', 'name1', 'description1')
+        return cleaner
+
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
@@ -689,26 +675,26 @@ class TestCleaner(unittest.TestCase):
 
         self.assert_(len(self.actions) > 0)
 
-        from xml.dom.minidom import parseString
-        from Action import ActionProvider
         for action_str in self.actions:
-            cleaner = Cleaner()
-            dom = parseString(action_str)
-            action_node = dom.childNodes[0]
-            atype = action_node.getAttribute('type')
-            provider = None
-            for actionplugin in ActionProvider.plugins:
-                if actionplugin.action_key == atype:
-                    provider = actionplugin(action_node)
-            cleaner.add_action('option1', provider)
-            cleaner.add_option('option1', 'name1', 'description1')
-            cleaner.set_option('option1', True)
-            pathname = cleaner.list_files().next()
-            self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
-            for pathname in cleaner.list_files():
-                self.assert_(os.path.lexists(pathname), "Does not exist: '%s'" % pathname)
-            for pathname in cleaner.other_cleanup(really_delete = False):
-                self.assert_(type(pathname) is str)
+            cleaner = self.action_to_cleaner(action_str)
+            count = 0
+            for cmd in cleaner.get_commands('option1'):
+                for result in cmd.execute(False):
+                    self.assertEqual(result['n_deleted'], 1)
+                    self.assert_(isinstance(result['size'], int) or \
+                        isinstance(result['size'], long))
+                    pathname = result['path']
+                    self.assert_(os.path.lexists(pathname), \
+                        "Does not exist: '%s'" % pathname)
+                    count += 1
+            self.assert_(count > 0)
+        # should yield nothing
+        cleaner.add_option('option2', 'name2', 'description2')
+        for cmd in cleaner.get_commands('option2'):
+            print cmd
+            self.assert_(False, 'option2 should yield nothing')
+        # should fail
+        self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
 
     def test_auto_hide(self):
         for key in sorted(backends):
@@ -725,29 +711,41 @@ class TestCleaner(unittest.TestCase):
 
     def test_get_options(self):
         for key in sorted(backends):
-            for (test_id, name, value) in backends[key].get_options():
+            for (test_id, name) in backends[key].get_options():
                 self.assert_ (type(test_id) is str)
                 self.assert_ (type(name) is str)
-                self.assert_ (type(value) is bool)
 
-    def test_list_files(self):
-        for key in sorted(backends):
-            print "debug: test_list_files: key='%s'" % (key, )
-            for (option_id, __name, __value) in backends[key].get_options():
-                backends[key].set_option(option_id, True)
-            for filename in backends[key].list_files():
-                self.assert_ (type(filename) is str)
-                self.assert_ (os.path.lexists(filename), \
-                    "In backend '%s' path does not exist: '%s' \
-                    " % (key, filename))
 
-    def test_other_cleanup(self):
-        """Test the method other_cleanup()"""
+    def test_get_commands(self):
         for key in sorted(backends):
-            for (cleaner_id, __name, __value) in backends[key].get_options():
-                backends[key].set_option(cleaner_id, True)
-            for description in backends[key].other_cleanup(False):
-                self.assert_(type(description) is str or None == description)
+            print "debug: test_get_commands: key='%s'" % (key, )
+            for (option_id, __name) in backends[key].get_options():
+                for cmd in backends[key].get_commands(option_id):
+                    for result in cmd.execute(really_delete = False):
+                        if result != True:
+                            break
+                    self.assert_(type(result) is dict, "result is a %s" % type(result))
+                    filename = result['path']
+                    self.assert_(isinstance(filename,str) or \
+                        None == filename, str(result))
+                    if isinstance(filename, str):
+                        self.assert_ (os.path.lexists(filename), \
+                            "In backend '%s' path does not exist: '%s' \
+                            " % (key, filename))
+        # make sure trash and tmp don't return the same results
+        if 'nt' == os.name:
+            return
+        def get_files(option_id):
+            ret = []
+            for cmd in backends['system'].get_commands(option_id):
+                result = cmd.execute(False).next()
+                ret.append(result['path'])
+            return ret
+        trash_paths = get_files('trash')
+        tmp_paths = get_files('tmp')
+        for tmp_path in tmp_paths:
+            self.assert_(tmp_path not in trash_paths)
+
 
     def test_whitelist(self):
         tests = [ \

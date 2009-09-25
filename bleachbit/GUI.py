@@ -139,7 +139,7 @@ class TreeInfoModel:
                 print "info: automatically hiding cleaner '%s'" % (c_id)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
-            for (o_id, o_name, o_value) in backends[key].get_options():
+            for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id))
         self.row_changed_handler_id = self.tree_store.connect("row-changed", \

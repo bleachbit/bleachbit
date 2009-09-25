@@ -74,7 +74,7 @@ def cleaners_list():
     for key in sorted(backends):
         c_name = backends[key].get_name()
         c_id = backends[key].get_id()
-        for (o_id, o_name, o_value) in backends[key].get_options():
+        for (o_id, o_name) in backends[key].get_options():
             yield "%s.%s" % (c_id, o_id)
 
 
@@ -111,7 +111,7 @@ def args_to_operations(args):
         # default to false
         if not operations.has_key(cleaner_id):
             operations[cleaner_id] = []
-            for (option_id2, o_name, o_value) in backends[cleaner_id].get_options():
+            for (option_id2, o_name) in backends[cleaner_id].get_options():
                 operations[cleaner_id].append( [ option_id2, default ] )
         if '*' == option_id:
             continue
@@ -216,7 +216,8 @@ class TestCLI(unittest.TestCase):
             devnull.close()
             pos = output[2].find('Traceback (most recent call last)')
             if pos > -1:
-                print output[2]
+                print "Saw the following error when using args '%s':\n %s" \
+                    % (args, output[2])
             self.assertEqual(pos, -1)
 
 
