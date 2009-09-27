@@ -69,7 +69,7 @@ echo Purging unnecessary locales
 %PYTHON_DIR%\python.exe setup.py clean-dist
 for /F "tokens=*" %%G in ('dir /s /b atk10.mo') do del %%G
 for /F "tokens=*" %%G in ('dir /s /b glib20.mo') do del %%G
-for /F "tokens=*" %%G in ('dir /s /b gtk-properties.mo') do del %%G
+for /F "tokens=*" %%G in ('dir /s /b gtk20-properties.mo') do del %%G
 
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
