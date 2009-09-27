@@ -50,16 +50,14 @@ del bleachbit_console.py
 set CANARY=dist\bleachbit.exe
 if not exist %CANARY% goto error
 
-echo Copying icon
-copy bleachbit.png dist\share
-
-echo Copying GTK files
+echo Copying GTK files and icon
 copy %GTK_DIR%\bin\intl.dll dist
 mkdir dist\etc
 xcopy %GTK_DIR%\etc dist\etc /i /s /q
 mkdir dist\lib
 xcopy %GTK_DIR%\lib dist\lib /i /s /q
 mkdir dist\share
+copy bleachbit.png dist\share\
 xcopy %GTK_DIR%\share dist\share /i /s /q
 
 echo Compressing executables
