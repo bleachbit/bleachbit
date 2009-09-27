@@ -108,19 +108,17 @@ set CANARY=dist\library.zip
 if not exist %CANARY% goto error
 
 echo Building portable
-cd dist
-%SZ_EXE% a -mx=9 -md=32m ..\BleachBit-portable.zip
+rd /s /q BleachBit-portable
+xcopy /e /i dist BleachBit-Portable
+%SZ_EXE% a -mx=9 -md=32m BleachBit-Win32-portable-full.zip BleachBit-portable
 
 :nsis
 echo Building installer
 if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" windows\bleachbit.nsi
 if not "%1" == "fast" %NSIS_EXE% windows\bleachbit.nsi
 
-
-
 echo Success!
 goto exit
-
 
 :error
 echo %CANARY% not found
