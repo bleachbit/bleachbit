@@ -63,11 +63,17 @@ xcopy %GTK_DIR%\share dist\share /i /s /q
 echo Compressing executables
 if not "%1" == "fast" for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" %UPX_OPTS%
 
-echo Purging unnecessary locales
+echo Purging unnecessary GTK+ files
 %PYTHON_DIR%\python.exe setup.py clean-dist
 for /F "tokens=*" %%G in ('dir /s /b atk10.mo') do del %%G
 for /F "tokens=*" %%G in ('dir /s /b glib20.mo') do del %%G
 for /F "tokens=*" %%G in ('dir /s /b gtk20-properties.mo') do del %%G
+del dist\etc\gtk-2.0\gtk.immodules
+del dist\lib\charset.alias
+rd /s /q dist\etc\pango
+rd /s /q dist\share\themes\Default
+rd /s /q dist\share\themes\Emacs
+rd /s /q dist\share\themes\Raleigh
 
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
