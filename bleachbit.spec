@@ -45,7 +45,11 @@ BuildArch:      noarch
 
 %if 0%{?mandriva_version}
 BuildRequires:  desktop-file-utils
+%if 0%{?mandriva_version} >= 200910
+BuildRequires:  libpython2.6-devel
+%else
 BuildRequires:  libpython2.5-devel
+%endif
 Requires:       gnome-python
 Requires:       gnome-python-gnomevfs
 Requires:       pygtk2.0 >= 2.6
