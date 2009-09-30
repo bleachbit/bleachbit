@@ -671,7 +671,7 @@ class TestCleaner(unittest.TestCase):
             self.actions.append( \
                 '<action type="children" directories="true">$WINDIR\\system32\\</action>')
         elif 'posix' == os.name:
-            self.actions.append('<action type="file">~/.bash_profile</action>')
+            self.actions.append('<action type="file">%s</action>' % __file__)
             self.actions.append('<action type="glob">/sbin/*sh</action>')
             self.actions.append('<action type="children" directories="false">/sbin/</action>')
             self.actions.append('<action type="children" directories="true">/var/log/</action>')
