@@ -792,19 +792,26 @@ class TestCleaner(unittest.TestCase):
         """Validate the command returned valid results"""
         import types
         self.assert_(type(result) is dict, "result is a %s" % type(result))
-        filename = result['path']
-        self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
-            "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
-        if isinstance(filename, str) and \
-            not filename[0:2] == 'HK':
-            self.assert_ (os.path.lexists(filename), \
-                "Path does not exist: '%s'" % (filename))
-        self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
-            "size is %s" % str(result['size']))
+        # label
+        self.assert_(isinstance(result['label'], (str, unicode)))
+        self.assert_(len(result['label'].strip()) > 0)
+        # n_*
         self.assert_(isinstance(result['n_deleted'], (int, long)))
         self.assert_(result['n_deleted'] >= 0)
         self.assert_(result['n_deleted'] <= 1)
-
+        self.assertEqual(result['n_special'] + result['n_deleted'], 1)
+        # size
+        self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
+            "size is %s" % str(result['size']))
+        # path
+        filename = result['path']
+        self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
+            "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
+        if isinstance(filename, (str, unicode)) and \
+            not filename[0:2] == 'HK':
+            self.assert_ (os.path.lexists(filename), \
+                "Path does not exist: '%s'" % (filename))
+        
 
 if __name__ == '__main__':
     unittest.main()
