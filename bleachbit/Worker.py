@@ -107,7 +107,7 @@ class Worker:
             else:
                 size = "?B"
             if ret['path']:
-                path = ' ' + ret['path']
+                path = ret['path']
             else:
                 path = ''
             line = "%s %s %s\n" % (ret['label'], size, path)
