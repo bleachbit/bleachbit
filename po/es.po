@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-24 21:52-0600\n"
-"PO-Revision-Date: 2009-09-28 23:45+0000\n"
+"PO-Revision-Date: 2009-09-30 04:49+0000\n"
 "Last-Translator: Andres E. Rodriguez Lazo <andreserl@ubuntu-pe.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-29 01:16+0000\n"
+"X-Launchpad-Export-Date: 2009-09-30 05:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -72,7 +72,7 @@ msgstr "Borrar la caché"
 #: ../cleaners/gpodder.xml ../bleachbit/Action.py:177
 #: ../bleachbit/Cleaner.py:188 ../bleachbit/Cleaner.py:271
 msgid "Vacuum"
-msgstr "Compactar base de datos"
+msgstr "Compactar"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -204,7 +204,7 @@ msgstr "Cliente de chat"
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr "Logs de chats"
+msgstr "Logs de chat"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -306,7 +306,7 @@ msgstr "Podcasts descargados"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr "Borrar las últimas sesiones incluyendo la actual"
+msgstr "Borrar la actual y últimas sesiones"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
@@ -526,7 +526,7 @@ msgstr "Borrar clave del registro"
 #: ../bleachbit/FileUtilities.py:189
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
-"No se puede importar el modulo sqlite3 de Python: se requiere Python 2.5 o "
+"No se puede importar el módulo sqlite3 de Python: se requiere Python 2.5 o "
 "posterior."
 
 #: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:527
@@ -672,6 +672,7 @@ msgstr ""
 "  Francisco Javier Pérez Davó https://launchpad.net/~perezdavo\n"
 "  Gonzalo Testa https://launchpad.net/~gonzalogtesta\n"
 "  Pablo Ponce https://launchpad.net/~pabloponce\n"
+"  elega https://launchpad.net/~elega\n"
 "  juancarlospaco https://launchpad.net/~juancarlospaco"
 
 #: ../bleachbit/GUI.py:450
@@ -755,7 +756,7 @@ msgid ""
 "damage your computer."
 msgstr ""
 "El fichero de definiciones del limpiador es nuevo. Unas definiciones "
-"maliciosas pueden dañar tu ordenador."
+"maliciosas pueden dañar su ordenador."
 
 #: ../bleachbit/Unix.py:357 ../bleachbit/Unix.py:387 ../bleachbit/Unix.py:545
 #, python-format
