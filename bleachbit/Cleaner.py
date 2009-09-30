@@ -688,7 +688,7 @@ class TestCleaner(unittest.TestCase):
                     self.assert_(os.path.lexists(pathname), \
                         "Does not exist: '%s'" % pathname)
                     count += 1
-                    self.validate_result(result)
+                    self.validate_result(self, result)
             self.assert_(count > 0)
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
@@ -726,7 +726,7 @@ class TestCleaner(unittest.TestCase):
                     for result in cmd.execute(really_delete = False):
                         if result != True:
                             break
-                    self.validate_result(result)
+                    self.validate_result(self, result)
         # make sure trash and tmp don't return the same results
         if 'nt' == os.name:
             return
@@ -760,7 +760,7 @@ class TestCleaner(unittest.TestCase):
                             break
                     msg = "Expected no files to be deleted but got '%s'" % str(result)
                     self.assert_(not isinstance(cmd, Command.Delete), msg)
-                    self.validate_result(result)
+                    self.validate_result(self, result)
         glob.iglob = _iglob
         os.path.exists = _exists
         os.path.lexists = _lexists
@@ -787,6 +787,7 @@ class TestCleaner(unittest.TestCase):
             self.assertEqual(backends['system'].whitelisted(test[0]), test[1], test[0])
 
 
+    @staticmethod
     def validate_result(self, result):
         """Validate the command returned valid results"""
         import types
