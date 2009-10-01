@@ -26,21 +26,49 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action type="children" directories="false">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache</action>
+    <action type="children" directories="false">~/.cache/chromium/</action>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cookies</action>
+    <action type="file">~/.config/chromium/Default/Cookies</action>
+    <action type="file">~/.config/chromium/Default/Extension Cookies</action>
   </option>
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History</action>
     <action type="glob">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*</action>
+    <action type="file">~/.config/chromium/Default/Archived History</action>
+    <action type="file">~/.config/chromium/Default/Archived History-journal</action>
+    <action type="file">~/.config/chromium/Default/History</action>
+    <action type="glob">~/.config/chromium/Default/History Index ????-??</action>
+    <action type="glob">~/.config/chromium/Default/History Index ????-??-journal</action>
+    <action type="file">~/.config/chromium/Default/History-journal</action>
+    <action type="file">~/.config/chromium/Default/Thumbnails</action>
+    <action type="file">~/.config/chromium/Default/Thumbnails-journal</action>
+    <action type="file">~/.config/chromium/Default/Visited Links</action>
   </option>
   <option id="current_session">
     <label>Current session</label>
     <description>Delete the current session</description>
     <action type="file">~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Current Session</action>
+    <action type="file">~/.config/chromium/Default/Current Session</action>
+    <action type="file">~/.config/chromium/Default/Current Tabs</action>
+    <action type="file">~/.config/chromium/Default/Last Session</action>
+    <action type="file">~/.config/chromium/Default/Last Tabs</action>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action type="sqlite.vacuum">~/.config/chromium/Safe Browsing Bloom</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/Archived History</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/Cookies</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/Extension Cookies</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/History</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/History Index ????-??</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/Thumbnails</action>
+    <action type="sqlite.vacuum">~/.config/chromium/Default/Web Data</action>
   </option>
 </cleaner>
