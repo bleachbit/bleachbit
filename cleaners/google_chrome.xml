@@ -29,6 +29,7 @@
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Google\Chrome\User Data\Default\Cache\</action>
     <action type="children" directories="false">~/.config/google-chrome/Default/Cache/</action>
+    <action type="children" directories="false">~/.cache/google-chrome/</action>
   </option>
   <option id="cookies">
     <label>Cookies</label>
