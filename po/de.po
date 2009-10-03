@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-24 21:52-0600\n"
-"PO-Revision-Date: 2009-09-26 05:09+0000\n"
+"PO-Revision-Date: 2009-10-03 10:11+0000\n"
 "Last-Translator: MixCool <lars.thoms@mixcool.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-26 06:12+0000\n"
+"X-Launchpad-Export-Date: 2009-10-03 20:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -48,7 +48,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Säubert die Datenbankfragmente, um Platz zu sparen und die Geschwindigkeit "
+"Reinigt die Datenbankfragmente, um Platz zu sparen und die Geschwindigkeit "
 "ohne Datenverluste zu erhöhen"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
@@ -341,7 +341,7 @@ msgstr "Index"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Unnötige Dateiensäuberer"
+msgstr "Reiniger für unnötige Dateien"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
@@ -434,7 +434,7 @@ msgstr "Zwischenablage"
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Säubert die Zwischenablage der Desktop-Umgebung, welche zum Kopieren und "
+"Reinigt die Zwischenablage der Desktop-Umgebung, welche zum Kopieren und "
 "Einfügen benutzt wird"
 
 #: ../bleachbit/Cleaner.py:400
@@ -473,7 +473,7 @@ msgstr "Papierkorb %s"
 #: ../bleachbit/CLI.py:102
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "ungültiger Säuberer: %s"
+msgstr "Ungültiger Reiniger: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -481,11 +481,11 @@ msgstr "ungültiger Säuberer: %s"
 #. http://bleachbit.sourceforge.net/documentation/command-line
 #: ../bleachbit/CLI.py:138
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "%prog [Optionen] Säuberer.Option1 Säuberer.Option2"
+msgstr "%prog [Optionen] Reiniger.Option1 Reiniger.Option2"
 
 #: ../bleachbit/CLI.py:141
 msgid "list cleaners"
-msgstr "Liste alle Säuberer auf"
+msgstr "Listet alle Reiniger auf"
 
 #: ../bleachbit/CLI.py:143
 msgid "delete files and make other permanent changes"
@@ -562,7 +562,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:81
 msgid "Hide irrelevant cleaners"
-msgstr "Verstecke die irrelevanten Säuberer"
+msgstr "Irrelevante Reiniger verstecken"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -714,7 +714,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:570
 msgid "Delete files in the selected operations"
-msgstr "Lösche Dateien in den ausgewähleten Operationen"
+msgstr "Dateien in den ausgewählten Operationen löschen"
 
 #: ../bleachbit/GUI.py:648
 msgid "Update BleachBit"
@@ -738,7 +738,7 @@ msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr ""
-"Die folgende Säuberungs-Definitions-Datei wurde verändert. Bösartige "
+"Die folgende Reinigungs-Definitions-Datei wurde verändert. Bösartige "
 "Definitionen können ihren Computer schädigen."
 
 #: ../bleachbit/RecognizeCleanerML.py:69
@@ -746,7 +746,7 @@ msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr ""
-"Die folgende Säuberungs-Definitions-Datei ist neu. Bösartige Definitionen "
+"Die folgende Reinigungs-Definitions-Datei ist neu. Bösartige Definitionen "
 "können ihren Computer schädigen."
 
 #: ../bleachbit/Unix.py:357 ../bleachbit/Unix.py:387 ../bleachbit/Unix.py:545
@@ -761,8 +761,8 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s konnte nicht gesäubert werden, weil es noch aktiv ist. Bitte beende es "
-"und wiederhole den Vorgang."
+"%s konnte nicht gereinigt werden, da es noch aktiv ist. Bitte beenden Sie "
+"das Programm und wiederholen den Vorgang."
 
 #: ../bleachbit/Update.py:84
 msgid "Error when checking for updates: "
@@ -783,7 +783,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:162
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Bitte warten. %s wird gesäubert."
+msgstr "Bitte warten Sie. %s wird gereinigt."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:165
