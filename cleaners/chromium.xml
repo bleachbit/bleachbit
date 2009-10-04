@@ -62,13 +62,13 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Safe Browsing Bloom"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/Archived History"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/Cookies"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/Extension Cookies"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/History"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Safe Browsing Bloom"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Archived History"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/History"/>
     <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/Thumbnails"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/Web Data"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Thumbnails"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Web Data"/>
   </option>
 </cleaner>

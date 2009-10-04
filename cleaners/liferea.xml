@@ -36,10 +36,10 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/liferea.db"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/permissions.sqlite"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/places.sqlite"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.6/liferea.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/liferea.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/mozilla/liferea/permissions.sqlite"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/mozilla/liferea/places.sqlite"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.6/liferea.db"/>
   </option>
 </cleaner>

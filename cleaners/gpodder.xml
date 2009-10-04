@@ -29,6 +29,6 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/gpodder/database.sqlite"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/gpodder/database.sqlite"/>
   </option>
 </cleaner>
