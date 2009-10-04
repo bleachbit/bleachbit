@@ -51,28 +51,41 @@
     <warning>Deleting the cache will slow down application usage</warning>
     <!-- An option has one or more actions.
 
-           There are three different types of actions.  In each case,
-           you should make the pattern as specific as possible to
-           avoid deleting files unintentionally.
+           Actions generally have two parts: a search method (how to
+           find a file) and a command (what to do with the file once
+           it is found). You should make the pattern as specific as 
+           possible to avoid deleting files unintentionally.
 
-           type="file" deletes a single file -->
-    <action type="file">/tmp/secret.log</action>
-    <!-- type="children" deletes all files under the directory (but
-           not the parent).  In this case, the attribute 'directories'
-           is required to specify whether to delete directories too
-           (or if false, leave the directories empty). -->
-    <action type="children" directories="false">/var/tmp/</action>
-    <!-- type="glob" deletes all pathnames matching the shell glob
+           search="file" finds a single file.
+           command="delete" deletes it.  -->
+    <action search="file" command="delete" path="/tmp/secret.log"/>
+    <!-- On POSIX systems for system logs that may be in use, it's better
+         to truncate than to delete. -->
+    <action search="file" command="truncate" path="/var/log/messages"/>
+    <!-- search="walk.all" deletes all files and directories under the directory (but
+           not the parent). It walks each subdirectory too.  -->
+    <action search="walk.all" command="delete" path="/var/tmp/"/>
+    <!-- search="walk.files" deletes all files (but not any directories), walking
+         in to each subdirectory. -->
+    <action search="walk.files" path="/var/tmp/"/>
+    <!-- search="glob" deletes all pathnames matching the shell glob
            pattern described in the Python documentation.
            http://www.python.org/doc/2.5.2/lib/module-glob.html -->
-    <action type="glob">/tmp/*.bak</action>
-    <action type="glob">/var/log/*.[0-9].gz</action>
-    <action type="glob">/tmp/?.bak</action>
-    <!-- type="winreg" without the attribute 'name' deletes 
+    <action search="glob" path="/tmp/*.bak"/>
+    <action search="glob" path="/var/log/*.[0-9].gz"/>
+    <action search="glob" path="/tmp/?.bak"/>
+    <!-- With search=file, glob, walk.all, and walk.files, BleachBit expands
+         ~ to the user's personal home directory and any existing environment
+         variables such as $HOME and $USERPROFILE -->
+    <action command="delete" search="file" path="~/.xsession-errors"/>
+    <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
+    <!-- command=sqlite.vacuum defragments an SQLite 3 database -->
+    <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
+    <!-- command="winreg" without the attribute 'name' deletes
            Windows registry keys -->
-    <action type="winreg">HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU</action>
-    <!-- type="winreg" with the attribute 'name' deletes a 
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
+    <!-- command="winreg" with the attribute 'name' deletes a
            named value under a Windows registry key -->
-    <action type="winreg" name="CurrentVersion">HKCU\Software\BleachBit</action>
+    <action command="winreg" name="CurrentVersion" path="HKCU\Software\BleachBit"/>
   </option>
 </cleaner>
