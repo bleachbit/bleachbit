@@ -250,7 +250,7 @@ class Winreg(ActionProvider):
     action_key = 'winreg'
 
     def __init__(self, action_element):
-        self.keyname = General.getText(action_element.childNodes)
+        self.keyname = action_element.getAttribute('path')
         self.name = action_element.getAttribute('name')
 
 
