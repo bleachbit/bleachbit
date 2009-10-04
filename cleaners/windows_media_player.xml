@@ -24,9 +24,9 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action type="winreg">HKCU\Software\Microsoft\MediaPlayer\Player\RecentFileList</action>
-    <action type="winreg">HKCU\Software\Microsoft\MediaPlayer\Player\RecentURLList</action>
-    <action type="winreg" name="OpenDir">HKCU\Software\Microsoft\MediaPlayer\Player\Settings</action>
-    <action type="winreg" name="SaveAsDir">HKCU\Software\Microsoft\MediaPlayer\Player\Settings</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\RecentFileList"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\RecentURLList"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="OpenDir"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="SaveAsDir"/>
   </option>
 </cleaner>

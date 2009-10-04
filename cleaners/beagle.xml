@@ -25,16 +25,16 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.beagle/TextCache</action>
+    <action command="delete" search="walk.files" path="~/.beagle/TextCache"/>
   </option>
   <option id="indexes">
     <label>Search indexes</label>
     <description>Delete the search indexes</description>
-    <action type="children" directories="true">~/.beagle/Indexes</action>
+    <action command="delete" search="walk.all" path="~/.beagle/Indexes"/>
   </option>
   <option id="logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action type="children" directories="false">~/.beagle/Log</action>
+    <action command="delete" search="walk.files" path="~/.beagle/Log"/>
   </option>
 </cleaner>

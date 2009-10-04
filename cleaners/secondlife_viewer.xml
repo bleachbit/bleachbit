@@ -25,13 +25,13 @@
   <option id="Cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.secondlife/cache/</action>
-    <action type="children" directories="false">$USERPROFILE\Application Data\SecondLife\cache\</action>
+    <action command="delete" search="walk.files" path="~/.secondlife/cache/"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Application Data\SecondLife\cache\"/>
   </option>
   <option id="Logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action type="children" directories="false">~/.secondlife/logs/</action>
-    <action type="children" directories="false">$USERPROFILE\Application Data\SecondLife\logs\</action>
+    <action command="delete" search="walk.files" path="~/.secondlife/logs/"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Application Data\SecondLife\logs\"/>
   </option>
 </cleaner>

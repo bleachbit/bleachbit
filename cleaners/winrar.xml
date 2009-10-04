@@ -24,6 +24,6 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action type="winreg">HKCU\Software\WinRAR\ArcHistory</action>
+    <action command="winreg" path="HKCU\Software\WinRAR\ArcHistory"/>
   </option>
 </cleaner>

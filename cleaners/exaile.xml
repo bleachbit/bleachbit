@@ -24,17 +24,17 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.exaile/cache/</action>
-    <action type="children" directories="false">~/.exaile/covers/</action>
+    <action command="delete" search="walk.files" path="~/.exaile/cache/"/>
+    <action command="delete" search="walk.files" path="~/.exaile/covers/"/>
   </option>
   <option id="downloaded_podcasts">
     <label>Downloaded podcasts</label>
     <description>Delete downloaded podcasts</description>
-    <action type="children" directories="false">~/.exaile/podcasts/</action>
+    <action command="delete" search="walk.files" path="~/.exaile/podcasts/"/>
   </option>
   <option id="log">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">~/.exaile/exaile.log</action>
+    <action command="delete" search="file" path="~/.exaile/exaile.log"/>
   </option>
 </cleaner>

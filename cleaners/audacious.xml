@@ -24,16 +24,16 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.cache/audacious/thumbs/</action>
+    <action command="delete" search="walk.files" path="~/.cache/audacious/thumbs/"/>
   </option>
   <option id="log">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">~/.config/audacious/log</action>
+    <action command="delete" search="file" path="~/.config/audacious/log"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action type="file">~/.config/audacious/playlist.xspf</action>
+    <action command="delete" search="file" path="~/.config/audacious/playlist.xspf"/>
   </option>
 </cleaner>

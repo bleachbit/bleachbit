@@ -24,7 +24,7 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.gnome2/rhythmbox/jamendo/</action>
-    <action type="children" directories="false">~/.gnome2/rhythmbox/magnatune/</action>
+    <action command="delete" search="walk.files" path="~/.gnome2/rhythmbox/jamendo/"/>
+    <action command="delete" search="walk.files" path="~/.gnome2/rhythmbox/magnatune/"/>
   </option>
 </cleaner>

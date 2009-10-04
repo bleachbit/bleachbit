@@ -25,14 +25,14 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the avatars and emoticons cache</description>
-    <action type="glob">~/.config/emesene1.0/*/cache/*.tmp</action>
-    <action type="glob">~/.config/emesene1.0/*/cache/*_[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]</action>
+    <action command="delete" search="glob" path="~/.config/emesene1.0/*/cache/*.tmp"/>
+    <action command="delete" search="glob" path="~/.config/emesene1.0/*/cache/*_[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]"/>
   </option>
   <option id="logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
-    <action type="glob">~/.config/emesene1.0/*/logs/*</action>
-    <action type="glob">~/.config/emesene2/*/log</action>
-    <action type="glob">~/.config/emesene2/*/log-journal</action>
+    <action command="delete" search="glob" path="~/.config/emesene1.0/*/logs/*"/>
+    <action command="delete" search="glob" path="~/.config/emesene2/*/log"/>
+    <action command="delete" search="glob" path="~/.config/emesene2/*/log-journal"/>
   </option>
 </cleaner>

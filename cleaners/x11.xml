@@ -24,6 +24,6 @@
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action type="file">~/.xsession-errors</action>
+    <action command="delete" search="file" path="~/.xsession-errors"/>
   </option>
 </cleaner>

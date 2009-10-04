@@ -24,6 +24,6 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action type="file">~/.mc/history</action>
+    <action command="delete" search="file" path="~/.mc/history"/>
   </option>
 </cleaner>

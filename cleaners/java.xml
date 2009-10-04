@@ -24,8 +24,8 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.java/deployment/cache/</action>
-    <action type="children" directories="false">$APPDATA\Sun\Java\Deployment\cache\</action>
-    <action type="children" directories="false">$USERPROFILE\AppData\LocalLow\Sun\Java\Deployment\cache\</action>
+    <action command="delete" search="walk.files" path="~/.java/deployment/cache/"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Sun\Java\Deployment\cache\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\LocalLow\Sun\Java\Deployment\cache\"/>
   </option>
 </cleaner>

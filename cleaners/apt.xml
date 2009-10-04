@@ -27,17 +27,17 @@
   <option id="clean">
     <label translate="false">clean</label>
     <description>Delete the cache</description>
-    <action type="glob">/var/cache/apt/archives/*deb</action>
-    <action type="glob">/var/cache/apt/archives/partial/*deb</action>
+    <action command="delete" search="glob" path="/var/cache/apt/archives/*deb"/>
+    <action command="delete" search="glob" path="/var/cache/apt/archives/partial/*deb"/>
   </option>
   <option id="autoclean">
     <label translate="false">autoclean</label>
     <description>Delete obsolete files</description>
-    <action type="apt.autoclean"/>
+    <action command="apt.autoclean"/>
   </option>
   <option id="autoremove">
     <label translate="false">autoremove</label>
     <description>Delete obsolete files</description>
-    <action type="apt.autoremove"/>
+    <action command="apt.autoremove"/>
   </option>
 </cleaner>

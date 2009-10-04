@@ -25,68 +25,68 @@
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Microsoft\Office\OffDiag\</action>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Microsoft\Office\OffDiag\"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action type="children" directories="false">$APPDATA\Microsoft\Office\Recent\</action>
-    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Editor\Recently Used URLs</action>
-    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent File List</action>
-    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recently Created Servers</action>
-    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Page List</action>
-    <action type="winreg">HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Web List</action>
+    <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Office\Recent\"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Editor\Recently Used URLs"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recently Created Servers"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Page List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent Web List"/>
     <!-- Microsoft Office 97 -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\8.0\Word\Data</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\8.0\Word\Data"/>
     <!-- Microsoft Office 2000 -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\9.0\Excel\Recent Files</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\9.0\PowerPoint\Recent File List</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\9.0\Publisher\Recent File List</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\9.0\Excel\Recent Files"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\9.0\PowerPoint\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\9.0\Publisher\Recent File List"/>
     <!-- Microsoft Office XP -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\10.0\Common\Open Find</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\10.0\Publisher\Recent File List</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\10.0\Common\Open Find"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\10.0\Publisher\Recent File List"/>
     <!-- Microsoft Office 2003 -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Common\Internet\Server Cache</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Common\Open Find</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Excel\Recent Files</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\PowerPoint\Recent File List</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Publisher\Recent File List</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Query\Data Sources</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\11.0\Word\File MRU</action>
-    <action type="winreg" name="UseRWHlinkNavigation">HKCU\Software\Microsoft\Office\11.0\Common\Internet</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Common\Internet\Server Cache"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Common\Open Find"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Excel\Recent Files"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\PowerPoint\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Publisher\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Query\Data Sources"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Word\File MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\11.0\Common\Internet" name="UseRWHlinkNavigation"/>
     <!-- Microsoft Office 2007 -->
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Common\HelpViewer\MRU Query</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Common\Open Find</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Excel\File MRU</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\PowerPoint\File MRU</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Publisher\Recent File List</action>
-    <action type="winreg">HKCU\Software\Microsoft\Office\12.0\Word\File MRU</action>
-    <action type="winreg" name="MRU1">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU2">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU3">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU4">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU5">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU6">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU7">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU8">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRU9">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate1">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate2">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate3">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate4">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate5">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate6">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate7">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate8">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="MRUDate9">HKCU\Software\Microsoft\Office\12.0\Access\Settings</action>
-    <action type="winreg" name="LastFile1">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile2">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile3">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile4">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile5">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile6">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile7">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile8">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
-    <action type="winreg" name="LastFile9">HKCU\Software\Microsoft\Office\12.0\Visio\Application</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Common\HelpViewer\MRU Query"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Common\Open Find"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Excel\File MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\PowerPoint\File MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Publisher\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Word\File MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU1"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU2"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU3"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU4"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU5"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU6"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU7"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU8"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRU9"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate1"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate2"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate3"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate4"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate5"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate6"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate7"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate8"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Access\Settings" name="MRUDate9"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile1"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile2"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile3"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile4"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile5"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile6"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile7"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile8"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Office\12.0\Visio\Application" name="LastFile9"/>
   </option>
 </cleaner>

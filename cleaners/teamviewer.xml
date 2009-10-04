@@ -24,12 +24,12 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">$APPDATA\TeamViewer\TeamViewer4_Logfile.log</action>
+    <action command="delete" search="file" path="$APPDATA\TeamViewer\TeamViewer4_Logfile.log"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action type="file">$APPDATA\TeamViewer\Connections.txt</action>
-    <action type="winreg" name="Last_Machine_Connections">HKCU\Software\TeamViewer\Version4</action>
+    <action command="delete" search="file" path="$APPDATA\TeamViewer\Connections.txt"/>
+    <action command="winreg" path="HKCU\Software\TeamViewer\Version4" name="Last_Machine_Connections"/>
   </option>
 </cleaner>

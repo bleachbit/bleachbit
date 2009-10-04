@@ -25,21 +25,21 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action type="children" directories="false">$USERPROFILE\Cookies\</action>
-    <action type="children" directories="false">$APPDATA\Microsoft\Windows\Cookies\</action>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Cookies\"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\Cookies\"/>
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Web cache reduces time to display revisited pages</description>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Temporary Internet Files\</action>
-    <action type="children" directories="false">$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\</action>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
   </option>
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\History\</action>
-    <action type="children" directories="false">$USERPROFILE\AppData\Local\Microsoft\Windows\History\</action>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\History\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\History\"/>
     <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
-    <action type="winreg">HKCU\Software\Microsoft\Internet Explorer\TypedURLs</action>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLs"/>
   </option>
 </cleaner>

@@ -24,6 +24,6 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the debug logs</description>
-    <action type="file">~/.easytag/easytag.log</action>
+    <action command="delete" search="file" path="~/.easytag/easytag.log"/>
   </option>
 </cleaner>

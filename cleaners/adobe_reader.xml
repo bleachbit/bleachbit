@@ -24,23 +24,23 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.adobe/Acrobat/7.0/Cache</action>
-    <action type="children" directories="false">~/.adobe/Acrobat/8.0/Cache</action>
-    <action type="children" directories="false">~/.adobe/Acrobat/9.0/Cache</action>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\7.0\Cache</action>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\8.0\Cache</action>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\9.0\Cache</action>
+    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/7.0/Cache"/>
+    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/8.0/Cache"/>
+    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/9.0/Cache"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\7.0\Cache"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\8.0\Cache"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Adobe\Acrobat\9.0\Cache"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action type="file">~/.adobe/Acrobat/7.0/Preferences/reader_prefs</action>
-    <action type="file">~/.adobe/Acrobat/8.0/Preferences/reader_prefs</action>
-    <action type="file">~/.adobe/Acrobat/9.0/Preferences/reader_prefs</action>
-    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles</action>
-    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles</action>
-    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles</action>
-    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\8.0\AVGeneral\cRecentFiles</action>
-    <action type="winreg">HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles</action>
+    <action command="delete" search="file" path="~/.adobe/Acrobat/7.0/Preferences/reader_prefs"/>
+    <action command="delete" search="file" path="~/.adobe/Acrobat/8.0/Preferences/reader_prefs"/>
+    <action command="delete" search="file" path="~/.adobe/Acrobat/9.0/Preferences/reader_prefs"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\8.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
   </option>
 </cleaner>

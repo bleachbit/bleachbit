@@ -27,28 +27,28 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action type="file">~/.gnome2/epiphany/ephy-favicon-cache.xml</action>
-    <action type="children" directories="false">~/.gnome2/epiphany/favicon_cache/</action>
-    <action type="children" directories="false">~/.gnome2/epiphany/mozilla/epiphany/Cache/</action>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/ephy-favicon-cache.xml"/>
+    <action command="delete" search="walk.files" path="~/.gnome2/epiphany/favicon_cache/"/>
+    <action command="delete" search="walk.files" path="~/.gnome2/epiphany/mozilla/epiphany/Cache/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.txt</action>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite</action>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal</action>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.txt"/>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite"/>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/signons3.txt</action>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/signons3.txt"/>
   </option>
   <option id="places">
     <label>Places</label>
     <description>A database of URLs including bookmarks, favicons, and a history of visited web sites</description>
     <warning>This option deletes all bookmarks.</warning>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/places.sqlite</action>
-    <action type="file">~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal</action>
-    <action type="file">~/.gnome2/epiphany/ephy-history.xml</action>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/places.sqlite"/>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal"/>
+    <action command="delete" search="file" path="~/.gnome2/epiphany/ephy-history.xml"/>
   </option>
 </cleaner>

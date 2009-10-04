@@ -24,11 +24,11 @@
   <option id="clean_all">
     <label translate="false">clean all</label>
     <description>Delete the cache</description>
-    <action type="yum.clean_all"/>
+    <action command="yum.clean_all"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action type="sqlite.vacuum">/var/cache/yum/*/*.sqlite</action>
+    <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
   </option>
 </cleaner>

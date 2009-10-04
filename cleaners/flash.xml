@@ -25,9 +25,9 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action type="children" directories="true">~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/</action>
-    <action type="children" directories="true">~/.macromedia/Flash_Player/#SharedObjects/</action>
-    <action type="children" directories="true">$APPDATA\Macromedia\Flash Player\#SharedObjects\</action>
-    <action type="children" directories="true">$APPDATA\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\</action>
+    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/"/>
+    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/#SharedObjects/"/>
+    <action command="delete" search="walk.all" path="$APPDATA\Macromedia\Flash Player\#SharedObjects\"/>
+    <action command="delete" search="walk.all" path="$APPDATA\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\"/>
   </option>
 </cleaner>

@@ -25,15 +25,15 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">~/.aMule/logfile</action>
-    <action type="file">~/.aMule/logfile.bak</action>
-    <action type="file">$APPDATA\aMule\logfile</action>
-    <action type="file">$APPDATA\aMule\logfile.bak</action>
+    <action command="delete" search="file" path="~/.aMule/logfile"/>
+    <action command="delete" search="file" path="~/.aMule/logfile.bak"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\logfile"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\logfile.bak"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="children" directories="false">~/.aMule/Temp/</action>
-    <action type="children" directories="false">$APPDATA\aMule\Temp\</action>
+    <action command="delete" search="walk.files" path="~/.aMule/Temp/"/>
+    <action command="delete" search="walk.files" path="$APPDATA\aMule\Temp\"/>
   </option>
 </cleaner>

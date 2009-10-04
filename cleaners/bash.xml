@@ -24,6 +24,6 @@
   <option id="history">
     <label>History</label>
     <description>Delete the command history</description>
-    <action type="file">~/.bash_history</action>
+    <action command="delete" search="file" path="~/.bash_history"/>
   </option>
 </cleaner>

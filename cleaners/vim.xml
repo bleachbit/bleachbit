@@ -25,7 +25,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
-    <action type="file">~/.viminfo</action>
-    <action type="file">$USERPROFILE\_viminfo</action>
+    <action command="delete" search="file" path="~/.viminfo"/>
+    <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
   </option>
 </cleaner>

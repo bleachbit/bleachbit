@@ -25,13 +25,13 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="glob">~/.amsn/*/displaypic/cache/*.dat</action>
-    <action type="glob">~/.amsn/*/displaypic/cache/*.png</action>
+    <action command="delete" search="glob" path="~/.amsn/*/displaypic/cache/*.dat"/>
+    <action command="delete" search="glob" path="~/.amsn/*/displaypic/cache/*.png"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
-    <action type="glob">~/.amsn/*/logs/date</action>
-    <action type="glob">~/.amsn/*/logs/*.log</action>
+    <action command="delete" search="glob" path="~/.amsn/*/logs/date"/>
+    <action command="delete" search="glob" path="~/.amsn/*/logs/*.log"/>
   </option>
 </cleaner>

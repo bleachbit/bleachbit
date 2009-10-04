@@ -24,6 +24,6 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.thumbnails/</action>
+    <action command="delete" search="walk.files" path="~/.thumbnails/"/>
   </option>
 </cleaner>

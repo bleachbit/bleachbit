@@ -24,6 +24,7 @@ Create cleaners from CleanerML (markup language)
 import os
 import sys
 import traceback
+import types
 import xml.dom.minidom
 import Cleaner
 import Common
@@ -84,7 +85,12 @@ class CleanerML:
         description = cleaner.getElementsByTagName('description')
         if description and description[0].parentNode == cleaner:
             self.handle_cleaner_description(description[0])
-        self.handle_cleaner_options(cleaner.getElementsByTagName('option'))
+        for option in cleaner.getElementsByTagName('option'):
+            try:
+                self.handle_cleaner_option(option)
+            except:
+                print str(sys.exc_info()[1])
+                print option.toxml()
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
 
 
@@ -111,27 +117,25 @@ class CleanerML:
             self.cleaner.add_running(detection_type, value)
 
 
-    def handle_cleaner_options(self, options):
-        """<option> elements"""
-        for option in options:
+    def handle_cleaner_option(self, option):
+        """<option> element"""
+        self.option_id = option.getAttribute('id')
+        self.option_description = None
+        self.option_name = None
 
-            self.option_id = option.getAttribute('id')
-            self.option_description = None
-            self.option_name = None
+        self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
+        description = option.getElementsByTagName('description')
+        self.handle_cleaner_option_description(description[0])
+        warning = option.getElementsByTagName('warning')
+        if warning:
+            self.handle_cleaner_option_warning(warning[0])
+            if self.option_warning:
+                self.cleaner.set_warning(self.option_id, self.option_warning)
 
-            self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
-            description = option.getElementsByTagName('description')
-            self.handle_cleaner_option_description(description[0])
-            warning = option.getElementsByTagName('warning')
-            if warning:
-                self.handle_cleaner_option_warning(warning[0])
-                if self.option_warning:
-                    self.cleaner.set_warning(self.option_id, self.option_warning)
+        for action in option.getElementsByTagName('action'):
+            self.handle_cleaner_option_action(action)
 
-            for action in option.getElementsByTagName('action'):
-                self.handle_cleaner_option_action(action)
-
-            self.cleaner.add_option(self.option_id, self.option_name, self.option_description)
+        self.cleaner.add_option(self.option_id, self.option_name, self.option_description)
 
 
     def handle_cleaner_option_label(self, label):
@@ -154,11 +158,13 @@ class CleanerML:
 
     def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""
-        atype = action_node.getAttribute('type')
+        command = action_node.getAttribute('command')
         provider = None
         for actionplugin in ActionProvider.plugins:
-            if actionplugin.action_key == atype:
+            if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
+        if None == provider:
+            raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)
 
 

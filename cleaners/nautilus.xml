@@ -24,7 +24,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action type="glob">~/.nautilus/saved-session-??????</action>
-    <action type="glob">~/.nautilus/metafiles/*:*.xml</action>
+    <action command="delete" search="glob" path="~/.nautilus/saved-session-??????"/>
+    <action command="delete" search="glob" path="~/.nautilus/metafiles/*:*.xml"/>
   </option>
 </cleaner>

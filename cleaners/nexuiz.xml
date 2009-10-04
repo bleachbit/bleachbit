@@ -25,6 +25,6 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.nexuiz/data/dlcache/</action>
+    <action command="delete" search="walk.files" path="~/.nexuiz/data/dlcache/"/>
   </option>
 </cleaner>

@@ -25,6 +25,6 @@
   <option id="index">
     <label>Index</label>
     <description>Delete the search index, a database of words and the files they contain</description>
-    <action type="children" directories="false">~/.recoll/xapiandb/</action>
+    <action command="delete" search="walk.files" path="~/.recoll/xapiandb/"/>
   </option>
 </cleaner>

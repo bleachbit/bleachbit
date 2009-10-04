@@ -25,6 +25,6 @@
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action type="file">~/.gl-117/logfile.txt</action>
+    <action command="delete" search="file" path="~/.gl-117/logfile.txt"/>
   </option>
 </cleaner>

@@ -25,21 +25,21 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.liferea_1.4/cache/</action>
-    <action type="children" directories="false">~/.liferea_1.4/mozilla/liferea/Cache/</action>
+    <action command="delete" search="walk.files" path="~/.liferea_1.4/cache/"/>
+    <action command="delete" search="walk.files" path="~/.liferea_1.4/mozilla/liferea/Cache/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action type="file">~/.liferea_1.4/mozilla/liferea/cookies.sqlite</action>
+    <action command="delete" search="file" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action type="sqlite.vacuum">~/.liferea_1.4/liferea.db</action>
-    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/cookies.sqlite</action>
-    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/permissions.sqlite</action>
-    <action type="sqlite.vacuum">~/.liferea_1.4/mozilla/liferea/places.sqlite</action>
-    <action type="sqlite.vacuum">~/.liferea_1.6/liferea.db</action>
+    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/liferea.db"/>
+    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
+    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/permissions.sqlite"/>
+    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.4/mozilla/liferea/places.sqlite"/>
+    <action command="sqlite.vacuum" search="glob" path="~/.liferea_1.6/liferea.db"/>
   </option>
 </cleaner>

@@ -24,9 +24,9 @@
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="file">~/.googleearth/Cache/dbCache.dat</action>
-    <action type="file">~/.googleearth/Cache/dbCache.dat.index</action>
-    <action type="file">$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat</action>
-    <action type="file">$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat.index</action>
+    <action command="delete" search="file" path="~/.googleearth/Cache/dbCache.dat"/>
+    <action command="delete" search="file" path="~/.googleearth/Cache/dbCache.dat.index"/>
+    <action command="delete" search="file" path="$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat"/>
+    <action command="delete" search="file" path="$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat.index"/>
   </option>
 </cleaner>

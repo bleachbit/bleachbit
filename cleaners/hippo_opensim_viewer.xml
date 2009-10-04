@@ -25,13 +25,13 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.hippo_opensim_viewer/cache/</action>
-    <action type="children" directories="false">$USERPROFILE\Application Data\Hippo_OpenSim_Viewer\cache\</action>
+    <action command="delete" search="walk.files" path="~/.hippo_opensim_viewer/cache/"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Application Data\Hippo_OpenSim_Viewer\cache\"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="children" directories="false">~/.hippo_opensim_viewer/logs/</action>
-    <action type="children" directories="false">$USERPROFILE\Application Data\Hippo_OpenSim_Viewer\logs\</action>
+    <action command="delete" search="walk.files" path="~/.hippo_opensim_viewer/logs/"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Application Data\Hippo_OpenSim_Viewer\logs\"/>
   </option>
 </cleaner>

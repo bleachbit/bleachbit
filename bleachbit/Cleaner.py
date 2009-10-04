@@ -650,10 +650,10 @@ class TestCleaner(unittest.TestCase):
         cleaner = Cleaner()
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
-        atype = action_node.getAttribute('type')
+        command = action_node.getAttribute('command')
         provider = None
         for actionplugin in ActionProvider.plugins:
-            if actionplugin.action_key == atype:
+            if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
         cleaner.add_action('option1', provider)
         cleaner.add_option('option1', 'name1', 'description1')
@@ -664,17 +664,17 @@ class TestCleaner(unittest.TestCase):
         """Unit test for Cleaner.add_action()"""
         self.actions = []
         if 'nt' == os.name:
-            self.actions.append('<action type="file">$WINDIR\\notepad.exe</action>')
-            self.actions.append('<action type="glob">$WINDIR\\system32\\*.dll</action>')
+            self.actions.append('<action command="delete" search="file" path="$WINDIR\\notepad.exe"/>')
+            self.actions.append('<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
             self.actions.append( \
-                '<action type="children" directories="false">$WINDIR\\system\\</action>')
+                '<action command="delete" search="walk.files" path="$WINDIR\\system\\"/>')
             self.actions.append( \
-                '<action type="children" directories="true">$WINDIR\\system32\\</action>')
+                '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
         elif 'posix' == os.name:
-            self.actions.append('<action type="file">%s</action>' % __file__)
-            self.actions.append('<action type="glob">/sbin/*sh</action>')
-            self.actions.append('<action type="children" directories="false">/sbin/</action>')
-            self.actions.append('<action type="children" directories="true">/var/log/</action>')
+            self.actions.append('<action command="delete" search="file" path="%s"/>' % __file__)
+            self.actions.append('<action command="delete" search="glob" path="/sbin/*sh"/>')
+            self.actions.append('<action command="delete" search="walk.files" path="/sbin/"/>')
+            self.actions.append('<action command="delete" search="walk.all" path="/var/log/"/>')
 
         self.assert_(len(self.actions) > 0)
 
@@ -811,7 +811,7 @@ class TestCleaner(unittest.TestCase):
             not filename[0:2] == 'HK':
             self.assert_ (os.path.lexists(filename), \
                 "Path does not exist: '%s'" % (filename))
-        
+
 
 if __name__ == '__main__':
     unittest.main()

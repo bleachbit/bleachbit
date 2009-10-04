@@ -27,13 +27,34 @@ Actions that perform cleaning
 
 import glob
 import os
-
+import unittest
 import Command
 import FileUtilities
 import General
 
 if 'posix' == os.name:
     import Unix
+
+
+
+###
+### File iterators
+###
+
+
+def get_file(path):
+    if os.path.lexists(path):
+        yield path
+
+
+def walk_all(top):
+    for path in FileUtilities.children_in_directory(top, True):
+        yield path
+
+
+def walk_files(top):
+    for path in FileUtilities.children_in_directory(top, False):
+        yield path
 
 
 
@@ -64,9 +85,32 @@ class ActionProvider:
         pass
 
 
+    def file_init(self, action_node):
+        """Initialize file search"""
+        search = action_node.getAttribute('search')
+        self.path = os.path.expanduser(os.path.expandvars( \
+            action_node.getAttribute('path')))
+        if 'file' == search:
+            self.get_paths = get_file
+        elif 'glob' == search:
+            self.get_paths = glob.glob
+        elif 'walk.all' == search:
+            self.get_paths = walk_all
+        elif 'walk.files' == search:
+            self.get_paths = walk_files
+        else:
+            raise RuntimeError("invalid search '%s'" % search)
+
+
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
+        pass
 
+
+
+    def get_paths(self):
+        """Overwritten by file_init()"""
+        raise RuntimeError('not initialized')
 
 
 ###
@@ -107,53 +151,17 @@ class AptAutoremove(ActionProvider):
                 'apt-get autoremove')
 
 
-class Children(ActionProvider):
-    """Action to list a directory"""
-    action_key = 'children'
+class Delete(ActionProvider):
+    """Action to delete files"""
+    action_key = 'delete'
 
 
     def __init__(self, action_element):
-        self.rootpath = General.getText(action_element.childNodes)
-        self.rootpath = os.path.expanduser(os.path.expandvars(self.rootpath))
-        del_dir_str = action_element.getAttribute('directories')
-        self.del_dir = General.boolstr_to_bool(del_dir_str)
-
+        self.file_init(action_element)
 
     def get_commands(self):
-        for pathname in FileUtilities.children_in_directory(self.rootpath, self.del_dir):
-            yield Command.Delete(pathname)
-
-
-
-class File(ActionProvider):
-    """Action to list a single file"""
-    action_key = 'file'
-
-
-    def __init__(self, action_element):
-        self.pathname = General.getText(action_element.childNodes)
-
-
-    def get_commands(self):
-        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
-        if os.path.lexists(expanded):
-            yield Command.Delete(expanded)
-
-
-
-class Glob(ActionProvider):
-    """Action to list files by Unix-shell-like glob"""
-    action_key = 'glob'
-
-
-    def __init__(self, action_element):
-        self.pathname = General.getText(action_element.childNodes)
-
-
-    def get_commands(self):
-        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
-        for pathname in glob.iglob(expanded):
-            yield Command.Delete(pathname)
+        for path in self.get_paths(self.path):
+            yield Command.Delete(path)
 
 
 
@@ -162,13 +170,12 @@ class SqliteVacuum(ActionProvider):
     action_key = 'sqlite.vacuum'
 
     def __init__(self, action_element):
-        self.pathname = General.getText(action_element.childNodes)
+        self.file_init(action_element)
 
     def get_commands(self):
-        expanded = os.path.expanduser(os.path.expandvars(self.pathname))
-        for pathname in glob.iglob(expanded):
+        for path in self.get_paths(self.path):
             yield Command.Function( \
-                pathname, \
+                path, \
                 FileUtilities.vacuum_sqlite3, \
                 # TRANSLATORS: Vacuum is a verb.  The term is jargon
                 # from the SQLite database.  Microsoft Access uses
@@ -256,4 +263,42 @@ class YumCleanAll(ActionProvider):
                 'yum clean all')
 
 
+
+class TestAction(unittest.TestCase):
+    """Test cases for Action"""
+
+
+    def test_Delete(self):
+        """Unit test for class Delete"""
+        import Cleaner
+        import tempfile
+        from xml.dom.minidom import parseString
+        for dir in ('~', '$HOME'):
+            expanded = os.path.expanduser(os.path.expandvars(dir))
+            (fd, filename) = tempfile.mkstemp(dir = expanded)
+            os.close(fd)
+            action_str = '<action command="delete" search="file" path="%s" />' % filename
+            dom = parseString(action_str)
+            action_node = dom.childNodes[0]
+            command = action_node.getAttribute('command')
+            provider = None
+            for actionplugin in ActionProvider.plugins:
+                if actionplugin.action_key == command:
+                    provider = actionplugin(action_node)
+            self.assertNotEqual(provider, None)
+            for cmd in provider.get_commands():
+                self.assert_(isinstance(cmd, Command.Delete))
+                self.assert_(os.path.lexists(filename))
+                # preview
+                result = cmd.execute(really_delete = False).next()
+                Cleaner.TestCleaner.validate_result(self, result)
+                # delete
+                result = cmd.execute(really_delete = True).next()
+                self.assert_(not os.path.lexists(filename))
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()
 

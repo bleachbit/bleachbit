@@ -24,7 +24,7 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action type="file">~/.config/real/rpcookies.txt</action>
-    <action type="file">$APPDATA\Real\RealPlayer\cookies.txt</action>
+    <action command="delete" search="file" path="~/.config/real/rpcookies.txt"/>
+    <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\cookies.txt"/>
   </option>
 </cleaner>

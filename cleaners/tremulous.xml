@@ -25,6 +25,6 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the list of game servers</description>
-    <action type="file">~/.tremulous/servercache.dat</action>
+    <action command="delete" search="file" path="~/.tremulous/servercache.dat"/>
   </option>
 </cleaner>

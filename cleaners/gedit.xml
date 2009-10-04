@@ -26,8 +26,8 @@
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
     <!-- gedit 2.26.1 on Ubuntu 9.04 -->
-    <action type="file">~/.cache/gedit/gedit-metadata.xml</action>
+    <action command="delete" search="file" path="~/.cache/gedit/gedit-metadata.xml"/>
     <!-- gedit 2.24.3 on Fedora 10 -->
-    <action type="file">~/.gnome2/gedit-metadata.xml</action>
+    <action command="delete" search="file" path="~/.gnome2/gedit-metadata.xml"/>
   </option>
 </cleaner>

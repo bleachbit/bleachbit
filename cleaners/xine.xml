@@ -25,6 +25,6 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="file">~/.xine/catalog.cache</action>
+    <action command="delete" search="file" path="~/.xine/catalog.cache"/>
   </option>
 </cleaner>

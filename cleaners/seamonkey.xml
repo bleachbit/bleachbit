@@ -35,28 +35,28 @@
       all SeaMonkey profiles, it catches non-SeaMonkey profiles
       such as 'eclipse' and 'firefox'.  Using profiles is rare, so we don't. 
     -->
-    <action type="children" directories="false">~/.mozilla/default/Cache/</action>
-    <action type="children" directories="false">$USERPROFILE\Local Settings\Application Data\Mozilla\Profiles\default\Cache\</action>
+    <action command="delete" search="walk.files" path="~/.mozilla/default/Cache/"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Mozilla\Profiles\default\Cache\"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/chatzilla/logs/client.2009-07-03.log -->
-    <action type="glob">~/.mozilla/*/????????.slt/chatzilla/logs/*log</action>
-    <action type="glob">$APPDATA\Mozilla\Profiles\default\????????.slt\chatzilla\logs\*log</action>
+    <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/chatzilla/logs/*log"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\chatzilla\logs\*log"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/cookies.txt -->
     <!-- example: /home/bob/.mozilla/test/pfr72dbv.slt/cookies.txt -->
-    <action type="glob">~/.mozilla/*/????????.slt/cookies.txt</action>
-    <action type="glob">$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt</action>
+    <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/cookies.txt"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
   </option>
   <option id="history">
     <label>History</label>
     <description>Delete the list of visited web pages</description>
-    <action type="glob">~/.mozilla/*/????????.slt/history.dat</action>
-    <action type="glob">$APPDATA\Mozilla\Profiles\default\????????.slt\history.dat</action>
+    <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/history.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\history.dat"/>
   </option>
 </cleaner>

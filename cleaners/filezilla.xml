@@ -29,7 +29,7 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action type="file">~/.filezilla/recentservers.xml</action>
-    <action type="file">$APPDATA\FileZilla\recentservers.xml</action>
+    <action command="delete" search="file" path="~/.filezilla/recentservers.xml"/>
+    <action command="delete" search="file" path="$APPDATA\FileZilla\recentservers.xml"/>
   </option>
 </cleaner>

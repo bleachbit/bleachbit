@@ -25,11 +25,11 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">~/.gftp/gftp.log</action>
+    <action command="delete" search="file" path="~/.gftp/gftp.log"/>
   </option>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.gftp/cache</action>
+    <action command="delete" search="walk.files" path="~/.gftp/cache"/>
   </option>
 </cleaner>

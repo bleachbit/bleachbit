@@ -25,6 +25,6 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action type="file">~/.links2/links.his</action>
+    <action command="delete" search="file" path="~/.links2/links.his"/>
   </option>
 </cleaner>

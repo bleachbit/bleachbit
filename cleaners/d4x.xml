@@ -24,7 +24,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action type="glob">~/.ntrc_2/history*</action>
-    <action type="file">~/.ntrc_2/cookies.txt</action>
+    <action command="delete" search="glob" path="~/.ntrc_2/history*"/>
+    <action command="delete" search="file" path="~/.ntrc_2/cookies.txt"/>
   </option>
 </cleaner>

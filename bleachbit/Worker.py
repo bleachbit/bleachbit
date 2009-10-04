@@ -215,7 +215,7 @@ class TestWorker(unittest.TestCase):
         os.write(fd, '123')
         os.close(fd)
         self.assert_(os.path.exists(filename))
-        astr = '<action type="test">%s</action>' % filename
+        astr = '<action command="test">%s</action>' % filename
         cleaner = Cleaner.TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
         operations = { 'test' : [ ('option1', True ) ] }

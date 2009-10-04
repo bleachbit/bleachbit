@@ -24,8 +24,8 @@
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="children" directories="false">~/.gimp-2.4/tmp/</action>
+    <action command="delete" search="walk.files" path="~/.gimp-2.4/tmp/"/>
     <!-- GIMP uses identical paths on Fedora 10 and Windows XP -->
-    <action type="children" directories="false">~/.gimp-2.6/tmp/</action>
+    <action command="delete" search="walk.files" path="~/.gimp-2.6/tmp/"/>
   </option>
 </cleaner>

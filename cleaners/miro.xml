@@ -25,19 +25,19 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.miro/icon-cache/</action>
-    <action type="children" directories="false">~/.miro/mozilla/Cache/</action>
-    <action type="children" directories="false">$APPDATA\Participatory Culture Foundation\Miro\Support\icon-cache\</action>
+    <action command="delete" search="walk.files" path="~/.miro/icon-cache/"/>
+    <action command="delete" search="walk.files" path="~/.miro/mozilla/Cache/"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Participatory Culture Foundation\Miro\Support\icon-cache\"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="file">~/.miro/miro-downloader-log</action>
-    <action type="file">~/.miro/miro-log</action>
-    <action type="file">~/.miro/miro-log.1</action>
-    <action type="file">$USERPROFILE\Local Settings\Temp\Miro-downloader.log</action>
-    <action type="file">$USERPROFILE\Local Settings\Temp\Miro.log</action>
-    <action type="file">$USERPROFILE\Local Settings\Temp\Miro.log.1</action>
-    <action type="file">$USERPROFILE\Local Settings\Temp\Miro_Download_Daemon_a.txt</action>
+    <action command="delete" search="file" path="~/.miro/miro-downloader-log"/>
+    <action command="delete" search="file" path="~/.miro/miro-log"/>
+    <action command="delete" search="file" path="~/.miro/miro-log.1"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro-downloader.log"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log.1"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro_Download_Daemon_a.txt"/>
   </option>
 </cleaner>

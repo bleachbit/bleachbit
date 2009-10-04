@@ -25,18 +25,18 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">$PROGRAMFILES\Yahoo!\Messenger\Cache\</action>
+    <action command="delete" search="walk.files" path="$PROGRAMFILES\Yahoo!\Messenger\Cache\"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
-    <action type="glob">$PROGRAMFILES\Yahoo!\Messenger\Profiles\*\Archive\Messages\*\*.dat</action>
+    <action command="delete" search="glob" path="$PROGRAMFILES\Yahoo!\Messenger\Profiles\*\Archive\Messages\*\*.dat"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="children" directories="false">$PROGRAMFILES\Yahoo!\Messenger\logs\</action>
-    <action type="file">$USERPROFILE\Local Settings\Application Data\Yahoo\Y!Msgr\merlin.log</action>
-    <action type="file">$USERPROFILE\Local Settings\Application Data\Yahoo\Y!Msgr\merlin.log.old</action>
+    <action command="delete" search="walk.files" path="$PROGRAMFILES\Yahoo!\Messenger\logs\"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Application Data\Yahoo\Y!Msgr\merlin.log"/>
+    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Application Data\Yahoo\Y!Msgr\merlin.log.old"/>
   </option>
 </cleaner>

@@ -26,13 +26,13 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <!-- avatars -->
-    <action type="children" directories="true">~/.purple/icons/</action>
-    <action type="children" directories="true">$APPDATA\.purple\icons\</action>
+    <action command="delete" search="walk.all" path="~/.purple/icons/"/>
+    <action command="delete" search="walk.all" path="$APPDATA\.purple\icons\"/>
   </option>
   <option id="logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
-    <action type="children" directories="true">~/.purple/logs/</action>
-    <action type="children" directories="true">$APPDATA\.purple\logs\</action>
+    <action command="delete" search="walk.all" path="~/.purple/logs/"/>
+    <action command="delete" search="walk.all" path="$APPDATA\.purple\logs\"/>
   </option>
 </cleaner>

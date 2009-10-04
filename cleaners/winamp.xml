@@ -24,7 +24,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete the history</description>
-    <action type="file">$APPDATA\Winamp\winamp.m3u</action>
-    <action type="file">$APPDATA\Winamp\winamp.m3u8</action>
+    <action command="delete" search="file" path="$APPDATA\Winamp\winamp.m3u"/>
+    <action command="delete" search="file" path="$APPDATA\Winamp\winamp.m3u8"/>
   </option>
 </cleaner>

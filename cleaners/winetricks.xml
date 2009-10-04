@@ -24,7 +24,7 @@
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="children" directories="false">~/.wine/drive_c/winetrickstmp/</action>
-    <action type="children" directories="false">~/.winetrickscache/</action>
+    <action command="delete" search="walk.files" path="~/.wine/drive_c/winetrickstmp/"/>
+    <action command="delete" search="walk.files" path="~/.winetrickscache/"/>
   </option>
 </cleaner>

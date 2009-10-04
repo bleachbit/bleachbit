@@ -29,6 +29,6 @@
     <!-- ical: /home/foo/.evolution/cache/calendar/webcal___icalx.com_public_icalshare_US%20Holidays.ics/cache.xml -->
     <!-- IMAP? : /home/foo/.evolution/cache/tmp/mail.log.AMIoEg -->
     <!-- ? : /home/foo/.evolution/cache/http/ -->
-    <action type="children" directories="true">~/.evolution/cache/</action>
+    <action command="delete" search="walk.all" path="~/.evolution/cache/"/>
   </option>
 </cleaner>

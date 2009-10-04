@@ -25,27 +25,27 @@
   <option id="backup_files">
     <label>Backup files</label>
     <description>Delete the backup files</description>
-    <action type="glob">~/.azureus/active/*.bak</action>
-    <action type="glob">$APPDATA\Azureus\active\*.bak</action>
+    <action command="delete" search="glob" path="~/.azureus/active/*.bak"/>
+    <action command="delete" search="glob" path="$APPDATA\Azureus\active\*.bak"/>
   </option>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="file">~/.azureus/ipfilter.cache</action>
-    <action type="file">$APPDATA\Azureus\ipfilter.cache</action>
+    <action command="delete" search="file" path="~/.azureus/ipfilter.cache"/>
+    <action command="delete" search="file" path="$APPDATA\Azureus\ipfilter.cache"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action type="children" directories="true">~/.azureus/logs/</action>
-    <action type="file">~/.azureus/update.log</action>
-    <action type="file">~/.azureus/tracker.log</action>
-    <action type="children" directories="true">$APPDATA\Azureus\logs\</action>
+    <action command="delete" search="walk.all" path="~/.azureus/logs/"/>
+    <action command="delete" search="file" path="~/.azureus/update.log"/>
+    <action command="delete" search="file" path="~/.azureus/tracker.log"/>
+    <action command="delete" search="walk.all" path="$APPDATA\Azureus\logs\"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="children" directories="false">~/.azureus/tmp/</action>
-    <action type="children" directories="false">$APPDATA\Azureus\tmp\</action>
+    <action command="delete" search="walk.files" path="~/.azureus/tmp/"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Azureus\tmp\"/>
   </option>
 </cleaner>

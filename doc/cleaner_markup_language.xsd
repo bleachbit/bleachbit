@@ -67,22 +67,31 @@
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
-                      <xs:attribute name="type" use="required">
+                      <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
-                            <xs:enumeration value="children"/>
-                            <xs:enumeration value="glob"/>
-                            <xs:enumeration value="file"/>
+                            <xs:enumeration value="delete"/>
                             <xs:enumeration value="sqlite.vacuum"/>
+                            <xs:enumeration value="truncate"/>
                             <xs:enumeration value="winreg"/>
                             <xs:enumeration value="yum.clean_all"/>
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>
-                      <xs:attribute name="directories" type="xs:string"/>
                       <xs:attribute name="name" type="xs:string"/>
+                      <xs:attribute name="path" type="xs:string"/>
+                      <xs:attribute name="search">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:string">
+                            <xs:enumeration value="file"/>
+                            <xs:enumeration value="glob"/>
+                            <xs:enumeration value="walk.all"/>
+                            <xs:enumeration value="walk.files"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>

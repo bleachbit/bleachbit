@@ -26,7 +26,7 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="children" directories="false">~/.config/transmission/blocklists/</action>
-    <action type="children" directories="false">~/.config/transmission/resume/</action>
+    <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
+    <action command="delete" search="walk.files" path="~/.config/transmission/resume/"/>
   </option>
 </cleaner>

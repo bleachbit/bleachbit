@@ -24,13 +24,13 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action type="glob">~/.kde/cache-*/*/*</action>
-    <action type="glob">~/.kde/cache-*/*</action>
+    <action command="delete" search="glob" path="~/.kde/cache-*/*/*"/>
+    <action command="delete" search="glob" path="~/.kde/cache-*/*"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action type="glob">~/.kde/tmp-*/*/*</action>
-    <action type="glob">~/.kde/tmp-*/*</action>
+    <action command="delete" search="glob" path="~/.kde/tmp-*/*/*"/>
+    <action command="delete" search="glob" path="~/.kde/tmp-*/*"/>
   </option>
 </cleaner>
