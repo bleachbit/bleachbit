@@ -184,6 +184,21 @@ class SqliteVacuum(ActionProvider):
                _('Vacuum'))
 
 
+
+class Truncate(ActionProvider):
+    """Action to truncate files"""
+    action_key = 'truncate'
+
+
+    def __init__(self, action_element):
+        self.file_init(action_element)
+
+    def get_commands(self):
+        for path in self.get_paths(self.path):
+            yield Command.Truncate(path)
+
+
+
 class TestActionProvider(ActionProvider):
     """Test ActionProvider"""
     action_key = 'test'
@@ -268,33 +283,49 @@ class TestAction(unittest.TestCase):
     """Test cases for Action"""
 
 
+    def _test_action_str(self, action_str):
+        """Parse <action> and test it"""
+        from xml.dom.minidom import parseString
+        import Cleaner
+        dom = parseString(action_str)
+        action_node = dom.childNodes[0]
+        command = action_node.getAttribute('command')
+        filename = action_node.getAttribute('path')
+        provider = None
+        for actionplugin in ActionProvider.plugins:
+            if actionplugin.action_key == command:
+                provider = actionplugin(action_node)
+        self.assertNotEqual(provider, None)
+        for cmd in provider.get_commands():
+            self.assert_(isinstance(cmd, Command.Delete))
+            self.assert_(os.path.lexists(filename))
+            # preview
+            result = cmd.execute(really_delete = False).next()
+            Cleaner.TestCleaner.validate_result(self, result)
+            # delete
+            result = cmd.execute(really_delete = True).next()
+            if 'delete' == command:
+                self.assert_(not os.path.lexists(filename))
+            elif 'truncate' == command:
+                self.assert_(os.path.lexists(filename))
+                os.remove(filename)
+                self.assert_(not os.path.lexists(filename))
+            else:
+                raise RuntimeError("Unknown command '%s'" % command)
+
+
     def test_Delete(self):
         """Unit test for class Delete"""
-        import Cleaner
         import tempfile
-        from xml.dom.minidom import parseString
         for dir in ('~', '$HOME'):
-            expanded = os.path.expanduser(os.path.expandvars(dir))
-            (fd, filename) = tempfile.mkstemp(dir = expanded)
-            os.close(fd)
-            action_str = '<action command="delete" search="file" path="%s" />' % filename
-            dom = parseString(action_str)
-            action_node = dom.childNodes[0]
-            command = action_node.getAttribute('command')
-            provider = None
-            for actionplugin in ActionProvider.plugins:
-                if actionplugin.action_key == command:
-                    provider = actionplugin(action_node)
-            self.assertNotEqual(provider, None)
-            for cmd in provider.get_commands():
-                self.assert_(isinstance(cmd, Command.Delete))
-                self.assert_(os.path.lexists(filename))
-                # preview
-                result = cmd.execute(really_delete = False).next()
-                Cleaner.TestCleaner.validate_result(self, result)
-                # delete
-                result = cmd.execute(really_delete = True).next()
-                self.assert_(not os.path.lexists(filename))
+            for command in ('delete', 'truncate'):
+                expanded = os.path.expanduser(os.path.expandvars(dir))
+                (fd, filename) = tempfile.mkstemp(dir = expanded)
+                os.close(fd)
+                action_str = '<action command="%s" search="file" path="%s" />' % \
+                    (command, filename)
+                self._test_action_str(action_str)
+
 
 
 
