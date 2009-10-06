@@ -27,6 +27,8 @@ Actions that perform cleaning
 
 import glob
 import os
+import re
+import types
 import unittest
 import Command
 import FileUtilities
@@ -34,27 +36,6 @@ import General
 
 if 'posix' == os.name:
     import Unix
-
-
-
-###
-### File iterators
-###
-
-
-def get_file(path):
-    if os.path.lexists(path):
-        yield path
-
-
-def walk_all(top):
-    for path in FileUtilities.children_in_directory(top, True):
-        yield path
-
-
-def walk_files(top):
-    for path in FileUtilities.children_in_directory(top, False):
-        yield path
 
 
 
@@ -85,22 +66,6 @@ class ActionProvider:
         pass
 
 
-    def file_init(self, action_node):
-        """Initialize file search"""
-        search = action_node.getAttribute('search')
-        self.path = os.path.expanduser(os.path.expandvars( \
-            action_node.getAttribute('path')))
-        if 'file' == search:
-            self.get_paths = get_file
-        elif 'glob' == search:
-            self.get_paths = glob.glob
-        elif 'walk.all' == search:
-            self.get_paths = walk_all
-        elif 'walk.files' == search:
-            self.get_paths = walk_files
-        else:
-            raise RuntimeError("invalid search '%s'" % search)
-
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
@@ -108,9 +73,61 @@ class ActionProvider:
 
 
 
+###
+### base class
+###
+
+
+class FileActionProvider(ActionProvider):
+    """Base class for providers which work on individual files"""
+    action_key = '_file'
+
+    def __init__(self, action_element):
+        """Initialize file search"""
+        self.regex = action_element.getAttribute('regex')
+        assert(isinstance(self.regex, (str, unicode, types.NoneType)))
+        self.search = action_element.getAttribute('search')
+        self.path = os.path.expanduser(os.path.expandvars( \
+            action_element.getAttribute('path')))
+
+
     def get_paths(self):
-        """Overwritten by file_init()"""
-        raise RuntimeError('not initialized')
+        """Return a filtered list of files"""
+
+        def get_file(path):
+            if os.path.lexists(path):
+                yield path
+
+        def get_walk_all(top):
+            for path in FileUtilities.children_in_directory(top, False):
+                yield path
+
+        def get_walk_files(top):
+            for path in FileUtilities.children_in_directory(top, True):
+                yield path
+
+        if 'file' == self.search:
+            func = get_file
+        elif 'glob' == self.search:
+            func = glob.iglob
+        elif 'walk.all' == self.search:
+            func = get_walk_all
+        elif 'walk.files' == self.search:
+            func = get_walk_files
+        else:
+            raise RuntimeError("invalid search='%s'" % search)
+
+        if None == self.regex:
+            for path in func(self.path):
+                yield path
+        else:
+            for path in func(self.path):
+                if re.search(self.regex, os.path.basename(path)):
+                    yield path
+
+
+    def get_commands(self):
+        raise NotImplementedError('not implemented')
 
 
 ###
@@ -151,29 +168,23 @@ class AptAutoremove(ActionProvider):
                 'apt-get autoremove')
 
 
-class Delete(ActionProvider):
+class Delete(FileActionProvider):
     """Action to delete files"""
     action_key = 'delete'
 
 
-    def __init__(self, action_element):
-        self.file_init(action_element)
-
     def get_commands(self):
-        for path in self.get_paths(self.path):
+        for path in self.get_paths():
             yield Command.Delete(path)
 
 
 
-class SqliteVacuum(ActionProvider):
+class SqliteVacuum(FileActionProvider):
     """Action to vacuum SQLite databases"""
     action_key = 'sqlite.vacuum'
 
-    def __init__(self, action_element):
-        self.file_init(action_element)
-
     def get_commands(self):
-        for path in self.get_paths(self.path):
+        for path in self.get_paths():
             yield Command.Function( \
                 path, \
                 FileUtilities.vacuum_sqlite3, \
@@ -185,16 +196,13 @@ class SqliteVacuum(ActionProvider):
 
 
 
-class Truncate(ActionProvider):
+class Truncate(FileActionProvider):
     """Action to truncate files"""
     action_key = 'truncate'
 
 
-    def __init__(self, action_element):
-        self.file_init(action_element)
-
     def get_commands(self):
-        for path in self.get_paths(self.path):
+        for path in self.get_paths():
             yield Command.Truncate(path)
 
 
@@ -283,6 +291,23 @@ class TestAction(unittest.TestCase):
     """Test cases for Action"""
 
 
+    def _action_str_to_commands(self, action_str):
+        """Parse <action> and return commands"""
+        from xml.dom.minidom import parseString
+        dom = parseString(action_str)
+        action_node = dom.childNodes[0]
+        delete = Delete(action_node)
+        for cmd in delete.get_commands():
+            yield cmd
+
+
+    def _action_str_to_result(self, action_str):
+        """Parse <action> and return result"""
+        cmd = self._action_str_to_commands(action_str).next()
+        result = cmd.execute(False).next()
+        return result
+
+
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
         from xml.dom.minidom import parseString
@@ -302,6 +327,7 @@ class TestAction(unittest.TestCase):
             # preview
             result = cmd.execute(really_delete = False).next()
             Cleaner.TestCleaner.validate_result(self, result)
+            self.assertNotEqual('/', result['path'])
             # delete
             result = cmd.execute(really_delete = True).next()
             if 'delete' == command:
@@ -314,7 +340,7 @@ class TestAction(unittest.TestCase):
                 raise RuntimeError("Unknown command '%s'" % command)
 
 
-    def test_Delete(self):
+    def test_delete(self):
         """Unit test for class Delete"""
         import tempfile
         for dir in ('~', '$HOME'):
@@ -327,6 +353,30 @@ class TestAction(unittest.TestCase):
                 self._test_action_str(action_str)
 
 
+    def test_regex(self):
+        """Unit test for regex option"""
+        _iglob = glob.iglob
+        glob.iglob = lambda x: ['/tmp/foo']
+        FileUtilities.getsize = lambda x: 1
+        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo$"/>'
+        result = self._action_str_to_result(action_str)
+        self.assert_(result['path'], '/tmp/foo')
+        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
+        self.assertRaises(StopIteration, lambda : self._action_str_to_result(action_str))
+        glob.iglob = _iglob
+
+
+    def test_walk_files(self):
+        """Unit test for walk.files"""
+        import Cleaner
+        if 'posix' == os.name:
+            path = '/usr/var/log'
+        elif 'nt' == os.name:
+            path = '$WINDIR\\system32'
+        action_str = '<action command="delete" search="walk.files" path="%s" />'
+        for cmd in self._action_str_to_commands(action_str):
+            Cleaner.TestCleaner.validate_result(self, result)
+            self.assert_(not os.path.isdir(result['path']))
 
 
 
