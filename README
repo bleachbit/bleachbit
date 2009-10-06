@@ -16,16 +16,16 @@ http://bleachbit.sourceforge.net
 *** Usage
 ***
 
-To run BleachBit without installation, unpack the tarball
-and then run these commands.
+To run BleachBit without installation, unpack the tarball and then run these
+commands.
 
 make -C po local
 python bleachbit.py
 
 Then, review the preferences.
 
-Then, select some options, and click Preview.  Review
-the files, toggle options accordingly, and click Delete.
+Then, select some options, and click Preview.  Review the files, toggle options
+accordingly, and click Delete.
 
 For information regarding the command line interface, run:
 python bleachbit.py --help
