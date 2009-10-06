@@ -36,7 +36,7 @@
   <option id="recent_documents">
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
-    <action type="glob">~/.kde/share/apps/RecentDocuments/*.desktop</action>
-    <action type="glob">~/.kde4/share/apps/RecentDocuments/*.desktop</action>
+    <action command="delete" search="glob" path="~/.kde/share/apps/RecentDocuments/*.desktop"/>
+    <action command="delete" search="glob" path="~/.kde4/share/apps/RecentDocuments/*.desktop"/>
   </option>
 </cleaner>
