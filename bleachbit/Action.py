@@ -115,7 +115,7 @@ class FileActionProvider(ActionProvider):
         elif 'walk.files' == self.search:
             func = get_walk_files
         else:
-            raise RuntimeError("invalid search='%s'" % search)
+            raise RuntimeError("invalid search='%s'" % self.search)
 
         if None == self.regex:
             for path in func(self.path):
@@ -356,13 +356,19 @@ class TestAction(unittest.TestCase):
     def test_regex(self):
         """Unit test for regex option"""
         _iglob = glob.iglob
-        glob.iglob = lambda x: ['/tmp/foo']
+        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2']
         FileUtilities.getsize = lambda x: 1
-        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo$"/>'
+        # return regex match
+        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
         result = self._action_str_to_result(action_str)
-        self.assert_(result['path'], '/tmp/foo')
+        self.assert_(result['path'], '/tmp/foo2')
+        # return nothing
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
         self.assertRaises(StopIteration, lambda : self._action_str_to_result(action_str))
+        # expect error
+        action_str = '<action command="delete" search="invalid" path="/tmp/foo" regex="^bar$"/>'
+        self.assertRaises(RuntimeError, lambda : self._action_str_to_result(action_str))
+        # clean up
         glob.iglob = _iglob
 
 
