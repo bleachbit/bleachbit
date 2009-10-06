@@ -164,8 +164,12 @@ class Worker:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
                 msg = _("Please wait.  Previewing %s.") % name
             self.ui.update_progress_bar(msg)
-            for dummy in self.clean_operation(operation):
-                yield True
+            try:
+                for dummy in self.clean_operation(operation):
+                    yield True
+            except:
+                self.print_exception(operation)
+
             count += 1
 
         # print final stats
