@@ -105,27 +105,19 @@ def args_to_operations(args):
         default = False
         # enable all options (for example, firefox.*)
         if '*' == option_id:
-            default = True
             if operations.has_key(cleaner_id):
                 del operations[cleaner_id]
-        # default to false
-        if not operations.has_key(cleaner_id):
             operations[cleaner_id] = []
             for (option_id2, o_name) in backends[cleaner_id].get_options():
-                operations[cleaner_id].append( [ option_id2, default ] )
-        if '*' == option_id:
+                operations[cleaner_id].append( option_id2 )
             continue
-        # change the specified option
-        for option in operations[cleaner_id]:
-            try:
-                operations[cleaner_id].remove( [ option_id, False ] )
-            except ValueError:
-                pass
-            try:
-                operations[cleaner_id].remove( [ option_id, True ] ) # prevent duplicates
-            except ValueError:
-                pass
-            operations[cleaner_id].append( [ option_id, True ] )
+        # add the specified option
+        if not operations.has_key(cleaner_id):
+            operations[cleaner_id] = []
+        if not option_id in operations[cleaner_id]:
+            operations[cleaner_id].append( option_id )
+    for (k, v) in operations.iteritems():
+        operations[k] = sorted(v)
     return operations
 
 
@@ -177,6 +169,15 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
 
 class TestCLI(unittest.TestCase):
     """Unit test for module CLI"""
+
+
+    def test_args_to_operations(self):
+        """Unit test for args_to_operations()"""
+        tests = ( ( ['adobe_reader.*'], {'adobe_reader' : [ u'cache', u'mru' ] } ),
+            ( ['adobe_reader.mru'], {'adobe_reader' : [ u'mru' ] } ) )
+        for test in tests:
+            o = args_to_operations(test[0])
+            self.assertEqual(o, test[1])
 
 
     def test_cleaners_list(self):

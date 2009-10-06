@@ -332,8 +332,9 @@ class GUI:
                 if None == iterc:
                     return None
                 while iterc:
-                    tup = (model[iterc][2], model[iterc][1])
-                    ret.append(tup)
+                    if model[iterc][1]:
+                        # option is enabled
+                        ret.append(model[iterc][2])
                     iterc = model.iter_next(iterc)
                 return ret
             __iter = model.iter_next(__iter)
@@ -358,13 +359,13 @@ class GUI:
     def preview_or_run_operations(self, really_delete, operations = None):
         """Preview operations or run operations (delete files)"""
 
-        assert(type(really_delete) is bool)
+        assert(isinstance(really_delete, bool))
         import bleachbit.Worker
         if None == operations:
             operations = {}
             for operation in self.get_selected_operations():
                 operations[operation] = self.get_operation_options(operation)
-        assert(type(operations) is dict)
+        assert(isinstance(operations, dict))
         if 0 == len(operations):
             dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL \
                 | gtk.DIALOG_DESTROY_WITH_PARENT, \

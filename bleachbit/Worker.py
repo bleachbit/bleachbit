@@ -56,6 +56,7 @@ class Worker:
         """
         self.ui = ui
         self.really_delete = really_delete
+        assert(isinstance(operations, dict))
         self.operations = operations
         self.total_bytes = 0
         self.total_deleted = 0
@@ -120,6 +121,7 @@ class Worker:
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
+        assert(isinstance(operation_options, list))
         print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
         if self.really_delete and backends[operation].is_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
@@ -131,24 +133,23 @@ class Worker:
         import time
         self.yield_time = time.time()
 
-        if operation_options:
-            for (option_id, value) in operation_options:
-                # fixme: remove the values (true/false)
-                if not value:
-                    # option is disabled, so skip it
-                    continue
-                for cmd in backends[operation].get_commands(option_id):
-                    for ret in self.execute(cmd):
-                        if True == ret:
-                            # Return control to PyGTK idle loop to keep
-                            # it responding allow the user to abort
-                            self.yield_time = time.time()
-                            yield True
-                    if time.time() - self.yield_time > 0.25:
-                        if self.really_delete:
-                            self.ui.update_total_size(self.total_bytes)
-                        yield True
+        if not operation_options:
+            raise StopIteration
+
+        for option_id in operation_options:
+            assert(isinstance(option_id, (str, unicode)))
+            for cmd in backends[operation].get_commands(option_id):
+                for ret in self.execute(cmd):
+                    if True == ret:
+                        # Return control to PyGTK idle loop to keep
+                        # it responding allow the user to abort
                         self.yield_time = time.time()
+                        yield True
+                if time.time() - self.yield_time > 0.25:
+                    if self.really_delete:
+                        self.ui.update_total_size(self.total_bytes)
+                    yield True
+                    self.yield_time = time.time()
 
 
     def run(self):
