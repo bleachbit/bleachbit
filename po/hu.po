@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-24 21:52-0600\n"
-"PO-Revision-Date: 2009-09-29 18:36+0000\n"
-"Last-Translator: charlie <Unknown>\n"
+"PO-Revision-Date: 2009-10-06 08:18+0000\n"
+"Last-Translator: Muszela Balázs <bazsi86@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-29 22:08+0000\n"
+"X-Launchpad-Export-Date: 2009-10-06 14:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -515,7 +515,7 @@ msgstr ""
 
 #: ../bleachbit/Command.py:187
 msgid "Delete registry key"
-msgstr ""
+msgstr "Regisztrációs kulcs törlése"
 
 #: ../bleachbit/FileUtilities.py:189
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -654,6 +654,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Gergely Szarka https://launchpad.net/~gszarka\n"
 "  Moltenice80 https://launchpad.net/~moltenice80\n"
+"  Muszela Balázs https://launchpad.net/~bazsi86\n"
 "  alfa00red https://launchpad.net/~alfa00red\n"
 "  charlie https://launchpad.net/~janos.csardi"
 
@@ -792,7 +793,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:185
 #, python-format
 msgid "Files deleted: %d"
-msgstr ""
+msgstr "Fájlok törölve: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
@@ -809,4 +810,4 @@ msgstr ""
 #: ../bleachbit/Worker.py:195
 #, python-format
 msgid "Errors: %d"
-msgstr ""
+msgstr "Hibák: %d"
