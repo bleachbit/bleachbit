@@ -33,4 +33,9 @@
     <action command="delete" search="glob" path="~/.kde/tmp-*/*/*"/>
     <action command="delete" search="glob" path="~/.kde/tmp-*/*"/>
   </option>
+  <option id="recent_documents">
+    <label>Recent documents list</label>
+    <description>Delete the list of recently used documents</description>
+    <action type="glob">~/.kde4/share/apps/RecentDocuments/*.desktop</action>
+  </option>
 </cleaner>
