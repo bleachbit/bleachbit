@@ -220,15 +220,16 @@ class TestWorker(unittest.TestCase):
         os.write(fd, '123')
         os.close(fd)
         self.assert_(os.path.exists(filename))
-        astr = '<action command="test">%s</action>' % filename
+        astr = '<action command="test" path="%s"/>' % filename
         cleaner = Cleaner.TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
-        operations = { 'test' : [ ('option1', True ) ] }
+        operations = { 'test' : [ 'option1' ] }
         w = Worker(ui, True, operations)
         run = w.run()
         while run.next():
             pass
-        self.assert_(not os.path.exists(filename))
+        self.assert_(not os.path.exists(filename), \
+            "Path does not exist '%s'" % filename)
         self.assertEqual(w.total_special, 3)
         self.assertEqual(w.total_errors, 2)
         if 'posix' == os.name:

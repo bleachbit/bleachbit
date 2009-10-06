@@ -212,7 +212,7 @@ class TestActionProvider(ActionProvider):
     action_key = 'test'
 
     def __init__(self, action_element):
-        self.pathname = General.getText(action_element.childNodes)
+        self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
         # non-existent file, should fail and continue
