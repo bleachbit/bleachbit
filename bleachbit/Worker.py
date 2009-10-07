@@ -30,6 +30,7 @@ import sys
 import traceback
 import unittest
 
+import DeepScan
 import FileUtilities
 from Cleaner import backends
 
@@ -138,6 +139,7 @@ class Worker:
 
         for option_id in operation_options:
             assert(isinstance(option_id, (str, unicode)))
+            # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd):
                     if True == ret:
@@ -150,11 +152,22 @@ class Worker:
                         self.ui.update_total_size(self.total_bytes)
                     yield True
                     self.yield_time = time.time()
-
+            # deep scan
+            ds = backends[operation].get_deep_scan(option_id)
+            if not ds:
+                continue
+            if '' == ds['path']:
+                ds['path'] = os.path.expanduser('~')
+            if 'delete' != ds['command']:
+                raise NotImplementedError('Deep scan only supports deleting now')
+            if not self.deepscans.has_key(ds['path']):
+                self.deepscans[ds['path']] = []
+            self.deepscans[ds['path']].append(ds)
 
     def run(self):
         """Perform the main cleaning process"""
         count = 0
+        self.deepscans = {}
         for operation in self.operations:
             self.ui.update_progress_bar(1.0 * count / len(self.operations))
             name = backends[operation].get_name()
@@ -172,6 +185,28 @@ class Worker:
                 self.print_exception(operation)
 
             count += 1
+
+        # run deep scan
+        print 'debug: deepscans=', self.deepscans
+        # TRANSLATORS: The "deep scan" feature searches over broad
+        # areas of the file system such as the user's whole home directory
+        # or all the system executables.
+        self.ui.update_progress_bar("Please wait.  Running deep scan.")
+        ds = DeepScan.DeepScan()
+        for (path, dsdict) in self.deepscans.iteritems():
+            print 'debug: deepscan path=',path
+            print 'debug: deepscan dict=', dsdict
+            for dsdict2 in dsdict:
+                ds.add_search(path, dsdict2['regex'])
+
+        for path in ds.scan():
+            # fixme: yield to idle loop
+            # fixme: support non-delete commands
+            import Command
+            cmd = Command.Delete(path)
+            for ret in self.execute(cmd):
+                if True == ret:
+                    yield True
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)

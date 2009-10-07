@@ -88,7 +88,17 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.path = os.path.expanduser(os.path.expandvars( \
-            action_element.getAttribute('path')))
+        action_element.getAttribute('path')))
+        self.ds = {}
+        if 'deep' == self.search:
+            self.ds['regex'] = self.regex
+            self.ds['cache'] = General.boolstr_to_bool(action_element.getAttribute('cache'))
+            self.ds['command'] = action_element.getAttribute('command')
+            self.ds['path'] = self.path
+
+
+    def get_deep_scan(self):
+        return self.ds
 
 
     def get_paths(self):
@@ -106,7 +116,9 @@ class FileActionProvider(ActionProvider):
             for path in FileUtilities.children_in_directory(top, True):
                 yield path
 
-        if 'file' == self.search:
+        if 'deep' == self.search:
+            raise StopIteration
+        elif 'file' == self.search:
             func = get_file
         elif 'glob' == self.search:
             func = glob.iglob

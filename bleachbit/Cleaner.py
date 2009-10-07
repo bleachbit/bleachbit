@@ -95,6 +95,14 @@ class Cleaner:
         if not self.options.has_key(option_id):
             raise RuntimeError("Unknown option '%s'" % option_id)
 
+    def get_deep_scan(self, option_id):
+        """Get dictionary used to build a deep scan"""
+        for action in self.actions:
+            if option_id == action[0]:
+                return action[1].get_deep_scan()
+        if not self.options.has_key(option_id):
+            raise RuntimeError("Unknown option '%s'" % option_id)
+
     def get_description(self):
         """Brief description of the cleaner"""
         return self.description
