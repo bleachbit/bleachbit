@@ -23,27 +23,40 @@
   <label translate="true">Deep scan</label>
   <option id="backup">
     <label>Backup files</label>
-    <description>Delete the files</description>
+    <description>Delete the backup files</description>
     <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$" cache="false"/>
     <action command="delete" search="deep" regex="\.[a-zA-Z]{1,4}~$" cache="false"/>
     <warning>This option is slow.</warning>
   </option>
-  <option id="compiled">
-    <label>Compiled objects</label>
+  <option id="developer">
+    <label>Developer files</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
+    <!-- gettext -->
+    <action command="delete" search="deep" regex="\.mo$" cache="false"/>
     <!-- Python -->
     <action command="delete" search="deep" regex="\.py[co]$" cache="false"/>
   </option>
-  <option id="thumbs.db">
-    <label>Thumbs.db</label>
+  <option id="thumbs_db">
+    <label translate="false">Thumbs.db</label>
     <description>Delete the files</description>
+    <warning>This option is slow.</warning>
     <action command="delete" search="deep" regex="^Thumbs\.db$" cache="false"/>
     <action command="delete" search="deep" regex="^Thumbs\.db:encryptable$" cache="false"/>
   </option>
-  <option id="thumbs.db">
-    <label>DS_Store</label>
+  <option id="ds_store">
+    <label translate="false">DS_Store</label>
     <description>Delete the files</description>
+    <warning>This option is slow.</warning>
     <action command="delete" search="deep" cache="false" regex="^DS_Store$"/>
+  </option>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <warning>This option is slow.</warning>
+    <!-- http://support.microsoft.com/kb/211632 -->
+    <action command="delete" search="deep" cache="false" regex="^~wr[a-z][0-9]{4}\.tmp$"/>
+    <!-- http://support.microsoft.com/kb/826810 -->
+    <action command="delete" search="deep" cache="false" regex="^ppt[0-9]{4}\.tmp$"/>
   </option>
 </cleaner>
