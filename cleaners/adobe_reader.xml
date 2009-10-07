@@ -21,6 +21,7 @@
 -->
 <cleaner id="adobe_reader">
   <label>Adobe Reader</label>
+  <running type="exe">acroread</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
@@ -42,5 +43,10 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\8.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
+  </option>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
   </option>
 </cleaner>
