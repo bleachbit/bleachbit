@@ -24,9 +24,9 @@
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
+    <warning>This option is slow.</warning>
     <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$" cache="false"/>
     <action command="delete" search="deep" regex="\.[a-zA-Z]{1,4}~$" cache="false"/>
-    <warning>This option is slow.</warning>
   </option>
   <option id="developer">
     <label>Developer files</label>
