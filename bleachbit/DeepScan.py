@@ -128,7 +128,12 @@ class TestDeepScan(unittest.TestCase):
         ds.add_search(path, '^Thumbs.db$')
         ds.add_search(path, '^Thumbs.db:encryptable$')
         for ret in ds.scan():
-            self.assert_(isinstance(ret, (str, unicode)))
+            if True == ret:
+                # it's yielding control to the GTK idle loop
+                continue
+            self.assert_(isinstance(ret, (str, unicode)), \
+                "Expecting string but got '%s' (%s)" % \
+                 (ret, str(type(ret))))
             self.assert_(os.path.lexists(ret))
 
 
