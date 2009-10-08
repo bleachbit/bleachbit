@@ -82,7 +82,8 @@ class Cleaner:
                     for ret in cmd.execute(False):
                         return False
                 for ds in self.get_deep_scan(option_id):
-                    return False
+                    if isinstance(ds, dict):
+                        return False
             except:
                 print 'warning: exception in auto_hide(), cleaner=%s, option=%s' % (self.name, option_id)
                 traceback.print_exc()
@@ -101,7 +102,8 @@ class Cleaner:
         """Get dictionary used to build a deep scan"""
         for action in self.actions:
             if option_id == action[0]:
-                return action[1].get_deep_scan()
+                for ds in action[1].get_deep_scan():
+                    yield ds
         if not self.options.has_key(option_id):
             raise RuntimeError("Unknown option '%s'" % option_id)
 

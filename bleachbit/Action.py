@@ -66,6 +66,9 @@ class ActionProvider:
         pass
 
 
+    def get_deep_scan(self):
+        """Return a dictionary used to construct a deep scan"""
+        raise StopIteration
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
@@ -98,7 +101,7 @@ class FileActionProvider(ActionProvider):
 
 
     def get_deep_scan(self):
-        return self.ds
+        yield self.ds
 
 
     def get_paths(self):

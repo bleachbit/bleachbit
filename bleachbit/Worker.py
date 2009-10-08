@@ -153,7 +153,7 @@ class Worker:
                     yield True
                     self.yield_time = time.time()
             # deep scan
-            ds = backends[operation].get_deep_scan(option_id)
+            ds = backends[operation].get_deep_scan(option_id).next()
             if not ds:
                 continue
             if '' == ds['path']:
