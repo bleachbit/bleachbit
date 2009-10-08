@@ -403,6 +403,9 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
+        if 'linux2' == sys.platform:
+            self.add_option('memory', _('Memory'), _('Wipe the swap and free memory'))
+            self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
@@ -483,6 +486,11 @@ class System(Cleaner):
                 expanded = os.path.expandvars(path)
                 for globbed in glob.iglob(expanded):
                     files += [ globbed ]
+
+        # memory
+        if 'linux2' == sys.platform and 'memory' == option_id:
+            import Memory
+            yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:

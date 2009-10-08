@@ -270,7 +270,7 @@ def listdir(directory):
         yield os.path.join(dirname, filename)
 
 
-def wipe_contents(path):
+def wipe_contents(path, truncate = True):
     """Wipe files contents
 
     http://en.wikipedia.org/wiki/Data_remanence
@@ -292,8 +292,9 @@ def wipe_contents(path):
         f.write(blanks)
         size -= 4096
     f.flush()
-    f.truncate(0)
-    f.flush()
+    if truncate:
+        f.truncate(0)
+        f.flush()
     f.close()
 
 
