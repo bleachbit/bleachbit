@@ -28,14 +28,18 @@
     <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$" cache="false"/>
     <action command="delete" search="deep" regex="\.[a-zA-Z]{1,4}~$" cache="false"/>
   </option>
-  <option id="developer">
-    <label>Developer files</label>
+  <option id="compiled_objects">
+    <label>Compiled objects</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <!-- gettext -->
-    <action command="delete" search="deep" regex="\.mo$" cache="false"/>
-    <!-- Python -->
+     <!-- Python -->
     <action command="delete" search="deep" regex="\.py[co]$" cache="false"/>
+  </option>
+  <option id="ds_store">
+    <label translate="false">DS_Store</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" cache="false" regex="^DS_Store$"/>
   </option>
   <option id="thumbs_db">
     <label translate="false">Thumbs.db</label>
@@ -43,12 +47,6 @@
     <warning>This option is slow.</warning>
     <action command="delete" search="deep" regex="^Thumbs\.db$" cache="false"/>
     <action command="delete" search="deep" regex="^Thumbs\.db:encryptable$" cache="false"/>
-  </option>
-  <option id="ds_store">
-    <label translate="false">DS_Store</label>
-    <description>Delete the files</description>
-    <warning>This option is slow.</warning>
-    <action command="delete" search="deep" cache="false" regex="^DS_Store$"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
