@@ -67,6 +67,7 @@
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
+                      <xs:attribute name="cache" type="xs:string"/>
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
@@ -86,6 +87,7 @@
                       <xs:attribute name="search">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
+                            <xs:enumeration value="deep"/>
                             <xs:enumeration value="file"/>
                             <xs:enumeration value="glob"/>
                             <xs:enumeration value="walk.all"/>
