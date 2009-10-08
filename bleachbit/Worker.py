@@ -179,6 +179,7 @@ class Worker:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
                 msg = _("Please wait.  Previewing %s.") % name
             self.ui.update_progress_bar(msg)
+            yield True # show the progress bar message now
             try:
                 for dummy in self.clean_operation(operation):
                     yield True
