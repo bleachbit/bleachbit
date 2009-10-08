@@ -96,6 +96,9 @@ class DeepScan:
    def scan(self):
         """Perform requested searches and yield each match"""
         print 'debug: searches=', self.searches
+        import time
+        yield_time = time.time()
+
         for (top, regexes) in self.searches.iteritems():
             for (dirpath, dirnames, filenames) in os.walk(top):
                 for regex in regexes:
@@ -104,7 +107,10 @@ class DeepScan:
                     for filename in filenames:
                         if r.search(filename):
                             yield os.path.join(dirpath, filename)
-
+                if time.time() - yield_time > 0.25:
+                    # allow GTK+ to process the idle loop
+                    yield True
+                    yield_time = time.time()
 
 
 

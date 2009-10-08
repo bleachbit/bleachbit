@@ -164,6 +164,7 @@ class Worker:
                 self.deepscans[ds['path']] = []
             self.deepscans[ds['path']].append(ds)
 
+
     def run(self):
         """Perform the main cleaning process"""
         count = 0
@@ -192,6 +193,7 @@ class Worker:
         # areas of the file system such as the user's whole home directory
         # or all the system executables.
         self.ui.update_progress_bar("Please wait.  Running deep scan.")
+        yield True # allow GTK to update the screen
         ds = DeepScan.DeepScan()
         for (path, dsdict) in self.deepscans.iteritems():
             print 'debug: deepscan path=',path
@@ -200,13 +202,15 @@ class Worker:
                 ds.add_search(path, dsdict2['regex'])
 
         for path in ds.scan():
+            if True == path:
+                yield True
+                continue
             # fixme: yield to idle loop
             # fixme: support non-delete commands
             import Command
             cmd = Command.Delete(path)
             for ret in self.execute(cmd):
-                if True == ret:
-                    yield True
+                yield True
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
