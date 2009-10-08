@@ -107,6 +107,7 @@ def get_swap_uuid(device):
         if None != ret:
             uuid = ret.group(1)
     print "debug: uuid(%s)='%s'" % (device, uuid)
+    return uuid
 
 
 def physical_free_linux():
@@ -184,8 +185,8 @@ def wipe_swap_linux(devices):
         # reinitialize
         print "debug: reinitializing swap device ", device
         args = ['mkswap', device]
-        if None != uuid:
-            args.append("-u")
+        if uuid:
+            args.append("-U")
             args.append(uuid)
         (rc, stdout, stderr) = General.run_external(args)
         if 0 != rc:
