@@ -205,7 +205,6 @@ class Worker:
             if True == path:
                 yield True
                 continue
-            # fixme: yield to idle loop
             # fixme: support non-delete commands
             import Command
             cmd = Command.Delete(path)
