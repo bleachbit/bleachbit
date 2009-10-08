@@ -32,7 +32,7 @@
     <label>Compiled objects</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-     <!-- Python -->
+    <!-- Python -->
     <action command="delete" search="deep" regex="\.py[co]$" cache="false"/>
   </option>
   <option id="ds_store">
