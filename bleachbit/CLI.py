@@ -173,7 +173,7 @@ class TestCLI(unittest.TestCase):
 
     def test_args_to_operations(self):
         """Unit test for args_to_operations()"""
-        tests = ( ( ['adobe_reader.*'], {'adobe_reader' : [ u'cache', u'mru' ] } ),
+        tests = ( ( ['adobe_reader.*'], {'adobe_reader' : [ u'cache', u'mru', u'tmp' ] } ),
             ( ['adobe_reader.mru'], {'adobe_reader' : [ u'mru' ] } ) )
         for test in tests:
             o = args_to_operations(test[0])
