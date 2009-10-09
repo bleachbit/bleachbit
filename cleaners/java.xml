@@ -25,6 +25,7 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.files" path="~/.java/deployment/cache/"/>
+    <action command="delete" search="walk.all" path="~/.icedteaplugin/cache/"/>
     <action command="delete" search="walk.files" path="$APPDATA\Sun\Java\Deployment\cache\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\LocalLow\Sun\Java\Deployment\cache\"/>
   </option>
