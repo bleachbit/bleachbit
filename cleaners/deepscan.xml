@@ -36,10 +36,10 @@
     <action command="delete" search="deep" regex="\.py[co]$" cache="false"/>
   </option>
   <option id="ds_store">
-    <label translate="false">DS_Store</label>
+    <label translate="false">.DS_Store</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" cache="false" regex="^DS_Store$"/>
+    <action command="delete" search="deep" cache="false" regex="^\.DS_Store$"/>
   </option>
   <option id="thumbs_db">
     <label translate="false">Thumbs.db</label>
