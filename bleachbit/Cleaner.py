@@ -410,6 +410,8 @@ class System(Cleaner):
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
         if 'linux2' == sys.platform:
+            # TRANSLATORS: 'Free' is an adjective and could be translated
+            # 'unallocated.'
             self.add_option('memory', _('Memory'), _('Wipe the swap and free memory'))
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
