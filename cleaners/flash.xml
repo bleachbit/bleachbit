@@ -22,12 +22,18 @@
 <cleaner id="flash">
   <label>Flash</label>
   <description>Multimedia viewer</description>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="walk.all" path="$APPDATA\Adobe\Flash Player\AssetCache\"/>
+    <action command="delete" search="walk.all" path="~/.adobe/Flash_Player/AssetCache/"/>
+  </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/"/>
-    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/#SharedObjects/"/>
     <action command="delete" search="walk.all" path="$APPDATA\Macromedia\Flash Player\#SharedObjects\"/>
     <action command="delete" search="walk.all" path="$APPDATA\Macromedia\Flash Player\macromedia.com\support\flashplayer\sys\"/>
+    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/#SharedObjects/"/>
+    <action command="delete" search="walk.all" path="~/.macromedia/Flash_Player/macromedia.com/support/flashplayer/sys/"/>
   </option>
 </cleaner>
