@@ -461,20 +461,10 @@ class GUI:
             return
 
         # create a temporary cleaner object
-        cleaner = bleachbit.Cleaner.Cleaner()
-        cleaner.add_option('files', 'files', '')
-        cleaner.name = ''
-        import bleachbit.Action
-        class CustomFileAction(bleachbit.Action.ActionProvider):
-            def list_files(self):
-                for path in paths:
-                    yield path
-        provider = CustomFileAction(None)
-        cleaner.add_action('files', provider)
-        backends['_gui'] = cleaner
+        backends['_gui'] = bleachbit.Cleaner.create_simple_cleaner(paths)
 
         # preview and confirm
-        operations = { '_gui' : [ ( 'files', True) ] }
+        operations = { '_gui' : [ 'files' ] }
         self.preview_or_run_operations(False, operations)
 
         if delete_confirmation_dialog(self.window, mention_preview = False):

@@ -194,6 +194,17 @@ class Delete(FileActionProvider):
 
 
 
+class Shred(FileActionProvider):
+    """Action to shred files (override preference)"""
+    action_key = 'shred'
+
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Shred(path)
+
+
+
 class SqliteVacuum(FileActionProvider):
     """Action to vacuum SQLite databases"""
     action_key = 'sqlite.vacuum'

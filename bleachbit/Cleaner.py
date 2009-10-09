@@ -17,9 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Perform (or assist with) cleaning operations.
 """
+
+
 
 from gettext import gettext as _
 import glob
@@ -33,6 +37,7 @@ import re
 import subprocess
 import sys
 import traceback
+import unittest
 
 import Command
 import FileUtilities
@@ -45,6 +50,7 @@ elif 'nt' == os.name:
 
 from FileUtilities import children_in_directory
 from Options import options
+
 
 
 class Cleaner:
@@ -650,6 +656,7 @@ class System(Cleaner):
         return False
 
 
+# initialize "hard coded" (non-CleanerML) backends
 backends = {}
 backends["firefox"] = Firefox()
 if 'posix' == os.name:
@@ -658,9 +665,24 @@ backends["openofficeorg"] = OpenOfficeOrg()
 backends["system"] = System()
 
 
-import unittest
+def create_simple_cleaner(paths):
+    cleaner = Cleaner()
+    cleaner.add_option(option_id = 'files', name = '', description = '')
+    cleaner.name = ''
+    import Action
+    import Command
+    class CustomFileAction(Action.ActionProvider):
+        def get_commands(self):
+            for path in paths:
+                yield Command.Shred(path)
+    provider = CustomFileAction(None)
+    cleaner.add_action('files', provider)
+    return cleaner
+
+
 
 class TestCleaner(unittest.TestCase):
+
 
     @staticmethod
     def action_to_cleaner(action_str):
@@ -718,18 +740,44 @@ class TestCleaner(unittest.TestCase):
         # should fail
         self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
 
+
     def test_auto_hide(self):
         for key in sorted(backends):
             self.assert_ (type(backends[key].auto_hide()) is bool)
+
+
+    def test_create_simple_cleaner(self):
+        """Unit test for method create_simple_cleaner"""
+        import tempfile
+        (fd, filename1) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        (fd, filename2) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        self.assert_(os.path.exists(filename1))
+        self.assert_(os.path.exists(filename2))
+        cleaner = create_simple_cleaner( [ filename1, filename2 ] )
+        for cmd in cleaner.get_commands('files'):
+            # preview
+            for result in cmd.execute(False):
+                self.validate_result(self, result)
+            # delete
+            for result in cmd.execute(True):
+                pass
+
+        self.assert_(not os.path.exists(filename1))
+        self.assert_(not os.path.exists(filename2))
+
 
     def test_get_name(self):
         for key in sorted(backends):
             self.assert_ (type(backends[key].get_name()) is str)
 
+
     def test_get_descrption(self):
         for key in sorted(backends):
             for desc in backends[key].get_description():
                 self.assert_ (type(desc) is str)
+
 
     def test_get_options(self):
         for key in sorted(backends):
