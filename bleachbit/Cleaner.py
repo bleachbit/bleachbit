@@ -418,6 +418,7 @@ class System(Cleaner):
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+            self.add_option('thumbnails', _('Thumbnails'), _('Delete the cache')))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
@@ -638,6 +639,11 @@ class System(Cleaner):
                     return Windows.empty_recycle_bin(drive, True)
                 # fixme: enable size preview
                 yield Command.Function(None, emptyrecyclebin, label)
+
+        if 'nt' == os.name and 'thumbnails' == option_id:
+            for path in os.path.expandvars('$LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\thumbcache*.db'):
+                yield Command.Delete(path)
+
 
 
     def whitelisted(self, pathname):
