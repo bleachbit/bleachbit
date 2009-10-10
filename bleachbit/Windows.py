@@ -202,7 +202,7 @@ def start_with_computer(enabled):
     import win32com.client
     shell = win32com.client.Dispatch('WScript.Shell')
     shortcut = shell.CreateShortCut(Common.autostart_path)
-    shortcut.TargetPath = Common.bleachbit_exe_path
+    shortcut.TargetPath = os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe')
     shortcut.save()
 
 
