@@ -540,7 +540,7 @@ def start_with_computer(enabled):
         return
     import shutil
     shutil.copy(Common.launcher_path, Common.autostart_path)
-    os.chmod(Common.autostart_path, 0750)
+    os.chmod(Common.autostart_path, 0755)
 
 
 def start_with_computer_check():
