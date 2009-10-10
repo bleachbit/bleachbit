@@ -532,17 +532,20 @@ def rotated_logs():
 def start_with_computer(enabled):
     """If enabled, create shortcut to start application with computer.
     If disabled, then delete the shortcut."""
-    fn = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
     if not enabled:
-        if os.path.lexists(fn):
-            FileUtilities.delete(fn)
+        if os.path.lexists(Common.autostart_path):
+            FileUtilities.delete(Common.autostart_path)
         return
-    if os.path.lexists(fn):
+    if os.path.lexists(Common.autostart_path):
         return
     import shutil
-    shutil.copy(Common.launcher_path, fn)
-    os.chmod(fn, 0750)
+    shutil.copy(Common.launcher_path, Common.autostart_path)
+    os.chmod(Common.autostart_path, 0750)
 
+
+def start_with_computer_check():
+    """Return boolean whether BleachBit will start with the computer"""
+    return os.path.lexists(Common.autostart_path)
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
@@ -710,6 +713,22 @@ class TestUnix(unittest.TestCase):
                 "Rotated log path '%s' does not exist" % path)
 
 
+    def test_start_with_computer(self):
+        """Unit test for start_with_computer*"""
+        b = start_with_computer_check()
+        self.assert_(isinstance(b, bool))
+        # opposite setting
+        start_with_computer(not b)
+        two_b = start_with_computer_check()
+        self.assert_(isinstance(two_b, bool))
+        self.assertEqual(b, not two_b)
+        # original setting
+        start_with_computer(b)
+        three_b = start_with_computer_check()
+        self.assert_(isinstance(b, bool))
+        self.assertEqual(b, three_b)
+
+
     def test_wine_to_linux_path(self):
         """Unit test for wine_to_linux_path()"""
         tests = [ ("/home/foo/.wine", \
@@ -717,6 +736,7 @@ class TestUnix(unittest.TestCase):
             "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe") ]
         for test in tests:
             self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
+
 
     def test_yum_clean(self):
         """Unit test for yum_clean()"""

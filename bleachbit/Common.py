@@ -120,6 +120,7 @@ else:
 
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
+autostart_path = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
 
 
 ###

@@ -33,6 +33,9 @@ import sys
 from Common import online_update_notification_enabled
 from Options import options
 
+if 'posix' == os.name:
+    import Unix
+
 
 
 class PreferencesDialog:
@@ -62,11 +65,10 @@ class PreferencesDialog:
 
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
+        options.toggle(path)
         if 'auto_hide' == path:
-            options.toggle(path)
             self.cb_refresh_operations()
         if 'auto_start' == path and 'posix' == os.name:
-            import Unix
             try:
                 Unix.start_with_computer(options.get(path))
             except:
@@ -76,13 +78,13 @@ class PreferencesDialog:
                     message_format = str(sys.exc_info()[1]))
                 dlg.run()
                 dlg.destroy()
-            else:
-                options.toggle(path)
 
 
     def __general_page(self):
         """Return a widget containing the general page"""
 
+
+        options.set('auto_start', Unix.start_with_computer_check())
 
         vbox = gtk.VBox()
 
