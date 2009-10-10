@@ -18,6 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 """
 Functionality specific to Microsoft Windows
 
@@ -37,8 +38,11 @@ These are the terms:
 
 """
 
+
+
 import os
 import sys
+import unittest
 
 from gettext import gettext as _
 
@@ -54,6 +58,10 @@ if 'win32' == sys.platform:
 
     psapi = windll.psapi
     kernel = windll.kernel32
+
+import FileUtilities
+import Common
+
 
 
 def delete_locked_file(pathname):
@@ -182,8 +190,26 @@ def split_registry_key(full_key):
     return ( hive_map[hive_str], full_key[5:] )
 
 
+def start_with_computer(enabled):
+    """If enabled, create shortcut to start application with computer.
+    If disabled, then delete the shortcut."""
+    if not enabled:
+        if os.path.lexists(Common.autostart_path):
+            FileUtilities.delete(Common.autostart_path)
+        return
+    if os.path.lexists(Common.autostart_path):
+        return
+    import win32com.client
+    shell = win32com.client.Dispatch('WScript.Shell')
+    shortcut = shell.CreateShortCut(Common.autostart_path)
+    shortcut.TargetPath = Common.bleachbit_exe_path
+    shortcut.save()
 
-import unittest
+
+def start_with_computer_check():
+    """Return boolean whether BleachBit will start with the computer"""
+    return os.path.lexists(Common.autostart_path)
+
 
 class TestWindows(unittest.TestCase):
     """Unit tests for module Windows"""
@@ -282,6 +308,23 @@ class TestWindows(unittest.TestCase):
             (hive, key) = split_registry_key(input_key)
             self.assertEqual(expected_hive, hive)
             self.assertEqual(expected_key, key)
+
+
+    def test_start_with_computer(self):
+            """Unit test for start_with_computer*"""
+            b = start_with_computer_check()
+            self.assert_(isinstance(b, bool))
+            # opposite setting
+            start_with_computer(not b)
+            two_b = start_with_computer_check()
+            self.assert_(isinstance(two_b, bool))
+            self.assertEqual(b, not two_b)
+            # original setting
+            start_with_computer(b)
+            three_b = start_with_computer_check()
+            self.assert_(isinstance(b, bool))
+            self.assertEqual(b, three_b)
+
 
 
 if __name__ == '__main__' and sys.platform == 'win32':

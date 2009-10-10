@@ -29,10 +29,13 @@ Preferences dialog
 import gtk
 import os
 import sys
+import traceback
 
 from Common import online_update_notification_enabled
 from Options import options
 
+if 'nt' == os.name:
+    import Windows
 if 'posix' == os.name:
     import Unix
 
@@ -68,10 +71,15 @@ class PreferencesDialog:
         options.toggle(path)
         if 'auto_hide' == path:
             self.cb_refresh_operations()
-        if 'auto_start' == path and 'posix' == os.name:
+        if 'auto_start' == path:
+            if 'nt' == os.name:
+                swc = Windows.start_with_computer
+            if 'posix' == os.name:
+                swc = Unix.start_with_computer
             try:
-                Unix.start_with_computer(options.get(path))
+                swc(options.get(path))
             except:
+                traceback.print_exc()
                 dlg = gtk.MessageDialog(self.parent,
                     type = gtk.MESSAGE_ERROR,
                     buttons = gtk.BUTTONS_OK,
@@ -84,7 +92,12 @@ class PreferencesDialog:
         """Return a widget containing the general page"""
 
 
-        options.set('auto_start', Unix.start_with_computer_check())
+        if 'nt' == os.name:
+            swcc = Windows.start_with_computer_check
+        if 'posix' == os.name:
+            swcc = Unix.start_with_computer_check
+
+        options.set('auto_start', swcc())
 
         vbox = gtk.VBox()
 
@@ -113,11 +126,10 @@ class PreferencesDialog:
         self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False)
 
-        if 'posix' == os.name:
-            cb_start = gtk.CheckButton(_("Start BleachBit with computer"))
-            cb_start.set_active(options.get('auto_start'))
-            cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
-            vbox.pack_start(cb_start, False)
+        cb_start = gtk.CheckButton(_("Start BleachBit with computer"))
+        cb_start.set_active(options.get('auto_start'))
+        cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
+        vbox.pack_start(cb_start, False)
         return vbox
 
     def __drives_page(self):

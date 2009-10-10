@@ -120,7 +120,10 @@ else:
 
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
-autostart_path = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
+if 'posix' == os.name:
+    autostart_path = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
+if 'nt' == os.name:
+    autostart_path = os.path.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup\\bleachbit.lnk')
 
 
 ###
