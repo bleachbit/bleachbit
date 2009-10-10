@@ -121,7 +121,12 @@ Section Core (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
-    File /r "..\dist\*.*"
+    File "..\dist\*.*"
+    File /r "..\dist\etc\*.*"
+    File /r "..\dist\lib\*.*"
+    File "..\dist\share\bleachbit.png"
+    File /r "..\dist\share\cleaners\*.*"
+    File /r "..\dist\share\themes\*.*"
     File "..\COPYING"
 
     SetOutPath "$INSTDIR\share\"
@@ -164,6 +169,13 @@ SectionGroup /e Shortcuts
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     SectionEnd
 SectionGroupEnd
+
+
+Section Translations
+    SetOutPath $INSTDIR
+    File /r "..\dist\share\locale\*.*"
+
+SectionEnd
 
 ;--------------------------------
 ;Installer Functions
