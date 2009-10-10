@@ -19,6 +19,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 """
 Integration specific to Unix-like operating systems
 """
@@ -32,6 +33,7 @@ import subprocess
 import sys
 import ConfigParser
 
+import Common
 import FileUtilities
 import General
 
@@ -525,6 +527,22 @@ def rotated_logs():
         whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
         if None == re.match(whitelist_re, path): # for Slackware, Launchpad #367575
             yield path
+
+
+def start_with_computer(enabled):
+    """If enabled, create shortcut to start application with computer.
+    If disabled, then delete the shortcut."""
+    fn = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
+    if not enabled:
+        if os.path.lexists(fn):
+            FileUtilities.delete(fn)
+        return
+    if os.path.lexists(fn):
+        return
+    import shutil
+    shutil.copy(Common.launcher_path, fn)
+    os.chmod(fn, 0750)
+
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):

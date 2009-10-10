@@ -118,6 +118,10 @@ else:
         locale_dir = "/usr/pkg/share/locale/"
 
 
+# launcher
+launcher_path = '/usr/share/applications/bleachbit.desktop'
+
+
 ###
 ### gettext
 ###

@@ -31,7 +31,7 @@ import sys
 import Common
 
 
-boolean_keys = ('auto_hide', 'check_online_updates', 'first_start', 'shred')
+boolean_keys = ('auto_hide', 'auto_start', 'check_online_updates', 'first_start', 'shred')
 
 
 
@@ -138,6 +138,7 @@ class Options:
 
         # set defaults
         self.__set_default("auto_hide", True)
+        self.__set_default("auto_start", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
 

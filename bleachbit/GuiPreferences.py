@@ -19,6 +19,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Preferences dialog
 """
@@ -26,6 +28,7 @@ Preferences dialog
 
 import gtk
 import os
+import sys
 
 from Common import online_update_notification_enabled
 from Options import options
@@ -57,21 +60,36 @@ class PreferencesDialog:
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
 
 
+    def __toggle_callback(self, cell, path):
+        """Callback function to toggle option"""
+        if 'auto_hide' == path:
+            options.toggle(path)
+            self.cb_refresh_operations()
+        if 'auto_start' == path and 'posix' == os.name:
+            import Unix
+            try:
+                Unix.start_with_computer(options.get(path))
+            except:
+                dlg = gtk.MessageDialog(self.parent,
+                    type = gtk.MESSAGE_ERROR,
+                    buttons = gtk.BUTTONS_OK,
+                    message_format = str(sys.exc_info()[1]))
+                dlg.run()
+                dlg.destroy()
+            else:
+                options.toggle(path)
+
+
     def __general_page(self):
         """Return a widget containing the general page"""
 
-        def toggle_callback(cell, path):
-            """Callback function to toggle option b"""
-            options.toggle(path)
-            if 'auto_hide' == path:
-                self.cb_refresh_operations()
 
         vbox = gtk.VBox()
 
         if online_update_notification_enabled:
             cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
             cb_updates.set_active(options.get('check_online_updates'))
-            cb_updates.connect('toggled', toggle_callback, 'check_online_updates')
+            cb_updates.connect('toggled', self.__toggle_callback, 'check_online_updates')
             self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
@@ -81,7 +99,7 @@ class PreferencesDialog:
         # the list of cleaners.
         cb_auto_hide = gtk.CheckButton(_("Hide irrelevant cleaners"))
         cb_auto_hide.set_active(options.get('auto_hide'))
-        cb_auto_hide.connect('toggled', toggle_callback, 'auto_hide')
+        cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
         vbox.pack_start(cb_auto_hide, False)
 
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
@@ -89,11 +107,15 @@ class PreferencesDialog:
         # 'Shred files to prevent recovery.'
         cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
-        cb_shred.connect('toggled', toggle_callback, 'shred')
+        cb_shred.connect('toggled', self.__toggle_callback, 'shred')
         self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False)
 
-
+        if 'posix' == os.name:
+            cb_start = gtk.CheckButton(_("Start BleachBit with computer"))
+            cb_start.set_active(options.get('auto_start'))
+            cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
+            vbox.pack_start(cb_start, False)
         return vbox
 
     def __drives_page(self):
