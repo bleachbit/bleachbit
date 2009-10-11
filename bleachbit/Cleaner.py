@@ -618,7 +618,7 @@ class System(Cleaner):
 
         # prefetch
         if 'nt' == os.name and 'prefetch' == option_id:
-            for path in os.path.expandvars('$windir\\Prefetch\\*.pf'):
+            for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
                 yield Command.Delete(path)
 
 
