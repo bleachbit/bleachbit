@@ -163,7 +163,6 @@ class Winreg:
         """Create the Windows registry cleaner"""
         self.keyname = keyname
         self.valuename = valuename
-        print 'debug winreg', keyname, valuename
 
 
     def execute(self, really_delete):
