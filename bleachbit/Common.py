@@ -28,7 +28,7 @@ import os
 import sys
 
 
-APP_VERSION = "0.7.0svn"
+APP_VERSION = "0.7.0beta"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
@@ -137,7 +137,7 @@ except:
     user_locale = None
 
 if None == user_locale:
-    user_locale = 'en_US'
+    user_locale = 'C'
     print "warning: No default locale found.  Assuming '%s'" % user_locale
 
 if 'win32' == sys.platform:
