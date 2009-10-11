@@ -147,8 +147,9 @@ class Options:
             pos = lang.find('_')
             if -1 != pos:
                 lang = lang [0 : pos]
-            print "info: automatically preserving language '%s'" % lang
-            self.set_language(lang, True)
+            for _lang in set([lang, 'en']):
+                print "info: automatically preserving language '%s'" % lang
+                self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
