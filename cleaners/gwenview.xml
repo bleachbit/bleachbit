@@ -24,7 +24,11 @@
   <option id="recent_documents">
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
-    <action command="delete" search="glob" path="~/.kde4/share/apps/gwenview/recentfolders/*rc" />
-    <action command="delete" search="glob" path="~/.kde4/share/apps/gwenview/recenturls/*rc" />
+    <!-- Arch Linux KDE 4.3.2 has ~/.kde4/ -->
+    <action command="delete" search="glob" path="~/.kde4/share/apps/gwenview/recentfolders/*rc"/>
+    <action command="delete" search="glob" path="~/.kde4/share/apps/gwenview/recenturls/*rc"/>
+    <!-- Fedora 11 KDE 4.3.1 has ~/.kde/ -->
+    <action command="delete" search="glob" path="~/.kde/share/apps/gwenview/recentfolders/*rc"/>
+    <action command="delete" search="glob" path="~/.kde/share/apps/gwenview/recenturls/*rc"/>
   </option>
 </cleaner>
