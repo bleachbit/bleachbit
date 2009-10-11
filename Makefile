@@ -14,7 +14,7 @@ build:
 clean:
 	@rm -vf {.,bleachbit}/*{pyc,pyo,~}
 	@rm -vrf build dist # created by py2exe
-	@rm -rf BleachBit-portable # created by windows/setup_py2exe.bat
+	@rm -rf BleachBit-Portable # created by windows/setup_py2exe.bat
 	@rm -rf BleachBit-Win32-portable-full.zip
 	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
