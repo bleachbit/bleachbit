@@ -418,7 +418,7 @@ class System(Cleaner):
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
-            self.add_option('thumbnails', _('Thumbnails'), _('Delete the cache')))
+            self.add_option('thumbnails', _('Thumbnails'), _('Delete the cache'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
@@ -634,6 +634,8 @@ class System(Cleaner):
                 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
             for key in keys:
                 yield Command.Winreg(key, None)
+            for path in glob.iglob(os.expandvars('$APPDATA\\Microsoft\\Windows\Recent\\*.lnk')):
+                yield Command.Delete(path)
 
         if 'nt' == os.name and 'recycle_bin' == option_id:
             for drive in Windows.get_fixed_drives():
