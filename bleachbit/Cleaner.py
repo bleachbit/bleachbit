@@ -416,9 +416,7 @@ class System(Cleaner):
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
-            self.add_option('mru', _('Most recently used'), _('Delete the list of recently used documents'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
-            self.add_option('thumbnails', _('Thumbnails'), _('Delete the cache'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
@@ -475,7 +473,7 @@ class System(Cleaner):
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*', \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
-                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \a
+                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
                 '$windir\\*.log', \
                 '$windir\\imsins.BAK', \
                 '$windir\\OEWABLog.txt', \
@@ -606,37 +604,6 @@ class System(Cleaner):
                 yield Command.Function(None, wipe_path_func, display)
 
 
-        # Windows MRU
-        if 'nt' == os.name and 'mru' == option_id:
-            # reference: http://support.microsoft.com/kb/142298
-            keys = ( \
-                # search assistant
-                'HKCU\Software\Microsoft\Search Assistant\ACMru',
-                # common open dialog
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU',
-                # Windows Vista/7
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU',
-                # common save as dialog
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU',
-                # Windows Vista/7
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU',
-                # find files command
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU',
-                # find Computer command
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU',
-                # map network drives
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU',
-                # printer ports
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU',
-                # recent documents in start menu
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs',
-                # run command
-                'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' )
-            for key in keys:
-                yield Command.Winreg(key, None)
-            for path in glob.iglob(os.expandvars('$APPDATA\\Microsoft\\Windows\Recent\\*.lnk')):
-                yield Command.Delete(path)
-
         if 'nt' == os.name and 'recycle_bin' == option_id:
             for drive in Windows.get_fixed_drives():
                 # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
@@ -645,10 +612,6 @@ class System(Cleaner):
                     return Windows.empty_recycle_bin(drive, True)
                 # fixme: enable size preview
                 yield Command.Function(None, emptyrecyclebin, label)
-
-        if 'nt' == os.name and 'thumbnails' == option_id:
-            for path in os.path.expandvars('$LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\thumbcache*.db'):
-                yield Command.Delete(path)
 
 
 

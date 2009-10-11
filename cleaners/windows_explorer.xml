@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2009 Andrew Ziem
+    http://bleachbit.sourceforge.net
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="windows_explorer" os="windows">
+  <label>Windows Explorer</label>
+  <option id="recent_documents">
+    <label>Recent documents list</label>
+    <description>Delete the list of recently used documents</description>
+    <!-- Vista -->
+    <action command="delete" search="glob" path="$APPDATA\\Microsoft\\Windows\Recent\\*.lnk"/>
+    <!-- recent documents in start menu -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
+  </option>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
+    <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
+    <!-- common open dialog -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
+    <!--  Windows Vista/7 -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU"/>
+    <!--  common save as dialog -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU"/>
+    <!--  Windows Vista/7 -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU"/>
+    <!--  find files command -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
+    <!--  find Computer command -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
+    <!--  map network drives -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
+    <!--  printer ports -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
+  </option>
+  <option id="run">
+    <label>Run</label>
+    <description>Delete the most recently used list</description>
+    <!--  run command -->
+    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
+  </option>
+  <option id="search_history">
+    <label>Search history</label>
+    <description>Delete the search history</description>
+    <action command="winreg" path="HKCU\Software\Microsoft\Search Assistant\ACMru"/>
+  </option>
+  <option id="thumbnails">
+    <label>Thumbnails</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="glob" path="$LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\thumbcache*.db"/>
+  </option>
+</cleaner>
