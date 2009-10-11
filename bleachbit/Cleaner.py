@@ -416,6 +416,7 @@ class System(Cleaner):
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
+            self.add_option('muicache', 'MUICache', _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
@@ -602,6 +603,13 @@ class System(Cleaner):
                         yield ret
                     yield 0
                 yield Command.Function(None, wipe_path_func, display)
+
+
+        if 'nt' == os.name and 'muicache ' == option_id:
+            keys = ( 'HCKU\\Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache',
+                'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache' )
+            for key in keys:
+                yield Command.Winreg(key, None)
 
 
         if 'nt' == os.name and 'recycle_bin' == option_id:
