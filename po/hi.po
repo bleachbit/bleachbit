@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-10-07 21:51-0600\n"
-"PO-Revision-Date: 2009-10-10 14:25+0000\n"
-"Last-Translator: nipunreddevil <nipunreddevil@gmail.com>\n"
+"PO-Revision-Date: 2009-10-11 16:51+0000\n"
+"Last-Translator: sumeet <sumeetdceian2007@gmail.com>\n"
 "Language-Team: Hindi <hi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-10 18:56+0000\n"
+"X-Launchpad-Export-Date: 2009-10-11 20:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -94,7 +94,7 @@ msgstr "मौजूदा सत्र"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
+msgstr "हटा  कुकीज़, जो"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 msgid "Delete the current session"
@@ -104,6 +104,7 @@ msgstr "वर्तमान सत्र हटाएँ"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
+"इतिहास हटाएँ, जिसमें दौरा कि  हुई  साइटों, डाउनलोड, और थंबनेल शामिल हो"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -442,6 +443,7 @@ msgstr "स्वैप स्मृति को पोछो और मुक�
 #: ../bleachbit/Cleaner.py:408
 msgid "This option is experimental and may cause system problems."
 msgstr ""
+"ये  विकल्प प्रयोगात्मक है  और   प्रणाली मे समस्याएं  पैदा कर सकता है ."
 
 #: ../bleachbit/Cleaner.py:412
 msgid "Recycle bin"
@@ -467,7 +469,7 @@ msgstr "मुक्त डिस्क स्थान"
 
 #: ../bleachbit/Cleaner.py:415
 msgid "Overwrite free disk space to hide deleted files"
-msgstr ""
+msgstr "फ़ाइलों को मिटाने के लिए  मुक्त डिस्क स्थान को अधिलेखित कर दो"
 
 #: ../bleachbit/Cleaner.py:420
 msgid "The system in general"
@@ -482,7 +484,7 @@ msgstr "सिस्टम"
 #: ../bleachbit/Cleaner.py:586
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "मुक्त डिस्क स्थान को अधिलेखित करे % s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
 #: ../bleachbit/Cleaner.py:628
@@ -493,7 +495,7 @@ msgstr "रिसाइकिलबिन %s"
 #: ../bleachbit/CLI.py:102
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "नहीं एक वैध क्लीनर:% s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -501,7 +503,7 @@ msgstr ""
 #. http://bleachbit.sourceforge.net/documentation/command-line
 #: ../bleachbit/CLI.py:130
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
+msgstr "उपयोग:%prog [विकल्प] क्लीनर.विकल्प१ क्लीनर.विकल्प२"
 
 #: ../bleachbit/CLI.py:133
 msgid "list cleaners"
@@ -509,11 +511,11 @@ msgstr "सूची क्लीनर"
 
 #: ../bleachbit/CLI.py:135
 msgid "delete files and make other permanent changes"
-msgstr ""
+msgstr "फ़ाइलों को  हटाएँ और अन्य स्थायी बदलाव करे"
 
 #: ../bleachbit/CLI.py:137
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "नष्ट करने वाली  फ़ाइलो और अन्य परिवर्तनो का पूर्वावलोकन करे"
 
 #: ../bleachbit/CLI.py:139
 msgid "output version information and exit"
@@ -521,7 +523,7 @@ msgstr "आउटपुट संस्करण सूचना और नि�
 
 #: ../bleachbit/CLI.py:141
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "फाइलो की सामग्री को छिपाने के लिए उन्हें अधिलेखित करे"
 
 #: ../bleachbit/Command.py:53 ../bleachbit/GUI.py:568
 msgid "Delete"
@@ -531,16 +533,16 @@ msgstr "मिटाएँ"
 #. system reboots
 #: ../bleachbit/Command.py:73
 msgid "Mark for deletion"
-msgstr ""
+msgstr "हटाने के लिए चिह्नित"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:148
 msgid "Truncate"
-msgstr ""
+msgstr "छोटा करें"
 
 #: ../bleachbit/Command.py:187
 msgid "Delete registry key"
-msgstr ""
+msgstr "हटाएँ रजिस्ट्री कुंजी"
 
 #: ../bleachbit/FileUtilities.py:189
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -601,7 +603,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Choose a folder"
-msgstr ""
+msgstr "एक फ़ोल्डर चुनें"
 
 #: ../bleachbit/GuiPreferences.py:132
 msgid ""
@@ -681,7 +683,8 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Asutosh https://launchpad.net/~dash-asutosh\n"
-"  nipunreddevil https://launchpad.net/~nipunreddevil"
+"  nipunreddevil https://launchpad.net/~nipunreddevil\n"
+"  sumeet https://launchpad.net/~sumeetdceian2007"
 
 #: ../bleachbit/GUI.py:451
 msgid "Choose files to shred"
@@ -789,7 +792,7 @@ msgstr "त्रुटि जब अद्यतनों के लिए ज�
 #: ../bleachbit/Worker.py:77
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "अपवाद  जब तक चल रहे आपरेशन '%(operation)s': '%(msg)s'"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:177
@@ -808,7 +811,7 @@ msgstr "कृपया प्रतीक्षा करें.पूर्व
 #: ../bleachbit/Worker.py:219
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr ""
+msgstr "डिस्क स्थान बरामद:% s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
@@ -822,7 +825,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:228
 #, python-format
 msgid "Files deleted: %d"
-msgstr ""
+msgstr "फ़ाइलों को नष्ट कर दिया:% d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
