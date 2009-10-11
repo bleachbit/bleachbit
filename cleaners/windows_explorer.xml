@@ -27,7 +27,7 @@
     <!-- Vista -->
     <action command="delete" search="glob" path="$APPDATA\\Microsoft\\Windows\Recent\\*.lnk"/>
     <!-- recent documents in start menu -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
@@ -42,19 +42,19 @@
     <!--  Windows Vista/7 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU"/>
     <!--  find files command -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
     <!--  find Computer command -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
     <!--  map network drives -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
     <!--  printer ports -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
   </option>
   <option id="run">
     <label>Run</label>
     <description>Delete the most recently used list</description>
     <!--  run command -->
-    <action command="winreg" path="HCKU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
   </option>
   <option id="search_history">
     <label>Search history</label>
