@@ -417,6 +417,7 @@ class System(Cleaner):
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('muicache', 'MUICache', _('Delete the cache'))
+            # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         if HAVE_GTK:
