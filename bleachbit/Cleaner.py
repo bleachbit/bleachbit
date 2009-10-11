@@ -609,7 +609,7 @@ class System(Cleaner):
 
 
         # MUICache
-        if 'nt' == os.name and 'muicache ' == option_id:
+        if 'nt' == os.name and 'muicache' == option_id:
             keys = ( 'HKCU\\Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache',
                 'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache' )
             for key in keys:
