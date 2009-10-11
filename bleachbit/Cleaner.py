@@ -417,6 +417,7 @@ class System(Cleaner):
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('muicache', 'MUICache', _('Delete the cache'))
+            self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
@@ -515,7 +516,7 @@ class System(Cleaner):
                 yield Command.Delete(path)
 
 
-        # temporary
+        # temporary files
         if 'posix' == os.name and 'tmp' == option_id:
             dirnames = [ '/tmp', '/var/tmp' ]
             for dirname in dirnames:
@@ -528,6 +529,7 @@ class System(Cleaner):
                     if ok:
                         yield Command.Delete(path)
 
+        # temporary files
         if 'nt' == os.name and 'tmp' == option_id:
             dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
             for filename in children_in_directory(dirname, True):
@@ -605,6 +607,7 @@ class System(Cleaner):
                 yield Command.Function(None, wipe_path_func, display)
 
 
+        # MUICache
         if 'nt' == os.name and 'muicache ' == option_id:
             keys = ( 'HCKU\\Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache',
                 'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache' )
@@ -612,6 +615,13 @@ class System(Cleaner):
                 yield Command.Winreg(key, None)
 
 
+        # prefetch
+        if 'nt' == os.name and 'prefetch' == option_id:
+            for path in os.path.expandvars('$windir\\Prefetch\\*.pf'):
+                yield Command.Delete(path)
+
+
+        # recycle bin
         if 'nt' == os.name and 'recycle_bin' == option_id:
             for drive in Windows.get_fixed_drives():
                 # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
