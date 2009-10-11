@@ -470,8 +470,12 @@ class System(Cleaner):
         files = []
         if 'nt' == os.name and 'logs' == option_id:
             paths = ( \
+                '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
+                '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*', \
+                '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
+                '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*', \
                 '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
-                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
+                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \a
                 '$windir\\*.log', \
                 '$windir\\imsins.BAK', \
                 '$windir\\OEWABLog.txt', \
