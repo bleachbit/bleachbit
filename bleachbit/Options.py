@@ -29,6 +29,7 @@ import ConfigParser
 import sys
 
 import Common
+import General
 
 
 boolean_keys = ('auto_hide', 'auto_start', 'check_online_updates', 'first_start', 'shred')
@@ -45,26 +46,13 @@ class Options:
 
     def __flush(self):
         """Write information to disk"""
-        mkdir = False
         if not os.path.exists(Common.options_dir):
-            os.makedirs(Common.options_dir, 0700)
-            mkdir = True
+            General.makedirs(Common.options_dir)
         mkfile = not os.path.exists(Common.options_file)
         _file = open(Common.options_file, 'wb')
         self.config.write(_file)
-        # If using sudo, avoid creating a directory that the
-        # original account cannot read.
-        if sys.platform == 'linux2' and sudo_mode():
-            import pwd
-            try:
-                uid = pwd.getpwnam(os.getlogin())[3]
-                if mkfile:
-                    os.chown(Common.options_file, uid, -1)
-                if mkdir:
-                    os.chown(Common.options_dir, uid, -1)
-            except:
-                print 'Failed fixing permissions created by sudo'
-                traceback.print_exc()
+        if mkfile and General.sudo_mode():
+            General.chownself(Common.options_file)
 
 
     def __set_default(self, key, value):
@@ -212,20 +200,6 @@ class Options:
         self.set(key, not self.get(key))
 
 
-def sudo_mode():
-    """Return whether running in sudo mode"""
-    try:
-        login1 = os.getlogin()
-    except:
-        login1 = os.getenv('LOGNAME')
-
-    try:
-        import pwd
-        login2 = pwd.getpwuid(os.getuid())[0]
-        return login1 != login2
-    except:
-        traceback.print_exc()
-        return False
 
 
 
@@ -294,11 +268,6 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(o.get_tree("parent", "child"), False)
 
 
-    def test_sudo_mode(self):
-        """Unit test for sudo_mode()"""
-        if not sys.platform == 'linux2':
-            return
-        self.assert_(type(sudo_mode()) is bool)
 
 
 if __name__ == '__main__':

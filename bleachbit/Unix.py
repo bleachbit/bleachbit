@@ -539,7 +539,7 @@ def start_with_computer(enabled):
     if os.path.lexists(Common.autostart_path):
         return
     import shutil
-    os.makedirs(os.path.dirname(Common.autostart_path))
+    General.makedirs(os.path.dirname(Common.autostart_path))
     shutil.copy(Common.launcher_path, Common.autostart_path)
     os.chmod(Common.autostart_path, 0755)
 

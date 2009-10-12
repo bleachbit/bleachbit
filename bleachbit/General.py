@@ -25,6 +25,11 @@ General code
 
 
 
+import os
+import sys
+
+
+
 ###
 ### XML
 ###
@@ -59,6 +64,28 @@ class WindowsError(Exception):
         return 'this is a dummy class for non-Windows systems'
 
 
+def chownself(path):
+    """Set path owner to real self when running in sudo.
+    If sudo creates a path and the owner isn't changed, the 
+    owner may not be able to access the path."""
+    if 'linux2' == sys.platform:
+        import pwd
+        uid = pwd.getpwnam(os.getlogin())[3]
+        print 'debug chown(%s, %s)' % (path, uid)
+        os.chown(path, uid, -1)
+
+
+def makedirs(path):
+    """Make directory recursively considering sudo permissions"""
+    print "debug: makedirs(%s)" % path
+    if os.path.lexists(path):
+        return
+    parentdir = os.path.split(path)[0]
+    if not os.path.lexists(parentdir):
+        makedirs(parentdir)
+    os.mkdir(path, 0700)
+    chownself(path)
+
 
 def run_external(args, stdout = False):
     """Run external command and return (return code, stdout, stderr)"""
@@ -77,6 +104,22 @@ def run_external(args, stdout = False):
         raise
     outputs = p.communicate()
     return (p.returncode, outputs[0], outputs[1])
+
+
+def sudo_mode():
+    """Return whether running in sudo mode"""
+    try:
+        login1 = os.getlogin()
+    except:
+        login1 = os.getenv('LOGNAME')
+
+    try:
+        import pwd
+        login2 = pwd.getpwuid(os.getuid())[0]
+        return login1 != login2
+    except:
+        traceback.print_exc()
+        return False
 
 
 
@@ -99,6 +142,34 @@ class TestGeneral(unittest.TestCase):
 
         for test in tests:
             self.assertEqual(boolstr_to_bool(test[0]), test[1])
+
+
+    def test_makedirs(self):
+        """Unit test for makedirs"""
+        def cleanup(dir):
+            if not os.path.lexists(dir):
+                return
+            os.rmdir(dir)
+            os.rmdir(os.path.dirname(dir))
+            self.assert_(not os.path.lexists(dir))
+
+        dir = '/tmp/bleachbit-test-makedirs/a'
+        cleanup(dir)
+        # directory does not exist
+        makedirs(dir)
+        self.assert_(os.path.lexists(dir))
+        # directory already exists
+        makedirs(dir)
+        self.assert_(os.path.lexists(dir))
+        # clean up
+        cleanup(dir)
+
+
+    def test_sudo_mode(self):
+        """Unit test for sudo_mode()"""
+        if not sys.platform == 'linux2':
+            return
+        self.assert_(type(sudo_mode()) is bool)
 
 
 if __name__ == '__main__':
