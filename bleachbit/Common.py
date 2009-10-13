@@ -71,9 +71,9 @@ if None == license_filename:
 # configuration
 options_dir = None
 if 'posix' == os.name:
-    options_dir = os.path.expanduser("~/.config/bleachbit/")
+    options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
-    options_dir = os.path.expandvars("${APPDATA}\\BleachBit\\")
+    options_dir = os.path.expandvars("${APPDATA}\\BleachBit")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # personal cleaners

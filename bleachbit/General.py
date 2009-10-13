@@ -76,7 +76,8 @@ def chownself(path):
 
 
 def makedirs(path):
-    """Make directory recursively considering sudo permissions"""
+    """Make directory recursively considering sudo permissions.
+    'Path' should not end in a delimiter."""
     print "debug: makedirs(%s)" % path
     if os.path.lexists(path):
         return
