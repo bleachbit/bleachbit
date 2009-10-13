@@ -27,6 +27,7 @@ General code
 
 import os
 import sys
+import traceback
 
 
 
@@ -68,11 +69,16 @@ def chownself(path):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the 
     owner may not be able to access the path."""
-    if 'linux2' == sys.platform:
-        import pwd
-        uid = pwd.getpwnam(os.getlogin())[3]
-        print 'debug chown(%s, %s)' % (path, uid)
+    if 'linux2' != sys.platform:
+        return
+    import pwd
+    try:
+        login = os.getlogin()
+        uid = pwd.getpwnam()[3]
+        print 'debug: chown(%s, uid=%s)' % (path, uid)
         os.chown(path, uid, -1)
+    else:
+        traceback.print_exc()
 
 
 def makedirs(path):
