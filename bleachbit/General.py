@@ -157,7 +157,10 @@ class TestGeneral(unittest.TestCase):
             os.rmdir(os.path.dirname(dir))
             self.assert_(not os.path.lexists(dir))
 
-        dir = '/tmp/bleachbit-test-makedirs/a'
+        if 'nt' == os.name:
+            dir = 'c:\\temp\\bleachbit-test-makedirs\\a'
+        if 'posix' == os.name:
+            dir = '/tmp/bleachbit-test-makedirs/a'
         cleanup(dir)
         # directory does not exist
         makedirs(dir)
