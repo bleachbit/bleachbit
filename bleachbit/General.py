@@ -77,7 +77,7 @@ def chownself(path):
         uid = pwd.getpwnam()[3]
         print 'debug: chown(%s, uid=%s)' % (path, uid)
         os.chown(path, uid, -1)
-    else:
+    except:
         traceback.print_exc()
 
 
