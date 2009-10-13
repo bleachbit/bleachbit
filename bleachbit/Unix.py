@@ -542,6 +542,8 @@ def start_with_computer(enabled):
     General.makedirs(os.path.dirname(Common.autostart_path))
     shutil.copy(Common.launcher_path, Common.autostart_path)
     os.chmod(Common.autostart_path, 0755)
+    if General.sudo_mode():
+        General.chownself(Common.autostart_path)
 
 
 def start_with_computer_check():
