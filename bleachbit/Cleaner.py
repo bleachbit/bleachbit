@@ -698,8 +698,8 @@ class TestCleaner(unittest.TestCase):
                 '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
         elif 'posix' == os.name:
             self.actions.append('<action command="delete" search="file" path="%s"/>' % __file__)
-            self.actions.append('<action command="delete" search="glob" path="/sbin/*sh"/>')
-            self.actions.append('<action command="delete" search="walk.files" path="/sbin/"/>')
+            self.actions.append('<action command="delete" search="glob" path="/usr/sbin/*sh"/>')
+            self.actions.append('<action command="delete" search="walk.files" path="/usr/sbin/"/>')
             self.actions.append('<action command="delete" search="walk.all" path="/var/log/"/>')
 
         self.assert_(len(self.actions) > 0)
