@@ -83,19 +83,32 @@ def enable_swap_linux():
 
 def fill_memory_linux():
     """Fill unallocated memory"""
-    report_free()
+    # make self primary target for Linux out-of-memory killer
+    path = '/proc/%d/oomadj' % os.getpid()
+    if os.path.exists(path):
+        f = open(path)
+        f.write('15')
+        f.close()
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
-    bytes = int(physical_free() * 0.95) # more than 95% causes segfault
-    megabytes = bytes / (1024**2)
-    print "info: allocating %d bytes of memory (%.2f MB)" % (bytes, megabytes)
-    time.sleep(2)
-    buffer = libc.malloc(bytes)
-    print "debug: wiping the memory I just allocated"
-    libc.memset(buffer, 0x00, bytes)
-    report_free()
-    print "debug: freeing memory"
-    libc.free(buffer)
-    report_free()
+    # fill memory
+    def fill_helper():
+        report_free()
+        allocbytes = int(physical_free() * 0.50)
+        if allocbytes < 1024:
+            return
+        megabytes = allocbytes / (1024**2)
+        print "info: allocating %.2f MB (%d B) memory" % (megabytes, allocbytes)
+        buffer = libc.malloc(allocbytes)
+        if 0 == buffer:
+            print 'debug: malloc() returned', buffer
+            return
+        print "debug: wiping %.2f MB I just allocated" % megabytes
+        libc.memset(buffer, 0x00, allocbytes)
+        fill_helper()
+        print "debug: freeing %.2f MB memory" % megabytes
+        libc.free(buffer)
+        report_free()
+    fill_helper()
 
 
 def get_swap_uuid(device):
@@ -107,7 +120,7 @@ def get_swap_uuid(device):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
         ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if None != ret:
-            uuid = ret.group(1)
+             uuid = ret.group(1)
     print "debug: uuid(%s)='%s'" % (device, uuid)
     return uuid
 
@@ -209,7 +222,9 @@ def wipe_memory():
     else:
         print 'debug: wipe_memory() pid %d waiting for child pid %d' % \
             (os.getpid(), child_pid)
-        os.waitpid(child_pid, 0)
+        rc = os.waitpid(child_pid, 0)[1]
+        if 0 != rc:
+            print 'warning: child process returned code %d' % rc
     enable_swap_linux()
     yield 0 # how much disk space was recovered
 
