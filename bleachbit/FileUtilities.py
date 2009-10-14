@@ -146,7 +146,7 @@ def delete(path, shred = False):
             # Error 145 may happen if the files are scheduled for deletion
             # during reboot.
             if 145 == e.winerror:
-                print "info: directory '%s' is not empty" % (pathname)
+                print "info: directory '%s' is not empty" % (path)
             else:
                 raise
     else:

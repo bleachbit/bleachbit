@@ -201,7 +201,6 @@ class TestCommand(unittest.TestCase):
 
     def test_Delete(self, cls = Delete):
         """Unit test for Delete"""
-        import os
         import tempfile
         (fd, path) = tempfile.mkstemp('bleachbit-test')
         os.write(fd, "foo")
@@ -224,7 +223,6 @@ class TestCommand(unittest.TestCase):
 
     def test_Function(self):
         """Unit test for Function"""
-        import os
         import tempfile
         (fd, path) = tempfile.mkstemp('bleachbit-test')
         os.write(fd, "foo")
