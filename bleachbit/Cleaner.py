@@ -715,7 +715,7 @@ class TestCleaner(unittest.TestCase):
                         "Does not exist: '%s'" % pathname)
                     count += 1
                     self.validate_result(self, result)
-            self.assert_(count > 0)
+            self.assert_(count > 0, "No files found for %s" % action_str)
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
         for cmd in cleaner.get_commands('option2'):
