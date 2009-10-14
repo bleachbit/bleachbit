@@ -26,6 +26,7 @@ Wipe memory
 
 
 import ctypes
+import os
 import re
 import subprocess
 import sys
@@ -81,6 +82,7 @@ def enable_swap_linux():
 
 
 def fill_memory_linux():
+    """Fill unallocated memory"""
     report_free()
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
     bytes = int(physical_free() * 0.95) # more than 95% causes segfault
@@ -196,11 +198,20 @@ def wipe_swap_linux(devices):
 def wipe_memory():
     """Wipe unallocated memory"""
     devices = disable_swap_linux()
+    yield True # process GTK+ idle loop
     print 'debug: wipe_memory(), devices=', devices
     wipe_swap_linux(devices)
-    fill_memory_linux()
+    yield True
+    child_pid = os.fork()
+    if 0 == child_pid:
+        fill_memory_linux()
+        sys.exit(0)
+    else:
+        print 'debug: wipe_memory() pid %d waiting for child pid %d' % \
+            (os.getpid(), child_pid)
+        os.waitpid(child_pid, 0)
     enable_swap_linux()
-    return 0 # how much disk space was recovered
+    yield 0 # how much disk space was recovered
 
 
 class TestMemory(unittest.TestCase):

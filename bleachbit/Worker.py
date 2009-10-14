@@ -85,21 +85,21 @@ class Worker:
     def execute(self, cmd):
         """Execute or preview the command"""
         ret = None
-        line = None
-        tag = None
         try:
             for ret in cmd.execute(self.really_delete):
                 if True == ret:
                     # temporarily pass control to the GTK idle loop
                     yield True
+        except SystemExit:
+            pass
         except Exception, e:
             # 2 = does not exist
             # 13 = permission denied
             if not (isinstance(e, OSError) and e.errno in (2, 13)):
                 traceback.print_exc()
             line = "%s\n" % (str(sys.exc_info()[1]))
-            tag = 'error'
             self.total_errors += 1
+            self.ui.append_text(line, 'error')
         else:
             if None == ret:
                 return
@@ -115,8 +115,8 @@ class Worker:
             line = "%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
+            self.ui.append_text(line)
 
-        self.ui.append_text(line, tag)
 
 
     def clean_operation(self, operation):
