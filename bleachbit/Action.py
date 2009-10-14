@@ -369,9 +369,9 @@ class TestAction(unittest.TestCase):
     def test_delete(self):
         """Unit test for class Delete"""
         import tempfile
-        for dir in ('~', '$HOME'):
+        for path in ('~', '$HOME'):
             for command in ('delete', 'truncate'):
-                expanded = os.path.expanduser(os.path.expandvars(dir))
+                expanded = os.path.expanduser(os.path.expandvars(path))
                 (fd, filename) = tempfile.mkstemp(dir = expanded)
                 os.close(fd)
                 action_str = '<action command="%s" search="file" path="%s" />' % \
@@ -405,8 +405,9 @@ class TestAction(unittest.TestCase):
             path = '/usr/var/log'
         elif 'nt' == os.name:
             path = '$WINDIR\\system32'
-        action_str = '<action command="delete" search="walk.files" path="%s" />'
+        action_str = '<action command="delete" search="walk.files" path="%s" />' % path
         for cmd in self._action_str_to_commands(action_str):
+            result = cmd.execute(False)
             Cleaner.TestCleaner.validate_result(self, result)
             self.assert_(not os.path.isdir(result['path']))
 

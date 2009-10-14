@@ -172,18 +172,6 @@ class Cleaner:
         """Return whether the cleaner is usable (has actions)"""
         return len(self.actions) > 0
 
-    def list_files(self):
-        """Iterate files that would be removed"""
-        raise NotImplementedError('deleted')
-
-    def other_cleanup(self, really_delete):
-        """Perform an operation more specialized than removing a file"""
-        raise NotImplementedError('deleted')
-
-    def set_option(self, option_id, value):
-        """Enable or disable an option"""
-        raise NotImplementedError('deleted')
-
     def set_warning(self, option_id, description):
         """Set a warning to be displayed when option is selected interactively"""
         self.warnings[option_id] = description
@@ -278,7 +266,7 @@ class Firefox(Cleaner):
         # URL history
         if 'url_history' == option_id:
             for path in FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite"):
-                    yield Command.Function(path, \
+                yield Command.Function(path, \
                         Special.delete_mozilla_url_history,
                         _('Delete the usage history'))
 
@@ -790,7 +778,7 @@ class TestCleaner(unittest.TestCase):
                     for result in cmd.execute(really_delete = False):
                         if result != True:
                             break
-                    self.validate_result(self, result)
+                        self.validate_result(self, result)
         # make sure trash and tmp don't return the same results
         if 'nt' == os.name:
             return
@@ -822,9 +810,9 @@ class TestCleaner(unittest.TestCase):
                     for result in cmd.execute(really_delete = False):
                         if result != True:
                             break
-                    msg = "Expected no files to be deleted but got '%s'" % str(result)
-                    self.assert_(not isinstance(cmd, Command.Delete), msg)
-                    self.validate_result(self, result)
+                        msg = "Expected no files to be deleted but got '%s'" % str(result)
+                        self.assert_(not isinstance(cmd, Command.Delete), msg)
+                        self.validate_result(self, result)
         glob.iglob = _iglob
         os.path.exists = _exists
         os.path.lexists = _lexists
