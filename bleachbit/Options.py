@@ -26,7 +26,6 @@ Store and retreieve user preferences
 import os
 import traceback
 import ConfigParser
-import sys
 
 import Common
 import General
