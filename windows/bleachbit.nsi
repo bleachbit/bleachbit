@@ -122,12 +122,17 @@ Section Core (Required)
 
     SetOutPath $INSTDIR
     File "..\dist\*.*"
-    File /r "..\dist\etc\*.*"
-    File /r "..\dist\lib\*.*"
-    File "..\dist\share\bleachbit.png"
-    File /r "..\dist\share\cleaners\*.*"
-    File /r "..\dist\share\themes\*.*"
     File "..\COPYING"
+    SetOutPath $INSTDIR\etc
+    File /r "..\dist\etc\*.*"
+    SetOutPath $INSTDIR\lib
+    File /r "..\dist\lib\*.*"
+    SetOutPath $INSTDIR\dist\share
+    File "..\dist\share\bleachbit.png"
+    SetOutPath $INSTDIR\dist\share\cleaners
+    File /r "..\dist\share\cleaners\*.*"
+    SetOutPath $INSTDIR\dist\share\themes
+    File /r "..\dist\share\themes\*.*"
 
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"
