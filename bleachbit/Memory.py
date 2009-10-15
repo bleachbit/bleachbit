@@ -206,6 +206,8 @@ def wipe_swap_linux(devices):
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
         print "info: wiping swap device '%s'" % device
+        if get_swap_size_linux(device) > 8*1024**3:
+            raise RuntimeError('swap file %s is larger than expected' % device)
         uuid = get_swap_uuid(device)
         # wipe
         FileUtilities.wipe_contents(device, truncate = False)
@@ -227,9 +229,6 @@ def wipe_memory():
     print 'debug: wipe_memory(), devices=', devices
     wipe_swap_linux(devices)
     yield True
-    for device in devices:
-        if get_swap_size_linux(device) > 8*1024**3:
-            raise RuntimeError('swap file is larger than expected')
     child_pid = os.fork()
     if 0 == child_pid:
         fill_memory_linux()
