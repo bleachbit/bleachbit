@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-10-11 15:17-0600\n"
-"PO-Revision-Date: 2009-10-13 19:07+0000\n"
+"PO-Revision-Date: 2009-10-14 22:56+0000\n"
 "Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-14 03:08+0000\n"
+"X-Launchpad-Export-Date: 2009-10-15 02:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -106,7 +106,7 @@ msgstr "Zmazať aktuálne sedenie"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
+msgstr "Zmazať históriu obsahujúci navštívené stránky, sťahovanie a náhľady"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -320,19 +320,19 @@ msgstr "Sedenie"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Zmazať cache s avatary a smajlíky"
 
 #: ../cleaners/deepscan.xml
 msgid "Compiled objects"
-msgstr ""
+msgstr "Kompilované objekty"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Hĺbkové prehľadávanie"
 
 #: ../cleaners/deepscan.xml
 msgid "Delete the files"
-msgstr ""
+msgstr "Zmazať súbory"
 
 #: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:426
 msgid "This option is slow."
@@ -440,20 +440,20 @@ msgstr "Vysypať kôš"
 #. 'unallocated.'
 #: ../bleachbit/Cleaner.py:415 ../bleachbit/Cleaner.py:507
 msgid "Memory"
-msgstr ""
+msgstr "Pamäť"
 
 #: ../bleachbit/Cleaner.py:415
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "Vyprázdniť odkladací priestor (Swap) a uvoľniť nejaké miesto v RAM"
 
 #: ../bleachbit/Cleaner.py:416
 msgid "This option is experimental and may cause system problems."
-msgstr ""
+msgstr "Táto voľba je len experimentálna, môže spôsobiť problémy v systéme!"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:421
 msgid "Prefetch"
-msgstr ""
+msgstr "Prefetch"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Recycle bin"
@@ -612,7 +612,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:129
 msgid "Start BleachBit with computer"
-msgstr ""
+msgstr "Spustiť BleachBit pri štarte systému"
 
 #: ../bleachbit/GuiPreferences.py:141
 msgid "Choose a folder"
