@@ -121,7 +121,7 @@ def get_swap_size_linux(device):
         ret = re.search(" ([0-9])+ %s$" % dev, line)
         if ret:
             return int(ret.group(1)) * 1024
-    raise RuntimeError('error: cannot find size of swap %s\n%s' % \
+    raise RuntimeError("error: cannot find size of swap device '%s'\n%s" % \
         (device,  open('/proc/partitions').read()))
 
 
@@ -268,8 +268,11 @@ class TestMemory(unittest.TestCase):
 
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        swap = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
-        size = get_swap_size_linux(swap)
+        swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
+        if 0 == len(swapdev):
+            print 'no active swap device detected'
+            return
+        size = get_swap_size_linux(swapdev)
         self.assert_(isinstance(size, (int, long)))
         self.assert_(size > 0)
 
