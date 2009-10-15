@@ -678,6 +678,8 @@ class GUI:
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
+        if 'posix' == os.name and None == os.getenv('HOME'):
+            self.append_text('Warning: environment HOME not set')
 
 
 if __name__ == '__main__':
