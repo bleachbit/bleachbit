@@ -111,6 +111,18 @@ def fill_memory_linux():
     fill_helper()
 
 
+def get_swap_size_linux(device):
+    """Return the size of the partition in bytes"""
+    dev = device.split('/')[-1] # 'sda1' in '/dev/sda1'
+    f = open("/proc/partitions")
+    for line in f:
+        ret = re.search(" ([0-9])+ %s$" % dev, line)
+        if ret:
+            return int(ret.group(1)) * 1024
+    raise RuntimeError('error: cannot find size of swap %s\n%s' % \
+        (device,  open('/proc/partitions').read()))
+
+
 def get_swap_uuid(device):
     """Find the UUID for the swap device"""
     uuid = None
@@ -215,6 +227,9 @@ def wipe_memory():
     print 'debug: wipe_memory(), devices=', devices
     wipe_swap_linux(devices)
     yield True
+    for device in devices:
+        if get_swap_size_linux(device) > 8*1024**3:
+            raise RuntimeError('swap file is larger than expected')
     child_pid = os.fork()
     if 0 == child_pid:
         fill_memory_linux()
@@ -248,6 +263,14 @@ class TestMemory(unittest.TestCase):
         self.assert_(isinstance(physical_free(), (int, long)))
         self.assert_(physical_free() > 0)
         report_free()
+
+
+    def test_get_swap_size_linux(self):
+        """Test for get_swap_size_linux()"""
+        swap = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
+        size = get_swap_size_linux(swap)
+        self.assert_(isinstance(size, (int, long)))
+        self.assert_(size > 0)
 
 
     def test_get_swap_uuid(self):
