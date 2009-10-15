@@ -89,6 +89,8 @@ def fill_memory_linux():
         f = open(path)
         f.write('15')
         f.close()
+    # OOM likes nice processes
+    print 'debug: new nice value', os.nice(19)
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
     # fill memory
     def fill_helper():
