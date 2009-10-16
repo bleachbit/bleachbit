@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-10-11 15:17-0600\n"
-"PO-Revision-Date: 2009-10-15 17:40+0000\n"
-"Last-Translator: arrange <Unknown>\n"
+"PO-Revision-Date: 2009-10-15 22:30+0000\n"
+"Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-15 18:48+0000\n"
+"X-Launchpad-Export-Date: 2009-10-16 05:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -49,6 +49,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Defragmentací databáze se zmenší její velikost a zvýší její rychlost, aniž "
+"by došlo k odstranění jakýchkoliv dat v ní obsažených."
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
@@ -205,7 +207,7 @@ msgstr "Dočasné soubory"
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml
 msgid "Chat client"
-msgstr "Komunikační program"
+msgstr "Chatovací program"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -327,7 +329,7 @@ msgstr "Kompilované objekty"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Hloubkové hledání"
+msgstr "Detailní prohledávání"
 
 #: ../cleaners/deepscan.xml
 msgid "Delete the files"
@@ -399,11 +401,12 @@ msgstr "Smazat soubory v build složce rpmbuild"
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:400
 msgid "Broken desktop files"
-msgstr "Poškozené soubory plochy"
+msgstr "Nefunkční soubory .desktop"
 
 #: ../bleachbit/Cleaner.py:400
 msgid "Delete broken application menu entries and file associations"
-msgstr "Odstranit poškozené položky menu a přidružené soubory"
+msgstr ""
+"Odstranit nefunkční položky menu a asociace mezi soubory a aplikacemi"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -600,7 +603,7 @@ msgstr "Skrýt pro vás nepoužitelné čističe"
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:123
 msgid "Overwrite files to hide contents"
-msgstr "Smazat nepotřebné i-uzly na disku"
+msgstr "Zničit sebemenší šanci na obnovení již smazaných souborů a složek"
 
 #: ../bleachbit/GuiPreferences.py:126
 msgid ""
@@ -631,7 +634,7 @@ msgstr "Přidat"
 
 #: ../bleachbit/GuiPreferences.py:189
 msgid "Remove"
-msgstr ""
+msgstr "Odebrat"
 
 #: ../bleachbit/GuiPreferences.py:214
 msgid "All languages will be deleted except those checked."
