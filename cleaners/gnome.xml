@@ -21,6 +21,12 @@
 -->
 <cleaner id="gnome" os="linux">
   <label>GNOME</label>
+  <option id="run">
+    <label>Run</label>
+    <description>Delete the usage history</description>
+    <!-- In GNOME 2.26.3 on Fedora 11 press ALT+F2 and click the down arrow -->
+    <action command="delete" search="file" path="~/.gconf/apps/gnome-settings/gnome-panel/%gconf.xml"/>
+  </option>
   <option id="search_history">
     <label>Search history</label>
     <description>Delete the search history</description>
