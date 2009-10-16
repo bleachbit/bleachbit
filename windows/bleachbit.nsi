@@ -127,11 +127,11 @@ Section Core (Required)
     File /r "..\dist\etc\*.*"
     SetOutPath $INSTDIR\lib
     File /r "..\dist\lib\*.*"
-    SetOutPath $INSTDIR\dist\share
+    SetOutPath $INSTDIR\share
     File "..\dist\share\bleachbit.png"
-    SetOutPath $INSTDIR\dist\share\cleaners
+    SetOutPath $INSTDIR\share\cleaners
     File /r "..\dist\share\cleaners\*.*"
-    SetOutPath $INSTDIR\dist\share\themes
+    SetOutPath $INSTDIR\share\themes
     File /r "..\dist\share\themes\*.*"
 
     SetOutPath "$INSTDIR\share\"
@@ -177,7 +177,7 @@ SectionGroupEnd
 
 
 Section Translations
-    SetOutPath $INSTDIR
+    SetOutPath $INSTDIR\dist\share\locale
     File /r "..\dist\share\locale\*.*"
 
 SectionEnd
