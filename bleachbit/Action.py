@@ -101,6 +101,8 @@ class FileActionProvider(ActionProvider):
 
 
     def get_deep_scan(self):
+        if 0 == len(self.ds):
+            raise StopIteration
         yield self.ds
 
 
