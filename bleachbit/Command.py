@@ -50,6 +50,8 @@ class Delete:
     def execute(self, really_delete):
         """Make changes and return results"""
         ret = { \
+            # TRANSLATORS: This is the label in the log indicating will be
+            # deleted (for previews) or was actually deleted
             'label' : _('Delete'),
             'n_deleted' : 1,
             'n_special' : 0,
