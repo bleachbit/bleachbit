@@ -676,14 +676,13 @@ class GUI:
         bleachbit.CleanerML.load_cleaners()
         self.create_window()
         gobject.threads_init()
-        if options.get("first_start") and sys.platform == 'linux2':
+        if options.get("first_start") and 'posix' == os.name:
             pref = PreferencesDialog(self.window, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
-        if 'posix' == os.name and None == os.getenv('HOME'):
-            self.append_text('Warning: environment HOME not set')
+
 
 
 if __name__ == '__main__':
