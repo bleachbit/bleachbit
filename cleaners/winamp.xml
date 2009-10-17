@@ -21,9 +21,9 @@
 -->
 <cleaner id="winamp" os="windows">
   <label>Winamp</label>
-  <option id="history">
-    <label>History</label>
-    <description>Delete the history</description>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
     <action command="delete" search="file" path="$APPDATA\Winamp\winamp.m3u"/>
     <action command="delete" search="file" path="$APPDATA\Winamp\winamp.m3u8"/>
   </option>
