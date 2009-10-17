@@ -671,7 +671,7 @@ class TestCleaner(unittest.TestCase):
     @staticmethod
     def action_to_cleaner(action_str):
         """Given an action XML fragment, return a cleaner"""
-        return self.action_to_cleaner( [action_strs] )
+        return TestCleaner.actions_to_cleaner( [action_str] )
 
     @staticmethod
     def actions_to_cleaner(action_strs):

@@ -153,16 +153,14 @@ class Worker:
                     yield True
                     self.yield_time = time.time()
             # deep scan
-            ds = backends[operation].get_deep_scan(option_id).next()
-            if not ds:
-                continue
-            if '' == ds['path']:
-                ds['path'] = os.path.expanduser('~')
-            if 'delete' != ds['command']:
-                raise NotImplementedError('Deep scan only supports deleting now')
-            if not self.deepscans.has_key(ds['path']):
-                self.deepscans[ds['path']] = []
-            self.deepscans[ds['path']].append(ds)
+            for ds in backends[operation].get_deep_scan(option_id):
+                if '' == ds['path']:
+                    ds['path'] = os.path.expanduser('~')
+                if 'delete' != ds['command']:
+                    raise NotImplementedError('Deep scan only supports deleting now')
+                if not self.deepscans.has_key(ds['path']):
+                    self.deepscans[ds['path']] = []
+                self.deepscans[ds['path']].append(ds)
 
 
     def run(self):
@@ -307,7 +305,7 @@ class TestWorker(unittest.TestCase):
             "Path still exists '%s'" % filename2)
         self.assertEqual(w.total_special, 0)
         self.assertEqual(w.total_errors, 0)
-        self.assertEqual(w.total_deleted, 1)
+        self.assertEqual(w.total_deleted, 2)
 
 
 
