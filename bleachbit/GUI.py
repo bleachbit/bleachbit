@@ -555,6 +555,7 @@ class GUI:
         # create the delete button
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        # TRANSLATORS: This is the delete button on the main window
         run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
