@@ -25,7 +25,7 @@
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
     <!-- Vista -->
-    <action command="delete" search="glob" path="$APPDATA\\Microsoft\\Windows\Recent\\*.lnk"/>
+    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
     <!-- recent documents in start menu -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
   </option>
@@ -64,6 +64,6 @@
   <option id="thumbnails">
     <label>Thumbnails</label>
     <description>Delete the cache</description>
-    <action command="delete" search="glob" path="$LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\thumbcache*.db"/>
+    <action command="delete" search="glob" path="$LOCALAPPDATA\Microsoft\Windows\Explorer\thumbcache*.db"/>
   </option>
 </cleaner>
