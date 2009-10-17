@@ -209,12 +209,12 @@ def wipe_swap_linux(devices):
     for device in devices:
         print "info: wiping swap device '%s'" % device
         if get_swap_size_linux(device) > 8*1024**3:
-            raise RuntimeError('swap file %s is larger than expected' % device)
+            raise RuntimeError('swap device %s is larger than expected' % device)
         uuid = get_swap_uuid(device)
         # wipe
         FileUtilities.wipe_contents(device, truncate = False)
         # reinitialize
-        print "debug: reinitializing swap device ", device
+        print "debug: reinitializing swap device %s" % device
         args = ['mkswap', device]
         if uuid:
             args.append("-U")
@@ -228,7 +228,7 @@ def wipe_memory():
     """Wipe unallocated memory"""
     devices = disable_swap_linux()
     yield True # process GTK+ idle loop
-    print 'debug: wipe_memory(), devices=', devices
+    print 'debug: detected swap devices:', devices
     wipe_swap_linux(devices)
     yield True
     child_pid = os.fork()
