@@ -114,11 +114,11 @@ class FileActionProvider(ActionProvider):
                 yield path
 
         def get_walk_all(top):
-            for path in FileUtilities.children_in_directory(top, False):
+            for path in FileUtilities.children_in_directory(top, True):
                 yield path
 
         def get_walk_files(top):
-            for path in FileUtilities.children_in_directory(top, True):
+            for path in FileUtilities.children_in_directory(top, False):
                 yield path
 
         if 'deep' == self.search:
@@ -404,14 +404,19 @@ class TestAction(unittest.TestCase):
         """Unit test for walk.files"""
         import Cleaner
         if 'posix' == os.name:
-            path = '/usr/var/log'
+            path = '/var'
         elif 'nt' == os.name:
-            path = '$WINDIR\\system32'
+            path = '$WINDIR'
         action_str = '<action command="delete" search="walk.files" path="%s" />' % path
+        results = 0
         for cmd in self._action_str_to_commands(action_str):
-            result = cmd.execute(False)
+            result = cmd.execute(False).next()
             Cleaner.TestCleaner.validate_result(self, result)
-            self.assert_(not os.path.isdir(result['path']))
+            path = result['path']
+            self.assert_(not os.path.isdir(path), \
+                "%s is a directory" % path)
+            results += 1
+        self.assert_(results > 0)
 
 
 
