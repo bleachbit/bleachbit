@@ -27,7 +27,6 @@ Wipe memory
 
 import ctypes
 import os
-import pwd
 import re
 import subprocess
 import sys
@@ -97,6 +96,7 @@ def fill_memory_linux():
     # OOM prefers non-privileged processes
     try:
         login = os.getlogin()
+        import pwd
         uid = pwd.getpwnam(login)[3]
         if uid > 0:
             print "debug: dropping privileges of pid %d to uid %d" % \
@@ -280,6 +280,8 @@ class TestMemory(unittest.TestCase):
 
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
+        if 'linux2' != sys.platform:
+            return
         swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
             print 'no active swap device detected'
