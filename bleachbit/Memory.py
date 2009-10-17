@@ -27,10 +27,12 @@ Wipe memory
 
 import ctypes
 import os
+import pwd
 import re
 import subprocess
 import sys
 import time
+import traceback
 import unittest
 
 import FileUtilities
@@ -92,10 +94,20 @@ def fill_memory_linux():
     # OOM likes nice processes
     print 'debug: new nice value', os.nice(19)
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
+    # OOM prefers non-privileged processes
+    try:
+        login = os.getlogin()
+        uid = pwd.getpwnam(login)[3]
+        if uid > 0:
+            print "debug: dropping privileges of pid %d to uid %d" % \
+                    (os.getpid(), uid)
+            os.seteuid(uid)
+    except:
+        traceback.print_exc()
     # fill memory
     def fill_helper():
         report_free()
-        allocbytes = int(physical_free() * 0.50)
+        allocbytes = int(physical_free() * 0.75)
         if allocbytes < 1024:
             return
         megabytes = allocbytes / (1024**2)
