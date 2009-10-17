@@ -671,20 +671,27 @@ class TestCleaner(unittest.TestCase):
     @staticmethod
     def action_to_cleaner(action_str):
         """Given an action XML fragment, return a cleaner"""
+        return self.action_to_cleaner( [action_strs] )
+
+    @staticmethod
+    def actions_to_cleaner(action_strs):
+        """Given multiple action XML fragments, return one cleaner"""
         from xml.dom.minidom import parseString
         from Action import ActionProvider
         cleaner = Cleaner()
-        dom = parseString(action_str)
-        action_node = dom.childNodes[0]
-        command = action_node.getAttribute('command')
-        provider = None
-        for actionplugin in ActionProvider.plugins:
-            if actionplugin.action_key == command:
-                provider = actionplugin(action_node)
-        cleaner.add_action('option1', provider)
-        cleaner.add_option('option1', 'name1', 'description1')
+        count = 1
+        for action_str in action_strs:
+            dom = parseString(action_str)
+            action_node = dom.childNodes[0]
+            command = action_node.getAttribute('command')
+            provider = None
+            for actionplugin in ActionProvider.plugins:
+                if actionplugin.action_key == command:
+                    provider = actionplugin(action_node)
+            cleaner.add_action('option%d' % count, provider)
+            cleaner.add_option('option%d' % count, 'name%d' % count, 'description%d' % count)
+            count = count + 1
         return cleaner
-
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""

@@ -268,7 +268,7 @@ class TestWorker(unittest.TestCase):
         while run.next():
             pass
         self.assert_(not os.path.exists(filename), \
-            "Path does not exist '%s'" % filename)
+            "Path still exists '%s'" % filename)
         self.assertEqual(w.total_special, 3)
         self.assertEqual(w.total_errors, 2)
         if 'posix' == os.name:
@@ -277,6 +277,38 @@ class TestWorker(unittest.TestCase):
         elif 'nt' == os.name:
             self.assertEqual(w.total_bytes, 3+3+10+10)
             self.assertEqual(w.total_deleted, 3)
+
+
+    def test_multiple_options(self):
+        """Test one cleaner with two options"""
+        import Cleaner
+        import CLI
+        import tempfile
+        ui = CLI.CliCallback()
+        (fd, filename1) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        self.assert_(os.path.exists(filename1))
+        (fd, filename2) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        self.assert_(os.path.exists(filename2))
+
+        astr1 = '<action command="delete" search="file" path="%s"/>' % filename1
+        astr2 = '<action command="delete" search="file" path="%s"/>' % filename2
+        cleaner = Cleaner.TestCleaner.actions_to_cleaner([astr1, astr2])
+        backends['test'] = cleaner
+        operations = { 'test' : [ 'option1', 'option2' ] }
+        w = Worker(ui, True, operations)
+        run = w.run()
+        while run.next():
+            pass
+        self.assert_(not os.path.exists(filename1), \
+            "Path still exists '%s'" % filename1)
+        self.assert_(not os.path.exists(filename2), \
+            "Path still exists '%s'" % filename2)
+        self.assertEqual(w.total_special, 0)
+        self.assertEqual(w.total_errors, 0)
+        self.assertEqual(w.total_deleted, 1)
+
 
 
 if __name__ == '__main__':
