@@ -69,19 +69,39 @@ def chownself(path):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the 
     owner may not be able to access the path."""
-    if 'linux2' != sys.platform:
+    if 'posix' != os.name:
         return
-    import pwd
+    uid = getrealuid()
+    print 'debug: chown(%s, uid=%s)' % (path, uid)
     try:
-        login = os.getlogin()
-    except:
-        login = os.getenv('LOGNAME')
-    try:
-        uid = pwd.getpwnam(login)[3]
-        print 'debug: chown(%s, uid=%s)' % (path, uid)
         os.chown(path, uid, -1)
     except:
         traceback.print_exc()
+
+
+def getrealuid():
+    """Get the real user ID when running in sudo mode"""
+
+    if 'posix' != os.name:
+        raise RuntimeError('getrealuid() requires POSIX')
+
+    if os.getenv('SUDO_UID'):
+        return int(os.getenv('SUDO_UID'))
+
+    login = None
+
+    try:
+        login = os.getlogin()
+        # On Ubuntu 9.04, getlogin() under sudo returns non-root user.
+        # On Fedora 11, getlogin() under sudo returns 'root'.
+    except:
+        login = os.getenv('LOGNAME')
+
+    if login and 'root' != login:
+        import pwd
+        return pwd.getpwnam(login)[3]
+
+    return os.getuid()
 
 
 def makedirs(path):
@@ -121,6 +141,9 @@ def sudo_mode():
     if 'linux2' != sys.platform:
         return False
 
+    if os.getenv('SUDO_UID'):
+        return True
+
     try:
         login1 = os.getlogin()
     except:
@@ -157,6 +180,13 @@ class TestGeneral(unittest.TestCase):
             self.assertEqual(boolstr_to_bool(test[0]), test[1])
 
 
+    def test_getrealuid(self):
+        """Test for getrealuid()"""
+        uid = getrealuid()
+        self.assert_(isinstance(uid, int))
+        self.assert_(0 <= uid <= 65535)
+
+
     def test_makedirs(self):
         """Unit test for makedirs"""
         def cleanup(dir):
@@ -183,7 +213,7 @@ class TestGeneral(unittest.TestCase):
 
     def test_sudo_mode(self):
         """Unit test for sudo_mode()"""
-        if not sys.platform == 'linux2':
+        if not 'posix' == os.name:
             return
         self.assert_(type(sudo_mode()) is bool)
 

@@ -97,9 +97,7 @@ def fill_memory_linux():
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
     # OOM prefers non-privileged processes
     try:
-        login = os.getenv('LOGNAME')
-        import pwd
-        uid = pwd.getpwnam(login)[3]
+        uid = General.getrealuid()
         if uid > 0:
             print "debug: dropping privileges of pid %d to uid %d" % \
                     (os.getpid(), uid)
