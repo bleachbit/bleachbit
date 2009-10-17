@@ -64,7 +64,7 @@ def disable_swap_linux():
         line = line.replace('\n', '')
         if '' == line:
             continue
-        ret = re.search('^swapoff on (/dev/[hs]d[a-z][0-9]+)$', line)
+        ret = re.search('^swapoff on (/dev/([hs]d[a-z][0-9]+|mapper/swap))$', line)
         if None == ret:
             raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'" \
                 % { 'args' : str(args), 'stdout' : stdout, 'stderr' : stderr } )
