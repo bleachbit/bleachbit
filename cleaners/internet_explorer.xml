@@ -30,7 +30,7 @@
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
-    <description>Web cache reduces time to display revisited pages</description>
+    <description>Delete the temporary files</description>
     <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
   </option>

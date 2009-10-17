@@ -24,7 +24,7 @@
   <description>Web browser</description>
   <option id="cache">
     <label>Cache</label>
-    <description>Web cache reduces time to display revisited pages</description>
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\Cache.db"/>
     <action command="delete" search="file" path="$USERPROFILE\AppData\Local\Apple Computer\Safari\Cache.db"/>
   </option>
