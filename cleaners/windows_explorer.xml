@@ -21,14 +21,6 @@
 -->
 <cleaner id="windows_explorer" os="windows">
   <label>Windows Explorer</label>
-  <option id="recent_documents">
-    <label>Recent documents list</label>
-    <description>Delete the list of recently used documents</description>
-    <!-- Vista -->
-    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
-    <!-- recent documents in start menu -->
-    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
-  </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
@@ -49,6 +41,14 @@
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
     <!--  printer ports -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
+  </option>
+  <option id="recent_documents">
+    <label>Recent documents list</label>
+    <description>Delete the list of recently used documents</description>
+    <!-- Vista -->
+    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
+    <!-- recent documents in start menu -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
   </option>
   <option id="run">
     <label>Run</label>
