@@ -97,7 +97,7 @@ def fill_memory_linux():
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
     # OOM prefers non-privileged processes
     try:
-        login = os.getlogin()
+        login = os.getenv('LOGNAME')
         import pwd
         uid = pwd.getpwnam(login)[3]
         if uid > 0:
