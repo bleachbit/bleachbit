@@ -74,6 +74,9 @@ def chownself(path):
     import pwd
     try:
         login = os.getlogin()
+    except:
+        login = os.getenv('LOGNAME')
+    try:
         uid = pwd.getpwnam(login)[3]
         print 'debug: chown(%s, uid=%s)' % (path, uid)
         os.chown(path, uid, -1)
