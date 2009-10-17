@@ -66,8 +66,10 @@ class CleanerML:
 
     def os_match(self, os_str):
         """Return boolean whether operating system matches"""
-        if len(os_str) == 0:
+        # If blank or if in .pot-creation-mode, return true.
+        if len(os_str) == 0 or None != self.xlate_cb:
             return True
+        # Otherwise, check platform.
         if os_str == 'linux' and sys.platform == 'linux2':
             return True
         if os_str == 'windows' and sys.platform == 'win32':
