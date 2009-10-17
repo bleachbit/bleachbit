@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-10-16 08:39-0600\n"
-"PO-Revision-Date: 2009-10-16 18:11+0000\n"
-"Last-Translator: Iryna Nikanchuk <defragbrain@gmail.com>\n"
+"POT-Creation-Date: 2009-10-16 20:07-0600\n"
+"PO-Revision-Date: 2009-10-17 00:52+0000\n"
+"Last-Translator: Ilia Lilov aka lilovip <lilovil@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-16 20:20+0000\n"
+"X-Launchpad-Export-Date: 2009-10-17 03:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -31,7 +31,7 @@ msgstr ""
 #: ../bleachbit/Cleaner.py:286 ../bleachbit/Cleaner.py:346
 #: ../bleachbit/Cleaner.py:389
 msgid "Cache"
-msgstr "Кеш"
+msgstr "Кэш"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -75,7 +75,7 @@ msgstr "Удалить кэш"
 #: ../bleachbit/Action.py:223 ../bleachbit/Cleaner.py:194
 #: ../bleachbit/Cleaner.py:277
 msgid "Vacuum"
-msgstr "Пылесос"
+msgstr "Спрессовать базу данных"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -339,6 +339,7 @@ msgstr "Удалить эти файлы"
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr ""
+"Проверить предпросмотр на файлы, которые вы, возможно, хотите сохранить."
 
 #: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:414
 msgid "This option is slow."
@@ -354,7 +355,7 @@ msgstr "Удалить историю команд"
 
 #: ../cleaners/gnome.xml
 msgid "Run"
-msgstr ""
+msgstr "Выполнить"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -432,7 +433,7 @@ msgstr "Удалить файлы для ненужных языков"
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:397
 msgid "Rotated logs"
-msgstr "Чередующиеся журналы"
+msgstr "Старые журналы"
 
 #: ../bleachbit/Cleaner.py:397
 msgid "Delete old system logs"
@@ -495,7 +496,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:418
 msgid "The system in general"
-msgstr "Система вцелом"
+msgstr "Система в целом"
 
 #: ../bleachbit/Cleaner.py:424
 msgid "System"
@@ -547,22 +548,25 @@ msgstr "вывести информацию о версии и выйти"
 msgid "overwrite files to hide contents"
 msgstr "перезаписать файлы чтобы скрыть содержимое"
 
-#: ../bleachbit/Command.py:53 ../bleachbit/GUI.py:558
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#. TRANSLATORS: This is the delete button on the main window
+#: ../bleachbit/Command.py:55 ../bleachbit/GUI.py:559
 msgid "Delete"
 msgstr "Удалить"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:73
+#: ../bleachbit/Command.py:75
 msgid "Mark for deletion"
 msgstr "Пометить для удаления после перезагрузки"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:148
+#: ../bleachbit/Command.py:150
 msgid "Truncate"
 msgstr "Усечь до нулевого размера"
 
-#: ../bleachbit/Command.py:187
+#: ../bleachbit/Command.py:189
 msgid "Delete registry key"
 msgstr "Удалить ключ реестра"
 
@@ -635,7 +639,7 @@ msgstr "Выберите папку"
 msgid ""
 "Choose a writable directory for each drive for which to overwrite free space."
 msgstr ""
-"Выбрать директорию, доступную для записи для каждого диска, для которого "
+"Выберите директорию, доступную для записи для каждого диска, для которого "
 "перезаписывается свободное пространство."
 
 #: ../bleachbit/GuiPreferences.py:187
@@ -664,7 +668,7 @@ msgstr "Имя"
 
 #: ../bleachbit/GUI.py:71
 msgid "Delete confirmation"
-msgstr "Удалить подтверждение"
+msgstr "Подтверждение удаления"
 
 #: ../bleachbit/GUI.py:79
 msgid ""
@@ -682,7 +686,7 @@ msgstr "Вы уверены, что хотите навсегда удалить
 
 #: ../bleachbit/GUI.py:179
 msgid "Active"
-msgstr "Активный"
+msgstr "Активировать"
 
 #: ../bleachbit/GUI.py:373
 msgid "You must select an operation"
@@ -720,7 +724,7 @@ msgstr "Выберите файлы для уничтожения"
 
 #: ../bleachbit/GUI.py:515
 msgid "_Shred Files"
-msgstr "_Shred Files"
+msgstr "_Уничтожить файлы"
 
 #: ../bleachbit/GUI.py:516
 msgid "_Quit"
@@ -758,19 +762,19 @@ msgstr "Предпросмотр"
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Просмотреть файлы в выбранных операциях (без удаления файлов)"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:562
 msgid "Delete files in the selected operations"
 msgstr "Удалить файлы в выбранных операциях"
 
-#: ../bleachbit/GUI.py:639
+#: ../bleachbit/GUI.py:640
 msgid "Update BleachBit"
 msgstr "Обновить BleachBit"
 
-#: ../bleachbit/GUI.py:644
+#: ../bleachbit/GUI.py:645
 msgid "BleachBit update is available"
 msgstr "Доступно обновление для BleachBit"
 
-#: ../bleachbit/GUI.py:652
+#: ../bleachbit/GUI.py:653
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Нажмите 'Обновить BleachBit' для получения информации"
 
