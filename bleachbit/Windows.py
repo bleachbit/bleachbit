@@ -294,10 +294,9 @@ class TestWindows(unittest.TestCase):
 
     def test_empty_recycle_bin(self):
         """Unit test for empty_recycle_bin"""
-        ret = empty_recycle_bin(really_delete = False).next()
-        self.assert_ (type(ret) is str)
-        for ret in empty_recycle_bin(False):
-            self.assert_ (type(ret) is str)
+        for drive in get_fixed_drives():
+            ret = empty_recycle_bin(drive, really_delete = False)
+            self.assert_ (isinstance(ret, (int, long)))
 
 
     def test_split_registry_key(self):
