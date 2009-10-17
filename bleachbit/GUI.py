@@ -661,9 +661,12 @@ class GUI:
     def check_online_updates(self):
         """Check for software updates in background"""
         import bleachbit.Update
-        update = bleachbit.Update.Update()
-        if update.is_update_available():
-            gobject.idle_add(self.enable_online_update, update.get_update_info_url())
+        try:
+            update = bleachbit.Update.Update()
+            if update.is_update_available():
+                gobject.idle_add(self.enable_online_update, update.get_update_info_url())
+        except:
+            self.append_text(_("Error when checking for updates: ") + str(sys.exc_info()[1]))
 
 
     def __init__(self):

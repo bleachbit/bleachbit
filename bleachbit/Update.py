@@ -17,18 +17,23 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Check for updates via the Internet
 """
+
 
 import platform
 import socket
 import sys
 import traceback
+import unittest
 import urllib2
 import xml.dom.minidom
 
 import Common
+
 
 
 def user_agent():
@@ -71,7 +76,7 @@ class Update:
 
     def get_update_info_url(self):
         """Return the URL with information about the update.
-        If no update is available, URL may be none."""
+        If no update is available, URL may be None."""
         return self.update_info_url
 
 
@@ -80,12 +85,13 @@ class Update:
         opener = urllib2.build_opener()
         opener.addheaders = [('User-Agent', user_agent())]
         socket.setdefaulttimeout(Common.socket_timeout)
+        handle = opener.open(Common.update_check_url)
+        doc = handle.read()
         try:
-            handle = opener.open(Common.update_check_url)
-            dom = xml.dom.minidom.parse(handle)
+            dom = xml.dom.minidom.parseString(doc)
         except:
-            print _("Error when checking for updates: "), str(sys.exc_info()[1])
-            return False
+            print doc
+            raise
         elements = dom.getElementsByTagName("url")
         if 0 == len(elements):
             self.update_available = False
@@ -95,7 +101,6 @@ class Update:
         dom.unlink()
         return self.update_available
 
-import unittest
 
 class TestUpdate(unittest.TestCase):
     """Unit tests for module Update"""
@@ -110,7 +115,7 @@ class TestUpdate(unittest.TestCase):
 
         # test failure
         Common.update_check_url = "http://www.surelydoesnotexist.com/foo"
-        self.assertEqual(update.is_update_available(), False)
+        self.assertRaises(urllib2.URLError, update.is_update_available)
 
 
     def test_user_agent(self):
