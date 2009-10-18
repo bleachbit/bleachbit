@@ -7,29 +7,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-11 22:31-0600\n"
-"PO-Revision-Date: 2009-08-14 12:24+0000\n"
-"Last-Translator: yonchan <Unknown>\n"
+"POT-Creation-Date: 2009-10-16 22:46-0600\n"
+"PO-Revision-Date: 2009-10-18 04:12+0000\n"
+"Last-Translator: Bundo <bundo@bundo.biz>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-14 14:36+0000\n"
+"X-Launchpad-Export-Date: 2009-10-18 05:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
-#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/pidgin.xml
-#: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/beagle.xml
-#: ../cleaners/opera.xml ../cleaners/rhythmbox.xml ../cleaners/epiphany.xml
-#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/google_chrome.xml ../cleaners/amsn.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml
+#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/kde.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
+#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/epiphany.xml ../cleaners/transmission.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vuze.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/google_chrome.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
+#: ../cleaners/safari.xml ../cleaners/java.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:183
-#: ../bleachbit/CleanerBackend.py:373 ../bleachbit/CleanerBackend.py:406
-#: ../bleachbit/CleanerBackend.py:518
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:185
+#: ../bleachbit/Cleaner.py:286 ../bleachbit/Cleaner.py:346
+#: ../bleachbit/Cleaner.py:389
 msgid "Cache"
 msgstr "캐시"
 
@@ -42,52 +43,61 @@ msgstr "게임 서버 리스트 삭제함"
 msgid "Game"
 msgstr "게임"
 
-#: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
-#: ../bleachbit/CleanerBackend.py:194
+#: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
+#: ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Cleaner.py:194
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr "데이터를 삭제하지 않고 차지하는 공간을 줄이고 속도를 향상시키기 위해 데이터베이스를 정리함"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/xine.xml ../cleaners/pidgin.xml ../cleaners/liferea.xml
-#: ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
+#: ../cleaners/liferea.xml ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
 #: ../cleaners/transmission.xml ../cleaners/nexuiz.xml ../cleaners/apt.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/evolution.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
+#: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/CleanerBackend.py:373
-#: ../bleachbit/CleanerBackend.py:406 ../bleachbit/CleanerBackend.py:518
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:389
+#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:409
 msgid "Delete the cache"
 msgstr "캐시를 삭제함"
 
-#. TRANSLATORS: Vacuum is a verb.  You could translate the words
-#. 'compact' or 'optimize' instead.
-#: ../cleaners/yum.xml ../cleaners/liferea.xml ../cleaners/gpodder.xml
-#: ../bleachbit/CleanerBackend.py:194
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
+#: ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Action.py:223 ../bleachbit/Cleaner.py:194
+#: ../bleachbit/Cleaner.py:277
 msgid "Vacuum"
 msgstr "최적화"
 
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
+#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/Cleaner.py:186
 msgid "Cookies"
 msgstr "쿠키"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 msgid "Current session"
-msgstr ""
+msgstr "현재 세션"
 
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/flash.xml
-#: ../cleaners/realplayer.xml ../bleachbit/CleanerBackend.py:184
+#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
+#: ../bleachbit/Cleaner.py:186
 msgid ""
-"Delete cookies, which contain information such as web site prefereneces, "
+"Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr "웹사이트 정보, 승인, 트래킹 정보 등을 포함하고 있는 쿠키를 삭제함"
+msgstr "쿠키 삭제, 웹 사이트 환경 설정, 인증, 신원 추적 등과 같은 정보가 들어있습니다."
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 msgid "Delete the current session"
@@ -95,31 +105,34 @@ msgstr "현재 세션을 삭제"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
-"Delete the history, which includes bookmarks, downloads, and visited sites"
-msgstr "북마크, 다운로드, 방문한 사이트 정보 등을 포함한 히스토리를 삭제함"
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "방문한 사이트 삭제, 다운로드 및 이미지 포함 내역"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../bleachbit/CleanerBackend.py:183
+#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:185
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr "재방문시 시간을 단축셔키주는 웹 캐시 정보를 삭제함"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
-#: ../cleaners/mc.xml ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/nautilus.xml ../cleaners/bash.xml ../cleaners/links2.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
+#: ../cleaners/seamonkey.xml ../cleaners/windows_defender.xml
+#: ../cleaners/google_chrome.xml ../cleaners/nautilus.xml
+#: ../cleaners/safari.xml ../cleaners/bash.xml ../cleaners/links2.xml
 #: ../cleaners/elinks.xml
 msgid "History"
 msgstr "사용 기록"
 
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/links2.xml ../cleaners/elinks.xml
-#: ../bleachbit/CleanerBackend.py:207
+#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
+#: ../cleaners/elinks.xml ../bleachbit/Cleaner.py:207
 msgid "Web browser"
 msgstr "웹 브라우저"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml
+#: ../cleaners/gnome.xml ../cleaners/links2.xml ../bleachbit/Cleaner.py:271
+#: ../bleachbit/Cleaner.py:337
 msgid "Delete the usage history"
 msgstr "사용 히스토리를 삭제함"
 
@@ -134,14 +147,17 @@ msgstr "편집기"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../bleachbit/Cleaner.py:406
 msgid "Delete the logs"
 msgstr "로그를 삭제함"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/easytag.xml ../cleaners/gftp.xml
-#: ../cleaners/amule.xml
+#: ../cleaners/exaile.xml ../cleaners/easytag.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../bleachbit/Cleaner.py:406
 msgid "Logs"
 msgstr "로그"
 
@@ -150,39 +166,69 @@ msgid "Multimedia viewer"
 msgstr "멀티미디어 뷰어"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
-#: ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
 msgstr "디버그 로그"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
-#: ../cleaners/easytag.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
+#: ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
 msgstr "디버그 로그를 삭제함"
 
-#: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/gedit.xml
-#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:407
-#: ../bleachbit/CleanerBackend.py:527 ../bleachbit/CleanerBackend.py:530
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:415
+msgid "Delete the temporary files"
+msgstr "임시 파일 삭제"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:193
+msgid "List of visited web pages"
+msgstr "방문한 웹페이지 정보를 삭제함"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:415
+msgid "Temporary files"
+msgstr "임시 파일"
+
+#: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
+#: ../cleaners/gwenview.xml ../cleaners/gedit.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
+#: ../bleachbit/Cleaner.py:287 ../bleachbit/Cleaner.py:398
 msgid "Delete the list of recently used documents"
 msgstr "최근에 사용된 문서 정보를 삭제함"
 
-#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
-#: ../cleaners/adobe_reader.xml ../bleachbit/CleanerBackend.py:407
-#: ../bleachbit/CleanerBackend.py:530
+#: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
+#: ../cleaners/winamp.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
+#: ../bleachbit/Cleaner.py:287
 msgid "Most recently used"
 msgstr "최근에 사용된"
 
+#: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:398
+msgid "Recent documents list"
+msgstr "최근 문서 목록"
+
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/amsn.xml
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
 msgstr "채팅 클라이언트"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
 msgstr "채팅 로그"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
 msgstr "채팅 로그를 삭제함"
 
@@ -207,77 +253,77 @@ msgstr "검색 툴"
 msgid "File transfer client"
 msgstr "파일 전송 클라이언트"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
+#: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
+msgid "Delete the files"
+msgstr "파일 지움"
+
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:187
 msgid "Download history"
 msgstr "다운로드 히스토리"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:185
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:187
 msgid "List of files downloaded"
 msgstr "다운로드한 파일 정보를 삭제함"
 
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
-msgid "List of visited web pages"
-msgstr "방문한 웹페이지 정보를 삭제함"
-
-#: ../cleaners/opera.xml ../bleachbit/CleanerBackend.py:191
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:193
 msgid "URL history"
 msgstr "URL 히스토리"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
+#: ../cleaners/winrar.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
+msgid "Delete the most recently used list"
+msgstr "가장 최근에 사용된 파일 목록 삭제"
+
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:191
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr "북마크, 바비콘, 방문한 웹사이트 정보를 포함하는 URL 데이터베이스"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:190
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr "유저명, 비밀번호, 비밀번호를 저장하지 않는 사이트 정보의 데이터베이스"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:190
-msgid "Deleting Places deletes bookmarks."
-msgstr ""
-
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:188
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:190
 msgid "Passwords"
 msgstr "비밀번호"
 
-#: ../cleaners/epiphany.xml ../bleachbit/CleanerBackend.py:189
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:191
 msgid "Places"
 msgstr "위치"
+
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:192
+msgid "This option deletes all bookmarks."
+msgstr "이 옵션은 모든 책갈피를 삭제합니다."
+
+#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:297
+msgid "Office suite"
+msgstr "오피스 프로그램"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
 msgstr "쓸모없게된 파일 삭제"
 
-#: ../cleaners/google_toolbar.xml
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
 msgid "Delete the search history"
 msgstr "검색 히스토리 삭제"
 
-#: ../cleaners/google_toolbar.xml
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
 msgid "Search history"
 msgstr "검색 히스토리"
 
-#: ../cleaners/vuze.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
 msgstr "백업 파일"
 
-#: ../cleaners/vuze.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
 msgstr "백업 파일 삭제"
-
-#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
-msgid "Delete the temporary files"
-msgstr "임시 파일 삭제"
-
-#: ../cleaners/vuze.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/CleanerBackend.py:374 ../bleachbit/CleanerBackend.py:535
-msgid "Temporary files"
-msgstr "임시 파일"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
@@ -295,7 +341,27 @@ msgstr "현재 그리고 마지막 세션 삭제"
 msgid "Session"
 msgstr "세션"
 
-#: ../cleaners/thumbnails.xml
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "아바타와 이모티콘 캐시 삭제"
+
+#: ../cleaners/deepscan.xml
+msgid "Compiled objects"
+msgstr "컴파일된 객체"
+
+#: ../cleaners/deepscan.xml
+msgid "Deep scan"
+msgstr "정밀 검사"
+
+#: ../cleaners/deepscan.xml
+msgid "Inspect the preview for any files you want to keep."
+msgstr "보존하려는 파일에 대해 미리보기 하며 검사합니다."
+
+#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:414
+msgid "This option is slow."
+msgstr "이 옵션은 프로그램의 진행속도를 느리게 만들 수 있습니다."
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
 msgstr "미리보기"
 
@@ -303,9 +369,9 @@ msgstr "미리보기"
 msgid "Delete the command history"
 msgstr "명령 히스토리 삭제"
 
-#: ../cleaners/gedit.xml ../bleachbit/CleanerBackend.py:527
-msgid "Recent documents list"
-msgstr "최근 문서 목록"
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "실행"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -328,38 +394,23 @@ msgstr "불필요한 파일 청소"
 msgid "Free space and maintain privacy"
 msgstr "자동 청소 및 개인정보 유지"
 
-#. TRANSLATORS: Vacuumed may also be translated 'compacted'
-#. or 'optimized.'  The '%s' is a file name.
-#: ../bleachbit/Action.py:185 ../bleachbit/Action.py:187
-#, python-format
-msgid "Vacuumed: %s"
-msgstr "최적화됨: %s"
-
-#: ../bleachbit/CleanerBackend.py:186
+#: ../bleachbit/Cleaner.py:188
 msgid "Form history"
 msgstr "폼 히스토리"
 
-#: ../bleachbit/CleanerBackend.py:186
+#: ../bleachbit/Cleaner.py:188
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "웹 사이트와 검색 바에 입력된 폼의 히스토리"
 
-#: ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/Cleaner.py:189
 msgid "Session restore"
 msgstr "세션 리스토어"
 
-#: ../bleachbit/CleanerBackend.py:187
+#: ../bleachbit/Cleaner.py:189
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "브라우저가 종료 또는 크래쉬 된 후 초기 세션을 로드함"
 
-#: ../bleachbit/CleanerBackend.py:377
-msgid "KDE desktop environment"
-msgstr "KDE 데스크탑 환경"
-
-#: ../bleachbit/CleanerBackend.py:417
-msgid "Office suite"
-msgstr "오피스 프로그램"
-
-#: ../bleachbit/CleanerBackend.py:481
+#: ../bleachbit/Cleaner.py:349
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "RPM빌드 디렉토리의 파일을 삭제함"
 
@@ -369,21 +420,21 @@ msgstr "RPM빌드 디렉토리의 파일을 삭제함"
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/CleanerBackend.py:517
+#: ../bleachbit/Cleaner.py:388
 msgid "Broken desktop files"
 msgstr "올바르지 않은 데스크탑 파일"
 
-#: ../bleachbit/CleanerBackend.py:517
+#: ../bleachbit/Cleaner.py:388
 msgid "Delete broken application menu entries and file associations"
 msgstr "올바르지 않은 어플리케이션 메뉴 및 파일 연결을 삭제함"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/CleanerBackend.py:521
+#: ../bleachbit/Cleaner.py:392
 msgid "Localizations"
 msgstr "국가별 설정"
 
-#: ../bleachbit/CleanerBackend.py:521
+#: ../bleachbit/Cleaner.py:392
 msgid "Delete files for unwanted languages"
 msgstr "불필요한 언어 파일들을 삭제함"
 
@@ -391,92 +442,169 @@ msgstr "불필요한 언어 파일들을 삭제함"
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/CleanerBackend.py:526
+#: ../bleachbit/Cleaner.py:397
 msgid "Rotated logs"
 msgstr "오래된 로그"
 
-#: ../bleachbit/CleanerBackend.py:526
+#: ../bleachbit/Cleaner.py:397
 msgid "Delete old system logs"
 msgstr "오래된 시스템 로그를 삭제함"
 
-#: ../bleachbit/CleanerBackend.py:528
+#: ../bleachbit/Cleaner.py:399
 msgid "Trash"
 msgstr "휴지통"
 
-#: ../bleachbit/CleanerBackend.py:528
+#: ../bleachbit/Cleaner.py:399
 msgid "Empty the trash"
 msgstr "휴지통을 비움"
 
-#: ../bleachbit/CleanerBackend.py:531
+#. TRANSLATORS: 'Free' is an adjective and could be translated
+#. 'unallocated.'
+#: ../bleachbit/Cleaner.py:403 ../bleachbit/Cleaner.py:495
+msgid "Memory"
+msgstr "메모리"
+
+#: ../bleachbit/Cleaner.py:403
+msgid "Wipe the swap and free memory"
+msgstr "스왑 및 사용 가능한 메모리 수정"
+
+#: ../bleachbit/Cleaner.py:404
+msgid "This option is experimental and may cause system problems."
+msgstr "이 옵션은 실험적이라 시스템에 문제가 발생할 수있습니다."
+
+#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
+#: ../bleachbit/Cleaner.py:409
+msgid "Prefetch"
+msgstr "미리 가져오기"
+
+#: ../bleachbit/Cleaner.py:410
 msgid "Recycle bin"
 msgstr "휴지통"
 
-#: ../bleachbit/CleanerBackend.py:531
+#: ../bleachbit/Cleaner.py:410
 msgid "Empty the recycle bin"
 msgstr "휴지통을 비움"
 
-#: ../bleachbit/CleanerBackend.py:532 ../bleachbit/CleanerBackend.py:649
-#: ../bleachbit/CleanerBackend.py:651
+#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:567
 msgid "Clipboard"
 msgstr "클립보드"
 
-#: ../bleachbit/CleanerBackend.py:532
+#: ../bleachbit/Cleaner.py:412
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr "복사 및 붙어넣기에 쓰이는 클립보드의 데스크탑 환경"
 
-#: ../bleachbit/CleanerBackend.py:533
+#: ../bleachbit/Cleaner.py:413
 msgid "Free disk space"
-msgstr ""
+msgstr "디스크를 청소함"
 
-#: ../bleachbit/CleanerBackend.py:533
+#: ../bleachbit/Cleaner.py:413
 msgid "Overwrite free disk space to hide deleted files"
-msgstr ""
+msgstr "빈 공간을 복구 불가능 하도록 만듬"
 
-#: ../bleachbit/CleanerBackend.py:534
-msgid "This option is slow."
-msgstr ""
-
-#: ../bleachbit/CleanerBackend.py:538
+#: ../bleachbit/Cleaner.py:418
 msgid "The system in general"
 msgstr "일반적인 상황에서의 시스템"
 
-#: ../bleachbit/CleanerBackend.py:544
+#: ../bleachbit/Cleaner.py:424
 msgid "System"
 msgstr "시스템"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/CleanerBackend.py:679
+#: ../bleachbit/Cleaner.py:589
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "%s의 빈 공간을 복구 불능 상태로 만듬"
 
-#: ../bleachbit/FileUtilities.py:176
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:617
+#, python-format
+msgid "Recycle bin %s"
+msgstr "%s 드라이브의 휴지통"
+
+#: ../bleachbit/CLI.py:102
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "유효한 청소: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog, but do translate usage, options, cleaner, and option.
+#. More information about the command line is here
+#. http://bleachbit.sourceforge.net/documentation/command-line
+#: ../bleachbit/CLI.py:130
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr ""
+"번역 : 명령줄에서 사용되는  % 는 번역하지 마십시오. 커맨드 라인에 대한 추가 정보는 "
+"http://bleachbit.sourceforge.net/documentation/command-line 을 참고 하십시오"
+
+#: ../bleachbit/CLI.py:133
+msgid "list cleaners"
+msgstr "청소 목록"
+
+#: ../bleachbit/CLI.py:135
+msgid "delete files and make other permanent changes"
+msgstr "파일을 삭제하고 다른 영구적으로 변경"
+
+#: ../bleachbit/CLI.py:137
+msgid "preview files to be deleted and other changes"
+msgstr "미리보기 파일 및 기타 변경 사항을 삭제"
+
+#: ../bleachbit/CLI.py:139
+msgid "output version information and exit"
+msgstr "버전 정보를 출력하고 종료합니다"
+
+#: ../bleachbit/CLI.py:141
+msgid "overwrite files to hide contents"
+msgstr "덮어쓸 파일 내용을 숨기기"
+
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#. TRANSLATORS: This is the delete button on the main window
+#: ../bleachbit/Command.py:55 ../bleachbit/GUI.py:559
+msgid "Delete"
+msgstr "삭제"
+
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:75
+msgid "Mark for deletion"
+msgstr "지울것 표시"
+
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:150
+msgid "Truncate"
+msgstr "잘라내기"
+
+#: ../bleachbit/Command.py:189
+msgid "Delete registry key"
+msgstr "등록된 키 삭제"
+
+#: ../bleachbit/FileUtilities.py:189
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "파이썬 모듈 sqlite3을 임포트 할수 없음: 파이썬 2.5 또는 그 이후 버전이 필요함"
 
-#: ../bleachbit/GuiPreferences.py:41 ../bleachbit/GUI.py:497
+#: ../bleachbit/GuiPreferences.py:51 ../bleachbit/GUI.py:518
 msgid "Preferences"
 msgstr "기본 설정"
 
-#: ../bleachbit/GuiPreferences.py:50
+#: ../bleachbit/GuiPreferences.py:60
 msgid "General"
 msgstr "일반"
 
-#: ../bleachbit/GuiPreferences.py:51
+#: ../bleachbit/GuiPreferences.py:61
 msgid "Drives"
-msgstr ""
+msgstr "드라이브"
 
-#: ../bleachbit/GuiPreferences.py:53
+#: ../bleachbit/GuiPreferences.py:63
 msgid "Languages"
 msgstr "언어"
 
-#: ../bleachbit/GuiPreferences.py:71
+#: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
 msgstr "인터넷을 통해 주기적으로 업데이트를 확인함"
 
-#: ../bleachbit/GuiPreferences.py:74
+#: ../bleachbit/GuiPreferences.py:108
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -486,54 +614,57 @@ msgstr "업데이트가 있으면 그에 관한 정보를 볼수 있으며, 수�
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:81
+#: ../bleachbit/GuiPreferences.py:115
 msgid "Hide irrelevant cleaners"
 msgstr "관련 없는 메뉴를 숨김"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:89
+#: ../bleachbit/GuiPreferences.py:123
 msgid "Overwrite files to hide contents"
 msgstr "복원할 수 없도록 파일을 삭제함"
 
-#: ../bleachbit/GuiPreferences.py:92
+#: ../bleachbit/GuiPreferences.py:126
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr "복원할 수 없는 삭제는 특정한 파일 시스템과 BleachBit 동작에서 비효율적이며 상당히 느림"
 
-#: ../bleachbit/GuiPreferences.py:104
+#: ../bleachbit/GuiPreferences.py:129
+msgid "Start BleachBit with computer"
+msgstr "로그인시 BleachBit 시작"
+
+#: ../bleachbit/GuiPreferences.py:141
 msgid "Choose a folder"
 msgstr "폴더를 선택함"
 
-#: ../bleachbit/GuiPreferences.py:131
+#: ../bleachbit/GuiPreferences.py:168
 msgid ""
-"Choose a writeable directory for each drive for which to overwrite free "
-"space."
-msgstr ""
+"Choose a writable directory for each drive for which to overwrite free space."
+msgstr "이 빈 공간을 덮어 각 드라이브에 쓰기 가능한 디렉토리를 선택하십시오."
 
-#: ../bleachbit/GuiPreferences.py:150
+#: ../bleachbit/GuiPreferences.py:187
 msgid "Add"
 msgstr "추가"
 
-#: ../bleachbit/GuiPreferences.py:152
+#: ../bleachbit/GuiPreferences.py:189
 msgid "Remove"
 msgstr "삭제"
 
-#: ../bleachbit/GuiPreferences.py:177
+#: ../bleachbit/GuiPreferences.py:214
 msgid "All languages will be deleted except those checked."
 msgstr "체크되지 않은 모든 언어 항목을 삭제함"
 
-#: ../bleachbit/GuiPreferences.py:195
+#: ../bleachbit/GuiPreferences.py:232
 msgid "Preserve"
 msgstr "유지"
 
-#: ../bleachbit/GuiPreferences.py:199
+#: ../bleachbit/GuiPreferences.py:236
 msgid "Code"
 msgstr "코드"
 
-#: ../bleachbit/GuiPreferences.py:203 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:240 ../bleachbit/GUI.py:171
 msgid "Name"
 msgstr "이름"
 
@@ -556,11 +687,19 @@ msgstr "정말로 이 파일들을 삭제해도 되겠습니까?"
 msgid "Active"
 msgstr "활성화"
 
-#: ../bleachbit/GUI.py:382
+#: ../bleachbit/GUI.py:373
+msgid "You must select an operation"
+msgstr "반드시 실행 항목을 선택해야 합니다."
+
+#: ../bleachbit/GUI.py:395
+msgid "Done."
+msgstr "완료"
+
+#: ../bleachbit/GUI.py:404
 msgid "Program to clean unnecessary files"
 msgstr "불필요한 파일을 삭제하는 프로그램"
 
-#: ../bleachbit/GUI.py:387
+#: ../bleachbit/GUI.py:409
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -568,70 +707,70 @@ msgstr ""
 "GNU 일반 공중 사용 허가서 버전 3 이후\n"
 "http://www.gnu.org/licenses/gpl-3.0.txt 확인하기 바랍니다."
 
-#: ../bleachbit/GUI.py:393
+#: ../bleachbit/GUI.py:415
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  bundo https://launchpad.net/~kang-bundo\n"
+"  Bundo https://launchpad.net/~kang-bundo\n"
 "  yonchan https://launchpad.net/~yhjang9"
 
-#: ../bleachbit/GUI.py:429
+#: ../bleachbit/GUI.py:451
 msgid "Choose files to shred"
 msgstr "파기할 파일들을 선택하세요"
 
-#: ../bleachbit/GUI.py:494
+#: ../bleachbit/GUI.py:515
 msgid "_Shred Files"
 msgstr "파일을 파기함(_S)"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:516
 msgid "_Quit"
 msgstr "종료(_Q)"
 
-#: ../bleachbit/GUI.py:496
+#: ../bleachbit/GUI.py:517
 msgid "_File"
 msgstr "파일(_F)"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:519
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: ../bleachbit/GUI.py:499
+#: ../bleachbit/GUI.py:520
+msgid "Help Contents"
+msgstr "도움말 차례"
+
+#: ../bleachbit/GUI.py:521
 msgid "_Release Notes"
 msgstr "릴리즈 노트(_R)"
 
-#: ../bleachbit/GUI.py:500
+#: ../bleachbit/GUI.py:522
 msgid "_About"
 msgstr "프로그램 정보(_A)"
 
-#: ../bleachbit/GUI.py:501
+#: ../bleachbit/GUI.py:523
 msgid "_Help"
 msgstr "도움말(_H)"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:549
 msgid "Preview"
 msgstr "미리보기"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:552
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "선택된 파일들을 프리뷰함 (어떠한 파일도 삭제되지 않음)"
 
-#: ../bleachbit/GUI.py:538
-msgid "Delete"
-msgstr "삭제"
-
-#: ../bleachbit/GUI.py:541
+#: ../bleachbit/GUI.py:562
 msgid "Delete files in the selected operations"
 msgstr "선택된 항목들의 파일들을 삭제함"
 
-#: ../bleachbit/GUI.py:618
+#: ../bleachbit/GUI.py:640
 msgid "Update BleachBit"
 msgstr "BleachBit 업데이트"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:645
 msgid "BleachBit update is available"
 msgstr "BleachBit의 새로운 업데이트가 존재합니다."
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:653
 msgid "Click 'Update BleachBit' for more information"
 msgstr "상세정보를 보려면 'BleachBit 업데이트'를 클릭"
 
@@ -640,83 +779,90 @@ msgstr "상세정보를 보려면 'BleachBit 업데이트'를 클릭"
 #. example, GIMP, Google Chrome, and Opera each have their own
 #. cleaner definition.  Anyone may write his own cleaner
 #. definition.
-#: ../bleachbit/RecognizeCleanerML.py:64
+#: ../bleachbit/RecognizeCleanerML.py:67
 msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr "아래의 클리닝 정의가 변경되었습니다. 의심스러운 정의는 컴퓨터에 데미지를 줄 수도 있습니다."
 
-#: ../bleachbit/RecognizeCleanerML.py:66
+#: ../bleachbit/RecognizeCleanerML.py:69
 msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr "아래의 클리닝 정의는 새로운 것입니다. 의심스러운 정의는 컴퓨터에 데미지를 줄 수도 있습니다."
 
-#: ../bleachbit/Unix.py:357 ../bleachbit/Unix.py:387 ../bleachbit/Unix.py:545
+#: ../bleachbit/Unix.py:359 ../bleachbit/Unix.py:389 ../bleachbit/Unix.py:569
 #, python-format
 msgid "Executable not found: %s"
 msgstr "실행파일이 존재하지 않음: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:542 ../bleachbit/Worker.py:78
+#: ../bleachbit/Unix.py:566 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr "%s는 현재 실행중이므로 클리닝 할 수 없습니다. 종료한 후에 다시 실행하기 바랍니다."
 
-#: ../bleachbit/Update.py:79
+#: ../bleachbit/Update.py:87
 msgid "Error when checking for updates: "
 msgstr "업데이트 확인중에 에러 발생: "
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Windows.py:173 ../bleachbit/Windows.py:175
-#, python-format
-msgid "Recycle bin %s"
-msgstr "%s 드라이브의 휴지통"
-
-#: ../bleachbit/Worker.py:54
-msgid "You must select an operation"
-msgstr "반드시 실행 항목을 선택해야 합니다."
-
-#. TRANSLATORS: This indicates an error.  The special
-#. keyword %(operation)s will be replaced by 'firefox'
-#. or 'opera' or some other cleaner ID.  The special
-#. keyword %(msg)s will be replaced by a message like
-#. 'Permission denied.'
-#: ../bleachbit/Worker.py:104 ../bleachbit/Worker.py:127
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:77
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "'%(operation)s': '%(msg)s' 항목을 실행하던 중에 예외상황 발생"
 
-#: ../bleachbit/Worker.py:121
-msgid "Special operation: "
-msgstr "특수 항목: "
-
-#. TRANSLATORS: This indicates the file will be deleted
-#. when Windows reboots.  The special keyword %(size)s
-#. changes to a size such as 320.1KB.
-#: ../bleachbit/Worker.py:164
-#, python-format
-msgid "Marked for deletion: %(size)s %(pathname)s"
-msgstr "삭제를 위해 선택됨: %(size)s %(pathname)s"
-
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:191
+#: ../bleachbit/Worker.py:175
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "잠시만 기다리세요. %s 클리닝 중"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "잠시만 기다리세요. %s 프리뷰 중"
 
-#: ../bleachbit/Worker.py:208
-msgid "Done."
-msgstr "완료"
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:218
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "복구된 디스크 공간 : %s"
 
-#: ../bleachbit/Worker.py:209
-msgid "Total size: "
-msgstr "총 사이즈: "
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:222
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "복구 할 수 있는 디스크 공간: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:227
+#, python-format
+msgid "Files deleted: %d"
+msgstr "삭제된 파일 : %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:231
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "삭제 할 수 있는 파일: %d"
+
+#: ../bleachbit/Worker.py:234
+#, python-format
+msgid "Special operations: %d"
+msgstr "특별한 방법: %d"
+
+#: ../bleachbit/Worker.py:237
+#, python-format
+msgid "Errors: %d"
+msgstr "오류: %d"
