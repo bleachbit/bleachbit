@@ -178,7 +178,7 @@ SectionGroupEnd
 
 
 Section Translations
-    SetOutPath $INSTDIR\dist\share\locale
+    SetOutPath $INSTDIR\share\locale
     File /r "..\dist\share\locale\*.*"
 
 SectionEnd
