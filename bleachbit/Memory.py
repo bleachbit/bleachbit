@@ -127,10 +127,12 @@ def fill_memory_linux():
 
 def get_swap_size_linux(device):
     """Return the size of the partition in bytes"""
-    dev = device.split('/')[-1] # 'sda1' in '/dev/sda1'
-    f = open("/proc/partitions")
+    f = open("/proc/swaps")
+    line = f.readline()
+    if not re.search('Filename\s+Type\s+Size', line):
+        raise RuntimeError("Unexpected first line in /proc/swaps '%s'" % line)
     for line in f:
-        ret = re.search(" ([0-9])+ %s$" % dev, line)
+        ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" % \
@@ -288,7 +290,9 @@ class TestMemory(unittest.TestCase):
             return
         size = get_swap_size_linux(swapdev)
         self.assert_(isinstance(size, (int, long)))
-        self.assert_(size > 0)
+        self.assert_(size > 1024**2)
+        print "debug: size of swap '%s': %d B (%d MB)" % \
+            (swapdev, size, size / (1024**2))
 
 
     def test_get_swap_uuid(self):
