@@ -125,18 +125,19 @@ def fill_memory_linux():
     fill_helper()
 
 
-def get_swap_size_linux(device):
+def get_swap_size_linux(device, proc_swaps = None):
     """Return the size of the partition in bytes"""
-    f = open("/proc/swaps")
-    line = f.readline()
+    if None == proc_swaps:
+        proc_swaps = open("/proc/swaps").read()
+    line = proc_swaps.split('\n')[0]
     if not re.search('Filename\s+Type\s+Size', line):
         raise RuntimeError("Unexpected first line in /proc/swaps '%s'" % line)
-    for line in f:
+    for line in proc_swaps.split('\n')[1:]:
         ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" % \
-        (device,  open('/proc/swaps').read()))
+        (device, proc_swaps))
 
 
 def get_swap_uuid(device):
@@ -214,7 +215,7 @@ def report_free():
     print "debug: physical free: %d B (%d MB)" % (bytes, bytes/1024**2)
 
 
-def wipe_swap_linux(devices):
+def wipe_swap_linux(devices, proc_swaps):
     """Shred the Linux swap file and then reinitilize it"""
     if None == devices:
         return
@@ -222,7 +223,7 @@ def wipe_swap_linux(devices):
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
         print "info: wiping swap device '%s'" % device
-        if get_swap_size_linux(device) > 8*1024**3:
+        if get_swap_size_linux(device, proc_swaps) > 8*1024**3:
             raise RuntimeError('swap device %s is larger than expected' % device)
         uuid = get_swap_uuid(device)
         # wipe
@@ -240,10 +241,12 @@ def wipe_swap_linux(devices):
 
 def wipe_memory():
     """Wipe unallocated memory"""
+    # cache the file because 'swapoff' changes it
+    proc_swaps = open("/proc/swaps").read()
     devices = disable_swap_linux()
     yield True # process GTK+ idle loop
     print 'debug: detected swap devices:', devices
-    wipe_swap_linux(devices)
+    wipe_swap_linux(devices, proc_swaps)
     yield True
     child_pid = os.fork()
     if 0 == child_pid:
@@ -293,6 +296,9 @@ class TestMemory(unittest.TestCase):
         self.assert_(size > 1024**2)
         print "debug: size of swap '%s': %d B (%d MB)" % \
             (swapdev, size, size / (1024**2))
+        proc_swaps = file('/proc/swaps').read()
+        size2 = get_swap_size_linux(swapdev, proc_swaps)
+        self.assertEqual(size, size2)
 
 
     def test_get_swap_uuid(self):
