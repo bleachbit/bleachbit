@@ -136,7 +136,7 @@ def get_swap_size_linux(device):
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" % \
-        (device,  open('/proc/partitions').read()))
+        (device,  open('/proc/swaps').read()))
 
 
 def get_swap_uuid(device):
