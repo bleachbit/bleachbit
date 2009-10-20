@@ -73,6 +73,7 @@ def chownself(path):
         return
     uid = getrealuid()
     print 'debug: chown(%s, uid=%s)' % (path, uid)
+    assert(path.find('/root') != 0)
     try:
         os.chown(path, uid, -1)
     except:
@@ -94,6 +95,7 @@ def getrealuid():
         login = os.getlogin()
         # On Ubuntu 9.04, getlogin() under sudo returns non-root user.
         # On Fedora 11, getlogin() under sudo returns 'root'.
+        # On Fedora 11, getlogin() under su returns non-root user.
     except:
         login = os.getenv('LOGNAME')
 
@@ -114,7 +116,8 @@ def makedirs(path):
     if not os.path.lexists(parentdir):
         makedirs(parentdir)
     os.mkdir(path, 0700)
-    chownself(path)
+    if sudo_mode():
+        chownself(path)
 
 
 def run_external(args, stdout = False):
@@ -141,21 +144,7 @@ def sudo_mode():
     if 'linux2' != sys.platform:
         return False
 
-    if os.getenv('SUDO_UID'):
-        return True
-
-    try:
-        login1 = os.getlogin()
-    except:
-        login1 = os.getenv('LOGNAME')
-
-    try:
-        import pwd
-        login2 = pwd.getpwuid(os.getuid())[0]
-        return login1 != login2
-    except:
-        traceback.print_exc()
-        return False
+    return os.getenv('SUDO_UID') != None
 
 
 
@@ -185,6 +174,13 @@ class TestGeneral(unittest.TestCase):
         uid = getrealuid()
         self.assert_(isinstance(uid, int))
         self.assert_(0 <= uid <= 65535)
+        if sudo_mode():
+            self.assert_(uid > 0)
+        print "debug: os.getenv('LOGNAME') =", os.getenv('LOGNAME')
+        print "debug: os.getenv('SUDO_UID') =", os.getenv('SUDO_UID')
+        print 'debug: os.geteuid() =', os.geteuid()
+        print 'debug: os.getuid() =', os.getuid()
+        print 'debug: os.login() =', os.getlogin()
 
 
     def test_makedirs(self):
@@ -215,7 +211,9 @@ class TestGeneral(unittest.TestCase):
         """Unit test for sudo_mode()"""
         if not 'posix' == os.name:
             return
-        self.assert_(type(sudo_mode()) is bool)
+        self.assert_(isinstance(sudo_mode(), bool))
+        if sudo_mode():
+            assert(os.getenv('HOME').find('/root') != 0)
 
 
 if __name__ == '__main__':
