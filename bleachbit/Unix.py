@@ -112,12 +112,14 @@ class Locales:
         'hi' : 'हिन्दी', \
         'hr' : 'Hrvatski', \
         'hu' : 'Magyar', \
+        'id' : 'Indonesian', \
         'it' : 'Italiano', \
         'iw' : 'עברית', \
         'ja' : '日本語', \
         'jv' : 'basa Jawa', \
         'ko' : '한국어', \
         'mr' : 'मराठी', \
+        'ms' : 'بهاس ملايو', \
         'nl' : 'Nederlands', \
         'no' : 'Norsk', \
         'pl' : 'polski', \
