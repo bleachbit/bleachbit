@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-10-16 22:46-0600\n"
-"PO-Revision-Date: 2009-10-18 12:52+0000\n"
+"PO-Revision-Date: 2009-10-21 13:52+0000\n"
 "Last-Translator: shane.fox <Unknown>\n"
 "Language-Team: Thai <th@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-18 14:08+0000\n"
+"X-Launchpad-Export-Date: 2009-10-21 17:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -517,7 +517,7 @@ msgstr "ระบบ"
 #: ../bleachbit/Cleaner.py:589
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "เขียนทับบนพื้นที่ว่างของดิส์ก%s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
 #: ../bleachbit/Cleaner.py:617
@@ -537,26 +537,27 @@ msgstr ""
 #: ../bleachbit/CLI.py:130
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr ""
+"การใช้: %prog [ทางเลือก] ผู้ทำความสะอาด.ทางเลือก1 ผู้ทำความสะอาด.ทางเลือก2"
 
 #: ../bleachbit/CLI.py:133
 msgid "list cleaners"
-msgstr ""
+msgstr "ลงรายชื่อผู้ทำความสะอาด"
 
 #: ../bleachbit/CLI.py:135
 msgid "delete files and make other permanent changes"
-msgstr ""
+msgstr "ลบไฟล์และทำการเปลื่นถาวรอื่น"
 
 #: ../bleachbit/CLI.py:137
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "ดูไฟล์ก่อนถูกลบและเปลี่ยนแปลงอื่น"
 
 #: ../bleachbit/CLI.py:139
 msgid "output version information and exit"
-msgstr ""
+msgstr "แสดงข้อมูลรุ่นของโปรแกรมแล้วจบการทำงาน"
 
 #: ../bleachbit/CLI.py:141
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "เขียนทับไฟล์เพื่อซ่อนข้อมูล"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
@@ -569,12 +570,12 @@ msgstr "ลบ"
 #. system reboots
 #: ../bleachbit/Command.py:75
 msgid "Mark for deletion"
-msgstr ""
+msgstr "ทำเครื่องหมายไว้เพื่อการลบ"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:150
 msgid "Truncate"
-msgstr ""
+msgstr "ลดความยาว"
 
 #: ../bleachbit/Command.py:189
 msgid "Delete registry key"
