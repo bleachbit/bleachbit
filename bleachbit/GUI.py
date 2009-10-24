@@ -407,7 +407,8 @@ class GUI:
             print "debug: pynotify not available"
         else:
             if pynotify.init(APP_NAME):
-                notify = pynotify.Notification('BleachBit', _("Done."))
+                notify = pynotify.Notification('BleachBit', _("Done."), \
+                    icon = 'bleachbit')
                 notify.show()
 
 
