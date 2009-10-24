@@ -444,16 +444,10 @@ class GUI:
         """Callback for shredding a file"""
 
         # get list of files
-        chooser = gtk.FileChooserDialog(title = _("Choose files to shred"),
-            parent = self.window,
-            action = gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
-        chooser.set_select_multiple(True)
-        resp = chooser.run()
-        paths = chooser.get_filenames()
-        chooser.destroy()
+        paths = bleachbit.GuiBasic.select_files(self.window, \
+            _("Choose files to shred"))
 
-        if gtk.RESPONSE_OK != resp:
+        if not paths:
             return
 
         # create a temporary cleaner object

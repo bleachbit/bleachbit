@@ -40,7 +40,7 @@ def browse_folder(parent, title):
         return Windows.browse_folder(parent.window.handle, title)
 
     # fall back to GTK+
-    chooser = gtk.FileChooserDialog( parent = self.parent, \
+    chooser = gtk.FileChooserDialog( parent = parent, \
         title = title,
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
         gtk.STOCK_ADD, gtk.RESPONSE_ACCEPT), \
@@ -54,6 +54,27 @@ def browse_folder(parent, title):
         return pathname
     # user cancelled
     return None
+
+
+def select_files(parent, title):
+    """Prompt user to select multiple files to delete"""
+
+    if 'nt' == os.name:
+        return Windows.browse_files(parent.window.handle, title)
+
+    chooser = gtk.FileChooserDialog(title = title,
+        parent = parent,
+        action = gtk.FILE_CHOOSER_ACTION_OPEN,
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
+    chooser.set_select_multiple(True)
+    resp = chooser.run()
+    paths = chooser.get_filenames()
+    chooser.destroy()
+
+    if gtk.RESPONSE_OK != resp:
+        return None
+
+    return paths
 
 
 def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK):

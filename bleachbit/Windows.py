@@ -48,9 +48,11 @@ from gettext import gettext as _
 
 if 'win32' == sys.platform:
     import _winreg
+    import pywintypes
     import win32api
     import win32con
     import win32file
+    import win32gui
     import win32process
 
     from ctypes import windll, c_ulong, c_buffer, byref, sizeof
@@ -62,6 +64,25 @@ if 'win32' == sys.platform:
 import FileUtilities
 import Common
 
+
+
+def browse_files(hwnd, title):
+    """Ask the user to select files.  Return full paths"""
+    try:
+        ret = win32gui.GetOpenFileNameW(None, \
+            Flags = win32con.OFN_ALLOWMULTISELECT \
+                | win32con.OFN_EXPLORER \
+                | win32con.OFN_FILEMUSTEXIST \
+                | win32con.OFN_HIDEREADONLY, \
+            Title = title)
+    except pywintypes.error:
+        print 'debug: browse_files(): user cancelled'
+        return None
+    pathnames = []
+    dirname = ret[0].split('\x00')[0]
+    for fname in ret[0].split('\x00')[1:]:
+        pathnames.append(os.path.join(dirname, fname))
+    return pathnames
 
 
 def browse_folder(hwnd, title):
