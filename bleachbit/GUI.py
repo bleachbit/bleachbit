@@ -41,6 +41,7 @@ from bleachbit.Cleaner import backends
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Options import options
 import bleachbit.Cleaner
+import bleachbit.GuiBasic
 import bleachbit.FileUtilities
 
 
@@ -367,12 +368,9 @@ class GUI:
                 operations[operation] = self.get_operation_options(operation)
         assert(isinstance(operations, dict))
         if 0 == len(operations):
-            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL \
-                | gtk.DIALOG_DESTROY_WITH_PARENT, \
-                gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, \
-                _("You must select an operation"))
-            dialog.run()
-            dialog.destroy()
+            bleachbit.GuiBasic.message_dialog(self.window, \
+                _("You must select an operation"),
+                gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
             return
         try:
             self.set_sensitive(False)

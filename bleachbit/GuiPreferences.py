@@ -31,8 +31,9 @@ import os
 import sys
 import traceback
 
-from Common import online_update_notification_enabled
 from Options import options
+import Common
+import GuiBasic
 
 if 'nt' == os.name:
     import Windows
@@ -101,7 +102,7 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
-        if online_update_notification_enabled:
+        if Common.online_update_notification_enabled:
             cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
             cb_updates.set_active(options.get('check_online_updates'))
             cb_updates.connect('toggled', self.__toggle_callback, 'check_online_updates')
@@ -137,17 +138,9 @@ class PreferencesDialog:
 
         def add_drive_cb(button):
             """Callback for adding a drive"""
-            chooser = gtk.FileChooserDialog( parent = self.parent, \
-                title = _("Choose a folder"),
-                buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
-                gtk.STOCK_ADD, gtk.RESPONSE_ACCEPT), \
-                action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
-
-            resp = chooser.run()
-            pathname = chooser.get_filename()
-            chooser.hide()
-            chooser.destroy()
-            if gtk.RESPONSE_ACCEPT == resp:
+            title = _("Choose a folder")
+            pathname = GuiBasic.browse_folder(self.parent, title)
+            if pathname:
                 liststore.append([pathname])
                 pathnames.append(pathname)
                 options.set_list('shred_drives', pathnames)
