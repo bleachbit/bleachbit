@@ -23,6 +23,7 @@ from gettext import gettext as _
 import os
 import sys
 import threading
+import time
 import traceback
 import types
 import warnings
@@ -360,6 +361,7 @@ class GUI:
 
         assert(isinstance(really_delete, bool))
         import bleachbit.Worker
+        self.start_time = None
         if None == operations:
             operations = {}
             for operation in self.get_selected_operations():
@@ -380,8 +382,10 @@ class GUI:
             err = str(sys.exc_info()[1])
             self.append_text(err + "\n", 'error')
         else:
+            self.start_time = time.time()
             worker = self.worker.run()
             gobject.idle_add(worker.next)
+
 
 
     def worker_done(self, worker, really_delete):
@@ -391,6 +395,21 @@ class GUI:
         self.progressbar.set_text(_("Done."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
+
+        # notification for long-running process
+        elapsed = (time.time() - self.start_time)
+        print 'debug: elapsed time: %d seconds' % elapsed
+        if elapsed < 10:
+            return
+        try:
+            import pynotify
+        except:
+            print "debug: pynotify not available"
+        else:
+            if pynotify.init(APP_NAME):
+                notify = pynotify.Notification('BleachBit', _("Done."))
+                notify.show()
+
 
 
     def about(self, __event):
