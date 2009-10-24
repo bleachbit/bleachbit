@@ -444,7 +444,7 @@ class GUI:
         """Callback for shredding a file"""
 
         # get list of files
-        paths = bleachbit.GuiBasic.select_files(self.window, \
+        paths = bleachbit.GuiBasic.browse_files(self.window, \
             _("Choose files to shred"))
 
         if not paths:

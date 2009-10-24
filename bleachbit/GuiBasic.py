@@ -56,7 +56,7 @@ def browse_folder(parent, title):
     return None
 
 
-def select_files(parent, title):
+def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
     if 'nt' == os.name:

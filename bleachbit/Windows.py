@@ -42,6 +42,7 @@ These are the terms:
 
 import os
 import sys
+import traceback
 import unittest
 
 from gettext import gettext as _
@@ -76,11 +77,16 @@ def browse_files(hwnd, title):
                 | win32con.OFN_HIDEREADONLY, \
             Title = title)
     except pywintypes.error:
+        traceback.print_exc()
         print 'debug: browse_files(): user cancelled'
         return None
+    _split = ret[0].split('\x00')
+    if 1 == len(_split):
+        # only one filename
+        return _split
     pathnames = []
-    dirname = ret[0].split('\x00')[0]
-    for fname in ret[0].split('\x00')[1:]:
+    dirname = _split[0]
+    for fname in _split[1:]:
         pathnames.append(os.path.join(dirname, fname))
     return pathnames
 
