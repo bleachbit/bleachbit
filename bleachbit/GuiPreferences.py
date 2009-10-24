@@ -63,7 +63,7 @@ class PreferencesDialog:
         if 'posix' == os.name:
             notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
 
-        self.dialog.vbox.pack_start(notebook, False)
+        self.dialog.vbox.pack_start(notebook, True)
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
 
 
