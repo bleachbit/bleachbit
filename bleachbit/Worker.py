@@ -112,7 +112,8 @@ class Worker:
                 path = ret['path']
             else:
                 path = ''
-            line = "%s %s %s\n" % (ret['label'], size, path)
+            path = path.decode('utf8', 'replace') # for invalid encoding
+            line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
             self.ui.append_text(line)
@@ -271,10 +272,10 @@ class TestWorker(unittest.TestCase):
         self.assertEqual(w.total_errors, 2)
         if 'posix' == os.name:
             self.assertEqual(w.total_bytes, 4096+10+10)
-            self.assertEqual(w.total_deleted, 2)
+            self.assertEqual(w.total_deleted, 3)
         elif 'nt' == os.name:
             self.assertEqual(w.total_bytes, 3+3+10+10)
-            self.assertEqual(w.total_deleted, 3)
+            self.assertEqual(w.total_deleted, 4)
 
 
     def test_multiple_options(self):
