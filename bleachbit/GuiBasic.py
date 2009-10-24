@@ -63,7 +63,7 @@ def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_
         gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, \
         type, \
         buttons, \
-        _("You must select an operation"))
+        msg)
     resp = dialog.run()
     dialog.destroy()
 

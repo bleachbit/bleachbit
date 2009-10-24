@@ -207,11 +207,9 @@ class TreeDisplayModel:
             # when toggling an option, present any warnings
             warning = backends[cleaner_id].get_warning(option_id)
             if warning:
-                dialog = gtk.MessageDialog(parent_window, gtk.DIALOG_MODAL, \
-                    gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, \
-                    warning)
-                resp = dialog.run()
-                dialog.destroy()
+                resp = bleachbit.GuiBasic.message_dialog(parent_window, \
+                    warning, \
+                    gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL)
                 if gtk.RESPONSE_OK != resp:
                     # user cancelled, so don't toggle option
                     return
