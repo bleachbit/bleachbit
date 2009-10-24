@@ -28,7 +28,7 @@ import os
 import sys
 
 
-APP_VERSION = "0.7.0"
+APP_VERSION = "0.7.1svn"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
