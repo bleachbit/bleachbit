@@ -45,7 +45,7 @@ def browse_folder(parent, title):
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
         gtk.STOCK_ADD, gtk.RESPONSE_ACCEPT), \
         action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
-
+    chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     pathname = chooser.get_filename()
     chooser.hide()
@@ -67,11 +67,13 @@ def browse_files(parent, title):
         action = gtk.FILE_CHOOSER_ACTION_OPEN,
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
     chooser.set_select_multiple(True)
+    chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     paths = chooser.get_filenames()
     chooser.destroy()
 
     if gtk.RESPONSE_OK != resp:
+        # user cancelled
         return None
 
     return paths
