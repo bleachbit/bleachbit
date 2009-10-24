@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# -*- coding: UTF-8 -*-
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
@@ -116,6 +117,47 @@ class DeepScan:
 
 class TestDeepScan(unittest.TestCase):
     """Unit test for module DeepScan"""
+
+
+    def _touch(self, fn):
+        """Create an empty file"""
+        open(fn, 'w')
+
+
+    def _test_encoding(self, fn):
+        """Test encoding"""
+
+        import tempfile
+        tempd = tempfile.mkdtemp('bleachbit-deepscan')
+        self.assert_(os.path.exists(tempd))
+
+        fullpath = os.path.join(tempd, fn)
+        self._touch(fullpath)
+        self.assert_(os.path.exists(fullpath))
+
+        ds = DeepScan()
+        ds.add_search(tempd, '^%s$' % fn)
+        found = False
+        for ret in ds.scan():
+            if True == ret:
+                continue
+            self.assert_(ret == fullpath)
+            found = True
+        self.assert_(found, "Did not find '%s'" % fullpath)
+
+        os.unlink(fullpath)
+        self.assert_(not os.path.exists(fullpath))
+        os.rmdir(tempd)
+        self.assert_(not os.path.exists(tempd))
+
+
+    def test_encoding(self):
+        """Test encoding"""
+        tests = ('äöüßÄÖÜ', \
+            "עִבְרִית")
+
+        for test in tests:
+            self._test_encoding(test)
 
 
     def test_DeepScan(self):
