@@ -180,7 +180,11 @@ class TestGeneral(unittest.TestCase):
         print "debug: os.getenv('SUDO_UID') =", os.getenv('SUDO_UID')
         print 'debug: os.geteuid() =', os.geteuid()
         print 'debug: os.getuid() =', os.getuid()
-        print 'debug: os.login() =', os.getlogin()
+        try:
+            print 'debug: os.login() =', os.getlogin()
+        except:
+            traceback.print_exc()
+            print 'debug: os.login() raised exception'
 
 
     def test_makedirs(self):
