@@ -41,9 +41,20 @@ class CliCallback:
     """Command line's callback passed to Worker"""
 
 
+    def __init__(self):
+        """Initialize CliCallback"""
+        import locale
+        self.encoding = locale.getdefaultlocale()[1]
+        if not self.encoding:
+            self.encoding = 'UTF8'
+
+
     def append_text(self, msg, tag = None):
         """Write text to the terminal"""
-        print msg.strip('\n')
+        # If the encoding is not explictly handled on a non-UTF-8
+        # system, then special Latin-1 characters such as umlauts may
+        # raise an exception as an encoding error.
+        print msg.strip('\n').encode(self.encoding, 'replace')
 
 
     def update_progress_bar(self, status):
