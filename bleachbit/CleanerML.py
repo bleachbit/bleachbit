@@ -17,9 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Create cleaners from CleanerML (markup language)
 """
+
+
 
 import os
 import sys
@@ -234,59 +238,8 @@ def create_pot():
     f.close()
 
 
-import unittest
-
-class TestCleanerML(unittest.TestCase):
-    """Test cases for CleanerML"""
-
-    def test_CleanerML(self):
-        """Unit test for class CleanerML"""
-        xmlcleaner = CleanerML("../doc/example_cleaner.xml")
-
-        self.assert_(isinstance(xmlcleaner, CleanerML))
-        self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
-
-        for (option_id, __name) in xmlcleaner.cleaner.get_options():
-            for cmd in xmlcleaner.cleaner.get_commands(option_id):
-                for result in cmd.execute(False):
-                    Cleaner.TestCleaner.validate_result(self, result)
-
-
-    def test_boolstr_to_bool(self):
-        """Unit test for boolstr_to_bool()"""
-        tests = [ ('True', True), \
-            ('False', False) ]
-
-        for (arg, output) in tests:
-            self.assertEqual(boolstr_to_bool(arg), output)
-            self.assertEqual(boolstr_to_bool(arg.lower()), output)
-            self.assertEqual(boolstr_to_bool(arg.upper()), output)
-
-
-    def test_create_pot(self):
-        """Unit test for create_pot()"""
-        create_pot()
-
-
-    def test_list_cleanerml_files(self):
-        """Unit test for list_cleanerml_files()"""
-        for pathname in list_cleanerml_files():
-            self.assert_(os.path.exists(pathname))
-
-
-    def test_load_cleaners(self):
-        """Unit test for load_cleaners()"""
-        load_cleaners()
-
-
-    def test_pot_fragment(self):
-        """Unit test for pot_fragment()"""
-        self.assert_(type(pot_fragment("Foo", 'bar.xml')) is str)
-
 
 if __name__ == '__main__':
     if 2 == len(sys.argv) and 'pot' == sys.argv[1]:
         create_pot()
-    else:
-        unittest.main()
 
