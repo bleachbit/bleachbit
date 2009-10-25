@@ -166,9 +166,28 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
 
 
 
-
 class TestCLI(unittest.TestCase):
     """Unit test for module CLI"""
+
+
+    def _test_preview(self, args, stdout = None, env = None):
+        """Helper to test preview"""
+        # Use devnull because in some cases the buffer will be too large,
+        # and the other alternative, the screen, is not desirable.
+        if stdout:
+            stdout_ = None
+        else:
+            stdout_ = open(os.devnull, 'w')
+        output = General.run_external(args, stdout = stdout_, env = env)
+        if not stdout:
+            stdout_.close()
+        self.assertEqual(output[0], 0)
+        print output
+        pos = output[2].find('Traceback (most recent call last)')
+        if pos > -1:
+            print "Saw the following error when using args '%s':\n %s" \
+                % (args, output[2])
+        self.assertEqual(pos, -1)
 
 
     def test_args_to_operations(self):
@@ -189,6 +208,29 @@ class TestCLI(unittest.TestCase):
     def test_init_cleaners(self):
         """Unit test for init_cleaners()"""
         init_cleaners()
+
+
+    def test_encoding(self):
+        """Unit test for encoding"""
+        if 'posix' != os.name:
+            return
+
+        import tempfile
+        (fd, filename) = tempfile.mkstemp(prefix = 'encoding-\xe4\xf6\xfc~', dir = '/tmp')
+        os.close(fd)
+        self.assert_(os.path.exists(filename))
+
+        import copy
+        env = copy.deepcopy(os.environ)
+        env['LANG'] = 'en_US' # not UTF-8
+        path = os.path.join('bleachbit', 'CLI.py')
+        args = [sys.executable, path, '-p', 'system.tmp']
+        # If Python pipes stdout to file or devnull, the test may give
+        # a false negative.  It must print stdout to terminal.
+        self._test_preview(args, stdout = True, env = env)
+
+        os.remove(filename)
+        self.assert_(not os.path.exists(filename))
 
 
     def test_invalid_locale(self):
@@ -212,14 +254,7 @@ class TestCLI(unittest.TestCase):
         args_list.append(big_args)
 
         for args in args_list:
-            devnull = open(os.devnull, 'w')
-            output = General.run_external(args, stdout = devnull)
-            devnull.close()
-            pos = output[2].find('Traceback (most recent call last)')
-            if pos > -1:
-                print "Saw the following error when using args '%s':\n %s" \
-                    % (args, output[2])
-            self.assertEqual(pos, -1)
+            self._test_preview(args)
 
 
     def test_delete(self):

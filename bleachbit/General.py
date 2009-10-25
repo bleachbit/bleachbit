@@ -120,14 +120,14 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout = False):
+def run_external(args, stdout = False, env = None):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
     import subprocess
     if False == stdout:
         stdout = subprocess.PIPE
     p = subprocess.Popen(args, stdout = stdout, \
-        stderr = subprocess.PIPE)
+        stderr = subprocess.PIPE, env = env)
     try:
         p.wait()
     except KeyboardInterrupt:
