@@ -12,7 +12,7 @@ build:
 	echo Nothing to build
 
 clean:
-	@rm -vf {.,bleachbit}/*{pyc,pyo,~}
+	@rm -vf {.,bleachbit,tests}/*{pyc,pyo,~}
 	@rm -vrf build dist # created by py2exe
 	@rm -rf BleachBit-Portable # created by windows/setup_py2exe.bat
 	@rm -rf BleachBit-Win32-portable-full.zip
