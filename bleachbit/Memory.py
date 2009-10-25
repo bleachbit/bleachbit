@@ -33,7 +33,6 @@ import subprocess
 import sys
 import time
 import traceback
-import unittest
 
 import FileUtilities
 import General
@@ -261,54 +260,5 @@ def wipe_memory():
     enable_swap_linux()
     yield 0 # how much disk space was recovered
 
-
-class TestMemory(unittest.TestCase):
-    """Unit test for module Memory"""
-
-
-    def test_count_linux_swap(self):
-        """Test for method count_linux_swap"""
-        if 'linux2' != sys.platform:
-            return
-        n_swaps = count_swap_linux()
-        self.assert_(isinstance(n_swaps, (int, long)))
-        self.assert_(n_swaps >= 0)
-        self.assert_(n_swaps < 10)
-
-
-    def test_physical_free(self):
-        """Test for method physical_free"""
-        self.assert_(isinstance(physical_free(), (int, long)))
-        self.assert_(physical_free() > 0)
-        report_free()
-
-
-    def test_get_swap_size_linux(self):
-        """Test for get_swap_size_linux()"""
-        if 'linux2' != sys.platform:
-            return
-        swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
-        if 0 == len(swapdev):
-            print 'no active swap device detected'
-            return
-        size = get_swap_size_linux(swapdev)
-        self.assert_(isinstance(size, (int, long)))
-        self.assert_(size > 1024**2)
-        print "debug: size of swap '%s': %d B (%d MB)" % \
-            (swapdev, size, size / (1024**2))
-        proc_swaps = file('/proc/swaps').read()
-        size2 = get_swap_size_linux(swapdev, proc_swaps)
-        self.assertEqual(size, size2)
-
-
-    def test_get_swap_uuid(self):
-        """Test for method get_swap_uuid"""
-        if 'linux2' != sys.platform:
-            return
-        self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
-
-
-if __name__ == '__main__':
-    unittest.main()
 
 
