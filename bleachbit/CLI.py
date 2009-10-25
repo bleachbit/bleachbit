@@ -44,7 +44,10 @@ class CliCallback:
     def __init__(self):
         """Initialize CliCallback"""
         import locale
-        self.encoding = locale.getdefaultlocale()[1]
+        try:
+            self.encoding = locale.getdefaultlocale()[1]
+        except:
+            self.encoding = None
         if not self.encoding:
             self.encoding = 'UTF8'
 
@@ -192,8 +195,8 @@ class TestCLI(unittest.TestCase):
         output = General.run_external(args, stdout = stdout_, env = env)
         if not stdout:
             stdout_.close()
-        self.assertEqual(output[0], 0)
-        print output
+        self.assertEqual(output[0], 0, "Return code = %d, stderr='%s'" \
+            % (output[0], output[2]))
         pos = output[2].find('Traceback (most recent call last)')
         if pos > -1:
             print "Saw the following error when using args '%s':\n %s" \
