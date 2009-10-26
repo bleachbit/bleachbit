@@ -17,9 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 """
 Check local CleanerML files as a security measure
 """
+
+
 
 import os
 import random
@@ -138,22 +142,5 @@ class RecognizeCleanerML:
                     options.set(pathname, self.new_hash, 'hashpath')
 
 
-import unittest
 
-class TestRecognizeCleanerML(unittest.TestCase):
-    """Test cases for RecognizeCleanerML"""
-
-    def test_hash(self):
-        """Unit test for hash()"""
-        digest = hashdigest('bleachbit')
-        if HAVE_HASHLIB:
-            self.assertEqual(len(digest), 128)
-            self.assertEqual(digest[1:10], '6382c203e')
-        else:
-            self.assertEqual(len(digest), 72)
-            self.assertEqual(digest[1:10], '0d4a3172f')
-
-
-if __name__ == '__main__':
-    unittest.main()
 
