@@ -59,32 +59,34 @@ def validate_result(self, result):
             "Path does not exist: '%s'" % (filename))
 
 
+def action_to_cleaner(action_str):
+    """Given an action XML fragment, return a cleaner"""
+    return actions_to_cleaner( [action_str] )
+
+
+def actions_to_cleaner(action_strs):
+    """Given multiple action XML fragments, return one cleaner"""
+
+    cleaner = Cleaner()
+    count = 1
+    for action_str in action_strs:
+        dom = parseString(action_str)
+        action_node = dom.childNodes[0]
+        command = action_node.getAttribute('command')
+        provider = None
+        for actionplugin in ActionProvider.plugins:
+            if actionplugin.action_key == command:
+                provider = actionplugin(action_node)
+        cleaner.add_action('option%d' % count, provider)
+        cleaner.add_option('option%d' % count, 'name%d' % count, 'description%d' % count)
+        count = count + 1
+    return cleaner
+
+
+
 class CleanerTestCase(unittest.TestCase):
 
 
-    @staticmethod
-    def action_to_cleaner(action_str):
-        """Given an action XML fragment, return a cleaner"""
-        return TestCleaner.actions_to_cleaner( [action_str] )
-
-    @staticmethod
-    def actions_to_cleaner(action_strs):
-        """Given multiple action XML fragments, return one cleaner"""
-
-        cleaner = Cleaner()
-        count = 1
-        for action_str in action_strs:
-            dom = parseString(action_str)
-            action_node = dom.childNodes[0]
-            command = action_node.getAttribute('command')
-            provider = None
-            for actionplugin in ActionProvider.plugins:
-                if actionplugin.action_key == command:
-                    provider = actionplugin(action_node)
-            cleaner.add_action('option%d' % count, provider)
-            cleaner.add_option('option%d' % count, 'name%d' % count, 'description%d' % count)
-            count = count + 1
-        return cleaner
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
@@ -105,7 +107,7 @@ class CleanerTestCase(unittest.TestCase):
         self.assert_(len(self.actions) > 0)
 
         for action_str in self.actions:
-            cleaner = self.action_to_cleaner(action_str)
+            cleaner = action_to_cleaner(action_str)
             count = 0
             for cmd in cleaner.get_commands('option1'):
                 for result in cmd.execute(False):
@@ -153,20 +155,24 @@ class CleanerTestCase(unittest.TestCase):
 
     def test_get_name(self):
         for key in sorted(backends):
-            self.assert_ (type(backends[key].get_name()) is str)
+            self.assert_ (isinstance(backends[key].get_name(), (str, unicode)))
 
 
     def test_get_descrption(self):
         for key in sorted(backends):
-            for desc in backends[key].get_description():
-                self.assert_ (type(desc) is str)
+            self.assert_ (isinstance(key, (str, unicode)))
+            self.assert_ (isinstance (backends[key], Cleaner))
+            desc = backends[key].get_description()
+            self.assert_ (isinstance (desc, (str, unicode)), \
+                "description for '%s' is '%s'" % (key, desc))
 
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
-                self.assert_ (type(test_id) is str)
-                self.assert_ (type(name) is str)
+                self.assert_ (isinstance(test_id, (str, unicode)),
+                    '%s.%s is not a string' % (key, test_id))
+                self.assert_ (isinstance(name, (str, unicode)))
 
 
     def test_get_commands(self):

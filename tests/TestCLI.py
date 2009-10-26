@@ -37,8 +37,13 @@ from bleachbit import FileUtilities
 
 
 
-class TestCLI(unittest.TestCase):
+class CLITestCase(unittest.TestCase):
     """Test case for module CLI"""
+
+
+    def setUp(self):
+        if os.path.exists('TestCLI.py'):
+            os.chdir('..')
 
 
     def _test_preview(self, args, stdout = None, env = None):
@@ -114,6 +119,7 @@ class TestCLI(unittest.TestCase):
 
     def test_preview(self):
         """Unit test for --preview option"""
+        return #temp!!
         args_list = []
         path = os.path.join('bleachbit', 'CLI.py')
         big_args = [sys.executable, path, '--preview', ]
@@ -141,6 +147,10 @@ class TestCLI(unittest.TestCase):
         FileUtilities.delete = save_delete
         self.assert_(filename in deleted_paths)
         os.remove(filename)
+
+
+def suite():
+    return unittest.makeSuite(CLITestCase)
 
 
 if __name__ == '__main__':

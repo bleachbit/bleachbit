@@ -20,7 +20,7 @@
 
 
 """
-Test cases for module Action
+Run all test suites
 """
 
 
@@ -30,17 +30,24 @@ import tempfile
 import unittest
 from xml.dom.minidom import parseString
 
-
 import TestAction
 import TestCleanerML
-
+import TestCleaner
+import TestCLI
+import TestCommand
+import TestDeepScan
 
 
 suites = [ TestAction.suite(),
-           TestCleanerML.suite() ]
+           TestCleanerML.suite(),
+           TestCleaner.suite(),
+           TestCLI.suite(),
+           TestCommand.suite(),
+           TestDeepScan.suite() ]
 
 
 def suite():
+    """Combine all the suites into one large suite"""
     suite_ = unittest.TestSuite()
     map(suite_.addTest, suites)
     return suite_

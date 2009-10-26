@@ -40,6 +40,7 @@ import traceback
 
 import Command
 import FileUtilities
+import Memory
 import Special
 
 if 'posix' == os.name:
@@ -490,7 +491,6 @@ class System(Cleaner):
 
         # memory
         if 'linux2' == sys.platform and 'memory' == option_id:
-            import Memory
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # most recently used documents list
@@ -655,6 +655,7 @@ def create_simple_cleaner(paths):
     import Action
     import Command
     class CustomFileAction(Action.ActionProvider):
+        action_key = '__customfileaction'
         def get_commands(self):
             for path in paths:
                 yield Command.Shred(path)

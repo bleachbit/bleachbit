@@ -34,8 +34,8 @@ from bleachbit.Command import *
 
 
 
-class TestCommand(unittest.TestCase):
-    """Test cases for commands"""
+class CommandTestCase(unittest.TestCase):
+    """Test case for Command"""
 
 
     def test_Delete(self, cls = Delete):
@@ -66,14 +66,16 @@ class TestCommand(unittest.TestCase):
         os.close(fd)
         cmd = Function(path, FileUtilities.delete, 'bar')
         self.assert_(os.path.exists(path))
+        self.assert_(os.path.getsize(path) > 0)
 
         # preview
         ret = cmd.execute(False).next()
         self.assert_(os.path.exists(path))
+        self.assert_(os.path.getsize(path) > 0)
 
         # delete
         ret = cmd.execute(True).next()
-        self.assert_(ret['size'] > 0)
+        self.assert_(ret['size'] > 0, 'Size is %d' % ret['size'])
         self.assertEqual(ret['path'], path)
         self.assert_(not os.path.exists(path))
 
@@ -81,6 +83,10 @@ class TestCommand(unittest.TestCase):
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
+
+
+def suite():
+    return unittest.makeSuite(CommandTestCase)
 
 
 if __name__ == '__main__':

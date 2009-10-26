@@ -102,6 +102,7 @@ class ActionTestCase(unittest.TestCase):
         """Unit test for regex option"""
         _iglob = glob.iglob
         glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2']
+        _getsize = FileUtilities.getsize
         FileUtilities.getsize = lambda x: 1
         # return regex match
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
@@ -115,7 +116,7 @@ class ActionTestCase(unittest.TestCase):
         self.assertRaises(RuntimeError, lambda : self._action_str_to_result(action_str))
         # clean up
         glob.iglob = _iglob
-
+        FileUtilities.getsize = _getsize
 
     def test_walk_files(self):
         """Unit test for walk.files"""

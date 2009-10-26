@@ -36,8 +36,8 @@ from bleachbit.DeepScan import DeepScan, ScanCache
 
 
 
-class TestDeepScan(unittest.TestCase):
-    """Unit test for module DeepScan"""
+class DeepScanTestCase(unittest.TestCase):
+    """Test Case for module DeepScan"""
 
 
     def _touch(self, fn):
@@ -110,6 +110,10 @@ class TestDeepScan(unittest.TestCase):
         os.remove(filename)
         sc.purge()
         self.assertEqual(sc.is_cached(filename), False)
+
+
+def suite():
+    return unittest.makeSuite(DeepScanTestCase)
 
 
 if __name__ == '__main__':

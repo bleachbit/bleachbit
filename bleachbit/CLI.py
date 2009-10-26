@@ -34,6 +34,7 @@ import sys
 from Cleaner import backends
 import Common
 import General
+import Worker
 
 
 
@@ -100,7 +101,6 @@ def list_cleaners():
 
 def preview_or_delete(operations, really_delete):
     """Preview deletes and other changes"""
-    import Worker
     cb = CliCallback()
     worker = Worker.Worker(cb, really_delete, operations).run()
     while worker.next():
