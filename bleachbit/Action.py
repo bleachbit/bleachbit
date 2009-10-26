@@ -29,7 +29,6 @@ import glob
 import os
 import re
 import types
-import unittest
 import Command
 import FileUtilities
 import General
