@@ -31,12 +31,12 @@ import unittest
 from xml.dom.minidom import parseString
 
 sys.path.append('.')
+import TestCleaner
 from bleachbit.Action import *
-from bleachbit import Cleaner
 
 
 
-class TestAction(unittest.TestCase):
+class ActionTestCase(unittest.TestCase):
     """Test cases for Action"""
 
 
@@ -72,7 +72,7 @@ class TestAction(unittest.TestCase):
             self.assert_(os.path.lexists(filename))
             # preview
             result = cmd.execute(really_delete = False).next()
-            Cleaner.TestCleaner.validate_result(self, result)
+            TestCleaner.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
             result = cmd.execute(really_delete = True).next()
@@ -127,13 +127,16 @@ class TestAction(unittest.TestCase):
         results = 0
         for cmd in self._action_str_to_commands(action_str):
             result = cmd.execute(False).next()
-            Cleaner.TestCleaner.validate_result(self, result)
+            TestCleaner.validate_result(self, result)
             path = result['path']
             self.assert_(not os.path.isdir(path), \
                 "%s is a directory" % path)
             results += 1
         self.assert_(results > 0)
 
+
+def suite():
+    return unittest.makeSuite(ActionTestCase)
 
 
 if __name__ == '__main__':

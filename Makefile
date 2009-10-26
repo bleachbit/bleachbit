@@ -62,15 +62,6 @@ lint:
 
 tests:
 	make -C cleaners tests
-	cd bleachbit && \
-	for f in `grep -l unittest *py`; \
-	do \
-		echo testing "$$f"; \
-		python "$$f" -v; \
-		rc=$$?; \
-		[ $$rc -gt 0 ] && echo -e \\a && notify-send -u critical "error executing test for $$f" && exit 1; \
-	done; \
-	exit 0
-	python bleachbit/CLI.py tests
+	python tests/TestAll.py -v
 
 

@@ -24,6 +24,7 @@ Test cases for module CleanerML
 """
 
 
+
 import unittest
 import sys
 
@@ -33,7 +34,7 @@ from bleachbit.CleanerML import *
 
 
 
-class TestCleanerML(unittest.TestCase):
+class CleanerMLTestCase(unittest.TestCase):
     """Test cases for CleanerML"""
 
     def test_CleanerML(self):
@@ -48,7 +49,7 @@ class TestCleanerML(unittest.TestCase):
         for (option_id, __name) in xmlcleaner.cleaner.get_options():
             for cmd in xmlcleaner.cleaner.get_commands(option_id):
                 for result in cmd.execute(False):
-                    TestCleaner.TestCleaner.validate_result(self, result)
+                    TestCleaner.validate_result(self, result)
 
 
     def test_boolstr_to_bool(self):
@@ -81,6 +82,12 @@ class TestCleanerML(unittest.TestCase):
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assert_(type(pot_fragment("Foo", 'bar.xml')) is str)
+
+
+
+def suite():
+    return unittest.makeSuite(CleanerMLTestCase)
+
 
 if __name__ == '__main__':
     unittest.main()

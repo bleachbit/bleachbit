@@ -35,7 +35,31 @@ from bleachbit.Cleaner import *
 
 
 
-class TestCleaner(unittest.TestCase):
+def validate_result(self, result):
+    """Validate the command returned valid results"""
+    self.assert_(type(result) is dict, "result is a %s" % type(result))
+    # label
+    self.assert_(isinstance(result['label'], (str, unicode)))
+    self.assert_(len(result['label'].strip()) > 0)
+    # n_*
+    self.assert_(isinstance(result['n_deleted'], (int, long)))
+    self.assert_(result['n_deleted'] >= 0)
+    self.assert_(result['n_deleted'] <= 1)
+    self.assertEqual(result['n_special'] + result['n_deleted'], 1)
+    # size
+    self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
+        "size is %s" % str(result['size']))
+    # path
+    filename = result['path']
+    self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
+        "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
+    if isinstance(filename, (str, unicode)) and \
+        not filename[0:2] == 'HK':
+        self.assert_ (os.path.lexists(filename), \
+            "Path does not exist: '%s'" % (filename))
+
+
+class CleanerTestCase(unittest.TestCase):
 
 
     @staticmethod
@@ -90,7 +114,7 @@ class TestCleaner(unittest.TestCase):
                     self.assert_(os.path.lexists(pathname), \
                         "Does not exist: '%s'" % pathname)
                     count += 1
-                    self.validate_result(self, result)
+                    validate_result(self, result)
             self.assert_(count > 0, "No files found for %s" % action_str)
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
@@ -118,7 +142,7 @@ class TestCleaner(unittest.TestCase):
         for cmd in cleaner.get_commands('files'):
             # preview
             for result in cmd.execute(False):
-                self.validate_result(self, result)
+                validate_result(self, result)
             # delete
             for result in cmd.execute(True):
                 pass
@@ -153,7 +177,7 @@ class TestCleaner(unittest.TestCase):
                     for result in cmd.execute(really_delete = False):
                         if result != True:
                             break
-                        self.validate_result(self, result)
+                        validate_result(self, result)
         # make sure trash and tmp don't return the same results
         if 'nt' == os.name:
             return
@@ -187,7 +211,7 @@ class TestCleaner(unittest.TestCase):
                             break
                         msg = "Expected no files to be deleted but got '%s'" % str(result)
                         self.assert_(not isinstance(cmd, Command.Delete), msg)
-                        self.validate_result(self, result)
+                        validate_result(self, result)
         glob.iglob = _iglob
         os.path.exists = _exists
         os.path.lexists = _lexists
@@ -214,31 +238,11 @@ class TestCleaner(unittest.TestCase):
             self.assertEqual(backends['system'].whitelisted(test[0]), test[1], test[0])
 
 
-    @staticmethod
-    def validate_result(self, result):
-        """Validate the command returned valid results"""
-        self.assert_(type(result) is dict, "result is a %s" % type(result))
-        # label
-        self.assert_(isinstance(result['label'], (str, unicode)))
-        self.assert_(len(result['label'].strip()) > 0)
-        # n_*
-        self.assert_(isinstance(result['n_deleted'], (int, long)))
-        self.assert_(result['n_deleted'] >= 0)
-        self.assert_(result['n_deleted'] <= 1)
-        self.assertEqual(result['n_special'] + result['n_deleted'], 1)
-        # size
-        self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
-            "size is %s" % str(result['size']))
-        # path
-        filename = result['path']
-        self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
-            "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
-        if isinstance(filename, (str, unicode)) and \
-            not filename[0:2] == 'HK':
-            self.assert_ (os.path.lexists(filename), \
-                "Path does not exist: '%s'" % (filename))
 
 
+
+def suite():
+    return unittest.makeSuite(CleanerTestCase)
 
 if __name__ == '__main__':
     unittest.main()
