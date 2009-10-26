@@ -20,13 +20,15 @@
 
 
 """
-Unit tests for module Action
+Test cases for module Action
 """
 
 
 
 import sys
+import tempfile
 import unittest
+from xml.dom.minidom import parseString
 
 sys.path.append('.')
 from bleachbit.Action import *
@@ -40,7 +42,6 @@ class TestAction(unittest.TestCase):
 
     def _action_str_to_commands(self, action_str):
         """Parse <action> and return commands"""
-        from xml.dom.minidom import parseString
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
         delete = Delete(action_node)
@@ -57,7 +58,6 @@ class TestAction(unittest.TestCase):
 
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
-        from xml.dom.minidom import parseString
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
@@ -88,7 +88,6 @@ class TestAction(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for class Delete"""
-        import tempfile
         for path in ('~', '$HOME'):
             for command in ('delete', 'truncate'):
                 expanded = os.path.expanduser(os.path.expandvars(path))
