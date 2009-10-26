@@ -28,7 +28,6 @@ import platform
 import socket
 import sys
 import traceback
-import unittest
 import urllib2
 import xml.dom.minidom
 
@@ -102,29 +101,4 @@ class Update:
         return self.update_available
 
 
-class TestUpdate(unittest.TestCase):
-    """Unit tests for module Update"""
-
-
-    def test_Update(self):
-        """Unit tests for class Update"""
-        update = Update()
-        available = update.is_update_available()
-        print "Update available = ", available
-        self.assert_ (type(available) is bool)
-
-        # test failure
-        Common.update_check_url = "http://www.surelydoesnotexist.com/foo"
-        self.assertRaises(urllib2.URLError, update.is_update_available)
-
-
-    def test_user_agent(self):
-        """Unit test for method user_agent()"""
-        agent = user_agent()
-        print "debug: user agent = '%s'" % (agent, )
-        self.assert_ (type(agent) is str)
-
-
-if __name__ == '__main__':
-    unittest.main()
 
