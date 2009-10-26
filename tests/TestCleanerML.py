@@ -28,8 +28,8 @@ import unittest
 import sys
 
 sys.path.append('.')
+import TestCleaner
 from bleachbit.CleanerML import *
-from bleachbit import Cleaner
 
 
 
@@ -48,7 +48,7 @@ class TestCleanerML(unittest.TestCase):
         for (option_id, __name) in xmlcleaner.cleaner.get_options():
             for cmd in xmlcleaner.cleaner.get_commands(option_id):
                 for result in cmd.execute(False):
-                    Cleaner.TestCleaner.validate_result(self, result)
+                    TestCleaner.TestCleaner.validate_result(self, result)
 
 
     def test_boolstr_to_bool(self):
@@ -83,5 +83,5 @@ class TestCleanerML(unittest.TestCase):
         self.assert_(type(pot_fragment("Foo", 'bar.xml')) is str)
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
 
