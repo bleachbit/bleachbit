@@ -25,8 +25,9 @@ Test cases for module Unix
 """
 
 
-import unittest
+import os
 import sys
+import unittest
 
 sys.path.append('.')
 from bleachbit.Unix import *
@@ -36,6 +37,7 @@ from bleachbit.Unix import *
 
 class TestUnix(unittest.TestCase):
     """Unit tests for module Unix"""
+
 
     def setUp(self):
         """Initialize unit tests"""
@@ -113,6 +115,7 @@ class TestUnix(unittest.TestCase):
         self.assertRaises(ValueError, locale_to_language, 'C')
         self.assertRaises(ValueError, locale_to_language, 'English')
 
+
     def test_locale_globex(self):
         """Unit test for locale_globex"""
 
@@ -133,6 +136,7 @@ class TestUnix(unittest.TestCase):
         expect = ('es', fakepath)
         self.assertEqual(actual, expect, "Expected '%s' but got '%s'" % (expect, actual))
         FileUtilities.globex = old_globex
+
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -191,6 +195,7 @@ class TestUnix(unittest.TestCase):
             print 'debug: yum bytes cleaned %d', bytes_freed
 
 
-if __name__ == '__main__' and 'linux2' == sys.platform:
+
+if __name__ == '__main__' and 'posix' == os.name:
     unittest.main()
 
