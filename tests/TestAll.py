@@ -36,6 +36,7 @@ import TestCleaner
 import TestCLI
 import TestCommand
 import TestDeepScan
+import TestFileUtilities
 
 
 suites = [ TestAction.suite(),
@@ -43,7 +44,8 @@ suites = [ TestAction.suite(),
            TestCleaner.suite(),
            TestCLI.suite(),
            TestCommand.suite(),
-           TestDeepScan.suite() ]
+           TestDeepScan.suite(),
+           TestFileUtilities.suite() ]
 
 
 def suite():

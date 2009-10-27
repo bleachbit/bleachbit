@@ -21,7 +21,7 @@
 
 
 """
-Tests for module FileUtilities
+Test case for module FileUtilities
 """
 
 
@@ -36,8 +36,8 @@ from bleachbit.FileUtilities import *
 
 
 
-class TestFileUtilities(unittest.TestCase):
-    """Unit test for module FileUtilities"""
+class FileUtilitiesTestCase(unittest.TestCase):
+    """Test case for module FileUtilities"""
 
     def __touch(self, filename):
         """Create an empty file"""
@@ -329,6 +329,9 @@ class TestFileUtilities(unittest.TestCase):
 
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
+        if None == os.getenv('ALLTESTS'):
+            print 'warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set'
+            return
         pathname = tempfile.gettempdir()
         wipe_path(pathname)
 
@@ -375,6 +378,8 @@ class TestFileUtilities(unittest.TestCase):
             return
 
         (handle, filename) = tempfile.mkstemp()
+        import pdb
+        pdb.set_trace()
         self.assertEqual(openfiles.is_open(filename), True)
 
         f = os.fdopen(handle)
@@ -387,14 +392,11 @@ class TestFileUtilities(unittest.TestCase):
         self.assertEqual(openfiles.is_open(filename), False)
 
 
+def suite():
+    return unittest.makeSuite(FileUtilitiesTestCase)
+
+
 if __name__ == '__main__':
-    if len(sys.argv) == 2 and sys.argv[1] == 'full':
-        print 'info: Running all tests.'
-        del sys.argv[1]
-        print sys.argv
-    else:
-        print "warning: Skipping some tests.  Use argument 'full' to run them."
-        del TestFileUtilities.test_wipe_path
     unittest.main()
 
 
