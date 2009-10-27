@@ -163,7 +163,7 @@ class CleanerTestCase(unittest.TestCase):
             self.assert_ (isinstance(key, (str, unicode)))
             self.assert_ (isinstance (backends[key], Cleaner))
             desc = backends[key].get_description()
-            self.assert_ (isinstance (desc, (str, unicode)), \
+            self.assert_ (isinstance (desc, (str, unicode, types.NoneType)), \
                 "description for '%s' is '%s'" % (key, desc))
 
 
