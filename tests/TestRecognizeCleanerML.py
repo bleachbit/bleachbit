@@ -33,8 +33,8 @@ from bleachbit.RecognizeCleanerML import hashdigest, HAVE_HASHLIB
 
 
 
-class TestRecognizeCleanerML(unittest.TestCase):
-    """Test cases for RecognizeCleanerML"""
+class RecognizeCleanerMLTestCase(unittest.TestCase):
+    """Test case for RecognizeCleanerML"""
 
     def test_hash(self):
         """Unit test for hash()"""
@@ -45,6 +45,10 @@ class TestRecognizeCleanerML(unittest.TestCase):
         else:
             self.assertEqual(len(digest), 72)
             self.assertEqual(digest[1:10], '0d4a3172f')
+
+
+def suite():
+    return unittest.makeSuite(RecognizeCleanerMLTestCase)
 
 
 if __name__ == '__main__':

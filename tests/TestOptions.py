@@ -33,8 +33,8 @@ from bleachbit.Options import boolean_keys, options
 
 
 
-class TestOptions(unittest.TestCase):
-    """Unit tests for class Options"""
+class OptionsTestCase(unittest.TestCase):
+    """Test case for class Options"""
 
     def test_Options(self):
         """Unit test for class Options"""
@@ -93,6 +93,9 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(o.get_tree("parent", "child"), False)
 
 
+
+def suite():
+    return unittest.makeSuite(OptionsTestCase)
 
 
 if __name__ == '__main__':

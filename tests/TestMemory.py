@@ -34,8 +34,8 @@ from bleachbit.Memory import *
 
 
 
-class TestMemory(unittest.TestCase):
-    """Unit test for module Memory"""
+class MemoryTestCase(unittest.TestCase):
+    """Test case for module Memory"""
 
 
     def test_count_linux_swap(self):
@@ -78,6 +78,11 @@ class TestMemory(unittest.TestCase):
         if 'linux2' != sys.platform:
             return
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
+
+
+
+def suite():
+    return unittest.makeSuite(MemoryTestCase)
 
 
 if __name__ == '__main__':

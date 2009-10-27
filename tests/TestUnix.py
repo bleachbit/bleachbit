@@ -21,7 +21,7 @@
 
 
 """
-Test cases for module Unix
+Test case for module Unix
 """
 
 
@@ -35,8 +35,8 @@ from bleachbit.Unix import *
 
 
 
-class TestUnix(unittest.TestCase):
-    """Unit tests for module Unix"""
+class UnixTestCase(unittest.TestCase):
+    """Test case for module Unix"""
 
 
     def setUp(self):
@@ -194,6 +194,10 @@ class TestUnix(unittest.TestCase):
             self.assert_(isinstance(bytes_freed, (int, long)))
             print 'debug: yum bytes cleaned %d', bytes_freed
 
+
+
+def suite():
+    return unittest.makeSuite(UnixTestCase)
 
 
 if __name__ == '__main__' and 'posix' == os.name:

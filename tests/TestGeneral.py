@@ -33,7 +33,7 @@ from bleachbit.General import *
 
 
 
-class TestGeneral(unittest.TestCase):
+class GeneralTestCase(unittest.TestCase):
     """Test case for module General"""
 
 
@@ -97,6 +97,10 @@ class TestGeneral(unittest.TestCase):
         self.assert_(isinstance(sudo_mode(), bool))
         if sudo_mode():
             assert(os.getenv('HOME').find('/root') != 0)
+
+
+def suite():
+    return unittest.makeSuite(GeneralTestCase)
 
 
 if __name__ == '__main__':

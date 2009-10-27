@@ -25,11 +25,11 @@ Test case for module FileUtilities
 """
 
 
-
+import datetime
 import locale
 import sys
-import unittest
 import tempfile
+import unittest
 
 sys.path.append('.')
 from bleachbit.FileUtilities import *
@@ -378,9 +378,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
             return
 
         (handle, filename) = tempfile.mkstemp()
-        import pdb
-        pdb.set_trace()
-        self.assertEqual(openfiles.is_open(filename), True)
+        openfiles = OpenFiles()
+        self.assertEqual(openfiles.is_open(filename), True, \
+            "Expected is_open(%s) to return True)\n" \
+            "openfiles.last_scan_time (ago)=%s\n" \
+            "openfiles.files=%s" % \
+            (filename, \
+            datetime.datetime.now() - openfiles.last_scan_time, \
+            openfiles.files))
 
         f = os.fdopen(handle)
         f.close()

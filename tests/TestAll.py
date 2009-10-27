@@ -37,6 +37,11 @@ import TestCLI
 import TestCommand
 import TestDeepScan
 import TestFileUtilities
+import TestGeneral
+import TestMemory
+import TestOptions
+import TestRecognizeCleanerML
+import TestUnix
 
 
 suites = [ TestAction.suite(),
@@ -45,7 +50,11 @@ suites = [ TestAction.suite(),
            TestCLI.suite(),
            TestCommand.suite(),
            TestDeepScan.suite(),
-           TestFileUtilities.suite() ]
+           TestFileUtilities.suite(),
+           TestGeneral.suite(),
+           TestMemory.suite(),
+           TestOptions.suite(),
+           TestRecognizeCleanerML.suite() ]
 
 
 def suite():
