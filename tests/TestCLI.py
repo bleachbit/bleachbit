@@ -146,6 +146,8 @@ class CLITestCase(unittest.TestCase):
             self.assert_(os.path.exists(path))
             deleted_paths.append(os.path.normcase(path))
         FileUtilities.delete = dummy_delete
+        FileUtilities.delete(filename)
+        self.assert_(os.path.exists(filename))
         operations = args_to_operations(['system.tmp'])
         preview_or_delete(operations, True)
         FileUtilities.delete = save_delete
