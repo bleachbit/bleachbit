@@ -123,7 +123,7 @@ class ActionTestCase(unittest.TestCase):
         if 'posix' == os.name:
             path = '/var'
         elif 'nt' == os.name:
-            path = '$WINDIR'
+            path = '$WINDIR\\system32'
         action_str = '<action command="delete" search="walk.files" path="%s" />' % path
         results = 0
         for cmd in self._action_str_to_commands(action_str):
