@@ -63,7 +63,7 @@ if 'posix' == os.name:
     suites.append(TestUnix.suite())
 
 if 'nt' == os.name:
-    suites.append(TestWindows.suite)
+    suites.append(TestWindows.suite())
 
 def suite():
     """Combine all the suites into one large suite"""

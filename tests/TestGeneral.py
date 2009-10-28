@@ -50,6 +50,9 @@ class GeneralTestCase(unittest.TestCase):
 
     def test_getrealuid(self):
         """Test for getrealuid()"""
+        if 'posix' != os.name:
+            self.assertRaises(RuntimeError, getrealuid)
+            return
         uid = getrealuid()
         self.assert_(isinstance(uid, int))
         self.assert_(0 <= uid <= 65535)
