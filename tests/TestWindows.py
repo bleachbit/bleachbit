@@ -20,7 +20,7 @@
 
 
 """
-Test cases for module Windows
+Test case for module Windows
 """
 
 
@@ -36,7 +36,7 @@ from bleachbit.Windows import *
 
 
 
-class TestWindows(unittest.TestCase):
+class WindowsTestCase(unittest.TestCase):
     """Test case for module Windows"""
 
 
@@ -149,6 +149,10 @@ class TestWindows(unittest.TestCase):
             self.assert_(isinstance(b, bool))
             self.assertEqual(b, three_b)
 
+
+
+def suite():
+    return unittest.makeSuite(WindowsTestCase)
 
 
 if __name__ == '__main__' and sys.platform == 'win32':

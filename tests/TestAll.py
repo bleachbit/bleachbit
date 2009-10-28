@@ -25,15 +25,13 @@ Run all test suites
 
 
 
-import sys
-import tempfile
+import os
 import unittest
-from xml.dom.minidom import parseString
 
 import TestAction
-import TestCleanerML
-import TestCleaner
 import TestCLI
+import TestCleaner
+import TestCleanerML
 import TestCommand
 import TestDeepScan
 import TestFileUtilities
@@ -42,6 +40,9 @@ import TestMemory
 import TestOptions
 import TestRecognizeCleanerML
 import TestUnix
+import TestUpdate
+import TestWindows
+import TestWorker
 
 
 suites = [ TestAction.suite(),
@@ -54,8 +55,15 @@ suites = [ TestAction.suite(),
            TestGeneral.suite(),
            TestMemory.suite(),
            TestOptions.suite(),
-           TestRecognizeCleanerML.suite() ]
+           TestRecognizeCleanerML.suite(),
+           TestUpdate.suite(),
+           TestWorker.suite() ]
 
+if 'posix' == os.name:
+    suites.append(TestUnix.suite())
+
+if 'nt' == os.name:
+    suites.append(TestWindows.suite)
 
 def suite():
     """Combine all the suites into one large suite"""

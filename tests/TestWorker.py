@@ -36,8 +36,8 @@ from bleachbit.Worker import *
 
 
 
-class TestWorker(unittest.TestCase):
-    """Unit test for module Worker"""
+class WorkerTestCase(unittest.TestCase):
+    """Test case for module Worker"""
 
     def test_TestActionProvider(self):
         """Test Worker using Action.TestActionProvider"""
@@ -47,7 +47,7 @@ class TestWorker(unittest.TestCase):
         os.close(fd)
         self.assert_(os.path.exists(filename))
         astr = '<action command="test" path="%s"/>' % filename
-        cleaner = TestCleaner.TestCleaner.action_to_cleaner(astr)
+        cleaner = TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
         operations = { 'test' : [ 'option1' ] }
         w = Worker(ui, True, operations)
@@ -78,7 +78,7 @@ class TestWorker(unittest.TestCase):
 
         astr1 = '<action command="delete" search="file" path="%s"/>' % filename1
         astr2 = '<action command="delete" search="file" path="%s"/>' % filename2
-        cleaner = TestCleaner.TestCleaner.actions_to_cleaner([astr1, astr2])
+        cleaner = TestCleaner.actions_to_cleaner([astr1, astr2])
         backends['test'] = cleaner
         operations = { 'test' : [ 'option1', 'option2' ] }
         w = Worker(ui, True, operations)
@@ -93,6 +93,10 @@ class TestWorker(unittest.TestCase):
         self.assertEqual(w.total_errors, 0)
         self.assertEqual(w.total_deleted, 2)
 
+
+
+def suite():
+    return unittest.makeSuite(WorkerTestCase)
 
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@
 
 
 """
-Test cases for module Update
+Test case for module Update
 """
 
 
@@ -34,8 +34,8 @@ from bleachbit.Update import Update, user_agent
 
 
 
-class TestUpdate(unittest.TestCase):
-    """Unit tests for module Update"""
+class UpdateTestCase(unittest.TestCase):
+    """Test case for module Update"""
 
 
     def test_Update(self):
@@ -55,6 +55,11 @@ class TestUpdate(unittest.TestCase):
         agent = user_agent()
         print "debug: user agent = '%s'" % (agent, )
         self.assert_ (type(agent) is str)
+
+
+
+def suite():
+    return unittest.makeSuite(UpdateTestCase)
 
 
 if __name__ == '__main__':
