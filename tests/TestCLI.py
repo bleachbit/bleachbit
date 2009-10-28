@@ -136,16 +136,21 @@ class CLITestCase(unittest.TestCase):
         """Unit test for --delete option"""
         (fd, filename) = tempfile.mkstemp('bleachbit-test')
         os.close(fd)
+        if 'nt' == os.name:
+            import win32api
+            filename = os.path.normcase(win32api.GetLongPathName(filename))
         # replace delete function for testing
         save_delete = FileUtilities.delete
         deleted_paths = []
         def dummy_delete(path, shred = False):
-            deleted_paths.append(path)
+            self.assert_(os.path.exists(path))
+            deleted_paths.append(os.path.normcase(path))
         FileUtilities.delete = dummy_delete
         operations = args_to_operations(['system.tmp'])
         preview_or_delete(operations, True)
         FileUtilities.delete = save_delete
-        self.assert_(filename in deleted_paths)
+        self.assert_(filename in deleted_paths, \
+            "%s not found deleted" % filename)
         os.remove(filename)
 
 
