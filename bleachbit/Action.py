@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# -*- coding: UTF-8 -*-
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
