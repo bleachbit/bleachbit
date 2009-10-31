@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-10-16 22:46-0600\n"
-"PO-Revision-Date: 2009-10-17 08:22+0000\n"
-"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2009-10-29 07:23-0600\n"
+"PO-Revision-Date: 2009-10-30 15:49+0000\n"
+"Last-Translator: Ddorda <d.dorda@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-17 13:04+0000\n"
+"X-Launchpad-Export-Date: 2009-10-30 18:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
@@ -367,6 +367,10 @@ msgstr "בדוק את התצוגה המקדימה עבור קבצים שברצו
 msgid "This option is slow."
 msgstr "אפשרות זו איטית."
 
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "תיקיות מותאמות יאופסו."
+
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
 msgstr "תמונות ממוזערות"
@@ -466,7 +470,7 @@ msgstr "פינוי האשפה"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:403 ../bleachbit/Cleaner.py:495
+#: ../bleachbit/Cleaner.py:403 ../bleachbit/Cleaner.py:494
 msgid "Memory"
 msgstr "זכרון"
 
@@ -491,7 +495,7 @@ msgstr "סל המיחזור"
 msgid "Empty the recycle bin"
 msgstr "פינוי סל המיחזור"
 
-#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:567
+#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:566
 msgid "Clipboard"
 msgstr "לוח הגזירים"
 
@@ -518,18 +522,18 @@ msgstr "מערכת"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:589
+#: ../bleachbit/Cleaner.py:588
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "שכתוב השטח הפנוי במיקום %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:617
+#: ../bleachbit/Cleaner.py:616
 #, python-format
 msgid "Recycle bin %s"
 msgstr "סל המיחזור %s"
 
-#: ../bleachbit/CLI.py:102
+#: ../bleachbit/CLI.py:116
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "not a valid cleaner: %s"
@@ -538,34 +542,34 @@ msgstr "not a valid cleaner: %s"
 #. %prog, but do translate usage, options, cleaner, and option.
 #. More information about the command line is here
 #. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:130
+#: ../bleachbit/CLI.py:144
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "usage: %prog [options] cleaner.option1 cleaner.option2"
 
-#: ../bleachbit/CLI.py:133
+#: ../bleachbit/CLI.py:147
 msgid "list cleaners"
 msgstr "list cleaners"
 
-#: ../bleachbit/CLI.py:135
+#: ../bleachbit/CLI.py:149
 msgid "delete files and make other permanent changes"
 msgstr "delete files and make other permanent changes"
 
-#: ../bleachbit/CLI.py:137
+#: ../bleachbit/CLI.py:151
 msgid "preview files to be deleted and other changes"
 msgstr "preview files to be deleted and other changes"
 
-#: ../bleachbit/CLI.py:139
+#: ../bleachbit/CLI.py:153
 msgid "output version information and exit"
 msgstr "output version information and exit"
 
-#: ../bleachbit/CLI.py:141
+#: ../bleachbit/CLI.py:155
 msgid "overwrite files to hide contents"
 msgstr "שכתוב על הקבצים להסתרת התוכן"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
 #. TRANSLATORS: This is the delete button on the main window
-#: ../bleachbit/Command.py:55 ../bleachbit/GUI.py:559
+#: ../bleachbit/Command.py:55 ../bleachbit/GUI.py:568
 msgid "Delete"
 msgstr "מחיקה"
 
@@ -588,27 +592,27 @@ msgstr "מחיקת רשומת המערכת"
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "לא ניתן לייבא את מודול ה־Python בשם sqlite3: נדרש Python 2.5 ומעלה."
 
-#: ../bleachbit/GuiPreferences.py:51 ../bleachbit/GUI.py:518
+#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:527
 msgid "Preferences"
 msgstr "העדפות"
 
-#: ../bleachbit/GuiPreferences.py:60
+#: ../bleachbit/GuiPreferences.py:61
 msgid "General"
 msgstr "כללי"
 
-#: ../bleachbit/GuiPreferences.py:61
+#: ../bleachbit/GuiPreferences.py:62
 msgid "Drives"
 msgstr "כוננים"
 
-#: ../bleachbit/GuiPreferences.py:63
+#: ../bleachbit/GuiPreferences.py:64
 msgid "Languages"
 msgstr "שפות"
 
-#: ../bleachbit/GuiPreferences.py:105
+#: ../bleachbit/GuiPreferences.py:106
 msgid "Check periodically for software updates via the Internet"
 msgstr "בדיקה תקופתית אחר עדכוני תוכנה דרך האינטרנט"
 
-#: ../bleachbit/GuiPreferences.py:108
+#: ../bleachbit/GuiPreferences.py:109
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -620,18 +624,18 @@ msgstr ""
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:115
+#: ../bleachbit/GuiPreferences.py:116
 msgid "Hide irrelevant cleaners"
 msgstr "הסתרת מנקים שאינם רלוונטיים"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:123
+#: ../bleachbit/GuiPreferences.py:124
 msgid "Overwrite files to hide contents"
 msgstr "שכתוב על קבצים כדי להסתיר את תוכנם"
 
-#: ../bleachbit/GuiPreferences.py:126
+#: ../bleachbit/GuiPreferences.py:127
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -639,7 +643,7 @@ msgstr ""
 "שכתוב אינו יעיל בכמה ממערכות הקבצים ועם פעולות מסויימות של BleachBit. שכתוב "
 "איטי יותר בצורה משמעותית."
 
-#: ../bleachbit/GuiPreferences.py:129
+#: ../bleachbit/GuiPreferences.py:130
 msgid "Start BleachBit with computer"
 msgstr "הפעלת BleachBit עם עליית המחשב"
 
@@ -647,41 +651,41 @@ msgstr "הפעלת BleachBit עם עליית המחשב"
 msgid "Choose a folder"
 msgstr "בחירת תיקייה"
 
-#: ../bleachbit/GuiPreferences.py:168
+#: ../bleachbit/GuiPreferences.py:161
 msgid ""
 "Choose a writable directory for each drive for which to overwrite free space."
 msgstr ""
 "בחירת תיקייה הניתנת לכתיבה עבור כל כונן שעבורו יש לשכתב את המקום הפנוי."
 
-#: ../bleachbit/GuiPreferences.py:187
+#: ../bleachbit/GuiPreferences.py:180
 msgid "Add"
 msgstr "הוספה"
 
-#: ../bleachbit/GuiPreferences.py:189
+#: ../bleachbit/GuiPreferences.py:182
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../bleachbit/GuiPreferences.py:214
+#: ../bleachbit/GuiPreferences.py:207
 msgid "All languages will be deleted except those checked."
 msgstr "כל השפות ימחקו מלבד אלו המסומנות."
 
-#: ../bleachbit/GuiPreferences.py:232
+#: ../bleachbit/GuiPreferences.py:225
 msgid "Preserve"
 msgstr "שימור"
 
-#: ../bleachbit/GuiPreferences.py:236
+#: ../bleachbit/GuiPreferences.py:229
 msgid "Code"
 msgstr "קוד"
 
-#: ../bleachbit/GuiPreferences.py:240 ../bleachbit/GUI.py:171
+#: ../bleachbit/GuiPreferences.py:233 ../bleachbit/GUI.py:173
 msgid "Name"
 msgstr "שם"
 
-#: ../bleachbit/GUI.py:71
+#: ../bleachbit/GUI.py:73
 msgid "Delete confirmation"
 msgstr "אימות המחיקה"
 
-#: ../bleachbit/GUI.py:79
+#: ../bleachbit/GUI.py:81
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -690,27 +694,27 @@ msgstr ""
 "האם למחוק לצמיתות את הקבצים בהתאם לפעולות הנבחרות? הקבצים שימחקו בפועל "
 "עלולים להיות שונים מכפי שהוצג בתצוגה המקדימה."
 
-#: ../bleachbit/GUI.py:81
+#: ../bleachbit/GUI.py:83
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "האם למחוק קבצים אלו?"
 
-#: ../bleachbit/GUI.py:179
+#: ../bleachbit/GUI.py:181
 msgid "Active"
 msgstr "פעיל"
 
-#: ../bleachbit/GUI.py:373
+#: ../bleachbit/GUI.py:372
 msgid "You must select an operation"
 msgstr "יש לבחור בפעולה"
 
-#: ../bleachbit/GUI.py:395
+#: ../bleachbit/GUI.py:395 ../bleachbit/GUI.py:410
 msgid "Done."
 msgstr "בוצע."
 
-#: ../bleachbit/GUI.py:404
+#: ../bleachbit/GUI.py:419
 msgid "Program to clean unnecessary files"
 msgstr "תוכנית לניקוי הקבצים הבלתי נחוצים"
 
-#: ../bleachbit/GUI.py:409
+#: ../bleachbit/GUI.py:424
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -719,97 +723,102 @@ msgstr ""
 "ניתן לעיין בכתובת http://www.gnu.org/licenses/gpl-3.0.txt\n"
 "או בעברית http://www.law.co.il/media/computer-law/gpl-hebrew.html"
 
-#: ../bleachbit/GUI.py:415
+#: ../bleachbit/GUI.py:430
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Ddorda https://launchpad.net/~ddorda\n"
 "  Yaron https://launchpad.net/~sh-yaron"
 
-#: ../bleachbit/GUI.py:451
+#: ../bleachbit/GUI.py:467
 msgid "Choose files to shred"
 msgstr "בחרו קבצים להשמדה"
 
-#: ../bleachbit/GUI.py:515
+#: ../bleachbit/GUI.py:524
 msgid "_Shred Files"
 msgstr "ה_שמדת קבצים"
 
-#: ../bleachbit/GUI.py:516
+#: ../bleachbit/GUI.py:525
 msgid "_Quit"
 msgstr "י_ציאה"
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:526
 msgid "_File"
 msgstr "_קובץ"
 
-#: ../bleachbit/GUI.py:519
+#: ../bleachbit/GUI.py:528
 msgid "_Edit"
 msgstr "ע_ריכה"
 
-#: ../bleachbit/GUI.py:520
+#: ../bleachbit/GUI.py:529
 msgid "Help Contents"
 msgstr "תכני העזרה"
 
-#: ../bleachbit/GUI.py:521
+#: ../bleachbit/GUI.py:530
 msgid "_Release Notes"
 msgstr "הערות ה_פצה"
 
-#: ../bleachbit/GUI.py:522
+#: ../bleachbit/GUI.py:531
 msgid "_About"
 msgstr "על _אודות"
 
-#: ../bleachbit/GUI.py:523
+#: ../bleachbit/GUI.py:532
 msgid "_Help"
 msgstr "ע_זרה"
 
-#: ../bleachbit/GUI.py:549
+#: ../bleachbit/GUI.py:558
 msgid "Preview"
 msgstr "תצוגה מקדימה"
 
-#: ../bleachbit/GUI.py:552
+#: ../bleachbit/GUI.py:561
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "תצוגה מקדימה של קבצים בפעולות הנבחרות (ללא מחיקת קבצים כלשהם)"
 
-#: ../bleachbit/GUI.py:562
+#: ../bleachbit/GUI.py:571
 msgid "Delete files in the selected operations"
 msgstr "מחיקת קבצים בפעולות שנבחרו"
 
-#: ../bleachbit/GUI.py:640
+#: ../bleachbit/GUI.py:649
 msgid "Update BleachBit"
 msgstr "עדכון BleachBit"
 
-#: ../bleachbit/GUI.py:645
+#: ../bleachbit/GUI.py:654
 msgid "BleachBit update is available"
 msgstr "ישנו עדכון זמין עבור BleachBit"
 
-#: ../bleachbit/GUI.py:653
+#: ../bleachbit/GUI.py:662
 msgid "Click 'Update BleachBit' for more information"
 msgstr "יש ללחוץ על \"עדכון BleachBit\" למידע נוסף"
+
+#: ../bleachbit/GUI.py:678
+msgid "Error when checking for updates: "
+msgstr "שגיאה בעת בדיקה אחר עדכונים: "
 
 #. TRANSLATORS: Cleaner definitions are the CleanerML XML files
 #. BleachBit uses to define how to clean an application.  For
 #. example, GIMP, Google Chrome, and Opera each have their own
 #. cleaner definition.  Anyone may write his own cleaner
 #. definition.
-#: ../bleachbit/RecognizeCleanerML.py:67
+#: ../bleachbit/RecognizeCleanerML.py:71
 msgid ""
 "The following cleaner definition file has changed.  Malicious definitions "
 "can damage your computer."
 msgstr "קובץ הגדרות הניקוי השתנה. הגדרות זדוניות עלולות להזיק למחשבך."
 
-#: ../bleachbit/RecognizeCleanerML.py:69
+#: ../bleachbit/RecognizeCleanerML.py:73
 msgid ""
 "The following cleaner definition file is new.  Malicious definitions can "
 "damage your computer."
 msgstr ""
 "קובץ הגדרות הניקוי הינו קובץ חדש. הגדרות זדוניות עלולות להזיק למחשבך."
 
-#: ../bleachbit/Unix.py:359 ../bleachbit/Unix.py:389 ../bleachbit/Unix.py:569
+#: ../bleachbit/Unix.py:361 ../bleachbit/Unix.py:391 ../bleachbit/Unix.py:571
 #, python-format
 msgid "Executable not found: %s"
 msgstr "קובץ ההפעלה לא נמצא: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:566 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:568 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -817,15 +826,11 @@ msgid ""
 msgstr ""
 "לא ניתן לנקות את %s כיוון שהתוכנית עדיין פועלת. יש לסגור אותה ולנסות בשנית."
 
-#: ../bleachbit/Update.py:87
-msgid "Error when checking for updates: "
-msgstr "שגיאה בעת בדיקה אחר עדכונים: "
-
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
 #. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:77
+#: ../bleachbit/Worker.py:76
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "ארעה חריגה בעת הרצת התהליך '%(operation)s': '%(msg)s'"
