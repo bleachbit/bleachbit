@@ -73,7 +73,12 @@ options_dir = None
 if 'posix' == os.name:
     options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
-    options_dir = os.path.expandvars("${APPDATA}\\BleachBit")
+    if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
+        # portable mode
+        options_dir = bleachbit_exe_path
+    else:
+        # installed mode
+        options_dir = os.path.expandvars("${APPDATA}\\BleachBit")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # personal cleaners
