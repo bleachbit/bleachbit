@@ -49,6 +49,9 @@
     <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
     <!-- recent documents in start menu -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
+    <!-- Windows 7 jump list -->
+    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
+    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
   </option>
   <option id="run">
     <label>Run</label>
