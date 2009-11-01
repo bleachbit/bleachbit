@@ -105,7 +105,7 @@ def cleaner_change_dialog(changes, parent):
     renderer0.connect('toggled', toggled, liststore)
     treeview.append_column(gtk.TreeViewColumn(_('Delete'), renderer0, active = 0))
     renderer1 = gtk.CellRendererText()
-    treeview.append_column(gtk.TreeViewColumn(_('File name'), renderer1, text = 1))
+    treeview.append_column(gtk.TreeViewColumn(_('Filename'), renderer1, text = 1))
 
     # populate tree view
     for change in changes:
