@@ -547,6 +547,9 @@ class GUI:
 
     def create_window(self):
         """Create the main application window"""
+
+        print 'info: GTK version %s' % '.'.join([str(x) for x in gtk.gtk_version])
+
         self.window = gtk.Window()
         self.window.connect('destroy', lambda w: gtk.main_quit())
 
