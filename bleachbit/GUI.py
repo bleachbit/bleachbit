@@ -321,7 +321,7 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not GuiBasic.delete_confirmation_dialog(self.window, True):
+        if not bleachbit.GuiBasic.delete_confirmation_dialog(self.window, True):
             return
         self.preview_or_run_operations(True)
 
@@ -447,7 +447,7 @@ class GUI:
         operations = { '_gui' : [ 'files' ] }
         self.preview_or_run_operations(False, operations)
 
-        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
+        if bleachbit.GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
             options.set('shred', True, commit = False)
             self.preview_or_run_operations(True, operations)
