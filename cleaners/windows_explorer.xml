@@ -54,7 +54,7 @@
     <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
   </option>
   <option id="run">
-    <label>Run</label>
+    <label translators="In Windows 'Run' is the dialog in the Start menu">Run</label>
     <description>Delete the most recently used list</description>
     <!--  run command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>

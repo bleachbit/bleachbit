@@ -147,8 +147,9 @@ class CleanerML:
         """<label> element under <option>"""
         self.option_name = _(getText(label.childNodes))
         translate = label.getAttribute('translate')
+        translators = label.getAttribute('translators')
         if not translate or boolstr_to_bool(translate):
-            self.xlate_cb(self.option_name)
+            self.xlate_cb(self.option_name, translators)
 
 
     def handle_cleaner_option_description(self, description):
@@ -206,13 +207,17 @@ def load_cleaners():
                 print "debug: '%s' is not usable" % pathname
 
 
-def pot_fragment(msgid, pathname):
+def pot_fragment(msgid, pathname, translators = None):
     """Create a string fragment for generating .pot files"""
-    ret = '''#: %s
+    if translators:
+        translators = "#. %s\n" % translators
+    else:
+        translators = ""
+    ret = '''%s#: %s
 msgid "%s"
 msgstr ""
 
-''' % (pathname, msgid)
+''' % (translators, pathname, msgid)
     return ret
 
 
@@ -227,13 +232,14 @@ def create_pot():
         strings = []
         try:
             CleanerML(pathname, \
-                lambda newstr: strings.append(newstr))
+                lambda newstr, translators = None: \
+                strings.append([ newstr, translators ] ))
         except:
             print "error reading '%s'" % pathname
             traceback.print_exc()
         else:
-            for string in sorted(set(strings)):
-                f.write(pot_fragment(string, pathname))
+            for (string, translators) in strings:
+                f.write(pot_fragment(string, pathname, translators))
 
     f.close()
 
