@@ -56,7 +56,7 @@ class CleanerML:
         self.option_warning = None
         self.xlate_cb = xlate_cb
         if None == self.xlate_cb:
-            self.xlate_cb = lambda x: None # do nothing
+            self.xlate_cb = lambda x, y = None: None # do nothing
 
         dom = xml.dom.minidom.parse(pathname)
 
