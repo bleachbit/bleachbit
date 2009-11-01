@@ -24,7 +24,6 @@ Perform the preview or delete operations
 """
 
 
-from gettext import gettext as _
 import os
 import sys
 import traceback
@@ -32,6 +31,7 @@ import traceback
 import DeepScan
 import FileUtilities
 from Cleaner import backends
+from Common import _
 
 if 'nt' == os.name:
     import Windows

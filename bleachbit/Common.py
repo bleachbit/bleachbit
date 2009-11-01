@@ -26,6 +26,7 @@ import gettext
 import locale
 import os
 import sys
+import traceback
 
 
 APP_VERSION = "0.7.1svn"
@@ -150,11 +151,12 @@ if 'win32' == sys.platform:
     os.environ['LANG'] = user_locale
 
 try:
-    gettext.bindtextdomain('bleachbit', locale_dir)
-    gettext.textdomain('bleachbit')
-    gettext.install('bleachbit', locale_dir, unicode=1)
+    t = gettext.translation('bleachbit', locale_dir)
+    _ = t.ugettext
 except:
-    print "Warning: gettext() failed so translations will be unvailable"
+    if 'C' != user_locale and 'en' != user_locale[0:2]:
+        traceback.print_exc()
+        print "warning: gettext() failed so translations will be unavailable"
     def _(msg):
         """Dummy replacement for gettext"""
         return msg

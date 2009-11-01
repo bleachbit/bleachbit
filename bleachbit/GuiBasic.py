@@ -31,6 +31,8 @@ import os
 if 'nt' == os.name:
     import Windows
 
+from Common import _
+
 
 
 def browse_folder(parent, title):

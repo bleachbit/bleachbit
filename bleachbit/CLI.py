@@ -26,12 +26,12 @@ Command line interface
 
 
 
-from gettext import gettext as _
 import optparse
 import os
 import sys
 
 from Cleaner import backends
+from Common import _
 import Common
 import General
 import Worker

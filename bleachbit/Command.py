@@ -29,6 +29,8 @@ import os
 import types
 import FileUtilities
 
+from Common import _
+
 if 'nt' == os.name:
     import Windows
 else:

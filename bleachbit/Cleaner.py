@@ -25,7 +25,6 @@ Perform (or assist with) cleaning operations.
 
 
 
-from gettext import gettext as _
 import glob
 try:
     import gtk
@@ -48,6 +47,7 @@ if 'posix' == os.name:
 elif 'nt' == os.name:
     import Windows
 
+from Common import _
 from FileUtilities import children_in_directory
 from Options import options
 

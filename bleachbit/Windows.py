@@ -44,7 +44,6 @@ import os
 import sys
 import traceback
 
-from gettext import gettext as _
 
 if 'win32' == sys.platform:
     import _winreg

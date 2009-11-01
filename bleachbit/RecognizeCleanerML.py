@@ -40,6 +40,7 @@ except:
 else:
     HAVE_HASHLIB = True
 
+from Common import _
 from CleanerML import list_cleanerml_files
 from Options import options
 import GuiBasic

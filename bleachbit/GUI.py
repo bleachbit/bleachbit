@@ -19,7 +19,6 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gettext import gettext as _
 import os
 import sys
 import threading
@@ -35,7 +34,7 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from bleachbit.Common import APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+from bleachbit.Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, online_update_notification_enabled, \
     release_notes_url
 from bleachbit.Cleaner import backends

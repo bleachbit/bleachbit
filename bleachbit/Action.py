@@ -34,6 +34,8 @@ import Command
 import FileUtilities
 import General
 
+from Common import _
+
 if 'posix' == os.name:
     import Unix
 

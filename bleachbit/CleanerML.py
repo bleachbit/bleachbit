@@ -32,8 +32,8 @@ import xml.dom.minidom
 import Cleaner
 import Common
 
-from gettext import gettext as _
 from Action import ActionProvider
+from Common import _
 from General import boolstr_to_bool, getText
 from FileUtilities import listdir
 

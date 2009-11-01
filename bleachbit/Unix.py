@@ -33,6 +33,7 @@ import subprocess
 import sys
 import ConfigParser
 
+from Common import _
 import Common
 import FileUtilities
 import General

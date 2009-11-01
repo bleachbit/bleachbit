@@ -31,6 +31,7 @@ import os
 import sys
 import traceback
 
+from Common import _
 from Options import options
 import Common
 import GuiBasic
