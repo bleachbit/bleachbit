@@ -38,7 +38,8 @@
     <description>List of visited web pages</description>
     <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\History.plist"/>
     <action command="delete" search="walk.files" path="$LOCALAPPDATA\Apple Computer\Safari\Webpage Previews\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\History\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Apple Computer\Safari\History\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\History\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\Webpage Previews\"/>
   </option>
 </cleaner>
