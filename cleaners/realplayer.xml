@@ -27,4 +27,16 @@
     <action command="delete" search="file" path="~/.config/real/rpcookies.txt"/>
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\cookies.txt"/>
   </option>
+  <option id="history">
+    <label>Usage history</label>
+    <description>Delete the usage history</description>
+    <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\realplayer.ste"/>
+    <action command="delete" search="glob" path="$APPDATA\Real\RealPlayer\History\*.lnk"/>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\RealPlayer-log.txt"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Real\RealPlayer\ErrorLogs\"/>
+  </option>
 </cleaner>
