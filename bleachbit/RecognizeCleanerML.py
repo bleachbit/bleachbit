@@ -90,10 +90,9 @@ def cleaner_change_dialog(changes, parent):
     image.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
     warnbox.pack_start(image, False)
     # TRANSLATORS: Cleaner definitions are XML data files that define
-    # which files will be cleaned.  Please type carriage returns so
-    # the dialog is not too wide (though the specific position of
-    # the line break is not very important).
-    label = gtk.Label(_("These cleaner definitions are new or have changed. Malicious definitions\ncan damage your system. If you do not trust these changes,\ndelete the files or quit."))
+    # which files will be cleaned.
+    label = gtk.Label(_("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
+    label.set_line_wrap(True)
     warnbox.pack_start(label, True)
     dialog.vbox.pack_start(warnbox, False)
 
