@@ -228,10 +228,14 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
-    Delete "$DESKTOP\BleachBit.lnk"
-    RMDir /r "$SMPROGRAMS\${prodname}"
     RMDir /r "$INSTDIR"
     DeleteRegKey HKCU "Software\${prodname}"
+    # delete normal shortcuts
+    RMDir /r "$SMPROGRAMS\${prodname}"
+    # delete any extra shortcuts
+    Delete "$DESKTOP\BleachBit.lnk"
+    Delete "$QUICKLAUNCH\BleachBit.lnk"
+    Delete "$SMSTARTUP\BleachBit.lnk"
     # remove registration in Add/Remove Programs
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
 SectionEnd
