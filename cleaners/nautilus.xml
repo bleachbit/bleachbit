@@ -23,8 +23,8 @@
   <label>Nautilus</label>
   <option id="history">
     <label>History</label>
-    <warning>Custom folders will be reset.</warning>
     <description>Delete the usage history</description>
+    <warning>Custom folders will be reset.</warning>
     <action command="delete" search="glob" path="~/.nautilus/saved-session-??????"/>
     <action command="delete" search="glob" path="~/.nautilus/metafiles/*:*.xml"/>
   </option>
