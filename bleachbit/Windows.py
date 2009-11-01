@@ -74,9 +74,11 @@ def browse_files(hwnd, title):
                 | win32con.OFN_FILEMUSTEXIST \
                 | win32con.OFN_HIDEREADONLY, \
             Title = title)
-    except pywintypes.error:
-        traceback.print_exc()
-        print 'debug: browse_files(): user cancelled'
+    except pywintypes.error, e:
+        if 0 == e.winerror:
+            print 'debug: browse_files(): user cancelled'
+        else:
+            traceback.print_exc()
         return None
     _split = ret[0].split('\x00')
     if 1 == len(_split):
