@@ -175,6 +175,16 @@ SectionGroup /e Shortcuts
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     SectionEnd
+
+    Section /o "Quick Launch" SectionQuickLaunch
+        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+        CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    SectionEnd
+
+    Section /o "Start automatically" SectionStartUp
+        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+        CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    SectionEnd
 SectionGroupEnd
 
 
