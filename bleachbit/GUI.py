@@ -68,36 +68,6 @@ def threaded(func):
 
 
 
-def delete_confirmation_dialog(parent, mention_preview):
-    """Return boolean whether OK to delete files."""
-    dialog = gtk.Dialog(title = _("Delete confirmation"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
-    dialog.set_default_size(300, -1)
-
-    hbox = gtk.HBox(homogeneous=False, spacing=10)
-    icon = gtk.Image()
-    icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
-    hbox.pack_start(icon, False)
-    if mention_preview:
-        question_text = _("Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
-    else:
-        question_text = _("Are you sure you want to permanently delete these files?")
-
-    question = gtk.Label(question_text)
-    question.set_line_wrap(True)
-    hbox.pack_start(question, False)
-    dialog.vbox.pack_start(hbox, False)
-    dialog.vbox.set_spacing(10)
-
-    dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
-    dialog.add_button(gtk.STOCK_DELETE, gtk.RESPONSE_ACCEPT)
-    dialog.set_default_response(gtk.RESPONSE_CANCEL)
-
-    dialog.show_all()
-    ret = dialog.run()
-    dialog.destroy()
-    return ret == gtk.RESPONSE_ACCEPT
-
-
 class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
 
@@ -351,7 +321,7 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not delete_confirmation_dialog(self.window, True):
+        if not GuiBasic.delete_confirmation_dialog(self.window, True):
             return
         self.preview_or_run_operations(True)
 
@@ -477,7 +447,7 @@ class GUI:
         operations = { '_gui' : [ 'files' ] }
         self.preview_or_run_operations(False, operations)
 
-        if delete_confirmation_dialog(self.window, mention_preview = False):
+        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
             options.set('shred', True, commit = False)
             self.preview_or_run_operations(True, operations)

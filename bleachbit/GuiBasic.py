@@ -79,6 +79,36 @@ def browse_files(parent, title):
     return paths
 
 
+def delete_confirmation_dialog(parent, mention_preview):
+    """Return boolean whether OK to delete files."""
+    dialog = gtk.Dialog(title = _("Delete confirmation"), parent = parent, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dialog.set_default_size(300, -1)
+
+    hbox = gtk.HBox(homogeneous=False, spacing=10)
+    icon = gtk.Image()
+    icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
+    hbox.pack_start(icon, False)
+    if mention_preview:
+        question_text = _("Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
+    else:
+        question_text = _("Are you sure you want to permanently delete these files?")
+
+    question = gtk.Label(question_text)
+    question.set_line_wrap(True)
+    hbox.pack_start(question, False)
+    dialog.vbox.pack_start(hbox, False)
+    dialog.vbox.set_spacing(10)
+
+    dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+    dialog.add_button(gtk.STOCK_DELETE, gtk.RESPONSE_ACCEPT)
+    dialog.set_default_response(gtk.RESPONSE_CANCEL)
+
+    dialog.show_all()
+    ret = dialog.run()
+    dialog.destroy()
+    return ret == gtk.RESPONSE_ACCEPT
+
+
 def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK):
     """Convenience wrapper for gtk.MessageDialog"""
 

@@ -25,9 +25,11 @@ Check local CleanerML files as a security measure
 
 
 
+import ConfigParser
+import gobject
 import os
 import random
-import ConfigParser
+import sys
 
 try:
     import hashlib
@@ -40,6 +42,7 @@ else:
 
 from CleanerML import list_cleanerml_files
 from Options import options
+import GuiBasic
 
 
 
@@ -49,43 +52,96 @@ NEW = 3
 
 
 
-def cleaner_change_dialog(pathname, status, parent):
-    """Present a dialog regarding the change of a cleaner definition"""
+def cleaner_change_dialog(changes, parent):
+    """Present a dialog regarding the change of cleaner definitions"""
+
+    def toggled(cell, path, model):
+        """Callback for clicking the checkbox"""
+#        i = model.get_iter(path)
+#        model[i][0] = not model[i][0]
+        __iter = model.get_iter_from_string(path)
+        value = not model.get_value(__iter, 0)
+        model.set(__iter, 0, value)
+#        import pdb
+#        pdb.set_trace()
+
+    def preserve_toggled_cb(cell, path, liststore):
+            """Callback for toggling the 'preserve' column"""
+            __iter = liststore.get_iter_from_string(path)
+            value = not liststore.get_value(__iter, 0)
+            liststore.set(__iter, 0, value)
+            langid = liststore[path][1]
+            options.set_language(langid, value)
+
 
     import pygtk
     pygtk.require('2.0')
     import gtk
 
-    dialog = gtk.Dialog(title = "BleachBit", parent = parent, \
+    dialog = gtk.Dialog(title = _("Security warning"), \
+        parent = parent, \
         flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
-    hbox = gtk.HBox(homogeneous = False, spacing = 10)
-    icon = gtk.Image()
-    icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
-    hbox.pack_start(icon, False)
-    if CHANGED == status:
-        # TRANSLATORS: Cleaner definitions are the CleanerML XML files
-        # BleachBit uses to define how to clean an application.  For
-        # example, GIMP, Google Chrome, and Opera each have their own
-        # cleaner definition.  Anyone may write his own cleaner
-        # definition.
-        msg = _("The following cleaner definition file has changed.  Malicious definitions can damage your computer.")
-    elif NEW == status:
-        msg = _("The following cleaner definition file is new.  Malicious definitions can damage your computer.")
-    else:
-        raise RuntimeError('Invalid status code %s' % status)
-    msg += "\n\n" + pathname
-    question = gtk.Label(msg)
-    question.set_line_wrap(True)
-    hbox.pack_start(question, False)
-    dialog.vbox.pack_start(hbox, False)
-    dialog.vbox.set_spacing(10)
-    dialog.add_button(gtk.STOCK_ADD, True)
-    dialog.add_button(gtk.STOCK_DELETE, False)
-    dialog.set_default_response(False)
+    dialog.set_default_size(600, 500)
+
+    # create warning
+    warnbox = gtk.HBox()
+    image = gtk.Image()
+    image.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
+    warnbox.pack_start(image, False)
+    # TRANSLATORS: Cleaner definitions are XML data files that define
+    # which files will be cleaned.  Please type carriage returns so
+    # the dialog is not too wide (though the specific position of
+    # the line break is not very important).
+    label = gtk.Label(_("These cleaner definitions are new or have changed. Malicious definitions\ncan damage your system. If you do not trust these changes,\ndelete the files or quit."))
+    warnbox.pack_start(label, True)
+    dialog.vbox.pack_start(warnbox, False)
+
+    # create tree view
+    liststore = gtk.ListStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING)
+    treeview = gtk.TreeView(model = liststore)
+
+    renderer0 = gtk.CellRendererToggle()
+    renderer0.set_property('activatable', True)
+    renderer0.connect('toggled', toggled, liststore)
+    treeview.append_column(gtk.TreeViewColumn(_('Delete'), renderer0, active = 0))
+    renderer1 = gtk.CellRendererText()
+    treeview.append_column(gtk.TreeViewColumn(_('File name'), renderer1, text = 1))
+
+    # populate tree view
+    for change in changes:
+        liststore.append( [ False, change[0] ])
+
+    # populate dialog with widgets
+    scrolled_window = gtk.ScrolledWindow()
+    scrolled_window.add_with_viewport(treeview)
+    dialog.vbox.pack_start(scrolled_window)
+
+    dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+    dialog.add_button(gtk.STOCK_QUIT, gtk.RESPONSE_CLOSE)
+
+    # run dialog
     dialog.show_all()
-    ret = dialog.run()
+    while True:
+        if gtk.RESPONSE_ACCEPT != dialog.run():
+            sys.exit(0)
+        delete = []
+        for row in liststore:
+            b = row[0]
+            path = row[1]
+            if b:
+                delete.append(path)
+        if 0 == len(delete):
+            # no files selected to delete
+            break
+        if not GuiBasic.delete_confirmation_dialog(parent, mention_preview = False):
+            # confirmation not accepted, so do not delete files
+            continue
+        for path in delete:
+            print "info: deleting unrecognized CleanerML '%s'" % path
+            os.remove(path)
+        break
     dialog.destroy()
-    return ret
+
 
 
 def hashdigest(string):
@@ -109,37 +165,38 @@ class RecognizeCleanerML:
         except ConfigParser.NoOptionError, e:
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
-        self.new_hash = None
         self.__scan()
 
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
         body = file(pathname).read()
-        self.new_hash = hashdigest(self.salt + body)
+        new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get(pathname, 'hashpath')
         except ConfigParser.NoOptionError, e:
-            return NEW
-        if self.new_hash == known_hash:
-            return KNOWN
-        return CHANGED
+            return (NEW, new_hash)
+        if new_hash == known_hash:
+            return (KNOWN, new_hash)
+        return (CHANGED, new_hash)
 
 
     def __scan(self):
         """Look for files and act accordingly"""
-        for pathname in list_cleanerml_files(local_only = True):
+        changes = []
+        for pathname in sorted(list_cleanerml_files(local_only = True)):
             pathname = os.path.abspath(pathname)
-            status = self.__recognized(pathname)
+            (status, hash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
-                ret = cleaner_change_dialog(pathname, status, \
-                    self.parent_window)
-                if not ret:
-                    print "info: deleting cleaner definition '%s'" % \
-                        pathname
-                    os.remove(pathname)
-                else:
-                    options.set(pathname, self.new_hash, 'hashpath')
+                changes.append([ pathname, status, hash ])
+        if len(changes) > 0:
+            cleaner_change_dialog(changes, self.parent_window)
+            for change in changes:
+                pathname = change[0]
+                hash = change[2]
+                print "info: remembering CleanerML file '%s'" % pathname
+                if os.path.exists(pathname):
+                    options.set(pathname, hash, 'hashpath')
 
 
 
