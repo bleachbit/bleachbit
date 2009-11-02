@@ -28,7 +28,7 @@
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\cookies.txt"/>
   </option>
   <option id="history">
-    <label>Usage history</label>
+    <label>History</label>
     <description>Delete the usage history</description>
     <!-- fixme: on Linux need a way to modify .ini files to wipe the MRU -->
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\realplayer.ste"/>
