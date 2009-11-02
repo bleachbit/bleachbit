@@ -39,9 +39,7 @@ import TestGeneral
 import TestMemory
 import TestOptions
 import TestRecognizeCleanerML
-import TestUnix
 import TestUpdate
-import TestWindows
 import TestWorker
 
 
@@ -60,9 +58,11 @@ suites = [ TestAction.suite(),
            TestWorker.suite() ]
 
 if 'posix' == os.name:
+    import TestUnix
     suites.append(TestUnix.suite())
 
 if 'nt' == os.name:
+    import TestWindows
     suites.append(TestWindows.suite())
 
 def suite():
