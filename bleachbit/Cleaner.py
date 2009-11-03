@@ -474,6 +474,7 @@ class System(Cleaner):
                 '$windir\\Debug\\*.log', \
                 '$windir\\Debug\\Setup\\UpdSh.log', \
                 '$windir\\Debug\\UserMode\\*.log', \
+                '$windir\\Debug\\UserMode\\ChkAcc.bak', \
                 '$windir\\Debug\\UserMode\\userenv.bak', \
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log', \
                 '$windir\\security\\logs\\*.log', \
