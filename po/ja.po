@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-01 20:58-0700\n"
-"PO-Revision-Date: 2009-11-04 17:06+0000\n"
+"PO-Revision-Date: 2009-11-05 03:13+0000\n"
 "Last-Translator: Yuki Kodama <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-04 19:40+0000\n"
+"X-Launchpad-Export-Date: 2009-11-05 14:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -391,7 +391,7 @@ msgstr "検索インデックスの削除 (キーワードとファイル名を�
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "不要ファイルクリーナ"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
@@ -403,19 +403,19 @@ msgstr "入力履歴"
 
 #: ../bleachbit/Cleaner.py:188
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
+msgstr "ウェブサイトのフォームまたは検索バーへの入力履歴"
 
 #: ../bleachbit/Cleaner.py:189
 msgid "Session restore"
-msgstr ""
+msgstr "セッションの復元"
 
 #: ../bleachbit/Cleaner.py:189
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
+msgstr "ブラウザが閉じられた、または正常終了しなかった場合、初期セッションを読み込む"
 
 #: ../bleachbit/Cleaner.py:349
 msgid "Delete the files in the rpmbuild build directory"
-msgstr ""
+msgstr "rpmbuild のビルドディレクトリのファイルの削除"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -425,21 +425,21 @@ msgstr ""
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:388
 msgid "Broken desktop files"
-msgstr ""
+msgstr "壊れた .desktop ファイル"
 
 #: ../bleachbit/Cleaner.py:388
 msgid "Delete broken application menu entries and file associations"
-msgstr ""
+msgstr "壊れたアプリケーションメニュー項目とファイルの関連付けの削除"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
 #: ../bleachbit/Cleaner.py:392
 msgid "Localizations"
-msgstr ""
+msgstr "ローカライゼーション"
 
 #: ../bleachbit/Cleaner.py:392
 msgid "Delete files for unwanted languages"
-msgstr ""
+msgstr "使用しない言語向けのファイルの削除"
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -447,89 +447,89 @@ msgstr ""
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:397
 msgid "Rotated logs"
-msgstr ""
+msgstr "古いシステムログファイル"
 
 #: ../bleachbit/Cleaner.py:397
 msgid "Delete old system logs"
-msgstr ""
+msgstr "古いシステムログファイルの削除"
 
 #: ../bleachbit/Cleaner.py:399
 msgid "Trash"
-msgstr ""
+msgstr "ゴミ箱"
 
 #: ../bleachbit/Cleaner.py:399
 msgid "Empty the trash"
-msgstr ""
+msgstr "ゴミ箱を空にする"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
 #: ../bleachbit/Cleaner.py:403 ../bleachbit/Cleaner.py:494
 msgid "Memory"
-msgstr ""
+msgstr "メモリ"
 
 #: ../bleachbit/Cleaner.py:403
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "メモリの空き領域を確保する"
 
 #: ../bleachbit/Cleaner.py:404
 msgid "This option is experimental and may cause system problems."
-msgstr ""
+msgstr "この項目は実験的なもので、システムエラーの原因となる可能性があります。"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:409
 msgid "Prefetch"
-msgstr ""
+msgstr "先読み"
 
 #: ../bleachbit/Cleaner.py:410
 msgid "Recycle bin"
-msgstr ""
+msgstr "ゴミ箱"
 
 #: ../bleachbit/Cleaner.py:410
 msgid "Empty the recycle bin"
-msgstr ""
+msgstr "ゴミ箱を空にする"
 
 #: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:566
 msgid "Clipboard"
-msgstr ""
+msgstr "クリップボード"
 
 #: ../bleachbit/Cleaner.py:412
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
+msgstr "コピー＆ペーストで使用するクリップボード。"
 
 #: ../bleachbit/Cleaner.py:413
 msgid "Free disk space"
-msgstr ""
+msgstr "ディスクの空き領域の確保"
 
 #: ../bleachbit/Cleaner.py:413
 msgid "Overwrite free disk space to hide deleted files"
-msgstr ""
+msgstr "削除済みファイルを上書きしてディスクの空き領域を確保する"
 
 #: ../bleachbit/Cleaner.py:418
 msgid "The system in general"
-msgstr ""
+msgstr "システム一般"
 
 #: ../bleachbit/Cleaner.py:424
 msgid "System"
-msgstr ""
+msgstr "システム"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
 #: ../bleachbit/Cleaner.py:588
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "ディスクの未使用領域を上書きする: %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
 #: ../bleachbit/Cleaner.py:616
 #, python-format
 msgid "Recycle bin %s"
-msgstr ""
+msgstr "ゴミ箱: %s"
 
 #: ../bleachbit/CLI.py:116
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "有効なクリーナではありません: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -541,7 +541,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:147
 msgid "list cleaners"
-msgstr ""
+msgstr "クリーナ一覧"
 
 #: ../bleachbit/CLI.py:149
 msgid "delete files and make other permanent changes"
@@ -553,7 +553,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:153
 msgid "output version information and exit"
-msgstr ""
+msgstr "バージョン情報を出力して終了する"
 
 #: ../bleachbit/CLI.py:155
 msgid "overwrite files to hide contents"
@@ -565,30 +565,30 @@ msgstr ""
 #: ../bleachbit/Command.py:57 ../bleachbit/GUI.py:538
 #: ../bleachbit/RecognizeCleanerML.py:106
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
 #: ../bleachbit/Command.py:77
 msgid "Mark for deletion"
-msgstr ""
+msgstr "削除マークを付ける"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:152
 msgid "Truncate"
-msgstr ""
+msgstr "切り詰める"
 
 #: ../bleachbit/Command.py:191
 msgid "Delete registry key"
-msgstr ""
+msgstr "レジストリキーの削除"
 
 #: ../bleachbit/FileUtilities.py:189
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
-msgstr ""
+msgstr "Python モジュールの sqlite3 をインポートできません: Python 2.5 またはそれ以上が必要です。"
 
 #: ../bleachbit/GuiBasic.py:86
 msgid "Delete confirmation"
-msgstr ""
+msgstr "削除の確認"
 
 #: ../bleachbit/GuiBasic.py:94
 msgid ""
@@ -603,19 +603,19 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:497
 msgid "Preferences"
-msgstr ""
+msgstr "設定"
 
 #: ../bleachbit/GuiPreferences.py:62
 msgid "General"
-msgstr ""
+msgstr "全般"
 
 #: ../bleachbit/GuiPreferences.py:63
 msgid "Drives"
-msgstr ""
+msgstr "ドライブ"
 
 #: ../bleachbit/GuiPreferences.py:65
 msgid "Languages"
-msgstr ""
+msgstr "言語"
 
 #: ../bleachbit/GuiPreferences.py:107
 msgid "Check periodically for software updates via the Internet"
@@ -654,7 +654,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:142
 msgid "Choose a folder"
-msgstr ""
+msgstr "フォルダの選択"
 
 #: ../bleachbit/GuiPreferences.py:162
 msgid ""
@@ -663,11 +663,11 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:182
 msgid "Add"
-msgstr ""
+msgstr "追加"
 
 #: ../bleachbit/GuiPreferences.py:184
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: ../bleachbit/GuiPreferences.py:209
 msgid "All languages will be deleted except those checked."
@@ -675,31 +675,31 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:227
 msgid "Preserve"
-msgstr ""
+msgstr "保管"
 
 #: ../bleachbit/GuiPreferences.py:231
 msgid "Code"
-msgstr ""
+msgstr "コード"
 
 #: ../bleachbit/GuiPreferences.py:235 ../bleachbit/GUI.py:142
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: ../bleachbit/GUI.py:150
 msgid "Active"
-msgstr ""
+msgstr "有効"
 
 #: ../bleachbit/GUI.py:341
 msgid "You must select an operation"
-msgstr ""
+msgstr "操作を選択してください"
 
 #: ../bleachbit/GUI.py:364 ../bleachbit/GUI.py:379
 msgid "Done."
-msgstr ""
+msgstr "完了"
 
 #: ../bleachbit/GUI.py:389
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "不要なファイルを削除する"
 
 #: ../bleachbit/GUI.py:394
 msgid ""
@@ -715,43 +715,43 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:437
 msgid "Choose files to shred"
-msgstr ""
+msgstr "シュレッダーにかけるファイルの選択"
 
 #: ../bleachbit/GUI.py:494
 msgid "_Shred Files"
-msgstr ""
+msgstr "シュレッダーにかける(_S)"
 
 #: ../bleachbit/GUI.py:495
 msgid "_Quit"
-msgstr ""
+msgstr "終了(_Q)"
 
 #: ../bleachbit/GUI.py:496
 msgid "_File"
-msgstr ""
+msgstr "ファイル(_F)"
 
 #: ../bleachbit/GUI.py:498
 msgid "_Edit"
-msgstr ""
+msgstr "編集(_E)"
 
 #: ../bleachbit/GUI.py:499
 msgid "Help Contents"
-msgstr ""
+msgstr "ヘルプの目次"
 
 #: ../bleachbit/GUI.py:500
 msgid "_Release Notes"
-msgstr ""
+msgstr "リリースノート(_R)"
 
 #: ../bleachbit/GUI.py:501
 msgid "_About"
-msgstr ""
+msgstr "バージョン情報(_A)"
 
 #: ../bleachbit/GUI.py:502
 msgid "_Help"
-msgstr ""
+msgstr "ヘルプ(_H)"
 
 #: ../bleachbit/GUI.py:528
 msgid "Preview"
-msgstr ""
+msgstr "プレビュー"
 
 #: ../bleachbit/GUI.py:531
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -759,19 +759,19 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:541
 msgid "Delete files in the selected operations"
-msgstr ""
+msgstr "選択された操作をファイルを削除"
 
 #: ../bleachbit/GUI.py:622
 msgid "Update BleachBit"
-msgstr ""
+msgstr "BleachBit のアップデート"
 
 #: ../bleachbit/GUI.py:627
 msgid "BleachBit update is available"
-msgstr ""
+msgstr "BleachBit の最新版があります"
 
 #: ../bleachbit/GUI.py:635
 msgid "Click 'Update BleachBit' for more information"
-msgstr ""
+msgstr "詳細は 'BleachBit のアップデート' をクリックしてください"
 
 #: ../bleachbit/GUI.py:651
 msgid "Error when checking for updates: "
@@ -779,7 +779,7 @@ msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
-msgstr ""
+msgstr "セキュリティ警告"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
@@ -792,12 +792,12 @@ msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:108
 msgid "Filename"
-msgstr ""
+msgstr "ファイル名"
 
 #: ../bleachbit/Unix.py:362 ../bleachbit/Unix.py:392 ../bleachbit/Unix.py:572
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "実行ファイルが見つかりません: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:569 ../bleachbit/Worker.py:129
@@ -820,48 +820,48 @@ msgstr ""
 #: ../bleachbit/Worker.py:175
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr ""
+msgstr "クリーニング中です、お待ちください... %s"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "プレビュー作成中です、お待ちください... %s"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py:218
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr ""
+msgstr "ディスク容量の増加: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:222
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr ""
+msgstr "増加するディスク容量: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py:227
 #, python-format
 msgid "Files deleted: %d"
-msgstr ""
+msgstr "削除されたファイル数: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py:231
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr ""
+msgstr "削除されるファイル数: %d"
 
 #: ../bleachbit/Worker.py:234
 #, python-format
 msgid "Special operations: %d"
-msgstr ""
+msgstr "特殊な操作数: %d"
 
 #: ../bleachbit/Worker.py:237
 #, python-format
 msgid "Errors: %d"
-msgstr ""
+msgstr "エラー: %d"
