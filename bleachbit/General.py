@@ -144,6 +144,11 @@ def sudo_mode():
     if 'linux2' != sys.platform:
         return False
 
+    if 'root' = os.getenv('USER'):
+        # gksu in Ubuntu 9.10 changes the username.  If the username is root,
+        # we're practically not in sudo mode.
+        return False
+
     return os.getenv('SUDO_UID') != None
 
 
