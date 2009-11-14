@@ -244,6 +244,7 @@ class Firefox(Cleaner):
         if 'passwords' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons.txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons[2-3].txt")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "signons.sqlite")
         # places database
         if 'places' == option_id:
             # Firefox version 3
