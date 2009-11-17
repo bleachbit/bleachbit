@@ -41,6 +41,7 @@ These are the terms:
 
 
 import os
+import platform
 import sys
 import traceback
 
@@ -161,6 +162,51 @@ def delete_registry_key(parent_key, really_delete):
         delete_registry_key(child_key, True)
     _winreg.DeleteKey(hive, parent_sub_key)
     return True
+
+
+def elevate_privileges():
+    """On Windows Vista and later, try to get administrator
+    privileges.  If successful, return True (so original process
+    can exit).  If failed or not applicable, return False."""
+
+
+    if platform.version() <= '5.2':
+        # Earlier than Vista
+        return False
+
+    if shell.IsUserAnAdmin():
+        print 'debug: already an admin (UAC not required)'
+        return False
+
+    if hasattr(sys, 'frozen'):
+        # running frozen in py2exe
+        exe = unicode(sys.executable, sys.getfilesystemencoding())
+        py = None
+    else:
+        # __file__ is absolute path to bleachbit/Windows.py
+        pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
+        py = '"%s"' % os.path.join(pydir, 'GUI.py')
+        exe = sys.executable
+
+    print 'debug: exe=', exe, ' parameters=', py
+    rc = None
+    try:
+        rc = shell.ShellExecuteEx(lpVerb = 'runas',
+            lpFile = exe,
+            lpParameters = py,
+            nShow = win32con.SW_SHOW)
+    except pywintypes.error, e:
+        if 1223 == e.winerror:
+            print 'debug: user denied the UAC dialog'
+            return False
+        raise
+
+    print 'debug: ShellExecuteEx=', rc
+
+    if isinstance(rc, dict):
+        return True
+
+    return False
 
 
 def enumerate_processes():

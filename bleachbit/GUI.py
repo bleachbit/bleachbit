@@ -653,6 +653,9 @@ class GUI:
 
 
     def __init__(self):
+        if 'nt' == os.name and Windows.elevate_privileges():
+            # privileges escalated in other process
+            sys.exit(0)
         import RecognizeCleanerML
         RecognizeCleanerML.RecognizeCleanerML()
         import CleanerML
