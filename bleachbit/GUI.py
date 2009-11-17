@@ -3,7 +3,7 @@
 
 ## BleachBit
 ## Copyright (C) 2009 Andrew Ziem
-## http://bleachbit.sourceforge.net
+## http://sourceforge.net
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -34,15 +34,16 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from bleachbit.Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+from Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, online_update_notification_enabled, \
     release_notes_url
-from bleachbit.Cleaner import backends
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Options import options
-import bleachbit.Cleaner
-import bleachbit.GuiBasic
-import bleachbit.FileUtilities
+from Cleaner import backends
+from GuiPreferences import PreferencesDialog
+from Options import options
+import Cleaner
+import FileUtilities
+import GuiBasic
+import Windows
 
 
 def open_url(url):
@@ -177,7 +178,7 @@ class TreeDisplayModel:
             # when toggling an option, present any warnings
             warning = backends[cleaner_id].get_warning(option_id)
             if warning:
-                resp = bleachbit.GuiBasic.message_dialog(parent_window, \
+                resp = GuiBasic.message_dialog(parent_window, \
                     warning, \
                     gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL)
                 if gtk.RESPONSE_OK != resp:
@@ -320,7 +321,7 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not bleachbit.GuiBasic.delete_confirmation_dialog(self.window, True):
+        if not GuiBasic.delete_confirmation_dialog(self.window, True):
             return
         self.preview_or_run_operations(True)
 
@@ -329,7 +330,7 @@ class GUI:
         """Preview operations or run operations (delete files)"""
 
         assert(isinstance(really_delete, bool))
-        import bleachbit.Worker
+        import Worker
         self.start_time = None
         if None == operations:
             operations = {}
@@ -337,7 +338,7 @@ class GUI:
                 operations[operation] = self.get_operation_options(operation)
         assert(isinstance(operations, dict))
         if 0 == len(operations):
-            bleachbit.GuiBasic.message_dialog(self.window, \
+            GuiBasic.message_dialog(self.window, \
                 _("You must select an operation"),
                 gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
             return
@@ -345,7 +346,7 @@ class GUI:
             self.set_sensitive(False)
             self.textbuffer.set_text("")
             self.progressbar.show()
-            self.worker = bleachbit.Worker.Worker(self, really_delete, operations)
+            self.worker = Worker.Worker(self, really_delete, operations)
         except:
             traceback.print_exc()
             err = str(sys.exc_info()[1])
@@ -433,20 +434,20 @@ class GUI:
         """Callback for shredding a file"""
 
         # get list of files
-        paths = bleachbit.GuiBasic.browse_files(self.window, \
+        paths = GuiBasic.browse_files(self.window, \
             _("Choose files to shred"))
 
         if not paths:
             return
 
         # create a temporary cleaner object
-        backends['_gui'] = bleachbit.Cleaner.create_simple_cleaner(paths)
+        backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
         # preview and confirm
         operations = { '_gui' : [ 'files' ] }
         self.preview_or_run_operations(False, operations)
 
-        if bleachbit.GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
+        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
             options.set('shred', True, commit = False)
             self.preview_or_run_operations(True, operations)
@@ -470,7 +471,7 @@ class GUI:
     def update_total_size(self, bytes):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
-        text = bleachbit.FileUtilities.bytes_to_human(bytes)
+        text = FileUtilities.bytes_to_human(bytes)
         if 0 == bytes:
             text = ""
         self.status_bar.push(context_id, text)
@@ -642,9 +643,9 @@ class GUI:
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        import bleachbit.Update
+        import Update
         try:
-            update = bleachbit.Update.Update()
+            update = Update.Update()
             if update.is_update_available():
                 gobject.idle_add(self.enable_online_update, update.get_update_info_url())
         except:
@@ -652,10 +653,10 @@ class GUI:
 
 
     def __init__(self):
-        import bleachbit.RecognizeCleanerML
-        bleachbit.RecognizeCleanerML.RecognizeCleanerML()
-        import bleachbit.CleanerML
-        bleachbit.CleanerML.load_cleaners()
+        import RecognizeCleanerML
+        RecognizeCleanerML.RecognizeCleanerML()
+        import CleanerML
+        CleanerML.load_cleaners()
         self.create_window()
         gobject.threads_init()
         if options.get("first_start") and 'posix' == os.name:
