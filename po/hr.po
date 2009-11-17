@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-01 20:58-0700\n"
-"PO-Revision-Date: 2009-11-03 12:01+0000\n"
-"Last-Translator: Saša Teković <Unknown>\n"
+"PO-Revision-Date: 2009-11-17 06:24+0000\n"
+"Last-Translator: nafterburner <nafterburner@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-03 13:40+0000\n"
+"X-Launchpad-Export-Date: 2009-11-17 14:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -811,7 +811,7 @@ msgstr "Greška pri provjeri ažuriranja: "
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
-msgstr ""
+msgstr "Sigurnosno upozorenje"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
@@ -821,10 +821,13 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
+"Ove čistije definicije su nove ili su se promijenile. Zlonamjerne definicije "
+"mogu oštetiti vaš sustav. Ako ne vjerujete ovim promjenama, izbrišite "
+"datoteke ili odustanite."
 
 #: ../bleachbit/RecognizeCleanerML.py:108
 msgid "Filename"
-msgstr ""
+msgstr "Ime datoteke"
 
 #: ../bleachbit/Unix.py:362 ../bleachbit/Unix.py:392 ../bleachbit/Unix.py:572
 #, python-format
