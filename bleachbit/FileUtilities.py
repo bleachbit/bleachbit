@@ -130,7 +130,13 @@ def delete(path, shred = False):
     if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
         os.remove(path)
     elif stat.S_ISDIR(mode):
-        os.rmdir(path)
+        try:
+            os.rmdir(path)
+        except WindowsError, e:
+            if 145 == e.winerror:
+                print "info: directory '%s' is not empty" % (path)
+            else:
+                raise
     elif stat.S_ISREG(mode):
         if shred or options.get('shred'):
             try:
