@@ -147,6 +147,8 @@ def process_cmd_line():
         help = _("list cleaners"))
     parser.add_option("-d", "--delete", action = "store_true",
         help = _("delete files and make other permanent changes"))
+    parser.add_option("--diagnostic", action = "store_true",
+        help = _("show diagnostic information"))
     parser.add_option("-p", "--preview", action = "store_true",
         help = _("preview files to be deleted and other changes"))
     parser.add_option("-v", "--version", action = "store_true",
@@ -175,6 +177,10 @@ There is NO WARRANTY, to the extent permitted by law.""" % Common.APP_VERSION
     if options.delete:
         operations = args_to_operations(args)
         preview_or_delete(operations, True)
+        sys.exit(0)
+    if options.diagnostic:
+        import Diagnostic
+        print Diagnostic.diagnostic_info()
         sys.exit(0)
     parser.print_help()
 

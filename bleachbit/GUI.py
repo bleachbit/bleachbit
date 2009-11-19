@@ -401,7 +401,39 @@ class GUI:
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_version(APP_VERSION)
         dialog.set_website(APP_URL)
-        dialog.run()
+        dialog.add_buttons(_("Diagnostics"), 100)
+        while True:
+            rc = dialog.run()
+            if 100 == rc:
+                self.diagnostic_dialog(dialog)
+            else:
+                break
+        dialog.hide()
+
+
+    def diagnostic_dialog(self, parent):
+        """Show diagnostic information"""
+        dialog = gtk.Dialog(_("Diagnostics"), parent)
+        dialog.resize(600, 400)
+        buffer = gtk.TextBuffer()
+        import Diagnostic
+        txt = Diagnostic.diagnostic_info()
+        buffer.set_text(txt)
+        textview = gtk.TextView(buffer)
+        textview.set_editable(False)
+        swindow = gtk.ScrolledWindow()
+        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        swindow.add_with_viewport(textview)
+        dialog.vbox.pack_start(swindow)
+        dialog.add_buttons(gtk.STOCK_COPY, 100, gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+        dialog.show_all()
+        while True:
+            rc = dialog.run()
+            if 100 == rc:
+                clipboard = gtk.clipboard_get()
+                clipboard.set_text(txt)
+            else:
+                break
         dialog.hide()
 
 
