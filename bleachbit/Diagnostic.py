@@ -33,7 +33,7 @@ import sys
 
 if 'nt' == os.name:
     import Windows
-    from win32com import shell
+    from win32com.shell import shell
 
 
 
@@ -53,6 +53,6 @@ def diagnostic_info():
     s += "\nsys.executable = %s" % sys.executable
     s += "\nsys.version = %s" % sys.version
     if 'nt' == os.name:
-        s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % win32com.shell.shell.IsUserAnAdmin()
+        s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % shell.IsUserAnAdmin()
     s += "\n__file__ = %s" % __file__
     return s
