@@ -401,7 +401,7 @@ class GUI:
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_version(APP_VERSION)
         dialog.set_website(APP_URL)
-        dialog.add_buttons(_("Diagnostics"), 100)
+        dialog.add_buttons(_("System information"), 100)
         while True:
             rc = dialog.run()
             if 100 == rc:
@@ -413,7 +413,7 @@ class GUI:
 
     def diagnostic_dialog(self, parent):
         """Show diagnostic information"""
-        dialog = gtk.Dialog(_("Diagnostics"), parent)
+        dialog = gtk.Dialog(_("System information"), parent)
         dialog.resize(600, 400)
         buffer = gtk.TextBuffer()
         import Diagnostic
