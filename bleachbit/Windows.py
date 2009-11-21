@@ -181,7 +181,7 @@ def elevate_privileges():
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
         exe = unicode(sys.executable, sys.getfilesystemencoding())
-        py = None
+        py = ""
     else:
         # __file__ is absolute path to bleachbit/Windows.py
         pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
