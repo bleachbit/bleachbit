@@ -230,6 +230,7 @@ class GUI:
         <menu action="Help">
             <menuitem action="HelpContents"/>
             <menuitem action="ReleaseNotes"/>
+            <menuitem action="SystemInformation"/>
             <menuitem action="About"/>
         </menu>
     </menubar>
@@ -405,13 +406,7 @@ class GUI:
         if os.path.exists(appicon_path):
             icon = gtk.gdk.pixbuf_new_from_file(appicon_path)
             dialog.set_logo(icon)
-        dialog.add_buttons(_("System information"), 100)
-        while True:
-            rc = dialog.run()
-            if 100 == rc:
-                self.diagnostic_dialog(dialog)
-            else:
-                break
+        dialog.run()
         dialog.hide()
 
 
@@ -535,6 +530,7 @@ class GUI:
                     ('Edit', None, _("_Edit")),
                     ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None, lambda link: open_url(help_contents_url)),
                     ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None, lambda link: open_url(release_notes_url)),
+                    ('SystemInformation', None, _('_System Information'), None, None, lambda foo: self.diagnostic_dialog(self.window)),
                     ('About', gtk.STOCK_ABOUT, _('_About'), None, None, self.about),
                     ('Help', None, _("_Help")))
         actiongroup.add_actions(entries)
