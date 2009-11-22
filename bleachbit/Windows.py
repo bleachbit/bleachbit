@@ -189,6 +189,13 @@ def elevate_privileges():
         exe = sys.executable
 
     print 'debug: exe=', exe, ' parameters=', py
+
+    # If the Python file is on a network drive, do not offer the UAC because
+    # the administrator may not have privileges and user will not be prompted.
+    if path_on_network(py):
+        print "debug: skipping UAC because '%s' is on network" % py
+        return False
+
     rc = None
     try:
         rc = shell.ShellExecuteEx(lpVerb = 'runas',
@@ -296,4 +303,9 @@ def start_with_computer_check():
     return os.path.lexists(Common.autostart_path)
 
 
-
+def path_on_network(path):
+    """Check whether 'path' is on a network drive"""
+    if len(os.path.splitunc(path)[0]) > 0:
+        return True
+    drive = os.path.splitdrive(path)[0] + '\\'
+    return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE

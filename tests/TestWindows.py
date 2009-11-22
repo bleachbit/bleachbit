@@ -150,6 +150,12 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(b, three_b)
 
 
+    def test_path_on_network(self):
+        """Unit test for path_on_network"""
+        self.assertEqual(path_on_network('c:\\bleachbit.exe'), False)
+        self.assertEqual(path_on_network('a:\\bleachbit.exe'), False)
+        self.assertEqual(path_on_network('\\\\Server\\Folder\\bleachbit.exe'), True)
+
 
 def suite():
     return unittest.makeSuite(WindowsTestCase)
