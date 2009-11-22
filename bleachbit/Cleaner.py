@@ -483,6 +483,8 @@ class System(Cleaner):
                 '$windir\\system32\\TZLog.log', \
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
+                '$windir\\system32\\LogFiles\\Firewall\\pfirewall.log*', \
+                '$windir\\system32\\LogFiles\\Scm\\SCM.EVM*', \
                 '$windir\\system32\\wbem\\Logs\\*.lo_', \
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
