@@ -185,16 +185,17 @@ def elevate_privileges():
     else:
         # __file__ is absolute path to bleachbit/Windows.py
         pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
-        py = '"%s"' % os.path.join(pydir, 'GUI.py')
+        pyfile = os.path.join(pydir, 'GUI.py')
+        # If the Python file is on a network drive, do not offer the UAC because
+        # the administrator may not have privileges and user will not be prompted.
+        if len(py) > 0 and path_on_network(pyfile):
+            print "debug: skipping UAC because '%s' is on network" % pyfile
+            return False
+        py = '"%s"' % pyfile
         exe = sys.executable
 
     print 'debug: exe=', exe, ' parameters=', py
 
-    # If the Python file is on a network drive, do not offer the UAC because
-    # the administrator may not have privileges and user will not be prompted.
-    if len(py) > 0 and path_on_network(py):
-        print "debug: skipping UAC because '%s' is on network" % py
-        return False
 
     rc = None
     try:
