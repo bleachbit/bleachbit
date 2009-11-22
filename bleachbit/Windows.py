@@ -265,7 +265,8 @@ def get_fixed_drives():
 def empty_recycle_bin(drive, really_delete):
     """Empty the recycle bin or preview its size"""
     bytes_used = shell.SHQueryRecycleBin(drive)[0]
-    if really_delete:
+    if really_delete and bytes_used > 0:
+        # Trying to delete an empty Recycle Bin on Vista/7 causes a 'catastrophic failure'
         flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
         shell.SHEmptyRecycleBin(None, drive, flags)
     return bytes_used
