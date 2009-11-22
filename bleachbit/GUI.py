@@ -370,7 +370,7 @@ class GUI:
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
         print 'debug: elapsed time: %d seconds' % elapsed
-        if elapsed < 10:
+        if elapsed < 10 or self.window.is_active():
             return
         try:
             import pynotify
