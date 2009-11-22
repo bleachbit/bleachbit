@@ -24,6 +24,6 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action command="winreg" path="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Paint\Recent File List"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Paint\Recent File List"/>
   </option>
 </cleaner>
