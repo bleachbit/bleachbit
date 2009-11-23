@@ -381,6 +381,7 @@ class GUI:
                 notify = pynotify.Notification('BleachBit', _("Done."), \
                     icon = 'bleachbit')
                 notify.show()
+                notify.set_timeout(10000)
 
 
 
