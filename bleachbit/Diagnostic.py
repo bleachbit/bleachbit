@@ -40,6 +40,11 @@ if 'nt' == os.name:
 def diagnostic_info():
     """Return diagnostic information as a string"""
     s = "BleachBit version %s" % Common.APP_VERSION
+    s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
+    s += "\nlocale_dir = %s" % Common.locale_dir
+    s += "\noptions_dir = %s" % Common.options_dir
+    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir
+    s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
         for value in ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID'):
