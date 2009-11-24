@@ -62,4 +62,7 @@ def diagnostic_info():
     if 'nt' == os.name:
         s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % shell.IsUserAnAdmin()
     s += "\n__file__ = %s" % __file__
+    if 'nt' == os.name:
+        for p in Windows.enumerate_processes():
+            s += '\nrunning process: %s' % p
     return s
