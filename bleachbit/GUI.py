@@ -43,7 +43,10 @@ from Options import options
 import Cleaner
 import FileUtilities
 import GuiBasic
-import Windows
+
+if 'nt' == os.name:
+    import Windows
+
 
 
 def open_url(url):
