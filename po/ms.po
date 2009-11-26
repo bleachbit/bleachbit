@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-25 15:07-0700\n"
-"PO-Revision-Date: 2009-11-25 18:05+0000\n"
+"PO-Revision-Date: 2009-11-26 05:52+0000\n"
 "Last-Translator: Ibrahim Elias <imen802003@netscape.net>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-25 19:20+0000\n"
+"X-Launchpad-Export-Date: 2009-11-26 07:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -397,7 +397,8 @@ msgid "Index"
 msgstr "Indeks"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr "Hapus indeks carian, database perkataan dan failnya"
 
 #: ../bleachbit.desktop
@@ -506,8 +507,10 @@ msgid "Clipboard"
 msgstr "Clipboard"
 
 #: ../bleachbit/Cleaner.py:413
-msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr "Desktop environment's clipboard digunakan untuk operasi copy dan paste"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+"Desktop environment's clipboard digunakan untuk operasi copy dan paste"
 
 #: ../bleachbit/Cleaner.py:414
 msgid "Free disk space"
@@ -533,7 +536,8 @@ msgstr "Sistem"
 msgid "Overwrite free disk space %s"
 msgstr "Overwrite ruang disk kosong %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:620
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:620
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Tong Recycle %s"
@@ -774,7 +778,7 @@ msgstr "_Catatan Versi Keluaran"
 
 #: ../bleachbit/GUI.py:537
 msgid "_System Information"
-msgstr ""
+msgstr "_Maklumat Sistem"
 
 #: ../bleachbit/GUI.py:538
 msgid "_About"
@@ -844,7 +848,8 @@ msgstr "Executable tidak dijumpai: %s"
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
-msgstr "%s tak boleh dibersihkan kerana sedang berjalan.  Tutup dan cuba lagi."
+msgstr ""
+"%s tak boleh dibersihkan kerana sedang berjalan.  Tutup dan cuba lagi."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
