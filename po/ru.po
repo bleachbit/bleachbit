@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-11-25 15:07-0700\n"
-"PO-Revision-Date: 2009-11-02 18:36+0000\n"
+"PO-Revision-Date: 2009-11-26 02:02+0000\n"
 "Last-Translator: Ilia Lilov aka lilovip <lilovil@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-02 20:44+0000\n"
+"X-Launchpad-Export-Date: 2009-11-26 17:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -151,7 +151,8 @@ msgstr "Редактор"
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "Удалить ~/.viminfo, включающий историю файлов, историю команд и буферы"
+msgstr ""
+"Удалить ~/.viminfo, включающий историю файлов, историю команд и буферы"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
@@ -400,7 +401,8 @@ msgid "Index"
 msgstr "Индекс"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Удалить поисковый индекс, базу данных слов и файлы, которые они содержат"
 
@@ -508,7 +510,8 @@ msgid "Clipboard"
 msgstr "Буфер"
 
 #: ../bleachbit/Cleaner.py:413
-msgid "The desktop environment's clipboard used for copy and paste operations"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Буфер обмена окружения рабочего стола, используемый для операций копирования "
 "и вставки"
@@ -537,7 +540,8 @@ msgstr "Система"
 msgid "Overwrite free disk space %s"
 msgstr "Перезаписать свободное дисковое пространство в %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:620
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:620
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Корзина для %s"
@@ -565,7 +569,7 @@ msgstr "удалить файлы и сделать остальные перм�
 
 #: ../bleachbit/CLI.py:151
 msgid "show system information"
-msgstr ""
+msgstr "показать информацию о системе"
 
 #: ../bleachbit/CLI.py:153
 msgid "preview files to be deleted and other changes"
@@ -747,12 +751,12 @@ msgstr ""
 "  Ilia Lilov aka lilovip https://launchpad.net/~lilovil-gmail\n"
 "  Iryna Nikanchuk https://launchpad.net/~unetriste\n"
 "  Sergey Sedov https://launchpad.net/~serg-sedov\n"
-"  SkyManPHP https://launchpad.net/~skymanphp\n"
-"  Vadim Peretokin https://launchpad.net/~vperetokin"
+"  Vadim Peretokin https://launchpad.net/~vperetokin\n"
+"  Сергій Матрунчик (SkyMan) https://launchpad.net/~skymanphp"
 
 #: ../bleachbit/GUI.py:419
 msgid "System information"
-msgstr ""
+msgstr "Информация о системе"
 
 #: ../bleachbit/GUI.py:473
 msgid "Choose files to shred"
@@ -784,7 +788,7 @@ msgstr "_Примечания к выпуску"
 
 #: ../bleachbit/GUI.py:537
 msgid "_System Information"
-msgstr ""
+msgstr "_System Information"
 
 #: ../bleachbit/GUI.py:538
 msgid "_About"
