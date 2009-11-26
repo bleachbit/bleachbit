@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-11-21 11:12-0700\n"
-"PO-Revision-Date: 2009-11-25 07:03+0000\n"
+"POT-Creation-Date: 2009-11-25 15:07-0700\n"
+"PO-Revision-Date: 2009-11-26 06:47+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-25 16:52+0000\n"
+"X-Launchpad-Export-Date: 2009-11-26 15:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -81,7 +81,8 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../bleachbit/Cleaner.py:207
+#: ../cleaners/elinks.xml ../cleaners/konqueror.xml
+#: ../bleachbit/Cleaner.py:207
 msgid "Web browser"
 msgstr "דפדפן אינטרנט"
 
@@ -94,16 +95,16 @@ msgstr "מחיקת מטמון הרשת, המפחית את הזמן שנדרש ע
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:186
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid "Cookies"
 msgstr "עוגיות"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:186
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -124,11 +125,11 @@ msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr "מחיקת ההיסטוריה הכוללת את האתרים בהם ביקרת, הורדות ותמונות ממוזערות."
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
 msgstr "ההפעלה הנוכחית"
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
 msgstr "מחיקת ההפעלה הנוכחית"
 
@@ -194,7 +195,8 @@ msgid "Delete the temporary files"
 msgstr "מחיקת הקבצים הזמניים"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml
+#: ../bleachbit/Cleaner.py:193
 msgid "List of visited web pages"
 msgstr "רשימת האתרים בהם ביקרתם"
 
@@ -202,7 +204,7 @@ msgstr "רשימת האתרים בהם ביקרתם"
 #: ../cleaners/winamp.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:288
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:288
 msgid "Most recently used"
 msgstr "בשימוש לאחרונה"
 
@@ -268,13 +270,14 @@ msgstr "היסטוריית ההורדות"
 msgid "List of files downloaded"
 msgstr "רשימת הקבצים שהורדו"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:193
 msgid "URL history"
 msgstr "היסטוריית כתובות"
 
 #: ../cleaners/winrar.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
+#: ../cleaners/paint.xml
 msgid "Delete the most recently used list"
 msgstr "מחיקת רשימת הפריטים בהם נעשה שימוש לאחרונה"
 
@@ -469,7 +472,7 @@ msgstr "פינוי האשפה"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:404 ../bleachbit/Cleaner.py:496
+#: ../bleachbit/Cleaner.py:404 ../bleachbit/Cleaner.py:498
 msgid "Memory"
 msgstr "זכרון"
 
@@ -494,7 +497,7 @@ msgstr "סל המיחזור"
 msgid "Empty the recycle bin"
 msgstr "פינוי סל המיחזור"
 
-#: ../bleachbit/Cleaner.py:413 ../bleachbit/Cleaner.py:568
+#: ../bleachbit/Cleaner.py:413 ../bleachbit/Cleaner.py:570
 msgid "Clipboard"
 msgstr "לוח הגזירים"
 
@@ -521,13 +524,13 @@ msgstr "מערכת"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:590
+#: ../bleachbit/Cleaner.py:592
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "שכתוב השטח הפנוי במיקום %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:618
+#: ../bleachbit/Cleaner.py:620
 #, python-format
 msgid "Recycle bin %s"
 msgstr "סל המיחזור %s"
@@ -572,7 +575,7 @@ msgstr "שכתוב על הקבצים להסתרת התוכן"
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
 #. TRANSLATORS: This is the delete button on the main window
-#: ../bleachbit/Command.py:57 ../bleachbit/GUI.py:571
+#: ../bleachbit/Command.py:57 ../bleachbit/GUI.py:575
 #: ../bleachbit/RecognizeCleanerML.py:106
 msgid "Delete"
 msgstr "מחיקה"
@@ -613,7 +616,7 @@ msgstr ""
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "האם למחוק קבצים אלו?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:530
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:533
 msgid "Preferences"
 msgstr "העדפות"
 
@@ -698,27 +701,27 @@ msgstr "שימור"
 msgid "Code"
 msgstr "קוד"
 
-#: ../bleachbit/GuiPreferences.py:235 ../bleachbit/GUI.py:143
+#: ../bleachbit/GuiPreferences.py:235 ../bleachbit/GUI.py:146
 msgid "Name"
 msgstr "שם"
 
-#: ../bleachbit/GUI.py:151
+#: ../bleachbit/GUI.py:154
 msgid "Active"
 msgstr "פעיל"
 
-#: ../bleachbit/GUI.py:342
+#: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
 msgstr "יש לבחור בפעולה"
 
-#: ../bleachbit/GUI.py:365 ../bleachbit/GUI.py:380
+#: ../bleachbit/GUI.py:369 ../bleachbit/GUI.py:384
 msgid "Done."
 msgstr "בוצע."
 
-#: ../bleachbit/GUI.py:390
+#: ../bleachbit/GUI.py:395
 msgid "Program to clean unnecessary files"
 msgstr "תוכנית לניקוי הקבצים הבלתי נחוצים"
 
-#: ../bleachbit/GUI.py:395
+#: ../bleachbit/GUI.py:400
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -727,78 +730,82 @@ msgstr ""
 "ניתן לעיין בכתובת http://www.gnu.org/licenses/gpl-3.0.txt\n"
 "או בעברית http://www.law.co.il/media/computer-law/gpl-hebrew.html"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:406
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Ddorda https://launchpad.net/~ddorda\n"
 "  Yaron https://launchpad.net/~sh-yaron"
 
-#: ../bleachbit/GUI.py:404 ../bleachbit/GUI.py:416
+#: ../bleachbit/GUI.py:419
 msgid "System information"
 msgstr "נתוני המערכת"
 
-#: ../bleachbit/GUI.py:470
+#: ../bleachbit/GUI.py:473
 msgid "Choose files to shred"
 msgstr "בחרו קבצים להשמדה"
 
-#: ../bleachbit/GUI.py:527
+#: ../bleachbit/GUI.py:530
 msgid "_Shred Files"
 msgstr "ה_שמדת קבצים"
 
-#: ../bleachbit/GUI.py:528
+#: ../bleachbit/GUI.py:531
 msgid "_Quit"
 msgstr "י_ציאה"
 
-#: ../bleachbit/GUI.py:529
+#: ../bleachbit/GUI.py:532
 msgid "_File"
 msgstr "_קובץ"
 
-#: ../bleachbit/GUI.py:531
+#: ../bleachbit/GUI.py:534
 msgid "_Edit"
 msgstr "ע_ריכה"
 
-#: ../bleachbit/GUI.py:532
+#: ../bleachbit/GUI.py:535
 msgid "Help Contents"
 msgstr "תכני העזרה"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "_Release Notes"
 msgstr "הערות ה_פצה"
 
-#: ../bleachbit/GUI.py:534
+#: ../bleachbit/GUI.py:537
+msgid "_System Information"
+msgstr "_נתוני המערכת"
+
+#: ../bleachbit/GUI.py:538
 msgid "_About"
 msgstr "על _אודות"
 
-#: ../bleachbit/GUI.py:535
+#: ../bleachbit/GUI.py:539
 msgid "_Help"
 msgstr "ע_זרה"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:565
 msgid "Preview"
 msgstr "תצוגה מקדימה"
 
-#: ../bleachbit/GUI.py:564
+#: ../bleachbit/GUI.py:568
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "תצוגה מקדימה של קבצים בפעולות הנבחרות (ללא מחיקת קבצים כלשהם)"
 
-#: ../bleachbit/GUI.py:574
+#: ../bleachbit/GUI.py:578
 msgid "Delete files in the selected operations"
 msgstr "מחיקת קבצים בפעולות שנבחרו"
 
-#: ../bleachbit/GUI.py:655
+#: ../bleachbit/GUI.py:659
 msgid "Update BleachBit"
 msgstr "עדכון BleachBit"
 
-#: ../bleachbit/GUI.py:660
+#: ../bleachbit/GUI.py:664
 msgid "BleachBit update is available"
 msgstr "ישנו עדכון זמין עבור BleachBit"
 
-#: ../bleachbit/GUI.py:668
+#: ../bleachbit/GUI.py:672
 msgid "Click 'Update BleachBit' for more information"
 msgstr "יש ללחוץ על \"עדכון BleachBit\" למידע נוסף"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:688
 msgid "Error when checking for updates: "
 msgstr "שגיאה בעת בדיקה אחר עדכונים: "
 
