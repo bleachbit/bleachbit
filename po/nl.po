@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-11-21 11:12-0700\n"
-"PO-Revision-Date: 2009-11-25 11:35+0000\n"
-"Last-Translator: Peter Schelleman <Unknown>\n"
+"POT-Creation-Date: 2009-11-25 15:07-0700\n"
+"PO-Revision-Date: 2009-11-27 08:40+0000\n"
+"Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-25 16:52+0000\n"
+"X-Launchpad-Export-Date: 2009-11-27 14:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -82,7 +82,8 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../bleachbit/Cleaner.py:207
+#: ../cleaners/elinks.xml ../cleaners/konqueror.xml
+#: ../bleachbit/Cleaner.py:207
 msgid "Web browser"
 msgstr "Webbrowser"
 
@@ -97,16 +98,16 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:186
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid "Cookies"
 msgstr "Cookies"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:186
+#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -129,11 +130,11 @@ msgid ""
 msgstr ""
 "Verwijder de geschiedenis met bezochte websites, downloads en thumbnails"
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
 msgstr "Huidige sessie"
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
 msgstr "Verwijder de huidige sessie"
 
@@ -201,7 +202,8 @@ msgid "Delete the temporary files"
 msgstr "Verwijder de tijdelijke bestanden"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml
+#: ../bleachbit/Cleaner.py:193
 msgid "List of visited web pages"
 msgstr "Lijst met bezochte websites"
 
@@ -209,7 +211,7 @@ msgstr "Lijst met bezochte websites"
 #: ../cleaners/winamp.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:288
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:288
 msgid "Most recently used"
 msgstr "Meest recent gebruikt"
 
@@ -275,13 +277,14 @@ msgstr "Download geschiedenis"
 msgid "List of files downloaded"
 msgstr "Lijst met gedownloade bestanden"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:193
 msgid "URL history"
 msgstr "URL geschiedenis"
 
 #: ../cleaners/winrar.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
+#: ../cleaners/paint.xml
 msgid "Delete the most recently used list"
 msgstr "Verwijder de recentst gebruikte lijst"
 
@@ -422,7 +425,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:189
 msgid "Session restore"
-msgstr ""
+msgstr "Sessie herstellen"
 
 #: ../bleachbit/Cleaner.py:189
 msgid "Loads the initial session after the browser closes or crashes"
@@ -478,7 +481,7 @@ msgstr "Prullenbak legen"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:404 ../bleachbit/Cleaner.py:496
+#: ../bleachbit/Cleaner.py:404 ../bleachbit/Cleaner.py:498
 msgid "Memory"
 msgstr "Geheugen"
 
@@ -503,7 +506,7 @@ msgstr "Prullenbak"
 msgid "Empty the recycle bin"
 msgstr "Prullenbak leegmaken"
 
-#: ../bleachbit/Cleaner.py:413 ../bleachbit/Cleaner.py:568
+#: ../bleachbit/Cleaner.py:413 ../bleachbit/Cleaner.py:570
 msgid "Clipboard"
 msgstr "Klembord"
 
@@ -532,13 +535,13 @@ msgstr "Systeem"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:590
+#: ../bleachbit/Cleaner.py:592
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Overschrijf de vrije schijfruimte %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:618
+#: ../bleachbit/Cleaner.py:620
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Prullenbak %s"
@@ -583,7 +586,7 @@ msgstr "Overschrijf bestanden om de inhoud te verbergen"
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
 #. TRANSLATORS: This is the delete button on the main window
-#: ../bleachbit/Command.py:57 ../bleachbit/GUI.py:571
+#: ../bleachbit/Command.py:57 ../bleachbit/GUI.py:575
 #: ../bleachbit/RecognizeCleanerML.py:106
 msgid "Delete"
 msgstr "Verwijder"
@@ -626,7 +629,7 @@ msgstr ""
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Weet u zeker dat u deze bestanden permanent wilt verwijderen?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:530
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:533
 msgid "Preferences"
 msgstr "Voorkeuren"
 
@@ -713,27 +716,27 @@ msgstr "Behouden"
 msgid "Code"
 msgstr "Code"
 
-#: ../bleachbit/GuiPreferences.py:235 ../bleachbit/GUI.py:143
+#: ../bleachbit/GuiPreferences.py:235 ../bleachbit/GUI.py:146
 msgid "Name"
 msgstr "Naam"
 
-#: ../bleachbit/GUI.py:151
+#: ../bleachbit/GUI.py:154
 msgid "Active"
 msgstr "Actief"
 
-#: ../bleachbit/GUI.py:342
+#: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
 msgstr "U moet een bewerking selecteren"
 
-#: ../bleachbit/GUI.py:365 ../bleachbit/GUI.py:380
+#: ../bleachbit/GUI.py:369 ../bleachbit/GUI.py:384
 msgid "Done."
 msgstr "Klaar."
 
-#: ../bleachbit/GUI.py:390
+#: ../bleachbit/GUI.py:395
 msgid "Program to clean unnecessary files"
 msgstr "Programma om overbodige bestanden te verwijderen"
 
-#: ../bleachbit/GUI.py:395
+#: ../bleachbit/GUI.py:400
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -741,7 +744,7 @@ msgstr ""
 "GNU Algemene Publieke Licentie versie 3 of later.\n"
 "Zie http://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:406
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -749,73 +752,77 @@ msgstr ""
 "  Peter Schelleman https://launchpad.net/~peterschelleman\n"
 "  rob https://launchpad.net/~rvdb"
 
-#: ../bleachbit/GUI.py:404 ../bleachbit/GUI.py:416
+#: ../bleachbit/GUI.py:419
 msgid "System information"
 msgstr "Systeem informatie"
 
-#: ../bleachbit/GUI.py:470
+#: ../bleachbit/GUI.py:473
 msgid "Choose files to shred"
 msgstr "Kies bestanden om te vernietigen"
 
-#: ../bleachbit/GUI.py:527
+#: ../bleachbit/GUI.py:530
 msgid "_Shred Files"
 msgstr "_Vernietig bestanden"
 
-#: ../bleachbit/GUI.py:528
+#: ../bleachbit/GUI.py:531
 msgid "_Quit"
 msgstr "_Sluit af"
 
-#: ../bleachbit/GUI.py:529
+#: ../bleachbit/GUI.py:532
 msgid "_File"
 msgstr "_Bestand"
 
-#: ../bleachbit/GUI.py:531
+#: ../bleachbit/GUI.py:534
 msgid "_Edit"
 msgstr "_Bewerken"
 
-#: ../bleachbit/GUI.py:532
+#: ../bleachbit/GUI.py:535
 msgid "Help Contents"
 msgstr "Hulp inhoud"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:536
 msgid "_Release Notes"
 msgstr "Uitgave opmerkingen"
 
-#: ../bleachbit/GUI.py:534
+#: ../bleachbit/GUI.py:537
+msgid "_System Information"
+msgstr "_Systeeminformatie"
+
+#: ../bleachbit/GUI.py:538
 msgid "_About"
 msgstr "_Over"
 
-#: ../bleachbit/GUI.py:535
+#: ../bleachbit/GUI.py:539
 msgid "_Help"
 msgstr "_Hulp"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:565
 msgid "Preview"
 msgstr "Bekijken"
 
-#: ../bleachbit/GUI.py:564
+#: ../bleachbit/GUI.py:568
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Bekijk bestanden van de geselecteerde bewerkingen (zonder bestanden te "
 "verwijderen)"
 
-#: ../bleachbit/GUI.py:574
+#: ../bleachbit/GUI.py:578
 msgid "Delete files in the selected operations"
 msgstr "Verwijder bestanden van de geselecteerde bewerkingen"
 
-#: ../bleachbit/GUI.py:655
+#: ../bleachbit/GUI.py:659
 msgid "Update BleachBit"
 msgstr "Kijk naar nieuwe versie voor BleachBit"
 
-#: ../bleachbit/GUI.py:660
+#: ../bleachbit/GUI.py:664
 msgid "BleachBit update is available"
 msgstr "Nieuwe versie voor BleachBit is beschikbaar"
 
-#: ../bleachbit/GUI.py:668
+#: ../bleachbit/GUI.py:672
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Klik op 'nieuwe versie voor BleachBit' voor meer informatie"
 
-#: ../bleachbit/GUI.py:684
+#: ../bleachbit/GUI.py:688
 msgid "Error when checking for updates: "
 msgstr "Fout bij het zoeken naar nieuwe versies "
 
