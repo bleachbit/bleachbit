@@ -152,13 +152,13 @@ class Cleaner:
             pathname = running[1]
             if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
-                    print "debug: process '%s' is runnning" % pathname
+                    print "debug: process '%s' is running" % pathname
                     return True
             elif 'exe' == test and 'nt' == os.name:
                 print 'debug: type(%s) = %s' % (pathname, type(pathname))
                 for p in Windows.enumerate_processes():
                     print 'debug: type(%s) = %s' % (p, type(p))
-                    print "debug: process '%s' is runnning" % pathname
+                    print "debug: process '%s' is running" % pathname
                     if p == pathname:
                         return True
             elif 'pathname' == test:
