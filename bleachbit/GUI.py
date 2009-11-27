@@ -399,9 +399,9 @@ class GUI:
         except:
             dialog.set_license(_("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
         dialog.set_name(APP_NAME)
-        # TRANSLASTORS: Maintain the names of translators here.
+        # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
-        # typed in Launchpad. This is a special string shown 
+        # typed in Launchpad. This is a special string shown
         # in the 'About' box.
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_version(APP_VERSION)
@@ -500,7 +500,7 @@ class GUI:
         elif (type(status) is str) or (type(status) is unicode):
             self.progressbar.set_text(status)
         else:
-            raise RuntimeError('unexcepted type: ' + str(type(status)))
+            raise RuntimeError('unexpected type: ' + str(type(status)))
 
 
     def update_total_size(self, bytes):
@@ -517,7 +517,7 @@ class GUI:
         # Create a UIManager instance
         uimanager = gtk.UIManager()
 
-        # Add the accelerator group to the toplevel window
+        # Add the accelerator group to the top level window
         accelgroup = uimanager.get_accel_group()
         self.window.add_accel_group(accelgroup)
 
