@@ -158,8 +158,8 @@ class Cleaner:
                 print 'debug: type(%s) = %s' % (pathname, type(pathname))
                 for p in Windows.enumerate_processes():
                     print 'debug: type(%s) = %s' % (p, type(p))
-                    print "debug: process '%s' is running" % pathname
                     if p == pathname:
+                        print "debug: process '%s' is running" % pathname
                         return True
             elif 'pathname' == test:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
