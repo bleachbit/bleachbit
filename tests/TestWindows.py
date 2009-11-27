@@ -32,6 +32,7 @@ import common
 
 if 'win32' == sys.platform:
     import _winreg
+    from win32com.shell import shell
 
 sys.path.append('.')
 from bleachbit.Windows import *
@@ -47,7 +48,13 @@ class WindowsTestCase(unittest.TestCase):
         fn = "c:\\bleachbit_deleteme_later"
         f = open(fn, "w")
         f.close()
-        delete_locked_file(fn)
+        try:
+            delete_locked_file(fn)
+        except pywintypes.error, e:
+            if 5 == e.winerror and not shell.IsUserAnAdmin():
+                pass
+            else:
+                raise
 
 
     def test_delete_registry_key(self):
