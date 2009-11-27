@@ -155,9 +155,12 @@ class Cleaner:
                     print "debug: process '%s' is runnning" % pathname
                     return True
             elif 'exe' == test and 'nt' == os.name:
-                if pathname in Windows.enumerate_processes():
+                print 'debug: type(%s) = %s' % (pathname, type(pathname))
+                for p in Windows.enumerate_processes():
+                    print 'debug: type(%s) = %s' % (p, type(p))
                     print "debug: process '%s' is runnning" % pathname
-                    return True
+                    if p == pathname:
+                        return True
             elif 'pathname' == test:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
