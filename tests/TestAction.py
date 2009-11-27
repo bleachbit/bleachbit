@@ -31,8 +31,9 @@ import unittest
 from xml.dom.minidom import parseString
 
 sys.path.append('.')
-import TestCleaner
 from bleachbit.Action import *
+
+import common
 
 
 
@@ -72,7 +73,7 @@ class ActionTestCase(unittest.TestCase):
             self.assert_(os.path.lexists(filename))
             # preview
             result = cmd.execute(really_delete = False).next()
-            TestCleaner.validate_result(self, result)
+            common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
             result = cmd.execute(really_delete = True).next()
@@ -128,7 +129,7 @@ class ActionTestCase(unittest.TestCase):
         results = 0
         for cmd in self._action_str_to_commands(action_str):
             result = cmd.execute(False).next()
-            TestCleaner.validate_result(self, result)
+            common.validate_result(self, result)
             path = result['path']
             self.assert_(not os.path.isdir(path), \
                 "%s is a directory" % path)

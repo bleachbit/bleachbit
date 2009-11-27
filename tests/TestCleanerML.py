@@ -29,8 +29,9 @@ import unittest
 import sys
 
 sys.path.append('.')
-import TestCleaner
 from bleachbit.CleanerML import *
+
+import common
 
 
 
@@ -49,7 +50,7 @@ class CleanerMLTestCase(unittest.TestCase):
         for (option_id, __name) in xmlcleaner.cleaner.get_options():
             for cmd in xmlcleaner.cleaner.get_commands(option_id):
                 for result in cmd.execute(False):
-                    TestCleaner.validate_result(self, result)
+                    common.validate_result(self, result)
 
 
     def test_boolstr_to_bool(self):

@@ -33,30 +33,9 @@ sys.path.append('.')
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
+import common
 
 
-def validate_result(self, result):
-    """Validate the command returned valid results"""
-    self.assert_(type(result) is dict, "result is a %s" % type(result))
-    # label
-    self.assert_(isinstance(result['label'], (str, unicode)))
-    self.assert_(len(result['label'].strip()) > 0)
-    # n_*
-    self.assert_(isinstance(result['n_deleted'], (int, long)))
-    self.assert_(result['n_deleted'] >= 0)
-    self.assert_(result['n_deleted'] <= 1)
-    self.assertEqual(result['n_special'] + result['n_deleted'], 1)
-    # size
-    self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
-        "size is %s" % str(result['size']))
-    # path
-    filename = result['path']
-    self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
-        "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
-    if isinstance(filename, (str, unicode)) and \
-        not filename[0:2] == 'HK':
-        self.assert_ (os.path.lexists(filename), \
-            "Path does not exist: '%s'" % (filename))
 
 
 def action_to_cleaner(action_str):
@@ -116,7 +95,7 @@ class CleanerTestCase(unittest.TestCase):
                     self.assert_(os.path.lexists(pathname), \
                         "Does not exist: '%s'" % pathname)
                     count += 1
-                    validate_result(self, result)
+                    common.validate_result(self, result)
             self.assert_(count > 0, "No files found for %s" % action_str)
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
@@ -144,7 +123,7 @@ class CleanerTestCase(unittest.TestCase):
         for cmd in cleaner.get_commands('files'):
             # preview
             for result in cmd.execute(False):
-                validate_result(self, result)
+                common.validate_result(self, result)
             # delete
             for result in cmd.execute(True):
                 pass
@@ -183,7 +162,7 @@ class CleanerTestCase(unittest.TestCase):
                     for result in cmd.execute(really_delete = False):
                         if result != True:
                             break
-                        validate_result(self, result)
+                        common.validate_result(self, result)
         # make sure trash and tmp don't return the same results
         if 'nt' == os.name:
             return
@@ -217,7 +196,7 @@ class CleanerTestCase(unittest.TestCase):
                             break
                         msg = "Expected no files to be deleted but got '%s'" % str(result)
                         self.assert_(not isinstance(cmd, Command.Delete), msg)
-                        validate_result(self, result)
+                        common.validate_result(self, result)
         glob.iglob = _iglob
         os.path.exists = _exists
         os.path.lexists = _lexists

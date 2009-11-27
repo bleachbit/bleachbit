@@ -26,6 +26,7 @@ Common code for unit tests
 
 
 import os
+import types
 
 
 
@@ -35,3 +36,28 @@ def destructive_tests(title):
         return True
     print 'warning: skipping test(s) for %s because env. var. DESTRUCTIVE_TESTS not set' % title
     return False
+
+
+def validate_result(self, result):
+    """Validate the command returned valid results"""
+    self.assert_(type(result) is dict, "result is a %s" % type(result))
+    # label
+    self.assert_(isinstance(result['label'], (str, unicode)))
+    self.assert_(len(result['label'].strip()) > 0)
+    # n_*
+    self.assert_(isinstance(result['n_deleted'], (int, long)))
+    self.assert_(result['n_deleted'] >= 0)
+    self.assert_(result['n_deleted'] <= 1)
+    self.assertEqual(result['n_special'] + result['n_deleted'], 1)
+    # size
+    self.assert_(isinstance(result['size'], (int, long, types.NoneType)), \
+        "size is %s" % str(result['size']))
+    # path
+    filename = result['path']
+    self.assert_(isinstance(filename, (str, unicode, types.NoneType)), \
+        "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
+    if isinstance(filename, (str, unicode)) and \
+        not filename[0:2] == 'HK':
+        self.assert_ (os.path.lexists(filename), \
+            "Path does not exist: '%s'" % (filename))
+
