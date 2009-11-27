@@ -28,6 +28,8 @@ Test case for module Windows
 import sys
 import unittest
 
+import common
+
 if 'win32' == sys.platform:
     import _winreg
 
@@ -105,6 +107,7 @@ class WindowsTestCase(unittest.TestCase):
         for process in processes:
             self.assertEqual(process, process.lower())
             self.assert_(len(process) > 0)
+            self.assert_(isinstance(process, (str, unicode)))
         self.assert_('explorer.exe' in processes)
 
 
@@ -122,6 +125,14 @@ class WindowsTestCase(unittest.TestCase):
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete = False)
             self.assert_ (isinstance(ret, (int, long)))
+        if not common.destructive_tests('recycle bin'):
+            return
+        for drive in get_fixed_drives():
+            ret = empty_recycle_bin(drive, really_delete = True)
+            self.assert_ (isinstance(ret, (int, long)))
+            # repeat because emptying empty recycle bin can cause
+            # 'catastrophic failure' error
+
 
 
     def test_split_registry_key(self):
