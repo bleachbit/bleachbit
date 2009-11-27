@@ -47,10 +47,18 @@ class CleanerMLTestCase(unittest.TestCase):
         self.assert_(isinstance(xmlcleaner, CleanerML))
         self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
 
-        for (option_id, __name) in xmlcleaner.cleaner.get_options():
-            for cmd in xmlcleaner.cleaner.get_commands(option_id):
-                for result in cmd.execute(False):
-                    common.validate_result(self, result)
+        def run_all(really_delete):
+            for (option_id, __name) in xmlcleaner.cleaner.get_options():
+                for cmd in xmlcleaner.cleaner.get_commands(option_id):
+                    for result in cmd.execute(really_delete):
+                        common.validate_result(self, result)
+
+        # preview
+        run_all(False)
+
+        # really delete if user allows
+        if common.destructive_tests('example_cleaner.xml'):
+            run_all(True)
 
 
     def test_boolstr_to_bool(self):
