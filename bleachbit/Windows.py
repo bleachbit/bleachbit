@@ -63,7 +63,7 @@ if 'win32' == sys.platform:
 
 import FileUtilities
 import Common
-
+import General
 
 
 def browse_files(hwnd, title):
@@ -220,39 +220,16 @@ def elevate_privileges():
 def enumerate_processes():
     """Return list of module names (e.g., firefox.exe) of running
     processes
-
-    Originally by Eric Koome
-    license GPL
-    http://code.activestate.com/recipes/305279/
     """
 
-    hModule = c_ulong()
-    count = c_ulong()
-    modname = c_buffer(30)
-    PROCESS_QUERY_INFORMATION = 0x0400
-    PROCESS_VM_READ = 0x0010
-
+    args = ['wmic', 'path', 'win32_process', 'get', 'Caption']
+    (rc, stdout, stderr) = General.run_external(args)
     modnames = []
+    for p in [p.strip().lower() for p in stdout.replace('\r','').split('\n')[1:]]:
+        if len(p) > 0:
+            modnames.append(p)
 
-    for pid in win32process.EnumProcesses():
-
-        # Get handle to the process based on PID
-        hProcess = kernel.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                      False, pid)
-        if hProcess:
-            psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
-            psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
-            clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
-            if len(clean_modname) > 0:
-                modnames.append(clean_modname)
-
-            # Clean up
-            for i in range(modname._length_):
-                modname[i] = '\x00'
-
-            kernel.CloseHandle(hProcess)
-
-    return modnames
+    return sorted(modnames)
 
 
 def get_fixed_drives():
