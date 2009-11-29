@@ -52,7 +52,10 @@ def diagnostic_info():
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
     s += "\nos.expandvars('$USERPROFILE') = %s" % os.path.expandvars('$USERPROFILE')
     if 'linux2' == sys.platform:
-        s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
+        if hasattr(platform, 'linux_distribution'):
+            s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
+        else:
+            s += "\nplatform.dist() = %s" % str(platform.dist())
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
     s += "\nplatform.platform = %s" % platform.platform()
