@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-02 22:12-0700\n"
-"PO-Revision-Date: 2009-12-02 10:25+0000\n"
+"PO-Revision-Date: 2009-12-06 00:26+0000\n"
 "Last-Translator: Simen Heggestøyl <simen@simenh.com>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-02 14:24+0000\n"
+"X-Launchpad-Export-Date: 2009-12-06 03:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -37,7 +37,7 @@ msgstr "Spill"
 #: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:350
 #: ../bleachbit/Cleaner.py:393
 msgid "Cache"
-msgstr ""
+msgstr "Hurtiglager"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -76,8 +76,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Ren databasefragmentering for å redusere  plassbruk og øke hastighet uten å "
-"fjerne data"
+"Rydd opp databasefragmentering for å redusere plassbruk og øke hastighet "
+"uten å fjerne data"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -91,7 +91,9 @@ msgstr "Nettleser"
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../bleachbit/Cleaner.py:188
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "Slett midlertidige Internett-filer"
+msgstr ""
+"Slett midlertidige Internett-filer, som reduserer tiden det tar å vise "
+"tidligere besøkte nettsider"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -131,11 +133,11 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
-msgstr ""
+msgstr "Aktiv økt"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Slett den aktive økten"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
@@ -227,19 +229,19 @@ msgstr "Nylig brukte dokumenter"
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
-msgstr ""
+msgstr "Chatteklient"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "Chattelogger"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "Slett chatteloggene"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
@@ -283,7 +285,7 @@ msgstr "URL-historikk"
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr "Slett liste over nylig brukte elementer"
+msgstr "Slett listen over nylig brukte elementer"
 
 #: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:193
 msgid "Passwords"
@@ -353,15 +355,15 @@ msgstr "Økt"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr ""
+msgstr "Slett aktiv og inaktive økter"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Slett hurtiglageret for avatarer og smilefjes"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Grundig søk"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -399,7 +401,7 @@ msgstr "Indeks"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
-msgstr ""
+msgstr "Slett søkeindeksen, en database med ord og filene de inneholder"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -442,13 +444,13 @@ msgstr "Ødelagte skrivebordfiler"
 
 #: ../bleachbit/Cleaner.py:392
 msgid "Delete broken application menu entries and file associations"
-msgstr ""
+msgstr "Slett brutte applikasjonsmenyelementer og filassosiasjoner"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
 #: ../bleachbit/Cleaner.py:396
 msgid "Localizations"
-msgstr ""
+msgstr "Lokaliseringer"
 
 #: ../bleachbit/Cleaner.py:396
 msgid "Delete files for unwanted languages"
@@ -564,7 +566,7 @@ msgstr "vis systeminformasjon"
 
 #: ../bleachbit/CLI.py:153
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "forhåndsvis filer som skal slettes og andre endringer"
 
 #: ../bleachbit/CLI.py:155
 msgid "output version information and exit"
@@ -595,7 +597,7 @@ msgstr "Trunker"
 
 #: ../bleachbit/Command.py:191
 msgid "Delete registry key"
-msgstr ""
+msgstr "Slett registernøkkel"
 
 #: ../bleachbit/FileUtilities.py:195
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
@@ -674,7 +676,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:131
 msgid "Start BleachBit with computer"
-msgstr ""
+msgstr "Start BleachBit ved maskinoppstart"
 
 #: ../bleachbit/GuiPreferences.py:142
 msgid "Choose a folder"
@@ -730,6 +732,8 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License versjon 3 eller høyere.\n"
+"Se http://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
