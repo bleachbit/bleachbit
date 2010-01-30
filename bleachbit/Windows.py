@@ -217,9 +217,65 @@ def elevate_privileges():
     return False
 
 
+
 def enumerate_processes():
     """Return list of module names (e.g., firefox.exe) of running
+    processes"""
+
+    if platform.win32_ver()[0] == 'XP':
+        return enumerate_processes_win32()
+    else:
+        return enumerate_processes_wmic()
+
+
+
+def enumerate_processes_win32():
+    """Return list of module names (e.g., firefox.exe) of running
     processes
+
+    Does not work on 64-bit Windows
+
+    Originally by Eric Koome
+    license GPL
+    http://code.activestate.com/recipes/305279/
+    """
+
+    hModule = c_ulong()
+    count = c_ulong()
+    modname = c_buffer(30)
+    PROCESS_QUERY_INFORMATION = 0x0400
+    PROCESS_VM_READ = 0x0010
+
+    modnames = []
+
+    for pid in win32process.EnumProcesses():
+
+        # Get handle to the process based on PID
+        hProcess = kernel.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                                      False, pid)
+        if hProcess:
+            psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
+            psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
+            clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
+            if len(clean_modname) > 0:
+                modnames.append(clean_modname)
+
+            # Clean up
+            for i in range(modname._length_):
+                modname[i] = '\x00'
+
+            kernel.CloseHandle(hProcess)
+
+    return modnames
+
+
+
+
+def enumerate_processes_wmic():
+    """Return list of module names (e.g., firefox.exe) of running
+    processes
+
+    Works on Windows XP Professional but not on XP Home
     """
 
     args = ['wmic', 'path', 'win32_process', 'get', 'Caption']
