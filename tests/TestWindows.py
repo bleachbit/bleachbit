@@ -110,12 +110,15 @@ class WindowsTestCase(unittest.TestCase):
 
 
     def test_enumerate_processes(self):
-        processes = enumerate_processes()
-        for process in processes:
-            self.assertEqual(process, process.lower())
-            self.assert_(len(process) > 0)
-            self.assert_(isinstance(process, (str, unicode)))
-        self.assert_('explorer.exe' in processes)
+        def tep_helper(processes):
+            for process in processes:
+                self.assertEqual(process, process.lower())
+                self.assert_(len(process) > 0)
+                self.assert_(isinstance(process, (str, unicode)))
+            self.assert_('explorer.exe' in processes)
+        tep_helper(enumerate_processes())
+        tep_helper(enumerate_processes_win32())
+        tep_helper(enumerate_processes_wmic())
 
 
     def test_get_fixed_drives(self):
