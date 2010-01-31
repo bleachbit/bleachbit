@@ -93,8 +93,19 @@ class GeneralTestCase(unittest.TestCase):
         cleanup(dir)
 
 
+    def test_run_external(self):
+        """Unit test for run_external"""
+        if 'nt' == os.name:
+            args = ['reg.exe']
+        elif 'posix' == os.name:
+            args = ['ls']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertEqual(0, rc)
+        self.assertEqual(0, len(stderr))
+
+
     def test_sudo_mode(self):
-        """Unit test for sudo_mode()"""
+        """Unit test for sudo_mode"""
         if not 'posix' == os.name:
             return
         self.assert_(isinstance(sudo_mode(), bool))
