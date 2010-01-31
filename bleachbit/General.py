@@ -126,8 +126,17 @@ def run_external(args, stdout = False, env = None):
     import subprocess
     if False == stdout:
         stdout = subprocess.PIPE
+    kwargs = {}
+    if subprocess.mswindows:
+        # hide the 'DOS box' window
+        stui = subprocess.STARTUPINFO()
+        import win32process
+        stui.dwFlags = win32process.STARTF_USESHOWWINDOW
+        import win32con
+        stui.wShowWindow = win32con.SW_HIDE
+        kwargs['startupinfo'] = stui
     p = subprocess.Popen(args, stdout = stdout, \
-        stderr = subprocess.PIPE, env = env)
+        stderr = subprocess.PIPE, env = env, **kwargs)
     try:
         p.wait()
     except KeyboardInterrupt:
