@@ -21,6 +21,8 @@
 -->
 <cleaner id="thunderbird">
   <label>Thunderbird</label>
+  <running type="exe">thunderbird.exe</running>
+  <running type="exe">thunderbird-bin</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
