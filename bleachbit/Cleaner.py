@@ -276,9 +276,14 @@ class Firefox(Cleaner):
 
         # vacuum
         if 'vacuum' == option_id:
-            for path in FileUtilities.expand_glob_join(self.profile_dir, "*.sqlite"):
+            paths = []
+            paths += FileUtilities.expand_glob_join(self.profile_dir, "*.sqlite")
+            if not cache_base == self.profile_dir:
+                paths += FileUtilities.expand_glob_join(cache_base, "*.sqlite")
+            for path in paths:
                 yield Command.Function(path, \
                     FileUtilities.vacuum_sqlite3, _("Vacuum"))
+
 
 
 class OpenOfficeOrg(Cleaner):
