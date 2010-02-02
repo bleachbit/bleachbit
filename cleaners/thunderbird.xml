@@ -19,21 +19,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="thunderbird" os="linux">
+<cleaner id="thunderbird">
   <label>Thunderbird</label>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="glob" path="$USERPROFILE\Local Settings\Application Data\Thunderbird\Profiles\????????.default\Cache\*"/>
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/Cache/*"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <action command="delete" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\cookies.sqlite"/>
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/cookies.sqlite"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <action command="delete" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\signons.sqlite"/>
     <!-- Fedora 11 Thunderbird 3.0 has ~/.thunderbird/default/????????.slt/ -->
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/signons.sqlite"/>
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/signons.txt"/>
@@ -44,6 +47,7 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\*.sqlite"/>
     <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/default/????????.slt/*.sqlite"/>
   </option>
 </cleaner>
