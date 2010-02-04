@@ -26,7 +26,7 @@
     <description>Delete the backup files</description>
     <warning>Inspect the preview for any files you want to keep.</warning>
     <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$" cache="false"/>
-    <action command="delete" search="deep" regex="\.[a-zA-Z]{1,4}~$" cache="false"/>
+    <action command="delete" search="deep" regex="[a-zA-Z]{1,4}~$" cache="false"/>
   </option>
   <option id="ds_store">
     <label translate="false">.DS_Store</label>
