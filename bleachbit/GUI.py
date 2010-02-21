@@ -407,7 +407,7 @@ class GUI:
         dialog.set_version(APP_VERSION)
         dialog.set_website(APP_URL)
         dialog.set_transient_for(self.window)
-        if os.path.exists(appicon_path):
+        if appicon_path and os.path.exists(appicon_path):
             icon = gtk.gdk.pixbuf_new_from_file(appicon_path)
             dialog.set_logo(icon)
         dialog.run()
