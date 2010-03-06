@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-07 20:05-0700\n"
-"PO-Revision-Date: 2010-01-07 15:18+0000\n"
-"Last-Translator: Yuki Kodama <Unknown>\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-11-25 15:07-0700\n"
+"PO-Revision-Date: 2010-03-05 11:42+0000\n"
+"Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-07 15:56+0000\n"
+"X-Launchpad-Export-Date: 2010-03-06 03:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -33,9 +33,9 @@ msgstr "ゲーム"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/safari.xml ../cleaners/java.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:188
-#: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:350
-#: ../bleachbit/Cleaner.py:393
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:185
+#: ../bleachbit/Cleaner.py:287 ../bleachbit/Cleaner.py:347
+#: ../bleachbit/Cleaner.py:390
 msgid "Cache"
 msgstr "キャッシュ"
 
@@ -52,9 +52,9 @@ msgstr "ゲームサーバ一覧の削除"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:290
-#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:393
-#: ../bleachbit/Cleaner.py:411 ../bleachbit/Cleaner.py:413
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:287
+#: ../bleachbit/Cleaner.py:347 ../bleachbit/Cleaner.py:390
+#: ../bleachbit/Cleaner.py:408 ../bleachbit/Cleaner.py:410
 msgid "Delete the cache"
 msgstr "キャッシュの削除"
 
@@ -64,14 +64,14 @@ msgstr "キャッシュの削除"
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Action.py:225 ../bleachbit/Cleaner.py:197
-#: ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Action.py:225 ../bleachbit/Cleaner.py:194
+#: ../bleachbit/Cleaner.py:278
 msgid "Vacuum"
 msgstr "Vacuum"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Cleaner.py:197
+#: ../bleachbit/Cleaner.py:194
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -81,13 +81,13 @@ msgstr "データベースの断片化を解消 (データサイズの縮小、�
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
 #: ../cleaners/elinks.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:210
+#: ../bleachbit/Cleaner.py:207
 msgid "Web browser"
 msgstr "ウェブブラウザ"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:188
+#: ../cleaners/safari.xml ../bleachbit/Cleaner.py:185
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr "ウェブサイトのキャッシュの削除 (訪問済みページの表示速度改善)"
 
@@ -95,7 +95,7 @@ msgstr "ウェブサイトのキャッシュの削除 (訪問済みページの�
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:189
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid "Cookies"
 msgstr "Cookie"
 
@@ -103,13 +103,11 @@ msgstr "Cookie"
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/konqueror.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:189
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:186
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
-"Cookie の削除 (サイトの設定、認証、アクセス解析のための追跡情報などが含まれま"
-"す)"
+msgstr "Cookie の削除 (サイトの設定、認証、アクセス解析のための追跡情報などが含まれます)"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -135,7 +133,7 @@ msgstr "現在のセッションの削除"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:275 ../bleachbit/Cleaner.py:341
+#: ../bleachbit/Cleaner.py:272 ../bleachbit/Cleaner.py:338
 msgid "Delete the usage history"
 msgstr "使用履歴の削除"
 
@@ -157,7 +155,7 @@ msgstr "マルチメディアプレーヤー"
 #: ../cleaners/exaile.xml ../cleaners/easytag.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:410
+#: ../bleachbit/Cleaner.py:407
 msgid "Logs"
 msgstr "ログファイル"
 
@@ -165,7 +163,7 @@ msgstr "ログファイル"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:410
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:407
 msgid "Delete the logs"
 msgstr "ログファイルの削除"
 
@@ -183,20 +181,20 @@ msgstr "デバッグログの削除"
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:419
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:416
 msgid "Temporary files"
 msgstr "一時ファイル"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:419
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:416
 msgid "Delete the temporary files"
 msgstr "一時ファイルの削除"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:193
 msgid "List of visited web pages"
 msgstr "訪問済みページの一覧"
 
@@ -204,19 +202,19 @@ msgstr "訪問済みページの一覧"
 #: ../cleaners/winamp.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:291
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:288
 msgid "Most recently used"
 msgstr "最近使用したファイル"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:291 ../bleachbit/Cleaner.py:402
+#: ../bleachbit/Cleaner.py:288 ../bleachbit/Cleaner.py:399
 msgid "Delete the list of recently used documents"
 msgstr "最近使用したドキュメントの履歴の削除"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:402
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:399
 msgid "Recent documents list"
 msgstr "最近使用したドキュメント一覧"
 
@@ -262,15 +260,15 @@ msgstr "ファイル転送アプリ"
 msgid "Delete the files"
 msgstr "ファイルの削除"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:187
 msgid "Download history"
 msgstr "ダウンロード履歴"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:187
 msgid "List of files downloaded"
 msgstr "ダウンロードしたファイル一覧"
 
-#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:196
+#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:193
 msgid "URL history"
 msgstr "URL 履歴"
 
@@ -281,31 +279,31 @@ msgstr "URL 履歴"
 msgid "Delete the most recently used list"
 msgstr "最近使用したファイル一覧の削除"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:190
 msgid "Passwords"
 msgstr "パスワード"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:190
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr "パスワードを記憶させるサイトと、そのユーザ名とパスワードのデータベース"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:191
 msgid "Places"
 msgstr "Places"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:191
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr "ブックマーク、favicon、閲覧履歴のデータベース"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:195
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:192
 msgid "This option deletes all bookmarks."
 msgstr "このオプションは全てのブックマークを削除します。"
 
-#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:301
+#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:298
 msgid "Office suite"
 msgstr "オフィスアプリ"
 
@@ -359,7 +357,7 @@ msgstr "詳細スキャン"
 msgid "Inspect the preview for any files you want to keep."
 msgstr "どのファイルを残すかプレビューを調査してください。"
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:418
+#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:415
 msgid "This option is slow."
 msgstr "この項目は処理に時間がかかります。"
 
@@ -390,7 +388,8 @@ msgid "Index"
 msgstr "インデックス"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr "検索インデックスの削除 (キーワードとファイル名を含むデータベース)"
 
 #: ../bleachbit.desktop
@@ -401,24 +400,23 @@ msgstr "不要ファイルクリーナ"
 msgid "Free space and maintain privacy"
 msgstr "スペースの確保とプライバシーの保全"
 
-#: ../bleachbit/Cleaner.py:191
+#: ../bleachbit/Cleaner.py:188
 msgid "Form history"
 msgstr "入力履歴"
 
-#: ../bleachbit/Cleaner.py:191
+#: ../bleachbit/Cleaner.py:188
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "ウェブサイトのフォームまたは検索バーへの入力履歴"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:189
 msgid "Session restore"
 msgstr "セッションの復元"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:189
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-"ブラウザが閉じられた、または正常終了しなかった場合、初期セッションを読み込む"
+msgstr "ブラウザが閉じられた、または正常終了しなかった場合、初期セッションを読み込む"
 
-#: ../bleachbit/Cleaner.py:353
+#: ../bleachbit/Cleaner.py:350
 msgid "Delete the files in the rpmbuild build directory"
 msgstr "rpmbuild のビルドディレクトリのファイルの削除"
 
@@ -428,21 +426,21 @@ msgstr "rpmbuild のビルドディレクトリのファイルの削除"
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:392
+#: ../bleachbit/Cleaner.py:389
 msgid "Broken desktop files"
 msgstr "壊れた .desktop ファイル"
 
-#: ../bleachbit/Cleaner.py:392
+#: ../bleachbit/Cleaner.py:389
 msgid "Delete broken application menu entries and file associations"
 msgstr "壊れたアプリケーションメニュー項目とファイルの関連付けの削除"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:396
+#: ../bleachbit/Cleaner.py:393
 msgid "Localizations"
 msgstr "ローカライゼーション"
 
-#: ../bleachbit/Cleaner.py:396
+#: ../bleachbit/Cleaner.py:393
 msgid "Delete files for unwanted languages"
 msgstr "使用しない言語向けのファイルの削除"
 
@@ -450,81 +448,83 @@ msgstr "使用しない言語向けのファイルの削除"
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:398
 msgid "Rotated logs"
 msgstr "古いシステムログファイル"
 
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:398
 msgid "Delete old system logs"
 msgstr "古いシステムログファイルの削除"
 
-#: ../bleachbit/Cleaner.py:403
+#: ../bleachbit/Cleaner.py:400
 msgid "Trash"
 msgstr "ゴミ箱"
 
-#: ../bleachbit/Cleaner.py:403
+#: ../bleachbit/Cleaner.py:400
 msgid "Empty the trash"
 msgstr "ゴミ箱を空にする"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:501
+#: ../bleachbit/Cleaner.py:404 ../bleachbit/Cleaner.py:498
 msgid "Memory"
 msgstr "メモリ"
 
-#: ../bleachbit/Cleaner.py:407
+#: ../bleachbit/Cleaner.py:404
 msgid "Wipe the swap and free memory"
 msgstr "メモリの空き領域を確保する"
 
-#: ../bleachbit/Cleaner.py:408
+#: ../bleachbit/Cleaner.py:405
 msgid "This option is experimental and may cause system problems."
 msgstr "この項目は実験的なもので、システムエラーの原因となる可能性があります。"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:413
+#: ../bleachbit/Cleaner.py:410
 msgid "Prefetch"
 msgstr "先読み"
 
-#: ../bleachbit/Cleaner.py:414
+#: ../bleachbit/Cleaner.py:411
 msgid "Recycle bin"
 msgstr "ゴミ箱"
 
-#: ../bleachbit/Cleaner.py:414
+#: ../bleachbit/Cleaner.py:411
 msgid "Empty the recycle bin"
 msgstr "ゴミ箱を空にする"
 
-#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:573
+#: ../bleachbit/Cleaner.py:413 ../bleachbit/Cleaner.py:570
 msgid "Clipboard"
 msgstr "クリップボード"
 
-#: ../bleachbit/Cleaner.py:416
-msgid "The desktop environment's clipboard used for copy and paste operations"
+#: ../bleachbit/Cleaner.py:413
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr "コピー＆ペーストで使用するクリップボード。"
 
-#: ../bleachbit/Cleaner.py:417
+#: ../bleachbit/Cleaner.py:414
 msgid "Free disk space"
 msgstr "ディスクの空き領域の確保"
 
-#: ../bleachbit/Cleaner.py:417
+#: ../bleachbit/Cleaner.py:414
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "削除済みファイルを上書きしてディスクの空き領域を確保する"
 
-#: ../bleachbit/Cleaner.py:422
+#: ../bleachbit/Cleaner.py:419
 msgid "The system in general"
 msgstr "システム一般"
 
-#: ../bleachbit/Cleaner.py:428
+#: ../bleachbit/Cleaner.py:425
 msgid "System"
 msgstr "システム"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:595
+#: ../bleachbit/Cleaner.py:592
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "ディスクの未使用領域を上書きする: %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:623
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:620
 #, python-format
 msgid "Recycle bin %s"
 msgstr "ゴミ箱: %s"
@@ -540,7 +540,7 @@ msgstr "有効なクリーナではありません: %s"
 #. http://bleachbit.sourceforge.net/documentation/command-line
 #: ../bleachbit/CLI.py:144
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
+msgstr "使用法： %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:147
 msgid "list cleaners"
@@ -591,9 +591,7 @@ msgstr "レジストリキーの削除"
 
 #: ../bleachbit/FileUtilities.py:195
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
-msgstr ""
-"Python モジュールの sqlite3 をインポートできません: Python 2.5 またはそれ以上"
-"が必要です。"
+msgstr "Python モジュールの sqlite3 をインポートできません: Python 2.5 またはそれ以上が必要です。"
 
 #: ../bleachbit/GuiBasic.py:86
 msgid "Delete confirmation"
@@ -605,6 +603,7 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"あなたが選択した操作に応じてファイルを永久に削除してもよろしいですか？削除される実際のファイルはプレビューを実行した時点から変わっているかもしれません。"
 
 #: ../bleachbit/GuiBasic.py:96
 msgid "Are you sure you want to permanently delete these files?"
@@ -635,8 +634,7 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
-"もし更新が見つかったなら、それについての情報を表示するためのオプションが与え"
-"られます。その後、手動でダウンロードし、アップデートをインストールします。"
+"もし更新が見つかったなら、それについての情報を表示するためのオプションが与えられます。その後、手動でダウンロードし、アップデートをインストールします。"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -720,10 +718,6 @@ msgstr ""
 "GNU 一般公衆利用許諾書 バージョン 3 かそれ以降。\n"
 "http://www.gnu.org/licenses/gpl-3.0.txt を参照して下さい。"
 
-#. TRANSLATORS: Maintain the names of translators here.
-#. Launchpad does this automatically for translations
-#. typed in Launchpad. This is a special string shown
-#. in the 'About' box.
 #: ../bleachbit/GUI.py:406
 msgid "translator-credits"
 msgstr ""
@@ -815,9 +809,8 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"これらのクリーナー定義は新規のものか、或いは変更されています。 悪意のある定義"
-"はあなたのシステムを破損するかも知れません。 これらの変更を信じないなら、ファ"
-"イルを削除するか、または実行をとりやめてください。"
+"これらのクリーナー定義は新規のものか、或いは変更されています。 悪意のある定義はあなたのシステムを破損するかも知れません。 "
+"これらの変更を信じないなら、ファイルを削除するか、または実行をとりやめてください。"
 
 #: ../bleachbit/RecognizeCleanerML.py:108
 msgid "Filename"
@@ -834,9 +827,7 @@ msgstr "実行ファイルが見つかりません: %s"
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
-msgstr ""
-"%s は現在実行中であるためクリーニングできません。終了してから再度実行し直して"
-"ください。"
+msgstr "%s は現在実行中であるためクリーニングできません。終了してから再度実行し直してください。"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
