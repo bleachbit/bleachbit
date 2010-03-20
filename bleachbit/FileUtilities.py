@@ -125,7 +125,11 @@ def children_in_directory(top, list_directories = False):
 
 def delete(path, shred = False):
     """Delete path that is either file, directory, link or FIFO"""
-    print "info: removing '%s'" % (path,)
+    try:
+        print u"info: removing '%s'" % path
+    except:
+        # FIXME: unicode exception workaround for Windows (see unit test)
+        print "info: removing '%s'" % path.encode('ascii', 'replace')
     mode = os.lstat(path)[stat.ST_MODE]
     if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
         os.remove(path)

@@ -137,10 +137,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
 
-
-        hebrew = "עִבְרִית"
-        katanana = "アメリカ"
-        umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
+        hebrew = u"עִבְרִית"
+        katanana = u"アメリカ"
+        umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
         tests = [ ('.suffix', 'prefix'), # simple
                   ("x".zfill(100), ".y".zfill(100)), # long
@@ -148,7 +147,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
                   ("'", "'"), # quotation mark
                   ("~`!@#$%^&()-_+=", "x"), # non-alphanumeric characters
                   ("[]{};',.", "x"), # non-alphanumeric characters
-                  (u'a', u'a'), # simple unicode
+                  (u'abcd', u'efgh'), # simple unicode
+                  (u'J\xf8rgen', 'Scandinavian'),
                   (hebrew, hebrew),
                   (katanana, katanana),
                   (umlauts, umlauts) ]
