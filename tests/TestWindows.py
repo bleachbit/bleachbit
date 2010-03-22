@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# -*- coding: UTF-8 -*-
 
 ## BleachBit
 ## Copyright (C) 2010 Andrew Ziem
@@ -76,6 +77,16 @@ class WindowsTestCase(unittest.TestCase):
         for test in tests:
             return_value = delete_registry_key(test[1], test[2])
             self.assertEqual(test[0], return_value)
+
+        # create a Unicode key
+        key = r'Software\\BleachBit\\unicode-\xf6-\xd8'
+        hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-\xf6')
+        hkey.Close()
+
+        # test
+        return_value = delete_registry_key('HKCU\\' + key, True)
+        self.assertEqual(return_value, True)
+
 
 
     def test_delete_registry_value(self):
