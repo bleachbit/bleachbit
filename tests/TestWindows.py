@@ -78,15 +78,16 @@ class WindowsTestCase(unittest.TestCase):
             return_value = delete_registry_key(test[1], test[2])
             self.assertEqual(test[0], return_value)
 
-        # create a Unicode key
-        key = r'Software\\BleachBit\\unicode-\xf6-\xd8'
-        hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-\xf6')
+        # Test Unicode key.  In BleachBit 0.7.3 this scenario would lead to
+        # the error (bug 537109)
+        # UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 11: ordinal not in range(128)
+        key = r'Software\\BleachBit\\DeleteThisKey'
+        hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-Ö')
         hkey.Close()
-
-        # test
-        return_value = delete_registry_key('HKCU\\' + key, True)
+        return_value = delete_registry_key(u'HKCU\\' + key, True)
         self.assertEqual(return_value, True)
-
+        return_value = delete_registry_key(u'HKCU\\' + key, True)
+        self.assertEqual(return_value, False)
 
 
     def test_delete_registry_value(self):

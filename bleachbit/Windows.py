@@ -144,6 +144,7 @@ def delete_registry_key(parent_key, really_delete):
     Return boolean whether found and success.  If really
     delete is False (meaning preview), just check whether
     the key exists."""
+    parent_key = str(parent_key) # Unicode to byte string
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
