@@ -151,6 +151,9 @@ class PreferencesDialog:
             """Callback for removing a drive"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
+            if None == _iter:
+                # nothing selected
+                return
             pathname = model[0][0]
             liststore.remove(_iter)
             pathnames.remove(pathname)
