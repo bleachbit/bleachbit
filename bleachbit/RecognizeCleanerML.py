@@ -43,6 +43,7 @@ else:
 from Common import _
 from CleanerML import list_cleanerml_files
 from Options import options
+from pgettext import pgettext as _p
 import GuiBasic
 
 
