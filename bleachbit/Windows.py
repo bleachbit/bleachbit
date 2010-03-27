@@ -223,10 +223,16 @@ def enumerate_processes():
     """Return list of module names (e.g., firefox.exe) of running
     processes"""
 
+    r = []
     if platform.win32_ver()[0] == 'XP':
-        return enumerate_processes_win32()
+        r = enumerate_processes_win32()
     else:
-        return enumerate_processes_wmic()
+        r = enumerate_processes_wmic()
+
+    # make unique
+    r = list(set(r))
+    r.sort()
+    return r
 
 
 
