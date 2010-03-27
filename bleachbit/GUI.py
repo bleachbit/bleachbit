@@ -555,17 +555,14 @@ class GUI:
         """Create the toolbar"""
         toolbar = gtk.Toolbar()
 
-        # create tooltips
-        tooltips = gtk.Tooltips()
-        tooltips.enable()
 
-       # create the preview button
+        # create the preview button
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
         preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
-        preview_button.set_tooltip(tooltips, _("Preview files in the selected operations (without deleting any files)"))
+        preview_button.set_tooltip_text(_("Preview files in the selected operations (without deleting any files)"))
         preview_button.set_is_important(True)
 
         # create the delete button
@@ -575,7 +572,7 @@ class GUI:
         run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
-        run_button.set_tooltip(tooltips, _("Delete files in the selected operations"))
+        run_button.set_tooltip_text(_("Delete files in the selected operations"))
         run_button.set_is_important(True)
 
         return toolbar

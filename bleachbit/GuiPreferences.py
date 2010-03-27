@@ -55,9 +55,6 @@ class PreferencesDialog:
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
         self.dialog.set_default_size(300, 200)
 
-        self.tooltips = gtk.Tooltips()
-        self.tooltips.enable()
-
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
         notebook.append_page(self.__drives_page(), gtk.Label(_("Drives")))
@@ -107,7 +104,7 @@ class PreferencesDialog:
             cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
             cb_updates.set_active(options.get('check_online_updates'))
             cb_updates.connect('toggled', self.__toggle_callback, 'check_online_updates')
-            self.tooltips.set_tip(cb_updates, _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
+            cb_updates.set_tooltip_text(_("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
         # TRANSLATORS: This means to hide cleaners which would do
@@ -125,7 +122,7 @@ class PreferencesDialog:
         cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
-        self.tooltips.set_tip(cb_shred, _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
+        cb_shred.set_tooltip_text(_("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False)
 
         cb_start = gtk.CheckButton(_("Start BleachBit with computer"))
