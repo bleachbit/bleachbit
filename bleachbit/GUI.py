@@ -560,7 +560,7 @@ class GUI:
         # create the preview button
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        # TRANSLATORS: This is the preview button on the main window
+        # TRANSLATORS: This is the preview button on the main window.  It previews changes.
         preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _p('button', "Preview"))
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
@@ -571,6 +571,7 @@ class GUI:
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
         # TRANSLATORS: This is the delete button on the main window
+        # It makes permanent changes: usually deleting files, sometimes altering them.
         run_button = gtk.ToolButton(icon_widget = icon, label = _p("button", "Delete"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)

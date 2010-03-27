@@ -180,8 +180,10 @@ class PreferencesDialog:
 
         vbox.pack_start(treeview)
 
+        # TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
         button_add = gtk.Button(_p('button', 'Add'))
         button_add.connect("clicked", add_drive_cb)
+        # TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
         button_remove = gtk.Button(_p('button', 'Remove'))
         button_remove.connect("clicked", remove_drive_cb)
 

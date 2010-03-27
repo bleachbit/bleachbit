@@ -103,10 +103,10 @@ def cleaner_change_dialog(changes, parent):
     renderer0 = gtk.CellRendererToggle()
     renderer0.set_property('activatable', True)
     renderer0.connect('toggled', toggled, liststore)
-    # This is the column label (header) in the tree view for the security dialog
+    # TRANSLATORS: This is the column label (header) in the tree view for the security dialog
     treeview.append_column(gtk.TreeViewColumn(_p('column_label', 'Delete'), renderer0, active = 0))
     renderer1 = gtk.CellRendererText()
-    # This is the column label (header) in the tree view for the security dialog
+    # TRANSLATORS: This is the column label (header) in the tree view for the security dialog
     treeview.append_column(gtk.TreeViewColumn(_p('column_label', 'Filename'), renderer1, text = 1))
 
     # populate tree view
