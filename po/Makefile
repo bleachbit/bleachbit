@@ -29,6 +29,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 	xgettext -o $(APP).pot \
 		--join-existing \
 		--add-comments=TRANSLATORS \
+		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		$(SRC)
 	echo " Words after update: " \

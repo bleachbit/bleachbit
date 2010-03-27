@@ -40,6 +40,7 @@ from Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
 from Cleaner import backends
 from GuiPreferences import PreferencesDialog
 from Options import options
+from pgettext import pgettext as _p
 import Cleaner
 import FileUtilities
 import GuiBasic
@@ -559,7 +560,8 @@ class GUI:
         # create the preview button
         preview_icon = gtk.Image()
         preview_icon.set_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _("Preview"))
+        # TRANSLATORS: This is the preview button on the main window
+        preview_button = gtk.ToolButton(icon_widget = preview_icon, label = _p('button', "Preview"))
         preview_button.connect("clicked", lambda *dummy: self.preview_or_run_operations(False))
         toolbar.insert(preview_button, -1)
         preview_button.set_tooltip_text(_("Preview files in the selected operations (without deleting any files)"))
@@ -569,7 +571,7 @@ class GUI:
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
         # TRANSLATORS: This is the delete button on the main window
-        run_button = gtk.ToolButton(icon_widget = icon, label = _("Delete"))
+        run_button = gtk.ToolButton(icon_widget = icon, label = _p("button", "Delete"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
         run_button.set_tooltip_text(_("Delete files in the selected operations"))
@@ -653,7 +655,7 @@ class GUI:
         """Create a button to launch browser to initiate software update"""
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        update_button = gtk.ToolButton(icon_widget = icon, label = _("Update BleachBit"))
+        update_button = gtk.ToolButton(icon_widget = icon, label = _p('button', 'Update BleachBit'))
         update_button.show_all()
         update_button.connect("clicked", lambda toolbutton, url: open_url(url), url)
         update_button.set_is_important(True)

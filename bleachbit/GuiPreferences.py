@@ -33,6 +33,7 @@ import traceback
 
 from Common import _
 from Options import options
+from pgettext import pgettext as _p
 import Common
 import GuiBasic
 
@@ -179,9 +180,9 @@ class PreferencesDialog:
 
         vbox.pack_start(treeview)
 
-        button_add = gtk.Button(_("Add"))
+        button_add = gtk.Button(_p('button', 'Add'))
         button_add.connect("clicked", add_drive_cb)
-        button_remove = gtk.Button(_("Remove"))
+        button_remove = gtk.Button(_p('button', 'Remove'))
         button_remove.connect("clicked", remove_drive_cb)
 
         button_box = gtk.HButtonBox()
