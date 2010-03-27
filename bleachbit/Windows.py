@@ -155,6 +155,9 @@ def delete_registry_key(parent_key, really_delete):
             return False
     if not really_delete:
         return True
+    if not hkey:
+        # key not found
+        return False
     keys_size = _winreg.QueryInfoKey(hkey)[0]
     child_keys = []
     for i in range(keys_size):
