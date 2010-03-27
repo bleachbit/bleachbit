@@ -83,8 +83,8 @@ class OpenFiles:
 def bytes_to_human(bytes_i):
     """Display a file size in human terms (megabytes, etc.)"""
 
-    storage_multipliers = { 1024**5 : 'PB', 1024**4 : 'TB', \
-        1024**3 : 'GB', 1024**2: 'MB', 1024: 'KB', 1 : 'B' }
+    storage_multipliers = { 1024**5 : 'PiB', 1024**4 : 'TiB', \
+        1024**3 : 'GiB', 1024**2: 'MiB', 1024: 'KiB', 1 : 'B' }
 
     assert(isinstance(bytes_i, (int, long)))
 
