@@ -154,7 +154,7 @@ class PreferencesDialog:
             if None == _iter:
                 # nothing selected
                 return
-            pathname = model[0][0]
+            pathname = model[_iter][0]
             liststore.remove(_iter)
             pathnames.remove(pathname)
             options.set_list('shred_drives', pathnames)
