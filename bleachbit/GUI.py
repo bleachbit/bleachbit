@@ -713,7 +713,7 @@ class GUI:
             if update.is_update_available():
                 gobject.idle_add(self.enable_online_update, update.get_update_info_url())
         except:
-            self.append_text(_("Error when checking for updates: ") + str(sys.exc_info()[1]))
+            self.append_text(_("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
 
 
     def __init__(self):
