@@ -55,13 +55,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
         tests = [ ("-1B", bytes_to_human(-1)),
                   ("0", bytes_to_human(0)),
                   ("1B", bytes_to_human(1)),
-                  ("1KB", bytes_to_human(1024)),
-                  ("1.1KB", bytes_to_human(1110)),
-                  ("1MB", bytes_to_human(1024**2)),
-                  ("1.2MB", bytes_to_human(1289748)),
-                  ("1GB", bytes_to_human(1024**3)),
-                  ("1.23GB", bytes_to_human(1320702444)),
-                  ("1TB", bytes_to_human(1024**4)) ]
+                  ("1kB", bytes_to_human(1000)),
+                  ("1.1kB", bytes_to_human(1110)),
+                  ("1MB", bytes_to_human(1000**2)),
+                  ("1.3MB", bytes_to_human(1289748)),
+                  ("1GB", bytes_to_human(1000**3)),
+                  ("1.32GB", bytes_to_human(1320702444)),
+                  ("1TB", bytes_to_human(1000**4)) ]
 
         for test in tests:
             self.assertEqual(test[0], test[1])
@@ -69,7 +69,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test roundtrip conversion for random values
         import random
         for n in range(0, 1000):
-            bytes1 = random.randrange(0, 1024**4)
+            bytes1 = random.randrange(0, 1000**4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
             error =  abs(float(bytes2 - bytes1) / bytes1)
@@ -84,7 +84,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             except:
                 print "Warning: exception when setlocale to de_DE.utf8"
             else:
-                self.assertEqual("1,01GB", bytes_to_human(1024**3 + 5812389))
+                self.assertEqual("1,01GB", bytes_to_human(1000**3 + 5812389))
 
         # clean up
         if 'posix' == os.name:
@@ -263,7 +263,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         output = output.replace("\n", "")
         du_size = output.split("\t")[0] + "B"
         print "output = '%s', size='%s'" % (output, du_size)
-        du_bytes = human_to_bytes(du_size)
+        du_bytes = human_to_bytes(du_size, 'du')
         print output, du_size, du_bytes
         self.assertEqual(getsize(filename), du_bytes)
 
@@ -275,7 +275,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         # create sparse file
         (handle, filename) = tempfile.mkstemp("sparsetest")
-        os.ftruncate(handle, 1024**2)
+        os.ftruncate(handle, 1000**2)
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
         delete(filename)

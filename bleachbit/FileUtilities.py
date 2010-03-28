@@ -81,19 +81,19 @@ class OpenFiles:
 
 
 def bytes_to_human(bytes_i):
-    """Display a file size in human terms (megabytes, etc.)"""
+    """Display a file size in human terms (megabytes, etc.) using SI standard"""
 
-    storage_multipliers = { 1024**5 : 'PiB', 1024**4 : 'TiB', \
-        1024**3 : 'GiB', 1024**2: 'MiB', 1024: 'KiB', 1 : 'B' }
+    storage_multipliers = { 1000**5 : 'PB', 1000**4 : 'TB', \
+        1000**3 : 'GB', 1000**2: 'MB', 1000: 'kB', 1 : 'B' }
 
     assert(isinstance(bytes_i, (int, long)))
 
     if 0 == bytes_i:
         return "0"
 
-    if bytes_i >= 1024**3:
+    if bytes_i >= 1000**3:
         decimals = 2
-    elif bytes_i >= 1024:
+    elif bytes_i >= 1000:
         decimals = 1
     else:
         decimals = 0
@@ -253,13 +253,22 @@ def globex(pathname, regex):
                 yield path
 
 
-def human_to_bytes(string):
-    """Convert a string like 10.2GB into bytes"""
-    multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
-        'GB': 1024**3, 'TB': 1024**4 }
-    matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
-    if 2 > len(matches[0]):
-        raise ValueError("Invalid input for '%s'" % (string))
+def human_to_bytes(string, format = 'si'):
+    """Convert a string like 10.2GB into bytes.  By
+    default use SI standard (base 10).  The format of the
+    GNU command 'du' (base 2) also supported."""
+    if 'si' == format:
+        multiplier = { 'B' : 1, 'kB': 1000, 'MB': 1000**2, \
+            'GB': 1000**3, 'TB': 1000**4 }
+        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([kMGT]{0,1}B)$", string)
+    elif 'du' == format:
+        multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
+            'GB': 1024**3, 'TB': 1024**4 }
+        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
+    else:
+        raise ValueError("Invalid format: '%s'" % format)
+    if [] == matches or 2 > len(matches[0]):
+        raise ValueError("Invalid input for '%s' (format='%s')" % (string, format))
     return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
 
 
