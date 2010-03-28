@@ -35,8 +35,8 @@ import gobject
 warnings.simplefilter('default')
 
 from Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
-    help_contents_url, license_filename, online_update_notification_enabled, \
-    release_notes_url
+    help_contents_url, license_filename, options_file, options_dir, \
+    online_update_notification_enabled, release_notes_url
 from Cleaner import backends
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -226,6 +226,7 @@ class GUI:
     <menubar name="MenuBar">
         <menu action="File">
             <menuitem action="ShredFiles"/>
+            <menuitem action="ShredQuit"/>
             <menuitem action="Quit"/>
         </menu>
         <menu action="Edit">
@@ -494,6 +495,32 @@ class GUI:
         del backends['_gui']
 
 
+    def cb_shred_quit(self, action):
+        """Shred settings (for privacy reasons) and quit"""
+        try:
+            FileUtilities.delete(options_file, shred = True)
+            fn = os.path.join(options_dir, "deepscan.sqlite3")
+            if os.path.exists(fn):
+                FileUtilities.delete(fn, shred = True)
+        except:
+            print traceback.print_exc()
+            err = str(sys.exc_info()[1])
+            self.append_text(err, 'error')
+            return
+
+        try:
+            os.rmdir(options_dir)
+        except:
+            print traceback.print_exc()
+            err = str(sys.exc_info()[1])
+            self.append_text(err, 'error')
+            while gtk.events_pending():
+                gtk.main_iteration()
+            time.sleep(3)
+
+        gtk.main_quit()
+
+
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
         if type(status) is float:
@@ -529,6 +556,7 @@ class GUI:
         # Create actions
         entries = (
                     ('ShredFiles', gtk.STOCK_DELETE, _('_Shred Files'), None, None, self.cb_shred_file),
+                    ('ShredQuit', None, _('S_hred Settings and Quit'), None, None, self.cb_shred_quit),
                     ('Quit', gtk.STOCK_QUIT, _('_Quit'), None, None, lambda *dummy: gtk.main_quit()),
                     ('File', None, _('_File')),
                     ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, None, self.cb_preferences_dialog),
