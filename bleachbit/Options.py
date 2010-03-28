@@ -49,7 +49,14 @@ class Options:
             General.makedirs(Common.options_dir)
         mkfile = not os.path.exists(Common.options_file)
         _file = open(Common.options_file, 'wb')
-        self.config.write(_file)
+        try:
+            self.config.write(_file)
+        except IOError, e:
+            print e
+            if 28 == e.errno:
+                print "Error: disk is full writing configuration '%s'" % Common.options_file
+            else:
+                raise
         if mkfile and General.sudo_mode():
             General.chownself(Common.options_file)
 
