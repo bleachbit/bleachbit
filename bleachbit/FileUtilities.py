@@ -41,6 +41,10 @@ if not "iglob" in dir(glob):
 
 from Options import options
 
+if 'nt' == os.name:
+    import win32file
+    import win32con
+
 if 'posix' == os.name:
     from General import WindowsError
 
@@ -230,6 +234,11 @@ def getsize(path):
     if 'posix' == os.name:
         __stat = os.lstat(path)
         return __stat.st_blocks * 512
+    if 'nt' == os.name:
+        # On some files os.path.getsize() returns access denied.
+        finddata = win32file.FindFilesW(path)[0]
+        size = (finddata[4] * (0xffffffff+1)) + finddata[5]
+        return size
     return os.path.getsize(path)
 
 
