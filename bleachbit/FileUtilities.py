@@ -128,8 +128,8 @@ def delete(path, shred = False):
     try:
         print u"info: removing '%s'" % path
     except:
-        # FIXME: unicode exception workaround for Windows (see unit test)
-        print "info: removing '%s'" % path.encode('ascii', 'replace')
+        p = re.compile('[\x7f-\xff]')
+        print r"info: removing '%s'" % p.sub('?', path)
     mode = os.lstat(path)[stat.ST_MODE]
     if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
         os.remove(path)
