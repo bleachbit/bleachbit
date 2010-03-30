@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-03-28 14:43-0600\n"
-"PO-Revision-Date: 2010-03-28 21:54+0000\n"
+"PO-Revision-Date: 2010-03-29 17:27+0000\n"
 "Last-Translator: Sergio Zanchetta <primes2h@ubuntu.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-29 00:20+0000\n"
+"X-Launchpad-Export-Date: 2010-03-30 02:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -413,7 +413,8 @@ msgid "Index"
 msgstr "Indice"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Elimina l'indice di ricerca (un database di parole e i file che le "
 "contengono)"
@@ -523,7 +524,8 @@ msgid "Clipboard"
 msgstr "Appunti"
 
 #: ../bleachbit/Cleaner.py:421
-msgid "The desktop environment's clipboard used for copy and paste operations"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Gli appunti dell'ambiente desktop usati per operazioni di copia e incolla"
 
@@ -552,7 +554,8 @@ msgstr "Sistema"
 msgid "Overwrite free disk space %s"
 msgstr "Sovrascrittura dello spazio libero su %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:628
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Cestino %s"
@@ -720,7 +723,8 @@ msgstr "Rimuovi"
 
 #: ../bleachbit/GuiPreferences.py:212
 msgid "All languages will be deleted except those checked."
-msgstr "Tutte le lingue saranno eliminate ad eccezione di quelle selezionate."
+msgstr ""
+"Tutte le lingue saranno eliminate ad eccezione di quelle selezionate."
 
 #: ../bleachbit/GuiPreferences.py:230
 msgid "Preserve"
@@ -790,7 +794,7 @@ msgstr "_Sovrascrivi i file"
 
 #: ../bleachbit/GUI.py:559
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "Elimina le impostazioni ed esci"
 
 #: ../bleachbit/GUI.py:560
 msgid "_Quit"
@@ -840,7 +844,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:603
 msgctxt "button"
 msgid "Delete"
-msgstr ""
+msgstr "Cancellare"
 
 #: ../bleachbit/GUI.py:606
 msgid "Delete files in the selected operations"
@@ -849,7 +853,7 @@ msgstr "Elimina i file delle operazioni selezionate"
 #: ../bleachbit/GUI.py:687
 msgctxt "button"
 msgid "Update BleachBit"
-msgstr ""
+msgstr "Aggiorna BleachBit"
 
 #: ../bleachbit/GUI.py:692
 msgid "BleachBit update is available"
@@ -883,7 +887,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:108
 msgctxt "column_label"
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
 #: ../bleachbit/RecognizeCleanerML.py:111
@@ -902,7 +906,8 @@ msgstr "Eseguibile non trovato: %s"
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
-msgstr "%s è ancora aperto e non può essere eliminato. Chiuderlo e riprovare."
+msgstr ""
+"%s è ancora aperto e non può essere eliminato. Chiuderlo e riprovare."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
