@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-03-27 11:43-0600\n"
-"PO-Revision-Date: 2010-03-27 22:00+0000\n"
-"Last-Translator: Roman Horník <roman.hornik@gmail.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-28 14:43-0600\n"
+"PO-Revision-Date: 2010-03-29 05:11+0000\n"
+"Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-28 01:48+0000\n"
+"X-Launchpad-Export-Date: 2010-03-29 14:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -93,8 +93,7 @@ msgstr "Webový prehliadač"
 #: ../cleaners/safari.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:188
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Zmazať webovú cache, ktorá urýchľuje načítanie už navštívených stránok"
+msgstr "Zmazať webovú cache, ktorá urýchľuje načítanie už navštívených stránok"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -409,8 +408,7 @@ msgid "Index"
 msgstr "Index"
 
 #: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
+msgid "Delete the search index, a database of words and the files they contain"
 msgstr "Zmazať vyhľadávací register, databázu slov a obsahujúce súbory"
 
 #: ../bleachbit.desktop
@@ -518,8 +516,7 @@ msgid "Clipboard"
 msgstr "Schránka"
 
 #: ../bleachbit/Cleaner.py:421
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
+msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Schránka desktopových prostredí používaná pre operácie kopírovať a vložiť"
 
@@ -546,8 +543,7 @@ msgstr "Systém"
 msgid "Overwrite free disk space %s"
 msgstr "Prepísať voľné miesto na disku %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Kôš na %s"
@@ -632,7 +628,7 @@ msgstr ""
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Ste si istý, že chcete navždy odstrániť tieto súbory?"
 
-#: ../bleachbit/GuiPreferences.py:54 ../bleachbit/GUI.py:534
+#: ../bleachbit/GuiPreferences.py:54 ../bleachbit/GUI.py:562
 msgid "Preferences"
 msgstr "Nastavenia"
 
@@ -730,19 +726,19 @@ msgstr "Názov"
 msgid "Active"
 msgstr "Aktívny"
 
-#: ../bleachbit/GUI.py:347
+#: ../bleachbit/GUI.py:348
 msgid "You must select an operation"
 msgstr "Musíte vybrať operáciu"
 
-#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
+#: ../bleachbit/GUI.py:371 ../bleachbit/GUI.py:386
 msgid "Done."
 msgstr "Hotovo."
 
-#: ../bleachbit/GUI.py:396
+#: ../bleachbit/GUI.py:397
 msgid "Program to clean unnecessary files"
 msgstr "Program na mazanie nepotrebných súborov"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:402
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -754,103 +750,107 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:407
+#: ../bleachbit/GUI.py:408
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Roman Horník https://launchpad.net/~roman.hornik\n"
 "  milboy https://launchpad.net/~milboys"
 
-#: ../bleachbit/GUI.py:420
+#: ../bleachbit/GUI.py:421
 msgid "System information"
 msgstr "Systémové informácie"
 
-#: ../bleachbit/GUI.py:474
+#: ../bleachbit/GUI.py:475
 msgid "Choose files to shred"
 msgstr "Vyberte súbory, ktoré majú byť rozdrvené"
 
-#: ../bleachbit/GUI.py:531
+#: ../bleachbit/GUI.py:558
 msgid "_Shred Files"
 msgstr "_Rozdrvené súbory"
 
-#: ../bleachbit/GUI.py:532
+#: ../bleachbit/GUI.py:559
+msgid "S_hred Settings and Quit"
+msgstr "_Skartovať Nastavenia a Ukončiť"
+
+#: ../bleachbit/GUI.py:560
 msgid "_Quit"
 msgstr "_Koniec"
 
-#: ../bleachbit/GUI.py:533
+#: ../bleachbit/GUI.py:561
 msgid "_File"
 msgstr "_Súbor"
 
-#: ../bleachbit/GUI.py:535
+#: ../bleachbit/GUI.py:563
 msgid "_Edit"
 msgstr "_Úpravy"
 
-#: ../bleachbit/GUI.py:536
+#: ../bleachbit/GUI.py:564
 msgid "Help Contents"
 msgstr "Obsah Pomocníka"
 
-#: ../bleachbit/GUI.py:537
+#: ../bleachbit/GUI.py:565
 msgid "_Release Notes"
 msgstr "_Poznámky k vydaniu"
 
-#: ../bleachbit/GUI.py:538
+#: ../bleachbit/GUI.py:566
 msgid "_System Information"
 msgstr "_Systémové informácie"
 
-#: ../bleachbit/GUI.py:539
+#: ../bleachbit/GUI.py:567
 msgid "_About"
 msgstr "_O programe"
 
-#: ../bleachbit/GUI.py:540
+#: ../bleachbit/GUI.py:568
 msgid "_Help"
 msgstr "_Pomocník"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:564
+#: ../bleachbit/GUI.py:592
 msgctxt "button"
 msgid "Preview"
 msgstr "Náhľad"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:595
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Náhľad súborov vo vybraných operáciach (bez odstránenia nejakých súborov)"
 
-#. TRANSLATORS: This is the delete button on the main window
+#. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:575
+#: ../bleachbit/GUI.py:603
 msgctxt "button"
 msgid "Delete"
 msgstr "Zmazať"
 
-#: ../bleachbit/GUI.py:578
+#: ../bleachbit/GUI.py:606
 msgid "Delete files in the selected operations"
 msgstr "Odstrániť súbory vo vybraných operáciach"
 
-#: ../bleachbit/GUI.py:659
+#: ../bleachbit/GUI.py:687
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "Aktualizovať BleachBit"
 
-#: ../bleachbit/GUI.py:664
+#: ../bleachbit/GUI.py:692
 msgid "BleachBit update is available"
 msgstr "Je k dispozícii aktualizácia BleachBit"
 
-#: ../bleachbit/GUI.py:672
+#: ../bleachbit/GUI.py:700
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Klikni na ''Aktualizácia BleachBit'' pre viac informácií"
 
-#: ../bleachbit/GUI.py:688
+#: ../bleachbit/GUI.py:716
 msgid "Error when checking for updates: "
 msgstr "Chyba pri kontrole aktualizácií: "
 
-#: ../bleachbit/RecognizeCleanerML.py:82
+#: ../bleachbit/RecognizeCleanerML.py:83
 msgid "Security warning"
 msgstr "Bezpečnostné upozornenie"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:94
+#: ../bleachbit/RecognizeCleanerML.py:95
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -861,13 +861,13 @@ msgstr ""
 "program."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:107
+#: ../bleachbit/RecognizeCleanerML.py:108
 msgctxt "column_label"
 msgid "Delete"
 msgstr "Zmazať"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:110
+#: ../bleachbit/RecognizeCleanerML.py:111
 msgctxt "column_label"
 msgid "Filename"
 msgstr "Názov súboru"
