@@ -65,7 +65,7 @@ class Delete:
             except WindowsError, e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
-                if 32 != e.winerror:
+                if 32 != e.winerror and 5 != e.winerror:
                     raise
                 try:
                     Windows.delete_locked_file(self.path)

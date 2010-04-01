@@ -134,26 +134,17 @@ def delete(path, shred = False):
     except:
         p = re.compile('[\x7f-\xff]')
         print r"info: removing '%s'" % p.sub('?', path)
-    mode = os.lstat(path)[stat.ST_MODE]
-    if stat.S_ISFIFO(mode) or stat.S_ISLNK(mode):
+    is_special = False
+    if 'posix' == os.name:
+        # With certain (relatively rare) files on Windows os.lstat()
+        # may return Access Denied
+        mode = os.lstat(path)[stat.ST_MODE]
+        is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
+    if is_special:
         os.remove(path)
-    elif stat.S_ISDIR(mode):
+    elif os.path.isdir(path):
         try:
             os.rmdir(path)
-        except WindowsError, e:
-            if 145 == e.winerror:
-                print "info: directory '%s' is not empty" % (path)
-            else:
-                raise
-    elif stat.S_ISREG(mode):
-        if shred or options.get('shred'):
-            try:
-                wipe_contents(path)
-            except IOError, e:
-                # permission denied (13) happens shredding MSIE 8 on Windows 7
-                print "debug: IOError #%s shredding '%s'" % (e.errno, path)
-        try:
-            os.remove(path)
         except WindowsError, e:
             # WindowsError: [Error 145] The directory is not empty:
             # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
@@ -163,8 +154,16 @@ def delete(path, shred = False):
                 print "info: directory '%s' is not empty" % (path)
             else:
                 raise
+    elif os.path.isfile(path):
+        if shred or options.get('shred'):
+            try:
+                wipe_contents(path)
+            except IOError, e:
+                # permission denied (13) happens shredding MSIE 8 on Windows 7
+                print "debug: IOError #%s shredding '%s'" % (e.errno, path)
+        os.remove(path)
     else:
-        raise Exception("Unsupported special file type")
+        raise Exception("Unsupported special file type: '%s'" % path)
 
 
 def ego_owner(filename):
@@ -235,10 +234,14 @@ def getsize(path):
         __stat = os.lstat(path)
         return __stat.st_blocks * 512
     if 'nt' == os.name:
-        # On some files os.path.getsize() returns access denied.
-        finddata = win32file.FindFilesW(path)[0]
-        size = (finddata[4] * (0xffffffff+1)) + finddata[5]
-        return size
+        # On rare files os.path.getsize() returns access denied, so try FindFilesW instead
+        finddata = win32file.FindFilesW(path)
+        if finddata == []:
+            # FindFilesW doesn't work for directories, so fallback to getsize()
+            return os.path.getsize(path)
+        else:
+            size = (finddata[0][4] * (0xffffffff+1)) + finddata[0][5]
+            return size
     return os.path.getsize(path)
 
 
