@@ -184,7 +184,7 @@ def run_setup():
            download_url = "http://bleachbit.sourceforge.net/download",
            license = "GPLv3",
            url = bleachbit.Common.APP_URL,
-           platforms = 'Linux and Windows with Python v2.4+ and PyGTK v2',
+           platforms = 'Linux and Windows; Python v2.5 and 2.6; GTK v2.12+',
            packages = ['bleachbit'],
            **args)
 
