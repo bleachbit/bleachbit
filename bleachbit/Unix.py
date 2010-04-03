@@ -100,8 +100,10 @@ class Locales:
 
     __native_locale_names = \
     { 'ar' : 'العربية', \
+        'be' : 'Беларуская мова', \
         'bg' : 'български език', \
         'bn' : 'বাংলা', \
+        'ca' : 'català', \
         'cs' : 'česky', \
         'da' : 'dansk', \
         'de' : 'Deutsch', \
@@ -121,6 +123,8 @@ class Locales:
         'ko' : '한국어', \
         'mr' : 'मराठी', \
         'ms' : 'بهاس ملايو', \
+        'nb' : 'Bokmål', \
+        'nds' : 'Plattdüütsch', \
         'nl' : 'Nederlands', \
         'no' : 'Norsk', \
         'pl' : 'polski', \
@@ -128,6 +132,8 @@ class Locales:
         'ro' : 'română', \
         'ru' : 'Pусский', \
         'sk' : 'slovenčina', \
+        'sl' : 'slovenščina', \
+        'sr' : 'Српски', \
         'sv' : 'svenska', \
         'tr' : 'Türkçe', \
         'uk' : 'Українська', \
