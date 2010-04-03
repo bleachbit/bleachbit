@@ -31,9 +31,8 @@ import os
 import sys
 import traceback
 
-from Common import _
+from Common import _, _p
 from Options import options
-from pgettext import pgettext as _p
 import Common
 import GuiBasic
 

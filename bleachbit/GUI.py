@@ -34,13 +34,12 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from Common import _, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
     online_update_notification_enabled, release_notes_url
 from Cleaner import backends
 from GuiPreferences import PreferencesDialog
 from Options import options
-from pgettext import pgettext as _p
 import Cleaner
 import FileUtilities
 import GuiBasic

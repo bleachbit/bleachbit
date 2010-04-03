@@ -40,10 +40,9 @@ except:
 else:
     HAVE_HASHLIB = True
 
-from Common import _
+from Common import _, _p
 from CleanerML import list_cleanerml_files
 from Options import options
-from pgettext import pgettext as _p
 import GuiBasic
 
 
