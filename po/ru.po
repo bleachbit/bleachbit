@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-03-28 14:43-0600\n"
-"PO-Revision-Date: 2010-03-28 21:14+0000\n"
+"PO-Revision-Date: 2010-04-04 21:03+0000\n"
 "Last-Translator: Ilia Lilov aka lilovip <lilovil@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-28 21:28+0000\n"
+"X-Launchpad-Export-Date: 2010-04-05 03:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -155,7 +155,8 @@ msgstr "Редактор"
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "Удалить ~/.viminfo, включающий историю файлов, историю команд и буферы"
+msgstr ""
+"Удалить ~/.viminfo, включающий историю файлов, историю команд и буферы"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
@@ -411,7 +412,8 @@ msgid "Index"
 msgstr "Индекс"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Удалить поисковый индекс, базу данных слов и файлы, которые они содержат"
 
@@ -519,7 +521,8 @@ msgid "Clipboard"
 msgstr "Буфер"
 
 #: ../bleachbit/Cleaner.py:421
-msgid "The desktop environment's clipboard used for copy and paste operations"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Буфер обмена окружения рабочего стола, используемый для операций копирования "
 "и вставки"
@@ -531,7 +534,8 @@ msgstr "Свободное дисковое пространство"
 #: ../bleachbit/Cleaner.py:422
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
-"Перезаписать свободное дисковое пространство чтобы скрыть удалённые файлы"
+"Перезаписать свободное дисковое пространство чтобы удалённые файлы "
+"невозможно было восстановить"
 
 #: ../bleachbit/Cleaner.py:427
 msgid "The system in general"
@@ -548,7 +552,8 @@ msgstr "Система"
 msgid "Overwrite free disk space %s"
 msgstr "Перезаписать свободное дисковое пространство в %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:628
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Корзина для %s"
@@ -653,7 +658,7 @@ msgstr "Языки"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
-msgstr "Периодически проверять программу на обновления через интернет."
+msgstr "Периодически проверять программу на обновления через Интернет"
 
 #: ../bleachbit/GuiPreferences.py:108
 msgid ""
@@ -698,7 +703,7 @@ msgstr "Выберите папку"
 msgid ""
 "Choose a writable directory for each drive for which to overwrite free space."
 msgstr ""
-"Выберите директорию, доступную для записи для каждого диска, для которого "
+"Выберите директорию, доступную для записи, для каждого диска, для которого "
 "перезаписывается свободное пространство."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
@@ -727,7 +732,7 @@ msgstr "Код"
 
 #: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:147
 msgid "Name"
-msgstr "Имя"
+msgstr "Название"
 
 #: ../bleachbit/GUI.py:155
 msgid "Active"
@@ -781,7 +786,7 @@ msgstr "_Уничтожить файлы"
 
 #: ../bleachbit/GUI.py:559
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "Обнулить настройки и выйти"
 
 #: ../bleachbit/GUI.py:560
 msgid "_Quit"
@@ -922,14 +927,14 @@ msgstr "Пожалуйста, подождите. Предпросмотр %s."
 #: ../bleachbit/Worker.py:218
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "Восстановленое дисковое пространство: %s"
+msgstr "Освобожденное дисковое пространство: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:222
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr "Дисковое пространство для восстановления: %s"
+msgstr "Дисковое пространство для освобождения: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
