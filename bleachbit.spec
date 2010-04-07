@@ -128,6 +128,11 @@ grep -l os=.windows. cleaners/*xml | xargs rm -f
 # remove Windows-specific modules
 rm -f bleachbit/Windows.py
 
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
+echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
+rm -f po/*.po
+%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
