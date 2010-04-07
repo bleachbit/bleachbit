@@ -175,9 +175,12 @@ desktop-file-install \
 %endif
 
 
+%if 0%{?rhel_version} || 0%{?centos_version}
+echo WARNING: no translations for RHEL 5.0 an CentOS 5.0 because of old msgfmt 0.14
+%else
 make -C po install DESTDIR=$RPM_BUILD_ROOT
-
 %find_lang %{name}
+%endif
 
 
 %clean
