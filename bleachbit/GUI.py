@@ -509,15 +509,16 @@ class GUI:
             self.append_text(err, 'error')
             return
 
-        try:
-            os.rmdir(options_dir)
-        except:
-            print traceback.print_exc()
-            err = str(sys.exc_info()[1])
-            self.append_text(err, 'error')
-            while gtk.events_pending():
-                gtk.main_iteration()
-            time.sleep(3)
+        if not portable_mode:
+            try:
+                os.rmdir(options_dir)
+            except:
+                print traceback.print_exc()
+                err = str(sys.exc_info()[1])
+                self.append_text(err, 'error')
+                while gtk.events_pending():
+                    gtk.main_iteration()
+                time.sleep(3)
 
         gtk.main_quit()
 
