@@ -36,7 +36,7 @@ warnings.simplefilter('default')
 
 from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url
+    online_update_notification_enabled, release_notes_url, portable_mode
 from Cleaner import backends
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -498,6 +498,8 @@ class GUI:
         """Shred settings (for privacy reasons) and quit"""
         try:
             FileUtilities.delete(options_file, shred = True)
+            if portable_mode:
+                open(options_file, 'w').write('[Portable]\n')
             fn = os.path.join(options_dir, "deepscan.sqlite3")
             if os.path.exists(fn):
                 FileUtilities.delete(fn, shred = True)

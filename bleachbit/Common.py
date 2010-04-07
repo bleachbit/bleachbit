@@ -71,12 +71,14 @@ if None == license_filename:
     print 'warning: cannot find GPLv3 license text file'
 
 # configuration
+portable_mode = False
 options_dir = None
 if 'posix' == os.name:
     options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
+        portable_mode = True
         options_dir = bleachbit_exe_path
     else:
         # installed mode
