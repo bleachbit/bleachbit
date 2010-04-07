@@ -128,7 +128,7 @@ grep -l os=.windows. cleaners/*xml | xargs rm -f
 # remove Windows-specific modules
 rm -f bleachbit/Windows.py
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
+%if 0%{?rhel_version} || 0%{?centos_version}
 echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
 rm -f po/*.po
 %endif
@@ -174,9 +174,9 @@ desktop-file-install \
 %suse_update_desktop_file %{name} Utility Filesystem
 %endif
 
-
 %if 0%{?rhel_version} || 0%{?centos_version}
-echo WARNING: no translations for RHEL 5.0 an CentOS 5.0 because of old msgfmt 0.14
+echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
+echo > %{name}.lang
 %else
 make -C po install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
