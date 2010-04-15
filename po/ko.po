@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-28 14:43-0600\n"
-"PO-Revision-Date: 2010-03-29 07:51+0000\n"
+"POT-Creation-Date: 2010-04-14 20:37-0600\n"
+"PO-Revision-Date: 2010-04-14 09:42+0000\n"
 "Last-Translator: Bundo <bundo@bundo.biz>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-29 14:36+0000\n"
+"X-Launchpad-Export-Date: 2010-04-14 13:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -599,7 +599,7 @@ msgstr "잘라내기"
 msgid "Delete registry key"
 msgstr "등록된 키 삭제"
 
-#: ../bleachbit/FileUtilities.py:199
+#: ../bleachbit/FileUtilities.py:202
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "파이썬 모듈 sqlite3을 임포트 할 수 없음: 파이썬 2.5 또는 그 이후 버전이 필요"
@@ -622,27 +622,27 @@ msgstr ""
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "정말로 이 파일들을 삭제해도 되겠습니까?"
 
-#: ../bleachbit/GuiPreferences.py:54 ../bleachbit/GUI.py:562
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:564
 msgid "Preferences"
 msgstr "기본 설정"
 
-#: ../bleachbit/GuiPreferences.py:60
+#: ../bleachbit/GuiPreferences.py:59
 msgid "General"
 msgstr "일반"
 
-#: ../bleachbit/GuiPreferences.py:61
+#: ../bleachbit/GuiPreferences.py:60
 msgid "Drives"
 msgstr "드라이브"
 
-#: ../bleachbit/GuiPreferences.py:63
+#: ../bleachbit/GuiPreferences.py:62
 msgid "Languages"
 msgstr "언어"
 
-#: ../bleachbit/GuiPreferences.py:105
+#: ../bleachbit/GuiPreferences.py:104
 msgid "Check periodically for software updates via the Internet"
 msgstr "인터넷을 통해 주기적으로 업데이트를 확인함"
 
-#: ../bleachbit/GuiPreferences.py:108
+#: ../bleachbit/GuiPreferences.py:107
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -654,18 +654,18 @@ msgstr ""
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:115
+#: ../bleachbit/GuiPreferences.py:114
 msgid "Hide irrelevant cleaners"
 msgstr "관련 없는 메뉴를 숨김"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:123
+#: ../bleachbit/GuiPreferences.py:122
 msgid "Overwrite files to hide contents"
 msgstr "복원할 수 없도록 파일을 삭제함"
 
-#: ../bleachbit/GuiPreferences.py:126
+#: ../bleachbit/GuiPreferences.py:125
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -673,64 +673,64 @@ msgstr ""
 "복원할 수 없는 삭제는 특정한 파일 시스템과 BleachBit 동작에서 비효율적이며 상"
 "당히 느림"
 
-#: ../bleachbit/GuiPreferences.py:129
+#: ../bleachbit/GuiPreferences.py:128
 msgid "Start BleachBit with computer"
 msgstr "로그인시 BleachBit 시작"
 
-#: ../bleachbit/GuiPreferences.py:140
+#: ../bleachbit/GuiPreferences.py:139
 msgid "Choose a folder"
 msgstr "폴더를 선택함"
 
-#: ../bleachbit/GuiPreferences.py:163
+#: ../bleachbit/GuiPreferences.py:162
 msgid ""
 "Choose a writable directory for each drive for which to overwrite free space."
 msgstr "이 빈 공간을 덮어 각 드라이브에 쓰기 가능한 디렉토리를 선택하십시오."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:184
+#: ../bleachbit/GuiPreferences.py:183
 msgctxt "button"
 msgid "Add"
 msgstr "추가"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187
+#: ../bleachbit/GuiPreferences.py:186
 msgctxt "button"
 msgid "Remove"
 msgstr "제거"
 
-#: ../bleachbit/GuiPreferences.py:212
+#: ../bleachbit/GuiPreferences.py:211
 msgid "All languages will be deleted except those checked."
 msgstr "체크되지 않은 모든 언어 항목을 삭제함"
 
-#: ../bleachbit/GuiPreferences.py:230
+#: ../bleachbit/GuiPreferences.py:229
 msgid "Preserve"
 msgstr "유지"
 
-#: ../bleachbit/GuiPreferences.py:234
+#: ../bleachbit/GuiPreferences.py:233
 msgid "Code"
 msgstr "코드"
 
-#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:147
+#: ../bleachbit/GuiPreferences.py:237 ../bleachbit/GUI.py:146
 msgid "Name"
 msgstr "이름"
 
-#: ../bleachbit/GUI.py:155
+#: ../bleachbit/GUI.py:154
 msgid "Active"
 msgstr "활성화"
 
-#: ../bleachbit/GUI.py:348
+#: ../bleachbit/GUI.py:347
 msgid "You must select an operation"
 msgstr "반드시 실행 항목을 선택해야 합니다."
 
-#: ../bleachbit/GUI.py:371 ../bleachbit/GUI.py:386
+#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
 msgid "Done."
 msgstr "완료"
 
-#: ../bleachbit/GUI.py:397
+#: ../bleachbit/GUI.py:396
 msgid "Program to clean unnecessary files"
 msgstr "불필요한 파일을 삭제하는 프로그램"
 
-#: ../bleachbit/GUI.py:402
+#: ../bleachbit/GUI.py:401
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -742,7 +742,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:408
+#: ../bleachbit/GUI.py:407
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -750,99 +750,99 @@ msgstr ""
 "  sungyup nham https://launchpad.net/~nhamfnad\n"
 "  yonchan https://launchpad.net/~yhjang9"
 
-#: ../bleachbit/GUI.py:421
+#: ../bleachbit/GUI.py:420
 msgid "System information"
-msgstr "시스탬 정보"
+msgstr "시스템 정보"
 
-#: ../bleachbit/GUI.py:475
+#: ../bleachbit/GUI.py:474
 msgid "Choose files to shred"
 msgstr "파기할 파일들을 선택하세요"
 
-#: ../bleachbit/GUI.py:558
+#: ../bleachbit/GUI.py:560
 msgid "_Shred Files"
 msgstr "파일을 파기함(_S)"
 
-#: ../bleachbit/GUI.py:559
+#: ../bleachbit/GUI.py:561
 msgid "S_hred Settings and Quit"
 msgstr "조각으로 찟는 설정과 종료(_H)"
 
-#: ../bleachbit/GUI.py:560
+#: ../bleachbit/GUI.py:562
 msgid "_Quit"
 msgstr "종료(_Q)"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:563
 msgid "_File"
 msgstr "파일(_F)"
 
-#: ../bleachbit/GUI.py:563
+#: ../bleachbit/GUI.py:565
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: ../bleachbit/GUI.py:564
+#: ../bleachbit/GUI.py:566
 msgid "Help Contents"
 msgstr "도움말 차례"
 
-#: ../bleachbit/GUI.py:565
+#: ../bleachbit/GUI.py:567
 msgid "_Release Notes"
 msgstr "릴리즈 노트(_R)"
 
-#: ../bleachbit/GUI.py:566
+#: ../bleachbit/GUI.py:568
 msgid "_System Information"
 msgstr "시스템 정보(_S)"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:569
 msgid "_About"
 msgstr "프로그램 정보(_A)"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:570
 msgid "_Help"
 msgstr "도움말(_H)"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:592
+#: ../bleachbit/GUI.py:594
 msgctxt "button"
 msgid "Preview"
 msgstr "미리보기"
 
-#: ../bleachbit/GUI.py:595
+#: ../bleachbit/GUI.py:597
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "선택된 파일들을 프리뷰함 (어떠한 파일도 삭제되지 않음)"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:603
+#: ../bleachbit/GUI.py:605
 msgctxt "button"
 msgid "Delete"
 msgstr "삭제"
 
-#: ../bleachbit/GUI.py:606
+#: ../bleachbit/GUI.py:608
 msgid "Delete files in the selected operations"
 msgstr "선택된 항목들의 파일들을 삭제함"
 
-#: ../bleachbit/GUI.py:687
+#: ../bleachbit/GUI.py:689
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "BleachBit 업데이트"
 
-#: ../bleachbit/GUI.py:692
+#: ../bleachbit/GUI.py:694
 msgid "BleachBit update is available"
 msgstr "BleachBit의 새로운 업데이트가 존재합니다."
 
-#: ../bleachbit/GUI.py:700
+#: ../bleachbit/GUI.py:702
 msgid "Click 'Update BleachBit' for more information"
 msgstr "상세정보를 보려면 'BleachBit 업데이트'를 클릭"
 
-#: ../bleachbit/GUI.py:716
+#: ../bleachbit/GUI.py:718
 msgid "Error when checking for updates: "
 msgstr "업데이트 확인중에 에러 발생: "
 
-#: ../bleachbit/RecognizeCleanerML.py:83
+#: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
 msgstr "보안 경고"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:95
+#: ../bleachbit/RecognizeCleanerML.py:94
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -853,24 +853,24 @@ msgstr ""
 "제하고 종료하십시요."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:108
+#: ../bleachbit/RecognizeCleanerML.py:107
 msgctxt "column_label"
 msgid "Delete"
 msgstr "삭제"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:111
+#: ../bleachbit/RecognizeCleanerML.py:110
 msgctxt "column_label"
 msgid "Filename"
 msgstr "파일 이름"
 
-#: ../bleachbit/Unix.py:362 ../bleachbit/Unix.py:392 ../bleachbit/Unix.py:572
+#: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
 #, python-format
 msgid "Executable not found: %s"
 msgstr "실행파일이 존재하지 않음: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:569 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:575 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
