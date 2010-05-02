@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-14 20:37-0600\n"
-"PO-Revision-Date: 2010-04-13 10:18+0000\n"
+"POT-Creation-Date: 2010-04-15 08:08-0600\n"
+"PO-Revision-Date: 2010-04-20 20:29+0000\n"
 "Last-Translator: Ekrem Kocadere <ekocadere@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-13 13:28+0000\n"
+"X-Launchpad-Export-Date: 2010-05-02 00:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -372,7 +372,7 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Derin tarama"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -380,7 +380,7 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
 msgid "This option is slow."
-msgstr ""
+msgstr "Bu özellik yavaş çalışır."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -500,7 +500,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:413
 msgid "This option is experimental and may cause system problems."
-msgstr ""
+msgstr "Bu özellik deneyseldir ve bazı sistem sorunlarına yol açabilir."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:418
@@ -525,7 +525,7 @@ msgstr "Masaüstü ortamının kopyalama ve yapıştırma için kullanılan pano
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Free disk space"
-msgstr ""
+msgstr "Disk alanını temizle."
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Overwrite free disk space to hide deleted files"
@@ -578,7 +578,7 @@ msgstr "Sistem bilgilerini göster."
 
 #: ../bleachbit/CLI.py:153
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "Silinecek dosyaları ve diğer değişiklikleri önizleyin."
 
 #: ../bleachbit/CLI.py:155
 msgid "output version information and exit"
@@ -598,7 +598,7 @@ msgstr "Sil"
 #. system reboots
 #: ../bleachbit/Command.py:77
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Silme için işaretle"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:152
@@ -689,7 +689,7 @@ msgstr "Bleachbit'i sistem açılışında başlat."
 
 #: ../bleachbit/GuiPreferences.py:139
 msgid "Choose a folder"
-msgstr ""
+msgstr "Bir klasör seçin"
 
 #: ../bleachbit/GuiPreferences.py:162
 msgid ""
@@ -700,7 +700,7 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py:183
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
 #: ../bleachbit/GuiPreferences.py:186
@@ -764,7 +764,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:420
 msgid "System information"
-msgstr ""
+msgstr "Sistem bilgisi"
 
 #: ../bleachbit/GUI.py:474
 msgid "Choose files to shred"
@@ -814,7 +814,7 @@ msgstr "_Yardım"
 #: ../bleachbit/GUI.py:594
 msgctxt "button"
 msgid "Preview"
-msgstr ""
+msgstr "Önizleme"
 
 #: ../bleachbit/GUI.py:597
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -827,7 +827,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:605
 msgctxt "button"
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 #: ../bleachbit/GUI.py:608
 msgid "Delete files in the selected operations"
@@ -836,7 +836,7 @@ msgstr "Seçili operasyonlardaki dosyaları sil"
 #: ../bleachbit/GUI.py:689
 msgctxt "button"
 msgid "Update BleachBit"
-msgstr ""
+msgstr "BleachBit'i güncelle"
 
 #: ../bleachbit/GUI.py:694
 msgid "BleachBit update is available"
@@ -873,7 +873,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:110
 msgctxt "column_label"
 msgid "Filename"
-msgstr ""
+msgstr "Dosya Adı"
 
 #: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
 #, python-format
