@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-15 08:08-0600\n"
-"PO-Revision-Date: 2010-04-06 11:26+0000\n"
+"PO-Revision-Date: 2010-05-04 19:22+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-06 13:32+0000\n"
+"X-Launchpad-Export-Date: 2010-05-06 16:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -336,7 +336,7 @@ msgstr "検索履歴の削除"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr "バックアップファイル"
+msgstr "ファイルをバックアップ"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
@@ -368,7 +368,7 @@ msgstr "詳細スキャン"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "どのファイルを残すかプレビューを調査してください。"
+msgstr "残したいファイルについては、プレビューを精査してください。"
 
 #: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
 msgid "This option is slow."
@@ -510,7 +510,7 @@ msgstr "クリップボード"
 
 #: ../bleachbit/Cleaner.py:421
 msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr "コピー＆ペーストで使用するデスクトップ環境のクリップボード"
+msgstr "コピー＆ペーストに使用するデスクトップ環境のクリップボード"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Free disk space"
@@ -763,7 +763,7 @@ msgstr "シュレッダーにかける(_S)"
 
 #: ../bleachbit/GUI.py:561
 msgid "S_hred Settings and Quit"
-msgstr "シュレッダーの設定と終了(_H)"
+msgstr "設定を削除して終了(_H)"
 
 #: ../bleachbit/GUI.py:562
 msgid "_Quit"
@@ -775,7 +775,7 @@ msgstr "ファイル (_F)"
 
 #: ../bleachbit/GUI.py:565
 msgid "_Edit"
-msgstr "_編集"
+msgstr "編集(_E)"
 
 #: ../bleachbit/GUI.py:566
 msgid "Help Contents"
@@ -801,7 +801,7 @@ msgstr "ヘルプ(_H)"
 #: ../bleachbit/GUI.py:594
 msgctxt "button"
 msgid "Preview"
-msgstr ""
+msgstr "プレビュー"
 
 #: ../bleachbit/GUI.py:597
 msgid "Preview files in the selected operations (without deleting any files)"
