@@ -136,8 +136,8 @@ class Shred(Delete):
 
     def __init__(self, path):
         """Create an instance to shred 'path'"""
-        self.shred = True
         Delete.__init__(self, path)
+        self.shred = True
 
 
 
