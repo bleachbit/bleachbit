@@ -592,6 +592,7 @@ class System(Cleaner):
             pathname = os.path.expanduser("~/.recently-used.xbel")
             if os.path.lexists(pathname):
                 yield Command.Shred(pathname)
+                gtk.RecentManager().purge_items()
 
 
         # overwrite free space
