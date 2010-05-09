@@ -583,6 +583,8 @@ class System(Cleaner):
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
             # in memory if it is simply deleted, so it must be shredded
             # (or at least truncated).
+            # GNOME 2.28.1 (Ubuntu 9.10) and 2.30 (10.04) do not re-read
+            # the file after truncation.
             pathname = os.path.expanduser("~/.recently-used.xbel")
             if os.path.lexists(pathname):
                 if options.get('shred'):
