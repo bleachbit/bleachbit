@@ -60,6 +60,7 @@ class PreferencesDialog:
         notebook.append_page(self.__drives_page(), gtk.Label(_("Drives")))
         if 'posix' == os.name:
             notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
+        notebook.append_page(self.__whitelist_page(), gtk.Label(_("Whitelist")))
 
         self.dialog.vbox.pack_start(notebook, True)
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
@@ -244,6 +245,65 @@ class PreferencesDialog:
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
         vbox.pack_start(swindow, False)
+        return vbox
+
+
+    def __whitelist_page(self):
+        """Return a widget containing the whitelist page"""
+
+        def add_whitelist_path_cb(button):
+            """Callback for adding a path"""
+            print "FIXME: stub"
+
+        def remove_whitelist_path_cb(button):
+            """Callback for removing a path"""
+            print "FIXME: stub"
+
+
+        vbox = gtk.VBox()
+
+        # TRANSLATORS: "Paths" is used generically to refer to both files and folders
+        notice = gtk.Label(_("Theses paths will not be deleted or modified."))
+        vbox.pack_start(notice)
+
+        # create list store
+        liststore = gtk.ListStore(str, str)
+
+        # create treeview
+        treeview = gtk.TreeView(liststore)
+
+        # create column views
+        self.renderer0 = gtk.CellRendererText()
+        self.column0 = gtk.TreeViewColumn(_("Type"), self.renderer0, text=0)
+        treeview.append_column(self.column0)
+
+        self.renderer1 = gtk.CellRendererText()
+        # TRANSLATORS: In the tree view "Path" is used generically to refer to a file, folder, or a pattern describing either
+        self.column1 = gtk.TreeViewColumn(_("Path"), self.renderer1, text=1)
+        treeview.append_column(self.column1)
+        treeview.set_search_column(1)
+
+        # finish tree view
+        swindow = gtk.ScrolledWindow()
+        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        swindow.set_size_request(300, 200)
+        swindow.add(treeview)
+        vbox.pack_start(swindow, False)
+
+        # buttons that modify the list
+        button_add = gtk.Button(_p('button', 'Add'))
+        button_add.connect("clicked", add_whitelist_path_cb)
+
+        button_remove = gtk.Button(_p('button', 'Remove'))
+        button_remove.connect("clicked", remove_whitelist_path_cb)
+
+        button_box = gtk.HButtonBox()
+        button_box.set_layout(gtk.BUTTONBOX_START)
+        button_box.pack_start(button_add)
+        button_box.pack_start(button_remove)
+        vbox.pack_start(button_box, False)
+
+        # return page
         return vbox
 
 
