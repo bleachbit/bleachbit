@@ -65,6 +65,14 @@ class OptionsTestCase(unittest.TestCase):
         o.set_list("list_test", list_values)
         self.assertEqual(list_values, o.get_list("list_test"))
 
+        # whitelist
+        whitelist = [ ('file', '/home/foo'), ('folder', '/home') ]
+        old_whitelist = o.get_whitelist_paths()
+        o.set_whitelist_paths(whitelist)
+        self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
+        o.set_whitelist_paths(old_whitelist)
+        self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
+
         # these should always be set
         for bkey in boolean_keys:
             self.assert_(type(o.get(bkey)) is bool)

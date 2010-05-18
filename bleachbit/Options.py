@@ -115,7 +115,7 @@ class Options:
         for option in set(options):
             type = self.config.get(section, option + '_type')
             path = self.config.get(section, option + '_path')
-            values.append( [ type, path ] )
+            values.append( ( type, path ) )
         return values
 
 
