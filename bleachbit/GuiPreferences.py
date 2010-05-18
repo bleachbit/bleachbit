@@ -251,8 +251,18 @@ class PreferencesDialog:
     def __whitelist_page(self):
         """Return a widget containing the whitelist page"""
 
-        def add_whitelist_path_cb(button):
-            """Callback for adding a path"""
+        def add_whitelist_file_cb(button):
+            """Callback for adding a file"""
+            title = _("Choose a file")
+            pathname = GuiBasic.browse_file(self.parent, title)
+            if pathname:
+                liststore.append( [ _('File'), pathname ] )
+                pathnames.append( [ 'file', pathname ] )
+                options.set_whitelist_paths(pathnames)
+
+
+        def add_whitelist_folder_cb(button):
+            """Callback for adding a folder"""
             print "FIXME: stub"
 
         def remove_whitelist_path_cb(button):
@@ -261,6 +271,9 @@ class PreferencesDialog:
 
 
         vbox = gtk.VBox()
+
+        # load data
+        pathnames = options.get_whitelist_paths()
 
         # TRANSLATORS: "Paths" is used generically to refer to both files and folders
         notice = gtk.Label(_("Theses paths will not be deleted or modified."))
@@ -278,7 +291,8 @@ class PreferencesDialog:
         treeview.append_column(self.column0)
 
         self.renderer1 = gtk.CellRendererText()
-        # TRANSLATORS: In the tree view "Path" is used generically to refer to a file, folder, or a pattern describing either
+        # TRANSLATORS: In the tree view "Path" is used generically to refer to a
+        # file, a folder, or a pattern describing either
         self.column1 = gtk.TreeViewColumn(_("Path"), self.renderer1, text=1)
         treeview.append_column(self.column1)
         treeview.set_search_column(1)
@@ -291,15 +305,19 @@ class PreferencesDialog:
         vbox.pack_start(swindow, False)
 
         # buttons that modify the list
-        button_add = gtk.Button(_p('button', 'Add'))
-        button_add.connect("clicked", add_whitelist_path_cb)
+        button_add_file = gtk.Button(_p('button', 'Add file'))
+        button_add_file.connect("clicked", add_whitelist_file_cb)
+
+        button_add_folder = gtk.Button(_p('button', 'Add folder'))
+        button_add_folder.connect("clicked", add_whitelist_folder_cb)
 
         button_remove = gtk.Button(_p('button', 'Remove'))
         button_remove.connect("clicked", remove_whitelist_path_cb)
 
         button_box = gtk.HButtonBox()
         button_box.set_layout(gtk.BUTTONBOX_START)
-        button_box.pack_start(button_add)
+        button_box.pack_start(button_add_file)
+        button_box.pack_start(button_add_folder)
         button_box.pack_start(button_remove)
         vbox.pack_start(button_box, False)
 

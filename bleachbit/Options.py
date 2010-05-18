@@ -100,6 +100,24 @@ class Options:
             values.append(self.config.get(section, option))
         return values
 
+    def get_whitelist_paths(self):
+        """Return the whitelist of paths"""
+        section = "whitelist/paths"
+        if not self.config.has_section(section):
+            return None
+        options = []
+        for option in sorted(self.config.options(section)):
+            pos = option.find('_')
+            if -1 == pos:
+                continue
+            options.append(option[0:pos])
+        values = []
+        for option in set(options):
+            type = self.config.get(section, option + '_type')
+            path = self.config.get(section, option + '_path')
+            values.append( [ type, path ] )
+        return values
+
 
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
@@ -172,6 +190,20 @@ class Options:
         counter = 0
         for value in values:
             self.config.set(section, str(counter), value)
+            counter += 1
+        self.__flush()
+
+
+    def set_whitelist_paths(self, values):
+        """Save thee whitelist"""
+        section = "whitelist/paths"
+        if self.config.has_section(section):
+            self.config.remove_section(section)
+        self.config.add_section(section)
+        counter = 0
+        for value in values:
+            self.config.set(section, str(counter) + '_type', value[0])
+            self.config.set(section, str(counter) + '_path', value[1])
             counter += 1
         self.__flush()
 

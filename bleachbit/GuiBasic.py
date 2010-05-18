@@ -58,6 +58,25 @@ def browse_folder(parent, title):
     return None
 
 
+def browse_file(parent, title):
+    """Prompt user to select a single file"""
+
+    chooser = gtk.FileChooserDialog(title = title,
+        parent = parent,
+        action = gtk.FILE_CHOOSER_ACTION_OPEN,
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
+    chooser.set_current_folder(os.path.expanduser('~'))
+    resp = chooser.run()
+    path = chooser.get_filename()
+    chooser.destroy()
+
+    if gtk.RESPONSE_OK != resp:
+        # user cancelled
+        return None
+
+    return path
+
+
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
