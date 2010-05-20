@@ -28,13 +28,13 @@ Scan directory tree for files to delete
 import Common
 import os
 import re
-import sqlite3
 
 
 class ScanCache:
 
     def __init__(self):
         dbpath = os.path.join(Common.options_dir, "deepscan.sqlite3")
+        import sqlite3
         self.conn = sqlite3.connect(dbpath)
         self.cursor = self.conn.cursor()
         try:
