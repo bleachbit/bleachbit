@@ -303,6 +303,26 @@ class FileUtilitiesTestCase(unittest.TestCase):
                 "does not exist: %s" % pathname)
 
 
+    def test_whitelisted(self):
+        """Unit test for whitelisted()"""
+        # setup
+        old_whitelist = options.get_whitelist_paths()
+        whitelist = [ ('file', '/home/foo') ]
+        options.set_whitelist_paths(whitelist)
+        self.assertEqual(set(whitelist), set(options.get_whitelist_paths()))
+
+        # test
+        self.assertEqual(False, whitelisted('/home/foo2'))
+        self.assertEqual(False, whitelisted('/home/fo'))
+        self.assertEqual(False, whitelisted(''))
+        self.assertEqual(False, whitelisted(None))
+        self.assertEqual(True, whitelisted('/home/foo'))
+
+        # clean up
+        options.set_whitelist_paths(old_whitelist)
+        self.assertEqual(set(old_whitelist), set(options.get_whitelist_paths()))
+
+
     def test_wipe_contents(self):
         """Unit test for wipe_delete()"""
 

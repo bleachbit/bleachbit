@@ -301,6 +301,14 @@ def listdir(directory):
         yield os.path.join(dirname, filename)
 
 
+def whitelisted(path):
+    """Check whether this path is whitelisted"""
+    for pathname in options.get_whitelist_paths():
+        if pathname[0] == 'file' and path == pathname[1]:
+            return True
+    return False
+
+
 def wipe_contents(path, truncate = True):
     """Wipe files contents
 
