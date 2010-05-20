@@ -256,6 +256,10 @@ class PreferencesDialog:
             title = _("Choose a file")
             pathname = GuiBasic.browse_file(self.parent, title)
             if pathname:
+                for this_pathname in pathnames:
+                    if pathname == this_pathname[1]:
+                        print "warning: '%s' already exists in whitelist" % pathname
+                        return
                 liststore.append( [ _('File'), pathname ] )
                 pathnames.append( [ 'file', pathname ] )
                 options.set_whitelist_paths(pathnames)
@@ -267,7 +271,17 @@ class PreferencesDialog:
 
         def remove_whitelist_path_cb(button):
             """Callback for removing a path"""
-            print "FIXME: stub"
+            treeselection = treeview.get_selection()
+            (model, _iter) = treeselection.get_selected()
+            if None == _iter:
+                # nothing selected
+                return
+            pathname = model[_iter][1]
+            liststore.remove(_iter)
+            for this_pathname in pathnames:
+                if this_pathname[1] == pathname:
+                    pathnames.remove(this_pathname)
+                    options.set_whitelist_paths(pathnames)
 
 
         vbox = gtk.VBox()
