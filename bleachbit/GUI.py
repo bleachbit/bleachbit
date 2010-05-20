@@ -734,6 +734,16 @@ class GUI:
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
+        if 'nt' == os.name:
+            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+            # http://bleachbit.sourceforge.net/forum/074-fails-errors
+            try:
+                import sqlite3
+            except ImportError, e:
+                print e
+                print dir(e)
+                self.append_text(_("Error loading SQLite module.  The anti-virus software may be blocking it."), 'error')
 
 
 
