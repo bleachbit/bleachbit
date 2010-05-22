@@ -109,6 +109,11 @@ class Function:
             raise AssertionError('Expected MethodType but got %s' % type(func))
 
     def execute(self, really_delete):
+
+        if None != self.path and FileUtilities.whitelisted(self.path):
+            yield whitelist(self.path)
+            return
+
         ret = { \
             'label' : self.label,
             'n_deleted' : 0,
