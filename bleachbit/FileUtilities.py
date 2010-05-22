@@ -306,6 +306,8 @@ def whitelisted(path):
     for pathname in options.get_whitelist_paths():
         if pathname[0] == 'file' and path == pathname[1]:
             return True
+        if pathname[0] == 'folder' and path.startswith(pathname[1]):
+            return True
     return False
 
 

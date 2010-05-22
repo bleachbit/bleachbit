@@ -307,16 +307,21 @@ class FileUtilitiesTestCase(unittest.TestCase):
         """Unit test for whitelisted()"""
         # setup
         old_whitelist = options.get_whitelist_paths()
-        whitelist = [ ('file', '/home/foo') ]
+        whitelist = [ ('file', '/home/foo'), ('folder', '/home/folder') ]
         options.set_whitelist_paths(whitelist)
         self.assertEqual(set(whitelist), set(options.get_whitelist_paths()))
 
         # test
+        self.assertEqual(False, whitelisted(''))
+        self.assertEqual(False, whitelisted('/'))
+
         self.assertEqual(False, whitelisted('/home/foo2'))
         self.assertEqual(False, whitelisted('/home/fo'))
-        self.assertEqual(False, whitelisted(''))
-        self.assertEqual(False, whitelisted(None))
         self.assertEqual(True, whitelisted('/home/foo'))
+
+        self.assertEqual(True, whitelisted('/home/folder'))
+        self.assertEqual(True, whitelisted('/home/folder/file'))
+        self.assertEqual(False, whitelisted('/home/fold'))
 
         # clean up
         options.set_whitelist_paths(old_whitelist)
