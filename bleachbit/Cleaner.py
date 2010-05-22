@@ -420,7 +420,7 @@ class System(Cleaner):
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
-        self.set_warning('free_disk_space', _('This option is slow.'))
+        self.set_warning('free_disk_space', _('This option is very slow.'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
     def get_description(self):
