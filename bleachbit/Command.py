@@ -167,6 +167,11 @@ class Truncate(Delete):
 
     def execute(self, really_delete):
         """Make changes and return results"""
+
+        if FileUtilities.whitelisted(self.path):
+            yield whitelist(self.path)
+            return
+
         ret = { \
             # TRANSLATORS: The file will be truncated to 0 bytes in length
             'label' : _('Truncate'),
