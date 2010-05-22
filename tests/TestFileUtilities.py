@@ -323,6 +323,17 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertEqual(True, whitelisted('/home/folder/file'))
         self.assertEqual(False, whitelisted('/home/fold'))
 
+        # test blank
+        options.set_whitelist_paths([])
+        self.assertEqual(False, whitelisted('/home/foo'))
+        self.assertEqual(False, whitelisted('/home/folder'))
+        self.assertEqual(False, whitelisted('/home/folder/file'))
+
+        options.config.remove_section('whitelist/paths')
+        self.assertEqual(False, whitelisted('/home/foo'))
+        self.assertEqual(False, whitelisted('/home/folder'))
+        self.assertEqual(False, whitelisted('/home/folder/file'))
+
         # clean up
         options.set_whitelist_paths(old_whitelist)
         self.assertEqual(set(old_whitelist), set(options.get_whitelist_paths()))

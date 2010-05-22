@@ -303,6 +303,9 @@ def listdir(directory):
 
 def whitelisted(path):
     """Check whether this path is whitelisted"""
+    whitelist = options.get_whitelist_paths()
+    if None == whitelist:
+        return False
     for pathname in options.get_whitelist_paths():
         if pathname[0] == 'file' and path == pathname[1]:
             return True
