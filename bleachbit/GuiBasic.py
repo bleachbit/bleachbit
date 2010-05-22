@@ -61,6 +61,8 @@ def browse_folder(parent, title):
 def browse_file(parent, title):
     """Prompt user to select a single file"""
 
+    # FIXME: add native Windows dialog
+
     chooser = gtk.FileChooserDialog(title = title,
         parent = parent,
         action = gtk.FILE_CHOOSER_ACTION_OPEN,
