@@ -58,6 +58,6 @@
     <action command="sqlite.vacuum" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\*.sqlite"/>
     <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/default/????????.slt/*.sqlite"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/-->
-    <action command="delete" search="glob" path="~/.thunderbird/????????.default/*sqlite"/>
+    <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/????????.default/*sqlite"/>
   </option>
 </cleaner>
