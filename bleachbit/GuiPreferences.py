@@ -267,7 +267,17 @@ class PreferencesDialog:
 
         def add_whitelist_folder_cb(button):
             """Callback for adding a folder"""
-            print "FIXME: stub"
+            title = _("Choose a folder")
+            pathname = GuiBasic.browse_folder(self.parent, title)
+            if pathname:
+                for this_pathname in pathnames:
+                    if pathname == this_pathname[1]:
+                        print "warning: '%s' already exists in whitelist" % pathname
+                        return
+                liststore.append( [ _('Folder'), pathname ] )
+                pathnames.append( [ 'folder', pathname ] )
+                options.set_whitelist_paths(pathnames)
+
 
         def remove_whitelist_path_cb(button):
             """Callback for removing a path"""
