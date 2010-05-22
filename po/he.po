@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-03-28 14:43-0600\n"
-"PO-Revision-Date: 2010-04-05 01:06+0000\n"
+"POT-Creation-Date: 2010-05-18 08:00-0600\n"
+"PO-Revision-Date: 2010-05-21 10:45+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-05 03:00+0000\n"
+"X-Launchpad-Export-Date: 2010-05-21 22:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -535,13 +535,13 @@ msgstr "מערכת"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:600
+#: ../bleachbit/Cleaner.py:604
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "שכתוב השטח הפנוי במיקום %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:628
+#: ../bleachbit/Cleaner.py:632
 #, python-format
 msgid "Recycle bin %s"
 msgstr "סל המיחזור %s"
@@ -604,15 +604,15 @@ msgstr "קיצוץ"
 msgid "Delete registry key"
 msgstr "מחיקת רשומת המערכת"
 
-#: ../bleachbit/FileUtilities.py:199
+#: ../bleachbit/FileUtilities.py:202
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "לא ניתן לייבא את מודול ה־Python בשם sqlite3: נדרש Python 2.5 ומעלה."
 
-#: ../bleachbit/GuiBasic.py:86
+#: ../bleachbit/GuiBasic.py:105
 msgid "Delete confirmation"
 msgstr "אימות המחיקה"
 
-#: ../bleachbit/GuiBasic.py:94
+#: ../bleachbit/GuiBasic.py:113
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -621,25 +621,29 @@ msgstr ""
 "האם למחוק לצמיתות את הקבצים בהתאם לפעולות הנבחרות? הקבצים שימחקו בפועל "
 "עלולים להיות שונים מכפי שהוצג בתצוגה המקדימה."
 
-#: ../bleachbit/GuiBasic.py:96
+#: ../bleachbit/GuiBasic.py:115
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "האם למחוק קבצים אלו?"
 
-#: ../bleachbit/GuiPreferences.py:54 ../bleachbit/GUI.py:562
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:564
 msgid "Preferences"
 msgstr "העדפות"
 
-#: ../bleachbit/GuiPreferences.py:60
+#: ../bleachbit/GuiPreferences.py:59
 msgid "General"
 msgstr "כללי"
 
-#: ../bleachbit/GuiPreferences.py:61
+#: ../bleachbit/GuiPreferences.py:60
 msgid "Drives"
 msgstr "כוננים"
 
-#: ../bleachbit/GuiPreferences.py:63
+#: ../bleachbit/GuiPreferences.py:62
 msgid "Languages"
 msgstr "שפות"
+
+#: ../bleachbit/GuiPreferences.py:63
+msgid "Whitelist"
+msgstr "רשימת היתר"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
@@ -697,7 +701,7 @@ msgid "Add"
 msgstr "הוספה"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:324
 msgctxt "button"
 msgid "Remove"
 msgstr "הסרה"
@@ -714,27 +718,64 @@ msgstr "שימור"
 msgid "Code"
 msgstr "קוד"
 
-#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:147
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:146
 msgid "Name"
 msgstr "שם"
 
-#: ../bleachbit/GUI.py:155
+#: ../bleachbit/GuiPreferences.py:256
+msgid "Choose a file"
+msgstr "בחירת קובץ"
+
+#: ../bleachbit/GuiPreferences.py:259 ../bleachbit/GuiPreferences.py:282
+msgid "File"
+msgstr "קובץ"
+
+#: ../bleachbit/GuiPreferences.py:284
+msgid "Folder"
+msgstr "תיקייה"
+
+#. TRANSLATORS: "Paths" is used generically to refer to both files and folders
+#: ../bleachbit/GuiPreferences.py:292
+msgid "Theses paths will not be deleted or modified."
+msgstr "נתיבים אלו לא ימחקו או ישתנו."
+
+#: ../bleachbit/GuiPreferences.py:300
+msgid "Type"
+msgstr "סוג"
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:306
+msgid "Path"
+msgstr "נתיב"
+
+#: ../bleachbit/GuiPreferences.py:318
+msgctxt "button"
+msgid "Add file"
+msgstr "הוספת קובץ"
+
+#: ../bleachbit/GuiPreferences.py:321
+msgctxt "button"
+msgid "Add folder"
+msgstr "הוספת תיקייה"
+
+#: ../bleachbit/GUI.py:154
 msgid "Active"
 msgstr "פעיל"
 
-#: ../bleachbit/GUI.py:348
+#: ../bleachbit/GUI.py:347
 msgid "You must select an operation"
 msgstr "יש לבחור בפעולה"
 
-#: ../bleachbit/GUI.py:371 ../bleachbit/GUI.py:386
+#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
 msgid "Done."
 msgstr "בוצע."
 
-#: ../bleachbit/GUI.py:397
+#: ../bleachbit/GUI.py:396
 msgid "Program to clean unnecessary files"
 msgstr "תוכנית לניקוי הקבצים הבלתי נחוצים"
 
-#: ../bleachbit/GUI.py:402
+#: ../bleachbit/GUI.py:401
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -747,106 +788,106 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:408
+#: ../bleachbit/GUI.py:407
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Ddorda https://launchpad.net/~ddorda\n"
 "  Yaron https://launchpad.net/~sh-yaron"
 
-#: ../bleachbit/GUI.py:421
+#: ../bleachbit/GUI.py:420
 msgid "System information"
 msgstr "נתוני המערכת"
 
-#: ../bleachbit/GUI.py:475
+#: ../bleachbit/GUI.py:474
 msgid "Choose files to shred"
 msgstr "בחרו קבצים להשמדה"
 
-#: ../bleachbit/GUI.py:558
+#: ../bleachbit/GUI.py:560
 msgid "_Shred Files"
 msgstr "ה_שמדת קבצים"
 
-#: ../bleachbit/GUI.py:559
+#: ../bleachbit/GUI.py:561
 msgid "S_hred Settings and Quit"
 msgstr "_חיסול ההגדרות ויציאה"
 
-#: ../bleachbit/GUI.py:560
+#: ../bleachbit/GUI.py:562
 msgid "_Quit"
 msgstr "י_ציאה"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:563
 msgid "_File"
 msgstr "_קובץ"
 
-#: ../bleachbit/GUI.py:563
+#: ../bleachbit/GUI.py:565
 msgid "_Edit"
 msgstr "ע_ריכה"
 
-#: ../bleachbit/GUI.py:564
+#: ../bleachbit/GUI.py:566
 msgid "Help Contents"
 msgstr "תכני העזרה"
 
-#: ../bleachbit/GUI.py:565
+#: ../bleachbit/GUI.py:567
 msgid "_Release Notes"
 msgstr "הערות ה_פצה"
 
-#: ../bleachbit/GUI.py:566
+#: ../bleachbit/GUI.py:568
 msgid "_System Information"
 msgstr "_נתוני המערכת"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:569
 msgid "_About"
 msgstr "על _אודות"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:570
 msgid "_Help"
 msgstr "ע_זרה"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:592
+#: ../bleachbit/GUI.py:594
 msgctxt "button"
 msgid "Preview"
 msgstr "תצוגה מקדימה"
 
-#: ../bleachbit/GUI.py:595
+#: ../bleachbit/GUI.py:597
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "תצוגה מקדימה של קבצים בפעולות הנבחרות (ללא מחיקת קבצים כלשהם)"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:603
+#: ../bleachbit/GUI.py:605
 msgctxt "button"
 msgid "Delete"
 msgstr "מחיקה"
 
-#: ../bleachbit/GUI.py:606
+#: ../bleachbit/GUI.py:608
 msgid "Delete files in the selected operations"
 msgstr "מחיקת קבצים בפעולות שנבחרו"
 
-#: ../bleachbit/GUI.py:687
+#: ../bleachbit/GUI.py:689
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "עדכון BleachBit"
 
-#: ../bleachbit/GUI.py:692
+#: ../bleachbit/GUI.py:694
 msgid "BleachBit update is available"
 msgstr "ישנו עדכון זמין עבור BleachBit"
 
-#: ../bleachbit/GUI.py:700
+#: ../bleachbit/GUI.py:702
 msgid "Click 'Update BleachBit' for more information"
 msgstr "יש ללחוץ על \"עדכון BleachBit\" למידע נוסף"
 
-#: ../bleachbit/GUI.py:716
+#: ../bleachbit/GUI.py:718
 msgid "Error when checking for updates: "
 msgstr "שגיאה בעת בדיקה אחר עדכונים: "
 
-#: ../bleachbit/RecognizeCleanerML.py:83
+#: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
 msgstr "אזהרת אבטחה"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:95
+#: ../bleachbit/RecognizeCleanerML.py:94
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -857,24 +898,24 @@ msgstr ""
 "לצאת."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:108
+#: ../bleachbit/RecognizeCleanerML.py:107
 msgctxt "column_label"
 msgid "Delete"
 msgstr "מחיקה"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:111
+#: ../bleachbit/RecognizeCleanerML.py:110
 msgctxt "column_label"
 msgid "Filename"
 msgstr "שם הקובץ"
 
-#: ../bleachbit/Unix.py:362 ../bleachbit/Unix.py:392 ../bleachbit/Unix.py:572
+#: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
 #, python-format
 msgid "Executable not found: %s"
 msgstr "קובץ ההפעלה לא נמצא: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:569 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:575 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
