@@ -37,6 +37,18 @@ else:
     from General import WindowsError
 
 
+def whitelist(path):
+    """Return information that this file was whitelisted"""
+    ret = { \
+        # TRANSLATORS: This is the label in the log indicating was
+        # skipped because it matches the whitelist
+        'label' : _('Skip'),
+        'n_deleted' : 0,
+        'n_special' : 0,
+        'path' : path,
+        'size' : 0 }
+    return ret
+
 
 class Delete:
     """Delete a single file or directory.  Obey the user
@@ -51,6 +63,9 @@ class Delete:
 
     def execute(self, really_delete):
         """Make changes and return results"""
+        if FileUtilities.whitelisted(self.path):
+            yield whitelist(self.path)
+            return
         ret = { \
             # TRANSLATORS: This is the label in the log indicating will be
             # deleted (for previews) or was actually deleted
