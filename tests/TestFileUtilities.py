@@ -320,8 +320,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertEqual(True, whitelisted('/home/foo'))
 
         self.assertEqual(True, whitelisted('/home/folder'))
+        self.assertEqual(True, whitelisted('/home/folder/'))
         self.assertEqual(True, whitelisted('/home/folder/file'))
         self.assertEqual(False, whitelisted('/home/fold'))
+        self.assertEqual(False, whitelisted('/home/folder2'))
 
         # test blank
         options.set_whitelist_paths([])
