@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-22 15:41-0600\n"
-"PO-Revision-Date: 2010-05-22 22:32+0000\n"
+"PO-Revision-Date: 2010-05-23 10:39+0000\n"
 "Last-Translator: Simen Heggestøyl <simen@simenh.com>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-23 00:04+0000\n"
+"X-Launchpad-Export-Date: 2010-05-23 14:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -68,7 +68,7 @@ msgstr "Slett hurtiglager"
 #: ../cleaners/gpodder.xml ../bleachbit/Action.py:225
 #: ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:285
 msgid "Vacuum"
-msgstr "Vakum"
+msgstr "Defragmenter"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
@@ -600,7 +600,7 @@ msgstr "overskriv filer for å skjule innholdet"
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:45
 msgid "Skip"
-msgstr ""
+msgstr "Hopp over"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
@@ -763,7 +763,7 @@ msgstr "Disse stiene vil verken bli slettet eller endret på."
 
 #: ../bleachbit/GuiPreferences.py:325
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
@@ -826,11 +826,11 @@ msgstr "Velg filer du vil slette og overskrive"
 
 #: ../bleachbit/GUI.py:560
 msgid "_Shred Files"
-msgstr "_Slette og overskrive filer"
+msgstr "_Slett og overskriv filer"
 
 #: ../bleachbit/GUI.py:561
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "Fjern innstillinger, og avslutt"
 
 #: ../bleachbit/GUI.py:562
 msgid "_Quit"
@@ -906,6 +906,8 @@ msgstr "Feil ved søking etter oppdateringer "
 msgid ""
 "Error loading SQLite module.  The anti-virus software may be blocking it."
 msgstr ""
+"En feil oppstod ved innlasting av SQLite-modulen. Det kan hende "
+"antivirusprogrammet blokkerer den."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
