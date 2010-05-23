@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-18 08:00-0600\n"
-"PO-Revision-Date: 2010-05-13 10:40+0000\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-05-22 15:41-0600\n"
+"PO-Revision-Date: 2010-05-22 22:32+0000\n"
 "Last-Translator: Simen Heggestøyl <simen@simenh.com>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-16 03:24+0000\n"
+"X-Launchpad-Export-Date: 2010-05-23 00:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -380,7 +380,7 @@ msgstr "Grundig søk"
 msgid "Inspect the preview for any files you want to keep."
 msgstr "Inspiser forhåndsvisningen av filer du vil beholde."
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
+#: ../cleaners/deepscan.xml
 msgid "This option is slow."
 msgstr "Dette alternativet er tregt."
 
@@ -411,7 +411,8 @@ msgid "Index"
 msgstr "Indeks"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr "Slett søkeindeksen, en database med ord og filene de inneholder"
 
 #: ../bleachbit.desktop
@@ -499,7 +500,8 @@ msgstr "Makuler veksleminne og ledig minne"
 
 #: ../bleachbit/Cleaner.py:413
 msgid "This option is experimental and may cause system problems."
-msgstr "Dette alternativet er eksperimentelt, og kan føre til systemproblemer."
+msgstr ""
+"Dette alternativet er eksperimentelt, og kan føre til systemproblemer."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:418
@@ -519,8 +521,10 @@ msgid "Clipboard"
 msgstr "Utklippstavle"
 
 #: ../bleachbit/Cleaner.py:421
-msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr "Skrivebordmiljøets utklippstavle som brukes til å kopiere og lime inn"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+"Skrivebordmiljøets utklippstavle som brukes til å kopiere og lime inn"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Free disk space"
@@ -529,6 +533,10 @@ msgstr "Ledig diskplass"
 #: ../bleachbit/Cleaner.py:422
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Overskriv ledig diskplass for å skjule slettede filer"
+
+#: ../bleachbit/Cleaner.py:423
+msgid "This option is very slow."
+msgstr "Dette alternativet er veldig tregt."
 
 #: ../bleachbit/Cleaner.py:427
 msgid "The system in general"
@@ -545,7 +553,8 @@ msgstr "System"
 msgid "Overwrite free disk space %s"
 msgstr "Overskriv ledig diskplass %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:632
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:632
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Papirkurv %s"
@@ -587,24 +596,30 @@ msgstr "vis versjonsinformasjon og avslutt"
 msgid "overwrite files to hide contents"
 msgstr "overskriv filer for å skjule innholdet"
 
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:45
+msgid "Skip"
+msgstr ""
+
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:57
+#: ../bleachbit/Command.py:72
 msgid "Delete"
 msgstr "Slett"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:77
+#: ../bleachbit/Command.py:92
 msgid "Mark for deletion"
 msgstr "Marker for sletting"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:152
+#: ../bleachbit/Command.py:177
 msgid "Truncate"
 msgstr "Trunker"
 
-#: ../bleachbit/Command.py:191
+#: ../bleachbit/Command.py:216
 msgid "Delete registry key"
 msgstr "Slett registernøkkel"
 
@@ -614,11 +629,11 @@ msgstr ""
 "Kan ikke importere Python-modulen sqlite3: Python 2.5 eller høyere er "
 "påkrevd."
 
-#: ../bleachbit/GuiBasic.py:105
+#: ../bleachbit/GuiBasic.py:107
 msgid "Delete confirmation"
 msgstr "Slett bekreftelse"
 
-#: ../bleachbit/GuiBasic.py:113
+#: ../bleachbit/GuiBasic.py:115
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -628,7 +643,7 @@ msgstr ""
 "handlinger? De aktuelle filene kan ha blitt endret siden du kjørte "
 "forhåndsvisningen."
 
-#: ../bleachbit/GuiBasic.py:115
+#: ../bleachbit/GuiBasic.py:117
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Er du sikker på at du vil slette disse filene permanent?"
 
@@ -650,7 +665,7 @@ msgstr "Språk"
 
 #: ../bleachbit/GuiPreferences.py:63
 msgid "Whitelist"
-msgstr ""
+msgstr "Unntaksliste"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
@@ -691,7 +706,7 @@ msgstr ""
 msgid "Start BleachBit with computer"
 msgstr "Start BleachBit ved maskinoppstart"
 
-#: ../bleachbit/GuiPreferences.py:140
+#: ../bleachbit/GuiPreferences.py:140 ../bleachbit/GuiPreferences.py:270
 msgid "Choose a folder"
 msgstr "Velg en mappe"
 
@@ -708,7 +723,7 @@ msgid "Add"
 msgstr "Legg til"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:324
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:349
 msgctxt "button"
 msgid "Remove"
 msgstr "Fjern"
@@ -731,40 +746,40 @@ msgstr "Navn"
 
 #: ../bleachbit/GuiPreferences.py:256
 msgid "Choose a file"
-msgstr ""
+msgstr "Velg en fil"
 
-#: ../bleachbit/GuiPreferences.py:259 ../bleachbit/GuiPreferences.py:282
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
-#: ../bleachbit/GuiPreferences.py:284
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:309
 msgid "Folder"
-msgstr ""
+msgstr "Mappe"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:292
+#: ../bleachbit/GuiPreferences.py:317
 msgid "Theses paths will not be deleted or modified."
-msgstr ""
+msgstr "Disse stiene vil verken bli slettet eller endret på."
 
-#: ../bleachbit/GuiPreferences.py:300
+#: ../bleachbit/GuiPreferences.py:325
 msgid "Type"
 msgstr ""
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:306
+#: ../bleachbit/GuiPreferences.py:331
 msgid "Path"
-msgstr ""
+msgstr "Sti"
 
-#: ../bleachbit/GuiPreferences.py:318
+#: ../bleachbit/GuiPreferences.py:343
 msgctxt "button"
 msgid "Add file"
-msgstr ""
+msgstr "Legg til fil"
 
-#: ../bleachbit/GuiPreferences.py:321
+#: ../bleachbit/GuiPreferences.py:346
 msgctxt "button"
 msgid "Add folder"
-msgstr ""
+msgstr "Legg til mappe"
 
 #: ../bleachbit/GUI.py:154
 msgid "Active"
@@ -886,6 +901,11 @@ msgstr "Trykk på \"Oppdater BleachBit\" for mer informasjon"
 #: ../bleachbit/GUI.py:718
 msgid "Error when checking for updates: "
 msgstr "Feil ved søking etter oppdateringer "
+
+#: ../bleachbit/GUI.py:746
+msgid ""
+"Error loading SQLite module.  The anti-virus software may be blocking it."
+msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
