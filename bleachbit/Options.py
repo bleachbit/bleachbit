@@ -104,7 +104,7 @@ class Options:
         """Return the whitelist of paths"""
         section = "whitelist/paths"
         if not self.config.has_section(section):
-            return None
+            return []
         options = []
         for option in sorted(self.config.options(section)):
             pos = option.find('_')

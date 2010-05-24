@@ -299,19 +299,17 @@ class PreferencesDialog:
         # load data
         pathnames = options.get_whitelist_paths()
         liststore = gtk.ListStore(str, str)
-        if None != pathnames:
-            for paths in pathnames:
-                type_code = paths[0]
-                type_str = None
-                if type_code == 'file':
-                    type_str = _('File')
-                elif type_code == 'folder':
-                    type_str = _('Folder')
-                else:
-                    raise RuntimeError("Invalid type code: '%s'" % type_code)
-                path = paths[1]
-                liststore.append( [ type_str, path ] )
-
+        for paths in pathnames:
+            type_code = paths[0]
+            type_str = None
+            if type_code == 'file':
+                type_str = _('File')
+            elif type_code == 'folder':
+                type_str = _('Folder')
+            else:
+                raise RuntimeError("Invalid type code: '%s'" % type_code)
+            path = paths[1]
+            liststore.append( [ type_str, path ] )
 
         # TRANSLATORS: "Paths" is used generically to refer to both files and folders
         notice = gtk.Label(_("Theses paths will not be deleted or modified."))

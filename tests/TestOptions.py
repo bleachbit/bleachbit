@@ -66,9 +66,14 @@ class OptionsTestCase(unittest.TestCase):
         self.assertEqual(list_values, o.get_list("list_test"))
 
         # whitelist
+        self.assert_(type(o.get_whitelist_paths() is list))
         whitelist = [ ('file', '/home/foo'), ('folder', '/home') ]
         old_whitelist = o.get_whitelist_paths()
+        options.config.remove_section('whitelist/paths')
+        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertEqual(o.get_whitelist_paths(), [])
         o.set_whitelist_paths(whitelist)
+        self.assert_(type(o.get_whitelist_paths() is list))
         self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
         o.set_whitelist_paths(old_whitelist)
         self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
