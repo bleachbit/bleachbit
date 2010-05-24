@@ -320,10 +320,26 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertEqual(True, whitelisted('/home/foo'))
 
         self.assertEqual(True, whitelisted('/home/folder'))
-        self.assertEqual(True, whitelisted('/home/folder/'))
-        self.assertEqual(True, whitelisted('/home/folder/file'))
+        if 'posix' == os.name:
+            self.assertEqual(True, whitelisted('/home/folder/'))
+            self.assertEqual(True, whitelisted('/home/folder/file'))
         self.assertEqual(False, whitelisted('/home/fold'))
         self.assertEqual(False, whitelisted('/home/folder2'))
+
+        if 'nt' == os.name:
+            whitelist = [ ('folder', 'D:\\'), ('file', 'c:\\windows\\foo.log'), ('folder', 'e:\\users') ]
+            options.set_whitelist_paths(whitelist)
+            self.assertEqual(True, whitelisted('e:\\users'))
+            self.assertEqual(True, whitelisted('e:\\users\\'))
+            self.assertEqual(True, whitelisted('e:\\users\\foo.log'))
+            self.assertEqual(False, whitelisted('e:\\users2'))
+            # case insensitivity
+            self.assertEqual(True, whitelisted('C:\\WINDOWS\\FOO.LOG'))
+            self.assertEqual(True, whitelisted('D:\\USERS'))
+
+            # drives letters have the seperator at the end while most paths don't
+            self.assertEqual(True, whitelisted('D:\\FOLDER\\FOO.LOG'))
+
 
         # test blank
         options.set_whitelist_paths([])

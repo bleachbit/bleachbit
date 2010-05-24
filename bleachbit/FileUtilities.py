@@ -311,6 +311,18 @@ def whitelisted(path):
                 return True
             if path.startswith(pathname[1] + os.sep):
                 return True
+        if 'nt' == os.name:
+            # Windows is case insensitive
+            if pathname[0] == 'file' and path.lower() == pathname[1].lower():
+                return True
+            if pathname[0] == 'folder':
+                if path.lower() == pathname[1].lower():
+                    return True
+                if path.lower().startswith(pathname[1].lower() + os.sep):
+                    return True
+                # Simple drive letter like C:\ matches everything below
+                if len(pathname[1]) == 3 and path.lower().startswith(pathname[1].lower()):
+                    return True
     return False
 
 
