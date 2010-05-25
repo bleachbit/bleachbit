@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-18 08:00-0600\n"
-"PO-Revision-Date: 2010-05-20 13:45+0000\n"
+"POT-Creation-Date: 2010-05-22 15:41-0600\n"
+"PO-Revision-Date: 2010-05-23 20:14+0000\n"
 "Last-Translator: Roman Horník <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-20 22:52+0000\n"
+"X-Launchpad-Export-Date: 2010-05-24 01:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -378,7 +378,7 @@ msgstr "Hĺbkové prehľadávanie"
 msgid "Inspect the preview for any files you want to keep."
 msgstr "Prezrite si v náhľadu súbory, ktoré si chcete ponechať"
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
+#: ../cleaners/deepscan.xml
 msgid "This option is slow."
 msgstr "Táto možnosť je pomalá"
 
@@ -531,6 +531,10 @@ msgstr "Uvoľniť miesto na disku"
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Skryť zmazané súbory prepísaním voľného miesta na disku"
 
+#: ../bleachbit/Cleaner.py:423
+msgid "This option is very slow."
+msgstr "Táto voľba je veľmi pomalá."
+
 #: ../bleachbit/Cleaner.py:427
 msgid "The system in general"
 msgstr "Systém všeobecne"
@@ -589,24 +593,30 @@ msgstr "vypísať informáciu o verzii a skončiť"
 msgid "overwrite files to hide contents"
 msgstr "prepísaním súborov skryť obsah"
 
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:45
+msgid "Skip"
+msgstr "Preskočiť"
+
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:57
+#: ../bleachbit/Command.py:72
 msgid "Delete"
 msgstr "Odstrániť"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:77
+#: ../bleachbit/Command.py:92
 msgid "Mark for deletion"
 msgstr "Označiť pre zmazanie"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:152
+#: ../bleachbit/Command.py:177
 msgid "Truncate"
 msgstr "Vyprázdniť"
 
-#: ../bleachbit/Command.py:191
+#: ../bleachbit/Command.py:216
 msgid "Delete registry key"
 msgstr "Zmazať kľúče registrov"
 
@@ -615,11 +625,11 @@ msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Nemôžem importovať sqlite3 modul Pythonu: je potrebný Python 2.5 alebo vyšší."
 
-#: ../bleachbit/GuiBasic.py:105
+#: ../bleachbit/GuiBasic.py:107
 msgid "Delete confirmation"
 msgstr "Odstrániť potvrdenie"
 
-#: ../bleachbit/GuiBasic.py:113
+#: ../bleachbit/GuiBasic.py:115
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -628,7 +638,7 @@ msgstr ""
 "Ste si istý že chcete navžy odstrániť vami označené súbory? Zmazané súbory "
 "sa nedajú obnoviť. Ak chcete vidieť o aké súbory sa jedná, pozrite si náhľad."
 
-#: ../bleachbit/GuiBasic.py:115
+#: ../bleachbit/GuiBasic.py:117
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Ste si istý, že chcete navždy odstrániť tieto súbory?"
 
@@ -691,7 +701,7 @@ msgstr ""
 msgid "Start BleachBit with computer"
 msgstr "Spustiť BleachBit pri štarte systému"
 
-#: ../bleachbit/GuiPreferences.py:140
+#: ../bleachbit/GuiPreferences.py:140 ../bleachbit/GuiPreferences.py:270
 msgid "Choose a folder"
 msgstr "Vybrať priečinok"
 
@@ -709,7 +719,7 @@ msgid "Add"
 msgstr "Pridať"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:324
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:349
 msgctxt "button"
 msgid "Remove"
 msgstr "Odstrániť"
@@ -734,35 +744,35 @@ msgstr "Názov"
 msgid "Choose a file"
 msgstr "Vyberte súbor"
 
-#: ../bleachbit/GuiPreferences.py:259 ../bleachbit/GuiPreferences.py:282
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
 msgid "File"
 msgstr "Súbor"
 
-#: ../bleachbit/GuiPreferences.py:284
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:309
 msgid "Folder"
 msgstr "Priečinok"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:292
+#: ../bleachbit/GuiPreferences.py:317
 msgid "Theses paths will not be deleted or modified."
 msgstr "Tieto cesty nebudú zmazané alebo modifikované."
 
-#: ../bleachbit/GuiPreferences.py:300
+#: ../bleachbit/GuiPreferences.py:325
 msgid "Type"
 msgstr "Typ"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:306
+#: ../bleachbit/GuiPreferences.py:331
 msgid "Path"
 msgstr "Cesta"
 
-#: ../bleachbit/GuiPreferences.py:318
+#: ../bleachbit/GuiPreferences.py:343
 msgctxt "button"
 msgid "Add file"
 msgstr "Pridať súbor"
 
-#: ../bleachbit/GuiPreferences.py:321
+#: ../bleachbit/GuiPreferences.py:346
 msgctxt "button"
 msgid "Add folder"
 msgstr "Pridať priečinok"
@@ -888,6 +898,13 @@ msgstr "Klikni na ''Aktualizácia BleachBit'' pre viac informácií"
 #: ../bleachbit/GUI.py:718
 msgid "Error when checking for updates: "
 msgstr "Chyba pri kontrole aktualizácií: "
+
+#: ../bleachbit/GUI.py:746
+msgid ""
+"Error loading SQLite module.  The anti-virus software may be blocking it."
+msgstr ""
+"Nastala chyba pri spustení modulu SQLite. Mohol byť zablokovaný "
+"antivírusovým programom."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
