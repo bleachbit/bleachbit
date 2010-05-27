@@ -355,7 +355,7 @@ class rpmbuild(Cleaner):
         self.add_option('cache', _('Cache'), _('Delete the cache'))
 
     def get_description(self):
-        return _("Delete the files in the rpmbuild build directory")
+        return _("Delete the files in the rpmbuild build folder")
 
     def get_id(self):
         return 'rpmbuild'
