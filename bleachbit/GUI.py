@@ -743,7 +743,7 @@ class GUI:
             except ImportError, e:
                 print e
                 print dir(e)
-                self.append_text(_("Error loading SQLite module.  The anti-virus software may be blocking it."), 'error')
+                self.append_text(_("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
 
 
