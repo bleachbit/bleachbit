@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-22 15:41-0600\n"
-"PO-Revision-Date: 2010-05-25 19:55+0000\n"
+"POT-Creation-Date: 2010-05-26 21:08-0600\n"
+"PO-Revision-Date: 2010-05-27 12:54+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-26 18:28+0000\n"
+"X-Launchpad-Export-Date: 2010-05-27 14:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -185,16 +185,18 @@ msgid "Delete the debug logs"
 msgstr "מחיקת יומני השגיאות"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Temporary files"
 msgstr "קבצים זמניים"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Delete the temporary files"
 msgstr "מחיקת הקבצים הזמניים"
 
@@ -434,8 +436,8 @@ msgid "Loads the initial session after the browser closes or crashes"
 msgstr "טעינת ההפעלה הראשונית לאחר סגירת או קריסת הדפדפן"
 
 #: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "מחיקת הקבצים שבתיקיית הבנייה של rpmbuild"
+msgid "Delete the files in the rpmbuild build folder"
+msgstr "מחיקת הקבצים בתיקיית הבנייה של ה־rpmbuild"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -700,9 +702,8 @@ msgstr "בחירת תיקייה"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
-msgstr ""
-"בחירת תיקייה הניתנת לכתיבה עבור כל כונן שעבורו יש לשכתב את המקום הפנוי."
+"Choose a writable folder for each drive for which to overwrite free space."
+msgstr "בחירת תיקייה הניתנת לכתיבה בכל כונן שבה ישוכתב המקום הפנוי."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
 #: ../bleachbit/GuiPreferences.py:184
@@ -711,7 +712,7 @@ msgid "Add"
 msgstr "הוספה"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
 msgctxt "button"
 msgid "Remove"
 msgstr "הסרה"
@@ -736,35 +737,35 @@ msgstr "שם"
 msgid "Choose a file"
 msgstr "בחירת קובץ"
 
-#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
 msgid "File"
 msgstr "קובץ"
 
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:309
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
 msgid "Folder"
 msgstr "תיקייה"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:317
+#: ../bleachbit/GuiPreferences.py:315
 msgid "Theses paths will not be deleted or modified."
 msgstr "נתיבים אלו לא ימחקו או ישתנו."
 
-#: ../bleachbit/GuiPreferences.py:325
+#: ../bleachbit/GuiPreferences.py:323
 msgid "Type"
 msgstr "סוג"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:331
+#: ../bleachbit/GuiPreferences.py:329
 msgid "Path"
 msgstr "נתיב"
 
-#: ../bleachbit/GuiPreferences.py:343
+#: ../bleachbit/GuiPreferences.py:341
 msgctxt "button"
 msgid "Add file"
 msgstr "הוספת קובץ"
 
-#: ../bleachbit/GuiPreferences.py:346
+#: ../bleachbit/GuiPreferences.py:344
 msgctxt "button"
 msgid "Add folder"
 msgstr "הוספת תיקייה"
@@ -893,8 +894,8 @@ msgstr "שגיאה בעת בדיקה אחר עדכונים: "
 
 #: ../bleachbit/GUI.py:746
 msgid ""
-"Error loading SQLite module.  The anti-virus software may be blocking it."
-msgstr "שגיאה בטעינת מודול ה־SQLite. יתכן שתכנת האנטיווירוס חוסמת אותו."
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr "שגיאה בטעינת מודול ה־SQLite: יתכן שתכנת האנטיווירוס חוסמת אותו."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
