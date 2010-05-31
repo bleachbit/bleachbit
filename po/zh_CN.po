@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-15 08:08-0600\n"
-"PO-Revision-Date: 2010-05-06 03:15+0000\n"
+"POT-Creation-Date: 2010-05-26 21:08-0600\n"
+"PO-Revision-Date: 2010-05-27 14:29+0000\n"
 "Last-Translator: 英华 <wantinghard@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-06 16:52+0000\n"
+"X-Launchpad-Export-Date: 2010-05-27 16:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -183,16 +183,18 @@ msgid "Delete the debug logs"
 msgstr "删除调试日志"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Temporary files"
 msgstr "临时文件"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Delete the temporary files"
 msgstr "删除临时文件"
 
@@ -368,7 +370,7 @@ msgstr "深度搜索"
 msgid "Inspect the preview for any files you want to keep."
 msgstr "查看您想保存的任何文件的预览"
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
+#: ../cleaners/deepscan.xml
 msgid "This option is slow."
 msgstr "此选项很耗时。"
 
@@ -427,8 +429,8 @@ msgid "Loads the initial session after the browser closes or crashes"
 msgstr "在浏览器关闭或崩溃后加载最初的会话"
 
 #: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "删除 rpmbuild 编译目录中的文件"
+msgid "Delete the files in the rpmbuild build folder"
+msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -517,6 +519,10 @@ msgstr "释放磁盘空间"
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "覆盖可用的磁盘空间用于隐藏删除的文件"
 
+#: ../bleachbit/Cleaner.py:423
+msgid "This option is very slow."
+msgstr "使用这一选项后会很慢。"
+
 #: ../bleachbit/Cleaner.py:427
 msgid "The system in general"
 msgstr "系统通用"
@@ -527,12 +533,12 @@ msgstr "系统"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:600
+#: ../bleachbit/Cleaner.py:604
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "在%s处覆盖空闲的磁盘"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:632
 #, python-format
 msgid "Recycle bin %s"
 msgstr "回收站 %s"
@@ -574,24 +580,30 @@ msgstr "显示版本信息并退出"
 msgid "overwrite files to hide contents"
 msgstr "覆盖文件来隐藏内容"
 
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:45
+msgid "Skip"
+msgstr "跳过"
+
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:57
+#: ../bleachbit/Command.py:72
 msgid "Delete"
 msgstr "删除"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:77
+#: ../bleachbit/Command.py:92
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:152
+#: ../bleachbit/Command.py:177
 msgid "Truncate"
 msgstr "截断"
 
-#: ../bleachbit/Command.py:191
+#: ../bleachbit/Command.py:216
 msgid "Delete registry key"
 msgstr "删除注册键"
 
@@ -599,11 +611,11 @@ msgstr "删除注册键"
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "无法导入 Python 模块 sqlite3：需要 Python 2.5 或更高版本。"
 
-#: ../bleachbit/GuiBasic.py:86
+#: ../bleachbit/GuiBasic.py:107
 msgid "Delete confirmation"
 msgstr "删除确认"
 
-#: ../bleachbit/GuiBasic.py:94
+#: ../bleachbit/GuiBasic.py:115
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -612,7 +624,7 @@ msgstr ""
 "你确定想要根据所选择的操作永久删除那些文件吗？实际被删除的文件可能会因为你使"
 "用预览而改变。"
 
-#: ../bleachbit/GuiBasic.py:96
+#: ../bleachbit/GuiBasic.py:117
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "你确认要永久删除这些文件吗？"
 
@@ -632,11 +644,15 @@ msgstr "驱动"
 msgid "Languages"
 msgstr "语言"
 
-#: ../bleachbit/GuiPreferences.py:104
+#: ../bleachbit/GuiPreferences.py:63
+msgid "Whitelist"
+msgstr "白名单"
+
+#: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
 msgstr "通过因特网周期性检查软件更新"
 
-#: ../bleachbit/GuiPreferences.py:107
+#: ../bleachbit/GuiPreferences.py:108
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -646,63 +662,100 @@ msgstr "如果找到更新，你会得到观看详情的选项。然后你可以
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:114
+#: ../bleachbit/GuiPreferences.py:115
 msgid "Hide irrelevant cleaners"
 msgstr "隐藏不相关的清理器"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:122
+#: ../bleachbit/GuiPreferences.py:123
 msgid "Overwrite files to hide contents"
 msgstr "覆盖文件以隐藏内容"
 
-#: ../bleachbit/GuiPreferences.py:125
+#: ../bleachbit/GuiPreferences.py:126
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr "在某些文件系统和 BleachBit 操作中，覆盖文件并不有效。覆盖操作很慢。"
 
-#: ../bleachbit/GuiPreferences.py:128
+#: ../bleachbit/GuiPreferences.py:129
 msgid "Start BleachBit with computer"
 msgstr "开机启动 BleachBit"
 
-#: ../bleachbit/GuiPreferences.py:139
+#: ../bleachbit/GuiPreferences.py:140 ../bleachbit/GuiPreferences.py:270
 msgid "Choose a folder"
 msgstr "选择一个文件夹"
 
-#: ../bleachbit/GuiPreferences.py:162
+#: ../bleachbit/GuiPreferences.py:163
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
-msgstr "为要覆盖空白区域的每一个驱动器选择一个可写的目录。"
+"Choose a writable folder for each drive for which to overwrite free space."
+msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:183
+#: ../bleachbit/GuiPreferences.py:184
 msgctxt "button"
 msgid "Add"
 msgstr "添加"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:186
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
 msgctxt "button"
 msgid "Remove"
 msgstr "移除"
 
-#: ../bleachbit/GuiPreferences.py:211
+#: ../bleachbit/GuiPreferences.py:212
 msgid "All languages will be deleted except those checked."
 msgstr "除了那些被检查的所有语言将被删除。"
 
-#: ../bleachbit/GuiPreferences.py:229
+#: ../bleachbit/GuiPreferences.py:230
 msgid "Preserve"
 msgstr "预留"
 
-#: ../bleachbit/GuiPreferences.py:233
+#: ../bleachbit/GuiPreferences.py:234
 msgid "Code"
 msgstr "代码"
 
-#: ../bleachbit/GuiPreferences.py:237 ../bleachbit/GUI.py:146
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:146
 msgid "Name"
 msgstr "名称"
+
+#: ../bleachbit/GuiPreferences.py:256
+msgid "Choose a file"
+msgstr "选择一个文件"
+
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
+msgid "File"
+msgstr "文件"
+
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
+msgid "Folder"
+msgstr "文件夹"
+
+#. TRANSLATORS: "Paths" is used generically to refer to both files and folders
+#: ../bleachbit/GuiPreferences.py:315
+msgid "Theses paths will not be deleted or modified."
+msgstr "将不会删除或修改这些位置"
+
+#: ../bleachbit/GuiPreferences.py:323
+msgid "Type"
+msgstr "类型"
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:329
+msgid "Path"
+msgstr "路径"
+
+#: ../bleachbit/GuiPreferences.py:341
+msgctxt "button"
+msgid "Add file"
+msgstr "添加文件"
+
+#: ../bleachbit/GuiPreferences.py:344
+msgctxt "button"
+msgid "Add folder"
+msgstr "添加文件夹"
 
 #: ../bleachbit/GUI.py:154
 msgid "Active"
@@ -829,6 +882,11 @@ msgstr "点击'Update BleachBit'查看详情"
 #: ../bleachbit/GUI.py:718
 msgid "Error when checking for updates: "
 msgstr "检查更新时出错： "
+
+#: ../bleachbit/GUI.py:746
+msgid ""
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
