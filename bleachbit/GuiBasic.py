@@ -66,7 +66,7 @@ def browse_file(parent, title):
     chooser = gtk.FileChooserDialog(title = title,
         parent = parent,
         action = gtk.FILE_CHOOSER_ACTION_OPEN,
-        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN, gtk.RESPONSE_OK))
     chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     path = chooser.get_filename()
