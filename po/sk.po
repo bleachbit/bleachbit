@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-22 15:41-0600\n"
-"PO-Revision-Date: 2010-05-23 20:14+0000\n"
-"Last-Translator: Roman Horník <Unknown>\n"
+"POT-Creation-Date: 2010-05-26 21:08-0600\n"
+"PO-Revision-Date: 2010-06-02 07:42+0000\n"
+"Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-24 01:28+0000\n"
+"X-Launchpad-Export-Date: 2010-06-02 14:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -189,16 +189,18 @@ msgid "Delete the debug logs"
 msgstr "Odstrániť ladiace záznamy"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Temporary files"
 msgstr "Dočasné súbory"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Delete the temporary files"
 msgstr "Odstrániť dočasné súbory"
 
@@ -439,8 +441,8 @@ msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Obnoviť predchádzajúcu reláciu po ukončení alebo páde prehliadača"
 
 #: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "Odstrániť súbory v adresári rpmbuild"
+msgid "Delete the files in the rpmbuild build folder"
+msgstr "Odstrániť súbory v priečinku rpmbuild"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -707,10 +709,10 @@ msgstr "Vybrať priečinok"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
+"Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
-"Vyberte zapisovateľnú zložku pre každý disk či oddiel, pre ktorý sa prepíše "
-"voľné miesto"
+"Vyberte zapisovateľný priečinok pre každú jednotku, pre ktorú prepíše voľné "
+"miesto."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
 #: ../bleachbit/GuiPreferences.py:184
@@ -719,7 +721,7 @@ msgid "Add"
 msgstr "Pridať"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
 msgctxt "button"
 msgid "Remove"
 msgstr "Odstrániť"
@@ -744,35 +746,35 @@ msgstr "Názov"
 msgid "Choose a file"
 msgstr "Vyberte súbor"
 
-#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
 msgid "File"
 msgstr "Súbor"
 
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:309
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
 msgid "Folder"
 msgstr "Priečinok"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:317
+#: ../bleachbit/GuiPreferences.py:315
 msgid "Theses paths will not be deleted or modified."
 msgstr "Tieto cesty nebudú zmazané alebo modifikované."
 
-#: ../bleachbit/GuiPreferences.py:325
+#: ../bleachbit/GuiPreferences.py:323
 msgid "Type"
 msgstr "Typ"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:331
+#: ../bleachbit/GuiPreferences.py:329
 msgid "Path"
 msgstr "Cesta"
 
-#: ../bleachbit/GuiPreferences.py:343
+#: ../bleachbit/GuiPreferences.py:341
 msgctxt "button"
 msgid "Add file"
 msgstr "Pridať súbor"
 
-#: ../bleachbit/GuiPreferences.py:346
+#: ../bleachbit/GuiPreferences.py:344
 msgctxt "button"
 msgid "Add folder"
 msgstr "Pridať priečinok"
@@ -901,10 +903,9 @@ msgstr "Chyba pri kontrole aktualizácií: "
 
 #: ../bleachbit/GUI.py:746
 msgid ""
-"Error loading SQLite module.  The anti-virus software may be blocking it."
+"Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
-"Nastala chyba pri spustení modulu SQLite. Mohol byť zablokovaný "
-"antivírusovým programom."
+"Chyba pri načítaní modulu SQLite: môže byť blokovaný antivírusovým softvérom."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
