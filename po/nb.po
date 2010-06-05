@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-22 15:41-0600\n"
-"PO-Revision-Date: 2010-05-23 10:39+0000\n"
+"POT-Creation-Date: 2010-05-26 21:08-0600\n"
+"PO-Revision-Date: 2010-06-02 20:21+0000\n"
 "Last-Translator: Simen Heggestøyl <simen@simenh.com>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-23 14:24+0000\n"
+"X-Launchpad-Export-Date: 2010-06-04 04:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -191,16 +191,18 @@ msgid "Delete the debug logs"
 msgstr "Slett feilsøkingsloggene"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Temporary files"
 msgstr "Midlertidige filer"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:424
 msgid "Delete the temporary files"
 msgstr "Slett midlertidige filer"
 
@@ -441,8 +443,8 @@ msgstr ""
 "Laster inn den opprinnelige økten etter at nettleseren lukkes eller krasjer"
 
 #: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "Slett filene i rpmbuild-byggekatalogen"
+msgid "Delete the files in the rpmbuild build folder"
+msgstr "Slett filene i rpmbuild-byggemappen"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -712,9 +714,10 @@ msgstr "Velg en mappe"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
+"Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
-"Velg en skrivbar katalog for hver stasjon, der ledig plass skal overskrives."
+"Velg en skrivbar mappe for hver lagringsenhet, der ledig plass skal "
+"overskrives."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
 #: ../bleachbit/GuiPreferences.py:184
@@ -723,7 +726,7 @@ msgid "Add"
 msgstr "Legg til"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
 msgctxt "button"
 msgid "Remove"
 msgstr "Fjern"
@@ -748,35 +751,35 @@ msgstr "Navn"
 msgid "Choose a file"
 msgstr "Velg en fil"
 
-#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
 msgid "File"
 msgstr "Fil"
 
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:309
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
 msgid "Folder"
 msgstr "Mappe"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:317
+#: ../bleachbit/GuiPreferences.py:315
 msgid "Theses paths will not be deleted or modified."
 msgstr "Disse stiene vil verken bli slettet eller endret på."
 
-#: ../bleachbit/GuiPreferences.py:325
+#: ../bleachbit/GuiPreferences.py:323
 msgid "Type"
 msgstr "Type"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:331
+#: ../bleachbit/GuiPreferences.py:329
 msgid "Path"
 msgstr "Sti"
 
-#: ../bleachbit/GuiPreferences.py:343
+#: ../bleachbit/GuiPreferences.py:341
 msgctxt "button"
 msgid "Add file"
 msgstr "Legg til fil"
 
-#: ../bleachbit/GuiPreferences.py:346
+#: ../bleachbit/GuiPreferences.py:344
 msgctxt "button"
 msgid "Add folder"
 msgstr "Legg til mappe"
@@ -904,10 +907,8 @@ msgstr "Feil ved søking etter oppdateringer "
 
 #: ../bleachbit/GUI.py:746
 msgid ""
-"Error loading SQLite module.  The anti-virus software may be blocking it."
+"Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
-"En feil oppstod ved innlasting av SQLite-modulen. Det kan hende "
-"antivirusprogrammet blokkerer den."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
