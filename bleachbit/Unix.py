@@ -112,6 +112,7 @@ class Locales:
         'es' : 'Español', \
         'fi' : 'suomen kieli', \
         'fr' : 'Français', \
+        'fo' : 'føroyskt', \
         'hi' : 'हिन्दी', \
         'hr' : 'Hrvatski', \
         'hu' : 'Magyar', \
