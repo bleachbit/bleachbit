@@ -30,7 +30,7 @@ import sys
 import traceback
 
 
-APP_VERSION = "0.8.0beta"
+APP_VERSION = "0.8.0"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
