@@ -65,6 +65,22 @@ import FileUtilities
 import Common
 import General
 
+def browse_file(hwnd, title):
+    """Ask the user to select a single file.  Return full path"""
+    try:
+        ret = win32gui.GetOpenFileNameW(None, \
+            Flags = win32con.OFN_EXPLORER \
+                | win32con.OFN_FILEMUSTEXIST \
+                | win32con.OFN_HIDEREADONLY, \
+            Title = title)
+    except pywintypes.error, e:
+        if 0 == e.winerror:
+            print 'debug: browse_file(): user cancelled'
+        else:
+            traceback.print_exc()
+        return None
+    return ret[0]
+
 
 def browse_files(hwnd, title):
     """Ask the user to select files.  Return full paths"""
