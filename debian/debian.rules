@@ -25,7 +25,7 @@ configure-stamp:
 build: build-stamp
 	# Starting in Ubuntu 10.04 the System menu has disappeared. Also the new choice is more consistent
 	# on Ubuntu.
-	sed -i -e 's/Categories=GTK;System;$$/Categories=GTK;System;Settings;/g' bleachbit.desktop
+	sed -i -e 's/Categories=GTK;System;$/Categories=GTK;System;Settings;/g' bleachbit.desktop
 	cp bleachbit.desktop bleachbit-root.desktop
 	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' bleachbit-root.desktop
 	sed -i -e 's/^Exec=bleachbit$$/Exec=su-to-root -X -c bleachbit/g' bleachbit-root.desktop
