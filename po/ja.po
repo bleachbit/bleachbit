@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-26 21:08-0600\n"
-"PO-Revision-Date: 2010-06-09 17:12+0000\n"
+"PO-Revision-Date: 2010-07-07 10:10+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-09 18:40+0000\n"
+"X-Launchpad-Export-Date: 2010-07-15 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -336,7 +336,7 @@ msgstr "検索履歴の削除"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr "ファイルをバックアップ"
+msgstr "バックアップファイル"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
@@ -419,11 +419,11 @@ msgstr "入力履歴"
 
 #: ../bleachbit/Cleaner.py:191
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
+msgstr "ウェブサイトのフォーム入力や検索バー入力の履歴"
 
 #: ../bleachbit/Cleaner.py:192
 msgid "Session restore"
-msgstr ""
+msgstr "セッションリストア"
 
 #: ../bleachbit/Cleaner.py:192
 msgid "Loads the initial session after the browser closes or crashes"
@@ -511,7 +511,7 @@ msgstr "クリップボード"
 #: ../bleachbit/Cleaner.py:421
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr "コピー＆ペーストに使用するデスクトップ環境のクリップボード"
+msgstr "コピー＆ペーストに使用したデスクトップ環境のクリップボード"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Free disk space"
@@ -523,7 +523,7 @@ msgstr "削除済みファイルを上書きしてディスクの空き領域を
 
 #: ../bleachbit/Cleaner.py:423
 msgid "This option is very slow."
-msgstr ""
+msgstr "このオプションは非常に時間がかかります。"
 
 #: ../bleachbit/Cleaner.py:427
 msgid "The system in general"
@@ -681,7 +681,7 @@ msgstr "内容を隠すためにファイルを上書き"
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
-msgstr ""
+msgstr "上書きはファイルシステムや BleachBit の特定の操作には影響を与えません。上書きはかなり遅いです。"
 
 #: ../bleachbit/GuiPreferences.py:129
 msgid "Start BleachBit with computer"
@@ -771,7 +771,7 @@ msgstr "操作を選択してください"
 
 #: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
 msgid "Done."
-msgstr "完了"
+msgstr "完了。"
 
 #: ../bleachbit/GUI.py:396
 msgid "Program to clean unnecessary files"
@@ -806,7 +806,7 @@ msgstr "シュレッダーにかけるファイルの選択"
 
 #: ../bleachbit/GUI.py:560
 msgid "_Shred Files"
-msgstr "シュレッダーにかける(_S)"
+msgstr "ファイルを裁断する(_S)"
 
 #: ../bleachbit/GUI.py:561
 msgid "S_hred Settings and Quit"
@@ -852,7 +852,7 @@ msgstr "プレビュー"
 
 #: ../bleachbit/GUI.py:597
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "選択した操作でファイルをプレビュー（ファイルの削除はしない）"
+msgstr "選択された操作におけるファイルをプレビュー（ファイルの削除はしない）"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
@@ -863,7 +863,7 @@ msgstr "削除"
 
 #: ../bleachbit/GUI.py:608
 msgid "Delete files in the selected operations"
-msgstr "選択された操作をファイルを削除"
+msgstr "選択された操作におけるファイルを削除"
 
 #: ../bleachbit/GUI.py:689
 msgctxt "button"
@@ -940,13 +940,13 @@ msgstr ""
 #: ../bleachbit/Worker.py:175
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "クリーニング中です、お待ちください... %s"
+msgstr "%s をクリーニング中です。お待ちください..."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:178
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "プレビュー作成中です、お待ちください... %s"
+msgstr "%s のプレビューを作成中です。お待ちください..."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
