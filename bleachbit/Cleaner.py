@@ -413,6 +413,7 @@ class System(Cleaner):
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
+            self.add_option('memory_dump', _('Memory dump'), _('Delete the file memory.dmp'))
             self.add_option('muicache', 'MUICache', _('Delete the cache'))
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
@@ -504,6 +505,16 @@ class System(Cleaner):
         # memory
         if 'linux2' == sys.platform and 'memory' == option_id:
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
+
+        # memory dump
+        # how to manually create this file
+        # http://www.pctools.com/guides/registry/detail/856/
+        if 'nt' == os.name and 'memory_dump' == option_id:
+            file = os.path.expandvars('$SystemRoot\\memory.dmp')
+            if os.path.exists(file):
+                files += file
+            for file in glob.iglob(os.path.expandvars('%SystemRoot\\Minidump\\*.dmp')):
+                files += file
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
