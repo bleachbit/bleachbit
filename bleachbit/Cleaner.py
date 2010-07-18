@@ -510,10 +510,10 @@ class System(Cleaner):
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
         if 'nt' == os.name and 'memory_dump' == option_id:
-            file = os.path.expandvars('$SystemRoot\\memory.dmp')
+            file = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(file):
                 files += file
-            for file in glob.iglob(os.path.expandvars('%SystemRoot\\Minidump\\*.dmp')):
+            for file in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
                 files += file
 
         # most recently used documents list
