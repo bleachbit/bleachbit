@@ -146,3 +146,16 @@ def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_
 
     return resp
 
+
+def open_url(url):
+    """Open an HTTP URL"""
+    print "debug: on_url('%s')" % (url,)
+    try:
+        import gnomevfs
+        gnomevfs.url_show(url)
+        return
+    except:
+        import webbrowser
+        webbrowser.open(url)
+
+
