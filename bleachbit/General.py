@@ -153,10 +153,11 @@ def sudo_mode():
     if 'linux2' != sys.platform:
         return False
 
-    if 'root' == os.getenv('USER'):
+    #if 'root' == os.getenv('USER'):
         # gksu in Ubuntu 9.10 changes the username.  If the username is root,
         # we're practically not in sudo mode.
-        return False
+        # Fedora 13: os.getenv('USER') = 'root' under sudo
+        #return False
 
     return os.getenv('SUDO_UID') != None
 

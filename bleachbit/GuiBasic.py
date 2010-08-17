@@ -27,6 +27,9 @@ Basic GUI code
 
 import gtk
 import os
+import sys
+import traceback
+import General
 
 if 'nt' == os.name:
     import Windows
@@ -148,8 +151,13 @@ def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_
 
 
 def open_url(url):
-    """Open an HTTP URL"""
+    """Open an HTTP URL.  Try to run as non-root."""
     print "debug: on_url('%s')" % (url,)
+    # drop privileges so the web browser is running as a normal process
+    if 'posix' == os.name and 0 == os.getuid():
+        msg = _("Because you are running as root, please manually open this link in a web browser:\n%s") % url
+        message_dialog(None, msg, gtk.MESSAGE_INFO)
+        return
     try:
         import gnomevfs
         gnomevfs.url_show(url)
@@ -157,5 +165,4 @@ def open_url(url):
     except:
         import webbrowser
         webbrowser.open(url)
-
 
