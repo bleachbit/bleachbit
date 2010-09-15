@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-14 20:37-0600\n"
-"PO-Revision-Date: 2010-04-14 14:39+0000\n"
-"Last-Translator: Moltenice80 <moltenice80@gmail.com>\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-08-29 13:04-0600\n"
+"PO-Revision-Date: 2010-09-06 20:58+0000\n"
+"Last-Translator: Papp Bence <papp.bence89@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-14 18:16+0000\n"
+"X-Launchpad-Export-Date: 2010-09-12 23:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -55,7 +55,7 @@ msgstr "Törli a játékszerverek listáját"
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:295
 #: ../bleachbit/Cleaner.py:355 ../bleachbit/Cleaner.py:398
-#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:418
+#: ../bleachbit/Cleaner.py:417 ../bleachbit/Cleaner.py:419
 msgid "Delete the cache"
 msgstr "Gyorsítótár törlése"
 
@@ -68,7 +68,7 @@ msgstr "Gyorsítótár törlése"
 #: ../cleaners/gpodder.xml ../bleachbit/Action.py:225
 #: ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:285
 msgid "Vacuum"
-msgstr "Vákuum"
+msgstr "Zsugorítás"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
@@ -188,16 +188,18 @@ msgid "Delete the debug logs"
 msgstr "Nyomkövetési naplók törlése"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:425
 msgid "Temporary files"
 msgstr "Átmeneti fájlok"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
+#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
+#: ../bleachbit/Cleaner.py:425
 msgid "Delete the temporary files"
 msgstr "Átmeneti fájlok törlése"
 
@@ -376,7 +378,7 @@ msgstr ""
 msgid "Inspect the preview for any files you want to keep."
 msgstr ""
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
+#: ../cleaners/deepscan.xml
 msgid "This option is slow."
 msgstr "Ez a beállítás elég lassú"
 
@@ -407,7 +409,8 @@ msgid "Index"
 msgstr "Index"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Törli a keresési indexet, mely szavak és az őket tartalmazó fájlok adatbázisa"
 
@@ -433,11 +436,12 @@ msgstr "Munkamenet visszaállítása"
 
 #: ../bleachbit/Cleaner.py:192
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Visszatölti a munkamenetet miután a böngésző bezáródik vagy összeomlik"
+msgstr ""
+"Visszatölti a munkamenetet miután a böngésző bezáródik vagy összeomlik"
 
 #: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "Törli a fájlokat az rpmbuild build könyvtárából"
+msgid "Delete the files in the rpmbuild build folder"
+msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -486,7 +490,7 @@ msgstr "Kuka ürítése"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:506
+#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:507
 msgid "Memory"
 msgstr "Memória"
 
@@ -498,53 +502,67 @@ msgstr ""
 msgid "This option is experimental and may cause system problems."
 msgstr ""
 
+#: ../bleachbit/Cleaner.py:416
+msgid "Memory dump"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:416
+msgid "Delete the file memory.dmp"
+msgstr ""
+
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:418
+#: ../bleachbit/Cleaner.py:419
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:420
 msgid "Recycle bin"
 msgstr "Kuka"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:420
 msgid "Empty the recycle bin"
 msgstr "Kuka ürítése"
 
-#: ../bleachbit/Cleaner.py:421 ../bleachbit/Cleaner.py:578
+#: ../bleachbit/Cleaner.py:422 ../bleachbit/Cleaner.py:589
 msgid "Clipboard"
 msgstr "Vágólap"
 
-#: ../bleachbit/Cleaner.py:421
-msgid "The desktop environment's clipboard used for copy and paste operations"
+#: ../bleachbit/Cleaner.py:422
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Az asztali környezet vágólapja, melyet másolás és beillesztés műveletekre "
 "használnak"
 
-#: ../bleachbit/Cleaner.py:422
+#: ../bleachbit/Cleaner.py:423
 msgid "Free disk space"
 msgstr "Szabad hely"
 
-#: ../bleachbit/Cleaner.py:422
+#: ../bleachbit/Cleaner.py:423
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Szabad hely felülírása a törölt fájlok álcázására"
 
-#: ../bleachbit/Cleaner.py:427
+#: ../bleachbit/Cleaner.py:424
+msgid "This option is very slow."
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:428
 msgid "The system in general"
 msgstr "A rendszer általában"
 
-#: ../bleachbit/Cleaner.py:433
+#: ../bleachbit/Cleaner.py:434
 msgid "System"
 msgstr "Rendszer"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:600
+#: ../bleachbit/Cleaner.py:615
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Szabad lemezterület felülírása: %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:643
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Kuka itt: %s"
@@ -586,24 +604,30 @@ msgstr "Verzióinformációk kiírása és kilépés"
 msgid "overwrite files to hide contents"
 msgstr "fájlok felülírása a tartalom elrejtéséhez"
 
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:45
+msgid "Skip"
+msgstr ""
+
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:57
+#: ../bleachbit/Command.py:72
 msgid "Delete"
 msgstr "Törlés"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:77
+#: ../bleachbit/Command.py:92
 msgid "Mark for deletion"
 msgstr "Kijelölés törlésre"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:152
+#: ../bleachbit/Command.py:177
 msgid "Truncate"
 msgstr "Lerövidítés"
 
-#: ../bleachbit/Command.py:191
+#: ../bleachbit/Command.py:216
 msgid "Delete registry key"
 msgstr "Regisztrációs kulcs törlése"
 
@@ -613,11 +637,11 @@ msgstr ""
 "Nem lehet beimportálni a sqlite3 Python modult: Python 2.5 vagy újabb "
 "telepítése szükséges"
 
-#: ../bleachbit/GuiBasic.py:86
+#: ../bleachbit/GuiBasic.py:111
 msgid "Delete confirmation"
 msgstr "Törlés megerősítése"
 
-#: ../bleachbit/GuiBasic.py:94
+#: ../bleachbit/GuiBasic.py:119
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -626,11 +650,19 @@ msgstr ""
 "Biztos, hogy véglegesen törlöd a kijelölt fájlokat? Az előnézet óta "
 "megváltozhatott a törlésre kerülő fájlok listája."
 
-#: ../bleachbit/GuiBasic.py:96
+#: ../bleachbit/GuiBasic.py:121
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Biztos benne, hogy véglegesen törölni akarja ezeket a fájlokat?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:564
+#: ../bleachbit/GuiBasic.py:158
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:551
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -646,11 +678,15 @@ msgstr "Meghajtók"
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: ../bleachbit/GuiPreferences.py:104
+#: ../bleachbit/GuiPreferences.py:63
+msgid "Whitelist"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
 msgstr "Rendszeresen keressen frissítéseket az internet segítségével"
 
-#: ../bleachbit/GuiPreferences.py:107
+#: ../bleachbit/GuiPreferences.py:108
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -662,18 +698,18 @@ msgstr ""
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:114
+#: ../bleachbit/GuiPreferences.py:115
 msgid "Hide irrelevant cleaners"
 msgstr "Nem ide vonatkozó tisztítók elrejtése"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:122
+#: ../bleachbit/GuiPreferences.py:123
 msgid "Overwrite files to hide contents"
 msgstr "Fájlok felülírása a tartalom elrejtéséhez"
 
-#: ../bleachbit/GuiPreferences.py:125
+#: ../bleachbit/GuiPreferences.py:126
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -681,64 +717,101 @@ msgstr ""
 "A felülírás hatástalan néhány fájlrendszeren és bizonyos BleachBit "
 "műveleteknél. A felülírás lényegesen lassabb."
 
-#: ../bleachbit/GuiPreferences.py:128
+#: ../bleachbit/GuiPreferences.py:129
 msgid "Start BleachBit with computer"
 msgstr "BleachBit indítása a számítógép indításakor"
 
-#: ../bleachbit/GuiPreferences.py:139
+#: ../bleachbit/GuiPreferences.py:140 ../bleachbit/GuiPreferences.py:270
 msgid "Choose a folder"
 msgstr "Mappa kiválasztása"
 
-#: ../bleachbit/GuiPreferences.py:162
+#: ../bleachbit/GuiPreferences.py:163
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
+"Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:183
+#: ../bleachbit/GuiPreferences.py:184
 msgctxt "button"
 msgid "Add"
 msgstr "Hozzáadás"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:186
+#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
 msgctxt "button"
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: ../bleachbit/GuiPreferences.py:211
+#: ../bleachbit/GuiPreferences.py:212
 msgid "All languages will be deleted except those checked."
 msgstr "Minden nyelv törlődik a kijelölteken kívül."
 
-#: ../bleachbit/GuiPreferences.py:229
+#: ../bleachbit/GuiPreferences.py:230
 msgid "Preserve"
 msgstr "Megőrzés"
 
-#: ../bleachbit/GuiPreferences.py:233
+#: ../bleachbit/GuiPreferences.py:234
 msgid "Code"
 msgstr "Kód"
 
-#: ../bleachbit/GuiPreferences.py:237 ../bleachbit/GUI.py:146
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:133
 msgid "Name"
 msgstr "Név"
 
-#: ../bleachbit/GUI.py:154
+#: ../bleachbit/GuiPreferences.py:256
+msgid "Choose a file"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
+msgid "File"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
+msgid "Folder"
+msgstr ""
+
+#. TRANSLATORS: "Paths" is used generically to refer to both files and folders
+#: ../bleachbit/GuiPreferences.py:315
+msgid "Theses paths will not be deleted or modified."
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:323
+msgid "Type"
+msgstr ""
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:329
+msgid "Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:341
+msgctxt "button"
+msgid "Add file"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:344
+msgctxt "button"
+msgid "Add folder"
+msgstr ""
+
+#: ../bleachbit/GUI.py:141
 msgid "Active"
 msgstr "Aktív"
 
-#: ../bleachbit/GUI.py:347
+#: ../bleachbit/GUI.py:334
 msgid "You must select an operation"
 msgstr "Választani kell egy műveletet"
 
-#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
+#: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:372
 msgid "Done."
 msgstr "Kész."
 
-#: ../bleachbit/GUI.py:396
+#: ../bleachbit/GUI.py:383
 msgid "Program to clean unnecessary files"
 msgstr "Program a szükségtelen fájlok eltávolítására"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:388
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -750,7 +823,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:407
+#: ../bleachbit/GUI.py:394
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -762,91 +835,96 @@ msgstr ""
 "  alfa00red https://launchpad.net/~alfa00red\n"
 "  charlie https://launchpad.net/~janos.csardi"
 
-#: ../bleachbit/GUI.py:420
+#: ../bleachbit/GUI.py:407
 msgid "System information"
 msgstr "Rendszerinformáció"
 
-#: ../bleachbit/GUI.py:474
+#: ../bleachbit/GUI.py:461
 msgid "Choose files to shred"
 msgstr "Válassza ki a zsugorítandó fájlokat"
 
-#: ../bleachbit/GUI.py:560
+#: ../bleachbit/GUI.py:547
 msgid "_Shred Files"
 msgstr "_Megosztott fájlok"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:548
 msgid "S_hred Settings and Quit"
 msgstr ""
 
-#: ../bleachbit/GUI.py:562
+#: ../bleachbit/GUI.py:549
 msgid "_Quit"
 msgstr "_Kilépés"
 
-#: ../bleachbit/GUI.py:563
+#: ../bleachbit/GUI.py:550
 msgid "_File"
 msgstr "_Fájl"
 
-#: ../bleachbit/GUI.py:565
+#: ../bleachbit/GUI.py:552
 msgid "_Edit"
 msgstr "_Szerkesztés"
 
-#: ../bleachbit/GUI.py:566
+#: ../bleachbit/GUI.py:553
 msgid "Help Contents"
 msgstr "Súgó tartalomjegyzéke"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:554
 msgid "_Release Notes"
 msgstr "_Kiadási megjegyzések"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:555
 msgid "_System Information"
 msgstr "_Rendszerinformáció"
 
-#: ../bleachbit/GUI.py:569
+#: ../bleachbit/GUI.py:556
 msgid "_About"
 msgstr "_Névjegy"
 
-#: ../bleachbit/GUI.py:570
+#: ../bleachbit/GUI.py:557
 msgid "_Help"
 msgstr "_Súgó"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:594
+#: ../bleachbit/GUI.py:581
 msgctxt "button"
 msgid "Preview"
 msgstr "Előnézet"
 
-#: ../bleachbit/GUI.py:597
+#: ../bleachbit/GUI.py:584
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "A (törlésre) kiválasztott fájlok listájának megtekintése."
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:605
+#: ../bleachbit/GUI.py:592
 msgctxt "button"
 msgid "Delete"
 msgstr "Törlés"
 
-#: ../bleachbit/GUI.py:608
+#: ../bleachbit/GUI.py:595
 msgid "Delete files in the selected operations"
 msgstr "Törli a kiválasztott műveletekben meghatározott fájlokat"
 
-#: ../bleachbit/GUI.py:689
+#: ../bleachbit/GUI.py:676
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "BleachBit frissítése"
 
-#: ../bleachbit/GUI.py:694
+#: ../bleachbit/GUI.py:681
 msgid "BleachBit update is available"
 msgstr "BleachBit frissítés érhető el"
 
-#: ../bleachbit/GUI.py:702
+#: ../bleachbit/GUI.py:689
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Több információért kattintson a \"BleachBit frissítése\" gombra"
 
-#: ../bleachbit/GUI.py:718
+#: ../bleachbit/GUI.py:705
 msgid "Error when checking for updates: "
 msgstr "Hiba a frissítések keresése közben: "
+
+#: ../bleachbit/GUI.py:733
+msgid ""
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
@@ -873,13 +951,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Fájlnév"
 
-#: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
+#: ../bleachbit/Unix.py:369 ../bleachbit/Unix.py:399 ../bleachbit/Unix.py:579
 #, python-format
 msgid "Executable not found: %s"
 msgstr "A futtatható állomány nem található: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:575 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:576 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
