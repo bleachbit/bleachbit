@@ -93,7 +93,7 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.path = os.path.expanduser(os.path.expandvars( \
-        action_element.getAttribute('path')))
+            action_element.getAttribute('path')))
         self.ds = {}
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
