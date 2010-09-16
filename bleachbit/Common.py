@@ -147,7 +147,7 @@ if 'nt' == os.name:
 
     if None == os.getenv('localappdata'):
         print 'ERROR: putenv failed'
-    else if not os.path.exists(os.getenv('localappdata')):
+    elif not os.path.exists(os.getenv('localappdata')):
         print 'ERROR: %localappdata% (%s) does not exist' % os.getenv('localappdata')
         os.environ['localappdata'] = os.path.expandvars('$USERPROFILE\AppData\Local')
         if not os.path.exists(os.getenv('localappdata')):
