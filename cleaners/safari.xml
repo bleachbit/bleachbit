@@ -25,8 +25,7 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\Cache.db"/>
-    <action command="delete" search="file" path="$USERPROFILE\AppData\Local\Apple Computer\Safari\Cache.db"/>
+    <action command="delete" search="file" path="$localappdata\Apple Computer\Safari\Cache.db"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -37,8 +36,7 @@
     <label>History</label>
     <description>List of visited web pages</description>
     <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\History.plist"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Apple Computer\Safari\History\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\History\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Apple Computer\Safari\Webpage Previews\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\History\"/>
+    <action command="delete" search="walk.files" path="$$localappdata\Apple Computer\Safari\Webpage Previews\"/>
   </option>
 </cleaner>
