@@ -191,7 +191,7 @@ class Worker:
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
         # or all the system executables.
-        self.ui.update_progress_bar("Please wait.  Running deep scan.")
+        self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
         yield True # allow GTK to update the screen
         ds = DeepScan.DeepScan()
         for (path, dsdict) in self.deepscans.iteritems():
