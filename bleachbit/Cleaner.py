@@ -221,7 +221,7 @@ class Firefox(Cleaner):
         if 'posix' == os.name:
             cache_base = self.profile_dir
         elif 'nt' == os.name:
-            cache_base = "$USERPROFILE\\Local Settings\\Application Data\\Mozilla\\Firefox\\Profiles\\*"
+            cache_base = "$localappdata\\Mozilla\\Firefox\\Profiles\\*"
         if 'cache' == option_id:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
@@ -473,8 +473,8 @@ class System(Cleaner):
                 '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*', \
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*', \
-                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak', \
-                '$userprofile\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt', \
+                '$localappdata\\Microsoft\\Internet Explorer\\brndlog.bak', \
+                '$localappdata\\Microsoft\\Internet Explorer\\brndlog.txt', \
                 '$windir\\*.log', \
                 '$windir\\imsins.BAK', \
                 '$windir\\OEWABLog.txt', \
