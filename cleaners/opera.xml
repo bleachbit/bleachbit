@@ -27,14 +27,14 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera 10 Beta\cache\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera 10 Beta\opcache\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera 10 Beta\thumbnails\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\cache\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\opcache\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\thumbnails\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\profile\cache4\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\profile\opcache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\opcache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\thumbnails\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\opcache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\thumbnails\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\profile\cache4\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\profile\opcache\"/>
     <action command="delete" search="walk.files" path="~/.opera/cache/"/>
     <action command="delete" search="walk.files" path="~/.opera/cache4/"/>
     <action command="delete" search="walk.files" path="~/.opera/opcache/"/>
@@ -78,11 +78,11 @@
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\typed_history.xml"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\vlink4.dat"/>
     <action command="delete" search="file" path="$LOCALAPPDATA\Opera\Opera\profile\vps\0000\md.dat"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\vps\0000\md.dat"/>
-    <action command="delete" search="glob" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera 10 Beta\icons\*.ico"/>
-    <action command="delete" search="glob" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera 10 Beta\icons\*.idx"/>
-    <action command="delete" search="glob" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\icons\*.ico"/>
-    <action command="delete" search="glob" path="$USERPROFILE\Local Settings\Application Data\Opera\Opera\icons\*.idx"/>
+    <action command="delete" search="file" path="$localappdata\Opera\Opera\vps\0000\md.dat"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera 10 Beta\icons\*.ico"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera 10 Beta\icons\*.idx"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera\icons\*.ico"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera\icons\*.idx"/>
     <action command="delete" search="file" path="~/.opera/global.dat"/>
     <action command="delete" search="file" path="~/.opera/global_history.dat"/>
     <action command="delete" search="file" path="~/.opera/typed_history.xml"/>

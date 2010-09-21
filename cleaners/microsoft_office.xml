@@ -25,7 +25,7 @@
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Microsoft\Office\OffDiag\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Office\OffDiag\"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>

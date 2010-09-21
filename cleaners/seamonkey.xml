@@ -36,7 +36,7 @@
       such as 'eclipse' and 'firefox'.  Using profiles is rare, so we don't. 
     -->
     <action command="delete" search="walk.files" path="~/.mozilla/default/Cache/"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Application Data\Mozilla\Profiles\default\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Mozilla\Profiles\default\Cache\"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
