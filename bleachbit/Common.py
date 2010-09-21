@@ -143,13 +143,14 @@ if 'nt' == os.name:
 # Windows XP doesn't define localappdata, but Windows Vista and 7 do
 if 'nt' == os.name:
     if None == os.getenv('localappdata'):
-        os.environ['localappdata'] = os.path.expandvars('$USERPROFILE\Local Settings\Application Data')
+        os.environ['localappdata'] = os.path.expandvars('$USERPROFILE\\Local Settings\\Application Data')
 
     if None == os.getenv('localappdata'):
         print 'ERROR: putenv failed'
     elif not os.path.exists(os.getenv('localappdata')):
         print 'ERROR: %localappdata% (%s) does not exist' % os.getenv('localappdata')
-        os.environ['localappdata'] = os.path.expandvars('$USERPROFILE\AppData\Local')
+        # Try the Windows Vista / Windows 7 location
+        os.environ['localappdata'] = os.path.expandvars('$USERPROFILE\\AppData\\Local')
         if not os.path.exists(os.getenv('localappdata')):
             print 'ERROR: %localappdata% (%s) does not exist' % os.getenv('localappdata')
 
