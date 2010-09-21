@@ -35,6 +35,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+import ConfigParser
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
@@ -125,6 +126,25 @@ def children_in_directory(top, list_directories = False):
                 yield os.path.join(dirpath, dirname)
         for filename in filenames:
             yield os.path.join(dirpath, filename)
+
+
+
+def clean_ini(path, section, parameter):
+    """Delete sections and parameters (aka option) in the file"""
+
+    # open file
+    config = ConfigParser.RawConfigParser()
+    config.read(path)
+
+    # read through file
+    if None == parameter:
+        config.remove_section(section)
+    else:
+        config.remove_option(section, parameter)
+
+    # write file
+    with open(path, 'wb') as f:
+        config.write(f)
 
 
 def delete(path, shred = False):
