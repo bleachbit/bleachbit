@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-26 21:08-0600\n"
-"PO-Revision-Date: 2010-05-28 14:57+0000\n"
-"Last-Translator: MixCool <lars.thoms@mixcool.de>\n"
+"POT-Creation-Date: 2010-09-20 10:30-0600\n"
+"PO-Revision-Date: 2010-09-20 11:30+0000\n"
+"Last-Translator: cmdrhenner <cmdrhenner@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-31 22:16+0000\n"
+"X-Launchpad-Export-Date: 2010-09-21 12:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -55,7 +55,7 @@ msgstr "Löscht die Gameserver-Liste"
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:295
 #: ../bleachbit/Cleaner.py:355 ../bleachbit/Cleaner.py:398
-#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:418
+#: ../bleachbit/Cleaner.py:417 ../bleachbit/Cleaner.py:419
 msgid "Delete the cache"
 msgstr "Löscht den Cache"
 
@@ -131,8 +131,7 @@ msgstr "Historie"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Löscht die Historie, in der sich die besuchten Seiten, Downloads und "
-"Vorschaubilder befinden"
+"Historie löschen (beinhaltet besuchte Seiten, Downloads und Vorschaubilder)"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -146,7 +145,7 @@ msgstr "Löscht die aktuelle Sitzung"
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:275 ../bleachbit/Cleaner.py:346
 msgid "Delete the usage history"
-msgstr "Löscht die Gebrauchs-Historie"
+msgstr "Verwendungs-Historie löschen"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -195,7 +194,7 @@ msgstr "Löscht die Debug Logs"
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
 #: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:424
+#: ../bleachbit/Cleaner.py:425
 msgid "Temporary files"
 msgstr "Temporäre Dateien"
 
@@ -203,7 +202,7 @@ msgstr "Temporäre Dateien"
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
 #: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:424
+#: ../bleachbit/Cleaner.py:425
 msgid "Delete the temporary files"
 msgstr "Löscht die temporären Dateien"
 
@@ -499,7 +498,7 @@ msgstr "Leert den Müll"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:506
+#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:507
 msgid "Memory"
 msgstr "Arbeitsspeicher"
 
@@ -511,59 +510,67 @@ msgstr "Löscht den Swap und freien Arbeitsspeicher"
 msgid "This option is experimental and may cause system problems."
 msgstr "Diese Option ist experimentell und könnte Systemfehler verursachen."
 
+#: ../bleachbit/Cleaner.py:416
+msgid "Memory dump"
+msgstr "Speicherabbild"
+
+#: ../bleachbit/Cleaner.py:416
+msgid "Delete the file memory.dmp"
+msgstr "Datei memory.dmp löschen"
+
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:418
+#: ../bleachbit/Cleaner.py:419
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:420
 msgid "Recycle bin"
 msgstr "Mülleimer"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:420
 msgid "Empty the recycle bin"
 msgstr "Leere den Mülleimer"
 
-#: ../bleachbit/Cleaner.py:421 ../bleachbit/Cleaner.py:578
+#: ../bleachbit/Cleaner.py:422 ../bleachbit/Cleaner.py:589
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
-#: ../bleachbit/Cleaner.py:421
+#: ../bleachbit/Cleaner.py:422
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Reinigt die Zwischenablage der Desktop-Umgebung, welche zum Kopieren und "
 "Einfügen benutzt wird"
 
-#: ../bleachbit/Cleaner.py:422
+#: ../bleachbit/Cleaner.py:423
 msgid "Free disk space"
 msgstr "Freier Speicherplatz"
 
-#: ../bleachbit/Cleaner.py:422
+#: ../bleachbit/Cleaner.py:423
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Überschreibt freien Speicherplatz, um gelöschte Daten zu verstecken"
 
-#: ../bleachbit/Cleaner.py:423
+#: ../bleachbit/Cleaner.py:424
 msgid "This option is very slow."
 msgstr "Diese Option verlangsamt den Vorgang."
 
-#: ../bleachbit/Cleaner.py:427
+#: ../bleachbit/Cleaner.py:428
 msgid "The system in general"
 msgstr "Das System im Allgemeinen"
 
-#: ../bleachbit/Cleaner.py:433
+#: ../bleachbit/Cleaner.py:434
 msgid "System"
 msgstr "System"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:604
+#: ../bleachbit/Cleaner.py:615
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Überschreibe freien Speicherplatz von %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:632
+#: ../bleachbit/Cleaner.py:643
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Papierkorb %s"
@@ -638,11 +645,11 @@ msgstr ""
 "Kann Python-Modul 'sqlite3' nicht importieren: Python 2.5 oder später wird "
 "vorrausgesetzt"
 
-#: ../bleachbit/GuiBasic.py:107
+#: ../bleachbit/GuiBasic.py:111
 msgid "Delete confirmation"
 msgstr "Löschbestätigung"
 
-#: ../bleachbit/GuiBasic.py:115
+#: ../bleachbit/GuiBasic.py:119
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -652,11 +659,22 @@ msgstr ""
 "wollen? Die aktuellen Dateien, die gelöscht werden, können sich geändert "
 "haben, wenn Sie vorher eine Vorschau erstellt haben."
 
-#: ../bleachbit/GuiBasic.py:117
+#: ../bleachbit/GuiBasic.py:121
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Sind Sie sicher, dass Sie diese Dateien für immer löschen wollen?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:564
+#: ../bleachbit/GuiBasic.py:158
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Sie sind als Root angemeldet, öffnen Sie daher bitte den folgenden Link "
+"manuell in einem Webbrowser:\n"
+"%s"
+
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:551
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -750,7 +768,7 @@ msgstr "Erhalten"
 msgid "Code"
 msgstr "Code"
 
-#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:146
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:133
 msgid "Name"
 msgstr "Name"
 
@@ -791,23 +809,23 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Ordner hinzufügen"
 
-#: ../bleachbit/GUI.py:154
+#: ../bleachbit/GUI.py:141
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../bleachbit/GUI.py:347
+#: ../bleachbit/GUI.py:334
 msgid "You must select an operation"
 msgstr "Sie müssen eine Operation auswählen"
 
-#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
+#: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:372
 msgid "Done."
 msgstr "Fertig."
 
-#: ../bleachbit/GUI.py:396
+#: ../bleachbit/GUI.py:383
 msgid "Program to clean unnecessary files"
 msgstr "Programm zum entfernen nicht benötigter Dateien"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:388
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -819,73 +837,74 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:407
+#: ../bleachbit/GUI.py:394
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Aljosha Papsch https://launchpad.net/~joschi-papsch\n"
 "  Georg Engelmann https://launchpad.net/~georg-engelmann\n"
-"  Jan-Christoph Borchardt https://launchpad.net/~inquata\n"
+"  Heinrich Ulbricht https://launchpad.net/~heinrich-ulbricht\n"
+"  Jan-Christoph Borchardt https://launchpad.net/~jancborchardt\n"
 "  Lunix https://launchpad.net/~themasterofdesaster2006\n"
 "  MixCool https://launchpad.net/~mixcool\n"
 "  Stefan https://launchpad.net/~drezil\n"
 "  Ubert Shok https://launchpad.net/~ushok"
 
-#: ../bleachbit/GUI.py:420
+#: ../bleachbit/GUI.py:407
 msgid "System information"
 msgstr "Systeminformationen"
 
-#: ../bleachbit/GUI.py:474
+#: ../bleachbit/GUI.py:461
 msgid "Choose files to shred"
 msgstr "Wählen Sie die Dateien zum Löschen aus"
 
-#: ../bleachbit/GUI.py:560
+#: ../bleachbit/GUI.py:547
 msgid "_Shred Files"
 msgstr "_Datei löschen"
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:548
 msgid "S_hred Settings and Quit"
 msgstr "Einstellungen schreddern und beenden"
 
-#: ../bleachbit/GUI.py:562
+#: ../bleachbit/GUI.py:549
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: ../bleachbit/GUI.py:563
+#: ../bleachbit/GUI.py:550
 msgid "_File"
 msgstr "_Datei"
 
-#: ../bleachbit/GUI.py:565
+#: ../bleachbit/GUI.py:552
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../bleachbit/GUI.py:566
+#: ../bleachbit/GUI.py:553
 msgid "Help Contents"
 msgstr "Hilfe-Inhalt"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:554
 msgid "_Release Notes"
 msgstr "Versionsbemerkungen"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:555
 msgid "_System Information"
 msgstr "_Systeminformationen"
 
-#: ../bleachbit/GUI.py:569
+#: ../bleachbit/GUI.py:556
 msgid "_About"
 msgstr "_Über"
 
-#: ../bleachbit/GUI.py:570
+#: ../bleachbit/GUI.py:557
 msgid "_Help"
 msgstr "_Hilfe"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:594
+#: ../bleachbit/GUI.py:581
 msgctxt "button"
 msgid "Preview"
 msgstr "Vorschau"
 
-#: ../bleachbit/GUI.py:597
+#: ../bleachbit/GUI.py:584
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Vorschau der Dateien in den ausgewählten Operationen (ohne irgendwelche "
@@ -893,33 +912,33 @@ msgstr ""
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:605
+#: ../bleachbit/GUI.py:592
 msgctxt "button"
 msgid "Delete"
 msgstr "Löschen"
 
-#: ../bleachbit/GUI.py:608
+#: ../bleachbit/GUI.py:595
 msgid "Delete files in the selected operations"
 msgstr "Dateien in den ausgewählten Operationen löschen"
 
-#: ../bleachbit/GUI.py:689
+#: ../bleachbit/GUI.py:676
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "BleachBit updaten"
 
-#: ../bleachbit/GUI.py:694
+#: ../bleachbit/GUI.py:681
 msgid "BleachBit update is available"
 msgstr "Ein Update für BleachBit ist verfügbar"
 
-#: ../bleachbit/GUI.py:702
+#: ../bleachbit/GUI.py:689
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Klicken sie 'BleachBit updaten' für weitere Informationen"
 
-#: ../bleachbit/GUI.py:718
+#: ../bleachbit/GUI.py:705
 msgid "Error when checking for updates: "
 msgstr "Error bei der suche nach Updates: "
 
-#: ../bleachbit/GUI.py:746
+#: ../bleachbit/GUI.py:733
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -954,13 +973,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Dateiname"
 
-#: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
+#: ../bleachbit/Unix.py:369 ../bleachbit/Unix.py:399 ../bleachbit/Unix.py:579
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Ausführbare Datei nicht gefunden: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:575 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:576 ../bleachbit/Worker.py:129
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -991,6 +1010,13 @@ msgstr "Bitte warten Sie. %s wird gereinigt."
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Bitte warten. %s wird analysiert."
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:194
+msgid "Please wait.  Running deep scan."
+msgstr ""
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
