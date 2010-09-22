@@ -188,7 +188,7 @@ class Firefox(Cleaner):
         self.add_option('cache', _('Cache'), _('Delete the web cache, which reduces time to display revisited pages'))
         self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site preferences, authentication, and tracking identification'))
         # TRANSLATORS: DOM = Document Object Model.
-        self.add_option('dom', _('DOM Storage'), _('Delete HTML5 cookies')
+        self.add_option('dom', _('DOM Storage'), _('Delete HTML5 cookies'))
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
