@@ -75,6 +75,7 @@
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
                             <xs:enumeration value="delete"/>
+                            <xs:enumeration value="ini"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
                             <xs:enumeration value="winreg"/>
@@ -83,6 +84,7 @@
                         </xs:simpleType>
                       </xs:attribute>
                       <xs:attribute name="name" type="xs:string"/>
+                      <xs:attribute name="parameter" type="xs:string"/>
                       <xs:attribute name="path" type="xs:string"/>
                       <xs:attribute name="regex" type="xs:string"/>
                       <xs:attribute name="search">
@@ -96,6 +98,8 @@
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>
+                      <xs:attribute name="section" type="xs:string"/>
+                      <xs:attribute name="search">
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>
