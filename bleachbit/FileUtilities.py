@@ -132,9 +132,11 @@ def children_in_directory(top, list_directories = False):
 def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file"""
 
-    # open file
+    # read file to parser
     config = ConfigParser.RawConfigParser()
-    config.read(path)
+    import io
+    with io.open(path, 'r', encoding='utf_8_sig') as fp:
+        config.readfp(fp)
 
     # change file
     if config.has_section(section):
