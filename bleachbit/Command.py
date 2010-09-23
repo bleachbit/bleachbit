@@ -151,6 +151,38 @@ class Function:
 
 
 
+class Ini:
+    """Remove sections or parameters from a .ini file"""
+
+    def __init__(self, path, section, parameter):
+        """Create the instance"""
+        self.path = path
+        self.section = section
+        self.parameter = parameter
+
+
+    def execute(self, really_delete):
+        """Make changes and return results"""
+
+        if FileUtilities.whitelisted(self.path):
+            yield whitelist(self.path)
+            return
+
+        ret = { \
+            # TRANSLATORS: Parts of this .ini file will be deleted
+            'label' : _('Clean .ini file'),
+            'n_deleted' : 0,
+            'n_special' : 1,
+            'path' : self.path,
+            'size' : None }
+        if really_delete:
+            oldsize = FileUtilities.getsize(self.path)
+            FileUtilities.clean_ini(self.path, self.section, self.parameter)
+            newsize = FileUtilities.getsize(self.path)
+            ret['size'] = oldsize - newsize
+        yield ret
+
+
 class Shred(Delete):
     """Shred a single file"""
 

@@ -171,6 +171,7 @@ class AptAutoclean(ActionProvider):
                 'apt-get autoclean')
 
 
+
 class AptAutoremove(ActionProvider):
     """Action to run 'apt-get autoremove'"""
     action_key = 'apt.autoremove'
@@ -195,6 +196,24 @@ class Delete(FileActionProvider):
     def get_commands(self):
         for path in self.get_paths():
             yield Command.Delete(path)
+
+
+
+class Ini(FileActionProvider):
+    """Action to clean .ini configuration files"""
+    action_key = 'ini'
+
+    def __init__(self, action_element):
+        FileActionProvider.__init__(self, action_element)
+        self.section = action_element.getAttribute('section')
+        self.parameter = action_element.getAttribute('parameter')
+        if self.parameter == "":
+            self.parameter = None
+
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Ini(path, self.section, self.parameter)
 
 
 

@@ -69,7 +69,7 @@ class ActionTestCase(unittest.TestCase):
                 provider = actionplugin(action_node)
         self.assertNotEqual(provider, None)
         for cmd in provider.get_commands():
-            self.assert_(isinstance(cmd, Command.Delete))
+            self.assert_(isinstance(cmd, (Command.Delete, Command.Ini)))
             self.assert_(os.path.lexists(filename))
             # preview
             result = cmd.execute(really_delete = False).next()
@@ -83,6 +83,8 @@ class ActionTestCase(unittest.TestCase):
                 self.assert_(os.path.lexists(filename))
                 os.remove(filename)
                 self.assert_(not os.path.lexists(filename))
+            elif 'ini' == command:
+                self.assert_(os.path.lexists(filename))
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
 
@@ -97,6 +99,21 @@ class ActionTestCase(unittest.TestCase):
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
+
+
+    def test_ini(self):
+        """Unit test for class Ini"""
+        from TestFileUtilities import test_ini
+
+        def execute_ini(path, section, parameter):
+            effective_parameter = ""
+            if None != parameter:
+                effective_parameter = 'parameter="%s"' % parameter
+            action_str = '<action command="ini" search="file" path="%s" section="%s" %s />' \
+                % (path, section, effective_parameter)
+            self._test_action_str(action_str)
+
+        test_ini(self, execute_ini)
 
 
     def test_regex(self):

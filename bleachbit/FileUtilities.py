@@ -136,11 +136,12 @@ def clean_ini(path, section, parameter):
     config = ConfigParser.RawConfigParser()
     config.read(path)
 
-    # read through file
-    if None == parameter:
-        config.remove_section(section)
-    else:
-        config.remove_option(section, parameter)
+    # change file
+    if config.has_section(section):
+        if None == parameter:
+            config.remove_section(section)
+        else:
+            config.remove_option(section, parameter)
 
     # write file
     with open(path, 'wb') as f:

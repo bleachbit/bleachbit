@@ -35,6 +35,38 @@ sys.path.append('.')
 from bleachbit.FileUtilities import *
 
 
+def test_ini(self, execute):
+    """Used to test .ini cleaning in TestAction and in TestFileUtilities """
+
+    # create test file
+    (fd, filename) = tempfile.mkstemp()
+    os.write(fd, '#Test\n')
+    os.write(fd, '[RecentsMRL]\n')
+    os.write(fd, 'list=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n')
+    os.close(fd)
+    self.assert_(os.path.exists(filename))
+    size = os.path.getsize(filename)
+    self.assertEqual(75, 75)
+
+    # section does not exist
+    execute(filename, 'Recents', None)
+    self.assertEqual(73, os.path.getsize(filename))
+
+    # parameter does not exist
+    execute(filename, 'RecentsMRL', 'files')
+    self.assertEqual(73, os.path.getsize(filename))
+
+    # parameter does exist
+    execute(filename, 'RecentsMRL', 'list')
+    self.assertEqual(14, os.path.getsize(filename))
+
+    # section does exist
+    execute(filename, 'RecentsMRL', None)
+    self.assertEqual(0, os.path.getsize(filename))
+
+    # clean up
+    delete(filename)
+
 
 class FileUtilitiesTestCase(unittest.TestCase):
     """Test case for module FileUtilities"""
@@ -128,35 +160,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
+        test_ini(self, clean_ini)
 
-        # create test file
-        (fd, filename) = tempfile.mkstemp()
-        os.write(fd, '#Test\n')
-        os.write(fd, '[RecentsMRL]\n')
-        os.write(fd, 'list=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n')
-        os.close(fd)
-        self.assert_(os.path.exists(filename))
-        size = os.path.getsize(filename)
-        self.assertEqual(75, 75)
-
-        # section does not exist
-        clean_ini(filename, 'Recents', None)
-        self.assertEqual(73, os.path.getsize(filename))
-
-        # parameter does not exist
-        clean_ini(filename, 'RecentsMRL', 'files')
-        self.assertEqual(73, os.path.getsize(filename))
-
-        # parameter does exist
-        clean_ini(filename, 'RecentsMRL', 'list')
-        self.assertEqual(14, os.path.getsize(filename))
-
-        # section does exist
-        clean_ini(filename, 'RecentsMRL', None)
-        self.assertEqual(0, os.path.getsize(filename))
-
-        # clean up
-        delete(filename)
 
 
     def test_delete(self):
