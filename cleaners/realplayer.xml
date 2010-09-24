@@ -30,7 +30,8 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action command="ini" search="file" path="~/.config/real/realplayerrc" section="recent_urls"/>
+    <!-- FIXME: RealPlayer uses a special .ini format which isn't currently compatible -->
+    <!-- <action command="ini" search="file" path="~/.config/real/realplayerrc" section="recent_urls"/> -->
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\realplayer.ste"/>
     <action command="delete" search="glob" path="$APPDATA\Real\RealPlayer\History\*.lnk"/>
   </option>
