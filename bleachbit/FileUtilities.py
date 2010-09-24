@@ -25,10 +25,9 @@ File-related utilities
 """
 
 
-
+import codecs
 import datetime
 import glob
-import io
 import locale
 import os
 import re
@@ -135,8 +134,8 @@ def clean_ini(path, section, parameter):
 
     # read file to parser
     config = ConfigParser.RawConfigParser()
-    with io.open(path, 'r', encoding='utf_8_sig') as fp:
-        config.readfp(fp)
+    fp = codecs.open(path, 'r', encoding='utf_8_sig')
+    config.readfp(fp)
 
     # change file
     if config.has_section(section):
@@ -146,8 +145,8 @@ def clean_ini(path, section, parameter):
             config.remove_option(section, parameter)
 
     # write file
-    with open(path, 'wb') as f:
-        config.write(f)
+    fp = codecs.open(path, 'wb', encoding='utf_8')
+    config.write(fp)
 
 
 def delete(path, shred = False):
