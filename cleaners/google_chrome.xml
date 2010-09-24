@@ -39,6 +39,12 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
   </option>
+  <option id="dom">
+    <label>DOM Storage</label>
+    <description>Delete HTML5 cookies</description>
+    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\databases\"/>
+    <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/databases/"/>
+  </option>
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
