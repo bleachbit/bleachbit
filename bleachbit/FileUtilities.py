@@ -28,6 +28,7 @@ File-related utilities
 
 import datetime
 import glob
+import io
 import locale
 import os
 import re
@@ -134,7 +135,6 @@ def clean_ini(path, section, parameter):
 
     # read file to parser
     config = ConfigParser.RawConfigParser()
-    import io
     with io.open(path, 'r', encoding='utf_8_sig') as fp:
         config.readfp(fp)
 
