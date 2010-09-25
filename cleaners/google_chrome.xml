@@ -36,8 +36,10 @@
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
+    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
+    <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/Local Storage/"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
