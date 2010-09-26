@@ -41,4 +41,14 @@
     <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\History\"/>
     <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\Webpage Previews\"/>
   </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="$APPDATA\Apple Computer\Safari\PubSub\Database\Database.sqlite3"/>
+    <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\Databases\*\*db"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\Databases\Databases.db"/>
+    <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\LocalStorage\*.localstorage"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\SafeBrowsing.db"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\WebpageIcons.db"/>
+ </option>
 </cleaner>
