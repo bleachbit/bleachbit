@@ -24,7 +24,9 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="RecentsMRL"/>
+    <action search="file" path="$APPDATA\vlc\vlc-qt-interface.ini" command="ini" section="General" parameter="filedialog-path"/>
+    <action search="file" path="$APPDATA\vlc\vlc-qt-interface.ini" command="ini" section="RecentsMRL"/>
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="General" parameter="filedialog-path"/>
+    <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="RecentsMRL"/>
   </option>
 </cleaner>
