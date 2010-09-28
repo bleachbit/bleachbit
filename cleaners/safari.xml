@@ -50,5 +50,5 @@
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\LocalStorage\*.localstorage"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\SafeBrowsing.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\WebpageIcons.db"/>
- </option>
+  </option>
 </cleaner>
