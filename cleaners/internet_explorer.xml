@@ -38,6 +38,7 @@
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
+    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\Recovery\Last Active\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\History\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\History\"/>
     <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
