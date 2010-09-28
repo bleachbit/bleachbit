@@ -31,7 +31,7 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\Cookies\Cookies.plist"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Apple Computer\Safari\LocalStorage\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\LocalStorage\"/>
   </option>
   <option id="history">
     <label>History</label>
