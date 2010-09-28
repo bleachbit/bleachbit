@@ -27,6 +27,7 @@
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="walk.files" path="$USERPROFILE\Cookies\"/>
     <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\Cookies\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
