@@ -518,9 +518,9 @@ class System(Cleaner):
         if 'nt' == os.name and 'memory_dump' == option_id:
             file = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(file):
-                files += file
+                files += [ file ]
             for file in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
-                files += file
+                files += [ file ]
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
