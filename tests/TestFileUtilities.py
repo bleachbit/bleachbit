@@ -46,15 +46,15 @@ def test_ini(self, execute):
     os.close(fd)
     self.assert_(os.path.exists(filename))
     size = os.path.getsize(filename)
-    self.assertEqual(75, 75)
+    self.assertEqual(77, size)
 
     # section does not exist
     execute(filename, 'Recents', None)
-    self.assertEqual(73, os.path.getsize(filename))
+    self.assertEqual(77, os.path.getsize(filename))
 
     # parameter does not exist
     execute(filename, 'RecentsMRL', 'files')
-    self.assertEqual(73, os.path.getsize(filename))
+    self.assertEqual(77, os.path.getsize(filename))
 
     # parameter does exist
     execute(filename, 'RecentsMRL', 'list')

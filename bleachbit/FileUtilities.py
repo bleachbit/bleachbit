@@ -138,15 +138,19 @@ def clean_ini(path, section, parameter):
     config.readfp(fp)
 
     # change file
+    changed = False
     if config.has_section(section):
         if None == parameter:
+            changed = True
             config.remove_section(section)
-        else:
+        elif config.has_option(section, parameter):
+            changed = True
             config.remove_option(section, parameter)
 
     # write file
-    fp = codecs.open(path, 'wb', encoding='utf_8')
-    config.write(fp)
+    if changed:
+        fp = codecs.open(path, 'wb', encoding='utf_8')
+        config.write(fp)
 
 
 def clean_json(path, key):
