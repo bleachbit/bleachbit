@@ -163,6 +163,26 @@ class FileUtilitiesTestCase(unittest.TestCase):
         test_ini(self, clean_ini)
 
 
+    def test_clean_json(self):
+        """Unit test for clean_json()"""
+         # create test file
+        (fd, filename) = tempfile.mkstemp()
+        os.write(fd, '{ "deleteme" : 1, "spareme" : 2 }')
+        os.close(fd)
+        self.assert_(os.path.exists(filename))
+        first_size = os.path.getsize(filename)
+
+        # invalid key
+        clean_json(filename, 'doesnotexist')
+        self.assertEqual(first_size, os.path.getsize(filename))
+
+        # valid key
+        clean_json(filename, 'deleteme')
+        self.assert_(first_size > os.path.getsize(filename))
+
+        # clean up
+        delete(filename)
+
 
     def test_delete(self):
         """Unit test for method delete()"""

@@ -149,6 +149,25 @@ def clean_ini(path, section, parameter):
     config.write(fp)
 
 
+def clean_json(path, key):
+    """Delete key in the JSON file"""
+
+    # Python 2.6+
+    import json
+
+    # read file to parser
+    with open(path, 'r') as f:
+        j = json.load(f)
+
+    # change file
+    if key in j.keys():
+        del(j[key])
+
+        # write file
+        with open(path, 'w') as f:
+            json.dump(j, f)
+
+
 def delete(path, shred = False):
     """Delete path that is either file, directory, link or FIFO"""
     try:
