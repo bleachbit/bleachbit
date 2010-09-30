@@ -308,7 +308,7 @@ class Locales:
         # /usr/share/i18n/locales/es_ES@euro
         globexs += ( ('/usr/share/i18n/locales/??_*', 'locales/([a-z]{2}_[A-Z]{2})'), )
         # /usr/share/aptitude/aptitude-defaults.es
-        globexs += ( ('/usr/share/aptitude/aptitude-defaults.[a-z]{2}(_[A-Z])?', 'defaults.([a-z]{2})'), )
+        globexs += ( ('/usr/share/aptitude/aptitude-defaults*', '-defaults.([a-z]{2})'), )
         # /usr/share/ppd/splix/samsung/ml1740fr.ppd
         globexs += ( ('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$' ), )
         # /usr/share/espeak-data/es_dict
