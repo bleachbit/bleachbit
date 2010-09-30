@@ -152,11 +152,14 @@ class Locales:
                 '/usr/share/gnucash/accounts',
                 '/usr/share/kde4/apps/ksgmltools2/customization',
                 '/usr/share/locale/',
-                '/usr/share/speedcrunch/books/' ] 
+                '/usr/share/speedcrunch/books/',
+                '/usr/share/vim/vim72/' # Ubuntu 10.10
+                ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
     ooosharedirs = [ '/usr/lib/openoffice/share/', # Ubuntu 8
+        '/usr/lib/openoffice/basis3.2/share/', # Ubuntu 10.10
         '/usr/lib/openoffice.org/basis3.0/share/', # Fedora 10
         '/opt/ooo-dev/basis3.0/share', # Sun development snapshot
         '/opt/openoffice.org/basis3.0/share/' ] # Sun
@@ -281,9 +284,13 @@ class Locales:
         # /usr/share/cups/doc-root/es/images/button-add-printer.gif
         lps += ( ('/usr/share/cups/doc-root/', dir_filter) , )
 
-        # Evolution
+        # evolution
         # /usr/share/evolution/2.22/help/quickref/es/quickref.pdf
         lps += ( ('/usr/share/evolution/*/help/quickref/', dir_filter) , )
+
+        # Evolution, Ubuntu 10.10
+        # /usr/share/evolution/2.30/default/es/mail
+        lps += ( ('/usr/share/evolution/*.*/default/', dir_filter) , )
 
         # foomatic
         dir_filter = lambda d: 2 != len(d)
