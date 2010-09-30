@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-09-28 18:02+0000\n"
+"PO-Revision-Date: 2010-09-29 15:38+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-28 20:32+0000\n"
+"X-Launchpad-Export-Date: 2010-09-29 18:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -364,7 +364,7 @@ msgstr "アバターと emoticon キャッシュの削除"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "詳細スキャン"
+msgstr "ディープスキャン"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -420,7 +420,7 @@ msgstr "DOM ストレージ"
 
 #: ../bleachbit/Cleaner.py:191
 msgid "Delete HTML5 cookies"
-msgstr "HTML5 クッキーを削除"
+msgstr "HTML5 cookie を削除"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Form history"
@@ -436,7 +436,7 @@ msgstr "セッション復元"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "ブラウザが閉じられた、または正常終了しなかった場合、初期セッションを読み込む"
+msgstr "ブラウザが閉じられた、または正常終了しなかった後、読み込む初期セッション"
 
 #: ../bleachbit/Cleaner.py:364
 msgid "Delete the files in the rpmbuild build folder"
@@ -464,7 +464,7 @@ msgstr "ローカライゼーション"
 
 #: ../bleachbit/Cleaner.py:407
 msgid "Delete files for unwanted languages"
-msgstr "使用しない言語ファイルの削除"
+msgstr "不要な言語ファイルの削除"
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -494,7 +494,7 @@ msgstr "メモリ"
 
 #: ../bleachbit/Cleaner.py:418
 msgid "Wipe the swap and free memory"
-msgstr "メモリの空き領域を確保する"
+msgstr "スワップを削除し、メモリの空き領域を確保する"
 
 #: ../bleachbit/Cleaner.py:419
 msgid "This option is experimental and may cause system problems."
@@ -682,7 +682,7 @@ msgstr "ホワイトリスト"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
-msgstr "インターネットを介して定期的にソフトウェアのアップデートを確認"
+msgstr "インターネットを介して定期的にソフトウェアの更新を確認"
 
 #: ../bleachbit/GuiPreferences.py:108
 msgid ""
@@ -769,7 +769,7 @@ msgstr "フォルダ"
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
 #: ../bleachbit/GuiPreferences.py:315
 msgid "Theses paths will not be deleted or modified."
-msgstr "これらのパスは削除あるいは変更できません。"
+msgstr "これらのパスは削除や変更はできません。"
 
 #: ../bleachbit/GuiPreferences.py:323
 msgid "Type"
@@ -784,12 +784,12 @@ msgstr "パス"
 #: ../bleachbit/GuiPreferences.py:341
 msgctxt "button"
 msgid "Add file"
-msgstr "ファイルを追加"
+msgstr "ファイルの追加"
 
 #: ../bleachbit/GuiPreferences.py:344
 msgctxt "button"
 msgid "Add folder"
-msgstr "フォルダを追加"
+msgstr "フォルダの追加"
 
 #: ../bleachbit/GUI.py:141
 msgid "Active"
@@ -801,11 +801,11 @@ msgstr "操作を選択してください"
 
 #: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:372
 msgid "Done."
-msgstr "完了。"
+msgstr "完了しました。"
 
 #: ../bleachbit/GUI.py:383
 msgid "Program to clean unnecessary files"
-msgstr "不要なファイルを削除する"
+msgstr "不要なファイルを削除するためのプログラム"
 
 #: ../bleachbit/GUI.py:388
 msgid ""
@@ -844,7 +844,7 @@ msgstr "設定を削除して終了(_H)"
 
 #: ../bleachbit/GUI.py:549
 msgid "_Quit"
-msgstr "終了(_Q):"
+msgstr "終了(_Q)"
 
 #: ../bleachbit/GUI.py:550
 msgid "_File"
@@ -882,7 +882,7 @@ msgstr "プレビュー"
 
 #: ../bleachbit/GUI.py:584
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "選択された動作でファイルをプレビューします（ファイル削除はしません）"
+msgstr "選択された操作でファイルをプレビューします（ファイル削除はしません）"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
@@ -893,7 +893,7 @@ msgstr "削除"
 
 #: ../bleachbit/GUI.py:595
 msgid "Delete files in the selected operations"
-msgstr "選択された動作でファイルを削除します"
+msgstr "選択された操作でファイルを削除します"
 
 #: ../bleachbit/GUI.py:676
 msgctxt "button"
@@ -910,7 +910,7 @@ msgstr "詳細は 'BleachBit のアップデート' をクリックしてくだ�
 
 #: ../bleachbit/GUI.py:705
 msgid "Error when checking for updates: "
-msgstr "アップデートの確認中にエラーが発生しました： "
+msgstr "更新の確認中にエラーが発生しました： "
 
 #: ../bleachbit/GUI.py:733
 msgid ""
