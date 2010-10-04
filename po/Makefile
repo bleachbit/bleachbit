@@ -32,6 +32,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		$(SRC)
+	sed -i 's/charset=CHARSET/charset=utf-8/g' bleachbit.pot
 	echo " Words after update: " \
 		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
 
