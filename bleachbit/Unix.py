@@ -596,6 +596,10 @@ def yum_clean():
         if len(line) > 2:
             non_blank_line = line
         if -1 != line.find('You need to be root'):
+            # Seen before Fedora 13
+            raise RuntimeError(line)
+        if -1 != line.find('Cannot remove rpmdb file'):
+            # Since first in Fedora 13
             raise RuntimeError(line)
         if -1 != line.find('Another app is currently holding'):
             print "debug: yum: '%s'" % line
