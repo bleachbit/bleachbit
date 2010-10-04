@@ -1,7 +1,7 @@
 ;  vim: ts=4:sw=4:expandtab
 ;
 ;  BleachBit
-;  Copyright (C) 2009 Andrew Ziem
+;  Copyright (C) 2010 Andrew Ziem
 ;  http://bleachbit.sourceforge.net
 ;
 ;  This program is free software: you can redistribute it and/or modify
@@ -114,6 +114,7 @@
   !insertmacro MUI_LANGUAGE "Spanish"
   !insertmacro MUI_LANGUAGE "Swedish"
   !insertmacro MUI_LANGUAGE "Thai"
+  !insertmacro MUI_LANGUAGE "TradChinese"
   !insertmacro MUI_LANGUAGE "Turkish"
   !insertmacro MUI_LANGUAGE "Ukrainian"
 
