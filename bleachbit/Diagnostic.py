@@ -48,10 +48,12 @@ def diagnostic_info():
     s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
-        for value in ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID'):
-            s += "\nos.getenv('%s') = %s" % (value, os.getenv(value))
+        envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
+    if 'nt' == os.name:
+        envs = ('APPDATA', 'localappdata', 'USERPROFILE')
+    for env in envs:
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
-    s += "\nos.expandvars('$USERPROFILE') = %s" % os.path.expandvars('$USERPROFILE')
     if 'linux2' == sys.platform:
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
