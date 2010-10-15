@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-09-24 06:13+0000\n"
-"Last-Translator: Burak Ilgicioglu <Unknown>\n"
+"PO-Revision-Date: 2010-10-12 11:29+0000\n"
+"Last-Translator: Amed Çeko Jiyan <amedcj@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-24 13:08+0000\n"
+"X-Launchpad-Export-Date: 2010-10-15 05:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 msgid "Game"
-msgstr "Oyun"
+msgstr "Lîstik"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
 #: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/kde.xml
@@ -38,11 +38,11 @@ msgstr "Oyun"
 #: ../bleachbit/Cleaner.py:301 ../bleachbit/Cleaner.py:361
 #: ../bleachbit/Cleaner.py:404
 msgid "Cache"
-msgstr "Önbellek"
+msgstr "Pêşbîr"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Oyun sunucu listesini sil"
+msgstr "Lîsteya pêşkêşkara lîstikan jê bibe"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
@@ -57,7 +57,7 @@ msgstr "Oyun sunucu listesini sil"
 #: ../bleachbit/Cleaner.py:361 ../bleachbit/Cleaner.py:404
 #: ../bleachbit/Cleaner.py:423 ../bleachbit/Cleaner.py:425
 msgid "Delete the cache"
-msgstr "Önbelleği sil"
+msgstr "Pêşbîrê jê bibe"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -77,8 +77,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Veritabanı parçalanmasını düzenleyerek hiçbir bilgi silmeden kullanılan "
-"alanı azaltın ve hızı arttırın."
+"Bêyî ku tu daneyan jê bibî parçebûna danegehê serast bike û qada bikaranînê "
+"kêm bike an jî lezê zêde bike"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -86,16 +86,14 @@ msgstr ""
 #: ../cleaners/elinks.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:212
 msgid "Web browser"
-msgstr "Web tarayıcı"
+msgstr "Geroka webê"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:188
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Web önbelleğini sil. Web önbelleği yeniden ziyaret edilen sayfaların "
-"görüntülenme süresini azaltır."
+msgstr "Pêşbîra webê jê bibe, bi vê yekê vekirina nû ya rûpelan dê hêdî bibe"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -104,7 +102,7 @@ msgstr ""
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:189
 msgid "Cookies"
-msgstr "Çerezler"
+msgstr "Çerez"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -115,9 +113,7 @@ msgstr "Çerezler"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
-"Site tercihleri, oturum doğrulamaları ve izleme kimlikleri gibi bilgiler "
-"içeren çerezleri sil"
+msgstr "Çerezên ku agahî, vebijêrk, û nasnameyên malperan tê de ne jê bibe"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -126,43 +122,42 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/bash.xml ../cleaners/links2.xml
 #: ../cleaners/elinks.xml ../cleaners/realplayer.xml
 msgid "History"
-msgstr "Geçmiş"
+msgstr "Dîrok"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Ziyaret edilen sayfaları, indirmeleri ve küçük önizleme resimlerini içeren "
-"geçmişi sil"
+"Vê dîroka ku malperên vebûne, daxistin û wêneyên pêşdîtinê tê de hene jê bibe"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
-msgstr "Aktif oturum"
+msgstr "Rûniştina çalak"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr "Aktif oturumu sil"
+msgstr "Rûniştina çalak jê bibe"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:352
 msgid "Delete the usage history"
-msgstr "Kullanım geçmişini sil"
+msgstr "Dîroka bikaranînê jê bibe"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
-msgstr "Editör"
+msgstr "Edîtor"
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"~/.viminfo klasörünü sil. Bu klasörde geçmiş, komut geçmişi ve tampon "
-"dosyaları bulunur."
+"Peldanka ~/.viminfo ku tê de dîroka pelan, dîroka fermanan û pelên tampon "
+"hene jê bibe"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "Çoklu ortam gösterici"
+msgstr "Nîşandêra Multîmedyayê"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -171,7 +166,7 @@ msgstr "Çoklu ortam gösterici"
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:421
 msgid "Logs"
-msgstr "Günlük Kayıtları"
+msgstr "Tomar"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -179,18 +174,18 @@ msgstr "Günlük Kayıtları"
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:421
 msgid "Delete the logs"
-msgstr "Günlük kayıtlarını sil."
+msgstr "Tomaran jê bibe"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
-msgstr "Hata ayıklama günlükleri"
+msgstr "Tomarên çewtiyan"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
 #: ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
-msgstr "Hata ayıklama günlüklerini sil"
+msgstr "Tomarên çewtiyan jê bibe"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
@@ -198,7 +193,7 @@ msgstr "Hata ayıklama günlüklerini sil"
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
 #: ../bleachbit/Cleaner.py:431
 msgid "Temporary files"
-msgstr "Geçici dosyalar"
+msgstr "Pelên demdemî"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
@@ -206,13 +201,13 @@ msgstr "Geçici dosyalar"
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
 #: ../bleachbit/Cleaner.py:431
 msgid "Delete the temporary files"
-msgstr "Geçici dosyaları sil"
+msgstr "Pelên demdemî jê bibe"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:198
 msgid "List of visited web pages"
-msgstr "Ziyaret edilmiş adreslerin listesi"
+msgstr "Lîsteya malperên vebûne"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
 #: ../cleaners/wordpad.xml ../cleaners/winamp.xml
@@ -221,244 +216,236 @@ msgstr "Ziyaret edilmiş adreslerin listesi"
 #: ../cleaners/adobe_reader.xml ../cleaners/paint.xml
 #: ../bleachbit/Cleaner.py:302
 msgid "Most recently used"
-msgstr "En son kullanılan"
+msgstr "Yên herî dawî hatine bikaranîn"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
 #: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:413
 msgid "Delete the list of recently used documents"
-msgstr "Son kullanılan doküman listesini sil"
+msgstr "Lîsteya belgeyên herî dawî hatine bikaranîn jê bibe"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:413
 msgid "Recent documents list"
-msgstr "En son doküman listesi"
+msgstr "Lîsteya belgeyên dawiyê"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
-msgstr "İstemci sohbeti"
+msgstr "Navrûyê chatê"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr "Sohbet günlükleri"
+msgstr "Tomarên chatê"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr "Sohbet günlüklerini sil"
+msgstr "Tomarên chatê jê bibe"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Ziyaret edilmiş web sayfalarını sil"
+msgstr "Malperên vebûne jê bibe"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "Masaüstü Kutucukları"
+msgstr "Amûrên Sermaseyê"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr "Arama aracı"
+msgstr "Amûra lêgerînê"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
-msgstr "Arama indeksleri"
+msgstr "Naverokên lêgerînê"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr "Arama indekslerini sil"
+msgstr "Naverokên lêgerînê jê bibe"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "File transfer client"
-msgstr "Dosya transfer istemcisi"
+msgstr "Navrûyê veguhestina pelan"
 
 #: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
-msgstr "Dosyaları sil"
+msgstr "Pelan jê bibe"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "Download history"
-msgstr "İndirme geçmişi"
+msgstr "Dîroka daxistinan"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "List of files downloaded"
-msgstr "İndirilen dosyalar listesi"
+msgstr "Lîsteyan pelên daxistî"
 
 #: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:198
 msgid "URL history"
-msgstr "URL geçmişi"
+msgstr "Dîroka URLê"
 
 #: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr "Sıklıkla kullanılan menü listesini sil"
+msgstr "Lîsteya yên herî zêde hatine bikaranîn jê bibe"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:195
 msgid "Passwords"
-msgstr "Şifreler"
+msgstr "Şîfre"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:195
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr ""
-"Kullanıcı adları ve  şifreleri bunun yanında şifreleri depolanmaması gereken "
-"sitelerin listesini içeren bir veritabanı."
+msgstr "Danegeheke nav û şîfreyan û ya malperên ku şîfreyan depo dike"
 
 #: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:196
 msgid "Places"
-msgstr "Konumlar"
+msgstr "Cî"
 
 #: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:196
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
-msgstr ""
-"Yer imlerini , favikonlarını ve ziyaret edilmiş web sitelerinin geçmişini "
-"içeren bir veritabanı"
+msgstr "Danegeheke URLên bijare, favîkon û dîroka malperan tê de heye"
 
 #: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:197
 msgid "This option deletes all bookmarks."
-msgstr "Bu seçenek tüm yer imlerini siler."
+msgstr "Ev vebijêrk dê hemû bijareyan jê bibe."
 
 #: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:312
 msgid "Office suite"
-msgstr "Ofis suit"
+msgstr "Bernameya ofîsê"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr "Kullanılmayan dosyaları sil"
+msgstr "Pelên nayên bikaranîn jê bibe"
 
 #: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Search history"
-msgstr "Arama Geçmişi"
+msgstr "Dîroka lêgerînê"
 
 #: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the search history"
-msgstr "Arama geçmişini sil"
+msgstr "Dîroka lêgerînê jê bibe"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr "Yedek dosyaları"
+msgstr "Pelên hilanînî"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
-msgstr "Yedekleme dosyalarını sil"
+msgstr "Pelên hilanînî jê bibe"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr "İndirilmiş yayın akış içerikleri"
+msgstr "Podkastên daxistî"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "İndirilmiş yayın akış içeriklerini sil"
+msgstr "Podkastên daxistî jê bibe"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
-msgstr "Oturum"
+msgstr "Rûniştin"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr "Son ve aktif oturumları sil"
+msgstr "Rûniştina niha û ya dawiyê jê bibe"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Profil resimleri ve duygu ifadeleri önbelleğini temizle"
+msgstr "Pêşbîra hemû avatar û rûkenan jê bibe"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Derin tarama"
+msgstr "Venihêrtina kûr"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Kalmasını istediğiniz dosyalar için önizlemeyi araştırın."
+msgstr "Ji bo pelên dixwazî bimînin pêşbîrê vekole."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr "Bu özellik yavaş çalışır."
+msgstr "Ev vebijêrk hêdî ye."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "Özel klasörler sıfırlanacak."
+msgstr "Peldankên taybet dê bêne resetkirin."
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr "Küçük Resimler"
+msgstr "Wêneyên biçûk"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
-msgstr "Bu komutu geçmişten sil"
+msgstr "Dîroka fermanan jê bibe"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 msgid "Run"
-msgstr "Çalıştır"
+msgstr "Bixebitîne"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Çerezleri, ziyaret edilmiş URLleri ve arama geçmişini sil"
+msgstr "Çerez, URLên vebûne û dîroka lêgerînê jê bibe"
 
 #: ../cleaners/recoll.xml
 msgid "Index"
-msgstr "Indeks"
+msgstr "Naverok"
 
 #: ../cleaners/recoll.xml
 msgid ""
 "Delete the search index, a database of words and the files they contain"
-msgstr ""
-"Arama indeksini sil. Arama indesksi dosya ve kelimeler içeren bir "
-"veritabanıdır."
+msgstr "Naveroka lêgerînê ku danegeha peyv û pel tê de ne ye, jê bibe"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Gereksiz dosya temizleyici"
+msgstr "Paqijkirina pelên nehewce"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr "Yer temizle ve gizliliğini koru"
+msgstr "Ciyê vala û parastina nepeniyê"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../bleachbit/Cleaner.py:191
 msgid "DOM Storage"
-msgstr "DOM alanı"
+msgstr "Qada DOMê"
 
 #: ../bleachbit/Cleaner.py:191
 msgid "Delete HTML5 cookies"
-msgstr "HTML5 çerezlerini sil"
+msgstr "Çerezên HTML5ê jê bibe"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Form history"
-msgstr "Form geçmişi"
+msgstr "Dîroka forman"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "Web sitelerine ve arama çubuğuna girilen formların geçmişi"
+msgstr "Dîroka formên malper darikê lêgerînê"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Session restore"
-msgstr "Oturumu tazele"
+msgstr "Rûniştinê nû bike"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-"Tarayıcı hata sonucu veya normal bir şekilde kapandıktan sonra başlangıç "
-"oturumunu yükler"
+msgstr "Piştî girtin an jî têkçûna gerokê rûniştina destpêkê bar dike"
 
 #: ../bleachbit/Cleaner.py:364
 msgid "Delete the files in the rpmbuild build folder"
-msgstr "rpmbuild inşa klasöründeki dosyaları sil"
+msgstr "Pelên di peldanka avakirinê ya rpmbuildê de ne jê bibe"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -468,21 +455,22 @@ msgstr "rpmbuild inşa klasöründeki dosyaları sil"
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:403
 msgid "Broken desktop files"
-msgstr "Bozulmuş masaüstü dosyaları"
+msgstr "Pelên Sermaseyê yên şikestî"
 
 #: ../bleachbit/Cleaner.py:403
 msgid "Delete broken application menu entries and file associations"
-msgstr "Bozulmuş uygulama menüsü girdilerini ve dosya ilişkilerini sil"
+msgstr ""
+"Ketanên pêşeka sepandinê yên şikestî û têkiliyên wan ên bi pelan re jê bibe"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
 #: ../bleachbit/Cleaner.py:407
 msgid "Localizations"
-msgstr "Yerelleştirmeler"
+msgstr "Herêmîkirin"
 
 #: ../bleachbit/Cleaner.py:407
 msgid "Delete files for unwanted languages"
-msgstr "İstenmeyen dil dosyalarını sil"
+msgstr "Pelên zimanên nayên xwestin jê bibe"
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -490,54 +478,56 @@ msgstr "İstenmeyen dil dosyalarını sil"
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:412
 msgid "Rotated logs"
-msgstr "Yönlendirilmiş günlükler"
+msgstr "Tomarên beralîkirî"
 
 #: ../bleachbit/Cleaner.py:412
 msgid "Delete old system logs"
-msgstr "Eski sistem kayıtlarını sil"
+msgstr "Tomarên pergalê yên kevn jê bibe"
 
 #: ../bleachbit/Cleaner.py:414
 msgid "Trash"
-msgstr "Çöp Kutusu"
+msgstr "Çop"
 
 #: ../bleachbit/Cleaner.py:414
 msgid "Empty the trash"
-msgstr "Çöpü boşalt"
+msgstr "Çopê vala bike"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:513
 msgid "Memory"
-msgstr "Bellek"
+msgstr "Bîr"
 
 #: ../bleachbit/Cleaner.py:418
 msgid "Wipe the swap and free memory"
-msgstr "Takas alanını temizle ve belleği boşalt"
+msgstr "Qada pevguherînê paqij bike û bîrê vala bike"
 
 #: ../bleachbit/Cleaner.py:419
 msgid "This option is experimental and may cause system problems."
-msgstr "Bu özellik deneyseldir ve bazı sistem sorunlarına yol açabilir."
+msgstr ""
+"Ev vebijêrk di asta ceribandinê de ye, dibe ku bibe sedema pirsgirêkên "
+"pergalê."
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Memory dump"
-msgstr "Bellek dökümü"
+msgstr "Raxistina bîrê"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Delete the file memory.dmp"
-msgstr "memory.dmp dosyasını sil"
+msgstr "Pelê memory.dmpê jê bibe"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:425
 msgid "Prefetch"
-msgstr "Ön Eşleme"
+msgstr "Pêşhevgirtin"
 
 #: ../bleachbit/Cleaner.py:426
 msgid "Recycle bin"
-msgstr "Çöp tenekesi"
+msgstr "Qutîka çopê"
 
 #: ../bleachbit/Cleaner.py:426
 msgid "Empty the recycle bin"
-msgstr "Çöp tenekesini boşalt"
+msgstr "Qutîka çopê vala bike"
 
 #: ../bleachbit/Cleaner.py:428 ../bleachbit/Cleaner.py:595
 msgid "Clipboard"
@@ -546,27 +536,27 @@ msgstr "Pano"
 #: ../bleachbit/Cleaner.py:428
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr "Masaüstü ortamının kopyalama ve yapıştırma için kullanılan panosu"
+msgstr "Panoya Sermaseyê ya ji bo kopîkirin û pêvekirinê"
 
 #: ../bleachbit/Cleaner.py:429
 msgid "Free disk space"
-msgstr "Disk alanını temizle."
+msgstr "Qada dîskê paqij bike"
 
 #: ../bleachbit/Cleaner.py:429
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "Silinen dosyaların saklanması için boş bellek bölümünün üzerine yaz"
+msgstr "Ji bo hilanîna pxelênjêbirî li ser beşa bîra vala binivîse"
 
 #: ../bleachbit/Cleaner.py:430
 msgid "This option is very slow."
-msgstr "Bu özellik çok yavaş çalışır"
+msgstr "Ev vebijêrk hêdî dixebite"
 
 #: ../bleachbit/Cleaner.py:434
 msgid "The system in general"
-msgstr "Genel olarak sistem"
+msgstr "Pergala te bi giştî"
 
 #: ../bleachbit/Cleaner.py:440
 msgid "System"
-msgstr "Sistem"
+msgstr "Pergal"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -848,6 +838,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Amed Çeko Jiyan https://launchpad.net/~amedcj\n"
 "  Burak Ilgicioglu https://launchpad.net/~ilgicioglu\n"
 "  Ekrem Kocadere https://launchpad.net/~ekocadere\n"
 "  Murat Bişkin https://launchpad.net/~muratbiskin\n"
