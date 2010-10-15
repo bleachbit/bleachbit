@@ -7,15 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-29 13:04-0600\n"
-"PO-Revision-Date: 2010-08-17 12:32+0000\n"
+"POT-Creation-Date: 2010-09-22 17:14-0600\n"
+"PO-Revision-Date: 2010-10-11 21:43+0000\n"
 "Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
 "Language-Team: Svetoslav Stefanov <lfu.project@gmail.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-12 23:36+0000\n"
+"X-Launchpad-Export-Date: 2010-10-15 05:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -39,8 +38,8 @@ msgstr "Игра"
 #: ../cleaners/thunderbird.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/gftp.xml ../cleaners/gpodder.xml
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:188
-#: ../bleachbit/Cleaner.py:295 ../bleachbit/Cleaner.py:355
-#: ../bleachbit/Cleaner.py:398
+#: ../bleachbit/Cleaner.py:301 ../bleachbit/Cleaner.py:361
+#: ../bleachbit/Cleaner.py:404
 msgid "Cache"
 msgstr "Кеш"
 
@@ -57,9 +56,9 @@ msgstr "Изтриване на списъка с игрови сървъри"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:295
-#: ../bleachbit/Cleaner.py:355 ../bleachbit/Cleaner.py:398
-#: ../bleachbit/Cleaner.py:417 ../bleachbit/Cleaner.py:419
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:301
+#: ../bleachbit/Cleaner.py:361 ../bleachbit/Cleaner.py:404
+#: ../bleachbit/Cleaner.py:423 ../bleachbit/Cleaner.py:425
 msgid "Delete the cache"
 msgstr "Изтриване на кешираните данни"
 
@@ -69,14 +68,14 @@ msgstr "Изтриване на кешираните данни"
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Action.py:225
-#: ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:285
+#: ../cleaners/gpodder.xml ../bleachbit/Action.py:242
+#: ../bleachbit/Cleaner.py:199 ../bleachbit/Cleaner.py:291
 msgid "Vacuum"
 msgstr "Вакуум"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Cleaner.py:197
+#: ../cleaners/gpodder.xml ../bleachbit/Cleaner.py:199
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -88,7 +87,7 @@ msgstr ""
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
 #: ../cleaners/elinks.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:210
+#: ../bleachbit/Cleaner.py:212
 msgid "Web browser"
 msgstr "Уеб четец"
 
@@ -148,7 +147,7 @@ msgstr "Изтриване на текущата сесия"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:275 ../bleachbit/Cleaner.py:346
+#: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:352
 msgid "Delete the usage history"
 msgstr "Изтриване на историята на използване"
 
@@ -172,7 +171,7 @@ msgstr "Програма за преглеждане на мултимедийн
 #: ../cleaners/exaile.xml ../cleaners/easytag.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:415
+#: ../bleachbit/Cleaner.py:421
 msgid "Logs"
 msgstr "Дневници"
 
@@ -180,7 +179,7 @@ msgstr "Дневници"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:415
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:421
 msgid "Delete the logs"
 msgstr "Изтриване на дневниците"
 
@@ -199,7 +198,7 @@ msgstr "Изтриване на дневниците с грешки"
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
 #: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:425
+#: ../bleachbit/Cleaner.py:431
 msgid "Temporary files"
 msgstr "Временни файлове"
 
@@ -207,13 +206,13 @@ msgstr "Временни файлове"
 #: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
 #: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:425
+#: ../bleachbit/Cleaner.py:431
 msgid "Delete the temporary files"
 msgstr "Изтриване на временните файлове"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:198
 msgid "List of visited web pages"
 msgstr "Списък на посетените страници"
 
@@ -222,19 +221,19 @@ msgstr "Списък на посетените страници"
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/paint.xml
-#: ../bleachbit/Cleaner.py:296
+#: ../bleachbit/Cleaner.py:302
 msgid "Most recently used"
 msgstr "Най-често употребявани"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:296 ../bleachbit/Cleaner.py:407
+#: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:413
 msgid "Delete the list of recently used documents"
 msgstr "Изтрива списъка с последно използвани документи"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:407
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:413
 msgid "Recent documents list"
 msgstr "Списък с последно отваряни документи"
 
@@ -284,15 +283,15 @@ msgstr "Клиент за трансфер на файлове"
 msgid "Delete the files"
 msgstr "Изтриване на файловете"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "Download history"
 msgstr "История на изтеглянията"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "List of files downloaded"
 msgstr "Списък с изтеглените файлове"
 
-#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:196
+#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:198
 msgid "URL history"
 msgstr "История на посетените адреси"
 
@@ -304,12 +303,12 @@ msgid "Delete the most recently used list"
 msgstr "Изтриване на списъка най-често употребявани"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:195
 msgid "Passwords"
 msgstr "Пароли"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:195
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -317,11 +316,11 @@ msgstr ""
 "База данни с имена и пароли, както и списък със страници, които не бива да "
 "запазват пароли"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:196
 msgid "Places"
 msgstr "Места"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:196
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
@@ -329,11 +328,11 @@ msgstr ""
 "База данни от адреси, включваща отметки, уеб икони и история на посетените "
 "страници."
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:195
+#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:197
 msgid "This option deletes all bookmarks."
 msgstr "Тази опция изтрива всички запазени връзки."
 
-#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:306
+#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:312
 msgid "Office suite"
 msgstr "Офис пакет"
 
@@ -418,7 +417,8 @@ msgid "Index"
 msgstr "Индекс"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Изтриване на индекса за търсене, база данни от думи и файлове, които те "
 "съдържат"
@@ -431,23 +431,32 @@ msgstr "Изчистване на непотребни файлове"
 msgid "Free space and maintain privacy"
 msgstr "Освободете място и запазете поверителност"
 
+#. TRANSLATORS: DOM = Document Object Model.
 #: ../bleachbit/Cleaner.py:191
+msgid "DOM Storage"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:191
+msgid "Delete HTML5 cookies"
+msgstr "Изтриване на HTML5 бисквитки"
+
+#: ../bleachbit/Cleaner.py:193
 msgid "Form history"
 msgstr "История на формите"
 
-#: ../bleachbit/Cleaner.py:191
+#: ../bleachbit/Cleaner.py:193
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "История на формите, въведени в уеб страниците и в полето за търсене"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:194
 msgid "Session restore"
 msgstr "Възстановяване на сесията"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:194
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Зарежда началната сесия след затваряне или срив на уеб четеца"
 
-#: ../bleachbit/Cleaner.py:358
+#: ../bleachbit/Cleaner.py:364
 msgid "Delete the files in the rpmbuild build folder"
 msgstr ""
 
@@ -457,21 +466,22 @@ msgstr ""
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:397
+#: ../bleachbit/Cleaner.py:403
 msgid "Broken desktop files"
 msgstr "Развалени desktop файлове"
 
-#: ../bleachbit/Cleaner.py:397
+#: ../bleachbit/Cleaner.py:403
 msgid "Delete broken application menu entries and file associations"
-msgstr "Изтрива развалените стартери за програми от менюто и файлови асоциации"
+msgstr ""
+"Изтрива развалените стартери за програми от менюто и файлови асоциации"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:407
 msgid "Localizations"
 msgstr "Локализации"
 
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:407
 msgid "Delete files for unwanted languages"
 msgstr "Изтриване на файловете за непотребни езици"
 
@@ -479,98 +489,100 @@ msgstr "Изтриване на файловете за непотребни е�
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/Cleaner.py:406
+#: ../bleachbit/Cleaner.py:412
 msgid "Rotated logs"
 msgstr "Стари логове"
 
-#: ../bleachbit/Cleaner.py:406
+#: ../bleachbit/Cleaner.py:412
 msgid "Delete old system logs"
 msgstr "Изтриване на стари системни доклади"
 
-#: ../bleachbit/Cleaner.py:408
+#: ../bleachbit/Cleaner.py:414
 msgid "Trash"
 msgstr "Кошче"
 
-#: ../bleachbit/Cleaner.py:408
+#: ../bleachbit/Cleaner.py:414
 msgid "Empty the trash"
 msgstr "Изпразване на кошчето"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
-#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:507
+#: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:513
 msgid "Memory"
 msgstr "Памет"
 
-#: ../bleachbit/Cleaner.py:412
+#: ../bleachbit/Cleaner.py:418
 msgid "Wipe the swap and free memory"
 msgstr "Изчистване на swap и свободна памет"
 
-#: ../bleachbit/Cleaner.py:413
+#: ../bleachbit/Cleaner.py:419
 msgid "This option is experimental and may cause system problems."
 msgstr ""
 "Тази опция е експериментална и може да предизвика  проблеми в  системата."
 
-#: ../bleachbit/Cleaner.py:416
+#: ../bleachbit/Cleaner.py:422
 msgid "Memory dump"
-msgstr ""
+msgstr "Съдържание на паметта"
 
-#: ../bleachbit/Cleaner.py:416
+#: ../bleachbit/Cleaner.py:422
 msgid "Delete the file memory.dmp"
-msgstr ""
+msgstr "Изтриване на файла memory.dmp"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:425
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:420
+#: ../bleachbit/Cleaner.py:426
 msgid "Recycle bin"
 msgstr "Кошче"
 
-#: ../bleachbit/Cleaner.py:420
+#: ../bleachbit/Cleaner.py:426
 msgid "Empty the recycle bin"
 msgstr "Изпразване на кошчето"
 
-#: ../bleachbit/Cleaner.py:422 ../bleachbit/Cleaner.py:589
+#: ../bleachbit/Cleaner.py:428 ../bleachbit/Cleaner.py:595
 msgid "Clipboard"
 msgstr "Буфер за обмен"
 
-#: ../bleachbit/Cleaner.py:422
-msgid "The desktop environment's clipboard used for copy and paste operations"
+#: ../bleachbit/Cleaner.py:428
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Буферът за обмен на работната среда, служещ за операциите копиране и "
 "поставяне"
 
-#: ../bleachbit/Cleaner.py:423
+#: ../bleachbit/Cleaner.py:429
 msgid "Free disk space"
 msgstr "Свободно пространство"
 
-#: ../bleachbit/Cleaner.py:423
+#: ../bleachbit/Cleaner.py:429
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
 "Презаписване на свободното дисково пространство, за да се скрият изтритите "
 "файлове"
 
-#: ../bleachbit/Cleaner.py:424
+#: ../bleachbit/Cleaner.py:430
 msgid "This option is very slow."
 msgstr "Тази настройка е много бавна."
 
-#: ../bleachbit/Cleaner.py:428
+#: ../bleachbit/Cleaner.py:434
 msgid "The system in general"
 msgstr "Системата като цяло"
 
-#: ../bleachbit/Cleaner.py:434
+#: ../bleachbit/Cleaner.py:440
 msgid "System"
 msgstr "Система"
 
 #. TRANSLATORS: 'Free' could also be translated 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:615
+#: ../bleachbit/Cleaner.py:621
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Презапиши свободното пространство %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:643
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:649
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Кошче %s"
@@ -630,16 +642,21 @@ msgstr "Изтриване"
 msgid "Mark for deletion"
 msgstr "Маркирай за изтриване"
 
+#. TRANSLATORS: Parts of this .ini file will be deleted
+#: ../bleachbit/Command.py:173
+msgid "Clean .ini file"
+msgstr "Изчистване на .ini файл"
+
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:177
+#: ../bleachbit/Command.py:209
 msgid "Truncate"
 msgstr "Изпразни"
 
-#: ../bleachbit/Command.py:216
+#: ../bleachbit/Command.py:248
 msgid "Delete registry key"
 msgstr "Изтрий регистърния ключ"
 
-#: ../bleachbit/FileUtilities.py:202
+#: ../bleachbit/FileUtilities.py:222
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr ""
 "Модулът на Python sqlite3 не може да се внесе: Изисква се Python 2.5 или по-"
@@ -669,6 +686,9 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
+"Тъй като работите като root, моля отворете ръчно следната връзка в уеб "
+"четец:\n"
+"%s"
 
 #: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:551
 msgid "Preferences"
@@ -737,6 +757,8 @@ msgstr "Изберете папка"
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
+"Изберете папка с права за запис за всяко устройтво, за което желаете да "
+"презапишете свободното пространство."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
 #: ../bleachbit/GuiPreferences.py:184
@@ -931,6 +953,8 @@ msgstr "Грешка при проверка за обновления: "
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"Грешка при зареждане на модула SQLite: може да го блокира антивирусен "
+"софтуер."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
@@ -993,6 +1017,13 @@ msgstr "Моля изчакайте. Изчистване на %s."
 msgid "Please wait.  Previewing %s."
 msgstr "Моля изчакайте. Преглеждане на %s."
 
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:194
+msgid "Please wait.  Running deep scan."
+msgstr "Моля изчакайте. Извършва се дълбоко сканиране."
+
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py:218
@@ -1038,8 +1069,7 @@ msgstr "Грешки: %d"
 #~ msgid ""
 #~ "A database of URLs including bookmarks and a history of visited web sites"
 #~ msgstr ""
-#~ "База данни с адреси, включително отметки и история на посетените уеб "
-#~ "страници"
+#~ "База данни с адреси, включително отметки и история на посетените уеб страници"
 
 #~ msgid "Epiphany web browser"
 #~ msgstr "Уеб четецът Epiphany"
@@ -1057,13 +1087,13 @@ msgstr "Грешки: %d"
 #~ "Unusable .desktop files (menu entries and file associtations) that are "
 #~ "either invalid structurally or point to non-existant locations"
 #~ msgstr ""
-#~ "Непотребни .desktop файлове (стартери в менюто и файлови асоциации), "
-#~ "който са структурно невалидни или сочат към несъществуващи цели"
+#~ "Непотребни .desktop файлове (стартери в менюто и файлови асоциации), който "
+#~ "са структурно невалидни или сочат към несъществуващи цели"
 
 #~ msgid "Cache location specified by XDG and used by various applications"
 #~ msgstr ""
-#~ "Местоположението на кеша според XDG спецификациите, използвано от "
-#~ "различни приложения"
+#~ "Местоположението на кеша според XDG спецификациите, използвано от различни "
+#~ "приложения"
 
 #~ msgid "Data used to operate the system in various languages and countries"
 #~ msgstr ""
@@ -1072,8 +1102,8 @@ msgstr "Грешки: %d"
 
 #~ msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
 #~ msgstr ""
-#~ "Изтриване на притежаваните от потребителя, неотворени, обикновени файлове "
-#~ "в /tmp и /var/tmp"
+#~ "Изтриване на притежаваните от потребителя, неотворени, обикновени файлове в "
+#~ "/tmp и /var/tmp"
 
 #~ msgid "Temporary storage for deleted files"
 #~ msgstr "Избор на папка за временни файлове."
@@ -1108,13 +1138,13 @@ msgstr "Грешки: %d"
 #~ "някои ситуации)"
 
 #~ msgid ""
-#~ "Are you sure you want to delete files according to the selected "
-#~ "operations?  The actual files that will be deleted may have changed since "
-#~ "you ran the preview.  Files cannot be undeleted."
+#~ "Are you sure you want to delete files according to the selected operations?  "
+#~ "The actual files that will be deleted may have changed since you ran the "
+#~ "preview.  Files cannot be undeleted."
 #~ msgstr ""
 #~ "Сигурни ли сте, че желаете да изтриете файловете съгласно избраните "
-#~ "операции? Те може да са се променили откакто сте пуснали прегледа. "
-#~ "Файловете не могат да бъдат върнати след изтриване."
+#~ "операции? Те може да са се променили откакто сте пуснали прегледа. Файловете "
+#~ "не могат да бъдат върнати след изтриване."
 
 #~ msgid "Special operation: "
 #~ msgstr "Специална операция: "
