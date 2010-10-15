@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-09-23 22:47+0000\n"
+"PO-Revision-Date: 2010-10-11 22:35+0000\n"
 "Last-Translator: Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-24 04:24+0000\n"
+"X-Launchpad-Export-Date: 2010-10-15 05:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../bleachbit/GUI.py:547
@@ -248,13 +248,13 @@ msgstr "Client chat"
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr "Jurnale de chat"
+msgstr "Jurnale de discuții"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr "Șterge jurnalele de chat"
+msgstr "Șterge jurnalele discuțiilor"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
@@ -287,7 +287,7 @@ msgstr "Șterge fișierele"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "Download history"
-msgstr "Istoricul descarcarilor"
+msgstr "Istoricul descărcărilor"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "List of files downloaded"
@@ -302,7 +302,7 @@ msgstr "Istoric URL-uri"
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr "Stergeti lista celor mai recente utilizari"
+msgstr "Șterge lista celor mai recente utilizări"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:195
@@ -315,8 +315,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"O bază de date cu nume de utilizatori și parole, și o lista cu siteuri "
-"pentru care nu ar trebui stochate parole"
+"O bază de date cu nume de utilizatori și parole, și o lista cu pagini web "
+"pentru care nu ar trebui stocate parole"
 
 #: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:196
 msgid "Places"
@@ -505,11 +505,11 @@ msgstr "Șterge fișierele jurnal învechite"
 
 #: ../bleachbit/Cleaner.py:414
 msgid "Trash"
-msgstr "Gunoi"
+msgstr "Coșul de gunoi"
 
 #: ../bleachbit/Cleaner.py:414
 msgid "Empty the trash"
-msgstr "Golește containerul cu fișiere șterse"
+msgstr "Golește coșul de gunoi"
 
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
@@ -740,7 +740,8 @@ msgstr "Ascunde curățătoarele irelevante"
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:123
 msgid "Overwrite files to hide contents"
-msgstr "Suprescriere fișiere pentru a preveni recuperarea conținutului"
+msgstr ""
+"Suprascrie fișierele pentru a preveni recuperarea conținutului acestora"
 
 #: ../bleachbit/GuiPreferences.py:126
 msgid ""
@@ -895,7 +896,7 @@ msgstr "Index documentaţie"
 
 #: ../bleachbit/GUI.py:554
 msgid "_Release Notes"
-msgstr "_Notele versiunii"
+msgstr "Note de lansa_re"
 
 #: ../bleachbit/GUI.py:555
 msgid "_System Information"
