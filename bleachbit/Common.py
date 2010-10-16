@@ -165,12 +165,11 @@ if 'win32' == sys.platform:
     os.environ['LANG'] = user_locale
 
 try:
+    if not os.path.exists(locale_dir):
+        raise RuntimeError('translations not installed')
     t = gettext.translation('bleachbit', locale_dir)
     _ = t.ugettext
 except:
-    if 'C' != user_locale and 'en' != user_locale[0:2]:
-        traceback.print_exc()
-        print "warning: gettext() failed so translations will be unavailable"
     def _(msg):
         """Dummy replacement for gettext"""
         return msg
