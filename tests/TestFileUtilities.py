@@ -418,6 +418,25 @@ class FileUtilitiesTestCase(unittest.TestCase):
         os.remove(filename)
 
 
+    def test_wipe_name(self):
+        """Unit test for wipe_name()"""
+
+        # create test file
+        (handle, filename) = tempfile.mkstemp("wipetest" + "0" * 50)
+        os.close(handle)
+        self.assert_(os.path.exists(filename))
+
+        # test
+        newname = wipe_name(filename)
+        self.assert_(len(filename) > len(newname))
+        self.assert_(not os.path.exists(filename))
+        self.assert_(os.path.exists(newname))
+
+        # clean
+        os.remove(newname)
+        self.assert_(not os.path.exists(newname))
+
+
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
         if None == os.getenv('ALLTESTS'):

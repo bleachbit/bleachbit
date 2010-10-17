@@ -30,8 +30,10 @@ import datetime
 import glob
 import locale
 import os
+import random
 import re
 import stat
+import string
 import subprocess
 import sys
 import tempfile
@@ -181,13 +183,19 @@ def delete(path, shred = False):
             else:
                 raise
     elif os.path.isfile(path):
+        # wipe contents
         if shred or options.get('shred'):
             try:
                 wipe_contents(path)
             except IOError, e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 print "debug: IOError #%s shredding '%s'" % (e.errno, path)
-        os.remove(path)
+        # wipe name
+        if shred or options.get('shred'):
+            os.remove(wipe_name(path))
+        # unlink
+        else:
+            os.remove(path)
     else:
         raise Exception("Unsupported special file type: '%s'" % path)
 
@@ -378,6 +386,44 @@ def wipe_contents(path, truncate = True):
         f.truncate(0)
         f.flush()
     f.close()
+
+
+def wipe_name(pathname1):
+    """Wipe the original filename and return the new pathname"""
+    def random_string(len):
+        return ''.join(random.choice(string.letters+string.digits) for i in xrange(len))
+    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+    (dir, file) = os.path.split(pathname1)
+    maxlen = 226 - len(dir)
+    # first, rename to a long name
+    i = 0
+    while True:
+        try:
+            pathname2 = os.path.join(dir, random_string(maxlen))
+            os.rename(pathname1,  pathname2)
+            break
+        except OSError:
+            if maxlen > 10:
+                maxlen -= 10
+            i += 1
+            if i > 100:
+                print 'warning: exhausted long rename: ', pathname1
+                pathname2 = pathname
+                break
+    # finally, rename to a short name
+    i = 0
+    while True:
+        try:
+            pathname3 = os.path.join(dir, random_string(i + 1))
+            os.rename(pathname2, pathname3)
+            break
+        except:
+            i = i + 1
+            if i > 100:
+                print 'warning: exhausted short rename: ', pathname2
+                pathname3 = pathname2
+                break
+    return pathname3
 
 
 def wipe_path(pathname, idle = False ):
