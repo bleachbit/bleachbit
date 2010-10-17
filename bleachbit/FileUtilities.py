@@ -37,6 +37,7 @@ import string
 import subprocess
 import sys
 import tempfile
+import traceback
 import ConfigParser
 
 if not "iglob" in dir(glob):
@@ -85,6 +86,10 @@ class OpenFiles:
             self.last_scan_time).seconds > 10:
             self.scan()
         return filename in self.files
+
+
+def __random_string(len):
+    return ''.join(random.choice(string.letters+string.digits) for i in xrange(len))
 
 
 def bytes_to_human(bytes_i):
@@ -390,8 +395,6 @@ def wipe_contents(path, truncate = True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    def random_string(len):
-        return ''.join(random.choice(string.letters+string.digits) for i in xrange(len))
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     (dir, file) = os.path.split(pathname1)
     maxlen = 226 - len(dir)
@@ -399,7 +402,7 @@ def wipe_name(pathname1):
     i = 0
     while True:
         try:
-            pathname2 = os.path.join(dir, random_string(maxlen))
+            pathname2 = os.path.join(dir, __random_string(maxlen))
             os.rename(pathname1,  pathname2)
             break
         except OSError:
@@ -414,7 +417,7 @@ def wipe_name(pathname1):
     i = 0
     while True:
         try:
-            pathname3 = os.path.join(dir, random_string(i + 1))
+            pathname3 = os.path.join(dir, __random_string(i + 1))
             os.rename(pathname2, pathname3)
             break
         except:
@@ -428,13 +431,34 @@ def wipe_name(pathname1):
 
 def wipe_path(pathname, idle = False ):
     """Wipe the free space in the path"""
+    def temporaryfile():
+        # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+        maxlen = 256 - len(pathname)
+        f = None
+        i = 0
+        while True:
+            try:
+                f = tempfile.TemporaryFile(dir = pathname, suffix = __random_string(maxlen))
+                break
+            except OSError, e:
+                if e.errno == 36:
+                    # OSError: [Errno 36] File name too long
+                    if maxlen > 10:
+                        maxlen -= 10
+                    i += 1
+                    if i > 100:
+                        f = tempfile.TemporaryFile(dir = pathname)
+                        break
+                else:
+                    raise
+        return f
     print "debug: wipe_path('%s')" % pathname
     files = []
     total_bytes = 0
     # repeat to clear inodes (Linux) / MFT (Master File Table on Windows)
     while True:
         try:
-            f = tempfile.TemporaryFile(dir = pathname)
+            f = temporaryfile()
         except OSError, e:
             # Linux gives errno 24
             # Windows gives errno 28 No space left on device
