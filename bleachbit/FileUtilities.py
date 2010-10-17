@@ -89,7 +89,7 @@ class OpenFiles:
 
 
 def __random_string(len):
-    return ''.join(random.choice(string.letters+string.digits) for i in xrange(len))
+    return ''.join(random.choice(string.ascii_letters + '0123456789 _.-') for i in xrange(len))
 
 
 def bytes_to_human(bytes_i):
