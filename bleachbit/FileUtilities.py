@@ -176,8 +176,11 @@ def delete(path, shred = False):
     if is_special:
         os.remove(path)
     elif os.path.isdir(path):
+        delpath = path
+        if shred or options.get('shred'):
+            delpath = os.remove(wipe_name(path))
         try:
-            os.rmdir(path)
+            os.rmdir(delpath)
         except WindowsError, e:
             # WindowsError: [Error 145] The directory is not empty:
             # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
