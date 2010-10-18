@@ -452,7 +452,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
         os.close(handle)
         self.wipe_name_helper(filename)
         self.assert_(os.path.exists(dir2))
-        os.rmdir(dir2)
+
+        # wipe a directory name
+        dir2new = wipe_name(dir2)
+        self.assert_(len(dir2) > len(dir2new))
+        self.assert_(not os.path.exists(dir2))
+        self.assert_(os.path.exists(dir2new))
+        os.rmdir(dir2new)
 
         # wipe the directory
         os.rmdir(dir)
