@@ -411,7 +411,7 @@ def wipe_name(pathname1):
             i += 1
             if i > 100:
                 print 'warning: exhausted long rename: ', pathname1
-                pathname2 = pathname
+                pathname2 = pathname1
                 break
     # finally, rename to a short name
     i = 0
