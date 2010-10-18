@@ -410,7 +410,6 @@ def wipe_name(pathname1):
             break
         except OSError:
             if maxlen > 10:
-                print 'debug: maxlen is too long', maxlen
                 maxlen -= 10
             i += 1
             if i > 100:
@@ -437,7 +436,7 @@ def wipe_path(pathname, idle = False ):
     """Wipe the free space in the path"""
     def temporaryfile():
         # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-        maxlen = 256 - len(pathname)
+        maxlen = 245
         f = None
         i = 0
         while True:
