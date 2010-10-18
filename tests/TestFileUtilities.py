@@ -418,12 +418,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         os.remove(filename)
 
 
-    def test_wipe_name(self):
-        """Unit test for wipe_name()"""
+    def wipe_name_helper(self, filename):
+        """Helper for test_wipe_name()"""
 
-        # create test file
-        (handle, filename) = tempfile.mkstemp("wipetest" + "0" * 50)
-        os.close(handle)
         self.assert_(os.path.exists(filename))
 
         # test
@@ -435,6 +432,31 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # clean
         os.remove(newname)
         self.assert_(not os.path.exists(newname))
+
+
+    def test_wipe_name(self):
+        """Unit test for wipe_name()"""
+
+         # create test file with moderately long name
+        (handle, filename) = tempfile.mkstemp("wipetest" + "0" * 50)
+        os.close(handle)
+        self.wipe_name_helper(filename)
+
+        # create file with short name in temporary directory with long name
+        dir = tempfile.mkdtemp(suffix = "0" * 200)
+        self.assert_(os.path.exists(dir))
+
+        dir2 = tempfile.mkdtemp(suffix = "0" * 200, dir = dir)
+
+        (handle, filename) = tempfile.mkstemp(dir = dir2, suffix = "1" * 200)
+        os.close(handle)
+        self.wipe_name_helper(filename)
+        self.assert_(os.path.exists(dir2))
+        os.rmdir(dir2)
+
+        # wipe the directory
+        os.rmdir(dir)
+        self.assert_(not os.path.exists(dir))
 
 
     def test_wipe_path(self):

@@ -395,9 +395,9 @@ def wipe_contents(path, truncate = True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     (dir, file) = os.path.split(pathname1)
-    maxlen = 226 - len(dir)
+    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+    maxlen = 226
     # first, rename to a long name
     i = 0
     while True:
@@ -407,6 +407,7 @@ def wipe_name(pathname1):
             break
         except OSError:
             if maxlen > 10:
+                print 'debug: maxlen is too long', maxlen
                 maxlen -= 10
             i += 1
             if i > 100:
