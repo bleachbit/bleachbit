@@ -445,14 +445,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # create file with short name in temporary directory with long name
         if 'posix' == os.name:
             dir0len = 210
-            dir1len = 10
-            filelen = 210
+            dir1len = 210
+            filelen = 10
         if 'nt' == os.name:
             # In Windows, the maximum path length is 260 characters
             # http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath
             dir0len = 100
             dir1len = 5
-            filelen = 5
+            filelen = 10
 
         dir0 = tempfile.mkdtemp(suffix = "0" * dir0len)
         self.assert_(os.path.exists(dir0))
