@@ -29,12 +29,6 @@
     <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\Cookies\"/>
     <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
-  <option id="temporary_files">
-    <label>Temporary files</label>
-    <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
-  </option>
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
@@ -43,5 +37,11 @@
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\History\"/>
     <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLs"/>
+  </option>
+  <option id="temporary_files">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
+    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
   </option>
 </cleaner>
