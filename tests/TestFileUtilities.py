@@ -443,26 +443,39 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.wipe_name_helper(filename)
 
         # create file with short name in temporary directory with long name
-        dir = tempfile.mkdtemp(suffix = "0" * 200)
-        self.assert_(os.path.exists(dir))
+        if 'posix' == os.name:
+            dir0len = 210
+            dir1len = 10
+            filelen = 210
+        if 'nt' == os.name:
+            # In Windows, the maximum path length is 260 characters
+            # http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath
+            dir0len = 100
+            dir1len = 5
+            filelen = 5
 
-        dir2 = tempfile.mkdtemp(suffix = "0" * 200, dir = dir)
+        dir0 = tempfile.mkdtemp(suffix = "0" * dir0len)
+        self.assert_(os.path.exists(dir0))
 
-        (handle, filename) = tempfile.mkstemp(dir = dir2, suffix = "1" * 200)
+        dir1 = tempfile.mkdtemp(suffix = "1" * dir1len, dir = dir0)
+        self.assert_(os.path.exists(dir1))
+
+        (handle, filename) = tempfile.mkstemp(dir = dir1, suffix = "2" * filelen)
         os.close(handle)
         self.wipe_name_helper(filename)
-        self.assert_(os.path.exists(dir2))
+        self.assert_(os.path.exists(dir0))
+        self.assert_(os.path.exists(dir1))
 
         # wipe a directory name
-        dir2new = wipe_name(dir2)
-        self.assert_(len(dir2) > len(dir2new))
-        self.assert_(not os.path.exists(dir2))
-        self.assert_(os.path.exists(dir2new))
-        os.rmdir(dir2new)
+        dir1new = wipe_name(dir1)
+        self.assert_(len(dir1) > len(dir1new))
+        self.assert_(not os.path.exists(dir1))
+        self.assert_(os.path.exists(dir1new))
+        os.rmdir(dir1new)
 
         # wipe the directory
-        os.rmdir(dir)
-        self.assert_(not os.path.exists(dir))
+        os.rmdir(dir0)
+        self.assert_(not os.path.exists(dir0))
 
 
     def test_wipe_path(self):
