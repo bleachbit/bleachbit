@@ -24,6 +24,8 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
+    <!-- applications executed including date and time -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"/>
     <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
     <!-- common open dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
