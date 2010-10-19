@@ -29,6 +29,12 @@
     <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\Cookies\"/>
     <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
+  <option id="forms">
+    <label>Form history</label>
+    <!-- Internet Explorer 7 and 8 -->
+    <description>A history of forms entered in web sites and in the Search bar</description>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\IntelliForms\Storage1"/>
+    </option>
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
