@@ -249,6 +249,8 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
+        except sqlite3.DatabaseError, exc:
+            raise sqlite3.DatabaseError('%s: %s' % (exc, path))
         except sqlite3.OperationalError, exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not available
