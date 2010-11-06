@@ -90,7 +90,9 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
@@ -100,7 +102,9 @@
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/History"/>
     <action command="sqlite.vacuum" search="glob" path="~/.config/google-chrome/Default/History Index ????-??"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Login Data"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Web Data"/>
   </option>
 </cleaner>
