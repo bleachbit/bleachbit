@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-11-04 00:01+0000\n"
+"PO-Revision-Date: 2010-11-06 15:59+0000\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-04 01:00+0000\n"
+"X-Launchpad-Export-Date: 2010-11-06 21:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -254,7 +254,7 @@ msgstr "Slet listen over besøgte netsider"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr ""
+msgstr "Kontroller til skrivebordet"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
@@ -450,7 +450,7 @@ msgstr "Indlæser den indledende session efter browseren lukker eller går ned"
 
 #: ../bleachbit/Cleaner.py:364
 msgid "Delete the files in the rpmbuild build folder"
-msgstr ""
+msgstr "Slet filerne i rpmbuild-mappen"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -632,7 +632,7 @@ msgstr "Mærk for sletning"
 #. TRANSLATORS: Parts of this .ini file will be deleted
 #: ../bleachbit/Command.py:173
 msgid "Clean .ini file"
-msgstr ""
+msgstr "Rens .ini-fil"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:209
@@ -658,6 +658,9 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"Er du sikker på, at du vil slette filer permanent som følge af de valgte "
+"operationer? De faktiske filer, som vil blive slettet, kan være ændret siden "
+"du kørte forhåndsvisningen."
 
 #: ../bleachbit/GuiBasic.py:121
 msgid "Are you sure you want to permanently delete these files?"
@@ -931,6 +934,8 @@ msgstr "Fejl ved kontrol for opdateringer: "
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"Fejl ved indlæsning af SQLite-modulet: antivirusprogrammet blokerer det "
+"måske."
 
 #: ../bleachbit/RecognizeCleanerML.py:82
 msgid "Security warning"
