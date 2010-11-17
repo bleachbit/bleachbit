@@ -178,7 +178,7 @@ def delete(path, shred = False):
     elif os.path.isdir(path):
         delpath = path
         if shred or options.get('shred'):
-            delpath = os.remove(wipe_name(path))
+            delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
         except WindowsError, e:
