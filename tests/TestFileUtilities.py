@@ -246,6 +246,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
         delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
+        # test directory
+        path = tempfile.mkdtemp()
+        self.assert_(os.path.exists(path))
+        delete(path, shred)
+        self.assert_(not os.path.exists(path))
+
 
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
