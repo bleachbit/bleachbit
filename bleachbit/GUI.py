@@ -553,6 +553,11 @@ class GUI:
         preview_item.connect('activate', self.cb_run_option, \
             False, cleaner_id, option_id)
         menu.append(preview_item)
+        delete_item = gtk.MenuItem(_("Delete"))
+        delete_item.connect('activate', self.cb_run_option, \
+            True, cleaner_id, option_id)
+        menu.append(delete_item)
+
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
         menu.show_all()
