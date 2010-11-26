@@ -124,9 +124,12 @@ class TreeDisplayModel:
     """Displays the info model in a view"""
 
 
-    def make_view(self, model, parent):
+    def make_view(self, model, parent, context_menu_event):
         """Create and return a TreeView object"""
         self.view = gtk.TreeView(model)
+
+        # listen for right click (context menu)
+        self.view.connect("button_press_event", context_menu_event)
 
         # first column
         self.renderer0 = gtk.CellRendererText()
@@ -435,7 +438,7 @@ class GUI:
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
-        self.view = display.make_view(mdl, self.window)
+        self.view = display.make_view(mdl, self.window, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrolled_window.add(self.view)
         return scrolled_window
@@ -451,6 +454,21 @@ class GUI:
         """Callback to refresh the list of cleaners"""
         self.tree_store.refresh_rows()
         self.view.expand_all()
+
+
+    def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
+        """Callback from context menu to delete/preview a single option"""
+        operations = { cleaner_id : [ option_id ] }
+
+        # preview
+        if not really_delete:
+            self.preview_or_run_operations(False, operations)
+            return
+
+        # delete
+        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
+            self.preview_or_run_operations(True, operations)
+            return
 
 
     def cb_shred_file(self, action):
@@ -508,6 +526,34 @@ class GUI:
                 time.sleep(3)
 
         gtk.main_quit()
+
+
+    def context_menu_event(self, treeview, event):
+        """When user right clicks on the tree view"""
+        if event.button != 3:
+            return False
+        pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
+        if None == pathinfo:
+            return False
+        path, col, cellx, celly = pathinfo
+        treeview.grab_focus()
+        treeview.set_cursor(path, col, 0)
+        # find the seleted option
+        model = treeview.get_model()
+        option_id = model[path][2]
+        option_name = model[path][0]
+        cleaner_id = model[path[0]][2]
+        cleaner_name = model[path[0]][0]
+        # make a menu
+        menu = gtk.Menu()
+        preview_item = gtk.MenuItem(_("Preview"))
+        preview_item.connect('activate', self.cb_run_option, \
+            False, cleaner_id, option_id)
+        menu.append(preview_item)
+        # show the context menu
+        menu.show_all()
+        menu.popup(None, None, None, event.button, event.time)
+        return True
 
 
     def update_progress_bar(self, status):
