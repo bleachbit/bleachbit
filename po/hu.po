@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-10-11 23:12+0000\n"
+"PO-Revision-Date: 2010-11-25 13:41+0000\n"
 "Last-Translator: Moltenice80 <moltenice80@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-15 05:28+0000\n"
+"X-Launchpad-Export-Date: 2010-11-26 03:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -429,7 +429,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:191
 msgid "Delete HTML5 cookies"
-msgstr ""
+msgstr "Törli a HTML5 sütiket"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Form history"
@@ -450,7 +450,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:364
 msgid "Delete the files in the rpmbuild build folder"
-msgstr ""
+msgstr "Törli az rpmbuild munkakönyvtárában található fájlokat"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -483,7 +483,7 @@ msgstr "Szükségtelen nyelvek fájljainak törlése"
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:412
 msgid "Rotated logs"
-msgstr ""
+msgstr "Régi naplófájlok"
 
 #: ../bleachbit/Cleaner.py:412
 msgid "Delete old system logs"
@@ -513,7 +513,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Memory dump"
-msgstr ""
+msgstr "Memóriatartalom"
 
 #: ../bleachbit/Cleaner.py:422
 msgid "Delete the file memory.dmp"
@@ -553,7 +553,7 @@ msgstr "Szabad hely felülírása a törölt fájlok álcázására"
 
 #: ../bleachbit/Cleaner.py:430
 msgid "This option is very slow."
-msgstr ""
+msgstr "Ez a beállítás nagyon lassú."
 
 #: ../bleachbit/Cleaner.py:434
 msgid "The system in general"
@@ -617,7 +617,7 @@ msgstr "fájlok felülírása a tartalom elrejtéséhez"
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:45
 msgid "Skip"
-msgstr ""
+msgstr "Kihagyás"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
@@ -694,7 +694,7 @@ msgstr "Nyelvek"
 
 #: ../bleachbit/GuiPreferences.py:63
 msgid "Whitelist"
-msgstr ""
+msgstr "Fehérlista"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
@@ -774,15 +774,15 @@ msgstr "Név"
 
 #: ../bleachbit/GuiPreferences.py:256
 msgid "Choose a file"
-msgstr ""
+msgstr "Fájl kiválasztása"
 
 #: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
 msgid "Folder"
-msgstr ""
+msgstr "Mappa"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
 #: ../bleachbit/GuiPreferences.py:315
@@ -791,18 +791,18 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:323
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
 #: ../bleachbit/GuiPreferences.py:329
 msgid "Path"
-msgstr ""
+msgstr "Útvonal"
 
 #: ../bleachbit/GuiPreferences.py:341
 msgctxt "button"
 msgid "Add file"
-msgstr ""
+msgstr "Fájl hozzáadása"
 
 #: ../bleachbit/GuiPreferences.py:344
 msgctxt "button"
