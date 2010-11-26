@@ -164,27 +164,30 @@ class Worker:
 
 
     def run(self):
-        """Perform the main cleaning process"""
-        count = 0
+        """Perform the main cleaning process which has these phases"""
+        """1. General cleaning"""
+        """2. Deep scan"""
+        """3. Memory"""
+        """4. Free disk space"""
         self.deepscans = {}
+        # prioritize
+        self.delayed_ops = []
         for operation in self.operations:
-            self.ui.update_progress_bar(1.0 * count / len(self.operations))
-            name = backends[operation].get_name()
-            if self.really_delete:
-                # TRANSLATORS: %s is replaced with Firefox, System, etc.
-                msg = _("Please wait.  Cleaning %s.") % name
-            else:
-                # TRANSLATORS: %s is replaced with Firefox, System, etc.
-                msg = _("Please wait.  Previewing %s.") % name
-            self.ui.update_progress_bar(msg)
-            yield True # show the progress bar message now
-            try:
-                for dummy in self.clean_operation(operation):
-                    yield True
-            except:
-                self.print_exception(operation)
+            delayables = ['free_disk_space', 'memory']
+            for delayable in delayables:
+                if 'system' == operation and delayable in self.operations['system']:
+                    i = self.operations['system'].index(delayable)
+                    del self.operations['system'][i]
+                    priority = 99
+                    if 'free_disk_space' == delayable:
+                        priority = 100
+                    new_op = (priority, { 'system' : [ delayable ] } )
+                    self.delayed_ops.append( new_op )
 
-            count += 1
+        # standard operations
+        for dummy in self.run_operations(self.operations):
+            # yield to GTK+ idle loop
+            yield True
 
         # run deep scan
         print 'debug: deepscans=', self.deepscans
@@ -209,6 +212,18 @@ class Worker:
             cmd = Command.Delete(path)
             for ret in self.execute(cmd):
                 yield True
+
+        # delayed operations
+        for op in sorted(self.delayed_ops):
+            operation = op[1].keys()[0]
+            for option_id in op[1].values()[0]:
+                for cmd in backends[operation].get_commands(option_id):
+                    for ret in self.execute(cmd):
+                        if True == ret:
+                            # Return control to PyGTK idle loop to keep
+                            # it responding allow the user to abort
+                            yield True
+
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
@@ -244,4 +259,24 @@ class Worker:
         yield False
 
 
+    def run_operations(self, my_operations):
+        """Run a set of operations (general, memory, free disk space)"""
+        count = 0
+        for operation in my_operations:
+            self.ui.update_progress_bar(1.0 * count / len(my_operations))
+            name = backends[operation].get_name()
+            if self.really_delete:
+                # TRANSLATORS: %s is replaced with Firefox, System, etc.
+                msg = _("Please wait.  Cleaning %s.") % name
+            else:
+                # TRANSLATORS: %s is replaced with Firefox, System, etc.
+                msg = _("Please wait.  Previewing %s.") % name
+            self.ui.update_progress_bar(msg)
+            yield True # show the progress bar message now
+            try:
+                for dummy in self.clean_operation(operation):
+                    yield True
+            except:
+                self.print_exception(operation)
 
+            count += 1
