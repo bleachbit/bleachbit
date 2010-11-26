@@ -554,6 +554,7 @@ class GUI:
             False, cleaner_id, option_id)
         menu.append(preview_item)
         # show the context menu
+        menu.attach_to_widget(treeview, menu.destroy)
         menu.show_all()
         menu.popup(None, None, None, event.button, event.time)
         return True
