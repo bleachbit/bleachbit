@@ -538,6 +538,9 @@ class GUI:
         path, col, cellx, celly = pathinfo
         treeview.grab_focus()
         treeview.set_cursor(path, col, 0)
+        # context menu applies only to children, not parents
+        if 2 != len(path):
+            return False
         # find the seleted option
         model = treeview.get_model()
         option_id = model[path][2]
