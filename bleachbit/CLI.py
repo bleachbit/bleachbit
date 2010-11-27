@@ -27,12 +27,10 @@ Command line interface
 
 
 import optparse
-import os
 import sys
 
 from Cleaner import backends
-from Common import _
-import Common
+from Common import _, APP_VERSION
 import General
 import Worker
 
@@ -85,9 +83,7 @@ def init_cleaners():
 def cleaners_list():
     """Yield each cleaner-option pair"""
     init_cleaners()
-    cleaners = []
     for key in sorted(backends):
-        c_name = backends[key].get_name()
         c_id = backends[key].get_id()
         for (o_id, o_name) in backends[key].get_options():
             yield "%s.%s" % (c_id, o_id)
@@ -116,7 +112,6 @@ def args_to_operations(args):
             print _("not a valid cleaner: %s") % arg
             continue
         (cleaner_id, option_id) = arg.split('.')
-        default = False
         # enable all options (for example, firefox.*)
         if '*' == option_id:
             if operations.has_key(cleaner_id):
