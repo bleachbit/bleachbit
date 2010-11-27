@@ -52,7 +52,7 @@ def diagnostic_info():
     if 'nt' == os.name:
         envs = ('APPDATA', 'localappdata', 'USERPROFILE')
     for env in envs:
-            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
+        s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
     if 'linux2' == sys.platform:
         if hasattr(platform, 'linux_distribution'):

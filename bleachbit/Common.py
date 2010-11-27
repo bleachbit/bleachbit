@@ -27,8 +27,9 @@ import gettext
 import locale
 import os
 import sys
-import traceback
 
+if 'nt' == os.name:
+    from win32com.shell import shell, shellcon
 
 APP_VERSION = "0.8.2"
 APP_NAME = "BleachBit"
@@ -132,7 +133,6 @@ launcher_path = '/usr/share/applications/bleachbit.desktop'
 if 'posix' == os.name:
     autostart_path = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
 if 'nt' == os.name:
-    from win32com.shell import shell, shellcon
     autostart_path = os.path.join(shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP), 'bleachbit.lnk')
 
 
@@ -143,8 +143,7 @@ if 'nt' == os.name:
 # Windows XP doesn't define localappdata, but Windows Vista and 7 do
 if 'nt' == os.name:
     if None == os.getenv('localappdata'):
-        from win32com.shell import shell, shellcon
-        os.environ['localappdata']= shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_LOCAL_APPDATA)
+        os.environ['localappdata'] = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_LOCAL_APPDATA)
 
 
 ###

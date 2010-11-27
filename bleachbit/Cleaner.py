@@ -516,11 +516,11 @@ class System(Cleaner):
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
         if 'nt' == os.name and 'memory_dump' == option_id:
-            file = os.path.expandvars('$windir\\memory.dmp')
-            if os.path.exists(file):
-                files += [ file ]
-            for file in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
-                files += [ file ]
+            fname = os.path.expandvars('$windir\\memory.dmp')
+            if os.path.exists(fname):
+                files += [ fname ]
+            for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
+                files += [ fname ]
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
@@ -686,7 +686,6 @@ def create_simple_cleaner(paths):
     cleaner.add_option(option_id = 'files', name = '', description = '')
     cleaner.name = ''
     import Action
-    import Command
     class CustomFileAction(Action.ActionProvider):
         action_key = '__customfileaction'
         def get_commands(self):
