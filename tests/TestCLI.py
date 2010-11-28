@@ -156,6 +156,7 @@ class CLITestCase(unittest.TestCase):
         self.assert_(filename in deleted_paths, \
             "%s not found deleted" % filename)
         os.remove(filename)
+        self.assert_(not os.path.exists(filename))
 
 
 def suite():
