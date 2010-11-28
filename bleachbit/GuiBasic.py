@@ -147,14 +147,28 @@ def message_dialog(parent, msg, mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS
     return resp
 
 
-def open_url(url):
+def open_url(url, parent_window = None, prompt = True):
     """Open an HTTP URL.  Try to run as non-root."""
-    print "debug: on_url('%s')" % (url,)
     # drop privileges so the web browser is running as a normal process
     if 'posix' == os.name and 0 == os.getuid():
         msg = _("Because you are running as root, please manually open this link in a web browser:\n%s") % url
         message_dialog(None, msg, gtk.MESSAGE_INFO)
         return
+    if prompt:
+        # find hostname
+        import re
+        ret = re.search('^http(s)?://([a-z\.]+)', url)
+        if None == ret:
+            host = url
+        else:
+            host = ret.group(2)
+        # TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+        msg = _("Open web browser to %s?") % host
+        resp = message_dialog(parent_window, msg, \
+            gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL)
+        if gtk.RESPONSE_OK != resp:
+            return
+    # open web browser
     try:
         import gnomevfs
         gnomevfs.url_show(url)

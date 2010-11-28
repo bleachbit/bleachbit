@@ -381,7 +381,8 @@ class GUI:
 
     def about(self, __event):
         """Create and show the about dialog"""
-        gtk.about_dialog_set_url_hook(lambda dialog, link: GuiBasic.open_url(link))
+        gtk.about_dialog_set_url_hook(lambda dialog, \
+            link: GuiBasic.open_url(link, self.window, False))
         dialog = gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
         dialog.set_copyright("Copyright (C) 2010 Andrew Ziem")
@@ -605,8 +606,10 @@ class GUI:
                     ('File', None, _('_File')),
                     ('Preferences', gtk.STOCK_PREFERENCES, _("Preferences"), None, None, self.cb_preferences_dialog),
                     ('Edit', None, _("_Edit")),
-                    ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None, lambda link: GuiBasic.open_url(help_contents_url)),
-                    ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None, lambda link: GuiBasic.open_url(release_notes_url)),
+                    ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None, \
+                        lambda link: GuiBasic.open_url(help_contents_url, self.window)),
+                    ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None, \
+                        lambda link: GuiBasic.open_url(release_notes_url, self.window)),
                     ('SystemInformation', None, _('_System Information'), None, None, lambda foo: self.diagnostic_dialog(self.window)),
                     ('About', gtk.STOCK_ABOUT, _('_About'), None, None, self.about),
                     ('Help', None, _("_Help")))
@@ -730,7 +733,8 @@ class GUI:
         icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
         update_button = gtk.ToolButton(icon_widget = icon, label = _p('button', 'Update BleachBit'))
         update_button.show_all()
-        update_button.connect("clicked", lambda toolbutton, url: GuiBasic.open_url(url), url)
+        update_button.connect("clicked", \
+            lambda toolbutton, url: GuiBasic.open_url(url, self.window), url)
         update_button.set_is_important(True)
         self.toolbar.insert(update_button, -1)
         msg = _("BleachBit update is available")
