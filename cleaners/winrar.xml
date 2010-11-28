@@ -25,8 +25,9 @@
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
     <action command="winreg" path="HKCU\Software\WinRAR\ArcHistory"/>
-    <action command="winreg" path="HKCU\Software\WinRAR\ExtrPath"/>
-    <action command="winreg" path="HKCU\Software\WinRAR\General" name="LastFolder"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcName"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ExtrPath"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\WizArcName"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\General" name="LastFolder"/>
   </option>
 </cleaner>
