@@ -537,7 +537,10 @@ def wipe_path(pathname, idle = False ):
         files.append(f)
         total_bytes += f.tell()
     # statistics
-    print 'debug: wrote %d files and %d bytes' % (len(files), total_bytes)
+    elapsed_sec = time.time() - start_time
+    rate_mbs = (total_bytes / (1000*1000) ) / elapsed_sec
+    print 'debug: wrote %d files and %d bytes in %d seconds at %.2f MB/s' % \
+        (len(files), total_bytes, elapsed_sec, rate_mbs)
     # truncate and close files
     for f in files:
         f.truncate(0)
