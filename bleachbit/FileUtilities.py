@@ -280,15 +280,8 @@ def free_space(pathname):
         ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname), \
             ctypes.byref(free_bytes), None, None)
         return free_bytes.value
-    args = ['df', '-B', '1', pathname]
-    (rc, stdout, stderr) = General.run_external(args)
-    if 0 != rc:
-        return None
-    line = stdout.split('\n')[1]
-    match = re.search("^[/a-z0-9]+\s+[0-9]+\s+[0-9]+([0-9]+)", line)
-    if not match:
-        return None
-    return int(match.groups(0)[0])
+    mystat = os.statvfs(pathname)
+    return mystat.f_bfree * mystat.f_bsize
 
 
 def getsize(path):
