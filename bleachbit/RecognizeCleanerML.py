@@ -67,12 +67,12 @@ def cleaner_change_dialog(changes, parent):
 #        pdb.set_trace()
 
     def preserve_toggled_cb(cell, path, liststore):
-            """Callback for toggling the 'preserve' column"""
-            __iter = liststore.get_iter_from_string(path)
-            value = not liststore.get_value(__iter, 0)
-            liststore.set(__iter, 0, value)
-            langid = liststore[path][1]
-            options.set_language(langid, value)
+        """Callback for toggling the 'preserve' column"""
+        __iter = liststore.get_iter_from_string(path)
+        value = not liststore.get_value(__iter, 0)
+        liststore.set(__iter, 0, value)
+        langid = liststore[path][1]
+        options.set_language(langid, value)
 
 
     import pygtk
@@ -188,14 +188,14 @@ class RecognizeCleanerML:
         changes = []
         for pathname in sorted(list_cleanerml_files(local_only = True)):
             pathname = os.path.abspath(pathname)
-            (status, hash) = self.__recognized(pathname)
+            (status, myhash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
-                changes.append([ pathname, status, hash ])
+                changes.append([ pathname, status, myhash ])
         if len(changes) > 0:
             cleaner_change_dialog(changes, self.parent_window)
             for change in changes:
                 pathname = change[0]
-                hash = change[2]
+                myhash = change[2]
                 print "info: remembering CleanerML file '%s'" % pathname
                 if os.path.exists(pathname):
                     options.set(pathname, hash, 'hashpath')
