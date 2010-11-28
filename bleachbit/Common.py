@@ -176,7 +176,7 @@ try:
     ungettext = t.ungettext
 except:
     def ungettext(singular, plural, n):
-       """Dummy replacement for Unicode, plural gettext"""
+        """Dummy replacement for Unicode, plural gettext"""
         if 1 == n:
             return singular
         return plural
