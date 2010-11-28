@@ -86,9 +86,11 @@ class Worker:
         ret = None
         try:
             for ret in cmd.execute(self.really_delete):
-                if True == ret:
-                    # temporarily pass control to the GTK idle loop
-                    yield True
+                if True == ret or isinstance(ret, tuple):
+                    # Temporarily pass control to the GTK idle loop,
+                    # allow user to abort, and
+                    # display progress (if applicable).
+                    yield ret
         except SystemExit:
             pass
         except Exception, e:
@@ -226,9 +228,12 @@ class Worker:
                 self.ui.update_progress_bar(msg)
                 for cmd in backends[operation].get_commands(option_id):
                     for ret in self.execute(cmd):
-                        if True == ret:
+                        if isinstance(ret, tuple):
+                            # Display progress (for free disk space)
+                            self.ui.update_progress_bar(ret[0])
+                        if True == ret or isinstance(ret, tuple):
                             # Return control to PyGTK idle loop to keep
-                            # it responding allow the user to abort
+                            # it responding and allow the user to abort.
                             yield True
 
 

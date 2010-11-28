@@ -622,7 +622,7 @@ class System(Cleaner):
                 def wipe_path_func():
                     for ret in FileUtilities.wipe_path(pathname, idle = True):
                         # Yield control to GTK idle because this process
-                        # is very slow.
+                        # is very slow.  Also display progress.
                         yield ret
                     yield 0
                 yield Command.Function(None, wipe_path_func, display)

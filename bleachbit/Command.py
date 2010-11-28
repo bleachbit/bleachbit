@@ -128,9 +128,10 @@ class Function:
                 if isinstance(func_ret, types.GeneratorType):
                     # function returned generator
                     for func_ret in self.func():
-                        if True == func_ret:
-                            # return control to GTK idle loop
-                            yield True
+                        if True == func_ret or isinstance(func_ret, tuple):
+                            # Return control to GTK idle loop.
+                            # If tuple, then display progress.
+                            yield func_ret
                 # either way, func_ret should be an integer
                 assert(isinstance(func_ret, (int, long)))
                 ret['size'] = func_ret

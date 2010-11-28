@@ -26,6 +26,7 @@ File-related utilities
 
 
 import codecs
+import datetime
 import glob
 import locale
 import os
@@ -83,7 +84,7 @@ class OpenFiles:
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
-        if None == self.last_scan_time or (time.time() - 
+        if None == self.last_scan_time or (time.time() -
             self.last_scan_time) > 10:
             self.scan()
         return filename in self.files
@@ -470,9 +471,30 @@ def wipe_path(pathname, idle = False ):
                 else:
                     raise
         return f
-    print "debug: wipe_path('%s')" % pathname
+
+
+    def estimate_completion():
+        """Return (percent, seconds) to complete"""
+        remaining_bytes = free_space(pathname)
+        done_bytes = start_free_bytes - remaining_bytes
+        if done_bytes < 0:
+            # mayber user deleted large file after starting wipe
+            done_bytes = 0
+        if 0 == start_free_bytes:
+            done_percent = 0
+        else:
+            done_percent = 1.0 * done_bytes / start_free_bytes
+        done_time = time.time() - start_time
+        rate = done_bytes / done_time # bytes per second
+        remaining_seconds = int(remaining_bytes / rate)
+        return (done_percent, remaining_seconds)
+
+
+    "debug: wipe_path('%s')" % pathname
     files = []
     total_bytes = 0
+    start_free_bytes = free_space(pathname)
+    start_time = time.time()
     # repeat to clear inodes (Linux) / MFT (Master File Table on Windows)
     while True:
         try:
@@ -484,7 +506,7 @@ def wipe_path(pathname, idle = False ):
                 break
             else:
                 raise
-        last_idle = last_idle = time.time()
+        last_idle = time.time()
         # blocks
         blanks = chr(0) * 4096
         try:
@@ -492,7 +514,9 @@ def wipe_path(pathname, idle = False ):
                 f.write(blanks)
                 if idle and (time.time() - last_idle) > 2:
                     # Keep the GUI responding, and allow the user to abort.
-                    yield True
+                    # Also display the ETA.
+                    yield estimate_completion()
+                    last_idle = time.time()
         except IOError, e:
             if 28 != e.errno:
                 raise
