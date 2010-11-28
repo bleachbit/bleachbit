@@ -31,9 +31,8 @@ import os
 import sys
 import traceback
 
-from Common import _, _p
+from Common import _, _p, online_update_notification_enabled
 from Options import options
-import Common
 import GuiBasic
 
 if 'nt' == os.name:
@@ -101,7 +100,7 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
-        if Common.online_update_notification_enabled:
+        if online_update_notification_enabled:
             cb_updates = gtk.CheckButton(_("Check periodically for software updates via the Internet"))
             cb_updates.set_active(options.get('check_online_updates'))
             cb_updates.connect('toggled', self.__toggle_callback, 'check_online_updates')
@@ -213,7 +212,6 @@ class PreferencesDialog:
         vbox.pack_start(notice)
 
         # populate data
-        import Unix
         liststore = gtk.ListStore('gboolean', str, str)
         for lang in Unix.locales.iterate_languages():
             preserve = options.get_language(lang)
