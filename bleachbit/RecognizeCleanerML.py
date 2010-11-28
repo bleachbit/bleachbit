@@ -186,7 +186,7 @@ class RecognizeCleanerML:
                 myhash = change[2]
                 print "info: remembering CleanerML file '%s'" % pathname
                 if os.path.exists(pathname):
-                    options.set(pathname, hash, 'hashpath')
+                    options.set(pathname, myhash, 'hashpath')
 
 
 
