@@ -30,11 +30,9 @@ import os
 import re
 import shlex
 import subprocess
-import sys
 import ConfigParser
 
-from Common import _
-import Common
+from Common import _, autostart_path, launcher_path
 import FileUtilities
 import General
 
@@ -552,22 +550,22 @@ def start_with_computer(enabled):
     """If enabled, create shortcut to start application with computer.
     If disabled, then delete the shortcut."""
     if not enabled:
-        if os.path.lexists(Common.autostart_path):
-            FileUtilities.delete(Common.autostart_path)
+        if os.path.lexists(autostart_path):
+            FileUtilities.delete(autostart_path)
         return
-    if os.path.lexists(Common.autostart_path):
+    if os.path.lexists(autostart_path):
         return
     import shutil
-    General.makedirs(os.path.dirname(Common.autostart_path))
-    shutil.copy(Common.launcher_path, Common.autostart_path)
-    os.chmod(Common.autostart_path, 0755)
+    General.makedirs(os.path.dirname(autostart_path))
+    shutil.copy(launcher_path, autostart_path)
+    os.chmod(autostart_path, 0755)
     if General.sudo_mode():
-        General.chownself(Common.autostart_path)
+        General.chownself(autostart_path)
 
 
 def start_with_computer_check():
     """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(Common.autostart_path)
+    return os.path.lexists(autostart_path)
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
