@@ -63,16 +63,16 @@
     <label>URL history</label>
     <description>List of visited web pages</description>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
-    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\global_history.dat"/>
-    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\typed_history.xml"/>
-    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\vlink4.dat"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\typed_history.xml"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\vlink4.dat"/>
     <action command="delete" search="file" path="$LOCALAPPDATA\Opera\Opera\profile\vps\0000\md.dat"/>
-    <action command="delete" search="file" path="$localappdata\Opera\Opera\vps\0000\md.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\global_history.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\typed_history.xml"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\vlink4.dat"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.ico"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.idx"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\vps\0000\md.dat"/>
     <action command="delete" search="file" path="~/.opera/global.dat"/>
     <action command="delete" search="file" path="~/.opera/global_history.dat"/>
     <action command="delete" search="file" path="~/.opera/typed_history.xml"/>
