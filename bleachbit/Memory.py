@@ -31,7 +31,6 @@ import os
 import re
 import subprocess
 import sys
-import time
 import traceback
 
 import FileUtilities
@@ -111,15 +110,15 @@ def fill_memory_linux():
             return
         megabytes = allocbytes / (1024**2)
         print "info: allocating %.2f MB (%d B) memory" % (megabytes, allocbytes)
-        buffer = libc.malloc(allocbytes)
-        if 0 == buffer:
-            print 'debug: malloc() returned', buffer
+        mbuffer = libc.malloc(allocbytes)
+        if 0 == mbuffer:
+            print 'debug: malloc() returned', mbuffer
             return
         print "debug: wiping %.2f MB I just allocated" % megabytes
-        libc.memset(buffer, 0x00, allocbytes)
+        libc.memset(mbuffer, 0x00, allocbytes)
         fill_helper()
         print "debug: freeing %.2f MB memory" % megabytes
-        libc.free(buffer)
+        libc.free(mbuffer)
         report_free()
     fill_helper()
 
@@ -210,8 +209,9 @@ def physical_free():
 
 def report_free():
     """Report free memory"""
-    bytes = physical_free()
-    print "debug: physical free: %d B (%d MB)" % (bytes, bytes/1024**2)
+    bytes_free = physical_free()
+    print "debug: physical free: %d B (%d MB)" % \
+        (bytes_free, bytes_free / 1024**2)
 
 
 def wipe_swap_linux(devices, proc_swaps):
