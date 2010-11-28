@@ -53,15 +53,6 @@ class UnixTestCase(unittest.TestCase):
             self.assert_(isinstance(bytes_freed, (int, long)))
 
 
-    def test_free_space(self):
-        """Unit test for free_space()"""
-        home = os.path.expanduser("~")
-        result = free_space(home)
-        self.assertNotEqual(result, None)
-        self.assert_(result > -1)
-        self.assert_(isinstance(result, (int, long)))
-
-
     def test_guess_overwrite_paths(self):
         """Unit test for guess_overwrite_paths()"""
         for path in guess_overwrite_paths():

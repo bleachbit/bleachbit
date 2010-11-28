@@ -271,6 +271,19 @@ def expand_glob_join(pathname1, pathname2):
     return ret
 
 
+def free_space(pathname):
+    """Return free space in bytes"""
+    args = ['df', '-B', '1', pathname]
+    (rc, stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        return None
+    line = stdout.split('\n')[1]
+    match = re.search("^[/a-z0-9]+\s+[0-9]+\s+[0-9]+([0-9]+)", line)
+    if not match:
+        return None
+    return int(match.groups(0)[0])
+
+
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""

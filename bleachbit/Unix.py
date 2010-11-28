@@ -49,23 +49,11 @@ except:
         gnomevfs = gnome.vfs
 
 
-def free_space(pathname):
-    """Return free space in bytes"""
-    args = ['df', '-B', '1', pathname]
-    (rc, stdout, stderr) = General.run_external(args)
-    if 0 != rc:
-        return None
-    line = stdout.split('\n')[1]
-    match = re.search("^[/a-z0-9]+\s+[0-9]+\s+[0-9]+([0-9]+)", line)
-    if not match:
-        return None
-    return int(match.groups(0)[0])
-
 
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
     home = os.path.expanduser("~")
-    if free_space(home) == free_space('/tmp/'):
+    if FileUtilities.free_space(home) == FileUtililities.free_space('/tmp/'):
         return [ home ]
     else:
         return [ home, '/tmp' ]

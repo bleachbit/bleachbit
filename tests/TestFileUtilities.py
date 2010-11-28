@@ -291,6 +291,15 @@ class FileUtilitiesTestCase(unittest.TestCase):
             expand_glob_join('c:\windows', '*.exe')
 
 
+    def test_free_space(self):
+        """Unit test for free_space()"""
+        home = os.path.expanduser("~")
+        result = free_space(home)
+        self.assertNotEqual(result, None)
+        self.assert_(result > -1)
+        self.assert_(isinstance(result, (int, long)))
+
+
     def test_getsize(self):
         """Unit test for method getsize()"""
         # create regular file
