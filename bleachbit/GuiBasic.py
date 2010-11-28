@@ -27,9 +27,6 @@ Basic GUI code
 
 import gtk
 import os
-import sys
-import traceback
-import General
 
 if 'nt' == os.name:
     import Windows
@@ -136,12 +133,12 @@ def delete_confirmation_dialog(parent, mention_preview):
     return ret == gtk.RESPONSE_ACCEPT
 
 
-def message_dialog(parent, msg, type = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK):
+def message_dialog(parent, msg, mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK):
     """Convenience wrapper for gtk.MessageDialog"""
 
     dialog = gtk.MessageDialog(parent, \
         gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, \
-        type, \
+        mtype, \
         buttons, \
         msg)
     resp = dialog.run()
