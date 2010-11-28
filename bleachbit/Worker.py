@@ -31,7 +31,7 @@ import traceback
 import DeepScan
 import FileUtilities
 from Cleaner import backends
-from Common import _
+from Common import _, ungettext
 
 if 'nt' == os.name:
     import Windows
@@ -219,7 +219,7 @@ class Worker:
         for op in sorted(self.delayed_ops):
             operation = op[1].keys()[0]
             for option_id in op[1].values()[0]:
-                self.ui.update_progress_bar(0)
+                self.ui.update_progress_bar(0.0)
                 if 'free_disk_space' == option_id:
                     msg = _("Please wait.  Wiping free disk space.")
                 elif 'memory' == option_id:
@@ -232,6 +232,11 @@ class Worker:
                         if isinstance(ret, tuple):
                             # Display progress (for free disk space)
                             self.ui.update_progress_bar(ret[0])
+                            min = int(ret[1] / 60)
+                            msg2 = ungettext("About %(min)d minute remaining", \
+                                "About %(min)d minutes remaining", min) \
+                                % { 'min' : min }
+                            self.ui.update_progress_bar(msg + ' ' + msg2)
                         if True == ret or isinstance(ret, tuple):
                             # Return control to PyGTK idle loop to keep
                             # it responding and allow the user to abort.
