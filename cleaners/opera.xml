@@ -66,14 +66,14 @@
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\typed_history.xml"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\vlink4.dat"/>
-    <action command="delete" search="file" path="$localappdata\Opera\Opera\profile\vps\0000\md.dat"/>
+    <action command="delete" search="file" path="$localappdata\Opera\Opera\profile\vps\????\md.dat"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\global_history.dat"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\typed_history.xml"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\vlink4.dat"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.gif"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.ico"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.idx"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\vps\0000\md.dat"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\vps\????\md.dat"/>
     <action command="delete" search="file" path="~/.opera/global.dat"/>
     <action command="delete" search="file" path="~/.opera/global_history.dat"/>
     <action command="delete" search="file" path="~/.opera/typed_history.xml"/>
@@ -81,5 +81,6 @@
     <action command="delete" search="glob" path="~/.opera/icons/*.gif"/>
     <action command="delete" search="glob" path="~/.opera/icons/*.ico"/>
     <action command="delete" search="glob" path="~/.opera/icons/*.idx"/>
+    <action command="delete" search="glob" path="~/.opera/vps/????/md.dat"/>
   </option>
 </cleaner>
