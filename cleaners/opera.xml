@@ -59,6 +59,12 @@
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
   </option>
+  <option id="search_history">
+    <label>Search history</label>
+    <description>Delete the search history</description>
+    <action command="delete" search="glob" path="$appdata\Opera\Opera*\search_field_history.dat"/>
+    <action command="delete" search="glob" path="~/.opera/search_field_history.dat"/>
+  </option>
   <option id="url_history">
     <label>URL history</label>
     <description>List of visited web pages</description>
