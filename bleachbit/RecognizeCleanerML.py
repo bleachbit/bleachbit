@@ -58,21 +58,9 @@ def cleaner_change_dialog(changes, parent):
 
     def toggled(cell, path, model):
         """Callback for clicking the checkbox"""
-#        i = model.get_iter(path)
-#        model[i][0] = not model[i][0]
         __iter = model.get_iter_from_string(path)
         value = not model.get_value(__iter, 0)
         model.set(__iter, 0, value)
-#        import pdb
-#        pdb.set_trace()
-
-    def preserve_toggled_cb(cell, path, liststore):
-        """Callback for toggling the 'preserve' column"""
-        __iter = liststore.get_iter_from_string(path)
-        value = not liststore.get_value(__iter, 0)
-        liststore.set(__iter, 0, value)
-        langid = liststore[path][1]
-        options.set_language(langid, value)
 
 
     import pygtk
