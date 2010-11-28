@@ -274,6 +274,12 @@ def expand_glob_join(pathname1, pathname2):
 
 def free_space(pathname):
     """Return free space in bytes"""
+    if 'nt' == os.name:
+        import ctypes
+        free_bytes = ctypes.c_int64()
+        ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname), \
+            ctypes.byref(free_bytes), None, None)
+        return free_bytes.value
     args = ['df', '-B', '1', pathname]
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
