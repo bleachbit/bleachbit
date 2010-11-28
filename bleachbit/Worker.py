@@ -164,11 +164,11 @@ class Worker:
 
 
     def run(self):
-        """Perform the main cleaning process which has these phases"""
-        """1. General cleaning"""
-        """2. Deep scan"""
-        """3. Memory"""
-        """4. Free disk space"""
+        """Perform the main cleaning process which has these phases
+        1. General cleaning
+        2. Deep scan
+        3. Memory
+        4. Free disk space"""
         self.deepscans = {}
         # prioritize
         self.delayed_ops = []
@@ -198,7 +198,7 @@ class Worker:
         yield True # allow GTK to update the screen
         ds = DeepScan.DeepScan()
         for (path, dsdict) in self.deepscans.iteritems():
-            print 'debug: deepscan path=',path
+            print 'debug: deepscan path=', path
             print 'debug: deepscan dict=', dsdict
             for dsdict2 in dsdict:
                 ds.add_search(path, dsdict2['regex'])
