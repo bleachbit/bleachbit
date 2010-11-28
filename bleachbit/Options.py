@@ -41,6 +41,7 @@ class Options:
 
     def __init__(self):
         self.restore()
+        self.config = ConfigParser.SafeConfigParser()
 
 
     def __flush(self):
@@ -113,9 +114,9 @@ class Options:
             myoptions.append(option[0:pos])
         values = []
         for option in set(myoptions):
-            type = self.config.get(section, option + '_type')
-            path = self.config.get(section, option + '_path')
-            values.append( ( type, path ) )
+            wl_type = self.config.get(section, option + '_type')
+            wl_path = self.config.get(section, option + '_path')
+            values.append( ( wl_type, wl_path ) )
         return values
 
 
@@ -131,7 +132,6 @@ class Options:
 
     def restore(self):
         """Restore saved options from disk"""
-        self.config = ConfigParser.SafeConfigParser()
         try:
             self.config.read(Common.options_file)
         except:
