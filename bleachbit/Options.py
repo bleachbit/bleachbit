@@ -40,8 +40,8 @@ class Options:
 
 
     def __init__(self):
-        self.restore()
         self.config = ConfigParser.SafeConfigParser()
+        self.restore()
 
 
     def __flush(self):
