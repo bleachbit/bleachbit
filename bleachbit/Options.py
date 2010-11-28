@@ -105,14 +105,14 @@ class Options:
         section = "whitelist/paths"
         if not self.config.has_section(section):
             return []
-        options = []
+        myoptions = []
         for option in sorted(self.config.options(section)):
             pos = option.find('_')
             if -1 == pos:
                 continue
-            options.append(option[0:pos])
+            myoptions.append(option[0:pos])
         values = []
-        for option in set(options):
+        for option in set(myoptions):
             type = self.config.get(section, option + '_type')
             path = self.config.get(section, option + '_path')
             values.append( ( type, path ) )
