@@ -26,7 +26,6 @@ File-related utilities
 
 
 import codecs
-import datetime
 import glob
 import locale
 import os
@@ -37,6 +36,7 @@ import string
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 import ConfigParser
 import General
@@ -69,7 +69,7 @@ class OpenFiles:
 
     def scan(self):
         """Update cache"""
-        self.last_scan_time = datetime.datetime.now()
+        self.last_scan_time = time.time()
         self.files = []
         for filename in glob.iglob("/proc/*/fd/*"):
             try:
@@ -83,8 +83,8 @@ class OpenFiles:
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
-        if None == self.last_scan_time or (datetime.datetime.now() - 
-            self.last_scan_time).seconds > 10:
+        if None == self.last_scan_time or (time.time() - 
+            self.last_scan_time) > 10:
             self.scan()
         return filename in self.files
 
@@ -484,13 +484,13 @@ def wipe_path(pathname, idle = False ):
                 break
             else:
                 raise
-        last_idle = datetime.datetime.now()
+        last_idle = last_idle = time.time()
         # blocks
         blanks = chr(0) * 4096
         try:
             while True:
                 f.write(blanks)
-                if idle and (last_idle - datetime.datetime.now()).seconds > 1:
+                if idle and (time.time() - last_idle) > 2:
                     # Keep the GUI responding, and allow the user to abort.
                     yield True
         except IOError, e:
