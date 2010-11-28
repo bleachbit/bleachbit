@@ -36,10 +36,13 @@
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstoragex"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
-    <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/Local Storage/"/>
+    <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
+        ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
+        ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->
+    <action command="delete" search="glob" path="~/.config/google-chrome/Default/Local Storage/http*localstorage"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
