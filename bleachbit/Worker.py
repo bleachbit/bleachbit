@@ -217,6 +217,13 @@ class Worker:
         for op in sorted(self.delayed_ops):
             operation = op[1].keys()[0]
             for option_id in op[1].values()[0]:
+                if 'free_disk_space' == option_id:
+                    msg = _("Please wait.  Wiping free disk space.")
+                elif 'memory' == option_id:
+                    msg = _("Please wait.  Cleaning %s.") % _("Memory")
+                else:
+                    raise RuntimeError("Unexpected option_id in delayed ops")
+                self.ui.update_progress_bar(msg)
                 for cmd in backends[operation].get_commands(option_id):
                     for ret in self.execute(cmd):
                         if True == ret:
