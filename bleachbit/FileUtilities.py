@@ -39,6 +39,7 @@ import sys
 import tempfile
 import traceback
 import ConfigParser
+import General
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob

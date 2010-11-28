@@ -53,7 +53,7 @@ except:
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
     home = os.path.expanduser("~")
-    if FileUtilities.free_space(home) == FileUtililities.free_space('/tmp/'):
+    if FileUtilities.free_space(home) == FileUtilities.free_space('/tmp/'):
         return [ home ]
     else:
         return [ home, '/tmp' ]
