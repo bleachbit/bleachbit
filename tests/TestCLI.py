@@ -27,12 +27,14 @@ Test case for module CLI
 
 
 import copy
+import os
 import sys
 import tempfile
 import unittest
 
 sys.path.append('.')
 from bleachbit.CLI import *
+from bleachbit.General import run_external
 from bleachbit import FileUtilities
 
 
@@ -54,7 +56,7 @@ class CLITestCase(unittest.TestCase):
             stdout_ = None
         else:
             stdout_ = open(os.devnull, 'w')
-        output = General.run_external(args, stdout = stdout_, env = env)
+        output = run_external(args, stdout = stdout_, env = env)
         if not stdout:
             stdout_.close()
         self.assertEqual(output[0], 0, "Return code = %d, stderr='%s'" \
@@ -113,7 +115,7 @@ class CLITestCase(unittest.TestCase):
         # tests are run from the parent directory
         path = os.path.join('bleachbit', 'CLI.py')
         args = [sys.executable, path, '--version']
-        output = General.run_external(args)
+        output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
 
 
