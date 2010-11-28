@@ -219,6 +219,7 @@ class Worker:
         for op in sorted(self.delayed_ops):
             operation = op[1].keys()[0]
             for option_id in op[1].values()[0]:
+                self.ui.update_progress_bar(0)
                 if 'free_disk_space' == option_id:
                     msg = _("Please wait.  Wiping free disk space.")
                 elif 'memory' == option_id:
