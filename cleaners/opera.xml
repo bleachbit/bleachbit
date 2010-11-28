@@ -27,14 +27,11 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\cache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\opcache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera 10 Beta\thumbnails\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\cache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\opcache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\thumbnails\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\profile\cache4\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera\profile\opcache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\opcache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\thumbnails\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\profile\cache4\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\profile\opcache\"/>
     <action command="delete" search="walk.files" path="~/.opera/cache/"/>
     <action command="delete" search="walk.files" path="~/.opera/cache4/"/>
     <action command="delete" search="walk.files" path="~/.opera/opcache/"/>
@@ -43,24 +40,22 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\cookies4.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\cookies4.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\cookies4.dat"/>
+    <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
+    <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\cookies4.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
   </option>
   <option id="current_session">
     <label>Current session</label>
     <description>Delete the current session</description>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\sessions\autosave.win"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\sessions\autosave.win"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\sessions\autosave.win"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
   </option>
   <option id="download_history">
     <label>Download history</label>
     <description>List of files downloaded</description>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\download.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\download.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
   </option>
@@ -68,21 +63,16 @@
     <label>URL history</label>
     <description>List of visited web pages</description>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\global_history.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\typed_history.xml"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera 10 Beta\vlink4.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\global_history.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\global_history.dat"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\typed_history.xml"/>
+    <action command="delete" search="glob" path="$APPDATA\Opera\Opera*\vlink4.dat"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\typed_history.xml"/>
     <action command="delete" search="file" path="$APPDATA\Opera\Opera\profile\vlink4.dat"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\typed_history.xml"/>
-    <action command="delete" search="file" path="$APPDATA\Opera\Opera\vlink4.dat"/>
     <action command="delete" search="file" path="$LOCALAPPDATA\Opera\Opera\profile\vps\0000\md.dat"/>
     <action command="delete" search="file" path="$localappdata\Opera\Opera\vps\0000\md.dat"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera 10 Beta\icons\*.ico"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera 10 Beta\icons\*.idx"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera\icons\*.ico"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera\icons\*.idx"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.ico"/>
+    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.idx"/>
     <action command="delete" search="file" path="~/.opera/global.dat"/>
     <action command="delete" search="file" path="~/.opera/global_history.dat"/>
     <action command="delete" search="file" path="~/.opera/typed_history.xml"/>

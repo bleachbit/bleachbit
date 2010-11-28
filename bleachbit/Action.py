@@ -116,12 +116,14 @@ class FileActionProvider(ActionProvider):
                 yield path
 
         def get_walk_all(top):
-            for path in FileUtilities.children_in_directory(top, True):
-                yield path
+            for expanded in glob.iglob(top):
+                for path in FileUtilities.children_in_directory(expanded, True):
+                    yield path
 
         def get_walk_files(top):
-            for path in FileUtilities.children_in_directory(top, False):
-                yield path
+            for expanded in glob.iglob(top):
+                for path in FileUtilities.children_in_directory(expanded, False):
+                    yield path
 
         if 'deep' == self.search:
             raise StopIteration
