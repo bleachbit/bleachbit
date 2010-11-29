@@ -233,9 +233,9 @@ class Worker:
                             # Display progress (for free disk space)
                             self.ui.update_progress_bar(ret[0])
                             min = int(ret[1] / 60)
-                            msg2 = ungettext("About %(min)d minute remaining", \
-                                "About %(min)d minutes remaining", min) \
-                                % { 'min' : min }
+                            msg2 = ungettext("About %d minute remaining.", \
+                                "About %d minutes remaining.", min) \
+                                % min
                             self.ui.update_progress_bar(msg + ' ' + msg2)
                         if True == ret or isinstance(ret, tuple):
                             # Return control to PyGTK idle loop to keep
