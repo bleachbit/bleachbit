@@ -152,7 +152,7 @@ class RecognizeCleanerML:
         self.parent_window = parent_window
         try:
             self.salt = options.get('hashsalt')
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError:
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.__scan()
@@ -164,7 +164,7 @@ class RecognizeCleanerML:
         new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get(pathname, 'hashpath')
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError:
             return (NEW, new_hash)
         if new_hash == known_hash:
             return (KNOWN, new_hash)
