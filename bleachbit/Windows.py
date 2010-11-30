@@ -110,8 +110,6 @@ def browse_files(hwnd, title):
 
 def browse_folder(hwnd, title):
     """Ask the user to select a folder.  Return full path."""
-    from win32com.shell import shell
-
     pidl = shell.SHBrowseForFolder(hwnd, None, title)[0]
     if None == pidl:
         # user cancelled
