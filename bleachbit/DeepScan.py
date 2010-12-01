@@ -30,62 +30,16 @@ import os
 import re
 
 
-class ScanCache:
-
-    def __init__(self):
-        dbpath = os.path.join(Common.options_dir, "deepscan.sqlite3")
-        import sqlite3
-        self.conn = sqlite3.connect(dbpath)
-        self.cursor = self.conn.cursor()
-        try:
-            self.cursor.execute("CREATE TABLE deepscan (path PRIMARY KEY, modified, size)")
-        except sqlite3.OperationalError, e:
-            if not str(e).strip() == "table deepscan already exists":
-                raise
-
-
-
-    def cache(self, path):
-        size = os.path.getsize(path)
-        modified = os.path.getmtime(path)
-        sql = "insert into deepscan values (?, ?, ?)"
-        self.cursor.execute(sql, [ path, modified, size ] )
-
-
-    def is_cached(self, path):
-        try:
-            size = os.path.getsize(path)
-            modified = os.path.getmtime(path)
-        except:
-            return False
-        sql = "select size from deepscan where path=? and modified=? and size=?"
-        for row in self.cursor.execute(sql, [ path, modified, size ]):
-            return True
-        return False
-
-
-    def purge(self):
-        for path in self.cursor.execute('select path from deepscan'):
-            print 'cached=', path, path[0]
-            if not os.path.lexists(path[0]):
-                self.cursor.execute('delete from deepscan where path=?', path)
-        self.cursor.execute('vacuum')
-
-
-    def __del__(self):
-        self.purge()
-        self.conn.commit()
-
-
 
 class DeepScan:
+    """Advanced directory tree scan"""
 
-   def __init__(self):
+    def __init__(self):
         self.roots = []
         self.searches = {}
 
 
-   def add_search(self, dirname, regex):
+    def add_search(self, dirname, regex):
         """Starting in dirname, look for files matching regex"""
         if not self.searches.has_key(dirname):
             self.searches[dirname] = [ regex ]
@@ -93,9 +47,9 @@ class DeepScan:
             self.searches[dirname].append( regex )
 
 
-   def scan(self):
+    def scan(self):
         """Perform requested searches and yield each match"""
-        print 'debug: searches=', self.searches
+        print 'debug: DeepScan.scan: searches=', self.searches
         import time
         yield_time = time.time()
 
