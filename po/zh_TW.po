@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-22 17:14-0600\n"
-"PO-Revision-Date: 2010-10-09 06:06+0000\n"
+"POT-Creation-Date: 2010-11-28 23:17-0700\n"
+"PO-Revision-Date: 2010-12-01 11:49+0000\n"
 "Last-Translator: Pin-hsien Li <pspeter9931@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-11 14:20+0000\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Launchpad-Export-Date: 2010-12-01 14:14+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -64,15 +65,17 @@ msgstr "刪除快取"
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Action.py:242
-#: ../bleachbit/Cleaner.py:199 ../bleachbit/Cleaner.py:291
+#: ../cleaners/google_chrome.xml ../cleaners/safari.xml
+#: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Action.py:246 ../bleachbit/Cleaner.py:199
+#: ../bleachbit/Cleaner.py:291
 msgid "Vacuum"
 msgstr "清空"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Cleaner.py:199
+#: ../cleaners/google_chrome.xml ../cleaners/safari.xml
+#: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Cleaner.py:199
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -98,7 +101,7 @@ msgstr "刪除網頁快取（網頁快取可以減少顯示已造訪網頁的時
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:189
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:189
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -107,7 +110,7 @@ msgstr "Cookies"
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:189
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:189
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -118,7 +121,8 @@ msgstr "刪除 Cookies (Cookies 包含了如網站設定、認證、以及追蹤
 #: ../cleaners/seamonkey.xml ../cleaners/windows_defender.xml
 #: ../cleaners/google_chrome.xml ../cleaners/nautilus.xml
 #: ../cleaners/safari.xml ../cleaners/bash.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../cleaners/realplayer.xml
+#: ../cleaners/elinks.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/realplayer.xml
 msgid "History"
 msgstr "歷史記錄"
 
@@ -136,8 +140,9 @@ msgid "Delete the current session"
 msgstr "刪除本次作業階段"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:352
+#: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:352
 msgid "Delete the usage history"
 msgstr "刪除使用記錄"
 
@@ -182,21 +187,13 @@ msgstr "除蟲記錄"
 msgid "Delete the debug logs"
 msgstr "刪除除蟲記錄"
 
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:431
-msgid "Temporary files"
-msgstr "暫存檔案"
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:193
+msgid "Form history"
+msgstr "表單記錄"
 
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/lives.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/amule.xml ../cleaners/winetricks.xml ../cleaners/wine.xml
-#: ../bleachbit/Cleaner.py:431
-msgid "Delete the temporary files"
-msgstr "刪除暫存檔案"
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:193
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "曾於網頁與搜索欄中輸入的表單記錄"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
@@ -204,12 +201,26 @@ msgstr "刪除暫存檔案"
 msgid "List of visited web pages"
 msgstr "已造訪網頁清單"
 
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:431
+msgid "Temporary files"
+msgstr "暫存檔案"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:431
+msgid "Delete the temporary files"
+msgstr "刪除暫存檔案"
+
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
 #: ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/paint.xml
-#: ../bleachbit/Cleaner.py:302
+#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:302
 msgid "Most recently used"
 msgstr "最近存取文件"
 
@@ -279,14 +290,24 @@ msgstr "下載記錄"
 msgid "List of files downloaded"
 msgstr "已下載檔案清單"
 
+#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "搜索記錄"
+
+#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "刪除搜索記錄"
+
 #: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:198
 msgid "URL history"
 msgstr "URL 記錄"
 
 #: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/paint.xml
 msgid "Delete the most recently used list"
 msgstr "刪除最近使用檔案清單"
 
@@ -324,16 +345,6 @@ msgstr "辦公室套件"
 msgid "Delete obsolete files"
 msgstr "刪除已過時的檔案"
 
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "搜索記錄"
-
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "刪除搜索記錄"
-
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
 msgstr "備份檔案"
@@ -349,6 +360,15 @@ msgstr "已下載的 Podcast"
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
 msgstr "刪除已下載的 Podcast（網路連播）"
+
+#. TRANSLATORS: DOM = Document Object Model.
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:191
+msgid "DOM Storage"
+msgstr "DOM 存儲物件"
+
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:191
+msgid "Delete HTML5 cookies"
+msgstr "刪除 HTML5 Cookies"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
@@ -413,23 +433,6 @@ msgstr "無用檔案清理器"
 msgid "Free space and maintain privacy"
 msgstr "釋放空間及維護隱私"
 
-#. TRANSLATORS: DOM = Document Object Model.
-#: ../bleachbit/Cleaner.py:191
-msgid "DOM Storage"
-msgstr "DOM 存儲物件"
-
-#: ../bleachbit/Cleaner.py:191
-msgid "Delete HTML5 cookies"
-msgstr "刪除 HTML5 Cookies"
-
-#: ../bleachbit/Cleaner.py:193
-msgid "Form history"
-msgstr "表單記錄"
-
-#: ../bleachbit/Cleaner.py:193
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "曾於網頁與搜索欄中輸入的表單記錄"
-
 #: ../bleachbit/Cleaner.py:194
 msgid "Session restore"
 msgstr "恢復作業階段"
@@ -489,6 +492,7 @@ msgstr "清空回收桶內的垃圾"
 #. TRANSLATORS: 'Free' is an adjective and could be translated
 #. 'unallocated.'
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:513
+#: ../bleachbit/Worker.py:226
 msgid "Memory"
 msgstr "記憶體"
 
@@ -563,7 +567,7 @@ msgstr "覆寫 %s 的可用空間"
 msgid "Recycle bin %s"
 msgstr "回收桶 %s"
 
-#: ../bleachbit/CLI.py:116
+#: ../bleachbit/CLI.py:111
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "%s 不是有效的清理選項"
@@ -572,31 +576,31 @@ msgstr "%s 不是有效的清理選項"
 #. %prog, but do translate usage, options, cleaner, and option.
 #. More information about the command line is here
 #. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:144
+#: ../bleachbit/CLI.py:138
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "用法：%prog [選項] 清理選項1 清理選項2"
 
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:141
 msgid "list cleaners"
 msgstr "列出所有清理選項"
 
-#: ../bleachbit/CLI.py:149
+#: ../bleachbit/CLI.py:143
 msgid "delete files and make other permanent changes"
 msgstr "刪除檔案並執行其他永久性更動"
 
-#: ../bleachbit/CLI.py:151
+#: ../bleachbit/CLI.py:145
 msgid "show system information"
 msgstr "顯示系統資訊"
 
-#: ../bleachbit/CLI.py:153
+#: ../bleachbit/CLI.py:147
 msgid "preview files to be deleted and other changes"
 msgstr "預覽可被刪除的檔案以及其他更動"
 
-#: ../bleachbit/CLI.py:155
+#: ../bleachbit/CLI.py:149
 msgid "output version information and exit"
 msgstr "輸出版本資訊並離開"
 
-#: ../bleachbit/CLI.py:157
+#: ../bleachbit/CLI.py:151
 msgid "overwrite files to hide contents"
 msgstr "覆寫檔案以隱藏內容"
 
@@ -608,7 +612,7 @@ msgstr "跳過"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:72
+#: ../bleachbit/Command.py:72 ../bleachbit/GUI.py:557
 msgid "Delete"
 msgstr "刪除"
 
@@ -619,39 +623,39 @@ msgid "Mark for deletion"
 msgstr "標記為刪除"
 
 #. TRANSLATORS: Parts of this .ini file will be deleted
-#: ../bleachbit/Command.py:173
+#: ../bleachbit/Command.py:174
 msgid "Clean .ini file"
 msgstr "清除 .ini 檔"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:209
+#: ../bleachbit/Command.py:210
 msgid "Truncate"
 msgstr "刪節"
 
-#: ../bleachbit/Command.py:248
+#: ../bleachbit/Command.py:249
 msgid "Delete registry key"
 msgstr "刪除登錄鍵"
 
-#: ../bleachbit/FileUtilities.py:222
+#: ../bleachbit/FileUtilities.py:246
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "無法載入 Python 模組 sqlite3：需要 Python 2.5 或是更新的版本。"
 
-#: ../bleachbit/GuiBasic.py:111
+#: ../bleachbit/GuiBasic.py:108
 msgid "Delete confirmation"
 msgstr "刪除動作確認"
 
-#: ../bleachbit/GuiBasic.py:119
+#: ../bleachbit/GuiBasic.py:116
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr "您確定要依照所選的選項來刪除檔案？將被刪除的檔案可能和上次預覽時顯示的檔案略有不同。"
 
-#: ../bleachbit/GuiBasic.py:121
+#: ../bleachbit/GuiBasic.py:118
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "確定要完全刪除這些檔案？"
 
-#: ../bleachbit/GuiBasic.py:158
+#: ../bleachbit/GuiBasic.py:154
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -661,31 +665,37 @@ msgstr ""
 "因為您正以 root 的身份執行程式，請在網頁瀏覽器中手動開啟此連結：\n"
 "%s"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:551
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:166
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "打開瀏覽器至 %s？"
+
+#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:607
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: ../bleachbit/GuiPreferences.py:59
+#: ../bleachbit/GuiPreferences.py:58
 msgid "General"
 msgstr "一般"
 
-#: ../bleachbit/GuiPreferences.py:60
+#: ../bleachbit/GuiPreferences.py:59
 msgid "Drives"
 msgstr "磁區"
 
-#: ../bleachbit/GuiPreferences.py:62
+#: ../bleachbit/GuiPreferences.py:61
 msgid "Languages"
 msgstr "語系"
 
-#: ../bleachbit/GuiPreferences.py:63
+#: ../bleachbit/GuiPreferences.py:62
 msgid "Whitelist"
 msgstr "白名單"
 
-#: ../bleachbit/GuiPreferences.py:105
+#: ../bleachbit/GuiPreferences.py:104
 msgid "Check periodically for software updates via the Internet"
 msgstr "定期於網路尋找軟體更新"
 
-#: ../bleachbit/GuiPreferences.py:108
+#: ../bleachbit/GuiPreferences.py:107
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -695,118 +705,118 @@ msgstr "如果有可用的更新，可點選選項查看有關此更新的資訊
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:115
+#: ../bleachbit/GuiPreferences.py:114
 msgid "Hide irrelevant cleaners"
 msgstr "隱藏不需要的選項"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:123
+#: ../bleachbit/GuiPreferences.py:122
 msgid "Overwrite files to hide contents"
 msgstr "覆寫檔案以隱藏內容"
 
-#: ../bleachbit/GuiPreferences.py:126
+#: ../bleachbit/GuiPreferences.py:125
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr "覆蓋動作在某些檔案系統以及 Bleachbit 的操作中並不有效，且會讓速度慢上許多。"
 
-#: ../bleachbit/GuiPreferences.py:129
+#: ../bleachbit/GuiPreferences.py:128
 msgid "Start BleachBit with computer"
 msgstr "開機時啟動 Bleachbit"
 
-#: ../bleachbit/GuiPreferences.py:140 ../bleachbit/GuiPreferences.py:270
+#: ../bleachbit/GuiPreferences.py:139 ../bleachbit/GuiPreferences.py:268
 msgid "Choose a folder"
 msgstr "選擇一個資料夾"
 
-#: ../bleachbit/GuiPreferences.py:163
+#: ../bleachbit/GuiPreferences.py:162
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr "在每個磁區選擇一個可寫入的資料夾，以便覆寫該磁區的可用空間。"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:184
+#: ../bleachbit/GuiPreferences.py:183
 msgctxt "button"
 msgid "Add"
 msgstr "新增"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
+#: ../bleachbit/GuiPreferences.py:186 ../bleachbit/GuiPreferences.py:345
 msgctxt "button"
 msgid "Remove"
 msgstr "移除"
 
-#: ../bleachbit/GuiPreferences.py:212
+#: ../bleachbit/GuiPreferences.py:211
 msgid "All languages will be deleted except those checked."
 msgstr "除了被勾選的語系外，其他的語系將會被刪除。"
 
-#: ../bleachbit/GuiPreferences.py:230
+#: ../bleachbit/GuiPreferences.py:228
 msgid "Preserve"
 msgstr "保留"
 
-#: ../bleachbit/GuiPreferences.py:234
+#: ../bleachbit/GuiPreferences.py:232
 msgid "Code"
 msgstr "編碼"
 
-#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:133
+#: ../bleachbit/GuiPreferences.py:236 ../bleachbit/GUI.py:136
 msgid "Name"
 msgstr "名稱"
 
-#: ../bleachbit/GuiPreferences.py:256
+#: ../bleachbit/GuiPreferences.py:254
 msgid "Choose a file"
 msgstr "選擇一個檔案"
 
-#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:306
+#: ../bleachbit/GuiPreferences.py:261 ../bleachbit/GuiPreferences.py:304
 msgid "File"
 msgstr "檔案"
 
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
+#: ../bleachbit/GuiPreferences.py:275 ../bleachbit/GuiPreferences.py:306
 msgid "Folder"
 msgstr "資料夾"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:315
+#: ../bleachbit/GuiPreferences.py:313
 msgid "Theses paths will not be deleted or modified."
 msgstr "這些檔案與目錄將不會被刪除或更動。"
 
-#: ../bleachbit/GuiPreferences.py:323
+#: ../bleachbit/GuiPreferences.py:321
 msgid "Type"
 msgstr "類別"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:329
+#: ../bleachbit/GuiPreferences.py:327
 msgid "Path"
 msgstr "路徑"
 
-#: ../bleachbit/GuiPreferences.py:341
+#: ../bleachbit/GuiPreferences.py:339
 msgctxt "button"
 msgid "Add file"
 msgstr "新增檔案"
 
-#: ../bleachbit/GuiPreferences.py:344
+#: ../bleachbit/GuiPreferences.py:342
 msgctxt "button"
 msgid "Add folder"
 msgstr "匯入資料夾"
 
-#: ../bleachbit/GUI.py:141
+#: ../bleachbit/GUI.py:144
 msgid "Active"
 msgstr "啟用"
 
-#: ../bleachbit/GUI.py:334
+#: ../bleachbit/GUI.py:337
 msgid "You must select an operation"
 msgstr "您必須選擇一個操作"
 
-#: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:372
+#: ../bleachbit/GUI.py:360 ../bleachbit/GUI.py:375
 msgid "Done."
 msgstr "完成。"
 
-#: ../bleachbit/GUI.py:383
+#: ../bleachbit/GUI.py:387
 msgid "Program to clean unnecessary files"
 msgstr "一個清除無用檔案的程式"
 
-#: ../bleachbit/GUI.py:388
+#: ../bleachbit/GUI.py:392
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -818,110 +828,114 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:394
+#: ../bleachbit/GUI.py:398
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Pin-hsien Li https://launchpad.net/~plesry"
 
-#: ../bleachbit/GUI.py:407
+#: ../bleachbit/GUI.py:411
 msgid "System information"
 msgstr "系統資訊"
 
-#: ../bleachbit/GUI.py:461
+#: ../bleachbit/GUI.py:480
 msgid "Choose files to shred"
 msgstr "選擇要粉碎的檔案"
 
-#: ../bleachbit/GUI.py:547
+#: ../bleachbit/GUI.py:553
+msgid "Preview"
+msgstr "預覽"
+
+#: ../bleachbit/GUI.py:603
 msgid "_Shred Files"
 msgstr "粉碎檔案 (_S)"
 
-#: ../bleachbit/GUI.py:548
+#: ../bleachbit/GUI.py:604
 msgid "S_hred Settings and Quit"
 msgstr "清除所有設定並離開程式 (_H)"
 
-#: ../bleachbit/GUI.py:549
+#: ../bleachbit/GUI.py:605
 msgid "_Quit"
 msgstr "結束 (_Q)"
 
-#: ../bleachbit/GUI.py:550
+#: ../bleachbit/GUI.py:606
 msgid "_File"
 msgstr "檔案 (_F)"
 
-#: ../bleachbit/GUI.py:552
+#: ../bleachbit/GUI.py:608
 msgid "_Edit"
 msgstr "編輯 (_E)"
 
-#: ../bleachbit/GUI.py:553
+#: ../bleachbit/GUI.py:609
 msgid "Help Contents"
 msgstr "說明文件"
 
-#: ../bleachbit/GUI.py:554
+#: ../bleachbit/GUI.py:611
 msgid "_Release Notes"
 msgstr "版本資訊 (_R)"
 
-#: ../bleachbit/GUI.py:555
+#: ../bleachbit/GUI.py:613
 msgid "_System Information"
 msgstr "系統資訊 (_S)"
 
-#: ../bleachbit/GUI.py:556
+#: ../bleachbit/GUI.py:614
 msgid "_About"
 msgstr "關於 (_A)"
 
-#: ../bleachbit/GUI.py:557
+#: ../bleachbit/GUI.py:615
 msgid "_Help"
 msgstr "說明 (_H)"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:581
+#: ../bleachbit/GUI.py:639
 msgctxt "button"
 msgid "Preview"
 msgstr "預覽"
 
-#: ../bleachbit/GUI.py:584
+#: ../bleachbit/GUI.py:642
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "預覽已勾選操作中的檔案 （將不會刪除任何檔案）"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:592
+#: ../bleachbit/GUI.py:650
 msgctxt "button"
 msgid "Delete"
 msgstr "刪除"
 
-#: ../bleachbit/GUI.py:595
+#: ../bleachbit/GUI.py:653
 msgid "Delete files in the selected operations"
 msgstr "刪除勾選操作中的檔案"
 
-#: ../bleachbit/GUI.py:676
+#: ../bleachbit/GUI.py:734
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "更新 Bleachbit"
 
-#: ../bleachbit/GUI.py:681
+#: ../bleachbit/GUI.py:740
 msgid "BleachBit update is available"
 msgstr "Bleachbit 有可用的更新"
 
-#: ../bleachbit/GUI.py:689
+#: ../bleachbit/GUI.py:748
 msgid "Click 'Update BleachBit' for more information"
 msgstr "點選 「更新 Bleachbit」以獲取更多資訊"
 
-#: ../bleachbit/GUI.py:705
+#: ../bleachbit/GUI.py:764
 msgid "Error when checking for updates: "
 msgstr "檢查更新時發生錯誤： "
 
-#: ../bleachbit/GUI.py:733
+#: ../bleachbit/GUI.py:792
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "在載入 SQLite 模組時發生錯誤：可能有防毒軟體阻擋連線。"
 
-#: ../bleachbit/RecognizeCleanerML.py:82
+#: ../bleachbit/RecognizeCleanerML.py:70
 msgid "Security warning"
 msgstr "安全性警告"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:94
+#: ../bleachbit/RecognizeCleanerML.py:82
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -929,24 +943,24 @@ msgid ""
 msgstr "這些清理器定義檔是新的，或是被更動過的。有害的定義檔會損壞您的系統。如果您不信任這些更動的話，刪除這些資料或離開程式。"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:107
+#: ../bleachbit/RecognizeCleanerML.py:95
 msgctxt "column_label"
 msgid "Delete"
 msgstr "刪除"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:110
+#: ../bleachbit/RecognizeCleanerML.py:98
 msgctxt "column_label"
 msgid "Filename"
 msgstr "檔案名稱"
 
-#: ../bleachbit/Unix.py:369 ../bleachbit/Unix.py:399 ../bleachbit/Unix.py:579
+#: ../bleachbit/Unix.py:364 ../bleachbit/Unix.py:394 ../bleachbit/Unix.py:574
 #, python-format
 msgid "Executable not found: %s"
 msgstr "未找到可執行檔：%s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:576 ../bleachbit/Worker.py:129
+#: ../bleachbit/Unix.py:571 ../bleachbit/Worker.py:131
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -962,59 +976,69 @@ msgstr "%s 在使用當中無法被清理。請關閉相關程式並再次嘗試
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "執行「%(operation)s」時發生錯誤：「%(msg)s」"
 
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:199
+msgid "Please wait.  Running deep scan."
+msgstr "請稍待。正在進行深層掃描。"
+
+#: ../bleachbit/Worker.py:224
+msgid "Please wait.  Wiping free disk space."
+msgstr "請稍待。正在清理磁碟的可用空間。"
+
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:175
+#: ../bleachbit/Worker.py:226 ../bleachbit/Worker.py:288
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "請稍待。正在清理 %s。"
 
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:178
+#: ../bleachbit/Worker.py:236
 #, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "請稍待。正在預覽 %s。"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:194
-msgid "Please wait.  Running deep scan."
-msgstr "請稍待。正在進行深層掃描。"
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "大約剩下 %d 分鐘。"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:218
+#: ../bleachbit/Worker.py:251
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "已恢復可用空間：%s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:222
+#: ../bleachbit/Worker.py:255
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "將要恢復可用空間：%s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:227
+#: ../bleachbit/Worker.py:260
 #, python-format
 msgid "Files deleted: %d"
 msgstr "已刪除檔案：%d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:231
+#: ../bleachbit/Worker.py:264
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "將要刪除檔案：%d"
 
-#: ../bleachbit/Worker.py:234
+#: ../bleachbit/Worker.py:267
 #, python-format
 msgid "Special operations: %d"
 msgstr "特殊操作：%d"
 
-#: ../bleachbit/Worker.py:237
+#: ../bleachbit/Worker.py:270
 #, python-format
 msgid "Errors: %d"
 msgstr "錯誤：%d"
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:291
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "請稍待。正在預覽 %s。"
