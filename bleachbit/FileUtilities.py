@@ -26,7 +26,6 @@ File-related utilities
 
 
 import codecs
-import datetime
 import glob
 import locale
 import os
@@ -34,17 +33,15 @@ import random
 import re
 import stat
 import string
-import subprocess
 import sys
 import tempfile
 import time
-import traceback
 import ConfigParser
-import General
 
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
+from Common import _
 from Options import options
 
 if 'nt' == os.name:
@@ -414,14 +411,14 @@ def wipe_contents(path, truncate = True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    (dir, file) = os.path.split(pathname1)
+    (head, tail) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
     # first, rename to a long name
     i = 0
     while True:
         try:
-            pathname2 = os.path.join(dir, __random_string(maxlen))
+            pathname2 = os.path.join(head, __random_string(maxlen))
             os.rename(pathname1,  pathname2)
             break
         except OSError:
@@ -436,7 +433,7 @@ def wipe_name(pathname1):
     i = 0
     while True:
         try:
-            pathname3 = os.path.join(dir, __random_string(i + 1))
+            pathname3 = os.path.join(head, __random_string(i + 1))
             os.rename(pathname2, pathname3)
             break
         except:
@@ -490,7 +487,7 @@ def wipe_path(pathname, idle = False ):
         return (done_percent, remaining_seconds)
 
 
-    "debug: wipe_path('%s')" % pathname
+    print "debug: wipe_path('%s')" % pathname
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)
