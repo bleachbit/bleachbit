@@ -46,7 +46,6 @@ from Options import options
 
 if 'nt' == os.name:
     import win32file
-    import win32con
 
 if 'posix' == os.name:
     from General import WindowsError
@@ -87,8 +86,10 @@ class OpenFiles:
         return filename in self.files
 
 
-def __random_string(len):
-    return ''.join(random.choice(string.ascii_letters + '0123456789 _.-') for i in xrange(len))
+def __random_string(length):
+    """Return random alphanumeric characters of given length"""
+    return ''.join(random.choice(string.ascii_letters + '0123456789 _.-') \
+        for i in xrange(length))
 
 
 def bytes_to_human(bytes_i):
@@ -320,22 +321,22 @@ def globex(pathname, regex):
                 yield path
 
 
-def human_to_bytes(string, format = 'si'):
+def human_to_bytes(human, hformat = 'si'):
     """Convert a string like 10.2GB into bytes.  By
     default use SI standard (base 10).  The format of the
     GNU command 'du' (base 2) also supported."""
-    if 'si' == format:
+    if 'si' == hformat:
         multiplier = { 'B' : 1, 'kB': 1000, 'MB': 1000**2, \
             'GB': 1000**3, 'TB': 1000**4 }
-        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([kMGT]{0,1}B)$", string)
-    elif 'du' == format:
+        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([kMGT]{0,1}B)$", human)
+    elif 'du' == hformat:
         multiplier = { 'B' : 1, 'KB': 1024, 'MB': 1024**2, \
             'GB': 1024**3, 'TB': 1024**4 }
-        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", string)
+        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", human)
     else:
-        raise ValueError("Invalid format: '%s'" % format)
+        raise ValueError("Invalid format: '%s'" % hformat)
     if [] == matches or 2 > len(matches[0]):
-        raise ValueError("Invalid input for '%s' (format='%s')" % (string, format))
+        raise ValueError("Invalid input for '%s' (hformat='%s')" % (human, hformat))
     return int(float(matches[0][0]+matches[0][1]) * multiplier[matches[0][2]])
 
 
