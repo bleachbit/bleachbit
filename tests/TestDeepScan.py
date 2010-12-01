@@ -32,7 +32,7 @@ import tempfile
 import unittest
 
 sys.path.append('.')
-from bleachbit.DeepScan import DeepScan, ScanCache
+from bleachbit.DeepScan import DeepScan
 
 
 
@@ -97,19 +97,6 @@ class DeepScanTestCase(unittest.TestCase):
                 "Expecting string but got '%s' (%s)" % \
                  (ret, str(type(ret))))
             self.assert_(os.path.lexists(ret))
-
-
-    def test_ScanCache(self):
-        """Unit test for class ScanCache"""
-        sc = ScanCache()
-        (fd, filename) = tempfile.mkstemp('bleachbit-deepscan-test')
-        os.close(fd)
-        self.assertEqual(sc.is_cached(filename), False)
-        sc.cache(filename)
-        self.assertEqual(sc.is_cached(filename), True)
-        os.remove(filename)
-        sc.purge()
-        self.assertEqual(sc.is_cached(filename), False)
 
 
 def suite():
