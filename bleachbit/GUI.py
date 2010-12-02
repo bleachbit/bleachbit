@@ -215,6 +215,7 @@ class GUI:
     <menubar name="MenuBar">
         <menu action="File">
             <menuitem action="ShredFiles"/>
+            <menuitem action="ShredFolders"/>
             <menuitem action="ShredQuit"/>
             <menuitem action="Quit"/>
         </menu>
@@ -473,11 +474,19 @@ class GUI:
 
 
     def cb_shred_file(self, action):
-        """Callback for shredding a file"""
+        """Callback for shredding a file or folder"""
 
         # get list of files
-        paths = GuiBasic.browse_files(self.window, \
-            _("Choose files to shred"))
+        if 'ShredFiles' == action.get_name():
+            paths = GuiBasic.browse_files(self.window, \
+                _("Choose files to shred"))
+        elif 'ShredFolders' == action.get_name():
+            paths = GuiBasic.browse_folder(self.window, \
+                _("Choose folder to shred"),
+                multiple = True,
+                delete = True)
+        else:
+            raise RuntimeError("Unexpected kind in cb_shred_file")
 
         if not paths:
             return
@@ -601,6 +610,7 @@ class GUI:
         # Create actions
         entries = (
                     ('ShredFiles', gtk.STOCK_DELETE, _('_Shred Files'), None, None, self.cb_shred_file),
+                    ('ShredFolders', gtk.STOCK_DELETE, _('Sh_red Folders'), None, None, self.cb_shred_file),
                     ('ShredQuit', None, _('S_hred Settings and Quit'), None, None, self.cb_shred_quit),
                     ('Quit', gtk.STOCK_QUIT, _('_Quit'), None, None, lambda *dummy: gtk.main_quit()),
                     ('File', None, _('_File')),

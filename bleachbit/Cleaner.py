@@ -690,7 +690,12 @@ def create_simple_cleaner(paths):
         action_key = '__customfileaction'
         def get_commands(self):
             for path in paths:
-                yield Command.Shred(path)
+                if os.path.isdir(path):
+                    for child in children_in_directory(path, True):
+                        yield Command.Shred(child)
+                    yield Command.Shred(path)
+                else:
+                    yield Command.Shred(path)
     provider = CustomFileAction(None)
     cleaner.add_action('files', provider)
     return cleaner

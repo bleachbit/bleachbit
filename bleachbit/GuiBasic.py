@@ -35,27 +35,35 @@ from Common import _
 
 
 
-def browse_folder(parent, title):
+def browse_folder(parent, title, multiple, delete):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if 'nt' == os.name:
         return Windows.browse_folder(parent.window.handle, title)
 
     # fall back to GTK+
+    if delete:
+        stock_button = gtk.STOCK_DELETE
+    else:
+        stock_button = gtk.STOCK_ADD
     chooser = gtk.FileChooserDialog( parent = parent, \
         title = title,
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
-        gtk.STOCK_ADD, gtk.RESPONSE_ACCEPT), \
+            stock_button, gtk.RESPONSE_OK), \
         action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    chooser.set_select_multiple(multiple)
     chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
-    pathname = chooser.get_filename()
+    if multiple:
+        ret = chooser.get_filenames()
+    else:
+        ret = chooser.get_filename()
     chooser.hide()
     chooser.destroy()
-    if gtk.RESPONSE_ACCEPT == resp:
-        return pathname
-    # user cancelled
-    return None
+    if gtk.RESPONSE_OK != resp:
+        # user cancelled
+        return None
+    return ret
 
 
 def browse_file(parent, title):

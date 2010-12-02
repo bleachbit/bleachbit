@@ -137,7 +137,8 @@ class PreferencesDialog:
         def add_drive_cb(button):
             """Callback for adding a drive"""
             title = _("Choose a folder")
-            pathname = GuiBasic.browse_folder(self.parent, title)
+            pathname = GuiBasic.browse_folder(self.parent, title, \
+                multiple = False, delete = False)
             if pathname:
                 liststore.append([pathname])
                 pathnames.append(pathname)
@@ -266,7 +267,8 @@ class PreferencesDialog:
         def add_whitelist_folder_cb(button):
             """Callback for adding a folder"""
             title = _("Choose a folder")
-            pathname = GuiBasic.browse_folder(self.parent, title)
+            pathname = GuiBasic.browse_folder(self.parent, title, \
+                multiple = False, delete = False)
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
