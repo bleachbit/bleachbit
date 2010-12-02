@@ -39,7 +39,8 @@ def browse_folder(parent, title, multiple, delete):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if 'nt' == os.name:
-        return Windows.browse_folder(parent.window.handle, title)
+        ret = Windows.browse_folder(parent.window.handle, title)
+        return [ret] if multiple else ret
 
     # fall back to GTK+
     if delete:
