@@ -27,12 +27,14 @@ Test case for module FileUtilities
 
 import datetime
 import locale
+import subprocess
 import sys
 import tempfile
 import unittest
 
 sys.path.append('.')
 from bleachbit.FileUtilities import *
+from bleachbit.Options import options
 
 
 def test_ini(self, execute):
