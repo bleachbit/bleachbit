@@ -178,7 +178,7 @@ class Worker:
             delayables = ['free_disk_space', 'memory']
             for delayable in delayables:
                 if operation not in ('system', '_gui'):
-                    return
+                    continue
                 if delayable in self.operations[operation]:
                     i = self.operations[operation].index(delayable)
                     del self.operations[operation][i]
