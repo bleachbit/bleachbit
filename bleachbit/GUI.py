@@ -510,9 +510,6 @@ class GUI:
             options.restore()
             return
 
-        # clean up temporary cleaner
-        del backends['_gui']
-
 
     def cb_shred_quit(self, action):
         """Shred settings (for privacy reasons) and quit"""
