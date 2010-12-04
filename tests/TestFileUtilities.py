@@ -25,11 +25,11 @@ Test case for module FileUtilities
 """
 
 
-import datetime
 import locale
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 
 sys.path.append('.')
@@ -552,7 +552,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             "openfiles.last_scan_time (ago)=%s\n" \
             "openfiles.files=%s" % \
             (filename, \
-            datetime.datetime.now() - openfiles.last_scan_time, \
+            time.time() - openfiles.last_scan_time, \
             openfiles.files))
 
         f = os.fdopen(handle)
