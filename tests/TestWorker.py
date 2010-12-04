@@ -50,8 +50,8 @@ class WorkerTestCase(unittest.TestCase):
         cleaner = TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
         operations = { 'test' : [ 'option1' ] }
-        w = Worker(ui, True, operations)
-        run = w.run()
+        worker = Worker(ui, True, operations)
+        run = worker.run()
         while run.next():
             pass
         self.assert_(not os.path.exists(filename), \
@@ -81,8 +81,8 @@ class WorkerTestCase(unittest.TestCase):
         cleaner = TestCleaner.actions_to_cleaner([astr1, astr2])
         backends['test'] = cleaner
         operations = { 'test' : [ 'option1', 'option2' ] }
-        w = Worker(ui, True, operations)
-        run = w.run()
+        worker = Worker(ui, True, operations)
+        run = worker.run()
         while run.next():
             pass
         self.assert_(not os.path.exists(filename1), \
