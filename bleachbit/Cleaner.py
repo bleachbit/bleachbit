@@ -684,8 +684,10 @@ backends["system"] = System()
 def create_simple_cleaner(paths):
     cleaner = Cleaner()
     cleaner.add_option(option_id = 'files', name = '', description = '')
-    cleaner.name = ''
+    cleaner.name = _("System") # shows up in progress bar
+
     import Action
+
     class CustomFileAction(Action.ActionProvider):
         action_key = '__customfileaction'
         def get_commands(self):
