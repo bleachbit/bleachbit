@@ -6,17 +6,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-12-03 18:36-0700\n"
-"PO-Revision-Date: 2010-12-01 18:40+0000\n"
+"PO-Revision-Date: 2010-12-04 09:45+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
-"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-12-02 01:32+0000\n"
+"X-Launchpad-Export-Date: 2010-12-04 16:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -437,8 +436,10 @@ msgid "Index"
 msgstr "Index"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr "Verwijdert de zoekgeschiedenis, een databank met woorden en bestanden"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Verwijdert de zoekgeschiedenis, een databank met woorden en bestanden"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -545,7 +546,8 @@ msgid "Clipboard"
 msgstr "Klembord"
 
 #: ../bleachbit/Cleaner.py:428
-msgid "The desktop environment's clipboard used for copy and paste operations"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Het klembord van de werkomgeving dat wordt gebruikt voor kopiëren en plakken"
 
@@ -577,7 +579,8 @@ msgstr "Systeem"
 msgid "Overwrite free disk space %s"
 msgstr "Overschrijf de vrije schijfruimte %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:649
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:649
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Prullenbak %s"
@@ -609,7 +612,8 @@ msgstr "Systeeminformatie tonen"
 
 #: ../bleachbit/CLI.py:147
 msgid "preview files to be deleted and other changes"
-msgstr "Bekijk de bestanden die verwijdert zullen worden en andere wijzigingen"
+msgstr ""
+"Bekijk de bestanden die verwijdert zullen worden en andere wijzigingen"
 
 #: ../bleachbit/CLI.py:149
 msgid "output version information and exit"
@@ -876,7 +880,7 @@ msgstr "Selecteer bestanden om te shredderen"
 
 #: ../bleachbit/GUI.py:486
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "Selecteer map om te shredderen"
 
 #: ../bleachbit/GUI.py:603
 msgid "Preview"
@@ -888,11 +892,11 @@ msgstr "Bestanden _shredderen"
 
 #: ../bleachbit/GUI.py:654
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "Mappen sh_redderen"
 
 #: ../bleachbit/GUI.py:655
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "Vrije ruimte _wissen"
 
 #: ../bleachbit/GUI.py:656
 msgid "S_hred Settings and Quit"
