@@ -363,6 +363,10 @@ class GUI:
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
 
+        # clean up temporary cleaner (menu option only)
+        if backends.has_key('_gui'):
+            del backends['_gui']
+
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
         print 'debug: elapsed time: %d seconds' % elapsed
