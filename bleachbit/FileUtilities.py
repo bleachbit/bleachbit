@@ -41,7 +41,6 @@ import ConfigParser
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
-from Common import _
 from Options import options
 
 if 'nt' == os.name:
@@ -241,6 +240,7 @@ def execute_sqlite3(path, cmds):
         import sqlite3
     except ImportError, exc:
         if sys.version_info[0] == 2 and sys.version_info[1] < 5:
+            from Common import _
             raise RuntimeError(_("Cannot import Python module sqlite3: Python 2.5 or later is required."))
         else:
             raise exc
