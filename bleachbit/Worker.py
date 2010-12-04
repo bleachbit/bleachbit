@@ -177,13 +177,15 @@ class Worker:
         for operation in self.operations:
             delayables = ['free_disk_space', 'memory']
             for delayable in delayables:
-                if 'system' == operation and delayable in self.operations['system']:
-                    i = self.operations['system'].index(delayable)
-                    del self.operations['system'][i]
+                if operation not in ('system', '_gui'):
+                    return
+                if delayable in self.operations[operation]:
+                    i = self.operations[operation].index(delayable)
+                    del self.operations[operation][i]
                     priority = 99
                     if 'free_disk_space' == delayable:
                         priority = 100
-                    new_op = (priority, { 'system' : [ delayable ] } )
+                    new_op = (priority, { operation : [ delayable ] } )
                     self.delayed_ops.append( new_op )
 
         # standard operations

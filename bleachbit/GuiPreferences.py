@@ -138,7 +138,7 @@ class PreferencesDialog:
             """Callback for adding a drive"""
             title = _("Choose a folder")
             pathname = GuiBasic.browse_folder(self.parent, title, \
-                multiple = False, delete = False)
+                multiple = False, stock_button = gtk.STOCK_DELETE)
             if pathname:
                 liststore.append([pathname])
                 pathnames.append(pathname)
@@ -268,7 +268,7 @@ class PreferencesDialog:
             """Callback for adding a folder"""
             title = _("Choose a folder")
             pathname = GuiBasic.browse_folder(self.parent, title, \
-                multiple = False, delete = False)
+                multiple = False, stock_button = gtk.STOCK_DELETE)
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:

@@ -701,6 +701,24 @@ def create_simple_cleaner(paths):
     return cleaner
 
 
+def create_wipe_cleaner(path):
+    cleaner = Cleaner()
+    cleaner.add_option(option_id = 'free_disk_space', name = '', description = '')
+    cleaner.name = ''
 
+    # create a temporary cleaner object
+    display = _("Overwrite free disk space %s") % path
+    def wipe_path_func():
+        for ret in FileUtilities.wipe_path(path, idle = True):
+            yield ret
+        yield 0
 
+    import Action
+    class CustomWipeAction(Action.ActionProvider):
+        action_key = '__customwipeaction'
+        def get_commands(self):
+            yield Command.Function(None, wipe_path_func, display)
+    provider = CustomWipeAction(None)
+    cleaner.add_action('free_disk_space', provider)
+    return cleaner
 

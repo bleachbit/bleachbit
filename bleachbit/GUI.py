@@ -216,6 +216,7 @@ class GUI:
         <menu action="File">
             <menuitem action="ShredFiles"/>
             <menuitem action="ShredFolders"/>
+            <menuitem action="WipeFreeSpace"/>
             <menuitem action="ShredQuit"/>
             <menuitem action="Quit"/>
         </menu>
@@ -484,7 +485,7 @@ class GUI:
             paths = GuiBasic.browse_folder(self.window, \
                 _("Choose folder to shred"),
                 multiple = True,
-                delete = True)
+                stock_button = gtk.STOCK_DELETE)
         else:
             raise RuntimeError("Unexpected kind in cb_shred_file")
 
@@ -536,6 +537,22 @@ class GUI:
                 time.sleep(3)
 
         gtk.main_quit()
+
+
+    def cb_wipe_free_space(self, action):
+        """callback to wipe free space in arbitrary folder"""
+        path = GuiBasic.browse_folder(self.window, \
+            _("Choose a folder"), \
+            multiple = False, stock_button = gtk.STOCK_OK)
+        if not path:
+            # user cancelled
+            return
+
+        backends['_gui'] = Cleaner.create_wipe_cleaner(path)
+
+        # execute
+        operations = { '_gui' : [ 'free_disk_space' ] }
+        self.preview_or_run_operations(True, operations)
 
 
     def context_menu_event(self, treeview, event):
@@ -611,6 +628,7 @@ class GUI:
         entries = (
                     ('ShredFiles', gtk.STOCK_DELETE, _('_Shred Files'), None, None, self.cb_shred_file),
                     ('ShredFolders', gtk.STOCK_DELETE, _('Sh_red Folders'), None, None, self.cb_shred_file),
+                    ('WipeFreeSpace', None, _('_Wipe Free Space'), None, None, self.cb_wipe_free_space),
                     ('ShredQuit', None, _('S_hred Settings and Quit'), None, None, self.cb_shred_quit),
                     ('Quit', gtk.STOCK_QUIT, _('_Quit'), None, None, lambda *dummy: gtk.main_quit()),
                     ('File', None, _('_File')),

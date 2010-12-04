@@ -35,7 +35,7 @@ from Common import _
 
 
 
-def browse_folder(parent, title, multiple, delete):
+def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if 'nt' == os.name:
@@ -43,10 +43,6 @@ def browse_folder(parent, title, multiple, delete):
         return [ret] if multiple else ret
 
     # fall back to GTK+
-    if delete:
-        stock_button = gtk.STOCK_DELETE
-    else:
-        stock_button = gtk.STOCK_ADD
     chooser = gtk.FileChooserDialog( parent = parent, \
         title = title,
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, \
