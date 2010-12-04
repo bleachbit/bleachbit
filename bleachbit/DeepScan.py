@@ -25,7 +25,6 @@ Scan directory tree for files to delete
 """
 
 
-import Common
 import os
 import re
 
