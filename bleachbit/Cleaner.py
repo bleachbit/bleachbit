@@ -85,7 +85,7 @@ class Cleaner:
         for (option_id, __name) in self.get_options():
             try:
                 for cmd in self.get_commands(option_id):
-                    for ret in cmd.execute(False):
+                    for dummy in cmd.execute(False):
                         return False
                 for ds in self.get_deep_scan(option_id):
                     if isinstance(ds, dict):
