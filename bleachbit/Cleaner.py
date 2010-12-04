@@ -414,8 +414,7 @@ class System(Cleaner):
             self.add_option('trash', _('Trash'), _('Empty the trash'))
         if 'linux2' == sys.platform:
             self.add_option('memory', _('Memory'), \
-            # TRANSLATORS: 'Free' is an adjective and could be translated
-            # 'unallocated.'
+            # TRANSLATORS: 'free' means 'unallocated'
                _('Wipe the swap and free memory'))
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
         if 'nt' == os.name:
@@ -427,7 +426,10 @@ class System(Cleaner):
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        self.add_option('free_disk_space', _('Free disk space'), _('Overwrite free disk space to hide deleted files'))
+        # TRANSLATORS: 'free' means 'not allocated'
+        self.add_option('free_disk_space', _('Free disk space'), \
+            # TRANSLATORS: 'free' means 'not allocated'
+            _('Overwrite free disk space to hide deleted files'))
         self.set_warning('free_disk_space', _('This option is very slow.'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))
 
@@ -617,7 +619,7 @@ class System(Cleaner):
         shred_drives = options.get_list('shred_drives')
         if 'free_disk_space' == option_id and shred_drives:
             for pathname in shred_drives:
-                # TRANSLATORS: 'Free' could also be translated 'unallocated.'
+                # TRANSLATORS: 'Free' means 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
                 display = _("Overwrite free disk space %s") % pathname
                 def wipe_path_func():
@@ -710,6 +712,7 @@ def create_wipe_cleaner(path):
     cleaner.name = ''
 
     # create a temporary cleaner object
+    # TRANSLATORS: 'free' means not 'unallocated'
     display = _("Overwrite free disk space %s") % path
     def wipe_path_func():
         for ret in FileUtilities.wipe_path(path, idle = True):
