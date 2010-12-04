@@ -712,7 +712,7 @@ def create_wipe_cleaner(path):
     cleaner.name = ''
 
     # create a temporary cleaner object
-    # TRANSLATORS: 'free' means not 'unallocated'
+    # TRANSLATORS: 'free' means 'unallocated'
     display = _("Overwrite free disk space %s") % path
     def wipe_path_func():
         for ret in FileUtilities.wipe_path(path, idle = True):
