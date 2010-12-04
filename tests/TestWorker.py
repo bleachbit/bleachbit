@@ -56,14 +56,14 @@ class WorkerTestCase(unittest.TestCase):
             pass
         self.assert_(not os.path.exists(filename), \
             "Path still exists '%s'" % filename)
-        self.assertEqual(w.total_special, 3)
-        self.assertEqual(w.total_errors, 2)
+        self.assertEqual(worker.total_special, 3)
+        self.assertEqual(worker.total_errors, 2)
         if 'posix' == os.name:
-            self.assertEqual(w.total_bytes, 4096+10+10)
-            self.assertEqual(w.total_deleted, 3)
+            self.assertEqual(worker.total_bytes, 4096+10+10)
+            self.assertEqual(worker.total_deleted, 3)
         elif 'nt' == os.name:
-            self.assertEqual(w.total_bytes, 3+3+10+10)
-            self.assertEqual(w.total_deleted, 4)
+            self.assertEqual(worker.total_bytes, 3+3+10+10)
+            self.assertEqual(worker.total_deleted, 4)
 
 
     def test_multiple_options(self):
@@ -89,9 +89,9 @@ class WorkerTestCase(unittest.TestCase):
             "Path still exists '%s'" % filename1)
         self.assert_(not os.path.exists(filename2), \
             "Path still exists '%s'" % filename2)
-        self.assertEqual(w.total_special, 0)
-        self.assertEqual(w.total_errors, 0)
-        self.assertEqual(w.total_deleted, 2)
+        self.assertEqual(worker.total_special, 0)
+        self.assertEqual(worker.total_errors, 0)
+        self.assertEqual(worker.total_deleted, 2)
 
 
 
