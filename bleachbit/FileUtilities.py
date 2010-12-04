@@ -41,8 +41,6 @@ import ConfigParser
 if not "iglob" in dir(glob):
     glob.iglob = glob.glob
 
-from Options import options
-
 if 'nt' == os.name:
     import win32file
 
@@ -161,6 +159,7 @@ def clean_ini(path, section, parameter):
 
 def delete(path, shred = False):
     """Delete path that is either file, directory, link or FIFO"""
+    from Options import options
     try:
         print u"info: removing '%s'" % path
     except:
@@ -359,6 +358,7 @@ def listdir(directory):
 
 def whitelisted(path):
     """Check whether this path is whitelisted"""
+    from Options import options
     for pathname in options.get_whitelist_paths():
         if pathname[0] == 'file' and path == pathname[1]:
             return True
