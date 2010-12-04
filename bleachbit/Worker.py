@@ -223,6 +223,7 @@ class Worker:
             for option_id in op[1].values()[0]:
                 self.ui.update_progress_bar(0.0)
                 if 'free_disk_space' == option_id:
+                    # TRANSLATORS: 'free' means 'unallocated'
                     msg = _("Please wait.  Wiping free disk space.")
                 elif 'memory' == option_id:
                     msg = _("Please wait.  Cleaning %s.") % _("Memory")

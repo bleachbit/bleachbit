@@ -426,9 +426,9 @@ class System(Cleaner):
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
-        # TRANSLATORS: 'free' means 'not allocated'
+        # TRANSLATORS: 'free' means 'unallocated'
         self.add_option('free_disk_space', _('Free disk space'), \
-            # TRANSLATORS: 'free' means 'not allocated'
+            # TRANSLATORS: 'free' means 'unallocated'
             _('Overwrite free disk space to hide deleted files'))
         self.set_warning('free_disk_space', _('This option is very slow.'))
         self.add_option('tmp', _('Temporary files'), _('Delete the temporary files'))

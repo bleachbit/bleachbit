@@ -160,6 +160,7 @@ class PreferencesDialog:
 
         vbox = gtk.VBox()
 
+        # TRANSLATORS: 'free' means 'unallocated'
         notice = gtk.Label(_("Choose a writable folder for each drive for which to overwrite free space."))
         notice.set_line_wrap(True)
         vbox.pack_start(notice, False)
