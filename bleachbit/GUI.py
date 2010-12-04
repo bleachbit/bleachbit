@@ -626,8 +626,8 @@ class GUI:
 
         # Create actions
         entries = (
-                    ('ShredFiles', gtk.STOCK_DELETE, _('_Shred Files'), None, None, self.cb_shred_file),
-                    ('ShredFolders', gtk.STOCK_DELETE, _('Sh_red Folders'), None, None, self.cb_shred_file),
+                    ('ShredFiles', None, _('_Shred Files'), None, None, self.cb_shred_file),
+                    ('ShredFolders', None, _('Sh_red Folders'), None, None, self.cb_shred_file),
                     ('WipeFreeSpace', None, _('_Wipe Free Space'), None, None, self.cb_wipe_free_space),
                     ('ShredQuit', None, _('S_hred Settings and Quit'), None, None, self.cb_shred_quit),
                     ('Quit', gtk.STOCK_QUIT, _('_Quit'), None, None, lambda *dummy: gtk.main_quit()),
