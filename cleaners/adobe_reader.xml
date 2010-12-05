@@ -32,6 +32,7 @@
     <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\7.0\Cache"/>
     <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\8.0\Cache"/>
     <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\9.0\Cache"/>
+    <action command="delete" search="glob" path="$USERPROFILE\AppData\LocalLow\Adobe\Acrobat\9.0\Search\*.idx"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
