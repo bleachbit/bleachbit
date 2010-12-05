@@ -194,28 +194,8 @@ class Worker:
             yield True
 
         # run deep scan
-        print 'debug: deepscans=', self.deepscans
-        # TRANSLATORS: The "deep scan" feature searches over broad
-        # areas of the file system such as the user's whole home directory
-        # or all the system executables.
-        self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
-        yield True # allow GTK to update the screen
-        ds = DeepScan.DeepScan()
-        for (path, dsdict) in self.deepscans.iteritems():
-            print 'debug: deepscan path=', path
-            print 'debug: deepscan dict=', dsdict
-            for dsdict2 in dsdict:
-                ds.add_search(path, dsdict2['regex'])
-
-        for path in ds.scan():
-            if True == path:
-                yield True
-                continue
-            # fixme: support non-delete commands
-            import Command
-            cmd = Command.Delete(path)
-            for ret in self.execute(cmd):
-                yield True
+        if self.deepscans:
+            self.run_deep_scan()
 
         # delayed operations
         for op in sorted(self.delayed_ops):
@@ -279,6 +259,31 @@ class Worker:
 
         yield False
 
+
+    def run_deep_scan():
+        """Run deep scans"""
+        print 'debug: deepscans=', self.deepscans
+        # TRANSLATORS: The "deep scan" feature searches over broad
+        # areas of the file system such as the user's whole home directory
+        # or all the system executables.
+        self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
+        yield True # allow GTK to update the screen
+        ds = DeepScan.DeepScan()
+        for (path, dsdict) in self.deepscans.iteritems():
+            print 'debug: deepscan path=', path
+            print 'debug: deepscan dict=', dsdict
+            for dsdict2 in dsdict:
+                ds.add_search(path, dsdict2['regex'])
+
+        for path in ds.scan():
+            if True == path:
+                yield True
+                continue
+            # fixme: support non-delete commands
+            import Command
+            cmd = Command.Delete(path)
+            for ret in self.execute(cmd):
+                yield True
 
     def run_operations(self, my_operations):
         """Run a set of operations (general, memory, free disk space)"""
