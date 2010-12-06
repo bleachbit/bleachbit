@@ -8,15 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-04 08:55-0700\n"
-"PO-Revision-Date: 2010-12-04 09:00+0000\n"
-"Last-Translator: Nicolas Delvaux <Unknown>\n"
+"PO-Revision-Date: 2010-12-05 16:38+0000\n"
+"Last-Translator: Hugues Belaib <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2010-12-04 15:08+0000\n"
+"X-Launchpad-Export-Date: 2010-12-06 03:03+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -440,7 +439,8 @@ msgid "Index"
 msgstr "Index"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+msgid ""
+"Delete the search index, a database of words and the files they contain"
 msgstr ""
 "Supprimer l'index de recherche : une base de données de mots et de fichiers"
 
@@ -549,7 +549,8 @@ msgid "Clipboard"
 msgstr "Presse-papiers"
 
 #: ../bleachbit/Cleaner.py:428
-msgid "The desktop environment's clipboard used for copy and paste operations"
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Le presse-papiers de l'environnement de bureau utilisé pour copier/coller"
 
@@ -583,7 +584,8 @@ msgstr "Système"
 msgid "Overwrite free disk space %s"
 msgstr "Ecraser l'espace libre du disque %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:652
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:652
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Corbeille sur %s"
@@ -902,7 +904,7 @@ msgstr "Choisir les fichiers à déchiqueter (via shred)"
 
 #: ../bleachbit/GUI.py:490
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "Choisir un dossier à morceler"
 
 #: ../bleachbit/GUI.py:580
 msgid "Preview"
@@ -918,7 +920,7 @@ msgstr "Dossiers pa_rtagés"
 
 #: ../bleachbit/GUI.py:632
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "_Suppression de l'espace libre"
 
 #: ../bleachbit/GUI.py:633
 msgid "S_hred Settings and Quit"
@@ -1066,7 +1068,7 @@ msgstr "Veuillez patienter. Exécution d'une analyse approfondie."
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:227
 msgid "Please wait.  Wiping free disk space."
-msgstr ""
+msgstr "Veuillez patienter. Suppression de l'espace libre en cours."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:229 ../bleachbit/Worker.py:291
