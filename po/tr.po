@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-03 18:36-0700\n"
-"PO-Revision-Date: 2010-12-04 06:59+0000\n"
-"Last-Translator: Burak Ilgicioglu <Unknown>\n"
+"POT-Creation-Date: 2010-12-04 08:55-0700\n"
+"PO-Revision-Date: 2010-12-08 08:54+0000\n"
+"Last-Translator: Ekrem Kocadere <ekocadere@hotmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2010-12-04 15:08+0000\n"
+"X-Launchpad-Export-Date: 2010-12-08 14:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -210,14 +210,14 @@ msgstr "Ziyaret edilmiş internet siteleri listesi"
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:431
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:434
 msgid "Temporary files"
 msgstr "Geçici dosyalar"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:431
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:434
 msgid "Delete the temporary files"
 msgstr "Geçici dosyaları sil"
 
@@ -273,11 +273,11 @@ msgstr "Arama aracı"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
-msgstr "Arama indeksi"
+msgstr "Arama indeksleri"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr "Arama indeksini sil"
+msgstr "Arama indekslerini sil"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
@@ -431,7 +431,9 @@ msgstr "İndeks"
 #: ../cleaners/recoll.xml
 msgid ""
 "Delete the search index, a database of words and the files they contain"
-msgstr "Kelime database'i ve dosyaları barındıran arama indeksini sil"
+msgstr ""
+"Arama indeksini sil. Arama indeksi dosya ve kelimeler içeren bir "
+"veritabanıdır."
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -497,13 +499,12 @@ msgstr "Çöp"
 msgid "Empty the trash"
 msgstr "Çöpü boşalt"
 
-#. TRANSLATORS: 'Free' is an adjective and could be translated
-#. 'unallocated.'
-#: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:513
-#: ../bleachbit/Worker.py:226
+#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:516
+#: ../bleachbit/Worker.py:229
 msgid "Memory"
 msgstr "Bellek"
 
+#. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:418
 msgid "Wipe the swap and free memory"
 msgstr "Takas alanını ve boş hafızayı temizle"
@@ -533,7 +534,7 @@ msgstr "Çöp tenekesi"
 msgid "Empty the recycle bin"
 msgstr "Çöp tenekesini boşalt"
 
-#: ../bleachbit/Cleaner.py:428 ../bleachbit/Cleaner.py:595
+#: ../bleachbit/Cleaner.py:428 ../bleachbit/Cleaner.py:598
 msgid "Clipboard"
 msgstr "Pano"
 
@@ -542,35 +543,38 @@ msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr "Kopyalama ve yapıştırma için masaüstü panosu"
 
-#: ../bleachbit/Cleaner.py:429
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:430
 msgid "Free disk space"
 msgstr "Disk alanını temizle"
 
-#: ../bleachbit/Cleaner.py:429
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:432
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Silinmiş dosyaları saklamak için disk boşalan üzerine yaz"
 
-#: ../bleachbit/Cleaner.py:430
+#: ../bleachbit/Cleaner.py:433
 msgid "This option is very slow."
 msgstr "Bu seçenek yavaş çalışır"
 
-#: ../bleachbit/Cleaner.py:434
+#: ../bleachbit/Cleaner.py:437
 msgid "The system in general"
 msgstr "Genel olarak sistemin"
 
-#: ../bleachbit/Cleaner.py:440
+#: ../bleachbit/Cleaner.py:443 ../bleachbit/Cleaner.py:690
 msgid "System"
 msgstr "Sistem"
 
-#. TRANSLATORS: 'Free' could also be translated 'unallocated.'
+#. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:621 ../bleachbit/GUI.py:552
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:624 ../bleachbit/Cleaner.py:716
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "%s boş bellek bölümü üzerine yaz"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:649
+#: ../bleachbit/Cleaner.py:652
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Çöp tenekesi %s"
@@ -621,7 +625,7 @@ msgstr "Atla"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:72 ../bleachbit/GUI.py:607
+#: ../bleachbit/Command.py:72 ../bleachbit/GUI.py:584
 msgid "Delete"
 msgstr "Sil"
 
@@ -645,7 +649,7 @@ msgstr "Tamamen sil"
 msgid "Delete registry key"
 msgstr "Kayıt anahtarını sil"
 
-#: ../bleachbit/FileUtilities.py:244
+#: ../bleachbit/FileUtilities.py:243
 msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
 msgstr "sqlite3 Python modülü bulunamıyor: Python 2.5 veya üstü gerekli"
 
@@ -684,7 +688,7 @@ msgstr ""
 msgid "Open web browser to %s?"
 msgstr "%s için web tarayıcısını aç"
 
-#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:659
+#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:636
 msgid "Preferences"
 msgstr "Ayarlar"
 
@@ -745,77 +749,78 @@ msgstr ""
 msgid "Start BleachBit with computer"
 msgstr "Bleachbit'i sistem açılışında başlat."
 
-#: ../bleachbit/GuiPreferences.py:139 ../bleachbit/GuiPreferences.py:269
-#: ../bleachbit/GUI.py:545
+#: ../bleachbit/GuiPreferences.py:139 ../bleachbit/GuiPreferences.py:270
+#: ../bleachbit/GUI.py:546
 msgid "Choose a folder"
 msgstr "Bir klasör seçin"
 
-#: ../bleachbit/GuiPreferences.py:163
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/GuiPreferences.py:164
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr "Her sürücüden yazılabilir bir klasör seçiniz."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:184
+#: ../bleachbit/GuiPreferences.py:185
 msgctxt "button"
 msgid "Add"
 msgstr "Ekle"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:187 ../bleachbit/GuiPreferences.py:347
+#: ../bleachbit/GuiPreferences.py:188 ../bleachbit/GuiPreferences.py:348
 msgctxt "button"
 msgid "Remove"
 msgstr "Kaldır"
 
-#: ../bleachbit/GuiPreferences.py:212
+#: ../bleachbit/GuiPreferences.py:213
 msgid "All languages will be deleted except those checked."
 msgstr "Seçilen lisanların dışındaki bütün lisanları sil"
 
-#: ../bleachbit/GuiPreferences.py:229
+#: ../bleachbit/GuiPreferences.py:230
 msgid "Preserve"
 msgstr "Koru"
 
-#: ../bleachbit/GuiPreferences.py:233
+#: ../bleachbit/GuiPreferences.py:234
 msgid "Code"
 msgstr "Kod"
 
-#: ../bleachbit/GuiPreferences.py:237 ../bleachbit/GUI.py:136
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GUI.py:136
 msgid "Name"
 msgstr "İsim"
 
-#: ../bleachbit/GuiPreferences.py:255
+#: ../bleachbit/GuiPreferences.py:256
 msgid "Choose a file"
 msgstr "Bir dosya seçin"
 
-#: ../bleachbit/GuiPreferences.py:262 ../bleachbit/GuiPreferences.py:306
+#: ../bleachbit/GuiPreferences.py:263 ../bleachbit/GuiPreferences.py:307
 msgid "File"
 msgstr "Dosya"
 
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:308
+#: ../bleachbit/GuiPreferences.py:278 ../bleachbit/GuiPreferences.py:309
 msgid "Folder"
 msgstr "Dizin"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:315
+#: ../bleachbit/GuiPreferences.py:316
 msgid "Theses paths will not be deleted or modified."
 msgstr "Bu konumlar silinmeyecek ve değiştirilmeyecek"
 
-#: ../bleachbit/GuiPreferences.py:323
+#: ../bleachbit/GuiPreferences.py:324
 msgid "Type"
 msgstr "Tür"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:329
+#: ../bleachbit/GuiPreferences.py:330
 msgid "Path"
 msgstr "Dosya Yolu"
 
-#: ../bleachbit/GuiPreferences.py:341
+#: ../bleachbit/GuiPreferences.py:342
 msgctxt "button"
 msgid "Add file"
 msgstr "Dosya ekle"
 
-#: ../bleachbit/GuiPreferences.py:344
+#: ../bleachbit/GuiPreferences.py:345
 msgctxt "button"
 msgid "Add folder"
 msgstr "Dizin ekle"
@@ -828,15 +833,15 @@ msgstr "Etkin"
 msgid "You must select an operation"
 msgstr "Bir operasyon seçmelisiniz."
 
-#: ../bleachbit/GUI.py:362 ../bleachbit/GUI.py:377
+#: ../bleachbit/GUI.py:362 ../bleachbit/GUI.py:381
 msgid "Done."
 msgstr "Tamamlandı."
 
-#: ../bleachbit/GUI.py:389
+#: ../bleachbit/GUI.py:393
 msgid "Program to clean unnecessary files"
 msgstr "Gereksiz dosyaları temizleyen program"
 
-#: ../bleachbit/GUI.py:394
+#: ../bleachbit/GUI.py:398
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -848,7 +853,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:400
+#: ../bleachbit/GUI.py:404
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -861,77 +866,77 @@ msgstr ""
 "  zeugma https://launchpad.net/~sunder67\n"
 "  İbrahim Altunok https://launchpad.net/~alquirel"
 
-#: ../bleachbit/GUI.py:413
+#: ../bleachbit/GUI.py:417
 msgid "System information"
 msgstr "Sistem bilgisi"
 
-#: ../bleachbit/GUI.py:483
+#: ../bleachbit/GUI.py:487
 msgid "Choose files to shred"
 msgstr "Parçalanıcak dosyaları seç"
 
-#: ../bleachbit/GUI.py:486
+#: ../bleachbit/GUI.py:490
 msgid "Choose folder to shred"
 msgstr "Parçalamak için dizini seçin"
 
-#: ../bleachbit/GUI.py:603
+#: ../bleachbit/GUI.py:580
 msgid "Preview"
 msgstr "Ön İzleme"
 
-#: ../bleachbit/GUI.py:653
+#: ../bleachbit/GUI.py:630
 msgid "_Shred Files"
 msgstr "Dosyaları Parça_la"
 
-#: ../bleachbit/GUI.py:654
+#: ../bleachbit/GUI.py:631
 msgid "Sh_red Folders"
 msgstr "Dizinleri parçala"
 
-#: ../bleachbit/GUI.py:655
+#: ../bleachbit/GUI.py:632
 msgid "_Wipe Free Space"
 msgstr "Boş alanı sil"
 
-#: ../bleachbit/GUI.py:656
+#: ../bleachbit/GUI.py:633
 msgid "S_hred Settings and Quit"
 msgstr "Ayarları sıfırla ve çık"
 
-#: ../bleachbit/GUI.py:657
+#: ../bleachbit/GUI.py:634
 msgid "_Quit"
 msgstr "_Kapat"
 
-#: ../bleachbit/GUI.py:658
+#: ../bleachbit/GUI.py:635
 msgid "_File"
 msgstr "_Dosya"
 
-#: ../bleachbit/GUI.py:660
+#: ../bleachbit/GUI.py:637
 msgid "_Edit"
 msgstr "Düz_en"
 
-#: ../bleachbit/GUI.py:661
+#: ../bleachbit/GUI.py:638
 msgid "Help Contents"
 msgstr "Yardım İçeriği"
 
-#: ../bleachbit/GUI.py:663
+#: ../bleachbit/GUI.py:640
 msgid "_Release Notes"
 msgstr "_Sürüm Notları"
 
-#: ../bleachbit/GUI.py:665
+#: ../bleachbit/GUI.py:642
 msgid "_System Information"
 msgstr "_Sistem Bilgisi"
 
-#: ../bleachbit/GUI.py:666
+#: ../bleachbit/GUI.py:643
 msgid "_About"
 msgstr "H_akkında"
 
-#: ../bleachbit/GUI.py:667
+#: ../bleachbit/GUI.py:644
 msgid "_Help"
 msgstr "_Yardım"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:691
+#: ../bleachbit/GUI.py:668
 msgctxt "button"
 msgid "Preview"
 msgstr "Önizleme"
 
-#: ../bleachbit/GUI.py:694
+#: ../bleachbit/GUI.py:671
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Seçili operasyonlardaki dosyaların önizlemesini yapın (Hiçbir dosya "
@@ -939,33 +944,33 @@ msgstr ""
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:702
+#: ../bleachbit/GUI.py:679
 msgctxt "button"
 msgid "Delete"
 msgstr "Sil"
 
-#: ../bleachbit/GUI.py:705
+#: ../bleachbit/GUI.py:682
 msgid "Delete files in the selected operations"
 msgstr "Seçili operasyonlardaki dosyaları sil"
 
-#: ../bleachbit/GUI.py:786
+#: ../bleachbit/GUI.py:763
 msgctxt "button"
 msgid "Update BleachBit"
 msgstr "BleachBit'i güncelle"
 
-#: ../bleachbit/GUI.py:792
+#: ../bleachbit/GUI.py:769
 msgid "BleachBit update is available"
 msgstr "BleachBit için bir güncelleme mevcut"
 
-#: ../bleachbit/GUI.py:800
+#: ../bleachbit/GUI.py:777
 msgid "Click 'Update BleachBit' for more information"
 msgstr "Daha fazla bilgi için 'BleachBit'i güncelle' yi tıklayın"
 
-#: ../bleachbit/GUI.py:816
+#: ../bleachbit/GUI.py:793
 msgid "Error when checking for updates: "
 msgstr "Güncellemeleri kontrol ederken bir hata meydana geldi "
 
-#: ../bleachbit/GUI.py:844
+#: ../bleachbit/GUI.py:821
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -1027,21 +1032,22 @@ msgstr ""
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:199
+#: ../bleachbit/Worker.py:201
 msgid "Please wait.  Running deep scan."
 msgstr "Derin tarama yapılıyor, lütfen bekleyiniz."
 
-#: ../bleachbit/Worker.py:224
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:227
 msgid "Please wait.  Wiping free disk space."
 msgstr "Lütfen bekleyin. Boş disk alanı temizleniyor."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:226 ../bleachbit/Worker.py:290
+#: ../bleachbit/Worker.py:229 ../bleachbit/Worker.py:291
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Lütfen bekleyin. %s  temizleniyor."
 
-#: ../bleachbit/Worker.py:236
+#: ../bleachbit/Worker.py:239
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -1049,44 +1055,44 @@ msgstr[0] "yaklaşık %d dakika kaldı."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:251
+#: ../bleachbit/Worker.py:254
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "Geri kazanılan disk alanı: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:255
+#: ../bleachbit/Worker.py:258
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "Geri kazanılacak disk alanı: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:260
+#: ../bleachbit/Worker.py:263
 #, python-format
 msgid "Files deleted: %d"
 msgstr "Silinen dosyalar: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:264
+#: ../bleachbit/Worker.py:267
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "Silinecek dosyalar: %d"
 
-#: ../bleachbit/Worker.py:267
+#: ../bleachbit/Worker.py:270
 #, python-format
 msgid "Special operations: %d"
 msgstr "Özel işlemler: %d"
 
-#: ../bleachbit/Worker.py:270
+#: ../bleachbit/Worker.py:273
 #, python-format
 msgid "Errors: %d"
 msgstr "Hatalar: %d"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:293
+#: ../bleachbit/Worker.py:294
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Lütfen bekleyin. %s için önizleme yapılıyor"
