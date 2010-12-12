@@ -193,8 +193,6 @@ class Firefox(Cleaner):
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
-        self.add_option('places', _('Places'), _('A database of URLs including bookmarks, favicons, and a history of visited web sites'))
-        self.set_warning('places', _('This option deletes all bookmarks.'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
@@ -254,13 +252,6 @@ class Firefox(Cleaner):
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons.txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons[2-3].txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "signons.sqlite")
-        # places database
-        if 'places' == option_id:
-            # Firefox version 3
-            files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite")
-            files += FileUtilities.expand_glob_join(self.profile_dir, "places.sqlite-journal")
-            files += FileUtilities.expand_glob_join(self.profile_dir, "bookmarkbackups/*ookmark*json")
-            # see also option 'url_history'
         # session restore
         if 'session_restore' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")

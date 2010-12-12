@@ -218,6 +218,20 @@ class Ini(FileActionProvider):
             yield Command.Ini(path, self.section, self.parameter)
 
 
+class Json(FileActionProvider):
+    """Action to clean JSON configuration files"""
+    action_key = 'json'
+
+    def __init__(self, action_element):
+        FileActionProvider.__init__(self, action_element)
+        self.address = action_element.getAttribute('address')
+
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Json(path, self.address)
+
+
 
 class Shred(FileActionProvider):
     """Action to shred files (override preference)"""

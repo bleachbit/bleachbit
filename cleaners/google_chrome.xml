@@ -70,6 +70,8 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Visited Links"/>
+    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="HostReferralList" />
+    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="StartupDNSPrefetchList" />
   </option>
   <option id="session">
     <label>Session</label>

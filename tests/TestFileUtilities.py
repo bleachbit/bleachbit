@@ -37,8 +37,8 @@ from bleachbit.FileUtilities import *
 from bleachbit.Options import options
 
 
-def test_ini(self, execute):
-    """Used to test .ini cleaning in TestAction and in TestFileUtilities """
+def test_ini_helper(self, execute):
+    """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     # create test file
     (fd, filename) = tempfile.mkstemp()
@@ -68,6 +68,47 @@ def test_ini(self, execute):
 
     # clean up
     delete(filename)
+    self.assert_(not os.path.exists(filename))
+
+
+def test_json_helper(self, execute):
+    """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
+    import simplejson as json
+
+    def load_js(js_fn):
+        with open(js_fn, 'r') as js_fd:
+            return json.load(js_fd)
+
+     # create test file
+    (fd, filename) = tempfile.mkstemp()
+    os.write(fd, '{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
+    os.close(fd)
+    self.assert_(os.path.exists(filename))
+    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+
+    # invalid key
+    execute(filename, 'doesnotexist')
+    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+
+    # invalid key
+    execute(filename, 'deleteme/doesnotexist')
+    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+
+    # valid key
+    execute(filename, 'deleteme')
+    self.assertEqual(load_js(filename), { 'spareme' : { 'deletemetoo' : 1 } } )
+
+    # valid key
+    execute(filename, 'spareme/deletemetoo')
+    self.assertEqual(load_js(filename), { 'spareme' : {} } )
+
+    # valid key
+    execute(filename, 'spareme')
+    self.assertEqual(load_js(filename), { } )
+
+    # clean up
+    delete(filename)
+    self.assert_(not os.path.exists(filename))
 
 
 class FileUtilitiesTestCase(unittest.TestCase):
@@ -162,7 +203,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
-        test_ini(self, clean_ini)
+        test_ini_helper(self, clean_ini)
+
+
+    def test_clean_json(self):
+        """Unit test for clean_json()"""
+        test_json_helper(self, clean_json)
 
 
     def test_delete(self):

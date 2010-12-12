@@ -69,7 +69,7 @@ class ActionTestCase(unittest.TestCase):
                 provider = actionplugin(action_node)
         self.assertNotEqual(provider, None)
         for cmd in provider.get_commands():
-            self.assert_(isinstance(cmd, (Command.Delete, Command.Ini)))
+            self.assert_(isinstance(cmd, (Command.Delete, Command.Ini, Command.Json)))
             self.assert_(os.path.lexists(filename))
             # preview
             result = cmd.execute(really_delete = False).next()
@@ -83,7 +83,7 @@ class ActionTestCase(unittest.TestCase):
                 self.assert_(os.path.lexists(filename))
                 os.remove(filename)
                 self.assert_(not os.path.lexists(filename))
-            elif 'ini' == command:
+            elif command in ('ini', 'json'):
                 self.assert_(os.path.lexists(filename))
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
@@ -103,7 +103,7 @@ class ActionTestCase(unittest.TestCase):
 
     def test_ini(self):
         """Unit test for class Ini"""
-        from TestFileUtilities import test_ini
+        from TestFileUtilities import test_ini_helper
 
         def execute_ini(path, section, parameter):
             effective_parameter = ""
@@ -113,7 +113,19 @@ class ActionTestCase(unittest.TestCase):
                 % (path, section, effective_parameter)
             self._test_action_str(action_str)
 
-        test_ini(self, execute_ini)
+        test_ini_helper(self, execute_ini)
+
+
+    def test_json(self):
+        """Unit test for class Json"""
+        from TestFileUtilities import test_json_helper
+
+        def execute_json(path, address):
+            action_str = '<action command="json" search="file" path="%s" address="%s" />' \
+                % (path, address)
+            self._test_action_str(action_str)
+
+        test_json_helper(self, execute_json)
 
 
     def test_regex(self):

@@ -170,8 +170,8 @@ class Ini:
             return
 
         ret = { \
-            # TRANSLATORS: Parts of this .ini file will be deleted
-            'label' : _('Clean .ini file'),
+            # TRANSLATORS: Parts of this file will be deleted
+            'label' : _('Clean file'),
             'n_deleted' : 0,
             'n_special' : 1,
             'path' : self.path,
@@ -182,6 +182,37 @@ class Ini:
             newsize = FileUtilities.getsize(self.path)
             ret['size'] = oldsize - newsize
         yield ret
+
+
+class Json:
+    """Remove a key from a JSON configuration file"""
+
+    def __init__(self, path, address):
+        """Create the instance"""
+        self.path = path
+        self.address = address
+
+
+    def execute(self, really_delete):
+        """Make changes and return results"""
+
+        if FileUtilities.whitelisted(self.path):
+            yield whitelist(self.path)
+            return
+
+        ret = { \
+            'label' : _('Clean file'),
+            'n_deleted' : 0,
+            'n_special' : 1,
+            'path' : self.path,
+            'size' : None }
+        if really_delete:
+            oldsize = FileUtilities.getsize(self.path)
+            FileUtilities.clean_json(self.path, self.address)
+            newsize = FileUtilities.getsize(self.path)
+            ret['size'] = oldsize - newsize
+        yield ret
+
 
 
 class Shred(Delete):
