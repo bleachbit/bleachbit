@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-12-04 08:55-0700\n"
-"PO-Revision-Date: 2010-12-11 16:16+0000\n"
+"PO-Revision-Date: 2010-12-12 10:21+0000\n"
 "Last-Translator: Redmar <redmar@ubuntu-nl.org>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-12-11 16:56+0000\n"
+"X-Launchpad-Export-Date: 2010-12-12 22:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -589,7 +589,7 @@ msgstr ""
 #: ../bleachbit/CLI.py:111
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "geen geldige cleaner: %s"
+msgstr "geen geldige opschoner: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -601,7 +601,7 @@ msgstr "Gebruik: %prog [opties] cleaner.optie1 cleaner.optie2"
 
 #: ../bleachbit/CLI.py:141
 msgid "list cleaners"
-msgstr "cleaners tonen"
+msgstr "opschoners tonen"
 
 #: ../bleachbit/CLI.py:143
 msgid "delete files and make other permanent changes"
@@ -734,7 +734,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Hide irrelevant cleaners"
-msgstr "Irrelevante schoonmaakopties verbergen"
+msgstr "Irrelevante opschoners verbergen"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -874,7 +874,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:417
 msgid "System information"
-msgstr "Systeem informatie"
+msgstr "Systeeminformatie"
 
 #: ../bleachbit/GUI.py:487
 msgid "Choose files to shred"
@@ -882,7 +882,7 @@ msgstr "Selecteer bestanden om te shredderen"
 
 #: ../bleachbit/GUI.py:490
 msgid "Choose folder to shred"
-msgstr "Selecteer map om te shredderen"
+msgstr "Selecteer map om te shredden"
 
 #: ../bleachbit/GUI.py:580
 msgid "Preview"
@@ -890,11 +890,11 @@ msgstr "Bekijken"
 
 #: ../bleachbit/GUI.py:630
 msgid "_Shred Files"
-msgstr "Bestanden _shredderen"
+msgstr "Bestanden _shredden"
 
 #: ../bleachbit/GUI.py:631
 msgid "Sh_red Folders"
-msgstr "Mappen sh_redderen"
+msgstr "Mappen sh_redden"
 
 #: ../bleachbit/GUI.py:632
 msgid "_Wipe Free Space"
@@ -902,7 +902,7 @@ msgstr "Vrije ruimte _wissen"
 
 #: ../bleachbit/GUI.py:633
 msgid "S_hred Settings and Quit"
-msgstr "Instellingen shredderen en afluiten"
+msgstr "Instellingen shredden en afluiten"
 
 #: ../bleachbit/GUI.py:634
 msgid "_Quit"
@@ -918,7 +918,7 @@ msgstr "B_ewerken"
 
 #: ../bleachbit/GUI.py:638
 msgid "Help Contents"
-msgstr "Helpinhoud"
+msgstr "Hulpinhoud"
 
 #: ../bleachbit/GUI.py:640
 msgid "_Release Notes"
@@ -970,7 +970,7 @@ msgstr "Er is een BleachBit-update beschikbaar"
 
 #: ../bleachbit/GUI.py:777
 msgid "Click 'Update BleachBit' for more information"
-msgstr "Klik op 'BleachBit-update' voor meer informatie"
+msgstr "Klik op ‘BleachBit-update’ voor meer informatie"
 
 #: ../bleachbit/GUI.py:793
 msgid "Error when checking for updates: "
@@ -995,9 +995,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Deze cleaner-definities zijn nieuw of gewijzigd. Kwaadaardige definities "
-"kunnen uw systeem beschadigen. Als u deze wijzigingen niet vertrouwt, "
-"verwijder dan deze bestanden of stop."
+"Deze opschoon-definities zijn nieuw of gewijzigd. Kwaadaardige definities "
+"kunnen uw systeem beschadigen. Als u deze wijzigingen niet vertrouwt moet u "
+"deze bestanden verwijderen of afsluiten."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
 #: ../bleachbit/RecognizeCleanerML.py:95
@@ -1014,7 +1014,7 @@ msgstr "Bestandsnaam"
 #: ../bleachbit/Unix.py:364 ../bleachbit/Unix.py:394 ../bleachbit/Unix.py:574
 #, python-format
 msgid "Executable not found: %s"
-msgstr "Uitvoerbaarbestand niet gevonden: %s"
+msgstr "Uitvoerbaar bestand niet gevonden: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:571 ../bleachbit/Worker.py:131
@@ -1033,14 +1033,14 @@ msgstr ""
 #: ../bleachbit/Worker.py:76
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Fout bij het uitvoeren van optie '%(operation)s': '%(msg)s'"
+msgstr "Fout bij het uitvoeren van optie ‘%(operation)s’: ‘%(msg)s’"
 
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
 #: ../bleachbit/Worker.py:201
 msgid "Please wait.  Running deep scan."
-msgstr "Een moment geduld. Bezig met een diepe scan."
+msgstr "Een moment geduld, bezig met een diepe scan."
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:227
@@ -1065,7 +1065,7 @@ msgstr[1] "Ongeveer %d minuten resterend."
 #: ../bleachbit/Worker.py:254
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "Vrij gekomen schijfruimte: %s"
+msgstr "Vrijgekomen schijfruimte: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
