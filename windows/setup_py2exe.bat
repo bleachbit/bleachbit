@@ -106,7 +106,7 @@ echo Building portable
 rd /s /q BleachBit-portable
 xcopy /e /i dist BleachBit-Portable
 echo [Portable] > BleachBit-Portable\BleachBit.ini
-%SZ_EXE% a -mx=9 -md=32m BleachBit-Win32-portable-full.zip BleachBit-portable
+%SZ_EXE% a -mx=9 -md=32m BleachBit-0.0.0-portable.zip BleachBit-portable
 
 :nsis
 echo Building installer
