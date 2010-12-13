@@ -168,8 +168,7 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    with open(path, 'r') as f:
-        js = json.load(f)
+    js = json.load(open(path, 'r'))
 
     # change file
     pos = js
@@ -196,8 +195,7 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        with open(path, 'w') as f:
-            json.dump(js, f)
+        json.dump(js, open(path, 'w'))
 
 
 def delete(path, shred = False):
