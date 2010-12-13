@@ -260,7 +260,7 @@ class Worker:
         yield False
 
 
-    def run_deep_scan():
+    def run_deep_scan(self):
         """Run deep scans"""
         print 'debug: deepscans=', self.deepscans
         # TRANSLATORS: The "deep scan" feature searches over broad
