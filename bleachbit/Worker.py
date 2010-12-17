@@ -195,7 +195,8 @@ class Worker:
 
         # run deep scan
         if self.deepscans:
-            self.run_deep_scan()
+            for dummy in self.run_deep_scan():
+                yield dummy
 
         # delayed operations
         for op in sorted(self.delayed_ops):
