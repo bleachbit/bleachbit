@@ -66,6 +66,45 @@ class WorkerTestCase(unittest.TestCase):
             self.assertEqual(worker.total_deleted, 4)
 
 
+    def test_deep_scan(self):
+        """Test for deep scan"""
+
+        # load cleaners from XML
+        import bleachbit.CleanerML
+        bleachbit.CleanerML.load_cleaners()
+
+        # DeepScan itself is tested elsewhere, so replace it here
+        import bleachbit.DeepScan
+        SaveDeepScan = bleachbit.DeepScan.DeepScan
+        self.scanned = 0
+        self_assertequal = self.assertEqual
+        self_assert = self.assert_
+
+        def increment_count():
+            self.scanned = self.scanned + 1
+
+        class MyDeepScan:
+            def add_search(self, dirname, regex):
+                self_assertequal(dirname, os.path.expanduser('~'))
+                self_assert(regex in ('^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'))
+
+            def scan(self):
+                increment_count()
+                yield True
+        bleachbit.DeepScan.DeepScan = MyDeepScan
+
+        # test
+        operations = { 'deepscan' : [ 'thumbs_db' ] }
+        ui = CLI.CliCallback()
+        worker = Worker(ui, False, operations).run()
+        while worker.next():
+            pass
+        self.assertEqual(1, self.scanned)
+
+        # clean up
+        bleachbit.DeepScan.DeepScan = SaveDeepScan
+
+
     def test_multiple_options(self):
         """Test one cleaner with two options"""
         ui = CLI.CliCallback()
