@@ -165,6 +165,8 @@ Section Core (Required)
         "URLInfoAbout" "http://bleachbit.sourceforge.net/"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "URLUpdateInfo" "http://bleachbit.sourceforge.net/download"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+        "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
 SectionEnd
 
 
