@@ -31,7 +31,7 @@
   ;Name and file
   !define prodname "BleachBit"
   Name "${prodname}"
-  OutFile "${prodname}-setup.exe"
+  OutFile "${prodname}-0.0.0-setup.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\${prodname}"
