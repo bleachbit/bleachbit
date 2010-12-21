@@ -42,6 +42,7 @@ These are the terms:
 
 import os
 import platform
+import re
 import sys
 import traceback
 
@@ -282,6 +283,9 @@ def enumerate_processes_win32():
             psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
             clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
             if len(clean_modname) > 0 and '?' != clean_modname:
+                # Filter out non-ASCII characters which we don't need
+                # and which may cause warnings.
+                clean_modname2 = re.sub('[^a-z\.]', '_', clean_modname)
                 modnames.append(clean_modname)
 
             # Clean up
