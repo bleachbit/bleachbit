@@ -127,6 +127,7 @@ class WindowsTestCase(unittest.TestCase):
                 self.assertEqual(process, process.lower())
                 self.assert_(len(process) > 0)
                 self.assert_(isinstance(process, (str, unicode)))
+                self.assertNotEqual(process, '?')
             self.assert_('explorer.exe' in processes)
         tep_helper(enumerate_processes())
         tep_helper(enumerate_processes_win32())

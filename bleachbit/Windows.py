@@ -281,7 +281,7 @@ def enumerate_processes_win32():
             psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
             psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
             clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
-            if len(clean_modname) > 0:
+            if len(clean_modname) > 0 and '?' != clean_modname:
                 modnames.append(clean_modname)
 
             # Clean up
