@@ -28,8 +28,11 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Cache\"/>
-    <action command="delete" search="walk.files" path="~/.config/google-chrome/Default/Cache/"/>
+    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="StartupDNSPrefetchList"/>
     <action command="delete" search="walk.files" path="~/.cache/google-chrome/"/>
+    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -71,8 +74,6 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??-journal"/>
-    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="HostReferralList"/>
-    <action command="json" search="file" path="~/.config/google-chrome/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="session">
     <label>Session</label>
