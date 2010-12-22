@@ -59,6 +59,8 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
+    <action command="json" search="file" path="~/.config/chromium/Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="~/.config/chromium/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="current_session">
     <label>Current session</label>
