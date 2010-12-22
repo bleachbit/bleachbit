@@ -22,7 +22,8 @@
 <cleaner id="chromium" os="linux">
   <label>Chromium</label>
   <description>Web browser</description>
-  <running type="exe">chromium-browser</running> <!-- Fedora 14 -->
+  <!-- Fedora 14 -->
+  <running type="exe">chromium-browser</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
@@ -36,6 +37,12 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Cookies"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
   </option>
+  <option id="dom">
+    <label>DOM Storage</label>
+    <description>Delete HTML5 cookies</description>
+    <action command="delete" search="glob" path="~/.config/chromium/Default/Local Storage/http*localstorage"/>
+    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/"/>
+  </option>
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
@@ -43,6 +50,7 @@
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History-journal"/>
+    <action command="delete" search="file" path="~/.config/chromium/Default/Favicons"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/History"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
