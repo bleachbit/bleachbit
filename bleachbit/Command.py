@@ -29,6 +29,7 @@ import os
 import types
 import FileUtilities
 
+from sqlite3 import DatabaseError
 from Common import _
 
 if 'nt' == os.name:
@@ -138,7 +139,13 @@ class Function:
             else:
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
-                self.func(self.path)
+                try:
+                    self.func(self.path)
+                except DatabaseError, e:
+                    if e.message.find('file is encrypted or is not a database') == -1:
+                        raise
+                    print e.message
+                    return
                 try:
                     newsize = FileUtilities.getsize(self.path)
                 except OSError, e:
