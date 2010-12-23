@@ -82,6 +82,7 @@ def update_dialog(parent, updates):
         ver = update[0]
         url = update[1]
         box_update = gtk.HBox()
+        # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
         button_stable = gtk.Button(_("Update to version %s") % ver)
         button_stable.connect('clicked', lambda dummy: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
