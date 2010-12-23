@@ -28,13 +28,13 @@ from Options import options
 import FileUtilities
 
 
-def shred_sqlite_char_columns(cols):
+def __shred_sqlite_char_columns(table, cols):
     """Create an SQL command to shred character columns"""
-    cmds = []
-    for col in cols:
-        assert(isinstance(col, (str, unicode)))
-        cmds.append("%s = randomblob(length(%s))" % (col, col) )
-    return ",".join(cmds)
+    cmd1 = "update %s set %s;" % \
+        (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]))
+    cmd2 = "update %s set %s;" % \
+        (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]))
+    return cmd1 + cmd2
 
 
 def delete_chrome_keywords(path):
@@ -42,10 +42,8 @@ def delete_chrome_keywords(path):
     cmds = ""
     if options.get('shred'):
         cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
-        shred_keywords_cmd = "update keywords set " + \
-            shred_sqlite_char_columns(cols) + ";"
-        cmds = shred_keywords_cmd
-    cmds = cmds + " delete from keywords;"
+        cmds =  __shred_sqlite_char_columns('keywords', cols)
+    cmds = cmds + "delete from keywords;"
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
 
