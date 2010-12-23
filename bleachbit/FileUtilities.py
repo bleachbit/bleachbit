@@ -198,11 +198,6 @@ def clean_json(path, target):
 def delete(path, shred = False):
     """Delete path that is either file, directory, link or FIFO"""
     from Options import options
-    try:
-        print u"info: removing '%s'" % path
-    except:
-        p = re.compile('[\x7f-\xff]')
-        print r"info: removing '%s'" % p.sub('?', path)
     is_special = False
     if 'posix' == os.name:
         # With certain (relatively rare) files on Windows os.lstat()
