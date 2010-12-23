@@ -118,9 +118,16 @@ def check_updates():
             return (ver, url)
         return ()
 
-    updates = ((parse_updates(dom.getElementsByTagName("stable"),),
-        (parse_updates(dom.getElementsByTagName("beta"),))))
+    stable = parse_updates(dom.getElementsByTagName("stable"))
+    beta = parse_updates(dom.getElementsByTagName("beta"))
+
     dom.unlink()
 
-    return (updates)
+    if stable and beta:
+        return (stable, beta)
+    if stable:
+        return (stable,)
+    if beta:
+        return (beta,)
+    return ()
 

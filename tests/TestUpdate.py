@@ -42,22 +42,36 @@ class UpdateTestCase(unittest.TestCase):
 
     def test_UpdateCheck(self):
         """Unit tests for class UpdateCheck"""
+
+        update_tests = []
+        update_tests.append( ( '<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta></updates>', \
+            ( (u'0.8.4', u'http://084') , (u'0.8.5beta', u'http://085beta'))) )
+        update_tests.append( ('<updates><stable ver="0.8.4">http://084</stable></updates>', \
+            ( (u'0.8.4', u'http://084') , ) ) )
+        update_tests.append( ('<updates><beta ver="0.8.5beta">http://085beta</beta></updates>', \
+            ( (u'0.8.5beta', u'http://085beta') , ) ) )
+        update_tests.append( ('<updates></updates>', \
+             () ))
+
         # fake network
         original_open = urllib2.build_opener
+        xml = ""
         class fake_opener:
 
-            def add_headers():
+            def add_headers(self):
                 pass
 
             def read(self):
-                return '<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta></updates>'
+                return xml
 
             def open(self, url):
                 return self
 
         urllib2.build_opener = fake_opener
-        updates = check_updates()
-        self.assertEqual(updates, ( (u'0.8.4', u'http://084') , (u'0.8.5beta', u'http://085beta')))
+        for update_test in update_tests:
+            xml = update_test[0]
+            updates = check_updates()
+            self.assertEqual(updates, update_test[1])
         urllib2.build_opener = original_open
 
         # real network
