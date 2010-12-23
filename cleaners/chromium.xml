@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="chromium" os="linux">
+<cleaner id="chromium">
   <label>Chromium</label>
   <description>Web browser</description>
   <!-- Fedora 14 -->
@@ -27,8 +27,12 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Cache\"/>
+    <!-- Chromium 69949 (December 2010) on Windows 7 does not store HostReferralList and StartupDNSPrefetchList -->
     <action command="delete" search="walk.files" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache"/>
     <action command="delete" search="walk.files" path="~/.cache/chromium/"/>
+    <action command="json" search="file" path="~/.config/chromium/Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="~/.config/chromium/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -59,8 +63,6 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
-    <action command="json" search="file" path="~/.config/chromium/Local State" address="HostReferralList"/>
-    <action command="json" search="file" path="~/.config/chromium/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="current_session">
     <label>Current session</label>
