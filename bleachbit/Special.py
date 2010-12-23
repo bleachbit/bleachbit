@@ -28,12 +28,12 @@ from Options import options
 import FileUtilities
 
 
-def __shred_sqlite_char_columns(table, cols):
+def __shred_sqlite_char_columns(table, cols, where = ""):
     """Create an SQL command to shred character columns"""
-    cmd1 = "update %s set %s;" % \
-        (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]))
-    cmd2 = "update %s set %s;" % \
-        (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]))
+    cmd1 = "update %s set %s %s;" % \
+        (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]), where)
+    cmd2 = "update %s set %s %s;" % \
+        (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]), where)
     return cmd1 + cmd2
 
 
@@ -62,17 +62,8 @@ def delete_mozilla_url_history(path):
     cmds = ""
 
     if options.get('shred'):
-        shred_places_cmd = "update moz_places " \
-            "set url = randomblob(length(url)), " \
-            "rev_host = randomblob(length(rev_host)), " \
-            "title = randomblob(length(title))" + places_suffix
-        cmds += shred_places_cmd
-        shred_places_cmd = "update moz_places " \
-            "set url = zeroblob(length(url)), " \
-            "rev_host = zeroblob(length(rev_host)), " \
-            "title = zeroblob(length(title))" + places_suffix
-        cmds += shred_places_cmd
-
+        cols = ('set_url', 'rev_host', 'title')
+        cmds += __shred_sqlite_char_columns('moz_places', cols)
 
     delete_places_cmd = "delete from moz_places " + places_suffix
     cmds += delete_places_cmd
@@ -85,14 +76,7 @@ def delete_mozilla_url_history(path):
         "where moz_places.id is null); "
 
     if options.get('shred'):
-        shred_annos_cmd = "update moz_annos " \
-            "set content = randomblob(length(content)) " \
-            + annos_suffix
-        cmds += shred_annos_cmd
-        shred_annos_cmd = "update moz_annos " \
-            "set content = zeroblob(length(content)) " \
-            + annos_suffix
-        cmds += shred_annos_cmd
+        cmds += __shred_sqlite_char_columns('moz_annos', ('content', ), annos_suffix)
 
     delete_annos_cmd = "delete from moz_annos " + annos_suffix
     cmds += delete_annos_cmd
@@ -102,17 +86,8 @@ def delete_mozilla_url_history(path):
         "from moz_places ); "
 
     if options.get('shred'):
-        shred_fav_cmd = "update moz_favicons " \
-            "set url = randomblob(length(url)), " \
-            "data = randomblob(length(data)) " \
-            +  fav_suffix
-        cmds += shred_fav_cmd
-        shred_fav_cmd = "update moz_favicons " \
-            "set url = zeroblob(length(url)), " \
-            "data = zeroblob(length(data)) " \
-            +  fav_suffix
-        cmds += shred_fav_cmd
-
+        cols = ('set_url', 'data')
+        cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     delete_fav_cmd = "delete from moz_favicons " + fav_suffix
     cmds += delete_fav_cmd
