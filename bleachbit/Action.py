@@ -33,6 +33,7 @@ import types
 import Command
 import FileUtilities
 import General
+import Special
 
 from Common import _
 
@@ -188,6 +189,18 @@ class AptAutoremove(ActionProvider):
             yield Command.Function(None, \
                 Unix.apt_autoremove, \
                 'apt-get autoremove')
+
+
+class Chrome_Keywords(FileActionProvider):
+    """Action to clean keywords table in Google Chrome/Chromium"""
+    action_key = 'chrome.keywords'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_chrome_keywords, \
+               _('Clean file'))
 
 
 class Delete(FileActionProvider):
