@@ -68,6 +68,7 @@
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
+                      <xs:attribute name="address" type="xs:string"/>
                       <xs:attribute name="cache" type="xs:string"/>
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
@@ -77,6 +78,7 @@
                             <xs:enumeration value="chrome.keywords"/>
                             <xs:enumeration value="delete"/>
                             <xs:enumeration value="ini"/>
+                            <xs:enumeration value="json"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
                             <xs:enumeration value="winreg"/>
