@@ -51,6 +51,8 @@ def delete_chrome_keywords(path):
 def delete_mozilla_url_history(path):
     """Delete URL history in Mozilla places.sqlite (Firefox 3 and family)"""
 
+    cmds = ""
+
     # delete the URLs in moz_places
     places_suffix = "where id in (select " \
         "moz_places.id from moz_places " \
@@ -59,11 +61,9 @@ def delete_mozilla_url_history(path):
         "where moz_inputhistory.input is null " \
         "and moz_bookmarks.id is null); "
 
-    cmds = ""
-
     if options.get('shred'):
         cols = ('set_url', 'rev_host', 'title')
-        cmds += __shred_sqlite_char_columns('moz_places', cols)
+        cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
     delete_places_cmd = "delete from moz_places " + places_suffix
     cmds += delete_places_cmd
