@@ -99,7 +99,7 @@ def update_dialog(parent, updates):
 
 
 
-def check_updates():
+def check_updates(check_beta):
     """Check for updates via the Internet"""
     opener = urllib2.build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
@@ -123,11 +123,11 @@ def check_updates():
 
     dom.unlink()
 
-    if stable and beta:
+    if stable and beta and check_beta:
         return (stable, beta)
     if stable:
         return (stable,)
-    if beta:
+    if beta and check_beta:
         return (beta,)
     return ()
 

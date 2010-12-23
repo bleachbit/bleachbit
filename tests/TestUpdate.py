@@ -50,8 +50,7 @@ class UpdateTestCase(unittest.TestCase):
             ( (u'0.8.4', u'http://084') , ) ) )
         update_tests.append( ('<updates><beta ver="0.8.5beta">http://085beta</beta></updates>', \
             ( (u'0.8.5beta', u'http://085beta') , ) ) )
-        update_tests.append( ('<updates></updates>', \
-             () ))
+        update_tests.append( ('<updates></updates>', ()) )
 
         # fake network
         original_open = urllib2.build_opener
@@ -70,7 +69,7 @@ class UpdateTestCase(unittest.TestCase):
         urllib2.build_opener = fake_opener
         for update_test in update_tests:
             xml = update_test[0]
-            updates = check_updates()
+            updates = check_updates(True)
             self.assertEqual(updates, update_test[1])
         urllib2.build_opener = original_open
 
