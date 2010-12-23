@@ -155,7 +155,6 @@ class Cleaner:
                     print "debug: process '%s' is running" % pathname
                     return True
             elif 'exe' == test and 'nt' == os.name:
-                print 'debug: type(%s) = %s' % (pathname, type(pathname))
                 for p in Windows.enumerate_processes():
                     print 'debug: type(%s) = %s' % (p, type(p))
                     if p == pathname:
