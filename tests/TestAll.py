@@ -39,6 +39,7 @@ import TestGeneral
 import TestMemory
 import TestOptions
 import TestRecognizeCleanerML
+import TestSpecial
 import TestUpdate
 import TestWorker
 
@@ -54,6 +55,7 @@ suites = [ TestAction.suite(),
            TestMemory.suite(),
            TestOptions.suite(),
            TestRecognizeCleanerML.suite(),
+           TestSpecial.suite(),
            TestUpdate.suite(),
            TestWorker.suite() ]
 

@@ -28,6 +28,27 @@ from Options import options
 import FileUtilities
 
 
+def shred_sqlite_char_columns(cols):
+    """Create an SQL command to shred character columns"""
+    cmds = []
+    for col in cols:
+        assert(isinstance(col, (str, unicode)))
+        cmds.append("%s = randomblob(length(%s))" % (col, col) )
+    return ",".join(cmds)
+
+
+def delete_chrome_keywords(path):
+    """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
+    cmds = ""
+    if options.get('shred'):
+        cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
+        shred_keywords_cmd = "update keywords set " + \
+            shred_sqlite_char_columns(cols) + ";"
+        cmds = shred_keywords_cmd
+    cmds = cmds + " delete from keywords;"
+    # execute the commands
+    FileUtilities.execute_sqlite3(path, cmds)
+
 
 def delete_mozilla_url_history(path):
     """Delete URL history in Mozilla places.sqlite (Firefox 3 and family)"""
