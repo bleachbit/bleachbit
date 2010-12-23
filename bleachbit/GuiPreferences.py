@@ -68,6 +68,7 @@ class PreferencesDialog:
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
         options.toggle(path)
+        self.cb_beta.set_sensitive(options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.cb_refresh_operations()
         if 'auto_start' == path:
@@ -106,6 +107,12 @@ class PreferencesDialog:
             cb_updates.connect('toggled', self.__toggle_callback, 'check_online_updates')
             cb_updates.set_tooltip_text(_("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
+
+            self.cb_beta = gtk.CheckButton(_("Check for new beta releases"))
+            self.cb_beta.set_active(options.get('check_beta'))
+            self.cb_beta.set_sensitive(options.get('check_online_updates'))
+            self.cb_beta.connect('toggled', self.__toggle_callback, 'check_beta')
+            vbox.pack_start(self.cb_beta, False)
 
         # TRANSLATORS: This means to hide cleaners which would do
         # nothing.  For example, if Firefox were never used on
