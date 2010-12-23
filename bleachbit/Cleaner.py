@@ -39,6 +39,7 @@ import traceback
 
 import Command
 import FileUtilities
+import General
 import Memory
 import Special
 
@@ -413,6 +414,7 @@ class System(Cleaner):
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+            self.add_option('updates', _('Updates'), _('Delete hotfixes and service packs'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         # TRANSLATORS: 'free' means 'unallocated'
@@ -647,6 +649,10 @@ class System(Cleaner):
                 # fixme: enable size preview
                 yield Command.Function(None, emptyrecyclebin, label)
 
+        # Windows Updates
+        if 'nt' == os.name and 'updates' == option_id:
+            for wu in Windows.delete_updates():
+                yield wu
 
 
     def whitelisted(self, pathname):

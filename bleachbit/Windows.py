@@ -40,6 +40,7 @@ These are the terms:
 
 
 
+import glob
 import os
 import platform
 import re
@@ -62,8 +63,9 @@ if 'win32' == sys.platform:
     psapi = windll.psapi
     kernel = windll.kernel32
 
-import FileUtilities
+import Command
 import Common
+import FileUtilities
 import General
 
 def browse_file(hwnd, title):
@@ -181,6 +183,28 @@ def delete_registry_key(parent_key, really_delete):
         delete_registry_key(child_key, True)
     _winreg.DeleteKey(hive, parent_sub_key)
     return True
+
+
+def delete_updates():
+    """Returns commands for deleting Windows Updates files"""
+    windir = os.path.expandvars('$windir')
+    wu = glob.iglob(os.path.join(windir,'$NtUninstallKB*'))
+    if not wu:
+        # if nothing to delete, then also do not restart service
+        return
+    args = ['net', 'stop', 'wuauserv']
+    def wu_service():
+        General.run_external(args)
+        return 0
+    yield Command.Function(None, wu_service, " ".join(args))
+
+    for path1 in wu:
+        for path2 in FileUtilities.children_in_directory(path1, True):
+            yield Command.Delete(path2)
+        yield Command.Delete(path1)
+
+    args = ['net', 'start', 'wuauserv']
+    yield Command.Function(None, wu_service, " ".join(args))
 
 
 def elevate_privileges():
