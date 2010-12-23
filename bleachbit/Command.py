@@ -142,7 +142,8 @@ class Function:
                 try:
                     self.func(self.path)
                 except DatabaseError, e:
-                    if e.message.find('file is encrypted or is not a database') == -1:
+                    if -1 == e.message.find('file is encrypted or is not a database') and \
+                       -1 == e.message.find('or missing database'):
                         raise
                     print 'Warning:', e.message
                     return
