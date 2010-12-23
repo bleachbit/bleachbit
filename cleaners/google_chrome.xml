@@ -45,7 +45,7 @@
   <option id="dom">
     <label>DOM Storage</label>
     <description>Delete HTML5 cookies</description>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstoragex"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstorage"/>
     <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
         ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
         ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->
