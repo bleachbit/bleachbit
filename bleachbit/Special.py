@@ -62,7 +62,7 @@ def delete_mozilla_url_history(path):
         "and moz_bookmarks.id is null); "
 
     if options.get('shred'):
-        cols = ('set_url', 'rev_host', 'title')
+        cols = ('url', 'rev_host', 'title')
         cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
     delete_places_cmd = "delete from moz_places " + places_suffix
@@ -86,7 +86,7 @@ def delete_mozilla_url_history(path):
         "from moz_places ); "
 
     if options.get('shred'):
-        cols = ('set_url', 'data')
+        cols = ('url', 'data')
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     delete_fav_cmd = "delete from moz_favicons " + fav_suffix
