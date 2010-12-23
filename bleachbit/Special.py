@@ -31,13 +31,21 @@ import FileUtilities
 def __shred_sqlite_char_columns(table, cols, where = ""):
     """Create an SQL command to shred character columns"""
     cmd = ""
-    if options.get('shred'):
+    if cols and options.get('shred'):
         cmd += "update %s set %s %s;" % \
             (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]), where)
         cmd += "update %s set %s %s;" % \
             (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]), where)
     cmd += "delete from %s %s;" % (table, where)
     return cmd
+
+
+def delete_chrome_autofill(path):
+    """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
+    cols = ('name', 'value', 'value_lower')
+    cmds = __shred_sqlite_char_columns('autofill', cols)
+    cmds += __shred_sqlite_char_columns('autofill_dates', () )
+    FileUtilities.execute_sqlite3(path, cmds)
 
 
 def delete_chrome_keywords(path):

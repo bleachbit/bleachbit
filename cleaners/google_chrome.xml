@@ -53,6 +53,12 @@
     <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\databases\"/>
     <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/databases/"/>
   </option>
+  <option id="form_history">
+    <label>Form history</label>
+    <description>A history of forms entered in web sites</description>
+    <action command="chrome.autofill" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
+    <action command="chrome.autofill" search="file" path="~/.config/google-chrome/Default/Web Data"/>
+  </option>
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>

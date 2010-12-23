@@ -67,6 +67,16 @@ class SpecialTestCase(unittest.TestCase):
         self.assert_(not os.path.exists(filename))
 
 
+    def test_delete_chrome_autofill(self):
+        """Unit test for delete_chrome_autofill"""
+        sql = """
+CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR, pair_id INTEGER PRIMARY KEY, count INTEGER DEFAULT 1);
+INSERT INTO "autofill" VALUES('ltmpl','sso','sso',1,3);
+CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
+INSERT INTO "autofill_dates" VALUES(1,1268958682);
+"""
+        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_autofill)
+
 
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""

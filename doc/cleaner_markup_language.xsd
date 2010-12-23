@@ -75,6 +75,7 @@
                           <xs:restriction base="xs:string">
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
+                            <xs:enumeration value="chrome.autofill"/>
                             <xs:enumeration value="chrome.keywords"/>
                             <xs:enumeration value="delete"/>
                             <xs:enumeration value="ini"/>

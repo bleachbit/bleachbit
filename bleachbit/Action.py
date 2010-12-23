@@ -191,8 +191,20 @@ class AptAutoremove(ActionProvider):
                 'apt-get autoremove')
 
 
-class Chrome_Keywords(FileActionProvider):
-    """Action to clean keywords table in Google Chrome/Chromium"""
+class ChromeAutofill(FileActionProvider):
+    """Action to clean 'autofill' table in Google Chrome/Chromium"""
+    action_key = 'chrome.autofill'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_chrome_autofill, \
+               _('Clean file'))
+
+
+class ChromeKeywords(FileActionProvider):
+    """Action to clean 'keywords' table in Google Chrome/Chromium"""
     action_key = 'chrome.keywords'
 
     def get_commands(self):
