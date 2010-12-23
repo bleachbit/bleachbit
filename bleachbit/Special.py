@@ -30,21 +30,20 @@ import FileUtilities
 
 def __shred_sqlite_char_columns(table, cols, where = ""):
     """Create an SQL command to shred character columns"""
-    cmd1 = "update %s set %s %s;" % \
-        (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]), where)
-    cmd2 = "update %s set %s %s;" % \
-        (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]), where)
-    return cmd1 + cmd2
+    cmd = ""
+    if options.get('shred'):
+        cmd += "update %s set %s %s;" % \
+            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]), where)
+        cmd += "update %s set %s %s;" % \
+            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]), where)
+    cmd += "delete from %s %s;" % (table, where)
+    return cmd
 
 
 def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
-    cmds = ""
-    if options.get('shred'):
-        cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
-        cmds =  __shred_sqlite_char_columns('keywords', cols)
-    cmds = cmds + "delete from keywords;"
-    # execute the commands
+    cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
+    cmds = __shred_sqlite_char_columns('keywords', cols)
     FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -61,12 +60,8 @@ def delete_mozilla_url_history(path):
         "where moz_inputhistory.input is null " \
         "and moz_bookmarks.id is null); "
 
-    if options.get('shred'):
-        cols = ('url', 'rev_host', 'title')
-        cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
-
-    delete_places_cmd = "delete from moz_places " + places_suffix
-    cmds += delete_places_cmd
+    cols = ('url', 'rev_host', 'title')
+    cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
     # delete any orphaned annotations in moz_annos
     annos_suffix =  "where id in (select moz_annos.id " \
@@ -75,22 +70,14 @@ def delete_mozilla_url_history(path):
         "on moz_annos.place_id = moz_places.id " \
         "where moz_places.id is null); "
 
-    if options.get('shred'):
-        cmds += __shred_sqlite_char_columns('moz_annos', ('content', ), annos_suffix)
-
-    delete_annos_cmd = "delete from moz_annos " + annos_suffix
-    cmds += delete_annos_cmd
+    cmds += __shred_sqlite_char_columns('moz_annos', ('content', ), annos_suffix)
 
     # delete any orphaned favicons
     fav_suffix = "where id not in (select favicon_id " \
         "from moz_places ); "
 
-    if options.get('shred'):
-        cols = ('url', 'data')
-        cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
-
-    delete_fav_cmd = "delete from moz_favicons " + fav_suffix
-    cmds += delete_fav_cmd
+    cols = ('url', 'data')
+    cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     # delete any orphaned history visits
     cmds += "delete from moz_historyvisits where place_id not " \
