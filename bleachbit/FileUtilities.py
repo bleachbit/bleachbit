@@ -38,9 +38,6 @@ import tempfile
 import time
 import ConfigParser
 
-if not "iglob" in dir(glob):
-    glob.iglob = glob.glob
-
 if 'nt' == os.name:
     import win32file
 
