@@ -750,40 +750,17 @@ class GUI:
         self.progressbar.hide()
         return
 
-    def enable_online_update(self, url):
-        """Create a button to launch browser to initiate software update"""
-        icon = gtk.Image()
-        icon.set_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        update_button = gtk.ToolButton(icon_widget = icon, label = _p('button', 'Update BleachBit'))
-        update_button.show_all()
-        update_button.connect("clicked", \
-            lambda toolbutton, url: GuiBasic.open_url(url, self.window), url)
-        update_button.set_is_important(True)
-        self.toolbar.insert(update_button, -1)
-        msg = _("BleachBit update is available")
-        try:
-            import pynotify
-        except:
-            print "debug: pynotify not available"
-            self.append_text(msg)
-        else:
-            if pynotify.init(APP_NAME):
-                notify = pynotify.Notification(msg, _("Click 'Update BleachBit' for more information"))
-                # this doesn't align the notification properly
-                #n.attach_to_widget(update_button)
-                notify.attach_to_widget(self.toolbar)
-                notify.show()
-
 
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
         import Update
         try:
-            update = Update.Update()
-            if update.is_update_available():
-                gobject.idle_add(self.enable_online_update, update.get_update_info_url())
+            updates = Update.check_updates()
+            if updates:
+                gobject.idle_add(lambda: Update.update_dialog(self.window, updates))
         except:
+            traceback.print_exc()
             self.append_text(_("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
 
 

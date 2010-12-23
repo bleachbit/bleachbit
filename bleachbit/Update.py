@@ -24,6 +24,7 @@ Check for updates via the Internet
 """
 
 
+import gtk
 import platform
 import socket
 import sys
@@ -32,7 +33,8 @@ import urllib2
 import xml.dom.minidom
 
 import Common
-
+from Common import _
+from GuiBasic import open_url
 
 
 def user_agent():
@@ -65,40 +67,59 @@ def user_agent():
     return agent
 
 
-class Update:
+
+def update_dialog(parent, updates):
+    """Updates contains the version numbers and URLs"""
+    dlg = gtk.Dialog(title = _("Update BleachBit"), \
+        parent = parent, \
+        flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dlg.set_default_size(250, 125)
+
+    label = gtk.Label(_("A new version is available."))
+    dlg.vbox.pack_start(label)
+
+    for update in updates:
+        ver = update[0]
+        url = update[1]
+        box_update = gtk.HBox()
+        button_stable = gtk.Button(_("Update to version %s") % ver)
+        button_stable.connect('clicked', lambda dummy: open_url(url, parent, False))
+        button_stable.connect('clicked', lambda dummy: dlg.response(0))
+        box_update.pack_start(button_stable, False, padding = 10)
+        dlg.vbox.pack_start(box_update, False)
+
+    dlg.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+
+    dlg.show_all()
+    dlg.run()
+    dlg.destroy()
+
+    return False
+
+
+
+def check_updates():
     """Check for updates via the Internet"""
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-Agent', user_agent())]
+    socket.setdefaulttimeout(Common.socket_timeout)
+    handle = opener.open(Common.update_check_url)
+    doc = handle.read()
+    try:
+        dom = xml.dom.minidom.parseString(doc)
+    except:
+        print doc
+        raise
+    def parse_updates(element):
+        if element:
+            ver = element[0].getAttribute('ver')
+            url = element[0].firstChild.data
+            return (ver, url)
+        return ()
 
-    def __init__(self):
-        self.update_available = None
-        self.update_info_url = None
+    updates = ((parse_updates(dom.getElementsByTagName("stable"),),
+        (parse_updates(dom.getElementsByTagName("beta"),))))
+    dom.unlink()
 
-
-    def get_update_info_url(self):
-        """Return the URL with information about the update.
-        If no update is available, URL may be None."""
-        return self.update_info_url
-
-
-    def is_update_available(self):
-        """Return boolean whether update is available"""
-        opener = urllib2.build_opener()
-        opener.addheaders = [('User-Agent', user_agent())]
-        socket.setdefaulttimeout(Common.socket_timeout)
-        handle = opener.open(Common.update_check_url)
-        doc = handle.read()
-        try:
-            dom = xml.dom.minidom.parseString(doc)
-        except:
-            print doc
-            raise
-        elements = dom.getElementsByTagName("url")
-        if 0 == len(elements):
-            self.update_available = False
-        else:
-            self.update_info_url = elements[0].firstChild.data
-            self.update_available = True
-        dom.unlink()
-        return self.update_available
-
-
+    return (updates)
 

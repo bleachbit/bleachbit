@@ -24,13 +24,15 @@ Test case for module Update
 """
 
 
+import socket
 import sys
+import types
 import unittest
 import urllib2
 
 sys.path.append('.')
 from bleachbit import Common
-from bleachbit.Update import Update, user_agent
+from bleachbit.Update import check_updates, user_agent
 
 
 
@@ -38,16 +40,38 @@ class UpdateTestCase(unittest.TestCase):
     """Test case for module Update"""
 
 
-    def test_Update(self):
-        """Unit tests for class Update"""
-        update = Update()
-        available = update.is_update_available()
-        print "Update available = ", available
-        self.assert_ (type(available) is bool)
+    def test_UpdateCheck(self):
+        """Unit tests for class UpdateCheck"""
+        # fake network
+        original_open = urllib2.build_opener
+        class fake_opener:
+
+            def add_headers():
+                pass
+
+            def read(self):
+                return '<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta></updates>'
+
+            def open(self, url):
+                return self
+
+        urllib2.build_opener = fake_opener
+        updates = check_updates()
+        self.assertEqual(updates, ( (u'0.8.4', u'http://084') , (u'0.8.5beta', u'http://085beta')))
+        urllib2.build_opener = original_open
+
+        # real network
+        for update in check_updates():
+            if not update:
+                continue
+            ver = update[0]
+            url = update[1]
+            self.assert_(isinstance(ver, (types.NoneType, unicode)))
+            self.assert_(isinstance(url, (types.NoneType, unicode)))
 
         # test failure
-        Common.update_check_url = "http://www.surelydoesnotexist.com/foo"
-        self.assertRaises(urllib2.URLError, update.is_update_available)
+        Common.update_check_url = "http://localhost/doesnotexist"
+        self.assertRaises(urllib2.URLError, check_updates)
 
 
     def test_user_agent(self):
