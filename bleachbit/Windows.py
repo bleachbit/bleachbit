@@ -188,8 +188,11 @@ def delete_registry_key(parent_key, really_delete):
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
     windir = os.path.expandvars('$windir')
-    wu = glob.iglob(os.path.join(windir,'$NtUninstallKB*'))
-    if not wu:
+    dirs = glob.glob(os.path.join(windir,'$NtUninstallKB*'))
+    dirs += [ os.path.expandvars('$windir\\SoftwareDistribution\\Download') ]
+    dirs += [ os.path.expandvars('$windir\\ie7updates') ]
+    dirs += [ os.path.expandvars('$windir\\ie8updates') ]
+    if not dirs:
         # if nothing to delete, then also do not restart service
         return
     args = ['net', 'stop', 'wuauserv']
@@ -198,7 +201,7 @@ def delete_updates():
         return 0
     yield Command.Function(None, wu_service, " ".join(args))
 
-    for path1 in wu:
+    for path1 in dirs:
         for path2 in FileUtilities.children_in_directory(path1, True):
             yield Command.Delete(path2)
         yield Command.Delete(path1)

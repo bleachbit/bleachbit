@@ -414,7 +414,8 @@ class System(Cleaner):
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
-            self.add_option('updates', _('Updates'), _('Delete hotfixes and service packs'))
+            self.add_option('updates', _('Update uninstallers'), _('Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
+            self.set_warning('updates', _('This option is experimental and may cause system problems.'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         # TRANSLATORS: 'free' means 'unallocated'
