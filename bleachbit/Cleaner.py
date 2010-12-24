@@ -342,42 +342,6 @@ class OpenOfficeOrg(Cleaner):
                             _('Delete the usage history'))
 
 
-class rpmbuild(Cleaner):
-    """Delete the rpmbuild build directory"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.options = {}
-        self.add_option('cache', _('Cache'), _('Delete the cache'))
-
-    def get_description(self):
-        return _("Delete the files in the rpmbuild build folder")
-
-    def get_id(self):
-        return 'rpmbuild'
-
-    def get_name(self):
-        return "rpmbuild"
-
-    def get_commands(self, option_id):
-        if not 'cache' == option_id:
-            raise StopIteration
-
-        dirnames = set([ os.path.expanduser("~/rpmbuild/BUILD/") ])
-        try:
-            args = ["rpm", "--eval", "%_topdir"]
-            dirname = subprocess.Popen(args, stdout=subprocess.PIPE).\
-                communicate()[0]
-        except:
-            print "warning: exception '%s' running '%s'" % \
-                (str(sys.exc_info()[1]), " ".join(args))
-        else:
-            dirnames.add(dirname + "/BUILD")
-        for dirname in dirnames:
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
-
-
 class System(Cleaner):
     """System in general"""
 
@@ -414,6 +378,8 @@ class System(Cleaner):
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
             self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+            # TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
+            # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _('Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
             self.set_warning('updates', _('This option is experimental and may cause system problems.'))
         if HAVE_GTK:
@@ -677,8 +643,6 @@ class System(Cleaner):
 # initialize "hard coded" (non-CleanerML) backends
 backends = {}
 backends["firefox"] = Firefox()
-if 'posix' == os.name:
-    backends["rpmbuild"] = rpmbuild()
 backends["openofficeorg"] = OpenOfficeOrg()
 backends["system"] = System()
 
