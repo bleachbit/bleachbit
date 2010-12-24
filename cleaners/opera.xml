@@ -52,6 +52,12 @@
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
   </option>
+  <option id="dom">
+    <label>DOM Storage</label>
+    <description>Delete HTML5 cookies</description>
+    <action command="delete" search="walk.all" path="$appdata\Opera\Opera*\pstorage\"/>
+    <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
+  </option>
   <option id="download_history">
     <label>Download history</label>
     <description>List of files downloaded</description>
