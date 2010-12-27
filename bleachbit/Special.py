@@ -97,7 +97,7 @@ def delete_mozilla_url_history(path):
 
 
 def delete_ooo_history(path):
-    """Erase the Openoffice.org MRU in Common.xcu"""
+    """Erase the OpenOffice.org MRU in Common.xcu"""
     import xml.dom.minidom
     dom1 = xml.dom.minidom.parse(path)
     for node in dom1.getElementsByTagName("node"):
