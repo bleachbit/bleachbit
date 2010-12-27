@@ -82,14 +82,14 @@ def delete_mozilla_url_history(path):
 
     # delete any orphaned favicons
     fav_suffix = "where id not in (select favicon_id " \
-        "from moz_places ); "
+        "from moz_places where favicon_id is not null ); "
 
     cols = ('url', 'data')
     cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     # delete any orphaned history visits
     cmds += "delete from moz_historyvisits where place_id not " \
-        "in (select id from moz_places); "
+        "in (select id from moz_places where id is not null); "
 
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
