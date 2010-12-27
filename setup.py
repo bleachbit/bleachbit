@@ -102,7 +102,6 @@ if 'py2exe' in sys.argv:
             'includes' : ['atk', 'cairo', 'gobject', 'pango', 'pangocairo', 'simplejson' ],
             'excludes' : ['_ssl', 'pyreadline', 'difflib', 'doctest',
                 'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
-            'dll_excludes' : [ 'msvcr71.dll' ],
             'compressed' : True # create a compressed zipfile
             }
         }
