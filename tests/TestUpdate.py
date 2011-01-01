@@ -74,7 +74,7 @@ class UpdateTestCase(unittest.TestCase):
         urllib2.build_opener = original_open
 
         # real network
-        for update in check_updates():
+        for update in check_updates(True):
             if not update:
                 continue
             ver = update[0]
@@ -84,7 +84,7 @@ class UpdateTestCase(unittest.TestCase):
 
         # test failure
         Common.update_check_url = "http://localhost/doesnotexist"
-        self.assertRaises(urllib2.URLError, check_updates)
+        self.assertRaises(urllib2.URLError, check_updates, True)
 
 
     def test_user_agent(self):
