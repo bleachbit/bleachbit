@@ -204,7 +204,8 @@ def delete_updates():
     for path1 in dirs:
         for path2 in FileUtilities.children_in_directory(path1, True):
             yield Command.Delete(path2)
-        yield Command.Delete(path1)
+        if os.path.exists(path1):
+            yield Command.Delete(path1)
 
     args = ['net', 'start', 'wuauserv']
     yield Command.Function(None, wu_service, " ".join(args))
