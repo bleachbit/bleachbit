@@ -62,7 +62,6 @@
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
-    <action command="chrome.keywords" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
@@ -72,7 +71,6 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
-    <action command="chrome.keywords" search="file" path="~/.config/google-chrome/Default/Web Data"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History"/>
@@ -83,6 +81,12 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??-journal"/>
+  </option>
+  <option id="search_engines">
+    <label>Search engines</label>
+    <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
+    <action command="chrome.keywords" search="file" path="~/.config/google-chrome/Default/Web Data"/>
+    <action command="chrome.keywords" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
   </option>
   <option id="session">
     <label>Session</label>

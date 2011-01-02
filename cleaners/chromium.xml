@@ -61,7 +61,6 @@
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
-    <action command="chrome.keywords" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Favicons"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
@@ -74,7 +73,6 @@
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??-journal"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History"/>
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
-    <action command="chrome.keywords" search="file" path="~/.config/chromium/Default/Web Data"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Favicons"/>
@@ -86,6 +84,12 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
+  </option>
+  <option id="search_engines">
+    <label>Search engines</label>
+    <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
+    <action command="chrome.keywords" search="file" path="~/.config/chromium/Default/Web Data"/>
+    <action command="chrome.keywords" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
   </option>
   <option id="current_session">
     <label>Current session</label>
