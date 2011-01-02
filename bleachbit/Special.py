@@ -51,7 +51,8 @@ def delete_chrome_autofill(path):
 def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
-    cmds = __shred_sqlite_char_columns('keywords', cols)
+    where = "where date_created = 0"
+    cmds = __shred_sqlite_char_columns('keywords', cols, where)
     FileUtilities.execute_sqlite3(path, cmds)
 
 
