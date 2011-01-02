@@ -53,6 +53,7 @@ def delete_chrome_keywords(path):
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
     where = "where date_created = 0"
     cmds = __shred_sqlite_char_columns('keywords', cols, where)
+    cmds += "update keywords set usage_count = 0;"
     FileUtilities.execute_sqlite3(path, cmds)
 
 
