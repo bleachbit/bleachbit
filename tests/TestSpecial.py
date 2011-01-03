@@ -40,14 +40,14 @@ class SpecialTestCase(unittest.TestCase):
     """Test case for module Special"""
 
 
-    def sqlite_clean_helper(self, sql, func):
+    def sqlite_clean_helper(self, sql, clean_func, check_func = None):
         """Helper for cleaning special SQLite cleaning"""
 
         # create test file
         (fd, filename) = tempfile.mkstemp()
         os.close(fd)
         self.assertRaises(sqlite3.DatabaseError, \
-            func, filename)
+            clean_func, filename)
         bleachbit.FileUtilities.execute_sqlite3(filename, sql)
         self.assert_(os.path.exists(filename))
 
@@ -55,12 +55,16 @@ class SpecialTestCase(unittest.TestCase):
         old_shred = options.get('shred')
         options.set('shred', False, commit = False)
         self.assertEqual(False, options.get('shred'))
-        func(filename)
+        clean_func(filename)
         options.set('shred', True, commit = False)
         self.assertEqual(True, options.get('shred'))
         options.set('shred', old_shred, commit = False)
-        func(filename)
+        clean_func(filename)
         self.assert_(os.path.exists(filename))
+
+        # check
+        if check_func:
+            check_func(self, filename)
 
         # tear down
         bleachbit.FileUtilities.delete(filename)
@@ -81,9 +85,24 @@ INSERT INTO "autofill_dates" VALUES(1,1268958682);
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
         sql = """
-CREATE TABLE "keywords" (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,show_in_default_list INTEGER,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,autogenerate_keyword INTEGER DEFAULT 0,logo_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR);
-INSERT INTO "keywords" VALUES(2,'Google','google.com','http://www.google.com/favicon.ico','{google:baseURL}search?{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}sourceid=chrome&ie={inputEncoding}&q={searchTerms}',1,1,'',0,0,'UTF-8','{google:baseSuggestURL}search?client=chrome&hl={language}&q={searchTerms}',1,1,6245,0,'{google:baseURL}search?{google:RLZ}sourceid=chrome-instant&ie={inputEncoding}&q={searchTerms}');"""
-        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_keywords)
+CREATE TABLE keywords (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,show_in_default_list INTEGER,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,autogenerate_keyword INTEGER DEFAULT 0,logo_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR);
+INSERT INTO "keywords" VALUES(2,'Google','google.com','http://www.google.com/favicon.ico','{google:baseURL}search?{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}sourceid=chrome&ie={inputEncoding}&q={searchTerms}',1,1,'',0,0,'UTF-8','{google:baseSuggestURL}search?client=chrome&hl={language}&q={searchTerms}',1,1,6245,0,'{google:baseURL}search?{google:RLZ}sourceid=chrome-instant&ie={inputEncoding}&q={searchTerms}');
+INSERT INTO "keywords" VALUES(3,'Yahoo!','yahoo.com','http://search.yahoo.com/favicon.ico','http://search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,1,'',0,0,'UTF-8','http://ff.search.yahoo.com/gossip?output=fxjson&command={searchTerms}',2,0,6262,0,'');
+INSERT INTO "keywords" VALUES(4,'Bing','bing.com','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=en-US&q={searchTerms}',1,1,'',0,0,'UTF-8','http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',3,0,6239,0,'');
+INSERT INTO "keywords" VALUES(5,'CNN.com','cnn.com','http://www.cnn.com/favicon.ico','http://www.cnn.com/search/?query={searchTerms}',0,1,'http://www.cnn.com/tools/search/cnncom.xml',1294062457,0,'UTF-8','',0,0,0,0,'');
+"""
+
+        def check_chrome_keywords(self, filename):
+            conn = sqlite3.connect(filename)
+            c = conn.cursor()
+            c.execute('select id from keywords')
+            ids = []
+            for row in c:
+                ids.append(row[0])
+            self.assertEqual(ids, [2,3,4])
+
+        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_keywords, \
+            check_chrome_keywords)
 
 
     def test_delete_mozilla_url_history(self):
