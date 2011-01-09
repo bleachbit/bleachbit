@@ -8,21 +8,20 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-01-02 15:23-0700\n"
-"PO-Revision-Date: 2011-01-05 10:24+0000\n"
-"Last-Translator: Launchpad Translations Administrators "
-"<rosetta@launchpad.net>\n"
+"PO-Revision-Date: 2011-01-09 18:53+0000\n"
+"Last-Translator: olavi tohver <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-05 17:08+0000\n"
-"X-Generator: Launchpad (build 12138)\n"
+"X-Launchpad-Export-Date: 2011-01-09 22:44+0000\n"
+"X-Generator: Launchpad (build 12161)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 msgid "Game"
-msgstr ""
+msgstr "Mängud"
 
 #: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
 #: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/kde.xml
@@ -39,11 +38,11 @@ msgstr ""
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:187
 #: ../bleachbit/Cleaner.py:291 ../bleachbit/Cleaner.py:358
 msgid "Cache"
-msgstr ""
+msgstr "Puhver"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr ""
+msgstr "Kustuta mängu serverite list"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
@@ -58,7 +57,7 @@ msgstr ""
 #: ../bleachbit/Cleaner.py:358 ../bleachbit/Cleaner.py:377
 #: ../bleachbit/Cleaner.py:379
 msgid "Delete the cache"
-msgstr ""
+msgstr "Kustuta vahemälu"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -87,7 +86,7 @@ msgstr ""
 #: ../cleaners/elinks.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:209
 msgid "Web browser"
-msgstr ""
+msgstr "Veebisirvija"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -103,7 +102,7 @@ msgstr ""
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
 #: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:188
 msgid "Cookies"
-msgstr ""
+msgstr "Küpsised"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -115,6 +114,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
+"Kustuta küpsised, mis sisaldavad informatsiooni nagu veebisaitide "
+"atribuudid, autentimised ja jälgimistunnustused"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
@@ -125,7 +126,7 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
 msgid "Delete HTML5 cookies"
-msgstr ""
+msgstr "Kustuta HTML5 küpsised"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
@@ -144,16 +145,17 @@ msgstr ""
 #: ../cleaners/elinks.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/realplayer.xml
 msgid "History"
-msgstr ""
+msgstr "Ajalugu"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
+"Kustuta ajalugu, mis sisaldab külastatud saite, allalaadimisi ja pisipilte"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
-msgstr ""
+msgstr "Otsingumootorid"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
@@ -163,11 +165,11 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
-msgstr ""
+msgstr "Praegune sessioon"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Kustuta praegune sessioon"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
@@ -178,16 +180,17 @@ msgstr ""
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
-msgstr ""
+msgstr "Redaktor"
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"Kustuta ~/.viminfo,  mis sisaldab faili ajalugu, käskude ajalugu ja puhvreid."
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr ""
+msgstr "Multimeedia mängija"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -196,7 +199,7 @@ msgstr ""
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:375
 msgid "Logs"
-msgstr ""
+msgstr "Logid"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -204,7 +207,7 @@ msgstr ""
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:375
 msgid "Delete the logs"
-msgstr ""
+msgstr "Kustuta logid"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
@@ -225,21 +228,21 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:195
 msgid "List of visited web pages"
-msgstr ""
+msgstr "Külastatud veebisaitide list"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:392
 msgid "Temporary files"
-msgstr ""
+msgstr "Ajutised failid"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:392
 msgid "Delete the temporary files"
-msgstr ""
+msgstr "Kustuta ajutised failid"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
 #: ../cleaners/wordpad.xml ../cleaners/winamp.xml
@@ -248,40 +251,40 @@ msgstr ""
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/paint.xml ../bleachbit/Cleaner.py:292
 msgid "Most recently used"
-msgstr ""
+msgstr "Hiljuti kasutatud"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
 #: ../bleachbit/Cleaner.py:292 ../bleachbit/Cleaner.py:367
 msgid "Delete the list of recently used documents"
-msgstr ""
+msgstr "Kustuta hiljuti kasutatud dokumentide nimekiri"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:367
 msgid "Recent documents list"
-msgstr ""
+msgstr "Hiljutiste dokumentide nimekiri"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
-msgstr ""
+msgstr "Suhtlusprogrammid"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "Suhtluslogid"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "Kustuta suhtlemise logid"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "Kustuta külastatud veebilehekülgede nimekiri"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -289,15 +292,15 @@ msgstr ""
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr ""
+msgstr "Otsingutööriist"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
-msgstr ""
+msgstr "Otsinguindeksid"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr ""
+msgstr "Kustuta otsinguindeksid"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
@@ -306,29 +309,29 @@ msgstr ""
 
 #: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
-msgstr ""
+msgstr "Kustuta failid"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "Download history"
-msgstr ""
+msgstr "Allalaadimise ajalugu"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "List of files downloaded"
-msgstr ""
+msgstr "Allalaetud failide nimekiri"
 
 #: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Search history"
-msgstr ""
+msgstr "Otsingu ajalugu"
 
 #: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the search history"
-msgstr ""
+msgstr "Kustuta otsingu ajalugu"
 
 #: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:195
 msgid "URL history"
-msgstr ""
+msgstr "URL´i ajalugu"
 
 #: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
@@ -340,7 +343,7 @@ msgstr ""
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:194
 msgid "Passwords"
-msgstr ""
+msgstr "Paroolid"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:194
@@ -351,7 +354,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
-msgstr ""
+msgstr "Asukohad"
 
 #: ../cleaners/epiphany.xml
 msgid ""
@@ -361,7 +364,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr ""
+msgstr "See valik kustutab kõik järjehoidjad."
 
 #: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:302
 msgid "Office suite"
@@ -373,7 +376,7 @@ msgstr ""
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr ""
+msgstr "Varundusfailid"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
@@ -381,27 +384,27 @@ msgstr ""
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Allalaetud podcastid"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Kustuta allalaetud podcastid"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
-msgstr ""
+msgstr "Seanss"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr ""
+msgstr "Kustuta praegune ja eelmine seanss"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Kustuta avataride ja emotikonide vahemälu"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Täielik skänneering"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -409,7 +412,7 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr ""
+msgstr "See valik on aeglane."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -417,11 +420,11 @@ msgstr ""
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr ""
+msgstr "Pisipildid"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
-msgstr ""
+msgstr "Kustuta käskude ajalugu"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -431,7 +434,7 @@ msgstr ""
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
+msgstr "Kustuta küpsised, külastatud URLid ja otsingu ajalugu"
 
 #: ../cleaners/recoll.xml
 msgid "Index"
@@ -444,7 +447,7 @@ msgstr ""
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "Mittevajalike failide puhastaja"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
@@ -962,7 +965,8 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  bushido https://launchpad.net/~olav-magi"
+"  bushido https://launchpad.net/~olav-magi\n"
+"  olavi tohver https://launchpad.net/~olts16"
 
 #: ../bleachbit/GUI.py:413
 msgid "System information"
