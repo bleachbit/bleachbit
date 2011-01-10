@@ -38,7 +38,7 @@ def destructive_tests(title):
     return False
 
 
-def validate_result(self, result):
+def validate_result(self, result, really_delete = False):
     """Validate the command returned valid results"""
     self.assert_(type(result) is dict, "result is a %s" % type(result))
     # label
@@ -58,6 +58,10 @@ def validate_result(self, result):
         "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
     if isinstance(filename, (str, unicode)) and \
         not filename[0:2] == 'HK':
-        self.assert_ (os.path.lexists(filename), \
-            "Path does not exist: '%s'" % (filename))
+        if really_delete:
+            self.assert_ (not os.path.lexists(filename), \
+                "Path exists: '%s'" % (filename))
+        else:
+            self.assert_ (os.path.lexists(filename), \
+                "Path does not exist: '%s'" % (filename))
 

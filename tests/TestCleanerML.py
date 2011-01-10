@@ -51,7 +51,7 @@ class CleanerMLTestCase(unittest.TestCase):
             for (option_id, __name) in xmlcleaner.cleaner.get_options():
                 for cmd in xmlcleaner.cleaner.get_commands(option_id):
                     for result in cmd.execute(really_delete):
-                        common.validate_result(self, result)
+                        common.validate_result(self, result, really_delete)
 
         # preview
         run_all(False)

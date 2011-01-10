@@ -41,6 +41,7 @@ import TestOptions
 import TestRecognizeCleanerML
 import TestSpecial
 import TestUpdate
+import TestWinapp
 import TestWorker
 
 
@@ -57,6 +58,7 @@ suites = [ TestAction.suite(),
            TestRecognizeCleanerML.suite(),
            TestSpecial.suite(),
            TestUpdate.suite(),
+           TestWinapp.suite(),
            TestWorker.suite() ]
 
 if 'posix' == os.name:
