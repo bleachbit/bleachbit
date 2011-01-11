@@ -47,7 +47,10 @@ def xml_escape(s):
 
 def section2option(s):
     """Normalize section name to appropriate option name"""
-    return re.sub(r'[^a-z]', ' ', s.lower())
+    ret = re.sub(r'[^a-z0-9]', '_', s.lower())
+    ret = re.sub(r'_+', '_', ret)
+    ret = re.sub(r'(^_|_$)', '', ret)
+    return ret
 
 
 class Winapp:

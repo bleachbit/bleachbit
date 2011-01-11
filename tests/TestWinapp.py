@@ -30,7 +30,7 @@ import sys
 import unittest
 
 sys.path.append('.')
-from bleachbit.Winapp import Winapp
+from bleachbit.Winapp import Winapp, section2option
 
 import common
 
@@ -147,6 +147,14 @@ class WinappTestCase(unittest.TestCase):
         self.assert_(not os.path.exists(ini_fn))
         self.assert_(not os.path.exists(dirname))
         self.assert_(cleaner.cleaner.auto_hide())
+
+
+    def test_section2option(self):
+        """Test for section2option()"""
+        tests = ( ('  FOO2  ', 'foo2'), \
+            ('A - B (C)', 'a_b_c') )
+        for test in tests:
+            self.assertEqual(section2option(test[0]), test[1])
 
 
 def suite():
