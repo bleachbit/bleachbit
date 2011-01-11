@@ -27,6 +27,7 @@ Command line interface
 
 
 import optparse
+import os
 import sys
 
 from Cleaner import backends
