@@ -52,22 +52,27 @@ def get_winapp2():
     return fn
 
 
+
 class WinappTestCase(unittest.TestCase):
     """Test cases for Winapp"""
 
 
-    def test_(self):
+    def run_all(self, cleaner, really_delete):
+        for (option_id, __name) in cleaner.cleaner.get_options():
+            for cmd in cleaner.cleaner.get_commands(option_id):
+                for result in cmd.execute(really_delete):
+                    common.validate_result(self, result, really_delete)
+
+
+    def test_remote(self):
         """Unit test for class Winapp"""
         cleaner = Winapp(get_winapp2())
 
-        def run_all(really_delete):
-            for (option_id, __name) in cleaner.cleaner.get_options():
-                for cmd in cleaner.cleaner.get_commands(option_id):
-                    for result in cmd.execute(really_delete):
-                        common.validate_result(self, result, really_delete)
+        self.run_all(cleaner, False)
 
-        # preview
-        run_all(False)
+
+    def test_fake(self):
+
 
         # fake file
         def ini2cleaner(filekey):
@@ -84,29 +89,38 @@ class WinappTestCase(unittest.TestCase):
         f1 = os.path.join(dirname, 'deleteme.log')
         file(f1, 'w').write('')
         cleaner = ini2cleaner('FileKey1=%s|deleteme.log\n' % dirname)
+        self.assert_(not cleaner.cleaner.auto_hide())
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(f1))
-        run_all(True)
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(cleaner.cleaner.auto_hide())
 
         # *.log
         file(f1, 'w').write('')
         cleaner = ini2cleaner('FileKey1=%s|*.LOG' % dirname)
+        self.assert_(not cleaner.cleaner.auto_hide())
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(f1))
-        run_all(True)
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(cleaner.cleaner.auto_hide())
 
         # *.*
         file(f1, 'w').write('')
         cleaner = ini2cleaner('FileKey1=%s|*.*' % dirname)
+        self.assert_(not cleaner.cleaner.auto_hide())
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(f1))
-        run_all(True)
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
         self.assert_(not os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(cleaner.cleaner.auto_hide())
 
         # recurse *.*
         dirname2 = os.path.join(dirname, 'sub')
@@ -114,24 +128,27 @@ class WinappTestCase(unittest.TestCase):
         f2 = os.path.join(dirname2, 'deleteme.log')
         file(f2, 'w').write('')
         cleaner = ini2cleaner('FileKey1=%s|*.*|RECURSE' % dirname)
+        self.assert_(not cleaner.cleaner.auto_hide())
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(f2))
-        run_all(True)
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
         self.assert_(not os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(cleaner.cleaner.auto_hide())
 
         # remove self *.*
         f2 = os.path.join(dirname2, 'deleteme.log')
         file(f2, 'w').write('')
         cleaner = ini2cleaner('FileKey1=%s|*.*|REMOVESELF' % dirname)
+        self.assert_(not cleaner.cleaner.auto_hide())
         self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(f2))
-        run_all(True)
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
         self.assert_(not os.path.exists(ini_fn))
         self.assert_(not os.path.exists(dirname))
-
-
-
+        self.assert_(cleaner.cleaner.auto_hide())
 
 
 def suite():
