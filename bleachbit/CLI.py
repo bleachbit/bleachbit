@@ -77,6 +77,9 @@ def init_cleaners():
     """Prepare the cleaners for use"""
     import CleanerML
     CleanerML.load_cleaners()
+    if 'nt' == os.name:
+        import Winapp
+        Winapp.load_cleaners()
 
 
 def cleaners_list():
