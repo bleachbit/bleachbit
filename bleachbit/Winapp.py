@@ -45,6 +45,11 @@ def xml_escape(s):
     return s.replace('&', '&amp;')
 
 
+def section2option(s):
+    """Normalize section name to appropriate option name"""
+    return re.sub(r'[^a-z]', ' ', s.lower())
+
+
 class Winapp:
     """Create cleaners from a Winapp2.ini-style file"""
 
@@ -63,7 +68,7 @@ class Winapp:
 
     def handle_section(self, section):
         """Parse a section"""
-        self.cleaner.add_option(section, 'name', 'description')
+        self.cleaner.add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
                 self.handle_filekey(section, option)
@@ -129,7 +134,7 @@ class Winapp:
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
             for cmd in provider.get_commands():
                 print 'debug: cmd', cmd
-            self.cleaner.add_action(ini_section, provider)
+            self.cleaner.add_action(section2option(ini_section), provider)
 
 
     def get_cleaner(self):
