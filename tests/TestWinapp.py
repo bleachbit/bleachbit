@@ -58,6 +58,7 @@ class WinappTestCase(unittest.TestCase):
 
 
     def run_all(self, cleaner, really_delete):
+        """Test all the cleaner options"""
         for (option_id, __name) in cleaner.cleaner.get_options():
             for cmd in cleaner.cleaner.get_commands(option_id):
                 for result in cmd.execute(really_delete):
@@ -65,16 +66,13 @@ class WinappTestCase(unittest.TestCase):
 
 
     def test_remote(self):
-        """Unit test for class Winapp"""
+        """Test with downloaded file"""
         cleaner = Winapp(get_winapp2())
-
         self.run_all(cleaner, False)
 
 
     def test_fake(self):
-
-
-        # fake file
+        """Test with fake file"""
         def ini2cleaner(filekey):
             ini = file(ini_fn, 'w')
             ini.write('[someapp]\n')
