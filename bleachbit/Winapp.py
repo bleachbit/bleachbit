@@ -20,7 +20,7 @@
 
 
 """
-Import Winapp2.ini (and Winapp1.ini) files
+Import Winapp2.ini files
 """
 
 
@@ -31,6 +31,7 @@ import ConfigParser
 import os
 import re
 import sys
+import traceback
 
 from Action import ActionProvider, Delete
 from Common import _
@@ -51,9 +52,11 @@ class Winapp:
         """Create cleaners from a Winapp2.ini-style file"""
 
         self.cleaner = Cleaner.Cleaner()
+        self.cleaner.id = 'winapp2'
+        self.cleaner.description = 'Winapp2.ini temporary description'
+        self.cleaner.name = 'Winapp2.ini temporary name'
         self.parser = ConfigParser.RawConfigParser()
         self.parser.read(pathname)
-        self.cleaner.description = 'Winapp2.ini'
         for section in self.parser.sections():
             self.handle_section(section)
 
@@ -68,7 +71,7 @@ class Winapp:
                 print 'fixme: regkey'
             elif option in ('default'):
                 pass
-            elif option in ('langsecref', 'detect'):
+            elif option in ('langsecref', 'detect', 'detectfile'):
                 print 'fixme:', option
             else:
                 print 'WARNING: unknown option', option
@@ -102,10 +105,13 @@ class Winapp:
             yield Delete(parseString(action_str).childNodes[0])
 
 
-    def handle_filekey(self, section, option):
-        """Parse a FileKey# option"""
-        elements = self.parser.get(section, option).split('|')
+    def handle_filekey(self, ini_section, ini_option):
+        """Parse a FileKey# option.
+
+        Section is [Application Name] and option is the FileKey#"""
+        elements = self.parser.get(ini_section, ini_option).split('|')
         dirname = elements.pop(0)
+        dirname = re.sub(r'%([a-zA-Z]+)%', r'$\1', dirname)
         filename = ""
         if elements:
             filename = elements.pop(0)
@@ -119,9 +125,11 @@ class Winapp:
                 removeself = True
             else:
                 print 'WARNING: unknown file option', element
-        print self.parser.get(section, option)
+        print 'debug:', self.parser.get(ini_section, ini_option)
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
-            self.cleaner.add_action(section, provider)
+            for cmd in provider.get_commands():
+                print 'debug: cmd', cmd
+            self.cleaner.add_action(ini_section, provider)
 
 
     def get_cleaner(self):
@@ -129,6 +137,27 @@ class Winapp:
         return self.cleaner
 
 
+def list_winapp_files():
+    """List winapp2.ini files"""
+    fn = os.path.join(Common.personal_cleaners_dir, 'winapp2.ini')
+    if os.path.exists(fn):
+        yield fn
+
+
+def load_cleaners():
+    """Scan for winapp2.ini files and load them"""
+    for pathname in list_winapp_files():
+        try:
+            inicleaner = Winapp(pathname)
+        except:
+            print "Error reading winapp2.ini cleaner '%s'" % pathname
+            traceback.print_exc()
+        else:
+            cleaner = inicleaner.get_cleaner()
+            if cleaner.is_usable():
+                Cleaner.backends[cleaner.id] = cleaner
+            else:
+                print 'debug: "%s" is not usable' % pathname
 
 
 

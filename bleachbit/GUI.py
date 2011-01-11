@@ -772,6 +772,9 @@ class GUI:
         RecognizeCleanerML.RecognizeCleanerML()
         import CleanerML
         CleanerML.load_cleaners()
+        if 'nt' == os.name:
+            import Winapp
+            Winapp.load_cleaners()
         self.create_window()
         gobject.threads_init()
         if options.get("first_start") and 'posix' == os.name:
@@ -790,7 +793,6 @@ class GUI:
                 print e
                 print dir(e)
                 self.append_text(_("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
-
 
 
 if __name__ == '__main__':
