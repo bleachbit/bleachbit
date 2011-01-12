@@ -37,6 +37,7 @@ from Action import ActionProvider, Delete
 from Common import _
 from FileUtilities import listdir
 from General import boolstr_to_bool, getText
+from Windows import detect_registry_key
 from xml.dom.minidom import parseString
 
 
@@ -51,6 +52,10 @@ def section2option(s):
     ret = re.sub(r'_+', '_', ret)
     ret = re.sub(r'(^_|_$)', '', ret)
     return ret
+
+def preexpand(s):
+    """Prepare pathname for expansion by changing %foo% to ${foo}"""
+    return re.sub(r'%([a-zA-Z]+)%', r'${\1}', s)
 
 
 class Winapp:
@@ -71,15 +76,23 @@ class Winapp:
 
     def handle_section(self, section):
         """Parse a section"""
+        if self.parser.has_option(section, 'detect'):
+            key = self.parser.get(section, 'detect')
+            if not detect_registry_key(key):
+                return
+        if self.parser.has_option(section, 'detectfile'):
+            pathname = os.path.expandvars(preexpand(self.parser.get(section, 'detectfile')))
+            if not os.path.exists(pathname):
+                return
         self.cleaner.add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
                 self.handle_filekey(section, option)
             elif option.startswith('regkey'):
                 print 'fixme: regkey'
-            elif option in ('default'):
+            elif option in ('default', 'detectfile', 'detect'):
                 pass
-            elif option in ('langsecref', 'detect', 'detectfile'):
+            elif option in ('langsecref'):
                 print 'fixme:', option
             else:
                 print 'WARNING: unknown option', option
@@ -118,8 +131,7 @@ class Winapp:
 
         Section is [Application Name] and option is the FileKey#"""
         elements = self.parser.get(ini_section, ini_option).split('|')
-        dirname = elements.pop(0)
-        dirname = re.sub(r'%([a-zA-Z]+)%', r'$\1', dirname)
+        dirname = preexpand(elements.pop(0))
         filename = ""
         if elements:
             filename = elements.pop(0)
