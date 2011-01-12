@@ -38,6 +38,7 @@ from Common import _
 from FileUtilities import listdir
 from General import boolstr_to_bool, getText
 from Windows import detect_registry_key
+from platform import uname
 from xml.dom.minidom import parseString
 
 
@@ -83,6 +84,11 @@ class Winapp:
         if self.parser.has_option(section, 'detectfile'):
             pathname = os.path.expandvars(preexpand(self.parser.get(section, 'detectfile')))
             if not os.path.exists(pathname):
+                return
+        if self.parser.has_option(section, 'detectos'):
+            min_os = self.parser.get(section, 'detectos')
+            cur_os = uname()[3][0:3]
+            if min_os > cur_os:
                 return
         self.cleaner.add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
