@@ -100,6 +100,8 @@ class Winapp:
                 self.handle_filekey(section, option)
             elif option.startswith('regkey'):
                 self.handle_regkey(section, option)
+            elif option == 'warning':
+                self.cleaner.set_warning(section2option(section), self.parser.get(section, 'warning'))
             elif option in ('default', 'detectfile', 'detect'):
                 pass
             elif option in ('langsecref'):
