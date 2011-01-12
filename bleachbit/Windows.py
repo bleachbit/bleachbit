@@ -211,6 +211,23 @@ def delete_updates():
     yield Command.Function(None, wu_service, " ".join(args))
 
 
+def detect_registry_key(parent_key):
+    """Detect whether registry key exists"""
+    parent_key = str(parent_key) # Unicode to byte string
+    (hive, parent_sub_key) = split_registry_key(parent_key)
+    hkey = None
+    try:
+        hkey = _winreg.OpenKey(hive, parent_sub_key)
+    except WindowsError, e:
+        if e.winerror == 2:
+            # 2 = 'file not found' happens when key does not exist
+            return False
+    if not hkey:
+        # key not found
+        return False
+    return True
+
+
 def elevate_privileges():
     """On Windows Vista and later, try to get administrator
     privileges.  If successful, return True (so original process

@@ -121,6 +121,12 @@ class WindowsTestCase(unittest.TestCase):
         self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, True), False)
 
 
+    def test_detect_registry_key(self):
+        """Test for detect_registry_key()"""
+        self.assert_(detect_registry_key('HKCU\\Software\\Microsoft\\'))
+        self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
+
+
     def test_enumerate_processes(self):
         def tep_helper(processes):
             for process in processes:
