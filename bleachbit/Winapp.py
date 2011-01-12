@@ -94,6 +94,9 @@ class Winapp:
             cur_os = uname()[3][0:3]
             if min_os > cur_os:
                 return
+        if self.parser.has_option(section, 'excludekey'):
+            print 'ERROR: ExcludeKey not implemented, section=', section
+            return
         self.cleaner.add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
