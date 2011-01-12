@@ -44,7 +44,7 @@ from xml.dom.minidom import parseString
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
-    return s.replace('&', '&amp;')
+    return s.replace('&', '&amp;').replace('"', '&quot;')
 
 
 def section2option(s):
@@ -72,7 +72,11 @@ class Winapp:
         self.parser = ConfigParser.RawConfigParser()
         self.parser.read(pathname)
         for section in self.parser.sections():
-            self.handle_section(section)
+            try:
+                self.handle_section(section)
+            except:
+                print 'ERROR: parsing error in section %s' % section
+                traceback.print_exc()
 
 
     def handle_section(self, section):
@@ -95,7 +99,7 @@ class Winapp:
             if option.startswith('filekey'):
                 self.handle_filekey(section, option)
             elif option.startswith('regkey'):
-                print 'fixme: regkey'
+                self.handle_regkey(section, option)
             elif option in ('default', 'detectfile', 'detect'):
                 pass
             elif option in ('langsecref'):
@@ -153,9 +157,18 @@ class Winapp:
                 print 'WARNING: unknown file option', element
         print 'debug:', self.parser.get(ini_section, ini_option)
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
-            for cmd in provider.get_commands():
-                print 'debug: cmd', cmd
             self.cleaner.add_action(section2option(ini_section), provider)
+
+
+    def handle_regkey(self, ini_section, ini_option):
+        """Parse a RegKey# option"""
+        elements = self.parser.get(ini_section, ini_option).split('|')
+        path = elements(0)
+        name = ""
+        if 2 == len(elements):
+            name = 'name="%s"' % xml_escape(elements(1))
+        action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
+        yield Winreg(parseString(action_str).childNodes[0])
 
 
     def get_cleaner(self):
