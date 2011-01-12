@@ -170,9 +170,16 @@ class TreeDisplayModel:
         if cleaner_id and value:
             # when toggling an option, present any warnings
             warning = backends[cleaner_id].get_warning(option_id)
+            # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+            # %(option) may be cache, logs, cookies, etc.
+            # %(warning) may be 'This option is really slow'
+            msg = _("Warning regarding %(cleaner)s - %(option)s:\n\n%(warning)s") % \
+                { 'cleaner' : model[parent][0], \
+                  'option'  : model[path][0], \
+                  'warning' : warning }
             if warning:
                 resp = GuiBasic.message_dialog(parent_window, \
-                    warning, \
+                    msg, \
                     gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL)
                 if gtk.RESPONSE_OK != resp:
                     # user cancelled, so don't toggle option
