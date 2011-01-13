@@ -33,7 +33,7 @@ import re
 import sys
 import traceback
 
-from Action import ActionProvider, Delete
+from Action import ActionProvider, Delete, Winreg
 from Common import _
 from FileUtilities import listdir
 from General import boolstr_to_bool, getText
@@ -168,12 +168,13 @@ class Winapp:
     def handle_regkey(self, ini_section, ini_option):
         """Parse a RegKey# option"""
         elements = self.parser.get(ini_section, ini_option).split('|')
-        path = elements(0)
+        path = elements[0]
         name = ""
         if 2 == len(elements):
-            name = 'name="%s"' % xml_escape(elements(1))
+            name = 'name="%s"' % xml_escape(elements[1])
         action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
-        yield Winreg(parseString(action_str).childNodes[0])
+        provider = Winreg(parseString(action_str).childNodes[0])
+        self.cleaner.add_action(section2option(ini_section), provider)
 
 
     def get_cleaner(self):
