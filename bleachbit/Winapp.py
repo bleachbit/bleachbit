@@ -145,7 +145,7 @@ class Winapp:
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
-        elements = self.parser.get(ini_section, ini_option).split('|')
+        elements = self.parser.get(ini_section, ini_option).strip().split('|')
         dirname = preexpand(elements.pop(0))
         filename = ""
         if elements:
@@ -167,7 +167,7 @@ class Winapp:
 
     def handle_regkey(self, ini_section, ini_option):
         """Parse a RegKey# option"""
-        elements = self.parser.get(ini_section, ini_option).split('|')
+        elements = self.parser.get(ini_section, ini_option).strip().split('|')
         path = elements[0]
         name = ""
         if 2 == len(elements):
