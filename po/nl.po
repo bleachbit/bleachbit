@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-02 15:23-0700\n"
-"PO-Revision-Date: 2011-01-03 11:03+0000\n"
+"POT-Creation-Date: 2011-01-11 23:03-0700\n"
+"PO-Revision-Date: 2011-01-12 20:17+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-03 13:48+0000\n"
-"X-Generator: Launchpad (build 12138)\n"
+"X-Launchpad-Export-Date: 2011-01-13 15:00+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -139,7 +139,7 @@ msgstr "Formuliergeschiedenis"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr "Verwijdert de formuliergeschiedenis ingevoerd in websites"
+msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -160,15 +160,13 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
-msgstr "Zoekmachines"
+msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
-"Verwijder de zoekgeschiedenis en de zoekmachines die niet standaard "
-"geïnstalleerd zijn, sommige ervan zijn automatisch toegevoegd"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -474,7 +472,7 @@ msgstr "Overslaan"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:73 ../bleachbit/GUI.py:578
+#: ../bleachbit/Command.py:73 ../bleachbit/GUI.py:585
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -488,7 +486,7 @@ msgstr "Markeren voor verwijdering"
 #: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
 msgid "Clean file"
-msgstr "Opschonen bestand"
+msgstr ""
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:249
@@ -513,6 +511,89 @@ msgid ""
 msgstr ""
 "%s kan niet schoongemaakt worden omdat het nog in gebruik is. Sluit het af "
 "en probeer het opnieuw."
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:76
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Fout bij het uitvoeren van optie ‘%(operation)s’: ‘%(msg)s’"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:208
+msgid "Please wait.  Wiping free disk space."
+msgstr "Een moment geduld, bezig met wissen van vrije schijfruimte."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:210 ../bleachbit/Worker.py:297
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Een moment geduld. %s wordt schoongemaakt."
+
+#: ../bleachbit/Worker.py:210 ../bleachbit/Cleaner.py:370
+#: ../bleachbit/Cleaner.py:477
+msgid "Memory"
+msgstr "Geheugen"
+
+#: ../bleachbit/Worker.py:220
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Ongeveer %d minuut resterend."
+msgstr[1] "Ongeveer %d minuten resterend."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:235
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Vrijgekomen schijfruimte: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:239
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Grootte vrijkomende schijfruimte: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:244
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Verwijderde bestanden: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:248
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Te verwijderen bestanden: %d"
+
+#: ../bleachbit/Worker.py:251
+#, python-format
+msgid "Special operations: %d"
+msgstr "Speciale opties: %d"
+
+#: ../bleachbit/Worker.py:254
+#, python-format
+msgid "Errors: %d"
+msgstr "Fouten: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:270
+msgid "Please wait.  Running deep scan."
+msgstr "Een moment geduld, bezig met een diepe scan."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:300
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Een moment geduld. %s wordt bekeken."
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
@@ -566,11 +647,6 @@ msgstr "Prullenbak"
 msgid "Empty the trash"
 msgstr "Prullenbak legen"
 
-#: ../bleachbit/Cleaner.py:370 ../bleachbit/Cleaner.py:477
-#: ../bleachbit/Worker.py:210
-msgid "Memory"
-msgstr "Geheugen"
-
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:372
 msgid "Wipe the swap and free memory"
@@ -605,15 +681,13 @@ msgstr "Leegt de prullenbak"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:383
 msgid "Update uninstallers"
-msgstr "Software-updateverwijderaars bijwerken"
+msgstr ""
 
 #: ../bleachbit/Cleaner.py:383
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Software-updateverwijderaars verwijderen voor Microsoft-updates, inclusief "
-"hotfixes, service packs en Internet Explorer-updates"
 
 #: ../bleachbit/Cleaner.py:386 ../bleachbit/Cleaner.py:559
 msgid "Clipboard"
@@ -659,9 +733,9 @@ msgstr "Overschrijf de vrije schijfruimte op %s"
 #: ../bleachbit/Cleaner.py:613
 #, python-format
 msgid "Recycle bin %s"
-msgstr "Prullenbak %s"
+msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:630
+#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:637
 msgid "Preferences"
 msgstr "Voorkeuren"
 
@@ -696,7 +770,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:111
 msgid "Check for new beta releases"
-msgstr "Controleer op nieuwe testversies"
+msgstr ""
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -726,7 +800,7 @@ msgid "Start BleachBit with computer"
 msgstr "BleachBit starten bij het opstarten van de computer"
 
 #: ../bleachbit/GuiPreferences.py:146 ../bleachbit/GuiPreferences.py:277
-#: ../bleachbit/GUI.py:540
+#: ../bleachbit/GUI.py:547
 msgid "Choose a folder"
 msgstr "Selecteer een map"
 
@@ -803,99 +877,49 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Map toevoegen"
 
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:76
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Fout bij het uitvoeren van optie ‘%(operation)s’: ‘%(msg)s’"
+#: ../bleachbit/RecognizeCleanerML.py:70
+msgid "Security warning"
+msgstr "Beveiligingswaarschuwing"
 
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:208
-msgid "Please wait.  Wiping free disk space."
-msgstr "Een moment geduld, bezig met wissen van vrije schijfruimte."
+#. TRANSLATORS: Cleaner definitions are XML data files that define
+#. which files will be cleaned.
+#: ../bleachbit/RecognizeCleanerML.py:82
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Deze opschoon-definities zijn nieuw of gewijzigd. Kwaadaardige definities "
+"kunnen uw systeem beschadigen. Als u deze wijzigingen niet vertrouwt moet u "
+"deze bestanden verwijderen of afsluiten."
 
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:210 ../bleachbit/Worker.py:297
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Een moment geduld. %s wordt schoongemaakt."
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:95
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Verwijderen"
 
-#: ../bleachbit/Worker.py:220
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Ongeveer %d minuut resterend."
-msgstr[1] "Ongeveer %d minuten resterend."
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:235
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Vrijgekomen schijfruimte: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:239
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Grootte vrijkomende schijfruimte: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:244
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Verwijderde bestanden: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:248
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Te verwijderen bestanden: %d"
-
-#: ../bleachbit/Worker.py:251
-#, python-format
-msgid "Special operations: %d"
-msgstr "Speciale opties: %d"
-
-#: ../bleachbit/Worker.py:254
-#, python-format
-msgid "Errors: %d"
-msgstr "Fouten: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:270
-msgid "Please wait.  Running deep scan."
-msgstr "Een moment geduld, bezig met een diepe scan."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:300
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Een moment geduld. %s wordt bekeken."
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:98
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Bestandsnaam"
 
 #: ../bleachbit/Update.py:73
 msgid "Update BleachBit"
-msgstr "BleachBit-update"
+msgstr "Kijk naar nieuwe versie voor BleachBit"
 
 #: ../bleachbit/Update.py:78
 msgid "A new version is available."
-msgstr "Er is een nieuwe versie beschikbaar."
+msgstr ""
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
 #: ../bleachbit/Update.py:86
 #, python-format
 msgid "Update to version %s"
-msgstr "Bijwerken naar versie %s"
+msgstr ""
 
-#: ../bleachbit/CLI.py:111
+#: ../bleachbit/CLI.py:115
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "geen geldige opschoner: %s"
@@ -904,31 +928,31 @@ msgstr "geen geldige opschoner: %s"
 #. %prog, but do translate usage, options, cleaner, and option.
 #. More information about the command line is here
 #. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:138
+#: ../bleachbit/CLI.py:142
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "Gebruik: %prog [opties] cleaner.optie1 cleaner.optie2"
 
-#: ../bleachbit/CLI.py:141
+#: ../bleachbit/CLI.py:145
 msgid "list cleaners"
 msgstr "opschoners tonen"
 
-#: ../bleachbit/CLI.py:143
+#: ../bleachbit/CLI.py:147
 msgid "delete files and make other permanent changes"
 msgstr "Verwijder bestanden en maak andere permanente wijzigingen"
 
-#: ../bleachbit/CLI.py:145
+#: ../bleachbit/CLI.py:149
 msgid "show system information"
 msgstr "systeeminformatie tonen"
 
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:151
 msgid "preview files to be deleted and other changes"
 msgstr "bekijk de wijzigingen en bestanden die verwijdert zullen worden"
 
-#: ../bleachbit/CLI.py:149
+#: ../bleachbit/CLI.py:153
 msgid "output version information and exit"
 msgstr "versie-informatie tonen en afsluiten"
 
-#: ../bleachbit/CLI.py:151
+#: ../bleachbit/CLI.py:155
 msgid "overwrite files to hide contents"
 msgstr "overschrijf bestanden om de inhoud te verbergen"
 
@@ -971,19 +995,30 @@ msgstr "Webbrowser openen met %s?"
 msgid "Active"
 msgstr "Actief"
 
-#: ../bleachbit/GUI.py:339
+#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+#. %(option) may be cache, logs, cookies, etc.
+#. %(warning) may be 'This option is really slow'
+#: ../bleachbit/GUI.py:176
+#, python-format
+msgid ""
+"Warning regarding %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+msgstr ""
+
+#: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
 msgstr "U moet een optie selecteren"
 
-#: ../bleachbit/GUI.py:362 ../bleachbit/GUI.py:377
+#: ../bleachbit/GUI.py:369 ../bleachbit/GUI.py:384
 msgid "Done."
 msgstr "Gereed."
 
-#: ../bleachbit/GUI.py:389
+#: ../bleachbit/GUI.py:396
 msgid "Program to clean unnecessary files"
 msgstr "Programma om overbodige bestanden te verwijderen"
 
-#: ../bleachbit/GUI.py:394
+#: ../bleachbit/GUI.py:401
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -995,11 +1030,9 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:400
+#: ../bleachbit/GUI.py:407
 msgid "translator-credits"
 msgstr ""
-"This is a dummy translation so that the credits are counted as translated.\n"
-"\n"
 "Launchpad Contributions:\n"
 "  Dooitze de Jong https://launchpad.net/~dooitze-de-jong\n"
 "  Fly-Man- https://launchpad.net/~flyman\n"
@@ -1009,77 +1042,77 @@ msgstr ""
 "  UndiFineD https://launchpad.net/~k.dejong\n"
 "  rob https://launchpad.net/~rvdb"
 
-#: ../bleachbit/GUI.py:413
+#: ../bleachbit/GUI.py:420
 msgid "System information"
 msgstr "Systeeminformatie"
 
-#: ../bleachbit/GUI.py:483
+#: ../bleachbit/GUI.py:490
 msgid "Choose files to shred"
 msgstr "Selecteer bestanden om te shredderen"
 
-#: ../bleachbit/GUI.py:486
+#: ../bleachbit/GUI.py:493
 msgid "Choose folder to shred"
 msgstr "Selecteer map om te shredden"
 
-#: ../bleachbit/GUI.py:574
+#: ../bleachbit/GUI.py:581
 msgid "Preview"
 msgstr "Bekijken"
 
-#: ../bleachbit/GUI.py:624
+#: ../bleachbit/GUI.py:631
 msgid "_Shred Files"
 msgstr "Bestanden _shredden"
 
-#: ../bleachbit/GUI.py:625
+#: ../bleachbit/GUI.py:632
 msgid "Sh_red Folders"
 msgstr "Mappen sh_redden"
 
-#: ../bleachbit/GUI.py:626
+#: ../bleachbit/GUI.py:633
 msgid "_Wipe Free Space"
 msgstr "Vrije ruimte _wissen"
 
-#: ../bleachbit/GUI.py:627
+#: ../bleachbit/GUI.py:634
 msgid "S_hred Settings and Quit"
 msgstr "Instellingen shredden en afluiten"
 
-#: ../bleachbit/GUI.py:628
+#: ../bleachbit/GUI.py:635
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: ../bleachbit/GUI.py:629
+#: ../bleachbit/GUI.py:636
 msgid "_File"
 msgstr "_Bestand"
 
-#: ../bleachbit/GUI.py:631
+#: ../bleachbit/GUI.py:638
 msgid "_Edit"
 msgstr "B_ewerken"
 
-#: ../bleachbit/GUI.py:632
+#: ../bleachbit/GUI.py:639
 msgid "Help Contents"
 msgstr "Hulpinhoud"
 
-#: ../bleachbit/GUI.py:634
+#: ../bleachbit/GUI.py:641
 msgid "_Release Notes"
 msgstr "_Uitgavenotities"
 
-#: ../bleachbit/GUI.py:636
+#: ../bleachbit/GUI.py:643
 msgid "_System Information"
 msgstr "_Systeeminformatie"
 
-#: ../bleachbit/GUI.py:637
+#: ../bleachbit/GUI.py:644
 msgid "_About"
 msgstr "_Over"
 
-#: ../bleachbit/GUI.py:638
+#: ../bleachbit/GUI.py:645
 msgid "_Help"
 msgstr "_Hulp"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:662
+#: ../bleachbit/GUI.py:669
 msgctxt "button"
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: ../bleachbit/GUI.py:665
+#: ../bleachbit/GUI.py:672
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Bekijk bestanden van de geselecteerde opties (zonder de bestanden te "
@@ -1087,53 +1120,25 @@ msgstr ""
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:673
+#: ../bleachbit/GUI.py:680
 msgctxt "button"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: ../bleachbit/GUI.py:676
+#: ../bleachbit/GUI.py:683
 msgid "Delete files in the selected operations"
 msgstr "Verwijder bestanden van de geselecteerde opties"
 
-#: ../bleachbit/GUI.py:764
+#: ../bleachbit/GUI.py:771
 msgid "Error when checking for updates: "
 msgstr "Fout bij het zoeken naar updates: "
 
-#: ../bleachbit/GUI.py:792
+#: ../bleachbit/GUI.py:802
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
 "Fout bij het laden van de SQLite-module: mogelijk wordt het geblokkeerd door "
 "de antivirussoftware."
-
-#: ../bleachbit/RecognizeCleanerML.py:70
-msgid "Security warning"
-msgstr "Beveiligingswaarschuwing"
-
-#. TRANSLATORS: Cleaner definitions are XML data files that define
-#. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:82
-msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
-msgstr ""
-"Deze opschoon-definities zijn nieuw of gewijzigd. Kwaadaardige definities "
-"kunnen uw systeem beschadigen. Als u deze wijzigingen niet vertrouwt moet u "
-"deze bestanden verwijderen of afsluiten."
-
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:95
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Verwijderen"
-
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:98
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Bestandsnaam"
 
 #~ msgid ""
 #~ "Delete the history, which includes bookmarks, downloads, and visited sites"
