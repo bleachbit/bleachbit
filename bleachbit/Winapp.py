@@ -41,6 +41,19 @@ from Windows import detect_registry_key
 from platform import uname
 from xml.dom.minidom import parseString
 
+# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+langsecref_map = { '3021' : _('Applications'), \
+# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3022' : _('Internet'), \
+# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3023' : _('Multimedia'), \
+# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3024': _('Utilities'), \
+# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
+    '3025' : _('Microsoft Windows'), \
+    '3026' : _('Internet'), \
+    '3027' : _('Internet'), \
+    '3028' : _('Internet') }
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
@@ -65,16 +78,21 @@ class Winapp:
     def __init__(self, pathname):
         """Create cleaners from a Winapp2.ini-style file"""
 
-        self.cleaner = Cleaner.Cleaner()
-        self.cleaner.id = 'winapp2'
-        self.cleaner.description = 'Winapp2.ini temporary description'
-        self.cleaner.name = 'Winapp2.ini temporary name'
+        self.cleaners = {}
+        for langsecref in set(langsecref_map.values()):
+            lid = langsecref.lower().replace(' ','_')
+            self.cleaners[lid] = Cleaner.Cleaner()
+            self.cleaners[lid].id = lid
+            self.cleaners[lid].name = langsecref
+            self.cleaners[lid].description = _('Imported from winapp2.ini')
+        self.errors = 0
         self.parser = ConfigParser.RawConfigParser()
         self.parser.read(pathname)
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
             except:
+                self.errors += 1
                 print 'ERROR: parsing error in section %s' % section
                 traceback.print_exc()
 
@@ -97,18 +115,17 @@ class Winapp:
         if self.parser.has_option(section, 'excludekey'):
             print 'ERROR: ExcludeKey not implemented, section=', section
             return
-        self.cleaner.add_option(section2option(section), section.replace('*', ''), '')
+        lid = langsecref_map[self.parser.get(section, 'langsecref')].lower().replace(' ','_')
+        self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
-                self.handle_filekey(section, option)
+                self.handle_filekey(lid, section, option)
             elif option.startswith('regkey'):
-                self.handle_regkey(section, option)
+                self.handle_regkey(lid, section, option)
             elif option == 'warning':
-                self.cleaner.set_warning(section2option(section), self.parser.get(section, 'warning'))
-            elif option in ('default', 'detectfile', 'detect'):
+                self.cleaner[lid].set_warning(section2option(section), self.parser.get(section, 'warning'))
+            elif option in ('default', 'detectfile', 'detect', 'langsecref'):
                 pass
-            elif option in ('langsecref'):
-                print 'fixme:', option
             else:
                 print 'WARNING: unknown option', option
 
@@ -141,7 +158,7 @@ class Winapp:
             yield Delete(parseString(action_str).childNodes[0])
 
 
-    def handle_filekey(self, ini_section, ini_option):
+    def handle_filekey(self, lid, ini_section, ini_option):
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
@@ -162,10 +179,10 @@ class Winapp:
                 print 'WARNING: unknown file option', element
         print 'debug:', self.parser.get(ini_section, ini_option)
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
-            self.cleaner.add_action(section2option(ini_section), provider)
+            self.cleaners[lid].add_action(section2option(ini_section), provider)
 
 
-    def handle_regkey(self, ini_section, ini_option):
+    def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
         elements = self.parser.get(ini_section, ini_option).strip().split('|')
         path = elements[0]
@@ -174,12 +191,15 @@ class Winapp:
             name = 'name="%s"' % xml_escape(elements[1])
         action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
         provider = Winreg(parseString(action_str).childNodes[0])
-        self.cleaner.add_action(section2option(ini_section), provider)
+        self.cleaners[lid].add_action(section2option(ini_section), provider)
 
 
-    def get_cleaner(self):
-        """Return the created cleaner"""
-        return self.cleaner
+    def get_cleaners(self):
+        """Return the created cleaners"""
+        for langsecref in set(langsecref_map.values()):
+            lid = langsecref.lower().replace(' ','_')
+            if self.cleaners[lid].is_usable():
+                yield self.cleaners[lid]
 
 
 def list_winapp_files():
@@ -198,11 +218,7 @@ def load_cleaners():
             print "Error reading winapp2.ini cleaner '%s'" % pathname
             traceback.print_exc()
         else:
-            cleaner = inicleaner.get_cleaner()
-            if cleaner.is_usable():
+            import pdb; pdb.set_trace()
+            for cleaner in inicleaner.get_cleaners():
                 Cleaner.backends[cleaner.id] = cleaner
-            else:
-                print 'debug: "%s" is not usable' % pathname
-
-
 
