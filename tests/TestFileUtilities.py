@@ -36,6 +36,11 @@ sys.path.append('.')
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
 
+try:
+    import json
+except:
+    import simplejson as json
+
 
 def test_ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
@@ -73,7 +78,6 @@ def test_ini_helper(self, execute):
 
 def test_json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
-    import simplejson as json
 
     def load_js(js_fn):
         with open(js_fn, 'r') as js_fd:
