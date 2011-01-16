@@ -150,11 +150,9 @@ class Winapp:
                 search = 'file'
         action_str = '<option command="delete" search="%s" path="%s" %s/>' % \
             (search, xml_escape(path), regex)
-        print 'debug:', action_str
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
             action_str = '<option command="delete" search="file" path="%s"/>' % xml_escape(dirname)
-            print 'debug:', action_str
             yield Delete(parseString(action_str).childNodes[0])
 
 
@@ -177,7 +175,6 @@ class Winapp:
                 removeself = True
             else:
                 print 'WARNING: unknown file option', element
-        print 'debug:', self.parser.get(ini_section, ini_option)
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
             self.cleaners[lid].add_action(section2option(ini_section), provider)
 
@@ -218,7 +215,6 @@ def load_cleaners():
             print "Error reading winapp2.ini cleaner '%s'" % pathname
             traceback.print_exc()
         else:
-            import pdb; pdb.set_trace()
             for cleaner in inicleaner.get_cleaners():
                 Cleaner.backends[cleaner.id] = cleaner
 
