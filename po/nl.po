@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-11 23:03-0700\n"
-"PO-Revision-Date: 2011-01-12 20:17+0000\n"
+"POT-Creation-Date: 2011-01-14 20:14-0700\n"
+"PO-Revision-Date: 2011-01-15 11:06+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-13 15:00+0000\n"
-"X-Generator: Launchpad (build 12177)\n"
+"X-Launchpad-Export-Date: 2011-01-15 14:16+0000\n"
+"X-Generator: Launchpad (build 12200)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -139,7 +139,7 @@ msgstr "Formuliergeschiedenis"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr ""
+msgstr "Verwijdert de formuliergeschiedenis ingevoerd in websites"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -160,13 +160,15 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
-msgstr ""
+msgstr "Zoekmachines"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Verwijder de zoekgeschiedenis en de zoekmachines die niet standaard "
+"geïnstalleerd zijn, sommige ervan zijn automatisch toegevoegd"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -486,7 +488,7 @@ msgstr "Markeren voor verwijdering"
 #: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
 msgid "Clean file"
-msgstr ""
+msgstr "Opschonen bestand"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:249
@@ -595,6 +597,36 @@ msgstr "Een moment geduld, bezig met een diepe scan."
 msgid "Please wait.  Previewing %s."
 msgstr "Een moment geduld. %s wordt bekeken."
 
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:45
+msgid "Applications"
+msgstr "Programma's"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:47 ../bleachbit/Winapp.py:54
+#: ../bleachbit/Winapp.py:55 ../bleachbit/Winapp.py:56
+msgid "Internet"
+msgstr "Internet"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:49
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:51
+msgid "Utilities"
+msgstr "Hulpmiddelen"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
+#: ../bleachbit/Winapp.py:53
+msgid "Microsoft Windows"
+msgstr "Microsoft Windows"
+
+#: ../bleachbit/Winapp.py:87
+msgid "Imported from winapp2.ini"
+msgstr "Geïmporteerd van winapp2.ini"
+
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
 msgstr "Sessie herstellen"
@@ -681,13 +713,15 @@ msgstr "Leegt de prullenbak"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:383
 msgid "Update uninstallers"
-msgstr ""
+msgstr "Software-updateverwijderaars bijwerken"
 
 #: ../bleachbit/Cleaner.py:383
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
+"Software-updateverwijderaars verwijderen voor Microsoft-updates, inclusief "
+"hotfixes, service packs en Internet Explorer-updates"
 
 #: ../bleachbit/Cleaner.py:386 ../bleachbit/Cleaner.py:559
 msgid "Clipboard"
@@ -733,7 +767,7 @@ msgstr "Overschrijf de vrije schijfruimte op %s"
 #: ../bleachbit/Cleaner.py:613
 #, python-format
 msgid "Recycle bin %s"
-msgstr ""
+msgstr "Prullenbak %s"
 
 #: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:637
 msgid "Preferences"
@@ -770,7 +804,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:111
 msgid "Check for new beta releases"
-msgstr ""
+msgstr "Controleer op nieuwe testversies"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -907,17 +941,17 @@ msgstr "Bestandsnaam"
 
 #: ../bleachbit/Update.py:73
 msgid "Update BleachBit"
-msgstr "Kijk naar nieuwe versie voor BleachBit"
+msgstr "BleachBit-update"
 
 #: ../bleachbit/Update.py:78
 msgid "A new version is available."
-msgstr ""
+msgstr "Er is een nieuwe versie beschikbaar."
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
 #: ../bleachbit/Update.py:86
 #, python-format
 msgid "Update to version %s"
-msgstr ""
+msgstr "Bijwerken naar versie %s"
 
 #: ../bleachbit/CLI.py:115
 #, python-format
@@ -1005,6 +1039,9 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
+"Waarschuwing voor %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 
 #: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
