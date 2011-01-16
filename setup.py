@@ -105,6 +105,14 @@ if 'py2exe' in sys.argv:
             'compressed' : True # create a compressed zipfile
             }
         }
+    import gtk
+    from distutils import version
+    gtkver = version.StrictVersion('.'.join([str(x) for x in gtk.gtk_version]))
+    gtkmin = version.StrictVersion('2.20.0')
+    if gtkver >= gtkmin:
+        args['options']['py2exe']['includes'].append('gio')
+    if sys.version_info.major == 2 and sys.version_info.minor <= 5:
+        args['options']['py2exe']['includes'].append('simplejson')
 
 
 def recompile_mo(langdir, app, langid, dst):
