@@ -41,6 +41,11 @@ if 'nt' == os.name:
 def diagnostic_info():
     """Return diagnostic information as a string"""
     s = "BleachBit version %s" % Common.APP_VERSION
+    try:
+        import gtk
+        s += '\nGTK version %s' % '.'.join([str(x) for x in gtk.gtk_version])
+    except:
+        pass
     s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
     s += "\nlocale_dir = %s" % Common.locale_dir
     s += "\noptions_dir = %s" % Common.options_dir
