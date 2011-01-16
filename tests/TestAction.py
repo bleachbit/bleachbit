@@ -91,7 +91,14 @@ class ActionTestCase(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for class Delete"""
-        for path in ('~', '$HOME'):
+        paths = ['~']
+        if 'nt' == os.name:
+            paths.append('%USERPROFILE%')
+            paths.append('${USERPROFILE}')
+            paths.append('$USERPROFILE')
+        if 'posix' == os.name:
+            paths.append('$HOME')
+        for path in paths:
             for command in ('delete', 'truncate'):
                 expanded = os.path.expanduser(os.path.expandvars(path))
                 (fd, filename) = tempfile.mkstemp(dir = expanded)
