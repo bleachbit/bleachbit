@@ -99,7 +99,7 @@ if 'py2exe' in sys.argv:
         'py2exe' : {
             'packages' : 'encodings',
             'optimize' : 2, # extra optimization (like python -OO)
-            'includes' : ['atk', 'cairo', 'gobject', 'pango', 'pangocairo', 'simplejson' ],
+            'includes' : ['atk', 'cairo', 'gobject', 'pango', 'pangocairo' ],
             'excludes' : ['_ssl', 'pyreadline', 'difflib', 'doctest',
                 'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
             'compressed' : True # create a compressed zipfile
