@@ -359,6 +359,7 @@ class System(Cleaner):
             # TRANSLATORS: Localizations are files supporting specific
             # languages, so applications appear in Spanish, etc.
             self.add_option('localizations', _('Localizations'), _('Delete files for unwanted languages'))
+            self.add_warning('localizations', _("Configure this option in the preferences."))
             # TRANSLATORS: 'Rotated logs' refers to old system log files.
             # Linux systems often have a scheduled job to rotate the logs
             # which means compress all except the newest log and then delete
