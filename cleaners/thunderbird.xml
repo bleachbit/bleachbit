@@ -28,8 +28,10 @@
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="glob" path="$localappdata\Thunderbird\Profiles\????????.default\Cache\*"/>
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/Cache/*"/>
-    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/Cache/-->
+    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/Cache/ -->
     <action command="delete" search="glob" path="~/.thunderbird/????????.default/Cache/*"/>
+    <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/Cache/ -->
+    <action command="delete" search="glob" path="~/.thunderbird/Profiles/????????.default/Cache/*"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -38,6 +40,8 @@
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/cookies.sqlite"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
     <action command="delete" search="glob" path="~/.thunderbird/????????.default/cookies.sqlite"/>
+    <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
+    <action command="delete" search="glob" path="~/.thunderbird/Profiles/????????.default/cookies.sqlite"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
@@ -49,15 +53,19 @@
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/signons3.txt"/>
     <!-- Ubuntu 9.10 Thunderbird 2.0 has ~/.mozilla-thunderbird/????????.default/ -->
     <action command="delete" search="file" path="~/.mozilla-thunderbird/????????.default/signons.txt"/>
-    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/-->
+    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
     <action command="delete" search="glob" path="~/.thunderbird/????????.default/signons.sqlite"/>
+    <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
+    <action command="delete" search="glob" path="~/.thunderbird/Profiles/????????.default/signons.sqlite"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
     <action command="sqlite.vacuum" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\*.sqlite"/>
     <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/default/????????.slt/*.sqlite"/>
-    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/-->
-    <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/????????.default/*sqlite"/>
+    <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
+    <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/????????.default/*.sqlite"/>
+    <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
+    <action command="sqlite.vacuum" search="glob" path="~/.thunderbird/Profiles/????????.default/*.sqlite"/>
   </option>
 </cleaner>
