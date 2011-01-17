@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-01-14 20:14-0700\n"
-"PO-Revision-Date: 2011-01-15 10:04+0000\n"
+"PO-Revision-Date: 2011-01-16 19:59+0000\n"
 "Last-Translator: bushido <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-15 14:16+0000\n"
+"X-Launchpad-Export-Date: 2011-01-17 03:32+0000\n"
 "X-Generator: Launchpad (build 12200)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -342,7 +342,7 @@ msgstr "URL´i ajalugu"
 #: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Kustuta hiljuti kasutatud failide nimekiri"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:194
@@ -436,7 +436,7 @@ msgstr "Kustuta käskude ajalugu"
 #. In Windows 'Run' is the dialog in the Start menu
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 msgid "Run"
-msgstr ""
+msgstr "Käivita"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -463,30 +463,30 @@ msgstr ""
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:46
 msgid "Skip"
-msgstr ""
+msgstr "Eiratud"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
 #: ../bleachbit/Command.py:73 ../bleachbit/GUI.py:585
 msgid "Delete"
-msgstr ""
+msgstr "Kustutatakse"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
 #: ../bleachbit/Command.py:93
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Märgi kustutamiseks"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
 msgid "Clean file"
-msgstr ""
+msgstr "Puhasta fail"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:249
 msgid "Truncate"
-msgstr ""
+msgstr "Kärbi"
 
 #: ../bleachbit/Command.py:288
 msgid "Delete registry key"
@@ -706,7 +706,7 @@ msgstr "Tühjenda prügikast"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:383
 msgid "Update uninstallers"
-msgstr ""
+msgstr "Uuenda eemaldusprogrammid"
 
 #: ../bleachbit/Cleaner.py:383
 msgid ""
@@ -776,7 +776,7 @@ msgstr "Keeled"
 
 #: ../bleachbit/GuiPreferences.py:62
 msgid "Whitelist"
-msgstr ""
+msgstr "Lubatud nimekiri"
 
 #: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
@@ -787,6 +787,8 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"Kui uuendus on leitud, kuvatakse valik näitamaks infot selle kohta. Siis "
+"võite uuenduse alla laadida ja paigaldada uuenduse."
 
 #: ../bleachbit/GuiPreferences.py:111
 msgid "Check for new beta releases"
@@ -860,24 +862,24 @@ msgstr "Nimi"
 
 #: ../bleachbit/GuiPreferences.py:263
 msgid "Choose a file"
-msgstr ""
+msgstr "Vali fail"
 
 #: ../bleachbit/GuiPreferences.py:270 ../bleachbit/GuiPreferences.py:314
 msgid "File"
-msgstr ""
+msgstr "Fail"
 
 #: ../bleachbit/GuiPreferences.py:285 ../bleachbit/GuiPreferences.py:316
 msgid "Folder"
-msgstr ""
+msgstr "Kaust"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
 #: ../bleachbit/GuiPreferences.py:323
 msgid "Theses paths will not be deleted or modified."
-msgstr ""
+msgstr "Neid asukohti ei kustutata ega muudeta."
 
 #: ../bleachbit/GuiPreferences.py:331
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
@@ -888,12 +890,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py:349
 msgctxt "button"
 msgid "Add file"
-msgstr ""
+msgstr "Lisa fail"
 
 #: ../bleachbit/GuiPreferences.py:352
 msgctxt "button"
 msgid "Add folder"
-msgstr ""
+msgstr "Lisa kaust"
 
 #: ../bleachbit/RecognizeCleanerML.py:70
 msgid "Security warning"
@@ -922,22 +924,22 @@ msgstr ""
 
 #: ../bleachbit/Update.py:73
 msgid "Update BleachBit"
-msgstr ""
+msgstr "Uuenda BleachBit"
 
 #: ../bleachbit/Update.py:78
 msgid "A new version is available."
-msgstr ""
+msgstr "Uus versioon on saadaval."
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
 #: ../bleachbit/Update.py:86
 #, python-format
 msgid "Update to version %s"
-msgstr ""
+msgstr "Uuendatud versioonile %s"
 
 #: ../bleachbit/CLI.py:115
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "pole ehtne puhastaja: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -949,7 +951,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:145
 msgid "list cleaners"
-msgstr ""
+msgstr "puhastajate nimekiri"
 
 #: ../bleachbit/CLI.py:147
 msgid "delete files and make other permanent changes"
