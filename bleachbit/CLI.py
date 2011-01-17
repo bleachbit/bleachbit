@@ -32,6 +32,7 @@ import sys
 
 from Cleaner import backends
 from Common import _, APP_VERSION
+import Options
 import Worker
 
 
@@ -106,10 +107,17 @@ def preview_or_delete(operations, really_delete):
         pass
 
 
-def args_to_operations(args):
+def args_to_operations(args, preset):
     """Read arguments and return list of operations"""
     init_cleaners()
     operations = {}
+    if preset:
+        # restore presets from the GUI
+        for key in sorted(backends):
+            c_id = backends[key].get_id()
+            for (o_id, o_name) in backends[key].get_options():
+                if Options.options.get_tree(c_id, o_id):
+                    args.append('.'.join([ c_id, o_id ]) )
     for arg in args:
         if 2 != len(arg.split('.')):
             print _("not a valid cleaner: %s") % arg
@@ -149,6 +157,8 @@ def process_cmd_line():
         help = _("show system information"))
     parser.add_option("-p", "--preview", action = "store_true",
         help = _("preview files to be deleted and other changes"))
+    parser.add_option("--preset", action="store_true",
+        help = _("use options set in the graphical interface"))
     parser.add_option("-v", "--version", action = "store_true",
         help = _("output version information and exit"))
     parser.add_option('-o', '--overwrite', action = 'store_true',
@@ -166,14 +176,13 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         list_cleaners()
         sys.exit(0)
     if options.preview:
-        operations = args_to_operations(args)
+        operations = args_to_operations(args, options.preset)
         preview_or_delete(operations, False)
         sys.exit(0)
     if options.overwrite:
-        import Options
         Options.options.set('shred', True, commit = False)
     if options.delete:
-        operations = args_to_operations(args)
+        operations = args_to_operations(args, options.preset)
         preview_or_delete(operations, True)
         sys.exit(0)
     if options.sysinfo:
