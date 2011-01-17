@@ -201,9 +201,10 @@ class Winapp:
 
 def list_winapp_files():
     """List winapp2.ini files"""
-    fn = os.path.join(Common.personal_cleaners_dir, 'winapp2.ini')
-    if os.path.exists(fn):
-        yield fn
+    for dirname in (Common.personal_cleaners_dir, Common.system_cleaners_dir):
+        fn = os.path.join(dirname, 'winapp2.ini')
+        if os.path.exists(fn):
+            yield fn
 
 
 def load_cleaners():
