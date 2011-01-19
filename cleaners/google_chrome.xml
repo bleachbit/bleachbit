@@ -84,7 +84,7 @@
   </option>
   <option id="search_engines">
     <label>Search engines</label>
-    <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
+    <description translators="'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html">Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
     <action command="chrome.keywords" search="file" path="~/.config/google-chrome/Default/Web Data"/>
     <action command="chrome.keywords" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
   </option>
