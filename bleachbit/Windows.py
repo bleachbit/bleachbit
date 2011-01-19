@@ -383,7 +383,9 @@ def split_registry_key(full_key):
     Used internally."""
     assert ( len (full_key) > 6 )
     hive_str = full_key[0:4]
-    hive_map = { 'HKCU' : _winreg.HKEY_CURRENT_USER,
+    hive_map = { 
+        'HKCR' : _winreg.HKEY_CLASSES_ROOT,
+        'HKCU' : _winreg.HKEY_CURRENT_USER,
         'HKLM' : _winreg.HKEY_LOCAL_MACHINE }
     if hive_str not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % hive_str)
