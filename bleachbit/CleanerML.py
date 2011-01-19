@@ -156,6 +156,8 @@ class CleanerML:
         """<description> element under <option>"""
         self.option_description = _(getText(description.childNodes))
         self.xlate_cb(self.option_description)
+        translators = description.getAttribute('translators')
+        self.xlate_cb(self.option_description, translators)
 
     def handle_cleaner_option_warning(self, warning):
         """<warning> element under <option>"""
