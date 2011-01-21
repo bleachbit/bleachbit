@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-16 21:55-0700\n"
-"PO-Revision-Date: 2011-01-18 19:06+0000\n"
+"POT-Creation-Date: 2011-01-18 20:44-0700\n"
+"PO-Revision-Date: 2011-01-20 21:22+0000\n"
 "Last-Translator: Nicolas Delvaux <Unknown>\n"
 "Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2011-01-19 04:00+0000\n"
+"X-Launchpad-Export-Date: 2011-01-20 23:12+0000\n"
 "X-Generator: Launchpad (build 12214)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -65,8 +65,8 @@ msgstr "Vider le cache"
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml
 #: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
-#: ../bleachbit/Action.py:285
+#: ../bleachbit/Action.py:285 ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:281
 msgid "Vacuum"
 msgstr "Optimiser"
 
@@ -137,7 +137,7 @@ msgstr "Historique des formulaires"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr ""
+msgstr "Un historique des formulaires entrés sur des sites web"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -160,6 +160,7 @@ msgstr ""
 msgid "Search engines"
 msgstr "Moteurs de recherche"
 
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
@@ -489,7 +490,7 @@ msgstr "Marquer pour effacement"
 #: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
 msgid "Clean file"
-msgstr ""
+msgstr "Nettoyer ce fichier"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:249
@@ -514,41 +515,6 @@ msgid ""
 msgstr ""
 "%s ne peut être nettoyé car il est en cours d'exécution. Fermez le programme "
 "et re-essayez."
-
-#: ../bleachbit/GuiBasic.py:113
-msgid "Delete confirmation"
-msgstr "Confirmation de suppression"
-
-#: ../bleachbit/GuiBasic.py:121
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer définitivement les fichiers correspondant "
-"aux opérations sélectionnées ? Les fichiers actuels, qui vont être "
-"supprimés, peuvent avoir changés depuis le lancement de l'aperçu."
-
-#: ../bleachbit/GuiBasic.py:123
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "Etes-vous sûr de vouloir supprimer définitive ces fichiers ?"
-
-#: ../bleachbit/GuiBasic.py:159
-#, python-format
-msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
-msgstr ""
-"Puisque vous êtes identifié en tant qu'administrateur, veuillez ouvrir "
-"manuellement ce lien dans un navigateur web :\n"
-"%s"
-
-#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
-#: ../bleachbit/GuiBasic.py:171
-#, python-format
-msgid "Open web browser to %s?"
-msgstr "Aller sur le site %s ?"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -637,7 +603,7 @@ msgstr "Veuillez patienter, prévisualisation de %s"
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:47 ../bleachbit/Winapp.py:54
@@ -648,21 +614,21 @@ msgstr "Internet"
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:49
 msgid "Multimedia"
-msgstr ""
+msgstr "Multimédia"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:51
 msgid "Utilities"
-msgstr ""
+msgstr "Utilitaires"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
 #: ../bleachbit/Winapp.py:53
 msgid "Microsoft Windows"
-msgstr ""
+msgstr "Microsoft Windows"
 
 #: ../bleachbit/Winapp.py:87
 msgid "Imported from winapp2.ini"
-msgstr ""
+msgstr "Importé depuis « winapp2.ini »"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
@@ -699,7 +665,7 @@ msgstr "Effacer les fichiers pour les langues non souhaitées"
 
 #: ../bleachbit/Cleaner.py:362
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "Configurez cette option dans les préférences."
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -755,7 +721,7 @@ msgstr "Vider la corbeille"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:384
 msgid "Update uninstallers"
-msgstr ""
+msgstr "Mettre à jour les désinstalleurs"
 
 #: ../bleachbit/Cleaner.py:384
 msgid ""
@@ -1035,6 +1001,41 @@ msgstr "afficher les informations de version et quitter"
 #: ../bleachbit/CLI.py:165
 msgid "overwrite files to hide contents"
 msgstr "écrire par dessus les fichiers pour cacher leur contenu"
+
+#: ../bleachbit/GuiBasic.py:113
+msgid "Delete confirmation"
+msgstr "Confirmation de suppression"
+
+#: ../bleachbit/GuiBasic.py:121
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer définitivement les fichiers correspondant "
+"aux opérations sélectionnées ? Les fichiers actuels, qui vont être "
+"supprimés, peuvent avoir changés depuis le lancement de l'aperçu."
+
+#: ../bleachbit/GuiBasic.py:123
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Etes-vous sûr de vouloir supprimer définitive ces fichiers ?"
+
+#: ../bleachbit/GuiBasic.py:159
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Puisque vous êtes identifié en tant qu'administrateur, veuillez ouvrir "
+"manuellement ce lien dans un navigateur web :\n"
+"%s"
+
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:171
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "Aller sur le site %s ?"
 
 #: ../bleachbit/GUI.py:144
 msgid "Active"
