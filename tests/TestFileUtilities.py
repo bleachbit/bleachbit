@@ -80,8 +80,8 @@ def test_json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
-        with open(js_fn, 'r') as js_fd:
-            return json.load(js_fd)
+        js_fd = open(js_fn, 'r')
+        return json.load(js_fd)
 
      # create test file
     (fd, filename) = tempfile.mkstemp()
