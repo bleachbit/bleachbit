@@ -62,7 +62,15 @@
                   </xs:simpleContent>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="description" type="xs:string" maxOccurs="1"/>
+              <xs:element name="description">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="translators" type="xs:string"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="warning" type="xs:string" minOccurs="0" maxOccurs="1"/>
               <xs:element name="action" maxOccurs="unbounded">
                 <xs:complexType>
