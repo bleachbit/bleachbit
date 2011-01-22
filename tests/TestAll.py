@@ -58,7 +58,6 @@ suites = [ TestAction.suite(),
            TestRecognizeCleanerML.suite(),
            TestSpecial.suite(),
            TestUpdate.suite(),
-           TestWinapp.suite(),
            TestWorker.suite() ]
 
 if 'posix' == os.name:
@@ -67,6 +66,7 @@ if 'posix' == os.name:
 
 if 'nt' == os.name:
     import TestWindows
+    suites.append(TestWinapp.suite())
     suites.append(TestWindows.suite())
 
 def suite():
