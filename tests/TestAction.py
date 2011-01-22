@@ -93,7 +93,8 @@ class ActionTestCase(unittest.TestCase):
         """Unit test for class Delete"""
         paths = ['~']
         if 'nt' == os.name:
-            paths.append('%USERPROFILE%')
+            if sys.version_info[0] == 2 and sys.version_info[1] > 5:
+                paths.append('%USERPROFILE%')
             paths.append('${USERPROFILE}')
             paths.append('$USERPROFILE')
         if 'posix' == os.name:
