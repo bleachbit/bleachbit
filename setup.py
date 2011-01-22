@@ -111,7 +111,7 @@ if 'py2exe' in sys.argv:
     gtkmin = version.StrictVersion('2.20.0')
     if gtkver >= gtkmin:
         args['options']['py2exe']['includes'].append('gio')
-    if sys.version_info.major == 2 and sys.version_info.minor <= 5:
+    if sys.version_info[0] == 2 and sys.version_info[1] <= 5:
         args['options']['py2exe']['includes'].append('simplejson')
 
 
