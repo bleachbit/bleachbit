@@ -71,6 +71,7 @@ if not "%1" == "fast" for /r dist %%e in (*.pyd,*.dll,*.exe) do %UPX_EXE% "%%e" 
 
 echo Purging unnecessary GTK+ files
 %PYTHON_DIR%\python.exe setup.py clean-dist
+for /r dist\share\locale %%e in (atk10.mo,glib20.mo,gtk20-properties.mo) do del "%%e"
 
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
