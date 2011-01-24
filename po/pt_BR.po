@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-16 21:55-0700\n"
-"PO-Revision-Date: 2011-01-18 19:20+0000\n"
+"POT-Creation-Date: 2011-01-18 20:44-0700\n"
+"PO-Revision-Date: 2011-01-23 06:01+0000\n"
 "Last-Translator: Eugênio F <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2011-01-19 04:00+0000\n"
+"X-Launchpad-Export-Date: 2011-01-23 21:48+0000\n"
 "X-Generator: Launchpad (build 12214)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
@@ -66,8 +66,8 @@ msgstr "Remover o cache"
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml
 #: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
-#: ../bleachbit/Action.py:285
+#: ../bleachbit/Action.py:285 ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:281
 msgid "Vacuum"
 msgstr "Aspirador"
 
@@ -161,6 +161,7 @@ msgstr ""
 msgid "Search engines"
 msgstr "Mecanismos de pesquisa"
 
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
@@ -512,41 +513,6 @@ msgstr ""
 "%s não pode ser limpo porque está sendo executado. Feche-o, e tente "
 "novamente."
 
-#: ../bleachbit/GuiBasic.py:113
-msgid "Delete confirmation"
-msgstr "Confirmação para apagar"
-
-#: ../bleachbit/GuiBasic.py:121
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-"Tem certeza que deseja remover esses arquivos de forma permanente de acordo "
-"com as operações selecionadas? Os arquivos que serão removidos podem ter "
-"sido alterados desde a última pré-visualização."
-
-#: ../bleachbit/GuiBasic.py:123
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "Tem certeza de que deseja remover esses arquivos permanentemente?"
-
-#: ../bleachbit/GuiBasic.py:159
-#, python-format
-msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
-msgstr ""
-"Porque você está executando como root, por favor abra este link manualmente "
-"em seu navegador:\n"
-"%s"
-
-#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
-#: ../bleachbit/GuiBasic.py:171
-#, python-format
-msgid "Open web browser to %s?"
-msgstr "Abrir navegador para %s?"
-
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
@@ -658,7 +624,7 @@ msgstr "Microsoft Windows"
 
 #: ../bleachbit/Winapp.py:87
 msgid "Imported from winapp2.ini"
-msgstr ""
+msgstr "Importado de winapp2.ini"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
@@ -1031,6 +997,41 @@ msgstr "exibir informação de versão e sair"
 msgid "overwrite files to hide contents"
 msgstr "sobrescreve arquivos para ocultar conteúdos"
 
+#: ../bleachbit/GuiBasic.py:113
+msgid "Delete confirmation"
+msgstr "Confirmação para apagar"
+
+#: ../bleachbit/GuiBasic.py:121
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Tem certeza que deseja remover esses arquivos de forma permanente de acordo "
+"com as operações selecionadas? Os arquivos que serão removidos podem ter "
+"sido alterados desde a última pré-visualização."
+
+#: ../bleachbit/GuiBasic.py:123
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Tem certeza de que deseja remover esses arquivos permanentemente?"
+
+#: ../bleachbit/GuiBasic.py:159
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Porque você está executando como root, por favor abra este link manualmente "
+"em seu navegador:\n"
+"%s"
+
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:171
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "Abrir navegador para %s?"
+
 #: ../bleachbit/GUI.py:144
 msgid "Active"
 msgstr "Ativo"
@@ -1045,6 +1046,9 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
+"Aviso sobre %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 
 #: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
