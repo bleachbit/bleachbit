@@ -174,11 +174,10 @@ def open_url(url, parent_window = None, prompt = True):
         if gtk.RESPONSE_OK != resp:
             return
     # open web browser
-    try:
-        import gnomevfs
-        gnomevfs.url_show(url)
-        return
-    except:
-        import webbrowser
-        webbrowser.open(url)
+    args = ['xdg-open', url]
+    import General
+    (rc, stdout, stderr) = General.run_external(args)
+    if rc != 0:
+        message_dialog(parent_window, "Error opening %s" % url, \
+            gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
 
