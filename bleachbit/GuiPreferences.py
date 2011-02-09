@@ -68,7 +68,8 @@ class PreferencesDialog:
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
         options.toggle(path)
-        self.cb_beta.set_sensitive(options.get('check_online_updates'))
+        if online_update_notification_enabled:
+            self.cb_beta.set_sensitive(options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.cb_refresh_operations()
         if 'auto_start' == path:
