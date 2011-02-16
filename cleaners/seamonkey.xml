@@ -30,12 +30,14 @@
       /home/bob/.mozilla/default/Cache/B4D1D17Fd01
       /home/bob/.mozilla/default/Cache/_CACHE_MAP_
       /home/bob/.mozilla/test/Cache/7CD2831Ed01 
+      /home/bob/.mozilla/seamonkey/eh6d1237.default/Cache (SeaMonkey 2.0, Fedora 14)
       C:\Documents and Settings\bob\Local Settings\Application Data\Mozilla\Profiles\default\Cache 
     The dilemma is if using '*' instead of 'default' to catch
       all SeaMonkey profiles, it catches non-SeaMonkey profiles
       such as 'eclipse' and 'firefox'.  Using profiles is rare, so we don't. 
     -->
     <action command="delete" search="walk.files" path="~/.mozilla/default/Cache/"/>
+    <action command="delete" search="walk.files" path="~/.mozilla/seamonkey/*/Cache/"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\Profiles\default\Cache\"/>
   </option>
   <option id="chat_logs">
