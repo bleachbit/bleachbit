@@ -102,9 +102,13 @@ def update_dialog(parent, updates):
 def check_updates(check_beta):
     """Check for updates via the Internet"""
     opener = urllib2.build_opener()
-    opener.addheaders = [('User-Agent', user_agent())]
     socket.setdefaulttimeout(Common.socket_timeout)
-    handle = opener.open(Common.update_check_url)
+    # Workaround for server caching
+    # https://sourceforge.net/apps/trac/sourceforge/ticket/17805
+    opener.addheaders = [('User-Agent', user_agent()), ('Pragma', 'no-cache')]
+    import random
+    url = Common.update_check_url + "?random=%d" % random.randrange(0, 100000)
+    handle = opener.open(url)
     doc = handle.read()
     try:
         dom = xml.dom.minidom.parseString(doc)
