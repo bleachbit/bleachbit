@@ -64,6 +64,7 @@ Requires(postun): desktop-file-utils
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
+Requires:       python >= 2.5
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
 Requires:       python-simplejson
