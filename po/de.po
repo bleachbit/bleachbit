@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-01-18 20:44-0700\n"
-"PO-Revision-Date: 2011-02-25 08:17+0000\n"
-"Last-Translator: cmdrhenner <cmdrhenner@gmail.com>\n"
+"PO-Revision-Date: 2011-03-19 16:22+0000\n"
+"Last-Translator: SpaceCafé <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-02-27 01:56+0000\n"
-"X-Generator: Launchpad (build 12460)\n"
+"X-Launchpad-Export-Date: 2011-04-28 01:56+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -38,11 +38,11 @@ msgstr "Spiel"
 #: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:187
 #: ../bleachbit/Cleaner.py:291 ../bleachbit/Cleaner.py:358
 msgid "Cache"
-msgstr "Cache"
+msgstr "Zwischenspeicher"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Löscht die Gameserver-Liste"
+msgstr "Die Game-Server-Liste wird gelöscht"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
@@ -57,7 +57,7 @@ msgstr "Löscht die Gameserver-Liste"
 #: ../bleachbit/Cleaner.py:358 ../bleachbit/Cleaner.py:378
 #: ../bleachbit/Cleaner.py:380
 msgid "Delete the cache"
-msgstr "Löscht den Cache"
+msgstr "Der Zwischenspeicher wird gelöscht"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -79,7 +79,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Datenbankfragmentierung reduzieren, um – ohne Daten zu entfernen – "
+"Datenbankfragmentierung wird reduziert, um – ohne Daten zu entfernen – "
 "Speicherplatz zu sparen und die Geschwindigkeit zu erhöhen"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
@@ -88,7 +88,7 @@ msgstr ""
 #: ../cleaners/elinks.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:209
 msgid "Web browser"
-msgstr "Web-Browser"
+msgstr "Webbrowser"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
@@ -96,7 +96,8 @@ msgstr "Web-Browser"
 #: ../bleachbit/Cleaner.py:187
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Web-Cache löschen, welcher die Anzeigezeit bereits besuchter Seiten reduziert"
+"Der Zwischenspeicher des Webbrowsers wird gelöscht, welcher die Anzeigezeit "
+"bereits besuchter Seiten reduziert"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -117,7 +118,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Cookies löschen, die Informationen wie Webseiten-Einstellungen, "
+"Cookies werden gelöscht, die Informationen wie Webseiten-Einstellungen, "
 "Authentifizierungen und Rückverfolgungsdaten enthalten"
 
 #. TRANSLATORS: DOM = Document Object Model.
@@ -129,16 +130,18 @@ msgstr "DOM Storage"
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
 msgid "Delete HTML5 cookies"
-msgstr "HTML5-Cookies löschen"
+msgstr "HTML5-Cookies werden gelöscht"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
 msgid "Form history"
-msgstr "Formular-Historie"
+msgstr "Formular-Verlauf"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr "Der Verlauf von Formulardaten, welche in Webseiten eingegeben wurden"
+msgstr ""
+"Der Verlauf von Formulardaten wird gelöscht, welche in Webseiten eingegeben "
+"wurden"
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
@@ -148,13 +151,14 @@ msgstr "Der Verlauf von Formulardaten, welche in Webseiten eingegeben wurden"
 #: ../cleaners/elinks.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/realplayer.xml
 msgid "History"
-msgstr "Historie"
+msgstr "Verlauf"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Historie löschen (beinhaltet besuchte Seiten, Downloads und Vorschaubilder)"
+"Der Verlauf wird gelöscht (beinhaltet besuchte Seiten, Downloads und "
+"Vorschaubilder)"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
@@ -166,8 +170,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
-"Suchmaschinenverlauf zurücksetzen und nicht vorinstallierte Suchmaschinen "
-"löschen, welche automatisch hinzugefügt wurden."
+"Der Suchmaschinenverlauf wird zurückgesetzt und nicht vorinstallierte "
+"Suchmaschinen werden gelöscht, welche automatisch hinzugefügt wurden"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -175,29 +179,29 @@ msgstr "Aktuelle Sitzung"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr "Löscht die aktuelle Sitzung"
+msgstr "Die aktuelle Sitzung wird gelöscht"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:271
 #: ../bleachbit/Cleaner.py:342
 msgid "Delete the usage history"
-msgstr "Verwendungs-Historie löschen"
+msgstr "Der Verwendungs-Verlauf wird gelöscht"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
-msgstr "Editor"
+msgstr "Texteditor"
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Löscht ~/.viminfo inklusive Datei-Historie, Kommando-Historie und "
-"Zwischenspeicher"
+"Die Datei »~/.viminfo« wird gelöscht, welche den Datei- und Befehls-Verlauf "
+"und den Zwischenspeicher beinhaltet"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "Multimedia-Spieler"
+msgstr "Multimedia-Player"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -206,7 +210,7 @@ msgstr "Multimedia-Spieler"
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
 #: ../bleachbit/Cleaner.py:376
 msgid "Logs"
-msgstr "Logs"
+msgstr "Protokolle"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
@@ -214,23 +218,22 @@ msgstr "Logs"
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:376
 msgid "Delete the logs"
-msgstr "Löscht die Logs"
+msgstr "Die Protokolle werden gelöscht"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
-msgstr "Debug Logs"
+msgstr "Debug-Protokolle"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
 #: ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
-msgstr "Löscht die Debug Logs"
+msgstr "Die Debug-Protokolle werden gelöscht"
 
 #: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
-"Eine Historie von Formulareingaben in Webseiten und in der Suchleiste"
+msgstr "Eine Verlauf von Formulareingaben in Webseiten und in der Suchleiste"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
@@ -250,7 +253,7 @@ msgstr "Temporäre Dateien"
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
 #: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:393
 msgid "Delete the temporary files"
-msgstr "Löscht die temporären Dateien"
+msgstr "Die temporären Dateien werden gelöscht"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
 #: ../cleaners/wordpad.xml ../cleaners/winamp.xml
@@ -259,14 +262,14 @@ msgstr "Löscht die temporären Dateien"
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/paint.xml ../bleachbit/Cleaner.py:292
 msgid "Most recently used"
-msgstr "Kürzlich verwendet"
+msgstr "Zuletzt verwendet"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
 #: ../bleachbit/Cleaner.py:292 ../bleachbit/Cleaner.py:368
 msgid "Delete the list of recently used documents"
-msgstr "Löscht die Liste der zuletzt benutzten Dokumente"
+msgstr "Die Liste der zuletzt benutzten Dokumente wird gelöscht"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:368
@@ -276,23 +279,23 @@ msgstr "Liste der zuletzt verwendeten Dokumente"
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
-msgstr "Chat client"
+msgstr "Chat-Client"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr "Chat Logs"
+msgstr "Chat-Protokolle"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr "Löscht die Chat Logs"
+msgstr "Die Chat-Protokolle werden gelöscht"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Löscht die Liste mit den besuchten Webseiten"
+msgstr "Die Liste mit den besuchten Webseiten wird gelöscht"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -308,7 +311,7 @@ msgstr "Such-Indizes"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr "Löscht die Suchindizes"
+msgstr "Die Suchindizes werden gelöscht"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
@@ -317,11 +320,11 @@ msgstr "Dateiübertragungs-Client"
 
 #: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
-msgstr "Löscht die Dateien"
+msgstr "Die Dateien werden gelöscht"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "Download history"
-msgstr "Download-Historie"
+msgstr "Download-Verlauf"
 
 #: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "List of files downloaded"
@@ -330,23 +333,23 @@ msgstr "Liste der heruntergeladenen Dateien"
 #: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Search history"
-msgstr "Suchen-Historie"
+msgstr "Suchverlauf"
 
 #: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the search history"
-msgstr "Löscht die Suchen-Historie"
+msgstr "Der Suchverlauf wird gelöscht"
 
 #: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:195
 msgid "URL history"
-msgstr "URL-Historie"
+msgstr "URL-Verlauf"
 
 #: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr "Lösche die zuletzt benutzen Listen"
+msgstr "Die zuletzt benutzen Listen werden gelöscht"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:194
