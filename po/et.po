@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-01-18 20:44-0700\n"
-"PO-Revision-Date: 2011-01-21 19:46+0000\n"
-"Last-Translator: olavi tohver <Unknown>\n"
+"PO-Revision-Date: 2011-04-10 06:20+0000\n"
+"Last-Translator: Jalakas <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-21 23:52+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
+"X-Launchpad-Export-Date: 2011-04-28 01:56+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -125,7 +125,7 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
 msgid "DOM Storage"
-msgstr ""
+msgstr "DOM Hoidla"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
@@ -167,6 +167,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Puhasta otsingumootori kasutamise ajalugu ja kustuta otsingumootorid, "
+"millest mõned on lisatud automaatselt pärast brauseri paigaldust."
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -217,13 +219,13 @@ msgstr "Kustuta logid"
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Veasilumise logid"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
 #: ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Kustuta veasilumise logid"
 
 #: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
 msgid "A history of forms entered in web sites and in the Search bar"
@@ -356,6 +358,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Andmebaas kasutajanimede ja paroolidega, samuti lehtede loetelu, mis ei "
+"tohiks salvestada paroole"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -375,11 +379,11 @@ msgstr "See valik kustutab kõik järjehoidjad."
 
 #: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:302
 msgid "Office suite"
-msgstr ""
+msgstr "Kontoritöö komplekt"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr ""
+msgstr "Kustuta aegunud faile"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
@@ -415,7 +419,7 @@ msgstr "Täielik skänneering"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr ""
+msgstr "Vaata eelvaadet leidmaks faile, mida soovid säilitada."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -423,7 +427,7 @@ msgstr "See valik on aeglane."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr ""
+msgstr "Kohandatud kaustade asukohad taastatakse."
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -451,6 +455,7 @@ msgstr "Indekseeri"
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
+"Kustuta otsingu indeks - andmebaas failidest ja nendes sisalduvatest sõnadest"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -458,7 +463,7 @@ msgstr "Mittevajalike failide puhastaja"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr ""
+msgstr "Vabasta ruumi ja säilita privaatsus"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -496,7 +501,7 @@ msgstr "Kustuta registrivõti"
 #: ../bleachbit/Unix.py:364 ../bleachbit/Unix.py:394 ../bleachbit/Unix.py:574
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "Käivitatavat ei leitud: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:571 ../bleachbit/Worker.py:131
@@ -520,7 +525,7 @@ msgstr ""
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:208
 msgid "Please wait.  Wiping free disk space."
-msgstr ""
+msgstr "Palun oota. Puhastatakse vaba kettaruumi."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:210 ../bleachbit/Worker.py:297
@@ -571,7 +576,7 @@ msgstr "Kustutatavad failid: %d"
 #: ../bleachbit/Worker.py:251
 #, python-format
 msgid "Special operations: %d"
-msgstr ""
+msgstr "Eritoiminguid: %d"
 
 #: ../bleachbit/Worker.py:254
 #, python-format
@@ -589,37 +594,37 @@ msgstr "Palun oota. Teostatakse põhjalikku otsingut."
 #: ../bleachbit/Worker.py:300
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "Palun oota. Kuvan  %s -i eelvaadet."
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
 msgid "Applications"
-msgstr ""
+msgstr "Rakendused"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:47 ../bleachbit/Winapp.py:54
 #: ../bleachbit/Winapp.py:55 ../bleachbit/Winapp.py:56
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:49
 msgid "Multimedia"
-msgstr ""
+msgstr "Multimeedia"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:51
 msgid "Utilities"
-msgstr ""
+msgstr "Tarvikud"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
 #: ../bleachbit/Winapp.py:53
 msgid "Microsoft Windows"
-msgstr ""
+msgstr "Microsoft Windows"
 
 #: ../bleachbit/Winapp.py:87
 msgid "Imported from winapp2.ini"
-msgstr ""
+msgstr "Imporditud winapp2.ini-st"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
@@ -627,7 +632,7 @@ msgstr "Seansi taastamine"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
+msgstr "Laeb esialgse seisundi pärast brauseri sulgumist või kokku jooksmist"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -641,7 +646,7 @@ msgstr "Katkised töölauafailid"
 
 #: ../bleachbit/Cleaner.py:357
 msgid "Delete broken application menu entries and file associations"
-msgstr ""
+msgstr "Kustuta rakenduste katkised menüükirjed ja failiseosed"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -655,7 +660,7 @@ msgstr "Kustuta ebavajalikud keelefailid"
 
 #: ../bleachbit/Cleaner.py:362
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "Seadista seda valikut eelistustes."
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -663,7 +668,7 @@ msgstr ""
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:367
 msgid "Rotated logs"
-msgstr ""
+msgstr "Vananenud logid"
 
 #: ../bleachbit/Cleaner.py:367
 msgid "Delete old system logs"
@@ -680,7 +685,7 @@ msgstr "Tühjenda prügikast"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:373
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "Puhasta saalealalt ja kasutamata mälust"
 
 #: ../bleachbit/Cleaner.py:374 ../bleachbit/Cleaner.py:385
 msgid "This option is experimental and may cause system problems."
@@ -718,6 +723,8 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
+"Kustuta Microsofti uuenduste eemaldajad, sealhulgas käigultparanduste, "
+"hoolduspakettide ja Internet Exploreri uuenduste eemaldajad"
 
 #: ../bleachbit/Cleaner.py:387 ../bleachbit/Cleaner.py:560
 msgid "Clipboard"
@@ -727,6 +734,8 @@ msgstr "Lõikelaud"
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
+"Lõikepuhvrit kasutatakse töölauakeskkondade kopeerimise ja kleepimise "
+"toimingutel"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:389
@@ -805,7 +814,7 @@ msgstr "Kontrolli uusi beta  väljalaskeid"
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:121
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Peida mittevajalikud puhastajad"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -904,7 +913,7 @@ msgstr "Lisa kaust"
 
 #: ../bleachbit/RecognizeCleanerML.py:70
 msgid "Security warning"
-msgstr ""
+msgstr "Turvahoiatus"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
@@ -919,13 +928,13 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:95
 msgctxt "column_label"
 msgid "Delete"
-msgstr ""
+msgstr "Kustuta"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
 #: ../bleachbit/RecognizeCleanerML.py:98
 msgctxt "column_label"
 msgid "Filename"
-msgstr ""
+msgstr "Failinimi"
 
 #: ../bleachbit/Update.py:73
 msgid "Update BleachBit"
@@ -960,31 +969,31 @@ msgstr "puhastajate nimekiri"
 
 #: ../bleachbit/CLI.py:155
 msgid "delete files and make other permanent changes"
-msgstr ""
+msgstr "failide kustutamine ja teiste püsivate muutuste sooritamine"
 
 #: ../bleachbit/CLI.py:157
 msgid "show system information"
-msgstr ""
+msgstr "näita süsteemi infot"
 
 #: ../bleachbit/CLI.py:159
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "kustutavate failide ja teiste püsivate muutuste eelvaade"
 
 #: ../bleachbit/CLI.py:161
 msgid "use options set in the graphical interface"
-msgstr ""
+msgstr "kasutatakse kasutajaliideses sätestatud seadeid"
 
 #: ../bleachbit/CLI.py:163
 msgid "output version information and exit"
-msgstr ""
+msgstr "väljastab versiooniteabe ja väljub"
 
 #: ../bleachbit/CLI.py:165
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "failide ülekirjutamine sisu peitmiseks"
 
 #: ../bleachbit/GuiBasic.py:113
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Kustutamise kinnitus"
 
 #: ../bleachbit/GuiBasic.py:121
 msgid ""
@@ -995,7 +1004,7 @@ msgstr ""
 
 #: ../bleachbit/GuiBasic.py:123
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "Oled sa kindel, et soovid need failid püsivalt kustutada?"
 
 #: ../bleachbit/GuiBasic.py:159
 #, python-format
@@ -1004,16 +1013,18 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
+"Kuna sa töötad administraatorina, palun ava see link veebibrauseris:\n"
+"%s"
 
 #. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
 #: ../bleachbit/GuiBasic.py:171
 #, python-format
 msgid "Open web browser to %s?"
-msgstr ""
+msgstr "Kas avada veebibrauseris: %s?"
 
 #: ../bleachbit/GUI.py:144
 msgid "Active"
-msgstr ""
+msgstr "Aktiivne"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
@@ -1028,21 +1039,23 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
-msgstr ""
+msgstr "Peate valima tegevuse"
 
 #: ../bleachbit/GUI.py:369 ../bleachbit/GUI.py:384
 msgid "Done."
-msgstr ""
+msgstr "Valmis."
 
 #: ../bleachbit/GUI.py:396
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Programm mittevajalike failide puhastamiseks"
 
 #: ../bleachbit/GUI.py:401
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License versioon 3 või uuem.\n"
+"Vt http://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1052,99 +1065,103 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Jalakas https://launchpad.net/~jalakas\n"
 "  bushido https://launchpad.net/~olav-magi\n"
 "  olavi tohver https://launchpad.net/~olts16"
 
 #: ../bleachbit/GUI.py:420
 msgid "System information"
-msgstr ""
+msgstr "Süsteemiinfo"
 
 #: ../bleachbit/GUI.py:490
 msgid "Choose files to shred"
-msgstr ""
+msgstr "Vali failid hävitamiseks"
 
 #: ../bleachbit/GUI.py:493
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "Vali kaust hävitamiseks"
 
 #: ../bleachbit/GUI.py:581
 msgid "Preview"
-msgstr ""
+msgstr "Eelvaade"
 
 #: ../bleachbit/GUI.py:631
 msgid "_Shred Files"
-msgstr ""
+msgstr "Hävita _fail"
 
 #: ../bleachbit/GUI.py:632
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "Hävita _kaust"
 
 #: ../bleachbit/GUI.py:633
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "Puhasta vaba kettaruum"
 
 #: ../bleachbit/GUI.py:634
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "Hävita _seaded ja välju"
 
 #: ../bleachbit/GUI.py:635
 msgid "_Quit"
-msgstr ""
+msgstr "_Välju"
 
 #: ../bleachbit/GUI.py:636
 msgid "_File"
-msgstr ""
+msgstr "_Fail"
 
 #: ../bleachbit/GUI.py:638
 msgid "_Edit"
-msgstr ""
+msgstr "_Muuda"
 
 #: ../bleachbit/GUI.py:639
 msgid "Help Contents"
-msgstr ""
+msgstr "Abiteabe sisukord"
 
 #: ../bleachbit/GUI.py:641
 msgid "_Release Notes"
-msgstr ""
+msgstr "_Väljalaske märkused"
 
 #: ../bleachbit/GUI.py:643
 msgid "_System Information"
-msgstr ""
+msgstr "_Süsteemi info"
 
 #: ../bleachbit/GUI.py:644
 msgid "_About"
-msgstr ""
+msgstr "_Programmist lähemalt"
 
 #: ../bleachbit/GUI.py:645
 msgid "_Help"
-msgstr ""
+msgstr "_Abi"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
 #: ../bleachbit/GUI.py:669
 msgctxt "button"
 msgid "Preview"
-msgstr ""
+msgstr "Eelvaade"
 
 #: ../bleachbit/GUI.py:672
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"Valitud toimingutest mõjutatud failide eelvaade (ilma ühtegi faili "
+"kustutamata)"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
 #: ../bleachbit/GUI.py:680
 msgctxt "button"
 msgid "Delete"
-msgstr ""
+msgstr "Kustuta"
 
 #: ../bleachbit/GUI.py:683
 msgid "Delete files in the selected operations"
-msgstr ""
+msgstr "Valitud toimingutest mõjutatud failide kustutamine"
 
 #: ../bleachbit/GUI.py:769
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Viga uuenduste kontrollimisel: "
 
 #: ../bleachbit/GUI.py:800
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"Viga SQLite mooduli laadimisel: seda võib blokeerida viirusetõrjetarkvara."
