@@ -195,11 +195,16 @@ def delete_updates():
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
+
+    import win32serviceutil
+    wu_running = win32serviceutil.QueryServiceStatus('wuauserv')[1] == 4
+
     args = ['net', 'stop', 'wuauserv']
     def wu_service():
         General.run_external(args)
         return 0
-    yield Command.Function(None, wu_service, " ".join(args))
+    if wu_running:
+        yield Command.Function(None, wu_service, " ".join(args))
 
     for path1 in dirs:
         for path2 in FileUtilities.children_in_directory(path1, True):
@@ -208,7 +213,8 @@ def delete_updates():
             yield Command.Delete(path1)
 
     args = ['net', 'start', 'wuauserv']
-    yield Command.Function(None, wu_service, " ".join(args))
+    if wu_running:
+        yield Command.Function(None, wu_service, " ".join(args))
 
 
 def detect_registry_key(parent_key):
