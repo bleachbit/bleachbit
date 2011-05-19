@@ -254,6 +254,7 @@ class Firefox(Cleaner):
         # session restore
         if 'session_restore' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")
+            files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.bak")
         # URL history
         if 'url_history' == option_id:
             # Firefox version 1
