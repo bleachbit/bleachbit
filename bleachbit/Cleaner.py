@@ -191,6 +191,7 @@ class Firefox(Cleaner):
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
         self.add_option('forms', _('Form history'), _('A history of forms entered in web sites and in the Search bar'))
         self.add_option('session_restore', _('Session restore'), _('Loads the initial session after the browser closes or crashes'))
+        self.add_option('site_preferences', _('Site preferences'), _('Settings for individual sites'))
         self.add_option('passwords', _('Passwords'), _('A database of usernames and passwords as well as a list of sites that should not store passwords'))
         self.add_option('url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
@@ -255,6 +256,10 @@ class Firefox(Cleaner):
         if 'session_restore' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.js")
             files += FileUtilities.expand_glob_join(self.profile_dir, "sessionstore.bak")
+        # site-specific preferences
+        if 'site_preferences' == option_id:
+            files += FileUtilities.expand_glob_join(self.profile_dir, "content-prefs.sqlite")
+
         # URL history
         if 'url_history' == option_id:
             # Firefox version 1
