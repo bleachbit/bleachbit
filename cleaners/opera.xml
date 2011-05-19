@@ -50,7 +50,9 @@
     <label>Current session</label>
     <description>Delete the current session</description>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win"/>
+    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win.bak"/>
     <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
+    <action command="delete" search="file" path="~/.opera/sessions/autosave.win.bak"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
