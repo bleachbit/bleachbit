@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-16 21:55-0700\n"
-"PO-Revision-Date: 2011-01-18 18:57+0000\n"
+"POT-Creation-Date: 2011-01-18 20:44-0700\n"
+"PO-Revision-Date: 2011-05-17 18:04+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-19 04:00+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
+"X-Launchpad-Export-Date: 2011-05-18 13:28+0000\n"
+"X-Generator: Launchpad (build 13067)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -66,8 +66,8 @@ msgstr "Tyhjennä välimuisti"
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml
 #: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
-#: ../bleachbit/Action.py:285
+#: ../bleachbit/Action.py:285 ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:281
 msgid "Vacuum"
 msgstr "Imuroi"
 
@@ -160,6 +160,7 @@ msgstr ""
 msgid "Search engines"
 msgstr "Hakukoneet"
 
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
@@ -509,40 +510,6 @@ msgid ""
 msgstr ""
 "Kohdetta %s ei voitu siivota koska se on ajossa. Sulje se ja yritä uudelleen."
 
-#: ../bleachbit/GuiBasic.py:113
-msgid "Delete confirmation"
-msgstr "Poiston vahvistus"
-
-#: ../bleachbit/GuiBasic.py:121
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-"Haluatko varmasti poistaa tiedostot valittujen operaatioiden mukaisesti? "
-"Poistettavat tiedostot ovat voineet muuttua sitten edellisen esikatselun."
-
-#: ../bleachbit/GuiBasic.py:123
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "Haluatko varmasti poistaa nämä tiedostot pysyvästi?"
-
-#: ../bleachbit/GuiBasic.py:159
-#, python-format
-msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
-msgstr ""
-"Koska sovellus suoritetaan järjestelmävalvojan oikeuksin, kopioi ja liitä "
-"seuraava linkki selaimeen:\n"
-"%s"
-
-#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
-#: ../bleachbit/GuiBasic.py:171
-#, python-format
-msgid "Open web browser to %s?"
-msgstr "Avataanko osoite %s selaimessa?"
-
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
@@ -723,7 +690,7 @@ msgstr "Tämä valinta on kokeellinen ja voi aiheuttaa ongelmia järjestelmään
 
 #: ../bleachbit/Cleaner.py:377
 msgid "Memory dump"
-msgstr ""
+msgstr "Muistivedos"
 
 #: ../bleachbit/Cleaner.py:377
 msgid "Delete the file memory.dmp"
@@ -1021,6 +988,40 @@ msgstr "tulosta versiotiedot ja poistu"
 #: ../bleachbit/CLI.py:165
 msgid "overwrite files to hide contents"
 msgstr "päällekirjoita tiedostot sisällön piilottamiseksi"
+
+#: ../bleachbit/GuiBasic.py:113
+msgid "Delete confirmation"
+msgstr "Poiston vahvistus"
+
+#: ../bleachbit/GuiBasic.py:121
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Haluatko varmasti poistaa tiedostot valittujen operaatioiden mukaisesti? "
+"Poistettavat tiedostot ovat voineet muuttua sitten edellisen esikatselun."
+
+#: ../bleachbit/GuiBasic.py:123
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Haluatko varmasti poistaa nämä tiedostot pysyvästi?"
+
+#: ../bleachbit/GuiBasic.py:159
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Koska sovellus suoritetaan järjestelmävalvojan oikeuksin, kopioi ja liitä "
+"seuraava linkki selaimeen:\n"
+"%s"
+
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:171
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "Avataanko osoite %s selaimessa?"
 
 #: ../bleachbit/GUI.py:144
 msgid "Active"
