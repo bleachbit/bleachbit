@@ -388,7 +388,6 @@ class System(Cleaner):
             # TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _('Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
-            self.set_warning('updates', _('This option is experimental and may cause system problems.'))
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
         # TRANSLATORS: 'free' means 'unallocated'
