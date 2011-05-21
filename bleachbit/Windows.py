@@ -287,6 +287,15 @@ def elevate_privileges():
     return False
 
 
+def empty_recycle_bin(drive, really_delete):
+    """Empty the recycle bin or preview its size"""
+    bytes_used = shell.SHQueryRecycleBin(drive)[0]
+    if really_delete and bytes_used > 0:
+        # Trying to delete an empty Recycle Bin on Vista/7 causes a 'catastrophic failure'
+        flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
+        shell.SHEmptyRecycleBin(None, drive, flags)
+    return bytes_used
+
 
 def enumerate_processes():
     """Return list of module names (e.g., firefox.exe) of running
@@ -302,7 +311,6 @@ def enumerate_processes():
     r = list(set(r))
     r.sort()
     return r
-
 
 
 def enumerate_processes_win32():
@@ -348,8 +356,6 @@ def enumerate_processes_win32():
     return modnames
 
 
-
-
 def enumerate_processes_wmic():
     """Return list of module names (e.g., firefox.exe) of running
     processes
@@ -367,6 +373,8 @@ def enumerate_processes_wmic():
     return sorted(modnames)
 
 
+
+
 def get_fixed_drives():
     """Yield each fixed drive"""
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):
@@ -374,14 +382,12 @@ def get_fixed_drives():
             yield drive
 
 
-def empty_recycle_bin(drive, really_delete):
-    """Empty the recycle bin or preview its size"""
-    bytes_used = shell.SHQueryRecycleBin(drive)[0]
-    if really_delete and bytes_used > 0:
-        # Trying to delete an empty Recycle Bin on Vista/7 causes a 'catastrophic failure'
-        flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
-        shell.SHEmptyRecycleBin(None, drive, flags)
-    return bytes_used
+def path_on_network(path):
+    """Check whether 'path' is on a network drive"""
+    if len(os.path.splitunc(path)[0]) > 0:
+        return True
+    drive = os.path.splitdrive(path)[0] + '\\'
+    return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
 
 def split_registry_key(full_key):
@@ -419,9 +425,4 @@ def start_with_computer_check():
     return os.path.lexists(Common.autostart_path)
 
 
-def path_on_network(path):
-    """Check whether 'path' is on a network drive"""
-    if len(os.path.splitunc(path)[0]) > 0:
-        return True
-    drive = os.path.splitdrive(path)[0] + '\\'
-    return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
+
