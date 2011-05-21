@@ -31,14 +31,7 @@ import os
 import random
 import sys
 
-try:
-    import hashlib
-except:
-    HAVE_HASHLIB = False
-    import md5
-    import sha
-else:
-    HAVE_HASHLIB = True
+import hashlib
 
 from Common import _, _p
 from CleanerML import list_cleanerml_files
@@ -137,13 +130,8 @@ def cleaner_change_dialog(changes, parent):
 def hashdigest(string):
     """Return hex digest of hash for a string"""
 
-    if HAVE_HASHLIB:
-        # Python 2.5 to 2.6
-        return hashlib.sha512(string).hexdigest()
-    else:
-        # Python 2.4
-        return md5.new(string).hexdigest() + \
-            sha.new(string).hexdigest()
+    # hashlib requires Python 2.5
+    return hashlib.sha512(string).hexdigest()
 
 
 class RecognizeCleanerML:

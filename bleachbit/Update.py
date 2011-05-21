@@ -37,6 +37,13 @@ from Common import _
 from GuiBasic import open_url
 
 
+def download_winapp2(url):
+    """Download latest winapp2.ini file and return whether change made"""
+    request = urllib2.Request(url)
+    request.add_header('User-Agent', user_agent())
+    opener = 
+
+
 def user_agent():
     """Return the user agent string"""
     __platform = platform.system() # Linux or Windows
