@@ -387,7 +387,7 @@ def apt_autoclean():
 
 
 def apt_autoremove():
-    """Run 'apt-get auturemove' and return the size (un-rounded, in bytes)
+    """Run 'apt-get autoremove' and return the size (un-rounded, in bytes)
         of freed space"""
 
     if not FileUtilities.exe_exists('apt-get'):
