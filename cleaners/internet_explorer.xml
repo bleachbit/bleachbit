@@ -53,5 +53,6 @@
     <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\IETldCache\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
     <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Feeds Cache\"/>
   </option>
 </cleaner>
