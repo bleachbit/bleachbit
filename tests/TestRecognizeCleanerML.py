@@ -29,7 +29,7 @@ import sys
 import unittest
 
 sys.path.append('.')
-from bleachbit.RecognizeCleanerML import hashdigest, HAVE_HASHLIB
+from bleachbit.RecognizeCleanerML import hashdigest
 
 
 
@@ -39,12 +39,8 @@ class RecognizeCleanerMLTestCase(unittest.TestCase):
     def test_hash(self):
         """Unit test for hash()"""
         digest = hashdigest('bleachbit')
-        if HAVE_HASHLIB:
-            self.assertEqual(len(digest), 128)
-            self.assertEqual(digest[1:10], '6382c203e')
-        else:
-            self.assertEqual(len(digest), 72)
-            self.assertEqual(digest[1:10], '0d4a3172f')
+        self.assertEqual(len(digest), 128)
+        self.assertEqual(digest[1:10], '6382c203e')
 
 
 def suite():
