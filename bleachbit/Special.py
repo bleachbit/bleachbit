@@ -65,6 +65,9 @@ def delete_chrome_history(path):
         ids_str = ",".join([str(id0) for id0 in ids_int])
         where = "where id not in (%s) " % ids_str
     cmds = __shred_sqlite_char_columns('urls', cols, where)
+    cmds += __shred_sqlite_char_columns('visits', None)
+    cols = ('lower_term', 'term')
+    cmds += __shred_sqlite_char_columns('keyword_search_terms', None)
     FileUtilities.execute_sqlite3(path, cmds)
 
 

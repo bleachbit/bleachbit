@@ -216,6 +216,18 @@ class ChromeDatabases(FileActionProvider):
                _('Clean file'))
 
 
+class ChromeHistory(FileActionProvider):
+    """Action to clean 'History' file in Google Chrome/Chromium"""
+    action_key = 'chrome.history'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_chrome_history, \
+               _('Clean file'))
+
+
 class ChromeKeywords(FileActionProvider):
     """Action to clean 'keywords' table in Google Chrome/Chromium"""
     action_key = 'chrome.keywords'
