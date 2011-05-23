@@ -158,13 +158,14 @@ def check_updates(check_beta, check_winapp2, append_text):
     stable = parse_updates(dom.getElementsByTagName("stable"))
     beta = parse_updates(dom.getElementsByTagName("beta"))
 
-    dom.unlink()
-
     wa_element = dom.getElementsByTagName('winapp2')
     if check_winapp2 and wa_element:
-        wa_sha512 = wa_element.getAttribute('sha512')
-        wa_url = wa_element.getAttribute('url')
+        wa_sha512 = wa_element[0].getAttribute('sha512')
+        wa_url = wa_element[0].getAttribute('url')
         update_winapp2(wa_url, wa_sha512, append_text)
+
+
+    dom.unlink()
 
     if stable and beta and check_beta:
         return (stable, beta)
