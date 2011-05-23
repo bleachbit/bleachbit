@@ -203,6 +203,19 @@ class ChromeAutofill(FileActionProvider):
                _('Clean file'))
 
 
+
+class ChromeDatabase(FileActionProvider):
+    """Action to clean Databases.db in Google Chrome/Chromium"""
+    action_key = 'chrome.database_db'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_chrome_databases_db, \
+               _('Clean file'))
+
+
 class ChromeKeywords(FileActionProvider):
     """Action to clean 'keywords' table in Google Chrome/Chromium"""
     action_key = 'chrome.keywords'

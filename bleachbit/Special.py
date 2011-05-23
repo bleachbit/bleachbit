@@ -48,6 +48,14 @@ def delete_chrome_autofill(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def delete_chrome_databases_db(path):
+    """Delete remote cookies (not extension data) from Databases.db"""
+    cols = ('origin', 'name', 'description')
+    where = "where origin like 'http%'"
+    cmds = __shred_sqlite_char_columns('Databases', cols, where)
+    FileUtilities.execute_sqlite3(path, cmds)
+
+
 def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')

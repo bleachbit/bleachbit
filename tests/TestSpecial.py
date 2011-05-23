@@ -82,6 +82,17 @@ INSERT INTO "autofill_dates" VALUES(1,1268958682);
         self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_autofill)
 
 
+    def test_delete_chrome_databases_db(self):
+        """Unit test for delete_chrome_databases_db"""
+        # data from Chromium 12
+        sql = """
+CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
+INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
+INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
+"""
+        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_databases_db)
+
+
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
         sql = """
