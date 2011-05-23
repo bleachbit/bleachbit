@@ -631,15 +631,16 @@ class System(Cleaner):
     def whitelisted(self, pathname):
         """Return boolean whether file is whitelisted"""
         regexes = [
+            '^/tmp/.X0-lock$',
             '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
-            '^/tmp/.X0-lock$',
             '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/ksocket-[^/]+/(Arts_SoundServerV2|secret-cookie)$',
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
-            '^/tmp/pulse-[^/]+/pid$' ]
+            '^/tmp/pulse-[^/]+/pid$',
+            '^/var/tmp/kdecache-' ]
         for regex in regexes:
             if None != re.match(regex, pathname):
                 return True
