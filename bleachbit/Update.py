@@ -25,6 +25,9 @@ Check for updates via the Internet
 
 
 import gtk
+import hashlib
+import os
+import os.path
 import platform
 import socket
 import sys
@@ -35,6 +38,23 @@ import xml.dom.minidom
 import Common
 from Common import _
 from GuiBasic import open_url
+
+
+def download_winapp2(url, hash_expected):
+    """Download latest winapp2.ini file"""
+    opener = urllib2.build_opener()
+    opener.addheaders =[('User-Agent', user_agent())]
+    doc = opener.open(url).read()
+    hash_actual = hashlib.sha512(doc).hexdigest()
+    if hash_expected and not hash_actual == hash_expected:
+        raise RuntimeError("hash for %s actually %s instead of %s" % \
+            (url, hash_actual, hash_expected))
+    from Common import personal_cleaners_dir
+    if not os.path.exists(personal_cleaners_dir):
+        os.mkdir(personal_cleaners_dir)
+    fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
+    f = open(fn, 'w')
+    f.write(doc)
 
 
 def user_agent():
