@@ -47,12 +47,13 @@
   <option id="dom">
     <label>DOM Storage</label>
     <description>Delete HTML5 cookies</description>
-    <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\Local Storage\http*localstoragex"/>
-    <action command="delete" search="walk.all" path="$localappdata\Chromium\User Data\Default\databases\"/>
-    <action command="delete" search="glob" path="~/.config/chromium/Default/Local Storage/http*localstorage"/>
     <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
-    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/http*/"/>
+    <action command="chrome.databases_db" search="glob" path="$localappdata\Chromium\User Data\Default\databases\Databases.db"/>
     <action command="chrome.databases_db" search="glob" path="~/.config/chromium/Default/databases/Databases.db"/>
+    <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\Local Storage\http*localstoragex"/>
+    <action command="delete" search="glob" path="~/.config/chromium/Default/Local Storage/http*localstorage"/>
+    <action command="delete" search="walk.all" path="$localappdata\Chromium\User Data\Default\databases\http*\"/>
+    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/http*/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
