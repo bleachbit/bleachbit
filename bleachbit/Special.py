@@ -56,6 +56,18 @@ def delete_chrome_databases_db(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def delete_chrome_history(path):
+    """Clean history from History and Favicon files without affecting bookmarks"""
+    cols = ('url', 'title')
+    where = ""
+    ids_int = get_chrome_bookmark_ids(path)
+    if ids_int:
+        ids_str = ",".join([str(id0) for id0 in ids_int])
+        where = "where id not in (%s) " % ids_str
+    cmds = __shred_sqlite_char_columns('urls', cols, where)
+    FileUtilities.execute_sqlite3(path, cmds)
+
+
 def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
@@ -119,7 +131,24 @@ def delete_ooo_history(path):
     dom1.writexml(open(path, "w"))
 
 
-def get_chrome_bookmarks(path):
+def get_chrome_bookmark_ids(history_path):
+    """Given the path of a history file, return the ids in the
+    urls table that are bookmarks"""
+    import os.path
+    bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
+    urls = get_chrome_bookmark_urls(bookmark_path)
+    ids = []
+    import sqlite3
+    conn = sqlite3.connect(history_path)
+    cursor = conn.cursor()
+    for url in urls:
+        cursor.execute('select id from urls where url=?', (url,))
+        for row in cursor:
+            ids.append(row[0])
+    return ids
+
+
+def get_chrome_bookmark_urls(path):
     """Return a list of bookmarked URLs in Google Chrome/Chromium"""
     try:
         import json
@@ -131,5 +160,4 @@ def get_chrome_bookmarks(path):
 
     # find bookmarks
     return [bookmark['url'] for bookmark in js['roots']['bookmark_bar']['children']]
-
 

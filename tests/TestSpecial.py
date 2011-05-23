@@ -35,19 +35,64 @@ from bleachbit.Options import options
 import bleachbit.FileUtilities
 import bleachbit.Special
 
+chrome_bookmarks = """
+{
+   "checksum": "e7db866d606d03627b99ccf5cdd62269",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "12950663211506884",
+            "id": "3",
+            "name": "BleachBit - Clean Disk Space, Maintain Privacy",
+            "type": "url",
+            "url": "http://bleachbit.sourceforge.net/"
+         } ],
+         "date_added": "0",
+         "date_modified": "12950663211506884",
+         "id": "1",
+         "name": "Bookmarks Bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "0",
+         "date_modified": "0",
+         "id": "2",
+         "name": "Other Bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}"""
+
+chrome_history_sql = """
+CREATE TABLE urls(id INTEGER PRIMARY KEY,url LONGVARCHAR,title LONGVARCHAR,visit_count INTEGER DEFAULT 0 NOT NULL,typed_count INTEGER DEFAULT 0 NOT NULL,last_visit_time INTEGER NOT NULL,hidden INTEGER DEFAULT 0 NOT NULL,favicon_id INTEGER DEFAULT 0 NOT NULL);
+INSERT INTO "urls" VALUES(1,'http://bleachbit.sourceforge.net/','BleachBit - Clean Disk Space, Maintain Privacy',2,0,12950666056707678,0,359);
+INSERT INTO "urls" VALUES(11,'http://www.sqlite.org/','SQLite Home Page',1,0,12950667437422381,0,354);
+CREATE TABLE visits(id INTEGER PRIMARY KEY,url INTEGER NOT NULL,visit_time INTEGER NOT NULL,from_visit INTEGER,transition INTEGER DEFAULT 0 NOT NULL,segment_id INTEGER,is_indexed BOOLEAN);
+INSERT INTO "visits" VALUES(1,1,12950666049209923,0,805306370,1,0);
+"""
 
 class SpecialTestCase(unittest.TestCase):
     """Test case for module Special"""
 
 
-    def sqlite_clean_helper(self, sql, clean_func, check_func = None):
+    def sqlite_clean_helper(self, sql, clean_func, check_func = None, setup_func = None):
         """Helper for cleaning special SQLite cleaning"""
 
         # create test file
         (fd, filename) = tempfile.mkstemp()
         os.close(fd)
+
+        # additional setup
+        if setup_func:
+            setup_func(filename)
+
+        # sqlite file does not exist
         self.assertRaises(sqlite3.DatabaseError, \
             clean_func, filename)
+
+        # create sqlite file
         bleachbit.FileUtilities.execute_sqlite3(filename, sql)
         self.assert_(os.path.exists(filename))
 
@@ -93,6 +138,30 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
         self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_databases_db)
 
 
+    def test_delete_chrome_history(self):
+        """Unit test for delete_chrome_history"""
+
+        def setup_bookmarks(history_path):
+            print 'debug: setup_bookmarks(%s)' % history_path
+            import os.path
+            bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
+            f = open(bookmark_path, 'w')
+            f.write(chrome_bookmarks)
+            f.close()
+
+        def check_chrome_history(self, filename):
+            conn = sqlite3.connect(filename)
+            c = conn.cursor()
+            c.execute('select id from urls')
+            ids = []
+            for row in c:
+                ids.append(row[0])
+            self.assertEqual(ids, [1])
+
+
+        self.sqlite_clean_helper(chrome_history_sql, bleachbit.Special.delete_chrome_history, check_chrome_history, setup_bookmarks)
+
+
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
         sql = """
@@ -135,45 +204,19 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.sqlite_clean_helper(sql, bleachbit.Special.delete_mozilla_url_history)
 
 
-    def test_get_chrome_bookmarks(self):
-        bookmarks = """
-{
-   "checksum": "e7db866d606d03627b99ccf5cdd62269",
-   "roots": {
-      "bookmark_bar": {
-         "children": [ {
-            "date_added": "12950663211506884",
-            "id": "3",
-            "name": "BleachBit - Clean Disk Space, Maintain Privacy",
-            "type": "url",
-            "url": "http://bleachbit.sourceforge.net/"
-         } ],
-         "date_added": "0",
-         "date_modified": "12950663211506884",
-         "id": "1",
-         "name": "Bookmarks Bar",
-         "type": "folder"
-      },
-      "other": {
-         "children": [  ],
-         "date_added": "0",
-         "date_modified": "0",
-         "id": "2",
-         "name": "Other Bookmarks",
-         "type": "folder"
-      }
-   },
-   "version": 1
-}"""
+    def test_get_chrome_bookmark_urls(self):
+        """Unit test for get_chrome_bookmark_urls()"""
         (fd, path) = tempfile.mkstemp()
-        os.write(fd, bookmarks)
+        os.write(fd, chrome_bookmarks)
         os.close(fd)
 
         self.assert_(os.path.exists(path))
-        urls = bleachbit.Special.get_chrome_bookmarks(path)
+        urls = bleachbit.Special.get_chrome_bookmark_urls(path)
         self.assertEqual(urls, ['http://bleachbit.sourceforge.net/'])
 
+        # does not exist
         os.unlink(path)
+        self.assertRaises(IOError, bleachbit.Special.get_chrome_bookmark_urls, path)
 
 
 def suite():
