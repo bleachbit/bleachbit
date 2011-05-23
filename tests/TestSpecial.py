@@ -135,6 +135,46 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.sqlite_clean_helper(sql, bleachbit.Special.delete_mozilla_url_history)
 
 
+    def test_get_chrome_bookmarks(self):
+        bookmarks = """
+{
+   "checksum": "e7db866d606d03627b99ccf5cdd62269",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "12950663211506884",
+            "id": "3",
+            "name": "BleachBit - Clean Disk Space, Maintain Privacy",
+            "type": "url",
+            "url": "http://bleachbit.sourceforge.net/"
+         } ],
+         "date_added": "0",
+         "date_modified": "12950663211506884",
+         "id": "1",
+         "name": "Bookmarks Bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "0",
+         "date_modified": "0",
+         "id": "2",
+         "name": "Other Bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}"""
+        (fd, path) = tempfile.mkstemp()
+        os.write(fd, bookmarks)
+        os.close(fd)
+
+        self.assert_(os.path.exists(path))
+        urls = bleachbit.Special.get_chrome_bookmarks(path)
+        self.assertEqual(urls, ['http://bleachbit.sourceforge.net/'])
+
+        os.unlink(path)
+
 
 def suite():
     return unittest.makeSuite(SpecialTestCase)

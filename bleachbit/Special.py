@@ -118,3 +118,18 @@ def delete_ooo_history(path):
                 break
     dom1.writexml(open(path, "w"))
 
+
+def get_chrome_bookmarks(path):
+    """Return a list of bookmarked URLs in Google Chrome/Chromium"""
+    try:
+        import json
+    except:
+        import simplejson as json
+
+    # read file to parser
+    js = json.load(open(path, 'r'))
+
+    # find bookmarks
+    return [bookmark['url'] for bookmark in js['roots']['bookmark_bar']['children']]
+
+
