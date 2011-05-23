@@ -31,7 +31,7 @@ import Common
 import General
 
 
-boolean_keys = ('auto_hide', 'auto_start', 'check_beta', 'check_online_updates', 'first_start', 'shred')
+boolean_keys = ('auto_hide', 'auto_start', 'check_beta', 'check_online_updates', 'first_start', 'shred', 'update_winapp2')
 
 
 
@@ -154,6 +154,8 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
+        if 'nt' == os.name:
+            self.__set_default("update_winapp2", False)
 
         if not self.config.has_section('preserve_languages'):
             lang = Common.user_locale
