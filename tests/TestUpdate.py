@@ -34,7 +34,7 @@ import urllib2
 
 sys.path.append('.')
 from bleachbit import Common
-from bleachbit.Update import check_updates, download_winapp2, user_agent
+from bleachbit.Update import check_updates, update_winapp2, user_agent
 
 
 
@@ -89,7 +89,7 @@ class UpdateTestCase(unittest.TestCase):
         self.assertRaises(urllib2.URLError, check_updates, True)
 
 
-    def test_download_winapp2(self):
+    def test_update_winapp2(self):
         from bleachbit.Common import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
@@ -100,7 +100,14 @@ class UpdateTestCase(unittest.TestCase):
             os.rmdir(personal_cleaners_dir)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2.ini'
-        self.assertRaises(RuntimeError, download_winapp2, url, "notahash")
+        # bad hash
+        self.assertRaises(RuntimeError, update_winapp2, url, "notahash")
+
+        # blank hash, download file
+        update_winapp2(url, None)
+
+        # blank hash, overwrite file
+        update_winapp2(url, None)
 
 
     def test_user_agent(self):

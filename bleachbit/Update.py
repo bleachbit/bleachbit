@@ -40,19 +40,36 @@ from Common import _
 from GuiBasic import open_url
 
 
-def download_winapp2(url, hash_expected):
-    """Download latest winapp2.ini file"""
+def update_winapp2(url, hash_expected):
+    """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
+    # first, determine whether an update is necessary
+    from Common import personal_cleaners_dir
+    fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
+    delete_current = False
+    if os.path.exists(fn):
+        f = open(fn, 'r')
+        hash_current = hashlib.sha512(f.read()).hexdigest()
+        if not hash_expected or hash_current == hash_expected:
+            # update is same as current
+            return
+        f.close()
+        delete_current = True
+    # download update
     opener = urllib2.build_opener()
     opener.addheaders =[('User-Agent', user_agent())]
     doc = opener.open(url).read()
+    # verify hash
     hash_actual = hashlib.sha512(doc).hexdigest()
     if hash_expected and not hash_actual == hash_expected:
         raise RuntimeError("hash for %s actually %s instead of %s" % \
             (url, hash_actual, hash_expected))
-    from Common import personal_cleaners_dir
+    # delete current
+    if delete_current:
+        from FileUtilities import shred
+        shred(fn)
+    # write file
     if not os.path.exists(personal_cleaners_dir):
         os.mkdir(personal_cleaners_dir)
-    fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
     f = open(fn, 'w')
     f.write(doc)
 
@@ -119,7 +136,7 @@ def update_dialog(parent, updates):
 
 
 
-def check_updates(check_beta):
+def check_updates(check_beta, check_winapp2):
     """Check for updates via the Internet"""
     opener = urllib2.build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
@@ -141,6 +158,12 @@ def check_updates(check_beta):
     beta = parse_updates(dom.getElementsByTagName("beta"))
 
     dom.unlink()
+
+    wa_element = dom.getElementsByTagName('winapp2')
+    if check_winapp2 and wa_element:
+        wa_sha512 = wa_element.getAttribute('sha512')
+        wa_url = wa_element.getAttribute('url')
+        update_winapp2(wa_url, wa_sha512)
 
     if stable and beta and check_beta:
         return (stable, beta)
