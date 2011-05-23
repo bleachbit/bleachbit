@@ -109,11 +109,16 @@ class PreferencesDialog:
             cb_updates.set_tooltip_text(_("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False)
 
+            updates_hbox = gtk.HBox()
+            updates_hbox.set_border_width(10)
+
             self.cb_beta = gtk.CheckButton(_("Check for new beta releases"))
             self.cb_beta.set_active(options.get('check_beta'))
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
             self.cb_beta.connect('toggled', self.__toggle_callback, 'check_beta')
-            vbox.pack_start(self.cb_beta, False)
+            updates_hbox.pack_start(self.cb_beta, False)
+
+            vbox.pack_start(updates_hbox, False)
 
         # TRANSLATORS: This means to hide cleaners which would do
         # nothing.  For example, if Firefox were never used on
