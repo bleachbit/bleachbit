@@ -204,9 +204,9 @@ class ChromeAutofill(FileActionProvider):
 
 
 
-class ChromeDatabase(FileActionProvider):
+class ChromeDatabases(FileActionProvider):
     """Action to clean Databases.db in Google Chrome/Chromium"""
-    action_key = 'chrome.database_db'
+    action_key = 'chrome.databases_db'
 
     def get_commands(self):
         for path in self.get_paths():

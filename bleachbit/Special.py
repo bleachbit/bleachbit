@@ -49,9 +49,9 @@ def delete_chrome_autofill(path):
 
 
 def delete_chrome_databases_db(path):
-    """Delete remote cookies (not extension data) from Databases.db"""
+    """Delete remote HTML5 cookies (avoiding extension data) from the Databases.db file"""
     cols = ('origin', 'name', 'description')
-    where = "where origin like 'http%'"
+    where = "where origin not like 'chrome-%'"
     cmds = __shred_sqlite_char_columns('Databases', cols, where)
     FileUtilities.execute_sqlite3(path, cmds)
 
