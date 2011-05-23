@@ -46,11 +46,12 @@ class UpdateTestCase(unittest.TestCase):
         """Unit tests for class UpdateCheck"""
 
         update_tests = []
-        update_tests.append( ( '<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta></updates>', \
+        wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
+        update_tests.append( ( '<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa, \
             ( (u'0.8.4', u'http://084') , (u'0.8.5beta', u'http://085beta'))) )
-        update_tests.append( ('<updates><stable ver="0.8.4">http://084</stable></updates>', \
+        update_tests.append( ('<updates><stable ver="0.8.4">http://084</stable>%s</updates>' % wa, \
             ( (u'0.8.4', u'http://084') , ) ) )
-        update_tests.append( ('<updates><beta ver="0.8.5beta">http://085beta</beta></updates>', \
+        update_tests.append( ('<updates><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa, \
             ( (u'0.8.5beta', u'http://085beta') , ) ) )
         update_tests.append( ('<updates></updates>', ()) )
 
@@ -71,12 +72,12 @@ class UpdateTestCase(unittest.TestCase):
         urllib2.build_opener = fake_opener
         for update_test in update_tests:
             xml = update_test[0]
-            updates = check_updates(True)
+            updates = check_updates(True, False, None)
             self.assertEqual(updates, update_test[1])
         urllib2.build_opener = original_open
 
         # real network
-        for update in check_updates(True):
+        for update in check_updates(True, False, None):
             if not update:
                 continue
             ver = update[0]
@@ -86,7 +87,7 @@ class UpdateTestCase(unittest.TestCase):
 
         # test failure
         Common.update_check_url = "http://localhost/doesnotexist"
-        self.assertRaises(urllib2.URLError, check_updates, True)
+        self.assertRaises(urllib2.URLError, check_updates, True, False, None)
 
 
     def test_update_winapp2(self):
@@ -100,14 +101,18 @@ class UpdateTestCase(unittest.TestCase):
             os.rmdir(personal_cleaners_dir)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2.ini'
+
+        def append_text(s):
+            print s
+
         # bad hash
-        self.assertRaises(RuntimeError, update_winapp2, url, "notahash")
+        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", append_text)
 
         # blank hash, download file
-        update_winapp2(url, None)
+        update_winapp2(url, None, append_text)
 
         # blank hash, overwrite file
-        update_winapp2(url, None)
+        update_winapp2(url, None, append_text)
 
 
     def test_user_agent(self):

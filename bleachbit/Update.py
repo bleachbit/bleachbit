@@ -40,7 +40,7 @@ from Common import _
 from GuiBasic import open_url
 
 
-def update_winapp2(url, hash_expected):
+def update_winapp2(url, hash_expected, append_text):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
     from Common import personal_cleaners_dir
@@ -72,6 +72,7 @@ def update_winapp2(url, hash_expected):
         os.mkdir(personal_cleaners_dir)
     f = open(fn, 'w')
     f.write(doc)
+    append_text(_('New winapp2.ini was downloaded.'))
 
 
 def user_agent():
@@ -136,7 +137,7 @@ def update_dialog(parent, updates):
 
 
 
-def check_updates(check_beta, check_winapp2):
+def check_updates(check_beta, check_winapp2, append_text):
     """Check for updates via the Internet"""
     opener = urllib2.build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
@@ -163,7 +164,7 @@ def check_updates(check_beta, check_winapp2):
     if check_winapp2 and wa_element:
         wa_sha512 = wa_element.getAttribute('sha512')
         wa_url = wa_element.getAttribute('url')
-        update_winapp2(wa_url, wa_sha512)
+        update_winapp2(wa_url, wa_sha512, append_text)
 
     if stable and beta and check_beta:
         return (stable, beta)
