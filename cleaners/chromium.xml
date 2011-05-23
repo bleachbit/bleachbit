@@ -50,7 +50,8 @@
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\Local Storage\http*localstoragex"/>
     <action command="delete" search="walk.all" path="$localappdata\Chromium\User Data\Default\databases\"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/Local Storage/http*localstorage"/>
-    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/"/>
+    <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
+    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/http*/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
