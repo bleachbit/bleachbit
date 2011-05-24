@@ -65,8 +65,7 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Archived History"/>
-    <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Favicons"/>
-    <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
+    <action command="chrome.history" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\History-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails-journal"/>
@@ -78,8 +77,7 @@
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Archived History-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Favicons"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/History"/>
+    <action command="chrome.history" search="file" path="~/.config/chromium/Default/History"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/History-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
