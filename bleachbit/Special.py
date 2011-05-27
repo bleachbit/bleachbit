@@ -41,6 +41,20 @@ def __shred_sqlite_char_columns(table, cols, where = ""):
     return cmd
 
 
+def __get_sqlite_int(path, sql, parameters = None):
+    """Run SQL on database in 'path' and return the integers"""
+    ids = []
+    import sqlite3
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+    cursor.execute(sql, parameters)
+    for row in cursor:
+        ids.append(row[0])
+    cursor.close()
+    conn.close()
+    return ids
+
+
 def delete_chrome_autofill(path):
     """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('name', 'value', 'value_lower')
@@ -163,13 +177,8 @@ def get_chrome_bookmark_ids(history_path):
     bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
-    import sqlite3
-    conn = sqlite3.connect(history_path)
-    cursor = conn.cursor()
     for url in urls:
-        cursor.execute('select id from urls where url=?', (url,))
-        for row in cursor:
-            ids.append(row[0])
+       ids +=  __get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
     return ids
 
 
