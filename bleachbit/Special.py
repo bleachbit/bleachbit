@@ -23,6 +23,7 @@
 Cross-platform, special cleaning operations
 """
 
+import os.path
 
 from Options import options
 import FileUtilities
@@ -56,10 +57,32 @@ def delete_chrome_databases_db(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def delete_chrome_favicons(path):
+    """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
+
+    path_history = os.path.join(os.path.dirname(path), 'History')
+
+    # icon_mapping
+    cols = ('page_url',)
+    where = None
+    cmds = ""
+    if os.path.exists(path_history):
+        cmds += "attach database \"%s\" as History;" % path_history
+        where = "where page_url not in (select distinct url from History.urls)"
+    cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
+
+    # favicons
+    cols = ('url', 'image_data')
+    where = "where id not in (select distinct icon_id from icon_mapping)"
+    cmds += __shred_sqlite_char_columns('favicons', cols, where)
+
+    FileUtilities.execute_sqlite3(path, cmds)
+
+
 def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
     cols = ('url', 'title')
-    where = ""
+    where = None
     ids_int = get_chrome_bookmark_ids(path)
     if ids_int:
         ids_str = ",".join([str(id0) for id0 in ids_int])
@@ -137,7 +160,6 @@ def delete_ooo_history(path):
 def get_chrome_bookmark_ids(history_path):
     """Given the path of a history file, return the ids in the
     urls table that are bookmarks"""
-    import os.path
     bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []

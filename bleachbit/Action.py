@@ -216,6 +216,19 @@ class ChromeDatabases(FileActionProvider):
                _('Clean file'))
 
 
+class ChromeFavicons(FileActionProvider):
+    """Action to clean 'Favicons' file in Google Chrome/Chromium"""
+    action_key = 'chrome.favicons'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_chrome_favicons, \
+               _('Clean file'))
+
+
+
 class ChromeHistory(FileActionProvider):
     """Action to clean 'History' file in Google Chrome/Chromium"""
     action_key = 'chrome.history'
