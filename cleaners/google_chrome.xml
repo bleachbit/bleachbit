@@ -77,6 +77,7 @@
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
+    <action command="chrome.favicons" search="file" path="~/.config/google-chrome/Default/Favicons"/>
     <action command="chrome.history" search="file" path="~/.config/google-chrome/Default/History"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>

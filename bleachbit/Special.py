@@ -47,9 +47,12 @@ def __get_sqlite_int(path, sql, parameters = None):
     import sqlite3
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
-    cursor.execute(sql, parameters)
+    if parameters:
+        cursor.execute(sql, parameters)
+    else:
+        cursor.execute(sql)
     for row in cursor:
-        ids.append(row[0])
+        ids.append(int(row[0]))
     cursor.close()
     conn.close()
     return ids
@@ -75,20 +78,35 @@ def delete_chrome_favicons(path):
     """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
 
     path_history = os.path.join(os.path.dirname(path), 'History')
-
-    # icon_mapping
-    cols = ('page_url',)
-    where = None
+    ver = __get_sqlite_int(path, 'select value from meta where key="version"')[0]
     cmds = ""
-    if os.path.exists(path_history):
-        cmds += "attach database \"%s\" as History;" % path_history
-        where = "where page_url not in (select distinct url from History.urls)"
-    cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
 
-    # favicons
-    cols = ('url', 'image_data')
-    where = "where id not in (select distinct icon_id from icon_mapping)"
-    cmds += __shred_sqlite_char_columns('favicons', cols, where)
+    if 4 == ver:
+        # Version 4 includes Chromium 12
+
+        # icon_mapping
+        cols = ('page_url',)
+        where = None
+        if os.path.exists(path_history):
+            cmds += "attach database \"%s\" as History;" % path_history
+            where = "where page_url not in (select distinct url from History.urls)"
+        cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
+
+        # favicons
+        cols = ('url', 'image_data')
+        where = "where id not in (select distinct icon_id from icon_mapping)"
+        cmds += __shred_sqlite_char_columns('favicons', cols, where)
+    elif 3 == ver:
+        # Version 3 includes Google Chrome 11
+
+        cols = ('url', 'image_data')
+        where = None
+        if os.path.exists(path_history):
+            cmds += "attach database \"%s\" as History;" % path_history
+            where = "where id not in(select distinct favicon_id from History.urls)"
+        cmds += __shred_sqlite_char_columns('favicons', cols, where)
+    else:
+        raise RuntimeError('%s is version %d' % (path, ver))
 
     FileUtilities.execute_sqlite3(path, cmds)
 
