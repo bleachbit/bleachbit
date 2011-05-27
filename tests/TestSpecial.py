@@ -71,6 +71,8 @@ INSERT INTO "urls" VALUES(1,'http://bleachbit.sourceforge.net/','BleachBit - Cle
 INSERT INTO "urls" VALUES(11,'http://www.sqlite.org/','SQLite Home Page',1,0,12950667437422381,0,354);
 CREATE TABLE visits(id INTEGER PRIMARY KEY,url INTEGER NOT NULL,visit_time INTEGER NOT NULL,from_visit INTEGER,transition INTEGER DEFAULT 0 NOT NULL,segment_id INTEGER,is_indexed BOOLEAN);
 INSERT INTO "visits" VALUES(1,1,12950666049209923,0,805306370,1,0);
+CREATE TABLE keyword_search_terms (keyword_id INTEGER NOT NULL,url_id INTEGER NOT NULL,lower_term LONGVARCHAR NOT NULL,term LONGVARCHAR NOT NULL);
+INSERT INTO "keyword_search_terms" VALUES(2,33,'bleachbit','bleachbit');
 """
 
 class SpecialTestCase(unittest.TestCase):
