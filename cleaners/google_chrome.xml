@@ -67,8 +67,9 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
+    <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails-journal"/>
