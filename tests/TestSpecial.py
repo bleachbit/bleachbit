@@ -83,7 +83,7 @@ class SpecialTestCase(unittest.TestCase):
         """Helper for cleaning special SQLite cleaning"""
 
         # create test file
-        (fd, filename) = tempfile.mkstemp()
+        (fd, filename) = tempfile.mkstemp('bleachbit-test')
         os.close(fd)
 
         # additional setup
@@ -208,7 +208,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
-        (fd, path) = tempfile.mkstemp()
+        (fd, path) = tempfile.mkstemp('bleachbit-test')
         os.write(fd, chrome_bookmarks)
         os.close(fd)
 
