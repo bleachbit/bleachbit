@@ -41,7 +41,6 @@ import TestOptions
 import TestRecognizeCleanerML
 import TestSpecial
 import TestUpdate
-import TestWinapp
 import TestWorker
 
 
@@ -65,6 +64,7 @@ if 'posix' == os.name:
     suites.append(TestUnix.suite())
 
 if 'nt' == os.name:
+    import TestWinapp
     import TestWindows
     suites.append(TestWinapp.suite())
     suites.append(TestWindows.suite())
