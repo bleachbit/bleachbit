@@ -72,6 +72,8 @@ class Options:
 
     def get(self, option, section = 'bleachbit'):
         """Retrieve a general option"""
+        if not 'nt' == os.name and 'update_winapp2' == option:
+            return False
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
