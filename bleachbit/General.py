@@ -73,7 +73,9 @@ def chownself(path):
         return
     uid = getrealuid()
     print 'debug: chown(%s, uid=%s)' % (path, uid)
-    assert(path.find('/root') != 0)
+    if 0 == path.find('/root'):
+        print 'note: chown for path /root aborted'
+        return
     try:
         os.chown(path, uid, -1)
     except:

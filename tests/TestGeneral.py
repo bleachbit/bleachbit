@@ -109,8 +109,6 @@ class GeneralTestCase(unittest.TestCase):
         if not 'posix' == os.name:
             return
         self.assert_(isinstance(sudo_mode(), bool))
-        if sudo_mode():
-            assert(os.getenv('HOME').find('/root') != 0)
 
 
 def suite():
