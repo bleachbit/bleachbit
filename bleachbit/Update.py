@@ -141,6 +141,7 @@ def check_updates(check_beta, check_winapp2, append_text):
     """Check for updates via the Internet"""
     opener = urllib2.build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
+    opener.addheaders = [('User-Agent', user_agent())]
     handle = opener.open(Common.update_check_url)
     doc = handle.read()
     try:
