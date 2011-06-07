@@ -174,5 +174,10 @@ def open_url(url, parent_window = None, prompt = True):
         if gtk.RESPONSE_OK != resp:
             return
     # open web browser
-    gtk.show_uri(None, url, gtk.gdk.CURRENT_TIME)
+    if 'nt' == os.name:
+        # avoid 'glib.GError: No application is registered as handling this file'
+        import webbrowser
+        webbrowser.open(url)
+    else:
+        gtk.show_uri(None, url, gtk.gdk.CURRENT_TIME)
 
