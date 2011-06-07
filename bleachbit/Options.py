@@ -33,7 +33,7 @@ import General
 
 boolean_keys = ['auto_hide', 'auto_start', 'check_beta', 'check_online_updates', 'first_start', 'shred']
 if 'nt' == os.name:
-    boolean_keys.append('uppdate_winapp2')
+    boolean_keys.append('update_winapp2')
 
 
 
