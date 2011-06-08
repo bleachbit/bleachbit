@@ -665,6 +665,8 @@ def create_simple_cleaner(paths):
         action_key = '__customfileaction'
         def get_commands(self):
             for path in paths:
+                if not isinstance(path, (str, unicode)):
+                    raise RuntimeError('expected path as string but got %s' % str(path))
                 if os.path.isdir(path):
                     for child in children_in_directory(path, True):
                         yield Command.Shred(child)

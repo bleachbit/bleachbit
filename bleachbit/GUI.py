@@ -499,6 +499,11 @@ class GUI:
         if not paths:
             return
 
+        self.shred_paths(paths)
+
+
+    def shred_paths(self, paths):
+        """Shred file or folders"""
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
@@ -509,31 +514,25 @@ class GUI:
         if GuiBasic.delete_confirmation_dialog(self.window, mention_preview = False):
             # delete
             self.preview_or_run_operations(True, operations)
-            return
+            return True
+        return False
 
 
     def cb_shred_quit(self, action):
         """Shred settings (for privacy reasons) and quit"""
-        try:
-            FileUtilities.delete(options_file, shred = True)
-            if portable_mode:
-                open(options_file, 'w').write('[Portable]\n')
-        except:
-            print traceback.print_exc()
-            err = str(sys.exc_info()[1])
-            self.append_text(err, 'error')
+        paths = []
+        if portable_mode:
+            # in portable mode on Windows, the options directory includes executables
+            paths.append(options_file)
+        else:
+            paths.append(options_dir)
+
+        if not self.shred_paths(paths):
+            # aborted
             return
 
-        if not portable_mode:
-            try:
-                os.rmdir(options_dir)
-            except:
-                print traceback.print_exc()
-                err = str(sys.exc_info()[1])
-                self.append_text(err, 'error')
-                while gtk.events_pending():
-                    gtk.main_iteration()
-                time.sleep(3)
+        if portable_mode:
+            open(options_file, 'w').write('[Portable]\n')
 
         gtk.main_quit()
 
