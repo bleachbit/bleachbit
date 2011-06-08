@@ -39,8 +39,8 @@ def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if 'nt' == os.name:
-        ret = Windows.browse_folder(parent.window.handle, title)
-        return [ret] if multiple else ret
+        ret = Windows.browse_folder(parent.window.handle if parent else None, title)
+        return [ret] if multiple and not ret is None else ret
 
     # fall back to GTK+
     chooser = gtk.FileChooserDialog( parent = parent, \
