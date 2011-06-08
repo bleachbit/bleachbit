@@ -176,6 +176,7 @@ SectionGroup /e Shortcuts
     Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}-homepage.lnk" "http://bleachbit.sourceforge.net"
     SectionEnd
 
     Section "Desktop" SectionDesktop
