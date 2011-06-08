@@ -143,10 +143,8 @@ def delete_mozilla_url_history(path):
     # delete the URLs in moz_places
     places_suffix = "where id in (select " \
         "moz_places.id from moz_places " \
-        "left join moz_inputhistory on moz_inputhistory.place_id = moz_places.id " \
         "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
-        "where moz_inputhistory.input is null " \
-        "and moz_bookmarks.id is null); "
+        "where moz_bookmarks.id is null); "
 
     cols = ('url', 'rev_host', 'title')
     cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
@@ -170,6 +168,11 @@ def delete_mozilla_url_history(path):
     # delete any orphaned history visits
     cmds += "delete from moz_historyvisits where place_id not " \
         "in (select id from moz_places where id is not null); "
+
+    # delete any orphaned input history
+    input_suffix = "where place_id not in (select distinct id from moz_places)"
+    cols = ('input', )
+    cmds += __shred_sqlite_char_columns('moz_inputhistory', cols, input_suffix)
 
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
