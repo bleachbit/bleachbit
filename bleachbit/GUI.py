@@ -518,9 +518,6 @@ class GUI:
             FileUtilities.delete(options_file, shred = True)
             if portable_mode:
                 open(options_file, 'w').write('[Portable]\n')
-            fn = os.path.join(options_dir, "deepscan.sqlite3")
-            if os.path.exists(fn):
-                FileUtilities.delete(fn, shred = True)
         except:
             print traceback.print_exc()
             err = str(sys.exc_info()[1])
