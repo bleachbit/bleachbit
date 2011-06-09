@@ -123,7 +123,6 @@ def delete_chrome_history(path):
     cmds += __shred_sqlite_char_columns('visits')
     cols = ('lower_term', 'term')
     cmds += __shred_sqlite_char_columns('keyword_search_terms')
-    print 'debug cmds=', cmds
     FileUtilities.execute_sqlite3(path, cmds)
 
 
