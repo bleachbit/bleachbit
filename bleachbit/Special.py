@@ -29,7 +29,7 @@ from Options import options
 import FileUtilities
 
 
-def __shred_sqlite_char_columns(table, cols, where = ""):
+def __shred_sqlite_char_columns(table, cols = None, where = ""):
     """Create an SQL command to shred character columns"""
     cmd = ""
     if cols and options.get('shred'):
@@ -114,15 +114,16 @@ def delete_chrome_favicons(path):
 def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
     cols = ('url', 'title')
-    where = None
+    where = ""
     ids_int = get_chrome_bookmark_ids(path)
     if ids_int:
         ids_str = ",".join([str(id0) for id0 in ids_int])
         where = "where id not in (%s) " % ids_str
     cmds = __shred_sqlite_char_columns('urls', cols, where)
-    cmds += __shred_sqlite_char_columns('visits', None)
+    cmds += __shred_sqlite_char_columns('visits')
     cols = ('lower_term', 'term')
-    cmds += __shred_sqlite_char_columns('keyword_search_terms', None)
+    cmds += __shred_sqlite_char_columns('keyword_search_terms')
+    print 'debug cmds=', cmds
     FileUtilities.execute_sqlite3(path, cmds)
 
 
