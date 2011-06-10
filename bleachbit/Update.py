@@ -65,8 +65,8 @@ def update_winapp2(url, hash_expected, append_text):
             (url, hash_actual, hash_expected))
     # delete current
     if delete_current:
-        from FileUtilities import shred
-        shred(fn)
+        from FileUtilities import delete
+        delete(fn, True)
     # write file
     if not os.path.exists(personal_cleaners_dir):
         os.mkdir(personal_cleaners_dir)
