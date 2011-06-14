@@ -390,8 +390,10 @@ class GUI:
 
     def about(self, __event):
         """Create and show the about dialog"""
-        gtk.about_dialog_set_url_hook(lambda dialog, \
-            link: GuiBasic.open_url(link, self.window, False))
+        if 'nt' != os.name and (2, 16, 6) != gtk.gtk_version:
+            # workaround for broken GTK+ (https://bugs.launchpad.net/bleachbit/+bug/797012)
+            gtk.about_dialog_set_url_hook(lambda dialog, \
+                link: GuiBasic.open_url(link, self.window, False))
         dialog = gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
         dialog.set_copyright("Copyright (C) 2011 Andrew Ziem")
