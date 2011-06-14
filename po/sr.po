@@ -9,15 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-15 08:08-0600\n"
-"PO-Revision-Date: 2010-04-29 14:38+0000\n"
+"POT-Creation-Date: 2011-05-23 12:10-0600\n"
+"PO-Revision-Date: 2011-06-14 07:21+0000\n"
 "Last-Translator: Данило Шеган <Unknown>\n"
 "Language-Team: sr <prevod@cp6linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-29 19:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2011-06-14 13:24+0000\n"
+"X-Generator: Launchpad (build 13216)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -36,15 +38,14 @@ msgstr "Игра"
 #: ../cleaners/safari.xml ../cleaners/java.xml ../cleaners/flash.xml
 #: ../cleaners/thunderbird.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:188
-#: ../bleachbit/Cleaner.py:295 ../bleachbit/Cleaner.py:355
-#: ../bleachbit/Cleaner.py:398
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:187
+#: ../bleachbit/Cleaner.py:297 ../bleachbit/Cleaner.py:364
 msgid "Cache"
 msgstr "Привремена меморија"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Обриши листу сервера игара"
+msgstr "Избриши списак сервера игара"
 
 #: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
@@ -55,54 +56,56 @@ msgstr "Обриши листу сервера игара"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:295
-#: ../bleachbit/Cleaner.py:355 ../bleachbit/Cleaner.py:398
-#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:418
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:297
+#: ../bleachbit/Cleaner.py:364 ../bleachbit/Cleaner.py:384
+#: ../bleachbit/Cleaner.py:386
 msgid "Delete the cache"
-msgstr "Обриши привремену меморију"
+msgstr "Избриши привремену меморију"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Action.py:225
-#: ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:285
+#: ../cleaners/firefox_vacuum.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:287
+#: ../bleachbit/Action.py:285
 msgid "Vacuum"
 msgstr "Дефрагментација базе"
 
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/gpodder.xml ../bleachbit/Cleaner.py:197
+#: ../cleaners/firefox_vacuum.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../bleachbit/Cleaner.py:197
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Смањује фрагментираност базе података ради ослобађања простора без брисања "
-"икаквих података"
+"Очисти фрагментацију базе података ради смањења простора и убрзања без "
+"брисања података"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:210
+#: ../cleaners/firefox_vacuum.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/elinks.xml
+#: ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:210
 msgid "Web browser"
 msgstr "Читач веба"
 
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:188
+#: ../bleachbit/Cleaner.py:187
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "Обриши листу посећених страница, што смањује време приказа истих"
+msgstr "Избриши списак посећених страница, што смањује време приказа истих"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:189
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:188
 msgid "Cookies"
 msgstr "Колачићи"
 
@@ -111,41 +114,74 @@ msgstr "Колачићи"
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:189
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:188
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Обриши колачиће који садрже информације kao што су поставке веб страница, "
-"аутентификација, и праћење идентитета"
+"Избриши колачиће који садрже податке као што су поставке веб страница, "
+"потврду и праћење идентитета"
+
+#. TRANSLATORS: DOM = Document Object Model.
+#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+msgid "DOM Storage"
+msgstr "DOM складиште"
+
+#: ../cleaners/chromium.xml ../cleaners/opera.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+msgid "Delete HTML5 cookies"
+msgstr "Избриши HTML5 колачиће"
+
+#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
+msgid "Form history"
+msgstr "Историјат образаца"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "A history of forms entered in web sites"
+msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
 #: ../cleaners/seamonkey.xml ../cleaners/windows_defender.xml
 #: ../cleaners/google_chrome.xml ../cleaners/nautilus.xml
 #: ../cleaners/safari.xml ../cleaners/bash.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../cleaners/realplayer.xml
+#: ../cleaners/elinks.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/realplayer.xml
 msgid "History"
-msgstr ""
+msgstr "Историјат"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "Избриши историју посећених страница, преузимања и индексе сличица"
+msgstr "Избриши историјат посећених страница, преузимања и сличица"
 
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
-msgid "Current session"
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "Search engines"
+msgstr ""
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
 msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Текућа сесија"
+
+#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr "Обриши текућу сесију"
+msgstr "Избриши текућу сесију"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:275 ../bleachbit/Cleaner.py:346
+#: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:277
+#: ../bleachbit/Cleaner.py:348
 msgid "Delete the usage history"
-msgstr "Обриши историју коришћења"
+msgstr "Избриши историјат коришћења"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -154,289 +190,404 @@ msgstr "Уређивач"
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr ""
-"Обриши ~/.viminfo који садржи историју датотека, историју наредби, и бафере"
+msgstr "Избриши ~/.viminfo који садржи историјат датотека, наредби и бафере"
 
 #: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr ""
+msgstr "Мултимедијални прегледач"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/easytag.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:415
+#: ../bleachbit/Cleaner.py:382
 msgid "Logs"
-msgstr "Дневници"
+msgstr "Записници"
 
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:415
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:382
 msgid "Delete the logs"
-msgstr "Обриши дневнике"
+msgstr "Избриши записнике"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Записници за уклањање грешака"
 
 #: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
 #: ../cleaners/secondlife_viewer.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Избриши записнике за уклањање грешака"
 
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
-msgid "Temporary files"
-msgstr "Привремени фајлови"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:424
-msgid "Delete the temporary files"
-msgstr ""
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "Историјат попуњених образаца на веб-сајтовима и пољима за претрагу"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../bleachbit/Cleaner.py:196
 msgid "List of visited web pages"
-msgstr "Листа посећених веб страна"
+msgstr "Списак посећених веб страница"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:398
+msgid "Temporary files"
+msgstr "Привремене датотеке"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:398
+msgid "Delete the temporary files"
+msgstr "Избриши привремене датотеке"
 
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
 #: ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/paint.xml
-#: ../bleachbit/Cleaner.py:296
+#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:298
 msgid "Most recently used"
-msgstr ""
+msgstr "Недавно коришћене"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:296 ../bleachbit/Cleaner.py:407
+#: ../bleachbit/Cleaner.py:298 ../bleachbit/Cleaner.py:374
 msgid "Delete the list of recently used documents"
-msgstr ""
+msgstr "Избриши списак недавно коришћених докумената"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:407
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:374
 msgid "Recent documents list"
 msgstr "Скорашњи документи"
 
 #: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
 msgid "Chat client"
-msgstr ""
+msgstr "Ћаскање"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "Записници ћаскања"
 
 #: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "Избриши записнике ћаскања"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "Избриши списак посећених веб страница"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr ""
+msgstr "Виџети за радну површину"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr ""
+msgstr "Претраживач"
 
 #: ../cleaners/beagle.xml
 msgid "Search indexes"
-msgstr ""
+msgstr "Пописи претраживања"
 
 #: ../cleaners/beagle.xml
 msgid "Delete the search indexes"
-msgstr ""
+msgstr "Избриши пописе претраживања"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml
 msgid "File transfer client"
-msgstr ""
+msgstr "Програм за пренос података"
 
 #: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
-msgstr ""
+msgstr "Избриши датотеке"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "Download history"
-msgstr "Историја преузимања"
+msgstr "Историјат преузимања"
 
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "List of files downloaded"
-msgstr "Листа преузетих фајлова"
+msgstr "Списак преузетих датотека"
+
+#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "Историјат претраживања"
+
+#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "Избриши историјат претраживања"
 
 #: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:196
 msgid "URL history"
-msgstr "Историја УРЛ-ова"
+msgstr "Историјат адреса"
 
 #: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/paint.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Избриши списак недавно коришћених"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:195
 msgid "Passwords"
-msgstr "Шифре"
+msgstr "Лозинке"
 
 #: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:195
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"База корисника и шифара као и листа сајтова који не треба да чувају шифре"
+"База корисничких имена и лозинки, као и списак сајтова који не би требало да "
+"чувају лозинке"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml
 msgid "Places"
-msgstr "Локације"
+msgstr "Места"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/epiphany.xml
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
+"База URL адреса која садржи забелешке, сличице сајта и историјат посећених "
+"страница"
 
-#: ../cleaners/epiphany.xml ../bleachbit/Cleaner.py:195
+#: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr ""
+msgstr "Ова опција брише све забелешке."
 
-#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:306
+#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:308
 msgid "Office suite"
-msgstr ""
+msgstr "Канцеларијски пакети"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr ""
-
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr ""
-
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr ""
+msgstr "Избриши застареле датотеке"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr ""
+msgstr "Резервне датотеке"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
-msgstr ""
+msgstr "Избриши резервне датотеке"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Преузети поткастови"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Избриши преузете поткастове"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
-msgstr ""
+msgstr "Сесија"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr ""
+msgstr "Избриши текућу и последњу сесију"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Избриши корисникове сличице и емотиконе из оставе"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Детаљно скенирање"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr ""
+msgstr "Проверите преглед свих датотека које желите да задржите."
 
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:423
+#: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr ""
+msgstr "Ова опција је спора."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr ""
+msgstr "Прилагођене фасцикле ће бити поништене."
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr "Мали прегледи слика"
+msgstr "Умањени прикази слика"
 
 #: ../cleaners/bash.xml
 msgid "Delete the command history"
-msgstr ""
+msgstr "Избриши историјат наредби"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 msgid "Run"
-msgstr ""
+msgstr "Покрени"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
+msgstr "Избриши колачиће, посећене адресе и историјат претраживања"
 
 #: ../cleaners/recoll.xml
 msgid "Index"
-msgstr ""
+msgstr "Попис"
 
 #: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr ""
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr "Избриши попис претраживања, базу речи и датотеке које садржи"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "Чистач непотребних датотека"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
+msgstr "Ослобађање простора и чување приватности"
+
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:46
+msgid "Skip"
+msgstr "Прескочи"
+
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:73 ../bleachbit/GUI.py:585
+msgid "Delete"
+msgstr "Обриши"
+
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:93
+msgid "Mark for deletion"
+msgstr "Означи за брисање"
+
+#. TRANSLATORS: Parts of this file will be deleted
+#: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
+#: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
+msgid "Clean file"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:191
-msgid "Form history"
-msgstr "Историја формулара"
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:249
+msgid "Truncate"
+msgstr "Скрати"
 
-#: ../bleachbit/Cleaner.py:191
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "Историја попуњених формулара веб сајтова и линија за претрагу"
+#: ../bleachbit/Command.py:288
+msgid "Delete registry key"
+msgstr "Обриши кључ регистра"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Unix.py:364 ../bleachbit/Unix.py:394 ../bleachbit/Unix.py:574
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Извршна датотека није нађена: %s"
+
+#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+#: ../bleachbit/Unix.py:571 ../bleachbit/Worker.py:131
+#, python-format
+msgid ""
+"%s cannot be cleaned because it is currently running.  Close it, and try "
+"again."
+msgstr ""
+"%s не може бити очишћен јер је тренутно активан. Затворите га, и пробајте "
+"поново."
+
+#: ../bleachbit/GuiBasic.py:113
+msgid "Delete confirmation"
+msgstr "Потврда брисања"
+
+#: ../bleachbit/GuiBasic.py:121
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Сигурно желите трајно да обришете датотеке у складу са изабраним "
+"операцијама? Постојеће датотеке које ће бити обрисане су можда измењене "
+"откад сте покренули преглед."
+
+#: ../bleachbit/GuiBasic.py:123
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Сигурно желите да трајно уклоните ове датотеке?"
+
+#: ../bleachbit/GuiBasic.py:159
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Пошто сте тренутно администратор, ручно отворите овај линк у читачу веба:\n"
+"%s"
+
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:171
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "Отворите читач веба са %s?"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:45
+msgid "Applications"
+msgstr ""
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:47 ../bleachbit/Winapp.py:54
+#: ../bleachbit/Winapp.py:55 ../bleachbit/Winapp.py:56
+msgid "Internet"
+msgstr ""
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:49
+msgid "Multimedia"
+msgstr ""
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:51
+msgid "Utilities"
+msgstr ""
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
+#: ../bleachbit/Winapp.py:53
+msgid "Microsoft Windows"
+msgstr ""
+
+#: ../bleachbit/Winapp.py:87
+msgid "Imported from winapp2.ini"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
-msgstr "Стање сесије"
+msgstr "Повратак сесије"
 
-#: ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:193
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Учитава почетну сесију након што се читач затвори или сруши"
+msgstr "Учитава почетну сесију након што се прегледач затвори или сруши"
 
-#: ../bleachbit/Cleaner.py:358
-msgid "Delete the files in the rpmbuild build directory"
-msgstr "Обриши фајлове у директоријуму rpmbuild за компајлирање"
+#: ../bleachbit/Cleaner.py:194
+msgid "Site preferences"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:194
+msgid "Settings for individual sites"
+msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -444,209 +595,166 @@ msgstr "Обриши фајлове у директоријуму rpmbuild за 
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:397
+#: ../bleachbit/Cleaner.py:363
 msgid "Broken desktop files"
-msgstr ""
+msgstr "Неисправне датотеке пречица"
 
-#: ../bleachbit/Cleaner.py:397
+#: ../bleachbit/Cleaner.py:363
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
+"Избриши неисправне уносе у менију програма и придружене формате датотека"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:367
 msgid "Localizations"
 msgstr "Локализације"
 
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:367
 msgid "Delete files for unwanted languages"
+msgstr "Избриши датотеке нежељених језика"
+
+#: ../bleachbit/Cleaner.py:368
+msgid "Configure this option in the preferences."
 msgstr ""
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/Cleaner.py:406
+#: ../bleachbit/Cleaner.py:373
 msgid "Rotated logs"
-msgstr ""
+msgstr "Застарели записници"
 
-#: ../bleachbit/Cleaner.py:406
+#: ../bleachbit/Cleaner.py:373
 msgid "Delete old system logs"
-msgstr ""
+msgstr "Избриши застареле записнике система"
 
-#: ../bleachbit/Cleaner.py:408
+#: ../bleachbit/Cleaner.py:375
 msgid "Trash"
 msgstr "Смеће"
 
-#: ../bleachbit/Cleaner.py:408
+#: ../bleachbit/Cleaner.py:375
 msgid "Empty the trash"
-msgstr ""
+msgstr "Испразни смеће"
 
-#. TRANSLATORS: 'Free' is an adjective and could be translated
-#. 'unallocated.'
-#: ../bleachbit/Cleaner.py:412 ../bleachbit/Cleaner.py:506
+#: ../bleachbit/Cleaner.py:377 ../bleachbit/Cleaner.py:483
+#: ../bleachbit/Worker.py:210
 msgid "Memory"
-msgstr ""
+msgstr "Меморија"
 
-#: ../bleachbit/Cleaner.py:412
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:379
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "Очисти помоћну и слободну меморију"
 
-#: ../bleachbit/Cleaner.py:413
+#: ../bleachbit/Cleaner.py:380
 msgid "This option is experimental and may cause system problems."
-msgstr ""
+msgstr "Ова опција је експериментална и може изазвати системске проблеме."
+
+#: ../bleachbit/Cleaner.py:383
+msgid "Memory dump"
+msgstr "Сачуван меморијски садржај"
+
+#: ../bleachbit/Cleaner.py:383
+msgid "Delete the file memory.dmp"
+msgstr "Избриши memory.dmp датотеку"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:418
+#: ../bleachbit/Cleaner.py:386
 msgid "Prefetch"
-msgstr ""
+msgstr "Предохват"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:387
 msgid "Recycle bin"
-msgstr ""
+msgstr "Корпа за отпатке"
 
-#: ../bleachbit/Cleaner.py:419
+#: ../bleachbit/Cleaner.py:387
 msgid "Empty the recycle bin"
+msgstr "Испразни корпу за отпатке"
+
+#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
+#. the uninstallers for software updates.
+#: ../bleachbit/Cleaner.py:390
+msgid "Update uninstallers"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:421 ../bleachbit/Cleaner.py:578
+#: ../bleachbit/Cleaner.py:390
+msgid ""
+"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
+"and Internet Explorer updates"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:392 ../bleachbit/Cleaner.py:565
 msgid "Clipboard"
-msgstr "Меморија копирања"
+msgstr "Исечци"
 
-#: ../bleachbit/Cleaner.py:421
-msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-"Меморија копирања радног окружења која се користи за операције умножи и "
-"налепи"
+#: ../bleachbit/Cleaner.py:392
+msgid ""
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr "Исечци се користе за радње као што су „умножи“ и „убаци“"
 
-#: ../bleachbit/Cleaner.py:422
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:394
 msgid "Free disk space"
-msgstr ""
+msgstr "Слободан простор на диску"
 
-#: ../bleachbit/Cleaner.py:422
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:396
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
+"Препиши преко слободног простора на диску да бисте сакрили избрисане датотеке"
 
-#: ../bleachbit/Cleaner.py:427
+#: ../bleachbit/Cleaner.py:397
+msgid "This option is very slow."
+msgstr "Ова опција је веома спора."
+
+#: ../bleachbit/Cleaner.py:401
 msgid "The system in general"
-msgstr "Систем, генерално"
+msgstr "Систем у целини"
 
-#: ../bleachbit/Cleaner.py:433
+#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:659
 msgid "System"
 msgstr "Систем"
 
-#. TRANSLATORS: 'Free' could also be translated 'unallocated.'
+#. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:600
+#: ../bleachbit/Cleaner.py:591 ../bleachbit/Cleaner.py:684
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "Препиши преко слободног простора на диску %s"
 
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:#: ../bleachbit/Cleaner.py:628
+#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
+#: ../bleachbit/Cleaner.py:619
 #, python-format
 msgid "Recycle bin %s"
-msgstr ""
+msgstr "Корпа за отпатке %s"
 
-#: ../bleachbit/CLI.py:116
-#, python-format
-msgid "not a valid cleaner: %s"
-msgstr ""
-
-#. TRANSLATORS: This is the command line usage.  Don't translate
-#. %prog, but do translate usage, options, cleaner, and option.
-#. More information about the command line is here
-#. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:144
-msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
-
-#: ../bleachbit/CLI.py:147
-msgid "list cleaners"
-msgstr ""
-
-#: ../bleachbit/CLI.py:149
-msgid "delete files and make other permanent changes"
-msgstr ""
-
-#: ../bleachbit/CLI.py:151
-msgid "show system information"
-msgstr ""
-
-#: ../bleachbit/CLI.py:153
-msgid "preview files to be deleted and other changes"
-msgstr ""
-
-#: ../bleachbit/CLI.py:155
-msgid "output version information and exit"
-msgstr ""
-
-#: ../bleachbit/CLI.py:157
-msgid "overwrite files to hide contents"
-msgstr ""
-
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:57
-msgid "Delete"
-msgstr "Обриши"
-
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:77
-msgid "Mark for deletion"
-msgstr ""
-
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:152
-msgid "Truncate"
-msgstr ""
-
-#: ../bleachbit/Command.py:191
-msgid "Delete registry key"
-msgstr ""
-
-#: ../bleachbit/FileUtilities.py:202
-msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
-msgstr ""
-"Не могу да увезем Python модул sqlite3: потребна је верзија Python-а 2.5 или "
-"новија"
-
-#: ../bleachbit/GuiBasic.py:86
-msgid "Delete confirmation"
-msgstr "Потврда брисања"
-
-#: ../bleachbit/GuiBasic.py:94
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-
-#: ../bleachbit/GuiBasic.py:96
-msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:564
+#: ../bleachbit/GuiPreferences.py:52 ../bleachbit/GUI.py:637
 msgid "Preferences"
-msgstr "Опције"
+msgstr "Поставке"
+
+#: ../bleachbit/GuiPreferences.py:58
+msgid "General"
+msgstr "Опште"
 
 #: ../bleachbit/GuiPreferences.py:59
-msgid "General"
-msgstr "Генерално"
-
-#: ../bleachbit/GuiPreferences.py:60
 msgid "Drives"
-msgstr ""
+msgstr "Дискови"
 
-#: ../bleachbit/GuiPreferences.py:62
+#: ../bleachbit/GuiPreferences.py:61
 msgid "Languages"
 msgstr "Језици"
 
-#: ../bleachbit/GuiPreferences.py:104
+#: ../bleachbit/GuiPreferences.py:62
+msgid "Whitelist"
+msgstr "Списак дозвољених"
+
+#: ../bleachbit/GuiPreferences.py:105
 msgid "Check periodically for software updates via the Internet"
 msgstr "Повремено проверавај путем интернета да ли има ажурирања програма"
 
-#: ../bleachbit/GuiPreferences.py:107
+#: ../bleachbit/GuiPreferences.py:108
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -654,22 +762,30 @@ msgstr ""
 "Ако се пронађе ажурирање, биће вам дата могућност да прегледате информације "
 "о ажурирању. Онда можете ручно преузети и инсталирати нову верзију"
 
+#: ../bleachbit/GuiPreferences.py:114
+msgid "Check for new beta releases"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:121
+msgid "Download and update cleaners from community (winapp2.ini)"
+msgstr ""
+
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:114
+#: ../bleachbit/GuiPreferences.py:133
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Сакриј неприменљиве чистаче"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:122
+#: ../bleachbit/GuiPreferences.py:141
 msgid "Overwrite files to hide contents"
-msgstr ""
+msgstr "Препиши преко датотека да сакријеш садржај"
 
-#: ../bleachbit/GuiPreferences.py:125
+#: ../bleachbit/GuiPreferences.py:144
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -677,56 +793,273 @@ msgstr ""
 "Преписивање фајлова нема ефекта на неким фајл системима и са одређеним "
 "операцијама програма BleachBit. Преписивање је значајно спорије"
 
-#: ../bleachbit/GuiPreferences.py:128
+#: ../bleachbit/GuiPreferences.py:147
 msgid "Start BleachBit with computer"
-msgstr ""
+msgstr "Покрени BleachBit с' рачунаром"
 
-#: ../bleachbit/GuiPreferences.py:139
+#: ../bleachbit/GuiPreferences.py:158 ../bleachbit/GuiPreferences.py:289
+#: ../bleachbit/GUI.py:547
 msgid "Choose a folder"
-msgstr ""
+msgstr "Изаберите фасциклу"
 
-#: ../bleachbit/GuiPreferences.py:162
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/GuiPreferences.py:183
 msgid ""
-"Choose a writable directory for each drive for which to overwrite free space."
+"Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
+"Изаберите фасциклу са правом уписа за сваки диск коме желите да препишете "
+"слободан простор."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:183
+#: ../bleachbit/GuiPreferences.py:204
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "Додај"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:186
+#: ../bleachbit/GuiPreferences.py:207 ../bleachbit/GuiPreferences.py:367
 msgctxt "button"
 msgid "Remove"
-msgstr ""
+msgstr "Уклони"
 
-#: ../bleachbit/GuiPreferences.py:211
+#: ../bleachbit/GuiPreferences.py:232
 msgid "All languages will be deleted except those checked."
 msgstr "Сви језици ће бити обрисани осим оних који су штиклирани."
 
-#: ../bleachbit/GuiPreferences.py:229
+#: ../bleachbit/GuiPreferences.py:249
 msgid "Preserve"
 msgstr "Сачувај"
 
-#: ../bleachbit/GuiPreferences.py:233
+#: ../bleachbit/GuiPreferences.py:253
 msgid "Code"
 msgstr "Код"
 
-#: ../bleachbit/GuiPreferences.py:237 ../bleachbit/GUI.py:146
+#: ../bleachbit/GuiPreferences.py:257 ../bleachbit/GUI.py:136
 msgid "Name"
 msgstr "Име"
 
-#: ../bleachbit/GUI.py:154
+#: ../bleachbit/GuiPreferences.py:275
+msgid "Choose a file"
+msgstr "Изаберите датотеку"
+
+#: ../bleachbit/GuiPreferences.py:282 ../bleachbit/GuiPreferences.py:326
+msgid "File"
+msgstr "Датотека"
+
+#: ../bleachbit/GuiPreferences.py:297 ../bleachbit/GuiPreferences.py:328
+msgid "Folder"
+msgstr "Фасцикла"
+
+#. TRANSLATORS: "Paths" is used generically to refer to both files and folders
+#: ../bleachbit/GuiPreferences.py:335
+msgid "Theses paths will not be deleted or modified."
+msgstr "Ове путање не могу бити обрисане или промењене."
+
+#: ../bleachbit/GuiPreferences.py:343
+msgid "Type"
+msgstr ""
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:349
+msgid "Path"
+msgstr "Путања"
+
+#: ../bleachbit/GuiPreferences.py:361
+msgctxt "button"
+msgid "Add file"
+msgstr "Додај датотеку"
+
+#: ../bleachbit/GuiPreferences.py:364
+msgctxt "button"
+msgid "Add folder"
+msgstr "Додај фасциклу"
+
+#: ../bleachbit/RecognizeCleanerML.py:63
+msgid "Security warning"
+msgstr "Безбедносно упозорење"
+
+#. TRANSLATORS: Cleaner definitions are XML data files that define
+#. which files will be cleaned.
+#: ../bleachbit/RecognizeCleanerML.py:75
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Ове дефиниције чистача су нове или су измењене. Злонамерне дефиниције могу "
+"оштетити систем. Ако не верујете овим изменама, избришите датотеке или "
+"одустаните."
+
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:88
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Избриши"
+
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:91
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Име датотеке"
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:76
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Изузетак код извршења операције '%(operation)s': '%(msg)s'"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:208
+msgid "Please wait.  Wiping free disk space."
+msgstr "Молим сачекајте. Брисање слободног простора диска."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:210 ../bleachbit/Worker.py:297
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Молим сачекајте. Чишћење %s."
+
+#: ../bleachbit/Worker.py:220
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:235
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Ослобођен простор на диску: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:239
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Биће ослобођено простора на диску: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:244
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Датотека уклоњено: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:248
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Датотека за брисање: %d"
+
+#: ../bleachbit/Worker.py:251
+#, python-format
+msgid "Special operations: %d"
+msgstr "Специјалне операције: %d"
+
+#: ../bleachbit/Worker.py:254
+#, python-format
+msgid "Errors: %d"
+msgstr "Грешке: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:270
+msgid "Please wait.  Running deep scan."
+msgstr "Молим сачекајте. Покренуто је детаљно скенирање."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:300
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Молим сачекајте. Приказ %s."
+
+#: ../bleachbit/Update.py:75
+msgid "New winapp2.ini was downloaded."
+msgstr ""
+
+#: ../bleachbit/Update.py:111
+msgid "Update BleachBit"
+msgstr "Ажурирај програм BleachBit"
+
+#: ../bleachbit/Update.py:116
+msgid "A new version is available."
+msgstr ""
+
+#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
+#: ../bleachbit/Update.py:124
+#, python-format
+msgid "Update to version %s"
+msgstr ""
+
+#: ../bleachbit/CLI.py:123
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "није важећи чистач: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog, but do translate usage, options, cleaner, and option.
+#. More information about the command line is here
+#. http://bleachbit.sourceforge.net/documentation/command-line
+#: ../bleachbit/CLI.py:150
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "употреба: %prog [options] cleaner.option1 cleaner.option2"
+
+#: ../bleachbit/CLI.py:153
+msgid "list cleaners"
+msgstr "списак чистача"
+
+#: ../bleachbit/CLI.py:155
+msgid "delete files and make other permanent changes"
+msgstr "избриши датотеке и уради остале трајне измене"
+
+#: ../bleachbit/CLI.py:157
+msgid "show system information"
+msgstr "прикажи системске податке"
+
+#: ../bleachbit/CLI.py:159
+msgid "preview files to be deleted and other changes"
+msgstr "прикажи датотеке које ће бити избрисане и остале измене"
+
+#: ../bleachbit/CLI.py:161
+msgid "use options set in the graphical interface"
+msgstr ""
+
+#: ../bleachbit/CLI.py:163
+msgid "output version information and exit"
+msgstr "прикажи податке о издању и изађи"
+
+#: ../bleachbit/CLI.py:165
+msgid "overwrite files to hide contents"
+msgstr "преснимите датотеке да сакријете садржај"
+
+#: ../bleachbit/GUI.py:144
 msgid "Active"
 msgstr "Активно"
 
-#: ../bleachbit/GUI.py:347
+#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+#. %(option) may be cache, logs, cookies, etc.
+#. %(warning) may be 'This option is really slow'
+#: ../bleachbit/GUI.py:176
+#, python-format
+msgid ""
+"Warning regarding %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+msgstr ""
+
+#: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
 msgstr "Морате одабрати операцију"
 
-#: ../bleachbit/GUI.py:370 ../bleachbit/GUI.py:385
+#: ../bleachbit/GUI.py:369 ../bleachbit/GUI.py:384
 msgid "Done."
 msgstr "Готово."
 
@@ -753,190 +1086,272 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Anaximandar https://launchpad.net/~anaximandar\n"
 "  Milan Masic https://launchpad.net/~mmasic-gmx\n"
+"  Rancher https://launchpad.net/~rancher\n"
 "  Roman Horník https://launchpad.net/~roman.hornik\n"
 "  turncoat https://launchpad.net/~uskokovic\n"
 "  Данило Шеган https://launchpad.net/~danilo"
 
 #: ../bleachbit/GUI.py:420
 msgid "System information"
-msgstr ""
+msgstr "Подаци о систему"
 
-#: ../bleachbit/GUI.py:474
+#: ../bleachbit/GUI.py:490
 msgid "Choose files to shred"
+msgstr "Изаберите датотеке за уништење"
+
+#: ../bleachbit/GUI.py:493
+msgid "Choose folder to shred"
 msgstr ""
 
-#: ../bleachbit/GUI.py:560
+#: ../bleachbit/GUI.py:581
+msgid "Preview"
+msgstr "Преглед"
+
+#: ../bleachbit/GUI.py:631
 msgid "_Shred Files"
+msgstr "_Уништи датотеке"
+
+#: ../bleachbit/GUI.py:632
+msgid "Sh_red Folders"
 msgstr ""
 
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:633
+msgid "_Wipe Free Space"
+msgstr ""
+
+#: ../bleachbit/GUI.py:634
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "Уништи п_одешавања и изађи"
 
-#: ../bleachbit/GUI.py:562
+#: ../bleachbit/GUI.py:635
 msgid "_Quit"
 msgstr "_Заврши"
 
-#: ../bleachbit/GUI.py:563
+#: ../bleachbit/GUI.py:636
 msgid "_File"
 msgstr "_Фајл"
 
-#: ../bleachbit/GUI.py:565
+#: ../bleachbit/GUI.py:638
 msgid "_Edit"
 msgstr "_Уређивање"
 
-#: ../bleachbit/GUI.py:566
+#: ../bleachbit/GUI.py:639
 msgid "Help Contents"
-msgstr ""
+msgstr "Садржај помоћи"
 
-#: ../bleachbit/GUI.py:567
+#: ../bleachbit/GUI.py:641
 msgid "_Release Notes"
-msgstr ""
+msgstr "_Белешке о издању"
 
-#: ../bleachbit/GUI.py:568
+#: ../bleachbit/GUI.py:643
 msgid "_System Information"
-msgstr ""
+msgstr "Подаци о _систему"
 
-#: ../bleachbit/GUI.py:569
+#: ../bleachbit/GUI.py:644
 msgid "_About"
 msgstr "_О програму"
 
-#: ../bleachbit/GUI.py:570
+#: ../bleachbit/GUI.py:645
 msgid "_Help"
 msgstr "_Помоћ"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:594
+#: ../bleachbit/GUI.py:669
 msgctxt "button"
 msgid "Preview"
-msgstr ""
+msgstr "Преглед"
 
-#: ../bleachbit/GUI.py:597
+#: ../bleachbit/GUI.py:672
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Даје преглед фајлова наведеним операцијама (фајлови неће бити обрисани)"
 
 #. TRANSLATORS: This is the delete button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:605
+#: ../bleachbit/GUI.py:680
 msgctxt "button"
 msgid "Delete"
-msgstr ""
+msgstr "Избриши"
 
-#: ../bleachbit/GUI.py:608
+#: ../bleachbit/GUI.py:683
 msgid "Delete files in the selected operations"
 msgstr "Обриши фајлове наведеним операцијама"
 
-#: ../bleachbit/GUI.py:689
-msgctxt "button"
-msgid "Update BleachBit"
-msgstr ""
-
-#: ../bleachbit/GUI.py:694
-msgid "BleachBit update is available"
-msgstr "Доступно је ажурирање програма BleachBit"
-
-#: ../bleachbit/GUI.py:702
-msgid "Click 'Update BleachBit' for more information"
-msgstr "Кликните на „Ажурирај програм BleachBit“ за више информација"
-
-#: ../bleachbit/GUI.py:718
+#: ../bleachbit/GUI.py:769
 msgid "Error when checking for updates: "
 msgstr "Јавила се грешка приликом провере ажурирања: "
 
-#: ../bleachbit/RecognizeCleanerML.py:82
-msgid "Security warning"
-msgstr ""
-
-#. TRANSLATORS: Cleaner definitions are XML data files that define
-#. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:94
+#: ../bleachbit/GUI.py:800
 msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
+"Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"Грешка при учитавању SQLite модула: антивирусни програм га можда блокира."
 
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:107
-msgctxt "column_label"
-msgid "Delete"
-msgstr ""
+#~ msgid "Delete Adobe Reader's cache"
+#~ msgstr "Обриши кеш програма Adobe Reader"
 
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:110
-msgctxt "column_label"
-msgid "Filename"
-msgstr ""
+#~ msgid "Delete the Bash history"
+#~ msgstr "Обриши историју Bash команди"
 
-#: ../bleachbit/Unix.py:368 ../bleachbit/Unix.py:398 ../bleachbit/Unix.py:578
+#~ msgid "Delete Beagle indexes and logs"
+#~ msgstr "Обриши индексе и дневник програма Beagle"
+
+#~ msgid "Web cache reduces time to display revisited pages"
+#~ msgstr "Веб кеш скраћује време потребно за приказ страна које су већ виђене."
+
+#~ msgid ""
+#~ "HTTP cookies contain information such as web site prefereneces, "
+#~ "authentication, and tracking identification"
+#~ msgstr ""
+#~ "HTTP колачићи садрже информације као што су опције веб сајтова, "
+#~ "аутентификацију и информације за праћење."
+
+#~ msgid ""
+#~ "A database of URLs including bookmarks and a history of visited web sites"
+#~ msgstr "База УРЛ-ова укључујући и забелешке и историју посећених сајтова"
+
+#~ msgid "Epiphany web browser"
+#~ msgstr "Веб читач Epiphany"
+
+#~ msgid "Mozilla Firefox web browser"
+#~ msgstr "Веб читач Mozilla Firefox"
+
+#~ msgid "Delete Adobe Flash's cache and settings"
+#~ msgstr "Обриши кеш и подешавања Adobe-овог Flash-а"
+
+#~ msgid "Delete Second Life Viewer's cache and temporary files"
+#~ msgstr "Обриши кеш и привремене фајлове програма Second Life"
+
+#~ msgid "Second Life Viewer"
+#~ msgstr "Програм Second Life"
+
+#~ msgid "Broken desktop entries"
+#~ msgstr "Неисправни објекти радне површине"
+
+#~ msgid ""
+#~ "Unusable .desktop files (menu entries and file associtations) that are "
+#~ "either invalid structurally or point to non-existant locations"
+#~ msgstr ""
+#~ "Стакве менија и програми за отварање фајлова записани у desktop фајловима "
+#~ "који су неисправно структуирани или показују на непостојећу локацију"
+
+#~ msgid "Cache location specified by XDG and used by various applications"
+#~ msgstr "Локације кеша које наводи XDG и које користе разне програми"
+
+#~ msgid "Data used to operate the system in various languages and countries"
+#~ msgstr "Преводи програма на разне језике и подешавања"
+
+#~ msgid "User-owned, unopened, regular files in /tmp/ and /var/tmp/"
+#~ msgstr ""
+#~ "Регуларни фајлови у /tmp/ и /var/tmp/ који припадају корисницима и који нису "
+#~ "отворени"
+
+#~ msgid "Temporary storage for deleted files"
+#~ msgstr "Привремено складиште за обрисане фајлове"
+
+#~ msgid "A common list of recently used documents"
+#~ msgstr "Листа недавно отворених докумената"
+
+#~ msgid "Delete GIMP's temporary folder"
+#~ msgstr "Обриши привремену фасциклу програма GIMP"
+
+#~ msgid "Delete the contents of Google Earth's cache and temporary files"
+#~ msgstr "Обриши кеш и привремене фајлове програма Google Earth"
+
+#~ msgid "Delete Java's cache"
+#~ msgstr "Обриши Java кеш"
+
+#~ msgid ""
+#~ "KDE cache including Konqueror.  Often contains sparse files where the "
+#~ "apparent file size does not match the actual disk usage."
+#~ msgstr ""
+#~ "KDE кеш, укључујући и програм Konqueror.  Често садржи раштркане фајлове где "
+#~ "привидна величина фајла није стварно заузет простор на диску."
+
+#~ msgid "Temporary files stored by KDE under the home directory"
+#~ msgstr "Привремени фајлови које KDE чува у корисниковом личном директоријуму"
+
+#~ msgid "KDE desktop environment"
+#~ msgstr "KDE радно окружење"
+
+#~ msgid "Cached registry and package data"
+#~ msgstr "Кеширани регистри и подаци о пакетима"
+
+#~ msgid "OpenOffice.org's list of recently used documents."
+#~ msgstr "Листа недавно коришћених докумената у програму OpenOffice.org"
+
+#~ msgid "OpenOffice.org office suite"
+#~ msgstr "OpenOffice.org канцеларијски алати"
+
+#~ msgid "Opera web browser"
+#~ msgstr "Веб читач Opera"
+
+#~ msgid "Delete RealPlayer's cookies"
+#~ msgstr "Обриши колачиће програма RealPlayer"
+
+#~ msgid "Delete the files in the rpmbuild build directory"
+#~ msgstr "Обриши фајлове у директоријуму rpmbuild за компајлирање"
+
+#~ msgid "Delete thumbnails in the thumbnails folder"
+#~ msgstr "Обриши мале прегледе слика"
+
+#~ msgid ""
+#~ "Delete ~/.viminfo which includes VIM file history, command history, and "
+#~ "buffers"
+#~ msgstr ""
+#~ "Обриши ~/.viminfo који садржи историју фајлова, команди и бафере програма VIM"
+
+#~ msgid "Delete the temporary files from winetricks"
+#~ msgstr "Обриши привремене фајлове програма winetricks"
+
+#~ msgid "Delete XChat logs and scrollback"
+#~ msgstr "Обриши дневник XChat и историјат"
+
+#~ msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
+#~ msgstr ""
+#~ "Не могу да увезем Python модул sqlite3: потребна је верзија Python-а 2.5 или "
+#~ "новија"
+
+#~ msgid "Overwrite files to hide contents (ineffective in some situations)"
+#~ msgstr ""
+#~ "Препиши фајлове како би сакрио садржај (нема ефекта у неким случајевима)"
+
+#~ msgid ""
+#~ "Are you sure you want to delete files according to the selected operations?  "
+#~ "The actual files that will be deleted may have changed since you ran the "
+#~ "preview.  Files cannot be undeleted."
+#~ msgstr ""
+#~ "Да ли сте сигурни да желите да обришете фајлове према назначеним "
+#~ "операцијама? Ти фајлови су можда промењени у међувремену. Фајлови се не могу "
+#~ "вратити."
+
 #, python-format
-msgid "Executable not found: %s"
-msgstr ""
+#~ msgid "Exception while getting running operation '%s': '%s'"
+#~ msgstr "Јавио се изузетак приликом покретања операције „%s“: „%s“"
 
-#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:575 ../bleachbit/Worker.py:129
-#, python-format
-msgid ""
-"%s cannot be cleaned because it is currently running.  Close it, and try "
-"again."
-msgstr ""
+#~ msgid "Special operation: "
+#~ msgstr "Специјална операција: "
 
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:76
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+#~ msgid "Please wait.  Scanning and deleting: "
+#~ msgstr "Молим сачекајте.  Претражујем и бришем: "
 
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:175
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr ""
+#~ msgid "Please wait.  Scanning: "
+#~ msgstr "Молим сачекајте.  Претражујем: "
 
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:178
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr ""
+#~ msgid "Total size: "
+#~ msgstr "Укупна величина: "
 
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:218
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr ""
+#~ msgid "Quit BleachBit"
+#~ msgstr "Заврши програм BleachBit"
 
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:222
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr ""
+#~ msgid "Configure BleachBit"
+#~ msgstr "Подешавање програма BleachBit"
 
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:227
-#, python-format
-msgid "Files deleted: %d"
-msgstr ""
+#~ msgid "Show about"
+#~ msgstr "Приказује информације о програму"
 
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:231
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr ""
+#~ msgid "BleachBit update is available"
+#~ msgstr "Доступно је ажурирање програма BleachBit"
 
-#: ../bleachbit/Worker.py:234
-#, python-format
-msgid "Special operations: %d"
-msgstr ""
-
-#: ../bleachbit/Worker.py:237
-#, python-format
-msgid "Errors: %d"
-msgstr ""
+#~ msgid "Click 'Update BleachBit' for more information"
+#~ msgstr "Кликните на „Ажурирај програм BleachBit“ за више информација"
