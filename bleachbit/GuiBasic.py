@@ -175,7 +175,7 @@ def open_url(url, parent_window = None, prompt = True):
             return
     # open web browser
     if 'nt' == os.name:
-        # avoid 'glib.GError: No application is registered as handling this file'
+        # in gtk.show_uri() avoid 'glib.GError: No application is registered as handling this file'
         import webbrowser
         webbrowser.open(url)
     else:
