@@ -123,6 +123,7 @@ class Locales:
         'sr' : 'Српски', \
         'sv' : 'svenska', \
         'tr' : 'Türkçe', \
+        'ug' : 'Uyghur', \
         'uk' : 'Українська', \
         'vi' : 'Tiếng Việt', \
         'zh' : '中文' }
