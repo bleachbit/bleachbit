@@ -96,7 +96,7 @@ class GeneralTestCase(unittest.TestCase):
     def test_run_external(self):
         """Unit test for run_external"""
         if 'nt' == os.name:
-            args = ['reg.exe']
+            args = ['cmd', '/c', 'dir', '%windir%\system32', '/s', '/b']
         elif 'posix' == os.name:
             args = ['ls']
         (rc, stdout, stderr) = run_external(args)
