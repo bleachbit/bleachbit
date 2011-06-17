@@ -297,25 +297,27 @@ def empty_recycle_bin(drive, really_delete):
     return bytes_used
 
 
-def enumerate_processes():
-    """Return list of module names (e.g., firefox.exe) of running
-    processes"""
+def get_fixed_drives():
+    """Yield each fixed drive"""
+    for drive in win32api.GetLogicalDriveStrings().split('\x00'):
+        if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
+            yield drive
+
+
+def is_process_running(name):
+    """Return boolean whether process (like firefox.exe) is running"""
 
     r = []
-    if platform.win32_ver()[0] == 'XP':
-        r = enumerate_processes_win32()
+    if os.getenv('PROGRAMFILES(X86)'):
+        # 64-bit Windows detected
+        return is_process_running_wmic(name)
     else:
-        r = enumerate_processes_wmic()
-
-    # make unique
-    r = list(set(r))
-    r.sort()
-    return r
+        # 32-bit Windows detected
+        return is_process_running_win32(name)
 
 
-def enumerate_processes_win32():
-    """Return list of module names (e.g., firefox.exe) of running
-    processes
+def is_process_running_win32(name):
+    """Return boolean whether process (like firefox.exe) is running
 
     Does not work on 64-bit Windows
 
@@ -330,8 +332,6 @@ def enumerate_processes_win32():
     PROCESS_QUERY_INFORMATION = 0x0400
     PROCESS_VM_READ = 0x0010
 
-    modnames = []
-
     for pid in win32process.EnumProcesses():
 
         # Get handle to the process based on PID
@@ -341,11 +341,6 @@ def enumerate_processes_win32():
             psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
             psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
             clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
-            if len(clean_modname) > 0 and '?' != clean_modname:
-                # Filter out non-ASCII characters which we don't need
-                # and which may cause warnings.
-                clean_modname2 = re.sub('[^a-z\.]', '_', clean_modname)
-                modnames.append(clean_modname)
 
             # Clean up
             for i in range(modname._length_):
@@ -353,33 +348,26 @@ def enumerate_processes_win32():
 
             kernel.CloseHandle(hProcess)
 
-    return modnames
+            if len(clean_modname) > 0 and '?' != clean_modname:
+                # Filter out non-ASCII characters which we don't need
+                # and which may cause display warnings
+                clean_modname2 = re.sub('[^a-z\.]', '_', clean_modname.lower())
+                if clean_modname2 == name.lower():
+                    return True
+
+    return False
 
 
-def enumerate_processes_wmic():
-    """Return list of module names (e.g., firefox.exe) of running
-    processes
+def is_process_running_wmic(name):
+    """Return boolean whether process (like firefox.exe) is running
 
     Works on Windows XP Professional but not on XP Home
     """
 
-    args = ['wmic', 'path', 'win32_process', 'get', 'Caption']
+    clean_name = re.sub('[^A-Za-z\.]', '_', name).lower()
+    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s%" % clean_name, 'get', 'Caption']
     (rc, stdout, stderr) = General.run_external(args)
-    modnames = []
-    for p in [p.strip().lower() for p in stdout.replace('\r','').split('\n')[1:]]:
-        if len(p) > 0:
-            modnames.append(p)
-
-    return sorted(modnames)
-
-
-
-
-def get_fixed_drives():
-    """Yield each fixed drive"""
-    for drive in win32api.GetLogicalDriveStrings().split('\x00'):
-        if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
-            yield drive
+    return stdout.lower().find(clean_name) > -1
 
 
 def path_on_network(path):

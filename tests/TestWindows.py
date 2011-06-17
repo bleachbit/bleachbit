@@ -127,20 +127,6 @@ class WindowsTestCase(unittest.TestCase):
         self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
 
 
-    def test_enumerate_processes(self):
-        def tep_helper(processes):
-            for process in processes:
-                self.assertEqual(process, process.lower())
-                self.assert_(len(process) > 0)
-                self.assert_(isinstance(process, (str, unicode)))
-                self.assertNotEqual(process, '?')
-                self.assertNotEqual(process, '_')
-            self.assert_('explorer.exe' in processes)
-        tep_helper(enumerate_processes())
-        tep_helper(enumerate_processes_win32())
-        tep_helper(enumerate_processes_wmic())
-
-
     def test_get_fixed_drives(self):
         """Unit test for get_fixed_drives"""
         drives = []
@@ -148,6 +134,13 @@ class WindowsTestCase(unittest.TestCase):
             drives.append(drive)
             self.assertEqual(drive, drive.upper())
         self.assert_("C:\\" in drives)
+
+
+    def test_is_process_running(self):
+        self.assertTrue(is_process_running('explorer.exe'))
+        self.assertTrue(is_process_running('ExPlOrEr.exe'))
+        self.assertTrue(is_process_running('svchost.exe'))
+        self.assertFalse(is_process_running('doesnotexist.exe'))
 
 
     def test_empty_recycle_bin(self):
