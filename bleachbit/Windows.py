@@ -365,7 +365,7 @@ def is_process_running_wmic(name):
     """
 
     clean_name = re.sub('[^A-Za-z\.]', '_', name).lower()
-    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s%" % clean_name, 'get', 'Caption']
+    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" % clean_name, 'get', 'Caption']
     (rc, stdout, stderr) = General.run_external(args)
     return stdout.lower().find(clean_name) > -1
 
