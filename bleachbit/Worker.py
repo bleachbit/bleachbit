@@ -126,6 +126,10 @@ class Worker:
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
         print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
+
+        if not operation_options:
+            raise StopIteration
+
         if self.really_delete and backends[operation].is_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
@@ -135,9 +139,6 @@ class Worker:
             return
         import time
         self.yield_time = time.time()
-
-        if not operation_options:
-            raise StopIteration
 
         for option_id in operation_options:
             assert(isinstance(option_id, (str, unicode)))
