@@ -96,12 +96,22 @@ class GeneralTestCase(unittest.TestCase):
     def test_run_external(self):
         """Unit test for run_external"""
         if 'nt' == os.name:
-            args = ['cmd', '/c', 'dir', '%windir%\system32', '/s', '/b']
+            args = ['cmd.exe', '/c', 'dir', '%windir%\system32', '/s', '/b']
         elif 'posix' == os.name:
-            args = ['ls']
+            args = ['find', '/usr/bin']
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(0, rc)
         self.assertEqual(0, len(stderr))
+
+        args = ['cmddoesnotexist']
+        self.assertRaises(OSError, run_external, args)
+
+        if 'nt' == os.name:
+            args = ['cmd.exe', '/c', 'dir', 'c:\doesnotexist']
+        elif 'posix' == os.name:
+            args = ['ls', '/doesnotexist']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertNotEqual(0, rc)
 
 
     def test_sudo_mode(self):

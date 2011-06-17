@@ -140,14 +140,13 @@ def run_external(args, stdout = False, env = None):
     p = subprocess.Popen(args, stdout = stdout, \
         stderr = subprocess.PIPE, env = env, **kwargs)
     try:
-        p.wait()
+        out = p.communicate()
     except KeyboardInterrupt:
         out = p.communicate()
         print out[0]
         print out[1]
         raise
-    outputs = p.communicate()
-    return (p.returncode, outputs[0], outputs[1])
+    return (p.returncode, out[0], out[1])
 
 
 def sudo_mode():
