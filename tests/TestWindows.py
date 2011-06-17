@@ -137,10 +137,14 @@ class WindowsTestCase(unittest.TestCase):
 
 
     def test_is_process_running(self):
-        self.assertTrue(is_process_running('explorer.exe'))
-        self.assertTrue(is_process_running('ExPlOrEr.exe'))
-        self.assertTrue(is_process_running('svchost.exe'))
-        self.assertFalse(is_process_running('doesnotexist.exe'))
+        tests = ((True, 'explorer.exe'), \
+            (True, 'ExPlOrEr.exe'), \
+            (True, 'svchost.exe'), \
+            (False, 'doesnotexist.exe'))
+        for test in tests:
+            self.assertEqual(test[0], is_process_running(test[1]))
+            self.assertEqual(test[0], is_process_running_win32(test[1]))
+            self.assertEqual(test[0], is_process_running_wmic(test[1]))
 
 
     def test_empty_recycle_bin(self):
