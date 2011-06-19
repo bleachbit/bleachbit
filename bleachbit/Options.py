@@ -131,7 +131,12 @@ class Options:
             option += "." + child
         if not self.config.has_option('tree', option):
             return False
-        return self.config.getboolean('tree', option)
+        try:
+            return self.config.getboolean('tree', option)
+        except:
+            # in case of corrupt configuration (Launchpad #799130)
+            traceback.print_exc()
+            return False
 
 
     def restore(self):
