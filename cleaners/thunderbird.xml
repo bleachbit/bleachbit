@@ -26,8 +26,8 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="glob" path="$localappdata\Thunderbird\Profiles\????????.default\Cache\*"/>
-    <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/Cache/*"/>
+    <action command="delete" search="walk.all" path="$localappdata\Thunderbird\Profiles\????????.default\Cache\"/>
+    <action command="delete" search="walk.all" path="~/.thunderbird/default/????????.slt/Cache/"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/Cache/ -->
     <action command="delete" search="glob" path="~/.thunderbird/????????.default/Cache/*"/>
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/Cache/ -->
