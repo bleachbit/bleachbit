@@ -580,10 +580,10 @@ class GUI:
         preview_item.connect('activate', self.cb_run_option, \
             False, cleaner_id, option_id)
         menu.append(preview_item)
-        delete_item = gtk.MenuItem(_("Delete"))
-        delete_item.connect('activate', self.cb_run_option, \
+        clean_item = gtk.MenuItem(_("Clean"))
+        clean_item.connect('activate', self.cb_run_option, \
             True, cleaner_id, option_id)
-        menu.append(delete_item)
+        menu.append(clean_item)
 
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
@@ -675,10 +675,10 @@ class GUI:
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
         # TRANSLATORS: This is the delete button on the main window.
         # It makes permanent changes: usually deleting files, sometimes altering them.
-        run_button = gtk.ToolButton(icon_widget = icon, label = _p("button", "Delete"))
+        run_button = gtk.ToolButton(icon_widget = icon, label = _p("button", "Clean"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
-        run_button.set_tooltip_text(_("Delete files in the selected operations"))
+        run_button.set_tooltip_text(_("Clean files in the selected operations"))
         run_button.set_is_important(True)
 
         return toolbar

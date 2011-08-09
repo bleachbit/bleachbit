@@ -99,10 +99,10 @@ def list_cleaners():
         print cleaner
 
 
-def preview_or_delete(operations, really_delete):
+def preview_or_clean(operations, really_clean):
     """Preview deletes and other changes"""
     cb = CliCallback()
-    worker = Worker.Worker(cb, really_delete, operations).run()
+    worker = Worker.Worker(cb, really_clean, operations).run()
     while worker.next():
         pass
 
@@ -151,8 +151,10 @@ def process_cmd_line():
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action = "store_true",
         help = _("list cleaners"))
-    parser.add_option("-d", "--delete", action = "store_true",
+    parser.add_option("-c", "--clean", action = "store_true",
         help = _("delete files and make other permanent changes"))
+    parser.add_option("-d", "--delete", action = "store_true",
+        help = _("depreciated alias for --clean"))
     parser.add_option("--sysinfo", action = "store_true",
         help = _("show system information"))
     parser.add_option("-p", "--preview", action = "store_true",
@@ -177,13 +179,13 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         sys.exit(0)
     if options.preview:
         operations = args_to_operations(args, options.preset)
-        preview_or_delete(operations, False)
+        preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
         Options.options.set('shred', True, commit = False)
-    if options.delete:
+    if options.delete or options.clean:
         operations = args_to_operations(args, options.preset)
-        preview_or_delete(operations, True)
+        preview_or_clean(operations, True)
         sys.exit(0)
     if options.sysinfo:
         import Diagnostic
