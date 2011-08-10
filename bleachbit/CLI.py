@@ -183,6 +183,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         sys.exit(0)
     if options.overwrite:
         Options.options.set('shred', True, commit = False)
+    if options.delete:
+        print 'Depreciation warning: use --clean instead of --delete'
     if options.delete or options.clean:
         operations = args_to_operations(args, options.preset)
         preview_or_clean(operations, True)
