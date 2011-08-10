@@ -200,6 +200,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         import GUI
         gui = GUI.GUI(uac=not options.no_uac)
         gtk.main()
+        sys.exit(0)
     if options.sysinfo:
         import Diagnostic
         print Diagnostic.diagnostic_info()
