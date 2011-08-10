@@ -157,6 +157,9 @@ def process_cmd_line():
         help = _("depreciated alias for --clean"))
     parser.add_option("--sysinfo", action = "store_true",
         help = _("show system information"))
+    parser.add_option("--gui", action = "store_true", help=_("Launch the graphic interface"))
+    if 'nt' == os.name:
+        parser.add_option("--no-uac", action = "store_true", help=_("Do not show prompt for administrator privileges"))
     parser.add_option("-p", "--preview", action = "store_true",
         help = _("preview files to be deleted and other changes"))
     parser.add_option("--preset", action="store_true",
@@ -189,6 +192,11 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         operations = args_to_operations(args, options.preset)
         preview_or_clean(operations, True)
         sys.exit(0)
+    if options.gui:
+        import gtk
+        import bleachbit.GUI
+        gui = bleachbit.GUI.GUI()
+        gtk.main()
     if options.sysinfo:
         import Diagnostic
         print Diagnostic.diagnostic_info()
