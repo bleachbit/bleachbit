@@ -251,7 +251,7 @@ def elevate_privileges():
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
         exe = unicode(sys.executable, sys.getfilesystemencoding())
-        py = ""
+        py = "--gui --no-uac"
     else:
         # __file__ is absolute path to bleachbit/Windows.py
         pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
@@ -261,7 +261,7 @@ def elevate_privileges():
         if len(pyfile) > 0 and path_on_network(pyfile):
             print "debug: skipping UAC because '%s' is on network" % pyfile
             return False
-        py = '"%s"' % pyfile
+        py = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
 
     print 'debug: exe=', exe, ' parameters=', py
