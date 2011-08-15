@@ -29,9 +29,12 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Cache\"/>
-    <!-- Chromium 69949 (December 2010) on Windows 7 does not store HostReferralList and StartupDNSPrefetchList -->
-    <action command="delete" search="walk.files" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache"/>
     <action command="delete" search="walk.files" path="~/.cache/chromium/"/>
+    <action command="delete" search="walk.files" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache"/>
+    <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="dns_prefetching/startup_list"/>
+<action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="dns_prefetching/host_referral_list"/>
+    <action command="json" search="file" path="~/.config/chromium/Default/Preferences" address="dns_prefetching/host_referral_list"/>
+    <action command="json" search="file" path="~/.config/chromium/Default/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="~/.config/chromium/Local State" address="HostReferralList"/>
     <action command="json" search="file" path="~/.config/chromium/Local State" address="StartupDNSPrefetchList"/>
   </option>
