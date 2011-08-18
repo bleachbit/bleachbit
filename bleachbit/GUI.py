@@ -576,10 +576,12 @@ class GUI:
         cleaner_name = model[path[0]][0]
         # make a menu
         menu = gtk.Menu()
+        # TRANSLATORS: this is the context menu
         preview_item = gtk.MenuItem(_("Preview"))
         preview_item.connect('activate', self.cb_run_option, \
             False, cleaner_id, option_id)
         menu.append(preview_item)
+        # TRANSLATORS: this is the context menu
         clean_item = gtk.MenuItem(_("Clean"))
         clean_item.connect('activate', self.cb_run_option, \
             True, cleaner_id, option_id)
@@ -673,7 +675,7 @@ class GUI:
         # create the delete button
         icon = gtk.Image()
         icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        # TRANSLATORS: This is the delete button on the main window.
+        # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes altering them.
         run_button = gtk.ToolButton(icon_widget = icon, label = _p("button", "Clean"))
         run_button.connect("clicked", self.run_operations)

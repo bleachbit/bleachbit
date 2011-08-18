@@ -154,10 +154,11 @@ def process_cmd_line():
     parser.add_option("-c", "--clean", action = "store_true",
         help = _("delete files and make other permanent changes"))
     parser.add_option("-d", "--delete", action = "store_true",
+        # TRANSLATORS: this is a warning for using --delete which will go away one day
         help = _("depreciated alias for --clean"))
     parser.add_option("--sysinfo", action = "store_true",
         help = _("show system information"))
-    parser.add_option("--gui", action = "store_true", help=_("launch the graphic interface"))
+    parser.add_option("--gui", action = "store_true", help=_("launch the graphical interface"))
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
