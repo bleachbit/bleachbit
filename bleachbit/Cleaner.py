@@ -575,13 +575,12 @@ class System(Cleaner):
             # shreading.
             #
             # https://bugzilla.gnome.org/show_bug.cgi?id=591404
-            def delete_linux_recently_used(pathname):
+            for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
+                pathname = os.path.expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
                     gtk.RecentManager().purge_items()
 
-            delete_linux_recently_used(os.path.expanduser("~/.recently-used.xbel"))
-            delete_linux_recently_used(os.path.expanduser("~/.local/share/recently-used.xbel"))
 
         # overwrite free space
         shred_drives = options.get_list('shred_drives')
