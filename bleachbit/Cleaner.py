@@ -410,6 +410,8 @@ class System(Cleaner):
         if 'posix' == os.name and 'cache' == option_id:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
+                if self.whitelisted(filename):
+                    continue
                 yield Command.Delete(filename)
 
         # menu
@@ -641,6 +643,8 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-' ]
+        regexes.append('^'+os.path.expanduser('~/.cache/wallpaper/'))
+        regexes.append('^'+os.path.expanduser('~/.cache/gnome-control-center/'))
         for regex in regexes:
             if None != re.match(regex, pathname):
                 return True
