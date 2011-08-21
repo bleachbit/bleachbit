@@ -496,8 +496,21 @@ class System(Cleaner):
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
             files += [ os.path.expanduser("~/.recently-used") ]
+            # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
+            # in memory if it is simply deleted, so it must be shredded
+            # (or at least truncated).
+            #
+            # GNOME 2.28.1 (Ubuntu 9.10) and 2.30 (10.04) do not re-read
+            # the file after truncation, but do re-read it after
+            # shreading.
+            #
+            # https://bugzilla.gnome.org/show_bug.cgi?id=591404
+            for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
+                pathname = os.path.expanduser(pathname)
+                if os.path.lexists(pathname):
+                    yield Command.Shred(pathname)
+                    gtk.RecentManager().purge_items()
 
-        # fixme http://www.freedesktop.org/wiki/Specifications/desktop-bookmark-spec
 
         if 'posix' == os.name and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
@@ -564,24 +577,6 @@ class System(Cleaner):
                 gtk.gdk.threads_leave()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
-
-
-        # recent documents
-        if 'posix' == os.name and 'recent_documents' == option_id:
-            # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
-            # in memory if it is simply deleted, so it must be shredded
-            # (or at least truncated).
-            #
-            # GNOME 2.28.1 (Ubuntu 9.10) and 2.30 (10.04) do not re-read
-            # the file after truncation, but do re-read it after
-            # shreading.
-            #
-            # https://bugzilla.gnome.org/show_bug.cgi?id=591404
-            for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
-                pathname = os.path.expanduser(pathname)
-                if os.path.lexists(pathname):
-                    yield Command.Shred(pathname)
-                    gtk.RecentManager().purge_items()
 
 
         # overwrite free space
