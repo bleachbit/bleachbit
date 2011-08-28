@@ -346,6 +346,7 @@ class Locales:
             return self.__native_locale_names[language_code]
         if os.path.exists('/usr/share/locale/all_languages'):
             if not self.__config_read:
+                # In Fedora 15, this file is provided by kdelibs-common
                 self.__config.read('/usr/share/locale/all_languages')
                 self.__config_read = True
             option = 'Name[%s]' % (language_code, )
