@@ -372,7 +372,7 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
-        if 'linux2' == sys.platform:
+        if sys.platform.startswith('linux'):
             self.add_option('memory', _('Memory'), \
             # TRANSLATORS: 'free' means 'unallocated'
                _('Wipe the swap and free memory'))
@@ -480,7 +480,7 @@ class System(Cleaner):
                     files += [ globbed ]
 
         # memory
-        if 'linux2' == sys.platform and 'memory' == option_id:
+        if sys.platform.startswith('linux') and 'memory' == option_id:
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # memory dump

@@ -74,7 +74,7 @@ class CleanerML:
         if len(os_str) == 0 or None != self.xlate_cb:
             return True
         # Otherwise, check platform.
-        if os_str == 'linux' and sys.platform == 'linux2':
+        if os_str == 'linux' and sys.platform.startswith('linux'):
             return True
         if os_str == 'windows' and sys.platform == 'win32':
             return True

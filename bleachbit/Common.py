@@ -91,7 +91,7 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
 system_cleaners_dir = None
-if sys.platform == 'linux2':
+if sys.platform.startswith('linux'):
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
@@ -119,7 +119,7 @@ if os.path.exists("./locale/"):
     print "debug: locale_dir = '%s'" % (locale_dir, )
 else:
     # system-wide installed locale
-    if sys.platform == 'linux2':
+    if sys.platform.startswith('linux'):
         locale_dir = "/usr/share/locale/"
     elif sys.platform == 'win32':
         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')

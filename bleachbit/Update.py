@@ -82,7 +82,7 @@ def user_agent():
     if sys.platform == "win32":
         # misleading: Python 2.5.4 shows uname()[2] as Vista on Windows 7
         __os = platform.uname()[3][0:3] # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
-    elif sys.platform == 'linux2':
+    elif sys.platform.startswith('linux'):
         dist = platform.dist() 
         # example: ('fedora', '11', 'Leonidas')
         # example: ('', '', '') for Arch Linux

@@ -151,7 +151,7 @@ def run_external(args, stdout = False, env = None):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if 'linux2' != sys.platform:
+    if not sys.platform.startswith('linux'):
         return False
 
     #if 'root' == os.getenv('USER'):

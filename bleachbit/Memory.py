@@ -200,7 +200,7 @@ def physical_free_windows():
 
 
 def physical_free():
-    if 'linux2' == sys.platform:
+    if sys.platform.startswith('linux'):
         return physical_free_linux()
     elif 'win32' == sys.platform:
         return physical_free_windows()

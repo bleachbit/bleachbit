@@ -59,7 +59,7 @@ def diagnostic_info():
     for env in envs:
         s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
-    if 'linux2' == sys.platform:
+    if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
         else:
