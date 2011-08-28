@@ -40,7 +40,7 @@ class MemoryTestCase(unittest.TestCase):
 
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
-        if 'linux2' != sys.platform:
+        if not sys.platform.startswith('linux'):
             return
         n_swaps = count_swap_linux()
         self.assert_(isinstance(n_swaps, (int, long)))
@@ -57,7 +57,7 @@ class MemoryTestCase(unittest.TestCase):
 
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        if 'linux2' != sys.platform:
+        if not sys.platform.startswith('linux'):
             return
         swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
@@ -75,7 +75,7 @@ class MemoryTestCase(unittest.TestCase):
 
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
-        if 'linux2' != sys.platform:
+        if not sys.platform.startswith('linux'):
             return
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 

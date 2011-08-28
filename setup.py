@@ -77,7 +77,7 @@ except ImportError:
 
 
 data_files = []
-if sys.platform == 'linux2':
+if sys.platform.startswith('linux'):
     data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform[:6] == 'netbsd':
