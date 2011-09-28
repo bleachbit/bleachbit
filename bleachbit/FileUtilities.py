@@ -512,7 +512,7 @@ def wipe_path(pathname, idle = False ):
             done_percent = 1.0 * done_bytes / (start_free_bytes + 1)
         done_time = time.time() - start_time
         rate = done_bytes / (done_time + 0.0001) # bytes per second
-        remaining_seconds = int(remaining_bytes / rate)
+        remaining_seconds = int(remaining_bytes / (rate+0.0001))
         return (done_percent, remaining_seconds)
 
 
