@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-18 20:44-0700\n"
-"PO-Revision-Date: 2011-01-30 16:47+0000\n"
+"POT-Creation-Date: 2011-08-17 20:52-0600\n"
+"PO-Revision-Date: 2011-09-06 11:37+0000\n"
 "Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-31 04:28+0000\n"
-"X-Generator: Launchpad (build 12274)\n"
+"X-Launchpad-Export-Date: 2011-10-28 03:56+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -35,8 +35,8 @@ msgstr "Lîstik"
 #: ../cleaners/safari.xml ../cleaners/java.xml ../cleaners/flash.xml
 #: ../cleaners/thunderbird.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:187
-#: ../bleachbit/Cleaner.py:291 ../bleachbit/Cleaner.py:358
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:186
+#: ../bleachbit/Cleaner.py:296 ../bleachbit/Cleaner.py:363
 msgid "Cache"
 msgstr "Pêşbîr"
 
@@ -53,9 +53,9 @@ msgstr "Lîsteya pêşkêşkara lîstikan jê bibe"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:291
-#: ../bleachbit/Cleaner.py:358 ../bleachbit/Cleaner.py:378
-#: ../bleachbit/Cleaner.py:380
+#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:296
+#: ../bleachbit/Cleaner.py:363 ../bleachbit/Cleaner.py:383
+#: ../bleachbit/Cleaner.py:385
 msgid "Delete the cache"
 msgstr "Pêşbîrê jê bibe"
 
@@ -66,8 +66,8 @@ msgstr "Pêşbîrê jê bibe"
 #: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
 #: ../cleaners/google_chrome.xml ../cleaners/safari.xml
 #: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
-#: ../bleachbit/Action.py:285 ../bleachbit/Cleaner.py:196
-#: ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Action.py:323
 msgid "Vacuum"
 msgstr "Vakum"
 
@@ -93,7 +93,7 @@ msgstr "Geroka webê"
 #: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:187
+#: ../bleachbit/Cleaner.py:186
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr "Pêşbîra webê jê bibe, bi vê yekê vekirina nû ya rûpelan dê hêdî bibe"
 
@@ -102,7 +102,7 @@ msgstr "Pêşbîra webê jê bibe, bi vê yekê vekirina nû ya rûpelan dê hê
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:188
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:187
 msgid "Cookies"
 msgstr "Çerez"
 
@@ -111,7 +111,7 @@ msgstr "Çerez"
 #: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
 #: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
 #: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:188
+#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:187
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -119,17 +119,17 @@ msgstr "Çerezên ku agahî, vebijêrk, û nasnameyên malperan tê de ne jê bi
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:189
 msgid "DOM Storage"
 msgstr "Qada DOMê"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:189
 msgid "Delete HTML5 cookies"
 msgstr "Çerezên HTML5ê jê bibe"
 
 #: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:191
 msgid "Form history"
 msgstr "Dîroka forman"
 
@@ -174,8 +174,8 @@ msgstr "Rûniştina çalak jê bibe"
 
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
 #: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:271
-#: ../bleachbit/Cleaner.py:342
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:276
+#: ../bleachbit/Cleaner.py:347
 msgid "Delete the usage history"
 msgstr "Dîroka bikaranînê jê bibe"
 
@@ -199,7 +199,7 @@ msgstr "Nîşandêra Multîmedyayê"
 #: ../cleaners/exaile.xml ../cleaners/easytag.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:376
+#: ../bleachbit/Cleaner.py:381
 msgid "Logs"
 msgstr "Tomar"
 
@@ -207,7 +207,7 @@ msgstr "Tomar"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
 #: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:376
+#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:381
 msgid "Delete the logs"
 msgstr "Tomaran jê bibe"
 
@@ -222,7 +222,7 @@ msgstr "Tomarên çewtiyan"
 msgid "Delete the debug logs"
 msgstr "Tomarên çewtiyan jê bibe"
 
-#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:191
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "Dîroka formên malper darikê lêgerînê"
 
@@ -235,14 +235,14 @@ msgstr "Lîsteya malperên vebûne"
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:393
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:397
 msgid "Temporary files"
 msgstr "Pelên demdemî"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:393
+#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:397
 msgid "Delete the temporary files"
 msgstr "Pelên demdemî jê bibe"
 
@@ -251,19 +251,19 @@ msgstr "Pelên demdemî jê bibe"
 #: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:292
+#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:297
 msgid "Most recently used"
 msgstr "Yên herî dawî hatine bikaranîn"
 
 #: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
 #: ../cleaners/gwenview.xml ../cleaners/gedit.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:292 ../bleachbit/Cleaner.py:368
+#: ../bleachbit/Cleaner.py:297 ../bleachbit/Cleaner.py:373
 msgid "Delete the list of recently used documents"
 msgstr "Lîsteya belgeyên herî dawî hatine bikaranîn jê bibe"
 
 #: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:368
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:373
 msgid "Recent documents list"
 msgstr "Lîsteya belgeyên dawiyê"
 
@@ -283,6 +283,14 @@ msgstr "Tomarên chatê"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
 msgid "Delete the chat logs"
 msgstr "Tomarên chatê jê bibe"
+
+#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+msgid "Download history"
+msgstr "Dîroka daxistinan"
+
+#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:190
+msgid "List of files downloaded"
+msgstr "Lîsteya pelên daxistî"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
@@ -312,14 +320,6 @@ msgstr "Navrûyê veguhestina pelan"
 #: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
 msgstr "Pelan jê bibe"
-
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
-msgid "Download history"
-msgstr "Dîroka daxistinan"
-
-#: ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
-msgid "List of files downloaded"
-msgstr "Lîsteya pelên daxistî"
 
 #: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
 #: ../cleaners/windows_explorer.xml
@@ -368,7 +368,7 @@ msgstr "Danegeheke URLên bijare, favîkon û dîroka malperan tê de heye"
 msgid "This option deletes all bookmarks."
 msgstr "Ev vebijêrk dê hemû bijareyan jê bibe."
 
-#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:302
+#: ../cleaners/microsoft_office.xml ../bleachbit/Cleaner.py:307
 msgid "Office suite"
 msgstr "Bernameya ofîsê"
 
@@ -463,7 +463,7 @@ msgstr "Derbas bibe"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:73 ../bleachbit/GUI.py:585
+#: ../bleachbit/Command.py:73
 msgid "Delete"
 msgstr "Jê bibe"
 
@@ -475,7 +475,9 @@ msgstr "Ji bo jêbirinê nîşan bike"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:182 ../bleachbit/Command.py:212
-#: ../bleachbit/Action.py:203 ../bleachbit/Action.py:215
+#: ../bleachbit/Action.py:203 ../bleachbit/Action.py:216
+#: ../bleachbit/Action.py:228 ../bleachbit/Action.py:241
+#: ../bleachbit/Action.py:253
 msgid "Clean file"
 msgstr ""
 
@@ -488,103 +490,19 @@ msgstr "Ji binî ve jê bibe"
 msgid "Delete registry key"
 msgstr "Kilîla tomarê jê bibe"
 
-#: ../bleachbit/Unix.py:364 ../bleachbit/Unix.py:394 ../bleachbit/Unix.py:574
+#: ../bleachbit/Unix.py:365 ../bleachbit/Unix.py:395 ../bleachbit/Unix.py:575
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Pelê xebitandinê nehate dîtin : %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:571 ../bleachbit/Worker.py:131
+#: ../bleachbit/Unix.py:572 ../bleachbit/Worker.py:135
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
 "%s niha dixebite, lewre nayê jêbirin. Tika ye pelî bigire û dîsa biceribîne."
-
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:76
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
-"Di xebitîna çalakiyê de zêdebariyek derket. '%(operation)s': '%(msg)s'"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:208
-msgid "Please wait.  Wiping free disk space."
-msgstr ""
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:210 ../bleachbit/Worker.py:297
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Tika ye li bendê be. %s tê paqijkirin."
-
-#: ../bleachbit/Worker.py:210 ../bleachbit/Cleaner.py:371
-#: ../bleachbit/Cleaner.py:478
-msgid "Memory"
-msgstr "Bîr"
-
-#: ../bleachbit/Worker.py:220
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:235
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Qada dîskê ya hatî zêdekirin: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:239
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Qada dîskê ya dê bê zêdekirin: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:244
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Pelên hatî jêbirin: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:248
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Pelên dê bên jêbirin: %d"
-
-#: ../bleachbit/Worker.py:251
-#, python-format
-msgid "Special operations: %d"
-msgstr "Karên taybet: %d"
-
-#: ../bleachbit/Worker.py:254
-#, python-format
-msgid "Errors: %d"
-msgstr "Çewtî: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:270
-msgid "Please wait.  Running deep scan."
-msgstr "Venêrîna kûr tê kirin, tika ye li bendê be."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:300
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Tika ye li bendê be. %s tê pêşandan"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -616,13 +534,21 @@ msgstr ""
 msgid "Imported from winapp2.ini"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:192
 msgid "Session restore"
 msgstr "Rûniştinê nû bike"
 
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:192
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Piştî girtin an jî têkçûna gerokê rûniştina destpêkê bar dike"
+
+#: ../bleachbit/Cleaner.py:193
+msgid "Site preferences"
+msgstr ""
+
+#: ../bleachbit/Cleaner.py:193
+msgid "Settings for individual sites"
+msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -630,26 +556,26 @@ msgstr "Piştî girtin an jî têkçûna gerokê rûniştina destpêkê bar dike
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:357
+#: ../bleachbit/Cleaner.py:362
 msgid "Broken desktop files"
 msgstr "Pelên Sermaseyê yên şikestî"
 
-#: ../bleachbit/Cleaner.py:357
+#: ../bleachbit/Cleaner.py:362
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
 "Ketanên pêşeka sepandinê yên şikestî û têkiliyên wan ên bi pelan re jê bibe"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:361
+#: ../bleachbit/Cleaner.py:366
 msgid "Localizations"
 msgstr "Herêmîkirin"
 
-#: ../bleachbit/Cleaner.py:361
+#: ../bleachbit/Cleaner.py:366
 msgid "Delete files for unwanted languages"
 msgstr "Pelên zimanên nayên xwestin jê bibe"
 
-#: ../bleachbit/Cleaner.py:362
+#: ../bleachbit/Cleaner.py:367
 msgid "Configure this option in the preferences."
 msgstr ""
 
@@ -657,106 +583,111 @@ msgstr ""
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/Cleaner.py:367
+#: ../bleachbit/Cleaner.py:372
 msgid "Rotated logs"
 msgstr "Tomarên beralîkirî"
 
-#: ../bleachbit/Cleaner.py:367
+#: ../bleachbit/Cleaner.py:372
 msgid "Delete old system logs"
 msgstr "Tomarên pergalê yên kevn jê bibe"
 
-#: ../bleachbit/Cleaner.py:369
+#: ../bleachbit/Cleaner.py:374
 msgid "Trash"
 msgstr "Çop"
 
-#: ../bleachbit/Cleaner.py:369
+#: ../bleachbit/Cleaner.py:374
 msgid "Empty the trash"
 msgstr "Çopê vala bike"
 
+#: ../bleachbit/Cleaner.py:376 ../bleachbit/Cleaner.py:482
+#: ../bleachbit/Worker.py:211
+msgid "Memory"
+msgstr "Bîr"
+
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:373
+#: ../bleachbit/Cleaner.py:378
 msgid "Wipe the swap and free memory"
 msgstr "Qada pevguherînê paqij bike û bîrê vala bike"
 
-#: ../bleachbit/Cleaner.py:374 ../bleachbit/Cleaner.py:385
+#: ../bleachbit/Cleaner.py:379
 msgid "This option is experimental and may cause system problems."
 msgstr ""
 "Ev vebijêrk di asta ceribandinê de ye, dibe ku bibe sedema pirsgirêkên "
 "pergalê."
 
-#: ../bleachbit/Cleaner.py:377
+#: ../bleachbit/Cleaner.py:382
 msgid "Memory dump"
 msgstr "Raxistina bîrê"
 
-#: ../bleachbit/Cleaner.py:377
+#: ../bleachbit/Cleaner.py:382
 msgid "Delete the file memory.dmp"
 msgstr "Pelê memory.dmpê jê bibe"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:380
+#: ../bleachbit/Cleaner.py:385
 msgid "Prefetch"
 msgstr "Pêşhevgirtin"
 
-#: ../bleachbit/Cleaner.py:381
+#: ../bleachbit/Cleaner.py:386
 msgid "Recycle bin"
 msgstr "Qutîka çopê"
 
-#: ../bleachbit/Cleaner.py:381
+#: ../bleachbit/Cleaner.py:386
 msgid "Empty the recycle bin"
 msgstr "Qutîka çopê vala bike"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:384
+#: ../bleachbit/Cleaner.py:389
 msgid "Update uninstallers"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:384
+#: ../bleachbit/Cleaner.py:389
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:387 ../bleachbit/Cleaner.py:560
+#: ../bleachbit/Cleaner.py:391 ../bleachbit/Cleaner.py:564
 msgid "Clipboard"
 msgstr "Pano"
 
-#: ../bleachbit/Cleaner.py:387
+#: ../bleachbit/Cleaner.py:391
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr "Panoya Sermaseyê ya ji bo kopîkirin û pêvekirinê"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:389
+#: ../bleachbit/Cleaner.py:393
 msgid "Free disk space"
 msgstr "Qada dîskê paqij bike"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:391
+#: ../bleachbit/Cleaner.py:395
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Ji bo hilanîna pelên jêbirî, li ser beşa bîra vala binivîse"
 
-#: ../bleachbit/Cleaner.py:392
+#: ../bleachbit/Cleaner.py:396
 msgid "This option is very slow."
 msgstr "Ev vebijêrk hêdî dixebite"
 
-#: ../bleachbit/Cleaner.py:396
+#: ../bleachbit/Cleaner.py:400
 msgid "The system in general"
 msgstr "Pergala te bi giştî"
 
-#: ../bleachbit/Cleaner.py:402 ../bleachbit/Cleaner.py:654
+#: ../bleachbit/Cleaner.py:406 ../bleachbit/Cleaner.py:659
 msgid "System"
 msgstr "Pergal"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:586 ../bleachbit/Cleaner.py:679
+#: ../bleachbit/Cleaner.py:590 ../bleachbit/Cleaner.py:686
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Li ser %s beşa bîra vala binivîse"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:614
+#: ../bleachbit/Cleaner.py:618
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Qutîka çopê %s"
@@ -781,11 +712,11 @@ msgstr "Ziman"
 msgid "Whitelist"
 msgstr "Lîsteya Spî"
 
-#: ../bleachbit/GuiPreferences.py:105
+#: ../bleachbit/GuiPreferences.py:107
 msgid "Check periodically for software updates via the Internet"
 msgstr "Dem bi dem ji înternetê agahiyên derbarê bernameyên de kontrol bike"
 
-#: ../bleachbit/GuiPreferences.py:108
+#: ../bleachbit/GuiPreferences.py:110
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -793,26 +724,30 @@ msgstr ""
 "Eger rojanekirinek bê dîtin, dê agahiya wê ji te re bê ragihandin. Û tu yê "
 "dikaribî wê daxî û saz bikî."
 
-#: ../bleachbit/GuiPreferences.py:111
+#: ../bleachbit/GuiPreferences.py:116
 msgid "Check for new beta releases"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:123
+msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr ""
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:121
+#: ../bleachbit/GuiPreferences.py:135
 msgid "Hide irrelevant cleaners"
 msgstr "Paqijiyên netêkildar veşêre"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:129
+#: ../bleachbit/GuiPreferences.py:143
 msgid "Overwrite files to hide contents"
 msgstr "Ji bo veşartina naverokê li ser pelan binivîse"
 
-#: ../bleachbit/GuiPreferences.py:132
+#: ../bleachbit/GuiPreferences.py:146
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -820,93 +755,93 @@ msgstr ""
 "Nivîsandina li ser di hin çalakiyên BleachBitê de bêbandor e. Nivîsandina li "
 "ser kar gelekî hêdî dike."
 
-#: ../bleachbit/GuiPreferences.py:135
+#: ../bleachbit/GuiPreferences.py:149
 msgid "Start BleachBit with computer"
 msgstr "Di vebûna pergalê de Bleachbitê bixebitîne"
 
-#: ../bleachbit/GuiPreferences.py:146 ../bleachbit/GuiPreferences.py:277
-#: ../bleachbit/GUI.py:547
+#: ../bleachbit/GuiPreferences.py:160 ../bleachbit/GuiPreferences.py:291
+#: ../bleachbit/GUI.py:545
 msgid "Choose a folder"
 msgstr "Peldankekê hilbijêre"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/GuiPreferences.py:171
+#: ../bleachbit/GuiPreferences.py:185
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr "Ji her ajokarê peldankeke tê nivîsandin hilbijêre."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
-#: ../bleachbit/GuiPreferences.py:192
+#: ../bleachbit/GuiPreferences.py:206
 msgctxt "button"
 msgid "Add"
 msgstr "Têxê"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path from the list of paths
-#: ../bleachbit/GuiPreferences.py:195 ../bleachbit/GuiPreferences.py:355
+#: ../bleachbit/GuiPreferences.py:209 ../bleachbit/GuiPreferences.py:369
 msgctxt "button"
 msgid "Remove"
 msgstr "Rake"
 
-#: ../bleachbit/GuiPreferences.py:220
+#: ../bleachbit/GuiPreferences.py:234
 msgid "All languages will be deleted except those checked."
 msgstr "Ji bilî zimanê hatî hilbijartin hemû zimanên din dê bên jêbirin."
 
-#: ../bleachbit/GuiPreferences.py:237
+#: ../bleachbit/GuiPreferences.py:251
 msgid "Preserve"
 msgstr "Biparêze"
 
-#: ../bleachbit/GuiPreferences.py:241
+#: ../bleachbit/GuiPreferences.py:255
 msgid "Code"
 msgstr "Kod"
 
-#: ../bleachbit/GuiPreferences.py:245 ../bleachbit/GUI.py:136
+#: ../bleachbit/GuiPreferences.py:259 ../bleachbit/GUI.py:136
 msgid "Name"
 msgstr "Nav"
 
-#: ../bleachbit/GuiPreferences.py:263
+#: ../bleachbit/GuiPreferences.py:277
 msgid "Choose a file"
 msgstr "Pelekî hilbijêre"
 
-#: ../bleachbit/GuiPreferences.py:270 ../bleachbit/GuiPreferences.py:314
+#: ../bleachbit/GuiPreferences.py:284 ../bleachbit/GuiPreferences.py:328
 msgid "File"
 msgstr "Pel"
 
-#: ../bleachbit/GuiPreferences.py:285 ../bleachbit/GuiPreferences.py:316
+#: ../bleachbit/GuiPreferences.py:299 ../bleachbit/GuiPreferences.py:330
 msgid "Folder"
 msgstr "Pelrêç"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files and folders
-#: ../bleachbit/GuiPreferences.py:323
+#: ../bleachbit/GuiPreferences.py:337
 msgid "Theses paths will not be deleted or modified."
 msgstr "Ev cî dê neyên jêbirin û guherandin."
 
-#: ../bleachbit/GuiPreferences.py:331
+#: ../bleachbit/GuiPreferences.py:345
 msgid "Type"
 msgstr "Cure"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:337
+#: ../bleachbit/GuiPreferences.py:351
 msgid "Path"
 msgstr "Pelrêç"
 
-#: ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:363
 msgctxt "button"
 msgid "Add file"
 msgstr "Pelî têxê"
 
-#: ../bleachbit/GuiPreferences.py:352
+#: ../bleachbit/GuiPreferences.py:366
 msgctxt "button"
 msgid "Add folder"
 msgstr "Peldankê têxê"
 
-#: ../bleachbit/RecognizeCleanerML.py:70
+#: ../bleachbit/RecognizeCleanerML.py:63
 msgid "Security warning"
 msgstr "Hişyariya ewlekariyê"
 
 #. TRANSLATORS: Cleaner definitions are XML data files that define
 #. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:82
+#: ../bleachbit/RecognizeCleanerML.py:75
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -917,27 +852,110 @@ msgstr ""
 "an jî jê derkeve."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:95
+#: ../bleachbit/RecognizeCleanerML.py:88
 msgctxt "column_label"
 msgid "Delete"
 msgstr "Jê bibe"
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:98
+#: ../bleachbit/RecognizeCleanerML.py:91
 msgctxt "column_label"
 msgid "Filename"
 msgstr "Navê pelî"
 
-#: ../bleachbit/Update.py:73
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:76
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr ""
+"Di xebitîna çalakiyê de zêdebariyek derket. '%(operation)s': '%(msg)s'"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:209
+msgid "Please wait.  Wiping free disk space."
+msgstr ""
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:211 ../bleachbit/Worker.py:298
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Tika ye li bendê be. %s tê paqijkirin."
+
+#: ../bleachbit/Worker.py:221
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:236
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Qada dîskê ya hatî zêdekirin: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:240
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Qada dîskê ya dê bê zêdekirin: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:245
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Pelên hatî jêbirin: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:249
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Pelên dê bên jêbirin: %d"
+
+#: ../bleachbit/Worker.py:252
+#, python-format
+msgid "Special operations: %d"
+msgstr "Karên taybet: %d"
+
+#: ../bleachbit/Worker.py:255
+#, python-format
+msgid "Errors: %d"
+msgstr "Çewtî: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:271
+msgid "Please wait.  Running deep scan."
+msgstr "Venêrîna kûr tê kirin, tika ye li bendê be."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:301
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Tika ye li bendê be. %s tê pêşandan"
+
+#: ../bleachbit/Update.py:75
+msgid "New winapp2.ini was downloaded."
+msgstr ""
+
+#: ../bleachbit/Update.py:111
 msgid "Update BleachBit"
 msgstr ""
 
-#: ../bleachbit/Update.py:78
+#: ../bleachbit/Update.py:116
 msgid "A new version is available."
 msgstr ""
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
-#: ../bleachbit/Update.py:86
+#: ../bleachbit/Update.py:124
 #, python-format
 msgid "Update to version %s"
 msgstr ""
@@ -963,23 +981,36 @@ msgstr "paqijkaran lîste bike"
 msgid "delete files and make other permanent changes"
 msgstr "pelan jê bibe û guherînên din ên mayîn de pêk bîne"
 
-#: ../bleachbit/CLI.py:157
+#. TRANSLATORS: this is a warning for using --delete which will go away one day
+#: ../bleachbit/CLI.py:158
+msgid "depreciated alias for --clean"
+msgstr ""
+
+#: ../bleachbit/CLI.py:160
 msgid "show system information"
 msgstr "agahiyên pergalê nîşan bide"
 
-#: ../bleachbit/CLI.py:159
-msgid "preview files to be deleted and other changes"
-msgstr "pêşdêtina pelên bên jêbirin û guherînên din"
-
 #: ../bleachbit/CLI.py:161
-msgid "use options set in the graphical interface"
+msgid "launch the graphical interface"
 msgstr ""
 
 #: ../bleachbit/CLI.py:163
+msgid "do not prompt for administrator privileges"
+msgstr ""
+
+#: ../bleachbit/CLI.py:168
+msgid "preview files to be deleted and other changes"
+msgstr "pêşdêtina pelên bên jêbirin û guherînên din"
+
+#: ../bleachbit/CLI.py:170
+msgid "use options set in the graphical interface"
+msgstr ""
+
+#: ../bleachbit/CLI.py:172
 msgid "output version information and exit"
 msgstr "agahiya guhertoyê bibîne û derkeve"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py:174
 msgid "overwrite files to hide contents"
 msgstr "ji bo hilanîna naverokan li ser pelan binivîse"
 
@@ -1040,11 +1071,11 @@ msgstr "Divê çalakiyekê hilbijêrî"
 msgid "Done."
 msgstr "Bi dawî hat."
 
-#: ../bleachbit/GUI.py:396
+#: ../bleachbit/GUI.py:398
 msgid "Program to clean unnecessary files"
 msgstr "Bernameya pelên nehewce jê dibe"
 
-#: ../bleachbit/GUI.py:401
+#: ../bleachbit/GUI.py:403
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1057,27 +1088,33 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:407
+#: ../bleachbit/GUI.py:409
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Amed Çeko Jiyan https://launchpad.net/~amedcj\n"
 "  Erdal Ronahi https://launchpad.net/~erdalronahi"
 
-#: ../bleachbit/GUI.py:420
+#: ../bleachbit/GUI.py:422
 msgid "System information"
 msgstr "Agahiya pergalê"
 
-#: ../bleachbit/GUI.py:490
+#: ../bleachbit/GUI.py:492
 msgid "Choose files to shred"
 msgstr "Pelênbên parçekirin hilbijêre"
 
-#: ../bleachbit/GUI.py:493
+#: ../bleachbit/GUI.py:495
 msgid "Choose folder to shred"
 msgstr ""
 
-#: ../bleachbit/GUI.py:581
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:580
 msgid "Preview"
+msgstr ""
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:585
+msgid "Clean"
 msgstr ""
 
 #: ../bleachbit/GUI.py:631
@@ -1106,7 +1143,7 @@ msgstr "_Pel"
 
 #: ../bleachbit/GUI.py:638
 msgid "_Edit"
-msgstr "Serast_bike"
+msgstr "_Sererastkirin"
 
 #: ../bleachbit/GUI.py:639
 msgid "Help Contents"
@@ -1139,16 +1176,16 @@ msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Pêşdîtina pelên di çalakiyên hilbijartî de bike (Pel dê neyên jêbirin)"
 
-#. TRANSLATORS: This is the delete button on the main window.
+#. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
 #: ../bleachbit/GUI.py:680
 msgctxt "button"
-msgid "Delete"
-msgstr "Jêbirin"
+msgid "Clean"
+msgstr ""
 
 #: ../bleachbit/GUI.py:683
-msgid "Delete files in the selected operations"
-msgstr "Pelên di çalakiyên hilbijartî de jê bibe"
+msgid "Clean files in the selected operations"
+msgstr ""
 
 #: ../bleachbit/GUI.py:769
 msgid "Error when checking for updates: "
@@ -1159,23 +1196,3 @@ msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
 "Di barkirina yekîneya SQLiteê de çewtî: Dibe ku antîvîrus vê asteng dike."
-
-#~ msgid "Delete the files in the rpmbuild build folder"
-#~ msgstr "Pelên di peldanka avakirinê ya rpmbuildê de ne jê bibe"
-
-#~ msgid "Clean .ini file"
-#~ msgstr "Pelê .ini paqij bike"
-
-#~ msgid "Cannot import Python module sqlite3: Python 2.5 or later is required."
-#~ msgstr ""
-#~ "Modula sqlite3 Pythonê nayê dîtin: Python 2.5 an jî bilintir pêwîst e"
-
-#~ msgctxt "button"
-#~ msgid "Update BleachBit"
-#~ msgstr "BleachBitê rojane bike"
-
-#~ msgid "BleachBit update is available"
-#~ msgstr "Ji bo BleachBitê rojanekirin hene"
-
-#~ msgid "Click 'Update BleachBit' for more information"
-#~ msgstr "Ji bo agahiyên zêdetir 'BleachBiê rojane bike'yê bitikîne"
