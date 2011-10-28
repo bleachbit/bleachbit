@@ -221,6 +221,21 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.assertRaises(IOError, bleachbit.Special.get_chrome_bookmark_urls, path)
 
 
+    def test_get_sqlite_int(self):
+        """Unit test for get_sqlite_int()"""
+        sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
+INSERT INTO "meta" VALUES('version','20');"""
+        # create test file
+        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        os.close(fd)
+        bleachbit.FileUtilities.execute_sqlite3(filename, sql)
+        self.assert_(os.path.exists(filename))
+        # run the test
+        ver = bleachbit.Special.get_sqlite_int(filename, 'select value from meta where key="version"')
+        self.assertEqual(ver, [20])
+
+
+
 def suite():
     return unittest.makeSuite(SpecialTestCase)
 

@@ -41,7 +41,7 @@ def __shred_sqlite_char_columns(table, cols = None, where = ""):
     return cmd
 
 
-def __get_sqlite_int(path, sql, parameters = None):
+def get_sqlite_int(path, sql, parameters = None):
     """Run SQL on database in 'path' and return the integers"""
     ids = []
     import sqlite3
@@ -78,7 +78,7 @@ def delete_chrome_favicons(path):
     """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
 
     path_history = os.path.join(os.path.dirname(path), 'History')
-    ver = __get_sqlite_int(path, 'select value from meta where key="version"')[0]
+    ver = get_sqlite_int(path, 'select value from meta where key="version"')[0]
     cmds = ""
 
     if 4 == ver:
@@ -199,7 +199,7 @@ def get_chrome_bookmark_ids(history_path):
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
     for url in urls:
-       ids +=  __get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
+       ids +=  get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
     return ids
 
 
