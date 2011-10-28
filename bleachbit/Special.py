@@ -84,11 +84,13 @@ def delete_chrome_databases_db(path):
 def delete_chrome_favicons(path):
     """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
 
+    path_history = os.path.join(os.path.dirname(path), 'History')
     ver = __get_chrome_history(path)
     cmds = ""
 
-    if 4 == ver:
+    if ver in [4, 20]:
         # Version 4 includes Chromium 12
+        # Version 20 includes Chromium 14, Google Chome 15
 
         # icon_mapping
         cols = ('page_url',)
