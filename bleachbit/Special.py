@@ -29,6 +29,13 @@ from Options import options
 import FileUtilities
 
 
+def __get_chrome_history(path):
+    """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
+    path_history = os.path.join(os.path.dirname(path), 'History')
+    ver = get_sqlite_int(path_history, 'select value from meta where key="version"')[0]
+    assert(ver > 1)
+    return ver
+
 def __shred_sqlite_char_columns(table, cols = None, where = ""):
     """Create an SQL command to shred character columns"""
     cmd = ""
@@ -77,8 +84,7 @@ def delete_chrome_databases_db(path):
 def delete_chrome_favicons(path):
     """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
 
-    path_history = os.path.join(os.path.dirname(path), 'History')
-    ver = get_sqlite_int(path, 'select value from meta where key="version"')[0]
+    ver = __get_chrome_history(path)
     cmds = ""
 
     if 4 == ver:
@@ -123,6 +129,11 @@ def delete_chrome_history(path):
     cmds += __shred_sqlite_char_columns('visits')
     cols = ('lower_term', 'term')
     cmds += __shred_sqlite_char_columns('keyword_search_terms')
+    ver = __get_chrome_history(path)
+    if ver >= 20:
+        # segments and segments_usage first seen in Google Chrome 15 (database version=20)
+        cmds += __shred_sqlite_char_columns('segments', ('name',))
+        cmds += __shred_sqlite_char_columns('segment_usage')
     FileUtilities.execute_sqlite3(path, cmds)
 
 

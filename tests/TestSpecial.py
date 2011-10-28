@@ -83,7 +83,8 @@ class SpecialTestCase(unittest.TestCase):
         """Helper for cleaning special SQLite cleaning"""
 
         # create test file
-        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        tmpdir = tempfile.mkdtemp('bleachbit-sqlite-test')
+        (fd, filename) = tempfile.mkstemp(dir=tmpdir)
         os.close(fd)
 
         # additional setup
@@ -143,13 +144,21 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
     def test_delete_chrome_history(self):
         """Unit test for delete_chrome_history"""
 
-        def setup_bookmarks(history_path):
-            print 'debug: setup_bookmarks(%s)' % history_path
+        def setup_history(history_path):
+            print 'debug: setup_history(%s)' % history_path
+            # setup bookmarks
             import os.path
             bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
             f = open(bookmark_path, 'w')
             f.write(chrome_bookmarks)
             f.close()
+
+            # setup history
+            sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
+INSERT INTO "meta" VALUES('version','4');"""
+            history_path = os.path.join(os.path.dirname(history_path), 'History')
+            bleachbit.FileUtilities.execute_sqlite3(history_path, sql)
+
 
         def check_chrome_history(self, filename):
             conn = sqlite3.connect(filename)
@@ -161,7 +170,7 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
             self.assertEqual(ids, [1])
 
 
-        self.sqlite_clean_helper(chrome_history_sql, bleachbit.Special.delete_chrome_history, check_chrome_history, setup_bookmarks)
+        self.sqlite_clean_helper(chrome_history_sql, bleachbit.Special.delete_chrome_history, check_chrome_history, setup_history)
 
 
     def test_delete_chrome_keywords(self):
