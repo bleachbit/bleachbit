@@ -47,8 +47,12 @@
     <label>Chat logs</label>
     <description>Delete the chat logs</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/chatzilla/logs/client.2009-07-03.log -->
-    <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/chatzilla/logs/*log"/>
+    <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default\chatzilla\logs (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\chatzilla\logs\*log"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\inputHistory.txt"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\urls.txt"/>
+    <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/chatzilla/logs/*log"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\logs\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -59,7 +63,7 @@
     <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/cookies.txt"/>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default/cookies.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\cookies.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
   </option>
   <option id="download_history">
