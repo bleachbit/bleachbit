@@ -32,13 +32,16 @@
       /home/bob/.mozilla/test/Cache/7CD2831Ed01 
       /home/bob/.mozilla/seamonkey/eh6d1237.default/Cache (SeaMonkey 2.0, Fedora 14)
       C:\Documents and Settings\bob\Local Settings\Application Data\Mozilla\Profiles\default\Cache 
-    The dilemma is if using '*' instead of 'default' to catch
+      C:\Documents and Settings\bob\Local Settings\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default\Cache (SeaMonkey 2.4.1, Windows XP)
+    The dilemma for old SeaMonkey if using '*' instead of 'default' to catch
       all SeaMonkey profiles, it catches non-SeaMonkey profiles
       such as 'eclipse' and 'firefox'.  Using profiles is rare, so we don't. 
     -->
     <action command="delete" search="walk.files" path="~/.mozilla/default/Cache/"/>
     <action command="delete" search="walk.files" path="~/.mozilla/seamonkey/*/Cache/"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\Profiles\default\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\startupCache\"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
@@ -52,15 +55,18 @@
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/cookies.txt -->
     <!-- example: /home/bob/.mozilla/test/pfr72dbv.slt/cookies.txt -->
-    <!-- example: /home/bob/.mozilla/seamonkey/*.default/cookies.sqlite (Fedora 14, SeaMonkey 2.0) -->
+    <!-- example: /home/bob/.mozilla/seamonkey/*.default/cookies.sqlite (SeaMonkey 2.0, Fedora 14) -->
+    <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/cookies.txt"/>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default/cookies.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
   </option>
   <option id="download_history">
     <label>Download history</label>
     <description>List of files downloaded</description>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/downloads.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default/downloads.sqlite"/>
   </option>
   <option id="history">
     <label>History</label>
