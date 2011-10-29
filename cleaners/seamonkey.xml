@@ -22,6 +22,8 @@
 <cleaner id="seamonkey">
   <label>SeaMonkey</label>
   <description>Web browser</description>
+  <running type="exe">seamonkey.exe</running>
+  <running type="exe">seamonkey</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
@@ -49,10 +51,10 @@
     <!-- example: /home/bob/.mozilla/default/1oq1wrww.slt/chatzilla/logs/client.2009-07-03.log -->
     <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default\chatzilla\logs (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\chatzilla\logs\*log"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\inputHistory.txt"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\urls.txt"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\chatzilla\inputHistory.txt"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\chatzilla\urls.txt"/>
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/chatzilla/logs/*log"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\chatzilla\logs\"/>
+    <action command="delete" search="walk.files" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\chatzilla\logs\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -63,14 +65,14 @@
     <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/cookies.txt"/>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default\cookies.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\cookies.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
   </option>
   <option id="download_history">
     <label>Download history</label>
     <description>List of files downloaded</description>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/downloads.sqlite"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*default/downloads.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\downloads.sqlite"/>
   </option>
   <option id="history">
     <label>History</label>
@@ -78,5 +80,6 @@
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\history.dat"/>
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/history.dat"/>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/urlbarhistory.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\urlbarhistory.sqlite"/>
   </option>
 </cleaner>
