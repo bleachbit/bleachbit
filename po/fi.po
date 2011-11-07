@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-08-17 20:52-0600\n"
-"PO-Revision-Date: 2011-08-18 08:27+0000\n"
+"PO-Revision-Date: 2011-11-01 08:25+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-08-19 23:30+0000\n"
-"X-Generator: Launchpad (build 13697)\n"
+"X-Launchpad-Export-Date: 2011-11-06 13:41+0000\n"
+"X-Generator: Launchpad (build 14231)\n"
 
 #: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
@@ -166,6 +166,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Tyhjennä hakukoneiden käyttöhistoria ja poista alkuperäisten rinnalle "
+"lisätyt hakukoneet (osa näistä on lisätty automaattisesti)"
 
 #: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
 msgid "Current session"
@@ -301,7 +303,7 @@ msgstr "Poista vierailtujen web-sivujen lista"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr ""
+msgstr "Työpöydän sovelmat"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
@@ -487,7 +489,7 @@ msgstr "Merkitse poistettavaksi"
 #: ../bleachbit/Action.py:228 ../bleachbit/Action.py:241
 #: ../bleachbit/Action.py:253
 msgid "Clean file"
-msgstr "Puhdista tiedosto"
+msgstr "Siivoa tiedosto"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:249
@@ -992,7 +994,7 @@ msgstr "poista tiedostot ja tee muita pysyviä muutoksia"
 #. TRANSLATORS: this is a warning for using --delete which will go away one day
 #: ../bleachbit/CLI.py:158
 msgid "depreciated alias for --clean"
-msgstr ""
+msgstr "vanhentuva alias valinnalle --clean"
 
 #: ../bleachbit/CLI.py:160
 msgid "show system information"
@@ -1130,7 +1132,7 @@ msgstr "Esikatselu"
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py:585
 msgid "Clean"
-msgstr ""
+msgstr "Siivoa"
 
 #: ../bleachbit/GUI.py:631
 msgid "_Shred Files"
@@ -1196,11 +1198,11 @@ msgstr ""
 #: ../bleachbit/GUI.py:680
 msgctxt "button"
 msgid "Clean"
-msgstr ""
+msgstr "Siivoa"
 
 #: ../bleachbit/GUI.py:683
 msgid "Clean files in the selected operations"
-msgstr ""
+msgstr "Siivoa tiedostot valituilta toimenpiteiltä"
 
 #: ../bleachbit/GUI.py:769
 msgid "Error when checking for updates: "
