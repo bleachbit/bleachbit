@@ -131,8 +131,6 @@ else:
 launcher_path = '/usr/share/applications/bleachbit.desktop'
 if 'posix' == os.name:
     autostart_path = os.path.expanduser('~/.config/autostart/bleachbit.desktop')
-if 'nt' == os.name:
-    autostart_path = os.path.join(shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP), 'bleachbit.lnk')
 
 
 ###

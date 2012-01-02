@@ -297,6 +297,20 @@ def empty_recycle_bin(drive, really_delete):
     return bytes_used
 
 
+def get_autostart_path():
+    """Return the path of the BleachBit shortcut in the user's startup folder"""
+    try:
+        startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
+        startupdir = shell.SHGetSpecialFolderPath(None,999999)
+    except:
+        # example of failure http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
+        traceback.print_exc()
+        msg = 'Error finding user startup folder: %s '%(str(sys.exc_info()[1]))
+        import GuiBasic
+        GuiBasic.message_dialog(None, msg)
+    return os.path.join(startupdir, 'bleachbit.lnk')
+
+
 def get_fixed_drives():
     """Yield each fixed drive"""
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):
@@ -383,7 +397,7 @@ def split_registry_key(full_key):
     Used internally."""
     assert ( len (full_key) > 6 )
     hive_str = full_key[0:4]
-    hive_map = { 
+    hive_map = {
         'HKCR' : _winreg.HKEY_CLASSES_ROOT,
         'HKCU' : _winreg.HKEY_CURRENT_USER,
         'HKLM' : _winreg.HKEY_LOCAL_MACHINE }
@@ -395,22 +409,23 @@ def split_registry_key(full_key):
 def start_with_computer(enabled):
     """If enabled, create shortcut to start application with computer.
     If disabled, then delete the shortcut."""
+    autostart_path = get_autostart_path()
     if not enabled:
-        if os.path.lexists(Common.autostart_path):
-            FileUtilities.delete(Common.autostart_path)
+        if os.path.lexists(autostart_path):
+            FileUtilities.delete(autostart_path)
         return
-    if os.path.lexists(Common.autostart_path):
+    if os.path.lexists(autostart_path):
         return
     import win32com.client
     shell = win32com.client.Dispatch('WScript.Shell')
-    shortcut = shell.CreateShortCut(Common.autostart_path)
+    shortcut = shell.CreateShortCut(autostart_path)
     shortcut.TargetPath = os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe')
     shortcut.save()
 
 
 def start_with_computer_check():
     """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(Common.autostart_path)
+    return os.path.lexists(get_autostart_path())
 
 
 
