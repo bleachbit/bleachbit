@@ -301,7 +301,6 @@ def get_autostart_path():
     """Return the path of the BleachBit shortcut in the user's startup folder"""
     try:
         startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
-        startupdir = shell.SHGetSpecialFolderPath(None,999999)
     except:
         # example of failure http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
         traceback.print_exc()
