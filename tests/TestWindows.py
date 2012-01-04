@@ -127,6 +127,11 @@ class WindowsTestCase(unittest.TestCase):
         self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
 
 
+    def test_get_autostart_path(self):
+        """Unit test for get_autostart_path"""
+        self.assert_(os.path.exists(get_autostart_path()))
+
+
     def test_get_fixed_drives(self):
         """Unit test for get_fixed_drives"""
         drives = []

@@ -307,6 +307,12 @@ def get_autostart_path():
         msg = 'Error finding user startup folder: %s '%(str(sys.exc_info()[1]))
         import GuiBasic
         GuiBasic.message_dialog(None, msg)
+        # as a fallback, guess
+        # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup
+        # Windows 7: C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+        startupdir = os.path.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
+        if not os.path.exists(startupdir):
+            startupdir = os.path.expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
     return os.path.join(startupdir, 'bleachbit.lnk')
 
 
