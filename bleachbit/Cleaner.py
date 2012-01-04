@@ -185,6 +185,7 @@ class Firefox(Cleaner):
         Cleaner.__init__(self)
         self.add_option('cache', _('Cache'), _('Delete the web cache, which reduces time to display revisited pages'))
         self.add_option('cookies', _('Cookies'), _('Delete cookies, which contain information such as web site preferences, authentication, and tracking identification'))
+        self.add_option('crash_reports', _('Crash reports'), _('Delete the files'))
         # TRANSLATORS: DOM = Document Object Model.
         self.add_option('dom', _('DOM Storage'), _('Delete HTML5 cookies'))
         self.add_option('download_history', _('Download history'), _('List of files downloaded'))
@@ -232,6 +233,14 @@ class Firefox(Cleaner):
         if 'cookies' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.txt")
             files += FileUtilities.expand_glob_join(self.profile_dir, "cookies.sqlite")
+        # crash reports
+        if 'posix' == os.name:
+            crashdir = os.path.expanduser("~/.mozilla/firefox/Crash Reports")
+        if 'nt' == os.name:
+            crashdir = os.path.expandvars("$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Crash Reports")
+        if 'crash_reports' == option_id:
+            for filename in children_in_directory(crashdir, False):
+                files += [ filename ]
         # DOM storage
         if 'dom' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "webappsstore.sqlite")
