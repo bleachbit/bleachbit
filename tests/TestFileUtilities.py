@@ -26,6 +26,7 @@ Test case for module FileUtilities
 
 
 import locale
+import platform
 import subprocess
 import sys
 import tempfile
@@ -257,6 +258,47 @@ class FileUtilitiesTestCase(unittest.TestCase):
             delete(filename, shred)
             self.assert_(not os.path.exists(filename))
 
+        def symlink_helper(link_fn):
+            # make source
+            (fd, srcname) = tempfile.mkstemp('bblinksrc')
+            os.close(fd)
+
+            # make target
+            self.assert_(os.path.exists(srcname))
+            targetname = tempfile.mktemp('bblinktarget')
+            self.assert_(not os.path.exists(targetname))
+            link_fn(srcname, targetname)
+            self.assert_(os.path.exists(targetname))
+            self.assert_(os.path.lexists(targetname))
+
+            # delete link
+            delete(targetname, shred)
+            self.assert_(os.path.exists(srcname))
+            self.assert_(not os.path.lexists(targetname))
+
+            # delete source
+            delete(srcname, shred)
+            self.assert_(not os.path.exists(srcname))
+
+            # test broken symlink
+            link_fn(srcname, targetname)
+            self.assert_(os.path.lexists(targetname))
+            self.assert_(not os.path.exists(targetname))
+            delete(targetname, shred)
+            self.assert_(not os.path.exists(targetname))
+
+        if 'nt' == os.name and platform.uname()[3][0:3] > '5.1':
+            # Windows XP = 5.1
+            # test symlinks
+            import ctypes
+            kern = ctypes.windll.LoadLibrary("kernel32.dll")
+            def win_symlink(src, target):
+                print 'CreateSymbolicLinkA(%s, %s)' % (src, target)
+                rc = kern.CreateSymbolicLinkA(src, target, 0)
+                self.assertEqual(rc, 0)
+            symlink_helper(win_symlink)
+
+        # below this point, only posix
         if 'nt' == os.name:
             return
 
@@ -268,27 +310,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assert_(not os.path.exists(filename))
 
         # test symlink
-        (fd, filename) = tempfile.mkstemp()
-        os.close(fd)
-        self.assert_(os.path.exists(filename))
-        linkname = '/tmp/bleachbitsymlinktest'
-        if os.path.lexists(linkname):
-            delete(linkname, shred)
-        self.assert_(not os.path.lexists(linkname))
-        os.symlink(filename, linkname)
-        self.assert_(os.path.lexists(linkname))
-        delete(linkname, shred)
-        self.assert_(os.path.exists(filename))
-        self.assert_(not os.path.lexists(linkname))
-        delete(filename, shred)
-        self.assert_(not os.path.exists(filename))
-
-        # test broken symlink
-        os.symlink(filename, linkname)
-        self.assert_(os.path.lexists(linkname))
-        self.assert_(not os.path.exists(linkname))
-        delete(linkname, shred)
-        self.assert_(not os.path.exists(linkname))
+        symlink_helper(os.symlink)
 
         # test fifo
         args = ["mkfifo", filename]
@@ -373,6 +395,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         # create a symlink
         linkname = '/tmp/bleachbitsymlinktest'
+        if os.path.lexists(linkname):
+            delete(linkname)
         os.symlink(filename, linkname)
         self.assert_(getsize(linkname) < 8192, "Symlink size is %d" % getsize(filename))
         delete(filename)
