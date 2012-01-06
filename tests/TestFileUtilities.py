@@ -259,43 +259,57 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(not os.path.exists(filename))
 
         def symlink_helper(link_fn):
-            # make source
-            (fd, srcname) = tempfile.mkstemp('bblinksrc')
+            # make regular file
+            (fd, srcname) = tempfile.mkstemp('bbregular')
             os.close(fd)
 
-            # make target
+            # make symlink
             self.assert_(os.path.exists(srcname))
-            targetname = tempfile.mktemp('bblinktarget')
-            self.assert_(not os.path.exists(targetname))
-            link_fn(srcname, targetname)
-            self.assert_(os.path.exists(targetname))
-            self.assert_(os.path.lexists(targetname))
+            linkname = tempfile.mktemp('bblink')
+            self.assert_(not os.path.exists(linkname))
+            link_fn(srcname, linkname)
+            self.assert_(os.path.exists(linkname))
+            self.assert_(os.path.lexists(linkname))
 
-            # delete link
-            delete(targetname, shred)
+            # delete symlink
+            delete(linkname, shred)
             self.assert_(os.path.exists(srcname))
-            self.assert_(not os.path.lexists(targetname))
+            self.assert_(not os.path.lexists(linkname))
 
-            # delete source
+            # delete regular link
             delete(srcname, shred)
             self.assert_(not os.path.exists(srcname))
 
-            # test broken symlink
-            link_fn(srcname, targetname)
-            self.assert_(os.path.lexists(targetname))
-            self.assert_(not os.path.exists(targetname))
-            delete(targetname, shred)
-            self.assert_(not os.path.exists(targetname))
+            ###
+            ### test broken symlink
+            ###
+            (fd, srcname) = tempfile.mkstemp('bbregular')
+            os.close(fd)
+            self.assert_(os.path.lexists(srcname))
+            link_fn(srcname, linkname)
+            self.assert_(os.path.lexists(linkname))
+            self.assert_(os.path.exists(linkname))
+
+            # delete regular file first
+            delete(srcname, shred)
+            self.assert_(not os.path.exists(srcname))
+
+            # clean up
+            delete(linkname, shred)
+            self.assert_(not os.path.exists(linkname))
+            self.assert_(not os.path.lexists(linkname))
 
         if 'nt' == os.name and platform.uname()[3][0:3] > '5.1':
             # Windows XP = 5.1
             # test symlinks
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
-            def win_symlink(src, target):
-                print 'CreateSymbolicLinkA(%s, %s)' % (src, target)
-                rc = kern.CreateSymbolicLinkA(src, target, 0)
-                self.assertEqual(rc, 0)
+            def win_symlink(src, linkname):
+                rc = kern.CreateSymbolicLinkA(linkname, src, 0)
+                if rc == 0:
+                    print 'CreateSymbolicLinkA(%s, %s)' % (linkname, src)
+                    print 'CreateSymolicLinkA() failed, error = %s' % ctypes.FormatError()
+                    self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
 
         # below this point, only posix
