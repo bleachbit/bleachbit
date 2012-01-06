@@ -27,6 +27,7 @@ Test case for module Windows
 
 
 import sys
+import tempfile
 import unittest
 
 import common
@@ -46,11 +47,11 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
-        fn = "c:\\bleachbit_deleteme_later"
-        f = open(fn, "w")
-        f.close()
+        (fd, pathname) = tempfile.mkstemp('bbregular')
+        os.close(fd)
+        self.assert_(os.path.exists(pathname))
         try:
-            delete_locked_file(fn)
+            delete_locked_file(pathname)
         except pywintypes.error, e:
             if 5 == e.winerror and not shell.IsUserAnAdmin():
                 pass
