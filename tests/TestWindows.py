@@ -147,10 +147,9 @@ class WindowsTestCase(unittest.TestCase):
     def test_is_process_running(self):
         tests = ((True, 'explorer.exe'), \
             (True, 'ExPlOrEr.exe'), \
-            (True, 'svchost.exe'), \
             (False, 'doesnotexist.exe'))
         for test in tests:
-            self.assertEqual(test[0], is_process_running(test[1]))
+            self.assertEqual(test[0], is_process_running(test[1]), 'is_process_running(%s) != %s' % (test[1], test[0]))
             self.assertEqual(test[0], is_process_running_win32(test[1]))
             self.assertEqual(test[0], is_process_running_wmic(test[1]))
 
