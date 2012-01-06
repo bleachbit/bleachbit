@@ -259,6 +259,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(not os.path.exists(filename))
 
         def symlink_helper(link_fn):
+
+            if 'nt' == os.name:
+                from win32com.shell import shell
+                if not shell.IsUserAnAdmin():
+                    print 'WARNING: skipping symlink test because of insufficient privileges'
+                    return
+
             # make regular file
             (fd, srcname) = tempfile.mkstemp('bbregular')
             os.close(fd)
