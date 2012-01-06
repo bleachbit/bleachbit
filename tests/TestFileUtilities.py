@@ -283,7 +283,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(os.path.exists(srcname))
             self.assert_(not os.path.lexists(linkname))
 
-            # delete regular link
+            # delete regular file
             delete(srcname, shred)
             self.assert_(not os.path.exists(srcname))
 
