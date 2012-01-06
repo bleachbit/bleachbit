@@ -130,7 +130,9 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_get_autostart_path(self):
         """Unit test for get_autostart_path"""
-        self.assert_(os.path.exists(get_autostart_path()))
+        pathname = get_autostart_path()
+        dirname = os.path.dirname(pathname)
+        self.assert_(os.path.exists(dirname), 'startup directory does not exist: %s' % dirname)
 
 
     def test_get_fixed_drives(self):
