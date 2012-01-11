@@ -149,6 +149,23 @@ def delete_chrome_keywords(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def delete_libreoffice_history(path):
+    """Erase LibreOffice's MRU in registrymodifications.xcu"""
+    import xml.dom.minidom
+    dom1 = xml.dom.minidom.parse(path)
+    modified = False
+    for node in dom1.getElementsByTagName("item"):
+        if not node.hasAttribute("oor:path"):
+            continue
+        if not node.getAttribute("oor:path").startswith('/org.openoffice.Office.Histories/Histories/'):
+            continue
+        node.parentNode.removeChild(node)
+        node.unlink()
+        modified = True
+    if modified:
+        dom1.writexml(open(path, "w"))
+
+
 def delete_mozilla_url_history(path):
     """Delete URL history in Mozilla places.sqlite (Firefox 3 and family)"""
 

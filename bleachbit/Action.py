@@ -295,6 +295,17 @@ class Json(FileActionProvider):
             yield Command.Json(path, self.address)
 
 
+class LibreOfficeHistory(FileActionProvider):
+    """Action to delete LibreOffice history"""
+    action_key = 'libreoffice_history'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function( \
+                path, \
+                Special.delete_libreoffice_history, \
+               _('Clean'))
+
 
 class Shred(FileActionProvider):
     """Action to shred files (override preference)"""
