@@ -138,9 +138,17 @@ if 'posix' == os.name:
 ###
 
 # Windows XP doesn't define localappdata, but Windows Vista and 7 do
+def environ(varname, csidl):
+    try:
+        os.environ[varname] = shell.SHGetSpecialFolderPath(None, csidl)
+    except:
+        traceback.print_exc()
+        msg = 'Error setting environemnt variable "%s": %s ' % (varname, str(sys.exc_info()[1]))
+        import GuiBasic
+        GuiBasic.message_dialog(None, msg)
 if 'nt' == os.name:
-    if None == os.getenv('localappdata'):
-        os.environ['localappdata'] = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_LOCAL_APPDATA)
+    environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
+    environ('documents', shellcon.CSIDL_DESKTOPDIRECTORY)
 
 
 ###
