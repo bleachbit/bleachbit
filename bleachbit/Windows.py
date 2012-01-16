@@ -402,7 +402,6 @@ def split_registry_key(full_key):
     Used internally."""
     assert ( len (full_key) >= 6 )
     [k1, k2] = full_key.split("\\", 1)
-    hive_str = full_key[0:4]
     hive_map = {
         'HKCR' : _winreg.HKEY_CLASSES_ROOT,
         'HKCU' : _winreg.HKEY_CURRENT_USER,
