@@ -400,15 +400,17 @@ def path_on_network(path):
 def split_registry_key(full_key):
     """Given a key like HKLM\Software split into tuple (hive, key).
     Used internally."""
-    assert ( len (full_key) > 6 )
+    assert ( len (full_key) >= 6 )
+    [k1, k2] = full_key.split("\\", 1)
     hive_str = full_key[0:4]
     hive_map = {
         'HKCR' : _winreg.HKEY_CLASSES_ROOT,
         'HKCU' : _winreg.HKEY_CURRENT_USER,
-        'HKLM' : _winreg.HKEY_LOCAL_MACHINE }
-    if hive_str not in hive_map:
-        raise RuntimeError("Invalid Windows registry hive '%s'" % hive_str)
-    return ( hive_map[hive_str], full_key[5:] )
+        'HKLM' : _winreg.HKEY_LOCAL_MACHINE, 
+        'HKU' : _winreg.HKEY_USERS }
+    if k1 not in hive_map:
+        raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
+    return ( hive_map[k1], k2 )
 
 
 def start_with_computer(enabled):

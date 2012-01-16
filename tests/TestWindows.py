@@ -172,7 +172,8 @@ class WindowsTestCase(unittest.TestCase):
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""
         tests = ( ('HKCU\\Software', _winreg.HKEY_CURRENT_USER, 'Software'),
-            ('HKLM\\SOFTWARE', _winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE') )
+            ('HKLM\\SOFTWARE', _winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE'),
+            ('HKU\\.DEFAULT', _winreg.HKEY_USERS, '.DEFAULT'))
         for (input_key, expected_hive, expected_key) in tests:
             (hive, key) = split_registry_key(input_key)
             self.assertEqual(expected_hive, hive)
