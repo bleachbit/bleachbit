@@ -28,12 +28,16 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="$APPDATA\.libreoffice\3\user\uno_packages\cache\"/>
+    <action command="delete" search="walk.all" path="~/.config/libreoffice/3/user/uno_packages/cache/"/>
     <action command="delete" search="walk.all" path="~/.libreoffice/3/user/uno_packages/cache/"/>
   </option>
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
     <action command="libreoffice_history" search="file" path="$APPDATA\LibreOffice\3\user\registrymodifications.xcu"/>
+    <!-- LibreOffice 3.4.5 on Fedora 16 uses ~/.libreoffice/3/user -->
+    <!-- LibreOffice 3.5 on Mint 9 (Ubuntu 10.04) uses ~/.config/libreoffice/3/user/ -->
     <action command="libreoffice_history" search="file" path="~/.libreoffice/3/user/registrymodifications.xcu"/>
+    <action command="libreoffice_history" search="file" path="~/.config/libreoffice/3/user/registrymodifications.xcu"/>
   </option>
 </cleaner>
