@@ -74,9 +74,10 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
@@ -87,6 +88,7 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History Provider Cache"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History-journal"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Default/Network Action Predictor"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Shortcuts"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails-journal"/>
