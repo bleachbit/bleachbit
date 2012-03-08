@@ -144,8 +144,11 @@ def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
     where = "where not date_created = 0"
-    cmds = __shred_sqlite_char_columns('keywords', cols, where)
+    cmds  = __shred_sqlite_char_columns('keywords', cols, where)
+    cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
     cmds += "update keywords set usage_count = 0;"
+    cmds += "update keywords_backup set usage_count = 0;"
+
     FileUtilities.execute_sqlite3(path, cmds)
 
 
