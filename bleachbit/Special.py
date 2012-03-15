@@ -29,9 +29,9 @@ from Options import options
 import FileUtilities
 
 
-def __get_chrome_history(path):
+def __get_chrome_history(path, fn = 'History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
-    path_history = os.path.join(os.path.dirname(path), 'History')
+    path_history = os.path.join(os.path.dirname(path), fn)
     ver = get_sqlite_int(path_history, 'select value from meta where key="version"')[0]
     assert(ver > 1)
     return ver
@@ -145,9 +145,12 @@ def delete_chrome_keywords(path):
     cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
     where = "where not date_created = 0"
     cmds  = __shred_sqlite_char_columns('keywords', cols, where)
-    cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
     cmds += "update keywords set usage_count = 0;"
-    cmds += "update keywords_backup set usage_count = 0;"
+    ver = __get_chrome_history(path, 'Web Data')
+    if ver >= 43:
+        # keywords_backup table first seen in Google Chrome 17 / Chromium 17 which is Web Data version 43
+        cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
+        cmds += "update keywords_backup set usage_count = 0;"
 
     FileUtilities.execute_sqlite3(path, cmds)
 
