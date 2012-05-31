@@ -39,6 +39,11 @@ if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
 
 if 1 == len(sys.argv):
     import gtk
+    try:
+        gtk.gdk.Screen().get_display()
+    except RuntimeError:
+        print "Could not open X display"
+        sys.exit(1)
     import bleachbit.GUI
     gui = bleachbit.GUI.GUI()
     gtk.main()

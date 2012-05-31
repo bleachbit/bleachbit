@@ -41,6 +41,9 @@ if 'posix' == os.name:
     import Unix
 
 
+LOCATIONS_WHITELIST = 1
+LOCATIONS_CUSTOM = 2
+
 
 class PreferencesDialog:
     """Present the preferences dialog and save changes"""
@@ -56,10 +59,11 @@ class PreferencesDialog:
 
         notebook = gtk.Notebook()
         notebook.append_page(self.__general_page(), gtk.Label(_("General")))
+        notebook.append_page(self.__locations_page(LOCATIONS_CUSTOM), gtk.Label(_("Custom")))
         notebook.append_page(self.__drives_page(), gtk.Label(_("Drives")))
         if 'posix' == os.name:
             notebook.append_page(self.__languages_page(), gtk.Label(_("Languages")))
-        notebook.append_page(self.__whitelist_page(), gtk.Label(_("Whitelist")))
+        notebook.append_page(self.__locations_page(LOCATIONS_WHITELIST), gtk.Label(_("Whitelist")))
 
         self.dialog.vbox.pack_start(notebook, True)
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
@@ -269,8 +273,8 @@ class PreferencesDialog:
         return vbox
 
 
-    def __whitelist_page(self):
-        """Return a widget containing the whitelist page"""
+    def __locations_page(self, page_type):
+        """Return a widget containing a list of files and folders"""
 
         def add_whitelist_file_cb(button):
             """Callback for adding a file"""
@@ -333,8 +337,11 @@ class PreferencesDialog:
             path = paths[1]
             liststore.append( [ type_str, path ] )
 
-        # TRANSLATORS: "Paths" is used generically to refer to both files and folders
-        notice = gtk.Label(_("Theses paths will not be deleted or modified."))
+        if LOCATIONS_WHITELIST == page_type:
+            # TRANSLATORS: "Paths" is used generically to refer to both files and folders
+            notice = gtk.Label(_("Theses paths will not be deleted or modified."))
+        elif LOCATIONS_CUSTOM == page_type:
+            notice = gtk.Label(_("Theses locations can be selected for cleaning."))
         vbox.pack_start(notice)
 
         # create treeview
