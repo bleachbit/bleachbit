@@ -204,7 +204,6 @@ class Firefox(Cleaner):
         elif 'nt' == os.name:
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
             self.add_running('exe', 'firefox.exe')
-            self.add_running('pathname', self.profile_dir + 'parent.lock')
 
     def get_description(self):
         return _("Web browser")
