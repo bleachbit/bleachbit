@@ -214,6 +214,13 @@ def delete(path, shred = False):
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
+        except OSError, e:
+            # [Errno 39] Directory not empty
+            # https://bugs.launchpad.net/bleachbit/+bug/1012930
+            if 39 == e.errno:
+                print "info: directory '%s' is not empty" % (path)
+            else:
+                raise
         except WindowsError, e:
             # WindowsError: [Error 145] The directory is not empty:
             # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
