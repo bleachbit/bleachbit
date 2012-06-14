@@ -245,7 +245,7 @@ def delete(path, shred = False):
         else:
             os.remove(path)
     else:
-        raise Exception("Unsupported special file type: '%s'" % path)
+        print "info: unsupported special file type: '%s'" % (path)
 
 
 def ego_owner(filename):
