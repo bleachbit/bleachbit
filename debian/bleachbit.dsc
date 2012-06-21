@@ -6,7 +6,7 @@ Version: 0.9.3beta
 Maintainer: Andrew Ziem <ahz001@gmail.com>
 Homepage: http://bleachbit.sourceforge.net
 Standards-Version: 3.7.3
-Build-Depends: debhelper (>= 7.3.0)
+Build-Depends: debhelper (>= 4)
 Build-Depends-Indep: python (>= 2.4), gettext, desktop-file-utils
 Files: 
  28528d402964e74dc2da424a9279827e 24376 bleachbit_0.9.3beta.orig.tar.gz
