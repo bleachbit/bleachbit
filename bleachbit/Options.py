@@ -56,7 +56,8 @@ class Options:
             self.config.write(_file)
         except IOError, e:
             print e
-            if 28 == e.errno:
+            from errno import ENOSPC
+            if e.errno == ENOSPC:
                 print "Error: disk is full writing configuration '%s'" % Common.options_file
             else:
                 raise

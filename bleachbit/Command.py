@@ -150,7 +150,8 @@ class Function:
                 try:
                     newsize = FileUtilities.getsize(self.path)
                 except OSError, e:
-                    if 2 == e.errno:
+                    from errno import ENOENT
+                    if e.errno == ENOENT:
                         # file does not exist
                         newsize = 0
                     else:

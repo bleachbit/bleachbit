@@ -26,6 +26,7 @@ File-related utilities
 
 
 import codecs
+import errno
 import glob
 import locale
 import os
@@ -429,7 +430,7 @@ def wipe_contents(path, truncate = True):
     try:
         f = open(path, 'wb')
     except IOError, e:
-        if 13 == e.errno: # permission denied
+        if e.errno == errno.EACCES: # permission denied
             os.chmod(path, 0200) # user write only
             f = open(path, 'wb')
         else:
@@ -493,8 +494,8 @@ def wipe_path(pathname, idle = False ):
                 f = tempfile.TemporaryFile(dir = pathname, suffix = __random_string(maxlen))
                 break
             except OSError, e:
-                if e.errno == 36:
-                    # OSError: [Errno 36] File name too long
+                if e.errno == errno.ENAMETOOLONG:
+                    # OSError: [Errno ENAMETOOLONG] File name too long
                     if maxlen > 10:
                         maxlen -= 10
                     i += 1
@@ -535,7 +536,7 @@ def wipe_path(pathname, idle = False ):
         except OSError, e:
             # Linux gives errno 24
             # Windows gives errno 28 No space left on device
-            if e.errno in (24, 28):
+            if e.errno in (errno.EMFILE, errno.ENOSPC):
                 break
             else:
                 raise
@@ -551,14 +552,14 @@ def wipe_path(pathname, idle = False ):
                     yield estimate_completion()
                     last_idle = time.time()
         except IOError, e:
-            if 28 != e.errno:
+            if e.errno != errno.ENOSPC:
                 raise
         # individual characters
         try:
             while True:
                 f.write(chr(0))
         except IOError, e:
-            if 28 != e.errno:
+            if e.errno != errno.ENOSPC:
                 raise
         try:
             f.flush()

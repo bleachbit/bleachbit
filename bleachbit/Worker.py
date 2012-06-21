@@ -96,7 +96,8 @@ class Worker:
         except Exception, e:
             # 2 = does not exist
             # 13 = permission denied
-            if not (isinstance(e, OSError) and e.errno in (2, 13)):
+            from errno import ENOENT, EACCES
+            if not (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
                 traceback.print_exc()
             line = "%s\n" % (str(sys.exc_info()[1]))
             self.total_errors += 1
