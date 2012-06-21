@@ -218,7 +218,7 @@ def delete(path, shred = False):
         except OSError, e:
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
-            if 39 == e.errno:
+            if errno.ENOTEMPTY == e.errno:
                 print "info: directory '%s' is not empty" % (path)
             else:
                 raise
