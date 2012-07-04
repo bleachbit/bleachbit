@@ -37,28 +37,56 @@ import bleachbit.Special
 
 chrome_bookmarks = """
 {
-   "checksum": "e7db866d606d03627b99ccf5cdd62269",
+   "checksum": "0313bd70dd6343134782af4b233016bf",
    "roots": {
       "bookmark_bar": {
-         "children": [ {
-            "date_added": "12950663211506884",
-            "id": "3",
-            "name": "BleachBit - Clean Disk Space, Maintain Privacy",
-            "type": "url",
-            "url": "http://bleachbit.sourceforge.net/"
-         } ],
-         "date_added": "0",
-         "date_modified": "12950663211506884",
+         "children": [  ],
+         "date_added": "12985843036082659",
+         "date_modified": "0",
          "id": "1",
          "name": "Bookmarks Bar",
          "type": "folder"
       },
       "other": {
-         "children": [  ],
-         "date_added": "0",
+         "children": [ {
+            "children": [ {
+               "date_added": "12985843072462200",
+               "id": "6",
+               "name": "BleachBit",
+               "type": "url",
+               "url": "http://bleachbit.sourceforge.net/"
+            } ],
+            "date_added": "12985843051141788",
+            "date_modified": "12985843072462200",
+            "id": "4",
+            "name": "software",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "12985843081812026",
+               "id": "7",
+               "name": "Slashdot",
+               "type": "url",
+               "url": "http://www.slashdot.org/"
+            } ],
+            "date_added": "12985843060482329",
+            "date_modified": "12985843081812026",
+            "id": "5",
+            "name": "news",
+            "type": "folder"
+         } ],
+         "date_added": "12985843036082740",
          "date_modified": "0",
          "id": "2",
          "name": "Other Bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "12985843036082744",
+         "date_modified": "0",
+         "id": "3",
+         "name": "Mobile Bookmarks",
          "type": "folder"
       }
    },
@@ -223,7 +251,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
         self.assert_(os.path.exists(path))
         urls = bleachbit.Special.get_chrome_bookmark_urls(path)
-        self.assertEqual(urls, ['http://bleachbit.sourceforge.net/'])
+        self.assertEqual(urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
 
         # does not exist
         os.unlink(path)

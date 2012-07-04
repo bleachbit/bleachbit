@@ -251,6 +251,24 @@ def get_chrome_bookmark_urls(path):
     # read file to parser
     js = json.load(open(path, 'r'))
 
-    # find bookmarks
-    return [bookmark['url'] for bookmark in js['roots']['bookmark_bar']['children']]
+    # empty list
+    urls = [ ]
 
+    # local recursive function
+    def get_chrome_bookmark_urls_helper(node):
+        if not isinstance(node, dict):
+            return
+        if not node.has_key('type'):
+            return
+        if node['type'] == "folder":
+            # folders have children
+            for child in node['children']:
+                get_chrome_bookmark_urls_helper(child)
+        if node['type'] == "url" and node.has_key('url'):
+            urls.append(node['url'])
+
+    # find bookmarks
+    for node in js['roots']:
+        get_chrome_bookmark_urls_helper(js['roots'][node])
+
+    return list(set(urls)) # unique
