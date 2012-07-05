@@ -70,7 +70,7 @@ binary-indep: build install
 # We have nothing to do by default.
 	dh_testdir
 	dh_testroot
-	dh_pycentral
+#	dh_pycentral
 	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
