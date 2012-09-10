@@ -63,12 +63,13 @@ license_filenames = ('/usr/share/common-licenses/GPL-3', # Debian, Ubuntu
     '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING', # CentOS, Fedora, RHEL
     '/usr/share/doc/packages/bleachbit/COPYING', # OpenSUSE 11.1
     '/usr/share/doc/bleachbit/COPYING', # Mandriva
-    '/usr/pkg/share/doc/bleachbit/COPYING' ) # NetBSD 5
+    '/usr/pkg/share/doc/bleachbit/COPYING', # NetBSD 5
+    '/usr/share/licenses/common/GPL3/license.txt' ) # Arch Linux
 for lf in license_filenames:
     if os.path.exists(lf):
         license_filename = lf
         break
-if None == license_filename:
+else:
     print 'warning: cannot find GPLv3 license text file'
 
 # configuration
