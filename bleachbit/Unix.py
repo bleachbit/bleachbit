@@ -138,7 +138,6 @@ class Locales:
                 '/usr/share/doc/HTML/release-notes/', # Fedora 10
                 '/usr/share/doc/thunar-data/html',
                 '/usr/share/gnucash/accounts',
-                '/usr/share/kde4/apps/ksgmltools2/customization',
                 '/usr/share/locale/',
                 '/usr/share/speedcrunch/books/',
                 '/usr/share/vim/vim72/' # Ubuntu 10.10
