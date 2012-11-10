@@ -51,9 +51,16 @@ langsecref_map = { '3021' : _('Applications'), \
     '3024': _('Utilities'), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
     '3025' : _('Microsoft Windows'), \
+# 3026 = Firefox/Mozilla
     '3026' : _('Internet'), \
+# 3027 = Opera
     '3027' : _('Internet'), \
-    '3028' : _('Internet') }
+# 3028 = Safari
+    '3028' : _('Internet'), \
+# 3029 = Google Chrome
+    '3029' : _('Internet'), \
+# 3030 = Thunderbird
+    '3030' : _('Internet') }
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
