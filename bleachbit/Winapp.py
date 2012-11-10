@@ -115,7 +115,11 @@ class Winapp:
         if self.parser.has_option(section, 'excludekey'):
             print 'ERROR: ExcludeKey not implemented, section=', section
             return
-        lid = langsecref_map[self.parser.get(section, 'langsecref')].lower().replace(' ','_')
+        # verify the langsecref number is known
+        langsecref_num = self.parser.get(section, 'langsecref')
+        if langsecref_num not in langsecref_map.keys():
+            raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
+        lid = langsecref_map[langsecref_num].lower().replace(' ','_') # cleaner ID
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
@@ -127,7 +131,7 @@ class Winapp:
             elif option in ('default', 'detectfile', 'detect', 'langsecref'):
                 pass
             else:
-                print 'WARNING: unknown option', option
+                print 'WARNING: unknown option %s in section %s' % (option, section)
 
 
     def __make_file_provider(self, dirname, filename, recurse, removeself):
@@ -174,7 +178,7 @@ class Winapp:
                 recurse = True
                 removeself = True
             else:
-                print 'WARNING: unknown file option', element
+                print 'WARNING: unknown file option %s in section %s' % (element, ini_section)
         for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
             self.cleaners[lid].add_action(section2option(ini_section), provider)
 
