@@ -42,8 +42,10 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
   </option>
   <option id="dom">
@@ -81,6 +83,7 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
@@ -97,6 +100,7 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Top Sites"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Default/Top Sites-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??-journal"/>

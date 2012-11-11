@@ -79,6 +79,7 @@
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Top Sites"/>
+    <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Top Sites-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??-journal"/>
@@ -97,6 +98,7 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites"/>
+    <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
@@ -126,6 +128,7 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Safe Browsing Bloom"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Cookies-journal"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
@@ -137,6 +140,7 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Archived History"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies-journal"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/History"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Login Data"/>
