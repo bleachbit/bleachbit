@@ -83,6 +83,7 @@
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??-journal"/>
+    <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Session Storage\"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History"/>
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
     <action command="chrome.history" search="file" path="~/.config/chromium/Default/History"/>
@@ -102,6 +103,7 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
+    <action command="delete" search="walk.files" path="~/.config/chromium/Default/Session Storage/"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>

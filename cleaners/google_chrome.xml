@@ -71,8 +71,8 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
-    <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
+    <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
@@ -87,6 +87,7 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
+    <action command="delete" search="walk.files" path="$localappdata\Google Chrome\User Data\Default\Session Storage\"/>
     <action command="chrome.history" search="file" path="~/.config/google-chrome/Default/History"/>
     <action command="chrome.favicons" search="file" path="~/.config/google-chrome/Default/Favicons"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History"/>
@@ -104,6 +105,7 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Visited Links"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??-journal"/>
+    <action command="delete" search="walk.files" path="~/.config/google-chrome/Default/Session Storage/"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
