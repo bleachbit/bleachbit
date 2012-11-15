@@ -47,6 +47,8 @@
   <option id="recent_documents">
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
+    <!-- Windows XP -->
+    <action command="delete" search="glob" path="$USERPROFILE\Recent\*.lnk"/>
     <!-- Vista -->
     <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
     <!-- recent documents in start menu -->
