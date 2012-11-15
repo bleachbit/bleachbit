@@ -463,6 +463,8 @@ class System(Cleaner):
         files = []
         if 'nt' == os.name and 'logs' == option_id:
             paths = ( \
+                '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log', \
+                '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp', \
                 '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
                 '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*', \
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*', \
@@ -480,6 +482,7 @@ class System(Cleaner):
                 '$windir\\Debug\\UserMode\\*.log', \
                 '$windir\\Debug\\UserMode\\ChkAcc.bak', \
                 '$windir\\Debug\\UserMode\\userenv.bak', \
+                '$windir\\Microsoft.NET\Framework\*\*.log', \
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log', \
                 '$windir\\security\\logs\\*.log', \
                 '$windir\\security\\logs\\*.old', \
