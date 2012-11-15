@@ -71,8 +71,9 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
-    <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
     <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
+    <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Safe Browsing Cookies-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
@@ -96,6 +97,7 @@
     <action command="delete" search="walk.files" path="$localappdata\Google Chrome\User Data\Default\Session Storage\"/>
     <action command="chrome.history" search="file" path="~/.config/google-chrome/Default/History"/>
     <action command="chrome.favicons" search="file" path="~/.config/google-chrome/Default/Favicons"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Safe Browsing Cookies-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History Provider Cache"/>
