@@ -106,9 +106,8 @@ class Options:
             values.append(self.config.get(section, option))
         return values
 
-    def get_whitelist_paths(self):
-        """Return the whitelist of paths"""
-        section = "whitelist/paths"
+    def get_paths(self, section):
+        """Abstracts get_whitelist_paths and get_custom_paths"""
         if not self.config.has_section(section):
             return []
         myoptions = []
@@ -119,28 +118,20 @@ class Options:
             myoptions.append(option[0:pos])
         values = []
         for option in set(myoptions):
-            wl_type = self.config.get(section, option + '_type')
-            wl_path = self.config.get(section, option + '_path')
-            values.append( ( wl_type, wl_path ) )
+            p_type = self.config.get(section, option + '_type')
+            p_path = self.config.get(section, option + '_path')
+            values.append( ( p_type, p_path ) )
         return values
+
+
+    def get_whitelist_paths(self):
+        """Return the whitelist of paths"""
+        return self.get_paths("whitelist/paths")
+
 
     def get_custom_paths(self):
         """Return list of custom paths"""
-        section = "custom/paths"
-        if not self.config.has_section(section):
-            return []
-        myoptions = []
-        for option in sorted(self.config.options(section)):
-            pos = option.find('_')
-            if -1 == pos:
-                continue
-            myoptions.append(option[0:pos])
-        values = []
-        for option in set(myoptions):
-            wl_type = self.config.get(section, option + '_type')
-            wl_path = self.config.get(section, option + '_path')
-            values.append( ( wl_type, wl_path ) )
-        return values
+        return self.get_paths("custom/paths")
 
 
     def get_tree(self, parent, child):
