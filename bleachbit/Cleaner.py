@@ -644,6 +644,11 @@ class System(Cleaner):
             for wu in Windows.delete_updates():
                 yield wu
 
+        # process queued files
+        for file in files:
+            if os.path.exists(file):
+                yield Command.Delete(file)
+
 
     def whitelisted(self, pathname):
         """Return boolean whether file is whitelisted"""
