@@ -369,6 +369,7 @@ class System(Cleaner):
             # More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
             self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
             self.add_option('cache', _('Cache'), _('Delete the cache'))
+            self.add_option('custom', _('Custom'), _('Delete user-specified files and folders'))
             # TRANSLATORS: Localizations are files supporting specific
             # languages, so applications appear in Spanish, etc.
             self.add_option('localizations', _('Localizations'), _('Delete files for unwanted languages'))
@@ -421,6 +422,17 @@ class System(Cleaner):
                 if self.whitelisted(filename):
                     continue
                 yield Command.Delete(filename)
+
+        # custom
+        if 'custom' == option_id:
+            for (c_type, c_path) in options.get_custom_paths():
+                if 'file' == c_type:
+                    yield Command.Delete(c_path)
+                elif 'folder' == c_type:
+                    for path in children_in_directory(c_path, True):
+                        yield Command.Delete(c_path)
+                else:
+                    raise RuntimeError('custom folder has invalid type %s' % c_type)
 
         # menu
         menu_dirs = [ '~/.local/share/applications', \
