@@ -320,10 +320,59 @@ class PreferencesDialog:
                     options.set_whitelist_paths(pathnames)
 
 
+
+
+        def add_custom_file_cb(button):
+            """Callback for adding a file"""
+            title = _("Choose a file")
+            pathname = GuiBasic.browse_file(self.parent, title)
+            if pathname:
+                for this_pathname in pathnames:
+                    if pathname == this_pathname[1]:
+                        print "warning: '%s' already exists in whitelist" % pathname
+                        return
+                liststore.append( [ _('File'), pathname ] )
+                pathnames.append( [ 'file', pathname ] )
+                options.set_custom_paths(pathnames)
+
+
+        def add_custom_folder_cb(button):
+            """Callback for adding a folder"""
+            title = _("Choose a folder")
+            pathname = GuiBasic.browse_folder(self.parent, title, \
+                multiple = False, stock_button = gtk.STOCK_ADD)
+            if pathname:
+                for this_pathname in pathnames:
+                    if pathname == this_pathname[1]:
+                        print "warning: '%s' already exists in whitelist" % pathname
+                        return
+                liststore.append( [ _('Folder'), pathname ] )
+                pathnames.append( [ 'folder', pathname ] )
+                options.set_custom_paths(pathnames)
+
+
+        def remove_custom_path_cb(button):
+            """Callback for removing a path"""
+            treeselection = treeview.get_selection()
+            (model, _iter) = treeselection.get_selected()
+            if None == _iter:
+                # nothing selected
+                return
+            pathname = model[_iter][1]
+            liststore.remove(_iter)
+            for this_pathname in pathnames:
+                if this_pathname[1] == pathname:
+                    pathnames.remove(this_pathname)
+                    options.set_custom_paths(pathnames)
+
+
         vbox = gtk.VBox()
 
         # load data
-        pathnames = options.get_whitelist_paths()
+        if LOCATIONS_WHITELIST == page_type:
+            pathnames = options.get_whitelist_paths()
+        elif LOCATIONS_CUSTOM == page_type:
+            pathnames = options.get_custom_paths()
         liststore = gtk.ListStore(str, str)
         for paths in pathnames:
             type_code = paths[0]
@@ -368,13 +417,24 @@ class PreferencesDialog:
 
         # buttons that modify the list
         button_add_file = gtk.Button(_p('button', 'Add file'))
-        button_add_file.connect("clicked", add_whitelist_file_cb)
+        if LOCATIONS_WHITELIST == page_type:
+            button_add_file.connect("clicked", add_whitelist_file_cb)
+        elif LOCATIONS_CUSTOM == page_type:
+            button_add_file.connect("clicked", add_custom_file_cb)
+        
 
         button_add_folder = gtk.Button(_p('button', 'Add folder'))
-        button_add_folder.connect("clicked", add_whitelist_folder_cb)
+        if LOCATIONS_WHITELIST == page_type:
+            button_add_folder.connect("clicked", add_whitelist_folder_cb)
+        elif LOCATIONS_CUSTOM == page_type:
+            button_add_folder.connect("clicked", add_custom_folder_cb)
+        
 
         button_remove = gtk.Button(_p('button', 'Remove'))
-        button_remove.connect("clicked", remove_whitelist_path_cb)
+        if LOCATIONS_WHITELIST == page_type:
+            button_remove.connect("clicked", remove_whitelist_path_cb)
+        elif LOCATIONS_CUSTOM == page_type:
+            button_remove.connect("clicked", remove_custom_path_cb)
 
         button_box = gtk.HButtonBox()
         button_box.set_layout(gtk.BUTTONBOX_START)
