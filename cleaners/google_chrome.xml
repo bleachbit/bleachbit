@@ -74,6 +74,7 @@
     <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
     <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor"/>
@@ -130,7 +131,6 @@
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
     <!-- In Google Chrome 7 the Safe Browsing Bloom is no longer an SQLite database -->
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
@@ -144,7 +144,6 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Safe Browsing Bloom"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\databases/http*/?"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/History"/>
