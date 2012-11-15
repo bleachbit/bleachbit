@@ -57,7 +57,9 @@
     <action command="chrome.databases_db" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases\Databases.db"/>
     <action command="chrome.databases_db" search="file" path="~/.config/google-chrome/Default/databases/Databases.db"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstorage"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstorage-journal"/>
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="~/.config/google-chrome/Default/Local Storage/http*localstorage-journal"/>
     <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\databases\http*\"/>
     <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/databases/http*/"/>
   </option>
