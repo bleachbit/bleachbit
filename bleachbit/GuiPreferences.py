@@ -390,7 +390,7 @@ class PreferencesDialog:
             # TRANSLATORS: "Paths" is used generically to refer to both files and folders
             notice = gtk.Label(_("Theses paths will not be deleted or modified."))
         elif LOCATIONS_CUSTOM == page_type:
-            notice = gtk.Label(_("Theses locations can be selected for cleaning."))
+            notice = gtk.Label(_("These locations can be selected for deletion."))
         vbox.pack_start(notice)
 
         # create treeview

@@ -369,6 +369,7 @@ class System(Cleaner):
             # More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
             self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
             self.add_option('cache', _('Cache'), _('Delete the cache'))
+            # TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
             self.add_option('custom', _('Custom'), _('Delete user-specified files and folders'))
             # TRANSLATORS: Localizations are files supporting specific
             # languages, so applications appear in Spanish, etc.
