@@ -512,7 +512,7 @@ def wipe_path(pathname, idle = False ):
         remaining_bytes = free_space(pathname)
         done_bytes = start_free_bytes - remaining_bytes
         if done_bytes < 0:
-            # mayber user deleted large file after starting wipe
+            # maybe user deleted large file after starting wipe
             done_bytes = 0
         if 0 == start_free_bytes:
             done_percent = 0
@@ -582,17 +582,20 @@ def wipe_path(pathname, idle = False ):
     # truncate and close files
     for f in files:
         f.truncate(0)
-        
+ 
         while True:
             try:
+                # Nikita: I noticed a bug that prevented file handles from
+                # being closed on FAT32. It sometimes takes two .close() calls
+                # to do actually close (and therefore delete) a temporary file
                 f.close()
                 break
             except IOError, e:
                 if e.errno == 0:
                     print 'debug: handled unknown error 0'
                     time.sleep(0.1)
-        
-            
+
+
     # files are removed implicitly
 
 
