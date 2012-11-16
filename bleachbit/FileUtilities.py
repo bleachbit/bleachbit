@@ -552,14 +552,18 @@ def wipe_path(pathname, idle = False ):
                     yield estimate_completion()
                     last_idle = time.time()
         except IOError, e:
-            if e.errno != errno.ENOSPC:
+            if e.errno == errno.ENOSPC:
+                break
+            elif e.errno != errno.EFBIG:
                 raise
         # individual characters
         try:
             while True:
                 f.write(chr(0))
         except IOError, e:
-            if e.errno != errno.ENOSPC:
+            if e.errno == errno.ENOSPC:
+                break
+            elif e.errno != errno.EFBIG:
                 raise
         try:
             f.flush()
@@ -578,7 +582,17 @@ def wipe_path(pathname, idle = False ):
     # truncate and close files
     for f in files:
         f.truncate(0)
-        f.close()
+        
+        while True:
+            try:
+                f.close()
+                break
+            except IOError, e:
+                if e.errno == 0:
+                    print 'debug: handled unknown error 0'
+                    time.sleep(0.1)
+        
+            
     # files are removed implicitly
 
 
