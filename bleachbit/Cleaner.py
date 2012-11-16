@@ -356,10 +356,14 @@ class OpenOfficeOrg(Cleaner):
 
 
 class System(Cleaner):
-    """System in general"""
+    """Clean the system in general"""
 
     def __init__(self):
         Cleaner.__init__(self)
+
+        ###
+        ### options for Linux and BSD
+        ###
         if 'posix' == os.name:
             # TRANSLATORS: desktop entries are .desktop files in Linux tha
             # make up the application menu (the menu that shows BleachBit,
@@ -369,8 +373,6 @@ class System(Cleaner):
             # More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
             self.add_option('desktop_entry', _('Broken desktop files'), _('Delete broken application menu entries and file associations'))
             self.add_option('cache', _('Cache'), _('Delete the cache'))
-            # TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
-            self.add_option('custom', _('Custom'), _('Delete user-specified files and folders'))
             # TRANSLATORS: Localizations are files supporting specific
             # languages, so applications appear in Spanish, etc.
             self.add_option('localizations', _('Localizations'), _('Delete files for unwanted languages'))
@@ -382,11 +384,19 @@ class System(Cleaner):
             self.add_option('rotated_logs', _('Rotated logs'), _('Delete old system logs'))
             self.add_option('recent_documents', _('Recent documents list'), _('Delete the list of recently used documents'))
             self.add_option('trash', _('Trash'), _('Empty the trash'))
+
+        ###
+        ### options just for Linux
+        ###
         if sys.platform.startswith('linux'):
             self.add_option('memory', _('Memory'), \
             # TRANSLATORS: 'free' means 'unallocated'
                _('Wipe the swap and free memory'))
             self.set_warning('memory', _('This option is experimental and may cause system problems.'))
+
+        ###
+        ### options just for Microsoft Windows
+        ###
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option('memory_dump', _('Memory dump'), _('Delete the file memory.dmp'))
@@ -397,8 +407,19 @@ class System(Cleaner):
             # TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _('Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
+
+        ###
+        ### options for GTK+
+        ###
+ 
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
+
+        ###
+        ### options common to all platforms
+        ###
+        # TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
+        self.add_option('custom', _('Custom'), _('Delete user-specified files and folders'))
         # TRANSLATORS: 'free' means 'unallocated'
         self.add_option('free_disk_space', _('Free disk space'), \
             # TRANSLATORS: 'free' means 'unallocated'
