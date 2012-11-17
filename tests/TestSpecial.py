@@ -254,8 +254,10 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.assertEqual(urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
 
         # does not exist
+        # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
+        # (maybe because the network was disconnected or because user created no bookmarks).
         os.unlink(path)
-        self.assertRaises(IOError, bleachbit.Special.get_chrome_bookmark_urls, path)
+        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_urls(path))
 
 
     def test_get_sqlite_int(self):

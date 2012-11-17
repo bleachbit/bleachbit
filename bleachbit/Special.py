@@ -234,6 +234,8 @@ def get_chrome_bookmark_ids(history_path):
     """Given the path of a history file, return the ids in the
     urls table that are bookmarks"""
     bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
+    if not os.path.exists(bookmark_path):
+        return []
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
     for url in urls:
