@@ -439,22 +439,27 @@ class System(Cleaner):
         return _("System")
 
     def get_commands(self, option_id):
+        # This variable will collect fully expanded file names, and
+        # at the end of this function, they will be checked they exist
+        # and processed through Command.Delete().
+        files = []
+
         # cache
         if 'posix' == os.name and 'cache' == option_id:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 if self.whitelisted(filename):
                     continue
-                yield Command.Delete(filename)
+                files += [ filename ]
 
         # custom
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
                 if 'file' == c_type:
-                    yield Command.Delete(c_path)
+                    files += [ c_path ]
                 elif 'folder' == c_type:
                     for path in children_in_directory(c_path, True):
-                        yield Command.Delete(c_path)
+                        files += [ c_path ]
                 else:
                     raise RuntimeError('custom folder has invalid type %s' % c_type)
 
@@ -484,7 +489,6 @@ class System(Cleaner):
                 yield Command.Delete(path)
 
         # Windows logs
-        files = []
         if 'nt' == os.name and 'logs' == option_id:
             paths = ( \
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log', \
