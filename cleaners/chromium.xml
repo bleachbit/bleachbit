@@ -86,6 +86,8 @@
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??-journal"/>
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Session Storage\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\JumpListIcons\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\JumpListIconsOld\"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History"/>
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
     <action command="chrome.history" search="file" path="~/.config/chromium/Default/History"/>
