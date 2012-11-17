@@ -224,6 +224,8 @@ class Firefox(Cleaner):
         if 'cache' == option_id:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
+            if 'nt' == os.name:
+                dirs += FileUtilities.expand_glob_join(cache_base, "jumpListCache") # Windows 8
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
