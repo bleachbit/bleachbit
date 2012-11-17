@@ -96,9 +96,9 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
     <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google Chrome\User Data\Default\Session Storage\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google Chrome\User Data\Default\JumpListIcons\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google Chrome\User Data\Default\JumpListIconsOld\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Session Storage\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIcons\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
     <action command="chrome.history" search="file" path="~/.config/google-chrome/Default/History"/>
     <action command="chrome.favicons" search="file" path="~/.config/google-chrome/Default/Favicons"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Safe Browsing Cookies-journal"/>
