@@ -458,8 +458,9 @@ class System(Cleaner):
                 if 'file' == c_type:
                     files += [ c_path ]
                 elif 'folder' == c_type:
+                    files += [ c_path ]
                     for path in children_in_directory(c_path, True):
-                        files += [ c_path ]
+                        files += [ path ]
                 else:
                     raise RuntimeError('custom folder has invalid type %s' % c_type)
 
@@ -614,11 +615,6 @@ class System(Cleaner):
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
 
-        # return queued files
-        for filename in files:
-            if os.path.lexists(filename):
-                yield Command.Delete(filename)
-
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
@@ -675,10 +671,10 @@ class System(Cleaner):
             for wu in Windows.delete_updates():
                 yield wu
 
-        # process queued files
-        for file in files:
-            if os.path.exists(file):
-                yield Command.Delete(file)
+        # return queued files
+        for filename in files:
+            if os.path.lexists(filename):
+                yield Command.Delete(filename)
 
 
     def whitelisted(self, pathname):
