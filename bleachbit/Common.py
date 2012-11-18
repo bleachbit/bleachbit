@@ -69,8 +69,6 @@ for lf in license_filenames:
     if os.path.exists(lf):
         license_filename = lf
         break
-else:
-    print 'warning: cannot find GPLv3 license text file'
 
 # configuration
 portable_mode = False
