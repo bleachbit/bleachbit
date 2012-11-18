@@ -38,7 +38,7 @@ from Common import _
 def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
-    if 'nt' == os.name:
+    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
         ret = Windows.browse_folder(parent.window.handle if parent else None, title)
         return [ret] if multiple and not ret is None else ret
 
@@ -66,7 +66,7 @@ def browse_folder(parent, title, multiple, stock_button):
 def browse_file(parent, title):
     """Prompt user to select a single file"""
 
-    if 'nt' == os.name:
+    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
         return Windows.browse_file(parent.window.handle, title)
 
     chooser = gtk.FileChooserDialog(title = title,
@@ -88,7 +88,7 @@ def browse_file(parent, title):
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
-    if 'nt' == os.name:
+    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
         return Windows.browse_files(parent.window.handle, title)
 
     chooser = gtk.FileChooserDialog(title = title,
