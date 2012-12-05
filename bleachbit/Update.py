@@ -24,7 +24,6 @@ Check for updates via the Internet
 """
 
 
-import gtk
 import hashlib
 import os
 import os.path
@@ -37,7 +36,6 @@ import xml.dom.minidom
 
 import Common
 from Common import _
-from GuiBasic import open_url
 
 
 def update_winapp2(url, hash_expected, append_text):
@@ -108,6 +106,8 @@ def user_agent():
 
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
+    import gtk
+    from GuiBasic import open_url
     dlg = gtk.Dialog(title = _("Update BleachBit"), \
         parent = parent, \
         flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
