@@ -28,6 +28,7 @@ Import Winapp2.ini files
 import Cleaner
 import Common
 import ConfigParser
+import Windows
 import os
 import re
 import sys
@@ -37,7 +38,6 @@ from Action import ActionProvider, Delete, Winreg
 from Common import _
 from FileUtilities import listdir
 from General import boolstr_to_bool, getText
-from Windows import detect_registry_key
 from platform import uname
 from xml.dom.minidom import parseString
 
@@ -60,7 +60,9 @@ langsecref_map = { '3021' : _('Applications'), \
 # 3029 = Google Chrome
     '3029' : _('Internet'), \
 # 3030 = Thunderbird
-    '3030' : _('Internet') }
+    '3030' : _('Internet'),
+# Section=Games (technically not langsecref)
+    'Games' : _('Games') }
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
@@ -108,7 +110,7 @@ class Winapp:
         """Parse a section"""
         if self.parser.has_option(section, 'detect'):
             key = self.parser.get(section, 'detect')
-            if not detect_registry_key(key):
+            if not Windows.detect_registry_key(key):
                 return
         if self.parser.has_option(section, 'detectfile'):
             pathname = os.path.expandvars(preexpand(self.parser.get(section, 'detectfile')))
@@ -122,10 +124,19 @@ class Winapp:
         if self.parser.has_option(section, 'excludekey'):
             print 'ERROR: ExcludeKey not implemented, section=', section
             return
-        # verify the langsecref number is known
-        langsecref_num = self.parser.get(section, 'langsecref')
-        if langsecref_num not in langsecref_map.keys():
-            raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
+        # there are two ways to specify sections: langsecref= and section=
+        if self.parser.has_option(section, 'langsecref'):
+            # verify the langsecref number is known
+            langsecref_num = self.parser.get(section, 'langsecref')
+            if langsecref_num not in langsecref_map.keys():
+                raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
+        elif self.parser.has_option(section, 'section'):
+            langsecref_num = self.parser.get(section, 'section')
+            if langsecref_num not in langsecref_map.keys():
+                raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
+        else:
+            print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
+            return
         lid = langsecref_map[langsecref_num].lower().replace(' ','_') # cleaner ID
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
@@ -135,7 +146,7 @@ class Winapp:
                 self.handle_regkey(lid, section, option)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(section2option(section), self.parser.get(section, 'warning'))
-            elif option in ('default', 'detectfile', 'detect', 'langsecref'):
+            elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section'):
                 pass
             else:
                 print 'WARNING: unknown option %s in section %s' % (option, section)
