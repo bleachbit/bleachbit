@@ -63,8 +63,9 @@ def disable_swap_linux():
         if '' == line:
             continue
         # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
+        # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
         # This matches swap devices and swap files
-        ret = re.search('^swapoff .* (/[\w/\.]+)$', line)
+        ret = re.search('^swapoff .* (/[\w/\.-]+)$', line)
         if None == ret:
             raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'" \
                 % { 'args' : str(args), 'stdout' : stdout, 'stderr' : stderr } )
