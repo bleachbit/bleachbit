@@ -34,6 +34,14 @@ from bleachbit.Winapp import Winapp, section2option
 
 import common
 
+if not 'nt' == os.name:
+    def fake_detect_registry_key(f):
+        return True
+    import bleachbit.Windows
+    bleachbit.Windows.detect_registry_key = fake_detect_registry_key
+
+
+
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
