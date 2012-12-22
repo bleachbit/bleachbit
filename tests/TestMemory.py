@@ -80,6 +80,17 @@ class MemoryTestCase(unittest.TestCase):
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
 
+    def test_parse_swapoff(self):
+        """Test for method parse_swapoff"""
+        tests = ( \
+            ('swapoff for /dev/sda6', '/dev/sda6'), \
+            ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'))
+
+        for test in tests:
+            self.assertEqual(parse_swapoff(test[0]), test[1])
+
+
+
 
 def suite():
     return unittest.makeSuite(MemoryTestCase)

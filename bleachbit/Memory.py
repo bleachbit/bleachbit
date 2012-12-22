@@ -48,6 +48,18 @@ def count_swap_linux():
     return count
 
 
+def parse_swapoff(swapoff):
+    """Parse the output of swapoff and return the device name"""
+    # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
+    # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
+    # This matches swap devices and swap files
+    ret = re.search('^swapoff .* (/[\w/\.-]+)$', swapoff)
+    if not ret:
+        # no matches
+        return None
+    return ret.group(1)
+
+
 def disable_swap_linux():
     """Disable Linux swap and return list of devices"""
     if 0 == count_swap_linux():
@@ -62,14 +74,11 @@ def disable_swap_linux():
         line = line.replace('\n', '')
         if '' == line:
             continue
-        # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
-        # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
-        # This matches swap devices and swap files
-        ret = re.search('^swapoff .* (/[\w/\.-]+)$', line)
+        ret = parse_swapoff(line)
         if None == ret:
             raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'" \
                 % { 'args' : str(args), 'stdout' : stdout, 'stderr' : stderr } )
-        devices.append(ret.group(1))
+        devices.append(ret)
     return devices
 
 
