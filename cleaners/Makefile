@@ -1,3 +1,6 @@
+# On some systems if not explicitly given, make uses /bin/sh, so 'make pretty' fails.
+SHELL := /bin/bash
+
 PHONY: pretty tests
 
 
