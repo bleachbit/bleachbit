@@ -42,27 +42,27 @@ from platform import uname
 from xml.dom.minidom import parseString
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-langsecref_map = { '3021' : _('Applications'), \
+langsecref_map = { '3021' : ('winapp2_applications', _('Applications')), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3022' : _('Internet'), \
+    '3022': ('winapp2_internet', _('Internet')), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3023' : _('Multimedia'), \
+    '3023': ('winapp2_multimedia',_('Multimedia')), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3024': _('Utilities'), \
+    '3024': ('winapp2_utilities', _('Utilities')), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
-    '3025' : _('Microsoft Windows'), \
+    '3025': ('winapp2_windows', 'Microsoft Windows'), \
 # 3026 = Firefox/Mozilla
-    '3026' : _('Internet'), \
+    '3026': ('winapp2_mozilla', 'Firefox/Mozilla'), \
 # 3027 = Opera
-    '3027' : _('Internet'), \
+    '3027': ('winapp2_opera', 'Opera'), \
 # 3028 = Safari
-    '3028' : _('Internet'), \
+    '3028': ('winapp2_safari', 'Safari'), \
 # 3029 = Google Chrome
-    '3029' : _('Internet'), \
+    '3029': ('winapp2_google_chrome', 'Google Chrome'), \
 # 3030 = Thunderbird
-    '3030' : _('Internet'),
+    '3030': ('winapp2_thunderbird', 'thunderbird'),
 # Section=Games (technically not langsecref)
-    'Games' : _('Games') }
+    'Games': ('winapp2_games', _('Games')) }
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
@@ -89,10 +89,10 @@ class Winapp:
 
         self.cleaners = {}
         for langsecref in set(langsecref_map.values()):
-            lid = langsecref.lower().replace(' ','_')
+            lid = langsecref[0]
             self.cleaners[lid] = Cleaner.Cleaner()
             self.cleaners[lid].id = lid
-            self.cleaners[lid].name = langsecref
+            self.cleaners[lid].name = langsecref[1]
             self.cleaners[lid].description = _('Imported from winapp2.ini')
         self.errors = 0
         self.parser = ConfigParser.RawConfigParser()
@@ -137,7 +137,7 @@ class Winapp:
         else:
             print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
             return
-        lid = langsecref_map[langsecref_num].lower().replace(' ','_') # cleaner ID
+        lid = langsecref_map[langsecref_num][0] # cleaner ID
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
@@ -216,7 +216,7 @@ class Winapp:
     def get_cleaners(self):
         """Return the created cleaners"""
         for langsecref in set(langsecref_map.values()):
-            lid = langsecref.lower().replace(' ','_')
+            lid = langsecref[0]
             if self.cleaners[lid].is_usable():
                 yield self.cleaners[lid]
 
