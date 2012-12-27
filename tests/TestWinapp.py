@@ -45,7 +45,7 @@ if not 'nt' == os.name:
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "http://content.thewebatom.net/files/winapp2.ini"
+    url = "http://www.winapp2.com/Winapp2.ini"
     tmpdir = None
     if 'posix' == os.name:
         tmpdir = '/tmp'
