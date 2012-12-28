@@ -164,7 +164,8 @@ class WinappTestCase(unittest.TestCase):
         for test in tests:
             for detect in ( \
                 "\nDetectFile=%%APPDATA%%\\Microsoft", \
-                "\nDetect=HKCU\\Software\\Microsoft"):
+                "\nDetect=HKCU\\Software\\Microsoft",
+                "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA\\does_not_exist"):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
@@ -172,6 +173,7 @@ class WinappTestCase(unittest.TestCase):
 
         # execute generic tests
         for test in tests:
+            print 'generic test: ', test
             (dirname, f1, f2, fbak) = setup_fake()
             cleaner = ini2cleaner(test[0] % dirname)
             self.assertEqual(test[1], cleaner.auto_hide())

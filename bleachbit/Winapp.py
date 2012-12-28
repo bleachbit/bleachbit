@@ -150,6 +150,7 @@ class Winapp:
                 pass
             else:
                 print 'WARNING: unknown option %s in section %s' % (option, section)
+                return
 
 
     def __make_file_provider(self, dirname, filename, recurse, removeself):
