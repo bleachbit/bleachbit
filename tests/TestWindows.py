@@ -95,7 +95,7 @@ class WindowsTestCase(unittest.TestCase):
             return_value = delete_registry_key(key, really_delete)
             self.assertEqual(rc, return_value)
             if really_delete:
-                self.assertEqual(registry_key_exists(key), False)
+                self.assertFalse(registry_key_exists(key))
 
         # Test Unicode key.  In BleachBit 0.7.3 this scenario would lead to
         # the error (bug 537109)
@@ -104,9 +104,9 @@ class WindowsTestCase(unittest.TestCase):
         hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-Ö')
         hkey.Close()
         return_value = delete_registry_key(u'HKCU\\' + key, True)
-        self.assertEqual(return_value, True)
+        self.assertTrue(return_value)
         return_value = delete_registry_key(u'HKCU\\' + key, True)
-        self.assertEqual(return_value, False)
+        self.assertFalse(return_value)
 
 
     def test_delete_registry_value(self):
@@ -125,19 +125,19 @@ class WindowsTestCase(unittest.TestCase):
         hkey.Close()
 
         # delete and confirm
-        self.assertEqual(delete_registry_value('HKCU\\' + key, value_name, False), True)
-        self.assertEqual(delete_registry_value('HKCU\\' + key, value_name, True), True)
-        self.assertEqual(delete_registry_value('HKCU\\' + key, value_name, False), False)
-        self.assertEqual(delete_registry_value('HKCU\\' + key, value_name, True), False)
+        self.assertTrue(delete_registry_value('HKCU\\' + key, value_name, False))
+        self.assertTrue(delete_registry_value('HKCU\\' + key, value_name, True))
+        self.assertFalse(delete_registry_value('HKCU\\' + key, value_name, False))
+        self.assertFalse(delete_registry_value('HKCU\\' + key, value_name, True))
 
 
         ##
         ## test: value does not exist
         ##
-        self.assertEqual(delete_registry_value('HKCU\\' + key, 'doesnotexist', False), False)
-        self.assertEqual(delete_registry_value('HKCU\\' + key, 'doesnotexist', True), False)
-        self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, False), False)
-        self.assertEqual(delete_registry_value('HKCU\\doesnotexist', value_name, True), False)
+        self.assertFalse(delete_registry_value('HKCU\\' + key, 'doesnotexist', False))
+        self.assertFalse(delete_registry_value('HKCU\\' + key, 'doesnotexist', True))
+        self.assertFalse(delete_registry_value('HKCU\\doesnotexist', value_name, False))
+        self.assertFalse(delete_registry_value('HKCU\\doesnotexist', value_name, True))
 
 
     def test_detect_registry_key(self):
@@ -216,9 +216,9 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_path_on_network(self):
         """Unit test for path_on_network"""
-        self.assertEqual(path_on_network('c:\\bleachbit.exe'), False)
-        self.assertEqual(path_on_network('a:\\bleachbit.exe'), False)
-        self.assertEqual(path_on_network('\\\\Server\\Folder\\bleachbit.exe'), True)
+        self.assertFalse(path_on_network('c:\\bleachbit.exe'))
+        self.assertFalse(path_on_network('a:\\bleachbit.exe'))
+        self.assertFalse(path_on_network('\\\\Server\\Folder\\bleachbit.exe'))
 
 
 def suite():
