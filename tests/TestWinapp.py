@@ -34,7 +34,9 @@ from bleachbit.Winapp import Winapp, section2option
 
 import common
 
-if not 'nt' == os.name:
+if 'nt' == os.name:
+    import _winreg
+else:
     def fake_detect_registry_key(f):
         return True
     import bleachbit.Windows
@@ -51,7 +53,14 @@ def get_winapp2():
         tmpdir = '/tmp'
     if 'nt' == os.name:
         tmpdir = os.getenv('TMP')
-    fn = os.path.join(tmpdir, 'thewebatom_winapp2.ini')
+    fn = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
+    if os.path.exists(fn):
+        import time
+        import stat
+        age_seconds = time.time() - os.stat(fn)[stat.ST_MTIME]
+        if age_seconds > (24 * 36 * 36):
+            print 'note: deleting stale file %s ' % fn
+            os.remove(fn)
     if not os.path.exists(fn):
         f = file(fn, 'w')
         import urllib2
@@ -82,82 +91,117 @@ class WinappTestCase(unittest.TestCase):
 
     def test_fake(self):
         """Test with fake file"""
+
+        ini_fn = None
+        dirname = None
+        f1 = None
+        f2 = None
+
+        def setup_fake():
+            """Setup the test environment"""
+            dirname = tempfile.mkdtemp(suffix='bleachbit_test_winapp')
+            f1 = os.path.join(dirname, 'deleteme.log')
+            file(f1, 'w').write('')
+
+            dirname2 = os.path.join(dirname, 'sub')
+            os.mkdir(dirname2)
+            f2 = os.path.join(dirname2, 'deleteme.log')
+            file(f2, 'w').write('')
+
+            self.assert_(os.path.exists(f1))
+            self.assert_(os.path.exists(f2))
+
+            return (dirname, f1, f2)
+
+
         def ini2cleaner(filekey):
             ini = file(ini_fn, 'w')
             ini.write('[someapp]\n')
             ini.write('LangSecRef=3021\n')
             ini.write(filekey)
             ini.close()
+            self.assert_(os.path.exists(ini_fn))
             return Winapp(ini_fn).get_cleaners().next()
 
-        # single file
+
+        # reuse this path to store a winapp2.ini file in
         import tempfile
-        dirname = tempfile.mkdtemp()
-        ini_fn = os.path.join(dirname, 'w.ini')
-        f1 = os.path.join(dirname, 'deleteme.log')
-        file(f1, 'w').write('')
+        (ini_h, ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        # single file
+        (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|deleteme.log\n' % dirname)
         self.assert_(not cleaner.auto_hide())
-        self.assert_(os.path.exists(ini_fn))
-        self.assert_(os.path.exists(f1))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
-        self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(os.path.exists(f2))
         self.assert_(cleaner.auto_hide())
 
         # *.log
-        file(f1, 'w').write('')
+        (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.LOG' % dirname)
         self.assert_(not cleaner.auto_hide())
-        self.assert_(os.path.exists(ini_fn))
-        self.assert_(os.path.exists(f1))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
-        self.assert_(os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(os.path.exists(f2))
         self.assert_(cleaner.auto_hide())
 
         # *.*
-        file(f1, 'w').write('')
+        (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*' % dirname)
         self.assert_(not cleaner.auto_hide())
-        self.assert_(os.path.exists(ini_fn))
-        self.assert_(os.path.exists(f1))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
-        self.assert_(not os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(os.path.exists(f2))
         self.assert_(cleaner.auto_hide())
 
         # recurse *.*
-        dirname2 = os.path.join(dirname, 'sub')
-        os.mkdir(dirname2)
-        f2 = os.path.join(dirname2, 'deleteme.log')
-        file(f2, 'w').write('')
+        (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*|RECURSE' % dirname)
         self.assert_(not cleaner.auto_hide())
-        self.assert_(os.path.exists(ini_fn))
-        self.assert_(os.path.exists(f2))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
-        self.assert_(not os.path.exists(ini_fn))
         self.assert_(os.path.exists(dirname))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(not os.path.exists(f2))
         self.assert_(cleaner.auto_hide())
 
-        # remove self *.*
-        f2 = os.path.join(dirname2, 'deleteme.log')
-        file(f2, 'w').write('')
+        # remove self *.*, this removes the directory
+        (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*|REMOVESELF' % dirname)
         self.assert_(not cleaner.auto_hide())
-        self.assert_(os.path.exists(ini_fn))
-        self.assert_(os.path.exists(f2))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
-        self.assert_(not os.path.exists(ini_fn))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(not os.path.exists(f2))
         self.assert_(not os.path.exists(dirname))
         self.assert_(cleaner.auto_hide())
 
+        # registry key, basic
+        (dirname, f1, f2) = setup_fake()
+        key = 'Software\\BleachBit\\DeleteThisKey'
+        subkey = key + '\\AndThisKey'
+        hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, subkey )
+        hkey.Close()
+        cleaner = ini2cleaner('RegKey1=HKCU\\%s' % key)
+        self.assert_(os.path.exists(ini_fn))
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
+        # FIXME: verify the registry key was actually deleted
+
+        # check for parse error with ampersand
+        (dirname, f1, f2) = setup_fake()
+        cleaner = ini2cleaner('RegKey1=HKCU\\Software\\PeanutButter&Jelly')
+        self.assert_(os.path.exists(ini_fn))
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
 
     def test_section2option(self):
         """Test for section2option()"""

@@ -205,6 +205,7 @@ class Winapp:
         """Parse a RegKey# option"""
         elements = self.parser.get(ini_section, ini_option).strip().split('|')
         path = elements[0]
+        path = path.replace('&', '&amp;')
         name = ""
         if 2 == len(elements):
             name = 'name="%s"' % xml_escape(elements[1])
