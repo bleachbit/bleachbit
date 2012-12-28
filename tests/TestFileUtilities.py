@@ -461,45 +461,45 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertEqual(set(whitelist), set(options.get_whitelist_paths()))
 
         # test
-        self.assertEqual(False, whitelisted(''))
-        self.assertEqual(False, whitelisted('/'))
+        self.assertFalse(whitelisted(''))
+        self.assertFalse(whitelisted('/'))
 
-        self.assertEqual(False, whitelisted('/home/foo2'))
-        self.assertEqual(False, whitelisted('/home/fo'))
-        self.assertEqual(True, whitelisted('/home/foo'))
+        self.assertFalse(whitelisted('/home/foo2'))
+        self.assertFalse(whitelisted('/home/fo'))
+        self.assertTrue(whitelisted('/home/foo'))
 
-        self.assertEqual(True, whitelisted('/home/folder'))
+        self.assertTrue(whitelisted('/home/folder'))
         if 'posix' == os.name:
-            self.assertEqual(True, whitelisted('/home/folder/'))
-            self.assertEqual(True, whitelisted('/home/folder/file'))
-        self.assertEqual(False, whitelisted('/home/fold'))
-        self.assertEqual(False, whitelisted('/home/folder2'))
+            self.assertTrue(whitelisted('/home/folder/'))
+            self.assertTrue(whitelisted('/home/folder/file'))
+        self.assertFalse(whitelisted('/home/fold'))
+        self.assertFalse(whitelisted('/home/folder2'))
 
         if 'nt' == os.name:
             whitelist = [ ('folder', 'D:\\'), ('file', 'c:\\windows\\foo.log'), ('folder', 'e:\\users') ]
             options.set_whitelist_paths(whitelist)
-            self.assertEqual(True, whitelisted('e:\\users'))
-            self.assertEqual(True, whitelisted('e:\\users\\'))
-            self.assertEqual(True, whitelisted('e:\\users\\foo.log'))
-            self.assertEqual(False, whitelisted('e:\\users2'))
+            self.assertTrue(whitelisted('e:\\users'))
+            self.assertTrue(whitelisted('e:\\users\\'))
+            self.assertTrue(whitelisted('e:\\users\\foo.log'))
+            self.assertFalse(whitelisted('e:\\users2'))
             # case insensitivity
-            self.assertEqual(True, whitelisted('C:\\WINDOWS\\FOO.LOG'))
-            self.assertEqual(True, whitelisted('D:\\USERS'))
+            self.assertTrue(whitelisted('C:\\WINDOWS\\FOO.LOG'))
+            self.assertTrue(whitelisted('D:\\USERS'))
 
             # drives letters have the seperator at the end while most paths don't
-            self.assertEqual(True, whitelisted('D:\\FOLDER\\FOO.LOG'))
+            self.assertTrue(whitelisted('D:\\FOLDER\\FOO.LOG'))
 
 
         # test blank
         options.set_whitelist_paths([])
-        self.assertEqual(False, whitelisted('/home/foo'))
-        self.assertEqual(False, whitelisted('/home/folder'))
-        self.assertEqual(False, whitelisted('/home/folder/file'))
+        self.assertFalse(whitelisted('/home/foo'))
+        self.assertFalse(whitelisted('/home/folder'))
+        self.assertFalse(whitelisted('/home/folder/file'))
 
         options.config.remove_section('whitelist/paths')
-        self.assertEqual(False, whitelisted('/home/foo'))
-        self.assertEqual(False, whitelisted('/home/folder'))
-        self.assertEqual(False, whitelisted('/home/folder/file'))
+        self.assertFalse(whitelisted('/home/foo'))
+        self.assertFalse(whitelisted('/home/folder'))
+        self.assertFalse(whitelisted('/home/folder/file'))
 
         # clean up
         options.set_whitelist_paths(old_whitelist)
@@ -642,7 +642,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         (handle, filename) = tempfile.mkstemp()
         openfiles = OpenFiles()
-        self.assertEqual(openfiles.is_open(filename), True, \
+        self.assertTrue(openfiles.is_open(filename), \
             "Expected is_open(%s) to return True)\n" \
             "openfiles.last_scan_time (ago)=%s\n" \
             "openfiles.files=%s" % \
@@ -653,11 +653,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
         f = os.fdopen(handle)
         f.close()
         openfiles.scan()
-        self.assertEqual(openfiles.is_open(filename), False)
+        self.assertFalse(openfiles.is_open(filename))
 
         os.unlink(filename)
         openfiles.scan()
-        self.assertEqual(openfiles.is_open(filename), False)
+        self.assertFalse(openfiles.is_open(filename))
 
 
 def suite():
