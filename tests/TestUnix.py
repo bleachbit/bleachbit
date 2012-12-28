@@ -78,7 +78,7 @@ class UnixTestCase(unittest.TestCase):
         # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
         # from /usr/bin/python to python2.6
         exe = os.path.basename(os.path.realpath(sys.executable))
-        self.assertEqual(True, is_running(exe))
+        self.assertTrue(is_running(exe))
 
 
     def test_iterate_languages(self):
