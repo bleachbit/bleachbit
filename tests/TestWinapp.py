@@ -198,9 +198,9 @@ class WinappTestCase(unittest.TestCase):
         (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('RegKey1=%s' % keyfull)
         self.run_all(cleaner, False)
-        self.assertEqual(TestWindows.registry_key_exists(keyfull), True)
+        self.assertTrue(TestWindows.registry_key_exists(keyfull))
         self.run_all(cleaner, True)
-        self.assertEqual(TestWindows.registry_key_exists(keyfull), False)
+        self.assertFalse(TestWindows.registry_key_exists(keyfull))
 
         # check for parse error with ampersand
         (dirname, f1, f2) = setup_fake()
