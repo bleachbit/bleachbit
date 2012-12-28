@@ -29,6 +29,8 @@ import os
 import sys
 import unittest
 
+import TestWindows
+
 sys.path.append('.')
 from bleachbit.Winapp import Winapp, section2option
 
@@ -96,6 +98,8 @@ class WinappTestCase(unittest.TestCase):
         dirname = None
         f1 = None
         f2 = None
+        keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
+        subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
 
         def setup_fake():
             """Setup the test environment"""
@@ -110,6 +114,12 @@ class WinappTestCase(unittest.TestCase):
 
             self.assert_(os.path.exists(f1))
             self.assert_(os.path.exists(f2))
+
+            hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, subkey )
+            hkey.Close()
+
+            self.assertTrue(TestWindows.registry_key_exists(keyfull))
+            self.assertTrue(TestWindows.registry_key_exists('HKCU\\%s' % subkey))
 
             return (dirname, f1, f2)
 
@@ -186,20 +196,15 @@ class WinappTestCase(unittest.TestCase):
 
         # registry key, basic
         (dirname, f1, f2) = setup_fake()
-        key = 'Software\\BleachBit\\DeleteThisKey'
-        subkey = key + '\\AndThisKey'
-        hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, subkey )
-        hkey.Close()
-        cleaner = ini2cleaner('RegKey1=HKCU\\%s' % key)
-        self.assert_(os.path.exists(ini_fn))
+        cleaner = ini2cleaner('RegKey1=%s' % keyfull)
         self.run_all(cleaner, False)
+        self.assertEqual(TestWindows.registry_key_exists(keyfull), True)
         self.run_all(cleaner, True)
-        # FIXME: verify the registry key was actually deleted
+        self.assertEqual(TestWindows.registry_key_exists(keyfull), False)
 
         # check for parse error with ampersand
         (dirname, f1, f2) = setup_fake()
         cleaner = ini2cleaner('RegKey1=HKCU\\Software\\PeanutButter&Jelly')
-        self.assert_(os.path.exists(ini_fn))
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
 
