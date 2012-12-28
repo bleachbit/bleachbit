@@ -322,7 +322,15 @@ def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
     if 'posix' == os.name:
-        __stat = os.lstat(path)
+        try:
+            __stat = os.lstat(path)
+        except OSError, e:
+            # OSError: [Errno 13] Permission denied
+            # can happen when a regular user is trying to find the size of /var/log/hp/tmp
+            # where /var/log/hp is 0774 and /var/log/hp/tmp is 1774
+            if errno.EACCES == e.errno:
+                return 0
+            raise
         return __stat.st_blocks * 512
     if 'nt' == os.name:
         # On rare files os.path.getsize() returns access denied, so try FindFilesW instead
