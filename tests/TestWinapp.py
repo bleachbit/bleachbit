@@ -130,6 +130,7 @@ class WinappTestCase(unittest.TestCase):
             ini.write('[someapp]\n')
             ini.write('LangSecRef=3021\n')
             ini.write(filekey)
+            ini.write('\n')
             ini.close()
             self.assertTrue(os.path.exists(ini_fn))
             if do_next:
@@ -142,77 +143,34 @@ class WinappTestCase(unittest.TestCase):
         (ini_h, ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
         os.close(ini_h)
 
-        # single file
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|deleteme.log\n' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertTrue(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
+        # a set of tests
+        tests = (
+            # single file    
+            ( 'FileKey1=%s|deleteme.log', False, True, False, True, True, True ),
+            # *.log
+            ( 'FileKey1=%s|*.LOG', False, True, False, True, True, True ),
+            # semicolon separates different file types
+            ( 'FileKey1=%s|*.log;*.bak', False, True, False, True, False, True ),
+            # *.*
+            ( 'FileKey1=%s|*.*', False, True, False, True, False, True ),
+            # recurse *.*
+            ( 'FileKey1=%s|*.*|RECURSE', False, True, False, False, False, True ),
+            # remove self *.*, this removes the directory
+            ( 'FileKey1=%s|*.*|REMOVESELF', False, False, False, False, False, True ),
+            )
 
-        # *.log
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|*.LOG' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertTrue(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
-
-        # semicolon separates different file types
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|*.log;*.bak' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertFalse(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
-
-        # *.*
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|*.*' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertFalse(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
-
-        # recurse *.*
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|*.*|RECURSE' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertFalse(os.path.exists(f2))
-        self.assertFalse(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
-
-        # remove self *.*, this removes the directory
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|*.*|REMOVESELF' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertFalse(os.path.exists(f1))
-        self.assertFalse(os.path.exists(f2))
-        self.assertFalse(os.path.exists(fbak))
-        self.assertFalse(os.path.exists(dirname))
-        self.assertTrue(cleaner.auto_hide())
+        # execute generic tests
+        for test in tests:
+            (dirname, f1, f2, fbak) = setup_fake()
+            cleaner = ini2cleaner(test[0] % dirname)
+            self.assertEqual(test[1], cleaner.auto_hide())
+            self.run_all(cleaner, False)
+            self.run_all(cleaner, True)
+            self.assertEqual(test[2], os.path.exists(dirname))
+            self.assertEqual(test[3], os.path.exists(f1))
+            self.assertEqual(test[4], os.path.exists(f2))
+            self.assertEqual(test[5], os.path.exists(fbak))
+            self.assertEqual(test[6], cleaner.auto_hide())
 
         # detectfile=, does not exist
         (dirname, f1, f2, fbak) = setup_fake()
