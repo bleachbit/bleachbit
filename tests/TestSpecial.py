@@ -243,6 +243,14 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.sqlite_clean_helper(sql, bleachbit.Special.delete_mozilla_url_history)
 
 
+    def test_get_chrome_bookmark_ids(self):
+        """Unit test for get_chrome_bookmark_ids()"""
+        # does not exist
+        # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
+        # (maybe because the network was disconnected or because user created no bookmarks).
+        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_urls('does_not_exist'))
+
+
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
         (fd, path) = tempfile.mkstemp('bleachbit-test')
@@ -253,11 +261,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         urls = bleachbit.Special.get_chrome_bookmark_urls(path)
         self.assertEqual(urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
 
-        # does not exist
-        # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
-        # (maybe because the network was disconnected or because user created no bookmarks).
         os.unlink(path)
-        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_urls(path))
 
 
     def test_get_sqlite_int(self):
