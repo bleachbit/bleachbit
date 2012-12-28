@@ -144,7 +144,7 @@ class WinappTestCase(unittest.TestCase):
         os.close(ini_h)
 
         # a set of tests
-        tests = (
+        tests = [
             # single file    
             ( 'FileKey1=%s|deleteme.log', False, True, False, True, True, True ),
             # *.log
@@ -157,7 +157,18 @@ class WinappTestCase(unittest.TestCase):
             ( 'FileKey1=%s|*.*|RECURSE', False, True, False, False, False, True ),
             # remove self *.*, this removes the directory
             ( 'FileKey1=%s|*.*|REMOVESELF', False, False, False, False, False, True ),
-            )
+            ]
+
+        # add positive detection to all the tests
+        new_tests = []
+        for test in tests:
+            for detect in ( \
+                "\nDetectFile=%%APPDATA%%\\Microsoft", \
+                "\nDetect=HKCU\\Software\\Microsoft"):
+                new_ini = test[0] + detect
+                new_test = [new_ini, ] + [x for x in test[1:]]
+                new_tests.append(new_test)
+        tests = tests + new_tests    
 
         # execute generic tests
         for test in tests:
