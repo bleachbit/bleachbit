@@ -184,12 +184,12 @@ class Winapp:
         Section is [Application Name] and option is the FileKey#"""
         elements = self.parser.get(ini_section, ini_option).strip().split('|')
         dirname = preexpand(elements.pop(0))
-        filename = ""
+        filenames = ""
         if elements:
-            filename = elements.pop(0)
+            filenames = elements.pop(0)
         recurse = False
         removeself = False
-        for element in elements:
+        for element in element:
             if 'RECURSE' == element:
                 recurse = True
             elif 'REMOVESELF' == element:
@@ -197,8 +197,9 @@ class Winapp:
                 removeself = True
             else:
                 print 'WARNING: unknown file option %s in section %s' % (element, ini_section)
-        for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
-            self.cleaners[lid].add_action(section2option(ini_section), provider)
+        for filename in filenames.split(';'):
+            for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
+                self.cleaners[lid].add_action(section2option(ini_section), provider)
 
 
     def handle_regkey(self, lid, ini_section, ini_option):
