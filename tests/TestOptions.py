@@ -52,11 +52,11 @@ class OptionsTestCase(unittest.TestCase):
         # test auto commit
         shred = o.get("shred")
         o.set("shred", False)
-        self.assertEqual(o.get("shred"), False)
+        self.assertFalse(o.get("shred"))
         o.set("shred", True, commit = False)
-        self.assertEqual(o.get("shred"), True)
+        self.assertTrue(o.get("shred"))
         o.restore()
-        self.assertEqual(o.get("shred"), False)
+        self.assertFalse(o.get("shred"))
         o.set("shred", shred)
         self.assertEqual(o.get("shred"), shred)
 
