@@ -122,7 +122,7 @@ class WinappTestCase(unittest.TestCase):
             self.assertTrue(TestWindows.registry_key_exists(keyfull))
             self.assertTrue(TestWindows.registry_key_exists('HKCU\\%s' % subkey))
 
-            return (dirname, f1, f2, bak)
+            return (dirname, f1, f2, fbak)
 
 
         def ini2cleaner(filekey):
