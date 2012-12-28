@@ -36,7 +36,6 @@ import hashlib
 from Common import _, _p
 from CleanerML import list_cleanerml_files
 from Options import options
-import GuiBasic
 
 
 
@@ -116,6 +115,7 @@ def cleaner_change_dialog(changes, parent):
         if 0 == len(delete):
             # no files selected to delete
             break
+        import GuiBasic
         if not GuiBasic.delete_confirmation_dialog(parent, mention_preview = False):
             # confirmation not accepted, so do not delete files
             continue
