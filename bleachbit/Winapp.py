@@ -41,6 +41,9 @@ from General import boolstr_to_bool, getText
 from platform import uname
 from xml.dom.minidom import parseString
 
+
+MAX_DETECT = 50
+
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = { '3021' : ('winapp2_applications', _('Applications')), \
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -108,19 +111,33 @@ class Winapp:
 
     def handle_section(self, section):
         """Parse a section"""
+        def detect_file(rawpath):
+            pathname = os.path.expandvars(preexpand(rawpath))
+            return os.path.exists(pathname)
+        # if simple detection fails then discard the section
         if self.parser.has_option(section, 'detect'):
             key = self.parser.get(section, 'detect')
             if not Windows.detect_registry_key(key):
                 return
         if self.parser.has_option(section, 'detectfile'):
-            pathname = os.path.expandvars(preexpand(self.parser.get(section, 'detectfile')))
-            if not os.path.exists(pathname):
+            if not detect_file(self.parser.get(section, 'detectfile')):
                 return
         if self.parser.has_option(section, 'detectos'):
             min_os = self.parser.get(section, 'detectos')
             cur_os = uname()[3][0:3]
             if min_os > cur_os:
                 return
+        # in case of multiple detection, discard if none match
+        if self.parser.has_option(section, 'detectfile1'):
+            matches = 0
+            for n in range(1, MAX_DETECT):
+                option_id = 'detectfile%d' % n
+                if self.parser.has_option(section, option_id):
+                     if not detect_file(self.parser.get(section, option_id)):
+                         matches = matches + 1
+            if not matches:
+                return
+        # not yet implemented
         if self.parser.has_option(section, 'excludekey'):
             print 'ERROR: ExcludeKey not implemented, section=', section
             return
@@ -146,8 +163,9 @@ class Winapp:
                 self.handle_regkey(lid, section, option)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(section2option(section), self.parser.get(section, 'warning'))
-            elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section'):
-                pass
+            elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section') \
+                or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
+                pass    
             else:
                 print 'WARNING: unknown option %s in section %s' % (option, section)
                 return
