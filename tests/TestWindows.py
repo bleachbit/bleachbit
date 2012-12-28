@@ -218,7 +218,7 @@ class WindowsTestCase(unittest.TestCase):
         """Unit test for path_on_network"""
         self.assertFalse(path_on_network('c:\\bleachbit.exe'))
         self.assertFalse(path_on_network('a:\\bleachbit.exe'))
-        self.assertFalse(path_on_network('\\\\Server\\Folder\\bleachbit.exe'))
+        self.assertTrue(path_on_network('\\\\Server\\Folder\\bleachbit.exe'))
 
 
 def suite():
