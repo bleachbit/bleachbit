@@ -125,15 +125,17 @@ class WinappTestCase(unittest.TestCase):
             return (dirname, f1, f2, fbak)
 
 
-        def ini2cleaner(filekey):
+        def ini2cleaner(filekey, do_next = True):
             ini = file(ini_fn, 'w')
             ini.write('[someapp]\n')
             ini.write('LangSecRef=3021\n')
             ini.write(filekey)
             ini.close()
             self.assertTrue(os.path.exists(ini_fn))
-            return Winapp(ini_fn).get_cleaners().next()
-
+            if do_next:
+                return Winapp(ini_fn).get_cleaners().next()
+            else:
+                return Winapp(ini_fn).get_cleaners()
 
         # reuse this path to store a winapp2.ini file in
         import tempfile
@@ -212,6 +214,23 @@ class WinappTestCase(unittest.TestCase):
         self.assertFalse(os.path.exists(dirname))
         self.assertTrue(cleaner.auto_hide())
 
+        # detectfile=, does not exist
+        (dirname, f1, f2, fbak) = setup_fake()
+        cleaner = ini2cleaner('FileKey1=%s|deleteme.log\nDetectFile=c:\\doesnotexist' % dirname, False)
+        self.assertRaises(StopIteration, cleaner.next)
+
+        # detectfile=, does exist
+        (dirname, f1, f2, fbak) = setup_fake()
+        cleaner = ini2cleaner('FileKey1=%s|deleteme.log\nDetectFile=%%APPDATA%%' % dirname)
+        self.assertFalse(cleaner.auto_hide())
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
+        self.assertTrue(os.path.exists(dirname))
+        self.assertFalse(os.path.exists(f1))
+        self.assertTrue(os.path.exists(f2))
+        self.assertTrue(os.path.exists(fbak))
+        self.assertTrue(cleaner.auto_hide())
+  
         # registry key, basic
         (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('RegKey1=%s' % keyfull)
