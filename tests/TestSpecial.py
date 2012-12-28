@@ -130,10 +130,10 @@ class SpecialTestCase(unittest.TestCase):
         # clean the file
         old_shred = options.get('shred')
         options.set('shred', False, commit = False)
-        self.assertEqual(False, options.get('shred'))
+        self.assertFalse(options.get('shred'))
         clean_func(filename)
         options.set('shred', True, commit = False)
-        self.assertEqual(True, options.get('shred'))
+        self.assertTrue(options.get('shred'))
         options.set('shred', old_shred, commit = False)
         clean_func(filename)
         self.assert_(os.path.exists(filename))
