@@ -248,7 +248,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         # does not exist
         # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
         # (maybe because the network was disconnected or because user created no bookmarks).
-        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_urls('does_not_exist'))
+        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_ids('does_not_exist'))
 
 
     def test_get_chrome_bookmark_urls(self):
