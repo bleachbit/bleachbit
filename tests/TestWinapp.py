@@ -95,9 +95,6 @@ class WinappTestCase(unittest.TestCase):
         """Test with fake file"""
 
         ini_fn = None
-        dirname = None
-        f1 = None
-        f2 = None
         keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
         subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
 
@@ -112,8 +109,12 @@ class WinappTestCase(unittest.TestCase):
             f2 = os.path.join(dirname2, 'deleteme.log')
             file(f2, 'w').write('')
 
+            fbak = os.path.join(dirname, 'deleteme.bak')
+            file(fbak, 'w').write('')
+
             self.assert_(os.path.exists(f1))
             self.assert_(os.path.exists(f2))
+            self.assert_(os.path.exists(fbak))
 
             hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, subkey )
             hkey.Close()
@@ -121,7 +122,7 @@ class WinappTestCase(unittest.TestCase):
             self.assertTrue(TestWindows.registry_key_exists(keyfull))
             self.assertTrue(TestWindows.registry_key_exists('HKCU\\%s' % subkey))
 
-            return (dirname, f1, f2)
+            return (dirname, f1, f2, bak)
 
 
         def ini2cleaner(filekey):
@@ -140,7 +141,7 @@ class WinappTestCase(unittest.TestCase):
         os.close(ini_h)
 
         # single file
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|deleteme.log\n' % dirname)
         self.assert_(not cleaner.auto_hide())
         self.run_all(cleaner, False)
@@ -148,10 +149,11 @@ class WinappTestCase(unittest.TestCase):
         self.assert_(os.path.exists(dirname))
         self.assert_(not os.path.exists(f1))
         self.assert_(os.path.exists(f2))
+        self.assert_(os.path.exists(fbak))
         self.assert_(cleaner.auto_hide())
 
         # *.log
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.LOG' % dirname)
         self.assert_(not cleaner.auto_hide())
         self.run_all(cleaner, False)
@@ -159,10 +161,23 @@ class WinappTestCase(unittest.TestCase):
         self.assert_(os.path.exists(dirname))
         self.assert_(not os.path.exists(f1))
         self.assert_(os.path.exists(f2))
+        self.assert_(os.path.exists(fbak))
+        self.assert_(cleaner.auto_hide())
+
+        # semicolon separates different file types
+        (dirname, f1, f2, fbak) = setup_fake()
+        cleaner = ini2cleaner('FileKey1=%s|*.log;*.bak' % dirname)
+        self.assert_(not cleaner.auto_hide())
+        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
+        self.assert_(os.path.exists(dirname))
+        self.assert_(not os.path.exists(f1))
+        self.assert_(os.path.exists(f2))
+        self.assert_(not os.path.exists(fbak))
         self.assert_(cleaner.auto_hide())
 
         # *.*
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*' % dirname)
         self.assert_(not cleaner.auto_hide())
         self.run_all(cleaner, False)
@@ -170,10 +185,11 @@ class WinappTestCase(unittest.TestCase):
         self.assert_(os.path.exists(dirname))
         self.assert_(not os.path.exists(f1))
         self.assert_(os.path.exists(f2))
+        self.assert_(not os.path.exists(fbak))
         self.assert_(cleaner.auto_hide())
 
         # recurse *.*
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*|RECURSE' % dirname)
         self.assert_(not cleaner.auto_hide())
         self.run_all(cleaner, False)
@@ -181,21 +197,23 @@ class WinappTestCase(unittest.TestCase):
         self.assert_(os.path.exists(dirname))
         self.assert_(not os.path.exists(f1))
         self.assert_(not os.path.exists(f2))
+        self.assert_(not os.path.exists(fbak))
         self.assert_(cleaner.auto_hide())
 
         # remove self *.*, this removes the directory
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('FileKey1=%s|*.*|REMOVESELF' % dirname)
         self.assert_(not cleaner.auto_hide())
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
         self.assert_(not os.path.exists(f1))
         self.assert_(not os.path.exists(f2))
+        self.assert_(not os.path.exists(fbak))
         self.assert_(not os.path.exists(dirname))
         self.assert_(cleaner.auto_hide())
 
         # registry key, basic
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('RegKey1=%s' % keyfull)
         self.run_all(cleaner, False)
         self.assertTrue(TestWindows.registry_key_exists(keyfull))
@@ -203,10 +221,11 @@ class WinappTestCase(unittest.TestCase):
         self.assertFalse(TestWindows.registry_key_exists(keyfull))
 
         # check for parse error with ampersand
-        (dirname, f1, f2) = setup_fake()
+        (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('RegKey1=HKCU\\Software\\PeanutButter&Jelly')
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
+
 
     def test_section2option(self):
         """Test for section2option()"""
