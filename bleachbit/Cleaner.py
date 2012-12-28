@@ -561,7 +561,8 @@ class System(Cleaner):
                 pathname = os.path.expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
-                    gtk.RecentManager().purge_items()
+                    if HAVE_GTK:
+                        gtk.RecentManager().purge_items()
 
 
         if 'posix' == os.name and 'rotated_logs' == option_id:
