@@ -188,18 +188,6 @@ class WinappTestCase(unittest.TestCase):
         cleaner = ini2cleaner('FileKey1=%s|deleteme.log\nDetectFile=c:\\doesnotexist' % dirname, False)
         self.assertRaises(StopIteration, cleaner.next)
 
-        # detectfile=, does exist
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|deleteme.log\nDetectFile=%%APPDATA%%' % dirname)
-        self.assertFalse(cleaner.auto_hide())
-        self.run_all(cleaner, False)
-        self.run_all(cleaner, True)
-        self.assertTrue(os.path.exists(dirname))
-        self.assertFalse(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertTrue(os.path.exists(fbak))
-        self.assertTrue(cleaner.auto_hide())
-  
         # registry key, basic
         (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('RegKey1=%s' % keyfull)
