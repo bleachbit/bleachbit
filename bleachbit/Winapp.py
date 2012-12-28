@@ -189,7 +189,8 @@ class Winapp:
             filenames = elements.pop(0)
         recurse = False
         removeself = False
-        for element in element:
+        for element in elements:
+            element = element.upper()
             if 'RECURSE' == element:
                 recurse = True
             elif 'REMOVESELF' == element:
