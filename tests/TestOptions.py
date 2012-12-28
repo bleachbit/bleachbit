@@ -92,18 +92,18 @@ class OptionsTestCase(unittest.TestCase):
         value = o.get_language('en')
         self.assert_(type(value) is bool)
         o.set_language('en', True)
-        self.assertEqual(o.get_language('en'), True)
+        self.assertTrue(o.get_language('en'))
         o.set_language('en', False)
-        self.assertEqual(o.get_language('en'), False)
+        self.assertFalse(o.get_language('en'))
         o.set_language('en', value)
 
         # tree
         o.set_tree("parent", "child", True)
-        self.assertEqual(o.get_tree("parent", "child"), True)
+        self.assertTrue(o.get_tree("parent", "child"))
         o.set_tree("parent", "child", False)
-        self.assertEqual(o.get_tree("parent", "child"), False)
+        self.assertFalse(o.get_tree("parent", "child"))
         o.config.remove_option("tree", "parent.child")
-        self.assertEqual(o.get_tree("parent", "child"), False)
+        self.assertFalse(o.get_tree("parent", "child"))
 
 
 
