@@ -27,9 +27,9 @@
     <description>Delete the cache</description>
     <action command="delete" search="walk.files" path="~/.beagle/TextCache"/>
   </option>
-  <option id="indexes">
-    <label>Search indexes</label>
-    <description>Delete the search indexes</description>
+  <option id="index">
+    <label>Index</label>
+    <description>Delete the indexes</description>
     <action command="delete" search="walk.all" path="~/.beagle/Indexes"/>
   </option>
   <option id="logs">
