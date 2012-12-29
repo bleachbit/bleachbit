@@ -159,21 +159,23 @@ class WinappTestCase(unittest.TestCase):
             ( 'FileKey1=%s|*.*|REMOVESELF', False, False, False, False, False, True ),
             ]
 
-        # add positive detection to all the tests
+        # Add positive detection, where the detection believes the application is present,
+        # to all the tests, which are also positive.
         new_tests = []
         for test in tests:
             for detect in ( \
                 "\nDetectFile=%%APPDATA%%\\Microsoft", \
-                "\nDetect=HKCU\\Software\\Microsoft",
-                "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA\\does_not_exist"):
+                "\nDetect=HKCU\\Software\\Microsoft", \
+                "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA%%\\does_not_exist", \
+                "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft"):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
-        tests = tests + new_tests    
+        positive_tests = tests + new_tests    
 
-        # execute generic tests
-        for test in tests:
-            print 'generic test: ', test
+        # execute positive tests
+        for test in positive_tests:
+            print 'positive test: ', test
             (dirname, f1, f2, fbak) = setup_fake()
             cleaner = ini2cleaner(test[0] % dirname)
             self.assertEqual(test[1], cleaner.auto_hide())
@@ -185,10 +187,19 @@ class WinappTestCase(unittest.TestCase):
             self.assertEqual(test[5], os.path.exists(fbak))
             self.assertEqual(test[6], cleaner.auto_hide())
 
-        # detectfile=, does not exist
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('FileKey1=%s|deleteme.log\nDetectFile=c:\\doesnotexist' % dirname, False)
-        self.assertRaises(StopIteration, cleaner.next)
+        # negative tests where the application detect believes the application is absent
+        for test in tests:
+            for detect in ( \
+                "\nDetectFile=c:\\does_not_exist", \
+                "\nDetect=HKCU\\Software\\does_not_exist", \
+                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2"):
+                new_ini = test[0] + detect
+                t = [new_ini, ] + [x for x in test[1:]]
+                print 'negative test', t
+                # execute the test
+                (dirname, f1, f2, fbak) = setup_fake()
+                cleaner = ini2cleaner(t[0] % dirname, False)
+                self.assertRaises(StopIteration, cleaner.next)
 
         # registry key, basic
         (dirname, f1, f2, fbak) = setup_fake()

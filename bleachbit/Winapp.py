@@ -133,9 +133,9 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'detectfile%d' % n
                 if self.parser.has_option(section, option_id):
-                     if not detect_file(self.parser.get(section, option_id)):
+                     if detect_file(self.parser.get(section, option_id)):
                          matches = matches + 1
-            if not matches:
+            if 0 == matches:
                 return
         # not yet implemented
         if self.parser.has_option(section, 'excludekey'):
