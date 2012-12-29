@@ -122,6 +122,12 @@
     <action command="delete" search="glob" path="~/.config/google-chrome/Default/History Index ????-??-journal"/>
     <action command="delete" search="walk.files" path="~/.config/google-chrome/Default/Session Storage/"/>
   </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Login Data"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
+  </option>
   <option id="search_engines">
     <label>Search engines</label>
     <description translators="'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html">Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
@@ -148,7 +154,6 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
@@ -161,7 +166,6 @@
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/History"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Login Data"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Web Data"/>

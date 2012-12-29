@@ -110,6 +110,12 @@
     <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
     <action command="delete" search="walk.files" path="~/.config/chromium/Default/Session Storage/"/>
   </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Login Data"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Login Data"/>
+  </option>
   <option id="search_engines">
     <label>Search engines</label>
     <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
@@ -139,7 +145,6 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Login Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
@@ -150,7 +155,6 @@
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies-journal"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/History"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Login Data"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Thumbnails"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Web Data"/>
