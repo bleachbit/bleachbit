@@ -29,10 +29,10 @@ import os
 import sys
 import unittest
 
-import TestWindows
 
 sys.path.append('.')
 from bleachbit.Winapp import Winapp, section2option
+from bleachbit.Windows import detect_registry_key
 
 import common
 
@@ -119,8 +119,8 @@ class WinappTestCase(unittest.TestCase):
             hkey = _winreg.CreateKey( _winreg.HKEY_CURRENT_USER, subkey )
             hkey.Close()
 
-            self.assertTrue(TestWindows.registry_key_exists(keyfull))
-            self.assertTrue(TestWindows.registry_key_exists('HKCU\\%s' % subkey))
+            self.assertTrue(detect_registry_key(keyfull))
+            self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
 
             return (dirname, f1, f2, fbak)
 
@@ -213,9 +213,9 @@ class WinappTestCase(unittest.TestCase):
         (dirname, f1, f2, fbak) = setup_fake()
         cleaner = ini2cleaner('RegKey1=%s' % keyfull)
         self.run_all(cleaner, False)
-        self.assertTrue(TestWindows.registry_key_exists(keyfull))
+        self.assertTrue(detect_registry_key(keyfull))
         self.run_all(cleaner, True)
-        self.assertFalse(TestWindows.registry_key_exists(keyfull))
+        self.assertFalse(detect_registry_key(keyfull))
 
         # check for parse error with ampersand
         (dirname, f1, f2, fbak) = setup_fake()

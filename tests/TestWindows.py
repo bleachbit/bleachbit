@@ -40,20 +40,6 @@ sys.path.append('.')
 from bleachbit.Windows import *
 
 
-def registry_key_exists(key):
-    """Returns a boolean whether the registry key exists"""
-    (hive, sub_key) = split_registry_key(key)
-    try:
-        hkey = _winreg.OpenKey(hive, sub_key, 0, _winreg.KEY_SET_VALUE)
-    except WindowsError, e:
-        if e.winerror == 2:
-            # 2 = 'file not found' means value does not exist
-            return False
-        raise
-    else:
-        return True
-
-
 class WindowsTestCase(unittest.TestCase):
     """Test case for module Windows"""
 
@@ -95,7 +81,7 @@ class WindowsTestCase(unittest.TestCase):
             return_value = delete_registry_key(key, really_delete)
             self.assertEqual(rc, return_value)
             if really_delete:
-                self.assertFalse(registry_key_exists(key))
+                self.assertFalse(detect_registry_key(key))
 
         # Test Unicode key.  In BleachBit 0.7.3 this scenario would lead to
         # the error (bug 537109)
