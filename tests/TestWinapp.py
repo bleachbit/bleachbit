@@ -98,10 +98,10 @@ class WinappTestCase(unittest.TestCase):
         keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
         subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
 
-        def setup_fake():
+        def setup_fake(f1_filename = None):
             """Setup the test environment"""
             dirname = tempfile.mkdtemp(suffix='bleachbit_test_winapp')
-            f1 = os.path.join(dirname, 'deleteme.log')
+            f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
             file(f1, 'w').write('')
 
             dirname2 = os.path.join(dirname, 'sub')
@@ -146,17 +146,19 @@ class WinappTestCase(unittest.TestCase):
         # a set of tests
         tests = [
             # single file    
-            ( 'FileKey1=%s|deleteme.log', False, True, False, True, True, True ),
+            ( 'FileKey1=%s|deleteme.log', None, False, True, False, True, True, True ),
+            # special characters for XML    
+            ( 'FileKey1=%s|special_chars_&-\'.txt', 'special_chars_&-\'.txt', False, True, False, True, True, True ),
             # *.log
-            ( 'FileKey1=%s|*.LOG', False, True, False, True, True, True ),
+            ( 'FileKey1=%s|*.LOG', None, False, True, False, True, True, True ),
             # semicolon separates different file types
-            ( 'FileKey1=%s|*.log;*.bak', False, True, False, True, False, True ),
+            ( 'FileKey1=%s|*.log;*.bak', None, False, True, False, True, False, True ),
             # *.*
-            ( 'FileKey1=%s|*.*', False, True, False, True, False, True ),
+            ( 'FileKey1=%s|*.*', None, False, True, False, True, False, True ),
             # recurse *.*
-            ( 'FileKey1=%s|*.*|RECURSE', False, True, False, False, False, True ),
+            ( 'FileKey1=%s|*.*|RECURSE', None, False, True, False, False, False, True ),
             # remove self *.*, this removes the directory
-            ( 'FileKey1=%s|*.*|REMOVESELF', False, False, False, False, False, True ),
+            ( 'FileKey1=%s|*.*|REMOVESELF', None, False, False, False, False, False, True ),
             ]
 
         # Add positive detection, where the detection believes the application is present,
@@ -178,23 +180,26 @@ class WinappTestCase(unittest.TestCase):
         # execute positive tests
         for test in positive_tests:
             print 'positive test: ', test
-            (dirname, f1, f2, fbak) = setup_fake()
+            (dirname, f1, f2, fbak) = setup_fake(test[1])
             cleaner = ini2cleaner(test[0] % dirname)
-            self.assertEqual(test[1], cleaner.auto_hide())
+            self.assertEqual(test[2], cleaner.auto_hide())
             self.run_all(cleaner, False)
             self.run_all(cleaner, True)
-            self.assertEqual(test[2], os.path.exists(dirname))
-            self.assertEqual(test[3], os.path.exists(f1))
-            self.assertEqual(test[4], os.path.exists(f2))
-            self.assertEqual(test[5], os.path.exists(fbak))
-            self.assertEqual(test[6], cleaner.auto_hide())
+            self.assertEqual(test[3], os.path.exists(dirname))
+            self.assertEqual(test[4], os.path.exists(f1))
+            self.assertEqual(test[5], os.path.exists(f2))
+            self.assertEqual(test[6], os.path.exists(fbak))
+            self.assertEqual(test[7], cleaner.auto_hide())
 
         # negative tests where the application detect believes the application is absent
         for test in tests:
-            for detect in ( \
-                "\nDetectFile=c:\\does_not_exist", \
-                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2", \
-                "\nDetect=HKCU\\Software\\does_not_exist", \
+            for detect in ( 
+                "\nDetectFile=c:\\does_not_exist", 
+                # special characters for XML 
+                "\nDetectFile=c:\\does_not_exist_special_chars_&'",  
+                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2", 
+                "\nDetect=HKCU\\Software\\does_not_exist", 
+                "\nDetect=HKCU\\Software\\does_not_exist_&'", 
                 "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
                 t = [new_ini, ] + [x for x in test[1:]]

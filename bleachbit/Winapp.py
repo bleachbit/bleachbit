@@ -235,8 +235,7 @@ class Winapp:
     def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
         elements = self.parser.get(ini_section, ini_option).strip().split('|')
-        path = elements[0]
-        path = path.replace('&', '&amp;')
+        path = xml_escape(elements[0])
         name = ""
         if 2 == len(elements):
             name = 'name="%s"' % xml_escape(elements[1])
