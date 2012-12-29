@@ -137,6 +137,15 @@ class Winapp:
                          matches = matches + 1
             if 0 == matches:
                 return
+        if self.parser.has_option(section, 'detect1'):
+            matches = 0
+            for n in range(1, MAX_DETECT):
+                option_id = 'detect%d' % n
+                if self.parser.has_option(section, option_id):
+                     if Windows.detect_registry_key(self.parser.get(section, option_id)):
+                         matches = matches + 1
+            if 0 == matches:
+                return
         # not yet implemented
         if self.parser.has_option(section, 'excludekey'):
             print 'ERROR: ExcludeKey not implemented, section=', section
@@ -164,6 +173,7 @@ class Winapp:
             elif option == 'warning':
                 self.cleaners[lid].set_warning(section2option(section), self.parser.get(section, 'warning'))
             elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section') \
+                or ['detect%d' % x for x in range(1, MAX_DETECT)] \
                 or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
                 pass    
             else:

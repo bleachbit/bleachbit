@@ -165,9 +165,11 @@ class WinappTestCase(unittest.TestCase):
         for test in tests:
             for detect in ( \
                 "\nDetectFile=%%APPDATA%%\\Microsoft", \
-                "\nDetect=HKCU\\Software\\Microsoft", \
                 "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA%%\\does_not_exist", \
-                "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft"):
+                "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft", \
+                "\nDetect=HKCU\\Software\\Microsoft", \
+                "\nDetect1=HKCU\\Software\\Microsoft\nDetect2=HKCU\\Software\\does_not_exist", \
+                "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft"):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
@@ -191,8 +193,9 @@ class WinappTestCase(unittest.TestCase):
         for test in tests:
             for detect in ( \
                 "\nDetectFile=c:\\does_not_exist", \
+                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2", \
                 "\nDetect=HKCU\\Software\\does_not_exist", \
-                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2"):
+                "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
                 t = [new_ini, ] + [x for x in test[1:]]
                 print 'negative test', t
