@@ -24,12 +24,13 @@ Test case for module Options
 """
 
 
-
+import os
 import sys
 import unittest
+import ConfigParser
 
 sys.path.append('.')
-from bleachbit.Options import boolean_keys, options
+import bleachbit.Options
 
 
 
@@ -38,7 +39,7 @@ class OptionsTestCase(unittest.TestCase):
 
     def test_Options(self):
         """Unit test for class Options"""
-        o = options
+        o = bleachbit.Options.options
         value = o.get("check_online_updates")
 
         # toggle a boolean
@@ -69,7 +70,7 @@ class OptionsTestCase(unittest.TestCase):
         self.assert_(type(o.get_whitelist_paths() is list))
         whitelist = [ ('file', '/home/foo'), ('folder', '/home') ]
         old_whitelist = o.get_whitelist_paths()
-        options.config.remove_section('whitelist/paths')
+        o.config.remove_section('whitelist/paths')
         self.assert_(type(o.get_whitelist_paths() is list))
         self.assertEqual(o.get_whitelist_paths(), [])
         o.set_whitelist_paths(whitelist)
@@ -79,7 +80,7 @@ class OptionsTestCase(unittest.TestCase):
         self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
 
         # these should always be set
-        for bkey in boolean_keys:
+        for bkey in bleachbit.Options.boolean_keys:
             self.assert_(type(o.get(bkey)) is bool)
 
         # language
@@ -102,13 +103,50 @@ class OptionsTestCase(unittest.TestCase):
 
     def test_hashpath(self):
         """Tests related to hashpath section"""
-        o = options
+        o = bleachbit.Options.options
 
         # ConfigParser naturally treats colons as delimiters
         value = 'abc'
         key = 'c:\\test\\foo.xml'
         o.set(key, value, 'hashpath')
         self.assertEqual(value, o.get(key, 'hashpath'))
+
+
+    def test_purge(self):
+        """Test purging"""
+        # By default ConfigParser stores keys (the filenames) as lowercase.
+        # This needs special consideration when combined with purging.
+        o1 = bleachbit.Options.Options()
+        import tempfile
+        dirname = tempfile.mkdtemp('bleachbit_test_options')
+        pathname = os.path.join(dirname, 'foo.xml')
+        file(pathname, 'w').write('') # make an empty file
+        self.assertTrue(os.path.exists(pathname))
+        myhash = '0ABCD'
+        o1.set(pathname, myhash, 'hashpath')
+        self.assertEqual(myhash, o1.get(pathname, 'hashpath'))
+        del o1
+
+        # reopen
+        o2 = bleachbit.Options.Options()
+        # write something, which triggers the purge
+        o2.set('dummypath', 'dummyvalue', 'hashpath')
+        # verify the path was not purged
+        self.assertTrue(os.path.exists(pathname))
+        self.assertEqual(myhash, o2.get(pathname, 'hashpath'))
+
+        # delete the path
+        os.remove(pathname)
+        # close and reopen
+        del o2
+        o3 = bleachbit.Options.Options()
+        # write something, which triggers the purge
+        o3.set('dummypath', 'dummyvalue', 'hashpath')
+        # verify the path was purged
+        self.assertRaises(ConfigParser.NoOptionError, lambda: o3.get(pathname, 'hashpath'))
+
+        # clean up
+        os.rmdir(dirname)
 
 
 

@@ -44,6 +44,7 @@ class Options:
     def __init__(self):
         self.purged = False
         self.config = ConfigParser.SafeConfigParser()
+        self.config.optionxform = str # make keys case sensitive for hashpath purging
         self.restore()
 
 
