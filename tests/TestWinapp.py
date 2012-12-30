@@ -145,9 +145,9 @@ class WinappTestCase(unittest.TestCase):
 
         # a set of tests
         tests = [
-            # single file    
+            # single file
             ( 'FileKey1=%s|deleteme.log', None, False, True, False, True, True, True ),
-            # special characters for XML    
+            # special characters for XML
             ( 'FileKey1=%s|special_chars_&-\'.txt', 'special_chars_&-\'.txt', False, True, False, True, True, True ),
             # *.log
             ( 'FileKey1=%s|*.LOG', None, False, True, False, True, True, True ),
@@ -175,7 +175,7 @@ class WinappTestCase(unittest.TestCase):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
-        positive_tests = tests + new_tests    
+        positive_tests = tests + new_tests
 
         # execute positive tests
         for test in positive_tests:
@@ -193,13 +193,13 @@ class WinappTestCase(unittest.TestCase):
 
         # negative tests where the application detect believes the application is absent
         for test in tests:
-            for detect in ( 
-                "\nDetectFile=c:\\does_not_exist", 
-                # special characters for XML 
-                "\nDetectFile=c:\\does_not_exist_special_chars_&'",  
-                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2", 
-                "\nDetect=HKCU\\Software\\does_not_exist", 
-                "\nDetect=HKCU\\Software\\does_not_exist_&'", 
+            for detect in (
+                "\nDetectFile=c:\\does_not_exist",
+                # special characters for XML
+                "\nDetectFile=c:\\does_not_exist_special_chars_&'",
+                "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2",
+                "\nDetect=HKCU\\Software\\does_not_exist",
+                "\nDetect=HKCU\\Software\\does_not_exist_&'",
                 "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
                 t = [new_ini, ] + [x for x in test[1:]]
