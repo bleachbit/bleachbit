@@ -42,12 +42,15 @@ class Options:
 
 
     def __init__(self):
+        self.purged = False
         self.config = ConfigParser.SafeConfigParser()
         self.restore()
 
 
     def __flush(self):
         """Write information to disk"""
+        if not self.purged:
+            self.__purge()
         if not os.path.exists(Common.options_dir):
             General.makedirs(Common.options_dir)
         mkfile = not os.path.exists(Common.options_file)
@@ -63,6 +66,17 @@ class Options:
                 raise
         if mkfile and General.sudo_mode():
             General.chownself(Common.options_file)
+
+
+    def __purge(self):
+	"""Clear out obsolete data"""
+	self.purged = True
+	if not self.config.has_section('hashpath'):
+            return
+	for option in self.config.options('hashpath'):
+            if not os.path.lexists(option):
+                print 'DEBUG: removing hashpath', option 
+                #self.config.remove_option('hashpath', option)
 
 
     def __set_default(self, key, value):
