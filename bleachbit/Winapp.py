@@ -175,7 +175,7 @@ class Winapp:
             elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section') \
                 or ['detect%d' % x for x in range(1, MAX_DETECT)] \
                 or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
-                pass    
+                pass
             else:
                 print 'WARNING: unknown option %s in section %s' % (option, section)
                 return

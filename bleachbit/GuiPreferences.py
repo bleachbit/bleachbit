@@ -421,14 +421,14 @@ class PreferencesDialog:
             button_add_file.connect("clicked", add_whitelist_file_cb)
         elif LOCATIONS_CUSTOM == page_type:
             button_add_file.connect("clicked", add_custom_file_cb)
-        
+
 
         button_add_folder = gtk.Button(_p('button', 'Add folder'))
         if LOCATIONS_WHITELIST == page_type:
             button_add_folder.connect("clicked", add_whitelist_folder_cb)
         elif LOCATIONS_CUSTOM == page_type:
             button_add_folder.connect("clicked", add_custom_folder_cb)
-        
+
 
         button_remove = gtk.Button(_p('button', 'Remove'))
         if LOCATIONS_WHITELIST == page_type:

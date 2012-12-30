@@ -22,7 +22,7 @@
 """
 Functionality specific to Microsoft Windows
 
-The Windows Registry terminology can be confusing. Take for example 
+The Windows Registry terminology can be confusing. Take for example
 the reference
 * HKCU\\Software\\BleachBit
 * CurrentVersion
@@ -405,7 +405,7 @@ def split_registry_key(full_key):
     hive_map = {
         'HKCR' : _winreg.HKEY_CLASSES_ROOT,
         'HKCU' : _winreg.HKEY_CURRENT_USER,
-        'HKLM' : _winreg.HKEY_LOCAL_MACHINE, 
+        'HKLM' : _winreg.HKEY_LOCAL_MACHINE,
         'HKU' : _winreg.HKEY_USERS }
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)

@@ -75,7 +75,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             if not os.path.lexists(option):
-                print 'DEBUG: removing hashpath', option 
+                print 'DEBUG: removing hashpath', option
                 self.config.remove_option('hashpath', option)
 
 

@@ -590,7 +590,7 @@ def wipe_path(pathname, idle = False ):
     # truncate and close files
     for f in files:
         f.truncate(0)
- 
+
         while True:
             try:
                 # Nikita: I noticed a bug that prevented file handles from

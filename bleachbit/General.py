@@ -45,7 +45,7 @@ def boolstr_to_bool(value):
 
 
 def getText(nodelist):
-    """Return the text data in an XML node 
+    """Return the text data in an XML node
     http://docs.python.org/library/xml.dom.minidom.html"""
     rc = ""
     for node in nodelist:
@@ -67,7 +67,7 @@ class WindowsError(Exception):
 
 def chownself(path):
     """Set path owner to real self when running in sudo.
-    If sudo creates a path and the owner isn't changed, the 
+    If sudo creates a path and the owner isn't changed, the
     owner may not be able to access the path."""
     if 'posix' != os.name:
         return

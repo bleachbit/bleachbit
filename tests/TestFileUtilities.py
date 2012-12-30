@@ -171,7 +171,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             locale.setlocale(locale.LC_NUMERIC, old_locale)
 
 
-    def test_children_in_directory(self): 
+    def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
 
         # test an existing directory that usually exists

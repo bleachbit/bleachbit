@@ -413,7 +413,7 @@ class System(Cleaner):
         ###
         ### options for GTK+
         ###
- 
+
         if HAVE_GTK:
             self.add_option('clipboard', _('Clipboard'), _('The desktop environment\'s clipboard used for copy and paste operations'))
 
