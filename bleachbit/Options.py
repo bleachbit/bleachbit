@@ -69,11 +69,11 @@ class Options:
 
 
     def __purge(self):
-	"""Clear out obsolete data"""
-	self.purged = True
-	if not self.config.has_section('hashpath'):
+        """Clear out obsolete data"""
+        self.purged = True
+        if not self.config.has_section('hashpath'):
             return
-	for option in self.config.options('hashpath'):
+        for option in self.config.options('hashpath'):
             if not os.path.lexists(option):
                 print 'DEBUG: removing hashpath', option 
                 self.config.remove_option('hashpath', option)
