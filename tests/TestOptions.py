@@ -82,12 +82,6 @@ class OptionsTestCase(unittest.TestCase):
         for bkey in boolean_keys:
             self.assert_(type(o.get(bkey)) is bool)
 
-        # ConfigParser naturally treats colons as delimiters
-        value = 'abc'
-        key = 'c:\\test\\foo.xml'
-        o.set(key, value, 'hashpath')
-        self.assertEqual(value, o.get(key, 'hashpath'))
-
         # language
         value = o.get_language('en')
         self.assert_(type(value) is bool)
@@ -104,6 +98,18 @@ class OptionsTestCase(unittest.TestCase):
         self.assertFalse(o.get_tree("parent", "child"))
         o.config.remove_option("tree", "parent.child")
         self.assertFalse(o.get_tree("parent", "child"))
+
+
+    def test_hashpath(self):
+        """Tests related to hashpath section"""
+        o = options
+
+        # ConfigParser naturally treats colons as delimiters
+        value = 'abc'
+        key = 'c:\\test\\foo.xml'
+        o.set(key, value, 'hashpath')
+        self.assertEqual(value, o.get(key, 'hashpath'))
+
 
 
 
