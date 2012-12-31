@@ -99,11 +99,11 @@ def fill_memory_linux():
     # In Linux 2.6.36 the system changed from oom_adj to oom_score_adj
     path = '/proc/%d/oom_score_adj' % os.getpid()
     if os.path.exists(path):
-        open(path).write('1000')
+        open(path, 'w').write('1000')
     else:
         path = '/proc/%d/oomadj' % os.getpid()
         if os.path.exists(path):
-            open(path).write('15')
+            open(path, 'w').write('15')
     # OOM likes nice processes
     print 'debug: new nice value', os.nice(19)
     libc = ctypes.cdll.LoadLibrary("libc.so.6")
