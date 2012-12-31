@@ -46,7 +46,6 @@ def path_to_option(pathname):
     pathname = os.path.normcase(pathname) 
     # On Windows expand DOS-8.3-style pathnames.
     if 'nt' == os.name and os.path.exists(pathname):
-        print 'debug GetLongPathname: ', pathname
         pathname = GetLongPathName(pathname)
     if ':' == pathname[1] :
         # ConfigParser treats colons in a special way
