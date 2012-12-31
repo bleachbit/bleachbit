@@ -19,7 +19,7 @@
 
 
 """
-Store and retreieve user preferences
+Store and retrieve user preferences
 """
 
 
