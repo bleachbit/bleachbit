@@ -114,6 +114,9 @@ class OptionsTestCase(unittest.TestCase):
         myhash = '0ABCD'
         o1.set_hashpath(pathname, myhash)
         self.assertEqual(myhash, o1.get_hashpath(pathname))
+        if 'nt' == os.name:
+            # check case sensitivity
+            self.assertEqual(myhash, o1.get_hashpath(pathname.upper()))
         del o1
 
         # reopen
