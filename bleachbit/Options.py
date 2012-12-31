@@ -24,17 +24,34 @@ Store and retreieve user preferences
 
 
 import os
+import re
 import traceback
 import ConfigParser
 
 import Common
 import General
 
+if 'nt' == os.name:
+    from win32file import GetLongPathName
+
 
 boolean_keys = ['auto_hide', 'auto_start', 'check_beta', 'check_online_updates', 'first_start', 'shred']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
 
+
+def path_to_option(pathname):
+    """Change a pathname to a .ini option name (a key)"""
+    # On Windows change to lowercase and use backwards slashes.
+    pathname = os.path.normcase(pathname) 
+    # On Windows expand DOS-8.3-style pathnames.
+    if 'nt' == os.name and os.path.exists(pathname):
+        print 'debug GetLongPathname: ', pathname
+        pathname = GetLongPathName(pathname)
+    if ':' == pathname[1] :
+        # ConfigParser treats colons in a special way
+        pathname = pathname[0] + pathname[2:]
+    return pathname
 
 
 class Options:
@@ -75,8 +92,12 @@ class Options:
         if not self.config.has_section('hashpath'):
             return
         for option in self.config.options('hashpath'):
-            if not os.path.lexists(option):
-                print 'DEBUG: removing hashpath', option
+            pathname = option
+            if 'nt' == os.name and re.search('^[a-z]\\\\', option):
+                # restore colon lost because ConfigParser treats colon special in keys
+                pathname = pathname[0] + ':' + pathname[1:]
+            if not os.path.lexists(pathname):
+                # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
 
 
@@ -95,6 +116,11 @@ class Options:
         if option in boolean_keys:
             return self.config.getboolean(section, option)
         return self.config.get(section, option)
+
+
+    def get_hashpath(self, pathname):
+        """Recall the hash for a file"""
+        return self.get(path_to_option(pathname), 'hashpath')
 
 
     def get_language(self, langid):
@@ -211,11 +237,14 @@ class Options:
 
     def set(self, key, value, section = 'bleachbit', commit = True):
         """Set a general option"""
-        if section == 'hashpath' and key[1] == ':':
-            key = key[0] + key[2:]
         self.config.set(section, key, str(value))
         if commit:
             self.__flush()
+
+
+    def set_hashpath(self, pathname, hashvalue):
+        """Remember the hash of a path"""
+        self.set(path_to_option(pathname), hashvalue, 'hashpath')
 
 
     def set_list(self, key, values):
@@ -243,6 +272,7 @@ class Options:
             self.config.set(section, str(counter) + '_path', value[1])
             counter += 1
         self.__flush()
+
 
     def set_custom_paths(self, values):
         """Save the customlist"""

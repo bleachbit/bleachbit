@@ -101,17 +101,6 @@ class OptionsTestCase(unittest.TestCase):
         self.assertFalse(o.get_tree("parent", "child"))
 
 
-    def test_hashpath(self):
-        """Tests related to hashpath section"""
-        o = bleachbit.Options.options
-
-        # ConfigParser naturally treats colons as delimiters
-        value = 'abc'
-        key = 'c:\\test\\foo.xml'
-        o.set(key, value, 'hashpath')
-        self.assertEqual(value, o.get(key, 'hashpath'))
-
-
     def test_purge(self):
         """Test purging"""
         # By default ConfigParser stores keys (the filenames) as lowercase.
@@ -123,8 +112,8 @@ class OptionsTestCase(unittest.TestCase):
         file(pathname, 'w').write('') # make an empty file
         self.assertTrue(os.path.exists(pathname))
         myhash = '0ABCD'
-        o1.set(pathname, myhash, 'hashpath')
-        self.assertEqual(myhash, o1.get(pathname, 'hashpath'))
+        o1.set_hashpath(pathname, myhash)
+        self.assertEqual(myhash, o1.get_hashpath(pathname))
         del o1
 
         # reopen
@@ -133,7 +122,7 @@ class OptionsTestCase(unittest.TestCase):
         o2.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was not purged
         self.assertTrue(os.path.exists(pathname))
-        self.assertEqual(myhash, o2.get(pathname, 'hashpath'))
+        self.assertEqual(myhash, o2.get_hashpath(pathname))
 
         # delete the path
         os.remove(pathname)
@@ -143,7 +132,7 @@ class OptionsTestCase(unittest.TestCase):
         # write something, which triggers the purge
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
-        self.assertRaises(ConfigParser.NoOptionError, lambda: o3.get(pathname, 'hashpath'))
+        self.assertRaises(ConfigParser.NoOptionError, lambda: o3.get_hashpath(pathname))
 
         # clean up
         os.rmdir(dirname)

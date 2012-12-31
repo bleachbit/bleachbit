@@ -151,7 +151,7 @@ class RecognizeCleanerML:
         body = file(pathname).read()
         new_hash = hashdigest(self.salt + body)
         try:
-            known_hash = options.get(pathname, 'hashpath')
+            known_hash = options.get_hashpath(pathname)
         except ConfigParser.NoOptionError:
             return (NEW, new_hash)
         if new_hash == known_hash:
@@ -174,7 +174,7 @@ class RecognizeCleanerML:
                 myhash = change[2]
                 print "info: remembering CleanerML file '%s'" % pathname
                 if os.path.exists(pathname):
-                    options.set(pathname, myhash, 'hashpath')
+                    options.set_hashpath(pathname, myhash)
 
 
 
