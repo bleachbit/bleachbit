@@ -153,7 +153,7 @@ def get_swap_uuid(device):
     """Find the UUID for the swap device"""
     uuid = None
     args = ['blkid', device, '-s', 'UUID']
-    (rc, stdout, stderr) = General.run_external(args)
+    (_, stdout, _) = General.run_external(args)
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
         ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
@@ -244,7 +244,7 @@ def wipe_swap_linux(devices, proc_swaps):
         if uuid:
             args.append("-U")
             args.append(uuid)
-        (rc, stdout, stderr) = General.run_external(args)
+        (rc, _, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
 
