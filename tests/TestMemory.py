@@ -41,8 +41,15 @@ class MemoryTestCase(unittest.TestCase):
         """Test for method make_self_oom_target_linux"""
         if not sys.platform.startswith('linux'):
             return
+
+        # preserve
+        euid = os.geteuid()
+
         # Minimally test there is no traceback
         make_self_oom_target_linux()
+
+        # restore
+        os.seteuid(euid)
 
 
     def test_count_linux_swap(self):
@@ -95,6 +102,19 @@ class MemoryTestCase(unittest.TestCase):
 
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
+
+
+    def test_swap_off_swap_on(self):
+        """Test for disabling and enabling swap"""
+        if not sys.platform.startswith('linux'):
+            return
+        if not General.sudo_mode() and os.getuid() > 0:
+            print 'NOTE: skipping test_swap_off_swap_on() because not enough privileges'
+            return
+        devices = disable_swap_linux()
+        enable_swap_linux()
+
+
 
 
 def suite():
