@@ -26,7 +26,6 @@ Wipe memory
 
 
 
-import ctypes
 import os
 import re
 import subprocess
@@ -183,6 +182,7 @@ def physical_free_linux():
 def physical_free_windows():
     """Return physical free memory on Windows"""
 
+    import ctypes
     from ctypes import c_long, c_ulonglong
     from ctypes.wintypes import Structure, sizeof, windll, byref
 
