@@ -47,6 +47,17 @@ def count_swap_linux():
     return count
 
 
+def get_proc_swaps():
+    """Return the output of 'swapon -s'"""
+    # Usually 'swapon -s' is identical to '/proc/swaps'
+    # Here is one exception: https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
+    (rc, stdout, stderr) = General.run_external(['swapon', '-s'])
+    if 0 == rc:
+        return stdout
+    print 'debug: "swapoff -s" failed so falling back to /proc/swaps'
+    return open("/proc/swaps").read()
+
+
 def parse_swapoff(swapoff):
     """Parse the output of swapoff and return the device name"""
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
@@ -137,10 +148,10 @@ def fill_memory_linux():
 def get_swap_size_linux(device, proc_swaps = None):
     """Return the size of the partition in bytes"""
     if None == proc_swaps:
-        proc_swaps = open("/proc/swaps").read()
+        proc_swaps = get_proc_swaps()
     line = proc_swaps.split('\n')[0]
     if not re.search('Filename\s+Type\s+Size', line):
-        raise RuntimeError("Unexpected first line in /proc/swaps '%s'" % line)
+        raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
     for line in proc_swaps.split('\n')[1:]:
         ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
@@ -253,7 +264,7 @@ def wipe_swap_linux(devices, proc_swaps):
 def wipe_memory():
     """Wipe unallocated memory"""
     # cache the file because 'swapoff' changes it
-    proc_swaps = open("/proc/swaps").read()
+    proc_swaps = get_proc_swaps()
     devices = disable_swap_linux()
     yield True # process GTK+ idle loop
     print 'debug: detected swap devices:', devices

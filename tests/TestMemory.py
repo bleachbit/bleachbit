@@ -37,6 +37,17 @@ from bleachbit.Memory import *
 class MemoryTestCase(unittest.TestCase):
     """Test case for module Memory"""
 
+    def test_get_proc_swaps(self):
+        """Test for method get_proc_swaps"""
+        if not sys.platform.startswith('linux'):
+            return
+        ret = get_proc_swaps()
+        self.assert_(isinstance(ret, str))
+        self.assert_(len(ret) > 10)
+        if not re.search('Filename\s+Type\s+Size', ret):
+            raise RuntimeError("Unexpected first line in swap summary '%s'" % ret)
+
+
     def test_make_self_oom_target_linux(self):
         """Test for method make_self_oom_target_linux"""
         if not sys.platform.startswith('linux'):
