@@ -93,9 +93,8 @@ def enable_swap_linux():
         raise RuntimeError(outputs[1].replace("\n", ""))
 
 
-def fill_memory_linux():
-    """Fill unallocated memory"""
-    # make self primary target for Linux out-of-memory killer
+def make_self_oom_target_linux():
+    """Make the current process the primary target for Linux out-of-memory killer"""
     # In Linux 2.6.36 the system changed from oom_adj to oom_score_adj
     path = '/proc/%d/oom_score_adj' % os.getpid()
     if os.path.exists(path):
@@ -106,7 +105,6 @@ def fill_memory_linux():
             open(path, 'w').write('15')
     # OOM likes nice processes
     print 'debug: new nice value', os.nice(19)
-    libc = ctypes.cdll.LoadLibrary("libc.so.6")
     # OOM prefers non-privileged processes
     try:
         uid = General.getrealuid()
@@ -116,25 +114,25 @@ def fill_memory_linux():
             os.seteuid(uid)
     except:
         traceback.print_exc()
-    # fill memory
-    def fill_helper():
-        report_free()
-        allocbytes = int(physical_free() * 0.75)
-        if allocbytes < 1024:
-            return
-        megabytes = allocbytes / (1024**2)
-        print "info: allocating %.2f MB (%d B) memory" % (megabytes, allocbytes)
-        mbuffer = libc.malloc(allocbytes)
-        if 0 == mbuffer:
-            print 'debug: malloc() returned', mbuffer
-            return
-        print "debug: wiping %.2f MB I just allocated" % megabytes
-        libc.memset(mbuffer, 0x00, allocbytes)
-        fill_helper()
+
+
+def fill_memory_linux():
+    """Fill unallocated memory"""
+    report_free()
+    allocbytes = int(physical_free() * 0.5)
+    if allocbytes < 1024:
+        return
+    megabytes = allocbytes / (1024**2)
+    print "info: allocating and wiping %.2f MB (%d B) memory" % (megabytes, allocbytes)
+    try:
+        buffer = '\x00' * allocbytes
+    except MemoryError:
+        pass
+    else:
+        fill_memory_linux()
         print "debug: freeing %.2f MB memory" % megabytes
-        libc.free(mbuffer)
-        report_free()
-    fill_helper()
+        del buffer
+    report_free()
 
 
 def get_swap_size_linux(device, proc_swaps = None):
@@ -263,6 +261,7 @@ def wipe_memory():
     yield True
     child_pid = os.fork()
     if 0 == child_pid:
+        make_self_oom_target_linux()
         fill_memory_linux()
         sys.exit(0)
     else:

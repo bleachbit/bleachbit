@@ -37,6 +37,13 @@ from bleachbit.Memory import *
 class MemoryTestCase(unittest.TestCase):
     """Test case for module Memory"""
 
+    def test_make_self_oom_target_linux(self):
+        """Test for method make_self_oom_target_linux"""
+        if not sys.platform.startswith('linux'):
+            return
+        # Minimally test there is no traceback
+        make_self_oom_target_linux()
+
 
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
@@ -90,6 +97,11 @@ class MemoryTestCase(unittest.TestCase):
             self.assertEqual(parse_swapoff(test[0]), test[1])
 
 
+    def test_fill_memory_linux(self):
+        """Test for method fill_memory_linux"""
+        if not sys.platform.startswith('linux'):
+            return
+        fill_memory_linux()
 
 
 def suite():
