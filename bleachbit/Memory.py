@@ -119,7 +119,7 @@ def make_self_oom_target_linux():
 def fill_memory_linux():
     """Fill unallocated memory"""
     report_free()
-    allocbytes = int(physical_free() * 0.5)
+    allocbytes = int(physical_free() * 0.4)
     if allocbytes < 1024:
         return
     megabytes = allocbytes / (1024**2)
