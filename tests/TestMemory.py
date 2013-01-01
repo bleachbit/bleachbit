@@ -97,13 +97,6 @@ class MemoryTestCase(unittest.TestCase):
             self.assertEqual(parse_swapoff(test[0]), test[1])
 
 
-    def test_fill_memory_linux(self):
-        """Test for method fill_memory_linux"""
-        if not sys.platform.startswith('linux'):
-            return
-        fill_memory_linux()
-
-
 def suite():
     return unittest.makeSuite(MemoryTestCase)
 
