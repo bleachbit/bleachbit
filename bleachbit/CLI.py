@@ -168,11 +168,15 @@ def process_cmd_line():
         help = _("preview files to be deleted and other changes"))
     parser.add_option("--preset", action="store_true",
         help = _("use options set in the graphical interface"))
+    if 'nt' == os.name:
+        parser.add_option("--update-winapp2", action="store_true",
+            help = _("update winapp2.ini, if a new version is available"))
     parser.add_option("-v", "--version", action = "store_true",
         help = _("output version information and exit"))
     parser.add_option('-o', '--overwrite', action = 'store_true',
         help = _('overwrite files to hide contents'))
     (options, args) = parser.parse_args()
+    did_something = False
     if options.version:
         print """
 BleachBit version %s
@@ -181,6 +185,12 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         sys.exit(0)
+    if 'nt' == os.name and options.update_winapp2:
+        import Update
+        print "Checking online for updates to winapp2.ini"
+        Update.check_updates(False, True, lambda x: sys.stdout.writeln(x))
+        # updates can be combined with --list, --preview, --clean
+        did_something = True
     if options.list_cleaners:
         list_cleaners()
         sys.exit(0)
@@ -206,7 +216,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         import Diagnostic
         print Diagnostic.diagnostic_info()
         sys.exit(0)
-    parser.print_help()
+    if not did_something:    
+        parser.print_help()
 
 
 
