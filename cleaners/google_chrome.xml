@@ -47,6 +47,7 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
+    <action command="delete" search="walk.files" path="~/.config/google-chrome/Default/Pepper Data/Shockwave Flash/WritableRoot/#SharedObjects/" />
   </option>
   <option id="dom">
     <label>DOM Storage</label>
