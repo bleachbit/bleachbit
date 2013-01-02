@@ -89,7 +89,7 @@ def cleaners_list():
     init_cleaners()
     for key in sorted(backends):
         c_id = backends[key].get_id()
-        for (o_id, o_name) in backends[key].get_options():
+        for (o_id, _) in backends[key].get_options():
             yield "%s.%s" % (c_id, o_id)
 
 
@@ -188,7 +188,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if 'nt' == os.name and options.update_winapp2:
         import Update
         print "Checking online for updates to winapp2.ini"
-        Update.check_updates(False, True, lambda x: sys.stdout.writeln(x))
+        Update.check_updates(False, True, lambda x: sys.stdout.write("%s\n" % x))
         # updates can be combined with --list, --preview, --clean
         did_something = True
     if options.list_cleaners:
@@ -209,7 +209,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.gui:
         import gtk
         import GUI
-        gui = GUI.GUI(uac=not options.no_uac)
+        GUI.GUI(uac=not options.no_uac)
         gtk.main()
         sys.exit(0)
     if options.sysinfo:
