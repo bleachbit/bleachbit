@@ -34,7 +34,6 @@ import random
 import re
 import stat
 import string
-import sys
 import tempfile
 import time
 import ConfigParser
@@ -456,7 +455,7 @@ def wipe_contents(path, truncate = True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    (head, tail) = os.path.split(pathname1)
+    (head, _) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
     # first, rename to a long name
