@@ -31,13 +31,10 @@ import ConfigParser
 import Windows
 import os
 import re
-import sys
 import traceback
 
-from Action import ActionProvider, Delete, Winreg
+from Action import Delete, Winreg
 from Common import _
-from FileUtilities import listdir
-from General import boolstr_to_bool, getText
 from platform import uname
 from xml.dom.minidom import parseString
 
@@ -133,8 +130,8 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'detectfile%d' % n
                 if self.parser.has_option(section, option_id):
-                     if detect_file(self.parser.get(section, option_id)):
-                         matches = matches + 1
+                    if detect_file(self.parser.get(section, option_id)):
+                        matches = matches + 1
             if 0 == matches:
                 return
         if self.parser.has_option(section, 'detect1'):
@@ -142,8 +139,8 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'detect%d' % n
                 if self.parser.has_option(section, option_id):
-                     if Windows.detect_registry_key(self.parser.get(section, option_id)):
-                         matches = matches + 1
+                    if Windows.detect_registry_key(self.parser.get(section, option_id)):
+                        matches = matches + 1
             if 0 == matches:
                 return
         # not yet implemented
