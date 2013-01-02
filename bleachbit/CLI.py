@@ -89,7 +89,7 @@ def cleaners_list():
     init_cleaners()
     for key in sorted(backends):
         c_id = backends[key].get_id()
-        for (o_id, _) in backends[key].get_options():
+        for (o_id, o_name) in backends[key].get_options():
             yield "%s.%s" % (c_id, o_id)
 
 
