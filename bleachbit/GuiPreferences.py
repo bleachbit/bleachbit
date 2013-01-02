@@ -69,7 +69,7 @@ class PreferencesDialog:
         self.dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
 
 
-    def __toggle_callback(self, cell, path):
+    def __toggle_callback(self, _, path):
         """Callback function to toggle option"""
         options.toggle(path)
         if online_update_notification_enabled:
