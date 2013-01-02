@@ -285,7 +285,7 @@ class Worker:
             # fixme: support non-delete commands
             import Command
             cmd = Command.Delete(path)
-            for ret in self.execute(cmd):
+            while self.execute(cmd):
                 yield True
 
     def run_operations(self, my_operations):
