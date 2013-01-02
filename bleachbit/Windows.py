@@ -68,7 +68,7 @@ import Common
 import FileUtilities
 import General
 
-def browse_file(hwnd, title):
+def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
     try:
         ret = win32gui.GetOpenFileNameW(None, \
@@ -85,7 +85,7 @@ def browse_file(hwnd, title):
     return ret[0]
 
 
-def browse_files(hwnd, title):
+def browse_files(_, title):
     """Ask the user to select files.  Return full paths"""
     try:
         ret = win32gui.GetOpenFileNameW(None, \
@@ -304,7 +304,7 @@ def get_autostart_path():
     except:
         # example of failure http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
         traceback.print_exc()
-        msg = 'Error finding user startup folder: %s '%(str(sys.exc_info()[1]))
+        msg = 'Error finding user startup folder: %s ' % (str(sys.exc_info()[1]))
         import GuiBasic
         GuiBasic.message_dialog(None, msg)
         # as a fallback, guess
@@ -326,7 +326,6 @@ def get_fixed_drives():
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running"""
 
-    r = []
     if os.getenv('PROGRAMFILES(X86)'):
         # 64-bit Windows detected
         return is_process_running_wmic(name)
@@ -385,7 +384,7 @@ def is_process_running_wmic(name):
 
     clean_name = re.sub('[^A-Za-z\.]', '_', name).lower()
     args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" % clean_name, 'get', 'Caption']
-    (rc, stdout, stderr) = General.run_external(args)
+    (_, stdout, _) = General.run_external(args)
     return stdout.lower().find(clean_name) > -1
 
 
@@ -423,8 +422,8 @@ def start_with_computer(enabled):
     if os.path.lexists(autostart_path):
         return
     import win32com.client
-    shell = win32com.client.Dispatch('WScript.Shell')
-    shortcut = shell.CreateShortCut(autostart_path)
+    wscript_shell = win32com.client.Dispatch('WScript.Shell')
+    shortcut = wscript_shell.CreateShortCut(autostart_path)
     shortcut.TargetPath = os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe')
     shortcut.save()
 
