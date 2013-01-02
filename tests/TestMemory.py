@@ -75,7 +75,8 @@ class MemoryTestCase(unittest.TestCase):
 
     def test_physical_free(self):
         """Test for method physical_free"""
-        self.assert_(isinstance(physical_free(), (int, long)))
+        ret = physical_free()
+        self.assert_(isinstance(ret, (int, long)), 'physical_free() returns variable type %s' % type(ret))
         self.assert_(physical_free() > 0)
         report_free()
 

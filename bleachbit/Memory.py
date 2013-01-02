@@ -185,7 +185,7 @@ def physical_free_linux():
             kb = int(ret.group(2))
             free_bytes += kb * 1024
     if free_bytes > 0:
-        return bytes
+        return free_bytes
     else:
         raise Exception("unknown")
 
