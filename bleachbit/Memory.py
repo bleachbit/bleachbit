@@ -51,7 +51,7 @@ def get_proc_swaps():
     """Return the output of 'swapon -s'"""
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception: https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, stderr) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _) = General.run_external(['swapon', '-s'])
     if 0 == rc:
         return stdout
     print 'debug: "swapoff -s" failed so falling back to /proc/swaps'
@@ -135,13 +135,13 @@ def fill_memory_linux():
     megabytes = allocbytes / (1024**2)
     print "info: allocating and wiping %.2f MB (%d B) memory" % (megabytes, allocbytes)
     try:
-        buffer = '\x00' * allocbytes
+        buf = '\x00' * allocbytes
     except MemoryError:
         pass
     else:
         fill_memory_linux()
         print "debug: freeing %.2f MB memory" % megabytes
-        del buffer
+        del buf
     report_free()
 
 
@@ -169,7 +169,7 @@ def get_swap_uuid(device):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
         ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if None != ret:
-             uuid = ret.group(1)
+            uuid = ret.group(1)
     print "debug: uuid(%s)='%s'" % (device, uuid)
     return uuid
 
@@ -177,14 +177,14 @@ def get_swap_uuid(device):
 def physical_free_linux():
     """Return the physical free memory on Linux"""
     f = open("/proc/meminfo")
-    bytes = 0
+    free_bytes = 0
     for line in f:
         line = line.replace("\n","")
         ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
         if None != ret:
             kb = int(ret.group(2))
-            bytes += kb * 1024
-    if bytes > 0:
+            free_bytes += kb * 1024
+    if free_bytes > 0:
         return bytes
     else:
         raise Exception("unknown")
@@ -193,7 +193,6 @@ def physical_free_linux():
 def physical_free_windows():
     """Return physical free memory on Windows"""
 
-    import ctypes
     from ctypes import c_long, c_ulonglong
     from ctypes.wintypes import Structure, sizeof, windll, byref
 
