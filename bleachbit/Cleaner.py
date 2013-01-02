@@ -33,13 +33,11 @@ except:
     HAVE_GTK = False
 import os.path
 import re
-import subprocess
 import sys
 import traceback
 
 import Command
 import FileUtilities
-import General
 import Memory
 import Special
 
