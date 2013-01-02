@@ -421,11 +421,11 @@ class GUI:
         """Show diagnostic information"""
         dialog = gtk.Dialog(_("System information"), parent)
         dialog.resize(600, 400)
-        buffer = gtk.TextBuffer()
+        txtbuffer = gtk.TextBuffer()
         import Diagnostic
         txt = Diagnostic.diagnostic_info()
-        buffer.set_text(txt)
-        textview = gtk.TextView(buffer)
+        txtbuffer.set_text(txt)
+        textview = gtk.TextView(txtbuffer)
         textview.set_editable(False)
         swindow = gtk.ScrolledWindow()
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -571,7 +571,6 @@ class GUI:
         # find the seleted option
         model = treeview.get_model()
         option_id = model[path][2]
-        option_name = model[path][0]
         cleaner_id = model[path[0]][2]
         cleaner_name = model[path[0]][0]
         # make a menu
@@ -604,11 +603,11 @@ class GUI:
             raise RuntimeError('unexpected type: ' + str(type(status)))
 
 
-    def update_total_size(self, bytes):
+    def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
-        text = FileUtilities.bytes_to_human(bytes)
-        if 0 == bytes:
+        text = FileUtilities.bytes_to_human(bytes_removed)
+        if 0 == bytes_removed:
             text = ""
         self.status_bar.push(context_id, text)
 
