@@ -54,7 +54,7 @@ def update_winapp2(url, hash_expected, append_text):
         delete_current = True
     # download update
     opener = urllib2.build_opener()
-    opener.addheaders =[('User-Agent', user_agent())]
+    opener.addheaders = [('User-Agent', user_agent())]
     doc = opener.open(url).read()
     # verify hash
     hash_actual = hashlib.sha512(doc).hexdigest()
