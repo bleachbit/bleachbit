@@ -30,10 +30,8 @@ import locale
 import os
 import platform
 import sys
-import traceback
 
 if 'nt' == os.name:
-    import Windows
     from win32com.shell import shell
 
 
