@@ -239,7 +239,7 @@ def get_chrome_bookmark_ids(history_path):
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
     for url in urls:
-       ids +=  get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
+        ids +=  get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
     return ids
 
 
