@@ -33,11 +33,6 @@ import FileUtilities
 from Cleaner import backends
 from Common import _, ungettext
 
-if 'nt' == os.name:
-    import Windows
-else:
-    from General import WindowsError
-
 
 
 class Worker:
