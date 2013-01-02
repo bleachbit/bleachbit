@@ -56,7 +56,7 @@ lint:
 		echo "$$f" ; \
 		pychecker "$$f" > "$$f".pychecker.log ; \
 		pyflakes "$$f" > "$$f".pyflakes.log ; \
-		pylint --disable-msg=C0111,C0103,W0403 "$$f" > "$$f".pylint.log ; \
+		pylint "$$f" > "$$f".pylint.log ; \
 	done; \
 	exit 0
 
