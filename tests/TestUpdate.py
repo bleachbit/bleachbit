@@ -96,11 +96,8 @@ class UpdateTestCase(unittest.TestCase):
         if os.path.exists(fn):
             print 'note: deleting %s' % fn
             os.unlink(fn)
-        if os.path.exists(personal_cleaners_dir):
-            print 'note: deleting %s' % personal_cleaners_dir
-            os.rmdir(personal_cleaners_dir)
 
-        url = 'http://katana.oooninja.com/bleachbit/winapp2.ini'
+        url = 'http://www.winapp2.com/Winapp2.ini'
 
         def append_text(s):
             print s
