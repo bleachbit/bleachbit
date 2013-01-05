@@ -1,3 +1,6 @@
+# On some systems if not explicitly given, make uses /bin/sh
+SHELL := /bin/bash
+
 .PHONY: clean install tests build
 
 prefix ?= /usr/local
