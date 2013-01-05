@@ -79,6 +79,7 @@
     <!-- keep /History before /Favicons -->
     <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\chrome_shutdown_ms.txt"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Safe Browsing Cookies-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
