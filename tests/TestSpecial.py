@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# -*- coding: UTF-8 -*-
 
 ## BleachBit
 ## Copyright (C) 2013 Andrew Ziem
@@ -25,6 +26,8 @@ Test case for module Special
 
 
 import os
+import os.path
+import shutil
 import sqlite3
 import sys
 import tempfile
@@ -93,39 +96,134 @@ chrome_bookmarks = """
    "version": 1
 }"""
 
+# <Default/History> from Google Chrome 23
 chrome_history_sql = """
+CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
+INSERT INTO "meta" VALUES('version','23');
 CREATE TABLE urls(id INTEGER PRIMARY KEY,url LONGVARCHAR,title LONGVARCHAR,visit_count INTEGER DEFAULT 0 NOT NULL,typed_count INTEGER DEFAULT 0 NOT NULL,last_visit_time INTEGER NOT NULL,hidden INTEGER DEFAULT 0 NOT NULL,favicon_id INTEGER DEFAULT 0 NOT NULL);
-INSERT INTO "urls" VALUES(1,'http://bleachbit.sourceforge.net/','BleachBit - Clean Disk Space, Maintain Privacy',2,0,12950666056707678,0,359);
-INSERT INTO "urls" VALUES(11,'http://www.sqlite.org/','SQLite Home Page',1,0,12950667437422381,0,354);
-CREATE TABLE visits(id INTEGER PRIMARY KEY,url INTEGER NOT NULL,visit_time INTEGER NOT NULL,from_visit INTEGER,transition INTEGER DEFAULT 0 NOT NULL,segment_id INTEGER,is_indexed BOOLEAN);
-INSERT INTO "visits" VALUES(1,1,12950666049209923,0,805306370,1,0);
+INSERT INTO "urls" VALUES(1,'http://sqlite.org/','SQLite Home Page',1,0,13001833567334094,0,0);
+INSERT INTO "urls" VALUES(2,'http://bleachbit.sourceforge.net/','BleachBit - Clean Disk Space, Maintain Privacy',1,0,13001833567892577,0,0);
+CREATE TABLE visits(id INTEGER PRIMARY KEY,url INTEGER NOT NULL,visit_time INTEGER NOT NULL,from_visit INTEGER,transition INTEGER DEFAULT 0 NOT NULL,segment_id INTEGER,is_indexed BOOLEAN,visit_duration INTEGER DEFAULT 0 NOT NULL);
+INSERT INTO "visits" VALUES(1,1,13001833567334094,0,805306374,0,1,8629624);
+INSERT INTO "visits" VALUES(2,2,13001833567892577,0,805306374,0,1,9249493);
 CREATE TABLE keyword_search_terms (keyword_id INTEGER NOT NULL,url_id INTEGER NOT NULL,lower_term LONGVARCHAR NOT NULL,term LONGVARCHAR NOT NULL);
-INSERT INTO "keyword_search_terms" VALUES(2,33,'bleachbit','bleachbit');
+INSERT INTO "keyword_search_terms" VALUES(2,3,'bleachbit','bleachbit');
+CREATE TABLE downloads (id INTEGER PRIMARY KEY,full_path LONGVARCHAR NOT NULL,url LONGVARCHAR NOT NULL,start_time INTEGER NOT NULL,received_bytes INTEGER NOT NULL,total_bytes INTEGER NOT NULL,state INTEGER NOT NULL,end_time INTEGER NOT NULL,opened INTEGER NOT NULL);
+CREATE TABLE segments (id INTEGER PRIMARY KEY,name VARCHAR,url_id INTEGER NON NULL,pres_index INTEGER DEFAULT -1 NOT NULL);
+CREATE TABLE segment_usage (id INTEGER PRIMARY KEY,segment_id INTEGER NOT NULL,time_slot INTEGER NOT NULL,visit_count INTEGER DEFAULT 0 NOT NULL);
 """
+
+
+# <Default/Web Data> from Google Chrome 23
+chrome_webdata = """
+CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
+INSERT INTO "meta" VALUES('version','46');
+CREATE TABLE keywords (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,show_in_default_list INTEGER,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR,last_modified INTEGER DEFAULT 0,sync_guid VARCHAR);
+INSERT INTO "keywords" VALUES(2,'Google','google.com','http://www.google.com/favicon.ico','{google:baseURL}search?q={searchTerms}&{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}sourceid=chrome&ie={inputEncoding}',1,'',0,0,'UTF-8',1,'{google:baseSuggestURL}search?{google:searchFieldtrialParameter}client=chrome&hl={language}&q={searchTerms}&sugkey={google:suggestAPIKeyParameter}',1,0,'{google:baseURL}webhp?sourceid=chrome-instant&{google:RLZ}{google:instantEnabledParameter}ie={inputEncoding}',0,'2D65ABE4-008A-21F1-8C9E-C95DE46CC245');
+INSERT INTO "keywords" VALUES(3,'Yahoo! Canada','ca.yahoo.com','http://ca.search.yahoo.com/favicon.ico','http://ca.search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,'',0,0,'UTF-8',1,'http://gossip.ca.yahoo.com/gossip-ca-sayt?output=fxjsonp&command={searchTerms}',2,0,'',0,'F4BAF053-6C8E-6183-C8BB-3104F82260AD');
+INSERT INTO "keywords" VALUES(4,'Yahoo! QuÃ©bec','qc.yahoo.com','http://qc.search.yahoo.com/favicon.ico','http://qc.search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,'',0,0,'UTF-8',1,'',5,0,'',0,'B42D7616-CF8F-6677-A206-19345BB5FE0F');
+INSERT INTO "keywords" VALUES(5,'Bing','bing.com','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=en-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',3,0,'',0,'73FA48F9-1ABD-BA46-F563-1AF75572B5DF');
+INSERT INTO "keywords" VALUES(6,'Bing','bing.com_','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=fr-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',7,0,'',0,'2D932B46-8F26-5C02-7E2F-BE62F263BE9D');
+INSERT INTO "keywords" VALUES(7,'cnn.com','cnn.com','http://www.cnn.com/favicon.ico','http://www.cnn.com/search/?query={searchTerms}&x=0&y=0&primaryType=mixed&sortBy=relevance&intl=false',1,'',1357360881,0,'UTF-8',0,'',0,0,'',1357360881,'0B71F4CA-380D-0228-064F-24CDF1F8FBD1');
+CREATE TABLE keywords_backup(
+  id INT,
+  short_name TEXT,
+  keyword TEXT,
+  favicon_url TEXT,
+  url TEXT,
+  safe_for_autoreplace INT,
+  originating_url TEXT,
+  date_created INT,
+  usage_count INT,
+  input_encodings TEXT,
+  show_in_default_list INT,
+  suggest_url TEXT,
+  prepopulate_id INT,
+  created_by_policy INT,
+  instant_url TEXT,
+  last_modified INT,
+  sync_guid TEXT
+);
+INSERT INTO "keywords_backup" VALUES(2,'Google','google.com','http://www.google.com/favicon.ico','{google:baseURL}search?q={searchTerms}&{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}sourceid=chrome&ie={inputEncoding}',1,'',0,0,'UTF-8',1,'{google:baseSuggestURL}search?{google:searchFieldtrialParameter}client=chrome&hl={language}&q={searchTerms}&sugkey={google:suggestAPIKeyParameter}',1,0,'{google:baseURL}webhp?sourceid=chrome-instant&{google:RLZ}{google:instantEnabledParameter}ie={inputEncoding}',0,'CB88DDB4-E4A2-80BC-3BEE-C8F02FDBA58A');
+INSERT INTO "keywords_backup" VALUES(3,'Yahoo! Canada','ca.yahoo.com','http://ca.search.yahoo.com/favicon.ico','http://ca.search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,'',0,0,'UTF-8',1,'http://gossip.ca.yahoo.com/gossip-ca-sayt?output=fxjsonp&command={searchTerms}',2,0,'',0,'21CD15EC-B9CA-4DCB-8526-0A4048CBA5F3');
+INSERT INTO "keywords_backup" VALUES(4,'Yahoo! QuÃ©bec','qc.yahoo.com','http://qc.search.yahoo.com/favicon.ico','http://qc.search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,'',0,0,'UTF-8',1,'',5,0,'',0,'AB0C2A23-C483-F255-8BEB-7A2B4E0C465F');
+INSERT INTO "keywords_backup" VALUES(5,'Bing','bing.com','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=en-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',3,0,'',0,'D77A8BC1-3CD6-4AB5-93B2-72B0C2E94E73');
+INSERT INTO "keywords_backup" VALUES(6,'Bing','bing.com_','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=fr-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',7,0,'',0,'E1035236-31F4-216A-632A-A7323A1B7A70');
+CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR, pair_id INTEGER PRIMARY KEY, count INTEGER DEFAULT 1);
+CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
+INSERT INTO "autofill" VALUES('ltmpl','sso','sso',1,3);
+INSERT INTO "autofill_dates" VALUES(1,1268958682);
+"""
+
+# databases/Databases.db from Chromium 12
+chrome_databases_db = """
+CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
+INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
+INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
+"""
+
 
 class SpecialTestCase(unittest.TestCase):
     """Test case for module Special"""
 
 
-    def sqlite_clean_helper(self, sql, clean_func, check_func = None, setup_func = None):
+    def setUp(self):
+        """Create test browser files."""
+        self.dir_base = tempfile.mkdtemp('bleachbit_special')
+        self.dir_google_chrome_default = os.path.join(self.dir_base, 'google-chrome/Default/')
+        os.makedirs(self.dir_google_chrome_default)
+
+    
+        # google-chrome/Default/Bookmarks
+        bookmark_path = os.path.join(self.dir_google_chrome_default, 'Bookmarks')
+        f = open(bookmark_path, 'w')
+        f.write(chrome_bookmarks)
+        f.close()
+
+        # google-chrome/Default/Web Data
+        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
+
+        # google-chrome/Default/History
+        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'History'), chrome_history_sql)
+
+        # google-chrome/Default/databases/Databases.db
+        os.makedirs(os.path.join(self.dir_google_chrome_default, 'databases'))
+        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'databases/Databases.db'), chrome_databases_db)
+
+
+    def tearDown(self):
+        """Remove test browser files."""
+        shutil.rmtree(self.dir_base)
+
+
+    def sqlite_clean_helper(self, sql, fn, clean_func, check_func = None, setup_func = None):
         """Helper for cleaning special SQLite cleaning"""
 
-        # create test file
-        tmpdir = tempfile.mkdtemp('bleachbit-sqlite-test')
-        (fd, filename) = tempfile.mkstemp(dir=tmpdir)
-        os.close(fd)
+        self.assertFalse(sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
-        # additional setup
-        if setup_func:
-            setup_func(filename)
-
-        # sqlite file does not exist
-        self.assertRaises(sqlite3.DatabaseError, \
-            clean_func, filename)
-
+        if fn:
+            filename = os.path.join(self.dir_base, fn)
+            if not os.path.exists(filename):
+                import pdb; pdb.set_trace()
+            self.assert_(os.path.exists(filename))
+        
         # create sqlite file
-        bleachbit.FileUtilities.execute_sqlite3(filename, sql)
-        self.assert_(os.path.exists(filename))
+        if sql:
+            # create test file 
+            tmpdir = tempfile.mkdtemp('bleachbit-sqlite-test')
+            (fd, filename) = tempfile.mkstemp(dir=tmpdir)
+            os.close(fd)
+
+            # additional setup
+            if setup_func:
+                setup_func(filename)
+
+            # before SQL creation executed, cleaning should fail
+            self.assertRaises(sqlite3.DatabaseError, \
+                clean_func, filename)
+            # create   
+            bleachbit.FileUtilities.execute_sqlite3(filename, sql)
+            self.assert_(os.path.exists(filename))
 
         # clean the file
         old_shred = options.get('shred')
@@ -149,44 +247,16 @@ class SpecialTestCase(unittest.TestCase):
 
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
-        sql = """
-CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR, pair_id INTEGER PRIMARY KEY, count INTEGER DEFAULT 1);
-INSERT INTO "autofill" VALUES('ltmpl','sso','sso',1,3);
-CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
-INSERT INTO "autofill_dates" VALUES(1,1268958682);
-"""
-        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_autofill)
+        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_autofill)
 
 
     def test_delete_chrome_databases_db(self):
         """Unit test for delete_chrome_databases_db"""
-        # data from Chromium 12
-        sql = """
-CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
-INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
-INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
-"""
-        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_databases_db)
+        self.sqlite_clean_helper(None, "google-chrome/Default/databases/Databases.db", bleachbit.Special.delete_chrome_databases_db)
 
 
     def test_delete_chrome_history(self):
         """Unit test for delete_chrome_history"""
-
-        def setup_history(history_path):
-            print 'debug: setup_history(%s)' % history_path
-            # setup bookmarks
-            import os.path
-            bookmark_path = os.path.join(os.path.dirname(history_path), 'Bookmarks')
-            f = open(bookmark_path, 'w')
-            f.write(chrome_bookmarks)
-            f.close()
-
-            # setup history
-            sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
-INSERT INTO "meta" VALUES('version','4');"""
-            history_path = os.path.join(os.path.dirname(history_path), 'History')
-            bleachbit.FileUtilities.execute_sqlite3(history_path, sql)
-
 
         def check_chrome_history(self, filename):
             conn = sqlite3.connect(filename)
@@ -195,22 +265,16 @@ INSERT INTO "meta" VALUES('version','4');"""
             ids = []
             for row in c:
                 ids.append(row[0])
-            self.assertEqual(ids, [1])
+            # id 1 is sqlite.org which is not a bookmark and should be cleaned
+            # id 2 is bleachbit.sourceforge.net which is a bookmark and should be cleaned
+            self.assertEqual(ids, [2])
 
 
-        self.sqlite_clean_helper(chrome_history_sql, bleachbit.Special.delete_chrome_history, check_chrome_history, setup_history)
+        self.sqlite_clean_helper(None, "google-chrome/Default/History", bleachbit.Special.delete_chrome_history, check_chrome_history)
 
 
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
-        sql = """
-CREATE TABLE keywords (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,show_in_default_list INTEGER,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,autogenerate_keyword INTEGER DEFAULT 0,logo_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR);
-INSERT INTO "keywords" VALUES(2,'Google','google.com','http://www.google.com/favicon.ico','{google:baseURL}search?{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}sourceid=chrome&ie={inputEncoding}&q={searchTerms}',1,1,'',0,0,'UTF-8','{google:baseSuggestURL}search?client=chrome&hl={language}&q={searchTerms}',1,1,6245,0,'{google:baseURL}search?{google:RLZ}sourceid=chrome-instant&ie={inputEncoding}&q={searchTerms}');
-INSERT INTO "keywords" VALUES(3,'Yahoo!','yahoo.com','http://search.yahoo.com/favicon.ico','http://search.yahoo.com/search?ei={inputEncoding}&fr=crmas&p={searchTerms}',1,1,'',0,0,'UTF-8','http://ff.search.yahoo.com/gossip?output=fxjson&command={searchTerms}',2,0,6262,0,'');
-INSERT INTO "keywords" VALUES(4,'Bing','bing.com','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=en-US&q={searchTerms}',1,1,'',0,0,'UTF-8','http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',3,0,6239,0,'');
-INSERT INTO "keywords" VALUES(5,'CNN.com','cnn.com','http://www.cnn.com/favicon.ico','http://www.cnn.com/search/?query={searchTerms}',0,1,'http://www.cnn.com/tools/search/cnncom.xml',1294062457,0,'UTF-8','',0,0,0,0,'');
-"""
-
         def check_chrome_keywords(self, filename):
             conn = sqlite3.connect(filename)
             c = conn.cursor()
@@ -218,9 +282,9 @@ INSERT INTO "keywords" VALUES(5,'CNN.com','cnn.com','http://www.cnn.com/favicon.
             ids = []
             for row in c:
                 ids.append(row[0])
-            self.assertEqual(ids, [2,3,4])
+            self.assertEqual(ids, [2,3,4,5,6])
 
-        self.sqlite_clean_helper(sql, bleachbit.Special.delete_chrome_keywords, \
+        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_keywords, \
             check_chrome_keywords)
 
 
@@ -240,7 +304,7 @@ INSERT INTO "moz_historyvisits" VALUES(85696,0,211406,1277603269156003,1,5523649
 INSERT INTO "moz_inputhistory" VALUES(164860,'blog',0.0125459501500806);
 INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/index.html','download: OpenOffice.org 2.3.1 Downloads','gro.eciffonepo.daolnwod.',0,0,0,28,20,NULL);
 """
-        self.sqlite_clean_helper(sql, bleachbit.Special.delete_mozilla_url_history)
+        self.sqlite_clean_helper(sql, None, bleachbit.Special.delete_mozilla_url_history)
 
 
     def test_get_chrome_bookmark_ids(self):
