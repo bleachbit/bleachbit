@@ -216,7 +216,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         import Diagnostic
         print Diagnostic.diagnostic_info()
         sys.exit(0)
-    if not did_something:    
+    if not did_something:
         parser.print_help()
 
 

@@ -43,7 +43,7 @@ if 'nt' == os.name:
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
     # On Windows change to lowercase and use backwards slashes.
-    pathname = os.path.normcase(pathname) 
+    pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
     if 'nt' == os.name and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)

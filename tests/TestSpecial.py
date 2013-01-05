@@ -173,7 +173,7 @@ class SpecialTestCase(unittest.TestCase):
         self.dir_google_chrome_default = os.path.join(self.dir_base, 'google-chrome/Default/')
         os.makedirs(self.dir_google_chrome_default)
 
-    
+
         # google-chrome/Default/Bookmarks
         bookmark_path = os.path.join(self.dir_google_chrome_default, 'Bookmarks')
         f = open(bookmark_path, 'w')
@@ -206,10 +206,10 @@ class SpecialTestCase(unittest.TestCase):
             if not os.path.exists(filename):
                 import pdb; pdb.set_trace()
             self.assert_(os.path.exists(filename))
-        
+
         # create sqlite file
         if sql:
-            # create test file 
+            # create test file
             tmpdir = tempfile.mkdtemp('bleachbit-sqlite-test')
             (fd, filename) = tempfile.mkstemp(dir=tmpdir)
             os.close(fd)
@@ -221,7 +221,7 @@ class SpecialTestCase(unittest.TestCase):
             # before SQL creation executed, cleaning should fail
             self.assertRaises(sqlite3.DatabaseError, \
                 clean_func, filename)
-            # create   
+            # create
             bleachbit.FileUtilities.execute_sqlite3(filename, sql)
             self.assert_(os.path.exists(filename))
 
