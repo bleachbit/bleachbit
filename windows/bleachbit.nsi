@@ -123,6 +123,16 @@
 
 
 ;--------------------------------
+;Function
+
+; http://nsis.sourceforge.net/RefreshShellIcons
+Function RefreshShellIcons
+  !define SHCNE_ASSOCCHANGED 0x08000000
+  !define SHCNF_IDLIST 0
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+;--------------------------------
 ;Default section
 Section Core (Required)
     SectionIn RO
@@ -177,23 +187,28 @@ SectionGroup /e Shortcuts
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}-homepage.lnk" "http://bleachbit.sourceforge.net"
+        Call RefreshShellIcons
         WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "http://bleachbit.sourceforge.net/"
     SectionEnd
 
     Section "Desktop" SectionDesktop
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+        Call RefreshShellIcons
     SectionEnd
 
     Section /o "Quick launch" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+        Call RefreshShellIcons
     SectionEnd
 
     Section /o "Start automatically" SectionStartUp
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+        Call RefreshShellIcons
     SectionEnd
+
 SectionGroupEnd
 
 
