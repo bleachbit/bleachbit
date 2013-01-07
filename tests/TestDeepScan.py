@@ -27,6 +27,7 @@ Test case for module DeepScan
 
 
 import os
+import shutil
 import sys
 import tempfile
 import unittest
@@ -81,7 +82,7 @@ class DeepScanTestCase(unittest.TestCase):
 
 
     def test_DeepScan(self):
-        """Unit test for class DeepScan"""
+        """Unit test for class DeepScan.  Preview real files."""
         ds = DeepScan()
         path = os.path.expanduser('~')
         ds.add_search(path, '^Makefile$')
@@ -97,6 +98,51 @@ class DeepScanTestCase(unittest.TestCase):
                 "Expecting string but got '%s' (%s)" % \
                  (ret, str(type(ret))))
             self.assert_(os.path.lexists(ret))
+
+
+    def test_delete(self):
+        """Delete files in a test environment"""
+
+        # make some files
+        base = os.path.expanduser('~/bleachbit-deepscan-test')
+        if os.path.exists(base):
+            shutil.rmtree(base)
+        os.mkdir(base)
+        f_del1 = os.path.join(base, 'foo.txt.bbtestbak')
+        file(f_del1, 'w').write('')
+        f_keep = os.path.join(base, 'foo.txt')
+        file(f_keep, 'w').write('')
+        subdir = os.path.join(base, 'sub')
+        os.mkdir(subdir)
+        f_del2 = os.path.join(base, 'sub/bar.ini.bbtestbak')
+        file(f_del2, 'w').write('')
+
+        # sanity check
+        self.assert_(os.path.exists(f_del1))
+        self.assert_(os.path.exists(f_keep))
+        self.assert_(os.path.exists(f_del2))
+
+        # run deep scan
+        astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false"/>'
+        import TestCleaner        
+        cleaner = TestCleaner.action_to_cleaner(astr)
+        from bleachbit.Worker import backends, Worker
+        backends['test'] = cleaner
+        operations = { 'test' : [ 'option1' ] }
+        from bleachbit import CLI
+        ui = CLI.CliCallback()
+        worker = Worker(ui, True, operations)
+        run = worker.run()
+        while run.next():
+            pass
+ 
+        # validate results
+        self.assert_(not os.path.exists(f_del1))
+        self.assert_(os.path.exists(f_keep))
+        self.assert_(not os.path.exists(f_del2))
+
+        # clean up
+        shutil.rmtree(base)
 
 
 def suite():
