@@ -54,11 +54,14 @@ class DeepScan:
 
         for (top, regexes) in self.searches.iteritems():
             for (dirpath, dirnames, filenames) in os.walk(top):
+                print 'debug: deepscan: dirpath: ', dirpath 
                 for regex in regexes:
+                    print 'debug: deepscan: %s %s ' % (dirpath, regex)
                     # fixme, don't match filename twice
                     r = re.compile(regex)
                     for filename in filenames:
                         if r.search(filename):
+                            print 'debug: deepscan: match', filename
                             yield os.path.join(dirpath, filename)
                 if time.time() - yield_time > 0.25:
                     # allow GTK+ to process the idle loop

@@ -85,8 +85,6 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor-journal"/>
@@ -112,8 +110,6 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Archived History-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History Provider Cache"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/History-journal"/>
-    <action command="delete" search="file" path="~/.config/google-chrome/Default/Login Data"/>
-    <action command="delete" search="file" path="~/.config/google-chrome/Default/Login Data-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Network Action Predictor"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Network Action Predictor-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Origin Bound Certs-journal"/>
@@ -131,8 +127,10 @@
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
-    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Login Data"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data-journal"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Default/Login Data"/>
+    <action command="delete" search="file" path="~/.config/google-chrome/Default/Login Data-journal"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
