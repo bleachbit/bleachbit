@@ -113,8 +113,10 @@
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Login Data"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Login Data"/>
+    <action command="delete" search="file" path="~/.config/chromium/Default/Login Data"/>
+    <action command="delete" search="file" path="~/.config/chromium/Default/Login Data-journal"/>
+    <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Login Data"/>
+    <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Login Data-journal"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
