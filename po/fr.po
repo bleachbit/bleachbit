@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-29 17:07-0700\n"
-"PO-Revision-Date: 2013-01-06 09:42+0000\n"
-"Last-Translator: gisele perreault <Unknown>\n"
+"PO-Revision-Date: 2013-01-06 22:59+0000\n"
+"Last-Translator: Nicolas Delvaux <Unknown>\n"
 "Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2013-01-06 15:48+0000\n"
-"X-Generator: Launchpad (build 16393)\n"
+"X-Launchpad-Export-Date: 2013-01-08 05:48+0000\n"
+"X-Generator: Launchpad (build 16402)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -88,8 +88,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Réduire la fragmentation de la base de données, pour réduire l'espace "
-"utilisé et améliorer la vitesse, sans supprimer les données"
+"Défragmenter la base de données pour réduire l'espace utilisé et améliorer "
+"la vitesse sans supprimer de données"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
@@ -126,8 +126,8 @@ msgstr "Éditeur"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Supprimer ~/.viminfo qui inclut un historique des fichiers et des commandes, "
-"et des buffers"
+"Supprimer ~/.viminfo qui inclut l'historique des fichiers et des commandes "
+"ainsi que les buffers"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/amule.xml ../cleaners/gftp.xml
@@ -181,7 +181,7 @@ msgstr "Navigateur web"
 #: ../bleachbit/Cleaner.py:186
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Vider le cache web, ce qui réduit le temps d'affichage des pages revisitées"
+"Vider le cache web pour réduire le temps d'affichage des pages revisitées"
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -209,7 +209,7 @@ msgstr ""
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:196
 msgid "List of visited web pages"
-msgstr "Liste des pages internet visitées"
+msgstr "Liste des pages web visitées"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
@@ -453,7 +453,7 @@ msgstr "Supprimer les sessions courante et précédente"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Scan approfondi"
+msgstr "Analyse approfondie"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -495,8 +495,7 @@ msgstr "Restauration de session"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-"Ouvrir la session initiale, après la fermeture ou le crash du navigateur"
+msgstr "Ouvre la session initiale après fermeture ou plantage du navigateur"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Site preferences"
@@ -562,7 +561,7 @@ msgstr "Mémoire"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:396
 msgid "Wipe the swap and free memory"
-msgstr "Nettoyer le swap et la mémoire libre"
+msgstr "Nettoyer le swap et la mémoire disponible"
 
 #: ../bleachbit/Cleaner.py:397
 msgid "This option is experimental and may cause system problems."
@@ -601,7 +600,7 @@ msgid ""
 "and Internet Explorer updates"
 msgstr ""
 "Supprimer les désinstalleurs des mises à jour Microsoft telles que les "
-"corrections de bogues, les service pack et les mises à jour d'Internet "
+"corrections de bogues, les service packs et les mises à jour d'Internet "
 "Explorer"
 
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:627
@@ -677,7 +676,7 @@ msgstr "lister les nettoyeurs"
 
 #: ../bleachbit/CLI.py:155
 msgid "delete files and make other permanent changes"
-msgstr "effacer les fichiers et faire des modifications permanentes"
+msgstr "effacer des fichiers et effectuer d'autres modifications permanentes"
 
 #. TRANSLATORS: this is a warning for using --delete which will go away one day
 #: ../bleachbit/CLI.py:158
