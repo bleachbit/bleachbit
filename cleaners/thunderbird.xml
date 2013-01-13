@@ -48,9 +48,9 @@
     <description>Delete the files</description>
     <action command="delete" search="walk.files" path="$APPDATA\Thunderbird\Profiles\????????.default" regex="\.msf$"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
-    <action command="delete" search="walk.files" path="~/.thunderbird/????????.default" regex="\.msf$"/>
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
-    <action command="delete" search="walk.files" path="~/.thunderbird/Profiles/????????.default/" regex="\.msf$"/>
+    <!-- Fedora 16 Thunderbird 17 has ~/.thunderbird/default/ -->
+    <action command="delete" search="walk.files" path="~/.thunderbird/" regex="\.msf$"/>
     </option>
   <option id="passwords">
     <label>Passwords</label>
