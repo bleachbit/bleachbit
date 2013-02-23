@@ -32,9 +32,9 @@ from bleachbit.FileUtilities import delete, listdir, wipe_path
 from bleachbit.General import run_external
 
 def create_disk_image():
-    """Make blank file of size 1,000,000 bytes and return filename"""
+    """Make blank file of size 5,000,000 bytes and return filename"""
     (fd, filename) = tempfile.mkstemp(suffix='disk-image', prefix='bleachbit-wipe-test')
-    for x in range(1, 10):
+    for x in range(1, 50):
         os.write(fd, '\x00' * 100000)
     os.close(fd)
     return filename
