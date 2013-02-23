@@ -96,11 +96,11 @@ def unmount_filesystem(mountpoint):
 
 def verify_cleanliness(filename):
     """Return True if the file is clean"""
-    found_secret = run_external(['grep','-q', 'secret',filename])[0] == 0
-    found_sshh = run_external(['grep','-q', 'sshh', filename])[0] == 0
-    clean = (not found_secret) and (not found_sshh)
+    found_secret = run_external(['grep','-q', 'secret',filename])[0] == 0 # filename
+    found_sshh = run_external(['grep','-q', 'sshh', filename])[0] == 0 # contents
+    clean = (found_secret*1) and (found_sshh*10)
     print '%s is clean: %s' % (filename, clean)
-    return clean
+    return 0 == clean
 
 
 def test_wipe():
