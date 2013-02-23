@@ -550,28 +550,31 @@ def wipe_path(pathname, idle = False ):
         last_idle = time.time()
         # blocks
         blanks = chr(0) * 4096
-        try:
-            while True:
+        while True:
+            try:
                 f.write(blanks)
-                if idle and (time.time() - last_idle) > 2:
-                    # Keep the GUI responding, and allow the user to abort.
-                    # Also display the ETA.
-                    yield estimate_completion()
-                    last_idle = time.time()
-        except IOError, e:
-            if e.errno == errno.ENOSPC:
-                break
-            elif e.errno != errno.EFBIG:
-                raise
+            except IOError, e:
+                if e.errno == errno.ENOSPC:
+                    print 'debug: while writing blocks, ENOSPC'
+                    break
+                elif e.errno != errno.EFBIG:
+                    raise
+            if idle and (time.time() - last_idle) > 2:
+                # Keep the GUI responding, and allow the user to abort.
+                # Also display the ETA.
+                yield estimate_completion()
+                last_idle = time.time()
         # individual characters
-        try:
-            while True:
+        while True:
+            try:
                 f.write(chr(0))
-        except IOError, e:
-            if e.errno == errno.ENOSPC:
-                break
-            elif e.errno != errno.EFBIG:
-                raise
+            except IOError, e:
+                if e.errno == errno.ENOSPC:
+                    print 'debug: while writing charactgers, ENOSPC'
+                    break
+                elif e.errno != errno.EFBIG:
+                    raise
+        # flush
         try:
             f.flush()
         except:
