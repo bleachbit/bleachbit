@@ -505,16 +505,12 @@ def wipe_path(pathname, idle = False ):
                 f = tempfile.NamedTemporaryFile(**kwargs)
                 break
             except OSError, e:
-                if e.errno == errno.ENAMETOOLONG:
-                    # OSError: [Errno ENAMETOOLONG] File name too long
-                    if maxlen > 10:
-                        maxlen -= 10
-                    i += 1
-                    if i > 100:
-                        f = tempfile.TemporaryFile(dir = pathname)
-                        break
-                else:
-                    raise
+                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC):
+                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264
+                    if maxlen > 5:
+                        maxlen -= 5
+                        continue
+                raise
         return f
 
 
@@ -578,12 +574,13 @@ def wipe_path(pathname, idle = False ):
                     raise
         # flush
         try:
-            f.flush()
+            f.flush() # write to OS buffer
         except:
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
             print "info: exception on f.flush()"
+        os.fsync(f.fileno()) # write to disk
         files.append(f)
         total_bytes += f.tell()
     # statistics
