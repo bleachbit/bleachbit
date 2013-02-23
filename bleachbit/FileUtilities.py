@@ -502,13 +502,14 @@ def wipe_path(pathname, idle = False ):
         while True:
             try:
                 kwargs = { 'dir' : pathname, 'suffix' : __random_string(maxlen) }
-                if sys.hexversion >= 0x02070000:
+                if sys.hexversion >= 0x02060000:
                     kwargs['delete'] = False
                 f = tempfile.NamedTemporaryFile(**kwargs)
                 break
             except OSError, e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC):
-                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264
+                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
+                    # Shrinking the size helps.
                     if maxlen > 5:
                         maxlen -= 5
                         continue
@@ -538,9 +539,11 @@ def wipe_path(pathname, idle = False ):
     total_bytes = 0
     start_free_bytes = free_space(pathname)
     start_time = time.time()
-    # repeat to clear inodes (Linux) / MFT (Master File Table on Windows)
     while True:
+        # Creating many empty files with long names should clear the
+        # names of deleted files.
         try:
+            print 'debug: wipe_path: creating new temporary file'
             f = temporaryfile()
         except OSError, e:
             # Linux gives errno 24
@@ -550,7 +553,7 @@ def wipe_path(pathname, idle = False ):
             else:
                 raise
         last_idle = time.time()
-        # blocks
+        # Write large blocks to quickly fill the disk.
         blanks = chr(0) * 4096
         while True:
             try:
@@ -565,7 +568,7 @@ def wipe_path(pathname, idle = False ):
                 # Also display the ETA.
                 yield estimate_completion()
                 last_idle = time.time()
-        # individual characters
+        # Write individual bytes to ensure file is as large as possible.
         while True:
             try:
                 f.write(chr(0))
@@ -574,9 +577,9 @@ def wipe_path(pathname, idle = False ):
                     break
                 elif e.errno != errno.EFBIG:
                     raise
-        # flush
+        # Write to OS buffer
         try:
-            f.flush() # write to OS buffer
+            f.flush()
         except:
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
