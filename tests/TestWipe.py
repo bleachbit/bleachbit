@@ -89,8 +89,8 @@ def unmount_filesystem(mountpoint):
         if 0 == rc:
             break
         import time
-        time.sleep(5)
         attempts += 1
+        time.sleep(attempts * 2)
         if attempts > 5:
             raise RuntimeError('cannot umount')
 
