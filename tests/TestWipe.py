@@ -47,6 +47,7 @@ def format_filesystem(filename):
 
 def make_dirty(mountpoint):
     counter = 0
+    contents = 'sssshhhh' * 512
     while True:
         try:
             f = tempfile.NamedTemporaryFile(mode='w', suffix='secret', dir=mountpoint, delete=False)
@@ -55,9 +56,9 @@ def make_dirty(mountpoint):
             break
 
         try:
-            f.write('sshh'*1000)
+            f.write(contents)
             f.flush()
-            counter+=1
+            counter += 1
         except IOError:
             break
 
@@ -96,11 +97,11 @@ def unmount_filesystem(mountpoint):
 
 def verify_cleanliness(filename):
     """Return True if the file is clean"""
-    found_secret = run_external(['grep','-q', 'secret',filename])[0] == 0 # filename
-    found_sshh = run_external(['grep','-q', 'sshh', filename])[0] == 0 # contents
-    clean = (found_secret*1) and (found_sshh*10)
+    found_secret = run_external(['grep','-q', 'secret', filename])[0] == 0 # filename
+    found_sshh = run_external(['grep','-q', 'sssshhhh', filename])[0] == 0 # contents
+    clean = (found_secret*1) + (found_sshh*10)
     print '%s is clean: %s' % (filename, clean)
-    return 0 == clean
+    return clean
 
 
 def test_wipe():
@@ -123,7 +124,7 @@ def test_wipe():
 
     # verify dirtiness
     unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == False)
+    assert(verify_cleanliness(filename) == 11)
     mount_filesystem(filename, mountpoint)
 
     # standard delete
@@ -133,11 +134,10 @@ def test_wipe():
 
     # verify dirtiness
     unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == False)
+    assert(verify_cleanliness(filename) == 11)
     mount_filesystem(filename, mountpoint)
 
     # really wipe
-    import pdb; pdb.set_trace()
     print 'wiping %s' % mountpoint
     for w in wipe_path(mountpoint):
         pass
@@ -146,7 +146,7 @@ def test_wipe():
     unmount_filesystem(mountpoint)
 
     # verify cleanliness
-    assert(verify_cleanliness(filename))
+    assert(verify_cleanliness(filename) == 0)
 
     # remove temporary
     delete(filename)
