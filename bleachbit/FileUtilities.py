@@ -447,10 +447,12 @@ def wipe_contents(path, truncate = True):
     while size > 0:
         f.write(blanks)
         size -= 4096
-    f.flush()
+    f.flush() # flush to OS buffer
+    os.fsync(f.fileno()) # force write to disk
     if truncate:
         f.truncate(0)
         f.flush()
+        os.fsync(f.fileno())
     f.close()
 
 
