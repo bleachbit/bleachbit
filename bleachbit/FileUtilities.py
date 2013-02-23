@@ -34,6 +34,7 @@ import random
 import re
 import stat
 import string
+import sys
 import tempfile
 import time
 import ConfigParser
@@ -498,7 +499,10 @@ def wipe_path(pathname, idle = False ):
         i = 0
         while True:
             try:
-                f = tempfile.TemporaryFile(dir = pathname, suffix = __random_string(maxlen))
+                kwargs = { 'dir' : pathname, 'suffix' : __random_string(maxlen) }
+                if sys.hexversion >= 0x02070000:
+                    kwargs['delete'] = False
+                f = tempfile.NamedTemporaryFile(**kwargs)
                 break
             except OSError, e:
                 if e.errno == errno.ENAMETOOLONG:
@@ -555,7 +559,6 @@ def wipe_path(pathname, idle = False ):
                 f.write(blanks)
             except IOError, e:
                 if e.errno == errno.ENOSPC:
-                    print 'debug: while writing blocks, ENOSPC'
                     break
                 elif e.errno != errno.EFBIG:
                     raise
@@ -570,7 +573,6 @@ def wipe_path(pathname, idle = False ):
                 f.write(chr(0))
             except IOError, e:
                 if e.errno == errno.ENOSPC:
-                    print 'debug: while writing charactgers, ENOSPC'
                     break
                 elif e.errno != errno.EFBIG:
                     raise
@@ -609,10 +611,8 @@ def wipe_path(pathname, idle = False ):
                 if e.errno == 0:
                     print 'debug: handled unknown error 0'
                     time.sleep(0.1)
-
-
-    # files are removed implicitly
-
+        # explicitly delete
+        delete(f.name)
 
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
