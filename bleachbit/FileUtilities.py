@@ -584,8 +584,13 @@ def wipe_path(pathname, idle = False ):
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000*1000) ) / elapsed_sec
-    print 'debug: wrote %d files and %d bytes in %d seconds at %.2f MB/s' % \
+    print 'note: wrote %d files and %d bytes in %d seconds at %.2f MB/s' % \
         (len(files), total_bytes, elapsed_sec, rate_mbs)
+    # how much free space is left (should be closer to zero)
+    if 'posix' == os.name:
+        stats = os.statvfs(pathname)
+        print 'note: %d bytes available to non-super=user' % (stats.f_bsize * stats.f_bavail)
+        print 'note: %d bytes available to super-user' % (stats.f_bfree * stats.f_bavail)
     # truncate and close files
     for f in files:
         f.truncate(0)
