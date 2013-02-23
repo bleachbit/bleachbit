@@ -25,22 +25,23 @@ Test FileUtilities.wipe_path
 import os
 import sys
 import tempfile
+import time
 
 sys.path.append('.')
 from bleachbit.FileUtilities import delete, listdir, wipe_path
 from bleachbit.General import run_external
 
 def create_disk_image():
-    """Make blank file of size 10,000,000 bytes and return filename"""
-    (fd, filename) = tempfile.mkstemp('bleachbit-wipe-test')
-    for x in range(1,100):
+    """Make blank file of size 1,000,000 bytes and return filename"""
+    (fd, filename) = tempfile.mkstemp(suffix='disk-image', prefix='bleachbit-wipe-test')
+    for x in range(1, 10):
         os.write(fd, '\x00' * 100000)
     os.close(fd)
     return filename
 
 
 def format_filesystem(filename):
-    args = ['/sbin/mkfs.ext4', '-q', '-F', filename]
+    args = ['/sbin/mkfs.ext3', '-q', '-F', filename]
     (rc, stdout, stderr) = run_external(args)
     assert(rc==0)
 
@@ -80,6 +81,7 @@ def mount_filesystem(filename, mountpoint):
 
 
 def unmount_filesystem(mountpoint):
+    time.sleep(0.5) # avoid "in use" error
     args = ['umount', mountpoint]
     attempts = 0
     while True:
@@ -88,7 +90,6 @@ def unmount_filesystem(mountpoint):
             print stderr
         if 0 == rc:
             break
-        import time
         attempts += 1
         time.sleep(attempts * 2)
         if attempts > 5:
