@@ -590,7 +590,7 @@ def wipe_path(pathname, idle = False ):
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
         print 'note: %d bytes available to non-super=user' % (stats.f_bsize * stats.f_bavail)
-        print 'note: %d bytes available to super-user' % (stats.f_bfree * stats.f_bavail)
+        print 'note: %d bytes available to super-user' % (stats.f_bsize * stats.f_bfree)
     # truncate and close files
     for f in files:
         f.truncate(0)
