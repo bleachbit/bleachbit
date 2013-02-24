@@ -26,22 +26,28 @@ import os
 import sys
 import tempfile
 import time
+import traceback
 
 sys.path.append('.')
 from bleachbit.FileUtilities import delete, listdir, wipe_path
 from bleachbit.General import run_external
 
-def create_disk_image():
-    """Make blank file of size 5,000,000 bytes and return filename"""
+def create_disk_image(n_bytes):
+    """Make blank file and return filename"""
     (fd, filename) = tempfile.mkstemp(suffix='disk-image', prefix='bleachbit-wipe-test')
-    for x in range(1, 50):
+    for x in range(1, int(n_bytes/1e5)):
         os.write(fd, '\x00' * 100000)
     os.close(fd)
     return filename
 
 
-def format_filesystem(filename):
-    args = ['/sbin/mkfs.ext3', '-q', '-F', filename]
+def format_filesystem(filename, mkfs_cmd):
+    args = []
+    for arg in mkfs_cmd:
+        if arg == 'filename':
+            args.append(filename)
+        else:
+            args.append(arg)
     (rc, stdout, stderr) = run_external(args)
     assert(rc==0)
 
@@ -105,16 +111,16 @@ def verify_cleanliness(filename):
     return clean
 
 
-def test_wipe():
+def test_wipe_sub(n_bytes, mkfs_cmd):
     """Test FileUtilities.wipe_path"""
     if 'nt' == os.name:
         print 'WARNING: test_wipe() not supported on Windows'
         return
-    filename = create_disk_image()
+    filename = create_disk_image(n_bytes)
     print 'created disk image %s' % filename
 
     # format filesystem
-    format_filesystem(filename)
+    format_filesystem(filename, mkfs_cmd)
 
     # mount
     mountpoint = tempfile.mkdtemp('bleachbit-wipe-mountpoint')
@@ -152,6 +158,26 @@ def test_wipe():
     # remove temporary
     delete(filename)
     delete(mountpoint)
+
+
+def test_wipe():
+    """Test wiping on several kinds of file systems"""
+    n_bytes=2000000
+    mkfs_cmds = ( ('/sbin/mkfs.ext3', '-q', '-F', 'filename'),
+        ('/sbin/mkfs.ext4', '-q', '-F', 'filename'),
+        ('/sbin/mkfs.ntfs', '-F', 'filename'),
+        ('/sbin/mkfs.vfat', 'filename') )
+    for mkfs_cmd in mkfs_cmds:
+        print
+        print '*' * 70
+        print ' '.join(mkfs_cmd)
+        print '*' * 70
+        print
+        try:
+            test_wipe_sub(n_bytes, mkfs_cmd)
+        except:
+            print sys.exc_info()[1]
+            traceback.print_exc()
 
 
 test_wipe()
