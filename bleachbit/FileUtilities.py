@@ -400,6 +400,15 @@ def listdir(directory):
         yield os.path.join(dirname, filename)
 
 
+def sync():
+    """Flush file system buffers. sync() is different than fsync()"""
+    if 'posix' == os.name:
+        import ctypes
+        rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
+        if 0 != rc:
+            print 'ERROR: sync() returned code %d' % rc
+
+
 def whitelisted(path):
     """Check whether this path is whitelisted"""
     from Options import options
@@ -539,9 +548,9 @@ def wipe_path(pathname, idle = False ):
     total_bytes = 0
     start_free_bytes = free_space(pathname)
     start_time = time.time()
+    # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
+    # this loop is sometimes necessary to create multiple files.
     while True:
-        # Creating many empty files with long names should clear the
-        # names of deleted files.
         try:
             print 'debug: wipe_path: creating new temporary file'
             f = temporaryfile()
@@ -554,13 +563,17 @@ def wipe_path(pathname, idle = False ):
                 raise
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
-        blanks = chr(0) * 4096
+        blanks = chr(0) * 65535
         while True:
             try:
                 f.write(blanks)
             except IOError, e:
                 if e.errno == errno.ENOSPC:
-                    break
+                    if len(blanks) > 1:
+                        # Try writing smaller blocks
+                        blanks = blanks[0 : (len(blanks)/2)]
+                    else:
+                        break
                 elif e.errno != errno.EFBIG:
                     raise
             if idle and (time.time() - last_idle) > 2:
@@ -568,15 +581,6 @@ def wipe_path(pathname, idle = False ):
                 # Also display the ETA.
                 yield estimate_completion()
                 last_idle = time.time()
-        # Write individual bytes to ensure file is as large as possible.
-        while True:
-            try:
-                f.write(chr(0))
-            except IOError, e:
-                if e.errno == errno.ENOSPC:
-                    break
-                elif e.errno != errno.EFBIG:
-                    raise
         # Write to OS buffer
         try:
             f.flush()
@@ -586,8 +590,15 @@ def wipe_path(pathname, idle = False ):
             # not on another XP SP3 with 64MB free space
             print "info: exception on f.flush()"
         os.fsync(f.fileno()) # write to disk
+        # Remember to delete
         files.append(f)
+        # For statistics
         total_bytes += f.tell()
+        # If no bytes were written, then quit
+        if f.tell() < 1:
+            break
+    # sync to disk
+    sync()
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000*1000) ) / elapsed_sec
