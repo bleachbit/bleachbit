@@ -465,6 +465,43 @@ def wipe_contents(path, truncate = True):
     f.close()
 
 
+def wipe_inodes(pathname):
+    """Create empty files with long names to clear remanence in metadata"""
+    # When the file system is full, Linux 3.5 will sometimes
+    # give an error and sometimes succeed.
+    errors = 0
+    files = []
+    suffix = ' ' * (os.statvfs(pathname).f_namemax - len(pathname) - 10)
+    print 'info: creating empty files'
+    print 'debug: suffix length = ', len(suffix)
+
+    # create empty files until file system is exhausted
+    while True:
+        try:
+            (fd, fn) = tempfile.mkstemp(dir=pathname, suffix=suffix, prefix = '')
+        except:
+            #print 'error', sys.exc_info()[1]
+            errors += 1
+        else:
+            errors = 0
+            files.append(fn)
+            os.close(fd)
+        if errors > 10 or 0 == os.statvfs(pathname).f_ffree:
+            break
+
+    # flush once because it is slow
+    sync()
+
+    # display effectiveness
+    stats = os.statvfs(pathname)
+    print 'info: %d inodes available, %d to super user' % (stats.f_ffree, stats.f_favail)
+
+    # clean up
+    for f in files:
+        os.remove(f)
+    print 'debug: done deleting empty files'
+
+
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
     (head, _) = os.path.split(pathname1)
@@ -626,6 +663,10 @@ def wipe_path(pathname, idle = False ):
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name)
+    # quickly wipe inodes
+    if 'posix' == os.name and os.statvfs(pathname).f_ffree > 0:
+        wipe_inodes(pathname)
+
 
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
