@@ -475,10 +475,16 @@ def wipe_inodes(pathname):
     print 'info: creating empty files'
     print 'debug: suffix length = ', len(suffix)
 
+    # Creating the files in a sub-directory improves recovery
+    # of disk space:
+    # http://bleachbit.sourceforge.net/news/deleting-files-doesnt-free-disk-space
+    tmpdir = os.path.join(pathname, __random_string(10))
+    os.mkdir(tmpdir)
+
     # create empty files until file system is exhausted
     while True:
         try:
-            (fd, fn) = tempfile.mkstemp(dir=pathname, suffix=suffix, prefix = '')
+            (fd, fn) = tempfile.mkstemp(dir=tmpdir, suffix=suffix, prefix = '')
         except:
             #print 'error', sys.exc_info()[1]
             errors += 1
@@ -499,6 +505,7 @@ def wipe_inodes(pathname):
     # clean up
     for f in files:
         os.remove(f)
+    os.rmdir(tmpdir)
     print 'debug: done deleting empty files'
 
 
