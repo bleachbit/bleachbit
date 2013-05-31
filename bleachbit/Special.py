@@ -148,8 +148,9 @@ def delete_chrome_keywords(path):
     cmds  = __shred_sqlite_char_columns('keywords', cols, where)
     cmds += "update keywords set usage_count = 0;"
     ver = __get_chrome_history(path, 'Web Data')
-    if ver >= 43:
+    if ver >= 43 and ver < 49:
         # keywords_backup table first seen in Google Chrome 17 / Chromium 17 which is Web Data version 43
+        # In Google Chrome 25, the table is gone.
         cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
         cmds += "update keywords_backup set usage_count = 0;"
 
