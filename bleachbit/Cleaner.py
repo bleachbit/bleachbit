@@ -240,6 +240,7 @@ class Firefox(Cleaner):
         if 'crash_reports' == option_id:
             for filename in children_in_directory(crashdir, False):
                 files += [ filename ]
+            files += FileUtilities.expand_glob_join(self.profile_dir, "minidumps/*.dmp")
         # DOM storage
         if 'dom' == option_id:
             files += FileUtilities.expand_glob_join(self.profile_dir, "webappsstore.sqlite")
