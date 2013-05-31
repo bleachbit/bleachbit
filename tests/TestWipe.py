@@ -29,7 +29,7 @@ import time
 import traceback
 
 sys.path.append('.')
-from bleachbit.FileUtilities import delete, listdir, wipe_path
+from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
 from bleachbit.General import run_external
 
 def create_disk_image(n_bytes):
@@ -53,28 +53,31 @@ def format_filesystem(filename, mkfs_cmd):
 
 
 def make_dirty(mountpoint):
-    counter = 0
+    create_counter = 0
+    write_counter = 0
     contents = 'sssshhhh' * 512
     while True:
         try:
-            f = tempfile.NamedTemporaryFile(mode='w', suffix='secret', dir=mountpoint, delete=False)
+            fn = os.path.join(mountpoint, 'secret' + str(create_counter))
+            f = open(fn, 'w')
+            create_counter += 1
         except:
-            print 'error creating temporary file'
+            print 'ERROR: while creating temporary file #%d' % create_counter
             break
 
         try:
             f.write(contents)
             f.flush()
-            counter += 1
+            write_counter += 1
         except IOError:
             break
 
         try:
             f.close()
         except:
-            print 'error closing temporary file %s' % f.name
+            print 'ERROR: while closing temporary file %s' % f.name
             break
-    print 'made %d files' % counter
+    print 'debug: created %d files and wrote to %d files' % (create_counter, write_counter)
 
 
 def mount_filesystem(filename, mountpoint):
@@ -104,9 +107,13 @@ def unmount_filesystem(mountpoint):
 
 def verify_cleanliness(filename):
     """Return True if the file is clean"""
-    found_secret = run_external(['grep','-q', 'secret', filename])[0] == 0 # filename
-    found_sshh = run_external(['grep','-q', 'sssshhhh', filename])[0] == 0 # contents
-    clean = (found_secret*1) + (found_sshh*10)
+    strings_ret = run_external(['strings', filename])
+    secret_count = strings_ret[1].count('secret') # filename
+    sssshhhh_count = strings_ret[1].count('sssshhhh') # contents
+    print 'debug: found %d sssshhhhh in image (contents) and %d secret (filename)' \
+        % (sssshhhh_count, secret_count)
+
+    clean = ((secret_count>0)*1) + ((sssshhhh_count > 0)*10)
     print '%s is clean: %s' % (filename, clean)
     return clean
 
@@ -126,6 +133,10 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
     mountpoint = tempfile.mkdtemp('bleachbit-wipe-mountpoint')
     mount_filesystem(filename, mountpoint)
 
+    # baseline free disk space
+    print 'df for clean filesystem'
+    print run_external(['df', mountpoint])[1]
+
     # make dirty
     make_dirty(mountpoint)
 
@@ -135,25 +146,55 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
     mount_filesystem(filename, mountpoint)
 
     # standard delete
-    print 'standard delete'
+    print 'info: standard delete'
+    delete_counter = 0
     for secretfile in listdir(mountpoint):
+        if not 'secret' in secretfile:
+            # skip lost+found
+            continue
         delete(secretfile, shred = False)
+        delete_counter += 1
+    print 'debug: deleted %d files' % delete_counter
 
+    # check
+    print 'df for empty, dirty filesystem'
+    print run_external(['df',mountpoint])[1]
+ 
     # verify dirtiness
     unmount_filesystem(mountpoint)
     assert(verify_cleanliness(filename) == 11)
     mount_filesystem(filename, mountpoint)
+    expected_free_space = free_space(mountpoint)
 
-    # really wipe
-    print 'wiping %s' % mountpoint
-    for w in wipe_path(mountpoint):
-        pass
+    # measure effectiveness of multiple wipes
+    for i in range(1,10):
+        print '*' * 30
+        print '* pass %d *' % i
+        print '*' * 30
 
-    # unmount
-    unmount_filesystem(mountpoint)
+        # remount
+        if i > 1:
+            mount_filesystem(filename, mountpoint)\
 
-    # verify cleanliness
-    assert(verify_cleanliness(filename) == 0)
+        # really wipe
+        print 'wiping %s' % mountpoint
+        for w in wipe_path(mountpoint):
+            pass
+
+        # verify cleaning process freed all space it allocated
+        actual_free_space = free_space(mountpoint)
+        if not expected_free_space == actual_free_space:
+            print 'expecting %d free space but got %d' % \
+                (expected_free_space, actual_free_space)
+            import pdb; pdb.set_trace()
+
+        # unmount
+        unmount_filesystem(mountpoint)
+
+        # verify cleanliness
+        cleanliness = verify_cleanliness(filename)
+
+    assert(cleanliness < 2)
 
     # remove temporary
     delete(filename)
@@ -162,11 +203,11 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
 
 def test_wipe():
     """Test wiping on several kinds of file systems"""
-    n_bytes=2000000
-    mkfs_cmds = ( ('/sbin/mkfs.ext3', '-q', '-F', 'filename'),
-        ('/sbin/mkfs.ext4', '-q', '-F', 'filename'),
-        ('/sbin/mkfs.ntfs', '-F', 'filename'),
-        ('/sbin/mkfs.vfat', 'filename') )
+    n_bytes=10000000
+    mkfs_cmds = ( ('/sbin/mkfs.ext3', '-q', '-F', 'filename'),)
+#        ('/sbin/mkfs.ext4', '-q', '-F', 'filename'))
+#        ('/sbin/mkntfs', '-F', 'filename'),
+#        ('/sbin/mkfs.vfat', 'filename') )
     for mkfs_cmd in mkfs_cmds:
         print
         print '*' * 70
@@ -178,6 +219,5 @@ def test_wipe():
         except:
             print sys.exc_info()[1]
             traceback.print_exc()
-
 
 test_wipe()
