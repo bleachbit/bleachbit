@@ -407,6 +407,9 @@ def sync():
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             print 'ERROR: sync() returned code %d' % rc
+    if 'nt' == os.name:
+        import ctypes
+        ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
 def whitelisted(path):
