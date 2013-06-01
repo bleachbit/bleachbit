@@ -38,9 +38,11 @@
     <!-- LibreOffice 3 on OpenSUSE from OpenSUSE repo uses ~/.libreoffice/3-suse/user// -->
     <!-- LibreOffice 3.4.5 on Fedora 16 uses ~/.libreoffice/3/user -->
     <!-- LibreOffice 3.5 on Mint 9 (Ubuntu 10.04) uses ~/.config/libreoffice/3/user/ -->
+    <!-- LibreOffice 4 on Ubuntu 13.04 uses ~/.config/libreoffice/4/user -->
     <action command="office_registrymodifications" search="file" path="$APPDATA\LibreOffice\3\user\registrymodifications.xcu"/>
     <action command="office_registrymodifications" search="file" path="~/.config/libreoffice/3/user/registrymodifications.xcu"/>
-    <action command="office_registrymodifications" search="file" path="~/.libreoffice/3/user/registrymodifications.xcu"/>
+    <action command="office_registrymodifications" search="file" path="~/.config/libreoffice/4/user/registrymodifications.xcu"/>
     <action command="office_registrymodifications" search="file" path="~/.libreoffice/3-suse/user/registrymodifications.xcu"/>
+    <action command="office_registrymodifications" search="file" path="~/.libreoffice/3/user/registrymodifications.xcu"/>
   </option>
 </cleaner>
