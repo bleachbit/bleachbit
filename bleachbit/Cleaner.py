@@ -354,7 +354,13 @@ class OpenOfficeOrg(Cleaner):
                         yield Command.Function(path, \
                             Special.delete_ooo_history,
                             _('Delete the usage history'))
-
+                # ~/.openoffice.org/3/user/registrymodifications.xcu
+                #       Apache OpenOffice.org 3.4.1 from openoffice.org on Ubuntu 13.04
+                for path in FileUtilities.expand_glob_join(prefix, "user/registrymodifications.xcu"):
+                    if os.path.lexists(path):
+                        yield Command.Function(path, \
+                            Special.delete_office_registrymodifications,
+                            _('Delete the usage history'))
 
 class System(Cleaner):
     """Clean the system in general"""

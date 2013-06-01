@@ -295,15 +295,15 @@ class Json(FileActionProvider):
             yield Command.Json(path, self.address)
 
 
-class LibreOfficeHistory(FileActionProvider):
+class OfficeRegistryModifications(FileActionProvider):
     """Action to delete LibreOffice history"""
-    action_key = 'libreoffice_history'
+    action_key = 'office_registrymodifications'
 
     def get_commands(self):
         for path in self.get_paths():
             yield Command.Function( \
                 path, \
-                Special.delete_libreoffice_history, \
+                Special.delete_office_registrymodifications, \
                _('Clean'))
 
 

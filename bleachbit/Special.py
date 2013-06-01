@@ -158,8 +158,8 @@ def delete_chrome_keywords(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
-def delete_libreoffice_history(path):
-    """Erase LibreOffice's MRU in registrymodifications.xcu"""
+def delete_office_registrymodifications(path):
+    """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
     import xml.dom.minidom
     dom1 = xml.dom.minidom.parse(path)
     modified = False
@@ -220,7 +220,7 @@ def delete_mozilla_url_history(path):
 
 
 def delete_ooo_history(path):
-    """Erase the OpenOffice.org MRU in Common.xcu"""
+    """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
     import xml.dom.minidom
     dom1 = xml.dom.minidom.parse(path)
     changed = False
