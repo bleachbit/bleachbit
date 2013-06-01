@@ -272,6 +272,9 @@ class Firefox(Cleaner):
         if 'url_history' == option_id:
             # Firefox version 1
             files += FileUtilities.expand_glob_join(self.profile_dir, "history.dat")
+            # Firefox 21 on Windows
+            if 'nt' == os.name:
+                files += FileUtilities.expand_glob_join(cache_base, "thumbnails/*.png")
             # see also function other_cleanup()
         # finish
         for filename in files:
