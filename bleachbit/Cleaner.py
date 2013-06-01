@@ -356,6 +356,8 @@ class OpenOfficeOrg(Cleaner):
                             _('Delete the usage history'))
                 # ~/.openoffice.org/3/user/registrymodifications.xcu
                 #       Apache OpenOffice.org 3.4.1 from openoffice.org on Ubuntu 13.04
+                # %AppData%\OpenOffice.org\3\user\registrymodifications.xcu
+                #       Apache OpenOffice.org 3.4.1 from openoffice.org on Windows XP
                 for path in FileUtilities.expand_glob_join(prefix, "user/registrymodifications.xcu"):
                     if os.path.lexists(path):
                         yield Command.Function(path, \
