@@ -7,56 +7,65 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-15 21:07-0700\n"
-"PO-Revision-Date: 2012-11-19 22:31+0000\n"
-"Last-Translator: Asier Iturralde Sarasola <Unknown>\n"
+"POT-Creation-Date: 2012-12-29 17:07-0700\n"
+"PO-Revision-Date: 2013-05-30 14:28+0000\n"
+"Last-Translator: gorkaazk <gorkaazkarate@euskalerria.org>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-11-25 22:08+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-05-31 05:01+0000\n"
+"X-Generator: Launchpad (build 16660)\n"
 
-#: ../cleaners/tremulous.xml ../cleaners/gl-117.xml ../cleaners/nexuiz.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
-msgid "Game"
-msgstr "Jokoa"
+#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
+#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/realplayer.xml ../cleaners/windows_defender.xml
+#: ../cleaners/d4x.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/libreoffice.xml ../cleaners/bash.xml ../cleaners/nautilus.xml
+#: ../cleaners/elinks.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml
+msgid "History"
+msgstr "Historia"
 
-#: ../cleaners/tremulous.xml ../cleaners/chromium.xml ../cleaners/miro.xml
-#: ../cleaners/audacious.xml ../cleaners/xine.xml ../cleaners/kde.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/liferea.xml
-#: ../cleaners/beagle.xml ../cleaners/opera.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/epiphany.xml ../cleaners/transmission.xml
-#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/vuze.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/google_chrome.xml ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
-#: ../cleaners/safari.xml ../cleaners/java.xml ../cleaners/flash.xml
-#: ../cleaners/thunderbird.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/libreoffice.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:186
-#: ../bleachbit/Cleaner.py:304 ../bleachbit/Cleaner.py:371
+#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/links2.xml
+#: ../cleaners/realplayer.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/nautilus.xml ../cleaners/gnome.xml ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Cleaner.py:357
+msgid "Delete the usage history"
+msgstr "Ezabatu erabilera-historia"
+
+#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/thumbnails.xml ../cleaners/safari.xml
+#: ../cleaners/transmission.xml ../cleaners/emesene.xml
+#: ../cleaners/liferea.xml ../cleaners/seamonkey.xml ../cleaners/vuze.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
+#: ../cleaners/tremulous.xml ../cleaners/libreoffice.xml ../cleaners/xine.xml
+#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/opera.xml
+#: ../cleaners/amsn.xml ../cleaners/gftp.xml ../cleaners/miro.xml
+#: ../cleaners/beagle.xml ../cleaners/kde.xml ../cleaners/epiphany.xml
+#: ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/java.xml ../cleaners/chromium.xml ../cleaners/audacious.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:186
+#: ../bleachbit/Cleaner.py:306 ../bleachbit/Cleaner.py:377
 msgid "Cache"
 msgstr "Cache-a"
 
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "Ezabatu joko zerbitzari zerrenda"
-
-#: ../cleaners/yum.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/xine.xml ../cleaners/kde.xml ../cleaners/pidgin.xml
-#: ../cleaners/liferea.xml ../cleaners/beagle.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/transmission.xml ../cleaners/nexuiz.xml ../cleaners/apt.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/evolution.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
-#: ../cleaners/java.xml ../cleaners/windows_explorer.xml ../cleaners/flash.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/libreoffice.xml
-#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/secondlife_viewer.xml ../bleachbit/Cleaner.py:304
-#: ../bleachbit/Cleaner.py:371 ../bleachbit/Cleaner.py:393
-#: ../bleachbit/Cleaner.py:395
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
+#: ../cleaners/transmission.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/liferea.xml ../cleaners/vuze.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
+#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/xine.xml
+#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
+#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/beagle.xml
+#: ../cleaners/kde.xml ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/java.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
+#: ../bleachbit/Cleaner.py:306 ../bleachbit/Cleaner.py:377
+#: ../bleachbit/Cleaner.py:405 ../bleachbit/Cleaner.py:407
 msgid "Delete the cache"
 msgstr "Ezabatu cache-a"
 
@@ -64,17 +73,17 @@ msgstr "Ezabatu cache-a"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/safari.xml
-#: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/liferea.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Action.py:334 ../bleachbit/Cleaner.py:197
-#: ../bleachbit/Cleaner.py:294
+#: ../bleachbit/Cleaner.py:296
 msgid "Vacuum"
 msgstr "Trinkotu"
 
-#: ../cleaners/yum.xml ../cleaners/chromium.xml ../cleaners/liferea.xml
-#: ../cleaners/google_chrome.xml ../cleaners/safari.xml
-#: ../cleaners/thunderbird.xml ../cleaners/gpodder.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/liferea.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:197
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
@@ -83,108 +92,32 @@ msgstr ""
 "Garbitu datu-basearen fragmentazioa tamaina txikitu eta abiadura handitzeko "
 "daturik ezabatu gabe"
 
-#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/safari.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../cleaners/konqueror.xml
-#: ../bleachbit/Cleaner.py:209
-msgid "Web browser"
-msgstr "Web arakatzailea"
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Game"
+msgstr "Jokoa"
 
-#: ../cleaners/chromium.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:186
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Ezabatu aurretik bisitatutako orriak bistaratzeko denbora txikitzen duen web "
-"cache-a"
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/teamviewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/vuze.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
+#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../bleachbit/Cleaner.py:403
+msgid "Logs"
+msgstr "Egunkariak"
 
-#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
-#: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:187
-msgid "Cookies"
-msgstr "Cookie-ak"
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/teamviewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/vuze.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
+#: ../cleaners/exaile.xml ../cleaners/screenlets.xml ../cleaners/gftp.xml
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:403
+msgid "Delete the logs"
+msgstr "Ezabatu egunkariak"
 
-#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/seamonkey.xml ../cleaners/liferea.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/google_chrome.xml
-#: ../cleaners/safari.xml ../cleaners/flash.xml ../cleaners/thunderbird.xml
-#: ../cleaners/konqueror.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml ../bleachbit/Cleaner.py:187
-msgid ""
-"Delete cookies, which contain information such as web site preferences, "
-"authentication, and tracking identification"
-msgstr ""
-"Ezabatu cookie-ak (webguneen hobespen, autentifikazio eta jarraipen "
-"identifikazioen gisako informazioa gordetzen dute)"
-
-#. TRANSLATORS: DOM = Document Object Model.
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
-msgid "DOM Storage"
-msgstr "DOM biltegiratzea"
-
-#: ../cleaners/chromium.xml ../cleaners/opera.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
-msgid "Delete HTML5 cookies"
-msgstr "Ezabatu HTML5 cookie-ak"
-
-#: ../cleaners/chromium.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
-msgid "Form history"
-msgstr "Formularioen historia"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "A history of forms entered in web sites"
-msgstr "Webguneetan sartutako formularioen historia"
-
-#: ../cleaners/chromium.xml ../cleaners/d4x.xml ../cleaners/vim.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/mc.xml
-#: ../cleaners/seamonkey.xml ../cleaners/windows_defender.xml
-#: ../cleaners/google_chrome.xml ../cleaners/nautilus.xml
-#: ../cleaners/safari.xml ../cleaners/bash.xml ../cleaners/links2.xml
-#: ../cleaners/elinks.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/libreoffice.xml ../cleaners/realplayer.xml
-msgid "History"
-msgstr "Historia"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
-"Ezabatu historia, bisitatutako guneak, deskargak eta koadro txikiak barne"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Search engines"
-msgstr "Bilatzaileak"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"Berrezarri bilatzailearen erabilera-historia eta ezabatu bilatzaile ez-"
-"lehenetsiak, horietako batzuk automatikoki gehitzen dira"
-
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "Uneko saioa"
-
-#: ../cleaners/chromium.xml ../cleaners/opera.xml ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "Ezabatu uneko saioa"
-
-#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/gnome.xml ../cleaners/links2.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/libreoffice.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:284 ../bleachbit/Cleaner.py:355
-msgid "Delete the usage history"
-msgstr "Ezabatu erabilera-historia"
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Koadro txikiak"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -197,99 +130,146 @@ msgstr ""
 "Ezabatu ~/.viminfo (fitxategi-historia, komando-historia eta buffer-ak daude "
 "bertan)"
 
-#: ../cleaners/miro.xml ../cleaners/xine.xml ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "Multimedia ikustailea"
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/amule.xml ../cleaners/gftp.xml
+msgid "File transfer client"
+msgstr "Fitxategi transferentzia bezeroa"
 
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/easytag.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/teamviewer.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../bleachbit/Cleaner.py:391
-msgid "Logs"
-msgstr "Egunkariak"
+#: ../cleaners/filezilla.xml ../cleaners/paint.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/teamviewer.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/winamp.xml
+#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/audacious.xml
+#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:307
+msgid "Most recently used"
+msgstr "Azkenaldian erabilitakoak"
 
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/screenlets.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/vuze.xml
-#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/teamviewer.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/realplayer.xml ../bleachbit/Cleaner.py:391
-msgid "Delete the logs"
-msgstr "Ezabatu egunkariak"
+#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
+#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:307
+#: ../bleachbit/Cleaner.py:387
+msgid "Delete the list of recently used documents"
+msgstr "Ezabatu azkenaldian erabilitako dokumentuen zerrenda"
 
-#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-msgid "Debug logs"
-msgstr "Arazketa-egunkariak"
+#: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
+msgid "Chat logs"
+msgstr "Berriketa-egunkariak"
 
-#: ../cleaners/gl-117.xml ../cleaners/beagle.xml ../cleaners/x11.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
-#: ../cleaners/secondlife_viewer.xml
-msgid "Delete the debug logs"
-msgstr "Ezabatu arazketa-egunkariak"
+#: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
+msgid "Delete the chat logs"
+msgstr "Ezabatu berriketa-egunkariak"
 
-#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "Webguneetan sartutako formularioen eta bilaketa barraren historia"
+#: ../cleaners/xchat.xml ../cleaners/emesene.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Berriketa bezeroa"
 
+#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/elinks.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../bleachbit/Cleaner.py:209
+msgid "Web browser"
+msgstr "Web arakatzailea"
+
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
+#: ../bleachbit/Cleaner.py:186
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Ezabatu aurretik bisitatutako orriak bistaratzeko denbora txikitzen duen web "
+"cache-a"
+
+#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
+#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:187
+msgid "Cookies"
+msgstr "Cookie-ak"
+
+#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
+#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:187
+msgid ""
+"Delete cookies, which contain information such as web site preferences, "
+"authentication, and tracking identification"
+msgstr ""
+"Ezabatu cookie-ak (webguneen hobespen, autentifikazio eta jarraipen "
+"identifikazioen gisako informazioa gordetzen dute)"
+
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:196
 msgid "List of visited web pages"
 msgstr "Bisitatutako web orrien zerrenda"
 
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:407
-msgid "Temporary files"
-msgstr "Aldi baterako fitxategiak"
+#: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "Ezabatu azkenaldian erabilitakoen zerrenda"
 
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/gimp.xml ../cleaners/google_earth.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/winetricks.xml ../cleaners/wine.xml ../bleachbit/Cleaner.py:407
-msgid "Delete the temporary files"
-msgstr "Ezabatu aldi baterako fitxategiak"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Ezabatu avatar eta aurpegieren cache-a"
 
-#: ../cleaners/audacious.xml ../cleaners/filezilla.xml ../cleaners/winrar.xml
-#: ../cleaners/wordpad.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/paint.xml ../bleachbit/Cleaner.py:305
-msgid "Most recently used"
-msgstr "Azkenaldian erabilitakoak"
-
-#: ../cleaners/audacious.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
-#: ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../bleachbit/Cleaner.py:305 ../bleachbit/Cleaner.py:383
-msgid "Delete the list of recently used documents"
-msgstr "Ezabatu azkenaldian erabilitako dokumentuen zerrenda"
-
-#: ../cleaners/kde.xml ../cleaners/gwenview.xml ../cleaners/gedit.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:383
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:387
 msgid "Recent documents list"
 msgstr "Azkenaldiko dokumentuen zerrenda"
 
-#: ../cleaners/pidgin.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml
-msgid "Chat client"
-msgstr "Berriketa bezeroa"
+#. In Windows 'Run' is the dialog in the Start menu
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
+msgid "Run"
+msgstr "Exekutatu"
 
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
-msgid "Chat logs"
-msgstr "Berriketa-egunkariak"
+#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Bilaketen historia"
 
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/xchat.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/skype.xml
-msgid "Delete the chat logs"
-msgstr "Ezabatu berriketa-egunkariak"
+#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Ezabatu bilaketen historia"
+
+#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/x11.xml
+msgid "Debug logs"
+msgstr "Arazketa-egunkariak"
+
+#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/easytag.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
+msgid "Delete the debug logs"
+msgstr "Ezabatu arazketa-egunkariak"
+
+#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
+#: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml ../cleaners/gimp.xml
+#: ../cleaners/kde.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:430
+msgid "Temporary files"
+msgstr "Aldi baterako fitxategiak"
+
+#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
+#: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml ../cleaners/gimp.xml
+#: ../cleaners/kde.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:430
+msgid "Delete the temporary files"
+msgstr "Ezabatu aldi baterako fitxategiak"
 
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:191
 msgid "Download history"
@@ -303,59 +283,112 @@ msgstr "Deskargatutako fitxategien zerrenda"
 msgid "Delete the list of visited web pages"
 msgstr "Ezabatu bisitatutako web-orrien zerrenda"
 
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "Mahaigainerako trepetak"
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "Babeskopia-fitxategiak"
 
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "Bilaketa tresna"
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "Ezabatu babeskopia-fitxategiak"
 
-#: ../cleaners/beagle.xml
-msgid "Search indexes"
-msgstr "Bilaketa-indizeak"
+#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Current session"
+msgstr "Uneko saioa"
 
-#: ../cleaners/beagle.xml
-msgid "Delete the search indexes"
-msgstr "Ezabatu bilaketa-indizeak"
+#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Delete the current session"
+msgstr "Ezabatu uneko saioa"
 
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml
-msgid "File transfer client"
-msgstr "Fitxategi transferentzia bezeroa"
+#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:196
+msgid "URL history"
+msgstr "URL historia"
 
-#: ../cleaners/windows_defender.xml ../cleaners/deepscan.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
+#: ../bleachbit/Cleaner.py:317
+msgid "Office suite"
+msgstr "Bulegotikako suitea"
+
+#: ../cleaners/windows_defender.xml ../cleaners/beagle.xml
+#: ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
 #: ../bleachbit/Cleaner.py:188
 msgid "Delete the files"
 msgstr "Ezabatu fitxategiak"
 
-#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "Bilaketen historia"
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Ezabatu joko zerbitzari zerrenda"
 
-#: ../cleaners/opera.xml ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "Ezabatu bilaketen historia"
+#: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:192
+msgid "Form history"
+msgstr "Formularioen historia"
 
-#: ../cleaners/opera.xml ../cleaners/konqueror.xml ../bleachbit/Cleaner.py:196
-msgid "URL history"
-msgstr "URL historia"
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:192
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "Webguneetan sartutako formularioen eta bilaketa barraren historia"
 
-#: ../cleaners/winrar.xml ../cleaners/wordpad.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/winzip.xml ../cleaners/vlc.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/paint.xml
-msgid "Delete the most recently used list"
-msgstr "Ezabatu azkenaldian erabilitakoen zerrenda"
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "Ezabatu fitxategi zaharkituak"
 
-#: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "Multimedia ikustailea"
+
+#: ../cleaners/recoll.xml ../cleaners/beagle.xml
+msgid "Search tool"
+msgstr "Bilaketa tresna"
+
+#: ../cleaners/recoll.xml ../cleaners/beagle.xml ../cleaners/thunderbird.xml
+msgid "Index"
+msgstr "Indizea"
+
+#: ../cleaners/recoll.xml
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Ezabatu bilaketa-indizea (hitzen eta hitz hauek agertzen diren fitxategien "
+"datu-basea)"
+
+#: ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "Deskargatutako podcast-ak"
+
+#: ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "Ezabatu deskargatutako podcast-ak"
+
+#: ../cleaners/bash.xml
+msgid "Delete the command history"
+msgstr "Ezabatu komandoen historia"
+
+#. TRANSLATORS: DOM = Document Object Model.
+#: ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+msgid "DOM Storage"
+msgstr "DOM biltegiratzea"
+
+#: ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:190
+msgid "Delete HTML5 cookies"
+msgstr "Ezabatu HTML5 cookie-ak"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Karpeta pertsonalizatuak berrezarriko dira."
+
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "Mahaigainerako trepetak"
+
+#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:195
 msgid "Passwords"
 msgstr "Pasahitzak"
 
-#: ../cleaners/epiphany.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:195
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
@@ -380,30 +413,32 @@ msgstr ""
 msgid "This option deletes all bookmarks."
 msgstr "Aukera honek laster-marka guztiak ezabatzen ditu."
 
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:315
-msgid "Office suite"
-msgstr "Bulegotikako suitea"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Ezabatu cookie-ak, bisitatutako URL-ak eta bilaketa-historia"
 
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "Ezabatu fitxategi zaharkituak"
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "A history of forms entered in web sites"
+msgstr "Webguneetan sartutako formularioen historia"
 
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Backup files"
-msgstr "Babeskopia-fitxategiak"
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr ""
+"Ezabatu historia, bisitatutako guneak, deskargak eta koadro txikiak barne"
 
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Delete the backup files"
-msgstr "Ezabatu babeskopia-fitxategiak"
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "Search engines"
+msgstr "Bilatzaileak"
 
-#: ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "Deskargatutako podcast-ak"
-
-#: ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "Ezabatu deskargatutako podcast-ak"
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"Berrezarri bilatzailearen erabilera-historia eta ezabatu bilatzaile ez-"
+"lehenetsiak, horietako batzuk automatikoki gehitzen dira"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
@@ -412,10 +447,6 @@ msgstr "Saioa"
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
 msgstr "Ezabatu uneko eta azkenengo saioak"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Ezabatu avatar eta aurpegieren cache-a"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -429,39 +460,6 @@ msgstr "Aztertu aurrebista gorde nahi dituzun fitxategientzat."
 msgid "This option is slow."
 msgstr "Aukera hau mantsoa da."
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Karpeta pertsonalizatuak berrezarriko dira."
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Koadro txikiak"
-
-#: ../cleaners/bash.xml
-msgid "Delete the command history"
-msgstr "Ezabatu komandoen historia"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "Exekutatu"
-
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Ezabatu cookie-ak, bisitatutako URL-ak eta bilaketa-historia"
-
-#: ../cleaners/recoll.xml
-msgid "Index"
-msgstr "Indizea"
-
-#: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr ""
-"Ezabatu bilaketa-indizea (hitzen eta hitz hauek agertzen diren fitxategien "
-"datu-basea)"
-
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
 msgstr "Beharrezko ez diren fitxategien garbitzailea"
@@ -470,89 +468,18 @@ msgstr "Beharrezko ez diren fitxategien garbitzailea"
 msgid "Free space and maintain privacy"
 msgstr "Egin leku librea eta mantendu pribatutasuna"
 
-#. TRANSLATORS: This is the label in the log indicating was
-#. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:46
-msgid "Skip"
-msgstr "Saltatu"
-
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:73
-msgid "Delete"
-msgstr "Ezabatu"
-
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:93
-msgid "Mark for deletion"
-msgstr "Ezabatzeko markatu"
-
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:183 ../bleachbit/Command.py:213
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:216
 #: ../bleachbit/Action.py:228 ../bleachbit/Action.py:241
-#: ../bleachbit/Action.py:253
+#: ../bleachbit/Action.py:253 ../bleachbit/Command.py:183
+#: ../bleachbit/Command.py:213
 msgid "Clean file"
 msgstr "Garbitu fitxategia"
-
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:250
-msgid "Truncate"
-msgstr "Trunkatu"
-
-#: ../bleachbit/Command.py:289
-msgid "Delete registry key"
-msgstr "Ezabatu erregistro-gakoa"
-
-#: ../bleachbit/Unix.py:366 ../bleachbit/Unix.py:396 ../bleachbit/Unix.py:576
-#, python-format
-msgid "Executable not found: %s"
-msgstr "Exekutagarria ez da aurkitu: %s"
-
-#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:573 ../bleachbit/Worker.py:136
-#, python-format
-msgid ""
-"%s cannot be cleaned because it is currently running.  Close it, and try "
-"again."
-msgstr "%s ezin da garbitu exekutatzen ari delako. Itxi eta saiatu berriz."
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:585
 msgid "Clean"
 msgstr "Garbitu"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:45
-msgid "Applications"
-msgstr "Aplikazioak"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:47 ../bleachbit/Winapp.py:55
-#: ../bleachbit/Winapp.py:57 ../bleachbit/Winapp.py:59
-#: ../bleachbit/Winapp.py:61 ../bleachbit/Winapp.py:63
-msgid "Internet"
-msgstr "Internet"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:49
-msgid "Multimedia"
-msgstr "Multimedia"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:51
-msgid "Utilities"
-msgstr "Tresnak"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini.
-#: ../bleachbit/Winapp.py:53
-msgid "Microsoft Windows"
-msgstr "Microsoft Windows"
-
-#: ../bleachbit/Winapp.py:94
-msgid "Imported from winapp2.ini"
-msgstr "winapp2.ini-tik inportatua"
 
 #: ../bleachbit/Cleaner.py:188
 msgid "Crash reports"
@@ -581,35 +508,26 @@ msgstr "Banakako guneen hobespenak"
 #. types, so clicking on an .html file in Nautilus brings up
 #. Firefox.
 #. More information: http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:370
+#: ../bleachbit/Cleaner.py:376
 msgid "Broken desktop files"
 msgstr "Hondatutako .desktop fitxategiak"
 
-#: ../bleachbit/Cleaner.py:370
+#: ../bleachbit/Cleaner.py:376
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
 "Ezabatu aplikazioen hondatutako menu-sarrerak eta fitxategi elkarketak"
 
-#. TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
-#: ../bleachbit/Cleaner.py:373 ../bleachbit/GuiPreferences.py:62
-msgid "Custom"
-msgstr "Pertsonalizatua"
-
-#: ../bleachbit/Cleaner.py:373
-msgid "Delete user-specified files and folders"
-msgstr "Ezabatu erabiltzaileak zehazturiko fitxategi eta karpetak"
-
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:376
+#: ../bleachbit/Cleaner.py:380
 msgid "Localizations"
 msgstr "Itzulpenak"
 
-#: ../bleachbit/Cleaner.py:376
+#: ../bleachbit/Cleaner.py:380
 msgid "Delete files for unwanted languages"
 msgstr "Ezabatu nahi ez diren hizkuntzetarako fitxategiak"
 
-#: ../bleachbit/Cleaner.py:377
+#: ../bleachbit/Cleaner.py:381
 msgid "Configure this option in the preferences."
 msgstr "Konfiguratu aukera hau hobespenetan."
 
@@ -617,65 +535,65 @@ msgstr "Konfiguratu aukera hau hobespenetan."
 #. Linux systems often have a scheduled job to rotate the logs
 #. which means compress all except the newest log and then delete
 #. the oldest log.  You could translate this 'old logs.'
-#: ../bleachbit/Cleaner.py:382
+#: ../bleachbit/Cleaner.py:386
 msgid "Rotated logs"
 msgstr "Biratutako egunkariak"
 
-#: ../bleachbit/Cleaner.py:382
+#: ../bleachbit/Cleaner.py:386
 msgid "Delete old system logs"
 msgstr "Ezabatu sistemaren egunkari zaharrak"
 
-#: ../bleachbit/Cleaner.py:384
+#: ../bleachbit/Cleaner.py:388
 msgid "Trash"
 msgstr "Zakarrontzia"
 
-#: ../bleachbit/Cleaner.py:384
+#: ../bleachbit/Cleaner.py:388
 msgid "Empty the trash"
 msgstr "Hustu zakarrontzia"
 
-#: ../bleachbit/Cleaner.py:386 ../bleachbit/Cleaner.py:508
+#: ../bleachbit/Cleaner.py:394 ../bleachbit/Cleaner.py:536
 #: ../bleachbit/Worker.py:212
 msgid "Memory"
 msgstr "Memoria"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:388
+#: ../bleachbit/Cleaner.py:396
 msgid "Wipe the swap and free memory"
 msgstr "Garbitu swap memoria eta memoria librea"
 
-#: ../bleachbit/Cleaner.py:389
+#: ../bleachbit/Cleaner.py:397
 msgid "This option is experimental and may cause system problems."
 msgstr ""
 "Aukera hau esperimentala da eta arazoak sortu ditzazke zure sisteman."
 
-#: ../bleachbit/Cleaner.py:392
+#: ../bleachbit/Cleaner.py:404
 msgid "Memory dump"
 msgstr "Memoria-iraulketa"
 
-#: ../bleachbit/Cleaner.py:392
+#: ../bleachbit/Cleaner.py:404
 msgid "Delete the file memory.dmp"
 msgstr "Ezabatu memory.dmp fitxategia"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:395
+#: ../bleachbit/Cleaner.py:407
 msgid "Prefetch"
 msgstr "Aurrez eskuratu"
 
-#: ../bleachbit/Cleaner.py:396
+#: ../bleachbit/Cleaner.py:408
 msgid "Recycle bin"
 msgstr "Zakarrontzia"
 
-#: ../bleachbit/Cleaner.py:396
+#: ../bleachbit/Cleaner.py:408
 msgid "Empty the recycle bin"
 msgstr "Hustu zakarrontzia"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:399
+#: ../bleachbit/Cleaner.py:411
 msgid "Update uninstallers"
 msgstr "Eguneraketen desinstalatzaileak"
 
-#: ../bleachbit/Cleaner.py:399
+#: ../bleachbit/Cleaner.py:411
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
@@ -683,50 +601,175 @@ msgstr ""
 "Ezabatu Microsoft eguneraketen desinstalatzaileak (hotfix-ak, service pack-"
 "ak eta Internet Explorer-en eguneraketak barne)"
 
-#: ../bleachbit/Cleaner.py:401 ../bleachbit/Cleaner.py:603
+#: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:627
 msgid "Clipboard"
 msgstr "Arbela"
 
-#: ../bleachbit/Cleaner.py:401
+#: ../bleachbit/Cleaner.py:418
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Kopiatu eta itsatsi eragiketetan erabiltzen den mahaigain inguruneko arbela"
 
+#. TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
+#: ../bleachbit/Cleaner.py:424 ../bleachbit/GuiPreferences.py:62
+msgid "Custom"
+msgstr "Pertsonalizatua"
+
+#: ../bleachbit/Cleaner.py:424
+msgid "Delete user-specified files and folders"
+msgstr "Ezabatu erabiltzaileak zehazturiko fitxategi eta karpetak"
+
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:403
+#: ../bleachbit/Cleaner.py:426
 msgid "Free disk space"
 msgstr "Leku librea diskoan"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:405
+#: ../bleachbit/Cleaner.py:428
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "Diskoko leku librea gainidatzi ezabatutako fitxategiak ezkutatzeko"
 
-#: ../bleachbit/Cleaner.py:406
+#: ../bleachbit/Cleaner.py:429
 msgid "This option is very slow."
 msgstr "Aukera hau oso mantsoa da."
 
-#: ../bleachbit/Cleaner.py:410
+#: ../bleachbit/Cleaner.py:433
 msgid "The system in general"
 msgstr "Sistema orokorrean"
 
-#: ../bleachbit/Cleaner.py:416 ../bleachbit/Cleaner.py:688
+#: ../bleachbit/Cleaner.py:439 ../bleachbit/Cleaner.py:712
 msgid "System"
 msgstr "Sistema"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:612 ../bleachbit/Cleaner.py:715
+#: ../bleachbit/Cleaner.py:636 ../bleachbit/Cleaner.py:739
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Gainidatzi %s diskoko leku librea"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:640
+#: ../bleachbit/Cleaner.py:664
 #, python-format
 msgid "Recycle bin %s"
 msgstr "%s zakarrontzia"
+
+#: ../bleachbit/CLI.py:123
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "ez da baliozko garbitzailea: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog, but do translate usage, options, cleaner, and option.
+#. More information about the command line is here
+#. http://bleachbit.sourceforge.net/documentation/command-line
+#: ../bleachbit/CLI.py:150
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "erabilera: %prog [aukerak] garbitzailea.aukera1 garbitzailea.aukera2"
+
+#: ../bleachbit/CLI.py:153
+msgid "list cleaners"
+msgstr "Zerrendatu garbitzaileak"
+
+#: ../bleachbit/CLI.py:155
+msgid "delete files and make other permanent changes"
+msgstr "ezabatu fitxategiak eta gauzatu beste aldaketa iraunkorrak"
+
+#. TRANSLATORS: this is a warning for using --delete which will go away one day
+#: ../bleachbit/CLI.py:158
+msgid "depreciated alias for --clean"
+msgstr "alias zaharkitua --clean-entzako"
+
+#: ../bleachbit/CLI.py:160
+msgid "show system information"
+msgstr "erakutsi sistemaren informazioa"
+
+#: ../bleachbit/CLI.py:161
+msgid "launch the graphical interface"
+msgstr "abiarazi interfaze grafikoa"
+
+#: ../bleachbit/CLI.py:163
+msgid "do not prompt for administrator privileges"
+msgstr "ez eskatu administratzaile baimenik"
+
+#: ../bleachbit/CLI.py:168
+msgid "preview files to be deleted and other changes"
+msgstr "ezabatuko diren fitxategien eta beste aldaketen aurrebista"
+
+#: ../bleachbit/CLI.py:170
+msgid "use options set in the graphical interface"
+msgstr "erabili interfaze grafikoan zehaztutako aukerak"
+
+#: ../bleachbit/CLI.py:172
+msgid "output version information and exit"
+msgstr "bertsioaren informazioa erakutsi eta irten"
+
+#: ../bleachbit/CLI.py:174
+msgid "overwrite files to hide contents"
+msgstr "gainidatzi fitxategiak edukiak ezkutatzeko"
+
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:46
+msgid "Skip"
+msgstr "Saltatu"
+
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:73
+msgid "Delete"
+msgstr "Ezabatu"
+
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:93
+msgid "Mark for deletion"
+msgstr "Ezabatzeko markatu"
+
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:250
+msgid "Truncate"
+msgstr "Trunkatu"
+
+#: ../bleachbit/Command.py:289
+msgid "Delete registry key"
+msgstr "Ezabatu erregistro-gakoa"
+
+#: ../bleachbit/GuiBasic.py:113
+msgid "Delete confirmation"
+msgstr "Ezabaketaren baieztapena"
+
+#: ../bleachbit/GuiBasic.py:121
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Ziur zaude betirako ezabatu nahi dituzula fitxategiak hautatutako eragiketen "
+"arabera? Ezabatuko diren fitxategiak aldatu egin dira aurrebista exekutatu "
+"zenuen azken alditik."
+
+#: ../bleachbit/GuiBasic.py:123
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Ziur zaude betirako ezabatu nahi dituzula fitxategi hauek?"
+
+#: ../bleachbit/GuiBasic.py:159
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Administratzaile gisa exekutatzen ari zarenez, mesedez ireki eskuz lotura "
+"hau web arakatzaile batean:\n"
+"%s"
+
+#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#: ../bleachbit/GuiBasic.py:171
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "%s ireki nahi duzu web arakatzailean?"
 
 #: ../bleachbit/GuiPreferences.py:55 ../bleachbit/GUI.py:637
 msgid "Preferences"
@@ -879,219 +922,6 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Gehitu karpeta"
 
-#: ../bleachbit/RecognizeCleanerML.py:63
-msgid "Security warning"
-msgstr "Segurtasun oharra"
-
-#. TRANSLATORS: Cleaner definitions are XML data files that define
-#. which files will be cleaned.
-#: ../bleachbit/RecognizeCleanerML.py:75
-msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
-msgstr ""
-"Garbiketarako definizio hauek berriak dira edo aldatu egin dira. Definizio "
-"maltzurrek zure sistema kaltetu dezakete. Aldaketa hauekin fidatzen ez "
-"bazara, ezabatu fitxategiak edo irten."
-
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:88
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Ezabatu"
-
-#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-#: ../bleachbit/RecognizeCleanerML.py:91
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Fitxategi-izena"
-
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:76
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Salbuespena '%(operation)s': '%(msg)s' eragiketa exekutatzean"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:210
-msgid "Please wait.  Wiping free disk space."
-msgstr "Mesedez itxaron. Diskoko leku librea garbitzen."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:212 ../bleachbit/Worker.py:299
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Mesedez itxaron. %s garbitzen."
-
-#: ../bleachbit/Worker.py:222
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Minutu %d inguru falta da."
-msgstr[1] "%d minutu inguru falta dira."
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:237
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Berreskuratutako diskoko lekua: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:241
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Berreskuratuko den diskoko lekua: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:246
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Ezabatutako fitxategiak: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:250
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Ezabatuko diren fitxategiak: %d"
-
-#: ../bleachbit/Worker.py:253
-#, python-format
-msgid "Special operations: %d"
-msgstr "Eragiketa bereziak: %d"
-
-#: ../bleachbit/Worker.py:256
-#, python-format
-msgid "Errors: %d"
-msgstr "Erroreak: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:272
-msgid "Please wait.  Running deep scan."
-msgstr "Mesedez itxaron. Eskaneatze sakona exekutatzen."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:302
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Mesedez itxaron. %s aurrikusten."
-
-#: ../bleachbit/Update.py:75
-msgid "New winapp2.ini was downloaded."
-msgstr "winapp2.ini berria deskargatu da."
-
-#: ../bleachbit/Update.py:111
-msgid "Update BleachBit"
-msgstr "Eguneratu BleachBit"
-
-#: ../bleachbit/Update.py:116
-msgid "A new version is available."
-msgstr "Bertsio berri bat eskuragarri dago."
-
-#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
-#: ../bleachbit/Update.py:124
-#, python-format
-msgid "Update to version %s"
-msgstr "Eguneratu %s bertsiora"
-
-#: ../bleachbit/CLI.py:123
-#, python-format
-msgid "not a valid cleaner: %s"
-msgstr "ez da baliozko garbitzailea: %s"
-
-#. TRANSLATORS: This is the command line usage.  Don't translate
-#. %prog, but do translate usage, options, cleaner, and option.
-#. More information about the command line is here
-#. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:150
-msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "erabilera: %prog [aukerak] garbitzailea.aukera1 garbitzailea.aukera2"
-
-#: ../bleachbit/CLI.py:153
-msgid "list cleaners"
-msgstr "Zerrendatu garbitzaileak"
-
-#: ../bleachbit/CLI.py:155
-msgid "delete files and make other permanent changes"
-msgstr "ezabatu fitxategiak eta gauzatu beste aldaketa iraunkorrak"
-
-#. TRANSLATORS: this is a warning for using --delete which will go away one day
-#: ../bleachbit/CLI.py:158
-msgid "depreciated alias for --clean"
-msgstr "alias zaharkitua --clean-entzako"
-
-#: ../bleachbit/CLI.py:160
-msgid "show system information"
-msgstr "erakutsi sistemaren informazioa"
-
-#: ../bleachbit/CLI.py:161
-msgid "launch the graphical interface"
-msgstr "abiarazi interfaze grafikoa"
-
-#: ../bleachbit/CLI.py:163
-msgid "do not prompt for administrator privileges"
-msgstr "ez eskatu administratzaile baimenik"
-
-#: ../bleachbit/CLI.py:168
-msgid "preview files to be deleted and other changes"
-msgstr "ezabatuko diren fitxategien eta beste aldaketen aurrebista"
-
-#: ../bleachbit/CLI.py:170
-msgid "use options set in the graphical interface"
-msgstr "erabili interfaze grafikoan zehaztutako aukerak"
-
-#: ../bleachbit/CLI.py:172
-msgid "output version information and exit"
-msgstr "bertsioaren informazioa erakutsi eta irten"
-
-#: ../bleachbit/CLI.py:174
-msgid "overwrite files to hide contents"
-msgstr "gainidatzi fitxategiak edukiak ezkutatzeko"
-
-#: ../bleachbit/GuiBasic.py:113
-msgid "Delete confirmation"
-msgstr "Ezabaketaren baieztapena"
-
-#: ../bleachbit/GuiBasic.py:121
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-"Ziur zaude betirako ezabatu nahi dituzula fitxategiak hautatutako eragiketen "
-"arabera? Ezabatuko diren fitxategiak aldatu egin dira aurrebista exekutatu "
-"zenuen azken alditik."
-
-#: ../bleachbit/GuiBasic.py:123
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "Ziur zaude betirako ezabatu nahi dituzula fitxategi hauek?"
-
-#: ../bleachbit/GuiBasic.py:159
-#, python-format
-msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
-msgstr ""
-"Administratzaile gisa exekutatzen ari zarenez, mesedez ireki eskuz lotura "
-"hau web arakatzaile batean:\n"
-"%s"
-
-#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
-#: ../bleachbit/GuiBasic.py:171
-#, python-format
-msgid "Open web browser to %s?"
-msgstr "%s ireki nahi duzu web arakatzailean?"
-
 #: ../bleachbit/GUI.py:144
 msgid "Active"
 msgstr "Aktiboa"
@@ -1138,7 +968,8 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Asier Iturralde Sarasola https://launchpad.net/~asier-iturralde"
+"  Asier Iturralde Sarasola https://launchpad.net/~asier-iturralde\n"
+"  gorkaazk https://launchpad.net/~gorkaazkarate"
 
 #: ../bleachbit/GUI.py:422
 msgid "System information"
@@ -1238,3 +1069,168 @@ msgid ""
 msgstr ""
 "Errorea SQLite modulua kargatzean: antibirus softwareak blokeatuta egon "
 "daiteke."
+
+#: ../bleachbit/RecognizeCleanerML.py:62
+msgid "Security warning"
+msgstr "Segurtasun oharra"
+
+#. TRANSLATORS: Cleaner definitions are XML data files that define
+#. which files will be cleaned.
+#: ../bleachbit/RecognizeCleanerML.py:74
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Garbiketarako definizio hauek berriak dira edo aldatu egin dira. Definizio "
+"maltzurrek zure sistema kaltetu dezakete. Aldaketa hauekin fidatzen ez "
+"bazara, ezabatu fitxategiak edo irten."
+
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:87
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Ezabatu"
+
+#. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
+#: ../bleachbit/RecognizeCleanerML.py:90
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Fitxategi-izena"
+
+#: ../bleachbit/Unix.py:366 ../bleachbit/Unix.py:396 ../bleachbit/Unix.py:576
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Exekutagarria ez da aurkitu: %s"
+
+#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+#: ../bleachbit/Unix.py:573 ../bleachbit/Worker.py:136
+#, python-format
+msgid ""
+"%s cannot be cleaned because it is currently running.  Close it, and try "
+"again."
+msgstr "%s ezin da garbitu exekutatzen ari delako. Itxi eta saiatu berriz."
+
+#: ../bleachbit/Update.py:73
+msgid "New winapp2.ini was downloaded."
+msgstr "winapp2.ini berria deskargatu da."
+
+#: ../bleachbit/Update.py:111
+msgid "Update BleachBit"
+msgstr "Eguneratu BleachBit"
+
+#: ../bleachbit/Update.py:116
+msgid "A new version is available."
+msgstr "Bertsio berri bat eskuragarri dago."
+
+#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
+#: ../bleachbit/Update.py:124
+#, python-format
+msgid "Update to version %s"
+msgstr "Eguneratu %s bertsiora"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:48
+msgid "Applications"
+msgstr "Aplikazioak"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:50
+msgid "Internet"
+msgstr "Internet"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:52
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:54
+msgid "Utilities"
+msgstr "Tresnak"
+
+#: ../bleachbit/Winapp.py:68
+msgid "Games"
+msgstr "Jokoak"
+
+#: ../bleachbit/Winapp.py:99
+msgid "Imported from winapp2.ini"
+msgstr "winapp2.ini-tik inportatua"
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:76
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Salbuespena '%(operation)s': '%(msg)s' eragiketa exekutatzean"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:210
+msgid "Please wait.  Wiping free disk space."
+msgstr "Mesedez itxaron. Diskoko leku librea garbitzen."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:212 ../bleachbit/Worker.py:299
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Mesedez itxaron. %s garbitzen."
+
+#: ../bleachbit/Worker.py:222
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Minutu %d inguru falta da."
+msgstr[1] "%d minutu inguru falta dira."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:237
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Berreskuratutako diskoko lekua: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:241
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Berreskuratuko den diskoko lekua: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:246
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Ezabatutako fitxategiak: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:250
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Ezabatuko diren fitxategiak: %d"
+
+#: ../bleachbit/Worker.py:253
+#, python-format
+msgid "Special operations: %d"
+msgstr "Eragiketa bereziak: %d"
+
+#: ../bleachbit/Worker.py:256
+#, python-format
+msgid "Errors: %d"
+msgstr "Erroreak: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:272
+msgid "Please wait.  Running deep scan."
+msgstr "Mesedez itxaron. Eskaneatze sakona exekutatzen."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:302
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Mesedez itxaron. %s aurrikusten."
