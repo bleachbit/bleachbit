@@ -98,7 +98,7 @@ class TreeInfoModel:
             c_value = options.get_tree(c_id, None)
             if not c_value and options.get('auto_hide') \
                 and backends[key].auto_hide():
-                print "info: automatically hiding cleaner '%s'" % (c_id)
+                #print "info: automatically hiding cleaner '%s'" % (c_id)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
             for (o_id, o_name) in backends[key].get_options():
