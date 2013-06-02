@@ -178,7 +178,7 @@ class Winapp:
             print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
             return
         # lid is the cleaner ID, such as winapp2_multimedia
-        lid = langsecref_map[langsecref_num][0] 
+        lid = langsecref_map[langsecref_num][0]
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
