@@ -31,7 +31,7 @@ import unittest
 
 
 sys.path.append('.')
-from bleachbit.Winapp import Winapp, section2option
+from bleachbit.Winapp import Winapp, detectos, section2option
 from bleachbit.Windows import detect_registry_key
 
 import common
@@ -89,6 +89,29 @@ class WinappTestCase(unittest.TestCase):
         winapps = Winapp(get_winapp2())
         for cleaner in winapps.get_cleaners():
             self.run_all(cleaner, False)
+
+
+    def test_detectos(self):
+        """Test detectos function"""
+        # Tests are in the format (required_ver, mock, expected_return)
+        tests = (('5.1', '5.1', True), \
+            ('5.1', '6.0', False), \
+            ('6.0', '5.1', False), \
+            ('|5.1', '5.1', True), \
+            ('|5.1', '6.0', False), \
+            ('6.1|', '5.1', False), \
+            ('6.1|', '6.0', False), \
+            ('6.1|', '6.1', True), \
+            ('6.1|', '6.2', True), \
+            ('6.2|', '5.1', False), \
+            ('6.2|', '6.0', False), \
+            ('6.2|', '6.1', False), \
+            ('6.2|', '6.2', True))
+        for (s, mock, expected_return) in tests:
+            actual_return = detectos(s, mock)
+            self.assertEqual(expected_return, actual_return,
+                'detectos(%s, %s)==%s instead of %s' % (s, mock,
+                actual_return, expected_return))
 
 
     def test_fake(self):

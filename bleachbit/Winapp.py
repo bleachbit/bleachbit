@@ -81,6 +81,23 @@ def preexpand(s):
     return re.sub(r'%([a-zA-Z]+)%', r'${\1}', s)
 
 
+def detectos(required_ver, mock = False):
+    """Returns boolean whether the detectos is compatible with the
+    current operating system, or the mock version, if given."""
+    current_os = (mock if mock else uname()[3])[0:3]
+    required_ver = required_ver.strip()
+    if required_ver.startswith('|'):
+        # This is the maximum version
+        # For example, |5.1 means Windows XP (5.1) but not Vista (6.0)
+        return current_os <= required_ver[1:]
+    elif required_ver.endswith('|'):
+        # This is the minimum version
+        # For example, 6.1| means Windows 7 or later
+        return current_os >= required_ver[:-1]
+    else:
+        # Exact version
+        return required_ver == current_os
+
 class Winapp:
     """Create cleaners from a Winapp2.ini-style file"""
 
@@ -120,9 +137,8 @@ class Winapp:
             if not detect_file(self.parser.get(section, 'detectfile')):
                 return
         if self.parser.has_option(section, 'detectos'):
-            min_os = self.parser.get(section, 'detectos')
-            cur_os = uname()[3][0:3]
-            if min_os > cur_os:
+            required_ver = self.parser.get(section, 'detectos')
+            if not detectos(required_ver):
                 return
         # in case of multiple detection, discard if none match
         if self.parser.has_option(section, 'detectfile1'):
