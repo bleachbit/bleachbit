@@ -105,12 +105,9 @@ class Winapp:
         """Create cleaners from a Winapp2.ini-style file"""
 
         self.cleaners = {}
+        self.cleaner_ids = []
         for langsecref in set(langsecref_map.values()):
-            lid = langsecref[0]
-            self.cleaners[lid] = Cleaner.Cleaner()
-            self.cleaners[lid].id = lid
-            self.cleaners[lid].name = langsecref[1]
-            self.cleaners[lid].description = _('Imported from winapp2.ini')
+            self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
         self.parser = ConfigParser.RawConfigParser()
         self.parser.read(pathname)
@@ -121,6 +118,29 @@ class Winapp:
                 self.errors += 1
                 print 'ERROR: parsing error in section %s' % section
                 traceback.print_exc()
+
+
+    def add_section(self, cleaner_id, name):
+        """Add a section (cleaners)"""
+        self.cleaner_ids.append(cleaner_id)
+        self.cleaners[cleaner_id] = Cleaner.Cleaner()
+        self.cleaners[cleaner_id].id = cleaner_id
+        self.cleaners[cleaner_id].name = name
+        self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
+
+
+    def section_to_cleanerid(self, langsecref):
+        """Given a langsecref (or section name), find the internal
+        BleachBit cleaner ID."""
+        # pre-defined, such as 3021
+        if langsecref in langsecref_map.keys():
+            return langsecref_map[langsecref][0]
+        # custom, such as games
+        cleanerid = 'winapp2_' + section2option(langsecref)
+        if not cleanerid in self.cleaners:
+            # never seen before
+            self.add_section(cleanerid, langsecref)
+        return cleanerid
 
 
     def handle_section(self, section):
@@ -168,17 +188,13 @@ class Winapp:
             # verify the langsecref number is known
             # langsecref_num is 3021, games, etc.
             langsecref_num = self.parser.get(section, 'langsecref')
-            if langsecref_num not in langsecref_map.keys():
-                raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
         elif self.parser.has_option(section, 'section'):
             langsecref_num = self.parser.get(section, 'section')
-            if langsecref_num not in langsecref_map.keys():
-                raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
         else:
             print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
             return
-        # lid is the cleaner ID, such as winapp2_multimedia
-        lid = langsecref_map[langsecref_num][0]
+        # find the BleachBit internal cleaner ID
+        lid = self.section_to_cleanerid(langsecref_num)
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
@@ -261,10 +277,9 @@ class Winapp:
 
     def get_cleaners(self):
         """Return the created cleaners"""
-        for langsecref in set(langsecref_map.values()):
-            lid = langsecref[0]
-            if self.cleaners[lid].is_usable():
-                yield self.cleaners[lid]
+        for cleaner_id in self.cleaner_ids:
+            if self.cleaners[cleaner_id].is_usable():
+                yield self.cleaners[cleaner_id]
 
 
 def list_winapp_files():
