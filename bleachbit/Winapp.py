@@ -166,6 +166,7 @@ class Winapp:
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
+            # langsecref_num is 3021, games, etc.
             langsecref_num = self.parser.get(section, 'langsecref')
             if langsecref_num not in langsecref_map.keys():
                 raise RuntimeError('Unknown LangSecRef=%s in section=%s' % (langsecref_num, section))
@@ -176,7 +177,8 @@ class Winapp:
         else:
             print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
             return
-        lid = langsecref_map[langsecref_num][0] # cleaner ID
+        # lid is the cleaner ID, such as winapp2_multimedia
+        lid = langsecref_map[langsecref_num][0] 
         self.cleaners[lid].add_option(section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
