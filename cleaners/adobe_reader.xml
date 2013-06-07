@@ -25,21 +25,14 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/7.0/Cache"/>
-    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/8.0/Cache"/>
-    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/9.0/Cache"/>
-    <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\6.0\Cache"/>
-    <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\7.0\Cache"/>
-    <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\8.0\Cache"/>
-    <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\9.0\Cache"/>
+    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache"/>
+    <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\*\Cache"/>
     <action command="delete" search="glob" path="$USERPROFILE\AppData\LocalLow\Adobe\Acrobat\9.0\Search\*.idx"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action command="delete" search="file" path="~/.adobe/Acrobat/7.0/Preferences/reader_prefs"/>
-    <action command="delete" search="file" path="~/.adobe/Acrobat/8.0/Preferences/reader_prefs"/>
-    <action command="delete" search="file" path="~/.adobe/Acrobat/9.0/Preferences/reader_prefs"/>
+    <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
