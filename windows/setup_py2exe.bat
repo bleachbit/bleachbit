@@ -88,6 +88,10 @@ echo Checking for Linux-only cleaners
 if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
 if exist dist\share\cleaners\wine.xml pause
 
+echo Signing code
+call codesign.bat dist\bleachbit.exe
+call codesign.bat dist\bleachbit_console.exe
+
 echo Recompressing library.zip with 7-Zip
 if "%1" == "fast" goto nsis
 if not exist %SZ_EXE% echo %SZ_EXE% does not exist
