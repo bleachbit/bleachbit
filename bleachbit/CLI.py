@@ -194,8 +194,12 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.list_cleaners:
         list_cleaners()
         sys.exit(0)
-    if options.preview:
+    if options.preview or options.delete or options.clean:
         operations = args_to_operations(args, options.preset)
+        if not operations:
+            print 'ERROR: No work to do.  Specify options.'
+            sys.exit(1)
+    if options.preview:
         preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
@@ -203,7 +207,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.delete:
         print 'Depreciation warning: use --clean instead of --delete'
     if options.delete or options.clean:
-        operations = args_to_operations(args, options.preset)
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.gui:
