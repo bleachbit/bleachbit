@@ -51,7 +51,7 @@
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
     <!-- Fedora 16 Thunderbird 17 has ~/.thunderbird/default/ -->
     <action command="delete" search="walk.files" path="~/.thunderbird/" regex="\.msf$"/>
-    </option>
+  </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
