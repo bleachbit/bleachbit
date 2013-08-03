@@ -27,6 +27,7 @@
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="$APPDATA\Adobe\Flash Player\AssetCache\"/>
     <action command="delete" search="walk.all" path="~/.adobe/Flash_Player/AssetCache/"/>
+    <action command="delete" search="walk.all" path="~/.adobe/Flash_Player/NativeCache/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
