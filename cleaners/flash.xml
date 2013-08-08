@@ -25,7 +25,11 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
+    <!-- reference: http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
+    <!-- reference: http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
     <action command="delete" search="walk.all" path="$APPDATA\Adobe\Flash Player\AssetCache\"/>
+    <action command="delete" search="walk.all" path="$APPDATA\Adobe\Flash Player\APSPrivateData2\"/>
+    <action command="delete" search="walk.all" path="$APPDATA\Adobe\Flash Player\NativeCache\"/>
     <action command="delete" search="walk.all" path="~/.adobe/Flash_Player/AssetCache/"/>
     <action command="delete" search="walk.all" path="~/.adobe/Flash_Player/NativeCache/"/>
   </option>
