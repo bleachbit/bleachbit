@@ -96,9 +96,8 @@ class TreeInfoModel:
             c_name = backends[key].get_name()
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
-            if not c_value and options.get('auto_hide') \
-                and backends[key].auto_hide():
-                #print "info: automatically hiding cleaner '%s'" % (c_id)
+            if not c_value and backends[key].auto_hide():
+                # hide irrelevant cleaner (e.g., the application is not detected)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
             for (o_id, o_name) in backends[key].get_options():

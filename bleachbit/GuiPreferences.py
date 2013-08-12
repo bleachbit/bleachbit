@@ -76,8 +76,6 @@ class PreferencesDialog:
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
             if 'nt' == os.name:
                 self.cb_winapp2.set_sensitive(options.get('check_online_updates'))
-        if 'auto_hide' == path:
-            self.cb_refresh_operations()
         if 'auto_start' == path:
             if 'nt' == os.name:
                 swc = Windows.start_with_computer
@@ -131,15 +129,6 @@ class PreferencesDialog:
                 updates_box.pack_start(self.cb_winapp2, False)
 
             vbox.pack_start(updates_box, False)
-
-        # TRANSLATORS: This means to hide cleaners which would do
-        # nothing.  For example, if Firefox were never used on
-        # this system, this option would hide Firefox to simplify
-        # the list of cleaners.
-        cb_auto_hide = gtk.CheckButton(_("Hide irrelevant cleaners"))
-        cb_auto_hide.set_active(options.get('auto_hide'))
-        cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
-        vbox.pack_start(cb_auto_hide, False)
 
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
