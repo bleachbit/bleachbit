@@ -767,7 +767,7 @@ class GUI:
             self.append_text(_("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
 
 
-    def __init__(self, uac=True):
+    def __init__(self, uac = True, shred_paths = None):
         if uac and 'nt' == os.name and Windows.elevate_privileges():
             # privileges escalated in other process
             sys.exit(0)
@@ -780,6 +780,9 @@ class GUI:
             Winapp.load_cleaners()
         self.create_window()
         gobject.threads_init()
+        if shred_paths:
+            self.shred_paths(shred_paths)
+            return
         if options.get("first_start") and 'posix' == os.name:
             pref = PreferencesDialog(self.window, self.cb_refresh_operations)
             pref.run()

@@ -152,10 +152,11 @@ def process_cmd_line():
     parser.add_option("-l", "--list-cleaners", action = "store_true",
         help = _("list cleaners"))
     parser.add_option("-c", "--clean", action = "store_true",
-        help = _("delete files and make other permanent changes"))
+        # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
+        # This is different than cleaning an arbitrary file, such as a spreadsheet on the desktop.
+        help = _("run cleaners to delete files and make other permanent changes"))
     parser.add_option("-d", "--delete", action = "store_true",
-        # TRANSLATORS: this is a warning for using --delete which will go away one day
-        help = _("depreciated alias for --clean"))
+        help = _("delete specific files or folders"))
     parser.add_option("--sysinfo", action = "store_true",
         help = _("show system information"))
     parser.add_option("--gui", action = "store_true", help=_("launch the graphical interface"))
@@ -194,7 +195,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.list_cleaners:
         list_cleaners()
         sys.exit(0)
-    if options.preview or options.delete or options.clean:
+    if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)
         if not operations:
             print 'ERROR: No work to do.  Specify options.'
@@ -204,15 +205,14 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         sys.exit(0)
     if options.overwrite:
         Options.options.set('shred', True, commit = False)
-    if options.delete:
-        print 'Depreciation warning: use --clean instead of --delete'
-    if options.delete or options.clean:
+    if options.clean:
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.gui:
         import gtk
         import GUI
-        GUI.GUI(uac=not options.no_uac)
+        shred_paths = args if options.delete else None
+        GUI.GUI(uac = not options.no_uac, shred_paths = shred_paths)
         gtk.main()
         sys.exit(0)
     if options.sysinfo:
