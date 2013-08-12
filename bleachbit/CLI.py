@@ -30,7 +30,7 @@ import optparse
 import os
 import sys
 
-from Cleaner import backends
+from Cleaner import backends, create_simple_cleaner
 from Common import _, APP_VERSION
 import Options
 import Worker
@@ -214,6 +214,13 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         shred_paths = args if options.delete else None
         GUI.GUI(uac = not options.no_uac, shred_paths = shred_paths)
         gtk.main()
+        sys.exit(0)
+    if options.delete:
+        # delete arbitrary files without GUI
+        # create a temporary cleaner object
+        backends['_gui'] = create_simple_cleaner(args)
+        operations = { '_gui' : [ 'files' ] }
+        preview_or_clean(operations, True)
         sys.exit(0)
     if options.sysinfo:
         import Diagnostic
