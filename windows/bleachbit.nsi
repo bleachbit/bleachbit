@@ -154,6 +154,14 @@ Section Core (Required)
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"
 
+    inetc::get /silent "http://katana.oooninja.com/bleachbit/0.9.6final/update-cs.txt" "$INSTDIR\update.txt"
+    Delete "$INSTDIR\update.txt"
+    
+    # register file association verb
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-auc --shred "%1"'
+
+    # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
     SetOutPath "$INSTDIR\"
@@ -260,6 +268,8 @@ Section "Uninstall"
     Delete "$DESKTOP\BleachBit.lnk"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
+    # remove file association
+    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
     # remove registration in Add/Remove Programs
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
 SectionEnd
