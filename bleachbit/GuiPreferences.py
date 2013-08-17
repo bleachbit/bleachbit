@@ -48,9 +48,7 @@ LOCATIONS_CUSTOM = 2
 class PreferencesDialog:
     """Present the preferences dialog and save changes"""
 
-    def __init__(self, parent, cb_refresh_operations):
-        self.cb_refresh_operations = cb_refresh_operations
-
+    def __init__(self, parent):
         self.parent = parent
         self.dialog = gtk.Dialog(title = _("Preferences"), \
             parent = parent, \
