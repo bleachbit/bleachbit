@@ -155,8 +155,8 @@ def process_cmd_line():
         # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
         # This is different than cleaning an arbitrary file, such as a spreadsheet on the desktop.
         help = _("run cleaners to delete files and make other permanent changes"))
-    parser.add_option("-d", "--delete", action = "store_true",
-        help = _("delete specific files or folders"))
+    parser.add_option("-s", "--shred", action = "store_true",
+        help = _("shred specific files or folders"))
     parser.add_option("--sysinfo", action = "store_true",
         help = _("show system information"))
     parser.add_option("--gui", action = "store_true", help=_("launch the graphical interface"))
@@ -204,6 +204,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
+        if not options.clean or options.shred:
+            print 'NOTE: --overwrite is intended only for use with --clean'
         Options.options.set('shred', True, commit = False)
     if options.clean:
         preview_or_clean(operations, True)
@@ -211,11 +213,11 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.gui:
         import gtk
         import GUI
-        shred_paths = args if options.delete else None
+        shred_paths = args if options.shred else None
         GUI.GUI(uac = not options.no_uac, shred_paths = shred_paths)
         gtk.main()
         sys.exit(0)
-    if options.delete:
+    if options.shred:
         # delete arbitrary files without GUI
         # create a temporary cleaner object
         backends['_gui'] = create_simple_cleaner(args)
