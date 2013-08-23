@@ -115,7 +115,6 @@ for __icon in __icons:
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
-    print "debug: locale_dir = '%s'" % (locale_dir, )
 else:
     # system-wide installed locale
     if sys.platform.startswith('linux'):
