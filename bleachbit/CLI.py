@@ -189,9 +189,9 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if 'nt' == os.name and options.update_winapp2:
         import Update
         print "Checking online for updates to winapp2.ini"
-        Update.check_updates(False, True, 
+        Update.check_updates(False, True,
             lambda x: sys.stdout.write("%s\n" % x),
-            pass)
+            lambda: None)
         # updates can be combined with --list, --preview, --clean
         did_something = True
     if options.list_cleaners:
