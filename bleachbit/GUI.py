@@ -37,7 +37,7 @@ warnings.simplefilter('default')
 from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
     online_update_notification_enabled, release_notes_url, portable_mode
-from Cleaner import backends
+from Cleaner import backends, register_cleaners
 from GuiPreferences import PreferencesDialog
 from Options import options
 import Cleaner
@@ -776,11 +776,7 @@ class GUI:
             sys.exit(0)
         import RecognizeCleanerML
         RecognizeCleanerML.RecognizeCleanerML()
-        import CleanerML
-        CleanerML.load_cleaners()
-        if 'nt' == os.name:
-            import Winapp
-            Winapp.load_cleaners()
+        register_cleaners()
         self.create_window()
         gobject.threads_init()
         if shred_paths:

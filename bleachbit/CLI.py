@@ -30,7 +30,7 @@ import optparse
 import os
 import sys
 
-from Cleaner import backends, create_simple_cleaner
+from Cleaner import backends, create_simple_cleaner, register_cleaners
 from Common import _, APP_VERSION
 import Options
 import Worker
@@ -75,18 +75,9 @@ class CliCallback:
         pass
 
 
-def init_cleaners():
-    """Prepare the cleaners for use"""
-    import CleanerML
-    CleanerML.load_cleaners()
-    if 'nt' == os.name:
-        import Winapp
-        Winapp.load_cleaners()
-
-
 def cleaners_list():
     """Yield each cleaner-option pair"""
-    init_cleaners()
+    register_cleaners()
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, o_name) in backends[key].get_options():
@@ -109,7 +100,7 @@ def preview_or_clean(operations, really_clean):
 
 def args_to_operations(args, preset):
     """Read arguments and return list of operations"""
-    init_cleaners()
+    register_cleaners()
     operations = {}
     if preset:
         # restore presets from the GUI

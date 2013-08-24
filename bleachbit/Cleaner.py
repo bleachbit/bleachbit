@@ -51,6 +51,9 @@ from FileUtilities import children_in_directory
 from Options import options
 
 
+# a module-level variable for holding cleaners
+backends = {}
+
 
 class Cleaner:
     """Base class for a cleaner"""
@@ -709,11 +712,27 @@ class System(Cleaner):
         return False
 
 
-# initialize "hard coded" (non-CleanerML) backends
-backends = {}
-backends["firefox"] = Firefox()
-backends["openofficeorg"] = OpenOfficeOrg()
-backends["system"] = System()
+def register_cleaners():
+    """Register all known cleaners: system, CleanerML, and Winapp2"""
+    global backends
+
+    # wipe out any registrations
+    # Because this is a global variable, cannot use backends = {}
+    backends.clear()
+
+    # initialize "hard coded" (non-CleanerML) backends
+    backends["firefox"] = Firefox()
+    backends["openofficeorg"] = OpenOfficeOrg()
+    backends["system"] = System()
+
+    # register CleanerML cleaners
+    import CleanerML
+    CleanerML.load_cleaners()
+
+    # register Winapp2.ini cleaners
+    if 'nt' == os.name:
+        import Winapp
+        Winapp.load_cleaners()
 
 
 def create_simple_cleaner(paths):
