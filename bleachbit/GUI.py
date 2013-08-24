@@ -759,7 +759,10 @@ class GUI:
         """Check for software updates in background"""
         import Update
         try:
-            updates = Update.check_updates(options.get('check_beta'), options.get('update_winapp2'), self.append_text)
+            updates = Update.check_updates(options.get('check_beta'),
+                options.get('update_winapp2'),
+                self.append_text,
+                self.cb_refresh_operations)
             if updates:
                 gobject.idle_add(lambda: Update.update_dialog(self.window, updates))
         except:
