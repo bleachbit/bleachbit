@@ -469,6 +469,8 @@ class GUI:
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
+        # remove from idle loop (see gobject.idle_add)
+        return False
 
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
