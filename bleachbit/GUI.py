@@ -463,7 +463,11 @@ class GUI:
 
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
+        # reload cleaners from disk
+        register_cleaners()
+        # update tree view
         self.tree_store.refresh_rows()
+        # expand tree view
         self.view.expand_all()
 
 
@@ -762,7 +766,7 @@ class GUI:
             updates = Update.check_updates(options.get('check_beta'),
                 options.get('update_winapp2'),
                 self.append_text,
-                self.cb_refresh_operations)
+                lambda: gobject.idle_add(self.cb_refresh_operations))
             if updates:
                 gobject.idle_add(lambda: Update.update_dialog(self.window, updates))
         except:
