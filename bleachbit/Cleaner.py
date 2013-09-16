@@ -519,6 +519,7 @@ class System(Cleaner):
                 '$windir\\SchedLgU.txt', \
                 '$windir\\ntbtlog.txt', \
                 '$windir\\setuplog.txt', \
+                '$windir\\REGLOCS.OLD', \
                 '$windir\\Debug\\*.log', \
                 '$windir\\Debug\\Setup\\UpdSh.log', \
                 '$windir\\Debug\\UserMode\\*.log', \
