@@ -94,6 +94,7 @@ def delete_chrome_favicons(path):
         # Version 22 includes Google Chrome 20
         # Version 25 is Google Chrome 26
         # Version 26 is Google Chrome 29
+        # Version 28 is Google Chrome 30
 
         # icon_mapping
         cols = ('page_url',)
