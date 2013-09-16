@@ -27,6 +27,7 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Application Cache\Index-journal"/>
     <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\CacheWritableAdobeRoot\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Cache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Media Cache\"/>
