@@ -159,7 +159,7 @@ Section Core (Required)
     
     # register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-auc --shred "%1"'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
