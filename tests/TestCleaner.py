@@ -203,6 +203,11 @@ class CleanerTestCase(unittest.TestCase):
         os.walk = _oswalk
 
 
+    def test_register_cleaners(self):
+        """Unit test for register_cleaners"""
+        register_cleaners()
+        register_cleaners()
+
     def test_whitelist(self):
         tests = [ \
             ('/tmp/.truecrypt_aux_mnt1/control', True), \
