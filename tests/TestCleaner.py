@@ -168,6 +168,7 @@ class CleanerTestCase(unittest.TestCase):
             return
         def get_files(option_id):
             ret = []
+            register_cleaners()
             for cmd in backends['system'].get_commands(option_id):
                 result = cmd.execute(False).next()
                 ret.append(result['path'])
@@ -224,6 +225,7 @@ class CleanerTestCase(unittest.TestCase):
             ('/tmp/pulse-foo/pid', True), \
             ('/tmp/tmpsDOBFd', False) \
             ]
+        register_cleaners()
         for test in tests:
             self.assertEqual(backends['system'].whitelisted(test[0]), test[1], test[0])
 
