@@ -219,6 +219,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
+        print "testing test_clean_json() with shred = False"
+        options.set('shred', False, commit = False)
+        test_json_helper(self, clean_json)
+
+        print "testing test_clean_json() with shred = True"
+        options.set('shred', True, commit = False)
         test_json_helper(self, clean_json)
 
 
