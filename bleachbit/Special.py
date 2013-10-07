@@ -143,7 +143,7 @@ def delete_chrome_history(path):
     cmds = __shred_sqlite_char_columns('urls', cols, where)
     cmds += __shred_sqlite_char_columns('visits')
     cols = ('lower_term', 'term')
-    cmds += __shred_sqlite_char_columns('keyword_search_terms')
+    cmds += __shred_sqlite_char_columns('keyword_search_terms', cols)
     ver = __get_chrome_history(path)
     if ver >= 20:
         # downloads, segments, segment_usage first seen in Chrome 14, Google Chrome 15 (database version = 20)
