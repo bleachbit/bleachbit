@@ -104,8 +104,17 @@ def delete_chrome_favicons(path):
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
 
+        # favicon images
+        cols = ('image_data', )
+        where = "where id not in (select distinct id from icon_mapping)"
+        cmds += __shred_sqlite_char_columns('favicon_bitmaps', cols, where)
+
         # favicons
-        cols = ('url', 'image_data')
+        # Google Chrome 30 (database version 28): image_data moved to table favicon_bitmaps
+        if ver < 28:
+            cols = ('url', 'image_data')
+        else:
+            cols = ('url', )
         where = "where id not in (select distinct icon_id from icon_mapping)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where)
     elif 3 == ver:
