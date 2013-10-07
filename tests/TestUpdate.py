@@ -72,12 +72,12 @@ class UpdateTestCase(unittest.TestCase):
         urllib2.build_opener = fake_opener
         for update_test in update_tests:
             xml = update_test[0]
-            updates = check_updates(True, False, None)
+            updates = check_updates(True, False, None, None)
             self.assertEqual(updates, update_test[1])
         urllib2.build_opener = original_open
 
         # real network
-        for update in check_updates(True, False, None):
+        for update in check_updates(True, False, None, None):
             if not update:
                 continue
             ver = update[0]
@@ -87,7 +87,7 @@ class UpdateTestCase(unittest.TestCase):
 
         # test failure
         Common.update_check_url = "http://localhost/doesnotexist"
-        self.assertRaises(urllib2.URLError, check_updates, True, False, None)
+        self.assertRaises(urllib2.URLError, check_updates, True, False, None, None)
 
 
     def test_update_winapp2(self):
@@ -102,14 +102,24 @@ class UpdateTestCase(unittest.TestCase):
         def append_text(s):
             print s
 
+        succeeded = {'r' : False} # scope
+        def on_success():
+            succeeded['r'] = True
+
         # bad hash
-        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", append_text)
+        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", 
+            append_text, on_success)
+        self.assert_(not succeeded['r'])
 
         # blank hash, download file
-        update_winapp2(url, None, append_text)
+        update_winapp2(url, None, append_text, on_success)
+        self.assert_(succeeded['r'])
 
-        # blank hash, overwrite file
-        update_winapp2(url, None, append_text)
+        # blank hash, do not download again
+        update_winapp2(url, None, append_text, on_success)
+        succeeded['r'] = False
+        update_winapp2(url, None, append_text, on_success)
+        self.assert_(succeeded['r'])
 
 
     def test_user_agent(self):
