@@ -208,6 +208,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
+        print "testing test_clean_ini() with shred = False"
+        options.set('shred', False, commit = False)
+        test_ini_helper(self, clean_ini)
+
+        print "testing test_clean_ini() with shred = True"
+        options.set('shred', True, commit = False)
         test_ini_helper(self, clean_ini)
 
 
