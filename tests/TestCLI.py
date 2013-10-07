@@ -83,11 +83,6 @@ class CLITestCase(unittest.TestCase):
             self.assert_ (type(cleaner) is str or type(cleaner) is unicode)
 
 
-    def test_init_cleaners(self):
-        """Unit test for init_cleaners()"""
-        init_cleaners()
-
-
     def test_encoding(self):
         """Unit test for encoding"""
         if 'posix' != os.name:
