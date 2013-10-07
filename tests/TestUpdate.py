@@ -119,7 +119,7 @@ class UpdateTestCase(unittest.TestCase):
         update_winapp2(url, None, append_text, on_success)
         succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
-        self.assert_(succeeded['r'])
+        self.assert_(not succeeded['r'])
 
 
     def test_user_agent(self):
