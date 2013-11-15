@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-10-20 13:51+0000\n"
+"PO-Revision-Date: 2013-10-22 16:51+0000\n"
 "Last-Translator: Ahmad Gharbeia أحمد غربية <ahmad@gharbeia.org>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2013-10-20 17:28+0000\n"
-"X-Generator: Launchpad (build 16807)\n"
+"X-Launchpad-Export-Date: 2013-11-15 04:29+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -35,7 +35,7 @@ msgstr "التأريخ"
 #: ../cleaners/nautilus.xml ../cleaners/gnome.xml ../bleachbit/Cleaner.py:291
 #: ../bleachbit/Cleaner.py:362 ../bleachbit/Cleaner.py:371
 msgid "Delete the usage history"
-msgstr "احذف التأريخ"
+msgstr "احذف تأريخ الاستخدام"
 
 #: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/thumbnails.xml ../cleaners/safari.xml
@@ -69,7 +69,7 @@ msgstr "الذاكرة المخبأة"
 #: ../bleachbit/Cleaner.py:311 ../bleachbit/Cleaner.py:390
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:420
 msgid "Delete the cache"
-msgstr "احذف الملفات المخبأة"
+msgstr "احذف ملفات المخبئية"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -91,7 +91,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"يقلل تناثر محتويات قاعدة البيانات لتقليل الحجم الذي تشغله و يزيد سرعة الوصول "
+"قلل تناثر محتويات قاعدة البيانات لتقليل الحجم الذي تشغله و زيادة سرعة الوصول "
 "إلى البيانات بدون حذف أية بيانات"
 
 #: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
@@ -109,7 +109,7 @@ msgstr "السجلّات"
 #: ../cleaners/exaile.xml ../cleaners/screenlets.xml ../cleaners/gftp.xml
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:416
 msgid "Delete the logs"
-msgstr "احذف السجلّات"
+msgstr "احذف السجّلات التي تحوي تفاصيل عمل البرمجية و جلسات استخدامها"
 
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
@@ -174,7 +174,7 @@ msgstr "عميل المحادثة"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../bleachbit/Cleaner.py:210
 msgid "Web browser"
-msgstr "متصفح الوب"
+msgstr "متصفح الوِب"
 
 #: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
@@ -192,7 +192,7 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:188
 msgid "Cookies"
-msgstr "ملفّات تعريف الارتباط"
+msgstr "كوكيز"
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -204,58 +204,58 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"حذف ملفات تعريف الارتباط ، والتي تحتوي على معلومات مثل التفضيلات المواقع، "
-"التوثيق ، و تعقب الهوية"
+"احذف الكوكيز، و هي قطع معلوماتية مُركّزة تحوي معلومات مثل تفضيلات المواقع، و "
+"بيانات الاستيثاق ، و تعقّب المستخدمين"
 
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:197
 msgid "List of visited web pages"
-msgstr "قائمة من صفحات الويب التي تم زيارتها"
+msgstr "قائمة صفحات الوِب التي سبقت مطالعتها"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
 #: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
 msgid "Delete the most recently used list"
-msgstr "حذف قائمة الملفات المستخدمة مؤخراً"
+msgstr "احذف قائمة الملفات المستعملة مؤخرًا"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "حذف الذاكرة المخبأة للصور الشخصية و الإبتسامات"
+msgstr "احذف الذاكرة المخبأة للأيقونات الشخصية و الإيماءات"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:400
 msgid "Recent documents list"
-msgstr "قائمة المستندات المفتوحة مؤخراً"
+msgstr "قائمة المستندات المستعملة مؤخرًا"
 
 #. In Windows 'Run' is the dialog in the Start menu
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
 msgid "Run"
-msgstr "تشغيل"
+msgstr "تشغيل الأوامر"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
 msgid "Search history"
-msgstr "سجل البحث"
+msgstr "تأريخ البحث"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
-msgstr "حذف سجل البحث"
+msgstr "احذف تأريخ البحث"
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
 msgid "Debug logs"
-msgstr "سجلات التصحيح"
+msgstr "سجلّات العلّات"
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/easytag.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
 msgid "Delete the debug logs"
-msgstr "حذف سجلات التصحيح"
+msgstr "احذف سجلاّت العلّات"
 
 #: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
 #: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
@@ -269,75 +269,75 @@ msgstr "الملفات المؤقتة"
 #: ../cleaners/wine.xml ../cleaners/internet_explorer.xml ../cleaners/gimp.xml
 #: ../cleaners/kde.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:443
 msgid "Delete the temporary files"
-msgstr "حذف الملفات المؤقتة"
+msgstr "احذف الملفات المؤقتة"
 
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "Download history"
-msgstr "محفوظات التحميل"
+msgstr "تأريخ التنزيلات"
 
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:192
 msgid "List of files downloaded"
-msgstr "قائمة الملفات المُحمّلة"
+msgstr "قائمة الملفات المُنزّلة"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "حذف قائمة صفحات الويب التي سبق زيارتها"
+msgstr "احذف قائمة صفحات الوِب التي سبقت مطالعتها"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr "ملفات النسخ الاحتياطي"
+msgstr "ملفات المحفوظات"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
-msgstr "حذف ملفات النسخ الاحتياطي"
+msgstr "احذف ملفات المحفوظات"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
 msgid "Current session"
-msgstr "الجلسة الحالية"
+msgstr "جلسات التصفّح الحالية"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
 msgid "Delete the current session"
-msgstr "حذف الجلسة الحالية"
+msgstr "أنه و أغلق جلسات التصفّح الحالية"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:197
 msgid "URL history"
-msgstr "روابط الإنترنت"
+msgstr "تأريخ مسارات الإنترنت"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
 #: ../bleachbit/Cleaner.py:322
 msgid "Office suite"
-msgstr "طقم المكتب"
+msgstr "طقم التطبيقات المكتبية"
 
 #: ../cleaners/windows_defender.xml ../cleaners/beagle.xml
 #: ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
 #: ../bleachbit/Cleaner.py:189
 msgid "Delete the files"
-msgstr "حذف الملفات"
+msgstr "احذف ملفات الفهارس"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "حذف قائمة خوادم اللعب"
+msgstr "احذف قائمة خواديم اللعب"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
-msgstr "حذف سجلات الأوامر"
+msgstr "احذف تأريخ الأوامر"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:193
 msgid "Form history"
-msgstr "مدخلات النماذج"
+msgstr "تأريخ الاستمارات"
 
 #: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:193
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "محفوظات النماذج المدخلة في مواقع الويب و أشرطة البحث"
+msgstr "تأريخ البيانات المدخلة في الاستمارات في صفحات الوِب و شريط البحث"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr "حذف الملفات الملغية (القديمة)"
+msgstr "احذف ملفات الحزم غير المستعملة"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "عارض وسائط"
+msgstr "عارض الميديا"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -351,40 +351,41 @@ msgstr "الفهرس"
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"حذف فهارس البحث، قاعدة بيانات من الكلمات والملفات التي تتضمّن هذه الكلمات"
+"احذف فهارس البحث، و هي قاعدة بيانات تحوي الكلمات و الملفات التي تحوي هذه "
+"الكلمات"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr "التدوينات الصوتية المحمّلة"
+msgstr "التدوينات الصوتية المُنزّلة"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "حذف التدوينات الصوتية المحمّلة"
+msgstr "احذف التدوينات الصوتية المُنزّلة"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:191
 msgid "DOM Storage"
-msgstr "مخزن وصلات التطبيقات البرمجية"
+msgstr "مخزن DOM (نموذج كيانات الوثيقة)"
 
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:191
 msgid "Delete HTML5 cookies"
-msgstr "حذف كعكات الـHTML5"
+msgstr "حذف كوكيز HTML5"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "المجلدات المخصصة سيتم تنظيفها"
+msgstr "تصفير الأدلّة المخصصة"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "الإضافات لسطح المكتب"
+msgstr "ملحقات سطح المكتب"
 
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:196
 msgid "Passwords"
-msgstr "كلمات المرور"
+msgstr "كلمات السرّ"
 
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
@@ -393,37 +394,38 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"قاعدة بيانات من الأسماء وكلمات المرور وأيضاً المواقع التي حددت عدم تخزين "
-"كلمات مرورها"
+"قاعدة بيانات تحوي أسماء المستخدم و كلمات السرّ، و كذلك قائمة المواقع التي "
+"يجب عدم حفظ كلمات سرّ لها"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
-msgstr "أماكن"
+msgstr "الأماكن"
 
 #: ../cleaners/epiphany.xml
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"قاعدة بيانات من الروابط تتضمن المفضلة، أيقونات المواقع و المحفوظات من صفحات "
-"الويب التي سبق زيارتها"
+"قاعدة بيانات تحوي مسارات المواقع المفضّلة و أيقوناتها، و تأريخ مطالعة صفحات "
+"الوِب"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "هذا الخيار سيحذف كل المفضلات."
+msgstr "هذا سيحذف كلّ علامات المواقع المفضّلة"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr "حذف الكوكيز، الروابط المزارة، محفوظات البحث"
+msgstr "احذف الكوكيز و مسارات الصفحات المطالعة، و تأريخ البحث"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr "تاريخ نماذج دخلت في مواقع الشبكة"
+msgstr "تاريخ محتويات الاستمارات المدخلة في صفحات الوِب"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "حذف المحفوظات التي تتضمن الصفحات المُزارة، التنزيلات، و المصغّرات"
+msgstr ""
+"احذف التأريخ الذي يتضمن مواقع الوِب المُطالعة، و التنزيلات، و المُصغّرات"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
@@ -435,14 +437,16 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"صفّر تأريخ استخدام محركات البحث، و احذف محركات البحث غير التي كانت في الحالة "
+"المبدئية للمتصفح"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
-msgstr "الجلسة"
+msgstr "الجلسات"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr "حذف الجلسة الحالية و السابقة"
+msgstr "احذف و أنه الجلسة الحالية و الجلسات السابقة"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -450,7 +454,7 @@ msgstr "فحص عميق"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "فحص لمعاينة أي الملفات التي تريد الاحتفاظ بها."
+msgstr "فحص لمعاينة الملفات التي تريد الاحتفاظ بها."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -458,11 +462,11 @@ msgstr "هذا الخيار بطيء."
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "منظّف الملفات غير المرغوبة"
+msgstr "منظّف الملفات غير الضرورية"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr "تفريغ المساحة والحفاظ على الخصوصية"
+msgstr "لإخلاء مساحات التخزين و الحفاظ على الخصوصية"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:203 ../bleachbit/Action.py:216
@@ -470,32 +474,32 @@ msgstr "تفريغ المساحة والحفاظ على الخصوصية"
 #: ../bleachbit/Action.py:253 ../bleachbit/Command.py:183
 #: ../bleachbit/Command.py:213
 msgid "Clean file"
-msgstr "تنظيف الملف (عن طريق أجزاء منه)"
+msgstr "نظّف الملف"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:587
 msgid "Clean"
-msgstr ""
+msgstr "نظّف"
 
 #: ../bleachbit/Cleaner.py:189
 msgid "Crash reports"
-msgstr ""
+msgstr "تقارير الانهيار"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Session restore"
-msgstr "إستعادة الجلسة"
+msgstr "استعادة الجلسات"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "تحميل الجلسة السابقة للمتصفح قبل إغلاقه أو إنهياره"
+msgstr "يحمّل الجلسة السابقة للمتصفح قبل إغلاقه أو انهياره"
 
 #: ../bleachbit/Cleaner.py:195
 msgid "Site preferences"
-msgstr ""
+msgstr "تفضيلات المواقع"
 
 #: ../bleachbit/Cleaner.py:195
 msgid "Settings for individual sites"
-msgstr ""
+msgstr "إعدادات مواقع بعينها"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux tha
 #. make up the application menu (the menu that shows BleachBit,
@@ -509,21 +513,21 @@ msgstr "ملفات سطح المكتب غير الصحيحة"
 
 #: ../bleachbit/Cleaner.py:389
 msgid "Delete broken application menu entries and file associations"
-msgstr "حذف مدخلات قائمة البرامج و لاحقات الملفات غير الصحيحة"
+msgstr "احذف مدخلات قائمة البرامج غير العاملة و ارتباطات الملفات غير الصحيحة"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
 #: ../bleachbit/Cleaner.py:393
 msgid "Localizations"
-msgstr "الترجمات"
+msgstr "التوطينات"
 
 #: ../bleachbit/Cleaner.py:393
 msgid "Delete files for unwanted languages"
-msgstr "حذف ملفات اللغات غير المرغوبة"
+msgstr "احذف ملفات اللغات و التوطين غير المطلوبة"
 
 #: ../bleachbit/Cleaner.py:394
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "اضبط هذا الخيار في تفضيلات هذا التطبيق"
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -535,7 +539,7 @@ msgstr "السجلات المتناوبة"
 
 #: ../bleachbit/Cleaner.py:399
 msgid "Delete old system logs"
-msgstr "حذف سجلات النظام القديمة"
+msgstr "احذف سجلات النظام القديمة"
 
 #: ../bleachbit/Cleaner.py:401
 msgid "Trash"
@@ -543,7 +547,7 @@ msgstr "المهملات"
 
 #: ../bleachbit/Cleaner.py:401
 msgid "Empty the trash"
-msgstr "تفريغ سلة المهملات"
+msgstr "أفرغ سلة المحذوفات"
 
 #: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:549
 #: ../bleachbit/Worker.py:207
@@ -553,11 +557,11 @@ msgstr "الذاكرة"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:409
 msgid "Wipe the swap and free memory"
-msgstr "مسح ذاكرة المبادلة و تحربر الذاكرة"
+msgstr "امح ذاكرة المبادلة و الذاكرة غير المستغلّة"
 
 #: ../bleachbit/Cleaner.py:410
 msgid "This option is experimental and may cause system problems."
-msgstr "هذا الخيار تجريبي وربما يسبب مشاكل في النظام."
+msgstr "هذا الخيار لازال قيد التطوير و قد يسبب خللا مؤقتا في النظام"
 
 #: ../bleachbit/Cleaner.py:417
 msgid "Memory dump"
@@ -565,7 +569,7 @@ msgstr "تفريغ الذاكرة"
 
 #: ../bleachbit/Cleaner.py:417
 msgid "Delete the file memory.dmp"
-msgstr "حذف memory.dmp"
+msgstr "احذف memory.dmp"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:420
@@ -578,13 +582,13 @@ msgstr "سلة المحذوفات"
 
 #: ../bleachbit/Cleaner.py:421
 msgid "Empty the recycle bin"
-msgstr "تفريغ سلة المحذوفات"
+msgstr "أفرغ سلة المحذوفات"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:424
 msgid "Update uninstallers"
-msgstr "حذف الملفات المتعلقة بإلغاء تثبيت التطبيقات المسؤولة عن التحديثات"
+msgstr "مزيلات التحديثات"
 
 #: ../bleachbit/Cleaner.py:424
 msgid ""
