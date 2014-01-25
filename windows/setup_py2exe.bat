@@ -89,8 +89,8 @@ if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleane
 if exist dist\share\cleaners\wine.xml pause
 
 echo Signing code
-call codesign.bat dist\bleachbit.exe
-call codesign.bat dist\bleachbit_console.exe
+call CodeSign.bat dist\bleachbit.exe
+call CodeSign.bat dist\bleachbit_console.exe
 
 echo Recompressing library.zip with 7-Zip
 if "%1" == "fast" goto nsis
@@ -122,7 +122,11 @@ echo [Portable] > BleachBit-Portable\BleachBit.ini
 echo Building installer
 if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" windows\bleachbit.nsi
 if not "%1" == "fast" %NSIS_EXE% windows\bleachbit.nsi
-
+echo Signing code
+call CodeSign.bat windows\BleachBit-0.0.0-setup.exe
+if not "%1" == "fast" %NSIS_EXE% /DNoTranslations windows\bleachbit.nsi
+if not "%1" == "fast" echo Signing code
+if not "%1" == "fast" call CodeSign.bat windows\BleachBit-0.0.0-setup-English.exe
 echo Success!
 goto exit
 

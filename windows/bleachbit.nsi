@@ -31,7 +31,11 @@
   ;Name and file
   !define prodname "BleachBit"
   Name "${prodname}"
+!ifdef NoTranslations
+  OutFile "${prodname}-0.0.0-setup-English.exe"
+!else
   OutFile "${prodname}-0.0.0-setup.exe"
+!endif
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\${prodname}"
@@ -83,6 +87,7 @@
 ;Languages
 
   !insertmacro MUI_LANGUAGE "English"
+!ifndef NoTranslations
   !insertmacro MUI_LANGUAGE "Arabic"
   !insertmacro MUI_LANGUAGE "Belarusian"
   !insertmacro MUI_LANGUAGE "Bulgarian"
@@ -120,7 +125,7 @@
   !insertmacro MUI_LANGUAGE "TradChinese"
   !insertmacro MUI_LANGUAGE "Turkish"
   !insertmacro MUI_LANGUAGE "Ukrainian"
-
+!endif
 
 ;--------------------------------
 ;Function
@@ -220,11 +225,12 @@ SectionGroup /e Shortcuts
 SectionGroupEnd
 
 
+!ifndef NoTranslations
 Section Translations
     SetOutPath $INSTDIR\share\locale
     File /r "..\dist\share\locale\*.*"
-
 SectionEnd
+!endif
 
 ;--------------------------------
 ;Installer Functions
