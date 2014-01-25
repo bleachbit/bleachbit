@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-09-23 11:18+0000\n"
+"PO-Revision-Date: 2013-12-29 00:18+0000\n"
 "Last-Translator: Nicolás Pierini <Unknown>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2013-09-24 02:48+0000\n"
-"X-Generator: Launchpad (build 16771)\n"
+"X-Launchpad-Export-Date: 2014-01-24 03:57+0000\n"
+"X-Generator: Launchpad (build 16914)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -128,7 +128,7 @@ msgstr "Editor"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Eliminar ~/.viminfo que incluye la historia de archivos, la historia de "
+"Eliminar ~/.viminfo que incluye el historial de archivos, el historial de "
 "órdenes, y la memoria intermedia"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
@@ -972,7 +972,7 @@ msgstr ""
 "Andrew Ziem, JuanCarlosPaco\n"
 "\n"
 "Launchpad Contributions:\n"
-"  Adolfo Jayme Barrientos https://launchpad.net/~fitoschido\n"
+"  Adolfo Jayme https://launchpad.net/~fitoschido\n"
 "  Adrián García https://launchpad.net/~adryitan\n"
 "  Alejandro Del Rincón https://launchpad.net/~alexsp92\n"
 "  Alfredo Hernández https://launchpad.net/~aldomann\n"
@@ -1105,9 +1105,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Estas definiciones más limpias son nuevas o han cambiando. Definiciones "
-"maliciosas pueden dañar su sistema. Si no confía en estos cambios, elimine "
-"los archivos o salga."
+"Estas definiciones son nuevas o han cambiado. Definiciones maliciosas pueden "
+"dañar su sistema. Si no confía en estos cambios, elimine los archivos o "
+"salga."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
 #: ../bleachbit/RecognizeCleanerML.py:87
@@ -1189,7 +1189,7 @@ msgstr "Importado de winapp2.ini"
 #: ../bleachbit/Worker.py:71
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Excepción al ejecutar la operación «%(operation)s': '%(msg)s»"
+msgstr "Excepción al ejecutar la operación «%(operation)s»: «%(msg)s»"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:205
