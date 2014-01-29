@@ -94,7 +94,7 @@ Requires:       xdg-utils
 Delete traces of your activities and other junk files to free disk
 space and maintain privacy.  BleachBit identifies and erases
 broken menu entries, cache, cookies, localizations, recent document
-lists, and temporary files in Firefox, OpenOffice.org, Bash, and 50
+lists, and temporary files in Firefox, Google Chrome, Flash, and 60
 other applications.
 
 Shred files to prevent recovery, and wipe free disk space to
