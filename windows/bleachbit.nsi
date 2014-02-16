@@ -159,9 +159,6 @@ Section Core (Required)
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"
 
-    inetc::get /silent "http://katana.oooninja.com/bleachbit/0.9.6final/update-cs.txt" "$INSTDIR\update.txt"
-    Delete "$INSTDIR\update.txt"
-    
     # register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
