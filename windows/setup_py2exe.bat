@@ -1,6 +1,6 @@
 @echo off
 REM BleachBit
-REM Copyright (C) 2009 Andrew Ziem
+REM Copyright (C) 2014 Andrew Ziem
 REM http://bleachbit.sourceforge.net
 REM
 REM This program is free software: you can redistribute it and/or modify
@@ -32,9 +32,9 @@ set UPX_EXE=upx
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
 echo Checking for 32-bit Python
-python -c 'import struct;bits= 8 * struct.calcsize("P");print bits;exit(0 if bits==32 else 1)'
-if not %ERRORLEVEL% echo "Python is not 32-bit"
-if not %ERRORLEVEL% goto error_general
+%PYTHON_DIR%\python.exe  -c "import struct;bits= 8 * struct.calcsize('P');print 'Python bits:', bits;exit(1 if bits==32 else 1)"
+if "%ERRORLEVEL%" neq "0" echo Python is not 32-bit
+if "%ERRORLEVEL%" neq "0" goto error_general
 
 echo Checking for translations
 set CANARY=locale
