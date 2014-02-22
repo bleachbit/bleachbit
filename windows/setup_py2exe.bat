@@ -32,17 +32,26 @@ set UPX_EXE=upx
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
 echo Checking for 32-bit Python
-%PYTHON_DIR%\python.exe  -c "import struct;bits= 8 * struct.calcsize('P');print 'Python bits:', bits;exit(1 if bits==32 else 1)"
+%PYTHON_DIR%\python.exe  -c "import struct;bits= 8 * struct.calcsize('P');print 'Python bits:', bits;exit(0 if bits==32 else 1)"
 if "%ERRORLEVEL%" neq "0" echo Python is not 32-bit
 if "%ERRORLEVEL%" neq "0" goto error_general
 
 echo Checking for translations
 set CANARY=locale
+if not exist %CANARY% echo run "make -C po local" to build translations
 if not exist %CANARY% goto error_canary
 
 echo Checking for GTK
 set CANARY=%GTK_DIR%
 if not exist %CANARY% goto error_canary
+
+echo Checking PyGTK+ library
+%PYTHON_DIR%\python.exe  -c "import pygtk"
+if "%ERRORLEVEL%" neq "0" goto error_general
+
+echo Checking Python win32 library
+%PYTHON_DIR%\python.exe  -c "import win32file"
+if "%ERRORLEVEL%" neq "0" goto error_general
 
 echo Deleting directories build and dist
 del /q /s build > nul
