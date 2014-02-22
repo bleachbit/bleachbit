@@ -31,13 +31,18 @@ set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
 set UPX_EXE=upx
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
+echo Checking for 32-bit Python
+python -c 'import struct;bits= 8 * struct.calcsize("P");print bits;exit(0 if bits==32 else 1)'
+if not %ERRORLEVEL% echo "Python is not 32-bit"
+if not %ERRORLEVEL% goto error_general
+
 echo Checking for translations
 set CANARY=locale
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Checking for GTK
 set CANARY=%GTK_DIR%
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Deleting directories build and dist
 del /q /s build > nul
@@ -54,7 +59,7 @@ copy bleachbit.py bleachbit_console.py
 %PYTHON_DIR%\python.exe -OO setup.py py2exe
 del bleachbit_console.py
 set CANARY=dist\bleachbit.exe
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Copying GTK files and icon
 copy %GTK_DIR%\bin\intl.dll dist
@@ -75,14 +80,14 @@ echo Purging unnecessary GTK+ files
 echo Copying BleachBit localizations
 xcopy locale dist\share\locale /i /s /q
 set CANARY=dist\share\locale\es\LC_MESSAGES\bleachbit.mo
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Copying BleachBit cleaners
 xcopy cleaners\*xml dist\share\cleaners\ /i /s /q
 
 echo Checking for CleanerML
 set CANARY=dist\share\cleaners\internet_explorer.xml
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Checking for Linux-only cleaners
 if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
@@ -110,7 +115,7 @@ dir ..\library.zip
 cd ..\..
 rd /s /q dist\library
 set CANARY=dist\library.zip
-if not exist %CANARY% goto error
+if not exist %CANARY% goto error_canary
 
 echo Building portable
 rd /s /q BleachBit-portable
@@ -130,8 +135,10 @@ if not "%1" == "fast" call CodeSign.bat windows\BleachBit-0.0.0-setup-English.ex
 echo Success!
 goto exit
 
-:error
+:error_canary
 echo %CANARY% not found
+
+:error_general
 echo Process aborted because of error!
 
 :exit
