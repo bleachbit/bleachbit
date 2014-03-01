@@ -159,10 +159,6 @@ Section Core (Required)
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"
 
-    # register file association verb
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
-
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
@@ -226,6 +222,15 @@ SectionGroupEnd
 Section Translations
     SetOutPath $INSTDIR\share\locale
     File /r "..\dist\share\locale\*.*"
+SectionEnd
+!endif
+
+;Section for making Shred Integration Optional
+!ifndef NoSectionShred
+Section "Integrate Shred" SectionShred
+    # register file association verb
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 SectionEnd
 !endif
 
