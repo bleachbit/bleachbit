@@ -198,12 +198,12 @@ class Firefox(Cleaner):
         self.add_option('vacuum', _('Vacuum'), _('Clean database fragmentation to reduce space and improve speed without removing any data'))
 
         if 'posix' == os.name:
-            self.profile_dir = "~/.mozilla/firefox*/*/"
+            self.profile_dir = "~/.mozilla/firefox*/*.default*/"
             self.add_running('exe', 'firefox')
             self.add_running('exe', 'firefox-bin')
             self.add_running('pathname', self.profile_dir + 'lock')
         elif 'nt' == os.name:
-            self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*\\"
+            self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*.default*\\"
             self.add_running('exe', 'firefox.exe')
 
     def get_description(self):
@@ -221,7 +221,7 @@ class Firefox(Cleaner):
         if 'posix' == os.name:
             cache_base = self.profile_dir
         elif 'nt' == os.name:
-            cache_base = "$localappdata\\Mozilla\\Firefox\\Profiles\\*"
+            cache_base = "$localappdata\\Mozilla\\Firefox\\Profiles\\*.default*"
         if 'cache' == option_id:
             dirs = FileUtilities.expand_glob_join(cache_base, "Cache*")
             dirs += FileUtilities.expand_glob_join(cache_base, "OfflineCache")
