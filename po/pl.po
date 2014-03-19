@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-09-15 18:06+0000\n"
-"Last-Translator: Paweł Szerszon <Unknown>\n"
+"PO-Revision-Date: 2014-01-24 08:51+0000\n"
+"Last-Translator: Piotr Strębski <strebski@o2.pl>\n"
 "Language-Team: s120801-translate\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2013-09-16 03:28+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2014-03-19 02:36+0000\n"
+"X-Generator: Launchpad (build 16963)\n"
 "X-Poedit-Country: POLAND\n"
 "Language: pl\n"
 "X-Poedit-Language: Polish\n"
@@ -161,13 +161,13 @@ msgstr "Usuń listę ostatnio używanych dokumentów"
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Chat logs"
-msgstr "Logi czatu"
+msgstr "Dzienniki czatu"
 
 #: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Delete the chat logs"
-msgstr "Usuń logi czatu"
+msgstr "Usuń dzienniki czatu"
 
 #: ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
@@ -255,13 +255,13 @@ msgstr "Usuń historię wyszukiwania"
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
 msgid "Debug logs"
-msgstr "Logi debugowania"
+msgstr "Dzienniki debugowania"
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/easytag.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
 msgid "Delete the debug logs"
-msgstr "Usuń logi debugowania"
+msgstr "Usuń dzienniki debugowania"
 
 #: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
 #: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
@@ -542,11 +542,11 @@ msgstr "Skonfiguruj tę opcję w preferencjach."
 #. the oldest log.  You could translate this 'old logs.'
 #: ../bleachbit/Cleaner.py:399
 msgid "Rotated logs"
-msgstr "Obrócone logi"
+msgstr "Obrócone dzienniki"
 
 #: ../bleachbit/Cleaner.py:399
 msgid "Delete old system logs"
-msgstr "Usuń stare pliki logów systemu"
+msgstr "Usuń stare pliki dzienników systemu"
 
 #: ../bleachbit/Cleaner.py:401
 msgid "Trash"
@@ -621,7 +621,7 @@ msgstr "Niestandardowe"
 
 #: ../bleachbit/Cleaner.py:437
 msgid "Delete user-specified files and folders"
-msgstr "Usuń wskazane przez użytkownika pliki i foldery"
+msgstr "Usuń wskazane przez użytkownika pliki i katalogi"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:439
@@ -684,7 +684,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:150
 msgid "shred specific files or folders"
-msgstr "zniszcz wskazane pliki lub foldery"
+msgstr "potnij wskazane pliki lub katalogi"
 
 #: ../bleachbit/CLI.py:152
 msgid "show system information"
@@ -989,7 +989,7 @@ msgstr "Informacje o systemie"
 
 #: ../bleachbit/GUI.py:495
 msgid "Choose files to shred"
-msgstr "Wybierz pliki do wymazania"
+msgstr "Wybierz pliki do pocięcia"
 
 #: ../bleachbit/GUI.py:498
 msgid "Choose folder to shred"
