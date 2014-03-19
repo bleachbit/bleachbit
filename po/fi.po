@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-09-23 06:40+0000\n"
+"PO-Revision-Date: 2014-03-06 19:09+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2013-09-24 02:48+0000\n"
-"X-Generator: Launchpad (build 16771)\n"
+"X-Launchpad-Export-Date: 2014-03-19 02:36+0000\n"
+"X-Generator: Launchpad (build 16963)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -526,7 +526,7 @@ msgstr "Poista ei-toivotut kielitiedostot"
 
 #: ../bleachbit/Cleaner.py:394
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "Muokkaa tätä valintaa asetuksissa."
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -653,7 +653,7 @@ msgstr "Roskakori %s"
 #: ../bleachbit/CLI.py:114
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "epäkelpo siivooja: %s"
+msgstr "virheellinen siivooja: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -672,10 +672,12 @@ msgstr "listaa siivoojat"
 #: ../bleachbit/CLI.py:148
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
+"suorita siivoojat poistaaksesi tiedostoja ja tehdäksesi muita pysyviä "
+"muutoksia"
 
 #: ../bleachbit/CLI.py:150
 msgid "shred specific files or folders"
-msgstr ""
+msgstr "tee silppua tietyistä tiedostoista tai kansioista"
 
 #: ../bleachbit/CLI.py:152
 msgid "show system information"
@@ -695,7 +697,7 @@ msgstr "esikatsele poistettavat tiedostot ja muut muutokset"
 
 #: ../bleachbit/CLI.py:162
 msgid "use options set in the graphical interface"
-msgstr ""
+msgstr "käytä graafisessa käyttöliittymässä asetettuja valintoja"
 
 #: ../bleachbit/CLI.py:165
 msgid "update winapp2.ini, if a new version is available"
@@ -808,7 +810,7 @@ msgstr "Tarkista uusien beta-versioiden saatavuus"
 
 #: ../bleachbit/GuiPreferences.py:123
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr "Lataa ja päivitä yhteisön luomat siivoajat (winapp2.ini)"
+msgstr "Lataa ja päivitä yhteisön luomat siivoojat (winapp2.ini)"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -973,11 +975,11 @@ msgstr "Järjestelmätiedot"
 
 #: ../bleachbit/GUI.py:495
 msgid "Choose files to shred"
-msgstr "Valitse hävitettävät tiedostot"
+msgstr "Valitse silputettavat tiedostot"
 
 #: ../bleachbit/GUI.py:498
 msgid "Choose folder to shred"
-msgstr "Valitse pysyvästi poistettava kansio"
+msgstr "Valitse silputettava kansio"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py:582
@@ -986,7 +988,7 @@ msgstr "Esikatselu"
 
 #: ../bleachbit/GUI.py:633
 msgid "_Shred Files"
-msgstr "_Poista tiedostoja"
+msgstr "Tee sil_ppua tiedostoista"
 
 #: ../bleachbit/GUI.py:634
 msgid "Sh_red Folders"
