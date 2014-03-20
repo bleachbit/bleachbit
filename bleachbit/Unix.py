@@ -52,7 +52,13 @@ except:
 
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
-    home = os.path.expanduser("~")
+    # In case overwritting leaves large files, placing them in
+    # ~/.config makes it easy to find them and clean them.
+    home = os.path.expanduser('~/.cache')
+    if not os.path.exists(home):
+        home = os.path.expanduser("~")
+    print 'debug', home
+    # Are these two paths on the same logical partition?
     if FileUtilities.free_space(home) == FileUtilities.free_space('/tmp/'):
         return [ home ]
     else:
