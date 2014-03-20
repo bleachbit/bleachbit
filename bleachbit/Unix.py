@@ -57,7 +57,6 @@ def guess_overwrite_paths():
     home = os.path.expanduser('~/.cache')
     if not os.path.exists(home):
         home = os.path.expanduser("~")
-    print 'debug', home
     # Are these two paths on the same logical partition?
     if FileUtilities.free_space(home) == FileUtilities.free_space('/tmp/'):
         return [ home ]
