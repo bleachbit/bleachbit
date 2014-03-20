@@ -401,6 +401,16 @@ def listdir(directory):
         yield os.path.join(dirname, filename)
 
 
+def same_partition(dir1, dir2):
+    """Are both directories on the same partition?"""
+    if 'nt' == os.name:
+        return free_space(dir1) == free_space(dir2)
+    stat1 = os.statvfs(dir1)
+    stat2 = os.statvfs(dir2)
+    return (stat1.f_blocks == stat2.f_blocks and
+        stat1.f_bfree == stat2.f_bfree)
+
+
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
     if 'posix' == os.name:

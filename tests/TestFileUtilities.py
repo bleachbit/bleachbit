@@ -463,6 +463,18 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(os.path.lexists(pathname), \
                 "does not exist: %s" % pathname)
 
+    def test_same_partition(self):
+        """Unit test for same_partition()"""
+        home = os.path.expanduser('~')
+        self.assertTrue(same_partition(home, home))
+        if 'posix' == os.name:
+            self.assertFalse(same_partition(home, '/proc'))
+        if 'nt' == os.name:
+            home_drive = os.path.splitdrive(home)[0]
+            from bleachbit.Windows import get_fixed_drives
+            for drive in get_fixed_drives():
+                this_drive = os.path.splitdrive(drive)[0]
+                self.assertEqual(same_partition(home, drive), home_drive==this_drive)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
