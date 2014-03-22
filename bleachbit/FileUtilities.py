@@ -389,7 +389,7 @@ def guess_overwrite_paths():
                 ret.append(drive)
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
-    print ret
+    return ret
 
 
 def human_to_bytes(human, hformat = 'si'):
