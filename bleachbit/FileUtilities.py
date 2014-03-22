@@ -199,10 +199,12 @@ def clean_json(path, target):
         json.dump(js, open(path, 'w'))
 
 
-def delete(path, shred = False):
+def delete(path, shred = False, ignore_missing = False):
     """Delete path that is either file, directory, link or FIFO"""
     from Options import options
     is_special = False
+    if ignore_missing and not os.path.lexists(path):
+        return
     if 'posix' == os.name:
         # With certain (relatively rare) files on Windows os.lstat()
         # may return Access Denied
@@ -597,6 +599,9 @@ def wipe_path(pathname, idle = False ):
                 if sys.hexversion >= 0x02060000:
                     kwargs['delete'] = False
                 f = tempfile.NamedTemporaryFile(**kwargs)
+                # In case the application closes prematurely, make sure this file is deleted
+                import atexit
+                atexit.register(delete, f.name, shred=False, ignore_missing=True)
                 break
             except OSError, e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC):

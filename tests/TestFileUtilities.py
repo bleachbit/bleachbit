@@ -234,6 +234,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.delete_helper(shred = False)
         print "testing delete() with shred = True"
         self.delete_helper(shred = True)
+        # exercise ignore_missing
+        delete('does-not-exist', ignore_missing=True)
+        self.assertRaises(OSError, delete, 'does-not-exist')
 
 
     def delete_helper(self, shred):
