@@ -57,6 +57,14 @@ echo Checking for UPX
 if not exist %UPX_EXE% echo Download UPX executable from http://upx.sourceforge.net/
 if not exist %UPX_EXE% goto error_general
 
+echo Checking for CodeSign.bat
+if not exist CodeSign.bat echo CodeSign.bat not found: code signing is not available
+if not exist CodeSign.bat pause
+
+echo Checking for NSIS
+if not exist %NSIS_EXE% echo NSIS executable not found: will try to build portable BleachBit
+if not exist %NSIS_EXE% pause
+
 echo Deleting directories build and dist
 del /q /s build > nul
 del /q /s dist > nul
