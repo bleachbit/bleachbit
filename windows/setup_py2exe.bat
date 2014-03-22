@@ -53,6 +53,10 @@ echo Checking Python win32 library
 %PYTHON_DIR%\python.exe  -c "import win32file"
 if "%ERRORLEVEL%" neq "0" goto error_general
 
+echo Checking for UPX
+if not exist %UPX_EXE% echo Download UPX executable from http://upx.sourceforge.net/
+if not exist %UPX_EXE% goto error_general
+
 echo Deleting directories build and dist
 del /q /s build > nul
 del /q /s dist > nul
