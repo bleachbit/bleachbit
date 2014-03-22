@@ -28,7 +28,7 @@ set PYTHON_DIR=c:\python25
 set PYTHON_VER=25
 :after_py
 set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
-set UPX_EXE=upx
+set UPX_EXE=upx.exe
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
 echo Checking for 32-bit Python
