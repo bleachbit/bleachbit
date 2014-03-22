@@ -53,12 +53,6 @@ class UnixTestCase(unittest.TestCase):
             self.assert_(isinstance(bytes_freed, (int, long)))
 
 
-    def test_guess_overwrite_paths(self):
-        """Unit test for guess_overwrite_paths()"""
-        for path in guess_overwrite_paths():
-            self.assert_(os.path.isdir(path))
-
-
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
         menu_dirs = [ '/usr/share/applications', \

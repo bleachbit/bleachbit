@@ -365,6 +365,31 @@ def globex(pathname, regex):
                 yield path
 
 
+def guess_overwrite_paths():
+    """Guess which partitions to overwrite (to hide deleted files)"""
+    # In case overwritting leaves large files, placing them in
+    # ~/.config makes it easy to find them and clean them.
+    ret = [ ]
+    if 'posix' == os.name:
+        home = os.path.expanduser('~/.cache')
+        if not os.path.exists(home):
+            home = os.path.expanduser("~")
+        ret.append(home)
+        if not same_partition(home, '/tmp/'):
+            ret.append('/tmp')
+    elif 'nt' == os.name:
+        localtmp = dirname = os.path.expandvars("$USERPROFILE\\Local Settings\\Temp\\")
+        from Windows import get_fixed_drives
+        for drive in get_fixed_drives():
+            if same_partition(localtmp, drive):
+                ret.append(localtmp)
+            else:
+                ret.append(drive)
+    else:
+        NotImplementedError('Unsupported OS in guess_overwrite_paths')
+    print ret
+
+
 def human_to_bytes(human, hformat = 'si'):
     """Convert a string like 10.2GB into bytes.  By
     default use SI standard (base 10).  The format of the

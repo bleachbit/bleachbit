@@ -49,20 +49,6 @@ except:
         gnomevfs = gnome.vfs
 
 
-
-def guess_overwrite_paths():
-    """Guess which partitions to overwrite (to hide deleted files)"""
-    # In case overwritting leaves large files, placing them in
-    # ~/.config makes it easy to find them and clean them.
-    home = os.path.expanduser('~/.cache')
-    if not os.path.exists(home):
-        home = os.path.expanduser("~")
-    if FileUtilities.same_partition(home, '/tmp/'):
-        return [ home ]
-    else:
-        return [ home, '/tmp' ]
-
-
 def locale_to_language(locale):
     """Convert the locale code to a language code (generally ISO 639)"""
     if 'klingon' == locale:

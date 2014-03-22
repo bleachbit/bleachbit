@@ -457,6 +457,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assertEqual(path, '/bin/ls')
 
 
+    def test_guess_overwrite_paths(self):
+        """Unit test for guess_overwrite_paths()"""
+        for path in guess_overwrite_paths():
+            self.assert_(os.path.isdir(path))
+
+
     def test_listdir(self):
         """Unit test for listdir()"""
         for pathname in listdir(('/tmp','~/.config/')):
