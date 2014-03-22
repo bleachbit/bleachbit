@@ -203,8 +203,10 @@ def delete(path, shred = False, ignore_missing = False):
     """Delete path that is either file, directory, link or FIFO"""
     from Options import options
     is_special = False
-    if ignore_missing and not os.path.lexists(path):
-        return
+    if not os.path.lexists(path):
+        if ignore_missing:
+            return
+        raise OSError(2, 'No such file or directory', path)
     if 'posix' == os.name:
         # With certain (relatively rare) files on Windows os.lstat()
         # may return Access Denied
