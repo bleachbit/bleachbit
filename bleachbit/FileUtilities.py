@@ -55,7 +55,7 @@ class OpenFiles:
         self.files = []
 
     def file_qualifies(self, filename):
-        """Return boolean wehether filename qualifies to enter cache (check \
+        """Return boolean whether filename qualifies to enter cache (check \
         against blacklist)"""
         return not filename.startswith("/dev") and \
             not filename.startswith("/proc")
