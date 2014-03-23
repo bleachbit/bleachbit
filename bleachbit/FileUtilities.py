@@ -25,6 +25,7 @@ File-related utilities
 """
 
 
+import atexit
 import codecs
 import errno
 import glob
@@ -535,6 +536,8 @@ def wipe_inodes(pathname):
             errors = 0
             files.append(fn)
             os.close(fd)
+            # In case the application closes prematurely, make sure this file is deleted
+            atexit.register(delete, fn, shred=False, ignore_missing=True)
         if errors > 10 or 0 == os.statvfs(pathname).f_ffree:
             break
 
@@ -602,7 +605,6 @@ def wipe_path(pathname, idle = False ):
                     kwargs['delete'] = False
                 f = tempfile.NamedTemporaryFile(**kwargs)
                 # In case the application closes prematurely, make sure this file is deleted
-                import atexit
                 atexit.register(delete, f.name, shred=False, ignore_missing=True)
                 break
             except OSError, e:
