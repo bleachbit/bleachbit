@@ -529,6 +529,9 @@ def wipe_inodes(pathname):
     while True:
         try:
             (fd, fn) = tempfile.mkstemp(dir=tmpdir, suffix=suffix, prefix = '')
+        except KeyboardInterrupt:
+            print 'info: wipe_inodes: keyboard interrupt'
+            break
         except:
             #print 'error', sys.exc_info()[1]
             errors += 1
