@@ -84,7 +84,7 @@ class OpenFiles:
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(string.ascii_letters + '0123456789 _.-') \
+    return ''.join(random.choice(string.ascii_letters + '0123456789_.-') \
         for i in xrange(length))
 
 
