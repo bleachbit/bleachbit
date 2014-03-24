@@ -24,6 +24,7 @@ Perform the preview or delete operations
 """
 
 
+import math
 import os
 import sys
 import traceback
@@ -162,6 +163,38 @@ class Worker:
                 self.deepscans[ds['path']].append(ds)
 
 
+    def run_delayed_op(self, operation, option_id):
+        """Run one delayed operation"""
+        self.ui.update_progress_bar(0.0)
+        if 'free_disk_space' == option_id:
+            # TRANSLATORS: 'free' means 'unallocated'
+            msg = _("Please wait.  Wiping free disk space.")
+        elif 'memory' == option_id:
+            msg = _("Please wait.  Cleaning %s.") % _("Memory")
+        else:
+            raise RuntimeError("Unexpected option_id in delayed ops")
+        self.ui.update_progress_bar(msg)
+        for cmd in backends[operation].get_commands(option_id):
+            old_phase = None
+            for ret in self.execute(cmd):
+                if isinstance(ret, tuple):
+                    # Display progress (for free disk space)
+                    phase = ret[0]
+                    percent_done = ret[1]
+                    eta_seconds = ret[2]
+                    self.ui.update_progress_bar(percent_done)
+                    eta_mins = math.ceil(eta_seconds / 60)
+                    msg2 = ungettext("About %d minute remaining.", \
+                        "About %d minutes remaining.", eta_mins) \
+                        % eta_mins
+                    self.ui.update_progress_bar(msg + ' ' + msg2)
+                    old_phase = phase
+                if True == ret or isinstance(ret, tuple):
+                    # Return control to PyGTK idle loop to keep
+                    # it responding and allow the user to abort.
+                    yield True
+
+
     def run(self):
         """Perform the main cleaning process which has these phases
         1. General cleaning
@@ -199,30 +232,9 @@ class Worker:
         for op in sorted(self.delayed_ops):
             operation = op[1].keys()[0]
             for option_id in op[1].values()[0]:
-                self.ui.update_progress_bar(0.0)
-                if 'free_disk_space' == option_id:
-                    # TRANSLATORS: 'free' means 'unallocated'
-                    msg = _("Please wait.  Wiping free disk space.")
-                elif 'memory' == option_id:
-                    msg = _("Please wait.  Cleaning %s.") % _("Memory")
-                else:
-                    raise RuntimeError("Unexpected option_id in delayed ops")
-                self.ui.update_progress_bar(msg)
-                for cmd in backends[operation].get_commands(option_id):
-                    for ret in self.execute(cmd):
-                        if isinstance(ret, tuple):
-                            # Display progress (for free disk space)
-                            self.ui.update_progress_bar(ret[0])
-                            mins = int(ret[1] / 60)
-                            msg2 = ungettext("About %d minute remaining.", \
-                                "About %d minutes remaining.", mins) \
-                                % mins
-                            self.ui.update_progress_bar(msg + ' ' + msg2)
-                        if True == ret or isinstance(ret, tuple):
-                            # Return control to PyGTK idle loop to keep
-                            # it responding and allow the user to abort.
-                            yield True
-
+                for ret in self.run_delayed_op(operation, option_id):
+                    # yield to GTK+ idle loop
+                    yield True
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)

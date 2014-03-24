@@ -635,7 +635,7 @@ def wipe_path(pathname, idle = False ):
         done_time = time.time() - start_time
         rate = done_bytes / (done_time + 0.0001) # bytes per second
         remaining_seconds = int(remaining_bytes / (rate+0.0001))
-        return (done_percent, remaining_seconds)
+        return (1, done_percent, remaining_seconds)
 
 
     print "debug: wipe_path('%s')" % pathname
