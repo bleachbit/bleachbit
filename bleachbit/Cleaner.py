@@ -737,6 +737,7 @@ def register_cleaners():
 
 
 def create_simple_cleaner(paths):
+    """Shred arbitrary files (used in CLI and GUI)"""
     cleaner = Cleaner()
     cleaner.add_option(option_id = 'files', name = '', description = '')
     cleaner.name = _("System") # shows up in progress bar
@@ -761,6 +762,7 @@ def create_simple_cleaner(paths):
 
 
 def create_wipe_cleaner(path):
+    """Wipe free disk space of arbitrary paths (used in GUI)"""
     cleaner = Cleaner()
     cleaner.add_option(option_id = 'free_disk_space', name = '', description = '')
     cleaner.name = ''
