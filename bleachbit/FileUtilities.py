@@ -509,7 +509,7 @@ def wipe_contents(path, truncate = True):
     f.close()
 
 
-def wipe_inodes(pathname):
+def wipe_inodes(pathname, idle = False):
     """Create empty files with long names to clear remanence in metadata"""
     # When the file system is full, Linux 3.5 will sometimes
     # give an error and sometimes succeed.
@@ -518,7 +518,10 @@ def wipe_inodes(pathname):
     suffix = ' ' * (os.statvfs(pathname).f_namemax - len(pathname) - 10)
     print 'info: creating empty files'
     print 'debug: suffix length = ', len(suffix)
-
+    stats = os.statvfs(pathname)
+    inodes_avail_original = stats.f_favail
+    last_idle = time.time()
+ 
     # Creating the files in a sub-directory improves recovery
     # of disk space:
     # http://bleachbit.sourceforge.net/news/deleting-files-doesnt-free-disk-space
@@ -539,6 +542,14 @@ def wipe_inodes(pathname):
             errors = 0
             files.append(fn)
             os.close(fd)
+            if idle and (time.time() - last_idle) > 2:
+                stats = os.statvfs(pathname)
+                if inodes_avail_original > 0:
+                    percent_done = 1.0*(inodes_avail_original - stats.f_favail) /inodes_avail_original
+                else:
+                    percent_done = 1.0
+                yield (2, percent_done, None)
+                last_idle = time.time()
             # In case the application closes prematurely, make sure this file is deleted
             atexit.register(delete, fn, shred=False, ignore_missing=True)
         if errors > 10 or 0 == os.statvfs(pathname).f_ffree:
@@ -552,8 +563,17 @@ def wipe_inodes(pathname):
     print 'info: %d inodes available, %d to super user' % (stats.f_ffree, stats.f_favail)
 
     # clean up
+    files_len_original = len(files)
+    files_remaining = len(files)
+    print 'info: deleting %d empty files' % files_len_original
     for f in files:
         os.remove(f)
+        files_remaining =- 1
+        if idle and (time.time() - last_idle) > 2:
+            percent_done = 1.0*(files_len_original - len(files)) /files_len_original
+            yield (3, percent_done, None)
+            last_idle = time.time()
+
     os.rmdir(tmpdir)
     print 'debug: done deleting empty files'
 
@@ -723,7 +743,8 @@ def wipe_path(pathname, idle = False ):
         delete(f.name)
     # quickly wipe inodes
     if 'posix' == os.name and os.statvfs(pathname).f_ffree > 0:
-        wipe_inodes(pathname)
+        for ret in wipe_inodes(pathname, idle):
+            yield ret
 
 
 def vacuum_sqlite3(path):

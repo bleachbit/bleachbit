@@ -179,16 +179,22 @@ class Worker:
             for ret in self.execute(cmd):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)
-                    phase = ret[0]
+                    phase = ret[0] # 1=wipe free disk space, 2=wipe inodes, 3=clean up inodes files
                     percent_done = ret[1]
                     eta_seconds = ret[2]
                     self.ui.update_progress_bar(percent_done)
-                    eta_mins = math.ceil(eta_seconds / 60)
-                    msg2 = ungettext("About %d minute remaining.", \
-                        "About %d minutes remaining.", eta_mins) \
-                        % eta_mins
-                    self.ui.update_progress_bar(msg + ' ' + msg2)
-                    old_phase = phase
+                    if phase == 2:
+                        msg = _('Please wait. Wiping file system metadata.')
+                    elif phase == 3:
+                        msg = _('Please wait. Cleaning up after wiping file system metadata.')
+                    if isinstance(eta_seconds, int):
+                        eta_mins = math.ceil(eta_seconds / 60)
+                        msg2 = ungettext("About %d minute remaining.", \
+                            "About %d minutes remaining.", eta_mins) \
+                            % eta_mins
+                        self.ui.update_progress_bar(msg + ' ' + msg2)
+                    else:
+                        self.ui.update_progress_bar(msg)
                 if True == ret or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
