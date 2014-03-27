@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-09-23 10:45+0000\n"
-"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
+"POT-Creation-Date: 2014-03-26 19:31-0600\n"
+"PO-Revision-Date: 2014-03-27 02:36+0000\n"
+"Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2013-09-24 02:48+0000\n"
-"X-Generator: Launchpad (build 16771)\n"
+"X-Launchpad-Export-Date: 2014-03-27 03:36+0000\n"
+"X-Generator: Launchpad (build 16967)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -478,7 +478,7 @@ msgid "Clean file"
 msgstr "Limpar ficheiro"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:587
+#: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:589
 msgid "Clean"
 msgstr "Limpar"
 
@@ -553,8 +553,8 @@ msgstr "Lixo"
 msgid "Empty the trash"
 msgstr "Baleirar o lixo"
 
-#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:549
-#: ../bleachbit/Worker.py:207
+#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:550
+#: ../bleachbit/Worker.py:173
 msgid "Memory"
 msgstr "Memoria"
 
@@ -602,7 +602,7 @@ msgstr ""
 "Elimina os desinstaladores das actualizacións de Microsoft, incluindo "
 "revisións, service packs e actualizacións de Internet Explorer"
 
-#: ../bleachbit/Cleaner.py:431 ../bleachbit/Cleaner.py:640
+#: ../bleachbit/Cleaner.py:431 ../bleachbit/Cleaner.py:641
 msgid "Clipboard"
 msgstr "Portarretallos"
 
@@ -641,19 +641,19 @@ msgstr "Esta opción é moi lenta."
 msgid "The system in general"
 msgstr "O sistema en xeral"
 
-#: ../bleachbit/Cleaner.py:452 ../bleachbit/Cleaner.py:741
+#: ../bleachbit/Cleaner.py:452 ../bleachbit/Cleaner.py:743
 msgid "System"
 msgstr "Sistema"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:649 ../bleachbit/Cleaner.py:768
+#: ../bleachbit/Cleaner.py:650 ../bleachbit/Cleaner.py:771
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Sobrescribir o espazo libre do disco %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:677
+#: ../bleachbit/Cleaner.py:678
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Papeleira de reciclaxe %s"
@@ -784,7 +784,7 @@ msgstr ""
 msgid "Open web browser to %s?"
 msgstr "Abrir o navegador a %s?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:639
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:641
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -844,7 +844,7 @@ msgid "Start BleachBit with computer"
 msgstr "Iniciar o BleachBit ao iniciar o computador"
 
 #: ../bleachbit/GuiPreferences.py:151 ../bleachbit/GuiPreferences.py:282
-#: ../bleachbit/GuiPreferences.py:328 ../bleachbit/GUI.py:548
+#: ../bleachbit/GuiPreferences.py:328 ../bleachbit/GUI.py:550
 msgid "Choose a folder"
 msgstr "Escolla un cartafol"
 
@@ -982,74 +982,74 @@ msgstr ""
 msgid "System information"
 msgstr "Información do sistema"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "Choose files to shred"
 msgstr "Escolla os ficheiros para destruir"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "Choose folder to shred"
 msgstr "Escolla o cartafol para destruir"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:582
+#: ../bleachbit/GUI.py:584
 msgid "Preview"
 msgstr "Previsualizar"
 
-#: ../bleachbit/GUI.py:633
+#: ../bleachbit/GUI.py:635
 msgid "_Shred Files"
 msgstr "_Destruir ficheiros"
 
-#: ../bleachbit/GUI.py:634
+#: ../bleachbit/GUI.py:636
 msgid "Sh_red Folders"
 msgstr "D_estruir cartafoles"
 
-#: ../bleachbit/GUI.py:635
+#: ../bleachbit/GUI.py:637
 msgid "_Wipe Free Space"
 msgstr "_Limpar espazo libre"
 
-#: ../bleachbit/GUI.py:636
+#: ../bleachbit/GUI.py:638
 msgid "S_hred Settings and Quit"
 msgstr "Des_tuir preferencias e saír"
 
-#: ../bleachbit/GUI.py:637
+#: ../bleachbit/GUI.py:639
 msgid "_Quit"
 msgstr "_Saír"
 
-#: ../bleachbit/GUI.py:638
+#: ../bleachbit/GUI.py:640
 msgid "_File"
 msgstr "_Ficheiro"
 
-#: ../bleachbit/GUI.py:640
+#: ../bleachbit/GUI.py:642
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../bleachbit/GUI.py:641
+#: ../bleachbit/GUI.py:643
 msgid "Help Contents"
 msgstr "Contidos da axuda"
 
-#: ../bleachbit/GUI.py:643
+#: ../bleachbit/GUI.py:645
 msgid "_Release Notes"
 msgstr "_Notas da Versión"
 
-#: ../bleachbit/GUI.py:645
+#: ../bleachbit/GUI.py:647
 msgid "_System Information"
 msgstr "I_nformación do sistema"
 
-#: ../bleachbit/GUI.py:646
+#: ../bleachbit/GUI.py:648
 msgid "_About"
 msgstr "_Sobre"
 
-#: ../bleachbit/GUI.py:647
+#: ../bleachbit/GUI.py:649
 msgid "_Help"
 msgstr "_Axuda"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:671
+#: ../bleachbit/GUI.py:673
 msgctxt "button"
 msgid "Preview"
 msgstr "Previsualizar"
 
-#: ../bleachbit/GUI.py:674
+#: ../bleachbit/GUI.py:676
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Previsualizar ficheiros nas operacións seleccionadas (sen eliminar ficheiro "
@@ -1057,20 +1057,20 @@ msgstr ""
 
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:682
+#: ../bleachbit/GUI.py:684
 msgctxt "button"
 msgid "Clean"
 msgstr "Limpar"
 
-#: ../bleachbit/GUI.py:685
+#: ../bleachbit/GUI.py:687
 msgid "Clean files in the selected operations"
 msgstr "Limpar os ficheiros nas operacións seleccionadas"
 
-#: ../bleachbit/GUI.py:774
+#: ../bleachbit/GUI.py:776
 msgid "Error when checking for updates: "
 msgstr "Produciuse un erro ao comprobar as actualizacións: "
 
-#: ../bleachbit/GUI.py:804
+#: ../bleachbit/GUI.py:806
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -1105,13 +1105,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Nome do ficheiro"
 
-#: ../bleachbit/Unix.py:366 ../bleachbit/Unix.py:396 ../bleachbit/Unix.py:576
+#: ../bleachbit/Unix.py:356 ../bleachbit/Unix.py:386 ../bleachbit/Unix.py:566
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Executábel non atopado: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:573 ../bleachbit/Worker.py:131
+#: ../bleachbit/Unix.py:563 ../bleachbit/Worker.py:132
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -1170,24 +1170,33 @@ msgstr "Importado de winapp2.ini"
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
 #. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:71
+#: ../bleachbit/Worker.py:72
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr ""
 "Produciuse un erro ao executar a operación «%(operation)s»: «%(msg)s»"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:205
+#: ../bleachbit/Worker.py:171
 msgid "Please wait.  Wiping free disk space."
 msgstr "Agarde. Limpando o espazo libre no disco"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:207 ../bleachbit/Worker.py:294
+#: ../bleachbit/Worker.py:173 ../bleachbit/Worker.py:312
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Agarde. Limpando %s."
 
-#: ../bleachbit/Worker.py:217
+#: ../bleachbit/Worker.py:187
+msgid "Please wait. Wiping file system metadata."
+msgstr "Agarde. Estanse borrando os metadatos do sistema de ficheiros."
+
+#: ../bleachbit/Worker.py:189
+msgid "Please wait. Cleaning up after wiping file system metadata."
+msgstr ""
+"Agarde. Estase limpando tras o borrado dos metadatos do sistema de ficheiros."
+
+#: ../bleachbit/Worker.py:192
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -1196,38 +1205,38 @@ msgstr[1] "Resta arredor de %d minutos"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:232
+#: ../bleachbit/Worker.py:250
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "Espazo en disco recuperado: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:236
+#: ../bleachbit/Worker.py:254
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "Espazo en disco que ha ser recuperado: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:241
+#: ../bleachbit/Worker.py:259
 #, python-format
 msgid "Files deleted: %d"
 msgstr "Ficheiros eliminados: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:245
+#: ../bleachbit/Worker.py:263
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "Ficheiros que han ser eliminados: %d"
 
-#: ../bleachbit/Worker.py:248
+#: ../bleachbit/Worker.py:266
 #, python-format
 msgid "Special operations: %d"
 msgstr "Operacións especiais: %d"
 
-#: ../bleachbit/Worker.py:251
+#: ../bleachbit/Worker.py:269
 #, python-format
 msgid "Errors: %d"
 msgstr "Erros: %d"
@@ -1235,12 +1244,12 @@ msgstr "Erros: %d"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:267
+#: ../bleachbit/Worker.py:285
 msgid "Please wait.  Running deep scan."
 msgstr "Agarde. Executando unha busca en profundidade."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:297
+#: ../bleachbit/Worker.py:315
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Agarde. Previsualizando %s."
