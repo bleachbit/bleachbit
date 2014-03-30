@@ -515,13 +515,19 @@ def wipe_inodes(pathname, idle = False):
     # give an error and sometimes succeed.
     errors = 0
     files = []
-    suffix = ' ' * (os.statvfs(pathname).f_namemax - len(pathname) - 10)
+    if 'nt' == os.name:
+        # 255 according to http://en.wikipedia.org/wiki/Long_filename
+        f_namemax = 250
+        if not pathname.endswith('\\'):
+            pathname += '\\'
+    elif 'posix' == os.name:
+        f_namemax = os.statvfs(pathname).f_namemax
+        stats = os.statvfs(pathname)
+        inodes_avail_original = stats.f_favail
+    suffix = ' ' * (f_namemax - len(pathname) - 10)
     print 'info: creating empty files'
     print 'debug: suffix length = ', len(suffix)
-    stats = os.statvfs(pathname)
-    inodes_avail_original = stats.f_favail
     last_idle = time.time()
- 
     # Creating the files in a sub-directory improves recovery
     # of disk space:
     # http://bleachbit.sourceforge.net/news/deleting-files-doesnt-free-disk-space
@@ -536,7 +542,7 @@ def wipe_inodes(pathname, idle = False):
             print 'info: wipe_inodes: keyboard interrupt'
             break
         except:
-            #print 'error', sys.exc_info()[1]
+            print 'error', sys.exc_info()[1]
             errors += 1
         else:
             errors = 0
@@ -544,23 +550,28 @@ def wipe_inodes(pathname, idle = False):
             os.close(fd)
             if idle and (time.time() - last_idle) > 2:
                 stats = os.statvfs(pathname)
-                if inodes_avail_original > 0:
-                    percent_done = 1.0*(inodes_avail_original - stats.f_favail) /inodes_avail_original
-                else:
-                    percent_done = 1.0
+                percent_done = None # not implemented on Windows
+                if 'posix' == os.name:
+                    if inodes_avail_original > 0:
+                        percent_done = 1.0*(inodes_avail_original - stats.f_favail) /inodes_avail_original
+                    else:
+                        percent_done = 1.0
                 yield (2, percent_done, None)
                 last_idle = time.time()
             # In case the application closes prematurely, make sure this file is deleted
             atexit.register(delete, fn, shred=False, ignore_missing=True)
-        if errors > 10 or 0 == os.statvfs(pathname).f_ffree:
+        if errors > 10:
+            break
+        if 'posix' == os.name and 0 == os.statvfs(pathname).f_ffree:
             break
 
     # flush once because it is slow
     sync()
 
     # display effectiveness
-    stats = os.statvfs(pathname)
-    print 'info: %d inodes available, %d to super user' % (stats.f_ffree, stats.f_favail)
+    if 'posix' == os.name:
+        stats = os.statvfs(pathname)
+        print 'info: %d inodes available, %d to super user' % (stats.f_ffree, stats.f_favail)
 
     # clean up
     files_len_original = len(files)
