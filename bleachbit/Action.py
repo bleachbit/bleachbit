@@ -295,6 +295,15 @@ class Json(FileActionProvider):
             yield Command.Json(path, self.address)
 
 
+class MozillaUrlHistory(FileActionProvider):
+    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    action_key = 'mozilla_url_history'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Special.delete_mozilla_url_history(path)
+
+
 class OfficeRegistryModifications(FileActionProvider):
     """Action to delete LibreOffice history"""
     action_key = 'office_registrymodifications'
