@@ -544,6 +544,13 @@ def wipe_inodes(pathname, idle = False):
         except:
             print 'error', sys.exc_info()[1]
             errors += 1
+            if os.path.exists(fn):
+                # on Windows with FAT32, files sometimes exist despite error
+                files.append(fn)
+            try:
+                os.close(fd)
+            except:
+                pass
         else:
             errors = 0
             files.append(fn)
