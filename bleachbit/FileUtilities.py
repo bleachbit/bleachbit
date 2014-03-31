@@ -200,8 +200,12 @@ def clean_json(path, target):
         json.dump(js, open(path, 'w'))
 
 
-def delete(path, shred = False, ignore_missing = False):
-    """Delete path that is either file, directory, link or FIFO"""
+def delete(path, shred = False, ignore_missing = False, allow_shred = True):
+    """Delete path that is either file, directory, link or FIFO.
+
+       If shred is enabled as a function parameter or the BleachBit global
+       parameter, the path will be shredded unless allow_shred = False.
+    """
     from Options import options
     is_special = False
     if not os.path.lexists(path):
@@ -217,7 +221,7 @@ def delete(path, shred = False, ignore_missing = False):
         os.remove(path)
     elif os.path.isdir(path):
         delpath = path
-        if shred or options.get('shred'):
+        if allow_shred and (shred or options.get('shred')):
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
@@ -239,17 +243,16 @@ def delete(path, shred = False, ignore_missing = False):
                 raise
     elif os.path.isfile(path):
         # wipe contents
-        if shred or options.get('shred'):
+        if allow_shred and (shred or options.get('shred')):
             try:
                 wipe_contents(path)
             except IOError, e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 print "debug: IOError #%s shredding '%s'" % (e.errno, path)
-        # wipe name
-        if shred or options.get('shred'):
+            # wipe name
             os.remove(wipe_name(path))
-        # unlink
         else:
+            # unlink
             os.remove(path)
     else:
         print "info: special file type cannot be deleted: '%s'" % (path)
@@ -566,7 +569,7 @@ def wipe_inodes(pathname, idle = False):
                 yield (2, percent_done, None)
                 last_idle = time.time()
             # In case the application closes prematurely, make sure this file is deleted
-            atexit.register(delete, fn, shred=False, ignore_missing=True)
+            atexit.register(delete, fn, allow_shred=False, ignore_missing=True)
         if errors > 10:
             break
         if 'posix' == os.name and 0 == os.statvfs(pathname).f_ffree:
@@ -646,7 +649,7 @@ def wipe_path(pathname, idle = False ):
                     kwargs['delete'] = False
                 f = tempfile.NamedTemporaryFile(**kwargs)
                 # In case the application closes prematurely, make sure this file is deleted
-                atexit.register(delete, f.name, shred=False, ignore_missing=True)
+                atexit.register(delete, f.name, allow_shred=False, ignore_missing=True)
                 break
             except OSError, e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC):
