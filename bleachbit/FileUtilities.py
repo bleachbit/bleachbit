@@ -593,6 +593,8 @@ def wipe_inodes(pathname, idle = False):
         except:
             if os.path.exists(f):
                 print 'warning: could not delete empty file %s' % f
+            else:
+                print 'warning: exception deleting empty file %s' %f
         files_remaining =- 1
         if idle and (time.time() - last_idle) > 2:
             percent_done = 1.0*(files_len_original - len(files)) /files_len_original
