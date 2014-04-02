@@ -1,28 +1,26 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Test cases for module Action
 """
-
 
 
 import sys
@@ -36,10 +34,9 @@ from bleachbit.Action import *
 import common
 
 
-
 class ActionTestCase(unittest.TestCase):
-    """Test cases for Action"""
 
+    """Test cases for Action"""
 
     def _action_str_to_commands(self, action_str):
         """Parse <action> and return commands"""
@@ -49,13 +46,11 @@ class ActionTestCase(unittest.TestCase):
         for cmd in delete.get_commands():
             yield cmd
 
-
     def _action_str_to_result(self, action_str):
         """Parse <action> and return result"""
         cmd = self._action_str_to_commands(action_str).next()
         result = cmd.execute(False).next()
         return result
-
 
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
@@ -69,14 +64,15 @@ class ActionTestCase(unittest.TestCase):
                 provider = actionplugin(action_node)
         self.assertNotEqual(provider, None)
         for cmd in provider.get_commands():
-            self.assert_(isinstance(cmd, (Command.Delete, Command.Ini, Command.Json)))
+            self.assert_(
+                isinstance(cmd, (Command.Delete, Command.Ini, Command.Json)))
             self.assert_(os.path.lexists(filename))
             # preview
-            result = cmd.execute(really_delete = False).next()
+            result = cmd.execute(really_delete=False).next()
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            result = cmd.execute(really_delete = True).next()
+            result = cmd.execute(really_delete=True).next()
             if 'delete' == command:
                 self.assert_(not os.path.lexists(filename))
             elif 'truncate' == command:
@@ -87,7 +83,6 @@ class ActionTestCase(unittest.TestCase):
                 self.assert_(os.path.lexists(filename))
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
-
 
     def test_delete(self):
         """Unit test for class Delete"""
@@ -102,12 +97,11 @@ class ActionTestCase(unittest.TestCase):
         for path in paths:
             for command in ('delete', 'truncate'):
                 expanded = os.path.expanduser(os.path.expandvars(path))
-                (fd, filename) = tempfile.mkstemp(dir = expanded)
+                (fd, filename) = tempfile.mkstemp(dir=expanded)
                 os.close(fd)
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
-
 
     def test_ini(self):
         """Unit test for class Ini"""
@@ -123,7 +117,6 @@ class ActionTestCase(unittest.TestCase):
 
         test_ini_helper(self, execute_ini)
 
-
     def test_json(self):
         """Unit test for class Json"""
         from TestFileUtilities import test_json_helper
@@ -134,7 +127,6 @@ class ActionTestCase(unittest.TestCase):
             self._test_action_str(action_str)
 
         test_json_helper(self, execute_json)
-
 
     def test_regex(self):
         """Unit test for regex option"""
@@ -148,10 +140,12 @@ class ActionTestCase(unittest.TestCase):
         self.assert_(result['path'], '/tmp/foo2')
         # return nothing
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
-        self.assertRaises(StopIteration, lambda : self._action_str_to_result(action_str))
+        self.assertRaises(
+            StopIteration, lambda: self._action_str_to_result(action_str))
         # expect error
         action_str = '<action command="delete" search="invalid" path="/tmp/foo" regex="^bar$"/>'
-        self.assertRaises(RuntimeError, lambda : self._action_str_to_result(action_str))
+        self.assertRaises(
+            RuntimeError, lambda: self._action_str_to_result(action_str))
         # clean up
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
@@ -168,8 +162,8 @@ class ActionTestCase(unittest.TestCase):
             result = cmd.execute(False).next()
             common.validate_result(self, result)
             path = result['path']
-            self.assert_(not os.path.isdir(path), \
-                "%s is a directory" % path)
+            self.assert_(not os.path.isdir(path),
+                         "%s is a directory" % path)
             results += 1
         self.assert_(results > 0)
 
@@ -180,4 +174,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-

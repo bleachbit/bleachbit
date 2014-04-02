@@ -1,29 +1,27 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Test case for module DeepScan
 """
-
 
 
 import os
@@ -36,15 +34,13 @@ sys.path.append('.')
 from bleachbit.DeepScan import DeepScan
 
 
-
 class DeepScanTestCase(unittest.TestCase):
-    """Test Case for module DeepScan"""
 
+    """Test Case for module DeepScan"""
 
     def _touch(self, fn):
         """Create an empty file"""
         open(fn, 'w')
-
 
     def _test_encoding(self, fn):
         """Test encoding"""
@@ -71,15 +67,13 @@ class DeepScanTestCase(unittest.TestCase):
         os.rmdir(tempd)
         self.assert_(not os.path.exists(tempd))
 
-
     def test_encoding(self):
         """Test encoding"""
-        tests = ('äöüßÄÖÜ', \
-            "עִבְרִית")
+        tests = ('äöüßÄÖÜ',
+                 "עִבְרִית")
 
         for test in tests:
             self._test_encoding(test)
-
 
     def test_DeepScan(self):
         """Unit test for class DeepScan.  Preview real files."""
@@ -94,11 +88,10 @@ class DeepScanTestCase(unittest.TestCase):
             if True == ret:
                 # it's yielding control to the GTK idle loop
                 continue
-            self.assert_(isinstance(ret, (str, unicode)), \
-                "Expecting string but got '%s' (%s)" % \
-                 (ret, str(type(ret))))
+            self.assert_(isinstance(ret, (str, unicode)),
+                         "Expecting string but got '%s' (%s)" %
+                        (ret, str(type(ret))))
             self.assert_(os.path.lexists(ret))
-
 
     def test_delete(self):
         """Delete files in a test environment"""
@@ -124,18 +117,18 @@ class DeepScanTestCase(unittest.TestCase):
 
         # run deep scan
         astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false"/>'
-        import TestCleaner        
+        import TestCleaner
         cleaner = TestCleaner.action_to_cleaner(astr)
         from bleachbit.Worker import backends, Worker
         backends['test'] = cleaner
-        operations = { 'test' : [ 'option1' ] }
+        operations = {'test': ['option1']}
         from bleachbit import CLI
         ui = CLI.CliCallback()
         worker = Worker(ui, True, operations)
         run = worker.run()
         while run.next():
             pass
- 
+
         # validate results
         self.assert_(not os.path.exists(f_del1))
         self.assert_(os.path.exists(f_keep))
@@ -151,4 +144,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-

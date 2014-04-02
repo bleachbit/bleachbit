@@ -1,22 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -33,8 +32,8 @@ sys.path.append('.')
 import bleachbit.Options
 
 
-
 class OptionsTestCase(unittest.TestCase):
+
     """Test case for class Options"""
 
     def test_Options(self):
@@ -54,7 +53,7 @@ class OptionsTestCase(unittest.TestCase):
         shred = o.get("shred")
         o.set("shred", False)
         self.assertFalse(o.get("shred"))
-        o.set("shred", True, commit = False)
+        o.set("shred", True, commit=False)
         self.assertTrue(o.get("shred"))
         o.restore()
         self.assertFalse(o.get("shred"))
@@ -68,7 +67,7 @@ class OptionsTestCase(unittest.TestCase):
 
         # whitelist
         self.assert_(type(o.get_whitelist_paths() is list))
-        whitelist = [ ('file', '/home/foo'), ('folder', '/home') ]
+        whitelist = [('file', '/home/foo'), ('folder', '/home')]
         old_whitelist = o.get_whitelist_paths()
         o.config.remove_section('whitelist/paths')
         self.assert_(type(o.get_whitelist_paths() is list))
@@ -100,7 +99,6 @@ class OptionsTestCase(unittest.TestCase):
         o.config.remove_option("tree", "parent.child")
         self.assertFalse(o.get_tree("parent", "child"))
 
-
     def test_purge(self):
         """Test purging"""
         # By default ConfigParser stores keys (the filenames) as lowercase.
@@ -109,7 +107,7 @@ class OptionsTestCase(unittest.TestCase):
         import tempfile
         dirname = tempfile.mkdtemp('bleachbit_test_options')
         pathname = os.path.join(dirname, 'foo.xml')
-        file(pathname, 'w').write('') # make an empty file
+        file(pathname, 'w').write('')  # make an empty file
         self.assertTrue(os.path.exists(pathname))
         myhash = '0ABCD'
         o1.set_hashpath(pathname, myhash)
@@ -135,12 +133,11 @@ class OptionsTestCase(unittest.TestCase):
         # write something, which triggers the purge
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
-        self.assertRaises(ConfigParser.NoOptionError, lambda: o3.get_hashpath(pathname))
+        self.assertRaises(
+            ConfigParser.NoOptionError, lambda: o3.get_hashpath(pathname))
 
         # clean up
         os.rmdir(dirname)
-
-
 
 
 def suite():
@@ -149,4 +146,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-

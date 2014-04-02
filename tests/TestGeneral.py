@@ -1,28 +1,26 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Test case for module General
 """
-
 
 
 import sys
@@ -32,21 +30,19 @@ sys.path.append('.')
 from bleachbit.General import *
 
 
-
 class GeneralTestCase(unittest.TestCase):
-    """Test case for module General"""
 
+    """Test case for module General"""
 
     def test_boolstr_to_bool(self):
         """Test case for method boolstr_to_bool"""
-        tests = ( ('True', True),
-            ('true', True ),
-            ('False', False ),
-            ('false', False ) )
+        tests = (('True', True),
+                ('true', True),
+                ('False', False),
+                ('false', False))
 
         for test in tests:
             self.assertEqual(boolstr_to_bool(test[0]), test[1])
-
 
     def test_getrealuid(self):
         """Test for getrealuid()"""
@@ -67,7 +63,6 @@ class GeneralTestCase(unittest.TestCase):
         except:
             traceback.print_exc()
             print 'debug: os.login() raised exception'
-
 
     def test_makedirs(self):
         """Unit test for makedirs"""
@@ -92,7 +87,6 @@ class GeneralTestCase(unittest.TestCase):
         # clean up
         cleanup(dir)
 
-
     def test_run_external(self):
         """Unit test for run_external"""
         if 'nt' == os.name:
@@ -113,7 +107,6 @@ class GeneralTestCase(unittest.TestCase):
         (rc, stdout, stderr) = run_external(args)
         self.assertNotEqual(0, rc)
 
-
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         if not 'posix' == os.name:
@@ -127,4 +120,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-

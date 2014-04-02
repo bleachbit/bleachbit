@@ -1,23 +1,22 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -50,7 +49,8 @@ def test_ini_helper(self, execute):
     (fd, filename) = tempfile.mkstemp()
     os.write(fd, '#Test\n')
     os.write(fd, '[RecentsMRL]\n')
-    os.write(fd, 'list=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n')
+    os.write(
+        fd, 'list=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n')
     os.close(fd)
     self.assert_(os.path.exists(filename))
     size = os.path.getsize(filename)
@@ -89,27 +89,30 @@ def test_json_helper(self, execute):
     os.write(fd, '{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
     os.close(fd)
     self.assert_(os.path.exists(filename))
-    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+    self.assertEqual(load_js(filename), {
+                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # invalid key
     execute(filename, 'doesnotexist')
-    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+    self.assertEqual(load_js(filename), {
+                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # invalid key
     execute(filename, 'deleteme/doesnotexist')
-    self.assertEqual(load_js(filename), { 'deleteme' : 1, 'spareme' : { 'deletemetoo' : 1 } } )
+    self.assertEqual(load_js(filename), {
+                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # valid key
     execute(filename, 'deleteme')
-    self.assertEqual(load_js(filename), { 'spareme' : { 'deletemetoo' : 1 } } )
+    self.assertEqual(load_js(filename), {'spareme': {'deletemetoo': 1}})
 
     # valid key
     execute(filename, 'spareme/deletemetoo')
-    self.assertEqual(load_js(filename), { 'spareme' : {} } )
+    self.assertEqual(load_js(filename), {'spareme': {}})
 
     # valid key
     execute(filename, 'spareme')
-    self.assertEqual(load_js(filename), { } )
+    self.assertEqual(load_js(filename), {})
 
     # clean up
     delete(filename)
@@ -117,12 +120,12 @@ def test_json_helper(self, execute):
 
 
 class FileUtilitiesTestCase(unittest.TestCase):
+
     """Test case for module FileUtilities"""
 
     def __touch(self, filename):
         """Create an empty file"""
         open(filename, "w")
-
 
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
@@ -132,16 +135,16 @@ class FileUtilitiesTestCase(unittest.TestCase):
             locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
         # test one-way conversion for predefined values
-        tests = [ ("-1B", bytes_to_human(-1)),
-                  ("0", bytes_to_human(0)),
-                  ("1B", bytes_to_human(1)),
-                  ("1kB", bytes_to_human(1000)),
-                  ("1.1kB", bytes_to_human(1110)),
-                  ("1MB", bytes_to_human(1000**2)),
-                  ("1.3MB", bytes_to_human(1289748)),
-                  ("1GB", bytes_to_human(1000**3)),
-                  ("1.32GB", bytes_to_human(1320702444)),
-                  ("1TB", bytes_to_human(1000**4)) ]
+        tests = [("-1B", bytes_to_human(-1)),
+                 ("0", bytes_to_human(0)),
+                 ("1B", bytes_to_human(1)),
+                 ("1kB", bytes_to_human(1000)),
+                 ("1.1kB", bytes_to_human(1110)),
+                 ("1MB", bytes_to_human(1000 ** 2)),
+                 ("1.3MB", bytes_to_human(1289748)),
+                 ("1GB", bytes_to_human(1000 ** 3)),
+                 ("1.32GB", bytes_to_human(1320702444)),
+                 ("1TB", bytes_to_human(1000 ** 4))]
 
         for test in tests:
             self.assertEqual(test[0], test[1])
@@ -149,13 +152,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test roundtrip conversion for random values
         import random
         for n in range(0, 1000):
-            bytes1 = random.randrange(0, 1000**4)
+            bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
-            error =  abs(float(bytes2 - bytes1) / bytes1)
-            self.assert_(abs(error) < 0.01, \
-                "%d (%s) is %.2f%% different than %d" % \
-                (bytes1, human, error * 100, bytes2))
+            error = abs(float(bytes2 - bytes1) / bytes1)
+            self.assert_(abs(error) < 0.01,
+                         "%d (%s) is %.2f%% different than %d" %
+                        (bytes1, human, error * 100, bytes2))
 
         # test localization
         if hasattr(locale, 'format_string'):
@@ -164,12 +167,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
             except:
                 print "Warning: exception when setlocale to de_DE.utf8"
             else:
-                self.assertEqual("1,01GB", bytes_to_human(1000**3 + 5812389))
+                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
         # clean up
         if 'posix' == os.name:
             locale.setlocale(locale.LC_NUMERIC, old_locale)
-
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
@@ -177,67 +179,63 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test an existing directory that usually exists
         dirname = os.path.expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
-            self.assert_ (type(filename) is str)
-            self.assert_ (os.path.isabs(filename))
+            self.assert_(type(filename) is str)
+            self.assert_(os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
-            self.assert_ (type(filename) is str)
-            self.assert_ (os.path.isabs(filename))
-            self.assert_ (not os.path.isdir(filename))
+            self.assert_(type(filename) is str)
+            self.assert_(os.path.isabs(filename))
+            self.assert_(not os.path.isdir(filename))
 
         # test a constructed file in a constructed directory
         dirname = tempfile.mkdtemp()
         filename = os.path.join(dirname, "somefile")
         self.__touch(filename)
         for loopfilename in children_in_directory(dirname, True):
-            self.assertEqual (loopfilename, filename)
+            self.assertEqual(loopfilename, filename)
         for loopfilename in children_in_directory(dirname, False):
-            self.assertEqual (loopfilename, filename)
+            self.assertEqual(loopfilename, filename)
         os.remove(filename)
 
         # test subdirectory
         subdirname = os.path.join(dirname, "subdir")
         os.mkdir(subdirname)
         for filename in children_in_directory(dirname, True):
-            self.assertEqual (filename, subdirname)
+            self.assertEqual(filename, subdirname)
         for filename in children_in_directory(dirname, False):
-            self.assert_ (False)
+            self.assert_(False)
         os.rmdir(subdirname)
 
         os.rmdir(dirname)
 
-
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
         print "testing test_clean_ini() with shred = False"
-        options.set('shred', False, commit = False)
+        options.set('shred', False, commit=False)
         test_ini_helper(self, clean_ini)
 
         print "testing test_clean_ini() with shred = True"
-        options.set('shred', True, commit = False)
+        options.set('shred', True, commit=False)
         test_ini_helper(self, clean_ini)
-
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
         print "testing test_clean_json() with shred = False"
-        options.set('shred', False, commit = False)
+        options.set('shred', False, commit=False)
         test_json_helper(self, clean_json)
 
         print "testing test_clean_json() with shred = True"
-        options.set('shred', True, commit = False)
+        options.set('shred', True, commit=False)
         test_json_helper(self, clean_json)
-
 
     def test_delete(self):
         """Unit test for method delete()"""
         print "testing delete() with shred = False"
-        self.delete_helper(shred = False)
+        self.delete_helper(shred=False)
         print "testing delete() with shred = True"
-        self.delete_helper(shred = True)
+        self.delete_helper(shred=True)
         # exercise ignore_missing
         delete('does-not-exist', ignore_missing=True)
         self.assertRaises(OSError, delete, 'does-not-exist')
-
 
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
@@ -246,24 +244,25 @@ class FileUtilitiesTestCase(unittest.TestCase):
         katanana = u"アメリカ"
         umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
-        tests = [ ('.suffix', 'prefix'), # simple
-                  ("x".zfill(100), ".y".zfill(100)), # long
-                  (" ", " "), # space
-                  ("'", "'"), # quotation mark
-                  ("~`!@#$%^&()-_+=", "x"), # non-alphanumeric characters
-                  ("[]{};',.", "x"), # non-alphanumeric characters
-                  (u'abcd', u'efgh'), # simple unicode
-                  (u'J\xf8rgen', 'Scandinavian'),
-                  (hebrew, hebrew),
-                  (katanana, katanana),
-                  (umlauts, umlauts) ]
+        tests = [('.suffix', 'prefix'),  # simple
+                 ("x".zfill(100), ".y".zfill(100)),  # long
+                 (" ", " "),  # space
+                 ("'", "'"),  # quotation mark
+                 ("~`!@#$%^&()-_+=", "x"),  # non-alphanumeric characters
+                 ("[]{};',.", "x"),  # non-alphanumeric characters
+                 (u'abcd', u'efgh'),  # simple unicode
+                 (u'J\xf8rgen', 'Scandinavian'),
+                 (hebrew, hebrew),
+                 (katanana, katanana),
+                 (umlauts, umlauts)]
         if 'posix' == os.name:
             # Windows doesn't allow these characters but Unix systems do
-            tests.append( ('"', '*') )
-            tests.append( ('\t', '\\') )
-            tests.append( (':?', '<>|') )
+            tests.append(('"', '*'))
+            tests.append(('\t', '\\'))
+            tests.append((':?', '<>|'))
         for test in tests:
-            (fd, filename) = tempfile.mkstemp(test[0], 'bleachbit-test' + test[1])
+            (fd, filename) = tempfile.mkstemp(
+                test[0], 'bleachbit-test' + test[1])
             self.assert_(os.path.exists(filename))
             for x in range(0, 4096):
                 bytes_written = os.write(fd, "top secret")
@@ -302,9 +301,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
             delete(srcname, shred)
             self.assert_(not os.path.exists(srcname))
 
-            ###
-            ### test broken symlink
-            ###
+            #
+            # test broken symlink
+            #
             (fd, srcname) = tempfile.mkstemp('bbregular')
             os.close(fd)
             self.assert_(os.path.lexists(srcname))
@@ -326,6 +325,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             # test symlinks
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
+
             def win_symlink(src, linkname):
                 rc = kern.CreateSymbolicLinkA(linkname, src, 0)
                 if rc == 0:
@@ -362,13 +362,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
         delete(path, shred)
         self.assert_(not os.path.exists(path))
 
-
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
         if 'nt' == os.name:
             return
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
-
 
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
@@ -377,21 +375,19 @@ class FileUtilitiesTestCase(unittest.TestCase):
             filename = 'cmd.exe'
         self.assert_(exists_in_path(filename))
 
-
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
-        tests = [ ("/bin/sh", True), \
-            ("sh", True), \
-            ("doesnotexist", False), \
-            ("/bin/doesnotexist", False) ]
+        tests = [("/bin/sh", True),
+                 ("sh", True),
+                 ("doesnotexist", False),
+                 ("/bin/doesnotexist", False)]
         if 'nt' == os.name:
-            tests = [ ('c:\\windows\\system32\\cmd.exe', True), \
-                      ('cmd.exe', True),
-                      ('doesnotexist', False),
-                      ('c:\\windows\\doesnotexist.exe', False) ]
+            tests = [('c:\\windows\\system32\\cmd.exe', True),
+                     ('cmd.exe', True),
+                     ('doesnotexist', False),
+                     ('c:\\windows\\doesnotexist.exe', False)]
         for test in tests:
             self.assertEqual(exe_exists(test[0]), test[1])
-
 
     def test_expand_glob_join(self):
         """Unit test for expand_glob_join()"""
@@ -400,7 +396,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
         if 'nt' == os.name:
             expand_glob_join('c:\windows', '*.exe')
 
-
     def test_free_space(self):
         """Unit test for free_space()"""
         home = os.path.expanduser("~")
@@ -408,7 +403,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertNotEqual(result, None)
         self.assert_(result > -1)
         self.assert_(isinstance(result, (int, long)))
-
 
     def test_getsize(self):
         """Unit test for method getsize()"""
@@ -421,7 +415,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assertEqual(getsize(filename), 10 * 12345)
             return
 
-        output = subprocess.Popen(["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
+        output = subprocess.Popen(
+            ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
         output = output.replace("\n", "")
         du_size = output.split("\t")[0] + "B"
         print "output = '%s', size='%s'" % (output, du_size)
@@ -434,16 +429,16 @@ class FileUtilitiesTestCase(unittest.TestCase):
         if os.path.lexists(linkname):
             delete(linkname)
         os.symlink(filename, linkname)
-        self.assert_(getsize(linkname) < 8192, "Symlink size is %d" % getsize(filename))
+        self.assert_(getsize(linkname) < 8192, "Symlink size is %d" %
+                     getsize(filename))
         delete(filename)
 
         # create sparse file
         (handle, filename) = tempfile.mkstemp("sparsetest")
-        os.ftruncate(handle, 1000**2)
+        os.ftruncate(handle, 1000 ** 2)
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
         delete(filename)
-
 
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
@@ -452,25 +447,21 @@ class FileUtilitiesTestCase(unittest.TestCase):
             path = 'c:\\windows\\system32'
         self.assert_(getsizedir(path) > 0)
 
-
-
     def test_globex(self):
         """Unit test for method globex()"""
         for path in globex('/bin/*', '/ls$'):
             self.assertEqual(path, '/bin/ls')
-
 
     def test_guess_overwrite_paths(self):
         """Unit test for guess_overwrite_paths()"""
         for path in guess_overwrite_paths():
             self.assert_(os.path.isdir(path))
 
-
     def test_listdir(self):
         """Unit test for listdir()"""
-        for pathname in listdir(('/tmp','~/.config/')):
-            self.assert_(os.path.lexists(pathname), \
-                "does not exist: %s" % pathname)
+        for pathname in listdir(('/tmp', '~/.config/')):
+            self.assert_(os.path.lexists(pathname),
+                         "does not exist: %s" % pathname)
 
     def test_same_partition(self):
         """Unit test for same_partition()"""
@@ -483,13 +474,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
-                self.assertEqual(same_partition(home, drive), home_drive==this_drive)
+                self.assertEqual(
+                    same_partition(home, drive), home_drive == this_drive)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
         # setup
         old_whitelist = options.get_whitelist_paths()
-        whitelist = [ ('file', '/home/foo'), ('folder', '/home/folder') ]
+        whitelist = [('file', '/home/foo'), ('folder', '/home/folder')]
         options.set_whitelist_paths(whitelist)
         self.assertEqual(set(whitelist), set(options.get_whitelist_paths()))
 
@@ -509,7 +501,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assertFalse(whitelisted('/home/folder2'))
 
         if 'nt' == os.name:
-            whitelist = [ ('folder', 'D:\\'), ('file', 'c:\\windows\\foo.log'), ('folder', 'e:\\users') ]
+            whitelist = [('folder', 'D:\\'), (
+                'file', 'c:\\windows\\foo.log'), ('folder', 'e:\\users')]
             options.set_whitelist_paths(whitelist)
             self.assertTrue(whitelisted('e:\\users'))
             self.assertTrue(whitelisted('e:\\users\\'))
@@ -519,9 +512,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assertTrue(whitelisted('C:\\WINDOWS\\FOO.LOG'))
             self.assertTrue(whitelisted('D:\\USERS'))
 
-            # drives letters have the seperator at the end while most paths don't
+            # drives letters have the seperator at the end while most paths
+            # don't
             self.assertTrue(whitelisted('D:\\FOLDER\\FOO.LOG'))
-
 
         # test blank
         options.set_whitelist_paths([])
@@ -536,8 +529,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         # clean up
         options.set_whitelist_paths(old_whitelist)
-        self.assertEqual(set(old_whitelist), set(options.get_whitelist_paths()))
-
+        self.assertEqual(
+            set(old_whitelist), set(options.get_whitelist_paths()))
 
     def test_wipe_contents(self):
         """Unit test for wipe_delete()"""
@@ -562,7 +555,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # clean up
         os.remove(filename)
 
-
     def wipe_name_helper(self, filename):
         """Helper for test_wipe_name()"""
 
@@ -577,7 +569,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # clean
         os.remove(newname)
         self.assert_(not os.path.exists(newname))
-
 
     def test_wipe_name(self):
         """Unit test for wipe_name()"""
@@ -599,13 +590,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
             dir1len = 5
             filelen = 10
 
-        dir0 = tempfile.mkdtemp(suffix = "0" * dir0len)
+        dir0 = tempfile.mkdtemp(suffix="0" * dir0len)
         self.assert_(os.path.exists(dir0))
 
-        dir1 = tempfile.mkdtemp(suffix = "1" * dir1len, dir = dir0)
+        dir1 = tempfile.mkdtemp(suffix="1" * dir1len, dir=dir0)
         self.assert_(os.path.exists(dir1))
 
-        (handle, filename) = tempfile.mkstemp(dir = dir1, suffix = "2" * filelen)
+        (handle, filename) = tempfile.mkstemp(
+            dir=dir1, suffix="2" * filelen)
         os.close(handle)
         self.wipe_name_helper(filename)
         self.assert_(os.path.exists(dir0))
@@ -622,7 +614,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
         os.rmdir(dir0)
         self.assert_(not os.path.exists(dir0))
 
-
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
         if None == os.getenv('ALLTESTS'):
@@ -630,7 +621,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
             return
         pathname = tempfile.gettempdir()
         wipe_path(pathname)
-
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
@@ -652,21 +642,22 @@ class FileUtilitiesTestCase(unittest.TestCase):
         conn.execute('create table numbers (number)')
         conn.commit()
         empty_size = getsize(path)
+
         def number_generator():
             for x in range(1, 10000):
                 yield (x, )
-        conn.executemany('insert into numbers (number) values ( ? ) ', number_generator())
+        conn.executemany(
+            'insert into numbers (number) values ( ? ) ', number_generator())
         conn.commit()
-        self.assert_( empty_size < getsize(path))
+        self.assert_(empty_size < getsize(path))
         conn.execute('delete from numbers')
         conn.commit()
         conn.close()
 
         vacuum_sqlite3(path)
-        self.assertEqual(empty_size , getsize(path))
+        self.assertEqual(empty_size, getsize(path))
 
         delete(path)
-
 
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
@@ -675,13 +666,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         (handle, filename) = tempfile.mkstemp()
         openfiles = OpenFiles()
-        self.assertTrue(openfiles.is_open(filename), \
-            "Expected is_open(%s) to return True)\n" \
-            "openfiles.last_scan_time (ago)=%s\n" \
-            "openfiles.files=%s" % \
-            (filename, \
-            time.time() - openfiles.last_scan_time, \
-            openfiles.files))
+        self.assertTrue(openfiles.is_open(filename),
+                        "Expected is_open(%s) to return True)\n"
+                        "openfiles.last_scan_time (ago)=%s\n"
+                        "openfiles.files=%s" %
+                       (filename,
+                        time.time() - openfiles.last_scan_time,
+                           openfiles.files))
 
         f = os.fdopen(handle)
         f.close()
@@ -699,5 +690,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-
-

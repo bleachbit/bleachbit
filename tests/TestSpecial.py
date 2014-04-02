@@ -1,23 +1,22 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -164,47 +163,51 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
 
 
 class SpecialTestCase(unittest.TestCase):
-    """Test case for module Special"""
 
+    """Test case for module Special"""
 
     def setUp(self):
         """Create test browser files."""
         self.dir_base = tempfile.mkdtemp('bleachbit_special')
-        self.dir_google_chrome_default = os.path.join(self.dir_base, 'google-chrome/Default/')
+        self.dir_google_chrome_default = os.path.join(
+            self.dir_base, 'google-chrome/Default/')
         os.makedirs(self.dir_google_chrome_default)
 
-
         # google-chrome/Default/Bookmarks
-        bookmark_path = os.path.join(self.dir_google_chrome_default, 'Bookmarks')
+        bookmark_path = os.path.join(
+            self.dir_google_chrome_default, 'Bookmarks')
         f = open(bookmark_path, 'w')
         f.write(chrome_bookmarks)
         f.close()
 
         # google-chrome/Default/Web Data
-        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
+        bleachbit.FileUtilities.execute_sqlite3(
+            os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
 
         # google-chrome/Default/History
-        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'History'), chrome_history_sql)
+        bleachbit.FileUtilities.execute_sqlite3(
+            os.path.join(self.dir_google_chrome_default, 'History'), chrome_history_sql)
 
         # google-chrome/Default/databases/Databases.db
         os.makedirs(os.path.join(self.dir_google_chrome_default, 'databases'))
-        bleachbit.FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'databases/Databases.db'), chrome_databases_db)
-
+        bleachbit.FileUtilities.execute_sqlite3(
+            os.path.join(self.dir_google_chrome_default, 'databases/Databases.db'), chrome_databases_db)
 
     def tearDown(self):
         """Remove test browser files."""
         shutil.rmtree(self.dir_base)
 
-
-    def sqlite_clean_helper(self, sql, fn, clean_func, check_func = None, setup_func = None):
+    def sqlite_clean_helper(self, sql, fn, clean_func, check_func=None, setup_func=None):
         """Helper for cleaning special SQLite cleaning"""
 
-        self.assertFalse(sql and fn, "sql and fn are mutually exclusive ways to create the data")
+        self.assertFalse(
+            sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
         if fn:
             filename = os.path.join(self.dir_base, fn)
             if not os.path.exists(filename):
-                import pdb; pdb.set_trace()
+                import pdb
+                pdb.set_trace()
             self.assert_(os.path.exists(filename))
 
         # create sqlite file
@@ -219,20 +222,20 @@ class SpecialTestCase(unittest.TestCase):
                 setup_func(filename)
 
             # before SQL creation executed, cleaning should fail
-            self.assertRaises(sqlite3.DatabaseError, \
-                clean_func, filename)
+            self.assertRaises(sqlite3.DatabaseError,
+                              clean_func, filename)
             # create
             bleachbit.FileUtilities.execute_sqlite3(filename, sql)
             self.assert_(os.path.exists(filename))
 
         # clean the file
         old_shred = options.get('shred')
-        options.set('shred', False, commit = False)
+        options.set('shred', False, commit=False)
         self.assertFalse(options.get('shred'))
         clean_func(filename)
-        options.set('shred', True, commit = False)
+        options.set('shred', True, commit=False)
         self.assertTrue(options.get('shred'))
-        options.set('shred', old_shred, commit = False)
+        options.set('shred', old_shred, commit=False)
         clean_func(filename)
         self.assert_(os.path.exists(filename))
 
@@ -244,16 +247,15 @@ class SpecialTestCase(unittest.TestCase):
         bleachbit.FileUtilities.delete(filename)
         self.assert_(not os.path.exists(filename))
 
-
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
-        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_autofill)
-
+        self.sqlite_clean_helper(
+            None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_autofill)
 
     def test_delete_chrome_databases_db(self):
         """Unit test for delete_chrome_databases_db"""
-        self.sqlite_clean_helper(None, "google-chrome/Default/databases/Databases.db", bleachbit.Special.delete_chrome_databases_db)
-
+        self.sqlite_clean_helper(
+            None, "google-chrome/Default/databases/Databases.db", bleachbit.Special.delete_chrome_databases_db)
 
     def test_delete_chrome_history(self):
         """Unit test for delete_chrome_history"""
@@ -266,15 +268,16 @@ class SpecialTestCase(unittest.TestCase):
             for row in c:
                 ids.append(row[0])
             # id 1 is sqlite.org which is not a bookmark and should be cleaned
-            # id 2 is bleachbit.sourceforge.net which is a bookmark and should be cleaned
+            # id 2 is bleachbit.sourceforge.net which is a bookmark and should
+            # be cleaned
             self.assertEqual(ids, [2])
 
-
-        self.sqlite_clean_helper(None, "google-chrome/Default/History", bleachbit.Special.delete_chrome_history, check_chrome_history)
-
+        self.sqlite_clean_helper(None, "google-chrome/Default/History",
+                                 bleachbit.Special.delete_chrome_history, check_chrome_history)
 
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
+
         def check_chrome_keywords(self, filename):
             conn = sqlite3.connect(filename)
             c = conn.cursor()
@@ -282,11 +285,11 @@ class SpecialTestCase(unittest.TestCase):
             ids = []
             for row in c:
                 ids.append(row[0])
-            self.assertEqual(ids, [2,3,4,5,6])
+            self.assertEqual(ids, [2, 3, 4, 5, 6])
 
-        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_keywords, \
+        self.sqlite_clean_helper(
+            None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_keywords,
             check_chrome_keywords)
-
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
@@ -304,16 +307,16 @@ INSERT INTO "moz_historyvisits" VALUES(85696,0,211406,1277603269156003,1,5523649
 INSERT INTO "moz_inputhistory" VALUES(164860,'blog',0.0125459501500806);
 INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/index.html','download: OpenOffice.org 2.3.1 Downloads','gro.eciffonepo.daolnwod.',0,0,0,28,20,NULL);
 """
-        self.sqlite_clean_helper(sql, None, bleachbit.Special.delete_mozilla_url_history)
-
+        self.sqlite_clean_helper(
+            sql, None, bleachbit.Special.delete_mozilla_url_history)
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
         # does not exist
         # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
         # (maybe because the network was disconnected or because user created no bookmarks).
-        self.assertEqual([], bleachbit.Special.get_chrome_bookmark_ids('does_not_exist'))
-
+        self.assertEqual(
+            [], bleachbit.Special.get_chrome_bookmark_ids('does_not_exist'))
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
@@ -323,10 +326,10 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
         self.assert_(os.path.exists(path))
         urls = bleachbit.Special.get_chrome_bookmark_urls(path)
-        self.assertEqual(urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
+        self.assertEqual(
+            urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
 
         os.unlink(path)
-
 
     def test_get_sqlite_int(self):
         """Unit test for get_sqlite_int()"""
@@ -338,9 +341,9 @@ INSERT INTO "meta" VALUES('version','20');"""
         bleachbit.FileUtilities.execute_sqlite3(filename, sql)
         self.assert_(os.path.exists(filename))
         # run the test
-        ver = bleachbit.Special.get_sqlite_int(filename, 'select value from meta where key="version"')
+        ver = bleachbit.Special.get_sqlite_int(
+            filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
-
 
 
 def suite():
@@ -349,4 +352,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-

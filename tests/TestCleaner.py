@@ -1,21 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -36,11 +36,9 @@ from bleachbit.Cleaner import *
 import common
 
 
-
-
 def action_to_cleaner(action_str):
     """Given an action XML fragment, return a cleaner"""
-    return actions_to_cleaner( [action_str] )
+    return actions_to_cleaner([action_str])
 
 
 def actions_to_cleaner(action_strs):
@@ -57,31 +55,35 @@ def actions_to_cleaner(action_strs):
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
         cleaner.add_action('option%d' % count, provider)
-        cleaner.add_option('option%d' % count, 'name%d' % count, 'description%d' % count)
+        cleaner.add_option('option%d' % count, 'name%d' %
+                           count, 'description%d' % count)
         count = count + 1
     return cleaner
 
 
-
 class CleanerTestCase(unittest.TestCase):
-
-
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
         self.actions = []
         if 'nt' == os.name:
-            self.actions.append('<action command="delete" search="file" path="$WINDIR\\notepad.exe"/>')
-            self.actions.append('<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
-            self.actions.append( \
+            self.actions.append(
+                '<action command="delete" search="file" path="$WINDIR\\notepad.exe"/>')
+            self.actions.append(
+                '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
+            self.actions.append(
                 '<action command="delete" search="walk.files" path="$WINDIR\\system\\"/>')
-            self.actions.append( \
+            self.actions.append(
                 '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
         elif 'posix' == os.name:
-            self.actions.append('<action command="delete" search="file" path="%s"/>' % __file__)
-            self.actions.append('<action command="delete" search="glob" path="/usr/sbin/*sh"/>')
-            self.actions.append('<action command="delete" search="walk.files" path="/usr/sbin/"/>')
-            self.actions.append('<action command="delete" search="walk.all" path="/var/log/"/>')
+            self.actions.append(
+                '<action command="delete" search="file" path="%s"/>' % __file__)
+            self.actions.append(
+                '<action command="delete" search="glob" path="/usr/sbin/*sh"/>')
+            self.actions.append(
+                '<action command="delete" search="walk.files" path="/usr/sbin/"/>')
+            self.actions.append(
+                '<action command="delete" search="walk.all" path="/var/log/"/>')
 
         self.assert_(len(self.actions) > 0)
 
@@ -92,8 +94,8 @@ class CleanerTestCase(unittest.TestCase):
                 for result in cmd.execute(False):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
-                    self.assert_(os.path.lexists(pathname), \
-                        "Does not exist: '%s'" % pathname)
+                    self.assert_(os.path.lexists(pathname),
+                                 "Does not exist: '%s'" % pathname)
                     count += 1
                     common.validate_result(self, result)
             self.assert_(count > 0, "No files found for %s" % action_str)
@@ -105,11 +107,9 @@ class CleanerTestCase(unittest.TestCase):
         # should fail
         self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
 
-
     def test_auto_hide(self):
         for key in sorted(backends):
-            self.assert_ (type(backends[key].auto_hide()) is bool)
-
+            self.assert_(type(backends[key].auto_hide()) is bool)
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
@@ -119,7 +119,7 @@ class CleanerTestCase(unittest.TestCase):
         os.close(fd)
         self.assert_(os.path.exists(filename1))
         self.assert_(os.path.exists(filename2))
-        cleaner = create_simple_cleaner( [ filename1, filename2 ] )
+        cleaner = create_simple_cleaner([filename1, filename2])
         for cmd in cleaner.get_commands('files'):
             # preview
             for result in cmd.execute(False):
@@ -131,41 +131,38 @@ class CleanerTestCase(unittest.TestCase):
         self.assert_(not os.path.exists(filename1))
         self.assert_(not os.path.exists(filename2))
 
-
     def test_get_name(self):
         for key in sorted(backends):
-            self.assert_ (isinstance(backends[key].get_name(), (str, unicode)))
-
+            self.assert_(isinstance(backends[key].get_name(), (str, unicode)))
 
     def test_get_descrption(self):
         for key in sorted(backends):
-            self.assert_ (isinstance(key, (str, unicode)))
-            self.assert_ (isinstance (backends[key], Cleaner))
+            self.assert_(isinstance(key, (str, unicode)))
+            self.assert_(isinstance(backends[key], Cleaner))
             desc = backends[key].get_description()
-            self.assert_ (isinstance (desc, (str, unicode, types.NoneType)), \
-                "description for '%s' is '%s'" % (key, desc))
-
+            self.assert_(isinstance(desc, (str, unicode, types.NoneType)),
+                         "description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
-                self.assert_ (isinstance(test_id, (str, unicode)),
-                    '%s.%s is not a string' % (key, test_id))
-                self.assert_ (isinstance(name, (str, unicode)))
-
+                self.assert_(isinstance(test_id, (str, unicode)),
+                             '%s.%s is not a string' % (key, test_id))
+                self.assert_(isinstance(name, (str, unicode)))
 
     def test_get_commands(self):
         for key in sorted(backends):
             print "debug: test_get_commands: key='%s'" % (key, )
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete = False):
+                    for result in cmd.execute(really_delete=False):
                         if result != True:
                             break
                         common.validate_result(self, result)
         # make sure trash and tmp don't return the same results
         if 'nt' == os.name:
             return
+
         def get_files(option_id):
             ret = []
             register_cleaners()
@@ -177,7 +174,6 @@ class CleanerTestCase(unittest.TestCase):
         tmp_paths = get_files('tmp')
         for tmp_path in tmp_paths:
             self.assert_(tmp_path not in trash_paths)
-
 
     def test_no_files_exist(self):
         """Verify only existing files are returned"""
@@ -192,10 +188,11 @@ class CleanerTestCase(unittest.TestCase):
         for key in sorted(backends):
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete = False):
+                    for result in cmd.execute(really_delete=False):
                         if result != True:
                             break
-                        msg = "Expected no files to be deleted but got '%s'" % str(result)
+                        msg = "Expected no files to be deleted but got '%s'" % str(
+                            result)
                         self.assert_(not isinstance(cmd, Command.Delete), msg)
                         common.validate_result(self, result)
         glob.iglob = _iglob
@@ -203,34 +200,33 @@ class CleanerTestCase(unittest.TestCase):
         os.path.lexists = _lexists
         os.walk = _oswalk
 
-
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
         register_cleaners()
         register_cleaners()
 
     def test_whitelist(self):
-        tests = [ \
-            ('/tmp/.truecrypt_aux_mnt1/control', True), \
-            ('/tmp/.truecrypt_aux_mnt1/volume', True), \
-            ('/tmp/.vbox-foo-ipc/lock', True), \
-            ('/tmp/.wine-500/server-806-102400f/lock', True), \
-            ('/tmp/gconfd-foo/lock/ior', True), \
-            ('/tmp/ksocket-foo/Arts_SoundServerV2', True), \
-            ('/tmp/ksocket-foo/secret-cookie', True), \
-            ('/tmp/orbit-foo/bonobo-activation-server-ior', True), \
-            ('/tmp/orbit-foo/bonobo-activation-register.lock', True), \
-            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior', True), \
-            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock', True), \
-            ('/tmp/pulse-foo/pid', True), \
-            ('/tmp/tmpsDOBFd', False) \
-            ]
+        tests = [
+            ('/tmp/.truecrypt_aux_mnt1/control', True),
+            ('/tmp/.truecrypt_aux_mnt1/volume', True),
+            ('/tmp/.vbox-foo-ipc/lock', True),
+            ('/tmp/.wine-500/server-806-102400f/lock', True),
+            ('/tmp/gconfd-foo/lock/ior', True),
+            ('/tmp/ksocket-foo/Arts_SoundServerV2', True),
+            ('/tmp/ksocket-foo/secret-cookie', True),
+            ('/tmp/orbit-foo/bonobo-activation-server-ior', True),
+            ('/tmp/orbit-foo/bonobo-activation-register.lock', True),
+            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior',
+             True),
+            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
+             True),
+            ('/tmp/pulse-foo/pid', True),
+            ('/tmp/tmpsDOBFd', False)
+        ]
         register_cleaners()
         for test in tests:
-            self.assertEqual(backends['system'].whitelisted(test[0]), test[1], test[0])
-
-
-
+            self.assertEqual(
+                backends['system'].whitelisted(test[0]), test[1], test[0])
 
 
 def suite():
@@ -238,4 +234,3 @@ def suite():
 
 if __name__ == '__main__':
     unittest.main()
-
