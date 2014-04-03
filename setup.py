@@ -1,29 +1,27 @@
 #!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Build BleachBit tarballs and exe
 """
-
 
 
 import bleachbit.Common
@@ -41,11 +39,11 @@ if sys.platform == 'win32':
         print 'warning: py2exe not available'
 
 
-##
-## begin win32com.shell workaround for py2exe
-## copied from http://spambayes.svn.sourceforge.net/viewvc/spambayes/trunk/spambayes/windows/py2exe/setup_all.py?revision=3245&content-type=text%2Fplain
-## under Python license compatible with GPL
-##
+#
+# begin win32com.shell workaround for py2exe
+# copied from http://spambayes.svn.sourceforge.net/viewvc/spambayes/trunk/spambayes/windows/py2exe/setup_all.py?revision=3245&content-type=text%2Fplain
+# under Python license compatible with GPL
+#
 
 # ModuleFinder can't handle runtime changes to __path__, but win32com uses them,
 # particularly for people who build from sources.  Hook this in.
@@ -70,10 +68,9 @@ except ImportError:
     # no build path setup, no worries.
     pass
 
-###
-### end win32com.shell workaround for py2exe
-###
-
+#
+# end win32com.shell workaround for py2exe
+#
 
 
 data_files = []
@@ -88,23 +85,23 @@ elif sys.platform[:6] == 'netbsd':
 args = {}
 if 'py2exe' in sys.argv:
     args['windows'] = [{
-        'script' : 'bleachbit.py',
-        'icon_resources' : [(1, 'windows/bleachbit.ico')]
-        }]
+        'script': 'bleachbit.py',
+        'icon_resources': [(1, 'windows/bleachbit.ico')]
+    }]
     args['console'] = [{
-        'script' : 'bleachbit_console.py',
-        'icon_resources' : [(1, 'windows/bleachbit.ico')]
-        }]
+        'script': 'bleachbit_console.py',
+        'icon_resources': [(1, 'windows/bleachbit.ico')]
+    }]
     args['options'] = {
-        'py2exe' : {
-            'packages' : 'encodings',
-            'optimize' : 2, # extra optimization (like python -OO)
-            'includes' : ['atk', 'cairo', 'gobject', 'pango', 'pangocairo' ],
-            'excludes' : ['_ssl', 'pyreadline', 'difflib', 'doctest',
-                'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
-            'compressed' : True # create a compressed zipfile
-            }
+        'py2exe': {
+            'packages': 'encodings',
+            'optimize': 2,  # extra optimization (like python -OO)
+            'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
+            'excludes': ['_ssl', 'pyreadline', 'difflib', 'doctest',
+                         'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
+            'compressed': True  # create a compressed zipfile
         }
+    }
     import gtk
     from distutils import version
     gtkver = version.StrictVersion('.'.join([str(x) for x in gtk.gtk_version]))
@@ -130,7 +127,7 @@ def recompile_mo(langdir, app, langid, dst):
     # decompile .mo to .po
     po = os.path.join(dst, langid + '.po')
     __args = ['msgunfmt', '-o', po,
-        mo_pathname ]
+              mo_pathname]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
@@ -138,14 +135,14 @@ def recompile_mo(langdir, app, langid, dst):
     # shrink .po
     po2 = os.path.join(dst, langid + '.po2')
     __args = ['msgmerge', '--no-fuzzy-matching', po,
-        os.path.normpath('windows/%s.pot' % app),
-        '-o', po2 ]
+              os.path.normpath('windows/%s.pot' % app),
+              '-o', po2]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
 
     # compile smaller .po to smaller .mo
-    __args = ['msgfmt', po2, '-o', mo_pathname ]
+    __args = ['msgfmt', po2, '-o', mo_pathname]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
         raise RuntimeError(ret[2])
@@ -182,19 +179,20 @@ def clean_dist_locale():
             os.system(cmd)
     os.rmdir(tmpd)
 
+
 def run_setup():
-    setup( name = 'bleachbit',
-           version = bleachbit.Common.APP_VERSION,
-           description = "Free space and maintain privacy",
-           long_description = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
-           author = "Andrew Ziem",
-           author_email = "ahz001@gmail.com",
-           download_url = "http://bleachbit.sourceforge.net/download",
-           license = "GPLv3",
-           url = bleachbit.Common.APP_URL,
-           platforms = 'Linux and Windows; Python v2.5 to 2.7; GTK v2.12+',
-           packages = ['bleachbit'],
-           **args)
+    setup(name='bleachbit',
+          version=bleachbit.Common.APP_VERSION,
+          description="Free space and maintain privacy",
+          long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
+          author="Andrew Ziem",
+          author_email="ahz001@gmail.com",
+          download_url="http://bleachbit.sourceforge.net/download",
+          license="GPLv3",
+          url=bleachbit.Common.APP_URL,
+          platforms='Linux and Windows; Python v2.5 to 2.7; GTK v2.12+',
+          packages=['bleachbit'],
+          **args)
 
 
 if __name__ == '__main__':
@@ -202,4 +200,3 @@ if __name__ == '__main__':
         clean_dist_locale()
     else:
         run_setup()
-
