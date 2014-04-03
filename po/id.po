@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-09-12 20:36-0600\n"
-"PO-Revision-Date: 2013-09-24 10:01+0000\n"
+"POT-Creation-Date: 2014-03-26 19:31-0600\n"
+"PO-Revision-Date: 2014-04-03 14:13+0000\n"
 "Last-Translator: Trisno Pamuji <tri.snowman@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2013-10-07 04:40+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2014-04-03 16:40+0000\n"
+"X-Generator: Launchpad (build 16976)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -479,7 +479,7 @@ msgid "Clean file"
 msgstr "Bersihkan berkas"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:587
+#: ../bleachbit/Action.py:307 ../bleachbit/GUI.py:589
 msgid "Clean"
 msgstr "Bersihkan"
 
@@ -551,8 +551,8 @@ msgstr "Tempat sampah"
 msgid "Empty the trash"
 msgstr "Kosongkan tempat sampah"
 
-#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:549
-#: ../bleachbit/Worker.py:207
+#: ../bleachbit/Cleaner.py:407 ../bleachbit/Cleaner.py:550
+#: ../bleachbit/Worker.py:173
 msgid "Memory"
 msgstr "Memori"
 
@@ -602,7 +602,7 @@ msgstr ""
 "Hapus uninstaller untuk pemutakhiran Microsoft termasuk perbaikan, paket "
 "layanan, dan pemutakhiran Internet Explorer"
 
-#: ../bleachbit/Cleaner.py:431 ../bleachbit/Cleaner.py:640
+#: ../bleachbit/Cleaner.py:431 ../bleachbit/Cleaner.py:641
 msgid "Clipboard"
 msgstr "Papan klip"
 
@@ -640,19 +640,19 @@ msgstr "Pilihan ini sangat lambat."
 msgid "The system in general"
 msgstr "Sistem secara umum"
 
-#: ../bleachbit/Cleaner.py:452 ../bleachbit/Cleaner.py:741
+#: ../bleachbit/Cleaner.py:452 ../bleachbit/Cleaner.py:743
 msgid "System"
 msgstr "Sistem"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:649 ../bleachbit/Cleaner.py:768
+#: ../bleachbit/Cleaner.py:650 ../bleachbit/Cleaner.py:771
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Menimpa ruang kosong pada disk %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:677
+#: ../bleachbit/Cleaner.py:678
 #, python-format
 msgid "Recycle bin %s"
 msgstr "Tempat sampah %s"
@@ -779,7 +779,7 @@ msgstr ""
 msgid "Open web browser to %s?"
 msgstr "Buka penjelajah web ke %s?"
 
-#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:639
+#: ../bleachbit/GuiPreferences.py:53 ../bleachbit/GUI.py:641
 msgid "Preferences"
 msgstr "Preferensi"
 
@@ -840,7 +840,7 @@ msgid "Start BleachBit with computer"
 msgstr "Mulai BleachBit dengan komputer"
 
 #: ../bleachbit/GuiPreferences.py:151 ../bleachbit/GuiPreferences.py:282
-#: ../bleachbit/GuiPreferences.py:328 ../bleachbit/GUI.py:548
+#: ../bleachbit/GuiPreferences.py:328 ../bleachbit/GUI.py:550
 msgid "Choose a folder"
 msgstr "Pilih folder"
 
@@ -981,74 +981,74 @@ msgstr ""
 msgid "System information"
 msgstr "Informasi Sistem"
 
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:497
 msgid "Choose files to shred"
 msgstr "Pilih file-file yang akan di sobek"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:500
 msgid "Choose folder to shred"
 msgstr "Pilih folder yang akan di sobek"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:582
+#: ../bleachbit/GUI.py:584
 msgid "Preview"
 msgstr "Pratinjau"
 
-#: ../bleachbit/GUI.py:633
+#: ../bleachbit/GUI.py:635
 msgid "_Shred Files"
 msgstr "_Sobek berkas-berkas"
 
-#: ../bleachbit/GUI.py:634
+#: ../bleachbit/GUI.py:636
 msgid "Sh_red Folders"
 msgstr "Folder Teriris"
 
-#: ../bleachbit/GUI.py:635
+#: ../bleachbit/GUI.py:637
 msgid "_Wipe Free Space"
 msgstr "B_ersihkan Ruang Kosong"
 
-#: ../bleachbit/GUI.py:636
+#: ../bleachbit/GUI.py:638
 msgid "S_hred Settings and Quit"
 msgstr "Pengaturan S_hred dan Keluar"
 
-#: ../bleachbit/GUI.py:637
+#: ../bleachbit/GUI.py:639
 msgid "_Quit"
 msgstr "Keluar"
 
-#: ../bleachbit/GUI.py:638
+#: ../bleachbit/GUI.py:640
 msgid "_File"
 msgstr "_Berkas"
 
-#: ../bleachbit/GUI.py:640
+#: ../bleachbit/GUI.py:642
 msgid "_Edit"
 msgstr "_Ubah"
 
-#: ../bleachbit/GUI.py:641
+#: ../bleachbit/GUI.py:643
 msgid "Help Contents"
 msgstr "Isi Bantuan"
 
-#: ../bleachbit/GUI.py:643
+#: ../bleachbit/GUI.py:645
 msgid "_Release Notes"
 msgstr "_Catatan keluaran"
 
-#: ../bleachbit/GUI.py:645
+#: ../bleachbit/GUI.py:647
 msgid "_System Information"
 msgstr "Informasi _Sistem"
 
-#: ../bleachbit/GUI.py:646
+#: ../bleachbit/GUI.py:648
 msgid "_About"
 msgstr "Tent_ang"
 
-#: ../bleachbit/GUI.py:647
+#: ../bleachbit/GUI.py:649
 msgid "_Help"
 msgstr "_Bantuan"
 
 #. TRANSLATORS: This is the preview button on the main window.  It previews changes.
-#: ../bleachbit/GUI.py:671
+#: ../bleachbit/GUI.py:673
 msgctxt "button"
 msgid "Preview"
 msgstr "Pratinjau"
 
-#: ../bleachbit/GUI.py:674
+#: ../bleachbit/GUI.py:676
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Pratilik berkas-berkas pada operasi yang dipilih (tanpa menghapus berkas-"
@@ -1056,20 +1056,20 @@ msgstr ""
 
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes altering them.
-#: ../bleachbit/GUI.py:682
+#: ../bleachbit/GUI.py:684
 msgctxt "button"
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: ../bleachbit/GUI.py:685
+#: ../bleachbit/GUI.py:687
 msgid "Clean files in the selected operations"
 msgstr "Bersihkan berkas dalam operasi yang dipilih"
 
-#: ../bleachbit/GUI.py:774
+#: ../bleachbit/GUI.py:776
 msgid "Error when checking for updates: "
 msgstr "Gagal ketika memeriksa pembaruan: "
 
-#: ../bleachbit/GUI.py:804
+#: ../bleachbit/GUI.py:806
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "Gagal memuat modul SQLite: perangkat anti virus mungkin membloknya."
@@ -1102,13 +1102,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Nama berkas"
 
-#: ../bleachbit/Unix.py:366 ../bleachbit/Unix.py:396 ../bleachbit/Unix.py:576
+#: ../bleachbit/Unix.py:356 ../bleachbit/Unix.py:386 ../bleachbit/Unix.py:566
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Eksekusi tidak ditemukan: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:573 ../bleachbit/Worker.py:131
+#: ../bleachbit/Unix.py:563 ../bleachbit/Worker.py:132
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -1167,23 +1167,32 @@ msgstr "Diimpor dari winapp2.ini"
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
 #. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:71
+#: ../bleachbit/Worker.py:72
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Pengecualian ketika menjalankan operasi '%(operation)s': '%(msg)s'"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:205
+#: ../bleachbit/Worker.py:171
 msgid "Please wait.  Wiping free disk space."
 msgstr "Mohon tunggu. Sedang menyapu ruang kosong pada disk."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:207 ../bleachbit/Worker.py:294
+#: ../bleachbit/Worker.py:173 ../bleachbit/Worker.py:312
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "Mohon tunggu. Membersikan %s."
 
-#: ../bleachbit/Worker.py:217
+#: ../bleachbit/Worker.py:187
+msgid "Please wait. Wiping file system metadata."
+msgstr "Silakan tunggu. Sedang menyapu metadata sistem berkas."
+
+#: ../bleachbit/Worker.py:189
+msgid "Please wait. Cleaning up after wiping file system metadata."
+msgstr ""
+"Silakan tunggu. Sedang membersihkan setelah menyapu metadata sistem berkas."
+
+#: ../bleachbit/Worker.py:192
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -1191,38 +1200,38 @@ msgstr[0] "Sekitar %d menit tersisa."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:232
+#: ../bleachbit/Worker.py:250
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "Ruang disk yang telah pulih: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:236
+#: ../bleachbit/Worker.py:254
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "Ruang disk yang akan dipulihkan: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:241
+#: ../bleachbit/Worker.py:259
 #, python-format
 msgid "Files deleted: %d"
 msgstr "Berkas-berkas yang dihapus: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:245
+#: ../bleachbit/Worker.py:263
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "Berkas-berkas yang akan dihapus: %d"
 
-#: ../bleachbit/Worker.py:248
+#: ../bleachbit/Worker.py:266
 #, python-format
 msgid "Special operations: %d"
 msgstr "Operasi khusus: %d"
 
-#: ../bleachbit/Worker.py:251
+#: ../bleachbit/Worker.py:269
 #, python-format
 msgid "Errors: %d"
 msgstr "Kesalahan: %d"
@@ -1230,12 +1239,12 @@ msgstr "Kesalahan: %d"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:267
+#: ../bleachbit/Worker.py:285
 msgid "Please wait.  Running deep scan."
 msgstr "Mohon tunggu. Pengecekan mendalam sedang berjalan."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:297
+#: ../bleachbit/Worker.py:315
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "Mohon tunggu. Pratayang %s."
