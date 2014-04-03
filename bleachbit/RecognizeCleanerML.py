@@ -1,28 +1,26 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Check local CleanerML files as a security measure
 """
-
 
 
 import ConfigParser
@@ -38,11 +36,9 @@ from CleanerML import list_cleanerml_files
 from Options import options
 
 
-
 KNOWN = 1
 CHANGED = 2
 NEW = 3
-
 
 
 def cleaner_change_dialog(changes, parent):
@@ -54,14 +50,13 @@ def cleaner_change_dialog(changes, parent):
         value = not model.get_value(__iter, 0)
         model.set(__iter, 0, value)
 
-
     import pygtk
     pygtk.require('2.0')
     import gtk
 
-    dialog = gtk.Dialog(title = _("Security warning"), \
-        parent = parent, \
-        flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dialog = gtk.Dialog(title=_("Security warning"),
+                        parent=parent,
+                        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
     dialog.set_default_size(600, 500)
 
     # create warning
@@ -71,27 +66,32 @@ def cleaner_change_dialog(changes, parent):
     warnbox.pack_start(image, False)
     # TRANSLATORS: Cleaner definitions are XML data files that define
     # which files will be cleaned.
-    label = gtk.Label(_("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
+    label = gtk.Label(
+        _("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
     label.set_line_wrap(True)
     warnbox.pack_start(label, True)
     dialog.vbox.pack_start(warnbox, False)
 
     # create tree view
     liststore = gtk.ListStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING)
-    treeview = gtk.TreeView(model = liststore)
+    treeview = gtk.TreeView(model=liststore)
 
     renderer0 = gtk.CellRendererToggle()
     renderer0.set_property('activatable', True)
     renderer0.connect('toggled', toggled, liststore)
-    # TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-    treeview.append_column(gtk.TreeViewColumn(_p('column_label', 'Delete'), renderer0, active = 0))
+    # TRANSLATORS: This is the column label (header) in the tree view for the
+    # security dialog
+    treeview.append_column(
+        gtk.TreeViewColumn(_p('column_label', 'Delete'), renderer0, active=0))
     renderer1 = gtk.CellRendererText()
-    # TRANSLATORS: This is the column label (header) in the tree view for the security dialog
-    treeview.append_column(gtk.TreeViewColumn(_p('column_label', 'Filename'), renderer1, text = 1))
+    # TRANSLATORS: This is the column label (header) in the tree view for the
+    # security dialog
+    treeview.append_column(
+        gtk.TreeViewColumn(_p('column_label', 'Filename'), renderer1, text=1))
 
     # populate tree view
     for change in changes:
-        liststore.append( [ False, change[0] ])
+        liststore.append([False, change[0]])
 
     # populate dialog with widgets
     scrolled_window = gtk.ScrolledWindow()
@@ -116,7 +116,7 @@ def cleaner_change_dialog(changes, parent):
             # no files selected to delete
             break
         import GuiBasic
-        if not GuiBasic.delete_confirmation_dialog(parent, mention_preview = False):
+        if not GuiBasic.delete_confirmation_dialog(parent, mention_preview=False):
             # confirmation not accepted, so do not delete files
             continue
         for path in delete:
@@ -124,7 +124,6 @@ def cleaner_change_dialog(changes, parent):
             os.remove(path)
         break
     dialog.destroy()
-
 
 
 def hashdigest(string):
@@ -135,8 +134,10 @@ def hashdigest(string):
 
 
 class RecognizeCleanerML:
+
     """Check local CleanerML files as a security measure"""
-    def __init__(self, parent_window = None):
+
+    def __init__(self, parent_window=None):
         self.parent_window = parent_window
         try:
             self.salt = options.get('hashsalt')
@@ -144,7 +145,6 @@ class RecognizeCleanerML:
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.__scan()
-
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
@@ -158,15 +158,14 @@ class RecognizeCleanerML:
             return (KNOWN, new_hash)
         return (CHANGED, new_hash)
 
-
     def __scan(self):
         """Look for files and act accordingly"""
         changes = []
-        for pathname in sorted(list_cleanerml_files(local_only = True)):
+        for pathname in sorted(list_cleanerml_files(local_only=True)):
             pathname = os.path.abspath(pathname)
             (status, myhash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
-                changes.append([ pathname, status, myhash ])
+                changes.append([pathname, status, myhash])
         if len(changes) > 0:
             cleaner_change_dialog(changes, self.parent_window)
             for change in changes:
@@ -175,7 +174,3 @@ class RecognizeCleanerML:
                 print "info: remembering CleanerML file '%s'" % pathname
                 if os.path.exists(pathname):
                     options.set_hashpath(pathname, myhash)
-
-
-
-

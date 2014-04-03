@@ -1,29 +1,27 @@
 #!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Command line interface
 """
-
 
 
 import optparse
@@ -36,10 +34,9 @@ import Options
 import Worker
 
 
-
 class CliCallback:
-    """Command line's callback passed to Worker"""
 
+    """Command line's callback passed to Worker"""
 
     def __init__(self):
         """Initialize CliCallback"""
@@ -51,24 +48,20 @@ class CliCallback:
         if not self.encoding:
             self.encoding = 'UTF8'
 
-
-    def append_text(self, msg, tag = None):
+    def append_text(self, msg, tag=None):
         """Write text to the terminal"""
         # If the encoding is not explictly handled on a non-UTF-8
         # system, then special Latin-1 characters such as umlauts may
         # raise an exception as an encoding error.
         print msg.strip('\n').encode(self.encoding, 'replace')
 
-
     def update_progress_bar(self, status):
         """Not used"""
         pass
 
-
     def update_total_size(self, size):
         """Not used"""
         pass
-
 
     def worker_done(self, worker, really_delete):
         """Not used"""
@@ -108,7 +101,7 @@ def args_to_operations(args, preset):
             c_id = backends[key].get_id()
             for (o_id, o_name) in backends[key].get_options():
                 if Options.options.get_tree(c_id, o_id):
-                    args.append('.'.join([ c_id, o_id ]) )
+                    args.append('.'.join([c_id, o_id]))
     for arg in args:
         if 2 != len(arg.split('.')):
             print _("not a valid cleaner: %s") % arg
@@ -120,13 +113,13 @@ def args_to_operations(args, preset):
                 del operations[cleaner_id]
             operations[cleaner_id] = []
             for (option_id2, o_name) in backends[cleaner_id].get_options():
-                operations[cleaner_id].append( option_id2 )
+                operations[cleaner_id].append(option_id2)
             continue
         # add the specified option
         if not operations.has_key(cleaner_id):
             operations[cleaner_id] = []
         if not option_id in operations[cleaner_id]:
-            operations[cleaner_id].append( option_id )
+            operations[cleaner_id].append(option_id)
     for (k, v) in operations.iteritems():
         operations[k] = sorted(v)
     return operations
@@ -140,35 +133,37 @@ def process_cmd_line():
     # http://bleachbit.sourceforge.net/documentation/command-line
     usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
     parser = optparse.OptionParser(usage)
-    parser.add_option("-l", "--list-cleaners", action = "store_true",
-        help = _("list cleaners"))
-    parser.add_option("-c", "--clean", action = "store_true",
-        # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
-        # This is different than cleaning an arbitrary file, such as a spreadsheet on the desktop.
-        help = _("run cleaners to delete files and make other permanent changes"))
-    parser.add_option("-s", "--shred", action = "store_true",
-        help = _("shred specific files or folders"))
-    parser.add_option("--sysinfo", action = "store_true",
-        help = _("show system information"))
-    parser.add_option("--gui", action = "store_true", help=_("launch the graphical interface"))
+    parser.add_option("-l", "--list-cleaners", action="store_true",
+                      help=_("list cleaners"))
+    parser.add_option("-c", "--clean", action="store_true",
+                      # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
+                      # This is different than cleaning an arbitrary file, such as a
+                      # spreadsheet on the desktop.
+                      help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option("-s", "--shred", action="store_true",
+                      help=_("shred specific files or folders"))
+    parser.add_option("--sysinfo", action="store_true",
+                      help=_("show system information"))
+    parser.add_option("--gui", action="store_true",
+                      help=_("launch the graphical interface"))
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
         uac_help = optparse.SUPPRESS_HELP
-    parser.add_option("--no-uac", action = "store_true", help=uac_help)
-    parser.add_option("-p", "--preview", action = "store_true",
-        help = _("preview files to be deleted and other changes"))
+    parser.add_option("--no-uac", action="store_true", help=uac_help)
+    parser.add_option("-p", "--preview", action="store_true",
+                      help=_("preview files to be deleted and other changes"))
     parser.add_option("--preset", action="store_true",
-        help = _("use options set in the graphical interface"))
+                      help=_("use options set in the graphical interface"))
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
-            help = _("update winapp2.ini, if a new version is available"))
-    parser.add_option("-v", "--version", action = "store_true",
-        help = _("output version information and exit"))
-    parser.add_option('-o', '--overwrite', action = 'store_true',
-        help = _('overwrite files to hide contents'))
+                          help=_("update winapp2.ini, if a new version is available"))
+    parser.add_option("-v", "--version", action="store_true",
+                      help=_("output version information and exit"))
+    parser.add_option('-o', '--overwrite', action='store_true',
+                      help=_('overwrite files to hide contents'))
     parser.add_option("--wipe-metadata", action="store_true",
-            help = _("wipe file system metadata"))
+                      help=_("wipe file system metadata"))
     (options, args) = parser.parse_args()
     did_something = False
     if options.version:
@@ -183,8 +178,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         import Update
         print "Checking online for updates to winapp2.ini"
         Update.check_updates(False, True,
-            lambda x: sys.stdout.write("%s\n" % x),
-            lambda: None)
+                             lambda x: sys.stdout.write("%s\n" % x),
+                             lambda: None)
         # updates can be combined with --list, --preview, --clean
         did_something = True
     if options.list_cleaners:
@@ -201,7 +196,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.overwrite:
         if not options.clean or options.shred:
             print 'NOTE: --overwrite is intended only for use with --clean'
-        Options.options.set('shred', True, commit = False)
+        Options.options.set('shred', True, commit=False)
     if options.clean:
         preview_or_clean(operations, True)
         sys.exit(0)
@@ -209,20 +204,20 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         import gtk
         import GUI
         shred_paths = args if options.shred else None
-        GUI.GUI(uac = not options.no_uac, shred_paths = shred_paths)
+        GUI.GUI(uac=not options.no_uac, shred_paths=shred_paths)
         gtk.main()
         sys.exit(0)
     if options.shred:
         # delete arbitrary files without GUI
         # create a temporary cleaner object
         backends['_gui'] = create_simple_cleaner(args)
-        operations = { '_gui' : [ 'files' ] }
+        operations = {'_gui': ['files']}
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.wipe_metadata:
         pathname = args[0]
         if not os.path.lexists(pathname):
-            print 'ERROR: path does not exist: %s' % pathname 
+            print 'ERROR: path does not exist: %s' % pathname
             sys.exit(1)
         if not os.path.isdir(pathname):
             print 'ERROR: not a directory: %s' % pathname
@@ -240,8 +235,5 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         parser.print_help()
 
 
-
-
 if __name__ == '__main__':
     process_cmd_line()
-

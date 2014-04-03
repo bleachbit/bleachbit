@@ -1,22 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -24,17 +23,14 @@ General code
 """
 
 
-
 import os
 import sys
 import traceback
 
 
-
-###
-### XML
-###
-
+#
+# XML
+#
 def boolstr_to_bool(value):
     """Convert a string boolean to a Python boolean"""
     if 'true' == value.lower():
@@ -54,13 +50,13 @@ def getText(nodelist):
     return rc
 
 
-
-###
-### General
-###
-
+#
+# General
+#
 class WindowsError(Exception):
+
     """Dummy class for non-Windows systems"""
+
     def __str__(self):
         return 'this is a dummy class for non-Windows systems'
 
@@ -122,7 +118,7 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout = False, env = None):
+def run_external(args, stdout=False, env=None):
     """Run external command and return (return code, stdout, stderr)"""
     print 'debug: running cmd ', args
     import subprocess
@@ -137,8 +133,8 @@ def run_external(args, stdout = False, env = None):
         import win32con
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
-    p = subprocess.Popen(args, stdout = stdout, \
-        stderr = subprocess.PIPE, env = env, **kwargs)
+    p = subprocess.Popen(args, stdout=stdout,
+                         stderr=subprocess.PIPE, env=env, **kwargs)
     try:
         out = p.communicate()
     except KeyboardInterrupt:
@@ -154,12 +150,10 @@ def sudo_mode():
     if not sys.platform.startswith('linux'):
         return False
 
-    #if 'root' == os.getenv('USER'):
+    # if 'root' == os.getenv('USER'):
         # gksu in Ubuntu 9.10 changes the username.  If the username is root,
         # we're practically not in sudo mode.
         # Fedora 13: os.getenv('USER') = 'root' under sudo
-        #return False
+        # return False
 
     return os.getenv('SUDO_UID') != None
-
-

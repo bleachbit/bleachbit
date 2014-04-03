@@ -1,21 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -35,7 +35,8 @@ if 'nt' == os.name:
     from win32file import GetLongPathName
 
 
-boolean_keys = ['auto_start', 'check_beta', 'check_online_updates', 'first_start', 'shred']
+boolean_keys = ['auto_start', 'check_beta',
+                'check_online_updates', 'first_start', 'shred']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
 
@@ -47,22 +48,21 @@ def path_to_option(pathname):
     # On Windows expand DOS-8.3-style pathnames.
     if 'nt' == os.name and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
-    if ':' == pathname[1] :
+    if ':' == pathname[1]:
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
 
 
 class Options:
-    """Store and retrieve user preferences"""
 
+    """Store and retrieve user preferences"""
 
     def __init__(self):
         self.purged = False
         self.config = ConfigParser.SafeConfigParser()
-        self.config.optionxform = str # make keys case sensitive for hashpath purging
+        self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.restore()
-
 
     def __flush(self):
         """Write information to disk"""
@@ -84,7 +84,6 @@ class Options:
         if mkfile and General.sudo_mode():
             General.chownself(Common.options_file)
 
-
     def __purge(self):
         """Clear out obsolete data"""
         self.purged = True
@@ -93,20 +92,19 @@ class Options:
         for option in self.config.options('hashpath'):
             pathname = option
             if 'nt' == os.name and re.search('^[a-z]\\\\', option):
-                # restore colon lost because ConfigParser treats colon special in keys
+                # restore colon lost because ConfigParser treats colon special
+                # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
             if not os.path.lexists(pathname):
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
-
 
     def __set_default(self, key, value):
         """Set the default value"""
         if not self.config.has_option('bleachbit', key):
             self.set(key, value)
 
-
-    def get(self, option, section = 'bleachbit'):
+    def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
@@ -116,11 +114,9 @@ class Options:
             return self.config.getboolean(section, option)
         return self.config.get(section, option)
 
-
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
         return self.get(path_to_option(pathname), 'hashpath')
-
 
     def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
@@ -128,13 +124,11 @@ class Options:
             return False
         return self.config.getboolean('preserve_languages', langid)
 
-
     def get_languages(self):
         """Return a list of all selected languages"""
         if not self.config.has_section('preserve_languages'):
             return None
         return self.config.options('preserve_languages')
-
 
     def get_list(self, option):
         """Return an option which is a list data type"""
@@ -160,19 +154,16 @@ class Options:
         for option in set(myoptions):
             p_type = self.config.get(section, option + '_type')
             p_path = self.config.get(section, option + '_path')
-            values.append( ( p_type, p_path ) )
+            values.append((p_type, p_path))
         return values
-
 
     def get_whitelist_paths(self):
         """Return the whitelist of paths"""
         return self.get_paths("whitelist/paths")
 
-
     def get_custom_paths(self):
         """Return list of custom paths"""
         return self.get_paths("custom/paths")
-
 
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
@@ -187,7 +178,6 @@ class Options:
             # in case of corrupt configuration (Launchpad #799130)
             traceback.print_exc()
             return False
-
 
     def restore(self):
         """Restore saved options from disk"""
@@ -215,31 +205,28 @@ class Options:
             lang = Common.user_locale
             pos = lang.find('_')
             if -1 != pos:
-                lang = lang [0 : pos]
+                lang = lang[0: pos]
             for _lang in set([lang, 'en']):
                 print "info: automatically preserving language '%s'" % lang
                 self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
-            self.get('version') != Common.APP_VERSION:
+                self.get('version') != Common.APP_VERSION:
             self.set('first_start', True)
 
         # set version
         self.set("version", Common.APP_VERSION)
 
-
-    def set(self, key, value, section = 'bleachbit', commit = True):
+    def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
         self.config.set(section, key, str(value))
         if commit:
             self.__flush()
 
-
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
         self.set(path_to_option(pathname), hashvalue, 'hashpath')
-
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""
@@ -252,7 +239,6 @@ class Options:
             self.config.set(section, str(counter), value)
             counter += 1
         self.__flush()
-
 
     def set_whitelist_paths(self, values):
         """Save the whitelist"""
@@ -267,7 +253,6 @@ class Options:
             counter += 1
         self.__flush()
 
-
     def set_custom_paths(self, values):
         """Save the customlist"""
         section = "custom/paths"
@@ -281,7 +266,6 @@ class Options:
             counter += 1
         self.__flush()
 
-
     def set_language(self, langid, value):
         """Set the value for a locale (whether to preserve it)"""
         if not self.config.has_section('preserve_languages'):
@@ -291,7 +275,6 @@ class Options:
         else:
             self.config.set('preserve_languages', langid, str(value))
         self.__flush()
-
 
     def set_tree(self, parent, child, value):
         """Set an option for the tree view.  The child may be None."""
@@ -306,16 +289,9 @@ class Options:
             self.config.set('tree', option, str(value))
         self.__flush()
 
-
     def toggle(self, key):
         """Toggle a boolean key"""
         self.set(key, not self.get(key))
 
 
-
-
-
-
 options = Options()
-
-

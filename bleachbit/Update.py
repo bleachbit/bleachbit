@@ -1,22 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -59,8 +58,8 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     # verify hash
     hash_actual = hashlib.sha512(doc).hexdigest()
     if hash_expected and not hash_actual == hash_expected:
-        raise RuntimeError("hash for %s actually %s instead of %s" % \
-            (url, hash_actual, hash_expected))
+        raise RuntimeError("hash for %s actually %s instead of %s" %
+                          (url, hash_actual, hash_expected))
     # delete current
     if delete_current:
         from FileUtilities import delete
@@ -76,11 +75,12 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
 
 def user_agent():
     """Return the user agent string"""
-    __platform = platform.system() # Linux or Windows
-    __os = platform.uname()[2] # e.g., 2.6.28-12-generic or XP
+    __platform = platform.system()  # Linux or Windows
+    __os = platform.uname()[2]  # e.g., 2.6.28-12-generic or XP
     if sys.platform == "win32":
         # misleading: Python 2.5.4 shows uname()[2] as Vista on Windows 7
-        __os = platform.uname()[3][0:3] # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
+        __os = platform.uname()[3][
+            0:3]  # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
     elif sys.platform.startswith('linux'):
         dist = platform.dist()
         # example: ('fedora', '11', 'Leonidas')
@@ -91,27 +91,26 @@ def user_agent():
         __sys = platform.system()
         mach = platform.machine()
         rel = platform.release()
-        __os = __sys + '/' + mach+ ' '  + rel
+        __os = __sys + '/' + mach + ' ' + rel
     __locale = ""
     try:
         import locale
-        __locale = locale.getdefaultlocale()[0] # e.g., en_US
+        __locale = locale.getdefaultlocale()[0]  # e.g., en_US
     except:
         traceback.print_exc()
 
-    agent = "BleachBit/%s (%s; %s; %s)" % (Common.APP_VERSION, \
-        __platform, __os, __locale)
+    agent = "BleachBit/%s (%s; %s; %s)" % (Common.APP_VERSION,
+                                           __platform, __os, __locale)
     return agent
-
 
 
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
     import gtk
     from GuiBasic import open_url
-    dlg = gtk.Dialog(title = _("Update BleachBit"), \
-        parent = parent, \
-        flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dlg = gtk.Dialog(title=_("Update BleachBit"),
+                     parent=parent,
+                     flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
     dlg.set_default_size(250, 125)
 
     label = gtk.Label(_("A new version is available."))
@@ -121,11 +120,13 @@ def update_dialog(parent, updates):
         ver = update[0]
         url = update[1]
         box_update = gtk.HBox()
-        # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or similar
+        # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
+        # similar
         button_stable = gtk.Button(_("Update to version %s") % ver)
-        button_stable.connect('clicked', lambda dummy: open_url(url, parent, False))
+        button_stable.connect(
+            'clicked', lambda dummy: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
-        box_update.pack_start(button_stable, False, padding = 10)
+        box_update.pack_start(button_stable, False, padding=10)
         dlg.vbox.pack_start(box_update, False)
 
     dlg.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
@@ -135,7 +136,6 @@ def update_dialog(parent, updates):
     dlg.destroy()
 
     return False
-
 
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
@@ -150,6 +150,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     except:
         print doc
         raise
+
     def parse_updates(element):
         if element:
             ver = element[0].getAttribute('ver')
@@ -175,4 +176,3 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     if beta and check_beta:
         return (beta,)
     return ()
-

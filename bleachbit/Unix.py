@@ -1,23 +1,22 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -72,75 +71,75 @@ def locale_globex(globpath, regex):
 
 
 class Locales:
+
     """Find languages and localization files"""
 
     __native_locale_names = \
-    { 'ar' : 'العربية', \
-        'be' : 'Беларуская мова', \
-        'bg' : 'български език', \
-        'bn' : 'বাংলা', \
-        'bs' : 'босански', \
-        'ca' : 'català', \
-        'cs' : 'česky', \
-        'da' : 'dansk', \
-        'de' : 'Deutsch', \
-        'el' : 'Ελληνικά', \
-        'en' : 'English', \
-        'es' : 'Español', \
-        'fi' : 'suomen kieli', \
-        'fr' : 'Français', \
-        'fo' : 'føroyskt', \
-        'hi' : 'हिन्दी', \
-        'hr' : 'Hrvatski', \
-        'hu' : 'Magyar', \
-        'id' : 'Indonesian', \
-        'it' : 'Italiano', \
-        'iw' : 'עברית', \
-        'ja' : '日本語', \
-        'jv' : 'basa Jawa', \
-        'ko' : '한국어', \
-        'mr' : 'मराठी', \
-        'ms' : 'بهاس ملايو', \
-        'nb' : 'Bokmål', \
-        'nds' : 'Plattdüütsch', \
-        'nl' : 'Nederlands', \
-        'no' : 'Norsk', \
-        'pl' : 'polski', \
-        'pt' : 'Português', \
-        'ro' : 'română', \
-        'ru' : 'Pусский', \
-        'sk' : 'slovenčina', \
-        'sl' : 'slovenščina', \
-        'sr' : 'Српски', \
-        'sv' : 'svenska', \
-        'tr' : 'Türkçe', \
-        'ug' : 'Uyghur', \
-        'uk' : 'Українська', \
-        'vi' : 'Tiếng Việt', \
-        'zh' : '中文' }
+        {'ar': 'العربية',
+         'be': 'Беларуская мова',
+         'bg': 'български език',
+         'bn': 'বাংলা',
+         'bs': 'босански',
+         'ca': 'català',
+         'cs': 'česky',
+         'da': 'dansk',
+         'de': 'Deutsch',
+         'el': 'Ελληνικά',
+         'en': 'English',
+         'es': 'Español',
+         'fi': 'suomen kieli',
+         'fr': 'Français',
+         'fo': 'føroyskt',
+         'hi': 'हिन्दी',
+         'hr': 'Hrvatski',
+         'hu': 'Magyar',
+         'id': 'Indonesian',
+         'it': 'Italiano',
+         'iw': 'עברית',
+         'ja': '日本語',
+         'jv': 'basa Jawa',
+         'ko': '한국어',
+         'mr': 'मराठी',
+         'ms': 'بهاس ملايو',
+         'nb': 'Bokmål',
+         'nds': 'Plattdüütsch',
+         'nl': 'Nederlands',
+         'no': 'Norsk',
+         'pl': 'polski',
+         'pt': 'Português',
+         'ro': 'română',
+         'ru': 'Pусский',
+         'sk': 'slovenčina',
+         'sl': 'slovenščina',
+         'sr': 'Српски',
+         'sv': 'svenska',
+         'tr': 'Türkçe',
+         'ug': 'Uyghur',
+         'uk': 'Українська',
+         'vi': 'Tiếng Việt',
+         'zh': '中文'}
 
-    __basedirs = [ os.path.expanduser('~/.local/share/locale/'),
-                '/usr/local/share/locale/',
-                '/usr/share/apps/ksgmltools2/customization/',
-                '/usr/share/calendar', # Ubuntu 8.10
-                '/usr/share/cups/locale', # Ubuntu 8.10
-                '/usr/share/doc/kde/HTML/',
-                '/usr/share/doc/HTML/release-notes/', # Fedora 10
-                '/usr/share/doc/thunar-data/html',
-                '/usr/share/gnucash/accounts',
-                '/usr/share/locale/',
-                '/usr/share/speedcrunch/books/',
-                '/usr/share/vim/vim72/' # Ubuntu 10.10
-                ]
+    __basedirs = [os.path.expanduser('~/.local/share/locale/'),
+                  '/usr/local/share/locale/',
+                  '/usr/share/apps/ksgmltools2/customization/',
+                  '/usr/share/calendar',  # Ubuntu 8.10
+                  '/usr/share/cups/locale',  # Ubuntu 8.10
+                  '/usr/share/doc/kde/HTML/',
+                  '/usr/share/doc/HTML/release-notes/',  # Fedora 10
+                  '/usr/share/doc/thunar-data/html',
+                  '/usr/share/gnucash/accounts',
+                  '/usr/share/locale/',
+                  '/usr/share/speedcrunch/books/',
+                  '/usr/share/vim/vim72/'  # Ubuntu 10.10
+                  ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
 
-    ooosharedirs = [ '/usr/lib/openoffice/share/', # Ubuntu 8
-        '/usr/lib/openoffice/basis3.2/share/', # Ubuntu 10.10
-        '/usr/lib/openoffice.org/basis3.0/share/', # Fedora 10
-        '/opt/ooo-dev/basis3.0/share', # Sun development snapshot
-        '/opt/openoffice.org/basis3.0/share/' ] # Sun
-
+    ooosharedirs = ['/usr/lib/openoffice/share/',  # Ubuntu 8
+                    '/usr/lib/openoffice/basis3.2/share/',  # Ubuntu 10.10
+                    '/usr/lib/openoffice.org/basis3.0/share/',  # Fedora 10
+                    '/opt/ooo-dev/basis3.0/share',  # Sun development snapshot
+                    '/opt/openoffice.org/basis3.0/share/']  # Sun
 
     def __init__(self):
         self.__languages = []
@@ -152,27 +151,28 @@ class Locales:
                 self.__basedirs.append(dirname)
 
         for ooosharedir in self.ooosharedirs:
-            suffixes = [ 'autotext/',
-                'config/soffice.cfg/global/accelerator/',
-                'registry/res/',
-                'samples/',
-                'template/',
-                'template/wizard/letter/',
-                'wordbook/' ]
+            suffixes = ['autotext/',
+                        'config/soffice.cfg/global/accelerator/',
+                        'registry/res/',
+                        'samples/',
+                        'template/',
+                        'template/wizard/letter/',
+                        'wordbook/']
             for suffix in suffixes:
                 ooodir = os.path.join(ooosharedir, suffix)
                 if os.path.exists(ooodir):
                     self.__basedirs.append(ooodir)
-            ooomodules = os.path.join(ooosharedir, 'config/soffice.cfg/modules')
+            ooomodules = os.path.join(
+                ooosharedir, 'config/soffice.cfg/modules')
             if os.path.exists(ooomodules):
                 for ooomodule in os.listdir(ooomodules):
-                    dirname = os.path.join(ooomodules, ooomodule + '/accelerator/')
+                    dirname = os.path.join(
+                        ooomodules, ooomodule + '/accelerator/')
                     self.__basedirs.append(dirname)
 
         self.__scanned = False
         self.__config = ConfigParser.RawConfigParser()
         self.__config_read = False
-
 
     def __scan(self):
         """Create a list of languages"""
@@ -196,14 +196,12 @@ class Locales:
         self.__languages = sorted(set(self.__languages))
         self.__scanned = True
 
-
     def iterate_languages(self):
         """Return each language code (generally ISO 639)"""
         if not self.__scanned:
             self.__scan()
         for lang in self.__languages:
             yield lang
-
 
     def __localization_path(self, basedir, language_filter, dir_filter):
         """Return localization paths in a single directory tree"""
@@ -229,106 +227,112 @@ class Locales:
                 yield path
             yield locale_dirname
 
-
     def localization_paths(self, language_filter):
         """Return paths containing localization files"""
 
-        ##
-        ## general
-        ##
+        #
+        # general
+        #
         for basedir in self.__basedirs:
             dir_filter = lambda d: d in self.__ignore
             for path in self.__localization_path(basedir, language_filter, dir_filter):
                 yield path
 
-        ###
-        ### the locale is the directory name
-        ###
+        #
+        # the locale is the directory name
+        #
 
         lps = []
 
         # CUPS, Fedora 10
         # /usr/share/cups/templates/es/jobs.tmpl
-        lps += ( ('/usr/share/cups/templates/', lambda d: d.endswith('tmpl')) , )
+        lps += (('/usr/share/cups/templates/', lambda d: d.endswith('tmpl')), )
 
         # CUPS, Fedora 10
         # /usr/share/cups/www/es/images/button-add-printer.gif
-        dir_filter = lambda d: d in ['cups.css', 'cups-printable.css', \
-            'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
-        lps += ( ('/usr/share/cups/www/', dir_filter) , )
+        dir_filter = lambda d: d in ['cups.css', 'cups-printable.css',
+                                     'favicon.ico', 'help', 'images', 'index.html', 'robots.txt']
+        lps += (('/usr/share/cups/www/', dir_filter), )
 
         # CUPS, Ubuntu 8.10
         # /usr/share/cups/doc-root/es/images/button-add-printer.gif
-        lps += ( ('/usr/share/cups/doc-root/', dir_filter) , )
+        lps += (('/usr/share/cups/doc-root/', dir_filter), )
 
         # evolution
         # /usr/share/evolution/2.22/help/quickref/es/quickref.pdf
-        lps += ( ('/usr/share/evolution/*/help/quickref/', dir_filter) , )
+        lps += (('/usr/share/evolution/*/help/quickref/', dir_filter), )
 
         # Evolution, Ubuntu 10.10
         # /usr/share/evolution/2.30/default/es/mail
-        lps += ( ('/usr/share/evolution/*.*/default/', dir_filter) , )
+        lps += (('/usr/share/evolution/*.*/default/', dir_filter), )
 
         # foomatic
         dir_filter = lambda d: 2 != len(d)
-        lps += ( ('/usr/share/foomatic/db/source/PPD/Kyocera/', dir_filter) , )
+        lps += (('/usr/share/foomatic/db/source/PPD/Kyocera/', dir_filter), )
 
         # man pages
         # /usr/share/man/es/man1/man.1.gz
         dir_filter = lambda d: d.startswith('man')
-        lps += ( ('/usr/share/man/', dir_filter) , )
+        lps += (('/usr/share/man/', dir_filter), )
 
         # process lps
         for lp in lps:
             for path in self.__localization_path(lp[0], language_filter, lp[1]):
                 yield path
 
-
-        ###
-        ### locale_globex
-        ###
+        #
+        # locale_globex
+        #
         globexs = []
 
         # /usr/share/i18n/locales/es_ES@euro
-        globexs += ( ('/usr/share/i18n/locales/??_*', 'locales/([a-z]{2}_[A-Z]{2})'), )
+        globexs += (
+            ('/usr/share/i18n/locales/??_*', 'locales/([a-z]{2}_[A-Z]{2})'), )
         # /usr/share/aptitude/aptitude-defaults.es
-        globexs += ( ('/usr/share/aptitude/aptitude-defaults*', '-defaults.([a-z]{2})'), )
+        globexs += (
+            ('/usr/share/aptitude/aptitude-defaults*', '-defaults.([a-z]{2})'), )
         # /usr/share/ppd/splix/samsung/ml1740fr.ppd
-        globexs += ( ('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$' ), )
+        globexs += (('/usr/share/ppd/splix/*/*fr.ppd', '(fr).ppd$'), )
         # /usr/share/espeak-data/es_dict
-        globexs += ( ('/usr/share/espeak-data/*_dict', '/([a-z]{2,3})_dict$' ), )
+        globexs += (
+            ('/usr/share/espeak-data/*_dict', '/([a-z]{2,3})_dict$'), )
         # /usr/share/espeak-data/voices/en/en-n
-        globexs += ( ('/usr/share/espeak-data/voices/en/*', '/(en)-?[a-z]{0,2}$' ), )
+        globexs += (
+            ('/usr/share/espeak-data/voices/en/*', '/(en)-?[a-z]{0,2}$'), )
         # /usr/share/espeak-data/voices/es-la
-        globexs += ( ('/usr/share/espeak-data/voices/*', '/([a-z]{2,3}(-[a-z]{2})?)$' ), )
+        globexs += (
+            ('/usr/share/espeak-data/voices/*', '/([a-z]{2,3}(-[a-z]{2})?)$'), )
         # /usr/share/espeak-data/voices/mb/mb-ro1-en, do not match mb-us*
-        globexs += ( ('/usr/share/espeak-data/voices/mb/mb-*', '/mb-([a-tv-z][a-z])[0-9](-[a-z]{2,3})?$' ), )
+        globexs += (
+            ('/usr/share/espeak-data/voices/mb/mb-*', '/mb-([a-tv-z][a-z])[0-9](-[a-z]{2,3})?$'), )
         # /usr/share/hplip/data/localization/hplip_es.qm
-        globexs += ( ('/usr/share/hplip/data/localization/hplip_??.qm', '_([a-z]{2}).qm$' ), )
+        globexs += (
+            ('/usr/share/hplip/data/localization/hplip_??.qm', '_([a-z]{2}).qm$'), )
         # /usr/share/myspell/dicts/hyph_es_ES.dic
-        globexs += ( ('/usr/share/myspell/dicts/hyph_??_??.dic', '([a-z]{2}_[A-Z]{2}).dic$' ), )
+        globexs += (
+            ('/usr/share/myspell/dicts/hyph_??_??.dic', '([a-z]{2}_[A-Z]{2}).dic$'), )
         # /usr/share/omf/gedit/gedit-es.omf
-        globexs += ( ('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$'), )
+        globexs += (('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$'), )
         # OpenOffice.org
         # /usr/lib/openoffice/share/autocorr/acor_es-ES.dat
         for ooosharedir in self.ooosharedirs:
-            globexs += ( (ooosharedir + '/autocorr/acor_*.dat', 'acor_([a-z]{2}(-[A-Z]{2})?).dat$'), )
+            globexs += (
+                (ooosharedir + '/autocorr/acor_*.dat', 'acor_([a-z]{2}(-[A-Z]{2})?).dat$'), )
         # TCL on Fedora 10a
         # /usr/share/tcl8.5/msgs/es.msg
         # /usr/share/tcl8.5/msgs/es_mx.msg
-        globexs += ( ('/usr/share/tcl*/msgs/?*.msg', '/([a-z]{2}(_[a-z]{2})?).msg$'), )
+        globexs += (
+            ('/usr/share/tcl*/msgs/?*.msg', '/([a-z]{2}(_[a-z]{2})?).msg$'), )
 
         # process reglobs
         for (globpath, regex) in globexs:
             for (locale_code, path) in locale_globex(globpath, regex):
                 language_code = locale_to_language(locale_code)
-                if 'mb' == language_code: # not a real code but found in espeak Ubuntu 9.04
+                if 'mb' == language_code:  # not a real code but found in espeak Ubuntu 9.04
                     continue
                 if None != language_filter and language_filter(locale_code, language_code):
                     continue
                 yield path
-
-
 
     def native_name(self, language_code):
         """Return the name of the language in its own language"""
@@ -357,8 +361,8 @@ def apt_autoclean():
 
     args = ['apt-get', 'autoclean']
 
-    process = subprocess.Popen(args, \
-        stderr =  subprocess.STDOUT, stdout = subprocess.PIPE)
+    process = subprocess.Popen(args,
+                               stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
     total_bytes = 0
 
@@ -387,8 +391,8 @@ def apt_autoremove():
 
     args = ['apt-get', '--yes', 'autoremove']
 
-    process = subprocess.Popen(args, \
-        stderr =  subprocess.STDOUT, stdout = subprocess.PIPE)
+    process = subprocess.Popen(args,
+                               stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
     total_bytes = 0
 
@@ -397,7 +401,8 @@ def apt_autoremove():
         if line.startswith('E: '):
             raise RuntimeError(line)
         # After this operation, 74.7MB disk space will be freed.
-        match = re.search(", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
+        match = re.search(
+            ", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
         if match:
             pkg_bytes_str = match.groups(0)[0]
             pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
@@ -421,7 +426,8 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
-        # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program Files\\foo\\foo.exe"
+        # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program
+        # Files\\foo\\foo.exe"
         execs = shlex.split(config.get('Desktop Entry', 'Exec'))
         wineprefix = None
         del(execs[0])
@@ -463,7 +469,7 @@ def is_broken_xdg_desktop(pathname):
     file_type = config.get('Desktop Entry', 'Type').strip().lower()
     if 'link' == file_type:
         if not config.has_option('Desktop Entry', 'URL') and \
-            not config.has_option('Desktop Entry', 'URL[$e]'):
+                not config.has_option('Desktop Entry', 'URL[$e]'):
             print "info: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
             return True
         return False
@@ -509,20 +515,20 @@ def rotated_logs():
     # /var/log/dmesg.1.gz
     # Fedora 10
     # /var/log/messages-20090118
-    globpaths = ( '/var/log/*.[0-9]', \
-         '/var/log/*/*.[0-9]', \
-        '/var/log/*.gz', \
-        '/var/log/*/*gz', \
-        '/var/log/*/*.old', \
-        '/var/log/*.old' )
+    globpaths = ('/var/log/*.[0-9]',
+                 '/var/log/*/*.[0-9]',
+                 '/var/log/*.gz',
+                 '/var/log/*/*gz',
+                 '/var/log/*/*.old',
+                 '/var/log/*.old')
     for globpath in globpaths:
         for path in glob.iglob(globpath):
             yield path
     regex = '-[0-9]{8}$'
-    globpaths = ( '/var/log/*-*', '/var/log/*/*-*' )
+    globpaths = ('/var/log/*-*', '/var/log/*/*-*')
     for path in FileUtilities.globex(globpaths, regex):
         whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
-        if None == re.match(whitelist_re, path): # for Slackware, Launchpad #367575
+        if None == re.match(whitelist_re, path):  # for Slackware, Launchpad #367575
             yield path
 
 
@@ -551,23 +557,24 @@ def start_with_computer_check():
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
-    windows_pathname = windows_pathname.replace(drive_letter + ":", \
-        "drive_" + drive_letter.lower())
-    windows_pathname = windows_pathname.replace("\\","/")
+    windows_pathname = windows_pathname.replace(drive_letter + ":",
+                                                "drive_" + drive_letter.lower())
+    windows_pathname = windows_pathname.replace("\\", "/")
     return os.path.join(wineprefix, windows_pathname)
 
 
 def yum_clean():
     """Run 'yum clean all' and return size in bytes recovered"""
     if os.path.exists('/var/run/yum.pid'):
-        msg = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
+        msg = _(
+            "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
         raise RuntimeError(msg)
     if not FileUtilities.exe_exists('yum'):
         raise RuntimeError(_('Executable not found: %s') % 'yum')
     old_size = FileUtilities.getsizedir('/var/cache/yum')
-    args  = ['yum', "--enablerepo=*", 'clean', 'all']
-    p = subprocess.Popen(args, stderr=subprocess.STDOUT, \
-        stdout=subprocess.PIPE)
+    args = ['yum', "--enablerepo=*", 'clean', 'all']
+    p = subprocess.Popen(args, stderr=subprocess.STDOUT,
+                         stdout=subprocess.PIPE)
     non_blank_line = ""
     while True:
         line = p.stdout.readline().replace("\n", "")
@@ -592,6 +599,3 @@ def yum_clean():
 
 
 locales = Locales()
-
-
-

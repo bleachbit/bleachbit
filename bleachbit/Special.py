@@ -1,22 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -29,26 +28,30 @@ from Options import options
 import FileUtilities
 
 
-def __get_chrome_history(path, fn = 'History'):
+def __get_chrome_history(path, fn='History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
-    ver = get_sqlite_int(path_history, 'select value from meta where key="version"')[0]
+    ver = get_sqlite_int(
+        path_history, 'select value from meta where key="version"')[0]
     assert(ver > 1)
     return ver
 
-def __shred_sqlite_char_columns(table, cols = None, where = ""):
+
+def __shred_sqlite_char_columns(table, cols=None, where=""):
     """Create an SQL command to shred character columns"""
     cmd = ""
     if cols and options.get('shred'):
         cmd += "update %s set %s %s;" % \
-            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)  for col in cols]), where)
+            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
+             for col in cols]), where)
         cmd += "update %s set %s %s;" % \
-            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)  for col in cols]), where)
+            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
+             for col in cols]), where)
     cmd += "delete from %s %s;" % (table, where)
     return cmd
 
 
-def get_sqlite_int(path, sql, parameters = None):
+def get_sqlite_int(path, sql, parameters=None):
     """Run SQL on database in 'path' and return the integers"""
     ids = []
     import sqlite3
@@ -69,7 +72,7 @@ def delete_chrome_autofill(path):
     """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('name', 'value', 'value_lower')
     cmds = __shred_sqlite_char_columns('autofill', cols)
-    cmds += __shred_sqlite_char_columns('autofill_dates', () )
+    cmds += __shred_sqlite_char_columns('autofill_dates', ())
     FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -110,7 +113,8 @@ def delete_chrome_favicons(path):
         cmds += __shred_sqlite_char_columns('favicon_bitmaps', cols, where)
 
         # favicons
-        # Google Chrome 30 (database version 28): image_data moved to table favicon_bitmaps
+        # Google Chrome 30 (database version 28): image_data moved to table
+        # favicon_bitmaps
         if ver < 28:
             cols = ('url', 'image_data')
         else:
@@ -147,12 +151,16 @@ def delete_chrome_history(path):
     ver = __get_chrome_history(path)
     if ver >= 20:
         # downloads, segments, segment_usage first seen in Chrome 14, Google Chrome 15 (database version = 20)
-        # Google Chrome 30 (database version 28) doesn't have full_path, but it does have current_path and target_path
+        # Google Chrome 30 (database version 28) doesn't have full_path, but it
+        # does have current_path and target_path
         if ver >= 28:
-            cmds += __shred_sqlite_char_columns('downloads', ('current_path', 'target_path'))
-            cmds += __shred_sqlite_char_columns('downloads_url_chains', ('url', ))
+            cmds += __shred_sqlite_char_columns(
+                'downloads', ('current_path', 'target_path'))
+            cmds += __shred_sqlite_char_columns(
+                'downloads_url_chains', ('url', ))
         else:
-            cmds += __shred_sqlite_char_columns('downloads', ('full_path', 'url'))
+            cmds += __shred_sqlite_char_columns(
+                'downloads', ('full_path', 'url'))
         cmds += __shred_sqlite_char_columns('segments', ('name',))
         cmds += __shred_sqlite_char_columns('segment_usage')
     FileUtilities.execute_sqlite3(path, cmds)
@@ -160,9 +168,10 @@ def delete_chrome_history(path):
 
 def delete_chrome_keywords(path):
     """Delete keywords table in Chromium/Google Chrome 'Web Data' database"""
-    cols = ('short_name', 'keyword', 'favicon_url', 'originating_url', 'suggest_url')
+    cols = ('short_name', 'keyword', 'favicon_url',
+            'originating_url', 'suggest_url')
     where = "where not date_created = 0"
-    cmds  = __shred_sqlite_char_columns('keywords', cols, where)
+    cmds = __shred_sqlite_char_columns('keywords', cols, where)
     cmds += "update keywords set usage_count = 0;"
     ver = __get_chrome_history(path, 'Web Data')
     if ver >= 43 and ver < 49:
@@ -212,7 +221,8 @@ def delete_mozilla_url_history(path):
         "on moz_annos.place_id = moz_places.id " \
         "where moz_places.id is null); "
 
-    cmds += __shred_sqlite_char_columns('moz_annos', ('content', ), annos_suffix)
+    cmds += __shred_sqlite_char_columns(
+        'moz_annos', ('content', ), annos_suffix)
 
     # delete any orphaned favicons
     fav_suffix = "where id not in (select favicon_id " \
@@ -232,7 +242,6 @@ def delete_mozilla_url_history(path):
 
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
-
 
 
 def delete_ooo_history(path):
@@ -260,7 +269,8 @@ def get_chrome_bookmark_ids(history_path):
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
     for url in urls:
-        ids +=  get_sqlite_int(history_path, 'select id from urls where url=?', (url,))
+        ids += get_sqlite_int(
+            history_path, 'select id from urls where url=?', (url,))
     return ids
 
 
@@ -275,7 +285,7 @@ def get_chrome_bookmark_urls(path):
     js = json.load(open(path, 'r'))
 
     # empty list
-    urls = [ ]
+    urls = []
 
     # local recursive function
     def get_chrome_bookmark_urls_helper(node):
@@ -294,4 +304,4 @@ def get_chrome_bookmark_urls(path):
     for node in js['roots']:
         get_chrome_bookmark_urls_helper(js['roots'][node])
 
-    return list(set(urls)) # unique
+    return list(set(urls))  # unique

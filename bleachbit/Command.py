@@ -1,28 +1,26 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Command design pattern implementation for cleaning
 """
-
 
 
 import os
@@ -40,47 +38,47 @@ else:
 
 def whitelist(path):
     """Return information that this file was whitelisted"""
-    ret = { \
+    ret = {
         # TRANSLATORS: This is the label in the log indicating was
         # skipped because it matches the whitelist
-        'label' : _('Skip'),
-        'n_deleted' : 0,
-        'n_special' : 0,
-        'path' : path,
-        'size' : 0 }
+        'label': _('Skip'),
+        'n_deleted': 0,
+        'n_special': 0,
+        'path': path,
+        'size': 0}
     return ret
 
 
 class Delete:
+
     """Delete a single file or directory.  Obey the user
     preference regarding shredding."""
-
 
     def __init__(self, path):
         """Create a Delete instance to delete 'path'"""
         self.path = path
         self.shred = False
 
-
     def execute(self, really_delete):
         """Make changes and return results"""
         if FileUtilities.whitelisted(self.path):
             yield whitelist(self.path)
             return
-        ret = { \
+        ret = {
             # TRANSLATORS: This is the label in the log indicating will be
             # deleted (for previews) or was actually deleted
-            'label' : _('Delete'),
-            'n_deleted' : 1,
-            'n_special' : 0,
-            'path' : self.path,
-            'size' : FileUtilities.getsize(self.path) }
+            'label': _('Delete'),
+            'n_deleted': 1,
+            'n_special': 0,
+            'path': self.path,
+            'size': FileUtilities.getsize(self.path)}
         if really_delete:
             try:
                 FileUtilities.delete(self.path, self.shred)
             except WindowsError, e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
-                # used by another process: u'C:\\Documents and Settings\\username\\Cookies\\index.dat'
+                # used by another process: u'C:\\Documents and
+                # Settings\\username\\Cookies\\index.dat'
                 if 32 != e.winerror and 5 != e.winerror:
                     raise
                 try:
@@ -95,6 +93,7 @@ class Delete:
 
 
 class Function:
+
     """Execute a simple Python function"""
 
     def __init__(self, path, func, label):
@@ -115,12 +114,12 @@ class Function:
             yield whitelist(self.path)
             return
 
-        ret = { \
-            'label' : self.label,
-            'n_deleted' : 0,
-            'n_special' : 1,
-            'path' : self.path,
-            'size' : None }
+        ret = {
+            'label': self.label,
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': self.path,
+            'size': None}
 
         if really_delete:
             if None == self.path:
@@ -160,8 +159,8 @@ class Function:
         yield ret
 
 
-
 class Ini:
+
     """Remove sections or parameters from a .ini file"""
 
     def __init__(self, path, section, parameter):
@@ -170,7 +169,6 @@ class Ini:
         self.section = section
         self.parameter = parameter
 
-
     def execute(self, really_delete):
         """Make changes and return results"""
 
@@ -178,13 +176,13 @@ class Ini:
             yield whitelist(self.path)
             return
 
-        ret = { \
+        ret = {
             # TRANSLATORS: Parts of this file will be deleted
-            'label' : _('Clean file'),
-            'n_deleted' : 0,
-            'n_special' : 1,
-            'path' : self.path,
-            'size' : None }
+            'label': _('Clean file'),
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': self.path,
+            'size': None}
         if really_delete:
             oldsize = FileUtilities.getsize(self.path)
             FileUtilities.clean_ini(self.path, self.section, self.parameter)
@@ -194,13 +192,13 @@ class Ini:
 
 
 class Json:
+
     """Remove a key from a JSON configuration file"""
 
     def __init__(self, path, address):
         """Create the instance"""
         self.path = path
         self.address = address
-
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -209,12 +207,12 @@ class Json:
             yield whitelist(self.path)
             return
 
-        ret = { \
-            'label' : _('Clean file'),
-            'n_deleted' : 0,
-            'n_special' : 1,
-            'path' : self.path,
-            'size' : None }
+        ret = {
+            'label': _('Clean file'),
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': self.path,
+            'size': None}
         if really_delete:
             oldsize = FileUtilities.getsize(self.path)
             FileUtilities.clean_json(self.path, self.address)
@@ -223,8 +221,8 @@ class Json:
         yield ret
 
 
-
 class Shred(Delete):
+
     """Shred a single file"""
 
     def __init__(self, path):
@@ -233,10 +231,9 @@ class Shred(Delete):
         self.shred = True
 
 
-
 class Truncate(Delete):
-    """Truncate a single file"""
 
+    """Truncate a single file"""
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -245,13 +242,13 @@ class Truncate(Delete):
             yield whitelist(self.path)
             return
 
-        ret = { \
+        ret = {
             # TRANSLATORS: The file will be truncated to 0 bytes in length
-            'label' : _('Truncate'),
-            'n_deleted' : 1,
-            'n_special' : 0,
-            'path' : self.path,
-            'size' : FileUtilities.getsize(self.path) }
+            'label': _('Truncate'),
+            'n_deleted': 1,
+            'n_special': 0,
+            'path': self.path,
+            'size': FileUtilities.getsize(self.path)}
         if really_delete:
             f = open(self.path, 'wb')
             f.truncate(0)
@@ -259,6 +256,7 @@ class Truncate(Delete):
 
 
 class Winreg:
+
     """Clean Windows registry"""
 
     def __init__(self, keyname, valuename):
@@ -266,17 +264,16 @@ class Winreg:
         self.keyname = keyname
         self.valuename = valuename
 
-
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
         if 'nt' != os.name:
             raise StopIteration
-        _str = None # string representation
-        ret = None # return value meaning 'deleted' or 'delete-able'
+        _str = None  # string representation
+        ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
             _str = '%s<%s>' % (self.keyname, self.valuename)
-            ret = Windows.delete_registry_value(self.keyname, \
-                self.valuename, really_delete)
+            ret = Windows.delete_registry_value(self.keyname,
+                                                self.valuename, really_delete)
         else:
             ret = Windows.delete_registry_key(self.keyname, really_delete)
             _str = self.keyname
@@ -285,14 +282,11 @@ class Winreg:
             # makes the auto-hide feature work nicely.
             raise StopIteration
 
-        ret = { \
-            'label' : _('Delete registry key'),
-            'n_deleted' : 0,
-            'n_special' : 1,
-            'path' : _str,
-            'size' : 0 }
+        ret = {
+            'label': _('Delete registry key'),
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': _str,
+            'size': 0}
 
         yield ret
-
-
-

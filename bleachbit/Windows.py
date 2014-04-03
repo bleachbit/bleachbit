@@ -1,22 +1,21 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -37,7 +36,6 @@ These are the terms:
 
 
 """
-
 
 
 import glob
@@ -68,14 +66,15 @@ import Common
 import FileUtilities
 import General
 
+
 def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
     try:
-        ret = win32gui.GetOpenFileNameW(None, \
-            Flags = win32con.OFN_EXPLORER \
-                | win32con.OFN_FILEMUSTEXIST \
-                | win32con.OFN_HIDEREADONLY, \
-            Title = title)
+        ret = win32gui.GetOpenFileNameW(None,
+                                        Flags=win32con.OFN_EXPLORER
+                                        | win32con.OFN_FILEMUSTEXIST
+                                        | win32con.OFN_HIDEREADONLY,
+                                        Title=title)
     except pywintypes.error, e:
         if 0 == e.winerror:
             print 'debug: browse_file(): user cancelled'
@@ -88,12 +87,12 @@ def browse_file(_, title):
 def browse_files(_, title):
     """Ask the user to select files.  Return full paths"""
     try:
-        ret = win32gui.GetOpenFileNameW(None, \
-            Flags = win32con.OFN_ALLOWMULTISELECT \
-                | win32con.OFN_EXPLORER \
-                | win32con.OFN_FILEMUSTEXIST \
-                | win32con.OFN_HIDEREADONLY, \
-            Title = title)
+        ret = win32gui.GetOpenFileNameW(None,
+                                        Flags=win32con.OFN_ALLOWMULTISELECT
+                                        | win32con.OFN_EXPLORER
+                                        | win32con.OFN_FILEMUSTEXIST
+                                        | win32con.OFN_HIDEREADONLY,
+                                        Title=title)
     except pywintypes.error, e:
         if 0 == e.winerror:
             print 'debug: browse_files(): user cancelled'
@@ -124,7 +123,8 @@ def browse_folder(hwnd, title):
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
     if os.path.exists(pathname):
-        win32api.MoveFileEx(pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
+        win32api.MoveFileEx(
+            pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -153,7 +153,7 @@ def delete_registry_value(key, value_name, really_delete):
         raise
     else:
         return True
-    raise RuntimeError ('Unknown error in delete_registry_value')
+    raise RuntimeError('Unknown error in delete_registry_value')
 
 
 def delete_registry_key(parent_key, really_delete):
@@ -161,7 +161,7 @@ def delete_registry_key(parent_key, really_delete):
     Return boolean whether found and success.  If really
     delete is False (meaning preview), just check whether
     the key exists."""
-    parent_key = str(parent_key) # Unicode to byte string
+    parent_key = str(parent_key)  # Unicode to byte string
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
@@ -188,10 +188,10 @@ def delete_registry_key(parent_key, really_delete):
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
     windir = os.path.expandvars('$windir')
-    dirs = glob.glob(os.path.join(windir,'$NtUninstallKB*'))
-    dirs += [ os.path.expandvars('$windir\\SoftwareDistribution\\Download') ]
-    dirs += [ os.path.expandvars('$windir\\ie7updates') ]
-    dirs += [ os.path.expandvars('$windir\\ie8updates') ]
+    dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
+    dirs += [os.path.expandvars('$windir\\SoftwareDistribution\\Download')]
+    dirs += [os.path.expandvars('$windir\\ie7updates')]
+    dirs += [os.path.expandvars('$windir\\ie8updates')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
@@ -200,6 +200,7 @@ def delete_updates():
     wu_running = win32serviceutil.QueryServiceStatus('wuauserv')[1] == 4
 
     args = ['net', 'stop', 'wuauserv']
+
     def wu_service():
         General.run_external(args)
         return 0
@@ -219,7 +220,7 @@ def delete_updates():
 
 def detect_registry_key(parent_key):
     """Detect whether registry key exists"""
-    parent_key = str(parent_key) # Unicode to byte string
+    parent_key = str(parent_key)  # Unicode to byte string
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
@@ -239,7 +240,6 @@ def elevate_privileges():
     privileges.  If successful, return True (so original process
     can exit).  If failed or not applicable, return False."""
 
-
     if platform.version() <= '5.2':
         # Earlier than Vista
         return False
@@ -257,7 +257,8 @@ def elevate_privileges():
         pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
         pyfile = os.path.join(pydir, 'GUI.py')
         # If the Python file is on a network drive, do not offer the UAC because
-        # the administrator may not have privileges and user will not be prompted.
+        # the administrator may not have privileges and user will not be
+        # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
             print "debug: skipping UAC because '%s' is on network" % pyfile
             return False
@@ -266,13 +267,12 @@ def elevate_privileges():
 
     print 'debug: exe=', exe, ' parameters=', py
 
-
     rc = None
     try:
-        rc = shell.ShellExecuteEx(lpVerb = 'runas',
-            lpFile = exe,
-            lpParameters = py,
-            nShow = win32con.SW_SHOW)
+        rc = shell.ShellExecuteEx(lpVerb='runas',
+                                  lpFile=exe,
+                                  lpParameters=py,
+                                  nShow=win32con.SW_SHOW)
     except pywintypes.error, e:
         if 1223 == e.winerror:
             print 'debug: user denied the UAC dialog'
@@ -291,7 +291,8 @@ def empty_recycle_bin(drive, really_delete):
     """Empty the recycle bin or preview its size"""
     bytes_used = shell.SHQueryRecycleBin(drive)[0]
     if really_delete and bytes_used > 0:
-        # Trying to delete an empty Recycle Bin on Vista/7 causes a 'catastrophic failure'
+        # Trying to delete an empty Recycle Bin on Vista/7 causes a
+        # 'catastrophic failure'
         flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
         shell.SHEmptyRecycleBin(None, drive, flags)
     return bytes_used
@@ -302,17 +303,23 @@ def get_autostart_path():
     try:
         startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
     except:
-        # example of failure http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
+        # example of failure
+        # http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
         traceback.print_exc()
-        msg = 'Error finding user startup folder: %s ' % (str(sys.exc_info()[1]))
+        msg = 'Error finding user startup folder: %s ' % (
+            str(sys.exc_info()[1]))
         import GuiBasic
         GuiBasic.message_dialog(None, msg)
         # as a fallback, guess
         # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup
-        # Windows 7: C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-        startupdir = os.path.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
+        # Windows 7:
+        # C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start
+        # Menu\Programs\Startup
+        startupdir = os.path.expandvars(
+            '$USERPROFILE\\Start Menu\\Programs\\Startup')
         if not os.path.exists(startupdir):
-            startupdir = os.path.expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+            startupdir = os.path.expandvars(
+                '$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
     return os.path.join(startupdir, 'bleachbit.lnk')
 
 
@@ -353,12 +360,16 @@ def is_process_running_win32(name):
     for pid in win32process.EnumProcesses():
 
         # Get handle to the process based on PID
-        hProcess = kernel.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                      False, pid)
+        hProcess = kernel.OpenProcess(
+            PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+            False, pid)
         if hProcess:
-            psapi.EnumProcessModules(hProcess, byref(hModule), sizeof(hModule), byref(count))
-            psapi.GetModuleBaseNameA(hProcess, hModule.value, modname, sizeof(modname))
-            clean_modname = "".join([ i for i in modname if i != '\x00']).lower()
+            psapi.EnumProcessModules(
+                hProcess, byref(hModule), sizeof(hModule), byref(count))
+            psapi.GetModuleBaseNameA(
+                hProcess, hModule.value, modname, sizeof(modname))
+            clean_modname = "".join(
+                [i for i in modname if i != '\x00']).lower()
 
             # Clean up
             for i in range(modname._length_):
@@ -383,7 +394,8 @@ def is_process_running_wmic(name):
     """
 
     clean_name = re.sub('[^A-Za-z\.]', '_', name).lower()
-    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" % clean_name, 'get', 'Caption']
+    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" %
+            clean_name, 'get', 'Caption']
     (_, stdout, _) = General.run_external(args)
     return stdout.lower().find(clean_name) > -1
 
@@ -399,16 +411,16 @@ def path_on_network(path):
 def split_registry_key(full_key):
     """Given a key like HKLM\Software split into tuple (hive, key).
     Used internally."""
-    assert ( len (full_key) >= 6 )
+    assert (len(full_key) >= 6)
     [k1, k2] = full_key.split("\\", 1)
     hive_map = {
-        'HKCR' : _winreg.HKEY_CLASSES_ROOT,
-        'HKCU' : _winreg.HKEY_CURRENT_USER,
-        'HKLM' : _winreg.HKEY_LOCAL_MACHINE,
-        'HKU' : _winreg.HKEY_USERS }
+        'HKCR': _winreg.HKEY_CLASSES_ROOT,
+        'HKCU': _winreg.HKEY_CURRENT_USER,
+        'HKLM': _winreg.HKEY_LOCAL_MACHINE,
+        'HKU': _winreg.HKEY_USERS}
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
-    return ( hive_map[k1], k2 )
+    return (hive_map[k1], k2)
 
 
 def start_with_computer(enabled):
@@ -424,13 +436,11 @@ def start_with_computer(enabled):
     import win32com.client
     wscript_shell = win32com.client.Dispatch('WScript.Shell')
     shortcut = wscript_shell.CreateShortCut(autostart_path)
-    shortcut.TargetPath = os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe')
+    shortcut.TargetPath = os.path.join(
+        Common.bleachbit_exe_path, 'bleachbit.exe')
     shortcut.save()
 
 
 def start_with_computer_check():
     """Return boolean whether BleachBit will start with the computer"""
     return os.path.lexists(get_autostart_path())
-
-
-

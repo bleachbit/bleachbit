@@ -1,23 +1,22 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -33,7 +32,6 @@ import sys
 
 if 'nt' == os.name:
     from win32com.shell import shell
-
 
 
 def diagnostic_info():
@@ -59,7 +57,8 @@ def diagnostic_info():
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
-            s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
+            s += "\nplatform.linux_distribution() = %s" % str(
+                platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
     if 'nt' == os.name:
@@ -69,7 +68,8 @@ def diagnostic_info():
     s += "\nsys.executable = %s" % sys.executable
     s += "\nsys.version = %s" % sys.version
     if 'nt' == os.name:
-        s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % shell.IsUserAnAdmin()
+        s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % shell.IsUserAnAdmin(
+        )
     s += "\n__file__ = %s" % __file__
 
     return s

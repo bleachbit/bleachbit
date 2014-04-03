@@ -1,28 +1,26 @@
 # vim: ts=4:sw=4:expandtab
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Create cleaners from CleanerML (markup language)
 """
-
 
 
 import os
@@ -39,9 +37,10 @@ from FileUtilities import listdir
 
 
 class CleanerML:
+
     """Create a cleaner from CleanerML"""
 
-    def __init__(self, pathname, xlate_cb = None):
+    def __init__(self, pathname, xlate_cb=None):
         """Create cleaner from XML in pathname.
 
         If xlate_cb is set, use it as a callback for each
@@ -56,17 +55,15 @@ class CleanerML:
         self.option_warning = None
         self.xlate_cb = xlate_cb
         if None == self.xlate_cb:
-            self.xlate_cb = lambda x, y = None: None # do nothing
+            self.xlate_cb = lambda x, y = None: None  # do nothing
 
         dom = xml.dom.minidom.parse(pathname)
 
         self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])
 
-
     def get_cleaner(self):
         """Return the created cleaner"""
         return self.cleaner
-
 
     def os_match(self, os_str):
         """Return boolean whether operating system matches"""
@@ -79,7 +76,6 @@ class CleanerML:
         if os_str == 'windows' and sys.platform == 'win32':
             return True
         return False
-
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""
@@ -98,7 +94,6 @@ class CleanerML:
                 print option.toxml()
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
 
-
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
         self.cleaner.name = _(getText(label.childNodes))
@@ -106,12 +101,10 @@ class CleanerML:
         if translate and boolstr_to_bool(translate):
             self.xlate_cb(self.cleaner.name)
 
-
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
         self.xlate_cb(self.cleaner.description)
-
 
     def handle_cleaner_running(self, running_elements):
         """<running> element under <cleaner>"""
@@ -121,14 +114,14 @@ class CleanerML:
             value = getText(running.childNodes)
             self.cleaner.add_running(detection_type, value)
 
-
     def handle_cleaner_option(self, option):
         """<option> element"""
         self.option_id = option.getAttribute('id')
         self.option_description = None
         self.option_name = None
 
-        self.handle_cleaner_option_label(option.getElementsByTagName('label')[0])
+        self.handle_cleaner_option_label(
+            option.getElementsByTagName('label')[0])
         description = option.getElementsByTagName('description')
         self.handle_cleaner_option_description(description[0])
         warning = option.getElementsByTagName('warning')
@@ -140,8 +133,8 @@ class CleanerML:
         for action in option.getElementsByTagName('action'):
             self.handle_cleaner_option_action(action)
 
-        self.cleaner.add_option(self.option_id, self.option_name, self.option_description)
-
+        self.cleaner.add_option(
+            self.option_id, self.option_name, self.option_description)
 
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
@@ -150,7 +143,6 @@ class CleanerML:
         translators = label.getAttribute('translators')
         if not translate or boolstr_to_bool(translate):
             self.xlate_cb(self.option_name, translators)
-
 
     def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
@@ -176,12 +168,12 @@ class CleanerML:
         self.cleaner.add_action(self.option_id, provider)
 
 
-def list_cleanerml_files(local_only = False):
+def list_cleanerml_files(local_only=False):
     """List CleanerML files"""
-    cleanerdirs = ( Common.local_cleaners_dir, \
-        Common.personal_cleaners_dir )
+    cleanerdirs = (Common.local_cleaners_dir,
+                   Common.personal_cleaners_dir)
     if not local_only:
-        cleanerdirs += ( Common.system_cleaners_dir, )
+        cleanerdirs += (Common.system_cleaners_dir, )
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
@@ -209,7 +201,7 @@ def load_cleaners():
                 print "debug: '%s' is not usable" % pathname
 
 
-def pot_fragment(msgid, pathname, translators = None):
+def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
     if translators:
         translators = "#. %s\n" % translators
@@ -233,9 +225,9 @@ def create_pot():
             continue
         strings = []
         try:
-            CleanerML(pathname, \
-                lambda newstr, translators = None: \
-                strings.append([ newstr, translators ] ))
+            CleanerML(pathname,
+                      lambda newstr, translators=None:
+                      strings.append([newstr, translators]))
         except:
             print "error reading '%s'" % pathname
             traceback.print_exc()
@@ -246,8 +238,6 @@ def create_pot():
     f.close()
 
 
-
 if __name__ == '__main__':
     if 2 == len(sys.argv) and 'pot' == sys.argv[1]:
         create_pot()
-

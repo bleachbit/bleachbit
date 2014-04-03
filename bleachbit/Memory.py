@@ -1,29 +1,27 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-## BleachBit
-## Copyright (C) 2014 Andrew Ziem
-## http://bleachbit.sourceforge.net
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# BleachBit
+# Copyright (C) 2014 Andrew Ziem
+# http://bleachbit.sourceforge.net
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
 Wipe memory
 """
-
 
 
 import os
@@ -34,7 +32,6 @@ import traceback
 
 import FileUtilities
 import General
-
 
 
 def count_swap_linux():
@@ -50,7 +47,8 @@ def count_swap_linux():
 def get_proc_swaps():
     """Return the output of 'swapon -s'"""
     # Usually 'swapon -s' is identical to '/proc/swaps'
-    # Here is one exception: https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
+    # Here is one exception:
+    # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
     (rc, stdout, _) = General.run_external(['swapon', '-s'])
     if 0 == rc:
         return stdout
@@ -86,8 +84,8 @@ def disable_swap_linux():
             continue
         ret = parse_swapoff(line)
         if None == ret:
-            raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'" \
-                % { 'args' : str(args), 'stdout' : stdout, 'stderr' : stderr } )
+            raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'"
+                               % {'args': str(args), 'stdout': stdout, 'stderr': stderr})
         devices.append(ret)
     return devices
 
@@ -120,7 +118,7 @@ def make_self_oom_target_linux():
         uid = General.getrealuid()
         if uid > 0:
             print "debug: dropping privileges of pid %d to uid %d" % \
-                    (os.getpid(), uid)
+                (os.getpid(), uid)
             os.seteuid(uid)
     except:
         traceback.print_exc()
@@ -132,7 +130,7 @@ def fill_memory_linux():
     allocbytes = int(physical_free() * 0.4)
     if allocbytes < 1024:
         return
-    megabytes = allocbytes / (1024**2)
+    megabytes = allocbytes / (1024 ** 2)
     print "info: allocating and wiping %.2f MB (%d B) memory" % (megabytes, allocbytes)
     try:
         buf = '\x00' * allocbytes
@@ -145,7 +143,7 @@ def fill_memory_linux():
     report_free()
 
 
-def get_swap_size_linux(device, proc_swaps = None):
+def get_swap_size_linux(device, proc_swaps=None):
     """Return the size of the partition in bytes"""
     if None == proc_swaps:
         proc_swaps = get_proc_swaps()
@@ -156,8 +154,8 @@ def get_swap_size_linux(device, proc_swaps = None):
         ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
             return int(ret.group(1)) * 1024
-    raise RuntimeError("error: cannot find size of swap device '%s'\n%s" % \
-        (device, proc_swaps))
+    raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
+                      (device, proc_swaps))
 
 
 def get_swap_uuid(device):
@@ -179,7 +177,7 @@ def physical_free_linux():
     f = open("/proc/meminfo")
     free_bytes = 0
     for line in f:
-        line = line.replace("\n","")
+        line = line.replace("\n", "")
         ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
         if None != ret:
             kb = int(ret.group(2))
@@ -233,7 +231,7 @@ def report_free():
     """Report free memory"""
     bytes_free = physical_free()
     print "debug: physical free: %d B (%d MB)" % \
-        (bytes_free, bytes_free / 1024**2)
+        (bytes_free, bytes_free / 1024 ** 2)
 
 
 def wipe_swap_linux(devices, proc_swaps):
@@ -244,11 +242,12 @@ def wipe_swap_linux(devices, proc_swaps):
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
         print "info: wiping swap device '%s'" % device
-        if get_swap_size_linux(device, proc_swaps) > 8*1024**3:
-            raise RuntimeError('swap device %s is larger than expected' % device)
+        if get_swap_size_linux(device, proc_swaps) > 8 * 1024 ** 3:
+            raise RuntimeError(
+                'swap device %s is larger than expected' % device)
         uuid = get_swap_uuid(device)
         # wipe
-        FileUtilities.wipe_contents(device, truncate = False)
+        FileUtilities.wipe_contents(device, truncate=False)
         # reinitialize
         print "debug: reinitializing swap device %s" % device
         args = ['mkswap', device]
@@ -265,7 +264,7 @@ def wipe_memory():
     # cache the file because 'swapoff' changes it
     proc_swaps = get_proc_swaps()
     devices = disable_swap_linux()
-    yield True # process GTK+ idle loop
+    yield True  # process GTK+ idle loop
     print 'debug: detected swap devices:', devices
     wipe_swap_linux(devices, proc_swaps)
     yield True
@@ -281,7 +280,4 @@ def wipe_memory():
         if 0 != rc:
             print 'warning: child process returned code %d' % rc
     enable_swap_linux()
-    yield 0 # how much disk space was recovered
-
-
-
+    yield 0  # how much disk space was recovered
