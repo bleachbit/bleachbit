@@ -67,4 +67,6 @@ tests:
 	make -C cleaners tests
 	python tests/TestAll.py -v
 
-
+pretty:
+	autopep8 -i {.,bleachbit,tests}/*py
+	make -C cleaners pretty
