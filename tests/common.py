@@ -37,7 +37,7 @@ def destructive_tests(title):
 
 def validate_result(self, result, really_delete=False):
     """Validate the command returned valid results"""
-    self.assert_(type(result) is dict, "result is a %s" % type(result))
+    self.assert_(isinstance(result, dict), "result is a %s" % type(result))
     # label
     self.assert_(isinstance(result['label'], (str, unicode)))
     self.assert_(len(result['label'].strip()) > 0)
@@ -47,11 +47,11 @@ def validate_result(self, result, really_delete=False):
     self.assert_(result['n_deleted'] <= 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assert_(isinstance(result['size'], (int, long, types.NoneType)),
+    self.assert_(isinstance(result['size'], (int, long, type(None))),
                  "size is %s" % str(result['size']))
     # path
     filename = result['path']
-    self.assert_(isinstance(filename, (str, unicode, types.NoneType)),
+    self.assert_(isinstance(filename, (str, unicode, type(None))),
                  "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
     if isinstance(filename, (str, unicode)) and \
             not filename[0:2] == 'HK':

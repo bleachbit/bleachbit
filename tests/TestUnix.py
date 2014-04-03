@@ -71,7 +71,7 @@ class UnixTestCase(unittest.TestCase):
     def test_iterate_languages(self):
         """Unit test for the method iterate_languages()"""
         for language in self.locales.iterate_languages():
-            self.assert_(type(language) is str)
+            self.assert_(isinstance(language, str))
             self.assert_(len(language) > 0)
             self.assert_(len(language) < 9)
 

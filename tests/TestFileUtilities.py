@@ -179,10 +179,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test an existing directory that usually exists
         dirname = os.path.expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
-            self.assert_(type(filename) is str)
+            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
-            self.assert_(type(filename) is str)
+            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
             self.assert_(not os.path.isdir(filename))
 
@@ -341,7 +341,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test file with mode 0444/-r--r--r--
         (fd, filename) = tempfile.mkstemp()
         os.close(fd)
-        os.chmod(filename, 0444)
+        os.chmod(filename, 0o444)
         delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
@@ -627,7 +627,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         try:
             import sqlite3
-        except ImportError, e:
+        except ImportError as e:
             if sys.version_info[0] == 2 and sys.version_info[1] < 5:
                 print "Warning: Skipping test_vacuum_sqlite3() on old Python"
                 return

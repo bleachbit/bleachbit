@@ -197,7 +197,8 @@ class SpecialTestCase(unittest.TestCase):
         """Remove test browser files."""
         shutil.rmtree(self.dir_base)
 
-    def sqlite_clean_helper(self, sql, fn, clean_func, check_func=None, setup_func=None):
+    def sqlite_clean_helper(
+            self, sql, fn, clean_func, check_func=None, setup_func=None):
         """Helper for cleaning special SQLite cleaning"""
 
         self.assertFalse(

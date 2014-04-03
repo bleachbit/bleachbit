@@ -84,8 +84,8 @@ class UpdateTestCase(unittest.TestCase):
                 continue
             ver = update[0]
             url = update[1]
-            self.assert_(isinstance(ver, (types.NoneType, unicode)))
-            self.assert_(isinstance(url, (types.NoneType, unicode)))
+            self.assert_(isinstance(ver, (type(None), unicode)))
+            self.assert_(isinstance(url, (type(None), unicode)))
 
         # test failure
         Common.update_check_url = "http://localhost/doesnotexist"
@@ -128,7 +128,7 @@ class UpdateTestCase(unittest.TestCase):
         """Unit test for method user_agent()"""
         agent = user_agent()
         print "debug: user agent = '%s'" % (agent, )
-        self.assert_(type(agent) is str)
+        self.assert_(isinstance(agent, str))
 
 
 def suite():

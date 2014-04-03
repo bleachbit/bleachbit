@@ -80,11 +80,11 @@ class OptionsTestCase(unittest.TestCase):
 
         # these should always be set
         for bkey in bleachbit.Options.boolean_keys:
-            self.assert_(type(o.get(bkey)) is bool)
+            self.assert_(isinstance(o.get(bkey), bool))
 
         # language
         value = o.get_language('en')
-        self.assert_(type(value) is bool)
+        self.assert_(isinstance(value, bool))
         o.set_language('en', True)
         self.assertTrue(o.get_language('en'))
         o.set_language('en', False)

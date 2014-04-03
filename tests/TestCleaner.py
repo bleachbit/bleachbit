@@ -109,7 +109,7 @@ class CleanerTestCase(unittest.TestCase):
 
     def test_auto_hide(self):
         for key in sorted(backends):
-            self.assert_(type(backends[key].auto_hide()) is bool)
+            self.assert_(isinstance(backends[key].auto_hide(), bool))
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
@@ -140,7 +140,7 @@ class CleanerTestCase(unittest.TestCase):
             self.assert_(isinstance(key, (str, unicode)))
             self.assert_(isinstance(backends[key], Cleaner))
             desc = backends[key].get_description()
-            self.assert_(isinstance(desc, (str, unicode, types.NoneType)),
+            self.assert_(isinstance(desc, (str, unicode, type(None))),
                          "description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):

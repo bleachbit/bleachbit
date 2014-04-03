@@ -83,7 +83,7 @@ class CleanerMLTestCase(unittest.TestCase):
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
-        self.assert_(type(pot_fragment("Foo", 'bar.xml')) is str)
+        self.assert_(isinstance(pot_fragment("Foo", 'bar.xml'), str))
 
 
 def suite():

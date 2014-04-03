@@ -76,7 +76,12 @@ class CLITestCase(unittest.TestCase):
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
-            self.assert_(type(cleaner) is str or type(cleaner) is unicode)
+            self.assert_(
+                isinstance(
+                    cleaner,
+                    str) or isinstance(
+                        cleaner,
+                        unicode))
 
     def test_encoding(self):
         """Unit test for encoding"""
