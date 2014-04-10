@@ -69,4 +69,5 @@ tests:
 
 pretty:
 	autopep8 -i {.,bleachbit,tests}/*py
+	dos2unix  {.,bleachbit,tests}/*py
 	make -C cleaners pretty
