@@ -94,13 +94,15 @@ options_file = os.path.join(options_dir, "bleachbit.ini")
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
-system_cleaners_dir = None
 if sys.platform.startswith('linux'):
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
+else:
+    system_cleaners_dir = None
+    print 'warning: unknown system cleaners directory for platform ', sys.platform
 
 # local cleaners directory (for running from source tree)
 local_cleaners_dir = os.path.normpath(
