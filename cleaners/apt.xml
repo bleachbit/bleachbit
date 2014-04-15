@@ -40,7 +40,7 @@
     <description>Delete obsolete files</description>
     <action command="apt.autoremove"/>
   </option>
-  <option id="package-lists">
+  <option id="package_lists">
     <label>Package lists</label>
     <description>Delete the cached package lists</description>
     <action command="delete" search="walk.all" path="/var/lib/apt/lists/"/>
