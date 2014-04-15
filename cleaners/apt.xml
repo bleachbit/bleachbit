@@ -36,12 +36,12 @@
     <action command="apt.autoclean"/>
   </option>
   <option id="autoremove">
-    <label translate="false">autoremove</label>
+    <label>autoremove</label>
     <description>Delete obsolete files</description>
     <action command="apt.autoremove"/>
   </option>
   <option id="package-lists">
-    <label translate="true">Package lists</label>
+    <label>Package lists</label>
     <description>Delete the cached package lists</description>
     <action command="delete" search="walk.all" path="/var/lib/apt/lists/"/>
   </option>
