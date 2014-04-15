@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2014 Andrew Ziem
+    Copyright (C) 2014 Andrew Ziem, nodiscc
     http://bleachbit.sourceforge.net
 
     This program is free software: you can redistribute it and/or modify
@@ -39,5 +39,10 @@
     <label translate="false">autoremove</label>
     <description>Delete obsolete files</description>
     <action command="apt.autoremove"/>
+  </option>
+  <option id="package-lists">
+    <label translate="true">Package lists</label>
+    <description>Delete the cached package lists</description>
+    <action command="delete" search="walk.all" path="/var/lib/apt/lists/"/>
   </option>
 </cleaner>
