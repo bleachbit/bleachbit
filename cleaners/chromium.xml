@@ -112,7 +112,7 @@
   </option>
   <option id="passwords">
     <label>Passwords</label>
-    <warning>This will delete your saved passwords</warning>
+    <warning>This option will delete your saved passwords.</warning>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
     <action command="delete" search="file" path="~/.config/chromium/Default/Login Data"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Login Data-journal"/>
