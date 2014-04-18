@@ -42,7 +42,7 @@
   </option>
   <option id="package_lists">
     <label>Package lists</label>
-    <description>Delete the cached package lists</description>
+    <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="/var/lib/apt/lists/"/>
   </option>
 </cleaner>
