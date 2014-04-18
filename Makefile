@@ -71,3 +71,5 @@ pretty:
 	autopep8 -i {.,bleachbit,tests}/*py
 	dos2unix  {.,bleachbit,tests}/*py
 	make -C cleaners pretty
+	xmllint --format doc/cleaner_markup_language.xsd > doc/cleaner_markup_language.xsd.tmp
+	mv doc/cleaner_markup_language.xsd.tmp doc/cleaner_markup_language.xsd
