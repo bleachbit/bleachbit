@@ -139,17 +139,16 @@ class PreferencesDialog:
                 self.cb_winapp2.connect(
                     'toggled', self.__toggle_callback, 'update_winapp2')
                 updates_box.pack_start(self.cb_winapp2, False, True, 0)
-
             vbox.pack_start(updates_box, False, True, 0)
 
         # TRANSLATORS: This means to hide cleaners which would do
         # nothing.  For example, if Firefox were never used on
         # this system, this option would hide Firefox to simplify
         # the list of cleaners.
-        cb_auto_hide = gtk.CheckButton(_("Hide irrelevant cleaners"))
+        cb_auto_hide = Gtk.CheckButton.new_with_label(_("Hide irrelevant cleaners"))
         cb_auto_hide.set_active(options.get('auto_hide'))
         cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
-        vbox.pack_start(cb_auto_hide, False)
+        vbox.pack_start(cb_auto_hide, False, True, 0)
 
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
@@ -173,11 +172,12 @@ class PreferencesDialog:
         vbox.pack_start(cb_exit, False, True, 0)
 
         # Disable delete confirmation message.
-        cb_popup = gtk.CheckButton(_("Confirm before delete"))
+        cb_popup = Gtk.CheckButton(_("Confirm before delete"))
         cb_popup.set_active(options.get('delete_confirmation'))
         cb_popup.connect(
             'toggled', self.__toggle_callback, 'delete_confirmation')
         vbox.pack_start(cb_popup, False, True, 0)
+
         return vbox
 
     def __drives_page(self):
