@@ -28,10 +28,11 @@ import types
 import warnings
 
 warnings.simplefilter('error')
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GLib
+from gi.repository import Gio
+from gi.repository import GdkPixbuf
 warnings.simplefilter('default')
 
 from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
@@ -61,14 +62,14 @@ class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
 
     def __init__(self):
-        self.tree_store = gtk.TreeStore(
-            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT)
+        self.tree_store = Gtk.TreeStore(
+            GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_PYOBJECT)
         if None == self.tree_store:
             raise Exception("cannot create tree store")
         self.row_changed_handler_id = None
         self.refresh_rows()
         self.tree_store.set_sort_func(3, self.sort_func)
-        self.tree_store.set_sort_column_id(3, gtk.SORT_ASCENDING)
+        self.tree_store.set_sort_column_id(3, Gtk.SortType.ASCENDING)
 
     def get_model(self):
         """Return the tree store"""
@@ -103,7 +104,7 @@ class TreeInfoModel:
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 
-    def sort_func(self, model, iter1, iter2):
+    def sort_func(self, model, iter1, iter2, user_data):
         """Sort the tree by the display name"""
         s1 = model[iter1][0].lower()
         s2 = model[iter2][0].lower()
@@ -120,22 +121,22 @@ class TreeDisplayModel:
 
     def make_view(self, model, parent, context_menu_event):
         """Create and return a TreeView object"""
-        self.view = gtk.TreeView(model)
+        self.view = Gtk.TreeView.new_with_model(model)
 
         # listen for right click (context menu)
         self.view.connect("button_press_event", context_menu_event)
 
         # first column
-        self.renderer0 = gtk.CellRendererText()
-        self.column0 = gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
+        self.renderer0 = Gtk.CellRendererText()
+        self.column0 = Gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
         self.view.append_column(self.column0)
         self.view.set_search_column(0)
 
         # second column
-        self.renderer1 = gtk.CellRendererToggle()
+        self.renderer1 = Gtk.CellRendererToggle()
         self.renderer1.set_property('activatable', True)
         self.renderer1.connect('toggled', self.col1_toggled_cb, model, parent)
-        self.column1 = gtk.TreeViewColumn(_("Active"), self.renderer1)
+        self.column1 = Gtk.TreeViewColumn(_("Active"), self.renderer1)
         self.column1.add_attribute(self.renderer1, "active", 1)
         self.view.append_column(self.column1)
 
@@ -149,11 +150,11 @@ class TreeDisplayModel:
             # if not value given, toggle current value
             value = not model[path][1]
         assert(type(value) is types.BooleanType)
-        assert(type(model) is gtk.TreeStore)
+        assert(type(model) is Gtk.TreeStore)
         cleaner_id = None
         i = path
         if type(i) is str:
-            # type is either str or gtk.TreeIter
+            # type is either str or Gtk.TreeIter
             i = model.get_iter(path)
         parent = model.iter_parent(i)
         if None != parent:
@@ -173,8 +174,8 @@ class TreeDisplayModel:
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
-                                               gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL)
-                if gtk.RESPONSE_OK != resp:
+                                               Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL)
+                if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
                     return
         model[path][1] = value
@@ -211,26 +212,144 @@ class GUI:
 
     ui = \
         '''
-<ui>
-    <menubar name="MenuBar">
-        <menu action="File">
-            <menuitem action="ShredFiles"/>
-            <menuitem action="ShredFolders"/>
-            <menuitem action="WipeFreeSpace"/>
-            <menuitem action="ShredQuit"/>
-            <menuitem action="Quit"/>
-        </menu>
-        <menu action="Edit">
-            <menuitem action="Preferences"/>
-        </menu>
-        <menu action="Help">
-            <menuitem action="HelpContents"/>
-            <menuitem action="ReleaseNotes"/>
-            <menuitem action="SystemInformation"/>
-            <menuitem action="About"/>
-        </menu>
-    </menubar>
-</ui>'''
+<interface>
+  <object class="GtkMenuBar" id="MenuBar">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="menuitem1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_File</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Shred Files</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onShredFiles" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Sh_red Folders</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onShredFolders" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Wipe Free Space</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onWipeFreeSpace" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">S_hred Settings and Quit</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onShredQuit" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Quit</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onQuit" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Edit</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuitem3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Preferences</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onPreferencesDialog" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Help</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="imagemenuitem10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Help Contents</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onHelpContents" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Release Notes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onReleaseNotes" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_System Information</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onSystemInformation" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_About</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="onAbout" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>'''
 
     def append_text(self, text, tag=None, __iter=None):
         """Add some text to the main log"""
@@ -243,7 +362,7 @@ class GUI:
         # Scroll to end.  If the command is run directly instead of
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
-        gobject.idle_add(lambda:
+        GLib.idle_add(lambda:
                          self.textview.scroll_mark_onscreen(
                          self.textbuffer.get_insert()))
 
@@ -276,7 +395,8 @@ class GUI:
         """Return a list of the IDs of the selected operations in the tree view"""
         ret = []
         model = self.tree_store.get_model()
-        __iter = model.get_iter_root()
+        path = Gtk.TreePath(0)
+        __iter = model.get_iter(path)
         while __iter:
             if model[__iter][1]:
                 ret.append(model[__iter][2])
@@ -287,7 +407,8 @@ class GUI:
         """For the given operation ID, return a list of the selected option IDs."""
         ret = []
         model = self.tree_store.get_model()
-        __iter = model.get_iter_root()
+        path = Gtk.TreePath(0)
+        __iter = model.get_iter(path)
         while __iter:
             if operation == model[__iter][2]:
                 iterc = model.iter_children(__iter)
@@ -304,7 +425,6 @@ class GUI:
 
     def set_sensitive(self, true):
         """Disable commands while an operation is running"""
-        self.actiongroup.set_sensitive(true)
         self.toolbar.set_sensitive(true)
         self.view.set_sensitive(true)
 
@@ -334,7 +454,7 @@ class GUI:
         if 0 == len(operations):
             GuiBasic.message_dialog(self.window,
                                     _("You must select an operation"),
-                                    gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
+                                    Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
             return
         try:
             self.set_sensitive(False)
@@ -348,7 +468,7 @@ class GUI:
         else:
             self.start_time = time.time()
             worker = self.worker.run()
-            gobject.idle_add(worker.next)
+            GLib.idle_add(worker.next)
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
@@ -371,24 +491,19 @@ class GUI:
         if elapsed < 10 or self.window.is_active():
             return
         try:
-            import pynotify
+            from gi.repository import Notify
         except:
             print "debug: pynotify not available"
         else:
-            if pynotify.init(APP_NAME):
-                notify = pynotify.Notification('BleachBit', _("Done."),
+            if Notify.init(APP_NAME):
+                notify = Notify.Notification('BleachBit', _("Done."),
                                                icon='bleachbit')
                 notify.show()
                 notify.set_timeout(10000)
 
     def about(self, __event):
         """Create and show the about dialog"""
-        if 'nt' != os.name and (2, 16, 6) != gtk.gtk_version:
-            # workaround for broken GTK+
-            # (https://bugs.launchpad.net/bleachbit/+bug/797012)
-            gtk.about_dialog_set_url_hook(lambda dialog,
-                                          link: GuiBasic.open_url(link, self.window, False))
-        dialog = gtk.AboutDialog()
+        dialog = Gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
         dialog.set_copyright("Copyright (C) 2008-2014 Andrew Ziem")
         try:
@@ -406,32 +521,32 @@ class GUI:
         dialog.set_website(APP_URL)
         dialog.set_transient_for(self.window)
         if appicon_path and os.path.exists(appicon_path):
-            icon = gtk.gdk.pixbuf_new_from_file(appicon_path)
+            icon = GdkPixbuf.Pixbuf.new_from_file(appicon_path)
             dialog.set_logo(icon)
         dialog.run()
         dialog.hide()
 
     def diagnostic_dialog(self, parent):
         """Show diagnostic information"""
-        dialog = gtk.Dialog(_("System information"), parent)
+        dialog = Gtk.Dialog(title=_("System information"), transient_for=parent)
         dialog.resize(600, 400)
-        txtbuffer = gtk.TextBuffer()
+        txtbuffer = Gtk.TextBuffer()
         import Diagnostic
         txt = Diagnostic.diagnostic_info()
         txtbuffer.set_text(txt)
-        textview = gtk.TextView(txtbuffer)
+        textview = Gtk.TextView.new_with_buffer(txtbuffer)
         textview.set_editable(False)
-        swindow = gtk.ScrolledWindow()
-        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        swindow.add_with_viewport(textview)
-        dialog.vbox.pack_start(swindow)
+        swindow = Gtk.ScrolledWindow()
+        swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        swindow.add(textview)
+        dialog.vbox.pack_start(swindow, True, True, 0)
         dialog.add_buttons(
-            gtk.STOCK_COPY, 100, gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+            _('_Copy'), 100, _('_Close'), Gtk.ResponseType.CLOSE)
         dialog.show_all()
         while True:
             rc = dialog.run()
             if 100 == rc:
-                clipboard = gtk.clipboard_get()
+                clipboard = Gtk.clipboard_get()
                 clipboard.set_text(txt)
             else:
                 break
@@ -439,8 +554,8 @@ class GUI:
 
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
-        scrolled_window = gtk.ScrolledWindow()
-        scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
@@ -463,7 +578,7 @@ class GUI:
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
-        # remove from idle loop (see gobject.idle_add)
+        # remove from idle loop (see GObject.idle_add)
         return False
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
@@ -484,14 +599,14 @@ class GUI:
         """Callback for shredding a file or folder"""
 
         # get list of files
-        if 'ShredFiles' == action.get_name():
+        if 'ShredFiles' == action:
             paths = GuiBasic.browse_files(self.window,
                                           _("Choose files to shred"))
-        elif 'ShredFolders' == action.get_name():
+        elif 'ShredFolders' == action:
             paths = GuiBasic.browse_folder(self.window,
                                            _("Choose folder to shred"),
                                            multiple=True,
-                                           stock_button=gtk.STOCK_DELETE)
+                                           stock_button=_('_Delete'))
         else:
             raise RuntimeError("Unexpected kind in cb_shred_file")
 
@@ -532,13 +647,13 @@ class GUI:
         if portable_mode:
             open(options_file, 'w').write('[Portable]\n')
 
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def cb_wipe_free_space(self, action):
         """callback to wipe free space in arbitrary folder"""
         path = GuiBasic.browse_folder(self.window,
                                       _("Choose a folder"),
-                                      multiple=False, stock_button=gtk.STOCK_OK)
+                                      multiple=False, stock_button=_('_OK'))
         if not path:
             # user cancelled
             return
@@ -568,14 +683,14 @@ class GUI:
         cleaner_id = model[path[0]][2]
         cleaner_name = model[path[0]][0]
         # make a menu
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
         # TRANSLATORS: this is the context menu
-        preview_item = gtk.MenuItem(_("Preview"))
+        preview_item = Gtk.MenuItem(_("Preview"))
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
         # TRANSLATORS: this is the context menu
-        clean_item = gtk.MenuItem(_("Clean"))
+        clean_item = Gtk.MenuItem(_("Clean"))
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -606,67 +721,39 @@ class GUI:
     def create_menubar(self):
         """Create the menu bar (file, help)"""
         # Create a UIManager instance
-        uimanager = gtk.UIManager()
-
-        # Add the accelerator group to the top level window
-        accelgroup = uimanager.get_accel_group()
-        self.window.add_accel_group(accelgroup)
-
-        # Create an ActionGroup
-        actiongroup = gtk.ActionGroup('UIManagerExample')
-        self.actiongroup = actiongroup
-
-        # Create actions
-        entries = (
-            ('ShredFiles', None, _('_Shred Files'),
-             None, None, self.cb_shred_file),
-            ('ShredFolders', None, _('Sh_red Folders'),
-             None, None, self.cb_shred_file),
-            ('WipeFreeSpace', None, _('_Wipe Free Space'),
-             None, None, self.cb_wipe_free_space),
-            ('ShredQuit', None, _('S_hred Settings and Quit'),
-             None, None, self.cb_shred_quit),
-            ('Quit', gtk.STOCK_QUIT, _('_Quit'), None,
-             None, lambda *dummy: gtk.main_quit()),
-            ('File', None, _('_File')),
-            ('Preferences', gtk.STOCK_PREFERENCES, _(
-             "Preferences"), None, None, self.cb_preferences_dialog),
-            ('Edit', None, _("_Edit")),
-            ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None,
-             lambda link: GuiBasic.open_url(
-             help_contents_url, self.window)),
-            ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None,
-             lambda link: GuiBasic.open_url(
-             release_notes_url, self.window)),
-            ('SystemInformation', None, _('_System Information'), None,
-             None, lambda foo: self.diagnostic_dialog(self.window)),
-            ('About', gtk.STOCK_ABOUT, _(
-             '_About'), None, None, self.about),
-            ('Help', None, _("_Help")))
-        actiongroup.add_actions(entries)
-        actiongroup.get_action('Quit').set_property('short-label', '_Quit')
-
-        # Add the actiongroup to the uimanager
-        uimanager.insert_action_group(actiongroup, 0)
+        builder = Gtk.Builder()
+        handlers = {
+            "onShredFiles": lambda shred_files: self.cb_shred_file('ShredFiles'),
+            "onShredFolders": lambda shred_folders: self.cb_shred_file('ShredFolders'),
+            "onWipeFreeSpace": self.cb_wipe_free_space,
+            "onShredQuit": self.cb_shred_quit,
+            "onQuit": Gtk.main_quit,
+            "onPreferencesDialog": self.cb_preferences_dialog,
+            "onHelpContents": lambda link: GuiBasic.open_url(help_contents_url, self.window),
+            "onReleaseNotes": lambda link: GuiBasic.open_url(release_notes_url, self.window),
+            "onSystemInformation": lambda dialog: self.diagnostic_dialog(self.window),
+            "onAbout": self.about
+        }
 
         # Add a UI description
-        uimanager.add_ui_from_string(self.ui)
+        builder.add_from_string(self.ui)
+        builder.connect_signals(handlers)
 
         # Create a MenuBar
-        menubar = uimanager.get_widget('/MenuBar')
+        menubar = builder.get_object('MenuBar')
         return menubar
 
     def create_toolbar(self):
         """Create the toolbar"""
-        toolbar = gtk.Toolbar()
+        toolbar = Gtk.Toolbar()
 
         # create the preview button
-        preview_icon = gtk.Image()
-        preview_icon.set_from_stock(
-            gtk.STOCK_FIND, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        preview_icon = Gtk.Image()
+        preview_icon.set_from_icon_name(
+            'edit-find', Gtk.IconSize.LARGE_TOOLBAR)
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
-        preview_button = gtk.ToolButton(
+        preview_button = Gtk.ToolButton(
             icon_widget=preview_icon, label=_p('button', "Preview"))
         preview_button.connect(
             "clicked", lambda *dummy: self.preview_or_run_operations(False))
@@ -676,12 +763,12 @@ class GUI:
         preview_button.set_is_important(True)
 
         # create the delete button
-        icon = gtk.Image()
-        icon.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        icon = Gtk.Image()
+        icon.set_from_icon_name('edit-delete', Gtk.IconSize.LARGE_TOOLBAR)
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
-        run_button = gtk.ToolButton(
+        run_button = Gtk.ToolButton(
             icon_widget=icon, label=_p("button", "Clean"))
         run_button.connect("clicked", self.run_operations)
         toolbar.insert(run_button, -1)
@@ -694,43 +781,43 @@ class GUI:
     def create_window(self):
         """Create the main application window"""
 
-        self.window = gtk.Window()
-        self.window.connect('destroy', lambda w: gtk.main_quit())
+        self.window = Gtk.Window()
+        self.window.connect('destroy', lambda w: Gtk.main_quit())
 
         self.window.resize(800, 600)
         self.window.set_title(APP_NAME)
         if appicon_path and os.path.exists(appicon_path):
             self.window.set_icon_from_file(appicon_path)
-        vbox = gtk.VBox()
+        vbox = Gtk.VBox()
         self.window.add(vbox)
 
         # add menubar
-        vbox.pack_start(self.create_menubar(), False)
+        vbox.pack_start(self.create_menubar(), False, True, 0)
 
         # add toolbar
         self.toolbar = self.create_toolbar()
-        vbox.pack_start(self.toolbar, False)
+        vbox.pack_start(self.toolbar, False, True, 0)
 
         # split main window
-        hbox = gtk.HBox(homogeneous=False, spacing=10)
-        vbox.pack_start(hbox, True)
+        hbox = Gtk.HBox(homogeneous=False, spacing=10)
+        vbox.pack_start(hbox, True, True, 0)
 
         # add operations to left
         operations = self.create_operations_box()
-        hbox.pack_start(operations, False)
+        hbox.pack_start(operations, False, True, 0)
 
         # create the right side of the window
-        right_box = gtk.VBox()
-        self.progressbar = gtk.ProgressBar()
-        right_box.pack_start(self.progressbar, False)
+        right_box = Gtk.VBox()
+        self.progressbar = Gtk.ProgressBar()
+        right_box.pack_start(self.progressbar, False, True, 0)
 
         # add output display on right
-        self.textbuffer = gtk.TextBuffer()
-        swindow = gtk.ScrolledWindow()
-        swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.textview = gtk.TextView(self.textbuffer)
+        self.textbuffer = Gtk.TextBuffer()
+        swindow = Gtk.ScrolledWindow()
+        swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.textview = Gtk.TextView.new_with_buffer(self.textbuffer)
         self.textview.set_editable(False)
-        self.textview.set_wrap_mode(gtk.WRAP_WORD)
+        self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         swindow.add(self.textview)
         right_box.add(swindow)
         hbox.add(right_box)
@@ -738,22 +825,22 @@ class GUI:
         # add markup tags
         tt = self.textbuffer.get_tag_table()
 
-        style_operation = gtk.TextTag('operation')
+        style_operation = Gtk.TextTag.new('operation')
         style_operation.set_property('size-points', 14)
         style_operation.set_property('weight', 700)
         tt.add(style_operation)
 
-        style_option_label = gtk.TextTag('option_label')
+        style_option_label = Gtk.TextTag.new('option_label')
         style_option_label.set_property('weight', 700)
         tt.add(style_option_label)
 
-        style_operation = gtk.TextTag('error')
+        style_operation = Gtk.TextTag.new('error')
         style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
 
         # add status bar
-        self.status_bar = gtk.Statusbar()
-        vbox.pack_start(self.status_bar, False)
+        self.status_bar = Gtk.Statusbar()
+        vbox.pack_start(self.status_bar, False, True, 0)
 
         # done
         self.window.show_all()
@@ -768,9 +855,9 @@ class GUI:
             updates = Update.check_updates(options.get('check_beta'),
                                            options.get('update_winapp2'),
                                            self.append_text,
-                                           lambda: gobject.idle_add(self.cb_refresh_operations))
+                                           lambda: GLib.idle_add(self.cb_refresh_operations))
             if updates:
-                gobject.idle_add(
+                GLib.idle_add(
                     lambda: Update.update_dialog(self.window, updates))
         except:
             traceback.print_exc()
@@ -785,7 +872,6 @@ class GUI:
         RecognizeCleanerML.RecognizeCleanerML()
         register_cleaners()
         self.create_window()
-        gobject.threads_init()
         if shred_paths:
             self.shred_paths(shred_paths)
             return
@@ -813,4 +899,4 @@ class GUI:
 
 if __name__ == '__main__':
     gui = GUI()
-    gtk.main()
+    Gtk.main()

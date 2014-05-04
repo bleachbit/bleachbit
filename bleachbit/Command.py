@@ -141,10 +141,10 @@ class Function:
                 try:
                     self.func(self.path)
                 except DatabaseError, e:
-                    if -1 == e.message.find('file is encrypted or is not a database') and \
-                       -1 == e.message.find('or missing database'):
+                    if -1 == e.args[0].find('file is encrypted or is not a database') and \
+                       -1 == e.args[0].find('or missing database'):
                         raise
-                    print 'Warning:', e.message
+                    print 'Warning:', e.args[0]
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)

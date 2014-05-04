@@ -25,7 +25,8 @@ Perform (or assist with) cleaning operations.
 
 import glob
 try:
-    import gtk
+    from gi.repository import Gtk
+    from gi.repository import Gdk
     HAVE_GTK = True
 except:
     HAVE_GTK = False
@@ -650,7 +651,7 @@ class System(Cleaner):
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
                     if HAVE_GTK:
-                        gtk.RecentManager().purge_items()
+                        Gtk.RecentManager().purge_items()
 
         if 'posix' == os.name and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
@@ -705,10 +706,8 @@ class System(Cleaner):
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
-                gtk.gdk.threads_enter()
-                clipboard = gtk.clipboard_get()
-                clipboard.set_text("")
-                gtk.gdk.threads_leave()
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
 
