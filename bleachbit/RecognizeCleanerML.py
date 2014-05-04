@@ -24,7 +24,7 @@ Check local CleanerML files as a security measure
 
 
 import ConfigParser
-import gobject
+from gi.repository import GObject
 import os
 import random
 import sys
@@ -50,61 +50,61 @@ def cleaner_change_dialog(changes, parent):
         value = not model.get_value(__iter, 0)
         model.set(__iter, 0, value)
 
-    import pygtk
-    pygtk.require('2.0')
-    import gtk
+    import gi
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk
 
-    dialog = gtk.Dialog(title=_("Security warning"),
+    dialog = Gtk.Dialog(title=_("Security warning"),
                         parent=parent,
-                        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+                        flags=Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT)
     dialog.set_default_size(600, 500)
 
     # create warning
-    warnbox = gtk.HBox()
-    image = gtk.Image()
-    image.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
+    warnbox = Gtk.HBox()
+    image = Gtk.Image()
+    image.set_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
     warnbox.pack_start(image, False)
     # TRANSLATORS: Cleaner definitions are XML data files that define
     # which files will be cleaned.
-    label = gtk.Label(
+    label = Gtk.Label(
         _("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
     label.set_line_wrap(True)
     warnbox.pack_start(label, True)
     dialog.vbox.pack_start(warnbox, False)
 
     # create tree view
-    liststore = gtk.ListStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING)
-    treeview = gtk.TreeView(model=liststore)
+    liststore = Gtk.ListStore(GObject.TYPE_BOOLEAN, GObject.TYPE_STRING)
+    treeview = Gtk.TreeView(model=liststore)
 
-    renderer0 = gtk.CellRendererToggle()
+    renderer0 = Gtk.CellRendererToggle()
     renderer0.set_property('activatable', True)
     renderer0.connect('toggled', toggled, liststore)
     # TRANSLATORS: This is the column label (header) in the tree view for the
     # security dialog
     treeview.append_column(
-        gtk.TreeViewColumn(_p('column_label', 'Delete'), renderer0, active=0))
-    renderer1 = gtk.CellRendererText()
+        Gtk.TreeViewColumn(_p('column_label', 'Delete'), renderer0, active=0))
+    renderer1 = Gtk.CellRendererText()
     # TRANSLATORS: This is the column label (header) in the tree view for the
     # security dialog
     treeview.append_column(
-        gtk.TreeViewColumn(_p('column_label', 'Filename'), renderer1, text=1))
+        Gtk.TreeViewColumn(_p('column_label', 'Filename'), renderer1, text=1))
 
     # populate tree view
     for change in changes:
         liststore.append([False, change[0]])
 
     # populate dialog with widgets
-    scrolled_window = gtk.ScrolledWindow()
+    scrolled_window = Gtk.ScrolledWindow()
     scrolled_window.add_with_viewport(treeview)
-    dialog.vbox.pack_start(scrolled_window)
+    dialog.vbox.pack_start(scrolled_window, True, True, 0)
 
-    dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
-    dialog.add_button(gtk.STOCK_QUIT, gtk.RESPONSE_CLOSE)
+    dialog.add_button(Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)
+    dialog.add_button(Gtk.STOCK_QUIT, Gtk.ResponseType.CLOSE)
 
     # run dialog
     dialog.show_all()
     while True:
-        if gtk.RESPONSE_ACCEPT != dialog.run():
+        if Gtk.ResponseType.ACCEPT != dialog.run():
             sys.exit(0)
         delete = []
         for row in liststore:
