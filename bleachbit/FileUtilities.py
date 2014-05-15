@@ -778,10 +778,6 @@ def wipe_path(pathname, idle=False):
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name)
-    # quickly wipe inodes
-    if 'posix' == os.name and os.statvfs(pathname).f_ffree > 0:
-        for ret in wipe_inodes(pathname, idle):
-            yield ret
 
 
 def vacuum_sqlite3(path):

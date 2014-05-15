@@ -162,8 +162,6 @@ def process_cmd_line():
                       help=_("output version information and exit"))
     parser.add_option('-o', '--overwrite', action='store_true',
                       help=_('overwrite files to hide contents'))
-    parser.add_option("--wipe-metadata", action="store_true",
-                      help=_("wipe file system metadata"))
     (options, args) = parser.parse_args()
     did_something = False
     if options.version:
@@ -213,19 +211,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         backends['_gui'] = create_simple_cleaner(args)
         operations = {'_gui': ['files']}
         preview_or_clean(operations, True)
-        sys.exit(0)
-    if options.wipe_metadata:
-        pathname = args[0]
-        if not os.path.lexists(pathname):
-            print 'ERROR: path does not exist: %s' % pathname
-            sys.exit(1)
-        if not os.path.isdir(pathname):
-            print 'ERROR: not a directory: %s' % pathname
-            sys.exit(1)
-        print 'Wiping file system metadata on path %s' % pathname
-        from FileUtilities import wipe_inodes
-        for ret in wipe_inodes(pathname):
-            continue
         sys.exit(0)
     if options.sysinfo:
         import Diagnostic
