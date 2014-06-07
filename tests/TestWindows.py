@@ -49,7 +49,7 @@ class WindowsTestCase(unittest.TestCase):
         self.assert_(os.path.exists(pathname))
         try:
             delete_locked_file(pathname)
-        except pywintypes.error as e:
+        except pywintypes.error, e:
             if 5 == e.winerror and not shell.IsUserAnAdmin():
                 pass
             else:
