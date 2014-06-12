@@ -26,12 +26,16 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.files" path="~/.liferea_1.4/cache/"/>
+    <action command="delete" search="walk.files" path="~/.liferea_1.6/cache/"/>
+    <action command="delete" search="walk.files" path="~/.liferea_1.8/cache/"/>
     <action command="delete" search="walk.files" path="~/.liferea_1.4/mozilla/liferea/Cache/"/>
+        <!-- Note: starting with 1.6 Liferea does not use Mozilla anymore (using WebKitGTK now) -->
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
+    <!-- Note: The WebkitGTK rendering used since 1.6 does not persist cookies and auth -->
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -41,5 +45,8 @@
     <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/mozilla/liferea/permissions.sqlite"/>
     <action command="sqlite.vacuum" search="file" path="~/.liferea_1.4/mozilla/liferea/places.sqlite"/>
     <action command="sqlite.vacuum" search="file" path="~/.liferea_1.6/liferea.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/.liferea_1.8/liferea.db"/>
+    <!-- since 1.10 Liferea follows XDG paths -->
+    <action command="sqlite.vacuum" search="file" path="~/.local/share/liferea/liferea.db"/>
   </option>
 </cleaner>
