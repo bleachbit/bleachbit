@@ -22,6 +22,8 @@
 <cleaner id="liferea">
   <label>Liferea</label>
   <running type="exe">liferea-bin</running>
+  <!-- Newer Liferea releases do not have a "liferea" wrapper anymore. Just a binary -->
+  <running type="exe">liferea</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
