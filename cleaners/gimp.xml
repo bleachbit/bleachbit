@@ -24,8 +24,9 @@
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
+    <!-- GIMP uses identical paths on Chakra 2014.05, Fedora 10, Windows XP, and Windows 7 -->
     <action command="delete" search="walk.files" path="~/.gimp-2.4/tmp/"/>
-    <!-- GIMP uses identical paths on Fedora 10 and Windows XP -->
     <action command="delete" search="walk.files" path="~/.gimp-2.6/tmp/"/>
+    <action command="delete" search="walk.files" path="~/.gimp-2.8/tmp/"/>
   </option>
 </cleaner>
