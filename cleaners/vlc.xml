@@ -36,6 +36,7 @@
     <action search="file" path="$APPDATA\vlc\vlc-qt-interface.ini" command="ini" section="RecentsMRL"/>
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="General" parameter="filedialog-path"/>
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="RecentsMRL"/>
+    <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="OpenDialog" parameter="netMRL"/>
     <action command="delete" search="walk.files" path="$APPDATA\vlc\art\artistalbum\"/>
   </option>
 </cleaner>
