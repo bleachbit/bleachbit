@@ -26,5 +26,7 @@
     <label>History</label>
     <description>Delete the usage history</description>
     <action command="delete" search="file" path="~/.links2/links.his"/>
+    <!-- Chakra 2014.05 uses ~/.links/ -->
+    <action command="delete" search="file" path="~/.links/links.his"/>
   </option>
 </cleaner>
