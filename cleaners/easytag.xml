@@ -19,14 +19,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
+<!-- FIXME: No idea if this is available for Windows. -->
 <cleaner id="easytag" os="linux">
-  <!-- FIXME: No idea if this is available for Windows. -->
   <label>Easytag</label>
   <description>Audio files tagger</description>
-  <option id="easytag">
-    <label>Delete mask files from easytag</label>
-    <description>Delete mask/history files from easytag</description>
-    <action search="glob" command="delete" path="~/.easytag/*.history"/>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the usage history</description>
+    <action command="delete" search="glob" path="~/.easytag/*.history"/>
+    <action command="delete" search="glob" path="~/.easytag/*.mask"/>
   </option>
   <option id="logs">
     <label>Logs</label>
