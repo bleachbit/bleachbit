@@ -150,7 +150,7 @@ def environ(varname, csidl):
         os.environ[varname] = shell.SHGetSpecialFolderPath(None, csidl)
     except:
         traceback.print_exc()
-        msg = 'Error setting environemnt variable "%s": %s ' % (
+        msg = 'Error setting environment variable "%s": %s ' % (
             varname, str(sys.exc_info()[1]))
         import GuiBasic
         GuiBasic.message_dialog(None, msg)
