@@ -144,7 +144,15 @@ class Locales:
                   '/usr/share/gnucash/accounts',
                   '/usr/share/locale/',
                   '/usr/share/speedcrunch/books/',
-                  '/usr/share/vim/vim72/'  # Ubuntu 10.10
+                  '/usr/share/vim/vim72/',  # Ubuntu 10.10
+                  '/usr/share/help/',
+                  '/usr/share/vim/vim74/lang/',
+                  '/usr/share/anki/locale/',
+                  '/usr/share/zenmap/locale/',
+                  '/usr/share/lyx/doc/',
+                  '/usr/share/lyx/examples/',
+                  '/usr/share/lib/R/library/translations',
+                  '/usr/share/cups/doc/',
                   ]
 
     __ignore = ['all_languages', 'C', 'l10n', 'locale.alias', 'default']
