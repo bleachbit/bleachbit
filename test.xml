@@ -1,0 +1,12 @@
+<action command="localization">
+	<path location="/usr/share">
+		<path location="locale" />
+		<path location="help" />
+		<path location="vim/vim74/lang" />
+		<path location="vim/vim74/lang" filter="menu_*.vim"/>
+		<path location="X11/locale" />
+	</path>
+	<path location="/tmp/testdata/" >
+		<path location="foo" filter="*.txt" />
+	</path>
+</action>
