@@ -288,10 +288,12 @@ class Firefox(Cleaner):
                 self.profile_dir, "signons.sqlite")
         # session restore
         if 'session_restore' == option_id:
+            # Names include sessionstore.js, sessionstore.bak,
+            # sessionstore.bak-20140715214327, sessionstore-1.js
             files += FileUtilities.expand_glob_join(
-                self.profile_dir, "sessionstore.js")
+                self.profile_dir, "sessionstore*.js")
             files += FileUtilities.expand_glob_join(
-                self.profile_dir, "sessionstore.bak")
+                self.profile_dir, "sessionstore.bak*")
         # site-specific preferences
         if 'site_preferences' == option_id:
             files += FileUtilities.expand_glob_join(
