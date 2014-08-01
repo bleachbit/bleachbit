@@ -72,7 +72,6 @@ def delete_chrome_autofill(path):
     """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('name', 'value', 'value_lower')
     cmds = __shred_sqlite_char_columns('autofill', cols)
-    cmds += __shred_sqlite_char_columns('autofill_dates', ())
     FileUtilities.execute_sqlite3(path, cmds)
 
 
