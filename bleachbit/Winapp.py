@@ -102,6 +102,14 @@ def detectos(required_ver, mock=False):
         # Exact version
         return required_ver == current_os
 
+def detect_file(rawpath):
+    """Check whether a path exists for DetectFile#="""
+    pathname = os.path.expandvars(preexpand(rawpath))
+    import glob
+    for thispath in glob.iglob(pathname):
+        return True
+    return False
+
 
 class Winapp:
 
@@ -148,9 +156,6 @@ class Winapp:
 
     def handle_section(self, section):
         """Parse a section"""
-        def detect_file(rawpath):
-            pathname = os.path.expandvars(preexpand(rawpath))
-            return os.path.exists(pathname)
         # if simple detection fails then discard the section
         if self.parser.has_option(section, 'detect'):
             key = self.parser.get(section, 'detect')

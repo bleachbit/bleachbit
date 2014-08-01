@@ -29,7 +29,7 @@ import unittest
 
 
 sys.path.append('.')
-from bleachbit.Winapp import Winapp, detectos, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key
 
 import common
@@ -105,6 +105,19 @@ class WinappTestCase(unittest.TestCase):
             self.assertEqual(expected_return, actual_return,
                              'detectos(%s, %s)==%s instead of %s' % (s, mock,
                                                                      actual_return, expected_return))
+
+    def test_detect_file(self):
+        """Test detect_file function"""
+        tests = ( ('%windir%\\system32\\kernel32.dll', True),
+                  ('%windir%\\doesnotexist', False),
+                  ('%windir%\\system*', True),
+                  ('%windir%\\*ystem32', True),
+                  ('%windir%\\*ystem3*', True))
+        for (pathname, expected_return) in tests:
+            actual_return = detect_file(pathname)
+            msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
+            self.assertEqual(expected_return, actual_return, msg)
+
 
     def test_fake(self):
         """Test with fake file"""
