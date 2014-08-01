@@ -109,6 +109,9 @@ class WinappTestCase(unittest.TestCase):
     def test_detect_file(self):
         """Test detect_file function"""
         tests = ( ('%windir%\\system32\\kernel32.dll', True),
+                  ('%windir%\\system32', True),
+                  ('%ProgramFiles%\\Internet Explorer', True),
+                  ('%ProgramFiles%\\Internet Explorer\\', True),
                   ('%windir%\\doesnotexist', False),
                   ('%windir%\\system*', True),
                   ('%windir%\\*ystem32', True),
