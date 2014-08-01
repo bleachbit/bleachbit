@@ -321,8 +321,10 @@ def free_space(pathname):
     if 'nt' == os.name:
         import ctypes
         free_bytes = ctypes.c_int64()
-        ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname),
+        rc = ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname),
                                                    ctypes.byref(free_bytes), None, None)
+        if 0 == rc:
+            raise ctypes.WinError()
         return free_bytes.value
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
