@@ -239,6 +239,10 @@ class Firefox(Cleaner):
             if 'nt' == os.name:
                 dirs += FileUtilities.expand_glob_join(
                     cache_base, "jumpListCache")  # Windows 8
+            if 'posix' == os.name:
+                # This path is whitelisted under the System - Cache cleaner,
+                # so it can be cleaned here.
+                dirs += [ os.path.expanduser('~/.cache/mozilla') ]
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
@@ -756,6 +760,8 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-']
         regexes.append('^' + os.path.expanduser('~/.cache/wallpaper/'))
+        # Clean Firefox cache from Firefox cleaner (LP#1295826)
+        regexes.append('^' + os.path.expanduser('~/.cache/mozilla'))
         regexes.append(
             '^' + os.path.expanduser('~/.cache/gnome-control-center/'))
         for regex in regexes:
