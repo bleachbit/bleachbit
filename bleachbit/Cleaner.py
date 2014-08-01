@@ -226,6 +226,7 @@ class Firefox(Cleaner):
         return "Firefox"
 
     def get_commands(self, option_id):
+        files = []
         # browser cache
         cache_base = None
         if 'posix' == os.name:
@@ -241,7 +242,10 @@ class Firefox(Cleaner):
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
-        files = []
+            # Necko Predictive Network Actions
+            # https://wiki.mozilla.org/Privacy/Reviews/Necko
+            files += FileUtilities.expand_glob_join(
+                self.profile_dir, "netpredictions.sqlite")
         # cookies
         if 'cookies' == option_id:
             files += FileUtilities.expand_glob_join(
