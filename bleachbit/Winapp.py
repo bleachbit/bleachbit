@@ -62,7 +62,7 @@ langsecref_map = {'3021': ('winapp2_applications', _('Applications')),
                   # 3029 = Google Chrome
                   '3029': ('winapp2_google_chrome', 'Google Chrome'),
                   # 3030 = Thunderbird
-                  '3030': ('winapp2_thunderbird', 'thunderbird'),
+                  '3030': ('winapp2_thunderbird', 'Thunderbird'),
                   # Section=Games (technically not langsecref)
                   'Games': ('winapp2_games', _('Games'))}
 
