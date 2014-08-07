@@ -92,11 +92,14 @@ def expand_path(p):
     expand1 = os.path.expandvars(preexpand(p))
     for pathname in glob.iglob(expand1):
         yield pathname
-    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%
-    if re.match('%ProgramFiles%', p, flags=re.IGNORECASE):
-        expand2 = re.sub(r'%ProgramFiles%',r'%ProgramW6432%', p, flags=re.IGNORECASE)
-        for pathname in expand_path(expand2):
-            yield pathname
+    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
+    subs = (('ProgramFiles', 'ProgramW6432'),
+            ('CommonProgramFiles', 'CommonProgramW6432'))
+    for (sub_orig, sub_repl) in subs:
+        if re.match('%%%s%%' % sub_orig, p, flags=re.IGNORECASE):
+            expand2 = re.sub(r'%%%s%%'% sub_orig, '%%%s%%' % sub_repl, p, flags=re.IGNORECASE)
+            for pathname in expand_path(expand2):
+                yield pathname
 
 
 def detectos(required_ver, mock=False):
