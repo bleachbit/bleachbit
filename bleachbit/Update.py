@@ -127,7 +127,7 @@ def update_dialog(parent, updates):
         button_stable.connect(
             'clicked', lambda dummy: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
-        box_update.pack_start(button_stable, False, , True, 10)
+        box_update.pack_start(button_stable, False, True, 10)
         dlg.vbox.pack_start(box_update, False, True, 0)
 
     dlg.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
