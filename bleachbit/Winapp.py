@@ -81,8 +81,9 @@ def section2option(s):
 
 
 def preexpand(s):
-    """Prepare pathname for expansion by changing %foo% to ${foo}"""
-    return re.sub(r'%([a-zA-Z]+)%', r'${\1}', s)
+    """Prepare pathname for expansion by changing %foo% to ${foo}
+    required by Python 2.5.4"""
+    return re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', s)
 
 
 def detectos(required_ver, mock=False):
