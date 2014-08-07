@@ -108,14 +108,29 @@ class WinappTestCase(unittest.TestCase):
 
     def test_detect_file(self):
         """Test detect_file function"""
-        tests = ( ('%windir%\\system32\\kernel32.dll', True),
+        tests = [ ('%windir%\\system32\\kernel32.dll', True),
                   ('%windir%\\system32', True),
                   ('%ProgramFiles%\\Internet Explorer', True),
                   ('%ProgramFiles%\\Internet Explorer\\', True),
                   ('%windir%\\doesnotexist', False),
                   ('%windir%\\system*', True),
                   ('%windir%\\*ystem32', True),
-                  ('%windir%\\*ystem3*', True))
+                  ('%windir%\\*ystem3*', True)]
+        # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
+        # variable to also %ProgramW6432%, so test unique entries in %ProgramW6432%.
+        import struct
+        if not 32 == 8 * struct.calcsize('P'):
+            raise NotImplementedError('expecting 32-bit Python')
+        if os.getenv('ProgramW6432'):
+            dir_64 = os.listdir(os.getenv('ProgramFiles'))
+            dir_32 = os.listdir(os.getenv('ProgramW6432'))
+            dir_32_unique = set(dir_32) - set(dir_64)
+            if dir_32 and not dir_32_unique:
+                raise RuntimeError('Test expects objects in %ProgramW6432% not in %ProgramFiles%')
+            for pathname in dir_32_unique:
+                tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
+        else:
+            print 'NOTE: skipping %ProgramW6432% tests because WoW64 not detected'
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
