@@ -28,6 +28,7 @@ import Common
 import ConfigParser
 import Windows
 import os
+import glob
 import re
 import traceback
 
@@ -86,6 +87,18 @@ def preexpand(s):
     return re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', s)
 
 
+def expand_path(p):
+    """Expand glob and environment variables in path"""
+    expand1 = os.path.expandvars(preexpand(p))
+    for pathname in glob.iglob(expand1):
+        yield pathname
+    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%
+    if re.match('%ProgramFiles%', p, flags=re.IGNORECASE):
+        expand2 = re.sub(r'%ProgramFiles%',r'%ProgramW6432%', p, flags=re.IGNORECASE)
+        for pathname in expand_path(expand2):
+            yield pathname
+
+
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
@@ -103,11 +116,9 @@ def detectos(required_ver, mock=False):
         # Exact version
         return required_ver == current_os
 
-def detect_file(rawpath):
+def detect_file(pathname):
     """Check whether a path exists for DetectFile#="""
-    pathname = os.path.expandvars(preexpand(rawpath))
-    import glob
-    for thispath in glob.iglob(pathname):
+    for thispath in expand_path(pathname):
         return True
     return False
 
