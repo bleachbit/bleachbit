@@ -227,6 +227,7 @@ class Firefox(Cleaner):
         return "Firefox"
 
     def get_commands(self, option_id):
+        files = []
         # browser cache
         cache_base = None
         if 'posix' == os.name:
@@ -239,10 +240,17 @@ class Firefox(Cleaner):
             if 'nt' == os.name:
                 dirs += FileUtilities.expand_glob_join(
                     cache_base, "jumpListCache")  # Windows 8
+            if 'posix' == os.name:
+                # This path is whitelisted under the System - Cache cleaner,
+                # so it can be cleaned here.
+                dirs += [ os.path.expanduser('~/.cache/mozilla') ]
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
-        files = []
+            # Necko Predictive Network Actions
+            # https://wiki.mozilla.org/Privacy/Reviews/Necko
+            files += FileUtilities.expand_glob_join(
+                self.profile_dir, "netpredictions.sqlite")
         # cookies
         if 'cookies' == option_id:
             files += FileUtilities.expand_glob_join(
@@ -289,10 +297,12 @@ class Firefox(Cleaner):
                 self.profile_dir, "signons.sqlite")
         # session restore
         if 'session_restore' == option_id:
+            # Names include sessionstore.js, sessionstore.bak,
+            # sessionstore.bak-20140715214327, sessionstore-1.js
             files += FileUtilities.expand_glob_join(
-                self.profile_dir, "sessionstore.js")
+                self.profile_dir, "sessionstore*.js")
             files += FileUtilities.expand_glob_join(
-                self.profile_dir, "sessionstore.bak")
+                self.profile_dir, "sessionstore.bak*")
         # site-specific preferences
         if 'site_preferences' == option_id:
             files += FileUtilities.expand_glob_join(
@@ -749,6 +759,8 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-']
         regexes.append('^' + os.path.expanduser('~/.cache/wallpaper/'))
+        # Clean Firefox cache from Firefox cleaner (LP#1295826)
+        regexes.append('^' + os.path.expanduser('~/.cache/mozilla'))
         regexes.append(
             '^' + os.path.expanduser('~/.cache/gnome-control-center/'))
         for regex in regexes:

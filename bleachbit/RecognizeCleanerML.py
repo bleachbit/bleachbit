@@ -63,14 +63,14 @@ def cleaner_change_dialog(changes, parent):
     warnbox = Gtk.HBox()
     image = Gtk.Image()
     image.set_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
-    warnbox.pack_start(image, False)
+    warnbox.pack_start(image, False, True, 0)
     # TRANSLATORS: Cleaner definitions are XML data files that define
     # which files will be cleaned.
     label = Gtk.Label(
         _("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
     label.set_line_wrap(True)
-    warnbox.pack_start(label, True)
-    dialog.vbox.pack_start(warnbox, False)
+    warnbox.pack_start(label, True, True, 0)
+    dialog.vbox.pack_start(warnbox, False, True, 0)
 
     # create tree view
     liststore = Gtk.ListStore(GObject.TYPE_BOOLEAN, GObject.TYPE_STRING)

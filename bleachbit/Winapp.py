@@ -62,7 +62,7 @@ langsecref_map = {'3021': ('winapp2_applications', _('Applications')),
                   # 3029 = Google Chrome
                   '3029': ('winapp2_google_chrome', 'Google Chrome'),
                   # 3030 = Thunderbird
-                  '3030': ('winapp2_thunderbird', 'thunderbird'),
+                  '3030': ('winapp2_thunderbird', 'Thunderbird'),
                   # Section=Games (technically not langsecref)
                   'Games': ('winapp2_games', _('Games'))}
 
@@ -101,6 +101,14 @@ def detectos(required_ver, mock=False):
     else:
         # Exact version
         return required_ver == current_os
+
+def detect_file(rawpath):
+    """Check whether a path exists for DetectFile#="""
+    pathname = os.path.expandvars(preexpand(rawpath))
+    import glob
+    for thispath in glob.iglob(pathname):
+        return True
+    return False
 
 
 class Winapp:
@@ -148,9 +156,6 @@ class Winapp:
 
     def handle_section(self, section):
         """Parse a section"""
-        def detect_file(rawpath):
-            pathname = os.path.expandvars(preexpand(rawpath))
-            return os.path.exists(pathname)
         # if simple detection fails then discard the section
         if self.parser.has_option(section, 'detect'):
             key = self.parser.get(section, 'detect')

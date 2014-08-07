@@ -31,7 +31,7 @@ import sys
 if 'nt' == os.name:
     from win32com.shell import shell, shellcon
 
-APP_VERSION = "1.1"
+APP_VERSION = "1.3"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
@@ -146,14 +146,16 @@ if 'posix' == os.name:
 
 # Windows XP doesn't define localappdata, but Windows Vista and 7 do
 def environ(varname, csidl):
+    if os.environ.has_key(varname):
+        # Do not redefine the environment variable when it already exists
+        return
     try:
         os.environ[varname] = shell.SHGetSpecialFolderPath(None, csidl)
     except:
+        import traceback
         traceback.print_exc()
-        msg = 'Error setting environemnt variable "%s": %s ' % (
+        print 'ERROR: setting environment variable "%s": %s ' % (
             varname, str(sys.exc_info()[1]))
-        import GuiBasic
-        GuiBasic.message_dialog(None, msg)
 if 'nt' == os.name:
     environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
     environ('documents', shellcon.CSIDL_DESKTOPDIRECTORY)
