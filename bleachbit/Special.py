@@ -241,7 +241,8 @@ def delete_mozilla_url_history(path):
 
     # delete the whole moz_hosts table
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
-    # Reference: https://support.mozilla.org/en-US/questions/937290#answer-400987
+    # Reference:
+    # https://support.mozilla.org/en-US/questions/937290#answer-400987
     cmds += __shred_sqlite_char_columns('moz_hosts', ('host',))
     cmds += "delete from moz_hosts;"
 

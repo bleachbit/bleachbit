@@ -242,7 +242,7 @@ class Firefox(Cleaner):
             if 'posix' == os.name:
                 # This path is whitelisted under the System - Cache cleaner,
                 # so it can be cleaned here.
-                dirs += [ os.path.expanduser('~/.cache/mozilla') ]
+                dirs += [os.path.expanduser('~/.cache/mozilla')]
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)

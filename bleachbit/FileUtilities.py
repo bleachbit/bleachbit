@@ -322,7 +322,7 @@ def free_space(pathname):
         import ctypes
         free_bytes = ctypes.c_int64()
         rc = ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname),
-                                                   ctypes.byref(free_bytes), None, None)
+                                                        ctypes.byref(free_bytes), None, None)
         if 0 == rc:
             raise ctypes.WinError()
         return free_bytes.value
