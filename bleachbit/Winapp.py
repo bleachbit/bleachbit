@@ -81,27 +81,6 @@ def section2option(s):
     return ret
 
 
-def preexpand(s):
-    """Prepare pathname for expansion by changing %foo% to ${foo}
-    required by Python 2.5.4"""
-    return re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', s)
-
-
-def expand_path(p):
-    """Expand glob and environment variables in path"""
-    expand1 = os.path.expandvars(preexpand(p))
-    for pathname in glob.iglob(expand1):
-        yield pathname
-    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
-    subs = (('ProgramFiles', 'ProgramW6432'),
-            ('CommonProgramFiles', 'CommonProgramW6432'))
-    for (sub_orig, sub_repl) in subs:
-        if re.match('%%%s%%' % sub_orig, p, flags=re.IGNORECASE):
-            expand2 = re.sub(r'%%%s%%'% sub_orig, '%%%s%%' % sub_repl, p, flags=re.IGNORECASE)
-            for pathname in expand_path(expand2):
-                yield pathname
-
-
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
@@ -119,10 +98,29 @@ def detectos(required_ver, mock=False):
         # Exact version
         return required_ver == current_os
 
+
+def winapp_expand_vars(pathname):
+    """Expand environment variables using special Winapp2.ini rules"""
+    # Change %foo% to ${foo} as required by Python 2.5.4 (but not 2.7.8)
+    pathname = re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', pathname)
+    # This is the regular expansion
+    expand1 = os.path.expandvars(pathname)
+    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
+    subs = (('ProgramFiles', 'ProgramW6432'),
+            ('CommonProgramFiles', 'CommonProgramW6432'))
+    for (sub_orig, sub_repl) in subs:
+        if re.match(r'\${%s}' % sub_orig, pathname, flags=re.IGNORECASE):
+            expand2 = re.sub(r'\${%s}' % sub_orig, '${%s}' %
+                             sub_repl, pathname, flags=re.IGNORECASE)
+            return (expand1, os.path.expandvars(expand2))
+    return (expand1,)
+
+
 def detect_file(pathname):
     """Check whether a path exists for DetectFile#="""
-    for thispath in expand_path(pathname):
-        return True
+    for expanded in winapp_expand_vars(pathname):
+        for thispath in glob.iglob(expanded):
+            return True
     return False
 
 
@@ -267,7 +265,7 @@ class Winapp:
 
         Section is [Application Name] and option is the FileKey#"""
         elements = self.parser.get(ini_section, ini_option).strip().split('|')
-        dirname = preexpand(elements.pop(0))
+        dirnames = winapp_expand_vars(elements.pop(0))
         filenames = ""
         if elements:
             filenames = elements.pop(0)
@@ -283,9 +281,10 @@ class Winapp:
             else:
                 print 'WARNING: unknown file option %s in section %s' % (element, ini_section)
         for filename in filenames.split(';'):
-            for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
-                self.cleaners[lid].add_action(
-                    section2option(ini_section), provider)
+            for dirname in dirnames:
+                for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
+                    self.cleaners[lid].add_action(
+                        section2option(ini_section), provider)
 
     def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
