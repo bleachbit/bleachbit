@@ -109,9 +109,9 @@ def winapp_expand_vars(pathname):
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
     for (sub_orig, sub_repl) in subs:
-        if re.match(r'\${%s}' % sub_orig, pathname, flags=re.IGNORECASE):
-            expand2 = re.sub(r'\${%s}' % sub_orig, '${%s}' %
-                             sub_repl, pathname, flags=re.IGNORECASE)
+        pattern = re.compile(r'\${%s}' % sub_orig, flags=re.IGNORECASE)
+        if pattern.match(pathname):
+            expand2 = pattern.sub('${%s}' % sub_repl, pathname)
             return (expand1, os.path.expandvars(expand2))
     return (expand1,)
 
