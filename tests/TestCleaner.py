@@ -72,7 +72,7 @@ class CleanerTestCase(unittest.TestCase):
             self.actions.append(
                 '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
             self.actions.append(
-                '<action command="delete" search="walk.files" path="$WINDIR\\system\\"/>')
+                '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>')
             self.actions.append(
                 '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
         elif 'posix' == os.name:
