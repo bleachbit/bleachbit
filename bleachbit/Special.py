@@ -51,6 +51,22 @@ def __shred_sqlite_char_columns(table, cols=None, where=""):
     return cmd
 
 
+def __sqlite_table_exists(pathname, table):
+    """Check whether a table exists in the SQLite database"""
+    cmd = "select name from sqlite_master where type='table' and name=?;"
+    import sqlite3
+    conn = sqlite3.connect(pathname)
+    cursor = conn.cursor()
+    ret = False
+    cursor.execute(cmd, (table,))
+    if cursor.fetchone():
+        ret = True
+    cursor.close()
+    conn.commit()
+    conn.close()
+    return ret
+
+
 def get_sqlite_int(path, sql, parameters=None):
     """Run SQL on database in 'path' and return the integers"""
     ids = []
@@ -243,8 +259,9 @@ def delete_mozilla_url_history(path):
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
     # Reference:
     # https://support.mozilla.org/en-US/questions/937290#answer-400987
-    cmds += __shred_sqlite_char_columns('moz_hosts', ('host',))
-    cmds += "delete from moz_hosts;"
+    if __sqlite_table_exists(path, 'moz_hosts'):
+        cmds += __shred_sqlite_char_columns('moz_hosts', ('host',))
+        cmds += "delete from moz_hosts;"
 
     # execute the commands
     FileUtilities.execute_sqlite3(path, cmds)
