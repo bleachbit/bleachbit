@@ -276,12 +276,9 @@ def exists_in_path(filename):
 def exe_exists(pathname):
     """Returns boolean whether executable exists"""
     if os.path.isabs(pathname):
-        if not os.path.exists(pathname):
-            return False
+        return os.path.exists(pathname)
     else:
-        if not exists_in_path(pathname):
-            return False
-    return True
+        return exists_in_path(pathname)
 
 
 def execute_sqlite3(path, cmds):
