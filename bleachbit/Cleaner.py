@@ -24,6 +24,8 @@ Perform (or assist with) cleaning operations.
 
 
 import glob
+from bleachbit import UnixLocales
+
 try:
     import gtk
     HAVE_GTK = True
@@ -546,8 +548,10 @@ class System(Cleaner):
 
         # unwanted locales
         if 'posix' == os.name and 'localizations' == option_id:
-            callback = lambda locale, language: options.get_language(language)
-            for path in Unix.locales.localization_paths(callback):
+            for path in UnixLocales.locales.localization_paths():
+                if os.path.isdir(path):
+                    for subpath in children_in_directory(path, list_directories=True):
+                        yield Command.Delete(subpath)
                 yield Command.Delete(path)
 
         # Windows logs
