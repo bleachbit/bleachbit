@@ -396,9 +396,9 @@ def guess_overwrite_paths():
                     ret.append(localtmp)
                 else:
                     ret.append(drive)
-            else:
+            except:
                 # see https://github.com/az0/bleachbit/issues/27
-                import traceback.print_exc()
+                import traceback
                 traceback.print_exc()
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
