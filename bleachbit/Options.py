@@ -35,7 +35,7 @@ if 'nt' == os.name:
     from win32file import GetLongPathName
 
 
-boolean_keys = ['auto_start', 'check_beta',
+boolean_keys = ['auto_hide', 'auto_start', 'check_beta',
                 'check_online_updates', 'first_start', 'shred']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
@@ -194,6 +194,7 @@ class Options:
             self.set_list('shred_drives', guess_overwrite_paths())
 
         # set defaults
+        self.__set_default("auto_hide", True)
         self.__set_default("auto_start", False)
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
