@@ -440,7 +440,7 @@ class GUI:
 
     def cb_preferences_dialog(self, action):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(self.window)
+        pref = PreferencesDialog(self.window, self.cb_refresh_operations)
         pref.run()
 
     def cb_refresh_operations(self):
