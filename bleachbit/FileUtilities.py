@@ -391,10 +391,15 @@ def guess_overwrite_paths():
             "$USERPROFILE\\Local Settings\\Temp\\")
         from Windows import get_fixed_drives
         for drive in get_fixed_drives():
-            if same_partition(localtmp, drive):
-                ret.append(localtmp)
+            try:
+                if same_partition(localtmp, drive):
+                    ret.append(localtmp)
+                else:
+                    ret.append(drive)
             else:
-                ret.append(drive)
+                # see https://github.com/az0/bleachbit/issues/27
+                import traceback.print_exc()
+                traceback.print_exc()
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
