@@ -778,7 +778,7 @@ class GUI:
             self.shred_paths(shred_paths)
             return
         if options.get("first_start") and 'posix' == os.name:
-            pref = PreferencesDialog(self.window)
+            pref = PreferencesDialog(self.window, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
