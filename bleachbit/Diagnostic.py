@@ -52,7 +52,7 @@ def diagnostic_info():
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     if 'nt' == os.name:
         envs = ('APPDATA', 'localappdata',
-                'USERPROFILE', 'ProgramFiles', 'ProgramW6432')
+                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
     s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
