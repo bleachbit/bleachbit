@@ -387,19 +387,24 @@ def guess_overwrite_paths():
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = dirname = os.path.expandvars(
-            "$USERPROFILE\\Local Settings\\Temp\\")
+        localtmp = os.path.expandvars('$TMP')
+        if not os.path.exists(localtmp):
+            print 'ERROR: %TMP% does not exist:', localtmp
+            localtmp = None
+        else:
+            from win32file import GetLongPathName
+            localtmp = GetLongPathName(localtmp)
         from Windows import get_fixed_drives
         for drive in get_fixed_drives():
             try:
-                if same_partition(localtmp, drive):
+                if localtmp and same_partition(localtmp, drive):
                     ret.append(localtmp)
                 else:
                     ret.append(drive)
-            except:
+            except Exception, e:
                 # see https://github.com/az0/bleachbit/issues/27
-                import traceback
-                traceback.print_exc()
+                # https://bugs.launchpad.net/bleachbit/+bug/1372179
+                print 'ERROR in same_partition(%s, %s): %s' % (localtmp, drive, e)
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
