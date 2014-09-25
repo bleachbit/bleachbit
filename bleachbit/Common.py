@@ -31,7 +31,7 @@ import sys
 if 'nt' == os.name:
     from win32com.shell import shell, shellcon
 
-APP_VERSION = "1.5"
+APP_VERSION = "1.5.1"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
