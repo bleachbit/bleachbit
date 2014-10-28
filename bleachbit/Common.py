@@ -244,6 +244,4 @@ _p = lambda msgctxt, msgid: pgettext(msgctxt, msgid)
 base_url = "http://bleachbit.sourceforge.net"
 help_contents_url = "%s/link.php?version=%s&lang=%s&target=help" \
     % (base_url, APP_VERSION, user_locale)
-release_notes_url = "%s/link.php?version=%s&lang=%s&target=release_notes" \
-    % (base_url, APP_VERSION, user_locale)
 update_check_url = "%s/communicate.php" % base_url
