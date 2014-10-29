@@ -28,6 +28,7 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.all" path="~/.config/chromium/Default/Application Cache/"/>
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Cache\"/>
     <action command="delete" search="walk.files" path="~/.cache/chromium/"/>
     <action command="delete" search="walk.files" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache"/>
