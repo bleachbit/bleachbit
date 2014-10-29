@@ -35,8 +35,6 @@ APP_VERSION = "1.5.2"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
-print "info: starting %s version %s" % (APP_NAME, APP_VERSION)
-
 socket_timeout = 10
 
 # Setting below value to false disables update notification (useful
