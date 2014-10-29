@@ -309,6 +309,11 @@ class Firefox(Cleaner):
                 self.profile_dir, "sessionstore*.js")
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "sessionstore.bak*")
+            ss_bu_dir = os.path.join(self.profile_dir, 'sessionstore-backups')
+            files += FileUtilities.expand_glob_join(
+                ss_bu_dir, 'previous.js')
+            files += FileUtilities.expand_glob_join(
+                ss_bu_dir, 'upgrade.js-20*')
         # site-specific preferences
         if 'site_preferences' == option_id:
             files += FileUtilities.expand_glob_join(
