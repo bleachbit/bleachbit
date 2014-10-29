@@ -626,7 +626,7 @@ class System(Cleaner):
             #
             # GNOME 2.28.1 (Ubuntu 9.10) and 2.30 (10.04) do not re-read
             # the file after truncation, but do re-read it after
-            # shreading.
+            # shredding.
             #
             # https://bugzilla.gnome.org/show_bug.cgi?id=591404
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
