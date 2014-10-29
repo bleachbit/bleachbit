@@ -314,6 +314,8 @@ class Firefox(Cleaner):
                 ss_bu_dir, 'previous.js')
             files += FileUtilities.expand_glob_join(
                 ss_bu_dir, 'upgrade.js-20*')
+            files += FileUtilities.expand_glob_join(
+                ss_bu_dir, 'recovery.js')
         # site-specific preferences
         if 'site_preferences' == option_id:
             files += FileUtilities.expand_glob_join(
