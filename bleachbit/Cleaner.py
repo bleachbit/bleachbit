@@ -184,6 +184,8 @@ class Firefox(Cleaner):
 
     def __init__(self):
         Cleaner.__init__(self)
+        self.add_option('backup', _('Backup files'), _(
+            'Delete the backup files'))
         self.add_option('cache', _('Cache'), _(
             'Delete the web cache, which reduces time to display revisited pages'))
         self.add_option('cookies', _('Cookies'), _(
@@ -227,6 +229,11 @@ class Firefox(Cleaner):
 
     def get_commands(self, option_id):
         files = []
+        # backup files
+        if 'backup' == option_id:
+            bookmark_bu_dir = os.path.join(self.profile_dir, 'bookmarkbackups')
+            files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.json")
+            files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.jsonlz4")
         # browser cache
         cache_base = None
         if 'posix' == os.name:
