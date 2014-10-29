@@ -31,6 +31,7 @@
     <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Application Cache\"/>
     <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\CacheWritableAdobeRoot\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\GPUCache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Media Cache\"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/startup_list"/>
