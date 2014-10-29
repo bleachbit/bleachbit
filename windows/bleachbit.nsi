@@ -32,9 +32,9 @@
   !define prodname "BleachBit"
   Name "${prodname}"
 !ifdef NoTranslations
-  OutFile "${prodname}-0.0.0-setup-English.exe"
+  OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
-  OutFile "${prodname}-0.0.0-setup.exe"
+  OutFile "${prodname}-${VERSION}-setup.exe"
 !endif
 
   ;Default installation folder

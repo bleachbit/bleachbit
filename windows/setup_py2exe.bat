@@ -36,6 +36,10 @@ echo Checking for 32-bit Python
 if "%ERRORLEVEL%" neq "0" echo Python is not 32-bit
 if "%ERRORLEVEL%" neq "0" goto error_general
 
+echo Getting BleachBit version
+for /f "delims=" %%a in ('%PYTHON_DIR%\python.exe -c "import bleachbit.Common; print bleachbit.Common.APP_VERSION"') do @set BB_VER=%%a
+echo BleachBit version %BB_VER%
+
 echo Checking for translations
 set CANARY=locale
 if not exist %CANARY% echo run "make -C po local" to build translations
@@ -142,17 +146,17 @@ echo Building portable
 rd /s /q BleachBit-portable
 xcopy /e /i dist BleachBit-Portable
 echo [Portable] > BleachBit-Portable\BleachBit.ini
-%SZ_EXE% a -mx=9 -md=32m BleachBit-0.0.0-portable.zip BleachBit-portable
+%SZ_EXE% a -mx=9 -md=32m BleachBit-%BB_VER%-portable.zip BleachBit-portable
 
 :nsis
 echo Building installer
-if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" windows\bleachbit.nsi
-if not "%1" == "fast" %NSIS_EXE% windows\bleachbit.nsi
+if     "%1" == "fast" %NSIS_EXE% /X"SetCompressor /FINAL zlib" /DVERSION=%BB_VER% windows\bleachbit.nsi
+if not "%1" == "fast" %NSIS_EXE% /DVERSION=%BB_VER% windows\bleachbit.nsi
 echo Signing code
-call CodeSign.bat windows\BleachBit-0.0.0-setup.exe
-if not "%1" == "fast" %NSIS_EXE% /DNoTranslations windows\bleachbit.nsi
+call CodeSign.bat windows\BleachBit-%BB_VER%-setup.exe
+if not "%1" == "fast" %NSIS_EXE% /DNoTranslations /DVERSION=%BB_VER% windows\bleachbit.nsi
 if not "%1" == "fast" echo Signing code
-if not "%1" == "fast" call CodeSign.bat windows\BleachBit-0.0.0-setup-English.exe
+if not "%1" == "fast" call CodeSign.bat windows\BleachBit-%BB_VER%-setup-English.exe
 echo Success!
 goto exit
 
