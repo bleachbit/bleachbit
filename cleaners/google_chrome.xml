@@ -35,6 +35,7 @@
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Media Cache\"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/startup_list"/>
+    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="net/http_server_properties/servers"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="HostReferralList"/>
     <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="StartupDNSPrefetchList"/>
     <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
@@ -42,6 +43,7 @@
     <action command="delete" search="walk.files" path="~/.cache/google-chrome/"/>
     <action command="json" search="file" path="~/.config/google-chrome/Default/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="~/.config/google-chrome/Default/Preferences" address="dns_prefetching/startup_list"/>
+    <action command="json" search="file" path="~/.config/google-chrome/Default/Preferences" address="net/http_server_properties/servers"/>
     <action command="json" search="file" path="~/.config/google-chrome/Local State" address="HostReferralList"/>
     <action command="json" search="file" path="~/.config/google-chrome/Local State" address="StartupDNSPrefetchList"/>
   </option>
