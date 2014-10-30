@@ -292,7 +292,7 @@ class GUI(Gtk.ApplicationWindow):
         self.append_text(name + "\n", 'operation')
         if not description:
             description = ""
-        self.append_text(description + "\n\n\n")
+        self.append_text(description + "\n\n\n", 'description')
         for (label, description) in backends[cleaner_id].get_option_descriptions():
             self.append_text(label, 'option_label')
             if description:
@@ -689,7 +689,7 @@ class GUI(Gtk.ApplicationWindow):
         self.window.set_titlebar(self.headerbar)
 
         # split main window
-        hbox = Gtk.HBox(homogeneous=False, spacing=10)
+        hbox = Gtk.HBox(homogeneous=False)
         vbox.pack_start(hbox, True, True, 0)
 
         # add operations to left
@@ -718,10 +718,16 @@ class GUI(Gtk.ApplicationWindow):
         style_operation = Gtk.TextTag.new('operation')
         style_operation.set_property('size-points', 14)
         style_operation.set_property('weight', 700)
+        style_operation.set_property('justification', Gtk.Justification.CENTER)
         tt.add(style_operation)
+
+        style_description = Gtk.TextTag.new('description')
+        style_description.set_property('justification', Gtk.Justification.CENTER)
+        tt.add(style_description)
 
         style_option_label = Gtk.TextTag.new('option_label')
         style_option_label.set_property('weight', 700)
+        style_option_label.set_property('left-margin', 20)
         tt.add(style_option_label)
 
         style_operation = Gtk.TextTag.new('error')
