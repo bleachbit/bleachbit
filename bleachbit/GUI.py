@@ -123,6 +123,9 @@ class TreeDisplayModel:
         """Create and return a TreeView object"""
         self.view = Gtk.TreeView.new_with_model(model)
 
+        # hide headers
+        self.view.set_headers_visible(False)
+
         # listen for right click (context menu)
         self.view.connect("button_press_event", context_menu_event)
 
