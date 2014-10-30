@@ -718,6 +718,7 @@ class GUI(Gtk.ApplicationWindow):
         style_operation = Gtk.TextTag.new('operation')
         style_operation.set_property('size-points', 14)
         style_operation.set_property('weight', 700)
+        style_operation.set_property('pixels-above-lines', 10)
         style_operation.set_property('justification', Gtk.Justification.CENTER)
         tt.add(style_operation)
 
