@@ -635,7 +635,7 @@ class GUI(Gtk.ApplicationWindow):
         hb.props.show_close_button = True
         hb.props.title = APP_NAME
 
-        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
         # create the preview button
@@ -678,9 +678,6 @@ class GUI(Gtk.ApplicationWindow):
         if appicon_path and os.path.exists(appicon_path):
             self.window.set_icon_from_file(appicon_path)
 
-        vbox = Gtk.VBox()
-        self.window.add(vbox)
-
         # add app menu
         self.build_app_menu(app)
 
@@ -689,15 +686,15 @@ class GUI(Gtk.ApplicationWindow):
         self.window.set_titlebar(self.headerbar)
 
         # split main window
-        hbox = Gtk.HBox(homogeneous=False)
-        vbox.pack_start(hbox, True, True, 0)
+        hbox = Gtk.Box(homogeneous=False)
+        self.window.add(hbox)
 
         # add operations to left
         operations = self.create_operations_box()
         hbox.pack_start(operations, False, True, 0)
 
         # create the right side of the window
-        right_box = Gtk.VBox()
+        right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.progressbar = Gtk.ProgressBar()
         right_box.pack_start(self.progressbar, False, True, 0)
 
@@ -705,6 +702,7 @@ class GUI(Gtk.ApplicationWindow):
         self.textbuffer = Gtk.TextBuffer()
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        swindow.set_property('expand', True)
         self.textview = Gtk.TextView.new_with_buffer(self.textbuffer)
         self.textview.set_editable(False)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)

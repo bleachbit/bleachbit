@@ -120,7 +120,7 @@ def update_dialog(parent, updates):
     for update in updates:
         ver = update[0]
         url = update[1]
-        box_update = Gtk.HBox()
+        box_update = Gtk.Box()
         # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
         # similar
         button_stable = Gtk.Button(_("Update to version %s") % ver)
