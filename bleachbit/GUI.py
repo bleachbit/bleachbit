@@ -586,14 +586,6 @@ class GUI(Gtk.ApplicationWindow):
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
 
-    def update_total_size(self, bytes_removed):
-        """Callback to update the total size cleaned"""
-        context_id = self.status_bar.get_context_id('size')
-        text = FileUtilities.bytes_to_human(bytes_removed)
-        if 0 == bytes_removed:
-            text = ""
-        self.status_bar.push(context_id, text)
-
     def build_app_menu(self, app):
         builder = Gtk.Builder()
 
@@ -732,10 +724,6 @@ class GUI(Gtk.ApplicationWindow):
         style_operation = Gtk.TextTag.new('error')
         style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
-
-        # add status bar
-        self.status_bar = Gtk.Statusbar()
-        vbox.pack_start(self.status_bar, False, True, 0)
 
         # done
         self.window.show_all()
