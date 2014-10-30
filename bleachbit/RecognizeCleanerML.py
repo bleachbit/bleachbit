@@ -60,7 +60,7 @@ def cleaner_change_dialog(changes, parent):
     dialog.set_default_size(600, 500)
 
     # create warning
-    warnbox = Gtk.HBox()
+    warnbox = Gtk.Box()
     image = Gtk.Image()
     image.set_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
     warnbox.pack_start(image, False, True, 0)
