@@ -128,7 +128,7 @@ class Bleachbit(Gtk.Application):
         builder = Gtk.Builder()
         builder.add_from_file('data/AboutDialog.ui')
         dialog = builder.get_object('about_dialog')
-        dialog.set_name(APP_NAME)
+        dialog.set_program_name(APP_NAME)
         dialog.set_version(APP_VERSION)
         dialog.set_website(APP_URL)
         dialog.set_transient_for(self._window)
