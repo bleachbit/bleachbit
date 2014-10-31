@@ -564,12 +564,12 @@ class GUI(Gtk.ApplicationWindow):
         # make a menu
         menu = Gtk.Menu()
         # TRANSLATORS: this is the context menu
-        preview_item = Gtk.MenuItem(_("Preview"))
+        preview_item = Gtk.MenuItem(label=_("Preview"))
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
         # TRANSLATORS: this is the context menu
-        clean_item = Gtk.MenuItem(_("Clean"))
+        clean_item = Gtk.MenuItem(label=_("Clean"))
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -577,7 +577,7 @@ class GUI(Gtk.ApplicationWindow):
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
         menu.show_all()
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
         return True
 
     def update_progress_bar(self, status):
@@ -671,7 +671,6 @@ class GUI(Gtk.ApplicationWindow):
     def create_window(self, app):
         """Create the main application window"""
         self.window = Gtk.ApplicationWindow(application=app)
-        self.window.connect('destroy', lambda w: Gtk.main_quit())
 
         self.window.resize(800, 600)
         self.window.set_title(APP_NAME)
