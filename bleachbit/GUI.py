@@ -35,9 +35,8 @@ from gi.repository import Gio
 from gi.repository import GdkPixbuf
 warnings.simplefilter('default')
 
-from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
-    help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, portable_mode
+from Common import _, _p, APP_NAME, appicon_path, \
+    options_file, online_update_notification_enabled
 from Cleaner import backends, register_cleaners
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -213,53 +212,54 @@ class GUI(Gtk.ApplicationWindow):
 
     """The main application GUI"""
 
-    ui = \
-        '''
-<interface domain="bleachbit">
-  <menu id="app-menu">
-    <section>
-      <item>
-        <attribute name="action">app.shredFiles</attribute>
-        <attribute name="label" translatable="yes">_Shred Files</attribute>
-      </item>
-      <item>
-        <attribute name="action">app.shredFolders</attribute>
-        <attribute name="label" translatable="yes">Sh_red Folders</attribute>
-      </item>
-      <item>
-        <attribute name="action">app.wipeFreeSpace</attribute>
-        <attribute name="label" translatable="yes">_Wipe Free Space</attribute>
-      </item>
-      <item>
-        <attribute name="action">app.shredQuit</attribute>
-        <attribute name="label" translatable="yes">S_hred Settings and Quit</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="action">app.preferences</attribute>
-        <attribute name="label" translatable="yes">Preferences</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Help</attribute>
-        <attribute name="action">app.help</attribute>
-        <attribute name="accel">F1</attribute>
-      </item>
-      <item>
-        <attribute name="action">app.about</attribute>
-        <attribute name="label" translatable="yes">_About</attribute>
-      </item>
-      <item>
-        <attribute name="action">app.quit</attribute>
-        <attribute name="label" translatable="yes">_Quit</attribute>
-        <attribute name="accel">&lt;Primary&gt;q</attribute>
-    </item>
-    </section>
-  </menu>
-</interface>
-'''
+    def __init__(self, app, uac=True, shred_paths=None):
+        Gtk.Window.__init__(self, title=APP_NAME, application=app)
+        if uac and 'nt' == os.name and Windows.elevate_privileges():
+            # privileges escalated in other process
+            sys.exit(0)
+
+        import RecognizeCleanerML
+        RecognizeCleanerML.RecognizeCleanerML()
+        register_cleaners()
+
+        self.populate_window()
+
+        if shred_paths:
+            self.shred_paths(shred_paths)
+            return
+        if options.get("first_start") and 'posix' == os.name:
+            pref = PreferencesDialog(self.window)
+            pref.run()
+            options.set('first_start', False)
+        if online_update_notification_enabled and options.get("check_online_updates"):
+            self.check_online_updates()
+        if 'nt' == os.name:
+            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+            # http://bleachbit.sourceforge.net/forum/074-fails-errors
+            try:
+                import sqlite3
+            except ImportError, e:
+                print e
+                print dir(e)
+                self.append_text(
+                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+
+    def shred_paths(self, paths):
+        """Shred file or folders"""
+        # create a temporary cleaner object
+        backends['_gui'] = Cleaner.create_simple_cleaner(paths)
+
+        # preview and confirm
+        operations = {'_gui': ['files']}
+        self.preview_or_run_operations(False, operations)
+
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+            # delete
+            self.preview_or_run_operations(True, operations)
+            return True
+        return False
+
     def append_text(self, text, tag=None, __iter=None):
         """Add some text to the main log"""
         if not __iter:
@@ -410,31 +410,6 @@ class GUI(Gtk.ApplicationWindow):
                 notify.show()
                 notify.set_timeout(10000)
 
-    def about(self, __event, param):
-        """Create and show the about dialog"""
-        dialog = Gtk.AboutDialog()
-        dialog.set_comments(_("Program to clean unnecessary files"))
-        dialog.set_copyright("Copyright (C) 2008-2014 Andrew Ziem")
-        try:
-            dialog.set_license(open(license_filename).read())
-        except:
-            dialog.set_license(
-                _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
-        dialog.set_name(APP_NAME)
-        # TRANSLATORS: Maintain the names of translators here.
-        # Launchpad does this automatically for translations
-        # typed in Launchpad. This is a special string shown
-        # in the 'About' box.
-        dialog.set_translator_credits(_("translator-credits"))
-        dialog.set_version(APP_VERSION)
-        dialog.set_website(APP_URL)
-        dialog.set_transient_for(self.window)
-        if appicon_path and os.path.exists(appicon_path):
-            icon = GdkPixbuf.Pixbuf.new_from_file(appicon_path)
-            dialog.set_logo(icon)
-        dialog.run()
-        dialog.hide()
-
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
         scrolled_window = Gtk.ScrolledWindow()
@@ -443,15 +418,10 @@ class GUI(Gtk.ApplicationWindow):
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
         self.view = display.make_view(
-            mdl, self.window, self.context_menu_event)
+            mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrolled_window.add(self.view)
         return scrolled_window
-
-    def cb_preferences_dialog(self, action, param):
-        """Callback for preferences dialog"""
-        pref = PreferencesDialog(self.window, self.cb_refresh_operations)
-        pref.run()
 
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
@@ -477,83 +447,6 @@ class GUI(Gtk.ApplicationWindow):
         if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
             self.preview_or_run_operations(True, operations)
             return
-
-    def cb_shred_file(self, action, param):
-        """Callback for shredding a file"""
-
-        # get list of files
-        paths = GuiBasic.browse_files(self.window,
-                                          _("Choose files to shred"))
-
-        if not paths:
-            return
-
-        self.shred_paths(paths)
-
-    def cb_shred_folder(self, action, param):
-        """Callback for shredding a ffolder"""
-
-        paths = GuiBasic.browse_folder(self.window,
-                                           _("Choose folder to shred"),
-                                           multiple=True,
-                                           stock_button=_('_Delete'))
-
-        if not paths:
-            return
-
-        self.shred_paths(paths)
-
-    def shred_paths(self, paths):
-        """Shred file or folders"""
-        # create a temporary cleaner object
-        backends['_gui'] = Cleaner.create_simple_cleaner(paths)
-
-        # preview and confirm
-        operations = {'_gui': ['files']}
-        self.preview_or_run_operations(False, operations)
-
-        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
-            # delete
-            self.preview_or_run_operations(True, operations)
-            return True
-        return False
-
-    def cb_shred_quit(self, action, param):
-        """Shred settings (for privacy reasons) and quit"""
-        paths = []
-        if portable_mode:
-            # in portable mode on Windows, the options directory includes
-            # executables
-            paths.append(options_file)
-        else:
-            paths.append(options_dir)
-
-        if not self.shred_paths(paths):
-            # aborted
-            return
-
-        if portable_mode:
-            open(options_file, 'w').write('[Portable]\n')
-
-        Gtk.main_quit()
-
-    def cb_wipe_free_space(self, action, param):
-        """callback to wipe free space in arbitrary folder"""
-        path = GuiBasic.browse_folder(self.window,
-                                      _("Choose a folder"),
-                                      multiple=False, stock_button=_('_OK'))
-        if not path:
-            # user cancelled
-            return
-
-        backends['_gui'] = Cleaner.create_wipe_cleaner(path)
-
-        # execute
-        operations = {'_gui': ['free_disk_space']}
-        self.preview_or_run_operations(True, operations)
-
-    def quit(self, action, param):
-        sys.exit(0)
 
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""
@@ -601,46 +494,6 @@ class GUI(Gtk.ApplicationWindow):
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
 
-    def build_app_menu(self, app):
-        builder = Gtk.Builder()
-
-        builder.add_from_string(self.ui)
-
-        menu = builder.get_object('app-menu')
-        app.set_app_menu(menu)
-
-        shredFilesAction = Gio.SimpleAction.new('shredFiles', None)
-        shredFilesAction.connect('activate', self.cb_shred_file)
-        app.add_action(shredFilesAction)
-
-        shredFoldersAction = Gio.SimpleAction.new('shredFolders', None)
-        shredFoldersAction.connect('activate', self.cb_shred_folder)
-        app.add_action(shredFoldersAction)
-
-        wipeFreeSpaceAction = Gio.SimpleAction.new('wipeFreeSpace', None)
-        wipeFreeSpaceAction.connect('activate', self.cb_wipe_free_space)
-        app.add_action(wipeFreeSpaceAction)
-
-        shredQuitAction = Gio.SimpleAction.new('shredQuit', None)
-        shredQuitAction.connect('activate', self.cb_shred_quit)
-        app.add_action(shredQuitAction)
-
-        preferencesAction = Gio.SimpleAction.new('preferences', None)
-        preferencesAction.connect('activate', self.cb_preferences_dialog)
-        app.add_action(preferencesAction)
-
-        aboutAction = Gio.SimpleAction.new('about', None)
-        aboutAction.connect('activate', self.about)
-        app.add_action(aboutAction)
-
-        helpAction = Gio.SimpleAction.new('help', None)
-        helpAction.connect('activate', GuiBasic.open_url, help_contents_url, self.window)
-        app.add_action(helpAction)
-
-        quitAction = Gio.SimpleAction.new('quit', None)
-        quitAction.connect('activate', self.quit)
-        app.add_action(quitAction)
-
     def create_headerbar(self):
         """Create the headerbar"""
         hb = Gtk.HeaderBar()
@@ -680,25 +533,19 @@ class GUI(Gtk.ApplicationWindow):
 
         return hb
 
-    def create_window(self, app):
+    def populate_window(self):
         """Create the main application window"""
-        self.window = Gtk.ApplicationWindow(application=app)
-
-        self.window.resize(800, 600)
-        self.window.set_title(APP_NAME)
+        self.resize(800, 600)
         if appicon_path and os.path.exists(appicon_path):
-            self.window.set_icon_from_file(appicon_path)
-
-        # add app menu
-        self.build_app_menu(app)
+            self.set_icon_from_file(appicon_path)
 
         # add headerbar
         self.headerbar = self.create_headerbar()
-        self.window.set_titlebar(self.headerbar)
+        self.set_titlebar(self.headerbar)
 
         # split main window
         hbox = Gtk.Box(homogeneous=False)
-        self.window.add(hbox)
+        self.add(hbox)
 
         # add operations to left
         operations = self.create_operations_box()
@@ -745,7 +592,7 @@ class GUI(Gtk.ApplicationWindow):
         tt.add(style_operation)
 
         # done
-        self.window.show_all()
+        self.show_all()
         self.progressbar.hide()
         return
 
@@ -765,39 +612,6 @@ class GUI(Gtk.ApplicationWindow):
             traceback.print_exc()
             self.append_text(
                 _("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
-
-    def __init__(self, app, uac=True, shred_paths=None):
-        if uac and 'nt' == os.name and Windows.elevate_privileges():
-            # privileges escalated in other process
-            sys.exit(0)
-        import RecognizeCleanerML
-        RecognizeCleanerML.RecognizeCleanerML()
-        register_cleaners()
-        self.create_window(app)
-        if shred_paths:
-            self.shred_paths(shred_paths)
-            return
-        if options.get("first_start") and 'posix' == os.name:
-            pref = PreferencesDialog(self.window, self.cb_refresh_operations)
-            pref.run()
-            options.set('first_start', False)
-        if online_update_notification_enabled and options.get("check_online_updates"):
-            self.check_online_updates()
-        if 'nt' == os.name:
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://bleachbit.sourceforge.net/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError, e:
-                print e
-                print dir(e)
-                self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
-        if 'posix' == os.name and os.path.expanduser('~') == '/root':
-            self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
-
 
 if __name__ == '__main__':
     gui = GUI()
