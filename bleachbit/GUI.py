@@ -613,5 +613,3 @@ class GUI(Gtk.ApplicationWindow):
             self.append_text(
                 _("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
 
-if __name__ == '__main__':
-    gui = GUI()
