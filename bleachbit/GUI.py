@@ -228,7 +228,7 @@ class GUI(Gtk.ApplicationWindow):
             self.shred_paths(shred_paths)
             return
         if options.get("first_start") and 'posix' == os.name:
-            pref = PreferencesDialog(self.window)
+            pref = PreferencesDialog(self)
             pref.run()
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
@@ -345,7 +345,7 @@ class GUI(Gtk.ApplicationWindow):
         # if the option is selected under preference.
 
         if options.get("delete_confirmation"):
-            if not GuiBasic.delete_confirmation_dialog(self.window, True):
+            if not GuiBasic.delete_confirmation_dialog(self, True):
                 return
         self.preview_or_run_operations(True)
 
@@ -361,7 +361,7 @@ class GUI(Gtk.ApplicationWindow):
                 operations[operation] = self.get_operation_options(operation)
         assert(isinstance(operations, dict))
         if 0 == len(operations):
-            GuiBasic.message_dialog(self.window,
+            GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
                                     Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
             return
@@ -397,7 +397,7 @@ class GUI(Gtk.ApplicationWindow):
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
         print 'debug: elapsed time: %d seconds' % elapsed
-        if elapsed < 10 or self.window.is_active():
+        if elapsed < 10 or self.is_active():
             return
         try:
             from gi.repository import Notify
@@ -444,7 +444,7 @@ class GUI(Gtk.ApplicationWindow):
             return
 
         # delete
-        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
             self.preview_or_run_operations(True, operations)
             return
 
@@ -607,7 +607,7 @@ class GUI(Gtk.ApplicationWindow):
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
             if updates:
                 GLib.idle_add(
-                    lambda: Update.update_dialog(self.window, updates))
+                    lambda: Update.update_dialog(self, updates))
         except:
             traceback.print_exc()
             self.append_text(
