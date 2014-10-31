@@ -35,18 +35,6 @@ from Common import _, autostart_path, launcher_path
 import FileUtilities
 import General
 
-HAVE_GNOME_VFS = True
-try:
-    import gnomevfs
-except:
-    try:
-        # this is the deprecated name
-        import gnome.vfs
-    except:
-        HAVE_GNOME_VFS = False
-    else:
-        gnomevfs = gnome.vfs
-
 
 def locale_to_language(locale):
     """Convert the locale code to a language code (generally ISO 639)"""
@@ -498,11 +486,6 @@ def is_broken_xdg_desktop(pathname):
     if 'mimetype' == file_type:
         if not config.has_option('Desktop Entry', 'MimeType'):
             print "info: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
-            return True
-        mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
-        if HAVE_GNOME_VFS and 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
-            print "info: is_broken_xdg_menu: MimeType '%s' not " \
-                "registered '%s'" % (mimetype, pathname)
             return True
         return False
     if 'application' != file_type:
