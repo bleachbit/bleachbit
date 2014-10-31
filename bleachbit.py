@@ -27,22 +27,7 @@ Launcher
 import os
 import sys
 
-from gi.repository import Gio
-from gi.repository import Gtk
-from gi.repository import Gdk
-
-class Bleachbit(Gtk.Application):
-    def __init__(self):
-        Gtk.Application.__init__(self, flags=Gio.ApplicationFlags.FLAGS_NONE)
-        self.connect("activate", self.on_activate)
-        
-    def on_activate(self, data=None):
-        import bleachbit.GUI
-        gui = bleachbit.GUI.GUI(self)
-        gui.show_all()
-
-    def do_startup(self):
-        Gtk.Application.do_startup(self)
+from bleachbit.Application import Bleachbit
 
 if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
     # This path contains bleachbit/{C,G}LI.py .  This section is
