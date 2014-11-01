@@ -241,22 +241,31 @@ SectionEnd
 
 Function .onInit
 
+  ; Language display dialog
   !insertmacro MUI_LANGDLL_DISPLAY
 
-  ; uninstall old before installing new
+  ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
      "UninstallString"
 
+  ; If not already installed, skip uninstallation
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
     upgrading, or click 'Cancel' to abort the upgrade." \
+    /SD IDOK \
     IDOK uninstall_old
-    Abort
+
+  Abort
 
   uninstall_old:
-  ExecWait '$R0 _?=$INSTDIR'
+  ; If installing in silent mode, also uninstall in silent mode
+  Var /GLOBAL uninstaller_cmd
+  StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ExecWait $uninstaller_cmd
 
   new_install:
 
