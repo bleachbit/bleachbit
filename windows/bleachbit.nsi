@@ -265,7 +265,7 @@ Function .onInit
   StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ExecWait $uninstaller_cmd
+  ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
 
