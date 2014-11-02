@@ -794,6 +794,8 @@ class GUI:
                 print dir(e)
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+        if 'posix' == os.name and os.path.expanduser('~') == '/root':
+            self.append_text(_('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
 
 
 if __name__ == '__main__':
