@@ -770,6 +770,7 @@ class System(Cleaner):
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
             '^/tmp/gconfd-[^/]+/lock/ior$',
+            '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
