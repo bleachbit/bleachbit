@@ -55,7 +55,7 @@ def diagnostic_info():
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.expanduser('~') = %s" % os.path.expanduser('~')
+    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(
