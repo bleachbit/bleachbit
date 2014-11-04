@@ -67,6 +67,12 @@
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
   </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <warning>This will delete all of your saved passwords in Opera</warning>
+    <description>Delete all of your saved passwords in Opera.</description>
+    <action command="delete" search="file" path="~/.opera/wand.dat"/>
+  </option>
   <option id="search_history">
     <label>Search history</label>
     <description>Delete the search history</description>
