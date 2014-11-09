@@ -346,7 +346,7 @@ def getsize(path):
         # FindFilesW instead
         finddata = win32file.FindFilesW(path)
         if finddata == []:
-            # FindFilesW doesn't work for directories, so fallback to getsize()
+            # FindFilesW doesn't work for directories, so fall back to getsize()
             return os.path.getsize(path)
         else:
             size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
@@ -376,7 +376,7 @@ def globex(pathname, regex):
 
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
-    # In case overwritting leaves large files, placing them in
+    # In case overwriting leaves large files, placing them in
     # ~/.config makes it easy to find them and clean them.
     ret = []
     if 'posix' == os.name:
