@@ -406,25 +406,35 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_getsize(self):
         """Unit test for method getsize()"""
+        def test_getsize_helper(filename):
+            (handle, filename) = tempfile.mkstemp(filename)
+            os.write(handle, "abcdefghij" * 12345)
+            os.close(handle)
+
+            if 'nt' == os.name:
+                self.assertEqual(getsize(filename), 10 * 12345)
+            if 'posix' == os.name:
+                output = subprocess.Popen(
+                    ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
+                output = output.replace("\n", "")
+                du_size = output.split("\t")[0] + "B"
+                print "output = '%s', size='%s'" % (output, du_size)
+                du_bytes = human_to_bytes(du_size, 'du')
+                print output, du_size, du_bytes
+                self.assertEqual(getsize(filename), du_bytes)
+            delete(filename)
+
         # create regular file
-        (handle, filename) = tempfile.mkstemp("regulartest")
-        os.write(handle, "abcdefghij" * 12345)
-        os.close(handle)
+        test_getsize_helper('regulartest')
 
         if 'nt' == os.name:
-            self.assertEqual(getsize(filename), 10 * 12345)
+            # the following tests do not apply to Windows
             return
 
-        output = subprocess.Popen(
-            ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
-        output = output.replace("\n", "")
-        du_size = output.split("\t")[0] + "B"
-        print "output = '%s', size='%s'" % (output, du_size)
-        du_bytes = human_to_bytes(du_size, 'du')
-        print output, du_size, du_bytes
-        self.assertEqual(getsize(filename), du_bytes)
-
         # create a symlink
+        (handle, filename) = tempfile.mkstemp()
+        os.write(handle, "abcdefghij" * 12345)
+        os.close(handle)
         linkname = '/tmp/bleachbitsymlinktest'
         if os.path.lexists(linkname):
             delete(linkname)
