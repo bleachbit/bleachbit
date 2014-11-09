@@ -427,6 +427,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # create regular file
         test_getsize_helper('regulartest')
 
+        # special characters
+        test_getsize_helper(u'special_characters_∺ ∯')
+
         if 'nt' == os.name:
             # the following tests do not apply to Windows
             return
