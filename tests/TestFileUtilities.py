@@ -46,7 +46,7 @@ def test_ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     # create test file
-    (fd, filename) = tempfile.mkstemp()
+    (fd, filename) = tempfile.mkstemp('bleachbit-test-ini')
     os.write(fd, '#Test\n')
     os.write(fd, '[RecentsMRL]\n')
     os.write(
@@ -84,8 +84,8 @@ def test_json_helper(self, execute):
         js_fd = open(js_fn, 'r')
         return json.load(js_fd)
 
-     # create test file
-    (fd, filename) = tempfile.mkstemp()
+    # create test file
+    (fd, filename) = tempfile.mkstemp('bleachbit-test-json')
     os.write(fd, '{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
     os.close(fd)
     self.assert_(os.path.exists(filename))
@@ -425,17 +425,17 @@ class FileUtilitiesTestCase(unittest.TestCase):
             delete(filename)
 
         # create regular file
-        test_getsize_helper('regulartest')
+        test_getsize_helper('bleachbit-test-regular')
 
         # special characters
-        test_getsize_helper(u'special_characters_∺ ∯')
+        test_getsize_helper(u'bleachbit-test-special-characters-∺ ∯')
 
         if 'nt' == os.name:
             # the following tests do not apply to Windows
             return
 
         # create a symlink
-        (handle, filename) = tempfile.mkstemp()
+        (handle, filename) = tempfile.mkstemp('bleachbit-test-symlink')
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
         linkname = '/tmp/bleachbitsymlinktest'
@@ -447,7 +447,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         delete(filename)
 
         # create sparse file
-        (handle, filename) = tempfile.mkstemp("sparsetest")
+        (handle, filename) = tempfile.mkstemp("bleachbit-test-sparse")
         os.ftruncate(handle, 1000 ** 2)
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
@@ -549,7 +549,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         """Unit test for wipe_delete()"""
 
         # create test file
-        (handle, filename) = tempfile.mkstemp("wipetest")
+        (handle, filename) = tempfile.mkstemp("bleachbit-test-wipe")
         os.write(handle, "abcdefghij" * 12345)
         os.close(handle)
 
@@ -587,7 +587,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         """Unit test for wipe_name()"""
 
          # create test file with moderately long name
-        (handle, filename) = tempfile.mkstemp("wipetest" + "0" * 50)
+        (handle, filename) = tempfile.mkstemp("bleachbit-test-wipe" + "0" * 50)
         os.close(handle)
         self.wipe_name_helper(filename)
 
@@ -677,7 +677,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         if 'nt' == os.name:
             return
 
-        (handle, filename) = tempfile.mkstemp()
+        (handle, filename) = tempfile.mkstemp('bleachbit-test-open-files')
         openfiles = OpenFiles()
         self.assertTrue(openfiles.is_open(filename),
                         "Expected is_open(%s) to return True)\n"
