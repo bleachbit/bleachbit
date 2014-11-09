@@ -24,9 +24,9 @@ Test cases for module Winapp
 
 
 import os
+import shutil
 import sys
 import unittest
-
 
 sys.path.append('.')
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
@@ -241,6 +241,7 @@ class WinappTestCase(unittest.TestCase):
             self.assertEqual(test[5], os.path.exists(f2))
             self.assertEqual(test[6], os.path.exists(fbak))
             self.assertEqual(test[7], cleaner.auto_hide())
+            shutil.rmtree(dirname, True)
 
         # negative tests where the application detect believes the application
         # is absent
