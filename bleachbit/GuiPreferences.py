@@ -164,6 +164,22 @@ class PreferencesDialog:
         cb_start.set_active(options.get('auto_start'))
         cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
         vbox.pack_start(cb_start, False)
+
+        # Modification by Sunyafrigus
+        # Additional User Preference
+        # Exit After Cleaning
+        # Disable Delete Confirmation Popup
+        
+        cb_exit = gtk.CheckButton(_("Exit after Cleaning"))
+        cb_exit.set_active(options.get('exit_done'))
+        cb_exit.connect('toggled', self.__toggle_callback, 'exit_done')
+        vbox.pack_start(cb_exit, False)
+
+        cb_popup = gtk.CheckButton(_("Disable Delete Confirmation"))
+        cb_popup.set_active(options.get('no_popup'))
+        cb_popup.connect('toggled', self.__toggle_callback, 'no_popup')
+        vbox.pack_start(cb_popup, False)
+        
         return vbox
 
     def __drives_page(self):
