@@ -311,8 +311,13 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not GuiBasic.delete_confirmation_dialog(self.window, True):
-            return
+        
+        # Disable delete confirmation message.
+        # if the option is selected under preference.
+      
+        if not options.get("no_popup"):
+            if not GuiBasic.delete_confirmation_dialog(self.window, True):
+                return
         self.preview_or_run_operations(True)
 
     def preview_or_run_operations(self, really_delete, operations=None):
@@ -352,6 +357,13 @@ class GUI:
         self.progressbar.set_text(_("Done."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
+        
+        # Close the program after cleaning is completed.
+        # if the option is selected under preference.
+        
+        if really_delete:
+            if options.get("exit_done"):
+                sys.exit()
 
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
