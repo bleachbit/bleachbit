@@ -54,8 +54,8 @@
   </option>
   <option id="passwords">
     <label>Passwords</label>
-    <warning>This option will delete your saved passwords.</warning>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="glob" path="$APPDATA\Thunderbird\Profiles\????????.default\signons.sqlite"/>
     <!-- Fedora 11 Thunderbird 3.0 has ~/.thunderbird/default/????????.slt/ -->
     <action command="delete" search="glob" path="~/.thunderbird/default/????????.slt/signons.sqlite"/>
