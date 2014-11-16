@@ -116,7 +116,7 @@ def delete_confirmation_dialog(parent, mention_preview):
                         destroy_with_parent=True)
     dialog.set_default_size(300, -1)
 
-    hbox = Gtk.HBox(homogeneous=False, spacing=10)
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=False, spacing=10)
     if mention_preview:
         question_text = _(
             "Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
@@ -127,8 +127,8 @@ def delete_confirmation_dialog(parent, mention_preview):
     question = Gtk.Label(label=question_text)
     question.set_line_wrap(True)
     hbox.pack_start(question, False, True, 0)
-    dialog.vbox.pack_start(hbox, False, True, 0)
-    dialog.vbox.set_spacing(10)
+    dialog.get_content_area().pack_start(hbox, False, True, 0)
+    dialog.get_content_area().set_spacing(10)
 
     dialog.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
     dialog.add_button(_('_Delete'), Gtk.ResponseType.ACCEPT)

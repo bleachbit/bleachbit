@@ -527,7 +527,7 @@ class GUI:
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.add(textview)
-        dialog.vbox.pack_start(swindow, True, True, 0)
+        dialog.get_content_area().pack_start(swindow, True, True, 0)
         dialog.add_buttons(
             _('_Copy'), 100, _('_Close'), Gtk.ResponseType.CLOSE)
         dialog.show_all()
@@ -776,7 +776,7 @@ class GUI:
         self.window.set_title(APP_NAME)
         if appicon_path and os.path.exists(appicon_path):
             self.window.set_icon_from_file(appicon_path)
-        vbox = Gtk.VBox()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.window.add(vbox)
 
         # add menubar
@@ -787,7 +787,7 @@ class GUI:
         vbox.pack_start(self.toolbar, False, True, 0)
 
         # split main window
-        hbox = Gtk.HBox(homogeneous=False, spacing=10)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,homogeneous=False, spacing=10)
         vbox.pack_start(hbox, True, True, 0)
 
         # add operations to left
@@ -795,7 +795,7 @@ class GUI:
         hbox.pack_start(operations, False, True, 0)
 
         # create the right side of the window
-        right_box = Gtk.VBox()
+        right_box = Gtk.Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.progressbar = Gtk.ProgressBar()
         right_box.pack_start(self.progressbar, False, True, 0)
 
