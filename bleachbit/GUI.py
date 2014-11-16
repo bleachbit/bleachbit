@@ -795,7 +795,7 @@ class GUI:
         hbox.pack_start(operations, False, True, 0)
 
         # create the right side of the window
-        right_box = Gtk.Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.progressbar = Gtk.ProgressBar()
         right_box.pack_start(self.progressbar, False, True, 0)
 
