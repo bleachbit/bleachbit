@@ -201,7 +201,6 @@ class Options:
         self.__set_default("shred", False)
         self.__set_default("exit_done", False)
         self.__set_default("no_popup", False)
-
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
 
