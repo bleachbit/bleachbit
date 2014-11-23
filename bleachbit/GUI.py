@@ -362,20 +362,19 @@ class GUI:
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
-        global stop_now
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
         if not stop_now:
             self.progressbar.set_text(_("Done."))
         else:
             self.progressbar.set_text(_("Stopped."))
-            stop_now = False
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
         
         # Close the program after cleaning is completed.
-        # if the option is selected under preference.     
-        if really_delete and stop_now:
+        # if the option is selected under preference.
+        print stop_now      
+        if really_delete and not stop_now:
             if options.get("exit_done"):
                 sys.exit()
 
