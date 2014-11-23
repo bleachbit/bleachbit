@@ -38,7 +38,7 @@ class Worker:
 
     """Perform the preview or delete operations"""
 
-    def __init__(self, ui, really_delete, operations, stop_now):
+    def __init__(self, ui, really_delete, operations):
         """Create a Worker
 
         ui: an instance with methods
@@ -54,7 +54,6 @@ class Worker:
         self.really_delete = really_delete
         assert(isinstance(operations, dict))
         self.operations = operations
-        self.stop_now = stop_now
         self.total_bytes = 0
         self.total_deleted = 0
         self.total_errors = 0
@@ -78,89 +77,87 @@ class Worker:
 
     def execute(self, cmd):
         """Execute or preview the command"""
-        if not self.stop_now:
-			ret = None
-			try:
-				for ret in cmd.execute(self.really_delete):
-					if True == ret or isinstance(ret, tuple):
-						# Temporarily pass control to the GTK idle loop,
-						# allow user to abort, and
-						# display progress (if applicable).
-						yield ret
-			except SystemExit:
-				pass
-			except Exception, e:
-				# 2 = does not exist
-				# 13 = permission denied
-				from errno import ENOENT, EACCES
-				if not (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
-					traceback.print_exc()
-				line = "%s\n" % (str(sys.exc_info()[1]))
-				self.total_errors += 1
-				self.ui.append_text(line, 'error')
-			else:
-				if None == ret:
-					return
-				if isinstance(ret['size'], (int, long)):
-					size = FileUtilities.bytes_to_human(ret['size'])
-					self.total_bytes += ret['size']
-				else:
-					size = "?B"
-				if ret['path']:
-					path = ret['path']
-				else:
-					path = ''
-				path = path.decode('utf8', 'replace')  # for invalid encoding
-				line = u"%s %s %s\n" % (ret['label'], size, path)
-				self.total_deleted += ret['n_deleted']
-				self.total_special += ret['n_special']
-				self.ui.append_text(line)
+        ret = None
+        try:
+            for ret in cmd.execute(self.really_delete):
+                if True == ret or isinstance(ret, tuple):
+                    # Temporarily pass control to the GTK idle loop,
+                    # allow user to abort, and
+                    # display progress (if applicable).
+                    yield ret
+        except SystemExit:
+            pass
+        except Exception, e:
+            # 2 = does not exist
+            # 13 = permission denied
+            from errno import ENOENT, EACCES
+            if not (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
+                traceback.print_exc()
+            line = "%s\n" % (str(sys.exc_info()[1]))
+            self.total_errors += 1
+            self.ui.append_text(line, 'error')
+        else:
+            if None == ret:
+                return
+            if isinstance(ret['size'], (int, long)):
+                size = FileUtilities.bytes_to_human(ret['size'])
+                self.total_bytes += ret['size']
+            else:
+                size = "?B"
+            if ret['path']:
+                path = ret['path']
+            else:
+                path = ''
+            path = path.decode('utf8', 'replace')  # for invalid encoding
+            line = u"%s %s %s\n" % (ret['label'], size, path)
+            self.total_deleted += ret['n_deleted']
+            self.total_special += ret['n_special']
+            self.ui.append_text(line)
 
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
-        if not self.stop_now:
-			operation_options = self.operations[operation]
-			assert(isinstance(operation_options, list))
-			print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
+        operation_options = self.operations[operation]
+        assert(isinstance(operation_options, list))
+        print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
 
-			if not operation_options:
-				raise StopIteration
+        if not operation_options:
+            raise StopIteration
 
-			if self.really_delete and backends[operation].is_running():
-				# TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-				err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
-					% backends[operation].get_name()
-				self.ui.append_text(err + "\n", 'error')
-				self.total_errors += 1
-				return
-			import time
-			self.yield_time = time.time()
-						
-			for option_id in operation_options:
-				assert(isinstance(option_id, (str, unicode)))
-				# normal scan
-				for cmd in backends[operation].get_commands(option_id):
-					for ret in self.execute(cmd):
-						if True == ret:
-							# Return control to PyGTK idle loop to keep
-							# it responding allow the user to abort
-							self.yield_time = time.time()
-							yield True
-					if time.time() - self.yield_time > 0.25:
-						if self.really_delete:
-							self.ui.update_total_size(self.total_bytes)
-						yield True
-						self.yield_time = time.time()
-				# deep scan
-				for ds in backends[operation].get_deep_scan(option_id):
-					if '' == ds['path']:
-						ds['path'] = os.path.expanduser('~')
-					if 'delete' != ds['command']:
-						raise NotImplementedError(
-							'Deep scan only supports deleting now')
-					if not self.deepscans.has_key(ds['path']):
-						self.deepscans[ds['path']] = []
-					self.deepscans[ds['path']].append(ds)
+        if self.really_delete and backends[operation].is_running():
+            # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+            err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
+                % backends[operation].get_name()
+            self.ui.append_text(err + "\n", 'error')
+            self.total_errors += 1
+            return
+        import time
+        self.yield_time = time.time()
+
+        for option_id in operation_options:
+            assert(isinstance(option_id, (str, unicode)))
+            # normal scan
+            for cmd in backends[operation].get_commands(option_id):
+                for ret in self.execute(cmd):
+                    if True == ret:
+                        # Return control to PyGTK idle loop to keep
+                        # it responding allow the user to abort
+                        self.yield_time = time.time()
+                        yield True
+                if time.time() - self.yield_time > 0.25:
+                    if self.really_delete:
+                        self.ui.update_total_size(self.total_bytes)
+                    yield True
+                    self.yield_time = time.time()
+            # deep scan
+            for ds in backends[operation].get_deep_scan(option_id):
+                if '' == ds['path']:
+                    ds['path'] = os.path.expanduser('~')
+                if 'delete' != ds['command']:
+                    raise NotImplementedError(
+                        'Deep scan only supports deleting now')
+                if not self.deepscans.has_key(ds['path']):
+                    self.deepscans[ds['path']] = []
+                self.deepscans[ds['path']].append(ds)
 
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""

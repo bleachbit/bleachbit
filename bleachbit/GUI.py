@@ -7,7 +7,7 @@
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3  the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -26,7 +26,6 @@ import time
 import traceback
 import types
 import warnings
-from Options import options
 
 warnings.simplefilter('error')
 import pygtk
@@ -44,8 +43,6 @@ from Options import options
 import Cleaner
 import FileUtilities
 import GuiBasic
-
-stop_now = False
 
 if 'nt' == os.name:
     import Windows
@@ -322,16 +319,10 @@ class GUI:
             if not GuiBasic.delete_confirmation_dialog(self.window, True):
                 return
         self.preview_or_run_operations(True)
-		
-    def run_operations_stop(self, __widget):
-        global stop_now
-        stop_now = True
-        self.preview_or_run_operations(True)
-				
+
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
-        global stop_now
-		
+
         assert(isinstance(really_delete, bool))
         import Worker
         self.start_time = None
@@ -346,35 +337,31 @@ class GUI:
                                     gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
             return
         try:
-			self.set_sensitive(True)
-			self.textbuffer.set_text("")
-			self.progressbar.show()
-			self.worker = Worker.Worker(self, really_delete, operations ,stop_now)
-                
+            self.set_sensitive(False)
+            self.textbuffer.set_text("")
+            self.progressbar.show()
+            self.worker = Worker.Worker(self, really_delete, operations)
         except:
-			traceback.print_exc()
-			err = str(sys.exc_info()[1])
-			self.append_text(err + "\n", 'error')
+            traceback.print_exc()
+            err = str(sys.exc_info()[1])
+            self.append_text(err + "\n", 'error')
         else:
-			self.start_time = time.time()
-			worker = self.worker.run()
-			gobject.idle_add(worker.next)
+            self.start_time = time.time()
+            worker = self.worker.run()
+            gobject.idle_add(worker.next)
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
-        if not stop_now:
-            self.progressbar.set_text(_("Done."))
-        else:
-            self.progressbar.set_text(_("Stopped."))
+        self.progressbar.set_text(_("Done."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
         
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
-        print stop_now      
-        if really_delete and not stop_now:
+        
+        if really_delete:
             if options.get("exit_done"):
                 sys.exit()
 
@@ -492,7 +479,6 @@ class GUI:
         if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
             self.preview_or_run_operations(True, operations)
             return
-			
 
     def cb_shred_file(self, action):
         """Callback for shredding a file or folder"""
@@ -593,12 +579,6 @@ class GUI:
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
-		
-		# TRANSLATORS: this is the context menu
-        stop_item = gtk.MenuItem(_("Stop"))
-        stop_item.connect('activate', self.cb_run_option,
-                           True, cleaner_id, option_id)
-        menu.append(stop_item)
 
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
@@ -707,20 +687,6 @@ class GUI:
         toolbar.insert(run_button, -1)
         run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
-        run_button.set_is_important(True)
-		
-		# create the stop 
-        icon = gtk.Image()
-        icon.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_LARGE_TOOLBAR)
-        # TRANSLATORS: This is the clean button on the main window.
-        # It makes permanent changes: usually deleting files, sometimes
-        # altering them.
-        run_button = gtk.ToolButton(
-            icon_widget=icon, label=_p("button", "Stop!"))
-        run_button.connect("clicked", self.run_operations_stop)  
-        toolbar.insert(run_button, -1)
-        run_button.set_tooltip_text(
-            _("STOP the running operations"))
         run_button.set_is_important(True)
 
         return toolbar
