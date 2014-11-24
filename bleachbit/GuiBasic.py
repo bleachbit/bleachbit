@@ -116,7 +116,7 @@ def delete_confirmation_dialog(parent, mention_preview):
                         destroy_with_parent=True)
     dialog.set_default_size(300, -1)
 
-    hbox = Gtk.HBox(homogeneous=False, spacing=10)
+    hbox = Gtk.Box(homogeneous=False, spacing=10)
     if mention_preview:
         question_text = _(
             "Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
@@ -155,7 +155,7 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
     return resp
 
 
-def open_url(url, parent_window=None, prompt=True):
+def open_url(self, action, url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
     # drop privileges so the web browser is running as a normal process
     if 'posix' == os.name and 0 == os.getuid():

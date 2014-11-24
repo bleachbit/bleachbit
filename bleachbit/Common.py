@@ -58,23 +58,6 @@ else:
     bleachbit_exe_path = os.path.dirname(
         unicode(__file__, sys.getfilesystemencoding()))
 
-# license
-license_filename = None
-license_filenames = ('/usr/share/common-licenses/GPL-3',  # Debian, Ubuntu
-                     os.path.join(
-                         bleachbit_exe_path, 'COPYING'),  # Microsoft Windows
-                     '/usr/share/doc/bleachbit-' + APP_VERSION +
-                     '/COPYING',  # CentOS, Fedora, RHEL
-                     '/usr/share/doc/packages/bleachbit/COPYING',
-                     # OpenSUSE 11.1
-                     '/usr/share/doc/bleachbit/COPYING',  # Mandriva
-                     '/usr/pkg/share/doc/bleachbit/COPYING',  # NetBSD 5
-                     '/usr/share/licenses/common/GPL3/license.txt')  # Arch Linux
-for lf in license_filenames:
-    if os.path.exists(lf):
-        license_filename = lf
-        break
-
 # configuration
 portable_mode = False
 options_dir = None
@@ -243,7 +226,5 @@ _p = lambda msgctxt, msgid: pgettext(msgctxt, msgid)
 
 base_url = "http://bleachbit.sourceforge.net"
 help_contents_url = "%s/link.php?version=%s&lang=%s&target=help" \
-    % (base_url, APP_VERSION, user_locale)
-release_notes_url = "%s/link.php?version=%s&lang=%s&target=release_notes" \
     % (base_url, APP_VERSION, user_locale)
 update_check_url = "%s/communicate.php" % base_url
