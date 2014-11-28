@@ -93,7 +93,7 @@ class TreeInfoModel:
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
             if not c_value and options.get('auto_hide') \
-                and backends[key].auto_hide():
+                    and backends[key].auto_hide():
                 print "info: automatically hiding cleaner '%s'" % (c_id)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
@@ -311,10 +311,10 @@ class GUI:
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        
+
         # Disable delete confirmation message.
         # if the option is selected under preference.
-      
+
         if not options.get("no_delete_confirmation"):
             if not GuiBasic.delete_confirmation_dialog(self.window, True):
                 return
@@ -357,10 +357,10 @@ class GUI:
         self.progressbar.set_text(_("Done."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
-        
+
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
-        
+
         if really_delete:
             if options.get("exit_done"):
                 sys.exit()
@@ -807,7 +807,8 @@ class GUI:
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
         if 'posix' == os.name and os.path.expanduser('~') == '/root':
-            self.append_text(_('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
+            self.append_text(
+                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
 
 
 if __name__ == '__main__':
