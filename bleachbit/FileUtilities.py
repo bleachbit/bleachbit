@@ -601,7 +601,6 @@ def wipe_inodes(pathname, idle=False):
 
     # clean up
     files_len_original = len(files)
-    files_remaining = len(files)
     print 'info: deleting %d empty files' % files_len_original
     for f in files:
         try:
@@ -611,7 +610,6 @@ def wipe_inodes(pathname, idle=False):
                 print 'warning: could not delete empty file %s' % f
             else:
                 print 'warning: exception deleting empty file %s' % f
-        files_remaining = - 1
         if idle and (time.time() - last_idle) > 2:
             percent_done = 1.0 * \
                 (files_len_original - len(files)) / files_len_original
@@ -665,7 +663,6 @@ def wipe_path(pathname, idle=False):
         # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
         maxlen = 245
         f = None
-        i = 0
         while True:
             try:
                 kwargs = {
