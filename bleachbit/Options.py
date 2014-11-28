@@ -36,7 +36,7 @@ if 'nt' == os.name:
 
 
 boolean_keys = ['auto_hide', 'auto_start', 'check_beta',
-                'check_online_updates', 'first_start', 'shred','exit_done','no_popup']
+                'check_online_updates', 'first_start', 'shred','exit_done','no_delete_confirmation']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
 
@@ -200,7 +200,7 @@ class Options:
         self.__set_default("check_online_updates", True)
         self.__set_default("shred", False)
         self.__set_default("exit_done", False)
-        self.__set_default("no_popup", False)
+        self.__set_default("no_delete_confirmation", False)
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)

@@ -175,8 +175,8 @@ class PreferencesDialog:
         # Disable delete confirmation message.
 
         cb_popup = gtk.CheckButton(_("Disable Delete Confirmation"))
-        cb_popup.set_active(options.get('no_popup'))
-        cb_popup.connect('toggled', self.__toggle_callback, 'no_popup')
+        cb_popup.set_active(options.get('no_delete_confirmation'))
+        cb_popup.connect('toggled', self.__toggle_callback, 'no_delete_confirmation')
         vbox.pack_start(cb_popup, False)
         
         return vbox

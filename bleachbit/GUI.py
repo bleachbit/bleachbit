@@ -315,7 +315,7 @@ class GUI:
         # Disable delete confirmation message.
         # if the option is selected under preference.
       
-        if not options.get("no_popup"):
+        if not options.get("no_delete_confirmation"):
             if not GuiBasic.delete_confirmation_dialog(self.window, True):
                 return
         self.preview_or_run_operations(True)
