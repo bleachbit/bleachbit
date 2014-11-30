@@ -165,16 +165,14 @@ class PreferencesDialog:
         cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
         vbox.pack_start(cb_start, False)
 
-        # Close the Program after cleaning is complete.
-
+        # Close the application after cleaning is complete.
         cb_exit = gtk.CheckButton(_("Exit after cleaning"))
         cb_exit.set_active(options.get('exit_done'))
         cb_exit.connect('toggled', self.__toggle_callback, 'exit_done')
         vbox.pack_start(cb_exit, False)
 
         # Disable delete confirmation message.
-
-        cb_popup = gtk.CheckButton(_("Delete confirmation"))
+        cb_popup = gtk.CheckButton(_("Confirm before delete"))
         cb_popup.set_active(options.get('delete_confirmation'))
         cb_popup.connect(
             'toggled', self.__toggle_callback, 'delete_confirmation')
