@@ -27,6 +27,8 @@ Launcher
 import os
 import sys
 
+from bleachbit.Application import Bleachbit
+
 if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
     # This path contains bleachbit/{C,G}LI.py .  This section is
     # unnecessary if installing BleachBit in site-packages.
@@ -34,12 +36,9 @@ if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
 
 
 if 1 == len(sys.argv):
-    from gi.repository import Gtk
-    from gi.repository import Gdk
-
-    import bleachbit.GUI
-    gui = bleachbit.GUI.GUI()
-    Gtk.main()
+    app = Bleachbit()
+    exit_status = app.run(sys.argv)
+    sys.exit(exit_status)
 else:
     import bleachbit.CLI
     bleachbit.CLI.process_cmd_line()

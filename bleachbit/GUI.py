@@ -35,9 +35,8 @@ from gi.repository import Gio
 from gi.repository import GdkPixbuf
 warnings.simplefilter('default')
 
-from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
-    help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url, portable_mode
+from Common import _, _p, APP_NAME, appicon_path, \
+    options_file, online_update_notification_enabled
 from Cleaner import backends, register_cleaners
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -123,6 +122,9 @@ class TreeDisplayModel:
         """Create and return a TreeView object"""
         self.view = Gtk.TreeView.new_with_model(model)
 
+        # hide headers
+        self.view.set_headers_visible(False)
+
         # listen for right click (context menu)
         self.view.connect("button_press_event", context_menu_event)
 
@@ -206,150 +208,57 @@ class TreeDisplayModel:
         return
 
 
-class GUI:
+class GUI(Gtk.ApplicationWindow):
 
     """The main application GUI"""
 
-    ui = \
-        '''
-<interface>
-  <object class="GtkMenuBar" id="MenuBar">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="menuitem1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_File</property>
-        <property name="use_underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Shred Files</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onShredFiles" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Sh_red Folders</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onShredFolders" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Wipe Free Space</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onWipeFreeSpace" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">S_hred Settings and Quit</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onShredQuit" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Quit</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onQuit" swapped="no"/>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit</property>
-        <property name="use_underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="menuitem3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Preferences</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onPreferencesDialog" swapped="no"/>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Help</property>
-        <property name="use_underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="imagemenuitem10">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Help Contents</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onHelpContents" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="menuitem6">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Release Notes</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onReleaseNotes" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="menuitem5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_System Information</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onSystemInformation" swapped="no"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="menuitem7">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_About</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="onAbout" swapped="no"/>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-  </object>
-</interface>'''
+    def __init__(self, app, uac=True, shred_paths=None):
+        Gtk.Window.__init__(self, title=APP_NAME, application=app)
+        if uac and 'nt' == os.name and Windows.elevate_privileges():
+            # privileges escalated in other process
+            sys.exit(0)
+
+        import RecognizeCleanerML
+        RecognizeCleanerML.RecognizeCleanerML()
+        register_cleaners()
+
+        self.populate_window()
+
+        if shred_paths:
+            self.shred_paths(shred_paths)
+            return
+        if options.get("first_start") and 'posix' == os.name:
+            pref = PreferencesDialog(self)
+            pref.run()
+            options.set('first_start', False)
+        if online_update_notification_enabled and options.get("check_online_updates"):
+            self.check_online_updates()
+        if 'nt' == os.name:
+            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+            # http://bleachbit.sourceforge.net/forum/074-fails-errors
+            try:
+                import sqlite3
+            except ImportError, e:
+                print e
+                print dir(e)
+                self.append_text(
+                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+
+    def shred_paths(self, paths):
+        """Shred file or folders"""
+        # create a temporary cleaner object
+        backends['_gui'] = Cleaner.create_simple_cleaner(paths)
+
+        # preview and confirm
+        operations = {'_gui': ['files']}
+        self.preview_or_run_operations(False, operations)
+
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+            # delete
+            self.preview_or_run_operations(True, operations)
+            return True
+        return False
 
     def append_text(self, text, tag=None, __iter=None):
         """Add some text to the main log"""
@@ -383,7 +292,7 @@ class GUI:
         self.append_text(name + "\n", 'operation')
         if not description:
             description = ""
-        self.append_text(description + "\n\n\n")
+        self.append_text(description + "\n\n\n", 'description')
         for (label, description) in backends[cleaner_id].get_option_descriptions():
             self.append_text(label, 'option_label')
             if description:
@@ -425,13 +334,13 @@ class GUI:
 
     def set_sensitive(self, true):
         """Disable commands while an operation is running"""
-        self.toolbar.set_sensitive(true)
+        self.headerbar.set_sensitive(true)
         self.view.set_sensitive(true)
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-        if not GuiBasic.delete_confirmation_dialog(self.window, True):
+        if not GuiBasic.delete_confirmation_dialog(self, True):
             return
         self.preview_or_run_operations(True)
 
@@ -447,7 +356,7 @@ class GUI:
                 operations[operation] = self.get_operation_options(operation)
         assert(isinstance(operations, dict))
         if 0 == len(operations):
-            GuiBasic.message_dialog(self.window,
+            GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
                                     Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
             return
@@ -476,7 +385,7 @@ class GUI:
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
         print 'debug: elapsed time: %d seconds' % elapsed
-        if elapsed < 10 or self.window.is_active():
+        if elapsed < 10 or self.is_active():
             return
         try:
             from gi.repository import Notify
@@ -489,57 +398,6 @@ class GUI:
                 notify.show()
                 notify.set_timeout(10000)
 
-    def about(self, __event):
-        """Create and show the about dialog"""
-        dialog = Gtk.AboutDialog()
-        dialog.set_comments(_("Program to clean unnecessary files"))
-        dialog.set_copyright("Copyright (C) 2014 Andrew Ziem")
-        try:
-            dialog.set_license(open(license_filename).read())
-        except:
-            dialog.set_license(
-                _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
-        dialog.set_name(APP_NAME)
-        # TRANSLATORS: Maintain the names of translators here.
-        # Launchpad does this automatically for translations
-        # typed in Launchpad. This is a special string shown
-        # in the 'About' box.
-        dialog.set_translator_credits(_("translator-credits"))
-        dialog.set_version(APP_VERSION)
-        dialog.set_website(APP_URL)
-        dialog.set_transient_for(self.window)
-        if appicon_path and os.path.exists(appicon_path):
-            icon = GdkPixbuf.Pixbuf.new_from_file(appicon_path)
-            dialog.set_logo(icon)
-        dialog.run()
-        dialog.hide()
-
-    def diagnostic_dialog(self, parent):
-        """Show diagnostic information"""
-        dialog = Gtk.Dialog(title=_("System information"), transient_for=parent)
-        dialog.resize(600, 400)
-        txtbuffer = Gtk.TextBuffer()
-        import Diagnostic
-        txt = Diagnostic.diagnostic_info()
-        txtbuffer.set_text(txt)
-        textview = Gtk.TextView.new_with_buffer(txtbuffer)
-        textview.set_editable(False)
-        swindow = Gtk.ScrolledWindow()
-        swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        swindow.add(textview)
-        dialog.get_content_area().pack_start(swindow, True, True, 0)
-        dialog.add_buttons(
-            _('_Copy'), 100, _('_Close'), Gtk.ResponseType.CLOSE)
-        dialog.show_all()
-        while True:
-            rc = dialog.run()
-            if 100 == rc:
-                clipboard = Gtk.clipboard_get()
-                clipboard.set_text(txt)
-            else:
-                break
-        dialog.hide()
-
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
         scrolled_window = Gtk.ScrolledWindow()
@@ -548,15 +406,10 @@ class GUI:
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
         self.view = display.make_view(
-            mdl, self.window, self.context_menu_event)
+            mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrolled_window.add(self.view)
         return scrolled_window
-
-    def cb_preferences_dialog(self, action):
-        """Callback for preferences dialog"""
-        pref = PreferencesDialog(self.window)
-        pref.run()
 
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
@@ -579,78 +432,9 @@ class GUI:
             return
 
         # delete
-        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
             self.preview_or_run_operations(True, operations)
             return
-
-    def cb_shred_file(self, action):
-        """Callback for shredding a file or folder"""
-
-        # get list of files
-        if 'ShredFiles' == action:
-            paths = GuiBasic.browse_files(self.window,
-                                          _("Choose files to shred"))
-        elif 'ShredFolders' == action:
-            paths = GuiBasic.browse_folder(self.window,
-                                           _("Choose folder to shred"),
-                                           multiple=True,
-                                           stock_button=_('_Delete'))
-        else:
-            raise RuntimeError("Unexpected kind in cb_shred_file")
-
-        if not paths:
-            return
-
-        self.shred_paths(paths)
-
-    def shred_paths(self, paths):
-        """Shred file or folders"""
-        # create a temporary cleaner object
-        backends['_gui'] = Cleaner.create_simple_cleaner(paths)
-
-        # preview and confirm
-        operations = {'_gui': ['files']}
-        self.preview_or_run_operations(False, operations)
-
-        if GuiBasic.delete_confirmation_dialog(self.window, mention_preview=False):
-            # delete
-            self.preview_or_run_operations(True, operations)
-            return True
-        return False
-
-    def cb_shred_quit(self, action):
-        """Shred settings (for privacy reasons) and quit"""
-        paths = []
-        if portable_mode:
-            # in portable mode on Windows, the options directory includes
-            # executables
-            paths.append(options_file)
-        else:
-            paths.append(options_dir)
-
-        if not self.shred_paths(paths):
-            # aborted
-            return
-
-        if portable_mode:
-            open(options_file, 'w').write('[Portable]\n')
-
-        Gtk.main_quit()
-
-    def cb_wipe_free_space(self, action):
-        """callback to wipe free space in arbitrary folder"""
-        path = GuiBasic.browse_folder(self.window,
-                                      _("Choose a folder"),
-                                      multiple=False, stock_button=_('_OK'))
-        if not path:
-            # user cancelled
-            return
-
-        backends['_gui'] = Cleaner.create_wipe_cleaner(path)
-
-        # execute
-        operations = {'_gui': ['free_disk_space']}
-        self.preview_or_run_operations(True, operations)
 
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""
@@ -673,12 +457,12 @@ class GUI:
         # make a menu
         menu = Gtk.Menu()
         # TRANSLATORS: this is the context menu
-        preview_item = Gtk.MenuItem(_("Preview"))
+        preview_item = Gtk.MenuItem(label=_("Preview"))
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
         # TRANSLATORS: this is the context menu
-        clean_item = Gtk.MenuItem(_("Clean"))
+        clean_item = Gtk.MenuItem(label=_("Clean"))
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -686,7 +470,7 @@ class GUI:
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
         menu.show_all()
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
         return True
 
     def update_progress_bar(self, status):
@@ -698,97 +482,58 @@ class GUI:
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
 
-    def update_total_size(self, bytes_removed):
-        """Callback to update the total size cleaned"""
-        context_id = self.status_bar.get_context_id('size')
-        text = FileUtilities.bytes_to_human(bytes_removed)
-        if 0 == bytes_removed:
-            text = ""
-        self.status_bar.push(context_id, text)
+    def create_headerbar(self):
+        """Create the headerbar"""
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = APP_NAME
 
-    def create_menubar(self):
-        """Create the menu bar (file, help)"""
-        # Create a UIManager instance
-        builder = Gtk.Builder()
-        handlers = {
-            "onShredFiles": lambda shred_files: self.cb_shred_file('ShredFiles'),
-            "onShredFolders": lambda shred_folders: self.cb_shred_file('ShredFolders'),
-            "onWipeFreeSpace": self.cb_wipe_free_space,
-            "onShredQuit": self.cb_shred_quit,
-            "onQuit": Gtk.main_quit,
-            "onPreferencesDialog": self.cb_preferences_dialog,
-            "onHelpContents": lambda link: GuiBasic.open_url(help_contents_url, self.window),
-            "onReleaseNotes": lambda link: GuiBasic.open_url(release_notes_url, self.window),
-            "onSystemInformation": lambda dialog: self.diagnostic_dialog(self.window),
-            "onAbout": self.about
-        }
-
-        # Add a UI description
-        builder.add_from_string(self.ui)
-        builder.connect_signals(handlers)
-
-        # Create a MenuBar
-        menubar = builder.get_object('MenuBar')
-        return menubar
-
-    def create_toolbar(self):
-        """Create the toolbar"""
-        toolbar = Gtk.Toolbar()
+        box = Gtk.Box()
+        Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
         # create the preview button
-        preview_icon = Gtk.Image()
-        preview_icon.set_from_icon_name(
-            'edit-find', Gtk.IconSize.LARGE_TOOLBAR)
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
-        preview_button = Gtk.ToolButton(
-            icon_widget=preview_icon, label=_p('button', "Preview"))
-        preview_button.connect(
-            "clicked", lambda *dummy: self.preview_or_run_operations(False))
-        toolbar.insert(preview_button, -1)
+        preview_button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="edit-find-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        preview_button.add(image)
         preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
-        preview_button.set_is_important(True)
+        preview_button.connect(
+            "clicked", lambda *dummy: self.preview_or_run_operations(False))
+        box.add(preview_button)
 
         # create the delete button
-        icon = Gtk.Image()
-        icon.set_from_icon_name('edit-delete', Gtk.IconSize.LARGE_TOOLBAR)
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
-        run_button = Gtk.ToolButton(
-            icon_widget=icon, label=_p("button", "Clean"))
-        run_button.connect("clicked", self.run_operations)
-        toolbar.insert(run_button, -1)
+        run_button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="edit-clear-all-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        run_button.add(image)
         run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
-        run_button.set_is_important(True)
+        run_button.connect("clicked", self.run_operations)
+        box.add(run_button)
 
-        return toolbar
+        hb.pack_start(box)
 
-    def create_window(self):
+        return hb
+
+    def populate_window(self):
         """Create the main application window"""
-
-        self.window = Gtk.Window()
-        self.window.connect('destroy', lambda w: Gtk.main_quit())
-
-        self.window.resize(800, 600)
-        self.window.set_title(APP_NAME)
+        self.resize(800, 600)
         if appicon_path and os.path.exists(appicon_path):
-            self.window.set_icon_from_file(appicon_path)
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.window.add(vbox)
+            self.set_icon_from_file(appicon_path)
 
-        # add menubar
-        vbox.pack_start(self.create_menubar(), False, True, 0)
-
-        # add toolbar
-        self.toolbar = self.create_toolbar()
-        vbox.pack_start(self.toolbar, False, True, 0)
+        # add headerbar
+        self.headerbar = self.create_headerbar()
+        self.set_titlebar(self.headerbar)
 
         # split main window
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,homogeneous=False, spacing=10)
-        vbox.pack_start(hbox, True, True, 0)
+        hbox = Gtk.Box(homogeneous=False)
+        self.add(hbox)
 
         # add operations to left
         operations = self.create_operations_box()
@@ -803,6 +548,7 @@ class GUI:
         self.textbuffer = Gtk.TextBuffer()
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        swindow.set_property('expand', True)
         self.textview = Gtk.TextView.new_with_buffer(self.textbuffer)
         self.textview.set_editable(False)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
@@ -816,22 +562,25 @@ class GUI:
         style_operation = Gtk.TextTag.new('operation')
         style_operation.set_property('size-points', 14)
         style_operation.set_property('weight', 700)
+        style_operation.set_property('pixels-above-lines', 10)
+        style_operation.set_property('justification', Gtk.Justification.CENTER)
         tt.add(style_operation)
+
+        style_description = Gtk.TextTag.new('description')
+        style_description.set_property('justification', Gtk.Justification.CENTER)
+        tt.add(style_description)
 
         style_option_label = Gtk.TextTag.new('option_label')
         style_option_label.set_property('weight', 700)
+        style_option_label.set_property('left-margin', 20)
         tt.add(style_option_label)
 
         style_operation = Gtk.TextTag.new('error')
         style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
 
-        # add status bar
-        self.status_bar = Gtk.Statusbar()
-        vbox.pack_start(self.status_bar, False, True, 0)
-
         # done
-        self.window.show_all()
+        self.show_all()
         self.progressbar.hide()
         return
 
@@ -846,42 +595,8 @@ class GUI:
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
             if updates:
                 GLib.idle_add(
-                    lambda: Update.update_dialog(self.window, updates))
+                    lambda: Update.update_dialog(self, updates))
         except:
             traceback.print_exc()
             self.append_text(
                 _("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
-
-    def __init__(self, uac=True, shred_paths=None):
-        if uac and 'nt' == os.name and Windows.elevate_privileges():
-            # privileges escalated in other process
-            sys.exit(0)
-        import RecognizeCleanerML
-        RecognizeCleanerML.RecognizeCleanerML()
-        register_cleaners()
-        self.create_window()
-        if shred_paths:
-            self.shred_paths(shred_paths)
-            return
-        if options.get("first_start") and 'posix' == os.name:
-            pref = PreferencesDialog(self.window)
-            pref.run()
-            options.set('first_start', False)
-        if online_update_notification_enabled and options.get("check_online_updates"):
-            self.check_online_updates()
-        if 'nt' == os.name:
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://bleachbit.sourceforge.net/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError, e:
-                print e
-                print dir(e)
-                self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
-
-
-if __name__ == '__main__':
-    gui = GUI()
-    Gtk.main()

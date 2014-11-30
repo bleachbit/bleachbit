@@ -116,7 +116,7 @@ class PreferencesDialog:
                 _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
             vbox.pack_start(cb_updates, False, True, 0)
 
-            updates_box = Gtk.VBox()
+            updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             updates_box.set_border_width(10)
 
             self.cb_beta = Gtk.CheckButton.new_with_label(_("Check for new beta releases"))
