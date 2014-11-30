@@ -49,6 +49,8 @@ refresh-po: $(POTFILE)
 spelling: $(POTFILE)
 	@echo "* Checking spelling"
 	@echo
+	@echo Word count: `msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | wc --words`
+	@echo
 	msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | aspell  list | sort -u
 
 %.mo: %.po
