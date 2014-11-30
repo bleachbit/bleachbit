@@ -783,11 +783,9 @@ def wipe_path(pathname, idle=False):
                     print 'debug: handled unknown error 0'
                     time.sleep(0.1)
         # explicitly delete
-        if os.path.exists(f.name):
-            delete(f.name)
-        elif sys.hexversion >= 0x02060000:
-            # Python 2.5.4 always deletes NamedTemporaryFile
-            print 'DEBUG: does not exist: ', f.name
+        # Python 2.5.4 always deletes NamedTemporaryFile, so
+        # ignore missing in older Python here.
+        delete(f.name, ignore_missing = sys.hexversion < 0x02060000)
 
 
 def vacuum_sqlite3(path):
