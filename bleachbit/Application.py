@@ -120,7 +120,7 @@ class Bleachbit(Gtk.Application):
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(self._window)
+        pref = PreferencesDialog(self._window, self._window.cb_refresh_operations)
         pref.run()
 
     def about(self, action, param):
