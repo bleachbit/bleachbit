@@ -228,11 +228,7 @@ class GUI(Gtk.ApplicationWindow):
             self.shred_paths(shred_paths)
             return
         if options.get("first_start") and 'posix' == os.name:
-<<<<<<< HEAD
             pref = PreferencesDialog(self, self.cb_refresh_operations)
-=======
-            pref = PreferencesDialog(self)
->>>>>>> 7752a2d6b3cf06cf380ce24caac9b38addb701f0
             pref.run()
             options.set('first_start', False)
         if online_update_notification_enabled and options.get("check_online_updates"):
@@ -344,18 +340,13 @@ class GUI(Gtk.ApplicationWindow):
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
-<<<<<<< HEAD
 
         # Disable delete confirmation message.
         # if the option is selected under preference.
-
         if options.get("delete_confirmation"):
             if not GuiBasic.delete_confirmation_dialog(self, True):
                 return
-=======
-        if not GuiBasic.delete_confirmation_dialog(self, True):
-            return
->>>>>>> 7752a2d6b3cf06cf380ce24caac9b38addb701f0
+
         self.preview_or_run_operations(True)
 
     def preview_or_run_operations(self, really_delete, operations=None):
