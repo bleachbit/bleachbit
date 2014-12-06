@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
@@ -220,5 +219,3 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         parser.print_help()
 
 
-if __name__ == '__main__':
-    process_cmd_line()

@@ -108,7 +108,7 @@ class CLITestCase(unittest.TestCase):
         """Unit test for invalid locales"""
         os.environ['LANG'] = 'blahfoo'
         # tests are run from the parent directory
-        path = os.path.join('bleachbit', 'CLI.py')
+        path = 'bleachbit.py'
         args = [sys.executable, path, '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
@@ -117,7 +117,7 @@ class CLITestCase(unittest.TestCase):
         """Unit test for --preview option"""
         return  # temp!!
         args_list = []
-        path = os.path.join('bleachbit', 'CLI.py')
+        path = 'bleachbit.py'
         big_args = [sys.executable, path, '--preview', ]
         for cleaner in cleaners_list():
             args_list.append([sys.executable, path, '--preview', cleaner])
