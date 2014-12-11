@@ -99,8 +99,14 @@ def user_agent():
     except:
         traceback.print_exc()
 
-    agent = "BleachBit/%s (%s; %s; %s)" % (Common.APP_VERSION,
-                                           __platform, __os, __locale)
+    try:
+        import gtk
+        gtkver = '; GTK %s' % '.'.join([str(x) for x in gtk.gtk_version])
+    except:
+        gtkver = ""
+
+    agent = "BleachBit/%s (%s; %s; %s%s)" % (Common.APP_VERSION,
+                                             __platform, __os, __locale, gtkver)
     return agent
 
 
