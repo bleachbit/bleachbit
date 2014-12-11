@@ -770,6 +770,7 @@ class System(Cleaner):
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
             '^/tmp/gconfd-[^/]+/lock/ior$',
+            '^/tmp/fsa/', # fsarchiver
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
