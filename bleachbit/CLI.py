@@ -58,10 +58,6 @@ class CliCallback:
         """Not used"""
         pass
 
-    def update_total_size(self, size):
-        """Not used"""
-        pass
-
     def worker_done(self, worker, really_delete):
         """Not used"""
         pass

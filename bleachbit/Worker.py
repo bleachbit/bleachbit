@@ -44,7 +44,6 @@ class Worker:
         ui: an instance with methods
             append_text()
             update_progress_bar()
-            update_total_size()
             worker_done()
         really_delete: (boolean) preview or make real changes?
         operations: dictionary where operation-id is the key and
@@ -144,8 +143,6 @@ class Worker:
                         self.yield_time = time.time()
                         yield True
                 if time.time() - self.yield_time > 0.25:
-                    if self.really_delete:
-                        self.ui.update_total_size(self.total_bytes)
                     yield True
                     self.yield_time = time.time()
             # deep scan
@@ -266,8 +263,6 @@ class Worker:
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
 
-        if self.really_delete:
-            self.ui.update_total_size(self.total_bytes)
         self.ui.worker_done(self, self.really_delete)
 
         yield False
