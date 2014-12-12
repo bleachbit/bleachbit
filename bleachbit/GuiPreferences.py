@@ -123,7 +123,7 @@ class PreferencesDialog:
             updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             updates_box.set_border_width(10)
 
-            self.cb_beta = Gtk.CheckButton.new_with_label(_("Check for new beta releases"))
+            self.cb_beta = Gtk.CheckButton.new_with_label(label=_("Check for new beta releases"))
             self.cb_beta.set_active(options.get('check_beta'))
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
             self.cb_beta.connect(
@@ -145,7 +145,7 @@ class PreferencesDialog:
         # nothing.  For example, if Firefox were never used on
         # this system, this option would hide Firefox to simplify
         # the list of cleaners.
-        cb_auto_hide = Gtk.CheckButton.new_with_label(_("Hide irrelevant cleaners"))
+        cb_auto_hide = Gtk.CheckButton.new_with_label(label=_("Hide irrelevant cleaners"))
         cb_auto_hide.set_active(options.get('auto_hide'))
         cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
         vbox.pack_start(cb_auto_hide, False, True, 0)
@@ -153,26 +153,26 @@ class PreferencesDialog:
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = Gtk.CheckButton.new_with_label(_("Overwrite files to hide contents"))
+        cb_shred = Gtk.CheckButton.new_with_label(label=_("Overwrite files to hide contents"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
         cb_shred.set_tooltip_text(
             _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False, True, 0)
 
-        cb_start = Gtk.CheckButton.new_with_label(_("Start BleachBit with computer"))
+        cb_start = Gtk.CheckButton.new_with_label(label=_("Start BleachBit with computer"))
         cb_start.set_active(options.get('auto_start'))
         cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
         vbox.pack_start(cb_start, False, True, 0)
 
         # Close the application after cleaning is complete.
-        cb_exit = Gtk.CheckButton.new_with_label(_("Exit after cleaning"))
+        cb_exit = Gtk.CheckButton.new_with_label(label=_("Exit after cleaning"))
         cb_exit.set_active(options.get('exit_done'))
         cb_exit.connect('toggled', self.__toggle_callback, 'exit_done')
         vbox.pack_start(cb_exit, False, True, 0)
 
         # Disable delete confirmation message.
-        cb_popup = Gtk.CheckButton(_("Confirm before delete"))
+        cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
         cb_popup.set_active(options.get('delete_confirmation'))
         cb_popup.connect(
             'toggled', self.__toggle_callback, 'delete_confirmation')
@@ -231,11 +231,11 @@ class PreferencesDialog:
 
         # TRANSLATORS: In the preferences dialog, this button adds a path to
         # the list of paths
-        button_add = Gtk.Button.new_with_label(_p('button', 'Add'))
+        button_add = Gtk.Button.new_with_label(label=_p('button', 'Add'))
         button_add.connect("clicked", add_drive_cb)
         # TRANSLATORS: In the preferences dialog, this button removes a path
         # from the list of paths
-        button_remove = Gtk.Button.new_with_label(_p('button', 'Remove'))
+        button_remove = Gtk.Button.new_with_label(label=_p('button', 'Remove'))
         button_remove.connect("clicked", remove_drive_cb)
 
         button_box = Gtk.HButtonBox()
@@ -436,19 +436,19 @@ class PreferencesDialog:
         vbox.pack_start(swindow, False, True, 0)
 
         # buttons that modify the list
-        button_add_file = Gtk.Button.new_with_label(_p('button', 'Add file'))
+        button_add_file = Gtk.Button.new_with_label(label=_p('button', 'Add file'))
         if LOCATIONS_WHITELIST == page_type:
             button_add_file.connect("clicked", add_whitelist_file_cb)
         elif LOCATIONS_CUSTOM == page_type:
             button_add_file.connect("clicked", add_custom_file_cb)
 
-        button_add_folder = Gtk.Button.new_with_label(_p('button', 'Add folder'))
+        button_add_folder = Gtk.Button.new_with_label(label=_p('button', 'Add folder'))
         if LOCATIONS_WHITELIST == page_type:
             button_add_folder.connect("clicked", add_whitelist_folder_cb)
         elif LOCATIONS_CUSTOM == page_type:
             button_add_folder.connect("clicked", add_custom_folder_cb)
 
-        button_remove = Gtk.Button.new_with_label(_p('button', 'Remove'))
+        button_remove = Gtk.Button.new_with_label(label=_p('button', 'Remove'))
         if LOCATIONS_WHITELIST == page_type:
             button_remove.connect("clicked", remove_whitelist_path_cb)
         elif LOCATIONS_CUSTOM == page_type:

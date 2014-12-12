@@ -55,20 +55,20 @@ def cleaner_change_dialog(changes, parent):
     from gi.repository import Gtk
 
     dialog = Gtk.Dialog(title=_("Security warning"),
-                        parent=parent,
-                        flags=Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT)
+                        transient_for=parent,
+                        modal=True, destroy_with_parent=True)
     dialog.set_default_size(600, 500)
 
     # create warning
     warnbox = Gtk.Box()
     image = Gtk.Image()
-    image.set_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
+    image.set_from_icon_name("dialog-warning", Gtk.IconSize.DIALOG)
     warnbox.pack_start(image, False, True, 0)
 
     # TRANSLATORS: Cleaner definitions are XML data files that define
     # which files will be cleaned.
     label = Gtk.Label(
-        _("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
+        label=_("These cleaner definitions are new or have changed. Malicious definitions can damage your system. If you do not trust these changes, delete the files or quit."))
     label.set_line_wrap(True)
     warnbox.pack_start(label, True, True, 0)
     dialog.vbox.pack_start(warnbox, False, True, 0)
@@ -96,7 +96,7 @@ def cleaner_change_dialog(changes, parent):
 
     # populate dialog with widgets
     scrolled_window = Gtk.ScrolledWindow()
-    scrolled_window.add_with_viewport(treeview)
+    scrolled_window.add(treeview)
     dialog.vbox.pack_start(scrolled_window, True, True, 0)
 
     dialog.add_button(Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)
