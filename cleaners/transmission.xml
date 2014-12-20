@@ -23,10 +23,15 @@
   <label>Transmission</label>
   <description>File transfer client</description>
   <running type="exe">transmission</running>
-  <option id="cache">
-    <label>Cache</label>
-    <description>Delete the cache</description>
+  <option id="blocklists">
+    <label>Blocklists</label>
+    <description>Delete the blocklists</description>
     <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
+  </option>
+  <option id="torrents">
+    <label>Torrents</label>
+    <description>Remove all torrents</description>
     <action command="delete" search="walk.files" path="~/.config/transmission/resume/"/>
+    <action command="delete" search="walk.files" path="~/.config/transmission/torrents/"/>
   </option>
 </cleaner>
