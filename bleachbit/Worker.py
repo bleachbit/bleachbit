@@ -38,7 +38,7 @@ class Worker:
 
     """Perform the preview or delete operations"""
 
-    def __init__(self, ui, really_delete, operations):
+    def __init__(self, ui, really_delete, operations ,stop_now):
         """Create a Worker
 
         ui: an instance with methods
@@ -59,8 +59,13 @@ class Worker:
         self.total_errors = 0
         self.total_special = 0  # special operations
         self.yield_time = None
+        self.stop_now = stop_now
+        print "Worker 1st" , self.stop_now
         if 0 == len(self.operations):
             raise RuntimeError("No work to do")
+
+        if self.stop_now:
+            raise StopIteration
 
     def print_exception(self, operation):
         """Display exception"""
@@ -318,3 +323,6 @@ class Worker:
                 self.print_exception(operation)
 
             count += 1
+
+    def stop(self):
+       print "Exiting Now..!!"

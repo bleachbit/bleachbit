@@ -47,6 +47,7 @@ import GuiBasic
 if 'nt' == os.name:
     import Windows
 
+stop_now = False
 
 def threaded(func):
     """Decoration to create a threaded function"""
@@ -308,13 +309,18 @@ class GUI:
         self.toolbar.set_sensitive(true)
         self.view.set_sensitive(true)
 
+    def run_operations_stop(self, __widget):
+        self.stop_now = True
+        print "Stop clicked" , self.stop_now
+        self.preview_or_run_operations(True)
+
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
-        # fixme: should present this dialog after finding operations
-        
+        # fixme: should present this dialog after finding operations 
         # Disable delete confirmation message.
         # if the option is selected under preference.
-      
+        self.stop_now = False
+        print "Cleane clicked" , self.stop_now
         if not options.get("no_popup"):
             if not GuiBasic.delete_confirmation_dialog(self.window, True):
                 return
@@ -322,7 +328,7 @@ class GUI:
 
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
-
+		
         assert(isinstance(really_delete, bool))
         import Worker
         self.start_time = None
@@ -337,10 +343,12 @@ class GUI:
                                     gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
             return
         try:
-            self.set_sensitive(False)
+            self.set_sensitive(True)
             self.textbuffer.set_text("")
             self.progressbar.show()
-            self.worker = Worker.Worker(self, really_delete, operations)
+            print "STOP NOW"
+            print self,stop_now
+            self.worker = Worker.Worker(self, really_delete, operations, self.stop_now)
         except:
             traceback.print_exc()
             err = str(sys.exc_info()[1])
@@ -354,7 +362,10 @@ class GUI:
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
-        self.progressbar.set_text(_("Done."))
+        if not self.stop_now:
+            self.progressbar.set_text(_("Done."))
+        else:
+            self.progressbar.set_text(_("Stopped."))
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
         
@@ -580,6 +591,11 @@ class GUI:
                            True, cleaner_id, option_id)
         menu.append(clean_item)
 
+		# TRANSLATORS: this is the context menu
+        stop_item = gtk.MenuItem(_("Stop"))
+        stop_item.connect('activate', self.run_operations_stop)
+        menu.append(stop_item)
+
         # show the context menu
         menu.attach_to_widget(treeview, menu.destroy)
         menu.show_all()
@@ -687,6 +703,20 @@ class GUI:
         toolbar.insert(run_button, -1)
         run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
+        run_button.set_is_important(True)
+		
+		# create the stop 
+        icon = gtk.Image()
+        icon.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        # TRANSLATORS: This is the clean button on the main window.
+        # It makes permanent changes: usually deleting files, sometimes
+        # altering them.
+        run_button = gtk.ToolButton(
+            icon_widget=icon, label=_p("button", "Stop!"))
+        run_button.connect("clicked", self.run_operations_stop)  
+        toolbar.insert(run_button, -1)
+        run_button.set_tooltip_text(
+            _("STOP the running operations"))
         run_button.set_is_important(True)
 
         return toolbar
