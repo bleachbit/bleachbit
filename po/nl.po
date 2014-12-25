@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-11-02 19:50-0700\n"
-"PO-Revision-Date: 2014-11-23 18:12+0000\n"
+"POT-Creation-Date: 2014-11-30 08:42-0700\n"
+"PO-Revision-Date: 2014-12-24 10:57+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-11-24 03:28+0000\n"
-"X-Generator: Launchpad (build 17252)\n"
+"X-Launchpad-Export-Date: 2014-12-24 20:08+0000\n"
+"X-Generator: Launchpad (build 17286)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -382,21 +382,13 @@ msgstr "DOM-opslag"
 msgid "Delete HTML5 cookies"
 msgstr "Verwijder HTML5-cookies"
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Speciale mappen worden hersteld."
-
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "Widgets voor het bureaublad"
-
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:205
 msgid "Passwords"
 msgstr "Wachtwoorden"
 
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:206
 msgid ""
@@ -406,10 +398,22 @@ msgstr ""
 "Een database met gebruikersnamen en wachtwoorden en een lijst met websites "
 "die geen wachtwoorden op mogen slaan"
 
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
+#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 msgid "This option will delete your saved passwords."
 msgstr "Deze optie zal uw opgeslagen wachtwoorden verwijderen."
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Speciale mappen worden hersteld."
+
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "Widgets voor het bureaublad"
+
+#: ../cleaners/kde.xml
+msgid "This option may be incompatible with kdesudo"
+msgstr "Deze optie werkt mogelijk niet met kdesudo"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -492,7 +496,7 @@ msgid "Clean file"
 msgstr "Opschonen bestand"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:308 ../bleachbit/GUI.py:566
+#: ../bleachbit/Action.py:308 ../bleachbit/GUI.py:578
 msgid "Clean"
 msgstr "Opschonen"
 
@@ -543,7 +547,7 @@ msgstr "Verwijder bestanden van niet gewenste talen"
 
 #: ../bleachbit/Cleaner.py:457
 msgid "Configure this option in the preferences."
-msgstr "Deze optie instellen in de voorkeuren"
+msgstr "Deze optie instellen in de voorkeuren."
 
 #: ../bleachbit/Cleaner.py:463
 msgid "Rotated logs"
@@ -790,7 +794,7 @@ msgstr ""
 msgid "Open web browser to %s?"
 msgstr "Webbrowser openen met %s?"
 
-#: ../bleachbit/GuiPreferences.py:55 ../bleachbit/GUI.py:621
+#: ../bleachbit/GuiPreferences.py:55 ../bleachbit/GUI.py:633
 msgid "Preferences"
 msgstr "Voorkeuren"
 
@@ -858,12 +862,20 @@ msgstr ""
 msgid "Start BleachBit with computer"
 msgstr "BleachBit starten bij het opstarten van de computer"
 
-#: ../bleachbit/GuiPreferences.py:174 ../bleachbit/GuiPreferences.py:305
-#: ../bleachbit/GuiPreferences.py:346 ../bleachbit/GUI.py:528
+#: ../bleachbit/GuiPreferences.py:169
+msgid "Exit after cleaning"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:175
+msgid "Confirm before delete"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:188 ../bleachbit/GuiPreferences.py:319
+#: ../bleachbit/GuiPreferences.py:360 ../bleachbit/GUI.py:540
 msgid "Choose a folder"
 msgstr "Selecteer een map"
 
-#: ../bleachbit/GuiPreferences.py:198
+#: ../bleachbit/GuiPreferences.py:212
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
@@ -872,72 +884,72 @@ msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
-#: ../bleachbit/GuiPreferences.py:220
+#: ../bleachbit/GuiPreferences.py:234
 msgctxt "button"
 msgid "Add"
 msgstr "Toevoegen"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:224 ../bleachbit/GuiPreferences.py:437
+#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GuiPreferences.py:451
 msgctxt "button"
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: ../bleachbit/GuiPreferences.py:249
+#: ../bleachbit/GuiPreferences.py:263
 msgid "All languages will be deleted except those checked."
 msgstr "Alle talen zullen verwijderd worden, behalve de aangevinkte talen."
 
-#: ../bleachbit/GuiPreferences.py:267
+#: ../bleachbit/GuiPreferences.py:281
 msgid "Preserve"
 msgstr "Behouden"
 
-#: ../bleachbit/GuiPreferences.py:271
+#: ../bleachbit/GuiPreferences.py:285
 msgid "Code"
 msgstr "Code"
 
-#: ../bleachbit/GuiPreferences.py:275 ../bleachbit/GUI.py:130
+#: ../bleachbit/GuiPreferences.py:289 ../bleachbit/GUI.py:130
 msgid "Name"
 msgstr "Naam"
 
-#: ../bleachbit/GuiPreferences.py:292 ../bleachbit/GuiPreferences.py:333
+#: ../bleachbit/GuiPreferences.py:306 ../bleachbit/GuiPreferences.py:347
 msgid "Choose a file"
 msgstr "Selecteer een bestand"
 
-#: ../bleachbit/GuiPreferences.py:299 ../bleachbit/GuiPreferences.py:340
-#: ../bleachbit/GuiPreferences.py:384
+#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
+#: ../bleachbit/GuiPreferences.py:398
 msgid "File"
 msgstr "Bestand"
 
-#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
-#: ../bleachbit/GuiPreferences.py:386
+#: ../bleachbit/GuiPreferences.py:327 ../bleachbit/GuiPreferences.py:368
+#: ../bleachbit/GuiPreferences.py:400
 msgid "Folder"
 msgstr "Map"
 
-#: ../bleachbit/GuiPreferences.py:396
+#: ../bleachbit/GuiPreferences.py:410
 msgid "Theses paths will not be deleted or modified."
 msgstr "Deze locaties zullen niet verwijderd of aangepast worden."
 
-#: ../bleachbit/GuiPreferences.py:399
+#: ../bleachbit/GuiPreferences.py:413
 msgid "These locations can be selected for deletion."
 msgstr "Deze locaties kunnen geselecteerd worden voor verwijdering."
 
-#: ../bleachbit/GuiPreferences.py:407
+#: ../bleachbit/GuiPreferences.py:421
 msgid "Type"
 msgstr "Type"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:413
+#: ../bleachbit/GuiPreferences.py:427
 msgid "Path"
 msgstr "Locatie"
 
-#: ../bleachbit/GuiPreferences.py:425
+#: ../bleachbit/GuiPreferences.py:439
 msgctxt "button"
 msgid "Add file"
 msgstr "Bestand toevoegen"
 
-#: ../bleachbit/GuiPreferences.py:431
+#: ../bleachbit/GuiPreferences.py:445
 msgctxt "button"
 msgid "Add folder"
 msgstr "Map toevoegen"
@@ -960,19 +972,19 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:331
+#: ../bleachbit/GUI.py:336
 msgid "You must select an operation"
 msgstr "U moet een optie selecteren"
 
-#: ../bleachbit/GUI.py:352 ../bleachbit/GUI.py:367
+#: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:379
 msgid "Done."
 msgstr "Gereed."
 
-#: ../bleachbit/GUI.py:380
+#: ../bleachbit/GUI.py:392
 msgid "Program to clean unnecessary files"
 msgstr "Programma om overbodige bestanden te verwijderen"
 
-#: ../bleachbit/GUI.py:386
+#: ../bleachbit/GUI.py:398
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -984,7 +996,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:392
+#: ../bleachbit/GUI.py:404
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -999,103 +1011,103 @@ msgstr ""
 "  poepoog https://launchpad.net/~dukerat\n"
 "  rob https://launchpad.net/~rvdb"
 
-#: ../bleachbit/GUI.py:404
+#: ../bleachbit/GUI.py:416
 msgid "System information"
 msgstr "Systeeminformatie"
 
-#: ../bleachbit/GUI.py:477
+#: ../bleachbit/GUI.py:489
 msgid "Choose files to shred"
 msgstr "Selecteer bestanden om te shredden"
 
-#: ../bleachbit/GUI.py:480
+#: ../bleachbit/GUI.py:492
 msgid "Choose folder to shred"
 msgstr "Selecteer map om te shredden"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:561
+#: ../bleachbit/GUI.py:573
 msgid "Preview"
 msgstr "Bekijken"
 
-#: ../bleachbit/GUI.py:609
+#: ../bleachbit/GUI.py:621
 msgid "_Shred Files"
 msgstr "Bestanden _shredden"
 
-#: ../bleachbit/GUI.py:611
+#: ../bleachbit/GUI.py:623
 msgid "Sh_red Folders"
 msgstr "Mappen sh_redden"
 
-#: ../bleachbit/GUI.py:613
+#: ../bleachbit/GUI.py:625
 msgid "_Wipe Free Space"
 msgstr "Vrije ruimte _wissen"
 
-#: ../bleachbit/GUI.py:615
+#: ../bleachbit/GUI.py:627
 msgid "S_hred Settings and Quit"
 msgstr "Instellingen shredden en afluiten"
 
-#: ../bleachbit/GUI.py:617
+#: ../bleachbit/GUI.py:629
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: ../bleachbit/GUI.py:619
+#: ../bleachbit/GUI.py:631
 msgid "_File"
 msgstr "_Bestand"
 
-#: ../bleachbit/GUI.py:622
+#: ../bleachbit/GUI.py:634
 msgid "_Edit"
 msgstr "B_ewerken"
 
-#: ../bleachbit/GUI.py:623
+#: ../bleachbit/GUI.py:635
 msgid "Help Contents"
 msgstr "Hulpinhoud"
 
-#: ../bleachbit/GUI.py:626
+#: ../bleachbit/GUI.py:638
 msgid "_Release Notes"
 msgstr "_Uitgavenotities"
 
-#: ../bleachbit/GUI.py:629
+#: ../bleachbit/GUI.py:641
 msgid "_System Information"
 msgstr "_Systeeminformatie"
 
-#: ../bleachbit/GUI.py:632
+#: ../bleachbit/GUI.py:644
 msgid "_About"
 msgstr "I_nfo"
 
-#: ../bleachbit/GUI.py:633
+#: ../bleachbit/GUI.py:645
 msgid "_Help"
 msgstr "_Hulp"
 
-#: ../bleachbit/GUI.py:658
+#: ../bleachbit/GUI.py:670
 msgctxt "button"
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: ../bleachbit/GUI.py:663
+#: ../bleachbit/GUI.py:675
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Bekijk bestanden van de geselecteerde opties (zonder de bestanden te "
 "verwijderen)"
 
-#: ../bleachbit/GUI.py:673
+#: ../bleachbit/GUI.py:685
 msgctxt "button"
 msgid "Clean"
 msgstr "Opschonen"
 
-#: ../bleachbit/GUI.py:677
+#: ../bleachbit/GUI.py:689
 msgid "Clean files in the selected operations"
 msgstr "Verwijder bestanden van de geselecteerde opties"
 
-#: ../bleachbit/GUI.py:766
+#: ../bleachbit/GUI.py:778
 msgid "Error when checking for updates: "
 msgstr "Fout bij het zoeken naar updates: "
 
-#: ../bleachbit/GUI.py:796
+#: ../bleachbit/GUI.py:808
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
 "Fout bij het laden van de SQLite-module: mogelijk wordt het geblokkeerd door "
 "de antivirussoftware."
 
-#: ../bleachbit/GUI.py:798
+#: ../bleachbit/GUI.py:811
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
