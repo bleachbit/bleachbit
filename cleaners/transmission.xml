@@ -25,13 +25,13 @@
   <running type="exe">transmission</running>
   <option id="blocklists">
     <label>Blocklists</label>
-    <description>Delete all the blocklists</description>
+    <description>Delete the files</description>
     <warning>Blocklists will need update to work.</warning>
     <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
   </option>
   <option id="torrents">
     <label>Torrents</label>
-    <description>Remove all torrents from Transmission (files downloaded or uploaded via torrenting will remain)</description>
+    <description>Delete the torrents (just the metadata but not the files described)</description>
     <action command="delete" search="walk.files" path="~/.config/transmission/resume/"/>
     <action command="delete" search="walk.files" path="~/.config/transmission/torrents/"/>
   </option>
