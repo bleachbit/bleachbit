@@ -26,7 +26,7 @@
   <option id="blocklists">
     <label>Blocklists</label>
     <description>Delete all the blocklists</description>
-    <warning>This option will reset your blocklist settings.</warning>
+    <warning>Blocklists will need update to work.</warning>
     <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
   </option>
   <option id="torrents">
