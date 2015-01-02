@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 08:42-0700\n"
-"PO-Revision-Date: 2014-12-04 20:25+0000\n"
+"POT-Creation-Date: 2014-12-30 16:39-0700\n"
+"PO-Revision-Date: 2015-01-02 08:36+0000\n"
 "Last-Translator: Piotr Strębski <strebski@o2.pl>\n"
 "Language-Team: s120801-translate\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2014-12-05 05:56+0000\n"
-"X-Generator: Launchpad (build 17274)\n"
+"X-Launchpad-Export-Date: 2015-01-02 16:56+0000\n"
+"X-Generator: Launchpad (build 17286)\n"
 "X-Poedit-Country: POLAND\n"
 "Language: pl\n"
 "X-Poedit-Language: Polish\n"
@@ -43,8 +43,7 @@ msgid "Delete the usage history"
 msgstr "Usuń historię używania"
 
 #: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/thumbnails.xml ../cleaners/safari.xml
-#: ../cleaners/transmission.xml ../cleaners/emesene.xml
+#: ../cleaners/thumbnails.xml ../cleaners/safari.xml ../cleaners/emesene.xml
 #: ../cleaners/liferea.xml ../cleaners/seamonkey.xml ../cleaners/vuze.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
@@ -62,9 +61,8 @@ msgstr "Pamięć podręczna"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
-#: ../cleaners/transmission.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/liferea.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
+#: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
 #: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/xine.xml
 #: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
@@ -220,6 +218,28 @@ msgstr ""
 msgid "List of visited web pages"
 msgstr "Lista odwiedzonych stron internetowych"
 
+#: ../cleaners/transmission.xml
+msgid "Blocklists"
+msgstr "Listy blokowanych"
+
+#: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
+#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
+#: ../bleachbit/Cleaner.py:194
+msgid "Delete the files"
+msgstr "Usuń te pliki"
+
+#: ../cleaners/transmission.xml
+msgid "Blocklists will need update to work."
+msgstr "Listy blokowanych muszą zostać zaktualizowane do pracy"
+
+#: ../cleaners/transmission.xml
+msgid "Torrents"
+msgstr "Torrenty"
+
+#: ../cleaners/transmission.xml
+msgid "Delete the torrents (just the metadata but not the files described)"
+msgstr "Usuń torrenty (same metadane, bez opisanych plików)"
+
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
@@ -314,12 +334,6 @@ msgstr "Historia adresów URL"
 #: ../bleachbit/Cleaner.py:380
 msgid "Office suite"
 msgstr "Pakiet biurowy"
-
-#: ../cleaners/windows_defender.xml ../cleaners/beagle.xml
-#: ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
-#: ../bleachbit/Cleaner.py:194
-msgid "Delete the files"
-msgstr "Usuń te pliki"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -657,13 +671,13 @@ msgstr "Ta opcja jest bardzo wolna."
 msgid "The system in general"
 msgstr "System ogólnie"
 
-#: ../bleachbit/Cleaner.py:525 ../bleachbit/Cleaner.py:818
+#: ../bleachbit/Cleaner.py:525 ../bleachbit/Cleaner.py:819
 msgid "System"
 msgstr "System"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:721 ../bleachbit/Cleaner.py:849
+#: ../bleachbit/Cleaner.py:721 ../bleachbit/Cleaner.py:850
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Nadpisz wolną przestrzeń dysku %s"
@@ -1163,17 +1177,17 @@ msgstr ""
 msgid "New winapp2.ini was downloaded."
 msgstr "Została pobrana nowa wersja pliku winapp2.ini"
 
-#: ../bleachbit/Update.py:111
+#: ../bleachbit/Update.py:117
 msgid "Update BleachBit"
 msgstr "Uaktualnij program BleachBit"
 
-#: ../bleachbit/Update.py:116
+#: ../bleachbit/Update.py:122
 msgid "A new version is available."
 msgstr "Nowa wersja jest dostępna."
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
-#: ../bleachbit/Update.py:125
+#: ../bleachbit/Update.py:131
 #, python-format
 msgid "Update to version %s"
 msgstr "Zaktualizuj do wersji %s"
