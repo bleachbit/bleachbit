@@ -29,6 +29,7 @@ import sys
 import unittest
 
 sys.path.append('.')
+import bleachbit.Common
 from bleachbit.Unix import *
 
 
@@ -136,6 +137,12 @@ class UnixTestCase(unittest.TestCase):
         """Unit test for start_with_computer*"""
         b = start_with_computer_check()
         self.assert_(isinstance(b, bool))
+
+        if not os.path.exists(bleachbit.Common.launcher_path) and \
+            os.path.exists('bleachbit.desktop'):
+            # this happens when BleachBit is not installed
+            bleachbit.Common.launcher_path = 'bleachbit.desktop'
+
         # opposite setting
         start_with_computer(not b)
         two_b = start_with_computer_check()

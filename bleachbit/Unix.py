@@ -31,7 +31,8 @@ import shlex
 import subprocess
 import ConfigParser
 
-from Common import _, autostart_path, launcher_path
+from Common import _, autostart_path
+import Common
 import FileUtilities
 import General
 
@@ -558,14 +559,21 @@ def start_with_computer(enabled):
     """If enabled, create shortcut to start application with computer.
     If disabled, then delete the shortcut."""
     if not enabled:
+        # User requests to not automatically start BleachBit
         if os.path.lexists(autostart_path):
+            # Delete the shortcut
             FileUtilities.delete(autostart_path)
         return
+    # User requests to automatically start BleachBit
     if os.path.lexists(autostart_path):
+        # Already automatic, so exit
+        return
+    if not os.path.exists(Common.launcher_path):
+        print 'ERROR: does not exist: ', Common.launcher_path
         return
     import shutil
     General.makedirs(os.path.dirname(autostart_path))
-    shutil.copy(launcher_path, autostart_path)
+    shutil.copy(Common.launcher_path, autostart_path)
     os.chmod(autostart_path, 0755)
     if General.sudo_mode():
         General.chownself(autostart_path)
