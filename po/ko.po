@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-12-30 16:39-0700\n"
-"PO-Revision-Date: 2015-01-07 04:44+0000\n"
+"PO-Revision-Date: 2015-01-07 15:02+0000\n"
 "Last-Translator: B. W. Knight <kbd0651@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2015-01-07 04:48+0000\n"
+"X-Launchpad-Export-Date: 2015-01-07 15:48+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -88,7 +88,7 @@ msgstr "최적화"
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
-msgstr "데이터를 삭제하지 않고 차지하는 공간을 줄이고 속도를 향상하기 위해 데이터베이스를 정리합니다"
+msgstr "데이터베이스에 차지하는 공간을 줄이고 속도를 향상하기 위해 데이터 삭제 없이 데이터베이스를 청소합니다"
 
 #: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
@@ -145,7 +145,7 @@ msgstr "최근에 사용된"
 #: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:368
 #: ../bleachbit/Cleaner.py:465
 msgid "Delete the list of recently used documents"
-msgstr "최근에 사용된 문서 정보를 삭제합니다"
+msgstr "최근에 사용된 문서 목록을 삭제합니다"
 
 #: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
@@ -177,7 +177,7 @@ msgstr "웹 브라우저"
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:190
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "재방문 시 시간을 단축하게 하는 웹 캐시 정보를 삭제합니다"
+msgstr "재방문한 페이지를 표시하는 데 걸리는 시간을 단축해주는, 웹 캐시 정보를 삭제합니다"
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -197,27 +197,27 @@ msgstr "쿠키"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr "쿠키 삭제, 웹사이트 환경 설정, 인증, 신원 추적 등과 같은 정보가 들어있습니다."
+msgstr "웹사이트 환경 설정, 인증, 신원 추적 등의 정보가 들어있는, 쿠키를 삭제합니다."
 
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:208
 msgid "List of visited web pages"
-msgstr "방문한 웹 페이지 정보를 삭제합니다"
+msgstr "방문한 웹 페이지 목록"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr "블록리스트"
+msgstr "차단 목록"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
 #: ../bleachbit/Cleaner.py:194
 msgid "Delete the files"
-msgstr "파일을 지웁니다"
+msgstr "파일을 삭제합니다"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "블록리스트를 실행하기 위해서는 업데이트를 하셔야 합니다."
+msgstr "차단 목록을 실행하기 위해서는 업데이트를 하셔야 합니다."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -225,7 +225,7 @@ msgstr "토렌트 파일"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "토렌트 파일을 지웁니다(단지 메타데이터일 뿐이지만 설명되지 않은 파일입니다)"
+msgstr "토렌트 파일을 삭제합니다(단지 메타데이터일 뿐이지만 설명되지 않은 파일입니다)"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
@@ -291,11 +291,11 @@ msgstr "내려받기 기록"
 
 #: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:198
 msgid "List of files downloaded"
-msgstr "내려받은 파일 정보를 삭제합니다"
+msgstr "내려받은 파일 목록"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "방문한 웹 페이지 정보를 삭제합니다"
+msgstr "방문한 웹 페이지 목록을 삭제합니다"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:187
 msgid "Backup files"
@@ -337,7 +337,7 @@ msgstr "양식 기록"
 
 #: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:200
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "웹 사이트와 검색 바에 입력된 양식의 기록"
+msgstr "웹사이트와 검색 창에 입력된 양식의 기록"
 
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
@@ -345,7 +345,7 @@ msgstr "음성 파일 태거"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr "쓸모없게된 파일 삭제"
+msgstr "쓸모없게 된 파일을 삭제합니다"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
@@ -353,11 +353,11 @@ msgstr "패키지 목록"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "멀티미디어 뷰어"
+msgstr "멀티미디어 열람용 소프트웨어"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
-msgstr "검색 툴"
+msgstr "검색 도구"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml ../cleaners/thunderbird.xml
 msgid "Index"
@@ -366,21 +366,21 @@ msgstr "색인"
 #: ../cleaners/recoll.xml
 msgid ""
 "Delete the search index, a database of words and the files they contain"
-msgstr "파일에 포함된 단어의 데이터베이스인 검색 인덱스 삭제함"
+msgstr "파일에 포함된 단어의 데이터베이스인, 검색 색인을 삭제합니다"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr "다운로드한 팟캐스트 파일"
+msgstr "내려받은 팟캐스트 파일"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "다운로드한 팟캐스트 파일 삭제"
+msgstr "내려받은 팟캐스트 파일을 삭제합니다"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:196
 msgid "DOM Storage"
-msgstr "DOM 저장"
+msgstr "DOM 저장소"
 
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:196
@@ -399,12 +399,12 @@ msgstr "암호"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr "유저명, 암호, 암호를 저장하지 않는 사이트 정보의 데이터베이스"
+msgstr "사용자 이름 및 암호와 암호를 저장하지 않는 사이트 정보 목록의 데이터베이스"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 msgid "This option will delete your saved passwords."
-msgstr "이 선택 사항은 당신이 저장한 암호를 제거할 것입니다."
+msgstr "이 선택 사항은 당신이 저장한 암호를 삭제할 것입니다."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -426,28 +426,28 @@ msgstr "위치"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
-msgstr "북마크, 바비콘, 방문한 웹사이트 정보를 포함하는 URL 데이터베이스"
+msgstr "바로찾기, 즐겨찾기 아이콘, 방문한 웹사이트 정보를 포함하는 URL 데이터베이스"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "이 옵션은 모든 책갈피를 삭제합니다."
+msgstr "이 선택 사항은 모든 바로찾기를 삭제합니다."
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr "쿠키 파일, 방문한 URL, 검색 기록 삭제"
+msgstr "쿠키 파일, 방문한 URL, 검색 기록을 삭제합니다"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr "웹 사이트에 입력한 기록"
+msgstr "웹사이트에 입력한 기록"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "방문한 사이트 삭제, 다운로드 및 이미지 포함 내역"
+msgstr "방문한 사이트, 내려받기, 및 섬네일을 포함한 사용 기록을 삭제합니다"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
-msgstr "검색엔진"
+msgstr "검색 엔진"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -462,7 +462,7 @@ msgstr "세션"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
-msgstr "현재 그리고 마지막 세션 삭제"
+msgstr "현재 그리고 마지막 세션을 삭제합니다"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -470,19 +470,19 @@ msgstr "정밀 검사"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "보존하려는 파일에 대해 미리보기 하며 검사합니다."
+msgstr "보존하려는 파일에 대해 미리 보기 하며 검사합니다."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr "이 옵션은 프로그램의 진행속도를 느리게 만들 수 있습니다."
+msgstr "이 선택 사항은 느립니다."
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "불필요한 파일 청소"
+msgstr "불필요한 파일 청소기"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
-msgstr "자동 청소 및 개인정보 유지"
+msgstr "자동 청소 및 개인 정보를 유지합니다"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:192 ../bleachbit/Action.py:205
@@ -490,12 +490,12 @@ msgstr "자동 청소 및 개인정보 유지"
 #: ../bleachbit/Action.py:244 ../bleachbit/Command.py:181
 #: ../bleachbit/Command.py:211
 msgid "Clean file"
-msgstr "파일청소"
+msgstr "파일을 청소합니다"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/Action.py:308 ../bleachbit/GUI.py:578
 msgid "Clean"
-msgstr "정리"
+msgstr "청소하기"
 
 #: ../bleachbit/Cleaner.py:194
 msgid "Crash reports"
@@ -503,15 +503,15 @@ msgstr "오류 보고서"
 
 #: ../bleachbit/Cleaner.py:201
 msgid "Session restore"
-msgstr "세션 리스토어"
+msgstr "세션 복원"
 
 #: ../bleachbit/Cleaner.py:202
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "브라우저가 종료 또는 크래쉬 된 후 초기 세션을 로드함"
+msgstr "브라우저가 종료 또는 충돌된 후 초기 세션을 로드합니다"
 
 #: ../bleachbit/Cleaner.py:204
 msgid "Site preferences"
-msgstr "사이트 환경설정"
+msgstr "사이트 환경 설정"
 
 #: ../bleachbit/Cleaner.py:204
 msgid "Settings for individual sites"
@@ -526,11 +526,11 @@ msgstr "개별 사이트에 대한 설정"
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:449
 msgid "Broken desktop files"
-msgstr "올바르지 않은 데스크탑 파일"
+msgstr "올바르지 않은 데스크톱 파일"
 
 #: ../bleachbit/Cleaner.py:450
 msgid "Delete broken application menu entries and file associations"
-msgstr "올바르지 않은 프로그램 메뉴 및 파일 연결을 삭제함"
+msgstr "올바르지 않은 프로그램 메뉴 및 파일 연결을 삭제합니다"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -540,11 +540,11 @@ msgstr "국가별 설정"
 
 #: ../bleachbit/Cleaner.py:455
 msgid "Delete files for unwanted languages"
-msgstr "불필요한 언어 파일들을 삭제함"
+msgstr "불필요한 언어 파일들을 삭제합니다"
 
 #: ../bleachbit/Cleaner.py:457
 msgid "Configure this option in the preferences."
-msgstr "환경설정에서의 구성옵션"
+msgstr "환경 설정에서 이 선택 사항을 설정합니다."
 
 #: ../bleachbit/Cleaner.py:463
 msgid "Rotated logs"
@@ -552,7 +552,7 @@ msgstr "오래된 로그"
 
 #: ../bleachbit/Cleaner.py:463
 msgid "Delete old system logs"
-msgstr "오래된 시스템 로그를 삭제함"
+msgstr "오래된 시스템 로그를 삭제합니다"
 
 #: ../bleachbit/Cleaner.py:466
 msgid "Trash"
@@ -560,7 +560,7 @@ msgstr "휴지통"
 
 #: ../bleachbit/Cleaner.py:466
 msgid "Empty the trash"
-msgstr "휴지통을 비움"
+msgstr "휴지통을 비웁니다"
 
 #: ../bleachbit/Cleaner.py:472 ../bleachbit/Cleaner.py:624
 #: ../bleachbit/Worker.py:169
@@ -570,11 +570,11 @@ msgstr "메모리"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:474
 msgid "Wipe the swap and free memory"
-msgstr "스왑 및 사용 가능한 메모리 수정"
+msgstr "스와프 및 여유 메모리를 청소합니다"
 
 #: ../bleachbit/Cleaner.py:476
 msgid "This option is experimental and may cause system problems."
-msgstr "이 옵션은 실험적이라 시스템에 문제가 발생할 수 있습니다."
+msgstr "이 선택 사항은 실험적이라 시스템에서 문제가 발생할 수 있습니다."
 
 #: ../bleachbit/Cleaner.py:484
 msgid "Memory dump"
@@ -582,12 +582,12 @@ msgstr "메모리 덤프"
 
 #: ../bleachbit/Cleaner.py:484
 msgid "Delete the file memory.dmp"
-msgstr "memory.dmp 파일을 삭제합니다."
+msgstr "memory.dmp 파일을 삭제합니다"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:487
 msgid "Prefetch"
-msgstr "미리 가져오기"
+msgstr "미리 가져옵니다"
 
 #: ../bleachbit/Cleaner.py:489
 msgid "Recycle bin"
@@ -595,13 +595,13 @@ msgstr "휴지통"
 
 #: ../bleachbit/Cleaner.py:489
 msgid "Empty the recycle bin"
-msgstr "휴지통을 비움"
+msgstr "휴지통을 비웁니다"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:492
 msgid "Update uninstallers"
-msgstr "언인스탤러 업데이트"
+msgstr "제거 프로그램을 업데이트합니다"
 
 #: ../bleachbit/Cleaner.py:493
 msgid ""
@@ -616,7 +616,7 @@ msgstr "클립보드"
 #: ../bleachbit/Cleaner.py:501
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr "복사 및 붙어넣기에 쓰이는 클립보드의 데스크탑 환경"
+msgstr "복사 및 붙어 넣기 작업에 사용되는 데스크톱 환경의 클립보드"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -631,16 +631,16 @@ msgstr "사용자별 파일 및 폴더를 삭제합니다"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:511
 msgid "Free disk space"
-msgstr "디스크를 청소함"
+msgstr "디스크 여유 공간을 청소합니다"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:513
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "빈 공간을 복구 불가능 하도록 만듬"
+msgstr "디스크 여유 공간을 덮어 씌어서 복구할 수 없도록 만듭니다"
 
 #: ../bleachbit/Cleaner.py:514
 msgid "This option is very slow."
-msgstr "이 옵션은 매우 느립니다."
+msgstr "이 선택 사항은 매우 느립니다."
 
 #: ../bleachbit/Cleaner.py:519
 msgid "The system in general"
@@ -655,18 +655,18 @@ msgstr "시스템"
 #: ../bleachbit/Cleaner.py:721 ../bleachbit/Cleaner.py:850
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr "%s의 빈 공간을 복구 불능 상태로 만듬"
+msgstr "%s의 디스크 여유 공간을 덮어 씌어서 복구할 수 없도록 만듭니다"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
 #: ../bleachbit/Cleaner.py:748
 #, python-format
 msgid "Recycle bin %s"
-msgstr "%s 드라이브의 휴지통"
+msgstr "%s의 휴지통"
 
 #: ../bleachbit/CLI.py:107
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "유효한 청소: %s"
+msgstr "유효하지 않은 청소기입니다: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -674,26 +674,26 @@ msgstr "유효한 청소: %s"
 #. http://bleachbit.sourceforge.net/documentation/command-line
 #: ../bleachbit/CLI.py:134
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "사용법: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "사용법: %prog [선택 사항] 청소기.선택 사항1 청소기.선택 사항2"
 
 #: ../bleachbit/CLI.py:137
 msgid "list cleaners"
-msgstr "청소 목록"
+msgstr "청소기 목록"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
 #: ../bleachbit/CLI.py:142
 msgid "run cleaners to delete files and make other permanent changes"
-msgstr "정리 청소기를 실행하여 파일을 삭제하고 다른 변경 사항을 영구적으로 적용시킵니다"
+msgstr "청소기를 실행하여 파일을 삭제하고 다른 변경 사항을 영구적으로 적용시킵니다"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
-msgstr "특정 파일 혹은 폴더를 제거합니다"
+msgstr "특정 파일 혹은 폴더를 파기합니다"
 
 #: ../bleachbit/CLI.py:146
 msgid "show system information"
-msgstr "스시탬 정보 보기"
+msgstr "시스템 정보를 보입니다"
 
 #: ../bleachbit/CLI.py:148
 msgid "launch the graphical interface"
@@ -705,7 +705,7 @@ msgstr "관리자 권한에 대해 요청하지 않습니다"
 
 #: ../bleachbit/CLI.py:155
 msgid "preview files to be deleted and other changes"
-msgstr "미리보기 파일 및 기타 변경 사항을 삭제"
+msgstr "미리 보기 파일 및 기타 변경 사항을 삭제합니다"
 
 #: ../bleachbit/CLI.py:157
 msgid "use options set in the graphical interface"
@@ -721,25 +721,25 @@ msgstr "버전 정보를 출력하고 종료합니다"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
-msgstr "덮어쓸 파일 내용을 숨기기"
+msgstr "파일 내용을 덮어 씌어서 복구할 수 없도록 만듭니다"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:44
 msgid "Skip"
-msgstr "건너 뛰기"
+msgstr "건너뛰기"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
 #: ../bleachbit/Command.py:70
 msgid "Delete"
-msgstr "삭제"
+msgstr "삭제하기"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
 #: ../bleachbit/Command.py:91
 msgid "Mark for deletion"
-msgstr "지울것 표시"
+msgstr "지울 것을 표시합니다"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:247
@@ -748,7 +748,7 @@ msgstr "잘라내기"
 
 #: ../bleachbit/Command.py:286
 msgid "Delete registry key"
-msgstr "등록된 키 삭제"
+msgstr "등록된 키를 삭제합니다"
 
 #: ../bleachbit/GuiBasic.py:112
 msgid "Delete confirmation"
@@ -759,11 +759,13 @@ msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
-msgstr "선택된 항목에 따라 파일들을 영구히 삭제합니다. 프리뷰를 실행하면 실제 파일들이 삭제됩니다."
+msgstr ""
+"정말 당신이 선택한 작업에 따라 파일들을 영구히 삭제하시는 걸 원하십니까? 당신이 미리 보기를 실행하셨으므로 삭제될 실제 파일들은 변경될 "
+"수도 있습니다."
 
 #: ../bleachbit/GuiBasic.py:125
 msgid "Are you sure you want to permanently delete these files?"
-msgstr "정말로 이 파일들을 삭제해도 되겠습니까?"
+msgstr "정말로 당신은 이 파일들을 영구적으로 삭제하시는 걸 원하십니까?"
 
 #: ../bleachbit/GuiBasic.py:162
 #, python-format
@@ -772,18 +774,18 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"현재 루트로 실행하고 있으므로, 수동으로 웹 브라우저를 실행하여 이 링크를 여십시오.:\n"
+"현재 당신이 루트로 실행하고 있으므로, 웹 브라우저에서 수동으로 이 링크를 여십시오.:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
 #: ../bleachbit/GuiBasic.py:174
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "%s 웹브라우져로 열기"
+msgstr "%s를 웹 브라우저로 여시겠습니까?"
 
 #: ../bleachbit/GuiPreferences.py:55 ../bleachbit/GUI.py:633
 msgid "Preferences"
-msgstr "기본 설정"
+msgstr "환경 설정"
 
 #: ../bleachbit/GuiPreferences.py:61
 msgid "General"
@@ -803,21 +805,23 @@ msgstr "허용 목록"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr "인터넷을 통해 주기적으로 업데이트를 확인함"
+msgstr "인터넷을 통해 주기적으로 소프트웨어 업데이트를 확인합니다"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
-msgstr "업데이트가 있으면 그에 관한 정보를 볼 수 있으며, 수동으로 업데이트된 소프트웨어를 다운로드하고 인스톨 할 수 있습니다."
+msgstr ""
+"업데이트를 찾았다면, 이 업데이트에 관한 정보를 볼 수 있는 선택 사항이 당신에게 주어집니다. 그러고 나서, 당신은 수동으로 업데이트를 "
+"내려받기 및 설치할 수 있습니다."
 
 #: ../bleachbit/GuiPreferences.py:125
 msgid "Check for new beta releases"
-msgstr "새로운 베타 버전 확인"
+msgstr "새로운 베타 버전을 확인합니다"
 
 #: ../bleachbit/GuiPreferences.py:134
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr "커뮤니티로부터(winapp2.ini) 내려받기 및 업데이트를 합니다"
+msgstr "커뮤니티로부터(winapp2.ini) 청소기를 내려받기 및 업데이트를 합니다"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -825,28 +829,28 @@ msgstr "커뮤니티로부터(winapp2.ini) 내려받기 및 업데이트를 합�
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:148
 msgid "Hide irrelevant cleaners"
-msgstr "연관이 없는 정리 청소기를 숨깁니다"
+msgstr "연관이 없는 청소기를 숨깁니다"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:156
 msgid "Overwrite files to hide contents"
-msgstr "복원할 수 없도록 파일을 삭제함"
+msgstr "내용을 덮어 씌어서 복구할 수 없도록 만듭니다"
 
 #: ../bleachbit/GuiPreferences.py:160
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
-msgstr "복원할 수 없는 삭제는 특정한 파일 시스템과 BleachBit 동작에서 비효율적이며 상당히 느림."
+msgstr "덮어 씌어서 삭제하는 것은 몇몇 파일 시스템과 블리치비트 작업에서 비효율적입니다. 이는 상당히 느린 과정입니다."
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid "Start BleachBit with computer"
-msgstr "로그인시 BleachBit 시작"
+msgstr "컴퓨터가 시작할 때 블리치비트를 실행합니다"
 
 #: ../bleachbit/GuiPreferences.py:169
 msgid "Exit after cleaning"
-msgstr "정리한 후 종료합니다"
+msgstr "청소한 후 종료합니다"
 
 #: ../bleachbit/GuiPreferences.py:175
 msgid "Confirm before delete"
@@ -855,34 +859,34 @@ msgstr "삭제하기 전에 확인합니다"
 #: ../bleachbit/GuiPreferences.py:188 ../bleachbit/GuiPreferences.py:319
 #: ../bleachbit/GuiPreferences.py:360 ../bleachbit/GUI.py:540
 msgid "Choose a folder"
-msgstr "폴더를 선택함"
+msgstr "폴더를 선택하십시오"
 
 #: ../bleachbit/GuiPreferences.py:212
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
-msgstr "빈 공간을 덮어쓰려는 각 드라이브용 쓰기 폴더를 선택하십시오."
+msgstr "디스크 여유 공간을 덮어쓰려는 각 드라이브용 쓰기가 가능한 폴더를 선택하십시오."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
 #: ../bleachbit/GuiPreferences.py:234
 msgctxt "button"
 msgid "Add"
-msgstr "추가"
+msgstr "추가하기"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
 #: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GuiPreferences.py:451
 msgctxt "button"
 msgid "Remove"
-msgstr "제거"
+msgstr "제거하기"
 
 #: ../bleachbit/GuiPreferences.py:263
 msgid "All languages will be deleted except those checked."
-msgstr "체크되지 않은 모든 언어 항목을 삭제합니다."
+msgstr "표시된 언어 항목을 제외한 모든 언어 항목을 삭제합니다."
 
 #: ../bleachbit/GuiPreferences.py:281
 msgid "Preserve"
-msgstr "유지"
+msgstr "유지하기"
 
 #: ../bleachbit/GuiPreferences.py:285
 msgid "Code"
@@ -927,12 +931,12 @@ msgstr "경로"
 #: ../bleachbit/GuiPreferences.py:439
 msgctxt "button"
 msgid "Add file"
-msgstr "파일 추가"
+msgstr "파일을 추가합니다"
 
 #: ../bleachbit/GuiPreferences.py:445
 msgctxt "button"
 msgid "Add folder"
-msgstr "폴더 추가"
+msgstr "폴더를 추가합니다"
 
 #: ../bleachbit/GUI.py:138
 msgid "Active"
@@ -954,23 +958,23 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:336
 msgid "You must select an operation"
-msgstr "반드시 실행 항목을 선택해야 합니다."
+msgstr "반드시 실행 작업을 선택하셔야 합니다."
 
 #: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:379
 msgid "Done."
-msgstr "완료."
+msgstr "완료되었습니다."
 
 #: ../bleachbit/GUI.py:392
 msgid "Program to clean unnecessary files"
-msgstr "불필요한 파일을 삭제하는 프로그램"
+msgstr "불필요한 파일을 청소하는 프로그램입니다"
 
 #: ../bleachbit/GUI.py:398
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
-"GNU 일반 공중 사용 허가서 버전 3 이후\n"
-"http://www.gnu.org/licenses/gpl-3.0.txt 확인하기 바랍니다."
+"GNU 일반 공중 사용 허가서 버전 3 혹은 그 이후 버전의 허가서입니다.\n"
+"http://www.gnu.org/licenses/gpl-3.0.txt에서 확인하시기 바랍니다."
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -992,36 +996,36 @@ msgstr "시스템 정보"
 
 #: ../bleachbit/GUI.py:489
 msgid "Choose files to shred"
-msgstr "파기할 파일들을 선택하세요"
+msgstr "파기할 파일들을 선택하십시오"
 
 #: ../bleachbit/GUI.py:492
 msgid "Choose folder to shred"
-msgstr "삭제할 폴더를 선택하십시오"
+msgstr "파기할 폴더를 선택하십시오"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py:573
 msgid "Preview"
-msgstr "미리보기"
+msgstr "미리 보기"
 
 #: ../bleachbit/GUI.py:621
 msgid "_Shred Files"
-msgstr "파일을 파기함(_S)"
+msgstr "파일을 파기합니다(_S)"
 
 #: ../bleachbit/GUI.py:623
 msgid "Sh_red Folders"
-msgstr "폴더 삭제(_h)"
+msgstr "폴더를 파기합니다(_h)"
 
 #: ../bleachbit/GUI.py:625
 msgid "_Wipe Free Space"
-msgstr "디스크 여유 공간 청소(_W)"
+msgstr "디스크 여유 공간을 청소합니다(_W)"
 
 #: ../bleachbit/GUI.py:627
 msgid "S_hred Settings and Quit"
-msgstr "조각으로 찟는 설정과 종료(_H)"
+msgstr "설정을 파기하고 종료합니다(_H)"
 
 #: ../bleachbit/GUI.py:629
 msgid "_Quit"
-msgstr "종료(_Q)"
+msgstr "종료하기(_Q)"
 
 #: ../bleachbit/GUI.py:631
 msgid "_File"
@@ -1029,7 +1033,7 @@ msgstr "파일(_F)"
 
 #: ../bleachbit/GUI.py:634
 msgid "_Edit"
-msgstr "편집(_E)"
+msgstr "편집하기(_E)"
 
 #: ../bleachbit/GUI.py:635
 msgid "Help Contents"
@@ -1037,7 +1041,7 @@ msgstr "도움말 차례"
 
 #: ../bleachbit/GUI.py:638
 msgid "_Release Notes"
-msgstr "릴리즈 노트(_R)"
+msgstr "출시 정보(_R)"
 
 #: ../bleachbit/GUI.py:641
 msgid "_System Information"
@@ -1054,29 +1058,29 @@ msgstr "도움말(_H)"
 #: ../bleachbit/GUI.py:670
 msgctxt "button"
 msgid "Preview"
-msgstr "미리보기"
+msgstr "미리 보기"
 
 #: ../bleachbit/GUI.py:675
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "선택된 파일들을 프리뷰함 (어떠한 파일도 삭제되지 않음)"
+msgstr "선택된 파일들을 미리 봅니다(어떠한 파일을 삭제하지 않습니다)"
 
 #: ../bleachbit/GUI.py:685
 msgctxt "button"
 msgid "Clean"
-msgstr "정리"
+msgstr "청소하기"
 
 #: ../bleachbit/GUI.py:689
 msgid "Clean files in the selected operations"
-msgstr "선택된 처리 방식으로 파일을 정리합니다"
+msgstr "선택된 처리 방식으로 파일을 청소합니다"
 
 #: ../bleachbit/GUI.py:778
 msgid "Error when checking for updates: "
-msgstr "업데이트 확인중에 에러 발생: "
+msgstr "업데이트를 확인하는 중에 오류가 발생했습니다: "
 
 #: ../bleachbit/GUI.py:808
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
-msgstr "SQLite 모듈 불러오기 오류: 바이러스 백신 소프트웨어가 방해하고 있을지 모릅니다."
+msgstr "SQLite 모듈 불러오기 오류: 안티바이러스 소프트웨어가 이 프로그램을 차단했을 수 있습니다."
 
 #: ../bleachbit/GUI.py:811
 msgid ""
@@ -1084,7 +1088,7 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"당신은 시스템의 조각난 부분을 정리하기 위해 블리치비트를 관리자 권한으로 실행 중이며, 사용자 프로필 폴더와 관련 있는 설정을 이용하여 "
+"당신은 시스템의 공유된 부분을 청소하기 위해 블리치비트를 관리자 권한으로 실행 중이며, 사용자 프로필 폴더와 관련 있는 설정을 이용하여 "
 "루트 계정만 정리할 것입니다."
 
 #: ../bleachbit/RecognizeCleanerML.py:57
@@ -1097,13 +1101,13 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"이러한 정리 설정들이 새로이 혹은 변경되었습니다. 악의적인 설정들은 시스템에 손해를 줄수가 있습니다. 만약 이러한 변경들을 신뢰하지 "
-"못하겠다면, 파일들을 삭제하고 종료하십시요."
+"이러한 청소 설정들이 새로이 혹은 변경되었습니다. 악의적인 설정들은 시스템에 손해를 끼칠 수가 있습니다. 만약 이러한 변경들을 신뢰하지 "
+"못하겠다면, 파일들을 삭제하고 종료하십시오."
 
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
 msgid "Delete"
-msgstr "삭제"
+msgstr "삭제하기"
 
 #: ../bleachbit/RecognizeCleanerML.py:90
 msgctxt "column_label"
@@ -1113,7 +1117,7 @@ msgstr "파일 이름"
 #: ../bleachbit/Unix.py:382 ../bleachbit/Unix.py:412 ../bleachbit/Unix.py:595
 #, python-format
 msgid "Executable not found: %s"
-msgstr "실행파일이 존재하지 않음: %s"
+msgstr "실행파일이 존재하지 않습니다: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:592 ../bleachbit/Worker.py:128
@@ -1121,7 +1125,7 @@ msgstr "실행파일이 존재하지 않음: %s"
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
-msgstr "%s은(는) 현재 실행 중이므로 청소 할 수 없습니다. 종료한 후에 다시 실행하기 바랍니다."
+msgstr "%s은(는) 현재 실행 중이므로 청소할 수 없습니다. 이것을 닫으시고, 다시 실행하시기 바랍니다."
 
 #: ../bleachbit/Update.py:72
 msgid "New winapp2.ini was downloaded."
@@ -1129,7 +1133,7 @@ msgstr "새로운 winapp2.ini를 내려받았습니다."
 
 #: ../bleachbit/Update.py:117
 msgid "Update BleachBit"
-msgstr "BleachBit 업데이트"
+msgstr "블리치비트를 업데이트합니다"
 
 #: ../bleachbit/Update.py:122
 msgid "A new version is available."
@@ -1171,7 +1175,7 @@ msgstr "게임"
 
 #: ../bleachbit/Winapp.py:155
 msgid "Imported from winapp2.ini"
-msgstr "winapp2.ini에서 가져오기"
+msgstr "winapp2.ini에서 가져왔습니다"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1180,26 +1184,26 @@ msgstr "winapp2.ini에서 가져오기"
 #: ../bleachbit/Worker.py:71
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "'%(operation)s': '%(msg)s' 항목을 실행하던 중에 예외상황 발생"
+msgstr "'%(operation)s': '%(msg)s' 항목을 실행하던 도중에 예외상황이 발생했습니다"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:167
 msgid "Please wait.  Wiping free disk space."
-msgstr "기다려주십시오. 디스크 여유 공간을 청소하는 중입니다."
+msgstr "잠시만 기다려주십시오. 디스크 여유 공간을 청소하는 중입니다."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:169 ../bleachbit/Worker.py:308
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "잠시만 기다리세요. %s 청소 중."
+msgstr "잠시만 기다려주십시오. %s를 청소하는 중입니다."
 
 #: ../bleachbit/Worker.py:184
 msgid "Please wait. Wiping file system metadata."
-msgstr "기다려주십시오. 파일 시스템 메타데이터를 삭제하는 중입니다."
+msgstr "잠시만 기다려주십시오. 파일 시스템 메타데이터를 삭제하는 중입니다."
 
 #: ../bleachbit/Worker.py:187
 msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr "기다려주십시오. 파일 시스템 메타데이터를 삭제한 후에 정리 중입니다."
+msgstr "잠시만 기다려주십시오. 파일 시스템 메타데이터를 삭제한 후에 청소 중입니다."
 
 #: ../bleachbit/Worker.py:190
 #, python-format
@@ -1212,33 +1216,33 @@ msgstr[0] "%d 분 남았습니다."
 #: ../bleachbit/Worker.py:247
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "복구된 디스크 공간 : %s"
+msgstr "복구된 디스크 공간: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:251
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr "복구 할 수 있는 디스크 공간: %s"
+msgstr "복구될 디스크 공간: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py:256
 #, python-format
 msgid "Files deleted: %d"
-msgstr "삭제된 파일 : %d"
+msgstr "삭제된 파일: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py:260
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "삭제 할 수 있는 파일: %d"
+msgstr "삭제될 파일: %d"
 
 #: ../bleachbit/Worker.py:263
 #, python-format
 msgid "Special operations: %d"
-msgstr "특별한 방법: %d"
+msgstr "특수 작업: %d"
 
 #: ../bleachbit/Worker.py:266
 #, python-format
@@ -1250,10 +1254,10 @@ msgstr "오류: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:281
 msgid "Please wait.  Running deep scan."
-msgstr "잠시 기다려주십시오. 전체 검색 중입니다."
+msgstr "잠시만 기다려주십시오. 정밀 검사 중입니다."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:311
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "잠시만 기다리세요. %s 프리뷰 중."
+msgstr "잠시만 기다려주십시오. %s를 미리 보는 중입니다."
