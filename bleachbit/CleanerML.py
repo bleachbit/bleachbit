@@ -104,7 +104,8 @@ class CleanerML:
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
         self.cleaner.description = _(getText(description.childNodes))
-        self.xlate_cb(self.cleaner.description)
+        translators = description.getAttribute('translators')
+        self.xlate_cb(self.cleaner.description, translators)
 
     def handle_cleaner_running(self, running_elements):
         """<running> element under <cleaner>"""

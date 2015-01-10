@@ -32,7 +32,15 @@
             </xs:simpleContent>
           </xs:complexType>
         </xs:element>
-        <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="description" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="translators" type="xs:string"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="running" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:simpleContent>
