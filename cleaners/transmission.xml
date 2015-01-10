@@ -24,7 +24,7 @@
   <description>File transfer client</description>
   <running type="exe">transmission</running>
   <option id="blocklists">
-    <label>Blocklists</label>
+    <label translators="Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations">Blocklists</label>
     <description>Delete the files</description>
     <warning>Blocklists will need update to work.</warning>
     <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
