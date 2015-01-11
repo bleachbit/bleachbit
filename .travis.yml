@@ -6,11 +6,11 @@ before_install:
   - export VIRT_ROOT=/home/travis/virtualenv/python$TRAVIS_PYTHON_VERSION
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
-  - "sudo apt-get -y install build-essential gcc python-dev pkg-config libglib2.0-dev python-gobject-2-dev"
+  - sudo apt-get install git libgtk2.0-dev libglib2.0-dev
 # install PyGObject from source
-  - wget http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.90/pygobject-2.90.4.tar.bz2
-  - tar xf pygobject-2.90.4.tar.bz2
-  - cd pygobject-2.90.4
+  - wget http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.tar.bz2
+  - tar xf pygobject-2.28.6.tar.bz2
+  - cd pygobject-2.28.6
   - ./configure --prefix=$VIRT_ROOT --disable-introspection > /dev/null
   - make > /dev/null
   - make install > /dev/null
