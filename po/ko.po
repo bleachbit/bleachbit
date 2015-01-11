@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-30 16:39-0700\n"
-"PO-Revision-Date: 2015-01-09 20:05+0000\n"
+"POT-Creation-Date: 2015-01-09 21:05-0700\n"
+"PO-Revision-Date: 2015-01-11 13:36+0000\n"
 "Last-Translator: B. W. Knight <kbd0651@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2015-01-10 01:00+0000\n"
+"X-Launchpad-Export-Date: 2015-01-11 15:16+0000\n"
 "X-Generator: Launchpad (build 17298)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -205,6 +205,7 @@ msgstr "웹사이트 환경 설정, 인증, 신원 추적 등의 정보가 들�
 msgid "List of visited web pages"
 msgstr "방문한 웹 페이지 목록"
 
+#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
 msgstr "차단 목록"
@@ -339,6 +340,7 @@ msgstr "양식 기록"
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "웹사이트와 검색 창에 입력된 양식의 기록"
 
+#. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
 msgstr "음성 파일 태거"
@@ -507,7 +509,7 @@ msgstr "세션 복원"
 
 #: ../bleachbit/Cleaner.py:202
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "브라우저가 종료 또는 충돌된 후 초기 세션을 로드합니다"
+msgstr "브라우저가 종료 또는 충돌된 후 초기 세션을 불러옵니다"
 
 #: ../bleachbit/Cleaner.py:204
 msgid "Site preferences"
@@ -1114,13 +1116,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "파일 이름"
 
-#: ../bleachbit/Unix.py:382 ../bleachbit/Unix.py:412 ../bleachbit/Unix.py:595
+#: ../bleachbit/Unix.py:383 ../bleachbit/Unix.py:413 ../bleachbit/Unix.py:603
 #, python-format
 msgid "Executable not found: %s"
 msgstr "실행파일이 존재하지 않습니다: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:592 ../bleachbit/Worker.py:128
+#: ../bleachbit/Unix.py:600 ../bleachbit/Worker.py:128
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
