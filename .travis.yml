@@ -4,6 +4,7 @@ python:
   - "2.7"
 before_install:
   - export VIRT_ROOT=/home/travis/virtualenv/python$TRAVIS_PYTHON_VERSION
+  - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
   - "sudo apt-get -y install build-essential gcc python-dev pkg-config libglib2.0-dev python-gobject-2-dev"
 # install PyGObject from source
