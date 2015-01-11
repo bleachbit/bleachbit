@@ -7,13 +7,13 @@ before_install:
 install:
   - "sudo apt-get -y install build-essential gcc python-dev pkg-config libglib2.0-dev python-gobject-2-dev"
 # install PyGObject from source
- - wget http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.90/pygobject-2.90.4.tar.bz2
- - tar xf pygobject-2.90.4.tar.bz2
- - cd pygobject-2.90.4
- - ./configure --prefix=$VIRT_ROOT --disable-introspection > /dev/null
- - make > /dev/null
- - make install > /dev/null
- - cd ..
+  - wget http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.90/pygobject-2.90.4.tar.bz2
+  - tar xf pygobject-2.90.4.tar.bz2
+  - cd pygobject-2.90.4
+  - ./configure --prefix=$VIRT_ROOT --disable-introspection > /dev/null
+  - make > /dev/null
+  - make install > /dev/null
+  - cd ..
 # install PyGTK from source
   - wget http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.bz2
   - tar xf pygtk-2.24.0.tar.bz2
