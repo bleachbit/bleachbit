@@ -1,7 +1,12 @@
 language: python
 python:
-    - 2.6
-    - 2.7
-install:
-    - pip install PyGTK
+  - "2.7"
+before_install:
+  - "sudo apt-get -y install build-essential gcc python-dev pkg-config libglib2.0-dev python-gobject-2-dev"
+  - "wget http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.bz2"
+  - "tar -jxf pygtk*"
+  - "cd pygtk-2.24.0"
+  - "./configure"
+  - "make"
+  - "sudo make install"
 script: make tests
