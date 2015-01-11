@@ -15,8 +15,11 @@ pretty:
 	exit 0
 
 tests:
-	for f in *xml; \
+	lintrc=0; \
+	for f in *.xml; \
 	do \
 		xmllint --noout --schema ../doc/cleaner_markup_language.xsd "$$f"; \
-	done \
+		lintrc=$$(($$lintrc + $$?)); \
+	done; \
+	exit $$lintrc
 

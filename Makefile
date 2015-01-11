@@ -64,8 +64,9 @@ lint:
 	exit 0
 
 tests:
-	make -C cleaners tests
-	python tests/TestAll.py -v
+	make -C cleaners tests; cleaners_status=$$?; \
+	python tests/TestAll.py -v; py_status=$$?; \
+	exit $$(($$cleaners_status + $$py_status))
 
 pretty:
 	autopep8 -i {.,bleachbit,tests}/*py
