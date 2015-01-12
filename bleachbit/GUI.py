@@ -698,6 +698,7 @@ class GUI:
         self.window.connect('destroy', lambda w: gtk.main_quit())
 
         self.window.resize(800, 600)
+        self.window.set_position(gtk.WIN_POS_CENTER)
         self.window.set_title(APP_NAME)
         if appicon_path and os.path.exists(appicon_path):
             self.window.set_icon_from_file(appicon_path)
