@@ -79,9 +79,9 @@ class CleanerTestCase(unittest.TestCase):
             self.actions.append(
                 '<action command="delete" search="file" path="%s"/>' % __file__)
             self.actions.append(
-                '<action command="delete" search="glob" path="/usr/sbin/*sh"/>')
+                '<action command="delete" search="glob" path="/bin/*sh"/>')
             self.actions.append(
-                '<action command="delete" search="walk.files" path="/usr/sbin/"/>')
+                '<action command="delete" search="walk.files" path="/bin/"/>')
             self.actions.append(
                 '<action command="delete" search="walk.all" path="/var/log/"/>')
 
