@@ -148,7 +148,12 @@ def environ(varname, csidl):
         # Do not redefine the environment variable when it already exists
         return
     try:
-        os.environ[varname] = shell.SHGetSpecialFolderPath(None, csidl)
+        sppath = shell.SHGetSpecialFolderPath(None, csidl)
+        if len(sppath) < 10:
+            raise RuntimeError('special folder %s is too short: %s' % (varname, sppath))
+        if not os.path.exists(sppath):
+            raise RuntimeError('special folder %s does not exist: %s' % (varname, sppath))
+        os.environ[varname] = sppath
     except:
         import traceback
         traceback.print_exc()
