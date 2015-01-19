@@ -27,6 +27,10 @@ Launcher
 import os
 import sys
 
+if 'nt' == os.name:
+    from bleachbit.Windows import setup_environment
+    setup_environment()
+
 if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
     # This path contains bleachbit/{C,G}LI.py .  This section is
     # unnecessary if installing BleachBit in site-packages.

@@ -138,35 +138,6 @@ if 'posix' == os.name:
         '~/.config/autostart/bleachbit.desktop')
 
 
-#
-# setup environment
-#
-
-# Windows XP doesn't define localappdata, but Windows Vista and 7 do
-def environ(varname, csidl):
-    if os.environ.has_key(varname):
-        # Do not redefine the environment variable when it already exists
-        return
-    try:
-        sppath = shell.SHGetSpecialFolderPath(None, csidl)
-        if len(sppath) < 10:
-            raise RuntimeError('special folder %s is too short: %s' % (varname, sppath))
-        if not os.path.exists(sppath):
-            raise RuntimeError('special folder %s does not exist: %s' % (varname, sppath))
-        os.environ[varname] = sppath
-    except:
-        import traceback
-        traceback.print_exc()
-        print 'ERROR: setting environment variable "%s": %s ' % (
-            varname, str(sys.exc_info()[1]))
-if 'nt' == os.name:
-    environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
-    environ('documents', shellcon.CSIDL_MYDOCUMENTS)
-    environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
-    environ('music', shellcon.CSIDL_MYMUSIC)
-    environ('pictures', shellcon.CSIDL_MYPICTURES)
-    environ('video', shellcon.CSIDL_MYVIDEO)
-
 
 #
 # gettext

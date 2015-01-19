@@ -120,6 +120,25 @@ def browse_folder(hwnd, title):
     return fullpath
 
 
+def csidl_to_environ(varname, csidl):
+    """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
+    if os.environ.has_key(varname):
+        # Do not redefine the environment variable when it already exists
+        return
+    try:
+        sppath = shell.SHGetSpecialFolderPath(None, csidl)
+        if len(sppath) < 10:
+            raise RuntimeError('special folder %s is too short: %s' % (varname, sppath))
+        if not os.path.exists(sppath):
+            raise RuntimeError('special folder %s does not exist: %s' % (varname, sppath))
+        os.environ[varname] = sppath
+    except:
+        import traceback
+        traceback.print_exc()
+        print 'ERROR: setting environment variable "%s": %s ' % (
+            varname, str(sys.exc_info()[1]))
+
+
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
     if os.path.exists(pathname):
@@ -406,6 +425,16 @@ def path_on_network(path):
         return True
     drive = os.path.splitdrive(path)[0] + '\\'
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
+
+def setup_environment():
+    """Define any extra environment variables for use in CleanerML and Winapp2.ini"""
+    csidl_to_environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
+    csidl_to_environ('documents', shellcon.CSIDL_PERSONAL)
+    # Windows XP does not define localappdata, but Windows Vista and 7 do
+    csidl_to_environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
+    csidl_to_environ('music', shellcon.CSIDL_MYMUSIC)
+    csidl_to_environ('pictures', shellcon.CSIDL_MYPICTURES)
+    csidl_to_environ('video', shellcon.CSIDL_MYVIDEO)
 
 
 def split_registry_key(full_key):
