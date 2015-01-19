@@ -176,7 +176,8 @@ class WindowsTestCase(unittest.TestCase):
     def test_setup_environment(self):
         """Unit test for setup_environment"""
         setup_environment()
-        envs = ('commonappdata', 'documents', 'localappdata', 'music', 'pictures', 'video')
+        envs = ('commonappdata', 'documents',
+                'localappdata', 'music', 'pictures', 'video')
         for env in envs:
             self.assert_(os.path.exists(os.environ[env]))
 

@@ -128,9 +128,11 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
         if len(sppath) < 10:
-            raise RuntimeError('special folder %s is too short: %s' % (varname, sppath))
+            raise RuntimeError(
+                'special folder %s is too short: %s' % (varname, sppath))
         if not os.path.exists(sppath):
-            raise RuntimeError('special folder %s does not exist: %s' % (varname, sppath))
+            raise RuntimeError(
+                'special folder %s does not exist: %s' % (varname, sppath))
         os.environ[varname] = sppath
     except:
         import traceback
