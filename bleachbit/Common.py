@@ -160,8 +160,12 @@ def environ(varname, csidl):
         print 'ERROR: setting environment variable "%s": %s ' % (
             varname, str(sys.exc_info()[1]))
 if 'nt' == os.name:
-    environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
+    environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
     environ('documents', shellcon.CSIDL_DESKTOPDIRECTORY)
+    environ('localappdata', shellcon.CSIDL_LOCAL_APPDATA)
+    environ('music', shellcon.CSIDL_MYMUSIC)
+    environ('pictures', shellcon.CSIDL_MYPICTURES)
+    environ('video', shellcon.CSIDL_MYVIDEO)
 
 
 #
