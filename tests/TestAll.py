@@ -25,6 +25,7 @@ Run all test suites
 
 
 import os
+import sys
 import unittest
 
 import TestAction
@@ -75,6 +76,5 @@ def suite():
     map(suite_.addTest, suites)
     return suite_
 
-
 if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(suite())
+    sys.exit(unittest.TextTestRunner(verbosity=2).run(suite()).wasSuccessful())
