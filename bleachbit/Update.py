@@ -54,7 +54,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     # download update
     opener = urllib2.build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
-    kwargs = { 'fullurl' : url }
+    kwargs = {'fullurl': url}
     if sys.hexversion >= 0x02060000:
         # Python 2.6 added timeout option
         kwargs['timeout'] = 20

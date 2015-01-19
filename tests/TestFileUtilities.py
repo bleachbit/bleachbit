@@ -431,7 +431,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         test_getsize_helper(u'bleachbit-test-special-characters-∺ ∯')
 
         # long
-        test_getsize_helper(u'bleachbit-test-long'+'x'*200)
+        test_getsize_helper(u'bleachbit-test-long' + 'x' * 200)
 
         if 'nt' == os.name:
             # the following tests do not apply to Windows

@@ -346,7 +346,8 @@ def getsize(path):
         # FindFilesW instead
         finddata = win32file.FindFilesW(path)
         if finddata == []:
-            # FindFilesW doesn't work for directories, so fall back to getsize()
+            # FindFilesW doesn't work for directories, so fall back to
+            # getsize()
             return os.path.getsize(path)
         else:
             size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
@@ -784,7 +785,7 @@ def wipe_path(pathname, idle=False):
         # explicitly delete
         # Python 2.5.4 always deletes NamedTemporaryFile, so
         # ignore missing in older Python here.
-        delete(f.name, ignore_missing = sys.hexversion < 0x02060000)
+        delete(f.name, ignore_missing=sys.hexversion < 0x02060000)
 
 
 def vacuum_sqlite3(path):

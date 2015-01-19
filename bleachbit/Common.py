@@ -138,11 +138,9 @@ if 'posix' == os.name:
         '~/.config/autostart/bleachbit.desktop')
 
 
-
 #
 # gettext
 #
-
 try:
     user_locale = locale.getdefaultlocale()[0]
 except:

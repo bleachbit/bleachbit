@@ -36,7 +36,7 @@ if 'nt' == os.name:
 
 
 boolean_keys = ['auto_hide', 'auto_start', 'check_beta',
-                'check_online_updates', 'first_start', 'shred','exit_done','delete_confirmation']
+                'check_online_updates', 'first_start', 'shred', 'exit_done', 'delete_confirmation']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
 

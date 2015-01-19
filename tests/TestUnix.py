@@ -139,7 +139,7 @@ class UnixTestCase(unittest.TestCase):
         self.assert_(isinstance(b, bool))
 
         if not os.path.exists(bleachbit.Common.launcher_path) and \
-            os.path.exists('bleachbit.desktop'):
+                os.path.exists('bleachbit.desktop'):
             # this happens when BleachBit is not installed
             bleachbit.Common.launcher_path = 'bleachbit.desktop'
 

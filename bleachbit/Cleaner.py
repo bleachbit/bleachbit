@@ -233,7 +233,8 @@ class Firefox(Cleaner):
         if 'backup' == option_id:
             bookmark_bu_dir = os.path.join(self.profile_dir, 'bookmarkbackups')
             files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.json")
-            files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.jsonlz4")
+            files += FileUtilities.expand_glob_join(
+                bookmark_bu_dir, "*.jsonlz4")
         # browser cache
         cache_base = None
         if 'posix' == os.name:
@@ -770,7 +771,7 @@ class System(Cleaner):
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
             '^/tmp/gconfd-[^/]+/lock/ior$',
-            '^/tmp/fsa/', # fsarchiver
+            '^/tmp/fsa/',  # fsarchiver
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
