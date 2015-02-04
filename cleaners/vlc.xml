@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2014 Andrew Ziem
+    Copyright (C) 2015 Andrew Ziem
     http://bleachbit.sourceforge.net
 
     This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 -->
 <cleaner id="vlc">
   <label>VLC media player</label>
+  <description>Media player</description>
   <running type="exe">vlc.exe</running>
   <running type="exe">vlc</running>
   <option id="mru">
@@ -37,6 +38,6 @@
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="General" parameter="filedialog-path"/>
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="RecentsMRL"/>
     <action search="file" path="~/.config/vlc/vlc-qt-interface.conf" command="ini" section="OpenDialog" parameter="netMRL"/>
-    <action command="delete" search="walk.files" path="$APPDATA\vlc\art\artistalbum\"/>
+    <action command="delete" search="walk.files" path="$APPDATA\vlc\art\artistalbum\*"/>
   </option>
 </cleaner>
