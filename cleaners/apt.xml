@@ -21,6 +21,7 @@
 -->
 <cleaner id="apt" os="linux">
   <label>APT</label>
+  <description>Package manager</description>
   <running type="exe">apt-get</running>
   <running type="exe">synaptic</running>
   <!-- gnome-app-install uses synaptic -->
