@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-02-04 21:20-0700\n"
-"PO-Revision-Date: 2015-02-11 16:46+0000\n"
+"POT-Creation-Date: 2015-02-17 21:09-0700\n"
+"PO-Revision-Date: 2015-03-06 07:08+0000\n"
 "Last-Translator: Pin-hsien Li <pspeter9931@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2015-02-12 18:48+0000\n"
-"X-Generator: Launchpad (build 17336)\n"
+"X-Launchpad-Export-Date: 2015-03-07 04:08+0000\n"
+"X-Generator: Launchpad (build 17383)\n"
 "Language: zh_TW\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -91,6 +91,16 @@ msgid ""
 "removing any data"
 msgstr "清理資料庫碎片，減少使用空間並加快速度；不會移除任何資料"
 
+#: ../cleaners/yum.xml ../cleaners/apt.xml
+msgid "Package manager"
+msgstr "套件管理員"
+
+#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
+#: ../cleaners/secondlife_viewer.xml
+msgid "Game"
+msgstr "遊戲"
+
 #: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
@@ -108,15 +118,13 @@ msgstr "記錄檔"
 msgid "Delete the logs"
 msgstr "刪除記錄檔"
 
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
-#: ../cleaners/secondlife_viewer.xml
-msgid "Game"
-msgstr "遊戲"
-
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
 msgstr "縮圖"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "檔案圖示"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -241,9 +249,13 @@ msgid "Delete the avatars and emoticons cache"
 msgstr "刪除大頭貼與表情符號的快取"
 
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
 msgid "Media player"
 msgstr "媒體播放器"
+
+#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml
+msgid "File manager"
+msgstr "檔案管理員"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:465
@@ -329,6 +341,14 @@ msgstr "URL 記錄"
 msgid "Office suite"
 msgstr "辦公室套件"
 
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "文件檢視器"
+
+#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "郵件客戶端"
+
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
 msgstr "刪除遊戲伺服器清單"
@@ -336,6 +356,10 @@ msgstr "刪除遊戲伺服器清單"
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
 msgstr "刪除指令記錄"
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "Windows 軟體相容層"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
@@ -383,6 +407,10 @@ msgstr "已下載的 Podcast"
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
 msgstr "刪除已下載的 Podcast（網路連播）"
+
+#: ../cleaners/bash.xml
+msgid "Shell"
+msgstr "命令殼 (shell)"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
@@ -471,6 +499,14 @@ msgstr "作業階段"
 #: ../cleaners/google_chrome.xml
 msgid "Delete the current and last sessions"
 msgstr "刪除本次與之前的作業階段"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "視窗系統"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "文字處理器"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
