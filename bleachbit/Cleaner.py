@@ -604,6 +604,8 @@ class System(Cleaner):
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
+                '$windir\\SoftwareDistribution\\*.log',
+                '$windir\\SoftwareDistribution\\DataStore\\Logs\\*',
                 '$windir\\system32\\TZLog.log',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt',
