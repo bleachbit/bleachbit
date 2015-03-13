@@ -24,11 +24,7 @@ Perform (or assist with) cleaning operations.
 
 
 import glob
-try:
-    import gtk
-    HAVE_GTK = True
-except:
-    HAVE_GTK = False
+import warnings
 import os.path
 import re
 import sys
@@ -48,6 +44,12 @@ from Common import _
 from FileUtilities import children_in_directory
 from Options import options
 
+warnings.simplefilter("ignore", Warning) # Supress GTK warning messages while running in CLI #34 
+try:
+    import gtk
+    HAVE_GTK = True
+except:
+    HAVE_GTK = False
 
 # a module-level variable for holding cleaners
 backends = {}
@@ -604,6 +606,8 @@ class System(Cleaner):
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
+                '$windir\\SoftwareDistribution\\*.log',
+                '$windir\\SoftwareDistribution\\DataStore\\Logs\\*',
                 '$windir\\system32\\TZLog.log',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt',
