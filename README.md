@@ -2,7 +2,6 @@
 
 BleachBit cleans files to free disk space and to maintain privacy.
 
-
 ## Running from source
 
 To run BleachBit without installation, unpack the tarball and then run these
@@ -19,4 +18,15 @@ For information regarding the command line interface, run:
 
      python bleachbit.py --help
 
-For more help, please visit the [BleachBit web site](http://bleachbit.sourceforge.net/help)
+## Links
+
+* [BleachBit home 
+page](http://bleachbit.sourceforge.net)
+* [Support](http://bleachbit.sourceforge.net/help)
+* [Documentation](bleachbit.sourceforge.net/documentation/)
+
+### Development
+* [BleachBit on Travis CI](https://travis-ci.org/az0/bleachbit)  [![Build Status](https://travis-ci.org/az0/bleachbit.svg?branch=master)](https://travis-ci.org/az0/bleachbit)
+* [CleanerML Repository](https://github.com/az0/cleanerml)
+* [BleachBit Miscellaneous Repository](https://github.com/az0/bleachbit-misc)
+* [Winapp2.ini Repository](https://github.com/az0/winapp2.ini)
