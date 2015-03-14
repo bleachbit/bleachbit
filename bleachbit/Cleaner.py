@@ -482,6 +482,7 @@ class System(Cleaner):
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
                 'memory_dump', _('Memory dump'), _('Delete the file memory.dmp'))
+            self.add_option('crash_dumps', 'Crash dumps', _('Delete the crash dumps'))
             self.add_option('muicache', 'MUICache', _('Delete the cache'))
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
@@ -630,6 +631,11 @@ class System(Cleaner):
             if os.path.exists(fname):
                 files += [fname]
             for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
+                files += [fname]
+
+        # crash dumps
+        if 'nt' == os.name and 'crash_dumps' == option_id:
+            for fname in glob.iglob(os.path.expandvars('$localappdata\\CrashDumps\\*.dmp')):
                 files += [fname]
 
         # most recently used documents list
