@@ -30,4 +30,10 @@
     <action command="delete" search="glob" path="$APPDATA\Skype\*\chatmsg[0-9]*.dbb"/>
     <action command="delete" search="glob" path="$APPDATA\Skype\*\chatsync\*\*.dat"/>
   </option>
+  <option id="installers">
+    <label>Installers</label>
+    <description>Delete cached patches and installers</description>
+    <action command="delete" search="glob" path="$PROGRAMDATA\Skype\{*}\*.msi"/>
+    <action command="delete" search="glob" path="$PROGRAMDATA\Skype\{*}\*.exe"/>
+  </option>
 </cleaner>
