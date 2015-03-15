@@ -657,7 +657,8 @@ def wipe_name(pathname1):
 
 
 def wipe_path(pathname, idle=False):
-    """Wipe the free space in the path"""
+    """Wipe the free space in the path
+    This function uses an iterator to update the GUI."""
     def temporaryfile():
         # reference
         # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
