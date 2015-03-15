@@ -191,7 +191,11 @@ class Options:
             self.config.add_section("hashpath")
         if not self.config.has_section("list/shred_drives"):
             from FileUtilities import guess_overwrite_paths
-            self.set_list('shred_drives', guess_overwrite_paths())
+            try:
+                self.set_list('shred_drives', guess_overwrite_paths())
+            except:
+                traceback.print_exc()
+                print 'ERROR: error setting default shred drives'
 
         # set defaults
         self.__set_default("auto_hide", True)
