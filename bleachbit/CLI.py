@@ -50,7 +50,7 @@ class CliCallback:
 
     def append_text(self, msg, tag=None):
         """Write text to the terminal"""
-        # If the encoding is not explictly handled on a non-UTF-8
+        # If the encoding is not explicitly handled on a non-UTF-8
         # system, then special Latin-1 characters such as umlauts may
         # raise an exception as an encoding error.
         print msg.strip('\n').encode(self.encoding, 'replace')
