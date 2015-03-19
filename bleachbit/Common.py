@@ -25,6 +25,7 @@ Code that is commonly shared throughout BleachBit
 
 import gettext
 import locale
+import logging
 import os
 import sys
 
@@ -36,6 +37,10 @@ APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
 socket_timeout = 10
+
+logger = logging.getLogger('bleachbit')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).
@@ -100,7 +105,7 @@ elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    print 'warning: unknown system cleaners directory for platform ', sys.platform
+    logger.warning('unknown system cleaners directory for platform %s ' % sys.platform)
 
 # local cleaners directory (for running from source tree)
 local_cleaners_dir = os.path.normpath(
@@ -144,12 +149,12 @@ if 'posix' == os.name:
 try:
     user_locale = locale.getdefaultlocale()[0]
 except:
-    print 'warning: error getting locale: %s' % str(sys.exc_info()[1])
+    logger.warning('error getting locale: %s' % str(sys.exc_info()[1]))
     user_locale = None
 
 if None == user_locale:
     user_locale = 'C'
-    print "warning: No default locale found.  Assuming '%s'" % user_locale
+    logger.warning("no default locale found.  Assuming '%s'" % user_locale)
 
 if 'win32' == sys.platform:
     os.environ['LANG'] = user_locale
