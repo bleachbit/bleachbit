@@ -575,8 +575,7 @@ class System(Cleaner):
 
         # unwanted locales
         if 'posix' == os.name and 'localizations' == option_id:
-            callback = lambda locale, language: options.get_language(language)
-            for path in Unix.locales.localization_paths(callback):
+            for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
                 yield Command.Delete(path)
 
         # Windows logs

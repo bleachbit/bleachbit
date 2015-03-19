@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="localizations">
+  <label>Localizations</label>
+  <localizations>
+    <path location="/usr/lib">
+      <path location="chromium/locales" filter="*.pak"/>
+      <path location="libreoffice/share">
+        <path location="autocorr" filter="acor_*.dat"/>
+        <path location="fingerprint" filter="*.lm"/>
+      </path>
+    </path>
+    <path location="/usr/share">
+      <path location="anki/locale"/>
+      <path location="apps/ksgmltools/customization"/>
+      <path location="calendar"/>
+      <path location="cups/doc"/>
+      <path location="cups/locale"/>
+      <path location="doc">
+			<path location="kde/HTML"/>
+			<path location="HTML/release-notes"/>
+			<path location="thunar-data/html"/>
+		</path>
+      <path location="help"/>
+      <path location="i18n/locales"/>
+      <path location="locale"/>
+      <path location="lyx/doc"/>
+      <path location="lyx/examples"/>
+      <path location="speedcrunch/books"/>
+      <path location="texmaker/" filter="*.dic" />
+      <path location="vim/vim74/lang" filter="menu_*.vim"/>
+      <path location="vim/vim74/lang"/>
+      <path location="X11/locale"/>
+      <path location="zenmap/locale"/>
+    </path>
+  </localizations>
+</cleaner>
