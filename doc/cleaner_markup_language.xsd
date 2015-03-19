@@ -135,7 +135,7 @@
         <xs:element name="localizations" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:element ref="path"/>
+              <xs:element ref="path" maxOccurs="unbounded"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
