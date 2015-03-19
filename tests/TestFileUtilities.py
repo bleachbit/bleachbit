@@ -636,7 +636,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
             print 'warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set'
             return
         pathname = tempfile.gettempdir()
-        wipe_path(pathname)
+        for ret in wipe_path(pathname):
+            # no idle handler
+            pass
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
