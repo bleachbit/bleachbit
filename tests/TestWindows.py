@@ -42,6 +42,12 @@ class WindowsTestCase(unittest.TestCase):
 
     """Test case for module Windows"""
 
+
+    def test_get_recycle_bin(self):
+        """Unit test for get_recycle_bin"""
+        for f in get_recycle_bin():
+            self.assert_(os.path.exists(f))
+
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
         (fd, pathname) = tempfile.mkstemp('bbregular')
@@ -159,19 +165,6 @@ class WindowsTestCase(unittest.TestCase):
                 test[1]), 'is_process_running(%s) != %s' % (test[1], test[0]))
             self.assertEqual(test[0], is_process_running_win32(test[1]))
             self.assertEqual(test[0], is_process_running_wmic(test[1]))
-
-    def test_empty_recycle_bin(self):
-        """Unit test for empty_recycle_bin"""
-        for drive in get_fixed_drives():
-            ret = empty_recycle_bin(drive, really_delete=False)
-            self.assert_(isinstance(ret, (int, long)))
-        if not common.destructive_tests('recycle bin'):
-            return
-        for drive in get_fixed_drives():
-            ret = empty_recycle_bin(drive, really_delete=True)
-            self.assert_(isinstance(ret, (int, long)))
-            # repeat because emptying empty recycle bin can cause
-            # 'catastrophic failure' error
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""

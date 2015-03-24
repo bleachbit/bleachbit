@@ -748,14 +748,8 @@ class System(Cleaner):
 
         # recycle bin
         if 'nt' == os.name and 'recycle_bin' == option_id:
-            for drive in Windows.get_fixed_drives():
-                # TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-                label = _("Recycle bin %s") % drive
-
-                def emptyrecyclebin():
-                    return Windows.empty_recycle_bin(drive, True)
-                # fixme: enable size preview
-                yield Command.Function(None, emptyrecyclebin, label)
+            for path in Windows.get_recycle_bin():
+                yield Command.Delete(path)
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:

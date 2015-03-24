@@ -308,17 +308,6 @@ def elevate_privileges():
     return False
 
 
-def empty_recycle_bin(drive, really_delete):
-    """Empty the recycle bin or preview its size"""
-    bytes_used = shell.SHQueryRecycleBin(drive)[0]
-    if really_delete and bytes_used > 0:
-        # Trying to delete an empty Recycle Bin on Vista/7 causes a
-        # 'catastrophic failure'
-        flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
-        shell.SHEmptyRecycleBin(None, drive, flags)
-    return bytes_used
-
-
 def get_autostart_path():
     """Return the path of the BleachBit shortcut in the user's startup folder"""
     try:
@@ -349,6 +338,15 @@ def get_fixed_drives():
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):
         if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
             yield drive
+
+
+def get_recycle_bin():
+    """Yield a list of files in the recycle bin"""
+    pidl = shell.SHGetSpecialFolderLocation(0, shellcon.CSIDL_BITBUCKET)
+    desktop = shell.SHGetDesktopFolder()
+    h = desktop.BindToObject(pidl, None, shell.IID_IShellFolder)
+    for item in h:
+        yield h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
 
 
 def is_process_running(name):
