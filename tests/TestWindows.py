@@ -67,6 +67,9 @@ class WindowsTestCase(unittest.TestCase):
         # clear recycle bin
         for f in get_recycle_bin():
             FileUtilities.delete(f)
+        # now it should be empty
+        for f in get_recycle_bin():
+            self.fail('recycle bin should be empty, but it is not')
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""

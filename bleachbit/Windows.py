@@ -348,8 +348,9 @@ def get_recycle_bin():
     for item in h:
         path = h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
         if os.path.isdir(path):
-            for child in FileUtilities.children_in_directory(path):
+            for child in FileUtilities.children_in_directory(path, True):
                 yield child
+            yield path
         else:
             yield path
 
