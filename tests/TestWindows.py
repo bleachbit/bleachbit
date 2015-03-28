@@ -38,6 +38,11 @@ sys.path.append('.')
 from bleachbit.Windows import *
 
 
+def move_to_recycle_bin(path):
+    from win32com.shell import shell, shellcon
+    shell.SHFileOperation((0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO|shellcon.FOF_NOCONFIRMATION))
+
+
 class WindowsTestCase(unittest.TestCase):
 
     """Test case for module Windows"""
@@ -47,6 +52,22 @@ class WindowsTestCase(unittest.TestCase):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assert_(os.path.exists(f))
+        if None == os.getenv('ALLTESTS'):
+            print 'warning: skipping destructive parts of test_get_recycle_bin() because environment variable ALLTESTS not set'
+            return
+        # make a file and move it to the recycle bin
+        import tempfile
+        (fd, filename) = tempfile.mkstemp('bleachbit-recycle-file')
+        os.close(fd)
+        move_to_recycle_bin(filename)
+        # make a folder and move it to the recycle bin
+        dirname = tempfile.mkdtemp('bleachbit-recycle-folder')
+        open(os.path.join(dirname, 'file'), 'a').close()
+        move_to_recycle_bin(dirname)
+        # clear recycle bin
+        for f in get_recycle_bin():
+            FileUtilities.delete(f)
+
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""

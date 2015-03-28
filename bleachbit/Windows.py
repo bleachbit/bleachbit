@@ -346,7 +346,12 @@ def get_recycle_bin():
     desktop = shell.SHGetDesktopFolder()
     h = desktop.BindToObject(pidl, None, shell.IID_IShellFolder)
     for item in h:
-        yield h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
+        path = h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
+        if os.path.isdir(path):
+            for child in FileUtilities.children_in_directory(path):
+                yield child
+        else:
+            yield path
 
 
 def is_process_running(name):
