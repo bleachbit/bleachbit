@@ -40,13 +40,13 @@ from bleachbit.Windows import *
 
 def move_to_recycle_bin(path):
     from win32com.shell import shell, shellcon
-    shell.SHFileOperation((0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO|shellcon.FOF_NOCONFIRMATION))
+    shell.SHFileOperation(
+        (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
 
 
 class WindowsTestCase(unittest.TestCase):
 
     """Test case for module Windows"""
-
 
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
@@ -67,7 +67,6 @@ class WindowsTestCase(unittest.TestCase):
         # clear recycle bin
         for f in get_recycle_bin():
             FileUtilities.delete(f)
-
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
