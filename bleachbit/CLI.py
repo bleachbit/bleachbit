@@ -40,7 +40,7 @@ class CliCallback:
 
     def __init__(self):
         """Initialize CliCallback"""
-        self.encoding = encoding else 'UTF8'
+        self.encoding = encoding if encoding else 'UTF8'
 
     def append_text(self, msg, tag=None):
         """Write text to the terminal"""
