@@ -39,9 +39,22 @@ from bleachbit.Windows import *
 
 
 def move_to_recycle_bin(path):
+    """Move 'path' into recycle bin"""
     from win32com.shell import shell, shellcon
     shell.SHFileOperation(
         (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
+
+def put_files_into_recycle_bin():
+    """Put a file and a folder into the recycle bin"""
+    # make a file and move it to the recycle bin
+    import tempfile
+    (fd, filename) = tempfile.mkstemp('bleachbit-recycle-file')
+    os.close(fd)
+    move_to_recycle_bin(filename)
+    # make a folder and move it to the recycle bin
+    dirname = tempfile.mkdtemp('bleachbit-recycle-folder')
+    open(os.path.join(dirname, 'file'), 'a').close()
+    move_to_recycle_bin(dirname)
 
 
 class WindowsTestCase(unittest.TestCase):
@@ -52,21 +65,15 @@ class WindowsTestCase(unittest.TestCase):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assert_(os.path.exists(f))
-        if None == os.getenv('ALLTESTS'):
-            print 'warning: skipping destructive parts of test_get_recycle_bin() because environment variable ALLTESTS not set'
+        if not common.destructive_tests('get_recycle_bin'):
             return
-        # make a file and move it to the recycle bin
-        import tempfile
-        (fd, filename) = tempfile.mkstemp('bleachbit-recycle-file')
-        os.close(fd)
-        move_to_recycle_bin(filename)
-        # make a folder and move it to the recycle bin
-        dirname = tempfile.mkdtemp('bleachbit-recycle-folder')
-        open(os.path.join(dirname, 'file'), 'a').close()
-        move_to_recycle_bin(dirname)
+        put_files_into_recycle_bin()
         # clear recycle bin
+        counter = 0
         for f in get_recycle_bin():
+            counter += 1
             FileUtilities.delete(f)
+        self.assert_(counter >= 3, 'deleted %d' % counter)
         # now it should be empty
         for f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
