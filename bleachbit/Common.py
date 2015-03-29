@@ -105,7 +105,8 @@ elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    logger.warning('unknown system cleaners directory for platform %s ' % sys.platform)
+    logger.warning('unknown system cleaners directory for platform %s ' %
+                   sys.platform)
 
 # local cleaners directory (for running from source tree)
 local_cleaners_dir = os.path.normpath(

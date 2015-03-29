@@ -409,7 +409,8 @@ def guess_overwrite_paths():
             except Exception, e:
                 # see https://github.com/az0/bleachbit/issues/27
                 # https://bugs.launchpad.net/bleachbit/+bug/1372179
-                logger.error('error in same_partition(%s, %s): %s' % (localtmp, drive, e))
+                logger.error('error in same_partition(%s, %s): %s' %
+                             (localtmp, drive, e))
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
@@ -603,7 +604,8 @@ def wipe_inodes(pathname, idle=False):
     # display effectiveness
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d inodes available, %d to super user' % (stats.f_ffree, stats.f_favail))
+        logger.info('%d inodes available, %d to super user' %
+                    (stats.f_ffree, stats.f_favail))
 
     # clean up
     files_len_original = len(files)
@@ -774,13 +776,15 @@ def wipe_path(pathname, idle=False):
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s' % \
-        (len(files), total_bytes, elapsed_sec, rate_mbs))
+    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s' %
+                (len(files), total_bytes, elapsed_sec, rate_mbs))
     # how much free space is left (should be near zero)
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d bytes and %d inodes available to non-super-user' % (stats.f_bsize * stats.f_bavail, stats.f_favail))
-        logger.info('%d bytes and %d inodes available to super-user' % (stats.f_bsize * stats.f_bfree, stats.f_ffree))
+        logger.info('%d bytes and %d inodes available to non-super-user' %
+                    (stats.f_bsize * stats.f_bavail, stats.f_favail))
+        logger.info('%d bytes and %d inodes available to super-user' %
+                    (stats.f_bsize * stats.f_bfree, stats.f_ffree))
     # truncate and close files
     for f in files:
         f.truncate(0)
