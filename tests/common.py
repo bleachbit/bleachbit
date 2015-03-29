@@ -31,7 +31,7 @@ def destructive_tests(title):
     """Return true if allowed to run destructive tests.  If false print notice."""
     if os.getenv('DESTRUCTIVE_TESTS') == 'T':
         return True
-    print 'warning: skipping test(s) for %s because env. var. DESTRUCTIVE_TESTS not set' % title
+    print 'warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title
     return False
 
 
