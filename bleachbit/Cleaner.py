@@ -24,11 +24,12 @@ Perform (or assist with) cleaning operations.
 
 
 import glob
-import warnings
+import logging
 import os.path
 import re
 import sys
 import traceback
+import warnings
 
 import Command
 import FileUtilities
@@ -748,8 +749,27 @@ class System(Cleaner):
 
         # recycle bin
         if 'nt' == os.name and 'recycle_bin' == option_id:
+            # This method allows shredding
             for path in Windows.get_recycle_bin():
                 yield Command.Delete(path)
+            # If there were any files deleted, Windows XP will show the
+            # wrong icon for the recycle bin indicating it is not empty.
+            # The icon will be incorrect until logging in to Windows again
+            # or until it is emptied using the Windows API call for emptying
+            # the recycle bin.
+
+            # Windows 10 refreshes the recycle bin icon when the user
+            # opens the recycle bin folder.
+
+            # This is a hack to refresh the icon.
+            import tempfile
+            tmpdir = tempfile.mkdtemp()
+            Windows.move_to_recycle_bin(tmpdir)
+            try:
+                Windows.empty_recycle_bin(None, True)
+            except:
+                logger = logging.getLogger(__name__)
+                logger.info('error in empty_recycle_bin()', exc_info=True)
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:

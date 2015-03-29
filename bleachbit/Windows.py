@@ -308,6 +308,24 @@ def elevate_privileges():
     return False
 
 
+def empty_recycle_bin(path, really_delete):
+    """Empty the recycle bin or preview its size.
+
+    If the recycle bin is empty, it is not emptied again to avoid an error.
+
+    Keyword arguments:
+    path          -- A drive, folder or None.  None refers to all recycle bins.
+    really_delete -- If True, then delete.  If False, then just preview.
+    """
+    (bytes_used, num_files) = shell.SHQueryRecycleBin(path)
+    if really_delete and num_files > 0:
+        # Trying to delete an empty Recycle Bin on Vista/7 causes a
+        # 'catastrophic failure'
+        flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
+        shell.SHEmptyRecycleBin(None, path, flags)
+    return bytes_used
+
+
 def get_autostart_path():
     """Return the path of the BleachBit shortcut in the user's startup folder"""
     try:
@@ -423,6 +441,13 @@ def is_process_running_wmic(name):
             clean_name, 'get', 'Caption']
     (_, stdout, _) = General.run_external(args)
     return stdout.lower().find(clean_name) > -1
+
+
+def move_to_recycle_bin(path):
+    """Move 'path' into recycle bin"""
+    from win32com.shell import shell, shellcon
+    shell.SHFileOperation(
+        (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
 
 
 def path_on_network(path):

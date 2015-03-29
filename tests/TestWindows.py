@@ -38,12 +38,6 @@ sys.path.append('.')
 from bleachbit.Windows import *
 
 
-def move_to_recycle_bin(path):
-    """Move 'path' into recycle bin"""
-    from win32com.shell import shell, shellcon
-    shell.SHFileOperation(
-        (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
-
 def put_files_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
     # make a file and move it to the recycle bin
@@ -185,6 +179,31 @@ class WindowsTestCase(unittest.TestCase):
             drives.append(drive)
             self.assertEqual(drive, drive.upper())
         self.assert_("C:\\" in drives)
+
+    def test_empty_recycle_bin(self):
+        """Unit test for empty_recycle_bin"""
+        # check the function basically works
+        for drive in get_fixed_drives():
+            ret = empty_recycle_bin(drive, really_delete=False)
+            self.assert_(isinstance(ret, (int, long)))
+        if not common.destructive_tests('recycle bin'):
+            return
+        # check it deletes files for fixed drives
+        put_files_into_recycle_bin()
+        for drive in get_fixed_drives():
+            ret = empty_recycle_bin(drive, really_delete=True)
+            self.assert_(isinstance(ret, (int, long)))
+        # check it deletes files for all drives
+        put_files_into_recycle_bin()
+        ret = empty_recycle_bin(None, really_delete=True)
+        self.assert_(isinstance(ret, (int, long)))
+        # Repeat two for reasons.
+        # 1. Trying to empty an empty recycling bin can cause
+        #    a 'catastrophic failure' error (handled in the function)
+        # 2. It should show zero bytes were deleted
+        for drive in get_fixed_drives():
+            ret = empty_recycle_bin(drive, really_delete=True)
+            self.assertEqual(ret, 0)
 
     def test_is_process_running(self):
         tests = ((True, 'explorer.exe'),
