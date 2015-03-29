@@ -148,10 +148,11 @@ if 'posix' == os.name:
 # gettext
 #
 try:
-    user_locale = locale.getdefaultlocale()[0]
+    (user_locale, encoding) = locale.getdefaultlocale()
 except:
     logger.warning('error getting locale: %s' % str(sys.exc_info()[1]))
     user_locale = None
+    encoding = None
 
 if None == user_locale:
     user_locale = 'C'
@@ -179,6 +180,24 @@ except:
             return singular
         return plural
 
+#
+# string decoding
+#
+# In Python 2, some strings such as Python exceptions may be localized
+# and byte encoded.  This decodes them into Unicode.
+# See <https://bugs.launchpad.net/bleachbit/+bug/1416640>.
+#
+
+
+def decode_str(str):
+    """Decode a string into Unicode using the default encoding"""
+    if isinstance(str, Exception):
+        # for convenience
+        return decode_str(str.message)
+    try:
+        return str.decode(encoding)
+    except:
+        return str.decode('ascii', 'replace')
 
 #
 # pgettext

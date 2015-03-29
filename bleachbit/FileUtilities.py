@@ -39,6 +39,7 @@ import sys
 import tempfile
 import time
 import ConfigParser
+import Common
 
 if 'nt' == os.name:
     import win32file
@@ -292,7 +293,8 @@ def execute_sqlite3(path, cmds):
         try:
             cursor.execute(cmd)
         except sqlite3.DatabaseError, exc:
-            raise sqlite3.DatabaseError('%s: %s' % (exc, path))
+            raise sqlite3.DatabaseError(
+                '%s: %s' % (Common.decode_str(exc), path))
         except sqlite3.OperationalError, exc:
             logger = logging.getLogger(__name__)
             if exc.message.find('no such function: ') >= 0:
@@ -300,7 +302,8 @@ def execute_sqlite3(path, cmds):
                 # available
                 logger.warning(exc.message)
             else:
-                raise sqlite3.OperationalError('%s: %s' % (exc, path))
+                raise sqlite3.OperationalError(
+                    '%s: %s' % (Common.decode_str(exc), path))
     cursor.close()
     conn.commit()
     conn.close()
@@ -410,7 +413,7 @@ def guess_overwrite_paths():
                 # see https://github.com/az0/bleachbit/issues/27
                 # https://bugs.launchpad.net/bleachbit/+bug/1372179
                 logger.error('error in same_partition(%s, %s): %s' %
-                             (localtmp, drive, e))
+                             (localtmp, drive, Common.decode_str(e)))
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
@@ -456,7 +459,16 @@ def listdir(directory):
 def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
     if 'nt' == os.name:
-        return free_space(dir1) == free_space(dir2)
+        try:
+            return free_space(dir1) == free_space(dir2)
+        except IOError, e:
+            if e.errno == errno.EACCES:
+                logger = logging.getLogger(__name__)
+                logger.error(
+                    'access denied for same_partition(%s, %s): %s' % (dir1, dir2, Common.decode_str(e)))
+                # https://github.com/az0/bleachbit/issues/27
+                return False
+            raise
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
     return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
@@ -564,8 +576,8 @@ def wipe_inodes(pathname, idle=False):
         except KeyboardInterrupt:
             logger.info('wipe_inodes: keyboard interrupt')
             break
-        except:
-            logger.error(sys.exc_info()[1])
+        except Exception, e:
+            logger.error(Common.decode_str(e))
             errors += 1
             if os.path.exists(fn):
                 # on Windows with FAT32, files sometimes exist despite error

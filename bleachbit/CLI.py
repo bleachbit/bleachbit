@@ -29,7 +29,7 @@ import os
 import sys
 
 from Cleaner import backends, create_simple_cleaner, register_cleaners
-from Common import _, APP_VERSION
+from Common import _, APP_VERSION, encoding
 import Options
 import Worker
 
@@ -40,13 +40,7 @@ class CliCallback:
 
     def __init__(self):
         """Initialize CliCallback"""
-        import locale
-        try:
-            self.encoding = locale.getdefaultlocale()[1]
-        except:
-            self.encoding = None
-        if not self.encoding:
-            self.encoding = 'UTF8'
+        self.encoding = encoding else 'UTF8'
 
     def append_text(self, msg, tag=None):
         """Write text to the terminal"""
