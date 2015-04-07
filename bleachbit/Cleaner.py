@@ -680,8 +680,12 @@ class System(Cleaner):
         if 'nt' == os.name and 'tmp' == option_id:
             dirname = os.path.expandvars(
                 "$USERPROFILE\\Local Settings\\Temp\\")
+            # whitelist the folder %TEMP%\Low but not its contents
+            # https://bugs.launchpad.net/bleachbit/+bug/1421726
+            low = os.path.join(dirname, 'low').lower()
             for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
+                if not low == filename.lower():
+                    yield Command.Delete(filename)
             dirname = os.path.expandvars("$windir\\temp\\")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
