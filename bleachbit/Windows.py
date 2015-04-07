@@ -122,18 +122,9 @@ def browse_folder(hwnd, title):
 
 def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
-    if os.environ.has_key(varname):
-        # Do not redefine the environment variable when it already exists
-        return
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-        if len(sppath) < 10:
-            raise RuntimeError(
-                'special folder %s is too short: %s' % (varname, sppath))
-        if not os.path.exists(sppath):
-            raise RuntimeError(
-                'special folder %s does not exist: %s' % (varname, sppath))
-        os.environ[varname] = sppath
+        set_environ(varname, sppath)
     except:
         import traceback
         traceback.print_exc()
@@ -358,6 +349,67 @@ def get_fixed_drives():
             yield drive
 
 
+def get_known_folder_path(folder_name):
+    """Return the path of a folder by its Folder ID
+
+    Requires Windows Vista, Server 2008, or later
+
+    Based on the code Michael Kropat (mkropat) from <https://gist.github.com/mkropat/7550097> licensed
+    under the GNU GPL"""
+    import ctypes
+    from ctypes import wintypes
+    from uuid import UUID
+
+    class GUID(ctypes.Structure):
+        _fields_ = [
+            ("Data1", wintypes.DWORD),
+            ("Data2", wintypes.WORD),
+            ("Data3", wintypes.WORD),
+            ("Data4", wintypes.BYTE * 8)
+        ]
+
+        def __init__(self, uuid_):
+            ctypes.Structure.__init__(self)
+            self.Data1, self.Data2, self.Data3, self.Data4[
+                0], self.Data4[1], rest = uuid_.fields
+            for i in range(2, 8):
+                self.Data4[i] = rest >> (8 - i - 1) * 8 & 0xff
+
+    class FOLDERID:
+        LocalAppDataLow = UUID(
+            '{A520A1A4-1780-4FF6-BD18-167343C5AF16}')
+
+    class UserHandle:
+        current = wintypes.HANDLE(0)
+
+    _CoTaskMemFree = windll.ole32.CoTaskMemFree
+    _CoTaskMemFree.restype = None
+    _CoTaskMemFree.argtypes = [ctypes.c_void_p]
+
+    try:
+        _SHGetKnownFolderPath = windll.shell32.SHGetKnownFolderPath
+    except AttributeError:
+        # Not supported on Windows XP
+        return None
+    _SHGetKnownFolderPath.argtypes = [
+        ctypes.POINTER(GUID), wintypes.DWORD, wintypes.HANDLE, ctypes.POINTER(
+            ctypes.c_wchar_p)
+    ]
+
+    class PathNotFoundException(Exception):
+        pass
+
+    folderid = getattr(FOLDERID, folder_name)
+    fid = GUID(folderid)
+    pPath = ctypes.c_wchar_p()
+    S_OK = 0
+    if _SHGetKnownFolderPath(ctypes.byref(fid), 0, UserHandle.current, ctypes.byref(pPath)) != S_OK:
+        raise PathNotFoundException()
+    path = pPath.value
+    _CoTaskMemFree(pPath)
+    return path
+
+
 def get_recycle_bin():
     """Yield a list of files in the recycle bin"""
     pidl = shell.SHGetSpecialFolderLocation(0, shellcon.CSIDL_BITBUCKET)
@@ -457,6 +509,28 @@ def path_on_network(path):
     drive = os.path.splitdrive(path)[0] + '\\'
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
+def set_environ(varname, path):
+    """Define an environment variable for use in CleanerML and Winapp2.ini"""
+    if not path:
+        # Such as LocalAppDataLow on XP
+        return
+    if os.environ.has_key(varname):
+        # Do not redefine the environment variable when it already exists
+        return
+    try:
+        if len(path) < 10:
+            raise RuntimeError(
+                'special folder %s is too short' % path)
+        if not os.path.exists(path):
+            raise RuntimeError(
+                'special folder %s does not exist' % path)
+        os.environ[varname] = path
+    except:
+        import traceback
+        traceback.print_exc()
+        print 'ERROR: setting environment variable "%s": %s ' % (
+            varname, str(sys.exc_info()[1]))
+
 
 def setup_environment():
     """Define any extra environment variables for use in CleanerML and Winapp2.ini"""
@@ -467,6 +541,11 @@ def setup_environment():
     csidl_to_environ('music', shellcon.CSIDL_MYMUSIC)
     csidl_to_environ('pictures', shellcon.CSIDL_MYPICTURES)
     csidl_to_environ('video', shellcon.CSIDL_MYVIDEO)
+    # LocalLowAppData does not have a CSIDL for use with
+    # SHGetSpecialFolderPath. Instead, it is identified using
+    # SHGetKnownFolderPath in Windows Vista and later
+    path = get_known_folder_path('LocalAppDataLow')
+    set_environ('LocalAppDataLow', path)
 
 
 def split_registry_key(full_key):

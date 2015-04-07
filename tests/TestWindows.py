@@ -27,6 +27,7 @@ Test case for module Windows
 import sys
 import tempfile
 import unittest
+import platform
 
 import common
 
@@ -172,6 +173,19 @@ class WindowsTestCase(unittest.TestCase):
         self.assert_(os.path.exists(dirname),
                      'startup directory does not exist: %s' % dirname)
 
+    def test_get_known_folder_path(self):
+        """Unit test for get_known_folder_path"""
+        version = platform.uname()[3][0:3]
+        ret = get_known_folder_path('LocalAppDataLow')
+        self.assertNotEqual(ret, '')
+        if version <= '6.0':
+            # Before Vista
+            self.assertEqual(ret, None)
+            return
+        # Vista or later
+        self.assertNotEqual(ret, None)
+        self.assert_(os.path.exists(ret))
+
     def test_get_fixed_drives(self):
         """Unit test for get_fixed_drives"""
         drives = []
@@ -218,8 +232,11 @@ class WindowsTestCase(unittest.TestCase):
     def test_setup_environment(self):
         """Unit test for setup_environment"""
         setup_environment()
-        envs = ('commonappdata', 'documents',
-                'localappdata', 'music', 'pictures', 'video')
+        envs = ['commonappdata', 'documents',
+                'localappdata', 'music', 'pictures', 'video']
+        version = platform.uname()[3][0:3]
+        if version >= '6.0':
+            envs.append('localappdatalow')
         for env in envs:
             self.assert_(os.path.exists(os.environ[env]))
 
