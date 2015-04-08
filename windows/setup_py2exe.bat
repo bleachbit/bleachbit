@@ -157,6 +157,11 @@ call CodeSign.bat windows\BleachBit-%BB_VER%-setup.exe
 if not "%1" == "fast" %NSIS_EXE% /DNoTranslations /DVERSION=%BB_VER% windows\bleachbit.nsi
 if not "%1" == "fast" echo Signing code
 if not "%1" == "fast" call CodeSign.bat windows\BleachBit-%BB_VER%-setup-English.exe
+
+echo Zipping installer
+REM Please note that the archive does not have the folder name
+%SZ_EXE% a -mx=9 -md=32m windows\BleachBit-%BB_VER%-setup.zip .\windows\BleachBit-%BB_VER%-setup.exe
+
 echo Success!
 goto exit
 
