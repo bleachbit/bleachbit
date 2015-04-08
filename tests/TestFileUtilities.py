@@ -413,6 +413,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
+                # Expand the directory names, which are in the short format,
+                # to test the case where the full path (including the directory)
+                # is longer than 255 characters.
+                import win32api
+                lname = win32api.GetLongPathNameW(filename)
+                self.assertEqual(getsize(lname), 10 * 12345)
             if 'posix' == os.name:
                 output = subprocess.Popen(
                     ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
@@ -652,7 +658,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             else:
                 raise e
 
-        path = 'bleachbit.tmp.sqlite3'
+        path = os.path.abspath('bleachbit.tmp.sqlite3')
         if os.path.lexists(path):
             delete(path)
 

@@ -42,6 +42,7 @@ import ConfigParser
 import Common
 
 if 'nt' == os.name:
+    import pywintypes
     import win32file
 
 if 'posix' == os.name:
@@ -348,11 +349,17 @@ def getsize(path):
             raise
         return __stat.st_blocks * 512
     if 'nt' == os.name:
-        # On rare files os.path.getsize() returns access denied, so try
-        # FindFilesW instead
-        finddata = win32file.FindFilesW(path)
+        # On rare files os.path.getsize() returns access denied, so first
+        # try FindFilesW.
+        # Also, apply prefix to use extended-length paths to support longer
+        # filenames.
+        if path.startswith(r'\\'):
+            path2 = u'\\\\?\\unc\\'+path[2:]
+        else:
+            path2 = u'\\\\?\\'+path
+        finddata = win32file.FindFilesW(path2)
         if finddata == []:
-            # FindFilesW doesn't work for directories, so fall back to
+            # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
         else:
