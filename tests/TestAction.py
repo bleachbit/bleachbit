@@ -96,10 +96,19 @@ class ActionTestCase(unittest.TestCase):
         if 'posix' == os.name:
             paths.append('$HOME')
         for path in paths:
-            for command in ('delete', 'truncate'):
+            for mode in ('delete', 'truncate', 'delete_forward'):
                 expanded = os.path.expanduser(os.path.expandvars(path))
-                (fd, filename) = tempfile.mkstemp(dir=expanded)
+                (fd, filename) = tempfile.mkstemp(
+                    dir=expanded, prefix='bleachbit-action-delete')
                 os.close(fd)
+                command = mode
+                if 'delete_forward' == mode:
+                    # forward slash needs to be normalized on Windows
+                    if 'nt' == os.name:
+                        command = 'delete'
+                        filename = filename.replace('\\', '/')
+                    else:
+                        continue
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
