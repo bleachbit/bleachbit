@@ -78,15 +78,10 @@ class ActionTestCase(unittest.TestCase):
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            for result in cmd.execute(really_delete=True):
-                pass
+            ret = cmd.execute(really_delete=True).next()
             if 'delete' == command:
-                if 'walk.all' == search:
-                    self.assert_(dir_is_empty(filename),
-                                 'directory not empty after walk.all: %s' % filename)
-                else:
-                    self.assert_(not os.path.lexists(filename),
-                                 'exists: %s' % filename)
+                self.assert_(not os.path.lexists(cmd.path),
+                             'exists: %s' % cmd.path)
             elif 'truncate' == command:
                 self.assert_(os.path.lexists(filename))
                 os.remove(filename)
@@ -95,6 +90,9 @@ class ActionTestCase(unittest.TestCase):
                 self.assert_(os.path.lexists(filename))
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
+        if 'walk.all' == search:
+            self.assert_(dir_is_empty(filename),
+                         'directory not empty after walk.all: %s' % filename)
 
     def test_delete(self):
         """Unit test for class Delete"""
