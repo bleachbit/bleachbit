@@ -89,6 +89,7 @@ class ActionTestCase(unittest.TestCase):
         paths = ['~']
         if 'nt' == os.name:
             if sys.version_info[0] == 2 and sys.version_info[1] > 5:
+                # Python 2.6 and later supports %
                 paths.append('%USERPROFILE%')
             paths.append('${USERPROFILE}')
             paths.append('$USERPROFILE')
