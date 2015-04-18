@@ -113,11 +113,14 @@ class UnixTestCase(unittest.TestCase):
         from xml.dom.minidom import parseString
         configpath = parseString('<path location="/usr/share/locale/" />').firstChild
         locales.add_xml(configpath)
+        counter = 0
         for path in locales.localization_paths(['en']):
             self.assert_(os.path.lexists(path))
             #self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
             self.assert_(path.find('/en_') == -1)
+            counter += 1
+        self.assert_(counter > 0)
 
     def test_native_name(self):
         """Unit test for native_name()"""
