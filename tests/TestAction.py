@@ -34,6 +34,11 @@ from bleachbit.Action import *
 import common
 
 
+def dir_is_empty(dirname):
+    """Check whether a directory is empty"""
+    return not os.listdir(dirname)
+
+
 class ActionTestCase(unittest.TestCase):
 
     """Test cases for Action"""
@@ -58,6 +63,7 @@ class ActionTestCase(unittest.TestCase):
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
         filename = action_node.getAttribute('path')
+        search = action_node.getAttribute('search')
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
@@ -72,9 +78,15 @@ class ActionTestCase(unittest.TestCase):
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            result = cmd.execute(really_delete=True).next()
+            for result in cmd.execute(really_delete=True):
+                pass
             if 'delete' == command:
-                self.assert_(not os.path.lexists(filename))
+                if 'walk.all' == search:
+                    self.assert_(dir_is_empty(filename),
+                                 'directory not empty after walk.all: %s' % filename)
+                else:
+                    self.assert_(not os.path.lexists(filename),
+                                 'exists: %s' % filename)
             elif 'truncate' == command:
                 self.assert_(os.path.lexists(filename))
                 os.remove(filename)
@@ -159,6 +171,23 @@ class ActionTestCase(unittest.TestCase):
         # clean up
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
+
+    def test_walk_all(self):
+        """Unit test for walk.all"""
+        dirname = tempfile.mkdtemp(prefix='bleachbit-walk-all')
+
+        # this sub-directory should be deleted
+        subdir = os.path.join(dirname, 'sub')
+        os.mkdir(subdir)
+        self.assert_(os.path.exists(subdir))
+
+        # this file should be deleted too
+        filename = os.path.join(subdir, 'file')
+        open(filename, 'a').close()
+
+        action_str = '<action command="delete" search="walk.all" path="%s" />' % dirname
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(subdir))
 
     def test_walk_files(self):
         """Unit test for walk.files"""
