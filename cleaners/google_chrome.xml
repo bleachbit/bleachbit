@@ -171,9 +171,9 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases/Databases.db"/>
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases\Databases.db"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
-    <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\databases/http*/?"/>
+    <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\databases\http*\?"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/History"/>
