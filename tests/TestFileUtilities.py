@@ -240,17 +240,18 @@ class FileUtilitiesTestCase(unittest.TestCase):
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
 
+        # test deleting with various kinds of filenames
         hebrew = u"עִבְרִית"
         katanana = u"アメリカ"
         umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
         tests = [('.suffix', 'prefix'),  # simple
-                 ("x".zfill(100), ".y".zfill(100)),  # long
+                 ("x".zfill(100), ".y".zfill(50)),  # long
                  (" ", " "),  # space
                  ("'", "'"),  # quotation mark
                  ("~`!@#$%^&()-_+=", "x"),  # non-alphanumeric characters
                  ("[]{};',.", "x"),  # non-alphanumeric characters
-                 (u'abcd', u'efgh'),  # simple unicode
+                 (u'abcd', u'efgh'),  # simple Unicode
                  (u'J\xf8rgen', 'Scandinavian'),
                  (hebrew, hebrew),
                  (katanana, katanana),
@@ -261,8 +262,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
             tests.append(('\t', '\\'))
             tests.append((':?', '<>|'))
         for test in tests:
+            # delete a file
             (fd, filename) = tempfile.mkstemp(
-                test[0], 'bleachbit-test' + test[1])
+                prefix='bleachbit-delete-file'+test[0], suffix=test[1])
             self.assert_(os.path.exists(filename))
             for x in range(0, 4096):
                 bytes_written = os.write(fd, "top secret")
@@ -271,6 +273,12 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(os.path.exists(filename))
             delete(filename, shred)
             self.assert_(not os.path.exists(filename))
+
+            # delete an empty directory
+            dirname = tempfile.mkdtemp(suffix='bleachbit-delete-dir'+test[0], prefix=test[1])
+            self.assert_(os.path.exists(dirname))
+            delete(dirname, shred)
+            self.assert_(not os.path.exists(dirname))
 
         def symlink_helper(link_fn):
 
