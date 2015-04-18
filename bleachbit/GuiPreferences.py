@@ -265,10 +265,8 @@ class PreferencesDialog:
 
         # populate data
         liststore = gtk.ListStore('gboolean', str, str)
-        for lang in Unix.locales.iterate_languages():
-            preserve = options.get_language(lang)
-            native = Unix.locales.native_name(lang)
-            liststore.append([preserve, lang, native])
+        for lang, native in sorted(Unix.Locales.native_locale_names.items()):
+            liststore.append([(options.get_language(lang)), lang, native])
 
         # create treeview
         treeview = gtk.TreeView(liststore)

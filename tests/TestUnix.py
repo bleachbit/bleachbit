@@ -69,13 +69,6 @@ class UnixTestCase(unittest.TestCase):
         exe = os.path.basename(os.path.realpath(sys.executable))
         self.assertTrue(is_running(exe))
 
-    def test_iterate_languages(self):
-        """Unit test for the method iterate_languages()"""
-        for language in self.locales.iterate_languages():
-            self.assert_(isinstance(language, str))
-            self.assert_(len(language) > 0)
-            self.assert_(len(language) < 9)
-
     def test_locale_to_language(self):
         """Unit test for locale_to_language()"""
         tests = [('en', 'en'),
@@ -117,8 +110,14 @@ class UnixTestCase(unittest.TestCase):
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
-        for path in locales.localization_paths(lambda x, y: False):
+        from xml.dom.minidom import parseString
+        configpath = parseString('<path location="/usr/share/locale/" />').firstChild
+        locales.add_xml(configpath)
+        for path in locales.localization_paths(['en']):
             self.assert_(os.path.lexists(path))
+            #self.assert_(path.startswith('/usr/share/locale'))
+            # /usr/share/locale/en_* should be ignored
+            self.assert_(path.find('/en_') == -1)
 
     def test_native_name(self):
         """Unit test for native_name()"""

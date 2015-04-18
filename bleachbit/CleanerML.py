@@ -29,6 +29,7 @@ import traceback
 import xml.dom.minidom
 import Cleaner
 import Common
+import Unix
 
 from Action import ActionProvider
 from Common import _
@@ -93,6 +94,7 @@ class CleanerML:
                 print str(sys.exc_info()[1])
                 print option.toxml()
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
+        self.handle_localizations(cleaner.getElementsByTagName('localizations'))
 
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
@@ -166,6 +168,12 @@ class CleanerML:
         if None == provider:
             raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)
+
+
+    def handle_localizations(self, localization_nodes):
+        for localization_node in localization_nodes:
+            for child_node in localization_node.childNodes:
+                Unix.locales.add_xml(child_node)
 
 
 def list_cleanerml_files(local_only=False):
