@@ -111,12 +111,13 @@ class UnixTestCase(unittest.TestCase):
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
         from xml.dom.minidom import parseString
-        configpath = parseString('<path location="/usr/share/locale/" />').firstChild
+        configpath = parseString(
+            '<path location="/usr/share/locale/" />').firstChild
         locales.add_xml(configpath)
         counter = 0
         for path in locales.localization_paths(['en']):
             self.assert_(os.path.lexists(path))
-            #self.assert_(path.startswith('/usr/share/locale'))
+            # self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
             self.assert_(path.find('/en_') == -1)
             counter += 1

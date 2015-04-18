@@ -264,7 +264,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         for test in tests:
             # delete a file
             (fd, filename) = tempfile.mkstemp(
-                prefix='bleachbit-delete-file'+test[0], suffix=test[1])
+                prefix='bleachbit-delete-file' + test[0], suffix=test[1])
             self.assert_(os.path.exists(filename))
             for x in range(0, 4096):
                 bytes_written = os.write(fd, "top secret")
@@ -275,7 +275,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(not os.path.exists(filename))
 
             # delete an empty directory
-            dirname = tempfile.mkdtemp(suffix='bleachbit-delete-dir'+test[0], prefix=test[1])
+            dirname = tempfile.mkdtemp(
+                suffix='bleachbit-delete-dir' + test[0], prefix=test[1])
             self.assert_(os.path.exists(dirname))
             delete(dirname, shred)
             self.assert_(not os.path.exists(dirname))

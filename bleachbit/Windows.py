@@ -509,6 +509,7 @@ def path_on_network(path):
     drive = os.path.splitdrive(path)[0] + '\\'
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
+
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     if not path:

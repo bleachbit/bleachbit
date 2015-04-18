@@ -354,9 +354,9 @@ def getsize(path):
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
         if path.startswith(r'\\'):
-            path2 = u'\\\\?\\unc\\'+path[2:]
+            path2 = u'\\\\?\\unc\\' + path[2:]
         else:
-            path2 = u'\\\\?\\'+path
+            path2 = u'\\\\?\\' + path
         finddata = win32file.FindFilesW(path2)
         if finddata == []:
             # FindFilesW does not work for directories, so fall back to

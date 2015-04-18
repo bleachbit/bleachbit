@@ -176,7 +176,8 @@ class Locales:
         if xmldata.ELEMENT_NODE != xmldata.nodeType:
             return
         if 'path' != xmldata.nodeName:
-            raise RuntimeError("Invalid node '%s', expected 'path'" % xmldata.nodeName)
+            raise RuntimeError(
+                "Invalid node '%s', expected 'path'" % xmldata.nodeName)
         location = xmldata.getAttribute('location')
         if '' == location:
             raise RuntimeError("Path node without location attribute")
@@ -193,8 +194,10 @@ class Locales:
 
         if userfilter:
             if 1 != userfilter.count('*'):
-                raise RuntimeError("Filter string '%s' must contain the placeholder * exactly once" % userfilter)
-            (prefixlen, postfixlen) = [len(part) for part in userfilter.split('*')]
+                raise RuntimeError(
+                    "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
+            (prefixlen, postfixlen) = [len(part)
+                                       for part in userfilter.split('*')]
             postfixlen = -postfixlen if 0 != postfixlen else None
 
             for subpath in glob.iglob(path + userfilter):
