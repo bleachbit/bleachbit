@@ -115,7 +115,6 @@ set CANARY=dist\share\cleaners\internet_explorer.xml
 if not exist %CANARY% goto error_canary
 
 echo Checking for Linux-only cleaners
-del dist\share\cleaners\localizations.xml
 if exist dist\share\cleaners\wine.xml echo "grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f"
 if exist dist\share\cleaners\wine.xml pause
 
