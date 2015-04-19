@@ -29,7 +29,6 @@ import traceback
 import xml.dom.minidom
 import Cleaner
 import Common
-import Unix
 
 from Action import ActionProvider
 from Common import _
@@ -171,6 +170,9 @@ class CleanerML:
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):
+        if not 'posix' == os.name:
+            return
+        import Unix
         for localization_node in localization_nodes:
             for child_node in localization_node.childNodes:
                 Unix.locales.add_xml(child_node)
