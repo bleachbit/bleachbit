@@ -222,14 +222,9 @@ class Firefox(Cleaner):
             self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*.default*\\"
             self.add_running('exe', 'firefox.exe')
 
-    def get_description(self):
-        return _("Web browser")
-
-    def get_id(self):
-        return 'firefox'
-
-    def get_name(self):
-        return "Firefox"
+        self.description = _("Web browser")
+        self.id = 'firefox'
+        self.name = "Firefox"
 
     def get_commands(self, option_id):
         files = []
