@@ -509,14 +509,9 @@ class System(Cleaner):
         self.add_option(
             'tmp', _('Temporary files'), _('Delete the temporary files'))
 
-    def get_description(self):
-        return _("The system in general")
-
-    def get_id(self):
-        return 'system'
-
-    def get_name(self):
-        return _("System")
+        self.description = _("The system in general")
+        self.id = 'system'
+        self.name = _("System")
 
     def get_commands(self, option_id):
         # This variable will collect fully expanded file names, and
