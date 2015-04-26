@@ -371,6 +371,9 @@ class OpenOfficeOrg(Cleaner):
         self.add_option('cache', _('Cache'), _('Delete the cache'))
         self.add_option('recent_documents', _('Most recently used'), _(
             "Delete the list of recently used documents"))
+        self.id = 'openofficeorg'
+        self.name = 'OpenOffice.org'
+        self.description = _("Office suite")
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if 'posix' == os.name:
@@ -380,15 +383,6 @@ class OpenOfficeOrg(Cleaner):
         if 'nt' == os.name:
             self.prefixes = [
                 "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
-
-    def get_description(self):
-        return _("Office suite")
-
-    def get_id(self):
-        return 'openofficeorg'
-
-    def get_name(self):
-        return "OpenOffice.org"
 
     def get_commands(self, option_id):
         if 'recent_documents' == option_id:
