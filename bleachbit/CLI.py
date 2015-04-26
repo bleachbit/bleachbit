@@ -30,6 +30,7 @@ import sys
 
 from Cleaner import backends, create_simple_cleaner, register_cleaners
 from Common import _, APP_VERSION, encoding
+import Diagnostic
 import Options
 import Worker
 
@@ -134,6 +135,7 @@ def process_cmd_line():
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option('--debug-log', help='log debug messages to file')
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
     parser.add_option("--sysinfo", action="store_true",
@@ -158,6 +160,13 @@ def process_cmd_line():
                       help=_('overwrite files to hide contents'))
     (options, args) = parser.parse_args()
     did_something = False
+    if options.debug_log:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(logging.FileHandler(options.debug_log))
+        logger.info('BleachBit version %s' % APP_VERSION)
+        logger.info(Diagnostic.diagnostic_info())
     if options.version:
         print """
 BleachBit version %s
@@ -207,7 +216,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.sysinfo:
-        import Diagnostic
         print Diagnostic.diagnostic_info()
         sys.exit(0)
     if not did_something:
