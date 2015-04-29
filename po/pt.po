@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-03-15 15:49-0600\n"
-"PO-Revision-Date: 2015-04-09 21:37+0000\n"
+"PO-Revision-Date: 2015-04-28 12:33+0000\n"
 "Last-Translator: Sérgio Marques <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-04-10 20:08+0000\n"
-"X-Generator: Launchpad (build 17423)\n"
+"X-Launchpad-Export-Date: 2015-04-28 14:48+0000\n"
+"X-Generator: Launchpad (build 17453)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -512,6 +512,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Repor mecanismo de pesquisa e eliminar todos os mecanismos de pesquisa "
+"adicionados pelo utilizador."
 
 #: ../cleaners/audacious.xml
 msgid "Audio player"
@@ -1081,7 +1083,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:416
 msgid "System information"
-msgstr ""
+msgstr "Informação do sistema"
 
 #: ../bleachbit/GUI.py:489
 msgid "Choose files to shred"
@@ -1185,7 +1187,7 @@ msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py:57
 msgid "Security warning"
-msgstr ""
+msgstr "Aviso de segurança"
 
 #: ../bleachbit/RecognizeCleanerML.py:70
 msgid ""
@@ -1304,8 +1306,8 @@ msgstr ""
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Falta cerca de %d minuto."
+msgstr[1] "Faltam cerca de %d minutos."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
