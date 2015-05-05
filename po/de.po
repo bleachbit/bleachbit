@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-03-15 15:49-0600\n"
-"PO-Revision-Date: 2015-04-25 17:40+0000\n"
-"Last-Translator: pitfd <pitfd@openmailbox.org>\n"
+"PO-Revision-Date: 2015-05-03 22:42+0000\n"
+"Last-Translator: Tobias Bannert <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-04-26 02:32+0000\n"
-"X-Generator: Launchpad (build 17430)\n"
+"X-Launchpad-Export-Date: 2015-05-04 02:28+0000\n"
+"X-Generator: Launchpad (build 17474)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -35,7 +35,7 @@ msgstr "Verlauf"
 #: ../bleachbit/Cleaner.py:348 ../bleachbit/Cleaner.py:422
 #: ../bleachbit/Cleaner.py:431
 msgid "Delete the usage history"
-msgstr "Der Verwendungs-Verlauf wird gelöscht"
+msgstr "Den Verwendungsverlauf löschen"
 
 #: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/thumbnails.xml ../cleaners/safari.xml ../cleaners/emesene.xml
@@ -67,7 +67,7 @@ msgstr "Zwischenspeicher"
 #: ../bleachbit/Cleaner.py:369 ../bleachbit/Cleaner.py:454
 #: ../bleachbit/Cleaner.py:488 ../bleachbit/Cleaner.py:490
 msgid "Delete the cache"
-msgstr "Der Zwischenspeicher wird gelöscht"
+msgstr "Den Zwischenspeicher löschen"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -94,7 +94,7 @@ msgstr ""
 
 #: ../cleaners/yum.xml ../cleaners/apt.xml
 msgid "Package manager"
-msgstr "Paketmanager"
+msgstr "Paketverwaltung"
 
 #: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/gl-117.xml ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
@@ -117,7 +117,7 @@ msgstr "Protokolle"
 #: ../cleaners/exaile.xml ../cleaners/screenlets.xml ../cleaners/gftp.xml
 #: ../cleaners/miro.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:485
 msgid "Delete the logs"
-msgstr "Die Protokolle werden gelöscht"
+msgstr "Die Protokolle löschen"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -125,23 +125,23 @@ msgstr "Vorschaubilder"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr "Icons für die Dateien auf dem System"
+msgstr "Symbole für die Dateien auf dem System"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
-msgstr "Texteditor"
+msgstr "Textbearbeitung"
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Die Datei »~/.viminfo« wird gelöscht, welche den Datei- und Befehls-Verlauf "
-"und den Zwischenspeicher beinhaltet"
+"Die Datei »~/.viminfo« löschen, welche den Datei- und Befehlsverlauf und den "
+"Zwischenspeicher beinhaltet"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/amule.xml ../cleaners/gftp.xml
 msgid "File transfer client"
-msgstr "Dateiübertragungs-Client"
+msgstr "Dateiübertragungsprogramm"
 
 #: ../cleaners/filezilla.xml ../cleaners/paint.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/windows_explorer.xml
@@ -169,7 +169,7 @@ msgstr "Chat-Protokolle"
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Delete the chat logs"
-msgstr "Die Chat-Protokolle werden gelöscht"
+msgstr "Die Chat-Protokolle löschen"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -178,12 +178,12 @@ msgstr "Installationsprogramme"
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
 msgstr ""
-"Lösche zwischengespeicherte Software patches und Installationsprogramme"
+"Zwischengespeicherte Programmkorrekturen und Installationsprogramme löschen"
 
 #: ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Chat client"
-msgstr "Chat-Client"
+msgstr "Chat-Programm"
 
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
@@ -191,7 +191,7 @@ msgstr "Chat-Client"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../bleachbit/Cleaner.py:224
 msgid "Web browser"
-msgstr "Webbrowser"
+msgstr "Internet-Browser"
 
 #: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
@@ -199,7 +199,7 @@ msgstr "Webbrowser"
 #: ../bleachbit/Cleaner.py:192
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Der Zwischenspeicher des Webbrowsers wird gelöscht, welcher die Anzeigezeit "
+"Den Zwischenspeicher des Internet-Browsers löschen, welcher die Anzeigezeit "
 "bereits besuchter Seiten reduziert"
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
@@ -209,7 +209,7 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:193
 msgid "Cookies"
-msgstr "Cookies"
+msgstr "Profildateien (Cookies)"
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -221,30 +221,31 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Cookies werden gelöscht, die Informationen wie Webseiten-Einstellungen, "
-"Authentifizierungen und Rückverfolgungsdaten enthalten"
+"Die Profildateien (Cookies) löschen, welche Informationen wie "
+"Internetseiteneinstellungen, Legitimierungen und Rückverfolgungsdaten "
+"enthalten"
 
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:210
 msgid "List of visited web pages"
-msgstr "Liste besuchter Webseiten"
+msgstr "Liste besuchter Internetseiten"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr "Blocklisten"
+msgstr "Sperrlisten"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
 #: ../bleachbit/Cleaner.py:196
 msgid "Delete the files"
-msgstr "Die Dateien werden gelöscht"
+msgstr "Die Dateien löschen"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
 msgstr ""
-"Um die Funktionsfähigkeit sicherzustellen, müssen Blocklisten aktualisiert "
+"Um die Funktionsfähigkeit sicherzustellen, müssen Sperrlisten aktualisiert "
 "werden."
 
 #: ../cleaners/transmission.xml
@@ -270,11 +271,11 @@ msgstr "Löscht den Avatar- und Smilycache"
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
 #: ../cleaners/vlc.xml ../cleaners/winamp.xml
 msgid "Media player"
-msgstr "Medien-Player"
+msgstr "Medienspieler"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml
 msgid "File manager"
-msgstr "Dateimanager"
+msgstr "Dateiverwaltung"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:467
@@ -378,7 +379,7 @@ msgstr "Löscht die Kommando-Historie"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr "Kompatibilitätsschicht für Windows Software"
+msgstr "Kompatibilitätsschicht für Windows-Programme"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:201
@@ -897,7 +898,7 @@ msgstr "Ausnahmen"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr "Periodisch nach Softwareupdates via Internet suchen"
+msgstr "Regelmäßig nach Programmaktualisierungen im Internet suchen"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
@@ -1096,6 +1097,7 @@ msgstr ""
 "  Samuel Mehrbrodt https://launchpad.net/~sam92\n"
 "  SpaceCafé https://launchpad.net/~spacecafe\n"
 "  Stefan https://launchpad.net/~drezil\n"
+"  Tobias Bannert https://launchpad.net/~toba\n"
 "  Ubert Shok https://launchpad.net/~ushok\n"
 "  cmdrhenner https://launchpad.net/~cmdrhenner\n"
 "  jus https://launchpad.net/~jus\n"
@@ -1194,8 +1196,8 @@ msgstr "Error bei der suche nach Updates: "
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
-"Ein Fehler beim Laden des SQLite-Moduls ist aufgetreten: Die Antivirus-"
-"Software könnte dies blockieren."
+"Ein Fehler beim Laden des SQLite-Moduls ist aufgetreten: Das Antivirus-"
+"Programm könnte dieses sperren."
 
 #: ../bleachbit/GUI.py:812
 msgid ""
