@@ -277,6 +277,9 @@ def elevate_privileges():
         py = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
 
+    # add any command line parameters such as --debug-log
+    py = "%s %s" % (py, ' '.join(sys.argv[1:]))
+
     print 'debug: exe=', exe, ' parameters=', py
 
     rc = None
