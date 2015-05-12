@@ -253,6 +253,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
                  ("[]{};',.", "x"),  # non-alphanumeric characters
                  (u'abcd', u'efgh'),  # simple Unicode
                  (u'J\xf8rgen', 'Scandinavian'),
+                 (u'\u2014', 'em-dash'), #  LP#1454030
                  (hebrew, hebrew),
                  (katanana, katanana),
                  (umlauts, umlauts)]
