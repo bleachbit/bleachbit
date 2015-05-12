@@ -380,18 +380,20 @@ class OpenOfficeOrg(Cleaner):
                 "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
 
     def get_commands(self, option_id):
+        # paths for which to run expand_glob_join
+        egj = []
         if 'recent_documents' == option_id:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Histories.xcu"):
-                    if os.path.lexists(path):
-                        yield Command.Delete(path)
-                for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Histories.dat"):
-                    if os.path.lexists(path):
-                        yield Command.Delete(path)
+            egj.append("user/registry/data/org/openoffice/Office/Histories.xcu")
+            egj.append("user/registry/cache/org.openoffice.Office.Histories.dat")
 
         if 'recent_documents' == option_id and not 'cache' == option_id:
+            egj.append("user/registry/cache/org.openoffice.Office.Common.dat")
+
+        for egj_ in egj:
             for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, "user/registry/cache/org.openoffice.Office.Common.dat"):
+                for path in FileUtilities.expand_glob_join(prefix, egj_):
+                    if 'nt' == os.name:
+                        path = os.path.normpath(path)
                     if os.path.lexists(path):
                         yield Command.Delete(path)
 
@@ -401,6 +403,8 @@ class OpenOfficeOrg(Cleaner):
                 dirs += FileUtilities.expand_glob_join(
                     prefix, "user/registry/cache/")
             for dirname in dirs:
+                if 'nt' == os.name:
+                    dirname = os.path.normpath(dirname)
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
 
