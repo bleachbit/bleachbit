@@ -446,6 +446,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # special characters
         test_getsize_helper(u'bleachbit-test-special-characters-∺ ∯')
 
+        # em-dash (LP1454030)
+        test_getsize_helper(u'bleachbit-test-em-dash-\u2014')
+
         # long
         test_getsize_helper(u'bleachbit-test-long' + 'x' * 200)
 
