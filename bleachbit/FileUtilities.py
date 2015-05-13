@@ -211,6 +211,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     from Options import options
     logger = logging.getLogger(__name__)
     is_special = False
+    path = extended_path(path)
     if not os.path.lexists(path):
         if ignore_missing:
             return
@@ -320,6 +321,16 @@ def expand_glob_join(pathname1, pathname2):
     return ret
 
 
+def extended_path(path):
+    """If applicable, return the extended Windows pathname"""
+    if 'nt' == os.name:
+        if path.startswith(r'\\?'):
+            return path
+        if path.startswith(r'\\'):
+            return '\\\\?\\unc\\' + path[2:]
+        return '\\\\?\\' + path
+    return path
+
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
@@ -353,11 +364,7 @@ def getsize(path):
         # try FindFilesW.
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
-        if path.startswith(r'\\'):
-            path2 = u'\\\\?\\unc\\' + path[2:]
-        else:
-            path2 = u'\\\\?\\' + path
-        finddata = win32file.FindFilesW(path2)
+        finddata = win32file.FindFilesW(extended_path(path))
         if finddata == []:
             # FindFilesW does not work for directories, so fall back to
             # getsize()

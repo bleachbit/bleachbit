@@ -23,6 +23,8 @@
 Test case for module FileUtilities
 """
 
+# for Python 2.5 on Windows
+from __future__ import with_statement
 
 import locale
 import platform
@@ -40,6 +42,12 @@ try:
     import json
 except:
     import simplejson as json
+
+
+def write_file(filename, contents):
+    """Write contents to file"""
+    with open(extended_path(filename), 'w') as f:
+        f.write(contents)
 
 
 def test_ini_helper(self, execute):
@@ -247,13 +255,13 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         tests = [('.suffix', 'prefix'),  # simple
                  ("x".zfill(100), ".y".zfill(50)),  # long
-                 (" ", " "),  # space
+                 ("begins_with_space", ' '),
                  ("'", "'"),  # quotation mark
                  ("~`!@#$%^&()-_+=", "x"),  # non-alphanumeric characters
-                 ("[]{};',.", "x"),  # non-alphanumeric characters
+                 ("[]{};'.,", "x"),  # non-alphanumeric characters
                  (u'abcd', u'efgh'),  # simple Unicode
                  (u'J\xf8rgen', 'Scandinavian'),
-                 (u'\u2014', 'em-dash'), #  LP#1454030
+                 (u'\u2014', 'em-dash'),  # LP#1454030
                  (hebrew, hebrew),
                  (katanana, katanana),
                  (umlauts, umlauts)]
@@ -262,6 +270,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
             tests.append(('"', '*'))
             tests.append(('\t', '\\'))
             tests.append((':?', '<>|'))
+            # Windows filenames cannot end with space or period
+            tests.append((' ', ' '))
+            tests.append(('.', '.'))
         for test in tests:
             # delete a file
             (fd, filename) = tempfile.mkstemp(
@@ -416,10 +427,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_getsize(self):
         """Unit test for method getsize()"""
+        dirname = tempfile.mkdtemp('bleachbit-getsize')
+
         def test_getsize_helper(fname):
-            (handle, filename) = tempfile.mkstemp(fname)
-            os.write(handle, "abcdefghij" * 12345)
-            os.close(handle)
+            filename = os.path.join(dirname, fname)
+            write_file(filename, "abcdefghij" * 12345)
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
@@ -427,8 +439,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
                 # to test the case where the full path (including the directory)
                 # is longer than 255 characters.
                 import win32api
-                lname = win32api.GetLongPathNameW(filename)
+                lname = win32api.GetLongPathNameW(extended_path(filename))
                 self.assertEqual(getsize(lname), 10 * 12345)
+                # this function returns a byte string instead of Unicode
+                counter = 0
+                for child in children_in_directory(dirname, False):
+                    self.assertEqual(getsize(child), 10 * 12345)
+                    counter += 1
+                self.assertEqual(counter, 1)
             if 'posix' == os.name:
                 output = subprocess.Popen(
                     ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
@@ -452,6 +470,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         # long
         test_getsize_helper(u'bleachbit-test-long' + 'x' * 200)
+
+        # delete the empty directory
+        delete(dirname)
 
         if 'nt' == os.name:
             # the following tests do not apply to Windows
