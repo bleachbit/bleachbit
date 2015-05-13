@@ -439,6 +439,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
                 print output, du_size, du_bytes
                 self.assertEqual(getsize(filename), du_bytes)
             delete(filename)
+            self.assert_(not os.path.exists(filename))
 
         # create regular file
         test_getsize_helper('bleachbit-test-regular')
