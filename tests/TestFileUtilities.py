@@ -416,8 +416,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_getsize(self):
         """Unit test for method getsize()"""
-        def test_getsize_helper(filename):
-            (handle, filename) = tempfile.mkstemp(filename)
+        def test_getsize_helper(fname):
+            (handle, filename) = tempfile.mkstemp(fname)
             os.write(handle, "abcdefghij" * 12345)
             os.close(handle)
 
