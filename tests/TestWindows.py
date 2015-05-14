@@ -44,9 +44,11 @@ def put_files_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
     # make a file and move it to the recycle bin
     import tempfile
-    (fd, filename) = tempfile.mkstemp('bleachbit-recycle-file')
-    os.close(fd)
-    move_to_recycle_bin(filename)
+    tests = (('regular', u'unicode-emdash-u\u2014', 'long'+'x'*100))
+    for test in tests:
+        (fd, filename) = tempfile.mkstemp('bleachbit-recycle-file', test)
+        os.close(fd)
+        move_to_recycle_bin(filename)
     # make a folder and move it to the recycle bin
     dirname = tempfile.mkdtemp('bleachbit-recycle-folder')
     open(os.path.join(dirname, 'file'), 'a').close()
