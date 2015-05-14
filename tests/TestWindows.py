@@ -36,6 +36,7 @@ if 'win32' == sys.platform:
     from win32com.shell import shell
 
 sys.path.append('.')
+from bleachbit.FileUtilities import extended_path
 from bleachbit.Windows import *
 
 
@@ -59,7 +60,7 @@ class WindowsTestCase(unittest.TestCase):
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
-            self.assert_(os.path.exists(f))
+            self.assert_(os.path.exists(extended_path(f)), f)
         if not common.destructive_tests('get_recycle_bin'):
             return
         put_files_into_recycle_bin()
