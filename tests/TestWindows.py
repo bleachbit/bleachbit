@@ -75,16 +75,21 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
-        (fd, pathname) = tempfile.mkstemp('bbregular')
-        os.close(fd)
-        self.assert_(os.path.exists(pathname))
-        try:
-            delete_locked_file(pathname)
-        except pywintypes.error, e:
-            if 5 == e.winerror and not shell.IsUserAnAdmin():
-                pass
-            else:
-                raise
+        tests = (('regular', u'unicode-emdash-u\u2014', 'long'+'x'*100))
+        for test in tests:
+            (fd, pathname) = tempfile.mkstemp(
+                prefix='bleachbit-delete-locked-file',suffix=test)
+            os.close(fd)
+            self.assert_(os.path.exists(pathname))
+            try:
+                delete_locked_file(pathname)
+            except pywintypes.error, e:
+                if 5 == e.winerror and not shell.IsUserAnAdmin():
+                    pass
+                else:
+                    raise
+            self.assert_(os.path.exists(pathname))
+        print 'NOTE: reboot Windows and check the three files are deleted'
 
     def test_delete_registry_key(self):
         """Unit test for delete_registry_key"""
