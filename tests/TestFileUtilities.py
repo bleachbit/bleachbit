@@ -166,7 +166,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             error = abs(float(bytes2 - bytes1) / bytes1)
             self.assert_(abs(error) < 0.01,
                          "%d (%s) is %.2f%% different than %d" %
-                        (bytes1, human, error * 100, bytes2))
+                         (bytes1, human, error * 100, bytes2))
 
         # test localization
         if hasattr(locale, 'format_string'):
@@ -729,9 +729,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
                         "Expected is_open(%s) to return True)\n"
                         "openfiles.last_scan_time (ago)=%s\n"
                         "openfiles.files=%s" %
-                       (filename,
-                        time.time() - openfiles.last_scan_time,
-                           openfiles.files))
+                        (filename,
+                         time.time() - openfiles.last_scan_time,
+                         openfiles.files))
 
         f = os.fdopen(handle)
         f.close()

@@ -37,9 +37,9 @@ class GeneralTestCase(unittest.TestCase):
     def test_boolstr_to_bool(self):
         """Test case for method boolstr_to_bool"""
         tests = (('True', True),
-                ('true', True),
-                ('False', False),
-                ('false', False))
+                 ('true', True),
+                 ('False', False),
+                 ('false', False))
 
         for test in tests:
             self.assertEqual(boolstr_to_bool(test[0]), test[1])

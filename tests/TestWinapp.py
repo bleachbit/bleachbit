@@ -88,18 +88,18 @@ class WinappTestCase(unittest.TestCase):
         """Test detectos function"""
         # Tests are in the format (required_ver, mock, expected_return)
         tests = (('5.1', '5.1', True),
-                ('5.1', '6.0', False),
-                ('6.0', '5.1', False),
-                ('|5.1', '5.1', True),
-                ('|5.1', '6.0', False),
-                ('6.1|', '5.1', False),
-                ('6.1|', '6.0', False),
-                ('6.1|', '6.1', True),
-                ('6.1|', '6.2', True),
-                ('6.2|', '5.1', False),
-                ('6.2|', '6.0', False),
-                ('6.2|', '6.1', False),
-                ('6.2|', '6.2', True))
+                 ('5.1', '6.0', False),
+                 ('6.0', '5.1', False),
+                 ('|5.1', '5.1', True),
+                 ('|5.1', '6.0', False),
+                 ('6.1|', '5.1', False),
+                 ('6.1|', '6.0', False),
+                 ('6.1|', '6.1', True),
+                 ('6.1|', '6.2', True),
+                 ('6.2|', '5.1', False),
+                 ('6.2|', '6.0', False),
+                 ('6.2|', '6.1', False),
+                 ('6.2|', '6.2', True))
         for (s, mock, expected_return) in tests:
             actual_return = detectos(s, mock)
             self.assertEqual(expected_return, actual_return,
@@ -279,7 +279,7 @@ class WinappTestCase(unittest.TestCase):
     def test_section2option(self):
         """Test for section2option()"""
         tests = (('  FOO2  ', 'foo2'),
-                ('A - B (C)', 'a_b_c'))
+                 ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
 

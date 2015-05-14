@@ -383,8 +383,10 @@ class OpenOfficeOrg(Cleaner):
         # paths for which to run expand_glob_join
         egj = []
         if 'recent_documents' == option_id:
-            egj.append("user/registry/data/org/openoffice/Office/Histories.xcu")
-            egj.append("user/registry/cache/org.openoffice.Office.Histories.dat")
+            egj.append(
+                "user/registry/data/org/openoffice/Office/Histories.xcu")
+            egj.append(
+                "user/registry/cache/org.openoffice.Office.Histories.dat")
 
         if 'recent_documents' == option_id and not 'cache' == option_id:
             egj.append("user/registry/cache/org.openoffice.Office.Common.dat")

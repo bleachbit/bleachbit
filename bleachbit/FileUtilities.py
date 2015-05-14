@@ -331,6 +331,7 @@ def extended_path(path):
         return '\\\\?\\' + path
     return path
 
+
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:

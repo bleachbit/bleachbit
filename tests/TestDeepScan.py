@@ -90,7 +90,7 @@ class DeepScanTestCase(unittest.TestCase):
                 continue
             self.assert_(isinstance(ret, (str, unicode)),
                          "Expecting string but got '%s' (%s)" %
-                        (ret, str(type(ret))))
+                         (ret, str(type(ret))))
             self.assert_(os.path.lexists(ret))
 
     def test_delete(self):

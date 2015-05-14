@@ -63,7 +63,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     hash_actual = hashlib.sha512(doc).hexdigest()
     if hash_expected and not hash_actual == hash_expected:
         raise RuntimeError("hash for %s actually %s instead of %s" %
-                          (url, hash_actual, hash_expected))
+                           (url, hash_actual, hash_expected))
     # delete current
     if delete_current:
         from FileUtilities import delete
