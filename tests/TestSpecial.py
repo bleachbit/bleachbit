@@ -205,7 +205,7 @@ class SpecialTestCase(unittest.TestCase):
             sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
         if fn:
-            filename = os.path.join(self.dir_base, fn)
+            filename = os.path.normpath(os.path.join(self.dir_base, fn))
             self.assert_(os.path.exists(filename))
 
         # create sqlite file
