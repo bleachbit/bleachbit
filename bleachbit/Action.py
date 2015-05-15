@@ -87,9 +87,10 @@ class FileActionProvider(ActionProvider):
         self.search = action_element.getAttribute('search')
         self.path = os.path.expanduser(os.path.expandvars(
             action_element.getAttribute('path')))
-        if 'nt' == os.name:
+        if 'nt' == os.name and self.path:
             # convert forward slash to backslash for compatibility with getsize()
-            # and for display
+            # and for display.  Do not convert an empty path, or it will become
+            # the current directory (.).
             self.path = os.path.normpath(self.path)
         self.ds = {}
         if 'deep' == self.search:
