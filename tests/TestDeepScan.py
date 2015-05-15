@@ -45,7 +45,7 @@ class DeepScanTestCase(unittest.TestCase):
     def _test_encoding(self, fn):
         """Test encoding"""
 
-        tempd = tempfile.mkdtemp('bleachbit-deepscan')
+        tempd = tempfile.mkdtemp(prefix='bleachbit-test-deepscan')
         self.assert_(os.path.exists(tempd))
 
         fullpath = os.path.join(tempd, fn)

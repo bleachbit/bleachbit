@@ -89,7 +89,7 @@ class CLITestCase(unittest.TestCase):
             return
 
         (fd, filename) = tempfile.mkstemp(
-            prefix='encoding-\xe4\xf6\xfc~', dir='/tmp')
+            prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')
         os.close(fd)
         self.assert_(os.path.exists(filename))
 
@@ -129,7 +129,7 @@ class CLITestCase(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for --delete option"""
-        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-delete')
         os.close(fd)
         if 'nt' == os.name:
             import win32api

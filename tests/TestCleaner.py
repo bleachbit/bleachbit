@@ -113,9 +113,9 @@ class CleanerTestCase(unittest.TestCase):
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
-        (fd, filename1) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename1) = tempfile.mkstemp(prefix='bleachbit-test-cleaner')
         os.close(fd)
-        (fd, filename2) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename2) = tempfile.mkstemp(prefix='bleachbit-test-cleaner')
         os.close(fd)
         self.assert_(os.path.exists(filename1))
         self.assert_(os.path.exists(filename2))

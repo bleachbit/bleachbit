@@ -147,7 +147,7 @@ class WinappTestCase(unittest.TestCase):
 
         def setup_fake(f1_filename=None):
             """Setup the test environment"""
-            dirname = tempfile.mkdtemp(suffix='bleachbit_test_winapp')
+            dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
             f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
             file(f1, 'w').write('')
 

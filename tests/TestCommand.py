@@ -37,7 +37,7 @@ class CommandTestCase(unittest.TestCase):
 
     def test_Delete(self, cls=Delete):
         """Unit test for Delete"""
-        (fd, path) = tempfile.mkstemp('bleachbit-test')
+        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
         os.write(fd, "foo")
         os.close(fd)
         cmd = cls(path)
@@ -57,7 +57,7 @@ class CommandTestCase(unittest.TestCase):
 
     def test_Function(self):
         """Unit test for Function"""
-        (fd, path) = tempfile.mkstemp('bleachbit-test')
+        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
         os.write(fd, "foo")
         os.close(fd)
         cmd = Function(path, FileUtilities.delete, 'bar')

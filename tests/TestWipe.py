@@ -132,7 +132,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
     format_filesystem(filename, mkfs_cmd)
 
     # mount
-    mountpoint = tempfile.mkdtemp('bleachbit-wipe-mountpoint')
+    mountpoint = tempfile.mkdtemp(prefix='bleachbit-wipe-mountpoint')
     mount_filesystem(filename, mountpoint)
 
     # baseline free disk space

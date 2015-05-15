@@ -168,7 +168,7 @@ class SpecialTestCase(unittest.TestCase):
 
     def setUp(self):
         """Create test browser files."""
-        self.dir_base = tempfile.mkdtemp('bleachbit_special')
+        self.dir_base = tempfile.mkdtemp(prefix='bleachbit-test-special')
         self.dir_google_chrome_default = os.path.join(
             self.dir_base, 'google-chrome/Default/')
         os.makedirs(self.dir_google_chrome_default)
@@ -214,7 +214,7 @@ class SpecialTestCase(unittest.TestCase):
         # create sqlite file
         if sql:
             # create test file
-            tmpdir = tempfile.mkdtemp('bleachbit-sqlite-test')
+            tmpdir = tempfile.mkdtemp(prefix='bleachbit-test-sqlite')
             (fd, filename) = tempfile.mkstemp(dir=tmpdir)
             os.close(fd)
 
@@ -321,7 +321,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
-        (fd, path) = tempfile.mkstemp('bleachbit-test')
+        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-chrome')
         os.write(fd, chrome_bookmarks)
         os.close(fd)
 
@@ -337,7 +337,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','20');"""
         # create test file
-        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-sqlite')
         os.close(fd)
         bleachbit.FileUtilities.execute_sqlite3(filename, sql)
         self.assert_(os.path.exists(filename))

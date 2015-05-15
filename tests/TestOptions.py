@@ -105,7 +105,7 @@ class OptionsTestCase(unittest.TestCase):
         # This needs special consideration when combined with purging.
         o1 = bleachbit.Options.Options()
         import tempfile
-        dirname = tempfile.mkdtemp('bleachbit_test_options')
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-options')
         pathname = os.path.join(dirname, 'foo.xml')
         file(pathname, 'w').write('')  # make an empty file
         self.assertTrue(os.path.exists(pathname))

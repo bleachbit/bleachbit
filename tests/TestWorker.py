@@ -40,7 +40,7 @@ class WorkerTestCase(unittest.TestCase):
     def test_TestActionProvider(self):
         """Test Worker using Action.TestActionProvider"""
         ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.write(fd, '123')
         os.close(fd)
         self.assert_(os.path.exists(filename))
@@ -106,10 +106,10 @@ class WorkerTestCase(unittest.TestCase):
     def test_multiple_options(self):
         """Test one cleaner with two options"""
         ui = CLI.CliCallback()
-        (fd, filename1) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename1) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.close(fd)
         self.assert_(os.path.exists(filename1))
-        (fd, filename2) = tempfile.mkstemp('bleachbit-test')
+        (fd, filename2) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.close(fd)
         self.assert_(os.path.exists(filename2))
 
