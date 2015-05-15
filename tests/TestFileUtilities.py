@@ -253,9 +253,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         katanana = u"アメリカ"
         umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
-        tests = [('.suffix', 'prefix'),  # simple
+        tests = [('.prefix', 'suffix'),  # simple
                  ("x".zfill(100), ".y".zfill(50)),  # long
-                 ("begins_with_space", ' '),
+                 (' ', 'begins_with_space'),
                  ("'", "'"),  # quotation mark
                  ("~`!@#$%^&()-_+=", "x"),  # non-alphanumeric characters
                  ("[]{};'.,", "x"),  # non-alphanumeric characters
