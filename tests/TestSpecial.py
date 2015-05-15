@@ -206,9 +206,6 @@ class SpecialTestCase(unittest.TestCase):
 
         if fn:
             filename = os.path.join(self.dir_base, fn)
-            if not os.path.exists(filename):
-                import pdb
-                pdb.set_trace()
             self.assert_(os.path.exists(filename))
 
         # create sqlite file
