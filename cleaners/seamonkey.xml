@@ -42,7 +42,9 @@
     <action command="delete" search="walk.files" path="~/.mozilla/default/Cache/"/>
     <action command="delete" search="walk.files" path="~/.mozilla/seamonkey/*/Cache/"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\Profiles\default\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Mozilla\Profiles\default\cache2\"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\Cache\"/>
+    <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\cache2\"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\startupCache\"/>
   </option>
   <option id="chat_logs">
