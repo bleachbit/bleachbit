@@ -83,5 +83,6 @@
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/history.dat"/>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/urlbarhistory.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\urlbarhistory.sqlite"/>
+    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\sessionstore.bak"/>
   </option>
 </cleaner>
