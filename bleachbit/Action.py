@@ -403,6 +403,18 @@ class TestActionProvider(ActionProvider):
         yield Command.Delete(filename)
 
 
+class WinShellChangeNotify(ActionProvider):
+
+    """Action to clean the Windows Registry"""
+    action_key = 'win.shell.change.notify'
+
+    def get_commands(self):
+        import Windows
+        yield Command.Function(
+            None,
+            Windows.shell_change_notify,
+            None)
+
 class Winreg(ActionProvider):
 
     """Action to clean the Windows Registry"""

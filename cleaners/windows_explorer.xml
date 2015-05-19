@@ -25,8 +25,14 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <!-- applications executed including date and time -->
-    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"/>
+    <!-- applications executed including date and time, Windows XP -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{5E6AB780-7743-11CF-A12B-00AA004AE837}\Count"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{75048700-EF1F-11D0-9888-006097DEACF9}\Count"/>
+    <!-- applications executed including date and time, Windows 7 -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}\Count"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}\Count"/>
+    <!-- refresh Windows shell after UserAssist -->
+    <action command="win.shell.change.notify"/>
     <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
     <!-- common open dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>

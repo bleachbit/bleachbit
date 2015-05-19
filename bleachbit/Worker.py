@@ -112,7 +112,10 @@ class Worker:
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
-            self.ui.append_text(line)
+            if ret['label']:
+                # the label may be a hidden operation
+                # (e.g., win.shell.change.notify)
+                self.ui.append_text(line)
 
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""

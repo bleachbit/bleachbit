@@ -281,6 +281,11 @@ class WindowsTestCase(unittest.TestCase):
         self.assertTrue(path_on_network('\\\\Server\\Folder\\bleachbit.exe'))
 
 
+    def test_shell_change_notify(self):
+        """Unit test for shell_change_notify"""
+        ret = shell_change_notify()
+        self.assertEqual(ret, 0)
+
 def suite():
     return unittest.makeSuite(WindowsTestCase)
 

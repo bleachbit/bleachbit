@@ -513,6 +513,15 @@ def path_on_network(path):
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
 
+def shell_change_notify():
+    """Notify the Windows shell of update.
+
+    Used in windows_explorer.xml."""
+    shell.SHChangeNotify(shellcon.SHCNE_ASSOCCHANGED, shellcon.SHCNF_IDLIST,
+        None, None)
+    return 0
+
+
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     if not path:
