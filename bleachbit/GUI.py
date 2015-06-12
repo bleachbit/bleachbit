@@ -542,7 +542,11 @@ class GUI:
         if portable_mode:
             open(options_file, 'w').write('[Portable]\n')
 
-        gtk.main_quit()
+        # Quit the application through the idle loop to allow the worker
+        # to delete the files.  Use the lowest priority because the worker
+        # uses the standard priority.  Otherwise, this will quit before
+        # the files are deleted.
+        gobject.idle_add(lambda: gtk.main_quit(), priority=gobject.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action):
         """callback to wipe free space in arbitrary folder"""
