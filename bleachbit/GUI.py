@@ -501,7 +501,11 @@ class GUI:
         self.shred_paths(paths)
 
     def shred_paths(self, paths):
-        """Shred file or folders"""
+        """Shred file or folders
+
+        If user confirms and files are deleted, returns True.  If
+        user aborts, returns False.
+        """
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
@@ -513,10 +517,13 @@ class GUI:
             # delete
             self.preview_or_run_operations(True, operations)
             return True
+
+        # user aborted
         return False
 
     def cb_shred_quit(self, action):
         """Shred settings (for privacy reasons) and quit"""
+        # build a list of paths to delete
         paths = []
         if portable_mode:
             # in portable mode on Windows, the options directory includes
@@ -525,10 +532,13 @@ class GUI:
         else:
             paths.append(options_dir)
 
+        # prompt the user to confirm
         if not self.shred_paths(paths):
+            print 'user aborted'
             # aborted
             return
 
+        # in portable mode, rebuild a minimal bleachbit.ini
         if portable_mode:
             open(options_file, 'w').write('[Portable]\n')
 
