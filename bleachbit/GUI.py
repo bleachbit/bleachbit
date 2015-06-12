@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2015 Andrew Ziem
-# http://sourceforge.net
+# http://bleachbit.sourceforge.net
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
