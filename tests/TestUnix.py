@@ -121,7 +121,8 @@ class UnixTestCase(unittest.TestCase):
             # /usr/share/locale/en_* should be ignored
             self.assert_(path.find('/en_') == -1)
             counter += 1
-        self.assert_(counter > 0)
+        self.assert_(
+            counter > 0, 'Zero files deleted by localization cleaner.  This may be an error unless you really deleted all the files.')
 
     def test_native_name(self):
         """Unit test for native_name()"""
