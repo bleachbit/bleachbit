@@ -531,9 +531,6 @@ def set_environ(varname, path):
         # Do not redefine the environment variable when it already exists
         return
     try:
-        if len(path) < 10:
-            raise RuntimeError(
-                'special folder %s is too short' % path)
         if not os.path.exists(path):
             raise RuntimeError(
                 'special folder %s does not exist' % path)
