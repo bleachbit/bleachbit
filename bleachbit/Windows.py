@@ -533,7 +533,7 @@ def set_environ(varname, path):
     try:
         if not os.path.exists(path):
             raise RuntimeError(
-                'special folder %s does not exist' % path)
+                'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
     except:
         import traceback
