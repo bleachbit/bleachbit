@@ -518,7 +518,7 @@ def shell_change_notify():
 
     Used in windows_explorer.xml."""
     shell.SHChangeNotify(shellcon.SHCNE_ASSOCCHANGED, shellcon.SHCNF_IDLIST,
-        None, None)
+                         None, None)
     return 0
 
 
