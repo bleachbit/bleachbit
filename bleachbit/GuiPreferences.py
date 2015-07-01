@@ -261,7 +261,7 @@ class PreferencesDialog:
 
         notice = gtk.Label(
             _("All languages will be deleted except those checked."))
-        vbox.pack_start(notice)
+        vbox.pack_start(notice, False)
 
         # populate data
         liststore = gtk.ListStore('gboolean', str, str)
@@ -293,7 +293,7 @@ class PreferencesDialog:
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
-        vbox.pack_start(swindow, False)
+        vbox.pack_start(swindow)
         return vbox
 
     def __locations_page(self, page_type):
@@ -409,7 +409,7 @@ class PreferencesDialog:
         elif LOCATIONS_CUSTOM == page_type:
             notice = gtk.Label(
                 _("These locations can be selected for deletion."))
-        vbox.pack_start(notice)
+        vbox.pack_start(notice, False)
 
         # create treeview
         treeview = gtk.TreeView(liststore)
@@ -431,7 +431,7 @@ class PreferencesDialog:
         swindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
-        vbox.pack_start(swindow, False)
+        vbox.pack_start(swindow)
 
         # buttons that modify the list
         button_add_file = gtk.Button(_p('button', 'Add file'))
