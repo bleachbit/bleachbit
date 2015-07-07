@@ -176,6 +176,8 @@ class CleanerML:
         for localization_node in localization_nodes:
             for child_node in localization_node.childNodes:
                 Unix.locales.add_xml(child_node)
+        # Add a dummy action so the file isn't reported as unusable
+        self.cleaner.add_action('localization',ActionProvider(None))
 
 
 def list_cleanerml_files(local_only=False):
