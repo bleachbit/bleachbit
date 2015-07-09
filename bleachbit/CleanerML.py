@@ -55,7 +55,10 @@ class CleanerML:
         self.option_warning = None
         self.xlate_cb = xlate_cb
         if None == self.xlate_cb:
+            self.xlate_mode = False
             self.xlate_cb = lambda x, y = None: None  # do nothing
+        else:
+            self.xlate_mode = True
 
         dom = xml.dom.minidom.parse(pathname)
 
@@ -68,7 +71,7 @@ class CleanerML:
     def os_match(self, os_str):
         """Return boolean whether operating system matches"""
         # If blank or if in .pot-creation-mode, return true.
-        if len(os_str) == 0 or None != self.xlate_cb:
+        if len(os_str) == 0 or self.xlate_mode:
             return True
         # Otherwise, check platform.
         if os_str == 'linux' and sys.platform.startswith('linux'):
