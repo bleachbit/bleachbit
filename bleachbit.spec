@@ -3,19 +3,8 @@
 %{!?fedora_version: %define fedora_version %fedora}
 %endif
 
-%if 0%{?mdkver}
-# Mandriva 2009 doesn't define 'mandriva_version' but apparently OpenSUSE Build Service's MDK2009 does
-%{!?mandriva_version: %define mandriva_version %(echo %{mdkver} | grep -o ^2...)}
-%endif
-
-
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%endif
-
-%if 0%{?mandriva_version}
-%define python_compile_opt python -O -c "import compileall; compileall.compile_dir('.')"
-%define python_compile     python -c "import compileall; compileall.compile_dir('.')"
 %endif
 
 %if 0%{?suse_version}
@@ -27,38 +16,13 @@ Version:        1.9.0
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 
-%if 0%{?mandriva_version}
-Group:          File tools
-%else
 Group:          Applications/System
-%endif
 License:        GPLv3
 URL:            http://bleachbit.sourceforge.net
 Source0:        %{name}-%{version}.tar.gz
-%if 0%{?mandriva_version}
-BuildRoot:      %{_tmppath}/%{name}-%{version}
-%else
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-%endif
 
 BuildArch:      noarch
-
-%if 0%{?mandriva_version}
-BuildRequires:  desktop-file-utils
-%if 0%{?mandriva_version} >= 200910
-BuildRequires:  libpython2.6-devel
-%else
-BuildRequires:  libpython2.5-devel
-%endif
-Requires:       gnome-python
-Requires:       gnome-python-gnomevfs
-Requires:       pygtk2 >= 2.6
-Requires:       pygtk2.0 >= 2.6
-Requires:       python-simplejson
-Requires:       usermode-consoleonly
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
-%endif
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
@@ -111,7 +75,7 @@ hide previously deleted files.
 cp %{name}.desktop %{name}-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 
 cat > bleachbit.pam <<EOF
 #%PAM-1.0
@@ -144,7 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' %{name}-root.desktop
@@ -199,22 +163,12 @@ update-desktop-database &> /dev/null ||:
 update-desktop-database &> /dev/null ||:
 %endif
 
-%if 0%{?mandriva_version}
-%post
-%{update_menus}
-%{update_desktop_database}
-
-%postun
-%{clean_menus}
-%{clean_desktop_database}
-%endif
-
 
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING README.md
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version}
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
 %{_bindir}/%{name}-root
@@ -222,7 +176,7 @@ update-desktop-database &> /dev/null ||:
 %endif
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?mandriva_version} ||  0%{?suse_version} >= 1030
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?suse_version} >= 1030
 %{_datadir}/applications/%{name}-root.desktop
 %endif
 %{_datadir}/%{name}/
