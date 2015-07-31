@@ -673,7 +673,7 @@ def wipe_name(pathname1):
                 maxlen -= 10
             i += 1
             if i > 100:
-                logger.warning('exhausted long rename: %s' % pathname1)
+                logger.info('exhausted long rename: %s' % pathname1)
                 pathname2 = pathname1
                 break
     # finally, rename to a short name
@@ -686,7 +686,7 @@ def wipe_name(pathname1):
         except:
             i = i + 1
             if i > 100:
-                logger.warning('exhausted short rename: %s' % pathname2)
+                logger.info('exhausted short rename: %s' % pathname2)
                 pathname3 = pathname2
                 break
     return pathname3
