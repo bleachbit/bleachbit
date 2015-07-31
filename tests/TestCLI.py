@@ -163,7 +163,6 @@ class CLITestCase(unittest.TestCase):
                 if '.' == dir_:
                     filename = os.path.basename(filename)
                 self.assert_(os.path.exists(filename))
-                print 'debug fn', filename
                 path = os.path.join('bleachbit', 'CLI.py')
                 args = [sys.executable, path, '--shred', filename]
                 output = run_external(args, stdout=open(os.devnull, 'w'))
