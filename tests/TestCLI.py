@@ -115,7 +115,6 @@ class CLITestCase(unittest.TestCase):
 
     def test_preview(self):
         """Unit test for --preview option"""
-        return  # temp!!
         args_list = []
         path = os.path.join('bleachbit', 'CLI.py')
         big_args = [sys.executable, path, '--preview', ]
