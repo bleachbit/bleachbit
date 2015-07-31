@@ -41,7 +41,7 @@ if 1 == len(sys.argv):
     if 'nt' == os.name:
         # Ignore minor messages on Windows to avoid a popup
         # example: https://bugs.launchpad.net/bleachbit/+bug/1469588
-        import logger
+        import logging
         logger = logging.getLogger(__name__)
         logger.setlevel(logging.WARNING)
     import gtk
