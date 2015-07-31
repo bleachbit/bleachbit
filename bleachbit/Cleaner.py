@@ -844,6 +844,8 @@ def create_simple_cleaner(paths):
                 if not isinstance(path, (str, unicode)):
                     raise RuntimeError(
                         'expected path as string but got %s' % str(path))
+                if not os.path.isabs(path):
+                    path = os.path.abspath(path)
                 if os.path.isdir(path):
                     for child in children_in_directory(path, True):
                         yield Command.Shred(child)

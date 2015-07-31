@@ -155,14 +155,19 @@ class CLITestCase(unittest.TestCase):
     def test_shred(self):
         """Unit test for --shred"""
         suffixes = ['', '.', '.txt']
-        for suffix in suffixes:
-            (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-shred', suffix=suffix)
-            os.close(fd)
-            self.assert_(os.path.exists(filename))
-            path = os.path.join('bleachbit', 'CLI.py')
-            args = [sys.executable, path, '--shred', filename]
-            output = run_external(args, stdout=open(os.devnull, 'w'))
-            self.assert_(not os.path.exists(filename))
+        dirs = ['.', None]
+        for dir_ in dirs:
+            for suffix in suffixes:
+                (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
+                os.close(fd)
+                if '.' == dir_:
+                    filename = os.path.basename(filename)
+                self.assert_(os.path.exists(filename))
+                print 'debug fn', filename
+                path = os.path.join('bleachbit', 'CLI.py')
+                args = [sys.executable, path, '--shred', filename]
+                output = run_external(args, stdout=open(os.devnull, 'w'))
+                self.assert_(not os.path.exists(filename))
 
 def suite():
     return unittest.makeSuite(CLITestCase)
