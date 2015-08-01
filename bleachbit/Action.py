@@ -415,6 +415,7 @@ class WinShellChangeNotify(ActionProvider):
             Windows.shell_change_notify,
             None)
 
+
 class Winreg(ActionProvider):
 
     """Action to clean the Windows Registry"""
