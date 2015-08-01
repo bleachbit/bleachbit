@@ -36,14 +36,15 @@ if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
     # unnecessary if installing BleachBit in site-packages.
     sys.path.append('/usr/share/')
 
+if 'nt' == os.name:
+    # Ignore minor messages on Windows to avoid a popup
+    # example: https://bugs.launchpad.net/bleachbit/+bug/1469588
+    import bleachbit.Common
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.WARNING)
 
 if 1 == len(sys.argv):
-    if 'nt' == os.name:
-        # Ignore minor messages on Windows to avoid a popup
-        # example: https://bugs.launchpad.net/bleachbit/+bug/1469588
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.setlevel(logging.WARNING)
     import gtk
     try:
         gtk.gdk.Screen().get_display()
