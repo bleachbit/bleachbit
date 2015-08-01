@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import logging
 import os
 import sys
 import threading
@@ -203,6 +204,22 @@ class TreeDisplayModel:
             self.set_cleaner(child, model, parent_window, model[path][1])
             child = model.iter_next(child)
         return
+
+
+class GtkLoggerHandler(logging.Handler):
+
+    def __init__(self, append_text):
+        logging.Handler.__init__(self)
+        self.append_text = append_text
+        self.min_level = logging.WARNING
+        if '--debug-log' in sys.argv:
+            self.min_level = logging.DEBUG
+
+    def emit(self, record):
+        if record.levelno < self.min_level:
+            return
+        tag = 'error' if record.levelno >= logging.WARNING else None
+        self.append_text(record.msg + '\n', tag)
 
 
 class GUI:
@@ -802,6 +819,17 @@ class GUI:
         register_cleaners()
         self.create_window()
         gobject.threads_init()
+
+        # Redirect logging to the GUI.
+        logger = logging.getLogger('bleachbit')
+        gtklog = GtkLoggerHandler(self.append_text)
+        logger.addHandler(gtklog)
+        if 'nt' == os.name and 'windows_exe' == getattr(sys, 'frozen', None):
+            # On Microsoft Windows this avoids py2exe redirecting stderr to
+            # bleachbit.exe.log.
+            # sys.frozen = console_exe means the console is shown
+            logger.removeHandler(logging.StreamHandler())
+
         if shred_paths:
             self.shred_paths(shred_paths)
             return
