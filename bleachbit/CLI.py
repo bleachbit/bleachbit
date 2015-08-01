@@ -163,7 +163,6 @@ def process_cmd_line():
     if options.debug_log:
         import logging
         logger = logging.getLogger(__name__)
-        logger.setLevel(logging.DEBUG)
         logger.addHandler(logging.FileHandler(options.debug_log))
         logger.info('BleachBit version %s' % APP_VERSION)
         logger.info(Diagnostic.diagnostic_info())
