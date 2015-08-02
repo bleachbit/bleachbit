@@ -219,7 +219,7 @@ class GtkLoggerHandler(logging.Handler):
         if record.levelno < self.min_level:
             return
         tag = 'error' if record.levelno >= logging.WARNING else None
-        self.append_text(record.msg + '\n', tag)
+        self.append_text(record.getMessage() + '\n', tag)
 
 
 class GUI:
