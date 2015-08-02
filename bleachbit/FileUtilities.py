@@ -233,7 +233,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
-                logger.info("directory is not empty: %s" % path)
+                logger.info("directory is not empty: %s", path)
             else:
                 raise
         except WindowsError, e:
@@ -242,7 +242,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # Error 145 may happen if the files are scheduled for deletion
             # during reboot.
             if 145 == e.winerror:
-                logger.info("directory is not empty: %s" % path)
+                logger.info("directory is not empty: %s", path)
             else:
                 raise
     elif os.path.isfile(path):
@@ -252,14 +252,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 wipe_contents(path)
             except IOError, e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug(" IOError #%s shredding '%s'" % (e.errno, path))
+                logger.debug("IOError #%s shredding '%s'", e.errno, path)
             # wipe name
             os.remove(wipe_name(path))
         else:
             # unlink
             os.remove(path)
     else:
-        logger.info("special file type cannot be deleted: %s" % path)
+        logger.info("special file type cannot be deleted: %s", path)
 
 
 def ego_owner(filename):
@@ -412,7 +412,7 @@ def guess_overwrite_paths():
         localtmp = os.path.expandvars('$TMP')
         logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
-            logger.warning('%TMP% does not exist: %s' % localtmp)
+            logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
         else:
             from win32file import GetLongPathName
@@ -427,8 +427,8 @@ def guess_overwrite_paths():
             except Exception, e:
                 # see https://github.com/az0/bleachbit/issues/27
                 # https://bugs.launchpad.net/bleachbit/+bug/1372179
-                logger.error('error in same_partition(%s, %s): %s' %
-                             (localtmp, drive, Common.decode_str(e)))
+                logger.error('error in same_partition(%s, %s): %s',
+                             localtmp, drive, Common.decode_str(e))
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
@@ -480,7 +480,7 @@ def same_partition(dir1, dir2):
             if e.errno == errno.EACCES:
                 logger = logging.getLogger(__name__)
                 logger.error(
-                    'access denied for same_partition(%s, %s): %s' % (dir1, dir2, Common.decode_str(e)))
+                    'access denied for same_partition(%s, %s): %s', dir1, dir2, Common.decode_str(e))
                 # https://github.com/az0/bleachbit/issues/27
                 return False
             raise
@@ -576,7 +576,7 @@ def wipe_inodes(pathname, idle=False):
         inodes_avail_original = stats.f_favail
     suffix = ' ' * (f_namemax - len(pathname) - 10)
     logger.info('creating empty files')
-    logger.debug('debug: suffix length = %d' % len(suffix))
+    logger.debug('debug: suffix length = %d', len(suffix))
     last_idle = time.time()
     # Creating the files in a sub-directory improves recovery
     # of disk space:
@@ -631,20 +631,20 @@ def wipe_inodes(pathname, idle=False):
     # display effectiveness
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d inodes available, %d to super user' %
-                    (stats.f_ffree, stats.f_favail))
+        logger.info('%d inodes available, %d to super user',
+                    stats.f_ffree, stats.f_favail)
 
     # clean up
     files_len_original = len(files)
-    logger.info('deleting %d empty files' % files_len_original)
+    logger.info('deleting %d empty files', files_len_original)
     for f in files:
         try:
             os.remove(f)
         except:
             if os.path.exists(f):
-                logger.warning('could not delete empty file %s' % f)
+                logger.warning('could not delete empty file %s', f)
             else:
-                logger.warning('exception deleting empty file %s' % f)
+                logger.warning('exception deleting empty file %s', f)
         if idle and (time.time() - last_idle) > 2:
             percent_done = 1.0 * \
                 (files_len_original - len(files)) / files_len_original
@@ -673,7 +673,7 @@ def wipe_name(pathname1):
                 maxlen -= 10
             i += 1
             if i > 100:
-                logger.info('exhausted long rename: %s' % pathname1)
+                logger.info('exhausted long rename: %s', pathname1)
                 pathname2 = pathname1
                 break
     # finally, rename to a short name
@@ -686,7 +686,7 @@ def wipe_name(pathname1):
         except:
             i = i + 1
             if i > 100:
-                logger.info('exhausted short rename: %s' % pathname2)
+                logger.info('exhausted short rename: %s', pathname2)
                 pathname3 = pathname2
                 break
     return pathname3
@@ -744,7 +744,7 @@ def wipe_path(pathname, idle=False):
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
         return (1, done_percent, remaining_seconds)
 
-    logger.debug("wipe_path('%s')" % pathname)
+    logger.debug("wipe_path('%s')", pathname)
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)
@@ -803,15 +803,15 @@ def wipe_path(pathname, idle=False):
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s' %
-                (len(files), total_bytes, elapsed_sec, rate_mbs))
+    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s',
+                len(files), total_bytes, elapsed_sec, rate_mbs)
     # how much free space is left (should be near zero)
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d bytes and %d inodes available to non-super-user' %
-                    (stats.f_bsize * stats.f_bavail, stats.f_favail))
-        logger.info('%d bytes and %d inodes available to super-user' %
-                    (stats.f_bsize * stats.f_bfree, stats.f_ffree))
+        logger.info('%d bytes and %d inodes available to non-super-user',
+                    stats.f_bsize * stats.f_bavail, stats.f_favail)
+        logger.info('%d bytes and %d inodes available to super-user',
+                    stats.f_bsize * stats.f_bfree, stats.f_ffree)
     # truncate and close files
     for f in files:
         f.truncate(0)
