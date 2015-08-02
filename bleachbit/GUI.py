@@ -48,6 +48,8 @@ import GuiBasic
 if 'nt' == os.name:
     import Windows
 
+logger = logging.getLogger(__name__)
+
 
 def threaded(func):
     """Decoration to create a threaded function"""
@@ -95,7 +97,7 @@ class TreeInfoModel:
             c_value = options.get_tree(c_id, None)
             if not c_value and options.get('auto_hide') \
                     and backends[key].auto_hide():
-                print "info: automatically hiding cleaner '%s'" % (c_id)
+                logger.info("info: automatically hiding cleaner '%s'", (c_id))
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id))
             for (o_id, o_name) in backends[key].get_options():
@@ -219,7 +221,10 @@ class GtkLoggerHandler(logging.Handler):
         if record.levelno < self.min_level:
             return
         tag = 'error' if record.levelno >= logging.WARNING else None
-        self.append_text(record.getMessage() + '\n', tag)
+        msg = record.getMessage()
+        if record.exc_text:
+            msg = msg + '\n' + record.exc_text
+        self.append_text(msg + '\n', tag)
 
 
 class GUI:
@@ -358,10 +363,9 @@ class GUI:
             self.textbuffer.set_text("")
             self.progressbar.show()
             self.worker = Worker.Worker(self, really_delete, operations)
-        except:
-            traceback.print_exc()
-            err = str(sys.exc_info()[1])
-            self.append_text(err + "\n", 'error')
+            raise RuntimeError('test')
+        except Exception, e:
+            logger.exception('Error in Worker()')
         else:
             self.start_time = time.time()
             worker = self.worker.run()
@@ -384,13 +388,13 @@ class GUI:
 
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
-        print 'debug: elapsed time: %d seconds' % elapsed
+        logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.window.is_active():
             return
         try:
             import pynotify
         except:
-            print "debug: pynotify not available"
+            logger.debug('pynotify not available')
         else:
             if pynotify.init(APP_NAME):
                 notify = pynotify.Notification('BleachBit', _("Done."),
@@ -551,7 +555,7 @@ class GUI:
 
         # prompt the user to confirm
         if not self.shred_paths(paths):
-            print 'user aborted'
+            logger.debug('user aborted shred')
             # aborted
             return
 
@@ -805,10 +809,8 @@ class GUI:
             if updates:
                 gobject.idle_add(
                     lambda: Update.update_dialog(self.window, updates))
-        except:
-            traceback.print_exc()
-            self.append_text(
-                _("Error when checking for updates: ") + str(sys.exc_info()[1]), 'error')
+        except Exception, e:
+            logger.exception(_("Error when checking for updates: "))
 
     def __init__(self, uac=True, shred_paths=None):
         if uac and 'nt' == os.name and Windows.elevate_privileges():
@@ -821,14 +823,14 @@ class GUI:
         gobject.threads_init()
 
         # Redirect logging to the GUI.
-        logger = logging.getLogger('bleachbit')
+        bb_logger = logging.getLogger('bleachbit')
         gtklog = GtkLoggerHandler(self.append_text)
-        logger.addHandler(gtklog)
+        bb_logger.addHandler(gtklog)
         if 'nt' == os.name and 'windows_exe' == getattr(sys, 'frozen', None):
             # On Microsoft Windows this avoids py2exe redirecting stderr to
             # bleachbit.exe.log.
             # sys.frozen = console_exe means the console is shown
-            logger.removeHandler(logging.StreamHandler())
+            bb_logger.removeHandler(logging.StreamHandler())
 
         if shred_paths:
             self.shred_paths(shred_paths)
@@ -846,10 +848,8 @@ class GUI:
             try:
                 import sqlite3
             except ImportError, e:
-                print e
-                print dir(e)
-                self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+                logger.exception(
+                    _("Error loading the SQLite module: the antivirus software may be blocking it."))
         if 'posix' == os.name and os.path.expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
