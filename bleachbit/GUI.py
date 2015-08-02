@@ -363,7 +363,6 @@ class GUI:
             self.textbuffer.set_text("")
             self.progressbar.show()
             self.worker = Worker.Worker(self, really_delete, operations)
-            raise RuntimeError('test')
         except Exception, e:
             logger.exception('Error in Worker()')
         else:
