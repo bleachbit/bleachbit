@@ -134,7 +134,7 @@ class Cleaner:
         """Yield the names and descriptions of each option in a 2-tuple"""
         if self.options:
             for key in sorted(self.options.keys()):
-                yield ((self.options[key][0], self.options[key][1]))
+                yield (self.options[key][0], self.options[key][1])
 
     def get_options(self):
         """Return user-configurable options in 2-tuple (id, name)"""

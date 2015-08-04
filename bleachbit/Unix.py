@@ -53,7 +53,7 @@ def locale_to_language(locale):
     """Convert the locale code to a language code (generally ISO 639)"""
     if 'klingon' == locale:
         return locale
-    pattern = "^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$"
+    pattern = r"^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$"
     matches = re.findall(pattern, locale)
     if 1 > len(matches):
         raise ValueError("Invalid locale_code '%s'" % (locale,))
@@ -395,7 +395,7 @@ def apt_autoremove():
             raise RuntimeError(line)
         # After this operation, 74.7MB disk space will be freed.
         match = re.search(
-            ", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
+            r", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
         if match:
             pkg_bytes_str = match.groups(0)[0]
             pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
@@ -423,13 +423,13 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
         # Files\\foo\\foo.exe"
         execs = shlex.split(config.get('Desktop Entry', 'Exec'))
         wineprefix = None
-        del(execs[0])
+        del execs[0]
         while True:
             if 0 <= execs[0].find("="):
                 (name, value) = execs[0].split("=")
                 if 'WINEPREFIX' == name:
                     wineprefix = value
-                del(execs[0])
+                del execs[0]
             else:
                 break
         if not FileUtilities.exe_exists(execs[0]):

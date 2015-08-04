@@ -126,7 +126,6 @@ def csidl_to_environ(varname, csidl):
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
         set_environ(varname, sppath)
     except:
-        import traceback
         traceback.print_exc()
         print 'ERROR: setting environment variable "%s": %s ' % (
             varname, str(sys.exc_info()[1]))
@@ -357,8 +356,9 @@ def get_known_folder_path(folder_name):
 
     Requires Windows Vista, Server 2008, or later
 
-    Based on the code Michael Kropat (mkropat) from <https://gist.github.com/mkropat/7550097> licensed
-    under the GNU GPL"""
+    Based on the code Michael Kropat (mkropat) from
+    <https://gist.github.com/mkropat/7550097>
+    licensed  under the GNU GPL"""
     import ctypes
     from ctypes import wintypes
     from uuid import UUID
@@ -478,7 +478,7 @@ def is_process_running_win32(name):
             if len(clean_modname) > 0 and '?' != clean_modname:
                 # Filter out non-ASCII characters which we don't need
                 # and which may cause display warnings
-                clean_modname2 = re.sub('[^a-z\.]', '_', clean_modname.lower())
+                clean_modname2 = re.sub(r'[^a-z\.]', '_', clean_modname.lower())
                 if clean_modname2 == name.lower():
                     return True
 
@@ -491,7 +491,7 @@ def is_process_running_wmic(name):
     Works on Windows XP Professional but not on XP Home
     """
 
-    clean_name = re.sub('[^A-Za-z\.]', '_', name).lower()
+    clean_name = re.sub(r'[^A-Za-z\.]', '_', name).lower()
     args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" %
             clean_name, 'get', 'Caption']
     (_, stdout, _) = General.run_external(args)
@@ -500,7 +500,6 @@ def is_process_running_wmic(name):
 
 def move_to_recycle_bin(path):
     """Move 'path' into recycle bin"""
-    from win32com.shell import shell, shellcon
     shell.SHFileOperation(
         (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
 
@@ -559,9 +558,9 @@ def setup_environment():
 
 
 def split_registry_key(full_key):
-    """Given a key like HKLM\Software split into tuple (hive, key).
+    r"""Given a key like HKLM\Software split into tuple (hive, key).
     Used internally."""
-    assert (len(full_key) >= 6)
+    assert len(full_key) >= 6
     [k1, k2] = full_key.split("\\", 1)
     hive_map = {
         'HKCR': _winreg.HKEY_CLASSES_ROOT,

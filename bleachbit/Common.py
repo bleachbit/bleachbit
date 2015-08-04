@@ -29,9 +29,6 @@ import logging
 import os
 import sys
 
-if 'nt' == os.name:
-    from win32com.shell import shell, shellcon
-
 APP_VERSION = "1.9.1"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
@@ -188,15 +185,15 @@ except:
 #
 
 
-def decode_str(str):
+def decode_str(s):
     """Decode a string into Unicode using the default encoding"""
-    if isinstance(str, Exception):
+    if isinstance(s, Exception):
         # for convenience
-        return decode_str(str.message)
+        return decode_str(s.message)
     try:
-        return str.decode(encoding)
+        return s.decode(encoding)
     except:
-        return str.decode('ascii', 'replace')
+        return s.decode('ascii', 'replace')
 
 #
 # pgettext
@@ -233,7 +230,7 @@ def pgettext(msgctxt, msgid):
         return _(msgid)
 
 # Map our pgettext() custom function to _p()
-_p = lambda msgctxt, msgid: pgettext(msgctxt, msgid)
+_p = pgettext
 
 
 #

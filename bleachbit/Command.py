@@ -104,7 +104,7 @@ class Function:
         self.func = func
         self.label = label
         try:
-            assert(isinstance(func, types.FunctionType))
+            assert isinstance(func, types.FunctionType)
         except AssertionError:
             raise AssertionError('Expected MethodType but got %s' % type(func))
 
@@ -133,7 +133,7 @@ class Function:
                             # If tuple, then display progress.
                             yield func_ret
                 # either way, func_ret should be an integer
-                assert(isinstance(func_ret, (int, long)))
+                assert isinstance(func_ret, (int, long))
                 ret['size'] = func_ret
             else:
                 # Function takes a path.  We check the size.

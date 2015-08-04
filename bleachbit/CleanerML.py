@@ -56,7 +56,7 @@ class CleanerML:
         self.xlate_cb = xlate_cb
         if None == self.xlate_cb:
             self.xlate_mode = False
-            self.xlate_cb = lambda x, y = None: None  # do nothing
+            self.xlate_cb = lambda x, y=None: None  # do nothing
         else:
             self.xlate_mode = True
 
@@ -173,6 +173,7 @@ class CleanerML:
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):
+        """<localizations> element under <cleaner>"""
         if not 'posix' == os.name:
             return
         import Unix
