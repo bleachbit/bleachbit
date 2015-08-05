@@ -49,31 +49,11 @@ except:
         gnomevfs = gnome.vfs
 
 
-def locale_to_language(locale):
-    """Convert the locale code to a language code (generally ISO 639)"""
-    if 'klingon' == locale:
-        return locale
-    pattern = r"^([a-z]{2,3})([_-][a-zA-Z]{2,4})?(\.[a-zA-Z0-9-]*)?(@[a-zA-Z]*)?$"
-    matches = re.findall(pattern, locale)
-    if 1 > len(matches):
-        raise ValueError("Invalid locale_code '%s'" % (locale,))
-    return matches[0][0]
-
-
-def locale_globex(globpath, regex):
-    """List a path by glob, filter by regex, and return tuple
-    in format (locale, pathname)"""
-    for pathname in FileUtilities.globex(globpath, regex):
-        match = re.search(regex, pathname)
-        if None == match:
-            continue
-        locale_code = match.groups(0)[0]
-        yield (locale_code, pathname)
-
-
 class Locales:
 
     """Find languages and localization files"""
+
+    localepattern = r"(?P<locale>[a-z]{2,3})(?:[_-][a-zA-Z]{2,4})?(?:\.[a-zA-Z0-9-]*)?(?:@[a-zA-Z]*)?"
 
     native_locale_names = \
         {'aa': 'Afaraf',
@@ -270,23 +250,6 @@ class Locales:
     def __init__(self):
         pass
 
-    def native_name(self, language_code):
-        """Return the name of the language in its own language"""
-        if language_code in self.native_locale_names:
-            return self.native_locale_names[language_code]
-        if os.path.exists('/usr/share/locale/all_languages'):
-            if not self.__config_read:
-                # In Fedora 15, this file is provided by kdelibs-common
-                self.__config.read('/usr/share/locale/all_languages')
-                self.__config_read = True
-            option = 'Name[%s]' % (language_code, )
-            if self.__config.has_option(language_code, option):
-                value = self.__config.get(language_code, option)
-                # cache
-                self.native_locale_names[language_code] = value
-                return value
-        return None
-
     def add_xml(self, xml_node):
         self._paths.append(xml_node)
 
@@ -303,46 +266,54 @@ class Locales:
 
     @staticmethod
     def handle_path(path, xmldata):
+        """Extracts paths and filters from the supplied xml tree and yields matching files"""
 
         if xmldata.ELEMENT_NODE != xmldata.nodeType:
             return
-        if 'path' != xmldata.nodeName:
+        if not xmldata.nodeName in ['path', 'regexfilter']:
             raise RuntimeError(
-                "Invalid node '%s', expected 'path'" % xmldata.nodeName)
-        location = xmldata.getAttribute('location')
-        if '' == location:
-            raise RuntimeError("Path node without location attribute")
-        path = path + location
+                "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xmldata.nodeName)
+        location = xmldata.getAttribute('location') or '.'
+        if '.' != location:
+            path = path + location
         if not path.endswith('/'):
             path += '/'
 
         if not os.path.isdir(path):
             return
 
-        userfilter = xmldata.getAttribute('filter')
-        if not userfilter and not xmldata.hasChildNodes():
-            userfilter = '*'
+        pre = ''
+        post = ''
+        if 'regexfilter' == xmldata.nodeName:
+            pre = xmldata.getAttribute('prefix') or ''
+            post = xmldata.getAttribute('postfix') or ''
+        if 'path' == xmldata.nodeName:
+            userfilter = xmldata.getAttribute('filter')
+            if not userfilter and not xmldata.hasChildNodes:
+                userfilter = '*'
+            if userfilter:
+                if 1 != userfilter.count('*'):
+                    raise RuntimeError(
+                        "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
 
-        if userfilter:
-            if 1 != userfilter.count('*'):
+                # we can't use re.escape, because it escapes too much
+                (pre, post) = (re.sub(r'([\[\]()^$.])',r'\\\1',p) for p in userfilter.split('*'))
+            # handle child nodes
+            for child in xmldata.childNodes:
+                for (locale, subpath) in Locales.handle_path(path, child):
+                    yield (locale, subpath)
+        if pre or post:
+            try:
+                re.compile(pre)
+                re.compile(post)
+            except Exception as errormsg:
                 raise RuntimeError(
-                    "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
-            (prefixlen, postfixlen) = [len(part)
-                                       for part in userfilter.split('*')]
-            postfixlen = -postfixlen if 0 != postfixlen else None
-
-            for subpath in glob.iglob(path + userfilter):
-                try:
-                    filename = os.path.split(subpath)[1]
-                    locale = locale_to_language(filename[prefixlen:postfixlen])
-                except ValueError:
-                    continue
-                yield (locale, subpath)
-
-        # handle child nodes
-        for child in xmldata.childNodes:
-            for (locale, subpath) in Locales.handle_path(path, child):
-                yield (locale, subpath)
+                    "Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
+            regex = re.compile('^' + pre + Locales.localepattern + post + '$')
+            for subpath in os.listdir(path):
+                match = regex.match(subpath)
+                if match is not None:
+                    yield (match.group("locale"), path + subpath)
 
 
 def apt_autoclean():

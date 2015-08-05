@@ -27,13 +27,17 @@
       <path location="lyx/examples"/>
       <path location="man"/>
       <path location="mscore-2.0/locale">
-        <path location="." filter="instruments_*.qm"/>
-        <path location="." filter="mscore_*.qm"/>
-        <path location="." filter="qt_*.qm"/>
+        <regexfilter prefix="(instruments|mscore|qt)_" postfix="\.qm"/>
       </path>
       <path location="qt4/translations" filter="qt_*.qm"/>
+      <path location="qt/translations">
+        <regexfilter prefix="qt(_|script|_help|base|xmlpatterns)_" postfix="\.qm"/>
+        <regexfilter prefix="(linguist|designer)_" postfix="\.qm"/>
+      </path>
       <path location="speedcrunch/books"/>
-      <path location="texmaker/" filter="*.dic"/>
+      <path location="texmaker/" filter="*.dic">
+        <regexfilter prefix="(texmaker|qt)_" postfix="\.qm"/>
+      </path>
       <path location="vim/vim74/lang" filter="menu_*.vim"/>
       <path location="vim/vim74/lang"/>
       <path location="X11/locale"/>

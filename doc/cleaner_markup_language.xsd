@@ -154,10 +154,16 @@
   </xs:element>
   <xs:element name="path">
     <xs:complexType>
-      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="path"/>
-      </xs:sequence>
-      <xs:attribute name="location" type="xs:string" use="required"/>
+        <xs:element name="regexfilter">
+          <xs:complexType>
+            <xs:attribute name="prefix" type="xs:string" use="optional"/>
+            <xs:attribute name="postfix" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+      <xs:attribute name="location" type="xs:string" use="optional" default="."/>
       <xs:attribute name="filter" type="xs:string" use="optional" default="*"/>
     </xs:complexType>
   </xs:element>
