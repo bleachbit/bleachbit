@@ -84,7 +84,7 @@ class UnixTestCase(unittest.TestCase):
             m = regex.match(test[0])
             self.assertEqual(m.group("locale"), test[1])
         for test in ['default','C','English']:
-            self.assertIsNone(regex.match('test'))
+            self.assertTrue(regex.match('test') is None)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
