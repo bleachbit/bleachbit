@@ -2,7 +2,12 @@
 <cleaner id="localizations" os="linux">
   <label>Localizations</label>
   <localizations>
+  <!-- Here are paths which contain localizations. Each <path> is relative to
+       the parent element, so <path location="/usr"><path location="share"/></path>
+		 effects elements in /usr/share.-->
     <path location="/usr/lib">
+	   <!-- This filter deletes /usr/lib/chromium/locales/*.pak, where * is every
+		     valid locale not specifically excluded in the configuration.-->
       <path location="chromium/locales" filter="*.pak"/>
       <path location="libreoffice/share">
         <path location="autocorr" filter="acor_*.dat"/>
@@ -10,6 +15,8 @@
       </path>
     </path>
     <path location="/usr/share">
+	   <!-- A <path> element without children and an explicit filter-attribute
+		     defaults to filter="*"-->
       <path location="anki/locale"/>
       <path location="apps/ksgmltools/customization"/>
       <path location="calendar"/>
@@ -31,7 +38,12 @@
       </path>
       <path location="qt4/translations" filter="qt_*.qm"/>
       <path location="qt/translations">
+		  <!-- <regexfilter> enables filtering files/folders with 2 regular expressions.
+		       This deletes every file matching |prefix | locale   | postfix, e.g.
+				                                  qt_help_hu_HU.UTF-8.qm
+             This can only be used to delete entries in the current <path> -->
         <regexfilter prefix="qt(_|script|_help|base|xmlpatterns)_" postfix="\.qm"/>
+		  <!-- You can also specify multiple <regexfilter>s within a single path -->
         <regexfilter prefix="(linguist|designer)_" postfix="\.qm"/>
       </path>
       <path location="speedcrunch/books"/>
