@@ -36,15 +36,17 @@
       <path location="mscore-2.0/locale">
         <regexfilter prefix="(instruments|mscore|qt)_" postfix="\.qm"/>
       </path>
-      <path location="qt4/translations" filter="qt_*.qm"/>
+      <path location="qt4/translations">
+        <regexfilter prefix="\w*_" postfix="\.qm"/>
+      </path>
       <path location="qt/translations">
         <!-- <regexfilter> enables filtering files/folders with 2 regular expressions.
              This deletes every file matching |prefix | locale   | postfix, e.g.
                                               qt_help_hu_HU.UTF-8.qm
              This can only be used to delete entries in the current <path> -->
-        <regexfilter prefix="qt(_|script|_help|base|xmlpatterns)_" postfix="\.qm"/>
+        <regexfilter prefix="q[\w_]*" postfix="\.qm"/>
         <!-- You can also specify multiple <regexfilter>s within a single path -->
-        <regexfilter prefix="(linguist|designer)_" postfix="\.qm"/>
+        <regexfilter prefix="(linguist|designer|assistant)_" postfix="\.qm"/>
       </path>
       <path location="speedcrunch/books"/>
       <path location="texmaker/" filter="*.dic">
