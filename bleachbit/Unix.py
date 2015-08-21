@@ -282,14 +282,14 @@ class Locales:
         if not os.path.isdir(path):
             return
 
-        pre = ''
-        post = ''
+        pre = None
+        post = None
         if 'regexfilter' == xmldata.nodeName:
             pre = xmldata.getAttribute('prefix') or ''
             post = xmldata.getAttribute('postfix') or ''
         if 'path' == xmldata.nodeName:
             userfilter = xmldata.getAttribute('filter')
-            if not userfilter and not xmldata.hasChildNodes:
+            if not userfilter and not xmldata.hasChildNodes():
                 userfilter = '*'
             if userfilter:
                 if 1 != userfilter.count('*'):
@@ -302,7 +302,7 @@ class Locales:
             for child in xmldata.childNodes:
                 for (locale, subpath) in Locales.handle_path(path, child):
                     yield (locale, subpath)
-        if pre or post:
+        if pre is not None and post is not None:
             try:
                 re.compile(pre)
                 re.compile(post)
