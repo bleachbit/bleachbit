@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-03-15 15:49-0600\n"
-"PO-Revision-Date: 2015-09-01 23:21+0000\n"
+"PO-Revision-Date: 2015-09-05 00:35+0000\n"
 "Last-Translator: Csaba Vágányik <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-09-02 02:40+0000\n"
+"X-Launchpad-Export-Date: 2015-09-06 17:48+0000\n"
 "X-Generator: Launchpad (build 17706)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -249,7 +249,7 @@ msgstr "Torrentek"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr ""
+msgstr "Törli a torrenteket (csak a metaadatokat, de nem a leírt fájlokat)"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
@@ -763,6 +763,8 @@ msgstr "takarítók listázása"
 #: ../bleachbit/CLI.py:142
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
+"tisztítók futtatása a fájlok törlése és egyéb maradandó változtatások "
+"elvégzésének céljából"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
@@ -1180,6 +1182,9 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
+"Rendszergazdai jogokkal futtatja a BleachBit-et a rendszer megosztott "
+"részeinek tisztítása végett, a felhasználói profil könyvtárra vonatkozó "
+"utalások csak a root fiókot fogják megtisztítani."
 
 #: ../bleachbit/RecognizeCleanerML.py:57
 msgid "Security warning"
