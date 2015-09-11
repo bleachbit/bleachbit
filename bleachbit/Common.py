@@ -37,7 +37,8 @@ socket_timeout = 10
 
 logger = logging.getLogger('bleachbit')
 logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+logger_sh = logging.StreamHandler()
+logger.addHandler(logger_sh)
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).

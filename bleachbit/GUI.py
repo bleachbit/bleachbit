@@ -832,8 +832,8 @@ class GUI:
             # On Microsoft Windows this avoids py2exe redirecting stderr to
             # bleachbit.exe.log.
             # sys.frozen = console_exe means the console is shown
-            bb_logger.removeHandler(logging.StreamHandler())
-
+            from Common import logger_sh
+            bb_logger.removeHandler(logger_sh)
         if shred_paths:
             self.shred_paths(shred_paths)
             return
