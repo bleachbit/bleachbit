@@ -25,7 +25,7 @@ install:
   - cd ..
 # coveralls.io
   - pip install python-coveralls requests[security]
-script: make tests COVERAGE='coverage run'
+script: make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
    - coverage report
    - coveralls
