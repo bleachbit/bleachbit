@@ -24,6 +24,6 @@ install:
   - sudo make install
   - cd ..
 # coveralls.io
-  - pip install python-coveralls
+  - pip install python-coveralls requests[security]
 script: make tests COVERALLS='coveralls run'
 after_success: coveralls
