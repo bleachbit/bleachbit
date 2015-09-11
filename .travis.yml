@@ -28,4 +28,4 @@ install:
 script: make tests COVERAGE='coverage run'
 after_success:
    - coverage report
-   - coveralls --verbose
+   - coveralls
