@@ -23,4 +23,7 @@ install:
   - make > /dev/null
   - sudo make install
   - cd ..
-script: make tests
+# coveralls.io
+  - pip install python-coveralls
+script: make tests COVERALLS='coveralls run'
+after_success: coveralls

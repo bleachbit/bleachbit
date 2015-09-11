@@ -10,6 +10,8 @@ datadir ?= $(prefix)/share
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
 
+# if not specified, do not check coverage
+COVERAGE ?= python
 
 build:
 	echo Nothing to build
@@ -65,7 +67,7 @@ lint:
 
 tests:
 	make -C cleaners tests; cleaners_status=$$?; \
-	python tests/TestAll.py -v; py_status=$$?; \
+	$(COVERAGE) tests/TestAll.py -v; py_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status))
 
 pretty:
