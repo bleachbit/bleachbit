@@ -25,5 +25,5 @@ install:
   - cd ..
 # coveralls.io
   - pip install python-coveralls requests[security]
-script: make tests COVERALLS='coveralls run'
+script: make tests COVERAGE='coverage run'
 after_success: coveralls --verbose
