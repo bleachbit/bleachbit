@@ -295,12 +295,15 @@ class Firefox(Cleaner):
                 self.profile_dir, "formhistory.sqlite")
         # passwords
         if 'passwords' == option_id:
+            # http://kb.mozillazine.org/Password_Manager
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "signons.txt")
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "signons[2-3].txt")
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "signons.sqlite")
+            files += FileUtilities.expand_glob_join(
+                self.profile_dir, "logins.json")
         # session restore
         if 'session_restore' == option_id:
             # Names include sessionstore.js, sessionstore.bak,
