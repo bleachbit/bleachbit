@@ -69,44 +69,22 @@ class UnixTestCase(unittest.TestCase):
         exe = os.path.basename(os.path.realpath(sys.executable))
         self.assertTrue(is_running(exe))
 
-    def test_locale_to_language(self):
+    def test_locale_regex(self):
         """Unit test for locale_to_language()"""
         tests = [('en', 'en'),
                  ('en_US', 'en'),
                  ('en_US@piglatin', 'en'),
                  ('en_US.utf8', 'en'),
-                 ('klingon', 'klingon'),
                  ('pl.ISO8859-2', 'pl'),
                  ('sr_Latn', 'sr'),
                  ('zh_TW.Big5', 'zh')]
+        import re
+        regex = re.compile('^'+Locales.localepattern+'$')
         for test in tests:
-            self.assertEqual(locale_to_language(test[0]), test[1])
-
-        self.assertRaises(ValueError, locale_to_language, 'default')
-        self.assertRaises(ValueError, locale_to_language, 'C')
-        self.assertRaises(ValueError, locale_to_language, 'English')
-
-    def test_locale_globex(self):
-        """Unit test for locale_globex"""
-
-        locale = locale_globex('/bin/ls', '(ls)$').next()
-        self.assertEqual(locale, ('ls', '/bin/ls'))
-
-        fakepath = '/usr/share/omf/gedit/gedit-es.omf'
-
-        def test_yield(pathname, regex):
-            """Replacement for globex()"""
-            yield fakepath
-
-        old_globex = FileUtilities.globex
-        FileUtilities.globex = test_yield
-
-        func = locale_globex('/usr/share/omf/*/*-*.omf', '-([a-z]{2}).omf$')
-        actual = func.next()
-        expect = ('es', fakepath)
-        self.assertEqual(
-            actual, expect, "Expected '%s' but got '%s'" % (expect, actual))
-        FileUtilities.globex = old_globex
+            m = regex.match(test[0])
+            self.assertEqual(m.group("locale"), test[1])
+        for test in ['default','C','English']:
+            self.assertTrue(regex.match('test') is None)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -123,13 +101,6 @@ class UnixTestCase(unittest.TestCase):
             counter += 1
         self.assert_(
             counter > 0, 'Zero files deleted by localization cleaner.  This may be an error unless you really deleted all the files.')
-
-    def test_native_name(self):
-        """Unit test for native_name()"""
-        tests = [('en', 'English'),
-                 ('es', 'Español')]
-        for test in tests:
-            self.assertEqual(self.locales.native_name(test[0]), test[1])
 
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
