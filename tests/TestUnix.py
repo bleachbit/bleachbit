@@ -68,6 +68,7 @@ class UnixTestCase(unittest.TestCase):
         # from /usr/bin/python to python2.6
         exe = os.path.basename(os.path.realpath(sys.executable))
         self.assertTrue(is_running(exe))
+        self.assertFalse(is_running('does-not-exist'))
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
