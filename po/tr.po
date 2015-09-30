@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-09-11 16:02-0600\n"
-"PO-Revision-Date: 2015-09-14 17:40+0000\n"
+"PO-Revision-Date: 2015-09-29 13:35+0000\n"
 "Last-Translator: Özgür BASKIN <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-09-14 22:12+0000\n"
-"X-Generator: Launchpad (build 17737)\n"
+"X-Launchpad-Export-Date: 2015-09-29 19:00+0000\n"
+"X-Generator: Launchpad (build 17768)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -190,7 +190,7 @@ msgstr "Önbelleğe alınan yamaları ve yükleyicileri sil"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../bleachbit/Cleaner.py:225
 msgid "Web browser"
-msgstr "Web tarayıcı"
+msgstr "Web tarayıcısı"
 
 #: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
@@ -255,7 +255,7 @@ msgstr "Torrentleri sil (sadece meta verilerini)"
 #: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
 #: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
 msgid "Delete the most recently used list"
-msgstr "En çok kullanılanlar listesini sil"
+msgstr "En son kullanılanlar listesini sil"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -591,7 +591,7 @@ msgstr "Sil"
 #. system reboots
 #: ../bleachbit/Command.py:91
 msgid "Mark for deletion"
-msgstr "Silme için işaretle"
+msgstr "Silinmek üzere işaretle"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:181 ../bleachbit/Command.py:211
@@ -875,8 +875,7 @@ msgstr "Beyaz Liste"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
-"Belirli aralıklarla internetten programa ait güncellemeleri kontrol et"
+msgstr "Yazılım güncellemelerini düzenli aralıklarla kontrol et"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
@@ -1063,7 +1062,7 @@ msgstr "Lütfen bekleyin. Dosya sistemi meta verisi siliniyor."
 #: ../bleachbit/Worker.py:190
 msgid "Please wait. Cleaning up after wiping file system metadata."
 msgstr ""
-"Lütfen bekleyin. Dosya sistemi meta verisi silindi, temizlik yapılıyor."
+"Lütfen bekleyin. Dosya sistemi meta verisi silinip temizlik yapılıyor."
 
 #: ../bleachbit/Worker.py:193
 #, python-format
@@ -1294,15 +1293,15 @@ msgstr "Dosyaları Parça_la"
 
 #: ../bleachbit/GUI.py:660
 msgid "Sh_red Folders"
-msgstr "Dizinleri parçala"
+msgstr "Dizinleri Parçala"
 
 #: ../bleachbit/GUI.py:662
 msgid "_Wipe Free Space"
-msgstr "Boş alanı sil"
+msgstr "Boş Alanı Sil"
 
 #: ../bleachbit/GUI.py:664
 msgid "S_hred Settings and Quit"
-msgstr "Ayarları sıfırla ve çık"
+msgstr "Ayarları Sıfırla ve Çık"
 
 #: ../bleachbit/GUI.py:666
 msgid "_Quit"
