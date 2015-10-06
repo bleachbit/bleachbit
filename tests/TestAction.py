@@ -118,10 +118,13 @@ class ActionTestCase(unittest.TestCase):
                         command = 'delete'
                         filename = filename.replace('\\', '/')
                     else:
+                        # test not needed on this OS
+                        os.remove(filename)
                         continue
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
+                self.assert_(not os.path.exists(filename))
 
     def test_ini(self):
         """Unit test for class Ini"""
