@@ -30,9 +30,14 @@
       <path location="help"/>
       <path location="i18n/locales"/>
       <path location="locale"/>
+      <!-- for openSuSE -->
+      <path location="locale-bundle">
+         <path location="kf5"/>
+      </path>
       <path location="lyx/doc"/>
       <path location="lyx/examples"/>
       <path location="man"/>
+      <path location="mathjax/localization"/>
       <path location="mscore-2.0/locale">
         <regexfilter prefix="(instruments|mscore|qt)_" postfix="\.qm"/>
       </path>
