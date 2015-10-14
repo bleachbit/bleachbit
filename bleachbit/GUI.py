@@ -63,7 +63,7 @@ class TreeInfoModel:
 
     def __init__(self):
         self.tree_store = gtk.TreeStore(
-            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT)
+            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)
         if None == self.tree_store:
             raise Exception("cannot create tree store")
         self.row_changed_handler_id = None
@@ -98,10 +98,10 @@ class TreeInfoModel:
                 logger = logging.getLogger(__name__)
                 logger.info("info: automatically hiding cleaner '%s'", (c_id))
                 continue
-            parent = self.tree_store.append(None, (c_name, c_value, c_id))
+            parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
             for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
-                self.tree_store.append(parent, (o_name, o_value, o_id))
+                self.tree_store.append(parent, (o_name, o_value, o_id, ""))
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 
@@ -140,6 +140,13 @@ class TreeDisplayModel:
         self.column1 = gtk.TreeViewColumn(_("Active"), self.renderer1)
         self.column1.add_attribute(self.renderer1, "active", 1)
         self.view.append_column(self.column1)
+
+        # third column
+        self.renderer2 = gtk.CellRendererText()
+        self.renderer2.set_alignment(1.0,0.0)
+        self.column2 = gtk.TreeViewColumn(_("Size"), self.renderer2, text=3)
+        self.column2.set_alignment(1.0)
+        self.view.append_column(self.column2)
 
         # finish
         self.view.expand_all()
@@ -631,6 +638,26 @@ class GUI:
             self.progressbar.set_text(status)
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
+
+    def update_item_size(self, option, option_id, bytes_removed):
+        model = self.view.get_model()
+
+        text = FileUtilities.bytes_to_human(bytes_removed)
+        if 0 == bytes_removed:
+            text = ""
+
+        __iter = model.get_iter_root()
+        while __iter:
+            if model[__iter][2] == option:
+                if (option_id == -1):
+                    model[__iter][3] = text
+                else:
+                    child = model.iter_children(__iter)
+                    while child:
+                        if model[child][2] == option_id:
+                            model[child][3] = text
+                        child = model.iter_next(child)
+            __iter = model.iter_next(__iter)
 
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
