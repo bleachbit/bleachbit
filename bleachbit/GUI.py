@@ -640,6 +640,7 @@ class GUI:
             raise RuntimeError('unexpected type: ' + str(type(status)))
 
     def update_item_size(self, option, option_id, bytes_removed):
+        """Update size in tree control"""
         model = self.view.get_model()
 
         text = FileUtilities.bytes_to_human(bytes_removed)

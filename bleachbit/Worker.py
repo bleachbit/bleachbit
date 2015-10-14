@@ -45,6 +45,7 @@ class Worker:
             append_text()
             update_progress_bar()
             update_total_size()
+            update_item_size()
             worker_done()
         really_delete: (boolean) preview or make real changes?
         operations: dictionary where operation-id is the key and
