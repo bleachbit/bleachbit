@@ -45,6 +45,7 @@ class Worker:
             append_text()
             update_progress_bar()
             update_total_size()
+            update_item_size()
             worker_done()
         really_delete: (boolean) preview or make real changes?
         operations: dictionary where operation-id is the key and
@@ -54,6 +55,7 @@ class Worker:
         self.really_delete = really_delete
         assert(isinstance(operations, dict))
         self.operations = operations
+        self.size = 0
         self.total_bytes = 0
         self.total_deleted = 0
         self.total_errors = 0
@@ -101,9 +103,11 @@ class Worker:
                 return
             if isinstance(ret['size'], (int, long)):
                 size = FileUtilities.bytes_to_human(ret['size'])
+                self.size += ret['size']
                 self.total_bytes += ret['size']
             else:
                 size = "?B"
+
             if ret['path']:
                 path = ret['path']
             else:
@@ -136,7 +140,9 @@ class Worker:
         import time
         self.yield_time = time.time()
 
+        total_size = 0
         for option_id in operation_options:
+            self.size = 0
             assert(isinstance(option_id, (str, unicode)))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
@@ -151,6 +157,10 @@ class Worker:
                         self.ui.update_total_size(self.total_bytes)
                     yield True
                     self.yield_time = time.time()
+
+            self.ui.update_item_size(operation,option_id, self.size)
+            total_size += self.size
+
             # deep scan
             for ds in backends[operation].get_deep_scan(option_id):
                 if '' == ds['path']:
@@ -161,6 +171,7 @@ class Worker:
                 if not self.deepscans.has_key(ds['path']):
                     self.deepscans[ds['path']] = []
                 self.deepscans[ds['path']].append(ds)
+        self.ui.update_item_size(operation, -1, total_size)
 
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""
@@ -244,6 +255,7 @@ class Worker:
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
+
         if self.really_delete:
             # TRANSLATORS: This refers to disk space that was
             # really recovered (in other words, not a preview)
