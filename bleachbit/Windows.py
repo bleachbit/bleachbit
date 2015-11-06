@@ -251,8 +251,15 @@ def elevate_privileges():
     privileges.  If successful, return True (so original process
     can exit).  If failed or not applicable, return False."""
 
-    if platform.version() <= '5.2':
-        # Earlier than Vista
+
+    if float(platform.version()) < 6:
+        # Windows XP does not have the UAC.
+        # Vista is the version Windows that has the UAC.
+        # 5.1 = Windows XP
+        # 6.0 = Vista
+        # 6.1 = 7
+        # 6.2 = 8
+        # 10 = 10
         return False
 
     if shell.IsUserAnAdmin():
