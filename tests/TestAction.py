@@ -23,6 +23,7 @@ Test cases for module Action
 """
 
 
+import shutil
 import sys
 import tempfile
 import unittest
@@ -44,6 +45,29 @@ def _action_str_to_commands(action_str):
 def _action_str_to_results(action_str):
     """Parse <action> and return list of results"""
     return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
+
+def benchmark_regex():
+    """Measure how fast the regex option is"""
+    n_files = 100000
+    print 'benchmark of %d files' % n_files
+
+    # make a directory with many files
+    dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
+    for x in xrange(0,n_files):
+        common.touch_file(os.path.join(dirname,str(x)))
+    print dirname
+
+    # scan directory
+    import time
+    start = time.time()
+    action_str = '<action command="delete" search="glob" path="%s/*" regex="^12$"/>' % dirname
+    results = _action_str_to_results(action_str)
+    end = time.time()
+    elapsed_seconds = end-start
+    print 'elapsed: %.2f seconds, %.2f files/second' % (elapsed_seconds, n_files/elapsed_seconds)
+
+    # clean up
+    shutil.rmtree(dirname)
 
 
 def dir_is_empty(dirname):
@@ -215,4 +239,7 @@ def suite():
 
 
 if __name__ == '__main__':
+    if 2 == len(sys.argv) and 'benchmark' == sys.argv[1]:
+        benchmark_regex()
+        sys.exit()
     unittest.main()
