@@ -34,6 +34,8 @@ import tempfile
 import time
 import unittest
 
+import common
+
 sys.path.append('.')
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
@@ -131,9 +133,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     """Test case for module FileUtilities"""
 
-    def __touch(self, filename):
-        """Create an empty file"""
-        open(filename, "w")
 
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
@@ -197,7 +196,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test a constructed file in a constructed directory
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-children')
         filename = os.path.join(dirname, "somefile")
-        self.__touch(filename)
+        common.touch_file(filename)
         for loopfilename in children_in_directory(dirname, True):
             self.assertEqual(loopfilename, filename)
         for loopfilename in children_in_directory(dirname, False):

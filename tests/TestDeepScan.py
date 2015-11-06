@@ -30,6 +30,8 @@ import sys
 import tempfile
 import unittest
 
+import common
+
 sys.path.append('.')
 from bleachbit.DeepScan import DeepScan
 
@@ -38,10 +40,6 @@ class DeepScanTestCase(unittest.TestCase):
 
     """Test Case for module DeepScan"""
 
-    def _touch(self, fn):
-        """Create an empty file"""
-        open(fn, 'w')
-
     def _test_encoding(self, fn):
         """Test encoding"""
 
@@ -49,7 +47,7 @@ class DeepScanTestCase(unittest.TestCase):
         self.assert_(os.path.exists(tempd))
 
         fullpath = os.path.join(tempd, fn)
-        self._touch(fullpath)
+        common.touch_file(fullpath)
         self.assert_(os.path.exists(fullpath))
 
         ds = DeepScan()

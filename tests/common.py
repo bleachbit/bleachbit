@@ -35,6 +35,11 @@ def destructive_tests(title):
     return False
 
 
+def touch_file(filename):
+    """Create an empty file"""
+    open(filename, "w")
+
+
 def validate_result(self, result, really_delete=False):
     """Validate the command returned valid results"""
     self.assert_(isinstance(result, dict), "result is a %s" % type(result))
