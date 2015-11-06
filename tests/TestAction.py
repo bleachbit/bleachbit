@@ -65,11 +65,14 @@ def benchmark_regex():
     action_str = '<action command="delete" search="glob" path="%s/*" regex="^12$"/>' % dirname
     results = _action_str_to_results(action_str)
     end = time.time()
-    elapsed_seconds = end-start
-    print 'elapsed: %.2f seconds, %.2f files/second' % (elapsed_seconds, n_files/elapsed_seconds)
+    elapsed_seconds = end - start
+    rate = n_files / elapsed_seconds
+    print 'elapsed: %.2f seconds, %.2f files/second' % (elapsed_seconds, rate)
 
     # clean up
     shutil.rmtree(dirname)
+
+    return rate
 
 
 def dir_is_empty(dirname):
@@ -241,7 +244,15 @@ def suite():
 
 
 if __name__ == '__main__':
-    if 2 == len(sys.argv) and 'benchmark' == sys.argv[1]:
-        benchmark_regex()
+    if 1 < len(sys.argv) and 'benchmark' == sys.argv[1]:
+        rates = []
+        iterations = 1
+        if 3 == len(sys.argv):
+            iterations = int(sys.argv[2])
+        for x in xrange(0, iterations):
+            rate = benchmark_regex()
+            rates.append(rate)
+        # combine all the rates for easy copy and paste into R for analysis
+        print 'rates=%s' % ','.join([str(rate) for rate in rates])
         sys.exit()
     unittest.main()
