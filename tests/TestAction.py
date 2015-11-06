@@ -160,7 +160,7 @@ class ActionTestCase(unittest.TestCase):
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
         results = self._action_str_to_results(action_str)
         self.assert_(1 == len(results))
-        self.assert_(results[0]['path'], '/tmp/foo2')
+        self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match nothing
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
