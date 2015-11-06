@@ -320,7 +320,8 @@ class Locales:
                         "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
 
                 # we can't use re.escape, because it escapes too much
-                (pre, post) = (re.sub(r'([\[\]()^$.])',r'\\\1',p) for p in userfilter.split('*'))
+                (pre, post) = (re.sub(r'([\[\]()^$.])', r'\\\1', p)
+                               for p in userfilter.split('*'))
             # handle child nodes
             for child in xmldata.childNodes:
                 for (locale, subpath) in Locales.handle_path(path, child):

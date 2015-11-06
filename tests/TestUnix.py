@@ -80,11 +80,11 @@ class UnixTestCase(unittest.TestCase):
                  ('sr_Latn', 'sr'),
                  ('zh_TW.Big5', 'zh')]
         import re
-        regex = re.compile('^'+Locales.localepattern+'$')
+        regex = re.compile('^' + Locales.localepattern + '$')
         for test in tests:
             m = regex.match(test[0])
             self.assertEqual(m.group("locale"), test[1])
-        for test in ['default','C','English']:
+        for test in ['default', 'C', 'English']:
             self.assertTrue(regex.match('test') is None)
 
     def test_localization_paths(self):

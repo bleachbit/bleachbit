@@ -478,7 +478,8 @@ def is_process_running_win32(name):
             if len(clean_modname) > 0 and '?' != clean_modname:
                 # Filter out non-ASCII characters which we don't need
                 # and which may cause display warnings
-                clean_modname2 = re.sub(r'[^a-z\.]', '_', clean_modname.lower())
+                clean_modname2 = re.sub(
+                    r'[^a-z\.]', '_', clean_modname.lower())
                 if clean_modname2 == name.lower():
                     return True
 

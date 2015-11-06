@@ -158,7 +158,7 @@ class Worker:
                     yield True
                     self.yield_time = time.time()
 
-            self.ui.update_item_size(operation,option_id, self.size)
+            self.ui.update_item_size(operation, option_id, self.size)
             total_size += self.size
 
             # deep scan

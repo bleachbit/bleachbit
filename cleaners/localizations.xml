@@ -2,7 +2,7 @@
 <cleaner id="localizations" os="linux">
   <label>Localizations</label>
   <localizations>
-  <!-- Here are paths which contain localizations. Each <path> is relative to
+    <!-- Here are paths which contain localizations. Each <path> is relative to
        the parent element, so <path location="/usr"><path location="share"/></path>
        effects elements in /usr/share.-->
     <path location="/usr/lib">
@@ -32,7 +32,7 @@
       <path location="locale"/>
       <!-- for openSuSE -->
       <path location="locale-bundle">
-         <path location="kf5"/>
+        <path location="kf5"/>
       </path>
       <path location="lyx/doc"/>
       <path location="lyx/examples"/>

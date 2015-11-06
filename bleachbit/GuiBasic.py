@@ -46,7 +46,7 @@ def browse_folder(parent, title, multiple, stock_button):
                                     buttons=(
                                         gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                     stock_button, gtk.RESPONSE_OK),
-                                    action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+                                    action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
     chooser.set_select_multiple(multiple)
     chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()

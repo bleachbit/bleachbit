@@ -133,7 +133,6 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     """Test case for module FileUtilities"""
 
-
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
 
