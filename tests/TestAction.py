@@ -34,6 +34,7 @@ from bleachbit.Action import *
 
 import common
 
+
 def _action_str_to_commands(action_str):
     """Parse <action> and return commands"""
     dom = parseString(action_str)
@@ -42,9 +43,11 @@ def _action_str_to_commands(action_str):
     for cmd in delete.get_commands():
         yield cmd
 
+
 def _action_str_to_results(action_str):
     """Parse <action> and return list of results"""
     return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
+
 
 def benchmark_regex():
     """Measure how fast the regex option is"""
@@ -53,8 +56,8 @@ def benchmark_regex():
 
     # make a directory with many files
     dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
-    for x in xrange(0,n_files):
-        common.touch_file(os.path.join(dirname,str(x)))
+    for x in xrange(0, n_files):
+        common.touch_file(os.path.join(dirname, str(x)))
 
     # scan directory
     import time
