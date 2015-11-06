@@ -84,6 +84,8 @@ class FileActionProvider(ActionProvider):
         """Initialize file search"""
         self.regex = action_element.getAttribute('regex')
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
+        self.nregex = action_element.getAttribute('nregex')
+        assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.path = os.path.expanduser(os.path.expandvars(
             action_element.getAttribute('path')))
@@ -95,6 +97,7 @@ class FileActionProvider(ActionProvider):
         self.ds = {}
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
+            self.ds['nregex'] = self.nregex
             self.ds['cache'] = General.boolstr_to_bool(
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
@@ -135,14 +138,35 @@ class FileActionProvider(ActionProvider):
         else:
             raise RuntimeError("invalid search='%s'" % self.search)
 
-        if None == self.regex:
+        if self.regex:
+            regex_c = re.compile(self.regex)
+
+        if self.nregex:
+            nregex_c = re.compile(self.nregex)
+
+        # Sometimes this loop repeats many times, so optimize it by
+        # putting the conditional outside the loop.
+
+        if not self.regex and not self.nregex:
             for path in func(self.path):
                 yield path
-        else:
-            regex_c = re.compile(self.regex)
+        elif self.regex and not self.nregex:
             for path in func(self.path):
-                if regex_c.search(os.path.basename(path)):
-                    yield path
+                if not regex_c.search(os.path.basename(path)):
+                    continue
+                yield path
+        elif self.nregex:
+            for path in func(self.path):
+                if nregex_c.search(os.path.basename(path)):
+                    continue
+                yield path
+        else:
+            for path in func(self.path):
+                if not regex_c.search(os.path.basename(path)):
+                    continue
+                if nregex_c.search(os.path.basename(path)):
+                    continue
+                yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')

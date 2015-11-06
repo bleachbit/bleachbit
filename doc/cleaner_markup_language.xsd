@@ -113,6 +113,7 @@
                       <xs:attribute name="parameter" type="xs:string"/>
                       <xs:attribute name="path" type="xs:string"/>
                       <xs:attribute name="regex" type="xs:string"/>
+                      <xs:attribute name="nregex" type="xs:string"/>
                       <xs:attribute name="search">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">

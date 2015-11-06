@@ -181,25 +181,48 @@ class ActionTestCase(unittest.TestCase):
     def test_regex(self):
         """Unit test for regex option"""
         _iglob = glob.iglob
-        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2']
+        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
         _getsize = FileUtilities.getsize
         FileUtilities.getsize = lambda x: 1
 
+        # should match three files using no regexes
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
+        results = _action_str_to_results(action_str)
+        self.assert_(3 == len(results))
+
         # should match second file using positive regex
-        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
         results = _action_str_to_results(action_str)
         self.assert_(1 == len(results))
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
-        # should match nothing
-        action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
+        # should match second file using negative regex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(1 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/foo2')
+
+        # should match second file using both regexes
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^f" nregex="1$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(1 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/foo2')
+
+        # should match nothing using positive regex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^bar$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(0 == len(results))
+
+        # should match nothing using negative regex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="."/>'
         results = _action_str_to_results(action_str)
         self.assert_(0 == len(results))
 
         # should give an error
-        action_str = '<action command="delete" search="invalid" path="/tmp/foo" regex="^bar$"/>'
+        action_str = '<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
         self.assertRaises(
             RuntimeError, lambda: _action_str_to_results(action_str))
+
         # clean up
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
