@@ -33,6 +33,18 @@ from bleachbit.Action import *
 
 import common
 
+def _action_str_to_commands(action_str):
+    """Parse <action> and return commands"""
+    dom = parseString(action_str)
+    action_node = dom.childNodes[0]
+    delete = Delete(action_node)
+    for cmd in delete.get_commands():
+        yield cmd
+
+def _action_str_to_results(action_str):
+    """Parse <action> and return list of results"""
+    return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
+
 
 def dir_is_empty(dirname):
     """Check whether a directory is empty"""
@@ -42,18 +54,6 @@ def dir_is_empty(dirname):
 class ActionTestCase(unittest.TestCase):
 
     """Test cases for Action"""
-
-    def _action_str_to_commands(self, action_str):
-        """Parse <action> and return commands"""
-        dom = parseString(action_str)
-        action_node = dom.childNodes[0]
-        delete = Delete(action_node)
-        for cmd in delete.get_commands():
-            yield cmd
-
-    def _action_str_to_results(self, action_str):
-        """Parse <action> and return list of results"""
-        return [cmd.execute(False).next() for cmd in self._action_str_to_commands(action_str)]
 
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
@@ -158,19 +158,19 @@ class ActionTestCase(unittest.TestCase):
 
         # should match second file using positive regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
-        results = self._action_str_to_results(action_str)
+        results = _action_str_to_results(action_str)
         self.assert_(1 == len(results))
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match nothing
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
-        results = self._action_str_to_results(action_str)
+        results = _action_str_to_results(action_str)
         self.assert_(0 == len(results))
 
         # should give an error
         action_str = '<action command="delete" search="invalid" path="/tmp/foo" regex="^bar$"/>'
         self.assertRaises(
-            RuntimeError, lambda: self._action_str_to_results(action_str))
+            RuntimeError, lambda: _action_str_to_results(action_str))
         # clean up
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
@@ -200,7 +200,7 @@ class ActionTestCase(unittest.TestCase):
             path = '$WINDIR\\system32'
         action_str = '<action command="delete" search="walk.files" path="%s" />' % path
         results = 0
-        for cmd in self._action_str_to_commands(action_str):
+        for cmd in _action_str_to_commands(action_str):
             result = cmd.execute(False).next()
             common.validate_result(self, result)
             path = result['path']
