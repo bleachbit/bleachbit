@@ -51,11 +51,9 @@ class ActionTestCase(unittest.TestCase):
         for cmd in delete.get_commands():
             yield cmd
 
-    def _action_str_to_result(self, action_str):
-        """Parse <action> and return result"""
-        cmd = self._action_str_to_commands(action_str).next()
-        result = cmd.execute(False).next()
-        return result
+    def _action_str_to_results(self, action_str):
+        """Parse <action> and return list of results"""
+        return [cmd.execute(False).next() for cmd in self._action_str_to_commands(action_str)]
 
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
@@ -157,18 +155,22 @@ class ActionTestCase(unittest.TestCase):
         glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2']
         _getsize = FileUtilities.getsize
         FileUtilities.getsize = lambda x: 1
-        # return regex match
+
+        # should match second file using positive regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^foo2$"/>'
-        result = self._action_str_to_result(action_str)
-        self.assert_(result['path'], '/tmp/foo2')
-        # return nothing
+        results = self._action_str_to_results(action_str)
+        self.assert_(1 == len(results))
+        self.assert_(results[0]['path'], '/tmp/foo2')
+
+        # should match nothing
         action_str = '<action command="delete" search="glob" path="/tmp/foo" regex="^bar$"/>'
-        self.assertRaises(
-            StopIteration, lambda: self._action_str_to_result(action_str))
-        # expect error
+        results = self._action_str_to_results(action_str)
+        self.assert_(0 == len(results))
+
+        # should give an error
         action_str = '<action command="delete" search="invalid" path="/tmp/foo" regex="^bar$"/>'
         self.assertRaises(
-            RuntimeError, lambda: self._action_str_to_result(action_str))
+            RuntimeError, lambda: self._action_str_to_results(action_str))
         # clean up
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
