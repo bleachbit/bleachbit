@@ -37,7 +37,8 @@ def destructive_tests(title):
 
 def touch_file(filename):
     """Create an empty file"""
-    open(filename, "w")
+    f = open(filename, "w")
+    f.close()
 
 
 def validate_result(self, result, really_delete=False):
