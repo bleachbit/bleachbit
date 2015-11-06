@@ -55,7 +55,6 @@ def benchmark_regex():
     dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
     for x in xrange(0,n_files):
         common.touch_file(os.path.join(dirname,str(x)))
-    print dirname
 
     # scan directory
     import time
