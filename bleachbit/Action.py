@@ -139,8 +139,9 @@ class FileActionProvider(ActionProvider):
             for path in func(self.path):
                 yield path
         else:
+            regex_c = re.compile(self.regex)
             for path in func(self.path):
-                if re.search(self.regex, os.path.basename(path)):
+                if regex_c.search(os.path.basename(path)):
                     yield path
 
     def get_commands(self):
