@@ -274,6 +274,21 @@ class WindowsTestCase(unittest.TestCase):
             self.assert_(isinstance(b, bool))
             self.assertEqual(b, three_b)
 
+    def test_parse_windows_build(self):
+        """Unit test for parse_windows_build"""
+        from decimal import Decimal
+        tests = (('5.1.2600', Decimal('5.1')),
+            ('5.1', Decimal('5.1')),
+            ('10.0.10240', 10),
+            ('10.0', 10))
+        for test in tests:
+            self.assertEqual(parse_windows_build(test[0]), test[1])
+
+        # test for crash
+        parse_windows_build()
+        parse_windows_build(platform.version())
+        parse_windows_build(platform.uname()[3])
+
     def test_path_on_network(self):
         """Unit test for path_on_network"""
         self.assertFalse(path_on_network('c:\\bleachbit.exe'))

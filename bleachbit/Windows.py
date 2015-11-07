@@ -252,7 +252,7 @@ def elevate_privileges():
     can exit).  If failed or not applicable, return False."""
 
 
-    if float(platform.version()) < 6:
+    if parse_windows_build() < 6:
         # Windows XP does not have the UAC.
         # Vista is the version Windows that has the UAC.
         # 5.1 = Windows XP
@@ -510,6 +510,18 @@ def move_to_recycle_bin(path):
     """Move 'path' into recycle bin"""
     shell.SHFileOperation(
         (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
+
+
+def parse_windows_build(build = None):
+    """
+    Parse build string like 1.2.3 or 1.2 to numeric,
+    ignoring the third part, if present.
+    """
+    if not build:
+        # If not given, default to current system's version
+        build = platform.version()
+    from decimal import Decimal
+    return Decimal('.'.join(build.split('.')[0:2]))
 
 
 def path_on_network(path):
