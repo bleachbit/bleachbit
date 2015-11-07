@@ -30,7 +30,7 @@ import unittest
 
 sys.path.append('.')
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key
+from bleachbit.Windows import detect_registry_key, parse_windows_build
 
 import common
 
@@ -90,17 +90,29 @@ class WinappTestCase(unittest.TestCase):
         tests = (('5.1', '5.1', True),
                  ('5.1', '6.0', False),
                  ('6.0', '5.1', False),
+                 # 5.1 is the maximum version
                  ('|5.1', '5.1', True),
                  ('|5.1', '6.0', False),
+                 ('|5.1', '10.0', False),
+                 # 10.0 is the maximum version
+                 ('|10.0', '5.1', True),
+                 ('|10.0', '10.0', True),
+                 ('|10.0', '10.1', False),
+                 # 6.1 is the minimum version
                  ('6.1|', '5.1', False),
                  ('6.1|', '6.0', False),
                  ('6.1|', '6.1', True),
                  ('6.1|', '6.2', True),
+                 ('6.1|', '10.0', True),
                  ('6.2|', '5.1', False),
                  ('6.2|', '6.0', False),
                  ('6.2|', '6.1', False),
-                 ('6.2|', '6.2', True))
+                 ('6.2|', '6.2', True),
+                 # 10.0 is the minimum
+                 ('10.0|', '5.1', False),
+                 ('10.0|', '10.0', True))
         for (s, mock, expected_return) in tests:
+            mock = parse_windows_build(mock)
             actual_return = detectos(s, mock)
             self.assertEqual(expected_return, actual_return,
                              'detectos(%s, %s)==%s instead of %s' % (s, mock,

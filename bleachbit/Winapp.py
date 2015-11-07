@@ -34,7 +34,6 @@ import traceback
 
 from Action import Delete, Winreg
 from Common import _
-from platform import uname
 from xml.dom.minidom import parseString
 
 
@@ -80,19 +79,22 @@ def section2option(s):
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
-    current_os = (mock if mock else uname()[3])[0:3]
+    # Do not compare as string because Windows 10 (build 10.0) comes after
+    # Windows 8.1 (build 6.3).
+    assert(isinstance(required_ver, (str, unicode)))
+    current_os = (mock if mock else Windows.parse_windows_build())
     required_ver = required_ver.strip()
     if required_ver.startswith('|'):
         # This is the maximum version
         # For example, |5.1 means Windows XP (5.1) but not Vista (6.0)
-        return current_os <= required_ver[1:]
+        return current_os <= Windows.parse_windows_build(required_ver[1:])
     elif required_ver.endswith('|'):
         # This is the minimum version
         # For example, 6.1| means Windows 7 or later
-        return current_os >= required_ver[:-1]
+        return current_os >= Windows.parse_windows_build(required_ver[:-1])
     else:
         # Exact version
-        return required_ver == current_os
+        return Windows.parse_windows_build(required_ver) == current_os
 
 
 def winapp_expand_vars(pathname):
