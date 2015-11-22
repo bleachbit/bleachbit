@@ -143,6 +143,8 @@ class TreeDisplayModel:
         # third column
         self.renderer2 = gtk.CellRendererText()
         self.renderer2.set_alignment(1.0, 0.0)
+        # TRANSLATORS: Size is the label for the column that shows how
+        # much space an option would clean or did clean
         self.column2 = gtk.TreeViewColumn(_("Size"), self.renderer2, text=3)
         self.column2.set_alignment(1.0)
         self.view.append_column(self.column2)
