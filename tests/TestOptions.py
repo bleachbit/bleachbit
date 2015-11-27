@@ -99,6 +99,9 @@ class OptionsTestCase(unittest.TestCase):
         o.config.remove_option("tree", "parent.child")
         self.assertFalse(o.get_tree("parent", "child"))
 
+        # clean up
+        del o
+
     def test_purge(self):
         """Test purging"""
         # By default ConfigParser stores keys (the filenames) as lowercase.
