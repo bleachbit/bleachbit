@@ -142,10 +142,11 @@ class OptionsTestCase(unittest.TestCase):
     def test_abbreviation(self):
         """Test non-standard, abbreviated booleans T and F"""
         from bleachbit.Common import options_file
-        with open(options_file, 'wb') as f:
-            f.write('[bleachbit]\n')
-            f.write('shred = T\n')
-            f.write('exit_done = F\n')
+        f = open(options_file, 'wb')
+        f.write('[bleachbit]\n')
+        f.write('shred = T\n')
+        f.write('exit_done = F\n')
+        f.close()
         o = bleachbit.Options.options
         self.assertEqual(o.get('shred'), True)
         self.assertEqual(o.get('exit_done'), False)
