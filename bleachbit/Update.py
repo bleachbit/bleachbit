@@ -24,6 +24,7 @@ Check for updates via the Internet
 
 
 import hashlib
+import logging
 import os
 import os.path
 import platform
@@ -101,7 +102,8 @@ def user_agent():
         import locale
         __locale = locale.getdefaultlocale()[0]  # e.g., en_US
     except:
-        traceback.print_exc()
+        logger = logging.getLogger(__name__)
+        logger.exception('Exception when getting default locale')
 
     try:
         import gtk
@@ -153,13 +155,20 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener = urllib2.build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
-    handle = opener.open(Common.update_check_url)
+    logger = logging.getLogger(__name__)
+    try:
+        handle = opener.open(Common.update_check_url)
+    except urllib2.URLError:
+        logger.exception(
+            _('Error when opening a network connection to %s to check for updates. Please verify the network is working.' %
+                Common.update_check_url))
+        return ()
     doc = handle.read()
     try:
         dom = xml.dom.minidom.parseString(doc)
     except:
-        print doc
-        raise
+        logger.exception('The update information does not parse: %s' % doc)
+        return ()
 
     def parse_updates(element):
         if element:
