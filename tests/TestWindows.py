@@ -278,9 +278,9 @@ class WindowsTestCase(unittest.TestCase):
         """Unit test for parse_windows_build"""
         from decimal import Decimal
         tests = (('5.1.2600', Decimal('5.1')),
-            ('5.1', Decimal('5.1')),
-            ('10.0.10240', 10),
-            ('10.0', 10))
+                 ('5.1', Decimal('5.1')),
+                 ('10.0.10240', 10),
+                 ('10.0', 10))
         for test in tests:
             self.assertEqual(parse_windows_build(test[0]), test[1])
 

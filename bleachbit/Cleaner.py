@@ -208,7 +208,8 @@ class Firefox(Cleaner):
             'Site preferences'), _('Settings for individual sites'))
         self.add_option('passwords', _('Passwords'), _(
             'A database of usernames and passwords as well as a list of sites that should not store passwords'))
-        self.set_warning('passwords', _('This option will delete your saved passwords.'))
+        self.set_warning(
+            'passwords', _('This option will delete your saved passwords.'))
         self.add_option(
             'url_history', _('URL history'), _('List of visited web pages'))
         self.add_option('vacuum', _('Vacuum'), _(

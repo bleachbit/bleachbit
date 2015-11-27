@@ -259,7 +259,6 @@ def elevate_privileges():
     privileges.  If successful, return True (so original process
     can exit).  If failed or not applicable, return False."""
 
-
     if parse_windows_build() < 6:
         # Windows XP does not have the UAC.
         # Vista is the version Windows that has the UAC.
@@ -520,7 +519,7 @@ def move_to_recycle_bin(path):
         (0, shellcon.FO_DELETE, path, None, shellcon.FOF_ALLOWUNDO | shellcon.FOF_NOCONFIRMATION))
 
 
-def parse_windows_build(build = None):
+def parse_windows_build(build=None):
     """
     Parse build string like 1.2.3 or 1.2 to numeric,
     ignoring the third part, if present.
