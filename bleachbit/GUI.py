@@ -145,7 +145,6 @@ class TreeDisplayModel:
         if hasattr(self.renderer2, 'set_alignment'):
             # requires PyGTK 2.22
             # http://www.pygtk.org/pygtk2reference/class-gtkcellrenderer.html#method-gtkcellrenderer--set-alignment
-            print 'have it!'
             self.renderer2.set_alignment(1.0, 0.0)
         # TRANSLATORS: Size is the label for the column that shows how
         # much space an option would clean or did clean
