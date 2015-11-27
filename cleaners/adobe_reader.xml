@@ -34,7 +34,13 @@
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
     <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
-    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\*\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\8.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\10.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
