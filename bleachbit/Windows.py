@@ -283,7 +283,7 @@ def elevate_privileges():
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
         exe = unicode(sys.executable, sys.getfilesystemencoding())
-        py = "--gui --no-uac"
+        parameters = "--gui --no-uac"
     else:
         # __file__ is absolute path to bleachbit/Windows.py
         pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
@@ -295,11 +295,11 @@ def elevate_privileges():
             logger.debug(
                 "debug: skipping UAC because '%s' is on network" % pyfile)
             return False
-        py = '"%s" --gui --no-uac' % pyfile
+        parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
 
     # add any command line parameters such as --debug-log
-    py = "%s %s" % (py, ' '.join(sys.argv[1:]))
+    parameters = "%s %s" % (parameters, ' '.join(sys.argv[1:]))
 
     logger.debug('elevate_privileges() exe=%s, parameters=%s' %
                  (exe, parameters))
@@ -308,7 +308,7 @@ def elevate_privileges():
     try:
         rc = shell.ShellExecuteEx(lpVerb='runas',
                                   lpFile=exe,
-                                  lpParameters=py,
+                                  lpParameters=parameters,
                                   nShow=win32con.SW_SHOW)
     except pywintypes.error, e:
         if 1223 == e.winerror:
