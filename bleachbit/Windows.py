@@ -39,6 +39,7 @@ These are the terms:
 
 
 import glob
+import logging
 import os
 import platform
 import re
@@ -76,10 +77,11 @@ def browse_file(_, title):
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
     except pywintypes.error, e:
+        logger = logging.getLogger(__name__)
         if 0 == e.winerror:
-            print 'debug: browse_file(): user cancelled'
+            logger.debug('browse_file(): user cancelled')
         else:
-            traceback.print_exc()
+            logger.exception('exception in browse_file()')
         return None
     return ret[0]
 
@@ -94,10 +96,11 @@ def browse_files(_, title):
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
     except pywintypes.error, e:
+        logger = logging.getLogger(__name__)
         if 0 == e.winerror:
-            print 'debug: browse_files(): user cancelled'
+            logger.debug('browse_files(): user cancelled')
         else:
-            traceback.print_exc()
+            logger.exception('exception in browse_files()')
         return None
     _split = ret[0].split('\x00')
     if 1 == len(_split):
@@ -122,13 +125,15 @@ def browse_folder(hwnd, title):
 
 def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
+    logger = logging.getLogger(__name__)
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-        set_environ(varname, sppath)
     except:
-        traceback.print_exc()
-        print 'ERROR: setting environment variable "%s": %s ' % (
-            varname, str(sys.exc_info()[1]))
+        logger.exception(
+            'exception when getting special folder path for %s' % varname)
+        return
+    # there is exception handling in set_environ()
+    set_environ(varname, sppath)
 
 
 def delete_locked_file(pathname):
@@ -269,8 +274,10 @@ def elevate_privileges():
         # 10 = 10
         return False
 
+    logger = logging.getLogger(__name__)
+
     if shell.IsUserAnAdmin():
-        print 'debug: already an admin (UAC not required)'
+        logger.debug('already an admin (UAC not required)')
         return False
 
     if hasattr(sys, 'frozen'):
@@ -285,7 +292,8 @@ def elevate_privileges():
         # the administrator may not have privileges and user will not be
         # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
-            print "debug: skipping UAC because '%s' is on network" % pyfile
+            logger.debug(
+                "debug: skipping UAC because '%s' is on network" % pyfile)
             return False
         py = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
@@ -293,7 +301,8 @@ def elevate_privileges():
     # add any command line parameters such as --debug-log
     py = "%s %s" % (py, ' '.join(sys.argv[1:]))
 
-    print 'debug: exe=', exe, ' parameters=', py
+    logger.debug('elevate_privileges() exe=%s, parameters=%s' %
+                 (exe, parameters))
 
     rc = None
     try:
@@ -303,11 +312,11 @@ def elevate_privileges():
                                   nShow=win32con.SW_SHOW)
     except pywintypes.error, e:
         if 1223 == e.winerror:
-            print 'debug: user denied the UAC dialog'
+            logger.debug('user denied the UAC dialog')
             return False
         raise
 
-    print 'debug: ShellExecuteEx=', rc
+    logger.debug('ShellExecuteEx=%s' % rc)
 
     if isinstance(rc, dict):
         return True
@@ -340,7 +349,8 @@ def get_autostart_path():
     except:
         # example of failure
         # http://bleachbit.sourceforge.net/forum/error-windows-7-x64-bleachbit-091
-        traceback.print_exc()
+        logger = logging.getLogger(__name__)
+        logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
             str(sys.exc_info()[1]))
         import GuiBasic
@@ -550,10 +560,15 @@ def shell_change_notify():
 
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
+    logger = logging.getLogger(__name__)
     if not path:
+        logger.debug('set_environ(%s, %s): skipping because blank path' %
+                     (varname, path))
         # Such as LocalAppDataLow on XP
         return
     if os.environ.has_key(varname):
+        logger.debug('set_environ(%s, %s): skipping because environment variable is already defined' %
+                     (varname, path))
         # Do not redefine the environment variable when it already exists
         return
     try:
@@ -561,11 +576,10 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
+        logger.debug('set_environ(%s, %s), set' % (varname, path))
     except:
-        import traceback
-        traceback.print_exc()
-        print 'ERROR: setting environment variable "%s": %s ' % (
-            varname, str(sys.exc_info()[1]))
+        logger.exception(
+            'set_environ(%s, %s): exception when setting environment variable' % (varname, path))
 
 
 def setup_environment():
