@@ -62,6 +62,8 @@ class Options:
         self.purged = False
         self.config = ConfigParser.SafeConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
+        self.config._boolean_states['t'] = True
+        self.config._boolean_states['f'] = False
         self.restore()
 
     def __flush(self):

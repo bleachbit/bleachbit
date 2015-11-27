@@ -139,6 +139,17 @@ class OptionsTestCase(unittest.TestCase):
         # clean up
         os.rmdir(dirname)
 
+    def test_abbreviation(self):
+        """Test non-standard, abbreviated booleans T and F"""
+        from bleachbit.Common import options_file
+        with open(options_file, 'wb') as f:
+            f.write('[bleachbit]\n')
+            f.write('shred = T\n')
+            f.write('exit_done = F\n')
+        o = bleachbit.Options.options
+        self.assertEqual(o.get('shred'), True)
+        self.assertEqual(o.get('exit_done'), False)
+
 
 def suite():
     return unittest.makeSuite(OptionsTestCase)
