@@ -139,17 +139,26 @@ class OptionsTestCase(unittest.TestCase):
         # clean up
         os.rmdir(dirname)
 
-    def test_abbreviation(self):
+    def test_abbreviations(self):
         """Test non-standard, abbreviated booleans T and F"""
-        from bleachbit.Common import options_file
-        f = open(options_file, 'wb')
-        f.write('[bleachbit]\n')
-        f.write('shred = T\n')
-        f.write('exit_done = F\n')
-        f.close()
+
+        # set values
         o = bleachbit.Options.options
-        self.assertEqual(o.get('shred'), True)
-        self.assertEqual(o.get('exit_done'), False)
+        if not o.config.has_section('test'):
+            o.config.add_section('test')
+        o.config.set('test', 'test_t_upper', 'T')
+        o.config.set('test', 'test_f_upper', 'F')
+        o.config.set('test', 'test_t_lower', 't')
+        o.config.set('test', 'test_f_lower', 'f')
+
+        # read
+        self.assertEqual(o.config.getboolean('test', 'test_t_upper'), True)
+        self.assertEqual(o.config.getboolean('test', 'test_t_lower'), True)
+        self.assertEqual(o.config.getboolean('test', 'test_f_upper'), False)
+        self.assertEqual(o.config.getboolean('test', 'test_f_lower'), False)
+
+        # clean up
+        del o
 
 
 def suite():
