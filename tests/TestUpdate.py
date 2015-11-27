@@ -89,8 +89,9 @@ class UpdateTestCase(unittest.TestCase):
 
         # test failure
         Common.update_check_url = "http://localhost/doesnotexist"
-        self.assertRaises(
-            urllib2.URLError, check_updates, True, False, None, None)
+        self.assertEqual(
+            check_updates(True, False, None, None),
+            ())
 
     def test_update_winapp2(self):
         from bleachbit.Common import personal_cleaners_dir
