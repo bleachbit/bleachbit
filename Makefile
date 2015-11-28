@@ -25,7 +25,7 @@ clean:
 	make -C po clean
 	@rm -vrf locale
 	@rm -vrf {*/,./}*.{pychecker,pylint,pyflakes}.log
-	@rm -vrf windows/BleachBit-*-setup*.exe
+	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 
 install:
 	# "binary"
