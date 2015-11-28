@@ -95,7 +95,7 @@ class TreeInfoModel:
             if not c_value and options.get('auto_hide') \
                     and backends[key].auto_hide():
                 logger = logging.getLogger(__name__)
-                logger.info("info: automatically hiding cleaner '%s'", (c_id))
+                logger.debug("automatically hiding cleaner '%s'", (c_id))
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
             for (o_id, o_name) in backends[key].get_options():
