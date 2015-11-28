@@ -36,7 +36,11 @@ APP_URL = "http://bleachbit.sourceforge.net"
 socket_timeout = 10
 
 logger = logging.getLogger('bleachbit')
-logger.setLevel(logging.DEBUG)
+if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+    # When frozen in py2exe, avoid bleachbit.exe.log
+    logger.setLevel(logging.ERROR)
+else:
+    logger.setLevel(logging.INFO)
 logger_sh = logging.StreamHandler()
 logger.addHandler(logger_sh)
 
