@@ -152,6 +152,14 @@ CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR, pair_id
 CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
 INSERT INTO "autofill" VALUES('ltmpl','sso','sso',1,3);
 INSERT INTO "autofill_dates" VALUES(1,1268958682);
+CREATE TABLE autofill_profile_names ( guid VARCHAR, first_name VARCHAR, middle_name VARCHAR, last_name VARCHAR, full_name VARCHAR);
+INSERT INTO "autofill_profile_names" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','andrew','','ziem','');
+CREATE TABLE autofill_profile_emails ( guid VARCHAR, email VARCHAR);
+INSERT INTO "autofill_profile_emails" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','a@a.a');
+CREATE TABLE "autofill_profile_phones" ( guid VARCHAR, number VARCHAR);
+INSERT INTO "autofill_profile_phones" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','123457890');
+CREATE TABLE "autofill_profiles" ( guid VARCHAR PRIMARY KEY, company_name VARCHAR, street_address VARCHAR, dependent_locality VARCHAR, city VARCHAR, state VARCHAR, zipcode VARCHAR, sorting_code VARCHAR, country_code VARCHAR, date_modified INTEGER NOT NULL DEFAULT 0, origin VARCHAR DEFAULT '', language_code VARCHAR, use_count INTEGER NOT NULL DEFAULT 0, use_date INTEGER NOT NULL DEFAULT 0);
+INSERT INTO "autofill_profiles" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','','1234 anywhere st','','City','ST','000000','','US',1386736740,'','',5,1437861201);
 """
 
 # databases/Databases.db from Chromium 12
