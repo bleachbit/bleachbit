@@ -160,6 +160,8 @@ CREATE TABLE "autofill_profile_phones" ( guid VARCHAR, number VARCHAR);
 INSERT INTO "autofill_profile_phones" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','123457890');
 CREATE TABLE "autofill_profiles" ( guid VARCHAR PRIMARY KEY, company_name VARCHAR, street_address VARCHAR, dependent_locality VARCHAR, city VARCHAR, state VARCHAR, zipcode VARCHAR, sorting_code VARCHAR, country_code VARCHAR, date_modified INTEGER NOT NULL DEFAULT 0, origin VARCHAR DEFAULT '', language_code VARCHAR, use_count INTEGER NOT NULL DEFAULT 0, use_date INTEGER NOT NULL DEFAULT 0);
 INSERT INTO "autofill_profiles" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','','1234 anywhere st','','City','ST','000000','','US',1386736740,'','',5,1437861201);
+CREATE TABLE server_addresses (id VARCHAR,company_name VARCHAR,street_address VARCHAR,address_1 VARCHAR,address_2 VARCHAR,address_3 VARCHAR,address_4 VARCHAR,postal_code VARCHAR,sorting_code VARCHAR,country_code VARCHAR,language_code VARCHAR, recipient_name VARCHAR, phone_number VARCHAR);
+INSERT INTO "server_addresses" VALUES('a','','123 anywhere','ST','City','',NULL,'0000','','US','','andrew ziem','+1 000-000-0000');
 """
 
 # databases/Databases.db from Chromium 12
@@ -274,6 +276,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
             self.assertTableIsEmpty(filename, 'autofill_profile_names')
             self.assertTableIsEmpty(filename, 'autofill_profile_phones')
             self.assertTableIsEmpty(filename, 'autofill_profiles')
+            self.assertTableIsEmpty(filename, 'server_addresses')
         self.sqlite_clean_helper(
             None, fn, bleachbit.Special.delete_chrome_autofill, check_func=check_autofill)
 
