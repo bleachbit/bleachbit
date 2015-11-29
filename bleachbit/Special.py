@@ -90,7 +90,7 @@ def delete_chrome_autofill(path):
     cmds = __shred_sqlite_char_columns('autofill', cols)
     cols = ('first_name', 'middle_name', 'last_name', 'full_name')
     cmds += __shred_sqlite_char_columns('autofill_profile_names', cols)
-    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('emails',))
+    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',))
     cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',))
     cols = ('company_name', 'street_address', 'dependent_locality', 'city', 'state', 'zipcode', 'country_code')
     cmds += __shred_sqlite_char_columns('autofill_profiles', cols)
