@@ -169,8 +169,20 @@ INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfc
 INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
 """
 
+class SpecialAssertions:
+    def assertTableIsEmpty(self, path, table):
+        """Asserts SQLite table exists and is empty"""
+        if not os.path.lexists(path):
+            raise AssertionError('Path does not exist: %s' % path)
+        import sqlite3
+        conn = sqlite3.connect(path)
+        cursor = conn.cursor()
+        cursor.execute('select 1 from %s limit 1' % table)
+        row = cursor.fetchone()
+        if row:
+            raise AssertionError('Table is not empty: %s ' % table)
 
-class SpecialTestCase(unittest.TestCase):
+class SpecialTestCase(unittest.TestCase, SpecialAssertions):
 
     """Test case for module Special"""
 
@@ -255,8 +267,15 @@ class SpecialTestCase(unittest.TestCase):
 
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
+        fn = "google-chrome/Default/Web Data"
+        def check_autofill(self, filename):
+            self.assertTableIsEmpty(filename, 'autofill')
+            self.assertTableIsEmpty(filename, 'autofill_profile_emails')
+            self.assertTableIsEmpty(filename, 'autofill_profile_names')
+            self.assertTableIsEmpty(filename, 'autofill_profile_phones')
+            self.assertTableIsEmpty(filename, 'autofill_profiles')
         self.sqlite_clean_helper(
-            None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_autofill)
+            None, fn, bleachbit.Special.delete_chrome_autofill, check_func=check_autofill)
 
     def test_delete_chrome_databases_db(self):
         """Unit test for delete_chrome_databases_db"""
@@ -277,6 +296,13 @@ class SpecialTestCase(unittest.TestCase):
             # id 2 is bleachbit.sourceforge.net which is a bookmark and should
             # be cleaned
             self.assertEqual(ids, [2])
+
+            # these tables should always be empty after cleaning
+            self.assertTableIsEmpty(filename, 'downloads')
+            self.assertTableIsEmpty(filename, 'keyword_search_terms')
+            self.assertTableIsEmpty(filename, 'segment_usage')
+            self.assertTableIsEmpty(filename, 'segments')
+            self.assertTableIsEmpty(filename, 'visits')
 
         self.sqlite_clean_helper(None, "google-chrome/Default/History",
                                  bleachbit.Special.delete_chrome_history, check_chrome_history)
