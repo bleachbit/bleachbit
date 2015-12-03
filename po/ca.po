@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-11-27 12:03-0700\n"
-"PO-Revision-Date: 2015-11-29 08:43+0000\n"
+"PO-Revision-Date: 2015-12-01 19:14+0000\n"
 "Last-Translator: VPablo <villumar@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-11-29 21:20+0000\n"
-"X-Generator: Launchpad (build 17850)\n"
+"X-Launchpad-Export-Date: 2015-12-02 05:48+0000\n"
+"X-Generator: Launchpad (build 17856)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -125,7 +125,7 @@ msgstr "Miniatures"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr ""
+msgstr "Icones per els fitxers al sistema"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -178,11 +178,11 @@ msgstr "Suprimeix els registres de xat"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
-msgstr ""
+msgstr "Instal·ladors"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr ""
+msgstr "Esborra pedaços emmagatzemats  i instal·ladors"
 
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
@@ -232,7 +232,7 @@ msgstr "Llista de pàgines visitades"
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr ""
+msgstr "Llistes de bloqueig"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
@@ -242,15 +242,16 @@ msgstr "Suprimeix els fitxers"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "Les llistes de bloqueig necessiten ser actualitzades per funcionar."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
-msgstr ""
+msgstr "Torrents"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr ""
+"Esborra els torrents (només les metadades però no els fitxers descrits)"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
@@ -266,11 +267,11 @@ msgstr "Suprimeix els avatars i les emoticones"
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
 #: ../cleaners/vlc.xml ../cleaners/winamp.xml
 msgid "Media player"
-msgstr ""
+msgstr "Reproductor multimèdia"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml
 msgid "File manager"
-msgstr ""
+msgstr "Gestor de fitxers"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:469
@@ -358,15 +359,15 @@ msgstr "Paquet ofimàtic"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "Anti-virus"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr ""
+msgstr "Visor de documents"
 
 #: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
 msgid "Email client"
-msgstr ""
+msgstr "Client de correu"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -378,7 +379,7 @@ msgstr "Suprimeix l'historial d'ordres"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Capa de compatibilitat amb programari Windows"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:203
@@ -393,7 +394,7 @@ msgstr ""
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Etiquetador d'arxius d'àudio"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -401,7 +402,7 @@ msgstr "Suprimeix els fitxers obsolets"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
-msgstr ""
+msgstr "Llistes de paquets"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
@@ -424,7 +425,7 @@ msgstr ""
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
-msgstr ""
+msgstr "Editor de gràfics"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -436,7 +437,7 @@ msgstr "Suprimeix els podcasts baixats"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
-msgstr ""
+msgstr "Intèrpret d'ordres"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
@@ -469,7 +470,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:212
 msgid "This option will delete your saved passwords."
-msgstr ""
+msgstr "Aquesta opció esborrarà les contrasenyes emmagatzemades."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -477,7 +478,7 @@ msgstr "Es reinicialitzaran les carpetes personalitzades."
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr ""
+msgstr "Entorn d'escriptori"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -501,7 +502,7 @@ msgstr "Aquesta opció suprimeix les adreces d'interès."
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
-msgstr ""
+msgstr "Empaquetador d'arxius"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -527,10 +528,13 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Reinicia l'historial del motor de cerca i elimina qualsevol motor de cerca "
+"que no siga el predeterminat al navegador, alguns dels quals s'afegiren "
+"automàticament"
 
 #: ../cleaners/audacious.xml
 msgid "Audio player"
-msgstr ""
+msgstr "Reproductor d'àudio"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
@@ -542,11 +546,11 @@ msgstr "Suprimeix la sessió actual i l'anterior"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
-msgstr ""
+msgstr "Sistema de finestres"
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Processador de textos"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -554,7 +558,7 @@ msgstr "Anàlisi en profunditat"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr ""
+msgstr "Neteja arxius dispersos àmpliament al disc"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -611,7 +615,7 @@ msgstr "Voleu obrir %s al navegador web?"
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:44
 msgid "Skip"
-msgstr ""
+msgstr "Omet"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
@@ -631,7 +635,7 @@ msgstr "Marca per a suprimir"
 #: ../bleachbit/Action.py:248 ../bleachbit/Action.py:261
 #: ../bleachbit/Action.py:274
 msgid "Clean file"
-msgstr ""
+msgstr "Neteja arxiu"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:247
@@ -693,7 +697,7 @@ msgstr "Actiu"
 #. much space an option would clean or did clean
 #: ../bleachbit/GUI.py:152
 msgid "Size"
-msgstr ""
+msgstr "Mida"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
@@ -860,6 +864,9 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
+"Vosté està executant BleachBit amb permisos administratius per netejar parts "
+"compartides del sistema, i les referències del perfil d'usuari netejaran "
+"només el compte de root."
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -884,10 +891,11 @@ msgstr "llistat dels netejadors"
 #: ../bleachbit/CLI.py:141
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
+"executa netejadors per esborrar arxius i realitzar altres canvis permanents"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
-msgstr ""
+msgstr "comparteix fitxers o carpetes específiques"
 
 #: ../bleachbit/CLI.py:146
 msgid "show system information"
@@ -911,7 +919,7 @@ msgstr "usa les opcions establertes a la interfície gràfica"
 
 #: ../bleachbit/CLI.py:160
 msgid "update winapp2.ini, if a new version is available"
-msgstr ""
+msgstr "actualitza winapp2.ini, si una nova versió està disponible"
 
 #: ../bleachbit/CLI.py:162
 msgid "output version information and exit"
@@ -946,6 +954,8 @@ msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
 "verify the network is working."
 msgstr ""
+"Error obrint una connexió a la xarxa a %s per comprovar actualitzacions. Per "
+"favor comprove si la xarxa funciona."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -974,11 +984,13 @@ msgstr "Memòria"
 
 #: ../bleachbit/Worker.py:198
 msgid "Please wait. Wiping file system metadata."
-msgstr ""
+msgstr "Per favor, espere. Esborrant metadades del sistema d'arxius."
 
 #: ../bleachbit/Worker.py:201
 msgid "Please wait. Cleaning up after wiping file system metadata."
 msgstr ""
+"Per favor, espere. Realitzant una neteja després d'esborrar metadades del "
+"sistema d'arxius."
 
 #: ../bleachbit/Worker.py:204
 #, python-format
@@ -1041,37 +1053,37 @@ msgstr "Espereu.  S'està previsualitzant el %s."
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:43
 msgid "Applications"
-msgstr ""
+msgstr "Programari"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
 #: ../bleachbit/Winapp.py:46
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
 #: ../bleachbit/Winapp.py:49
 msgid "Multimedia"
-msgstr ""
+msgstr "Multimèdia"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
 #: ../bleachbit/Winapp.py:52
 msgid "Utilities"
-msgstr ""
+msgstr "Utilitats"
 
 #: ../bleachbit/Winapp.py:63
 msgid "Games"
-msgstr ""
+msgstr "Jocs"
 
 #: ../bleachbit/Winapp.py:153
 msgid "Imported from winapp2.ini"
-msgstr ""
+msgstr "Importats des del winapp2.ini"
 
 #: ../bleachbit/Cleaner.py:198
 msgid "Crash reports"
-msgstr ""
+msgstr "Informes de falls inesperats"
 
 #: ../bleachbit/Cleaner.py:205
 msgid "Session restore"
@@ -1083,7 +1095,7 @@ msgstr "Carrega la sessió inicial després que el navegador es tanqui o falli"
 
 #: ../bleachbit/Cleaner.py:208
 msgid "Site preferences"
-msgstr ""
+msgstr "Preferències del lloc"
 
 #: ../bleachbit/Cleaner.py:208
 msgid "Settings for individual sites"
@@ -1194,11 +1206,11 @@ msgstr ""
 #. files and folders will be erased.
 #: ../bleachbit/Cleaner.py:513 ../bleachbit/GuiPreferences.py:63
 msgid "Custom"
-msgstr ""
+msgstr "Personalitzat"
 
 #: ../bleachbit/Cleaner.py:514
 msgid "Delete user-specified files and folders"
-msgstr ""
+msgstr "Elimina arxius i carpetes especificats per l'usuari"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:516
@@ -1272,7 +1284,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:148
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Oculta netejadors irrellevants"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -1295,11 +1307,11 @@ msgstr "Inicia el BleachBit amb l'ordinador"
 
 #: ../bleachbit/GuiPreferences.py:169
 msgid "Exit after cleaning"
-msgstr ""
+msgstr "Ix després de netejar"
 
 #: ../bleachbit/GuiPreferences.py:175
 msgid "Confirm before delete"
-msgstr ""
+msgstr "Confirma abans d'esborrar"
 
 #: ../bleachbit/GuiPreferences.py:212
 msgid ""
@@ -1354,7 +1366,7 @@ msgstr "No es modificaran ni s'esborraran aquests camins."
 
 #: ../bleachbit/GuiPreferences.py:411
 msgid "These locations can be selected for deletion."
-msgstr ""
+msgstr "Aquestes ubicacions poden ser seleccionades per eliminar"
 
 #: ../bleachbit/GuiPreferences.py:419
 msgid "Type"
