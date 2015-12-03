@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-11-27 12:03-0700\n"
-"PO-Revision-Date: 2015-11-29 08:23+0000\n"
-"Last-Translator: Luca Ciavatta <luca.ciavatta@gmail.com>\n"
+"PO-Revision-Date: 2015-12-01 12:06+0000\n"
+"Last-Translator: Carml <mighty.carml@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-11-29 21:20+0000\n"
-"X-Generator: Launchpad (build 17850)\n"
+"X-Launchpad-Export-Date: 2015-12-02 05:48+0000\n"
+"X-Generator: Launchpad (build 17856)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -246,7 +246,7 @@ msgstr "La blocklist dovrà essere aggiornata per funzionare."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
-msgstr "Torrents"
+msgstr "Torrent"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
@@ -362,11 +362,11 @@ msgstr "Anti-virus"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr "Visualizzatore documenti"
+msgstr "Visualizzatore di documenti"
 
 #: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
 msgid "Email client"
-msgstr "Client di posta elettronica"
+msgstr "Client Email"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -378,7 +378,7 @@ msgstr "Elimina la cronologia dei comandi"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr "Layer di combatibilità per programmi Windows"
+msgstr "Strato sw di compatibilità per programmi Windows"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:203
@@ -424,7 +424,7 @@ msgstr ""
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
-msgstr "Editor grafico"
+msgstr "Programma di fotoritocco"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -469,7 +469,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:212
 msgid "This option will delete your saved passwords."
-msgstr "Questa opzione cancellerà le tue password salvate."
+msgstr "Questa opzione cancellerà le password salvate."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -600,7 +600,7 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"Poiché lo si sta eseguendo come root,aprire questo collegamento in un "
+"Poiché si sta eseguendo Bleachbit come root,aprire questo collegamento in un "
 "browser web:\n"
 "%s"
 
@@ -788,7 +788,7 @@ msgstr "_Sovrascrivi i file"
 
 #: ../bleachbit/GUI.py:693
 msgid "Sh_red Folders"
-msgstr "Elimina le ca_rtelle"
+msgstr "Sovrascrivi le ca_rtelle"
 
 #: ../bleachbit/GUI.py:695
 msgid "_Wipe Free Space"
@@ -842,7 +842,7 @@ msgstr "Anteprima"
 #: ../bleachbit/GUI.py:745
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
-"Anteprima dei file delle operazioni selezionate (nessun file verrà eliminato)"
+"Anteprima dei file nelle operazioni selezionate (nessun file verrà eliminato)"
 
 #: ../bleachbit/GUI.py:755
 msgctxt "button"
@@ -990,7 +990,7 @@ msgstr "Memoria"
 
 #: ../bleachbit/Worker.py:198
 msgid "Please wait. Wiping file system metadata."
-msgstr "Attendi, eliminazione dei metadati del file system in corso."
+msgstr "Attendere, eliminazione dei metadati del file system in corso."
 
 #: ../bleachbit/Worker.py:201
 msgid "Please wait. Cleaning up after wiping file system metadata."
@@ -1229,7 +1229,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:519
 msgid "This option is very slow."
-msgstr "Questa opzione è molto lenta"
+msgstr "Questa opzione è molto lenta."
 
 #: ../bleachbit/Cleaner.py:523
 msgid "The system in general"
@@ -1260,7 +1260,7 @@ msgstr "Lingue"
 
 #: ../bleachbit/GuiPreferences.py:69
 msgid "Whitelist"
-msgstr "Non eliminabili"
+msgstr "Da non eliminare"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
@@ -1312,11 +1312,11 @@ msgstr "Lanciare BleachBit all'avvio del computer"
 
 #: ../bleachbit/GuiPreferences.py:169
 msgid "Exit after cleaning"
-msgstr "Chiudi dopo la pulizia"
+msgstr "Chiudere dopo la pulizia."
 
 #: ../bleachbit/GuiPreferences.py:175
 msgid "Confirm before delete"
-msgstr "Conferma prima di cancellare"
+msgstr "Confermare prima di cancellare"
 
 #: ../bleachbit/GuiPreferences.py:212
 msgid ""
