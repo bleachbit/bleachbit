@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-11-27 12:03-0700\n"
-"PO-Revision-Date: 2015-11-30 15:26+0000\n"
+"PO-Revision-Date: 2015-12-03 23:22+0000\n"
 "Last-Translator: karm <melo@carmu.com>\n"
 "Language-Team: Interlingua <ia@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-12-01 02:20+0000\n"
-"X-Generator: Launchpad (build 17850)\n"
+"X-Launchpad-Export-Date: 2015-12-04 03:16+0000\n"
+"X-Generator: Launchpad (build 17862)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -220,17 +220,19 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
+"Cancellar le cookies, que contine information qual le preferentias de sito "
+"web, authentication, e identification de revision"
 
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../bleachbit/Cleaner.py:214
 msgid "List of visited web pages"
-msgstr ""
+msgstr "Lista del paginas web visitate"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr ""
+msgstr "Listas de bloco"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
@@ -240,7 +242,7 @@ msgstr "Deler le files"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "Listas de bloco"
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -249,17 +251,18 @@ msgstr "Torrentes"
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr ""
+"Cancellar le torrents (solmente le metadatos e non le files describite)"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
 #: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Cancellar le lista usate plus recentemente"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Cancellar le memoria tampon del avatares del emoticones"
 
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
 #: ../cleaners/vlc.xml ../cleaners/winamp.xml
@@ -273,7 +276,7 @@ msgstr "Gerente de file"
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:469
 msgid "Recent documents list"
-msgstr ""
+msgstr "Lista de documentos recente"
 
 #. In Windows 'Run' is the dialog in the Start menu
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
@@ -295,13 +298,13 @@ msgstr "Deler le historia de cerca"
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Registros de correction"
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/easytag.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Cancellar le registros de correction"
 
 #: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
 #: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
@@ -327,40 +330,40 @@ msgstr "Lista de files discargate"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "Cancellar le lista del paginas Web visitate"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:191
 msgid "Backup files"
-msgstr ""
+msgstr "Files copia de reserva"
 
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:192
 msgid "Delete the backup files"
-msgstr ""
+msgstr "Cancellar le files copia de reserva"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
 msgid "Current session"
-msgstr ""
+msgstr "Session actual"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Cancellar le session actual"
 
 #: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:214
 msgid "URL history"
-msgstr ""
+msgstr "Historia del URL"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
 #: ../bleachbit/Cleaner.py:376
 msgid "Office suite"
-msgstr ""
+msgstr "Suite de applicationes de officio"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "Contra-virus"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr ""
+msgstr "Visor de documento"
 
 #: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
 msgid "Email client"
@@ -372,37 +375,38 @@ msgstr "Deler le lista de servitores de joco"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
-msgstr ""
+msgstr "Cancellar le historia de commando"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Strato de compatibilitate pro le software Windows"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:203
 msgid "Form history"
-msgstr ""
+msgstr "Historia de forma"
 
 #: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:204
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
+"Un  historia de formas inserite in le sitos Web e in le barra de recerca"
 
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Taggator de files audio"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr ""
+msgstr "Cancellar le files obsolete"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
-msgstr ""
+msgstr "Listas de pacchetto"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr ""
+msgstr "Visor multimedial"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -416,18 +420,20 @@ msgstr "Indice"
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
+"Cancellar le indice de recerca, un base de datos de parolas e files a que "
+"illos contine"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
-msgstr ""
+msgstr "Modificator de graphicos"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Podcastes discargate"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Podcastes discargate"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
@@ -437,7 +443,7 @@ msgstr "Shell"
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:200
 msgid "DOM Storage"
-msgstr ""
+msgstr "Magazin de DOM"
 
 #: ../cleaners/opera.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:200
@@ -457,12 +463,14 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Un base de datos de nomines del usator e contrasignos assi como un lista de "
+"sitos que non debe immagazinar contrasignos"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:212
 msgid "This option will delete your saved passwords."
-msgstr ""
+msgstr "Iste option cancellara tu contrasignos salveguardate"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -470,11 +478,11 @@ msgstr ""
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr ""
+msgstr "Le plicas personal essera restaurate."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr ""
+msgstr "Widgets pro le scriptorio"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -485,10 +493,12 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
+"Un base de datos de URLes includente le signa-libros, le favicones, e un "
+"historia del sitos web visitate"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr ""
+msgstr "Iste option cancella tote le signa-libros."
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
