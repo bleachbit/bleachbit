@@ -171,7 +171,9 @@ INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfc
 INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
 """
 
+
 class SpecialAssertions:
+
     def assertTableIsEmpty(self, path, table):
         """Asserts SQLite table exists and is empty"""
         if not os.path.lexists(path):
@@ -183,6 +185,7 @@ class SpecialAssertions:
         row = cursor.fetchone()
         if row:
             raise AssertionError('Table is not empty: %s ' % table)
+
 
 class SpecialTestCase(unittest.TestCase, SpecialAssertions):
 
@@ -270,6 +273,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
         fn = "google-chrome/Default/Web Data"
+
         def check_autofill(self, filename):
             self.assertTableIsEmpty(filename, 'autofill')
             self.assertTableIsEmpty(filename, 'autofill_profile_emails')
