@@ -266,7 +266,7 @@ def elevate_privileges():
 
     if parse_windows_build() < 6:
         # Windows XP does not have the UAC.
-        # Vista is the version Windows that has the UAC.
+        # Vista is the first version Windows that has the UAC.
         # 5.1 = Windows XP
         # 6.0 = Vista
         # 6.1 = 7
