@@ -65,6 +65,7 @@ def diagnostic_info():
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
     s += "\nplatform.platform = %s" % platform.platform()
+    s += "\nplatform.version = %s" % platform.version()
     s += "\nsys.argv = %s" % sys.argv
     s += "\nsys.executable = %s" % sys.executable
     s += "\nsys.version = %s" % sys.version
