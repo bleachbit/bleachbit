@@ -68,7 +68,7 @@ class CleanerTestCase(unittest.TestCase):
         self.actions = []
         if 'nt' == os.name:
             self.actions.append(
-                '<action command="delete" search="file" path="$WINDIR\\notepad.exe"/>')
+                '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>')
             self.actions.append(
                 '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
             self.actions.append(
