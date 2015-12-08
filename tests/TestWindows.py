@@ -229,14 +229,14 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(ret, 0)
 
     def test_is_process_running(self):
-        tests = ((True, 'explorer.exe'),
-                 (True, 'ExPlOrEr.exe'),
+        # winlogon.exe runs on Windows XP and Windows 7
+        # explorer.exe does not run on Appveyor
+        tests = ((True, 'winlogon.exe'),
+                 (True, 'WinLogOn.exe'),
                  (False, 'doesnotexist.exe'))
         for test in tests:
             self.assertEqual(test[0], is_process_running(
-                test[1]), 'is_process_running(%s) != %s' % (test[1], test[0]))
-            self.assertEqual(test[0], is_process_running_win32(test[1]))
-            self.assertEqual(test[0], is_process_running_wmic(test[1]))
+                test[1]), 'Expecting is_process_running(%s) = %s' % (test[1], test[0]))
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""
