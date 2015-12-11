@@ -431,7 +431,7 @@ def get_known_folder_path(folder_name):
     pPath = ctypes.c_wchar_p()
     S_OK = 0
     if _SHGetKnownFolderPath(ctypes.byref(fid), 0, UserHandle.current, ctypes.byref(pPath)) != S_OK:
-        raise PathNotFoundException()
+        raise PathNotFoundException(folder_name)
     path = pPath.value
     _CoTaskMemFree(pPath)
     return path
@@ -594,8 +594,13 @@ def setup_environment():
     # LocalLowAppData does not have a CSIDL for use with
     # SHGetSpecialFolderPath. Instead, it is identified using
     # SHGetKnownFolderPath in Windows Vista and later
-    path = get_known_folder_path('LocalAppDataLow')
-    set_environ('LocalAppDataLow', path)
+    try:
+        path = get_known_folder_path('LocalAppDataLow')
+    except:
+        logger = logging.getLogger(__name__)
+        logger.exception('exception identifying LocalAppDataLow')
+    else:
+        set_environ('LocalAppDataLow', path)
 
 
 def split_registry_key(full_key):
