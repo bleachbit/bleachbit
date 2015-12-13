@@ -45,8 +45,9 @@ from Common import _
 from FileUtilities import children_in_directory
 from Options import options
 
+# Suppress GTK warning messages while running in CLI #34
 warnings.simplefilter("ignore", Warning)
-                      # Supress GTK warning messages while running in CLI #34
+
 try:
     import gtk
     HAVE_GTK = True
