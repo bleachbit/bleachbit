@@ -45,6 +45,7 @@ class CommandTestCase(unittest.TestCase):
 
         # preview
         ret = cmd.execute(really_delete=False).next()
+        s = str(cmd)
         self.assert_(ret['size'] > 0)
         self.assertEqual(ret['path'], path)
         self.assert_(os.path.exists(path))

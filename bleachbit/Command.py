@@ -59,6 +59,10 @@ class Delete:
         self.path = path
         self.shred = False
 
+    def __str__(self):
+        return 'Command to %s %s' % \
+            ('shred' if self.shred else 'delete', self.path)
+
     def execute(self, really_delete):
         """Make changes and return results"""
         if FileUtilities.whitelisted(self.path):
@@ -169,6 +173,10 @@ class Ini:
         self.section = section
         self.parameter = parameter
 
+    def __str__(self):
+        return 'Command to clean .ini path=%s, section=-%s, parameter=%s ' % \
+            (self.path, self.section, self.parameter)
+
     def execute(self, really_delete):
         """Make changes and return results"""
 
@@ -200,6 +208,10 @@ class Json:
         self.path = path
         self.address = address
 
+    def __str(self):
+        return 'Command to clean JSON file, path=%s, address=%s ' % \
+            (self.path, self.address)
+
     def execute(self, really_delete):
         """Make changes and return results"""
 
@@ -230,10 +242,16 @@ class Shred(Delete):
         Delete.__init__(self, path)
         self.shred = True
 
+    def __str__(self):
+        return 'Command to shred %s' % self.path
+
 
 class Truncate(Delete):
 
     """Truncate a single file"""
+
+    def __str__(self):
+        return 'Command to truncate %s' % self.path
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -263,6 +281,10 @@ class Winreg:
         """Create the Windows registry cleaner"""
         self.keyname = keyname
         self.valuename = valuename
+
+    def __str__(self):
+        return 'Command to clean registry, key=%, value=%s ' % \
+            (self.keyname, self.valuename)
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
