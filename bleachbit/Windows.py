@@ -46,6 +46,7 @@ import re
 import sys
 import traceback
 
+from decimal import Decimal
 
 if 'win32' == sys.platform:
     import _winreg
@@ -452,6 +453,12 @@ def get_recycle_bin():
             yield path
 
 
+def get_windows_version():
+    """Get the Windows major and minor version in a decimal like 10.0"""
+    v = win32api.GetVersionEx(0)
+    vstr = '%d.%d' % (v[0], v[1])
+    return Decimal(vstr)
+
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running"""
 
@@ -536,8 +543,7 @@ def parse_windows_build(build=None):
     """
     if not build:
         # If not given, default to current system's version
-        build = platform.version()
-    from decimal import Decimal
+        return get_windows_version()
     return Decimal('.'.join(build.split('.')[0:2]))
 
 

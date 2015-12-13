@@ -28,6 +28,7 @@ import sys
 import tempfile
 import unittest
 import platform
+from decimal import Decimal
 
 import common
 
@@ -203,6 +204,13 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(drive, drive.upper())
         self.assert_("C:\\" in drives)
 
+    def test_get_windows_version(self):
+        """Unit test for get_windows_version"""
+        v = get_windows_version()
+        self.assert_(v >= 5.1)
+        self.assert_(v > 5)
+        self.assert_(isinstance(v, Decimal))
+
     def test_empty_recycle_bin(self):
         """Unit test for empty_recycle_bin"""
         # check the function basically works
@@ -276,7 +284,6 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_parse_windows_build(self):
         """Unit test for parse_windows_build"""
-        from decimal import Decimal
         tests = (('5.1.2600', Decimal('5.1')),
                  ('5.1', Decimal('5.1')),
                  ('10.0.10240', 10),
