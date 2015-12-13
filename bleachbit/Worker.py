@@ -23,6 +23,7 @@ Perform the preview or delete operations
 """
 
 
+import logging
 import math
 import os
 import sys
@@ -72,9 +73,8 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
-        print err
-        traceback.print_exc()
-        self.ui.append_text(err + "\n", 'error')
+        logger = logging.getLogger(__name__)
+        logger.error(err, exc_info=True)
         self.total_errors += 1
 
     def execute(self, cmd):
@@ -93,11 +93,15 @@ class Worker:
             # 2 = does not exist
             # 13 = permission denied
             from errno import ENOENT, EACCES
-            if not (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
-                traceback.print_exc()
-            line = "%s\n" % (str(sys.exc_info()[1]))
+            logger = logging.getLogger(__name__)
+            if (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
+                # For access denied, do not show traceback
+                logger.error('%s: %s' % (str(e), str(cmd)))
+            else:
+                # For other errors, show the traceback.
+                logger.error('Error in execution of %s' %
+                         str(cmd), exc_info=exc_info)
             self.total_errors += 1
-            self.ui.append_text(line, 'error')
         else:
             if None == ret:
                 return
@@ -125,7 +129,9 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        print "debug: clean_operation('%s'), options = '%s'" % (operation, operation_options)
+        logger=logging.getLogger(__name__)
+        logger.debug("clean_operation('%s'), options = '%s'" %
+                     (operation, operation_options))
 
         if not operation_options:
             raise StopIteration
@@ -289,7 +295,8 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        print 'debug: deepscans=', self.deepscans
+        logger=logging.getLogger(__name__)
+        logger.debug(' deepscans=%s' % self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
         # or all the system executables.
@@ -297,8 +304,7 @@ class Worker:
         yield True  # allow GTK to update the screen
         ds = DeepScan.DeepScan()
         for (path, dsdict) in self.deepscans.iteritems():
-            print 'debug: deepscan path=', path
-            print 'debug: deepscan dict=', dsdict
+            logger.debug('deepscan path=%s, dict=%s' % (path, dsdict))
             for dsdict2 in dsdict:
                 ds.add_search(path, dsdict2['regex'])
 
