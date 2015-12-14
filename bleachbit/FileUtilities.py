@@ -95,7 +95,7 @@ def bytes_to_human(bytes_i):
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
     if bytes_i < 0:
-        return '-' + bytes_to_human(bytes_i)
+        return '-' + bytes_to_human(-bytes_i)
 
     from Options import options
     if options.get('units_iec'):
