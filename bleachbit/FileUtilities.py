@@ -92,31 +92,39 @@ def __random_string(length):
 
 
 def bytes_to_human(bytes_i):
-    """Display a file size in human terms (megabytes, etc.) using SI standard"""
+    """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
-    storage_multipliers = {1000 ** 5: 'PB', 1000 ** 4: 'TB',
-                           1000 ** 3: 'GB', 1000 ** 2: 'MB', 1000: 'kB', 1: 'B'}
+    if bytes_i < 0:
+        return '-' + bytes_to_human(-bytes_i)
+
+    from Options import options
+    if options.get('units_iec'):
+        prefixes = ['','Ki','Mi','Gi','Ti','Pi']
+        base = 1024.0
+    else:
+        prefixes = ['','k','M','G','T','P']
+        base = 1000.0
 
     assert(isinstance(bytes_i, (int, long)))
 
     if 0 == bytes_i:
         return "0"
 
-    if bytes_i >= 1000 ** 3:
+    if bytes_i >= base ** 3:
         decimals = 2
-    elif bytes_i >= 1000:
+    elif bytes_i >= base:
         decimals = 1
     else:
         decimals = 0
 
-    for key in sorted(storage_multipliers.keys(), reverse=True):
-        if bytes_i >= key:
-            abbrev = round((1.0 * bytes_i) / key, decimals)
-            suf = storage_multipliers[key]
-            return locale.str(abbrev) + suf
-
-    if bytes_i < 0:
-        return "-" + bytes_to_human(abs(bytes_i))
+    for exponent in range(0,len(prefixes)-1):
+        if bytes_i < base:
+            abbrev = round(bytes_i, decimals)
+            suf = prefixes[exponent]
+            return locale.str(abbrev) + suf + 'B'
+        else:
+            bytes_i /= base
+    return 'A lot.'
 
 
 def children_in_directory(top, list_directories=False):
