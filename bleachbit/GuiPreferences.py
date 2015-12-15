@@ -178,7 +178,7 @@ class PreferencesDialog:
             'toggled', self.__toggle_callback, 'delete_confirmation')
         vbox.pack_start(cb_popup, False)
 
-        # Use base 1000 oder 1024?
+        # Use base 1000 over 1024?
         cb_units_iec = gtk.CheckButton(_("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"))
         cb_units_iec.set_active(options.get("units_iec"))
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
