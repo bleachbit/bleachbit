@@ -389,7 +389,8 @@ class TestActionProvider(ActionProvider):
 
         # access denied, should fail and continue
         def accessdenied():
-            raise OSError(13, 'Permission denied: /foo/bar')
+            import errno
+            raise OSError(errno.EACCES, 'Permission denied: /foo/bar')
 
         yield Command.Function(None, accessdenied, 'Test access denied')
         # Lock the file on Windows.  It should be marked for deletion.
