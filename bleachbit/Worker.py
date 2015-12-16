@@ -100,7 +100,7 @@ class Worker:
             else:
                 # For other errors, show the traceback.
                 logger.error('Error in execution of %s' %
-                         str(cmd), exc_info=exc_info)
+                             str(cmd), exc_info=True)
             self.total_errors += 1
         else:
             if None == ret:

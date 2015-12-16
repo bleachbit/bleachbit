@@ -29,13 +29,61 @@ import unittest
 
 sys.path.append('.')
 import TestCleaner
-from bleachbit import CLI
+from bleachbit import CLI, Command
+from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
+
+
+class RuntimeExceptionAction(ActionProvider):
+
+    action_key = 'runtime'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # runtime exception, should fail and continue
+        def runtime():
+            raise RuntimeException('Expected exception')
+
+        yield Command.Function(None, runtime, 'Test runtime exception')
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
 
 
 class WorkerTestCase(unittest.TestCase):
 
     """Test case for module Worker"""
+
+    def test_TestRuntimeException(self):
+        """Test Worker using Action.RuntimeExceptionAction
+        The Worker module handles these differently than
+        access denied exceptions
+        """
+        ui = CLI.CliCallback()
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+        os.write(fd, '123')
+        os.close(fd)
+        self.assert_(os.path.exists(filename))
+        astr = '<action command="runtime" path="%s"/>' % filename
+        cleaner = TestCleaner.action_to_cleaner(astr)
+        backends['test'] = cleaner
+        operations = {'test': ['option1']}
+        worker = Worker(ui, True, operations)
+        run = worker.run()
+        while run.next():
+            pass
+        self.assert_(not os.path.exists(filename),
+                     "Path still exists '%s'" % filename)
+        self.assertEqual(worker.total_special, 0)
+        self.assertEqual(worker.total_errors, 1)
+        if 'posix' == os.name:
+            self.assertEqual(worker.total_bytes, 4096)
+            self.assertEqual(worker.total_deleted, 1)
+        elif 'nt' == os.name:
+            self.assertEqual(worker.total_bytes, 3)
+            self.assertEqual(worker.total_deleted, 1)
 
     def test_TestActionProvider(self):
         """Test Worker using Action.TestActionProvider"""
