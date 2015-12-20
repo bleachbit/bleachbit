@@ -141,19 +141,33 @@ class FileUtilitiesTestCase(unittest.TestCase):
             locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
 
         # test one-way conversion for predefined values
-        tests = [("-1B", bytes_to_human(-1)),
-                 ("0", bytes_to_human(0)),
-                 ("1B", bytes_to_human(1)),
-                 ("1kB", bytes_to_human(1000)),
-                 ("1.1kB", bytes_to_human(1110)),
-                 ("1MB", bytes_to_human(1000 ** 2)),
-                 ("1.3MB", bytes_to_human(1289748)),
-                 ("1GB", bytes_to_human(1000 ** 3)),
-                 ("1.32GB", bytes_to_human(1320702444)),
-                 ("1TB", bytes_to_human(1000 ** 4))]
+        # each test is a tuple in the format: (bytes, SI, EIC)
+        tests = ((-1, '-1B', '-1B'),
+                 (0, '0', '0'),
+                 (1, '1B', '1B'),
+                 (1000, '1kB', '1000B'),
+                 (1024, '1kB', '1KiB'),
+                 (1110, '1.1kB', '1.1KiB'),
+                 (1000**2, '1MB', '976.6KiB'),
+                 (1024**2, '1MB', '1MiB'),
+                 (1289748, '1.3MB', '1.2MiB'),
+                 (1000**3, '1GB', '953.7MiB'),
+                 (1024**3, '1.07GB', '1GiB'),
+                 (1320702444, '1.32GB', '1.23GiB'),
+                 (1000**4, '1TB', '931.32GiB'),
+                 (1024**4, '1.1TB', '1TiB'))
 
+        options.set('units_iec', True)
         for test in tests:
-            self.assertEqual(test[0], test[1])
+            iec = bytes_to_human(test[0])
+            self.assertEqual(test[2], iec,
+                             'bytes_to_human(%d) IEC = %s but expected %s' % (test[0], iec, test[2]))
+
+        options.set('units_iec', False)
+        for test in tests:
+            si = bytes_to_human(test[0])
+            self.assertEqual(test[1], si,
+                             'bytes_to_human(%d) SI = %s but expected %s' % (test[0], si, test[1]))
 
         # test roundtrip conversion for random values
         import random
