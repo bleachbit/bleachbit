@@ -34,7 +34,7 @@ from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
 
 
-class RuntimeExceptionAction(ActionProvider):
+class RuntimeErrorAction(ActionProvider):
 
     action_key = 'runtime'
 
@@ -44,7 +44,7 @@ class RuntimeExceptionAction(ActionProvider):
     def get_commands(self):
         # runtime exception, should fail and continue
         def runtime():
-            raise RuntimeException('Expected exception')
+            raise RuntimeError('This is a test exception')
 
         yield Command.Function(None, runtime, 'Test runtime exception')
 
@@ -56,8 +56,8 @@ class WorkerTestCase(unittest.TestCase):
 
     """Test case for module Worker"""
 
-    def test_TestRuntimeException(self):
-        """Test Worker using Action.RuntimeExceptionAction
+    def test_TestRuntimeError(self):
+        """Test Worker using Action.RuntimeErrorAction
         The Worker module handles these differently than
         access denied exceptions
         """
