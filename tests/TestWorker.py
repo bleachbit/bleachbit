@@ -208,8 +208,12 @@ class WorkerTestCase(unittest.TestCase):
             pass
         self.assert_(not os.path.exists(filename),
                      "Path still exists '%s'" % filename)
-        self.assertEqual(worker.total_special, special_expected)
-        self.assertEqual(worker.total_errors, errors_expected)
+        self.assertEqual(worker.total_special, special_expected,
+                         'For command %s expecting %s special operations but observed %d'
+                % (command, special_expected, worker.total_special))
+        self.assertEqual(worker.total_errors, errors_expected,
+            'For command %s expecting %d errors but observed %d'
+            % (command, errors_expected, worker.total_errors))
         if 'posix' == os.name:
             self.assertEqual(worker.total_bytes, bytes_expected_posix)
             self.assertEqual(worker.total_deleted, count_deleted_posix)
