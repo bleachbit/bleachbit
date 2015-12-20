@@ -103,6 +103,8 @@ class MemoryTestCase(unittest.TestCase):
     def test_parse_swapoff(self):
         """Test for method parse_swapoff"""
         tests = (
+            # Ubuntu 15.10 has format "swapoff /dev/sda3"
+            ('swapoff /dev/sda3', '/dev/sda3'),
             ('swapoff for /dev/sda6', '/dev/sda6'),
             ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'))
 

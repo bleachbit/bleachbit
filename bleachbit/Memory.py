@@ -61,11 +61,11 @@ def parse_swapoff(swapoff):
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
     # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
     # This matches swap devices and swap files
-    ret = re.search('^swapoff .* (/[\w/\.-]+)$', swapoff)
+    ret = re.search('^swapoff (\w* )?(/[\w/\.-]+)$', swapoff)
     if not ret:
         # no matches
         return None
-    return ret.group(1)
+    return ret.group(2)
 
 
 def disable_swap_linux():
