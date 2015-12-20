@@ -34,6 +34,126 @@ from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
 
 
+class AccessDeniedActionAction(ActionProvider):
+
+    action_key = 'access.denied'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # access denied, should fail and continue
+        def accessdenied():
+            import errno
+            raise OSError(errno.EACCES, 'Permission denied: /foo/bar')
+        yield Command.Function(None, accessdenied, 'Test access denied')
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+class DoesNotExistAction(ActionProvider):
+
+    action_key = 'does.not.exist'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # non-existent file, should fail and continue
+        yield Command.Delete("doesnotexist")
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+class FunctionGeneratorAction(ActionProvider):
+
+    action_key = 'function.generator'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # function generator without path, should succeed
+        def funcgenerator():
+            yield long(10)
+        yield Command.Function(None, funcgenerator, 'funcgenerator')
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+class FunctionPathAction(ActionProvider):
+
+    action_key = 'function.path'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # function with path, should succeed
+        def pathfunc(path):
+            pass
+        # self.pathname must exist because it checks the file size
+        yield Command.Function(self.pathname, pathfunc, 'pathfunc')
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+class InvalidEncodingAction(ActionProvider):
+
+    action_key = 'invalid.encoding'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # file with invalid encoding
+        import tempfile
+        (fd, filename) = tempfile.mkstemp('invalid-encoding-\xe4\xf6\xfc~')
+        os.close(fd)
+        yield Command.Delete(filename)
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+class FunctionPlainAction(ActionProvider):
+
+    action_key = 'function.plain'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # plain function without path, should succeed
+        def intfunc():
+            return int(5)
+        yield Command.Function(None, intfunc, 'intfunc')
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+class LockedAction(ActionProvider):
+
+    action_key = 'locked'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # Lock the file on Windows.  It should be marked for deletion.
+        f = os.open(self.pathname, os.O_RDWR | os.O_EXCL)
+        yield Command.Delete(self.pathname)
+        assert(os.path.exists(self.pathname))
+        os.close(f)
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+
 class RuntimeErrorAction(ActionProvider):
 
     action_key = 'runtime'
@@ -52,10 +172,25 @@ class RuntimeErrorAction(ActionProvider):
         yield Command.Delete(self.pathname)
 
 
+class TruncateTestAction(ActionProvider):
+
+    action_key = 'truncate.test'
+
+    def __init__(self, action_element):
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # truncate real file
+        yield Command.Truncate(self.pathname)
+
+        # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+
 class WorkerTestCase(unittest.TestCase):
 
     """Test case for module Worker"""
-
 
     def action_test_helper(self, command, special_expected, errors_expected, bytes_expected_posix, count_deleted_posix, bytes_expected_nt, count_deleted_nt):
         ui = CLI.CliCallback()
@@ -82,17 +217,47 @@ class WorkerTestCase(unittest.TestCase):
             self.assertEqual(worker.total_bytes, bytes_expected_nt)
             self.assertEqual(worker.total_deleted, count_deleted_nt)
 
+    def test_AccessDenied(self):
+        """Test Worker using Action.AccessDeniedAction"""
+        self.action_test_helper('access.denied', 0, 1, 4096, 1, 3, 1)
 
-    def test_TestRuntimeError(self):
+    def test_DoesNotExist(self):
+        """Test Worker using Action.DoesNotExistAction"""
+        self.action_test_helper('does.not.exist', 0, 1, 4096, 1, 3, 1)
+
+    def test_FunctionGenerator(self):
+        """Test Worker using Action.FunctionGenerator"""
+        self.action_test_helper('function.generator', 1, 0, 4096+10, 1, 3+10, 1)
+
+    def test_FunctionPath(self):
+        """Test Worker using Action.FunctionPathAction"""
+        self.action_test_helper('function.path', 1, 0, 4096, 1, 3, 1)
+
+    def test_FunctionPlain(self):
+        """Test Worker using Action.FunctionPlainAction"""
+        self.action_test_helper('function.plain', 1, 0, 4096+5, 1, 3+5, 1)
+
+    def test_InvalidEncoding(self):
+        """Test Worker using Action.InvalidEncodingAction"""
+        self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
+
+    def test_Locked(self):
+        """Test Worker using Action.LockedAction"""
+        if not 'nt' == os.name:
+            return
+        self.action_test_helper('locked', 0, 0, None, None, 3+0, 2)
+
+    def test_RuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction
         The Worker module handles these differently than
         access denied exceptions
         """
         self.action_test_helper('runtime', 0, 1, 4096, 1, 3, 1)
 
-    def test_TestActionProvider(self):
-        """Test Worker using Action.TestActionProvider"""
-        self.action_test_helper('test', 3, 2, 4096+10+10, 3, 3+3+10+10, 4)
+    def test_Truncate(self):
+        """Test Worker using Action.TruncateTestAction
+        """
+        self.action_test_helper('truncate.test', 0, 0, 4096, 2, 3, 2)
 
     def test_deep_scan(self):
         """Test for deep scan"""

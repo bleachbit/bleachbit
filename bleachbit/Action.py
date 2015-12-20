@@ -375,59 +375,6 @@ class Truncate(FileActionProvider):
             yield Command.Truncate(path)
 
 
-class TestActionProvider(ActionProvider):
-
-    """Test ActionProvider"""
-    action_key = 'test'
-
-    def __init__(self, action_element):
-        self.pathname = action_element.getAttribute('path')
-
-    def get_commands(self):
-        # non-existent file, should fail and continue
-        yield Command.Delete("doesnotexist")
-
-        # access denied, should fail and continue
-        def accessdenied():
-            import errno
-            raise OSError(errno.EACCES, 'Permission denied: /foo/bar')
-
-        yield Command.Function(None, accessdenied, 'Test access denied')
-        # Lock the file on Windows.  It should be marked for deletion.
-        if 'nt' == os.name:
-            f = os.open(self.pathname, os.O_RDWR | os.O_EXCL)
-            yield Command.Delete(self.pathname)
-            assert(os.path.exists(self.pathname))
-            os.close(f)
-
-        # function with path, should succeed
-        def pathfunc(path):
-            pass
-        # self.pathname must exist because it checks the file size
-        yield Command.Function(self.pathname, pathfunc, 'pathfunc')
-
-        # function generator without path, should succeed
-        def funcgenerator():
-            yield long(10)
-        yield Command.Function(None, funcgenerator, 'funcgenerator')
-
-        # plain function without path, should succeed
-        def intfunc():
-            return int(10)
-        yield Command.Function(None, intfunc, 'intfunc')
-
-        # truncate real file
-        yield Command.Truncate(self.pathname)
-
-        # real file, should succeed
-        yield Command.Delete(self.pathname)
-
-        # file with invalid encoding
-        import tempfile
-        (fd, filename) = tempfile.mkstemp('invalid-encoding-\xe4\xf6\xfc~')
-        os.close(fd)
-        yield Command.Delete(filename)
-
 
 class WinShellChangeNotify(ActionProvider):
 
