@@ -56,60 +56,43 @@ class WorkerTestCase(unittest.TestCase):
 
     """Test case for module Worker"""
 
+
+    def action_test_helper(self, command, special_expected, errors_expected, bytes_expected_posix, count_deleted_posix, bytes_expected_nt, count_deleted_nt):
+        ui = CLI.CliCallback()
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+        os.write(fd, '123')
+        os.close(fd)
+        self.assert_(os.path.exists(filename))
+        astr = '<action command="%s" path="%s"/>' % (command, filename)
+        cleaner = TestCleaner.action_to_cleaner(astr)
+        backends['test'] = cleaner
+        operations = {'test': ['option1']}
+        worker = Worker(ui, True, operations)
+        run = worker.run()
+        while run.next():
+            pass
+        self.assert_(not os.path.exists(filename),
+                     "Path still exists '%s'" % filename)
+        self.assertEqual(worker.total_special, special_expected)
+        self.assertEqual(worker.total_errors, errors_expected)
+        if 'posix' == os.name:
+            self.assertEqual(worker.total_bytes, bytes_expected_posix)
+            self.assertEqual(worker.total_deleted, count_deleted_posix)
+        elif 'nt' == os.name:
+            self.assertEqual(worker.total_bytes, bytes_expected_nt)
+            self.assertEqual(worker.total_deleted, count_deleted_nt)
+
+
     def test_TestRuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction
         The Worker module handles these differently than
         access denied exceptions
         """
-        ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
-        os.write(fd, '123')
-        os.close(fd)
-        self.assert_(os.path.exists(filename))
-        astr = '<action command="runtime" path="%s"/>' % filename
-        cleaner = TestCleaner.action_to_cleaner(astr)
-        backends['test'] = cleaner
-        operations = {'test': ['option1']}
-        worker = Worker(ui, True, operations)
-        run = worker.run()
-        while run.next():
-            pass
-        self.assert_(not os.path.exists(filename),
-                     "Path still exists '%s'" % filename)
-        self.assertEqual(worker.total_special, 0)
-        self.assertEqual(worker.total_errors, 1)
-        if 'posix' == os.name:
-            self.assertEqual(worker.total_bytes, 4096)
-            self.assertEqual(worker.total_deleted, 1)
-        elif 'nt' == os.name:
-            self.assertEqual(worker.total_bytes, 3)
-            self.assertEqual(worker.total_deleted, 1)
+        self.action_test_helper('runtime', 0, 1, 4096, 1, 3, 1)
 
     def test_TestActionProvider(self):
         """Test Worker using Action.TestActionProvider"""
-        ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
-        os.write(fd, '123')
-        os.close(fd)
-        self.assert_(os.path.exists(filename))
-        astr = '<action command="test" path="%s"/>' % filename
-        cleaner = TestCleaner.action_to_cleaner(astr)
-        backends['test'] = cleaner
-        operations = {'test': ['option1']}
-        worker = Worker(ui, True, operations)
-        run = worker.run()
-        while run.next():
-            pass
-        self.assert_(not os.path.exists(filename),
-                     "Path still exists '%s'" % filename)
-        self.assertEqual(worker.total_special, 3)
-        self.assertEqual(worker.total_errors, 2)
-        if 'posix' == os.name:
-            self.assertEqual(worker.total_bytes, 4096 + 10 + 10)
-            self.assertEqual(worker.total_deleted, 3)
-        elif 'nt' == os.name:
-            self.assertEqual(worker.total_bytes, 3 + 3 + 10 + 10)
-            self.assertEqual(worker.total_deleted, 4)
+        self.action_test_helper('test', 3, 2, 4096+10+10, 3, 3+3+10+10, 4)
 
     def test_deep_scan(self):
         """Test for deep scan"""
