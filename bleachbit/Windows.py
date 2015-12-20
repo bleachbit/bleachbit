@@ -459,6 +459,7 @@ def get_windows_version():
     vstr = '%d.%d' % (v[0], v[1])
     return Decimal(vstr)
 
+
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running"""
 

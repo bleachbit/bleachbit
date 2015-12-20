@@ -99,10 +99,10 @@ def bytes_to_human(bytes_i):
 
     from Options import options
     if options.get('units_iec'):
-        prefixes = ['','Ki','Mi','Gi','Ti','Pi']
+        prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi']
         base = 1024.0
     else:
-        prefixes = ['','k','M','G','T','P']
+        prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
     assert(isinstance(bytes_i, (int, long)))
@@ -117,7 +117,7 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for exponent in range(0,len(prefixes)-1):
+    for exponent in range(0, len(prefixes) - 1):
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
             suf = prefixes[exponent]

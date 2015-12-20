@@ -66,6 +66,7 @@ class DoesNotExistAction(ActionProvider):
         # real file, should succeed
         yield Command.Delete(self.pathname)
 
+
 class FunctionGeneratorAction(ActionProvider):
 
     action_key = 'function.generator'
@@ -99,6 +100,7 @@ class FunctionPathAction(ActionProvider):
 
         # real file, should succeed
         yield Command.Delete(self.pathname)
+
 
 class InvalidEncodingAction(ActionProvider):
 
@@ -153,7 +155,6 @@ class LockedAction(ActionProvider):
         yield Command.Delete(self.pathname)
 
 
-
 class RuntimeErrorAction(ActionProvider):
 
     action_key = 'runtime'
@@ -187,12 +188,13 @@ class TruncateTestAction(ActionProvider):
         yield Command.Delete(self.pathname)
 
 
-
 class WorkerTestCase(unittest.TestCase):
 
     """Test case for module Worker"""
 
-    def action_test_helper(self, command, special_expected, errors_expected, bytes_expected_posix, count_deleted_posix, bytes_expected_nt, count_deleted_nt):
+    def action_test_helper(self, command, special_expected, errors_expected,
+                           bytes_expected_posix, count_deleted_posix,
+                           bytes_expected_nt, count_deleted_nt):
         ui = CLI.CliCallback()
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.write(fd, '123')
@@ -210,10 +212,10 @@ class WorkerTestCase(unittest.TestCase):
                      "Path still exists '%s'" % filename)
         self.assertEqual(worker.total_special, special_expected,
                          'For command %s expecting %s special operations but observed %d'
-                % (command, special_expected, worker.total_special))
+                         % (command, special_expected, worker.total_special))
         self.assertEqual(worker.total_errors, errors_expected,
-            'For command %s expecting %d errors but observed %d'
-            % (command, errors_expected, worker.total_errors))
+                         'For command %s expecting %d errors but observed %d'
+                         % (command, errors_expected, worker.total_errors))
         if 'posix' == os.name:
             self.assertEqual(worker.total_bytes, bytes_expected_posix)
             self.assertEqual(worker.total_deleted, count_deleted_posix)
@@ -231,7 +233,8 @@ class WorkerTestCase(unittest.TestCase):
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
-        self.action_test_helper('function.generator', 1, 0, 4096+10, 1, 3+10, 1)
+        self.action_test_helper(
+            'function.generator', 1, 0, 4096 + 10, 1, 3 + 10, 1)
 
     def test_FunctionPath(self):
         """Test Worker using Action.FunctionPathAction"""
@@ -239,7 +242,7 @@ class WorkerTestCase(unittest.TestCase):
 
     def test_FunctionPlain(self):
         """Test Worker using Action.FunctionPlainAction"""
-        self.action_test_helper('function.plain', 1, 0, 4096+5, 1, 3+5, 1)
+        self.action_test_helper('function.plain', 1, 0, 4096 + 5, 1, 3 + 5, 1)
 
     def test_InvalidEncoding(self):
         """Test Worker using Action.InvalidEncodingAction"""
@@ -249,7 +252,7 @@ class WorkerTestCase(unittest.TestCase):
         """Test Worker using Action.LockedAction"""
         if not 'nt' == os.name:
             return
-        self.action_test_helper('locked', 0, 0, None, None, 3+0, 2)
+        self.action_test_helper('locked', 0, 0, None, None, 3 + 0, 2)
 
     def test_RuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction

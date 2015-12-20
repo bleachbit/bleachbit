@@ -129,7 +129,7 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        logger=logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
         logger.debug("clean_operation('%s'), options = '%s'" %
                      (operation, operation_options))
 
@@ -295,7 +295,7 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger=logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
         logger.debug(' deepscans=%s' % self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory

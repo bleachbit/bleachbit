@@ -375,7 +375,6 @@ class Truncate(FileActionProvider):
             yield Command.Truncate(path)
 
 
-
 class WinShellChangeNotify(ActionProvider):
 
     """Action to clean the Windows Registry"""
