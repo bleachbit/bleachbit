@@ -130,15 +130,15 @@ def fill_memory_linux():
     allocbytes = int(physical_free() * 0.4)
     if allocbytes < 1024:
         return
-    megabytes = allocbytes / (1024 ** 2)
-    print "info: allocating and wiping %.2f MB (%d B) memory" % (megabytes, allocbytes)
+    bytes_str = FileUtilities.bytes_to_human(allocbytes)
+    print "info: allocating and wiping %s (%d B) of memory" % (bytes_str, allocbytes)
     try:
         buf = '\x00' * allocbytes
     except MemoryError:
         pass
     else:
         fill_memory_linux()
-        print "debug: freeing %.2f MB memory" % megabytes
+        print "debug: freeing %s of memory" % bytes_str
         del buf
     report_free()
 
@@ -230,8 +230,9 @@ def physical_free():
 def report_free():
     """Report free memory"""
     bytes_free = physical_free()
-    print "debug: physical free: %d B (%d MB)" % \
-        (bytes_free, bytes_free / 1024 ** 2)
+    bytes_str = FileUtilities.bytes_to_human(bytes_free)
+    print "debug: physical free: %s (%d B)" % \
+        (bytes_str, bytes_free)
 
 
 def wipe_swap_linux(devices, proc_swaps):
