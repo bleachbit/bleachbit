@@ -155,7 +155,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
                  (1024**3, '1.07GB', '1GiB'),
                  (1320702444, '1.32GB', '1.23GiB'),
                  (1000**4, '1TB', '931.32GiB'),
-                 (1024**4, '1.1TB', '1TiB'))
+                 (1024**4, '1.1TB', '1TiB'),
+                 (1000**5, '1PB', '909.49TiB'),
+                 (1024**5, '1.13PB', '1PiB'))
 
         options.set('units_iec', True)
         for test in tests:
