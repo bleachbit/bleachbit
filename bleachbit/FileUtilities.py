@@ -117,7 +117,7 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for exponent in range(0, len(prefixes) - 1):
+    for exponent in range(0, len(prefixes)):
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
             suf = prefixes[exponent]
