@@ -343,13 +343,8 @@ def extended_path(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        import ctypes
-        free_bytes = ctypes.c_int64()
-        rc = ctypes.windll.kernel32.GetDiskFreeSpaceExW(unicode(pathname),
-                                                        ctypes.byref(free_bytes), None, None)
-        if 0 == rc:
-            raise ctypes.WinError()
-        return free_bytes.value
+        _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
+        return free_bytes
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
