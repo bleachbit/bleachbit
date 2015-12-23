@@ -442,6 +442,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assert_(isinstance(result, (int, long)))
 
         # compare to WMIC
+        if 'nt' != os.name:
+            return
         args = ['wmic',  'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
