@@ -546,7 +546,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
     def test_guess_overwrite_paths(self):
         """Unit test for guess_overwrite_paths()"""
         for path in guess_overwrite_paths():
-            self.assert_(os.path.isdir(path))
+            self.assert_(os.path.isdir(path), '%s is not a directory' % path)
 
     def test_listdir(self):
         """Unit test for listdir()"""

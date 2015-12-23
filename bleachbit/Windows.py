@@ -373,7 +373,12 @@ def get_fixed_drives():
     """Yield each fixed drive"""
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):
         if win32file.GetDriveType(drive) == win32file.DRIVE_FIXED:
-            yield drive
+            # Microsoft Office 2010 Starter creates a virtual drive that
+            # looks much like a fixed disk but isdir() returns false
+            # and free_space() returns access denied.
+            # https://bugs.launchpad.net/bleachbit/+bug/1474848
+            if os.path.isdir(drive):
+                yield drive
 
 
 def get_known_folder_path(folder_name):

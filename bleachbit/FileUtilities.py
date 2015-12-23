@@ -422,16 +422,10 @@ def guess_overwrite_paths():
             localtmp = GetLongPathName(localtmp)
         from Windows import get_fixed_drives
         for drive in get_fixed_drives():
-            try:
-                if localtmp and same_partition(localtmp, drive):
-                    ret.append(localtmp)
-                else:
-                    ret.append(drive)
-            except Exception, e:
-                # see https://github.com/az0/bleachbit/issues/27
-                # https://bugs.launchpad.net/bleachbit/+bug/1372179
-                logger.error('error in same_partition(%s, %s): %s',
-                             localtmp, drive, Common.decode_str(e))
+            if localtmp and same_partition(localtmp, drive):
+                ret.append(localtmp)
+            else:
+                ret.append(drive)
     else:
         NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
@@ -479,13 +473,14 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except IOError, e:
-            if e.errno == errno.EACCES:
-                logger = logging.getLogger(__name__)
-                logger.error(
-                    'access denied for same_partition(%s, %s): %s', dir1, dir2, Common.decode_str(e))
+        except pywintypes.error as e:
+            if 5 == e.winerror:
+                # Microsoft Office 2010 Starter Edition has a virtual
+                # drive that gives access denied
+                # https://bugs.launchpad.net/bleachbit/+bug/1372179
+                # https://bugs.launchpad.net/bleachbit/+bug/1474848
                 # https://github.com/az0/bleachbit/issues/27
-                return False
+                return dir1[0] == dir2[0]
             raise
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
