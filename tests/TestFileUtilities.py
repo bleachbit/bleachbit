@@ -441,6 +441,22 @@ class FileUtilitiesTestCase(unittest.TestCase):
         self.assert_(result > -1)
         self.assert_(isinstance(result, (int, long)))
 
+        # compare to WMIC
+        args = ['wmic',  'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
+        from bleachbit.General import run_external
+        (rc, stdout, stderr) = run_external(args)
+        if rc:
+            print 'error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr)
+            return
+        import re
+        for line in stdout.split('\n'):
+            line = line.strip()
+            if not re.match('([A-Z]):\s+(\d+)', line):
+                continue
+            drive, bytes_free = re.split('\s+', line)
+            bytes_free = int(bytes_free)
+            self.assertEqual(bytes_free, free_space(drive))
+
     def test_getsize(self):
         """Unit test for method getsize()"""
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-getsize')
