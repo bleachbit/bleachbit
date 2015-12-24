@@ -79,7 +79,21 @@ class CleanerMLTestCase(unittest.TestCase):
 
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""
+        # normal
         load_cleaners()
+
+        # should catch exception with invalid XML
+        import tempfile
+        pcd = Common.personal_cleaners_dir
+        Common.personal_cleaners_dir = tempfile.mkdtemp(
+            prefix='bleachbit-cleanerml-load')
+        fn_xml = os.path.join(Common.personal_cleaners_dir, 'invalid.xml')
+        with open(fn_xml, 'w') as f:
+            f.write('<xml><broken>')
+        load_cleaners()
+        import shutil
+        shutil.rmtree(Common.personal_cleaners_dir)
+        Common.personal_cleaners_dir = pcd
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
