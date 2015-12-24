@@ -33,6 +33,7 @@ import TestCLI
 import TestCleaner
 import TestCleanerML
 import TestCommand
+import TestDiagnostic
 import TestDeepScan
 import TestFileUtilities
 import TestGeneral
@@ -50,6 +51,7 @@ suites = [TestAction.suite(),
           TestCLI.suite(),
           TestCommand.suite(),
           TestDeepScan.suite(),
+          TestDiagnostic.suite(),
           TestFileUtilities.suite(),
           TestGeneral.suite(),
           TestMemory.suite(),
