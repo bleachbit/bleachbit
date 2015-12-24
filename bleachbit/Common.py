@@ -40,7 +40,12 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     # When frozen in py2exe, avoid bleachbit.exe.log
     logger.setLevel(logging.ERROR)
 else:
-    logger.setLevel(logging.INFO)
+    # debug if command line asks for it or if this a non-final release
+    if any(arg.startswith('--debug-log') for arg in sys.argv) or \
+            int(APP_VERSION.split('.')[1]) % 2:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
 logger_sh = logging.StreamHandler()
 logger.addHandler(logger_sh)
 
