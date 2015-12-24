@@ -89,6 +89,10 @@ class TreeInfoModel:
             self.tree_store.disconnect(self.row_changed_handler_id)
         self.tree_store.clear()
         for key in sorted(backends):
+            if not any(backends[key].get_options()):
+                # localizations has no options, so it should be hidden
+                # https://github.com/az0/bleachbit/issues/110
+                continue
             c_name = backends[key].get_name()
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
