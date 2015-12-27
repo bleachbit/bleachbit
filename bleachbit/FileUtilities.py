@@ -473,7 +473,7 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except pywintypes.error as e:
+        except pywintypes.error, e:
             if 5 == e.winerror:
                 # Microsoft Office 2010 Starter Edition has a virtual
                 # drive that gives access denied
