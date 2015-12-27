@@ -50,14 +50,14 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\"/>
-    <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies"/>
-    <action command="delete" search="file" path="~/.config/google-chrome/Default/Cookies-journal"/>
-    <action command="delete" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
-    <action command="delete" search="walk.all" path="~/.config/google-chrome/Default/Pepper Data/Shockwave Flash/WritableRoot/"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Cookies"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Cookies-journal"/>
+    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Extension Cookies"/>
+    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\*\Pepper Data\Shockwave Flash\WritableRoot\"/>
+    <action command="delete" search="glob" path="~/.config/google-chrome/*/Cookies"/>
+    <action command="delete" search="glob" path="~/.config/google-chrome/*/Cookies-journal"/>
+    <action command="delete" search="glob" path="~/.config/google-chrome/*/Extension Cookies"/>
+    <action command="delete" search="walk.all" path="~/.config/google-chrome/*/Pepper Data/Shockwave Flash/WritableRoot/"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
