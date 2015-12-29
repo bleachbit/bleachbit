@@ -26,6 +26,7 @@ page](http://bleachbit.sourceforge.net)
 * [Documentation](https://bleachbit.github.io/docs/)
 
 ### Development
+* [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  [![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)](https://ci.appveyor.com/project/az0/bleachbit)
 * [BleachBit on Travis CI](https://travis-ci.org/az0/bleachbit)  [![Build Status](https://travis-ci.org/az0/bleachbit.svg?branch=master)](https://travis-ci.org/az0/bleachbit)
 * [CleanerML Repository](https://github.com/az0/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/az0/bleachbit-misc)
