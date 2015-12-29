@@ -23,7 +23,7 @@ For information regarding the command line interface, run:
 * [BleachBit home 
 page](http://bleachbit.sourceforge.net)
 * [Support](http://bleachbit.sourceforge.net/help)
-* [Documentation](bleachbit.sourceforge.net/documentation/)
+* [Documentation](https://bleachbit.github.io/docs/)
 
 ### Development
 * [BleachBit on Travis CI](https://travis-ci.org/az0/bleachbit)  [![Build Status](https://travis-ci.org/az0/bleachbit.svg?branch=master)](https://travis-ci.org/az0/bleachbit)
