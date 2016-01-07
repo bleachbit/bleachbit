@@ -1,6 +1,6 @@
 @echo off
 REM BleachBit
-REM Copyright (C) 2008-2015 Andrew Ziem
+REM Copyright (C) 2008-2016 Andrew Ziem
 REM http://bleachbit.sourceforge.net
 REM
 REM This program is free software: you can redistribute it and/or modify
