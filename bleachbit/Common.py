@@ -29,7 +29,7 @@ import logging
 import os
 import sys
 
-APP_VERSION = "1.10"
+APP_VERSION = "1.11"
 APP_NAME = "BleachBit"
 APP_URL = "http://bleachbit.sourceforge.net"
 
