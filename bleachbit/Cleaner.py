@@ -805,6 +805,9 @@ class System(Cleaner):
         regexes.append('^' + os.path.expanduser('~/.cache/mozilla'))
         regexes.append(
             '^' + os.path.expanduser('~/.cache/gnome-control-center/'))
+        # iBus Pinyin
+        # https://bugs.launchpad.net/bleachbit/+bug/1538919
+        regexes.append('^' + os.path.expanduser('~/.cache/ibus/'))
         for regex in regexes:
             if None != re.match(regex, pathname):
                 return True
