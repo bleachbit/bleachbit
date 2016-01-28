@@ -26,6 +26,7 @@ clean:
 	@rm -vrf locale
 	@rm -vrf {*/,./}*.{pychecker,pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
+	@rm -vrf htmlcov # code coverage reports
 
 install:
 	# "binary"
