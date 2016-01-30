@@ -267,6 +267,8 @@ class Locales:
          'yo': 'Yorùbá',
          'za': 'Saɯ cueŋƅ',
          'zh': '中文',
+         'zh_CN' : '中文',
+         'zh_TW' : '中文',
          'zu': 'isiZulu'}
 
     _paths = []
