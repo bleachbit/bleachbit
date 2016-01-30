@@ -209,6 +209,7 @@ class Locales:
          'pl': 'polski',
          'ps': 'پښتو',
          'pt': 'Português',
+         'pt_BR' : 'Português do Brasil',
          'qu': 'Runa Simi',
          'rm': 'rumantsch grischun',
          'rn': 'Ikirundi',
