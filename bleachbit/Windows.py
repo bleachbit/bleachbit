@@ -130,7 +130,7 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except:
-        logger.exception(
+        logger.info(
             'exception when getting special folder path for %s' % varname)
         return
     # there is exception handling in set_environ()
