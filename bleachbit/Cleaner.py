@@ -216,7 +216,9 @@ class Firefox(Cleaner):
         self.add_option('vacuum', _('Vacuum'), _(
             'Clean database fragmentation to reduce space and improve speed without removing any data'))
 
-        if 'posix' == os.name:
+        if  'posix' == os.name and sys.platform.startswith('darwin'):
+            self.profile_dir = "~/Library/Application Support/Firefox/Profiles/*.default*/"
+        elif 'posix' == os.name:
             self.profile_dir = "~/.mozilla/firefox*/*.default*/"
             self.add_running('exe', 'firefox')
             self.add_running('exe', 'firefox-bin')
