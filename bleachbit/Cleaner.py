@@ -499,7 +499,8 @@ class System(Cleaner):
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _(
                 'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
-
+        elif 'posix' == os.name and sys.platform.startswith('darwin'):
+            self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         #
         # options for GTK+
         #
