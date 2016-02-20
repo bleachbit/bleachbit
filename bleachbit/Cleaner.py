@@ -218,6 +218,7 @@ class Firefox(Cleaner):
 
         if  'posix' == os.name and sys.platform.startswith('darwin'):
             self.profile_dir = "~/Library/Application Support/Firefox/Profiles/*.default*/"
+            self.add_running('exe', 'firefox')
         elif 'posix' == os.name:
             self.profile_dir = "~/.mozilla/firefox*/*.default*/"
             self.add_running('exe', 'firefox')
@@ -269,7 +270,9 @@ class Firefox(Cleaner):
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "cookies.sqlite")
         # crash reports
-        if 'posix' == os.name:
+        if  'posix' == os.name and sys.platform.startswith('darwin'):
+            crashdir = os.path.expanduser("~/Library/Application Support/Firefox/Crash Reports")
+        elif 'posix' == os.name:
             crashdir = os.path.expanduser("~/.mozilla/firefox/Crash Reports")
         if 'nt' == os.name:
             crashdir = os.path.expandvars(
@@ -362,7 +365,6 @@ class Firefox(Cleaner):
             for path in paths:
                 yield Command.Function(path,
                                        FileUtilities.vacuum_sqlite3, _("Vacuum"))
-
 
 class OpenOfficeOrg(Cleaner):
 
