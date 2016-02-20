@@ -44,10 +44,6 @@ def __shred_sqlite_char_columns(table, cols=None, where=""):
         cmd += "update %s set %s %s;" % \
                 (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
                 for col in cols]), where)
-<<<<<<< HEAD
-        print cmd
-=======
->>>>>>> 07c4599087b918ccb065ae58a69ad6b576f5387b
         cmd += "update %s set %s %s;" % \
             (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
              for col in cols]), where)
