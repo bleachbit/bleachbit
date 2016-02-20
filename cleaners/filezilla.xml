@@ -30,6 +30,7 @@
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
     <action command="delete" search="file" path="~/.filezilla/recentservers.xml"/>
+    <action command="delete" search="file" path="~/.config/filezilla/recentservers.xml">
     <action command="delete" search="file" path="$APPDATA\FileZilla\recentservers.xml"/>
   </option>
 </cleaner>

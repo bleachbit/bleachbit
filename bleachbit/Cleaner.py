@@ -216,7 +216,10 @@ class Firefox(Cleaner):
         self.add_option('vacuum', _('Vacuum'), _(
             'Clean database fragmentation to reduce space and improve speed without removing any data'))
 
-        if 'posix' == os.name:
+        if  'posix' == os.name and sys.platform.startswith('darwin'):
+            self.profile_dir = "~/Library/Application Support/Firefox/Profiles/*.default*/"
+            self.add_running('exe', 'firefox')
+        elif 'posix' == os.name:
             self.profile_dir = "~/.mozilla/firefox*/*.default*/"
             self.add_running('exe', 'firefox')
             self.add_running('exe', 'firefox-bin')
@@ -267,7 +270,9 @@ class Firefox(Cleaner):
             files += FileUtilities.expand_glob_join(
                 self.profile_dir, "cookies.sqlite")
         # crash reports
-        if 'posix' == os.name:
+        if  'posix' == os.name and sys.platform.startswith('darwin'):
+            crashdir = os.path.expanduser("~/Library/Application Support/Firefox/Crash Reports")
+        elif 'posix' == os.name:
             crashdir = os.path.expanduser("~/.mozilla/firefox/Crash Reports")
         if 'nt' == os.name:
             crashdir = os.path.expandvars(
@@ -360,7 +365,6 @@ class Firefox(Cleaner):
             for path in paths:
                 yield Command.Function(path,
                                        FileUtilities.vacuum_sqlite3, _("Vacuum"))
-
 
 class OpenOfficeOrg(Cleaner):
 
@@ -497,7 +501,8 @@ class System(Cleaner):
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _(
                 'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
-
+        elif 'posix' == os.name and sys.platform.startswith('darwin'):
+            self.add_option('recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
         #
         # options for GTK+
         #
