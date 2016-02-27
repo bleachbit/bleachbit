@@ -53,7 +53,7 @@ def put_files_into_recycle_bin():
         move_to_recycle_bin(filename)
     # make a folder and move it to the recycle bin
     dirname = tempfile.mkdtemp(prefix='bleachbit-recycle-folder')
-    open(os.path.join(dirname, 'file'), 'a').close()
+    common.touch_file(os.path.join(dirname, 'file'))
     move_to_recycle_bin(dirname)
 
 

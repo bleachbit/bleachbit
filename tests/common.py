@@ -39,6 +39,8 @@ def touch_file(filename):
     """Create an empty file"""
     f = open(filename, "w")
     f.close()
+    import os.path
+    assert(os.path.exists(filename))
 
 
 def validate_result(self, result, really_delete=False):

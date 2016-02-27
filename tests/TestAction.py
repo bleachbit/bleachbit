@@ -238,7 +238,7 @@ class ActionTestCase(unittest.TestCase):
 
         # this file should be deleted too
         filename = os.path.join(subdir, 'file')
-        open(filename, 'a').close()
+        common.touch_file(filename)
 
         action_str = '<action command="delete" search="walk.all" path="%s" />' % dirname
         self._test_action_str(action_str)
