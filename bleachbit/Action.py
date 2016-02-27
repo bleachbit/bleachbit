@@ -87,6 +87,7 @@ class FileActionProvider(ActionProvider):
         self.nregex = action_element.getAttribute('nregex')
         assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
+        self.object_type = action_element.getAttribute('type')
         self.path = os.path.expanduser(os.path.expandvars(
             action_element.getAttribute('path')))
         if 'nt' == os.name and self.path:
@@ -102,6 +103,18 @@ class FileActionProvider(ActionProvider):
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
+        if self.object_type:
+            if 'f' == self.object_type:
+                self.object_filter = os.path.isfile
+            elif 'd' == self.object_type:
+                self.object_filter = os.path.isdir
+            else:
+                raise RuntimeError('unsupported type %s in %s' % \
+                    (self.object_type, self.action_element))
+        else:
+            # faster to bypass
+            self.get_paths = self._get_paths
+
 
     def get_deep_scan(self):
         if 0 == len(self.ds):
@@ -109,6 +122,11 @@ class FileActionProvider(ActionProvider):
         yield self.ds
 
     def get_paths(self):
+        import itertools
+        for f in itertools.ifilter(self.object_filter, self._get_paths()):
+            yield f
+
+    def _get_paths(self):
         """Return a filtered list of files"""
 
         def get_file(path):

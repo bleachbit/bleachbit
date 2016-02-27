@@ -227,6 +227,30 @@ class ActionTestCase(unittest.TestCase):
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
 
+    def test_type(self):
+        """Unit test for type attribute"""
+        dirname = tempfile.mkdtemp(prefix='bleachbit-action-type')
+        filename = os.path.join(dirname, 'file')
+
+        # this should not delete anything
+        common.touch_file(filename)
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(os.path.exists(filename))
+
+        # should delete file
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(filename))
+
+        # should delete file
+        common.touch_file(filename)
+        action_str = '<action command="delete" search="file" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(filename))
+
+
+
     def test_walk_all(self):
         """Unit test for walk.all"""
         dirname = tempfile.mkdtemp(prefix='bleachbit-walk-all')
