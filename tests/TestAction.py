@@ -249,6 +249,16 @@ class ActionTestCase(unittest.TestCase):
         self._test_action_str(action_str)
         self.assert_(not os.path.exists(filename))
 
+        # should not delete anything
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % dirname
+        self._test_action_str(action_str)
+        self.assert_(os.path.exists(dirname))
+
+        # should delete directory
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % dirname
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(dirname))
+
 
 
     def test_walk_all(self):
