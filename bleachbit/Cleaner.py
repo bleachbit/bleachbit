@@ -445,7 +445,7 @@ class System(Cleaner):
         # options for Linux and BSD
         #
         if 'posix' == os.name:
-            # TRANSLATORS: desktop entries are .desktop files in Linux tha
+            # TRANSLATORS: desktop entries are .desktop files in Linux that
             # make up the application menu (the menu that shows BleachBit,
             # Firefox, and others.  The .desktop files also associate file
             # types, so clicking on an .html file in Nautilus brings up
