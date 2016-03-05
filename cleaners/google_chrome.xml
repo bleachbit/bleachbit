@@ -99,6 +99,8 @@
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\QuotaManager-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts-journal"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails-journal"/>
     <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
@@ -122,7 +124,9 @@
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Shortcuts"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Shortcuts-journal"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
+    <action command="delete" search="walk.files" path="~/.config/google-chrome/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Top Sites"/>
     <action command="delete" search="file" path="~/.config/google-chrome/Default/Top Sites-journal"/>
@@ -168,7 +172,8 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases\Databases.db"/>
@@ -177,7 +182,8 @@
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/History"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Thumbnails"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/Web Data"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/google-chrome/Default/databases/Databases.db"/>
