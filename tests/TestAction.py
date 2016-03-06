@@ -45,7 +45,10 @@ def _action_str_to_commands(action_str):
 
 
 def _action_str_to_results(action_str):
-    """Parse <action> and return list of results"""
+    """Parse <action> and return list of results
+
+    It lists the files, but it does not really delete them.
+    """
     return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
 
 
