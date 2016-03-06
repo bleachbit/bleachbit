@@ -67,7 +67,9 @@ def benchmark_filter(this_filter):
     start = time.time()
     filter_code = ''
     if 'regex' == this_filter:
-        filter_code = 'regex="^12$"'
+        # This regex matches everything, so the "no filter" and regex
+        # are comparable
+        filter_code = 'regex="."'
     action_str = '<action command="delete" search="glob" path="%s/*" %s />' % \
         (dirname, filter_code)
     results = _action_str_to_results(action_str)
