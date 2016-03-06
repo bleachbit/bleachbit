@@ -79,9 +79,12 @@
          variables such as $HOME and $USERPROFILE -->
     <action command="delete" search="file" path="~/.xsession-errors"/>
     <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
-    <!-- With the same set of search="..." types, you can filter the filename
-         by a regular expression -->
-    <action command="truncate" search="walk.files" path="/var/log" regex="log$"/>
+    <!-- While the search="..." generates a list of files, you can filter
+         the list using any combination of: regex, nregex, and type.
+
+         The following action truncates any file that ends with log.
+         -->
+    <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="d"/>
     <!-- command=sqlite.vacuum defragments an SQLite 3 database -->
     <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
     <!-- command="winreg" without the attribute 'name' deletes
