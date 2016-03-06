@@ -607,7 +607,6 @@ class System(Cleaner):
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
                 '$windir\\SoftwareDistribution\\*.log',
-                '$windir\\SoftwareDistribution\\DataStore\\Logs\\*',
                 '$windir\\system32\\TZLog.log',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak',
                 '$windir\\system32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt',
@@ -744,11 +743,6 @@ class System(Cleaner):
                 'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache')
             for key in keys:
                 yield Command.Winreg(key, None)
-
-        # prefetch
-        if 'nt' == os.name and 'prefetch' == option_id:
-            for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
-                yield Command.Delete(path)
 
         # recycle bin
         if 'nt' == os.name and 'recycle_bin' == option_id:
