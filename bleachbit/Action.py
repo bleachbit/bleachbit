@@ -103,17 +103,10 @@ class FileActionProvider(ActionProvider):
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
-        if self.object_type:
-            if 'f' == self.object_type:
-                self.object_filter = os.path.isfile
-            elif 'd' == self.object_type:
-                self.object_filter = os.path.isdir
-            else:
-                raise RuntimeError('unsupported type %s in %s' % \
-                    (self.object_type, self.action_element))
-        else:
-            # faster to bypass
+        if not self.object_type and not self.regex and not self.nregex:
+            # If the filter is not needed, bypass it for speed.
             self.get_paths = self._get_paths
+
 
 
     def get_deep_scan(self):
@@ -121,9 +114,33 @@ class FileActionProvider(ActionProvider):
             raise StopIteration
         yield self.ds
 
+
+    def path_filter(self, path):
+        """Process the filters: regex, nregex, type
+
+        If a filter is defined and it fails to match, this function
+        returns False. Otherwise, this function returns True."""
+
+        if self.regex:
+            if not self.regex_c.search(os.path.basename(path)):
+                return False
+
+        if self.nregex:
+            if self.nregex_c.search(os.path.basename(path)):
+                return False
+
+        if self.object_type:
+            if 'f' == self.object_type and not os.path.isfile(path):
+                return False
+            elif 'd' == self.object_type and not os.path.isdir(path):
+                return False
+
+        return True
+
+
     def get_paths(self):
         import itertools
-        for f in itertools.ifilter(self.object_filter, self._get_paths()):
+        for f in itertools.ifilter(self.path_filter, self._get_paths()):
             yield f
 
     def _get_paths(self):
@@ -157,34 +174,13 @@ class FileActionProvider(ActionProvider):
             raise RuntimeError("invalid search='%s'" % self.search)
 
         if self.regex:
-            regex_c = re.compile(self.regex)
+            self.regex_c = re.compile(self.regex)
 
         if self.nregex:
-            nregex_c = re.compile(self.nregex)
+            self.nregex_c = re.compile(self.nregex)
 
-        # Sometimes this loop repeats many times, so optimize it by
-        # putting the conditional outside the loop.
-
-        if not self.regex and not self.nregex:
-            for path in func(self.path):
-                yield path
-        elif self.regex and not self.nregex:
-            for path in func(self.path):
-                if not regex_c.search(os.path.basename(path)):
-                    continue
-                yield path
-        elif self.nregex:
-            for path in func(self.path):
-                if nregex_c.search(os.path.basename(path)):
-                    continue
-                yield path
-        else:
-            for path in func(self.path):
-                if not regex_c.search(os.path.basename(path)):
-                    continue
-                if nregex_c.search(os.path.basename(path)):
-                    continue
-                yield path
+        for path in func(self.path):
+            yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
