@@ -82,6 +82,9 @@
     <!-- While the search="..." generates a list of files, you can filter
          the list using any combination of: regex, nregex, and type.
 
+         regex and nregex are both case sensitive and both match just the
+         filename (i.e., not the whole path).
+
          The following action truncates any file that ends with log.
          -->
     <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="d"/>
