@@ -36,7 +36,10 @@ import Special
 from Common import _
 
 if 'posix' == os.name:
+    re_flags = 0
     import Unix
+else:
+    re_flags = re.IGNORECASE
 
 
 #
@@ -182,16 +185,16 @@ class FileActionProvider(ActionProvider):
             raise RuntimeError("invalid search='%s'" % self.search)
 
         if self.regex:
-            self.regex_c = re.compile(self.regex)
+            self.regex_c = re.compile(self.regex, re_flags)
 
         if self.nregex:
-            self.nregex_c = re.compile(self.nregex)
+            self.nregex_c = re.compile(self.nregex, re_flags)
 
         if self.wholeregex:
-            self.wholeregex_c = re.compile(self.wholeregex)
+            self.wholeregex_c = re.compile(self.wholeregex, re_flags)
 
         if self.nwholeregex:
-            self.nwholeregex_c = re.compile(self.nwholeregex)
+            self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
 
         for path in func(self.path):
             yield path

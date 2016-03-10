@@ -206,6 +206,16 @@ class ActionTestCase(unittest.TestCase):
         self.assert_(1 == len(results))
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
+        # On Windows should be case insensitive
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
+        results = _action_str_to_results(action_str)
+        if 'nt' == os.name:
+            self.assert_(1 == len(results))
+            self.assertEqual(results[0]['path'], '/tmp/foo2')
+        else:
+            self.assert_(0 == len(results))
+
+
         # should match second file using negative regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
         results = _action_str_to_results(action_str)
