@@ -86,6 +86,10 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.nregex = action_element.getAttribute('nregex')
         assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
+        self.wholeregex = action_element.getAttribute('wholeregex')
+        assert(isinstance(self.wholeregex, (str, unicode, types.NoneType)))
+        self.nwholeregex = action_element.getAttribute('nwholeregex')
+        assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self.path = os.path.expanduser(os.path.expandvars(
@@ -103,17 +107,14 @@ class FileActionProvider(ActionProvider):
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
-        if not self.object_type and not self.regex and not self.nregex:
+        if not any([self.object_type, self.regex, self.nregex, self.wholeregex, self.nwholeregex]):
             # If the filter is not needed, bypass it for speed.
             self.get_paths = self._get_paths
-
-
 
     def get_deep_scan(self):
         if 0 == len(self.ds):
             raise StopIteration
         yield self.ds
-
 
     def path_filter(self, path):
         """Process the filters: regex, nregex, type
@@ -129,6 +130,14 @@ class FileActionProvider(ActionProvider):
             if self.nregex_c.search(os.path.basename(path)):
                 return False
 
+        if self.wholeregex:
+            if not self.wholeregex_c.search(path):
+                return False
+
+        if self.nwholeregex:
+            if self.nwholeregex_c.search(path):
+                return False
+
         if self.object_type:
             if 'f' == self.object_type and not os.path.isfile(path):
                 return False
@@ -136,7 +145,6 @@ class FileActionProvider(ActionProvider):
                 return False
 
         return True
-
 
     def get_paths(self):
         import itertools
@@ -178,6 +186,12 @@ class FileActionProvider(ActionProvider):
 
         if self.nregex:
             self.nregex_c = re.compile(self.nregex)
+
+        if self.wholeregex:
+            self.wholeregex_c = re.compile(self.wholeregex)
+
+        if self.nwholeregex:
+            self.nwholeregex_c = re.compile(self.nwholeregex)
 
         for path in func(self.path):
             yield path

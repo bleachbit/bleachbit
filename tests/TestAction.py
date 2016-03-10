@@ -237,6 +237,31 @@ class ActionTestCase(unittest.TestCase):
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
 
+    def test_wholeregex(self):
+        """Unit test for wholeregex filter"""
+        _iglob = glob.iglob
+        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
+        _getsize = FileUtilities.getsize
+        FileUtilities.getsize = lambda x: 1
+
+        # should match three files using no regexes
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
+        results = _action_str_to_results(action_str)
+        self.assert_(3 == len(results))
+
+        # should match two files using wholeregex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(2 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/foo1')
+
+        # should match third file using nwholeregex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(1 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/bar1')
+
+
     def test_type(self):
         """Unit test for type attribute"""
         dirname = tempfile.mkdtemp(prefix='bleachbit-action-type')

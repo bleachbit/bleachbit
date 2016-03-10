@@ -114,6 +114,8 @@
                       <xs:attribute name="path" type="xs:string"/>
                       <xs:attribute name="regex" type="xs:string"/>
                       <xs:attribute name="nregex" type="xs:string"/>
+                      <xs:attribute name="wholeregex" type="xs:string"/>
+                      <xs:attribute name="nwholeregex" type="xs:string"/>
                       <xs:attribute name="type" type="xs:string"/>
                       <xs:attribute name="search">
                         <xs:simpleType>
