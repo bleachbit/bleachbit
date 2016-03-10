@@ -202,10 +202,22 @@ class WinappTestCase(unittest.TestCase):
         os.close(ini_h)
 
         # a set of tests
+        # this map explains what each position in the test tuple means
+        # 0=line to write directly to winapp2.ini
+        # 1=filename1 to place in fake environment (default=deleteme.log)
+        # 2=auto-hide before cleaning
+        # 3=dirname exists after cleaning
+        # 4=filename1 exists after cleaning
+        # 5=filename2 exists after cleaning
+        # 6=deleteme.bak exists after cleaning
+        # 7=auto-hide after cleaning
         tests = [
             # single file
             ('FileKey1=%s|deleteme.log', None,
-             False, True, False, True, True, True),
+            False, True, False, True, True, True),
+            # single file, case matching should be insensitive
+            ('FileKey1=%s|dEleteme.LOG', None,
+            False, True, False, True, True, True),
             # special characters for XML
             ('FileKey1=%s|special_chars_&-\'.txt', 'special_chars_&-\'.txt',
              False, True, False, True, True, True),
