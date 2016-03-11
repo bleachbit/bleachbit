@@ -180,6 +180,7 @@ class Winapp:
         FILE=%LocalAppData%\BleachBit\|*.ini
         FILE=%LocalAppData%\BleachBit\|*.ini;*.bak
         PATH=%LocalAppData%\BleachBit\
+        PATH=%LocalAppData%\BleachBit\|*.*
         """
         parts = excludekey.split('|')
         parts[0] = parts[0].upper()
@@ -202,7 +203,12 @@ class Winapp:
         for expanded in winapp_expand_vars(parts[1]):
             regex = None
             if not files:
+                # There is no third part, so this is either just a folder,
+                # or sometimes the file is specified directly.
                 regex = fnmatch.translate(expanded)
+                # If it is a folder, remove the trailing $
+                if 'PATH'  == parts[0]:
+                    regex = regex[:-1]
             if files and 1 == len(files):
                 regex = fnmatch.translate(os.path.join(expanded, files[0]))
             regexes.append(regex)

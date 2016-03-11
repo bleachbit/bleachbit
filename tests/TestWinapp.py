@@ -318,7 +318,6 @@ class WinappTestCase(unittest.TestCase):
         # 2 = deleteme.bak should exist
 
         # FIXME
-        # path (folder)
         # multiple types of files
         # environment variable in path
         # glob in path
@@ -326,6 +325,7 @@ class WinappTestCase(unittest.TestCase):
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log', True, False),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log', True, False),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*', True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s', True, True),
             )
 
         for test in tests:
