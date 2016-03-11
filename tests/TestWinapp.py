@@ -45,7 +45,6 @@ else:
 
 keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
-
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-combined.ini"
@@ -181,11 +180,12 @@ class WinappTestCase(unittest.TestCase):
 
         return (dirname, f1, f2, fbak)
 
-    def ini2cleaner(self, filekey, do_next=True):
+    def ini2cleaner(self, body, do_next=True):
+        """Write a minimal Winapp2.ini"""
         ini = file(self.ini_fn, 'w')
         ini.write('[someapp]\n')
         ini.write('LangSecRef=3021\n')
-        ini.write(filekey)
+        ini.write(body)
         ini.write('\n')
         ini.close()
         self.assertTrue(os.path.exists(self.ini_fn))
@@ -301,6 +301,41 @@ class WinappTestCase(unittest.TestCase):
             'RegKey1=HKCU\\Software\\PeanutButter&Jelly')
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
+
+    def test_excludekey(self):
+        """Test for ExcludeKey"""
+
+        # reuse this path to store a winapp2.ini file in
+        (ini_h, self.ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        # setup the environment
+
+        # tests
+        # each tuple
+        # 0 = body of winapp2.ini
+        # 1 = deleteme.log should exist
+        # 2 = deleteme.bak should exist
+
+        # FIXME
+        # path (folder)
+        # multiple types of files
+        # environment variable in path
+        # glob in path
+        tests = (
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log', True, False),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log', True, False),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*', True, True),
+            )
+
+        for test in tests:
+            (dirname, f1, f2, fbak) = self.setup_fake()
+            cleaner = self.ini2cleaner(test[0] % { 'd': dirname })
+            self.run_all(cleaner, True)
+            self.assertEqual(test[1], os.path.exists(r'%s\deleteme.log' % dirname))
+            self.assertEqual(test[2], os.path.exists(r'%s\deleteme.bak' % dirname))
+            shutil.rmtree(dirname)
+
 
     def test_section2option(self):
         """Test for section2option()"""

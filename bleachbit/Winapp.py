@@ -1,3 +1,4 @@
+
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
@@ -165,6 +166,53 @@ class Winapp:
             self.add_section(cleanerid, langsecref)
         return cleanerid
 
+    def translate_glob_to_regex(self, glob):
+        """Translate a pattern like *.*, *.log, or foo.log to regex"""
+        import fnmatch
+        return fnmatch.translate(glob).strip('\\Z(?ms)')
+
+    def excludekey_to_nwholeregex(self, excludekey):
+        """Translate one ExcludeKey to CleanerML nwholeregex
+
+        Supported examples
+        FILE=%LocalAppData%\BleachBit\BleachBit.ini
+        FILE=%LocalAppData%\BleachBit\|BleachBit.ini
+        FILE=%LocalAppData%\BleachBit\|*.ini
+        FILE=%LocalAppData%\BleachBit\|*.ini;*.bak
+        PATH=%LocalAppData%\BleachBit\
+        """
+        parts = excludekey.split('|')
+        parts[0] = parts[0].upper()
+        if 'REG' == parts[0]:
+            raise NotImplementedError('REG not supported in ExcludeKey')
+
+        # the last part contains the filename(s)
+        files = None
+        files_regex = ''
+        if 3 == len(parts):
+            files = parts[2].split(';')
+            if 1 == len(files):
+                files_regex = files[0]
+            elif len(files) > 1:
+                files_regex = '(%s)' % '|'.join([self.translate_glob_to_regex(f) for f in files])
+
+        # the middle part contains the file
+        regexes = []
+        import fnmatch
+        for expanded in winapp_expand_vars(parts[1]):
+            regex = None
+            if not files:
+                regex = fnmatch.translate(expanded)
+            if files and 1 == len(files):
+                regex = fnmatch.translate(os.path.join(expanded, files[0]))
+            regexes.append(regex)
+
+        if 1 == len(regexes):
+            return regexes[0]
+        else:
+            return '(%s)' % '|'.join(regexes)
+
+
     def handle_section(self, section):
         """Parse a section"""
         # if simple detection fails then discard the section
@@ -198,10 +246,13 @@ class Winapp:
                         matches = matches + 1
             if 0 == matches:
                 return
-        # not yet implemented
-        if self.parser.has_option(section, 'excludekey'):
-            print 'ERROR: ExcludeKey not implemented, section=', section
-            return
+        # excludekeys ignores a file, path, or registry key
+        excludekeys = []
+        if self.parser.has_option(section, 'excludekey1'):
+            for n in range(1, MAX_DETECT):
+                option_id = 'excludekey%d' % n
+                if self.parser.has_option(section, option_id):
+                    excludekeys.append(self.excludekey_to_nwholeregex(self.parser.get(section, option_id)))
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
@@ -218,7 +269,7 @@ class Winapp:
             section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
             if option.startswith('filekey'):
-                self.handle_filekey(lid, section, option)
+                self.handle_filekey(lid, section, option, excludekeys)
             elif option.startswith('regkey'):
                 self.handle_regkey(lid, section, option)
             elif option == 'warning':
@@ -232,7 +283,7 @@ class Winapp:
                 print 'WARNING: unknown option %s in section %s' % (option, section)
                 return
 
-    def __make_file_provider(self, dirname, filename, recurse, removeself):
+    def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
         regex = ''
         if recurse:
@@ -250,15 +301,18 @@ class Winapp:
             path = os.path.join(dirname, filename)
             if -1 == path.find('*'):
                 search = 'file'
-        action_str = '<option command="delete" search="%s" path="%s" %s/>' % \
-            (search, xml_escape(path), regex)
+        excludekeysxml = ''
+        if excludekeys:
+            excludekeysxml = 'nwholeregex="%s"' % excludekeys[0]
+        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
+            (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
             action_str = '<option command="delete" search="file" path="%s"/>' % xml_escape(
                 dirname)
             yield Delete(parseString(action_str).childNodes[0])
 
-    def handle_filekey(self, lid, ini_section, ini_option):
+    def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
@@ -280,7 +334,7 @@ class Winapp:
                 print 'WARNING: unknown file option %s in section %s' % (element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
-                for provider in self.__make_file_provider(dirname, filename, recurse, removeself):
+                for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)
 
