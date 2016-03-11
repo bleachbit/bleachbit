@@ -271,6 +271,9 @@ class ActionTestCase(unittest.TestCase):
         self.assert_(1 == len(results))
         self.assertEqual(results[0]['path'], '/tmp/bar1')
 
+        # clean up
+        glob.iglob = _iglob
+        FileUtilities.getsize = _getsize
 
     def test_type(self):
         """Unit test for type attribute"""
