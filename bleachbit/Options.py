@@ -97,7 +97,14 @@ class Options:
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
-            if not os.path.lexists(pathname):
+            exists = False
+            try:
+                exists = os.path.lexists(pathname)
+            except:
+                # this deals with corrupt keys
+                # https://www.bleachbit.org/forum/bleachbit-wont-launch-error-startup
+                print 'ERROR: error checking whether path exists: %s ' % pathname
+            if not exists:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
 

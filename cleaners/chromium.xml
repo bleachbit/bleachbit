@@ -82,6 +82,8 @@
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Shortcuts"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Shortcuts-journal"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite database, by Chromium 48 it is a folder -->
+    <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Top Sites"/>
@@ -105,6 +107,8 @@
     <action command="delete" search="file" path="~/.config/chromium/Default/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Shortcuts"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Shortcuts-journal"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite database, by Chromium 48 it is a folder -->
+    <action command="delete" search="walk.files" path="~/.config/chromium/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
     <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites"/>
@@ -151,7 +155,8 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Extension Cookies"/>
     <action command="sqlite.vacuum" search="glob" path="$localappdata\Chromium\User Data\Default\History Index ????-??"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite database, but by Chromium 48 it is a folder -->
+    <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
@@ -161,7 +166,8 @@
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies-journal"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/History"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Thumbnails"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite database, but by Chromium 48 it is a folder -->
+    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Web Data"/>
     <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>

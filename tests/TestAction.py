@@ -45,12 +45,15 @@ def _action_str_to_commands(action_str):
 
 
 def _action_str_to_results(action_str):
-    """Parse <action> and return list of results"""
+    """Parse <action> and return list of results
+
+    It lists the files, but it does not really delete them.
+    """
     return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
 
 
-def benchmark_regex():
-    """Measure how fast the regex option is"""
+def benchmark_filter(this_filter):
+    """Measure how fast listing files is with and without filter"""
     n_files = 100000
     print 'benchmark of %d files' % n_files
 
@@ -62,12 +65,19 @@ def benchmark_regex():
     # scan directory
     import time
     start = time.time()
-    action_str = '<action command="delete" search="glob" path="%s/*" regex="^12$"/>' % dirname
+    filter_code = ''
+    if 'regex' == this_filter:
+        # This regex matches everything, so the "no filter" and regex
+        # are comparable
+        filter_code = 'regex="."'
+    action_str = '<action command="delete" search="glob" path="%s/*" %s />' % \
+        (dirname, filter_code)
     results = _action_str_to_results(action_str)
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
-    print 'elapsed: %.2f seconds, %.2f files/second' % (elapsed_seconds, rate)
+    print 'filter %s: elapsed: %.2f seconds, %.2f files/second' % (this_filter,
+                                                                   elapsed_seconds, rate)
 
     # clean up
     shutil.rmtree(dirname)
@@ -196,6 +206,16 @@ class ActionTestCase(unittest.TestCase):
         self.assert_(1 == len(results))
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
+        # On Windows should be case insensitive
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
+        results = _action_str_to_results(action_str)
+        if 'nt' == os.name:
+            self.assert_(1 == len(results))
+            self.assertEqual(results[0]['path'], '/tmp/foo2')
+        else:
+            self.assert_(0 == len(results))
+
+
         # should match second file using negative regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
         results = _action_str_to_results(action_str)
@@ -227,6 +247,66 @@ class ActionTestCase(unittest.TestCase):
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
 
+    def test_wholeregex(self):
+        """Unit test for wholeregex filter"""
+        _iglob = glob.iglob
+        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
+        _getsize = FileUtilities.getsize
+        FileUtilities.getsize = lambda x: 1
+
+        # should match three files using no regexes
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
+        results = _action_str_to_results(action_str)
+        self.assert_(3 == len(results))
+
+        # should match two files using wholeregex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(2 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/foo1')
+
+        # should match third file using nwholeregex
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
+        results = _action_str_to_results(action_str)
+        self.assert_(1 == len(results))
+        self.assertEqual(results[0]['path'], '/tmp/bar1')
+
+        # clean up
+        glob.iglob = _iglob
+        FileUtilities.getsize = _getsize
+
+    def test_type(self):
+        """Unit test for type attribute"""
+        dirname = tempfile.mkdtemp(prefix='bleachbit-action-type')
+        filename = os.path.join(dirname, 'file')
+
+        # this should not delete anything
+        common.touch_file(filename)
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(os.path.exists(filename))
+
+        # should delete file
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(filename))
+
+        # should delete file
+        common.touch_file(filename)
+        action_str = '<action command="delete" search="file" path="%s" />' % filename
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(filename))
+
+        # should not delete anything
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % dirname
+        self._test_action_str(action_str)
+        self.assert_(os.path.exists(dirname))
+
+        # should delete directory
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % dirname
+        self._test_action_str(action_str)
+        self.assert_(not os.path.exists(dirname))
+
     def test_walk_all(self):
         """Unit test for walk.all"""
         dirname = tempfile.mkdtemp(prefix='bleachbit-walk-all')
@@ -238,7 +318,7 @@ class ActionTestCase(unittest.TestCase):
 
         # this file should be deleted too
         filename = os.path.join(subdir, 'file')
-        open(filename, 'a').close()
+        common.touch_file(filename)
 
         action_str = '<action command="delete" search="walk.all" path="%s" />' % dirname
         self._test_action_str(action_str)
@@ -268,14 +348,16 @@ def suite():
 
 if __name__ == '__main__':
     if 1 < len(sys.argv) and 'benchmark' == sys.argv[1]:
-        rates = []
-        iterations = 1
-        if 3 == len(sys.argv):
-            iterations = int(sys.argv[2])
-        for x in xrange(0, iterations):
-            rate = benchmark_regex()
-            rates.append(rate)
-        # combine all the rates for easy copy and paste into R for analysis
-        print 'rates=%s' % ','.join([str(rate) for rate in rates])
+        for this_filter in ['none', 'regex']:
+            rates = []
+            iterations = 1
+            if 3 == len(sys.argv):
+                iterations = int(sys.argv[2])
+            for x in xrange(0, iterations):
+                rate = benchmark_filter(this_filter)
+                rates.append(rate)
+            # combine all the rates for easy copy and paste into R for analysis
+            print 'rates for filter %s=%s' % (this_filter,
+                                              ','.join([str(rate) for rate in rates]))
         sys.exit()
     unittest.main()

@@ -48,7 +48,6 @@ class DeepScanTestCase(unittest.TestCase):
 
         fullpath = os.path.join(tempd, fn)
         common.touch_file(fullpath)
-        self.assert_(os.path.exists(fullpath))
 
         ds = DeepScan()
         ds.add_search(tempd, '^%s$' % fn)

@@ -26,6 +26,7 @@ Test cases for module Winapp
 import os
 import shutil
 import sys
+import tempfile
 import unittest
 
 sys.path.append('.')
@@ -42,10 +43,11 @@ else:
     import bleachbit.Windows
     bleachbit.Windows.detect_registry_key = fake_detect_registry_key
 
+keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "http://www.winapp2.com/Winapp2.ini"
+    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-combined.ini"
     tmpdir = None
     if 'posix' == os.name:
         tmpdir = '/tmp'
@@ -150,62 +152,73 @@ class WinappTestCase(unittest.TestCase):
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
             self.assertEqual(expected_return, actual_return, msg)
 
+    def setup_fake(self, f1_filename=None):
+        """Setup the test environment"""
+        subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
+
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
+        f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
+        file(f1, 'w').write('')
+
+        dirname2 = os.path.join(dirname, 'sub')
+        os.mkdir(dirname2)
+        f2 = os.path.join(dirname2, 'deleteme.log')
+        file(f2, 'w').write('')
+
+        fbak = os.path.join(dirname, 'deleteme.bak')
+        file(fbak, 'w').write('')
+
+        self.assertTrue(os.path.exists(f1))
+        self.assertTrue(os.path.exists(f2))
+        self.assertTrue(os.path.exists(fbak))
+
+        hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, subkey)
+        hkey.Close()
+
+        self.assertTrue(detect_registry_key(keyfull))
+        self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
+
+        return (dirname, f1, f2, fbak)
+
+    def ini2cleaner(self, body, do_next=True):
+        """Write a minimal Winapp2.ini"""
+        ini = file(self.ini_fn, 'w')
+        ini.write('[someapp]\n')
+        ini.write('LangSecRef=3021\n')
+        ini.write(body)
+        ini.write('\n')
+        ini.close()
+        self.assertTrue(os.path.exists(self.ini_fn))
+        if do_next:
+            return Winapp(self.ini_fn).get_cleaners().next()
+        else:
+            return Winapp(self.ini_fn).get_cleaners()
+
     def test_fake(self):
         """Test with fake file"""
 
-        ini_fn = None
-        keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
-        subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
-
-        def setup_fake(f1_filename=None):
-            """Setup the test environment"""
-            dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
-            f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
-            file(f1, 'w').write('')
-
-            dirname2 = os.path.join(dirname, 'sub')
-            os.mkdir(dirname2)
-            f2 = os.path.join(dirname2, 'deleteme.log')
-            file(f2, 'w').write('')
-
-            fbak = os.path.join(dirname, 'deleteme.bak')
-            file(fbak, 'w').write('')
-
-            self.assertTrue(os.path.exists(f1))
-            self.assertTrue(os.path.exists(f2))
-            self.assertTrue(os.path.exists(fbak))
-
-            hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, subkey)
-            hkey.Close()
-
-            self.assertTrue(detect_registry_key(keyfull))
-            self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
-
-            return (dirname, f1, f2, fbak)
-
-        def ini2cleaner(filekey, do_next=True):
-            ini = file(ini_fn, 'w')
-            ini.write('[someapp]\n')
-            ini.write('LangSecRef=3021\n')
-            ini.write(filekey)
-            ini.write('\n')
-            ini.close()
-            self.assertTrue(os.path.exists(ini_fn))
-            if do_next:
-                return Winapp(ini_fn).get_cleaners().next()
-            else:
-                return Winapp(ini_fn).get_cleaners()
-
         # reuse this path to store a winapp2.ini file in
-        import tempfile
-        (ini_h, ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
         os.close(ini_h)
 
         # a set of tests
+        # this map explains what each position in the test tuple means
+        # 0=line to write directly to winapp2.ini
+        # 1=filename1 to place in fake environment (default=deleteme.log)
+        # 2=auto-hide before cleaning
+        # 3=dirname exists after cleaning
+        # 4=filename1 exists after cleaning
+        # 5=filename2 exists after cleaning
+        # 6=deleteme.bak exists after cleaning
+        # 7=auto-hide after cleaning
         tests = [
             # single file
             ('FileKey1=%s|deleteme.log', None,
-             False, True, False, True, True, True),
+                False, True, False, True, True, True),
+            # single file, case matching should be insensitive
+            ('FileKey1=%s|dEleteme.LOG', None,
+                False, True, False, True, True, True),
             # special characters for XML
             ('FileKey1=%s|special_chars_&-\'.txt', 'special_chars_&-\'.txt',
              False, True, False, True, True, True),
@@ -243,8 +256,8 @@ class WinappTestCase(unittest.TestCase):
         # execute positive tests
         for test in positive_tests:
             print 'positive test: ', test
-            (dirname, f1, f2, fbak) = setup_fake(test[1])
-            cleaner = ini2cleaner(test[0] % dirname)
+            (dirname, f1, f2, fbak) = self.setup_fake(test[1])
+            cleaner = self.ini2cleaner(test[0] % dirname)
             self.assertEqual(test[2], cleaner.auto_hide())
             self.run_all(cleaner, False)
             self.run_all(cleaner, True)
@@ -270,23 +283,59 @@ class WinappTestCase(unittest.TestCase):
                 t = [new_ini, ] + [x for x in test[1:]]
                 print 'negative test', t
                 # execute the test
-                (dirname, f1, f2, fbak) = setup_fake()
-                cleaner = ini2cleaner(t[0] % dirname, False)
+                (dirname, f1, f2, fbak) = self.setup_fake()
+                cleaner = self.ini2cleaner(t[0] % dirname, False)
                 self.assertRaises(StopIteration, cleaner.next)
 
         # registry key, basic
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('RegKey1=%s' % keyfull)
+        (dirname, f1, f2, fbak) = self.setup_fake()
+        cleaner = self.ini2cleaner('RegKey1=%s' % keyfull)
         self.run_all(cleaner, False)
         self.assertTrue(detect_registry_key(keyfull))
         self.run_all(cleaner, True)
         self.assertFalse(detect_registry_key(keyfull))
 
         # check for parse error with ampersand
-        (dirname, f1, f2, fbak) = setup_fake()
-        cleaner = ini2cleaner('RegKey1=HKCU\\Software\\PeanutButter&Jelly')
+        (dirname, f1, f2, fbak) = self.setup_fake()
+        cleaner = self.ini2cleaner(
+            'RegKey1=HKCU\\Software\\PeanutButter&Jelly')
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
+
+    def test_excludekey(self):
+        """Test for ExcludeKey"""
+
+        # reuse this path to store a winapp2.ini file in
+        (ini_h, self.ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        # setup the environment
+
+        # tests
+        # each tuple
+        # 0 = body of winapp2.ini
+        # 1 = deleteme.log should exist
+        # 2 = deleteme.bak should exist
+
+        # FIXME
+        # multiple types of files
+        # environment variable in path
+        # glob in path
+        tests = (
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log', True, False),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log', True, False),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*', True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s', True, True),
+            )
+
+        for test in tests:
+            (dirname, f1, f2, fbak) = self.setup_fake()
+            cleaner = self.ini2cleaner(test[0] % { 'd': dirname })
+            self.run_all(cleaner, True)
+            self.assertEqual(test[1], os.path.exists(r'%s\deleteme.log' % dirname))
+            self.assertEqual(test[2], os.path.exists(r'%s\deleteme.bak' % dirname))
+            shutil.rmtree(dirname)
+
 
     def test_section2option(self):
         """Test for section2option()"""

@@ -36,7 +36,10 @@ import Special
 from Common import _
 
 if 'posix' == os.name:
+    re_flags = 0
     import Unix
+else:
+    re_flags = re.IGNORECASE
 
 
 #
@@ -86,7 +89,12 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.nregex = action_element.getAttribute('nregex')
         assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
+        self.wholeregex = action_element.getAttribute('wholeregex')
+        assert(isinstance(self.wholeregex, (str, unicode, types.NoneType)))
+        self.nwholeregex = action_element.getAttribute('nwholeregex')
+        assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
+        self.object_type = action_element.getAttribute('type')
         self.path = os.path.expanduser(os.path.expandvars(
             action_element.getAttribute('path')))
         if 'nt' == os.name and self.path:
@@ -102,13 +110,51 @@ class FileActionProvider(ActionProvider):
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
+        if not any([self.object_type, self.regex, self.nregex, self.wholeregex, self.nwholeregex]):
+            # If the filter is not needed, bypass it for speed.
+            self.get_paths = self._get_paths
 
     def get_deep_scan(self):
         if 0 == len(self.ds):
             raise StopIteration
         yield self.ds
 
+    def path_filter(self, path):
+        """Process the filters: regex, nregex, type
+
+        If a filter is defined and it fails to match, this function
+        returns False. Otherwise, this function returns True."""
+
+        if self.regex:
+            if not self.regex_c.search(os.path.basename(path)):
+                return False
+
+        if self.nregex:
+            if self.nregex_c.search(os.path.basename(path)):
+                return False
+
+        if self.wholeregex:
+            if not self.wholeregex_c.search(path):
+                return False
+
+        if self.nwholeregex:
+            if self.nwholeregex_c.search(path):
+                return False
+
+        if self.object_type:
+            if 'f' == self.object_type and not os.path.isfile(path):
+                return False
+            elif 'd' == self.object_type and not os.path.isdir(path):
+                return False
+
+        return True
+
     def get_paths(self):
+        import itertools
+        for f in itertools.ifilter(self.path_filter, self._get_paths()):
+            yield f
+
+    def _get_paths(self):
         """Return a filtered list of files"""
 
         def get_file(path):
@@ -139,34 +185,19 @@ class FileActionProvider(ActionProvider):
             raise RuntimeError("invalid search='%s'" % self.search)
 
         if self.regex:
-            regex_c = re.compile(self.regex)
+            self.regex_c = re.compile(self.regex, re_flags)
 
         if self.nregex:
-            nregex_c = re.compile(self.nregex)
+            self.nregex_c = re.compile(self.nregex, re_flags)
 
-        # Sometimes this loop repeats many times, so optimize it by
-        # putting the conditional outside the loop.
+        if self.wholeregex:
+            self.wholeregex_c = re.compile(self.wholeregex, re_flags)
 
-        if not self.regex and not self.nregex:
-            for path in func(self.path):
-                yield path
-        elif self.regex and not self.nregex:
-            for path in func(self.path):
-                if not regex_c.search(os.path.basename(path)):
-                    continue
-                yield path
-        elif self.nregex:
-            for path in func(self.path):
-                if nregex_c.search(os.path.basename(path)):
-                    continue
-                yield path
-        else:
-            for path in func(self.path):
-                if not regex_c.search(os.path.basename(path)):
-                    continue
-                if nregex_c.search(os.path.basename(path)):
-                    continue
-                yield path
+        if self.nwholeregex:
+            self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
+
+        for path in func(self.path):
+            yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
