@@ -62,6 +62,14 @@ def diagnostic_info():
                 platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
+
+    if sys.platform.startswith('darwin'):
+        if hasattr(platform, 'mac_ver'):
+            s += "\nplatform.mac_ver() = %s" % str(
+                platform.mac_ver())
+        else:
+            s += "\nplatform.dist() = %s" % str(platform.dist())
+
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
     s += "\nplatform.platform = %s" % platform.platform()

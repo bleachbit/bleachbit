@@ -77,6 +77,8 @@ class CleanerML:
         # Otherwise, check platform.
         if os_str == 'linux' and sys.platform.startswith('linux'):
             return True
+        if os_str == 'darwin' and sys.platform.startswith('darwin'):
+            return True
         if os_str == 'windows' and sys.platform == 'win32':
             return True
         return False
