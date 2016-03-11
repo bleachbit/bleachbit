@@ -45,7 +45,7 @@ else:
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "http://www.winapp2.com/Winapp2.ini"
+    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-combined.ini"
     tmpdir = None
     if 'posix' == os.name:
         tmpdir = '/tmp'
