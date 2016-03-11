@@ -19,36 +19,48 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="safari" os="windows">
+<cleaner id="safari">
   <label>Safari</label>
   <description>Web browser</description>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="file" path="$localappdata\Apple Computer\Safari\Cache.db"/>
+      <action command="delete" search="file" path="$localappdata\Apple Computer\Safari\Cache.db"/>
+      <action command="delete" search="file" path="~/Library/Safari/Cache.db"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\Cookies\Cookies.plist"/>
-    <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\LocalStorage\"/>
+      <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\Cookies\Cookies.plist"/>
+      <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\LocalStorage\"/>
+      <action command="delete" search="file" path="~/Library/Safari/Cookies.plist"/>
+      <action command="delete" search="walk.files" path="~/Library/Safari/LocalStorage/"/>
   </option>
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\History.plist"/>
-    <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\LastSession.plist"/>
-    <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\History\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\Webpage Previews\"/>
+      <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\History.plist"/>
+      <action command="delete" search="file" path="$APPDATA\Apple Computer\Safari\LastSession.plist"/>
+      <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\History\"/>
+      <action command="delete" search="walk.files" path="$localappdata\Apple Computer\Safari\Webpage Previews\"/>
+      <action command="delete" search="file" path="~/Library/Safari/History.plist"/>
+      <action command="delete" search="file" path="~/Library/Safari/LastSession.plist"/>
+      <action command="delete" search="walk.files" path="~/Library/Safari/History/"/>
+      <action command="delete" search="walk.files" path="~/Library/Safari/Webpage Previews/"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="sqlite.vacuum" search="file" path="$APPDATA\Apple Computer\Safari\PubSub\Database\Database.sqlite3"/>
-    <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\Databases\*\*db"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\Databases\Databases.db"/>
-    <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\LocalStorage\*.localstorage"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\SafeBrowsing.db"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\WebpageIcons.db"/>
+      <action command="sqlite.vacuum" search="file" path="$APPDATA\Apple Computer\Safari\PubSub\Database\Database.sqlite3"/>
+      <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\Databases\*\*db"/>
+      <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\Databases\Databases.db"/>
+      <action command="sqlite.vacuum" search="glob" path="$localappdata\Apple Computer\Safari\LocalStorage\*.localstorage"/>
+      <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\SafeBrowsing.db"/>
+      <action command="sqlite.vacuum" search="file" path="$localappdata\Apple Computer\Safari\WebpageIcons.db"/>
+      <action command="sqlite.vacuum" search="file" path="~/Library/Safari/History.db"/>
+      <action command="sqlite.vacuum" search="glob" path="~/Library/Safari/Databases/*/*db"/>
+      <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Databases/Databases.db"/>
+      <action command="sqlite.vacuum" search="glob" path="~/Library/Safari/LocalStorage/*.localstorage"/>
+      <action command="sqlite.vacuum" search="file" path="~/Library/Safari/WebpageIcons.db"/>
   </option>
 </cleaner>

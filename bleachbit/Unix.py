@@ -30,6 +30,7 @@ import re
 import shlex
 import subprocess
 import ConfigParser
+import sys
 
 from Common import _, autostart_path
 import Common
@@ -484,19 +485,40 @@ def is_broken_xdg_desktop(pathname):
 
 def is_running(exename):
     """Check whether exename is running"""
-    for filename in glob.iglob("/proc/*/exe"):
-        try:
-            target = os.path.realpath(filename)
-        except TypeError:
-            # happens, for example, when link points to
-            # '/etc/password\x00 (deleted)'
-            continue
-        except OSError:
-            # 13 = permission denied
-            continue
-        if exename == os.path.basename(target):
-            return True
-    return False
+    if sys.platform.startswith('darwin'):
+        import subprocess
+        ps = subprocess.Popen(['ps', '-caxm', '-orss,comm'], stdout=subprocess.PIPE).communicate()[0]
+        # Iterate processes
+        processLines = ps.split('\n')
+        for row in processLines:
+            try:
+                target = os.path.realpath(row.split()[1])
+            except TypeError:
+                # happens, for example, when link points to
+                # '/etc/password\x00 (deleted)'
+                continue
+            except OSError:
+                # 13 = permission denied
+                continue
+            except IndexError:
+                continue
+            if exename == os.path.basename(target):
+                return True
+        return False
+    else:
+        for filename in glob.iglob("/proc/*/exe"):
+            try:
+                target = os.path.realpath(filename)
+            except TypeError:
+                # happens, for example, when link points to
+                # '/etc/password\x00 (deleted)'
+                continue
+            except OSError:
+                # 13 = permission denied
+                continue
+            if exename == os.path.basename(target):
+                return True
+        return False
 
 
 def rotated_logs():
