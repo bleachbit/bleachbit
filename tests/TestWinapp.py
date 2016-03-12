@@ -355,6 +355,8 @@ class WinappTestCase(unittest.TestCase, AssertFile):
              True, False, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
+             True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
@@ -362,6 +364,8 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.exe;*.dll',
              False, False, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
+             True, True, True),
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
              True, True, True),
         )
 
