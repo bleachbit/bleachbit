@@ -286,6 +286,7 @@ class WinappTestCase(unittest.TestCase):
                 (dirname, f1, f2, fbak) = self.setup_fake()
                 cleaner = self.ini2cleaner(t[0] % dirname, False)
                 self.assertRaises(StopIteration, cleaner.next)
+                shutil.rmtree(dirname, True)
 
         # registry key, basic
         (dirname, f1, f2, fbak) = self.setup_fake()
@@ -294,6 +295,7 @@ class WinappTestCase(unittest.TestCase):
         self.assertTrue(detect_registry_key(keyfull))
         self.run_all(cleaner, True)
         self.assertFalse(detect_registry_key(keyfull))
+        shutil.rmtree(dirname, True)
 
         # check for parse error with ampersand
         (dirname, f1, f2, fbak) = self.setup_fake()
@@ -301,6 +303,7 @@ class WinappTestCase(unittest.TestCase):
             'RegKey1=HKCU\\Software\\PeanutButter&Jelly')
         self.run_all(cleaner, False)
         self.run_all(cleaner, True)
+        shutil.rmtree(dirname, True)
 
     def test_excludekey(self):
         """Test for ExcludeKey"""
@@ -334,7 +337,7 @@ class WinappTestCase(unittest.TestCase):
             self.run_all(cleaner, True)
             self.assertEqual(test[1], os.path.exists(r'%s\deleteme.log' % dirname))
             self.assertEqual(test[2], os.path.exists(r'%s\deleteme.bak' % dirname))
-            shutil.rmtree(dirname)
+            shutil.rmtree(dirname, True)
 
 
     def test_section2option(self):
