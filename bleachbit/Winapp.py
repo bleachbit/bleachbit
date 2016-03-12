@@ -301,7 +301,8 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                regex = ' regex="%s" ' % (re.escape(filename) + '$')
+                import fnmatch
+                regex = ' regex="%s" ' % (fnmatch.translate(filename))
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)

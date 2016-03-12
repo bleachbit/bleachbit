@@ -205,9 +205,9 @@ class WinappTestCase(unittest.TestCase):
         # 1=filename1 to place in fake environment (default=deleteme.log)
         # 2=auto-hide before cleaning
         # 3=dirname exists after cleaning
-        # 4=filename1 exists after cleaning
-        # 5=filename2 exists after cleaning
-        # 6=deleteme.bak exists after cleaning
+        # 4=filename1 (.\deleteme.log) exists after cleaning
+        # 5=sub\deleteme.log exists after cleaning
+        # 6=.\deleteme.bak exists after cleaning
         # 7=auto-hide after cleaning
         tests = [
             # single file
@@ -229,6 +229,9 @@ class WinappTestCase(unittest.TestCase):
             # recurse *.*
             ('FileKey1=%s|*.*|RECURSE', None, False,
              True, False, False, False, True),
+            # recurse *.log
+            ('FileKey1=%s|*.log|RECURSE', None, False,
+             True, False, False, True, True),
             # remove self *.*, this removes the directory
             ('FileKey1=%s|*.*|REMOVESELF', None,
              False, False, False, False, False, True),
