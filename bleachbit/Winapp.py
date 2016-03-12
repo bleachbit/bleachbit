@@ -194,6 +194,8 @@ class Winapp:
             files = parts[2].split(';')
             if 1 == len(files):
                 files_regex = files[0]
+                if '*.*' == files_regex:
+                    files = None
             elif len(files) > 1:
                 files_regex = '(%s)' % '|'.join([self.translate_glob_to_regex(f) for f in files])
 
@@ -209,8 +211,10 @@ class Winapp:
                 # If it is a folder, remove the trailing $
                 if 'PATH'  == parts[0]:
                     regex = regex[:-1]
-            if files and 1 == len(files):
-                regex = fnmatch.translate(os.path.join(expanded, files[0]))
+            if files:
+                # match one or more file types, directly in this tree or in any
+                # sub folder
+                regex = '%s.*%s' % (fnmatch.translate(expanded)[:-1], files_regex)
             regexes.append(regex)
 
         if 1 == len(regexes):

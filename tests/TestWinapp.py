@@ -339,26 +339,47 @@ class WinappTestCase(unittest.TestCase, AssertFile):
         # tests
         # each tuple
         # 0 = body of winapp2.ini
-        # 1 = deleteme.log should exist
-        # 2 = deleteme.bak should exist
+        # 1 = .\deleteme.log should exist
+        # 2 = .\deleteme.bak should exist
+        # 3 = sub\deleteme.log should exist
 
         # FIXME
-        # multiple types of files
         # environment variable in path
         # glob in path
         tests = (
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log', True, False),
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log', True, False),
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*', True, True),
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s', True, True),
-            )
+            ('FileKey1=%(d)s|deleteme.*', False, False, True),
+            ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
+             True, True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
+             True, True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
+             False, False, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.exe;*.dll',
+             False, False, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
+             True, True, True),
+        )
 
         for test in tests:
+            msg = '\nTest:\n%s' % test[0]
+            # setup
             (dirname, f1, f2, fbak) = self.setup_fake()
-            cleaner = self.ini2cleaner(test[0] % { 'd': dirname })
+            self.assertExists(r'%s\deleteme.log' % dirname, msg)
+            self.assertExists(r'%s\deleteme.bak' % dirname, msg)
+            self.assertExists(r'%s\sub\deleteme.log' % dirname, msg)
+            # delete files
+            cleaner = self.ini2cleaner(test[0] % {'d': dirname})
             self.run_all(cleaner, True)
-            self.assertEqual(test[1], os.path.exists(r'%s\deleteme.log' % dirname))
-            self.assertEqual(test[2], os.path.exists(r'%s\deleteme.bak' % dirname))
+            # test
+            self.assertCondExists(test[1], r'%s\deleteme.log' % dirname, msg)
+            self.assertCondExists(test[2], r'%s\deleteme.bak' % dirname, msg)
+            self.assertCondExists(test[3], r'%s\sub\deleteme.log' % dirname, msg)
+            # cleanup
             shutil.rmtree(dirname, True)
 
 
