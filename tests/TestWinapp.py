@@ -35,13 +35,11 @@ from bleachbit.Windows import detect_registry_key, parse_windows_build
 
 import common
 
-if 'nt' == os.name:
+def CreateSubKey(sub_key):
     import _winreg
-else:
-    def fake_detect_registry_key(f):
-        return True
-    import bleachbit.Windows
-    bleachbit.Windows.detect_registry_key = fake_detect_registry_key
+    hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, sub_key)
+    hkey.Close()
+
 
 keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
@@ -172,8 +170,7 @@ class WinappTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(f2))
         self.assertTrue(os.path.exists(fbak))
 
-        hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, subkey)
-        hkey.Close()
+        CreateSubKey(subkey)
 
         self.assertTrue(detect_registry_key(keyfull))
         self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
