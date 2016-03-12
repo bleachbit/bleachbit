@@ -35,6 +35,7 @@ from bleachbit.Windows import detect_registry_key, parse_windows_build
 
 import common
 
+
 def CreateSubKey(sub_key):
     import _winreg
     hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, sub_key)
@@ -42,6 +43,7 @@ def CreateSubKey(sub_key):
 
 
 keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
+
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
@@ -67,7 +69,27 @@ def get_winapp2():
     return fn
 
 
-class WinappTestCase(unittest.TestCase):
+class AssertFile:
+
+    def assertExists(self, path, msg=''):
+        """File, directory, or any path exists"""
+        if not os.path.exists(path):
+            raise AssertionError(
+                'The file %s should exist, but it does not. %s' % (path, msg))
+
+    def assertNotExists(self, path, msg=''):
+        if os.path.exists(path):
+            raise AssertionError(
+                'The file %s should not exist, but it does. %s' % (path, msg))
+
+    def assertCondExists(self, cond, path, msg=''):
+        if cond:
+            self.assertExists(path, msg)
+        else:
+            self.assertNotExists(path, msg)
+
+
+class WinappTestCase(unittest.TestCase, AssertFile):
 
     """Test cases for Winapp"""
 
@@ -166,9 +188,9 @@ class WinappTestCase(unittest.TestCase):
         fbak = os.path.join(dirname, 'deleteme.bak')
         file(fbak, 'w').write('')
 
-        self.assertTrue(os.path.exists(f1))
-        self.assertTrue(os.path.exists(f2))
-        self.assertTrue(os.path.exists(fbak))
+        self.assertExists(f1)
+        self.assertExists(f2)
+        self.assertExists(fbak)
 
         CreateSubKey(subkey)
 
@@ -185,7 +207,7 @@ class WinappTestCase(unittest.TestCase):
         ini.write(body)
         ini.write('\n')
         ini.close()
-        self.assertTrue(os.path.exists(self.ini_fn))
+        self.assertExists(self.ini_fn)
         if do_next:
             return Winapp(self.ini_fn).get_cleaners().next()
         else:
@@ -261,10 +283,10 @@ class WinappTestCase(unittest.TestCase):
             self.assertEqual(test[2], cleaner.auto_hide())
             self.run_all(cleaner, False)
             self.run_all(cleaner, True)
-            self.assertEqual(test[3], os.path.exists(dirname))
-            self.assertEqual(test[4], os.path.exists(f1))
-            self.assertEqual(test[5], os.path.exists(f2))
-            self.assertEqual(test[6], os.path.exists(fbak))
+            self.assertCondExists(test[3], dirname)
+            self.assertCondExists(test[4], f1)
+            self.assertCondExists(test[5], f2)
+            self.assertCondExists(test[6], fbak)
             self.assertEqual(test[7], cleaner.auto_hide())
             shutil.rmtree(dirname, True)
 
