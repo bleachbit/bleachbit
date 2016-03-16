@@ -367,6 +367,12 @@ class WinappTestCase(unittest.TestCase, AssertFile):
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
              True, True, True),
+            # multiple ExcludeKey, neither of which should do anything
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|c:\\doesnotexist|*.*\nExcludeKey2=PATH|c:\\alsodoesnotexist|*.*',
+             False, False, False),
+            # multiple ExcludeKey, the first should work
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\\alsodoesnotexist\|*.*',
+             True, False, True),
         )
 
         for test in tests:

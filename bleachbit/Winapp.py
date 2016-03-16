@@ -193,10 +193,12 @@ class Winapp:
         if 3 == len(parts):
             files = parts[2].split(';')
             if 1 == len(files):
-                files_regex = files[0]
+                # one file pattern like *.* or *.log
+                files_regex = self.translate_glob_to_regex(files[0])
                 if '*.*' == files_regex:
                     files = None
             elif len(files) > 1:
+                # multiple file patterns like *.log;*.bak
                 files_regex = '(%s)' % '|'.join([self.translate_glob_to_regex(f) for f in files])
 
         # the middle part contains the file
