@@ -26,13 +26,17 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="glob" path="~/.kde/cache-*/*/*"/>
+    <action command="delete" search="glob" path="~/.kde4/cache-*/*/*"/>
     <action command="delete" search="glob" path="~/.kde/cache-*/*"/>
+    <action command="delete" search="glob" path="~/.kde4/cache-*/*"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="~/.kde/tmp-*/*/*" nregex="^xauth="/>
+    <action command="delete" search="glob" path="~/.kde4/tmp-*/*/*" nregex="^xauth="/>
     <action command="delete" search="glob" path="~/.kde/tmp-*/*" nregex="^xauth="/>
+    <action command="delete" search="glob" path="~/.kde4/tmp-*/*" nregex="^xauth="/>
   </option>
   <option id="recent_documents">
     <label>Recent documents list</label>
