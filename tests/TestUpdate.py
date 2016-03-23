@@ -111,11 +111,13 @@ class UpdateTestCase(unittest.TestCase):
             succeeded['r'] = True
 
         # bad hash
+        succeeded['r'] = True
         self.assertRaises(RuntimeError, update_winapp2, url, "notahash",
                           append_text, on_success)
         self.assert_(not succeeded['r'])
 
         # blank hash, download file
+        succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
         self.assert_(succeeded['r'])
 
