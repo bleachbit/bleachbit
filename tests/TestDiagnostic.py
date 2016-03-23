@@ -40,7 +40,8 @@ class DiagnosticTestCase(unittest.TestCase):
         """Test diagnostic_info"""
         # at least it does not crash
         ret = diagnostic_info()
-        self.assert_(isinstance(ret, (str,unicode)))
+        self.assert_(isinstance(ret, (str, unicode)))
+
 
 def suite():
     return unittest.makeSuite(DiagnosticTestCase)

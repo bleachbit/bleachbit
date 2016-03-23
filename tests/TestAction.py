@@ -215,7 +215,6 @@ class ActionTestCase(unittest.TestCase):
         else:
             self.assert_(0 == len(results))
 
-
         # should match second file using negative regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
         results = _action_str_to_results(action_str)

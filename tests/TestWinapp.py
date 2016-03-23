@@ -344,11 +344,13 @@ class WinappTestCase(unittest.TestCase, AssertFile):
         # 3 = sub\deleteme.log should exist
 
         tests = (
-            # delete everything in single directory (no children) without exclusions
+            # delete everything in single directory (no children) without
+            # exclusions
             ('FileKey1=%(d)s|deleteme.*', False, False, True),
             # delete everything in single directory using environment variable
             ('FileKey1=%%bbtestdir%%|deleteme.*', False, False, True),
-            # delete everything in parent and child directories without exclusions
+            # delete everything in parent and child directories without
+            # exclusions
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',

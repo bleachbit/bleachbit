@@ -141,8 +141,8 @@ class Function:
                 ret['size'] = func_ret
             else:
                 if os.path.isdir(self.path):
-                    raise RuntimeError('Attempting to run file function %s on directory %s' % \
-                        (self.func.func_name, self.path))
+                    raise RuntimeError('Attempting to run file function %s on directory %s' %
+                                       (self.func.func_name, self.path))
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
                 try:
