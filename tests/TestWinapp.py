@@ -377,6 +377,10 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             # multiple ExcludeKey, both should work
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|%(d)s|*.bak',
              True, True, True),
+            # glob should exclude the directory called 'sub'
+            ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\s*',
+             False, False, True),
+
 
         )
 
