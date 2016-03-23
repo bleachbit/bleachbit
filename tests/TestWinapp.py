@@ -335,8 +335,6 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             suffix='.ini', prefix='winapp2')
         os.close(ini_h)
 
-        # setup the environment
-
         # tests
         # each tuple
         # 0 = body of winapp2.ini
@@ -344,26 +342,30 @@ class WinappTestCase(unittest.TestCase, AssertFile):
         # 2 = .\deleteme.bak should exist
         # 3 = sub\deleteme.log should exist
 
-        # FIXME
-        # environment variable in path
-        # glob in path
         tests = (
+            # delete everything in single directory (no children) without exclusions
             ('FileKey1=%(d)s|deleteme.*', False, False, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
+            # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
              True, False, True),
+            # exclude log without pipe delimiter
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
              True, False, True),
+            # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
              True, True, True),
+            # exclude sub-folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
              False, False, True),
+            # exclude multiple file types that do not exist
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.exe;*.dll',
              False, False, True),
+            # exclude multiple file types that do exist, so dlete nothing
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
