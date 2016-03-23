@@ -199,7 +199,8 @@ class Winapp:
                     files = None
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
-                files_regex = '(%s)' % '|'.join([self.translate_glob_to_regex(f) for f in files])
+                files_regex = '(%s)' % '|'.join(
+                    [self.translate_glob_to_regex(f) for f in files])
 
         # the middle part contains the file
         regexes = []
@@ -211,19 +212,19 @@ class Winapp:
                 # or sometimes the file is specified directly.
                 regex = fnmatch.translate(expanded)
                 # If it is a folder, remove the trailing $
-                if 'PATH'  == parts[0]:
+                if 'PATH' == parts[0]:
                     regex = regex[:-1]
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
-                regex = '%s.*%s' % (fnmatch.translate(expanded)[:-1], files_regex)
+                regex = '%s.*%s' % (
+                    fnmatch.translate(expanded)[:-1], files_regex)
             regexes.append(regex)
 
         if 1 == len(regexes):
             return regexes[0]
         else:
             return '(%s)' % '|'.join(regexes)
-
 
     def handle_section(self, section):
         """Parse a section"""
@@ -264,7 +265,8 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'excludekey%d' % n
                 if self.parser.has_option(section, option_id):
-                    excludekeys.append(self.excludekey_to_nwholeregex(self.parser.get(section, option_id)))
+                    excludekeys.append(
+                        self.excludekey_to_nwholeregex(self.parser.get(section, option_id)))
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
@@ -316,7 +318,7 @@ class Winapp:
                 search = 'file'
         excludekeysxml = ''
         if excludekeys:
-            if len(excludekeys) >1 :
+            if len(excludekeys) > 1:
                 # multiple
                 exclude_str = '(%s)' % '|'.join(excludekeys)
             else:

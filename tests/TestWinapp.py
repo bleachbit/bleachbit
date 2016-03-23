@@ -331,7 +331,8 @@ class WinappTestCase(unittest.TestCase, AssertFile):
         """Test for ExcludeKey"""
 
         # reuse this path to store a winapp2.ini file in
-        (ini_h, self.ini_fn) = tempfile.mkstemp(suffix='.ini', prefix='winapp2')
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
         os.close(ini_h)
 
         # setup the environment
@@ -392,10 +393,10 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             # test
             self.assertCondExists(test[1], r'%s\deleteme.log' % dirname, msg)
             self.assertCondExists(test[2], r'%s\deleteme.bak' % dirname, msg)
-            self.assertCondExists(test[3], r'%s\sub\deleteme.log' % dirname, msg)
+            self.assertCondExists(
+                test[3], r'%s\sub\deleteme.log' % dirname, msg)
             # cleanup
             shutil.rmtree(dirname, True)
-
 
     def test_section2option(self):
         """Test for section2option()"""
