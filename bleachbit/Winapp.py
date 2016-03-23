@@ -316,7 +316,13 @@ class Winapp:
                 search = 'file'
         excludekeysxml = ''
         if excludekeys:
-            excludekeysxml = 'nwholeregex="%s"' % excludekeys[0]
+            if len(excludekeys) >1 :
+                # multiple
+                exclude_str = '(%s)' % '|'.join(excludekeys)
+            else:
+                # just one
+                exclude_str = excludekeys[0]
+            excludekeysxml = 'nwholeregex="%s"' % exclude_str
         action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
             (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
