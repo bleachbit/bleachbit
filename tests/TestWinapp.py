@@ -73,6 +73,7 @@ class AssertFile:
 
     def assertExists(self, path, msg=''):
         """File, directory, or any path exists"""
+        path = os.path.expandvars(path)
         if not os.path.exists(path):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
@@ -345,6 +346,9 @@ class WinappTestCase(unittest.TestCase, AssertFile):
         tests = (
             # delete everything in single directory (no children) without exclusions
             ('FileKey1=%(d)s|deleteme.*', False, False, True),
+            # delete everything in single directory using environment variable
+            ('FileKey1=%%bbtestdir%%|deleteme.*', False, False, True),
+            # delete everything in parent and child directories without exclusions
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
@@ -358,6 +362,10 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
+             True, True, True),
+            # exclude everything in folder using environment variable
+            # use double %% to escape
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%%bbtestdir%%|*.*',
              True, True, True),
             # exclude sub-folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
@@ -393,6 +401,9 @@ class WinappTestCase(unittest.TestCase, AssertFile):
             self.assertExists(r'%s\deleteme.log' % dirname, msg)
             self.assertExists(r'%s\deleteme.bak' % dirname, msg)
             self.assertExists(r'%s\sub\deleteme.log' % dirname, msg)
+            # set environment variable for testing
+            os.environ['bbtestdir'] = dirname
+            self.assertExists(r'$bbtestdir\deleteme.log', msg)
             # delete files
             cleaner = self.ini2cleaner(test[0] % {'d': dirname})
             self.run_all(cleaner, True)
