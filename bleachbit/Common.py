@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://bleachbit.sourceforge.net
+# http://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import sys
 
 APP_VERSION = "1.11"
 APP_NAME = "BleachBit"
-APP_URL = "http://bleachbit.sourceforge.net"
+APP_URL = "http://www.bleachbit.org"
 
 socket_timeout = 10
 

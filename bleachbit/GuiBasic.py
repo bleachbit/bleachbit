@@ -2,7 +2,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://bleachbit.sourceforge.net
+# http://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ def open_url(url, parent_window=None, prompt=True):
             host = url
         else:
             host = ret.group(2)
-        # TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+        # TRANSLATORS: %s expands to www.bleachbit.org or similar
         msg = _("Open web browser to %s?") % host
         resp = message_dialog(parent_window, msg,
                               gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL)

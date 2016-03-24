@@ -3,8 +3,8 @@ Source: bleachbit
 Binary: bleachbit
 Architecture: all
 Version: 1.11
-Maintainer: Andrew Ziem <ahz001@gmail.com>
-Homepage: http://bleachbit.sourceforge.net
+Maintainer: Andrew Ziem <andrew@bleachbit.org>
+Homepage: http://www.bleachbit.org
 Standards-Version: 3.7.3
 Build-Depends: debhelper (>= 4)
 Build-Depends-Indep: python (>= 2.4), gettext, desktop-file-utils

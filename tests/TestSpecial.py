@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://bleachbit.sourceforge.net
+# http://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ chrome_bookmarks = """
                "id": "6",
                "name": "BleachBit",
                "type": "url",
-               "url": "http://bleachbit.sourceforge.net/"
+               "url": "http://www.bleachbit.org/"
             } ],
             "date_added": "12985843051141788",
             "date_modified": "12985843072462200",
@@ -101,7 +101,7 @@ CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR
 INSERT INTO "meta" VALUES('version','23');
 CREATE TABLE urls(id INTEGER PRIMARY KEY,url LONGVARCHAR,title LONGVARCHAR,visit_count INTEGER DEFAULT 0 NOT NULL,typed_count INTEGER DEFAULT 0 NOT NULL,last_visit_time INTEGER NOT NULL,hidden INTEGER DEFAULT 0 NOT NULL,favicon_id INTEGER DEFAULT 0 NOT NULL);
 INSERT INTO "urls" VALUES(1,'http://sqlite.org/','SQLite Home Page',1,0,13001833567334094,0,0);
-INSERT INTO "urls" VALUES(2,'http://bleachbit.sourceforge.net/','BleachBit - Clean Disk Space, Maintain Privacy',1,0,13001833567892577,0,0);
+INSERT INTO "urls" VALUES(2,'http://www.bleachbit.org/','BleachBit - Clean Disk Space, Maintain Privacy',1,0,13001833567892577,0,0);
 CREATE TABLE visits(id INTEGER PRIMARY KEY,url INTEGER NOT NULL,visit_time INTEGER NOT NULL,from_visit INTEGER,transition INTEGER DEFAULT 0 NOT NULL,segment_id INTEGER,is_indexed BOOLEAN,visit_duration INTEGER DEFAULT 0 NOT NULL);
 INSERT INTO "visits" VALUES(1,1,13001833567334094,0,805306374,0,1,8629624);
 INSERT INTO "visits" VALUES(2,2,13001833567892577,0,805306374,0,1,9249493);
@@ -300,7 +300,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
             for row in c:
                 ids.append(row[0])
             # id 1 is sqlite.org which is not a bookmark and should be cleaned
-            # id 2 is bleachbit.sourceforge.net which is a bookmark and should
+            # id 2 is www.bleachbit.org which is a bookmark and should
             # be cleaned
             self.assertEqual(ids, [2])
 
@@ -366,7 +366,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.assert_(os.path.exists(path))
         urls = bleachbit.Special.get_chrome_bookmark_urls(path)
         self.assertEqual(
-            urls, [u'http://www.slashdot.org/', u'http://bleachbit.sourceforge.net/'])
+            urls, [u'http://www.slashdot.org/', u'http://www.bleachbit.org/'])
 
         os.unlink(path)
 

@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://bleachbit.sourceforge.net
+# http://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -186,8 +186,8 @@ def run_setup():
           description="Free space and maintain privacy",
           long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
           author="Andrew Ziem",
-          author_email="ahz001@gmail.com",
-          download_url="http://bleachbit.sourceforge.net/download",
+          author_email="andrew@bleachbit.org",
+          download_url="http://www.bleachbit.org/download",
           license="GPLv3",
           url=bleachbit.Common.APP_URL,
           platforms='Linux and Windows; Python v2.5 to 2.7; GTK v2.12+',
