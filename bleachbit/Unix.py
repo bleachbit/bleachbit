@@ -25,6 +25,7 @@ Integration specific to Unix-like operating systems
 
 
 import glob
+import logging
 import os
 import re
 import shlex
@@ -35,18 +36,6 @@ from Common import _, autostart_path
 import Common
 import FileUtilities
 import General
-
-HAVE_GNOME_VFS = True
-try:
-    import gnomevfs
-except:
-    try:
-        # this is the deprecated name
-        import gnome.vfs
-    except:
-        HAVE_GNOME_VFS = False
-    else:
-        gnomevfs = gnome.vfs
 
 
 class Locales:
@@ -445,6 +434,20 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
     return False
 
 
+def is_unregistered_mime(mimetype):
+    """Returns True if the MIME type is known to be unregistered. If
+    registered or unknown, conservatively returns False."""
+    try:
+        import gio
+        if 0 == len(gio.app_info_get_all_for_type(mimetype)):
+            return True
+    except:
+        logger = logging.getLogger(__name__)
+        logger.warning(
+            'error calling gio.app_info_get_all_for_type(%s)' % mimetype)
+    return False
+
+
 def is_broken_xdg_desktop(pathname):
     """Returns boolean whether the given XDG desktop entry file is broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
@@ -469,7 +472,7 @@ def is_broken_xdg_desktop(pathname):
             print "info: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
-        if HAVE_GNOME_VFS and 0 == len(gnomevfs.mime_get_all_applications(mimetype)):
+        if is_unregistered_mime(mimetype):
             print "info: is_broken_xdg_menu: MimeType '%s' not " \
                 "registered '%s'" % (mimetype, pathname)
             return True
