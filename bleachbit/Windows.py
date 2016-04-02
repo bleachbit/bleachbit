@@ -146,6 +146,11 @@ def delete_locked_file(pathname):
         except WindowsError, e:
             if not 5 == e.winerror:
                 raise e
+            if shell.IsUserAnAdmin():
+                logger = logging.getLogger(__name__)
+                logger.warning(
+                    'Unable to queue locked file for deletion, even with admin rights: %s' % pathname)
+                return
             # show more useful message than "error: (5, 'MoveFileEx', 'Access
             # is denied.')"
             raise RuntimeError(
