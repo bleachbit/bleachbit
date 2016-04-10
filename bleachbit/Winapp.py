@@ -123,6 +123,17 @@ def detect_file(pathname):
     return False
 
 
+def fnmatch_translate(pattern):
+    """Same as the original without the end"""
+    import fnmatch
+    r = fnmatch.translate(pattern)
+    if r.endswith('$'):
+        return r[:-1]
+    if r.endswith(r'\Z(?ms)'):
+        return r[:-7]
+    return r
+
+
 class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
@@ -166,11 +177,6 @@ class Winapp:
             self.add_section(cleanerid, langsecref)
         return cleanerid
 
-    def translate_glob_to_regex(self, glob):
-        """Translate a pattern like *.*, *.log, or foo.log to regex"""
-        import fnmatch
-        return fnmatch.translate(glob).strip('\\Z(?ms)')
-
     def excludekey_to_nwholeregex(self, excludekey):
         """Translate one ExcludeKey to CleanerML nwholeregex
 
@@ -194,31 +200,27 @@ class Winapp:
             files = parts[2].split(';')
             if 1 == len(files):
                 # one file pattern like *.* or *.log
-                files_regex = self.translate_glob_to_regex(files[0])
+                files_regex = fnmatch_translate(files[0])
                 if '*.*' == files_regex:
                     files = None
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
                 files_regex = '(%s)' % '|'.join(
-                    [self.translate_glob_to_regex(f) for f in files])
+                    [fnmatch_translate(f) for f in files])
 
         # the middle part contains the file
         regexes = []
-        import fnmatch
         for expanded in winapp_expand_vars(parts[1]):
             regex = None
             if not files:
                 # There is no third part, so this is either just a folder,
                 # or sometimes the file is specified directly.
-                regex = fnmatch.translate(expanded)
-                # If it is a folder, remove the trailing $
-                if 'PATH' == parts[0]:
-                    regex = regex[:-1]
+                regex = fnmatch_translate(expanded)
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = '%s.*%s' % (
-                    fnmatch.translate(expanded)[:-1], files_regex)
+                    fnmatch_translate(expanded), files_regex)
             regexes.append(regex)
 
         if 1 == len(regexes):
