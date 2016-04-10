@@ -803,6 +803,8 @@ class System(Cleaner):
         regexes.append('^' + os.path.expanduser('~/.cache/wallpaper/'))
         # Clean Firefox cache from Firefox cleaner (LP#1295826)
         regexes.append('^' + os.path.expanduser('~/.cache/mozilla'))
+        # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
+        regexes.append('^' + os.path.expanduser('~/.cache/google-chrome'))
         regexes.append(
             '^' + os.path.expanduser('~/.cache/gnome-control-center/'))
         # iBus Pinyin
