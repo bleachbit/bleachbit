@@ -21,17 +21,20 @@
 -->
 <!-- FIXME: No idea if this is available for Windows. -->
 <cleaner id="easytag" os="linux">
-  <label>Easytag</label>
+  <label>EasyTAG</label>
   <description translators="This software edits metadata tags, such as title and artist, in audio files">Audio files tagger</description>
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
     <action command="delete" search="glob" path="~/.easytag/*.history"/>
     <action command="delete" search="glob" path="~/.easytag/*.mask"/>
+    <action command="delete" search="glob" path="~/.config/easytag/*.history"/>
+    <action command="delete" search="glob" path="~/.config/easytag/*.mask"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the debug logs</description>
     <action command="delete" search="file" path="~/.easytag/easytag.log"/>
+    <action command="delete" search="file" path="~/.cache/easytag/easytag.log"/>
   </option>
 </cleaner>
