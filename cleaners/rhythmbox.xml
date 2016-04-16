@@ -27,4 +27,9 @@
     <action command="delete" search="walk.files" path="~/.gnome2/rhythmbox/jamendo/"/>
     <action command="delete" search="walk.files" path="~/.gnome2/rhythmbox/magnatune/"/>
   </option>
+  <option id="history">
+    <label>Database</label>
+    <description>Delete database, which contain information such as play count and last played</description>
+    <action command="delete" search="file" path="~/.local/share/rhythmbox/rhythmdb.xml"/>
+  </option>
 </cleaner>
