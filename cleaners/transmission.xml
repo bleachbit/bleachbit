@@ -35,4 +35,9 @@
     <action command="delete" search="walk.files" path="~/.config/transmission/resume/"/>
     <action command="delete" search="walk.files" path="~/.config/transmission/torrents/"/>
   </option>
+  <option id="history">
+    <label>Statistics</label>
+    <description>Delete statistics such as ammount of downloaded/uploaded data and session count</description>
+    <action command="delete" search="file" path="~/.config/transmission/stats.json"/>
+  </option>
 </cleaner>
