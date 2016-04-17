@@ -100,7 +100,7 @@ class UpdateTestCase(unittest.TestCase):
             print 'note: deleting %s' % fn
             os.unlink(fn)
 
-        url = 'https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-combined.ini'
+        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
 
         def append_text(s):
             print s
