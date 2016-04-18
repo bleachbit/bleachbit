@@ -30,6 +30,7 @@
     <action command="delete" search="file" path="~/.gnome2/epiphany/ephy-favicon-cache.xml"/>
     <action command="delete" search="walk.files" path="~/.gnome2/epiphany/favicon_cache/"/>
     <action command="delete" search="walk.files" path="~/.gnome2/epiphany/mozilla/epiphany/Cache/"/>
+    <action command="delete" search="walk.files" path="~/.cache/epiphany-browser/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -37,6 +38,7 @@
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.txt"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal"/>
+    <action command="delete" search="file" path="~/.config/epiphany/cookies.sqlite"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
@@ -51,5 +53,15 @@
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/places.sqlite"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/places.sqlite-journal"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/ephy-history.xml"/>
+    <action command="delete" search="file" path="~/.config/epiphany/bookmarks.rdf"/>
+    <action command="delete" search="file" path="~/.config/epiphany/ephy-bookmarks.xml"/>
+    <action command="delete" search="file" path="~/.config/epiphany/ephy-history.db"/>
+    <action command="delete" search="file" path="~/.config/epiphany/session_state.xml"/>
+    <action command="delete" search="file" path="~/.config/epiphany/session_state.xml~"/>
+  </option>
+  <option id="dom">
+    <label>DOM Storage</label>
+    <description>Delete HTML5 cookies</description>
+    <action command="delete" search="walk.files" path="~/.local/share/webkitgtk/localstorage/"/>
   </option>
 </cleaner>
