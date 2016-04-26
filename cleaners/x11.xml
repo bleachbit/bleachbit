@@ -27,5 +27,6 @@
     <description>Delete the debug logs</description>
     <action command="delete" search="file" path="~/.xsession-errors"/>
     <action command="delete" search="file" path="~/.xsession-errors.old"/>
+    <action command="delete" search="walk.files" path="~/.local/share/xorg/"/>
   </option>
 </cleaner>
