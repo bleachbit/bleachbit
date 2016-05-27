@@ -25,6 +25,7 @@ Common code for unit tests
 
 import os
 import types
+from bleachbit.Common import encoding
 
 
 def destructive_tests(title):
@@ -60,7 +61,7 @@ def validate_result(self, result, really_delete=False):
     # path
     filename = result['path']
     self.assert_(isinstance(filename, (str, unicode, type(None))),
-                 "Filename is invalid: '%s' (type %s)" % (str(filename), type(filename)))
+                 u"Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))
     if isinstance(filename, (str, unicode)) and \
             not filename[0:2] == 'HK':
         if really_delete:

@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# coding=utf-8
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
@@ -33,7 +34,7 @@ sys.path.append('.')
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
-import common
+from . import common
 
 
 def action_to_cleaner(action_str):
@@ -113,13 +114,16 @@ class CleanerTestCase(unittest.TestCase):
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
-        (fd, filename1) = tempfile.mkstemp(prefix='bleachbit-test-cleaner')
-        os.close(fd)
-        (fd, filename2) = tempfile.mkstemp(prefix='bleachbit-test-cleaner')
-        os.close(fd)
+        dirname = tempfile.mkdtemp(
+            prefix='bleachbit-test-create-simple-cleaner')
+        filename1 = os.path.join(dirname, '1')
+        common.touch_file(filename1)
+        # test Cyrillic for https://bugs.launchpad.net/bleachbit/+bug/1541808
+        filename2 = os.path.join(dirname, u'чистый')
+        common.touch_file(filename2)
         self.assert_(os.path.exists(filename1))
         self.assert_(os.path.exists(filename2))
-        cleaner = create_simple_cleaner([filename1, filename2])
+        cleaner = create_simple_cleaner([filename1, filename2, dirname])
         for cmd in cleaner.get_commands('files'):
             # preview
             for result in cmd.execute(False):
@@ -130,6 +134,7 @@ class CleanerTestCase(unittest.TestCase):
 
         self.assert_(not os.path.exists(filename1))
         self.assert_(not os.path.exists(filename2))
+        self.assert_(not os.path.exists(dirname))
 
     def test_get_name(self):
         for key in sorted(backends):
