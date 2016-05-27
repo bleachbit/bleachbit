@@ -143,18 +143,18 @@ def delete_locked_file(pathname):
         try:
             win32api.MoveFileEx(
                 pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
-        except WindowsError, e:
+        except pywintypes.error, e:
             if not 5 == e.winerror:
                 raise e
             if shell.IsUserAnAdmin():
                 logger = logging.getLogger(__name__)
                 logger.warning(
-                    'Unable to queue locked file for deletion, even with admin rights: %s' % pathname)
+                    'Unable to queue locked file for deletion, even with administrator rights: %s' % pathname)
                 return
             # show more useful message than "error: (5, 'MoveFileEx', 'Access
             # is denied.')"
             raise RuntimeError(
-                'Access denied when attempting to delete locked file %s' % pathname)
+                'Access denied when attempting to delete locked file without administrator rights: %s' % pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
