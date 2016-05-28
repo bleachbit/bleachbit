@@ -34,7 +34,7 @@ sys.path.append('.')
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
-from . import common
+import common
 
 
 def action_to_cleaner(action_str):
