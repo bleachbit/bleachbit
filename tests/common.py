@@ -61,7 +61,7 @@ def validate_result(self, result, really_delete=False):
     # path
     filename = result['path']
     self.assert_(isinstance(filename, (str, unicode, type(None))),
-                 u"Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))
+                 "Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))
     if isinstance(filename, (str, unicode)) and \
             not filename[0:2] == 'HK':
         if really_delete:
