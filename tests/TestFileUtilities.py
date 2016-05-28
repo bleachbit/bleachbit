@@ -278,7 +278,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
                  (u'\u2014', 'em-dash'),  # LP#1454030
                  (hebrew, hebrew),
                  (katanana, katanana),
-                 (umlauts, umlauts)]
+                 (umlauts, umlauts),
+                 ('sigil','should$not-change')]
         if 'posix' == os.name:
             # Windows doesn't allow these characters but Unix systems do
             tests.append(('"', '*'))

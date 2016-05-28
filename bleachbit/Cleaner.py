@@ -42,7 +42,7 @@ elif 'nt' == os.name:
     import Windows
 
 from Common import _
-from FileUtilities import children_in_directory
+from FileUtilities import children_in_directory, expandvars
 from Options import options
 
 # Suppress GTK warning messages while running in CLI #34
@@ -164,7 +164,7 @@ class Cleaner:
                     print "debug: process '%s' is running" % pathname
                     return True
             elif 'pathname' == test:
-                expanded = os.path.expanduser(os.path.expandvars(pathname))
+                expanded = os.path.expanduser(expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
                         print "debug: file '%s' exists indicating '%s' is running" % (globbed, self.name)
@@ -270,7 +270,7 @@ class Firefox(Cleaner):
         if 'posix' == os.name:
             crashdir = os.path.expanduser("~/.mozilla/firefox/Crash Reports")
         if 'nt' == os.name:
-            crashdir = os.path.expandvars(
+            crashdir = expandvars(
                 "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Crash Reports")
         if 'crash_reports' == option_id:
             for filename in children_in_directory(crashdir, False):
@@ -620,7 +620,7 @@ class System(Cleaner):
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
             for path in paths:
-                expanded = os.path.expandvars(path)
+                expanded = expandvars(path)
                 for globbed in glob.iglob(expanded):
                     files += [globbed]
 
@@ -632,10 +632,10 @@ class System(Cleaner):
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
         if 'nt' == os.name and 'memory_dump' == option_id:
-            fname = os.path.expandvars('$windir\\memory.dmp')
+            fname = expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
                 files += [fname]
-            for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
+            for fname in glob.iglob(expandvars('$windir\\Minidump\\*.dmp')):
                 files += [fname]
 
         # most recently used documents list
@@ -676,7 +676,7 @@ class System(Cleaner):
 
         # temporary files
         if 'nt' == os.name and 'tmp' == option_id:
-            dirname = os.path.expandvars(
+            dirname = expandvars(
                 "$USERPROFILE\\Local Settings\\Temp\\")
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
@@ -684,7 +684,7 @@ class System(Cleaner):
             for filename in children_in_directory(dirname, True):
                 if not low == filename.lower():
                     yield Command.Delete(filename)
-            dirname = os.path.expandvars("$windir\\temp\\")
+            dirname = expandvars("$windir\\temp\\")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
 
@@ -747,7 +747,7 @@ class System(Cleaner):
 
         # prefetch
         if 'nt' == os.name and 'prefetch' == option_id:
-            for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
+            for path in glob.iglob(expandvars('$windir\\Prefetch\\*.pf')):
                 yield Command.Delete(path)
 
         # recycle bin

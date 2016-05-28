@@ -1,4 +1,5 @@
 # vim: ts=4:sw=4:expandtab
+# coding=utf-8
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
@@ -90,7 +91,7 @@ def dir_is_empty(dirname):
     return not os.listdir(dirname)
 
 
-class ActionTestCase(unittest.TestCase):
+class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for Action"""
 
@@ -162,6 +163,22 @@ class ActionTestCase(unittest.TestCase):
                     (command, filename)
                 self._test_action_str(action_str)
                 self.assert_(not os.path.exists(filename))
+
+    def test_delete_special_filenames(self):
+        """Unit test for deleting special filenames"""
+        dirname = tempfile.mkdtemp('bleachbit-action-delete-special')
+        tests = [
+            'normal',
+            'space in name',
+            'sigil$should-not-be-expanded',
+        ]
+        for test in tests:
+            pathname = os.path.join(dirname, test)
+            common.touch_file(pathname)
+            action_str = '<action command="delete" search="file" path="%s" />' % pathname
+            self._test_action_str(action_str)
+            self.assertNotExists(pathname)
+        os.rmdir(dirname)
 
     def test_ini(self):
         """Unit test for class Ini"""

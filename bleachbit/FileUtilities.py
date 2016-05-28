@@ -323,11 +323,22 @@ def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
     pathname3 = os.path.expanduser(
-        os.path.expandvars(os.path.join(pathname1, pathname2)))
+        expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
 
+
+def expandvars(path):
+    if (2,5)==sys.version_info[0:2] and 'nt' == os.name:
+        # Python 2.5 should not change $foo when foo is unknown, but
+        # it actually strips it out.
+        import backport
+        expandvars = backport.expandvars
+        return backport.expandvars(path)
+    else:
+        expandvars = os.path.expandvars
+        return os.path.expandvars(path)
 
 def extended_path(path):
     """If applicable, return the extended Windows pathname"""
@@ -412,7 +423,7 @@ def guess_overwrite_paths():
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = os.path.expandvars('$TMP')
+        localtmp = expandvars('$TMP')
         logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)

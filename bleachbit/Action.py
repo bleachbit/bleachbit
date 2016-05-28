@@ -95,7 +95,7 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
-        self.path = os.path.expanduser(os.path.expandvars(
+        self.path = os.path.expanduser(FileUtilities.expandvars(
             action_element.getAttribute('path')))
         if 'nt' == os.name and self.path:
             # convert forward slash to backslash for compatibility with getsize()

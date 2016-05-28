@@ -62,7 +62,7 @@ def actions_to_cleaner(action_strs):
     return cleaner
 
 
-class CleanerTestCase(unittest.TestCase):
+class CleanerTestCase(unittest.TestCase, common.AssertFile):
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
