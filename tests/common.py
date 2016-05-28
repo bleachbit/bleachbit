@@ -25,7 +25,6 @@ Common code for unit tests
 
 import os
 import types
-from bleachbit.Common import encoding
 
 class AssertFile:
 
@@ -79,6 +78,7 @@ def validate_result(self, result, really_delete=False):
                  "size is %s" % str(result['size']))
     # path
     filename = result['path']
+    from bleachbit.Common import encoding
     self.assert_(isinstance(filename, (str, unicode, type(None))),
                  "Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))
     if isinstance(filename, (str, unicode)) and \
