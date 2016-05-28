@@ -88,8 +88,9 @@ class CleanerMLTestCase(unittest.TestCase):
         Common.personal_cleaners_dir = tempfile.mkdtemp(
             prefix='bleachbit-cleanerml-load')
         fn_xml = os.path.join(Common.personal_cleaners_dir, 'invalid.xml')
-        with open(fn_xml, 'w') as f:
-            f.write('<xml><broken>')
+        f = open(fn_xml, 'w')
+        f.write('<xml><broken>')
+        f.close()
         load_cleaners()
         import shutil
         shutil.rmtree(Common.personal_cleaners_dir)
