@@ -26,17 +26,25 @@ Common code for unit tests
 import os
 import types
 
+
 class AssertFile:
 
-    def assertExists(self, path, msg=''):
+    def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
-        path = os.path.expandvars(path)
-        if not os.path.exists(path):
+        from bleachbit.FileUtilities import expandvars
+        path = expandvars(path)
+        if not func(path):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
-    def assertNotExists(self, path, msg=''):
-        if os.path.exists(path):
+    def assertLExists(self, path, msg=''):
+        self.assertExists(path, msg, os.path.lexists)
+
+    def assertNotLExists(self, path, msg=''):
+        self.assertExists(path, msg, os.path.lexists)
+
+    def assertNotExists(self, path, msg='', func=os.path.exists):
+        if func(path):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
@@ -45,6 +53,7 @@ class AssertFile:
             self.assertExists(path, msg)
         else:
             self.assertNotExists(path, msg)
+
 
 def destructive_tests(title):
     """Return true if allowed to run destructive tests.  If false print notice."""
@@ -84,8 +93,6 @@ def validate_result(self, result, really_delete=False):
     if isinstance(filename, (str, unicode)) and \
             not filename[0:2] == 'HK':
         if really_delete:
-            self.assert_(not os.path.lexists(filename),
-                         "Path exists: '%s'" % (filename))
+            self.assertNotLExists(filename)
         else:
-            self.assert_(os.path.lexists(filename),
-                         "Path does not exist: '%s'" % (filename))
+            self.assertLExists(filename)
