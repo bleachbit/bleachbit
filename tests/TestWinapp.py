@@ -69,28 +69,9 @@ def get_winapp2():
     return fn
 
 
-class AssertFile:
-
-    def assertExists(self, path, msg=''):
-        """File, directory, or any path exists"""
-        path = os.path.expandvars(path)
-        if not os.path.exists(path):
-            raise AssertionError(
-                'The file %s should exist, but it does not. %s' % (path, msg))
-
-    def assertNotExists(self, path, msg=''):
-        if os.path.exists(path):
-            raise AssertionError(
-                'The file %s should not exist, but it does. %s' % (path, msg))
-
-    def assertCondExists(self, cond, path, msg=''):
-        if cond:
-            self.assertExists(path, msg)
-        else:
-            self.assertNotExists(path, msg)
 
 
-class WinappTestCase(unittest.TestCase, AssertFile):
+class WinappTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for Winapp"""
 

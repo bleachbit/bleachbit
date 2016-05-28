@@ -32,7 +32,7 @@ from bleachbit.CleanerML import *
 import common
 
 
-class CleanerMLTestCase(unittest.TestCase):
+class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for CleanerML"""
 
@@ -75,7 +75,7 @@ class CleanerMLTestCase(unittest.TestCase):
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
         for pathname in list_cleanerml_files():
-            self.assert_(os.path.exists(pathname))
+            self.assertExists(pathname)
 
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""

@@ -27,6 +27,25 @@ import os
 import types
 from bleachbit.Common import encoding
 
+class AssertFile:
+
+    def assertExists(self, path, msg=''):
+        """File, directory, or any path exists"""
+        path = os.path.expandvars(path)
+        if not os.path.exists(path):
+            raise AssertionError(
+                'The file %s should exist, but it does not. %s' % (path, msg))
+
+    def assertNotExists(self, path, msg=''):
+        if os.path.exists(path):
+            raise AssertionError(
+                'The file %s should not exist, but it does. %s' % (path, msg))
+
+    def assertCondExists(self, cond, path, msg=''):
+        if cond:
+            self.assertExists(path, msg)
+        else:
+            self.assertNotExists(path, msg)
 
 def destructive_tests(title):
     """Return true if allowed to run destructive tests.  If false print notice."""
