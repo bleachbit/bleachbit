@@ -105,7 +105,7 @@ options_file = os.path.join(options_dir, "bleachbit.ini")
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
-if sys.platform.startswith('linux'):
+if sys.platform.startswith('linux') or sys.platform == 'darwin':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
@@ -137,7 +137,7 @@ if os.path.exists("./locale/"):
     locale_dir = os.path.abspath("./locale/")
 else:
     # system-wide installed locale
-    if sys.platform.startswith('linux'):
+    if sys.platform.startswith('linux') or sys.platform == 'darwin':
         locale_dir = "/usr/share/locale/"
     elif sys.platform == 'win32':
         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
