@@ -26,6 +26,20 @@ Scan directory tree for files to delete
 
 import os
 import re
+import sys
+import unicodedata
+
+
+def normalize_filename(fn):
+    """
+    macOS uses decomposed UTF-8 to store filename. This functions
+    recomposes them on macOS.
+    """
+    if 'darwin' == sys.platform:
+        return unicodedata.normalize(
+            'NFC', unicode(fn, 'utf-8')).encode('utf-8')
+    else:
+        return fn
 
 
 class DeepScan:
@@ -55,6 +69,7 @@ class DeepScan:
                     # fixme, don't match filename twice
                     r = re.compile(regex)
                     for filename in filenames:
+                        filename = normalize_filename(filename)
                         if r.search(filename):
                             yield os.path.join(dirpath, filename)
                 if time.time() - yield_time > 0.25:
