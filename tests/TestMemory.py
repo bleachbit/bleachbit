@@ -69,6 +69,36 @@ class MemoryTestCase(unittest.TestCase):
         self.assert_(n_swaps >= 0)
         self.assert_(n_swaps < 10)
 
+
+    def test_physical_free_darwin(self):
+        self.assertEqual(physical_free_darwin(lambda:
+"""Mach Virtual Memory Statistics: (page size of 4096 bytes)
+Pages free:                              836891.
+Pages active:                            588004.
+Pages inactive:                           16985.
+Pages speculative:                        89776.
+Pages throttled:                              0.
+Pages wired down:                        468097.
+Pages purgeable:                          58313.
+"Translation faults":                3109985921.
+Pages copy-on-write:                   25209334.
+Pages zero filled:                    537180873.
+Pages reactivated:                    132264973.
+Pages purged:                          11567935.
+File-backed pages:                       184609.
+Anonymous pages:                         510156.
+Pages stored in compressor:              784977.
+Pages occupied by compressor:             96724.
+Decompressions:                        66048421.
+Compressions:                          90076786.
+Pageins:                              758631430.
+Pageouts:                              30477017.
+Swapins:                               19424481.
+Swapouts:                              20258188.
+"""), 3427905536)
+        self.assertRaises(
+            RuntimeError, physical_free_darwin, lambda: "Invalid header")
+
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()

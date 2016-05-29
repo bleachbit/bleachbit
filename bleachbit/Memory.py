@@ -172,6 +172,24 @@ def get_swap_uuid(device):
     return uuid
 
 
+def physical_free_darwin(run_vmstat=None):
+    def parse_line(k, v):
+        return k, int(v.strip(" ."))
+    def get_page_size(line):
+        m = re.match(
+            r"Mach Virtual Memory Statistics: \(page size of (\d+) bytes\)",
+            line)
+        if m is None:
+            raise RuntimeError("Can't parse vm_stat output")
+        return int(m.groups()[0])
+    if run_vmstat is None:
+        run_vmstat = lambda: subprocess.check_output(["vm_stat"])
+    output = iter(run_vmstat().split("\n"))
+    page_size = get_page_size(next(output))
+    vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
+    return vm_stat["Pages free"] * page_size
+
+
 def physical_free_linux():
     """Return the physical free memory on Linux"""
     f = open("/proc/meminfo")
@@ -223,6 +241,8 @@ def physical_free():
         return physical_free_linux()
     elif 'win32' == sys.platform:
         return physical_free_windows()
+    elif 'darwin' == sys.platform:
+        return physical_free_darwin()
     else:
         raise RuntimeError('unsupported platform for physical_free()')
 
