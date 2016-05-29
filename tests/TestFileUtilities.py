@@ -560,7 +560,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         home = os.path.expanduser('~')
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
-            self.assertFalse(same_partition(home, '/proc'))
+            self.assertFalse(same_partition(home, '/dev'))
         if 'nt' == os.name:
             home_drive = os.path.splitdrive(home)[0]
             from bleachbit.Windows import get_fixed_drives
