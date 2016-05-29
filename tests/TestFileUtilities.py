@@ -525,6 +525,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
                      getsize(filename))
         delete(filename)
 
+        if 'darwin' == sys.platform:
+            # MacOS's HFS+ filesystem doesn't support sparse files
+            return
+
         # create sparse file
         (handle, filename) = tempfile.mkstemp(prefix="bleachbit-test-sparse")
         os.ftruncate(handle, 1000 ** 2)
