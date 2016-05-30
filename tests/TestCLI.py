@@ -106,12 +106,14 @@ class CLITestCase(unittest.TestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
+        lang = os.environ['LANG']
         os.environ['LANG'] = 'blahfoo'
         # tests are run from the parent directory
         path = os.path.join('bleachbit', 'CLI.py')
         args = [sys.executable, path, '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
+        os.environ['LANG'] = lang
 
     def test_preview(self):
         """Unit test for --preview option"""
