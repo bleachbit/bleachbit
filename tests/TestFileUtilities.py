@@ -783,6 +783,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
 
+    def test_open_files_lsof(self):
+        self.assertEqual(list(open_files_lsof(lambda:
+            'n/bar/foo\nn/foo/bar\nnoise'
+        )), ['/bar/foo', '/foo/bar'])
+
 
 def suite():
     return unittest.makeSuite(FileUtilitiesTestCase)
