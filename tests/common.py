@@ -25,7 +25,7 @@ Common code for unit tests
 
 import os
 import types
-
+from bleachbit.FileUtilities import extended_path
 
 class AssertFile:
 
@@ -33,7 +33,8 @@ class AssertFile:
         """File, directory, or any path exists"""
         from bleachbit.FileUtilities import expandvars
         path = expandvars(path)
-        if not func(path):
+        testpath = extended_path(path)
+        if not func(testpath):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
@@ -44,7 +45,8 @@ class AssertFile:
         self.assertExists(path, msg, os.path.lexists)
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
-        if func(path):
+        testpath = extended_path(path)
+        if func(testpath):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
