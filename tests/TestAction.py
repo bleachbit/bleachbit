@@ -166,7 +166,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     def test_delete_special_filenames(self):
         """Unit test for deleting special filenames"""
-        dirname = tempfile.mkdtemp('bleachbit-action-delete-special')
+        dirname = tempfile.mkdtemp(prefix='bleachbit-action-delete-special')
         tests = [
             'normal',
             'space in name',
