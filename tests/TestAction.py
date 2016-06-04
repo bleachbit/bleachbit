@@ -340,6 +340,8 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         self._test_action_str(action_str)
         self.assert_(not os.path.exists(subdir))
 
+        os.rmdir(dirname)
+
     def test_walk_files(self):
         """Unit test for walk.files"""
         if 'posix' == os.name:
