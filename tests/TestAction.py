@@ -110,7 +110,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         for cmd in provider.get_commands():
             self.assert_(
                 isinstance(cmd, (Command.Delete, Command.Ini, Command.Json)))
-            self.assert_(os.path.lexists(filename))
+            self.assertLExists(filename)
             # preview
             result = cmd.execute(really_delete=False).next()
             common.validate_result(self, result)
@@ -118,14 +118,13 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
             # delete
             ret = cmd.execute(really_delete=True).next()
             if 'delete' == command:
-                self.assert_(not os.path.lexists(cmd.path),
-                             'exists: %s' % cmd.path)
+                self.assertNotLExists(cmd.path)
             elif 'truncate' == command:
-                self.assert_(os.path.lexists(filename))
+                self.assertLExists(filename)
                 os.remove(filename)
-                self.assert_(not os.path.lexists(filename))
+                self.assertNotLExists(filename)
             elif command in ('ini', 'json'):
-                self.assert_(os.path.lexists(filename))
+                self.assertLExists(filename)
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
         if 'walk.all' == search:
@@ -162,7 +161,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
-                self.assert_(not os.path.exists(filename))
+                self.assertNotExists(filename)
 
     def test_delete_special_filenames(self):
         """Unit test for deleting special filenames"""
@@ -300,28 +299,28 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         common.touch_file(filename)
         action_str = '<action command="delete" search="file" type="d" path="%s" />' % filename
         self._test_action_str(action_str)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
 
         # should delete file
         action_str = '<action command="delete" search="file" type="f" path="%s" />' % filename
         self._test_action_str(action_str)
-        self.assert_(not os.path.exists(filename))
+        self.assertNotExists(filename)
 
         # should delete file
         common.touch_file(filename)
         action_str = '<action command="delete" search="file" path="%s" />' % filename
         self._test_action_str(action_str)
-        self.assert_(not os.path.exists(filename))
+        self.assertNotExists(filename)
 
         # should not delete anything
         action_str = '<action command="delete" search="file" type="f" path="%s" />' % dirname
         self._test_action_str(action_str)
-        self.assert_(os.path.exists(dirname))
+        self.assertExists(dirname)
 
         # should delete directory
         action_str = '<action command="delete" search="file" type="d" path="%s" />' % dirname
         self._test_action_str(action_str)
-        self.assert_(not os.path.exists(dirname))
+        self.assertNotExists(dirname)
 
     def test_walk_all(self):
         """Unit test for walk.all"""
@@ -330,7 +329,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         # this sub-directory should be deleted
         subdir = os.path.join(dirname, 'sub')
         os.mkdir(subdir)
-        self.assert_(os.path.exists(subdir))
+        self.assertExists(subdir)
 
         # this file should be deleted too
         filename = os.path.join(subdir, 'file')
@@ -338,7 +337,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
         action_str = '<action command="delete" search="walk.all" path="%s" />' % dirname
         self._test_action_str(action_str)
-        self.assert_(not os.path.exists(subdir))
+        self.assertNotExists(subdir)
 
         os.rmdir(dirname)
 

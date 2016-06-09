@@ -27,14 +27,19 @@ import os
 import types
 from bleachbit.FileUtilities import extended_path
 
+
 class AssertFile:
+
+    def getTestPath(self, path):
+        if 'nt' == os.name:
+            return extended_path(os.path.normpath(path))
+        return path
 
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
         from bleachbit.FileUtilities import expandvars
         path = expandvars(path)
-        testpath = extended_path(path)
-        if not func(testpath):
+        if not func(self.getTestPath(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
@@ -45,8 +50,7 @@ class AssertFile:
         self.assertNotExists(path, msg, os.path.lexists)
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
-        testpath = extended_path(path)
-        if func(testpath):
+        if func(self.getTestPath(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
