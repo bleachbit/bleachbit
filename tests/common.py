@@ -42,7 +42,7 @@ class AssertFile:
         self.assertExists(path, msg, os.path.lexists)
 
     def assertNotLExists(self, path, msg=''):
-        self.assertExists(path, msg, os.path.lexists)
+        self.assertNotExists(path, msg, os.path.lexists)
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
         testpath = extended_path(path)
