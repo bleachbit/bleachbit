@@ -78,6 +78,9 @@
   <option id="thumbnails">
     <label>Thumbnails</label>
     <description>Delete the cache</description>
+    <warning>This will restart Windows Explorer.</warning>
+    <action command="process" cmd="taskkill /f /IM explorer.exe"/>
     <action command="delete" search="glob" path="$LOCALAPPDATA\Microsoft\Windows\Explorer\thumbcache*.db"/>
+    <action command="process" cmd="start explorer.exe"/>
   </option>
 </cleaner>
