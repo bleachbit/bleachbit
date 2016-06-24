@@ -369,6 +369,22 @@ class OfficeRegistryModifications(FileActionProvider):
                 _('Clean'))
 
 
+class Process(ActionProvider):
+
+    """Action to run a process"""
+    action_key = 'process'
+
+    def __init__(self, action_element):
+        self.cmd = action_element.getAttribute('cmd')
+
+    def get_commands(self):
+        def run_process():
+            args = self.cmd.split(' ')
+            (rc, _, _) = General.run_external(args)
+            return 0
+        yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
+
+
 class Shred(FileActionProvider):
 
     """Action to shred files (override preference)"""

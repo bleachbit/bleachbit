@@ -101,6 +101,7 @@
                             <xs:enumeration value="json"/>
                             <xs:enumeration value="mozilla_url_history"/>
                             <xs:enumeration value="office_registrymodifications"/>
+                            <xs:enumeration value="process"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
                             <xs:enumeration value="win.shell.change.notify"/>
@@ -109,6 +110,7 @@
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>
+                      <xs:attribute name="cmd" type="xs:string"/>
                       <xs:attribute name="name" type="xs:string"/>
                       <xs:attribute name="parameter" type="xs:string"/>
                       <xs:attribute name="path" type="xs:string"/>
