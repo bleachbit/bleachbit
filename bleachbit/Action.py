@@ -380,7 +380,11 @@ class Process(ActionProvider):
     def get_commands(self):
         def run_process():
             args = self.cmd.split(' ')
-            (rc, _, _) = General.run_external(args)
+            try:
+                (rc, _, _) = General.run_external(args)
+            except Exception as e:
+                raise RuntimeError(
+                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
