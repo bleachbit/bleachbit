@@ -29,7 +29,7 @@
   </option>
   <option id="history">
     <label>Database</label>
-    <description>Delete database, which contain information such as play count and last played</description>
+    <description>Delete the database, which contain information such as play count and last played</description>
     <action command="delete" search="file" path="~/.local/share/rhythmbox/rhythmdb.xml"/>
   </option>
 </cleaner>
