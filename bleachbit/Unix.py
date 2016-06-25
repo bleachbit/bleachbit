@@ -272,7 +272,7 @@ class Locales:
         if not locales_to_keep:
             raise RuntimeError('Found no locales to keep')
         purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
-                                      if locale not in locales_to_keep))
+                                       if locale not in locales_to_keep))
 
         for xml_node in self._paths:
             for (locale, path) in Locales.handle_path('', xml_node):

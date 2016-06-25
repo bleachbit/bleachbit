@@ -330,7 +330,7 @@ def expand_glob_join(pathname1, pathname2):
 
 
 def expandvars(path):
-    if (2,5)==sys.version_info[0:2] and 'nt' == os.name:
+    if (2, 5) == sys.version_info[0:2] and 'nt' == os.name:
         # Python 2.5 should not change $foo when foo is unknown, but
         # it actually strips it out.
         import backport
@@ -339,6 +339,7 @@ def expandvars(path):
     else:
         expandvars = os.path.expandvars
         return os.path.expandvars(path)
+
 
 def extended_path(path):
     """If applicable, return the extended Windows pathname"""

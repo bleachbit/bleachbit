@@ -281,7 +281,7 @@ class GUI:
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         gobject.idle_add(lambda:
                          self.textview.scroll_mark_onscreen(
-                         self.textbuffer.get_insert()))
+                             self.textbuffer.get_insert()))
 
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""

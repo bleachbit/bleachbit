@@ -22,6 +22,7 @@ def expandvars(path):
     varchars = string.ascii_letters + string.digits + '_-'
     if isinstance(path, _unicode):
         encoding = sys.getfilesystemencoding()
+
         def getenv(var):
             return os.environ[var.encode(encoding)].decode(encoding)
     else:
@@ -46,7 +47,7 @@ def expandvars(path):
                 res = res + c
                 index = index + 1
             else:
-                path = path[index+1:]
+                path = path[index + 1:]
                 pathlen = len(path)
                 try:
                     index = path.index('%')
@@ -64,7 +65,7 @@ def expandvars(path):
                 res = res + c
                 index = index + 1
             elif path[index + 1:index + 2] == '{':
-                path = path[index+2:]
+                path = path[index + 2:]
                 pathlen = len(path)
                 try:
                     index = path.index('}')
@@ -94,5 +95,3 @@ def expandvars(path):
             res = res + c
         index = index + 1
     return res
-
-

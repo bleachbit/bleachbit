@@ -69,8 +69,6 @@ def get_winapp2():
     return fn
 
 
-
-
 class WinappTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for Winapp"""

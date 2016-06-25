@@ -43,10 +43,10 @@ def __shred_sqlite_char_columns(table, cols=None, where=""):
     if cols and options.get('shred'):
         cmd += "update or ignore %s set %s %s;" % \
             (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
-             for col in cols]), where)
+                              for col in cols]), where)
         cmd += "update or ignore %s set %s %s;" % \
             (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
-             for col in cols]), where)
+                              for col in cols]), where)
     cmd += "delete from %s %s;" % (table, where)
     return cmd
 
@@ -97,7 +97,7 @@ def delete_chrome_autofill(path):
     cmds += __shred_sqlite_char_columns('autofill_profiles', cols)
     cols = (
         'company_name', 'street_address', 'address_1', 'address_2', 'address_3', 'address_4',
-            'postal_code', 'country_code', 'language_code', 'recipient_name', 'phone_number')
+        'postal_code', 'country_code', 'language_code', 'recipient_name', 'phone_number')
     cmds += __shred_sqlite_char_columns('server_addresses', cols)
     FileUtilities.execute_sqlite3(path, cmds)
 

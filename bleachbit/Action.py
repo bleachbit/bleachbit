@@ -110,7 +110,8 @@ class FileActionProvider(ActionProvider):
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
-        if not any([self.object_type, self.regex, self.nregex, self.wholeregex, self.nwholeregex]):
+        if not any([self.object_type, self.regex, self.nregex,
+                    self.wholeregex, self.nwholeregex]):
             # If the filter is not needed, bypass it for speed.
             self.get_paths = self._get_paths
 
@@ -163,12 +164,14 @@ class FileActionProvider(ActionProvider):
 
         def get_walk_all(top):
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(expanded, True):
+                for path in FileUtilities.children_in_directory(
+                        expanded, True):
                     yield path
 
         def get_walk_files(top):
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(expanded, False):
+                for path in FileUtilities.children_in_directory(
+                        expanded, False):
                     yield path
 
         if 'deep' == self.search:

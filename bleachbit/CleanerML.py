@@ -97,7 +97,7 @@ class CleanerML:
                 logger = logging.getLogger(__name__)
                 logger.exception(
                     'error in handle_cleaner_option() for cleaner id = %s, option XML=%s',
-                                self.cleaner.id, option.toxml())
+                    self.cleaner.id, option.toxml())
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))

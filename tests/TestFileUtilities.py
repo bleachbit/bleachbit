@@ -279,7 +279,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
                  (hebrew, hebrew),
                  (katanana, katanana),
                  (umlauts, umlauts),
-                 ('sigil','should$not-change')]
+                 ('sigil', 'should$not-change')]
         if 'posix' == os.name:
             # Windows doesn't allow these characters but Unix systems do
             tests.append(('"', '*'))
@@ -665,7 +665,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
     def test_wipe_name(self):
         """Unit test for wipe_name()"""
 
-         # create test file with moderately long name
+        # create test file with moderately long name
         (handle, filename) = tempfile.mkstemp(
             prefix="bleachbit-test-wipe" + "0" * 50)
         os.close(handle)
