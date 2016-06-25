@@ -25,6 +25,7 @@ Actions that perform cleaning
 
 
 import glob
+import logging
 import os
 import re
 import types
@@ -384,10 +385,16 @@ class Process(ActionProvider):
         def run_process():
             args = self.cmd.split(' ')
             try:
-                (rc, _, _) = General.run_external(args)
-            except Exception as e:
+                (rc, stdout, stderr) = General.run_external(args)
+            except Exception, e:
                 raise RuntimeError(
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
+            else:
+                if not 0 == rc:
+                    logger = logging.getLogger(__name__)
+                    logger.warning(
+                        'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n' %
+                        (self.cmd, rc, stdout, stderr))
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
