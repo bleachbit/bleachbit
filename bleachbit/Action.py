@@ -379,7 +379,7 @@ class Process(ActionProvider):
     action_key = 'process'
 
     def __init__(self, action_element):
-        self.cmd = action_element.getAttribute('cmd')
+        self.cmd = FileUtilities.expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
         wait = action_element.getAttribute('wait')
