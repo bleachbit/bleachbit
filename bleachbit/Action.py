@@ -380,12 +380,24 @@ class Process(ActionProvider):
 
     def __init__(self, action_element):
         self.cmd = action_element.getAttribute('cmd')
+        # by default, wait
+        self.wait = True
+        wait = action_element.getAttribute('wait')
+        if wait and wait.lower()[0] in ('f', 'n'):
+            # false or no
+            self.wait = False
 
     def get_commands(self):
+
         def run_process():
-            args = self.cmd.split(' ')
             try:
-                (rc, stdout, stderr) = General.run_external(args)
+                if self.wait:
+                    args = self.cmd.split(' ')
+                    (rc, stdout, stderr) = General.run_external(args)
+                else:
+                    rc = 0  # unknown because we don't wait
+                    from subprocess import Popen
+                    Popen(self.cmd)
             except Exception, e:
                 raise RuntimeError(
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
