@@ -93,6 +93,9 @@ def validate_result(self, result, really_delete=False):
                  "size is %s" % str(result['size']))
     # path
     filename = result['path']
+    if not filename:
+        # the process action, for example, does not have a filename
+        return
     from bleachbit.Common import encoding
     self.assert_(isinstance(filename, (str, unicode, type(None))),
                  "Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))

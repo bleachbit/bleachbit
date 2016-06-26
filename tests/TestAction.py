@@ -109,8 +109,10 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         self.assertNotEqual(provider, None)
         for cmd in provider.get_commands():
             self.assert_(
-                isinstance(cmd, (Command.Delete, Command.Ini, Command.Json)))
-            self.assertLExists(filename)
+                isinstance(cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function)))
+            if 'process' != command:
+                # process does not have a filename
+                self.assertLExists(filename)
             # preview
             result = cmd.execute(really_delete=False).next()
             common.validate_result(self, result)
@@ -123,6 +125,8 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
                 self.assertLExists(filename)
                 os.remove(filename)
                 self.assertNotLExists(filename)
+            elif command in ('process'):
+                pass
             elif command in ('ini', 'json'):
                 self.assertLExists(filename)
             else:
@@ -203,6 +207,17 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
             self._test_action_str(action_str)
 
         test_json_helper(self, execute_json)
+
+    def test_process(self):
+        """Unit test for process action"""
+        tests = ['<action command="process" cmd="dir" />',
+                 '<action command="process" wait="false" cmd="dir" />',
+                 '<action command="process" wait="f" cmd="dir" />',
+                 '<action command="process" wait="no" cmd="dir" />',
+                 '<action command="process" wait="n" cmd="dir" />']
+
+        for test in tests:
+            self._test_action_str(test)
 
     def test_regex(self):
         """Unit test for regex option"""
