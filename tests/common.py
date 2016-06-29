@@ -24,7 +24,10 @@ Common code for unit tests
 
 
 import os
+import sys
 import types
+
+sys.path.append('.')
 from bleachbit.FileUtilities import extended_path
 
 
