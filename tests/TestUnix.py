@@ -63,6 +63,26 @@ class UnixTestCase(unittest.TestCase):
                              if fn.endswith('.desktop')]:
                 self.assert_(type(is_broken_xdg_desktop(filename) is bool))
 
+    def test_is_running_darwin(self):
+        def run_ps():
+            return """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
+alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
+alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
+root               665   0.0  0.0  2497508    512   ??  Ss   20May16   0:11.30 check_afp
+alocaluseraccount   646   0.0  0.1  2502484   5656   ??  S    20May16   0:03.62 DataDetectorsDynamicData
+alocaluseraccount   632   0.0  0.0  2471288    320   ??  S    20May16   0:02.79 mdflagwriter
+alocaluseraccount   616   0.0  0.0  2497596    520   ??  S    20May16   0:00.41 familycircled
+alocaluseraccount   573   0.0  0.0  3602328   2440   ??  S    20May16   0:39.64 storedownloadd
+alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 LaterAgent
+alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
+alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
+root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
+"""
+        self.assertTrue(is_running_darwin('USBAgent', run_ps))
+        self.assertFalse(is_running_darwin('does-not-exist', run_ps))
+        self.assertRaises(RuntimeError, is_running_darwin, 'foo', lambda: 'invalid-input')
+
     def test_is_running(self):
         # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
         # from /usr/bin/python to python2.6

@@ -525,6 +525,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
                      getsize(filename))
         delete(filename)
 
+        if 'darwin' == sys.platform:
+            # MacOS's HFS+ filesystem doesn't support sparse files
+            return
+
         # create sparse file
         (handle, filename) = tempfile.mkstemp(prefix="bleachbit-test-sparse")
         os.ftruncate(handle, 1000 ** 2)
@@ -560,7 +564,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         home = os.path.expanduser('~')
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
-            self.assertFalse(same_partition(home, '/proc'))
+            self.assertFalse(same_partition(home, '/dev'))
         if 'nt' == os.name:
             home_drive = os.path.splitdrive(home)[0]
             from bleachbit.Windows import get_fixed_drives
@@ -778,6 +782,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
         os.unlink(filename)
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
+
+    def test_open_files_lsof(self):
+        self.assertEqual(list(open_files_lsof(lambda:
+            'n/bar/foo\nn/foo/bar\nnoise'
+        )), ['/bar/foo', '/foo/bar'])
 
 
 def suite():
