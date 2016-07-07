@@ -33,7 +33,7 @@ import unittest
 import common
 
 sys.path.append('.')
-from bleachbit.DeepScan import DeepScan
+from bleachbit.DeepScan import DeepScan, normalized_walk
 from bleachbit.Common import expanduser
 
 
@@ -132,6 +132,29 @@ class DeepScanTestCase(unittest.TestCase):
 
         # clean up
         shutil.rmtree(base)
+
+    def test_normalized_walk_darwin(self):
+        import mock
+
+        with mock.patch('os.walk') as mock_walk:
+            mock_walk.return_value = [
+                ('/foo', ('bar',), ['ba\xcc\x80z']),
+                ('/foo/bar', (), ['spam', 'eggs']),
+            ]
+            with mock.patch('platform.system') as mock_platform_system:
+                mock_platform_system.return_value = 'Darwin'
+                self.assertEqual(list(normalized_walk('.')), [
+                    ('/foo', ('bar',), ['b\xc3\xa0z']),
+                    ('/foo/bar', (), ['spam', 'eggs']),
+                ])
+
+        with mock.patch('os.walk') as mock_walk:
+            expected = [
+                ('/foo', ('bar',), ['baz']),
+                ('/foo/bar', (), ['spam', 'eggs']),
+            ]
+            mock_walk.return_value = expected
+            self.assertEqual(list(normalized_walk('.')), expected)
 
 
 def suite():

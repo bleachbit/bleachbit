@@ -27,21 +27,37 @@ import Common
 
 import logging
 import os
+import platform
 import re
-import sys
 import unicodedata
 
 
-def normalize_filename(fn):
+UTF8 = 'utf-8'
+
+
+def to_unicode(s):
     """
-    macOS uses decomposed UTF-8 to store filename. This functions
-    recomposes them on macOS.
+    Converts non-unicode UTF-8 string to unicode obj. Does nothing if
+    string is already unicode.
     """
-    if 'darwin' == sys.platform:
-        return unicodedata.normalize(
-            'NFC', fn.decode('utf-8')).encode('utf-8')
+    return s if isinstance(s, unicode) else unicode(s, UTF8)
+
+
+def normalized_walk(top, **kwargs):
+    """
+    macOS uses decomposed UTF-8 to store filenames. This functions
+    is like `os.walk` but recomposes those decomposed filenames on
+    macOS
+    """
+    if 'Darwin' == platform.system():
+        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
+            yield dirpath, dirnames, [
+                unicodedata.normalize('NFC', to_unicode(fn)).encode(UTF8)
+                for fn in filenames
+            ]
     else:
-        return fn
+        for result in os.walk(top, **kwargs):
+            yield result
 
 
 class DeepScan:
@@ -66,12 +82,11 @@ class DeepScan:
         yield_time = time.time()
 
         for (top, regexes) in self.searches.items():
-            for (dirpath, dirnames, filenames) in os.walk(top):
+            for (dirpath, dirnames, filenames) in normalized_walk(top):
                 for regex in regexes:
                     # fixme, don't match filename twice
                     r = re.compile(regex)
                     for filename in filenames:
-                        filename = normalize_filename(filename)
                         if r.search(filename):
                             yield os.path.join(dirpath, filename)
                 if time.time() - yield_time > 0.25:
