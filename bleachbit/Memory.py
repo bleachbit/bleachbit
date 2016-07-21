@@ -175,6 +175,7 @@ def get_swap_uuid(device):
 def physical_free_darwin(run_vmstat=None):
     def parse_line(k, v):
         return k, int(v.strip(" ."))
+
     def get_page_size(line):
         m = re.match(
             r"Mach Virtual Memory Statistics: \(page size of (\d+) bytes\)",
@@ -263,9 +264,12 @@ def wipe_swap_linux(devices, proc_swaps):
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
         print "info: wiping swap device '%s'" % device
-        if get_swap_size_linux(device, proc_swaps) > 8 * 1024 ** 3:
+        safety_limit_bytes = 16 * 1024 ** 3  # 16 gibibytes
+        actual_size_bytes = get_swap_size_linux(device, proc_swaps)
+        if actual_size_bytes > safety_limit_bytes:
             raise RuntimeError(
-                'swap device %s is larger than expected' % device)
+                'swap device %s is larger (%d) than expected (%d)' %
+                (device, actual_size_bytes, safety_limit_bytes))
         uuid = get_swap_uuid(device)
         # wipe
         FileUtilities.wipe_contents(device, truncate=False)
