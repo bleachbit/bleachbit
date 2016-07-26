@@ -54,6 +54,7 @@
   <option id="recent_documents">
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
+    <warning>This option will reset pinned locations in Quick Access to their defaults.</warning>
     <!-- Windows XP -->
     <action command="delete" search="glob" path="$USERPROFILE\Recent\*.lnk"/>
     <!-- Vista -->
