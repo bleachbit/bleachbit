@@ -324,6 +324,11 @@ def execute_sqlite3(path, cmds):
     import sqlite3
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
+
+    # overwrites deleted content with zeros
+    # https://www.sqlite.org/pragma.html#pragma_secure_delete
+    cursor.execute('PRAGMA secure_delete=ON')
+
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
