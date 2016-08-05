@@ -327,6 +327,7 @@ def execute_sqlite3(path, cmds):
 
     # overwrites deleted content with zeros
     # https://www.sqlite.org/pragma.html#pragma_secure_delete
+    from Options import options
     if options.get('shred'):
         cursor.execute('PRAGMA secure_delete=ON')
 
