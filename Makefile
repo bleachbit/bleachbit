@@ -38,6 +38,10 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/applications
 	$(INSTALL_DATA) bleachbit.desktop $(DESTDIR)$(datadir)/applications/
 
+	# .desktop
+	mkdir -p $(DESTDIR)$(datadir)/appdata
+	$(INSTALL_DATA) bleachbit.appdata.xml $(DESTDIR)$(datadir)/appdata/
+
 	# Python code
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit
 	$(INSTALL_DATA) bleachbit/*.py $(DESTDIR)$(datadir)/bleachbit
