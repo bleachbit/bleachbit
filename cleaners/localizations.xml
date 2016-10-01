@@ -15,52 +15,50 @@
       </path>
     </path>
     <path location="/usr/share">
-      <!-- A <path> element without children and an explicit filter-attribute
-           defaults to filter="*"-->
-      <path location="anki/locale"/>
-      <path location="apps/ksgmltools/customization"/>
-      <path location="calendar"/>
-      <path location="cups/doc"/>
-      <path location="cups/locale"/>
-      <path location="doc">
-        <path location="kde/HTML"/>
-        <path location="HTML/release-notes"/>
-        <path location="thunar-data/html"/>
+      <!-- check for Qt translations in every folder's subfolder locale or translations -->
+      <!-- also check for localizations in folders named locale(s)/translation(s) in every subfolder-->
+      <path directoryregex="^.*$">
+        <path directoryregex="^(locale|translation)s?$">
+          <regexfilter prefix=".*_" postfix="\.qm"/>
+          <path location="." filter="*"/>
+        </path>
       </path>
-      <path location="help"/>
-      <path location="i18n/locales"/>
-      <path location="locale"/>
+      <path location="apps/ksgmltools/customization" filter="*"/>
+      <path location="calendar" filter="*"/>
+      <path location="cups/doc" filter="*"/>
+      <path location="doc">
+        <path location="kde/HTML" filter="*"/>
+        <path location="HTML/release-notes" filter="*"/>
+        <path location="thunar-data/html" filter="*"/>
+      </path>
+      <path location="help" filter="*"/>
+      <path location="locale" filter="*"/>
       <!-- for openSuSE -->
       <path location="locale-bundle">
-        <path location="kf5"/>
+        <path location="kf5" filter="*"/>
       </path>
-      <path location="lyx/doc"/>
-      <path location="lyx/examples"/>
-      <path location="man"/>
-      <path location="mathjax/localization"/>
-      <path location="mscore-2.0/locale">
-        <regexfilter prefix="(instruments|mscore|qt)_" postfix="\.qm"/>
+      <path location="lyx/doc" filter="*"/>
+      <path location="lyx/examples" filter="*"/>
+      <path location="man" filter="*"/>
+      <path location="octave/">
+        <path directoryregex="^[0-9.]+$">
+          <path location="locale/" filter="*.qm"/>
+        </path>
       </path>
-      <path location="qt4/translations">
-        <regexfilter prefix="\w*_" postfix="\.qm"/>
-      </path>
+      <!-- This already gets cleaned by the more general <path directoryregex="^.*$"> above but might be useful as an example -->
       <path location="qt/translations">
         <!-- <regexfilter> enables filtering files/folders with 2 regular expressions.
-             This deletes every file matching |prefix | locale   | postfix, e.g.
-                                              qt_help_hu_HU.UTF-8.qm
-             This can only be used to delete entries in the current <path> -->
+           This deletes every file matching |prefix | locale   | postfix, e.g.
+                                             qt_help_hu_HU.UTF-8.qm
+           This can only be used to delete entries in the current <path> -->
         <regexfilter prefix="q[\w_]*" postfix="\.qm"/>
         <!-- You can also specify multiple <regexfilter>s within a single path -->
         <regexfilter prefix="(linguist|designer|assistant)_" postfix="\.qm"/>
       </path>
-      <path location="speedcrunch/books"/>
-      <path location="texmaker/" filter="*.dic">
-        <regexfilter prefix="(texmaker|qt)_" postfix="\.qm"/>
-      </path>
+      <path location="speedcrunch/books" filter="*"/>
+      <path location="texmaker/" filter="*.dic"/>
       <path location="vim/vim74/lang" filter="menu_*.vim"/>
-      <path location="vim/vim74/lang"/>
-      <path location="X11/locale"/>
-      <path location="zenmap/locale"/>
+      <path location="vim/vim74/lang" filter="*"/>
     </path>
   </localizations>
 </cleaner>
