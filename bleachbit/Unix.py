@@ -286,10 +286,26 @@ class Locales:
 
         if xmldata.ELEMENT_NODE != xmldata.nodeType:
             return
-        if not xmldata.nodeName in ['path', 'regexfilter']:
+        if xmldata.nodeName not in ['path', 'regexfilter']:
             raise RuntimeError(
                 "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xmldata.nodeName)
         location = xmldata.getAttribute('location') or '.'
+
+        # if a pattern is supplied, we recurse into all matching subdirectories
+        if xmldata.hasAttribute('pattern'):
+            pattern = xmldata.getAttribute('pattern')
+            if '/' in pattern:
+                raise RuntimeError('directory pattern may not contain slashes.')
+            pattern = re.compile(pattern)
+
+            for subpath in os.listdir(path):
+                if pattern.match(subpath) and os.path.isdir(path+subpath):
+                    subpath = path + subpath + '/'
+                    for child in xmldata.childNodes:
+                        for (l, s) in Locales.handle_path(subpath, child):
+                            yield (l, s)
+            return
+
         if '.' != location:
             path = path + location
         if not path.endswith('/'):
@@ -303,7 +319,7 @@ class Locales:
         if 'regexfilter' == xmldata.nodeName:
             pre = xmldata.getAttribute('prefix') or ''
             post = xmldata.getAttribute('postfix') or ''
-        if 'path' == xmldata.nodeName:
+        elif 'path' == xmldata.nodeName:
             userfilter = xmldata.getAttribute('filter')
             if not userfilter and not xmldata.hasChildNodes():
                 userfilter = '*'

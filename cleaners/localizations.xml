@@ -15,6 +15,12 @@
       </path>
     </path>
     <path location="/usr/share">
+      <!-- check for Qt translations in every folder's subfolder locale or translations -->
+      <path pattern="^.*$">
+        <path pattern="^(locale|translations)$">
+          <regexfilter prefix=".*_" postfix="\.qm"/>
+        </path>
+      </path>
       <!-- A <path> element without children and an explicit filter-attribute
            defaults to filter="*"-->
       <path location="anki/locale"/>
@@ -38,12 +44,12 @@
       <path location="lyx/examples"/>
       <path location="man"/>
       <path location="mathjax/localization"/>
-      <path location="mscore-2.0/locale">
-        <regexfilter prefix="(instruments|mscore|qt)_" postfix="\.qm"/>
+      <path location="octave/">
+        <path pattern="^[0-9.]+$">
+          <path location="locale/" filter="*.qm"/>
+        </path>
       </path>
-      <path location="qt4/translations">
-        <regexfilter prefix="\w*_" postfix="\.qm"/>
-      </path>
+      <!-- This already gets cleaned by the more general <path pattern="^.*$"> above but might be useful as an example -->
       <path location="qt/translations">
         <!-- <regexfilter> enables filtering files/folders with 2 regular expressions.
              This deletes every file matching |prefix | locale   | postfix, e.g.
@@ -54,9 +60,7 @@
         <regexfilter prefix="(linguist|designer|assistant)_" postfix="\.qm"/>
       </path>
       <path location="speedcrunch/books"/>
-      <path location="texmaker/" filter="*.dic">
-        <regexfilter prefix="(texmaker|qt)_" postfix="\.qm"/>
-      </path>
+      <path location="texmaker/" filter="*.dic"/>
       <path location="vim/vim74/lang" filter="menu_*.vim"/>
       <path location="vim/vim74/lang"/>
       <path location="X11/locale"/>
