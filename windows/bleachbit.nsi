@@ -35,6 +35,8 @@
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
   OutFile "${prodname}-${VERSION}-setup.exe"
+  ; Unicode requires NSIS version 3 or later
+  Unicode true
 !endif
 
   ;Default installation folder
