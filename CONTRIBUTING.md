@@ -4,10 +4,15 @@ Thank you for your interest in contributing. Following these changes will help g
 
 If you plan to write a major change, please consider first emailing to discuss.
 
+## Environment
+
+BleachBit runs on Python 2.5, 2.6, and 2.7 with PyGTK 2. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
+
+The modernization branch supports GTK+ 3, but it is not yet ready. See the GitHub issues.
+
 ## Procedure
 
 * Get a GitHub account.
-* See [Running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
 * Fork the right BleachBit repository, as there are several repositories.
 * Check out your forked repository.
 * Make your changes.
