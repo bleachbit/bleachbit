@@ -60,6 +60,10 @@ install:
 	# translations
 	make -C po install DESTDIR=$(DESTDIR)
 
+	# PolicyKit
+	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
+	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
+
 lint:
 	for f in *py */*py; \
 	do \
