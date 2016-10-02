@@ -28,7 +28,7 @@ build: build-stamp
 	sed -i -e 's/Categories=GTK;System;$$/Categories=GTK;System;Settings;/g' bleachbit.desktop
 	cp bleachbit.desktop bleachbit-root.desktop
 	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' bleachbit-root.desktop
-	sed -i -e 's/^Exec=bleachbit$$/Exec=su-to-root -X -c bleachbit/g' bleachbit-root.desktop
+	sed -i -e 's/^Exec=bleachbit$$/Exec=pkexec bleachbit/g' bleachbit-root.desktop
 	# remove Windows-specific cleaners
 	grep -l os=.windows. cleaners/*xml | xargs rm -f
 	# remove Windows-specific modules
