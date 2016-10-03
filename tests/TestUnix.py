@@ -153,7 +153,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         for path in keepdirs + nukedirs:
             os.mkdir(os.path.join(dirname, path))
         for path in keepfiles + nukefiles:
-            open(os.path.join(path, file), 'w').close()
+            open(os.path.join(dirname, path), 'w').close()
 
         configxml = '<path directoryregex="^.*$">' \
                     '  <path directoryregex="^(locale|dummyfiles)$">' \
