@@ -104,10 +104,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         regex = re.compile('^' + Locales.localepattern + '$')
         for test in tests:
             m = regex.match(test[0])
-            self.assertIsNotNone(m, 'expected positive match for ' + test[0])
+            self.assert_(m is not None, 'expected positive match for ' + test[0])
             self.assertEqual(m.group("locale"), test[1])
         for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
-            self.assertIsNone(regex.match(test), 'expected negative match for '+test)
+            self.assert_(regex.match(test) is None, 'expected negative match for '+test)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -169,9 +169,9 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         # normpath because paths may contain ./
         deletelist = [os.path.normpath(path) for path in locales.localization_paths(['en', 'de'])]
         for path in keepdirs + keepfiles:
-            self.assertNotIn(os.path.join(dirname, path), deletelist)
+            self.assert_(os.path.join(dirname, path) not in deletelist)
         for path in nukedirs + nukefiles:
-            self.assertIn(os.path.join(dirname, path), deletelist)
+            self.assert_(os.path.join(dirname, path) in deletelist)
 
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
