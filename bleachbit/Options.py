@@ -25,6 +25,7 @@ Store and retrieve user preferences
 
 import os
 import re
+import sys
 import traceback
 import ConfigParser
 
@@ -125,7 +126,7 @@ class Options:
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
-        return self.get(path_to_option(pathname), 'hashpath')
+        return self.get(path_to_option(pathname).encode(Common.FSE), 'hashpath')
 
     def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
@@ -244,7 +245,7 @@ class Options:
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
-        self.set(path_to_option(pathname), hashvalue, 'hashpath')
+        self.set(path_to_option(pathname).encode(Common.FSE), hashvalue, 'hashpath')
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""

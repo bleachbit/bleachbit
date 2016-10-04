@@ -592,7 +592,7 @@ def set_environ(varname, path):
         if not os.path.exists(path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path
+        os.environ[varname] = path.encode(Common.FSE)
         logger.debug('set_environ(%s, %s), set' % (varname, path))
     except:
         logger.exception(

@@ -34,7 +34,7 @@ import FileUtilities
 import General
 import Special
 
-from Common import _
+from Common import _, FSE
 
 if 'posix' == os.name:
     re_flags = 0
@@ -97,7 +97,7 @@ class FileActionProvider(ActionProvider):
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self.path = os.path.expanduser(FileUtilities.expandvars(
-            action_element.getAttribute('path')))
+            action_element.getAttribute('path').encode(FSE)))
         if 'nt' == os.name and self.path:
             # convert forward slash to backslash for compatibility with getsize()
             # and for display.  Do not convert an empty path, or it will become

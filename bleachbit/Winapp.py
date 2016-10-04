@@ -34,7 +34,7 @@ import re
 import traceback
 
 from Action import Delete, Winreg
-from Common import _
+from Common import _, FSE
 from xml.dom.minidom import parseString
 
 
@@ -327,12 +327,12 @@ class Winapp:
                 # just one
                 exclude_str = excludekeys[0]
             excludekeysxml = 'nwholeregex="%s"' % exclude_str
-        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
-            (search, xml_escape(path), regex, excludekeysxml)
+        action_str = '<?xml version="1.0" encoding="%s"?><option command="delete" search="%s" path="%s" %s %s/>' % \
+                     (FSE, search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            action_str = '<option command="delete" search="file" path="%s"/>' % xml_escape(
-                dirname)
+            action_str = '<?xml version="1.0" encoding="%s"?><option command="delete" search="file" path="%s"/>' % \
+                         (FSE, xml_escape(dirname))
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):

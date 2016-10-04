@@ -32,6 +32,7 @@ from xml.dom.minidom import parseString
 
 sys.path.append('.')
 from bleachbit.Action import *
+from bleachbit.Common import FSE
 
 import common
 
@@ -162,8 +163,8 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
                         # test not needed on this OS
                         os.remove(filename)
                         continue
-                action_str = '<action command="%s" search="file" path="%s" />' % \
-                    (command, filename)
+                action_str = '<?xml version="1.0" encoding="%s"?><action command="%s" search="file" path="%s" />' % \
+                    (FSE, command, filename)
                 self._test_action_str(action_str)
                 self.assertNotExists(filename)
 

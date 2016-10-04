@@ -44,8 +44,8 @@ def diagnostic_info():
         pass
     s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
     s += "\nlocale_dir = %s" % Common.locale_dir
-    s += "\noptions_dir = %s" % Common.options_dir
-    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir
+    s += "\noptions_dir = %s" % Common.options_dir.decode(Common.FSE)
+    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir.decode(Common.FSE)
     s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
@@ -54,8 +54,11 @@ def diagnostic_info():
         envs = ('APPDATA', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
-        s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
+        if os.getenv(env):
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(Common.FSE))
+        else:
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
+    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~').decode(Common.FSE)
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(

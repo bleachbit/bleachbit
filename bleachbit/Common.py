@@ -155,6 +155,7 @@ if 'posix' == os.name:
 #
 # gettext
 #
+FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:

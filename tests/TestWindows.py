@@ -39,6 +39,7 @@ if 'win32' == sys.platform:
 sys.path.append('.')
 from bleachbit.FileUtilities import extended_path
 from bleachbit.Windows import *
+from bleachbit.Common import FSE
 
 
 def put_files_into_recycle_bin():
@@ -249,13 +250,13 @@ class WindowsTestCase(unittest.TestCase):
     def test_setup_environment(self):
         """Unit test for setup_environment"""
         setup_environment()
-        envs = ['commonappdata', 'documents',
-                'localappdata', 'music', 'pictures', 'video']
+        envs = ['commonappdata', 'documents', 'music', 'pictures', 'video',
+                'localappdata']
         version = platform.uname()[3][0:3]
         if version >= '6.0':
             envs.append('localappdatalow')
         for env in envs:
-            self.assert_(os.path.exists(os.environ[env]))
+            self.assert_(os.path.exists(os.environ[env].decode(FSE)))
 
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""
