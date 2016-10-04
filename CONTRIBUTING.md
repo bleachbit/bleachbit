@@ -11,7 +11,7 @@ Most bug reports are managed in [Launchpad](http://bugs.launchpad.net/) for hist
 
 Please file issues in GitHub in these exceptions:
 * You plan to commit the code that will close the issue.
-* The issue is specific to one of the special repositories (i.e., CleanerML, Winapp2.ini, CleanerML).
+* The issue is specific to one of the special repositories (i.e., CleanerML, Winapp2.ini, bleachbit-misc).
 
 Most users should use Launchpad to file bug reports for the BleachBit application.
 
