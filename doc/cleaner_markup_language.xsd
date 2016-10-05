@@ -170,6 +170,7 @@
           </xs:complexType>
         </xs:element>
       </xs:choice>
+      <xs:attribute name="directoryregex" type="xs:string" use="optional"/>
       <xs:attribute name="location" type="xs:string" use="optional" default="."/>
       <xs:attribute name="filter" type="xs:string" use="optional" default="*"/>
     </xs:complexType>
