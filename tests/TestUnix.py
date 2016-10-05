@@ -26,6 +26,7 @@ Test case for module Unix
 
 import os
 import sys
+import tempfile
 import unittest
 
 sys.path.append('.')
@@ -96,16 +97,17 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                  ('en_US', 'en'),
                  ('en_US@piglatin', 'en'),
                  ('en_US.utf8', 'en'),
+                 ('ko_KR.eucKR', 'ko'),
                  ('pl.ISO8859-2', 'pl'),
-                 ('sr_Latn', 'sr'),
                  ('zh_TW.Big5', 'zh')]
         import re
         regex = re.compile('^' + Locales.localepattern + '$')
         for test in tests:
             m = regex.match(test[0])
+            self.assert_(m is not None, 'expected positive match for ' + test[0])
             self.assertEqual(m.group("locale"), test[1])
-        for test in ['default', 'C', 'English']:
-            self.assertTrue(regex.match('test') is None)
+        for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
+            self.assert_(regex.match(test) is None, 'expected negative match for '+test)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -121,7 +123,55 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assert_(path.find('/en_') == -1)
             counter += 1
         self.assert_(
-            counter > 0, 'Zero files deleted by localization cleaner.  This may be an error unless you really deleted all the files.')
+            counter > 0, 'Zero files deleted by localization cleaner.'
+                         'This may be an error unless you really deleted all the files.')
+
+    def test_fakelocalizationdirs(self):
+        """Create a faked localization hierarchy and clean it afterwards"""
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-localizations')
+
+        keepdirs = [
+            'important_dontdelete',
+            'important_dontdelete/ru',
+            'delete',
+            'delete/locale',
+            'delete/locale/en',
+            'delete/dummyfiles',
+            'foobar',
+            'foobar/locale']
+        nukedirs = [
+            'delete/locale/ru',
+            'foobar/locale/ru']
+        keepfiles = [
+            'delete/dummyfiles/dontdeleteme_ru.txt',
+            'important_dontdelete/exceptthisone_ru.txt',
+            'delete/dummyfiles/en.txt',
+            'delete/dummyfiles/ru.dic']
+        nukefiles = [
+            'delete/dummyfiles/ru.txt',
+            'delete/locale/ru_RU.UTF8.txt']
+        for path in keepdirs + nukedirs:
+            os.mkdir(os.path.join(dirname, path))
+        for path in keepfiles + nukefiles:
+            open(os.path.join(dirname, path), 'w').close()
+
+        configxml = '<path directoryregex="^.*$">' \
+                    '  <path directoryregex="^(locale|dummyfiles)$">' \
+                    '    <path location="." filter="*" />' \
+                    '    <regexfilter postfix="\.txt" />' \
+                    '  </path>' \
+                    '</path>'
+        from xml.dom.minidom import parseString
+        config = parseString(configxml)
+        locales = Locales()
+        locales._paths = LocaleCleanerPath(dirname)
+        locales.add_xml(config.firstChild, None)
+        # normpath because paths may contain ./
+        deletelist = [os.path.normpath(path) for path in locales.localization_paths(['en', 'de'])]
+        for path in keepdirs + keepfiles:
+            self.assert_(os.path.join(dirname, path) not in deletelist)
+        for path in nukedirs + nukefiles:
+            self.assert_(os.path.join(dirname, path) in deletelist)
 
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""

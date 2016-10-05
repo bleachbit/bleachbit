@@ -39,11 +39,68 @@ import FileUtilities
 import General
 
 
-class Locales:
+class LocaleCleanerPath:
+    """This represents a path with either a specific folder name or a folder name pattern.
+    It also may contain several compiled regex patterns for localization items (folders or files)
+    and additional LocaleCleanerPaths that get traversed when asked to supply a list of localization
+    items"""
 
+    def __init__(self, location):
+        if location is None:
+            raise RuntimeError("location is none")
+        self.pattern = location
+        self.children = []
+
+    def add_child(self, child):
+        """Adds a child LocaleCleanerPath"""
+        self.children.append(child)
+        return child
+
+    def add_path_filter(self, pre, post):
+        """Adds a filter consisting of a prefix and a postfix
+        (e.g. 'foobar_' and '\.qm' to match 'foobar_en_US.utf-8.qm)"""
+        try:
+            regex = re.compile('^' + pre + Locales.localepattern + post + '$')
+        except Exception as errormsg:
+            raise RuntimeError("Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
+        self.add_child(regex)
+
+    def get_subpaths(self, basepath):
+        """Returns direct subpaths for this object, i.e. either the named subfolder or all
+        subfolders matching the pattern"""
+        if isinstance(self.pattern, re._pattern_type):
+            return (os.path.join(basepath, p) for p in os.listdir(basepath)
+                    if self.pattern.match(p) and os.path.isdir(os.path.join(basepath, p)))
+        else:
+            path = os.path.join(basepath, self.pattern)
+            return [path] if os.path.isdir(path) else []
+
+    def get_localizations(self, basepath):
+        """Returns all localization items for this object and all descendant objects"""
+        for path in self.get_subpaths(basepath):
+            for child in self.children:
+                if isinstance(child, LocaleCleanerPath):
+                    for res in child.get_localizations(path):
+                        yield res
+                elif isinstance(child, re._pattern_type):
+                    for element in os.listdir(path):
+                        match = child.match(element)
+                        if match is not None:
+                            yield (match.group('locale'), os.path.join(path, element))
+
+
+class Locales:
     """Find languages and localization files"""
 
-    localepattern = r"(?P<locale>[a-z]{2,3})(?:[_-][a-zA-Z]{2,4})?(?:\.[a-zA-Z0-9-]*)?(?:@[a-zA-Z]*)?"
+    # The regular expression to match locale strings and extract the langcode.
+    # See test_locale_regex() in tests/TestUnix.py for examples
+    # This doesn't match all possible valid locale strings to avoid
+    # matching filenames you might want to keep, e.g. the regex
+    # to match jp.eucJP might also match jp.importantfileextension
+    localepattern =\
+        r'(?P<locale>[a-z]{2,3})' \
+        r'(?:[_-][A-Z]{2,4}(?:\.[\w]+[\d-]+|@\w+)?)?' \
+        r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
     native_locale_names = \
         {'aa': 'Afaraf',
@@ -261,76 +318,64 @@ class Locales:
          'zh_TW': '中文',
          'zu': 'isiZulu'}
 
-    _paths = []
-
     def __init__(self):
-        pass
+        self._paths = LocaleCleanerPath(location='/')
 
-    def add_xml(self, xml_node):
-        self._paths.append(xml_node)
+    def add_xml(self, xml_node, parent=None):
+        """Parses the xml data and adds nodes to the LocaleCleanerPath-tree"""
+
+        if parent is None:
+            parent = self._paths
+        if xml_node.ELEMENT_NODE != xml_node.nodeType:
+            return
+
+        # if a pattern is supplied, we recurse into all matching subdirectories
+        if 'regexfilter' == xml_node.nodeName:
+            pre = xml_node.getAttribute('prefix') or ''
+            post = xml_node.getAttribute('postfix') or ''
+            parent.add_path_filter(pre, post)
+        elif 'path' == xml_node.nodeName:
+            if xml_node.hasAttribute('directoryregex'):
+                pattern = xml_node.getAttribute('directoryregex')
+                if '/' in pattern:
+                    raise RuntimeError('directoryregex may not contain slashes.')
+                pattern = re.compile(pattern)
+                parent = parent.add_child(LocaleCleanerPath(pattern))
+
+            # a combination of directoryregex and filter could be too much
+            else:
+                if xml_node.hasAttribute("location"):
+                    # if there's a filter attribute, it should apply to this path
+                    parent = parent.add_child(LocaleCleanerPath(xml_node.getAttribute('location')))
+
+                if xml_node.hasAttribute('filter'):
+                    userfilter = xml_node.getAttribute('filter')
+                    if 1 != userfilter.count('*'):
+                        raise RuntimeError(
+                            "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
+
+                    # we can't use re.escape, because it escapes too much
+                    (pre, post) = (re.sub(r'([\[\]()^$.])', r'\\\1', p)
+                                   for p in userfilter.split('*'))
+                    parent.add_path_filter(pre, post)
+        else:
+            raise RuntimeError(
+                "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xml_node.nodeName)
+
+        # handle child nodes
+        for child_xml in xml_node.childNodes:
+            self.add_xml(child_xml, parent)
 
     def localization_paths(self, locales_to_keep):
+        """Returns all localization items matching the previously added xml configuration"""
         if not locales_to_keep:
             raise RuntimeError('Found no locales to keep')
         purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
                                        if locale not in locales_to_keep))
 
-        for xml_node in self._paths:
-            for (locale, path) in Locales.handle_path('', xml_node):
-                if locale in purgeable_locales:
-                    yield path
-
-    @staticmethod
-    def handle_path(path, xmldata):
-        """Extracts paths and filters from the supplied xml tree and yields matching files"""
-
-        if xmldata.ELEMENT_NODE != xmldata.nodeType:
-            return
-        if not xmldata.nodeName in ['path', 'regexfilter']:
-            raise RuntimeError(
-                "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xmldata.nodeName)
-        location = xmldata.getAttribute('location') or '.'
-        if '.' != location:
-            path = path + location
-        if not path.endswith('/'):
-            path += '/'
-
-        if not os.path.isdir(path):
-            return
-
-        pre = None
-        post = None
-        if 'regexfilter' == xmldata.nodeName:
-            pre = xmldata.getAttribute('prefix') or ''
-            post = xmldata.getAttribute('postfix') or ''
-        if 'path' == xmldata.nodeName:
-            userfilter = xmldata.getAttribute('filter')
-            if not userfilter and not xmldata.hasChildNodes():
-                userfilter = '*'
-            if userfilter:
-                if 1 != userfilter.count('*'):
-                    raise RuntimeError(
-                        "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
-
-                # we can't use re.escape, because it escapes too much
-                (pre, post) = (re.sub(r'([\[\]()^$.])', r'\\\1', p)
-                               for p in userfilter.split('*'))
-            # handle child nodes
-            for child in xmldata.childNodes:
-                for (locale, subpath) in Locales.handle_path(path, child):
-                    yield (locale, subpath)
-        if pre is not None and post is not None:
-            try:
-                re.compile(pre)
-                re.compile(post)
-            except Exception as errormsg:
-                raise RuntimeError(
-                    "Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
-            regex = re.compile('^' + pre + Locales.localepattern + post + '$')
-            for subpath in os.listdir(path):
-                match = regex.match(subpath)
-                if match is not None:
-                    yield (match.group("locale"), path + subpath)
+        for (locale, path) in self._paths.get_localizations('/'):
+            if locale in purgeable_locales:
+                yield path
 
 
 def apt_autoclean():
