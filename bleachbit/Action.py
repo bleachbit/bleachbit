@@ -97,7 +97,7 @@ class FileActionProvider(ActionProvider):
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self.path = os.path.expanduser(FileUtilities.expandvars(
-            action_element.getAttribute('path').encode(FSE)))
+            action_element.getAttribute('path').encode(FSE))).decode(FSE)
         if 'nt' == os.name and self.path:
             # convert forward slash to backslash for compatibility with getsize()
             # and for display.  Do not convert an empty path, or it will become
