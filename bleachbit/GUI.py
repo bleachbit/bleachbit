@@ -26,6 +26,8 @@ import threading
 import time
 import types
 import warnings
+import urlparse
+import urllib
 
 warnings.simplefilter('error')
 import pygtk
@@ -638,6 +640,41 @@ class GUI:
         menu.popup(None, None, None, event.button, event.time)
         return True
 
+    def cb_drag_motion(self, widget, drag_context, x, y, time):
+        drag_context.drag_status(gtk.gdk.ACTION_MOVE, time)
+        return True
+
+    def cb_drag_data_received(self, widget, context, x, y, selection, target_type, time):
+        if target_type == self.TARGET_TYPE_TEXT:
+            assert(type(selection.data) is str)
+            file_urls = selection.data.split("\n")
+            file_paths = []
+            for file_url in file_urls:
+                # strip needed to remove "\r"
+                file_url = file_url.strip()
+                parsed_url = urlparse.urlparse(file_url)
+                if parsed_url.scheme == "file":
+                    file_path = urllib.url2pathname(parsed_url.path)
+                    file_path_unicode = file_path.decode("utf-8")
+                    file_paths.append(file_path_unicode)
+
+            self.shred_paths(file_paths)
+
+    def setup_drag_n_drop_widget(self, widget):
+        targets = [ ( "text/uri-list", 0, self.TARGET_TYPE_TEXT ) ]
+
+        widget.connect("drag_motion", self.cb_drag_motion)
+        widget.connect("drag_data_received", self.cb_drag_data_received)
+
+        widget.drag_dest_set(gtk.DEST_DEFAULT_DROP, targets, gtk.gdk.ACTION_MOVE)
+
+    def setup_drag_n_drop(self):
+        self.TARGET_TYPE_TEXT = 80
+
+        self.setup_drag_n_drop_widget(self.window)
+        # need to update textview drag&drop settings too
+        self.setup_drag_n_drop_widget(self.textview)
+
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
         if type(status) is float:
@@ -828,6 +865,9 @@ class GUI:
         # add status bar
         self.status_bar = gtk.Statusbar()
         vbox.pack_start(self.status_bar, False)
+
+        # setup drag&drop
+        self.setup_drag_n_drop()
 
         # done
         self.window.show_all()
