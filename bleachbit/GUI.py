@@ -26,8 +26,6 @@ import threading
 import time
 import types
 import warnings
-import urlparse
-import urllib
 
 warnings.simplefilter('error')
 import pygtk
@@ -646,6 +644,8 @@ class GUI:
 
     def cb_drag_data_received(self, widget, context, x, y, selection, target_type, time):
         if target_type == self.TARGET_TYPE_TEXT:
+            import urlparse
+            import urllib
             assert(type(selection.data) is str)
             file_urls = selection.data.split("\n")
             file_paths = []
