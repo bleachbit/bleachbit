@@ -661,12 +661,13 @@ class GUI:
             self.shred_paths(file_paths)
 
     def setup_drag_n_drop_widget(self, widget):
-        targets = [ ( "text/uri-list", 0, self.TARGET_TYPE_TEXT ) ]
+        targets = [("text/uri-list", 0, self.TARGET_TYPE_TEXT)]
 
         widget.connect("drag_motion", self.cb_drag_motion)
         widget.connect("drag_data_received", self.cb_drag_data_received)
 
-        widget.drag_dest_set(gtk.DEST_DEFAULT_DROP, targets, gtk.gdk.ACTION_MOVE)
+        widget.drag_dest_set(gtk.DEST_DEFAULT_DROP,
+                             targets, gtk.gdk.ACTION_MOVE)
 
     def setup_drag_n_drop(self):
         self.TARGET_TYPE_TEXT = 80
