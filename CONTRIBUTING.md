@@ -29,7 +29,7 @@ The modernization branch supports GTK+ 3, but it is not yet ready. See the GitHu
 
 ## Procedure for creating and submitting patch
 
-Following this process will help your changes get merged sooner. If you plan to write a major change, please consider first emailing to discuss.
+Following this process will help your changes get merged sooner. If you plan to write a major change, please consider first opening a GitHub issue to discuss.
 
 * Log in to GitHub.
 * Fork the right BleachBit repository, as there are several repositories.
