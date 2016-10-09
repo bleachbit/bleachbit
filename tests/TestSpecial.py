@@ -366,7 +366,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.assert_(os.path.exists(path))
         urls = bleachbit.Special.get_chrome_bookmark_urls(path)
         self.assertEqual(
-            urls, [u'http://www.slashdot.org/', u'https://www.bleachbit.org/'])
+            urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
 
         os.unlink(path)
 
