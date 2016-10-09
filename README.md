@@ -21,8 +21,8 @@ For information regarding the command line interface, run:
 ## Links
 
 * [BleachBit home 
-page](http://www.bleachbit.org)
-* [Support](http://www.bleachbit.org/help)
+page](https://www.bleachbit.org)
+* [Support](https://www.bleachbit.org/help)
 * [Documentation](https://bleachbit.github.io/docs/)
 
 ### Development

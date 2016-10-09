@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://www.bleachbit.org
+# https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ def process_cmd_line():
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate usage, options, cleaner, and option.
     # More information about the command line is here
-    # http://www.bleachbit.org/documentation/command-line
+    # https://www.bleachbit.org/documentation/command-line
     usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action="store_true",

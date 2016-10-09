@@ -3,7 +3,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://www.bleachbit.org
+# https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -923,7 +923,7 @@ class GUI:
         if 'nt' == os.name:
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://www.bleachbit.org/forum/074-fails-errors
+            # https://www.bleachbit.org/forum/074-fails-errors
             try:
                 import sqlite3
             except ImportError, e:

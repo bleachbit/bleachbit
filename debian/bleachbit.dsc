@@ -4,7 +4,7 @@ Binary: bleachbit
 Architecture: all
 Version: 1.13
 Maintainer: Andrew Ziem <andrew@bleachbit.org>
-Homepage: http://www.bleachbit.org
+Homepage: https://www.bleachbit.org
 Standards-Version: 3.7.3
 Build-Depends: debhelper (>= 4)
 Build-Depends-Indep: python (>= 2.5), gettext, desktop-file-utils

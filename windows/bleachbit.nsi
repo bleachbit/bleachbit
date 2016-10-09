@@ -2,7 +2,7 @@
 ;
 ;  BleachBit
 ;  Copyright (C) 2008-2016 Andrew Ziem
-;  http://www.bleachbit.org
+;  https://www.bleachbit.org
 ;
 ;  This program is free software: you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
   !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site"
-  !define MUI_FINISHPAGE_LINK_LOCATION "http://www.bleachbit.org"
+  !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -174,7 +174,7 @@ Section Core (Required)
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "DisplayVersion" "${VERSION}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "HelpLink" "http://www.bleachbit.org/help"
+        "HelpLink" "https://www.bleachbit.org/help"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "NoModify" "1"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
@@ -184,9 +184,9 @@ Section Core (Required)
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "UninstallString" "$INSTDIR\uninstall.exe"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "URLInfoAbout" "http://www.bleachbit.org/"
+        "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "URLUpdateInfo" "http://www.bleachbit.org/download"
+        "URLUpdateInfo" "https://www.bleachbit.org/download"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
         "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
 SectionEnd
@@ -200,7 +200,7 @@ SectionGroup /e Shortcuts
             "$INSTDIR\${prodname}.exe" \
             "--no-uac --gui"
         Call RefreshShellIcons
-        WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "http://www.bleachbit.org/"
+        WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
 
     Section "Desktop" SectionDesktop

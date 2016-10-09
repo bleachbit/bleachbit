@@ -2,7 +2,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2016 Andrew Ziem
-# http://www.bleachbit.org
+# https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -354,7 +354,7 @@ def get_autostart_path():
         startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
     except:
         # example of failure
-        # http://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
+        # https://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
         logger = logging.getLogger(__name__)
         logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
