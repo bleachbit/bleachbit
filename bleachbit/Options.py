@@ -54,7 +54,6 @@ def path_to_option(pathname):
         pathname = pathname[0] + pathname[2:]
     return pathname
 
-
 class Options:
 
     """Store and retrieve user preferences"""
@@ -98,6 +97,7 @@ class Options:
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
+                pathname = pathname.decode('utf-8')
             exists = False
             try:
                 exists = os.path.lexists(pathname)
@@ -122,11 +122,11 @@ class Options:
             option = option[0] + option[2:]
         if option in boolean_keys:
             return self.config.getboolean(section, option)
-        return self.config.get(section, option)
+        return self.config.get(section, option.encode('utf-8'))
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
-        return self.get(path_to_option(pathname).encode(Common.FSE), 'hashpath')
+        return self.get(path_to_option(pathname), 'hashpath')
 
     def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
@@ -239,13 +239,13 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key, str(value))
+        self.config.set(section, key.encode('utf-8'), str(value))
         if commit:
             self.__flush()
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
-        self.set(path_to_option(pathname).encode(Common.FSE), hashvalue, 'hashpath')
+        self.set(path_to_option(pathname), hashvalue, 'hashpath')
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""

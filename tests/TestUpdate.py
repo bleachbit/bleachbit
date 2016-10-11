@@ -97,7 +97,7 @@ class UpdateTestCase(unittest.TestCase):
         from bleachbit.Common import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
-            print 'note: deleting %s' % fn
+            print 'note: deleting %s' % fn.encode(Common.FSE)
             os.unlink(fn)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'

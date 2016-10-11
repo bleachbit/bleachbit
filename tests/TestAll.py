@@ -59,7 +59,8 @@ suites = [TestAction.suite(),
           TestRecognizeCleanerML.suite(),
           TestSpecial.suite(),
           TestUpdate.suite(),
-          TestWorker.suite()]
+          TestWorker.suite()
+          ]
 
 if 'posix' == os.name:
     import TestUnix

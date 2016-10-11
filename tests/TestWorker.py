@@ -32,6 +32,7 @@ import TestCleaner
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
+from bleachbit.Common import expanduser
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -286,7 +287,7 @@ class WorkerTestCase(unittest.TestCase):
         class MyDeepScan:
 
             def add_search(self, dirname, regex):
-                self_assertequal(dirname, os.path.expanduser('~'))
+                self_assertequal(dirname, expanduser('~'))
                 self_assert(
                     regex in ('^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'))
 

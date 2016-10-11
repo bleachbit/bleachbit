@@ -58,7 +58,7 @@ def diagnostic_info():
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(Common.FSE))
         else:
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~').decode(Common.FSE)
+    s += "\nos.path.expanduser('~') = %s" % Common.expanduser('~').decode(Common.FSE)
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(

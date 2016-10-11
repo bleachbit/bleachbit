@@ -40,7 +40,7 @@ class AssertFile:
 
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
-        from bleachbit.FileUtilities import expandvars
+        from bleachbit.Common import expandvars
         path = expandvars(path)
         if not func(self.getTestPath(path)):
             raise AssertionError(

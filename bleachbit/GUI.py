@@ -36,7 +36,8 @@ warnings.simplefilter('default')
 
 from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url, portable_mode
+    online_update_notification_enabled, release_notes_url, portable_mode, \
+    expanduser
 from Cleaner import backends, register_cleaners
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -889,7 +890,7 @@ class GUI:
                 logger = logging.getLogger(__name__)
                 logger.exception(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if 'posix' == os.name and os.path.expanduser('~') == '/root':
+        if 'posix' == os.name and expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
 

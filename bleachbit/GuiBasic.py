@@ -29,7 +29,7 @@ import os
 if 'nt' == os.name:
     import Windows
 
-from Common import _
+from Common import _, expanduser
 
 
 def browse_folder(parent, title, multiple, stock_button):
@@ -48,7 +48,7 @@ def browse_folder(parent, title, multiple, stock_button):
                                         stock_button, gtk.RESPONSE_OK),
                                     action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
     chooser.set_select_multiple(multiple)
-    chooser.set_current_folder(os.path.expanduser('~'))
+    chooser.set_current_folder(expanduser('~'))
     resp = chooser.run()
     if multiple:
         ret = chooser.get_filenames()
@@ -72,7 +72,7 @@ def browse_file(parent, title):
                                     parent=parent,
                                     action=gtk.FILE_CHOOSER_ACTION_OPEN,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-    chooser.set_current_folder(os.path.expanduser('~'))
+    chooser.set_current_folder(expanduser('~'))
     resp = chooser.run()
     path = chooser.get_filename()
     chooser.destroy()
@@ -95,7 +95,7 @@ def browse_files(parent, title):
                                     action=gtk.FILE_CHOOSER_ACTION_OPEN,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_DELETE, gtk.RESPONSE_OK))
     chooser.set_select_multiple(True)
-    chooser.set_current_folder(os.path.expanduser('~'))
+    chooser.set_current_folder(expanduser('~'))
     resp = chooser.run()
     paths = chooser.get_filenames()
     chooser.destroy()

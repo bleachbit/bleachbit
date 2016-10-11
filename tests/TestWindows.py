@@ -244,8 +244,10 @@ class WindowsTestCase(unittest.TestCase):
                  (True, 'WinLogOn.exe'),
                  (False, 'doesnotexist.exe'))
         for test in tests:
-            self.assertEqual(test[0], is_process_running(
-                test[1]), 'Expecting is_process_running(%s) = %s' % (test[1], test[0]))
+            self.assertEqual(test[0],
+                             is_process_running(test[1]),
+                             'Expecting is_process_running(%s) = %s' %
+                             (test[1], test[0]))
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""
@@ -256,7 +258,7 @@ class WindowsTestCase(unittest.TestCase):
         if version >= '6.0':
             envs.append('localappdatalow')
         for env in envs:
-            self.assert_(os.path.exists(os.environ[env].decode(FSE)))
+            self.assert_(os.path.exists(os.environ[env].decode('utf8')))
 
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""
