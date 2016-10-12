@@ -101,18 +101,18 @@ def expandvars(var):
         final = var
 
     if 'posix' == os.name:
-        final = os.path.expandvars(var)
+        final = os.path.expandvars(final)
     elif 'nt' == os.name:
         if (2, 5) == sys.version_info[0:2]:
             import backport
-            final = backport.expandvars(var)
+            final = backport.expandvars(final)
         else:
             import _winreg
             if final.startswith('${'):
                 final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
                                lambda x: '%%%s%%' % x.group(1),
                                final)
-            elif var.startswith('$'):
+            elif final.startswith('$'):
                 final = re.sub(r'\$(.*?)(?=$|\\)',
                                lambda x: '%%%s%%' % x.group(1),
                                final)
@@ -127,14 +127,18 @@ def expanduser(path):
     Return the argument with an initial component of "~" or "~user" replaced by
     that user's home directory.
     """
-    final = path
+    if isinstance(path, str):
+        final = path.decode('utf-8')
+    else:
+        final = path
+
     if 'posix' == os.name:
-        final = os.path.expanduser(path)
+        final = os.path.expanduser(final)
     elif 'nt' == os.name:
         if (2, 5) == sys.version_info[0:2]:
             import backport
-            final = backport.expandvars(path)
-        elif path == '~' or path.startswith('~/') or path.startswith('~user/'):
+            final = backport.expandvars(final)
+        elif final == '~' or final.startswith('~/') or final.startswith('~user/'):
             found = False
             for env in [u'%USERPROFILE%', u'%HOME%']:
                 if env in os.environ:
@@ -145,7 +149,7 @@ def expanduser(path):
                 h_drive = expandvars(u'%HOMEDRIVE%')
                 h_path = expandvars(u'%HOMEPATH%')
                 home = os.path.join(h_drive, h_path)
-            final = path.replace('~user/', '')
+            final = final.replace('~user/', '')
             final = final.replace('~/', '')
             final = final.replace('~', '')
             final = os.path.join(home, final)
