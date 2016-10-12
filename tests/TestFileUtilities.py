@@ -202,10 +202,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test an existing directory that usually exists
         dirname = expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
-            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
-            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
             self.assert_(not os.path.isdir(filename))
 
