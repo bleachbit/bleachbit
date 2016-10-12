@@ -95,16 +95,28 @@ def expandvars(var):
     Return the argument with environment variables expanded. Substrings of the
     form $name or ${name} or %name% are replaced by the value of environment
     variable name."""
-    final = var
+    if isinstance(var, str):
+        final = var.decode('utf-8')
+    else:
+        final = var
+
     if 'posix' == os.name:
         final = os.path.expandvars(var)
     elif 'nt' == os.name:
-        import _winreg
-        if var.startswith('${'):
-            var = re.sub(r'\$\{(.*?)\}(?=$|\\)', lambda x: '%%%s%%' % x.group(1), var)
-        elif var.startswith('$'):
-            var = re.sub(r'\$(.*?)(?=$|\\)', lambda x: '%%%s%%' % x.group(1), var)
-        final = _winreg.ExpandEnvironmentStrings(unicode(var))
+        if (2, 5) == sys.version_info[0:2]:
+            import backport
+            final = backport.expandvars(var)
+        else:
+            import _winreg
+            if final.startswith('${'):
+                final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
+                               lambda x: '%%%s%%' % x.group(1),
+                               final)
+            elif var.startswith('$'):
+                final = re.sub(r'\$(.*?)(?=$|\\)',
+                               lambda x: '%%%s%%' % x.group(1),
+                               final)
+            final = _winreg.ExpandEnvironmentStrings(final)
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.

@@ -41,7 +41,7 @@ import tempfile
 import time
 import ConfigParser
 import Common
-from Common import expanduser, expandvars
+from Common import expanduser
 
 if 'nt' == os.name:
     import pywintypes
@@ -355,10 +355,14 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = expanduser(expandvars(os.path.join(pathname1, pathname2)))
+    pathname3 = expanduser(Common.expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
+
+
+def expandvars(path):
+    return Common.expandvars(path)
 
 
 def extended_path(path):
@@ -444,7 +448,7 @@ def guess_overwrite_paths():
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = expandvars('$TMP')
+        localtmp = Common.expandvars('$TMP')
         logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)

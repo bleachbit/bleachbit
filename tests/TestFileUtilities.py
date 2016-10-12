@@ -435,6 +435,11 @@ class FileUtilitiesTestCase(unittest.TestCase):
         if 'nt' == os.name:
             expand_glob_join('c:\windows', '*.exe')
 
+    def test_expandvars(self):
+        """Unit test for expandvars()."""
+        expanded = expandvars('$HOME')
+        self.assertTrue(isinstance(expanded, unicode))
+
     def test_free_space(self):
         """Unit test for free_space()"""
         home = expanduser('~')
