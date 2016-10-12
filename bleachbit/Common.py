@@ -29,7 +29,6 @@ import logging
 import os
 import re
 import sys
-import _winreg
 
 APP_VERSION = "1.13"
 APP_NAME = "BleachBit"
@@ -100,6 +99,7 @@ def expandvars(var):
     if 'posix' == os.name:
         final = os.path.expandvars(var)
     elif 'nt' == os.name:
+        import _winreg
         if var.startswith('${'):
             var = re.sub(r'\$\{(.*?)\}(?=$|\\)', lambda x: '%%%s%%' % x.group(1), var)
         elif var.startswith('$'):
