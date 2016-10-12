@@ -375,17 +375,8 @@ def extended_path(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        from ctypes import c_ulong, byref, windll
-        if isinstance(pathname, str):
-            pathname = pathname.decode(Common.FSE)
-        freeBytesAvailable = c_ulong()
-        totalNumberOfBytes = c_ulong()
-        totalNumberOfFreeBytes = c_ulong()
-        windll.kernel32.GetDiskFreeSpaceExW(pathname,
-                                            byref(freeBytesAvailable),
-                                            byref(totalNumberOfBytes),
-                                            byref(totalNumberOfFreeBytes))
-        return totalNumberOfFreeBytes.value
+        import psutil
+        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
