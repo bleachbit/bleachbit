@@ -458,8 +458,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
             if not re.match('([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split('\s+', line)
+            print 'Checking free space for %s' % drive
             bytes_free = int(bytes_free)
-            self.assertEqual(bytes_free, free_space(unicode(drive)))
+            free = free_space(unicode(drive))
+            self.assertEqual(bytes_free, free)
 
     def test_getsize(self):
         """Unit test for method getsize()"""

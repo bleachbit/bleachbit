@@ -376,6 +376,8 @@ def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
         from ctypes import c_ulong, byref, windll
+        if isinstance(pathname, str):
+            pathname = pathname.decode(Common.FSE)
         freeBytesAvailable = c_ulong()
         totalNumberOfBytes = c_ulong()
         totalNumberOfFreeBytes = c_ulong()
