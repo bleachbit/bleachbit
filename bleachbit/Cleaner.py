@@ -30,6 +30,12 @@ from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special, Common
 
 import glob
+try:
+    from gi.repository import Gtk
+    from gi.repository import Gdk
+    HAVE_GTK = True
+except:
+    HAVE_GTK = False
 import logging
 import os.path
 import re
@@ -44,12 +50,6 @@ elif 'nt' == os.name:
 
 # Suppress GTK warning messages while running in CLI #34
 warnings.simplefilter("ignore", Warning)
-
-try:
-    import gtk
-    HAVE_GTK = True
-except:
-    HAVE_GTK = False
 
 # a module-level variable for holding cleaners
 backends = {}
@@ -234,8 +234,7 @@ class Firefox(Cleaner):
         if 'backup' == option_id:
             bookmark_bu_dir = os.path.join(self.profile_dir, 'bookmarkbackups')
             files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.json")
-            files += FileUtilities.expand_glob_join(
-                bookmark_bu_dir, "*.jsonlz4")
+            files += FileUtilities.expand_glob_join(bookmark_bu_dir, "*.jsonlz4")
         # browser cache
         cache_base = None
         if 'posix' == os.name:
@@ -654,7 +653,7 @@ class System(Cleaner):
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
                     if HAVE_GTK:
-                        gtk.RecentManager().purge_items()
+                        Gtk.RecentManager().purge_items()
 
         if 'posix' == os.name and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
@@ -713,10 +712,8 @@ class System(Cleaner):
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
-                gtk.gdk.threads_enter()
-                clipboard = gtk.clipboard_get()
-                clipboard.set_text("")
-                gtk.gdk.threads_leave()
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
 

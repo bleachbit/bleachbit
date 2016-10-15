@@ -31,11 +31,12 @@ if 'nt' == os.name:
     from bleachbit.Windows import setup_environment
     setup_environment()
 
-if 'posix' == os.name:
-    if os.path.isdir('/usr/share/bleachbit'):
-        # This path contains bleachbit/{C,G}LI.py .  This section is
-        # unnecessary if installing BleachBit in site-packages.
-        sys.path.append('/usr/share/')
+from bleachbit.GUI import Bleachbit
+
+if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
+    # This path contains bleachbit/{C,G}LI.py .  This section is
+    # unnecessary if installing BleachBit in site-packages.
+    sys.path.append('/usr/share/')
 
     # XDG base directory specification
     envs = {
@@ -48,15 +49,9 @@ if 'posix' == os.name:
             os.putenv(varname, value)
 
 if 1 == len(sys.argv):
-    import gtk
-    try:
-        gtk.gdk.Screen().get_display()
-    except RuntimeError:
-        print("Could not open X display")
-        sys.exit(1)
-    import bleachbit.GUI
-    gui = bleachbit.GUI.GUI()
-    gtk.main()
+    app = Bleachbit()
+    exit_status = app.run(sys.argv)
+    sys.exit(exit_status)
 else:
     import bleachbit.CLI
     bleachbit.CLI.process_cmd_line()

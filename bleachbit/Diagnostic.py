@@ -39,8 +39,8 @@ def diagnostic_info():
     """Return diagnostic information as a string"""
     s = "BleachBit version %s" % Common.APP_VERSION
     try:
-        import gtk
-        s += '\nGTK version %s' % '.'.join([str(x) for x in gtk.gtk_version])
+        from gi.repository import Gtk
+        s += '\nGTK version {0}.{1}.{2}'.format(Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
     except:
         pass
     s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
