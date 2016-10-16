@@ -66,10 +66,7 @@ class Bleachbit(Gtk.Application):
 
     def build_app_menu(self):
         builder = Gtk.Builder()
-
-        # TOOD: Only works when the bleachbit dir is the working directory
         builder.add_from_file(os.path.join(bleachbit_exe_path,'..','data','app-menu.ui'))
-
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
@@ -309,8 +306,8 @@ class TreeDisplayModel:
         if None == value:
             # if not value given, toggle current value
             value = not model[path][1]
-        assert (type(value) is types.BooleanType)
-        assert (type(model) is Gtk.TreeStore)
+        assert(type(value) is types.BooleanType)
+        assert(type(model) is Gtk.TreeStore)
         cleaner_id = None
         i = path
         if type(i) is str:
@@ -530,14 +527,14 @@ class GUI(Gtk.ApplicationWindow):
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
 
-        assert (isinstance(really_delete, bool))
+        assert(isinstance(really_delete, bool))
         import Worker
         self.start_time = None
         if None == operations:
             operations = {}
             for operation in self.get_selected_operations():
                 operations[operation] = self.get_operation_options(operation)
-        assert (isinstance(operations, dict))
+        assert(isinstance(operations, dict))
         if 0 == len(operations):
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
@@ -585,7 +582,6 @@ class GUI(Gtk.ApplicationWindow):
                 notify.show()
                 notify.set_timeout(10000)
 
-    # TODO: gtk3
     def diagnostic_dialog(self, parent):
         """Show diagnostic information"""
         dialog = Gtk.Dialog(_("System information"), parent)
@@ -707,7 +703,7 @@ class GUI(Gtk.ApplicationWindow):
         if target_type == 80:
             import urlparse
             import urllib
-            assert (type(selection.data) is str)
+            assert(type(selection.data) is str)
             file_urls = selection.data.split("\n")
             file_paths = []
             for file_url in file_urls:
@@ -785,12 +781,12 @@ class GUI(Gtk.ApplicationWindow):
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
         # create the preview button
-        # TRANSLATORS: This is the preview button on the main window.  It
-        # previews changes.
         preview_button = Gtk.Button()
         icon = Gio.ThemedIcon(name='edit-find')
         preview_button.add(Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON))
         preview_button.connect('clicked', lambda *dummy: self.preview_or_run_operations(False))
+        # TRANSLATORS: This is the preview button on the main window.  It
+        # previews changes.
         preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
         # not available in GTK3?
