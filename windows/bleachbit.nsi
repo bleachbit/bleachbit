@@ -199,6 +199,8 @@ SectionGroup /e Shortcuts
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
             "$INSTDIR\${prodname}.exe" \
             "--no-uac --gui"
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
+            "$INSTDIR\${prodname}_console.exe"
         Call RefreshShellIcons
         WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
