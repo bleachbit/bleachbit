@@ -22,12 +22,20 @@
 Code that is commonly shared throughout BleachBit
 """
 
-
 import gettext
 import locale
 import logging
 import os
 import sys
+
+#
+# Config Parser got renamed in Python 3
+#
+if sys.version_info >= (3,0):
+    from configparser import RawConfigParser, NoOptionError, SafeConfigParser
+else:
+    from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
+
 
 APP_VERSION = "1.13"
 APP_NAME = "BleachBit"
