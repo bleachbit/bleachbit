@@ -25,6 +25,7 @@ Store and retrieve user preferences
 
 import os
 import re
+import sys
 import traceback
 import ConfigParser
 
@@ -52,7 +53,6 @@ def path_to_option(pathname):
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
-
 
 class Options:
 
@@ -97,6 +97,7 @@ class Options:
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
+                pathname = pathname.decode('utf-8')
             exists = False
             try:
                 exists = os.path.lexists(pathname)
@@ -121,7 +122,7 @@ class Options:
             option = option[0] + option[2:]
         if option in boolean_keys:
             return self.config.getboolean(section, option)
-        return self.config.get(section, option)
+        return self.config.get(section, option.encode('utf-8'))
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -238,7 +239,7 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key, str(value))
+        self.config.set(section, key.encode('utf-8'), str(value))
         if commit:
             self.__flush()
 

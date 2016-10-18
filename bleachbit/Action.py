@@ -34,7 +34,7 @@ import FileUtilities
 import General
 import Special
 
-from Common import _
+from Common import _, FSE, expanduser, expandvars
 
 if 'posix' == os.name:
     re_flags = 0
@@ -96,8 +96,7 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
-        self.path = os.path.expanduser(FileUtilities.expandvars(
-            action_element.getAttribute('path')))
+        self.path = expanduser(expandvars(action_element.getAttribute('path')))
         if 'nt' == os.name and self.path:
             # convert forward slash to backslash for compatibility with getsize()
             # and for display.  Do not convert an empty path, or it will become
@@ -171,8 +170,7 @@ class FileActionProvider(ActionProvider):
 
         def get_walk_files(top):
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(
-                        expanded, False):
+                for path in FileUtilities.children_in_directory(expanded, False):
                     yield path
 
         if 'deep' == self.search:
@@ -379,7 +377,7 @@ class Process(ActionProvider):
     action_key = 'process'
 
     def __init__(self, action_element):
-        self.cmd = FileUtilities.expandvars(action_element.getAttribute('cmd'))
+        self.cmd = expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
         wait = action_element.getAttribute('wait')

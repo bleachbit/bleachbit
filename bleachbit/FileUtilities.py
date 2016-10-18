@@ -41,6 +41,7 @@ import tempfile
 import time
 import ConfigParser
 import Common
+from Common import expanduser
 
 if 'nt' == os.name:
     import pywintypes
@@ -354,23 +355,14 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = os.path.expanduser(
-        expandvars(os.path.join(pathname1, pathname2)))
+    pathname3 = expanduser(Common.expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
 
 
 def expandvars(path):
-    if (2, 5) == sys.version_info[0:2] and 'nt' == os.name:
-        # Python 2.5 should not change $foo when foo is unknown, but
-        # it actually strips it out.
-        import backport
-        expandvars = backport.expandvars
-        return backport.expandvars(path)
-    else:
-        expandvars = os.path.expandvars
-        return os.path.expandvars(path)
+    return Common.expandvars(path)
 
 
 def extended_path(path):
@@ -387,8 +379,8 @@ def extended_path(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-        return free_bytes
+        import psutil
+        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -449,21 +441,18 @@ def guess_overwrite_paths():
     # ~/.config makes it easy to find them and clean them.
     ret = []
     if 'posix' == os.name:
-        home = os.path.expanduser('~/.cache')
+        home = expanduser('~/.cache')
         if not os.path.exists(home):
-            home = os.path.expanduser("~")
+            home = expanduser("~")
         ret.append(home)
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = expandvars('$TMP')
+        localtmp = Common.expandvars('$TMP')
         logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
-        else:
-            from win32file import GetLongPathName
-            localtmp = GetLongPathName(localtmp)
         from Windows import get_fixed_drives
         for drive in get_fixed_drives():
             if localtmp and same_partition(localtmp, drive):
@@ -505,7 +494,7 @@ def listdir(directory):
             for pathname in listdir(dirname):
                 yield pathname
         return
-    dirname = os.path.expanduser(directory)
+    dirname = expanduser(directory)
     if not os.path.lexists(dirname):
         return
     for filename in os.listdir(dirname):

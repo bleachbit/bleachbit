@@ -26,6 +26,7 @@ import gettext
 import locale
 import logging
 import os
+import re
 import sys
 
 #
@@ -94,11 +95,80 @@ for lf in license_filenames:
         license_filename = lf
         break
 
+# os.path.expandvars does not work well with non-ascii Windows paths.
+# This is a unicode-compatible reimplementation of that function.
+def expandvars(var):
+    """Expand environment variables.
+
+    Return the argument with environment variables expanded. Substrings of the
+    form $name or ${name} or %name% are replaced by the value of environment
+    variable name."""
+    if isinstance(var, str):
+        final = var.decode('utf-8')
+    else:
+        final = var
+
+    if 'posix' == os.name:
+        final = os.path.expandvars(final)
+    elif 'nt' == os.name:
+        if (2, 5) == sys.version_info[0:2]:
+            import backport
+            final = backport.expandvars(final)
+        else:
+            import _winreg
+            if final.startswith('${'):
+                final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
+                               lambda x: '%%%s%%' % x.group(1),
+                               final)
+            elif final.startswith('$'):
+                final = re.sub(r'\$(.*?)(?=$|\\)',
+                               lambda x: '%%%s%%' % x.group(1),
+                               final)
+            final = _winreg.ExpandEnvironmentStrings(final)
+    return final
+
+# Windows paths have to be unicode, but os.path.expanduser does not support it.
+# This is a unicode-compatible reimplementation of that function.
+def expanduser(path):
+    """Expand the path with the home directory.
+
+    Return the argument with an initial component of "~" or "~user" replaced by
+    that user's home directory.
+    """
+    if isinstance(path, str):
+        final = path.decode('utf-8')
+    else:
+        final = path
+
+    if 'posix' == os.name:
+        final = os.path.expanduser(final)
+    elif 'nt' == os.name:
+        if (2, 5) == sys.version_info[0:2]:
+            import backport
+            final = backport.expandvars(final)
+        elif final == '~' or final.startswith('~/') or final.startswith('~user/'):
+            found = False
+            for env in [u'%USERPROFILE%', u'%HOME%']:
+                if env in os.environ:
+                    home = expandvars(env)
+                    found = True
+                    break
+            if not found:
+                h_drive = expandvars(u'%HOMEDRIVE%')
+                h_path = expandvars(u'%HOMEPATH%')
+                home = os.path.join(h_drive, h_path)
+            final = final.replace('~user/', '')
+            final = final.replace('~/', '')
+            final = final.replace('~', '')
+            final = os.path.join(home, final)
+    return final
+
+
 # configuration
 portable_mode = False
 options_dir = None
 if 'posix' == os.name:
-    options_dir = os.path.expanduser("~/.config/bleachbit")
+    options_dir = expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
@@ -106,7 +176,7 @@ elif 'nt' == os.name:
         options_dir = bleachbit_exe_path
     else:
         # installed mode
-        options_dir = os.path.expandvars("${APPDATA}\\BleachBit")
+        options_dir = expandvars("${APPDATA}")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # personal cleaners
@@ -156,13 +226,13 @@ else:
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
 if 'posix' == os.name:
-    autostart_path = os.path.expanduser(
-        '~/.config/autostart/bleachbit.desktop')
+    autostart_path = expanduser('~/.config/autostart/bleachbit.desktop')
 
 
 #
 # gettext
 #
+FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:
@@ -196,6 +266,7 @@ except:
             return singular
         return plural
 
+
 #
 # string decoding
 #
@@ -203,8 +274,6 @@ except:
 # and byte encoded.  This decodes them into Unicode.
 # See <https://bugs.launchpad.net/bleachbit/+bug/1416640>.
 #
-
-
 def decode_str(s):
     """Decode a string into Unicode using the default encoding"""
     if isinstance(s, Exception):
