@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-06-24 19:52-0600\n"
-"PO-Revision-Date: 2016-09-28 10:00+0000\n"
+"PO-Revision-Date: 2016-10-17 11:57+0000\n"
 "Last-Translator: Aleksey Kabanov <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2016-09-30 02:48+0000\n"
-"X-Generator: Launchpad (build 18204)\n"
+"X-Launchpad-Export-Date: 2016-10-18 02:56+0000\n"
+"X-Generator: Launchpad (build 18232)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -255,7 +255,7 @@ msgstr "Удалить торренты (только метаданные, не
 
 #: ../cleaners/transmission.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Статистика"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the file"
@@ -545,13 +545,15 @@ msgstr "Аудиоплеер"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "База данных"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
 "Delete the database, which contain information such as play count and last "
 "played"
 msgstr ""
+"Удалить базу данных, содержащую такую информацию, как число воспроизведений "
+"и последняя воспроизведённая композиция"
 
 #: ../cleaners/google_chrome.xml
 msgid "Session"
