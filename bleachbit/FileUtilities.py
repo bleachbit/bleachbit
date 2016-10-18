@@ -379,8 +379,17 @@ def extended_path(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        import psutil
-        return psutil.disk_usage(pathname).free
+        try:
+            # This works better with UTF-8 paths.
+            import psutil
+            return psutil.disk_usage(pathname).free
+        except:
+            # This works better with Windows XP but not UTF-8.
+            # Deprecated.
+            logger = logging.getLogger(__name__)
+            logger.warning('failed to start psutil (not supported on Windows XP')
+            _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
+            return free_bytes
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
