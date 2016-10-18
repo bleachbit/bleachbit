@@ -24,7 +24,6 @@ Integration specific to Unix-like operating systems
 """
 
 import glob
-import math
 import os
 import re
 import shlex
@@ -376,67 +375,6 @@ class Locales:
                 yield path
 
 
-def apt_autoclean():
-    """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
-        of freed space"""
-
-    if not FileUtilities.exe_exists('apt-get'):
-        raise RuntimeError(_('Executable not found: %s') % 'apt-get')
-
-    args = ['apt-get', 'autoclean']
-
-    process = subprocess.Popen(args,
-                               stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-
-    total_bytes = 0
-
-    while True:
-        line = process.stdout.readline().replace("\n", "")
-        if line.startswith('E: '):
-            raise RuntimeError(line)
-        # Del cups-common 1.3.9-17ubuntu3 [1165kB]
-        match = re.search("^Del .*\[([0-9.]+[a-zA-Z]{2})\]", line)
-        if match:
-            pkg_bytes_str = match.groups(0)[0]
-            pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
-            total_bytes += pkg_bytes
-        if "" == line and process.poll() is not None:
-            break
-
-    return total_bytes
-
-
-def apt_autoremove():
-    """Run 'apt-get autoremove' and return the size (un-rounded, in bytes)
-        of freed space"""
-
-    if not FileUtilities.exe_exists('apt-get'):
-        raise RuntimeError(_('Executable not found: %s') % 'apt-get')
-
-    args = ['apt-get', '--yes', 'autoremove']
-
-    process = subprocess.Popen(args,
-                               stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-
-    total_bytes = 0
-
-    while True:
-        line = process.stdout.readline().replace("\n", "")
-        if line.startswith('E: '):
-            raise RuntimeError(line)
-        # After this operation, 74.7MB disk space will be freed.
-        match = re.search(
-            r", ([0-9.]+[a-zA-Z]{2}) disk space will be freed", line)
-        if match:
-            pkg_bytes_str = match.groups(0)[0]
-            pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
-            total_bytes += pkg_bytes
-        if "" == line and process.poll() is not None:
-            break
-
-    return total_bytes
-
-
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
@@ -622,7 +560,7 @@ def wine_to_linux_path(wineprefix, windows_pathname):
     return os.path.join(wineprefix, windows_pathname)
 
 
-def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMTGTE]?B?', error_line_regexes=[]):
+def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None):
     """Runs a specified command and returns how much space was (reportedly) freed.
     The subprocess shouldn't need any user input and the user should have the
     necessary rights.
@@ -631,7 +569,7 @@ def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMTGTE]?B?', error_lin
     if not FileUtilities.exe_exists(bin):
         raise RuntimeError(_('Executable not found: %s') % bin)
     freed_space_regex = re.compile(freed_space_regex)
-    error_line_regexes = [re.compile(regex) for regex in error_line_regexes]
+    error_line_regexes = [re.compile(regex) for regex in error_line_regexes or []]
 
     output = subprocess.check_output([bin]+args, stderr=subprocess.STDOUT,
                                      universal_newlines=True, env={'LC_ALL':'C'})
@@ -654,37 +592,32 @@ def journald_clean():
     return run_cleaner_cmd('journalctl',['--vacuum-size=1'], freed_space_regex)
 
 
+def apt_autoremove():
+    """Run 'apt-get autoremove' and return the size (un-rounded, in bytes)
+        of freed space"""
+
+    args = ['--yes', 'autoremove']
+    # After this operation, 74.7MB disk space will be freed.
+    return run_cleaner_cmd('apt-get', args, r', ([\d.]+[a-zA-Z]{2}) disk space will be freed', ['^E: '])
+
+
+def apt_autoclean():
+    """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
+        of freed space"""
+    return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
+
+
 def yum_clean():
     """Run 'yum clean all' and return size in bytes recovered"""
     if os.path.exists('/var/run/yum.pid'):
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
         raise RuntimeError(msg)
-    if not FileUtilities.exe_exists('yum'):
-        raise RuntimeError(_('Executable not found: %s') % 'yum')
+
     old_size = FileUtilities.getsizedir('/var/cache/yum')
-    args = ['yum', "--enablerepo=*", 'clean', 'all']
-    p = subprocess.Popen(args, stderr=subprocess.STDOUT,
-                         stdout=subprocess.PIPE)
-    non_blank_line = ""
-    while True:
-        line = p.stdout.readline().replace("\n", "")
-        if len(line) > 2:
-            non_blank_line = line
-        if -1 != line.find('You need to be root'):
-            # Seen before Fedora 13
-            raise RuntimeError(line)
-        if -1 != line.find('Cannot remove rpmdb file'):
-            # Since first in Fedora 13
-            raise RuntimeError(line)
-        if -1 != line.find('Another app is currently holding'):
-            logger.debug("yum: '%s'" % line)
-            old_size = FileUtilities.getsizedir('/var/cache/yum')
-        if "" == line and p.poll() is not None:
-            break
-    logger.debug('yum process return code = %d' % p.returncode)
-    if p.returncode > 0:
-        raise RuntimeError(non_blank_line)
+    args = ['--enablerepo=*', 'clean', 'all']
+    invalid = ['You need to be root', 'Cannot remove rpmdb file']
+    run_cleaner_cmd('yum', args, '^unused regex$', invalid)
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
