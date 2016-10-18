@@ -94,7 +94,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_journald_clean(self):
         if not FileUtilities.exe_exists('journalctl'):
             self.assertRaises(RuntimeError,journald_clean)
-        journald_clean()
+        else:
+            journald_clean()
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
