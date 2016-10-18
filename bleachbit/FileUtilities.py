@@ -479,20 +479,25 @@ def human_to_bytes(human, hformat='si'):
     """Convert a string like 10.2GB into bytes.  By
     default use SI standard (base 10).  The format of the
     GNU command 'du' (base 2) also supported."""
+
     if 'si' == hformat:
-        multiplier = {'B': 1, 'kB': 1000, 'MB': 1000 ** 2,
-                      'GB': 1000 ** 3, 'TB': 1000 ** 4}
-        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([kMGT]{0,1}B)$", human)
+        base = 1000
+        suffixes = 'kMGTE'
     elif 'du' == hformat:
-        multiplier = {'B': 1, 'KB': 1024, 'MB': 1024 ** 2,
-                      'GB': 1024 ** 3, 'TB': 1024 ** 4}
-        matches = re.findall("^([0-9]*)(\.[0-9]{1,2})?([KMGT]{0,1}B)$", human)
+        base = 1024
+        suffixes = 'KMGTE'
     else:
         raise ValueError("Invalid format: '%s'" % hformat)
-    if [] == matches or 2 > len(matches[0]):
-        raise ValueError(
-            "Invalid input for '%s' (hformat='%s')" % (human, hformat))
-    return int(float(matches[0][0] + matches[0][1]) * multiplier[matches[0][2]])
+    matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
+    if matches is None:
+        raise ValueError("Invalid input for '%s' (hformat='%s')" % (human, hformat))
+    (amount, suffix) = matches.groups()
+
+    if '' == suffix:
+        exponent = 0
+    else:
+        exponent = suffixes.find(suffix) + 1
+    return int(float(amount) * base**exponent)
 
 
 def listdir(directory):

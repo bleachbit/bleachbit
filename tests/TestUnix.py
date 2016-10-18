@@ -91,6 +91,11 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.assertTrue(is_running(exe))
         self.assertFalse(is_running('does-not-exist'))
 
+    def test_journald_clean(self):
+        if not FileUtilities.exe_exists('journalctl'):
+            self.assertRaises(RuntimeError,journald_clean)
+        journald_clean()
+
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
         tests = [('en', 'en'),
@@ -178,6 +183,20 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         for path in rotated_logs():
             self.assert_(os.path.exists(path),
                          "Rotated log path '%s' does not exist" % path)
+
+    def test_run_cleaner_cmd(self):
+        self.assertRaises(RuntimeError, run_cleaner_cmd, '/hopethisdoesntexist', [])
+        # test if regexes for invalid lines work
+        self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],
+                          error_line_regexes=['invalid'])
+
+        freed_space_regex = r'^Freed ([\d.]+[kMT]?B)'
+        lines = ['Test line',
+                 'Freed 100B on your hard drive',
+                 'Freed 1.9kB, hooray!',
+                 'Fred 12MB']
+        freed_space = run_cleaner_cmd('echo', ['\n'.join(lines)], freed_space_regex)
+        self.assertEqual(freed_space, 2000)
 
     def test_start_with_computer(self):
         """Unit test for start_with_computer*"""

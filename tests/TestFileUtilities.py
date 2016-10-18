@@ -553,6 +553,27 @@ class FileUtilitiesTestCase(unittest.TestCase):
         for path in guess_overwrite_paths():
             self.assert_(os.path.isdir(path), '%s is not a directory' % path)
 
+    def test_human_to_bytes(self):
+        """Unit test for human_to_bytes()"""
+        self.assertRaises(ValueError, human_to_bytes, '', hformat='invalid')
+
+        invalid = ['Bazillion kB',
+                   '120XB',
+                   '.12MB']
+        for test in invalid:
+            self.assertRaises(ValueError, human_to_bytes, test)
+
+        valid = {'1kB': 1000,
+                 '1.1MB': 1100000,
+                 '12B': 12,
+                 '1.0M': 1000*1000,
+                 '1TB': 1000**4,
+                 '1000': 1000}
+        for test, result in valid.items():
+            self.assertEqual(human_to_bytes(test), result)
+
+        self.assertEqual(human_to_bytes('1 MB', 'du'), 1024*1024)
+
     def test_listdir(self):
         """Unit test for listdir()"""
         for pathname in listdir(('/tmp', '~/.config/')):
