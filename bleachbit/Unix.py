@@ -23,20 +23,17 @@
 Integration specific to Unix-like operating systems
 """
 
-
 import glob
-import logging
 import os
 import re
 import shlex
 import subprocess
 import sys
-import ConfigParser
 
-from Common import _, autostart_path
-import Common
 import FileUtilities
 import General
+import Common
+from Common import _, logger
 
 
 class LocaleCleanerPath:
@@ -402,7 +399,7 @@ def apt_autoclean():
             pkg_bytes_str = match.groups(0)[0]
             pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
             total_bytes += pkg_bytes
-        if "" == line and process.poll() != None:
+        if "" == line and process.poll() is not None:
             break
 
     return total_bytes
@@ -433,7 +430,7 @@ def apt_autoremove():
             pkg_bytes_str = match.groups(0)[0]
             pkg_bytes = FileUtilities.human_to_bytes(pkg_bytes_str.upper())
             total_bytes += pkg_bytes
-        if "" == line and process.poll() != None:
+        if "" == line and process.poll() is not None:
             break
 
     return total_bytes
@@ -442,13 +439,11 @@ def apt_autoremove():
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
-        print "info: is_broken_xdg_menu: missing required option 'Exec': '%s'" \
-            % (desktop_pathname)
+        logger.info("is_broken_xdg_menu: missing required option 'Exec': '%s'" % desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not FileUtilities.exe_exists(exe):
-        print "info: is_broken_xdg_menu: executable '%s' does not exist '%s'" \
-            % (exe, desktop_pathname)
+        logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'" % (exe, desktop_pathname))
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
@@ -466,16 +461,14 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             else:
                 break
         if not FileUtilities.exe_exists(execs[0]):
-            print "info: is_broken_xdg_menu: executable '%s'" \
-                "does not exist '%s'" % (execs[0], desktop_pathname)
+            logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], desktop_pathname))
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                print "info: is_broken_xdg_menu: Windows executable" \
-                    "'%s' does not exist '%s'" % \
-                    (windows_exe, desktop_pathname)
+                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" %
+                            (windows_exe, desktop_pathname))
                 return True
     return False
 
@@ -484,47 +477,43 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        import gio
-        if 0 == len(gio.app_info_get_all_for_type(mimetype)):
+        from gi.repository import Gio
+        if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
-    except:
-        logger = logging.getLogger(__name__)
-        logger.warning(
-            'error calling gio.app_info_get_all_for_type(%s)' % mimetype)
+    except ImportError:
+        logger.warning('error calling gio.app_info_get_all_for_type(%s)' % mimetype)
     return False
 
 
 def is_broken_xdg_desktop(pathname):
     """Returns boolean whether the given XDG desktop entry file is broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
-    config = ConfigParser.RawConfigParser()
+    config = Common.RawConfigParser()
     config.read(pathname)
     if not config.has_section('Desktop Entry'):
-        print "info: is_broken_xdg_menu: missing required section " \
-            "'Desktop Entry': '%s'" % (pathname)
+        logger.info("is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % pathname)
         return True
     if not config.has_option('Desktop Entry', 'Type'):
-        print "info: is_broken_xdg_menu: missing required option 'Type': '%s'" % (pathname)
+        logger.info("is_broken_xdg_menu: missing required option 'Type': '%s'" % pathname)
         return True
     file_type = config.get('Desktop Entry', 'Type').strip().lower()
     if 'link' == file_type:
         if not config.has_option('Desktop Entry', 'URL') and \
                 not config.has_option('Desktop Entry', 'URL[$e]'):
-            print "info: is_broken_xdg_menu: missing required option 'URL': '%s'" % (pathname)
+            logger.info("is_broken_xdg_menu: missing required option 'URL': '%s'" % pathname)
             return True
         return False
     if 'mimetype' == file_type:
         if not config.has_option('Desktop Entry', 'MimeType'):
-            print "info: is_broken_xdg_menu: missing required option 'MimeType': '%s'" % (pathname)
+            logger.info("is_broken_xdg_menu: missing required option 'MimeType': '%s'" % pathname)
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
         if is_unregistered_mime(mimetype):
-            print "info: is_broken_xdg_menu: MimeType '%s' not " \
-                "registered '%s'" % (mimetype, pathname)
+            logger.info("is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname))
             return True
         return False
     if 'application' != file_type:
-        print "Warning: unhandled type '%s': file '%s'" % (file_type, pathname)
+        logger.warning("unhandled type '%s': file '%s'" % (file_type, pathname))
         return False
     if __is_broken_xdg_desktop_application(config, pathname):
         return True
@@ -533,7 +522,8 @@ def is_broken_xdg_desktop(pathname):
 
 def is_running_darwin(exename, run_ps=None):
     if run_ps is None:
-        run_ps = lambda: subprocess.check_output(["ps", "aux", "-c"])
+        def run_ps():
+            subprocess.check_output(["ps", "aux", "-c"])
     try:
         processess = (re.split(r"\s+", p, 10)[10] for p in run_ps().split("\n") if p != "")
         next(processess)  # drop the header
@@ -589,7 +579,7 @@ def rotated_logs():
     globpaths = ('/var/log/*-*', '/var/log/*/*-*')
     for path in FileUtilities.globex(globpaths, regex):
         whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
-        if None == re.match(whitelist_re, path):  # for Slackware, Launchpad #367575
+        if re.match(whitelist_re, path) is None:  # for Slackware, Launchpad #367575
             yield path
 
 
@@ -598,28 +588,28 @@ def start_with_computer(enabled):
     If disabled, then delete the shortcut."""
     if not enabled:
         # User requests to not automatically start BleachBit
-        if os.path.lexists(autostart_path):
+        if os.path.lexists(Common.autostart_path):
             # Delete the shortcut
-            FileUtilities.delete(autostart_path)
+            FileUtilities.delete(Common.autostart_path)
         return
     # User requests to automatically start BleachBit
-    if os.path.lexists(autostart_path):
+    if os.path.lexists(Common.autostart_path):
         # Already automatic, so exit
         return
     if not os.path.exists(Common.launcher_path):
-        print 'ERROR: does not exist: ', Common.launcher_path
+        logger.error('%s does not exist: ' % Common.launcher_path)
         return
     import shutil
-    General.makedirs(os.path.dirname(autostart_path))
-    shutil.copy(Common.launcher_path, autostart_path)
-    os.chmod(autostart_path, 0755)
+    General.makedirs(os.path.dirname(Common.autostart_path))
+    shutil.copy(Common.launcher_path, Common.autostart_path)
+    os.chmod(Common.autostart_path, 0o755)
     if General.sudo_mode():
-        General.chownself(autostart_path)
+        General.chownself(Common.autostart_path)
 
 
 def start_with_computer_check():
     """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(autostart_path)
+    return os.path.lexists(Common.autostart_path)
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
@@ -655,11 +645,11 @@ def yum_clean():
             # Since first in Fedora 13
             raise RuntimeError(line)
         if -1 != line.find('Another app is currently holding'):
-            print "debug: yum: '%s'" % line
+            logger.debug("yum: '%s'" % line)
             old_size = FileUtilities.getsizedir('/var/cache/yum')
-        if "" == line and p.poll() != None:
+        if "" == line and p.poll() is not None:
             break
-    print 'debug: yum process return code = %d' % p.returncode
+    logger.debug('yum process return code = %d' % p.returncode)
     if p.returncode > 0:
         raise RuntimeError(non_blank_line)
     new_size = FileUtilities.getsizedir('/var/cache/yum')
