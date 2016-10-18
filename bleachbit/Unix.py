@@ -560,19 +560,19 @@ def wine_to_linux_path(wineprefix, windows_pathname):
     return os.path.join(wineprefix, windows_pathname)
 
 
-def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None):
+def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None):
     """Runs a specified command and returns how much space was (reportedly) freed.
     The subprocess shouldn't need any user input and the user should have the
     necessary rights.
     freed_space_regex gets applied to every output line, if the re matches,
     add values captured by the single group in the regex"""
-    if not FileUtilities.exe_exists(bin):
-        raise RuntimeError(_('Executable not found: %s') % bin)
+    if not FileUtilities.exe_exists(cmd):
+        raise RuntimeError(_('Executable not found: %s') % cmd)
     freed_space_regex = re.compile(freed_space_regex)
     error_line_regexes = [re.compile(regex) for regex in error_line_regexes or []]
 
-    output = subprocess.check_output([bin]+args, stderr=subprocess.STDOUT,
-                                     universal_newlines=True, env={'LC_ALL':'C'})
+    output = subprocess.check_output([cmd]+args, stderr=subprocess.STDOUT,
+                                     universal_newlines=True, env={'LC_ALL': 'C'})
 
     freed_space = 0
     for line in output.split('\n'):
@@ -581,7 +581,7 @@ def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
             freed_space += FileUtilities.human_to_bytes(m.group(1))
         for error_re in error_line_regexes:
             if error_re.search(line):
-                raise RuntimeError('Invalid output from %s: %s' % (bin,line))
+                raise RuntimeError('Invalid output from %s: %s' % (cmd, line))
 
     return freed_space
 
@@ -589,7 +589,7 @@ def run_cleaner_cmd(bin, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     freed_space_regex = '^Vacuuming done, freed ([\d.]+[KMGT]?) of archived journals on disk.$'
-    return run_cleaner_cmd('journalctl',['--vacuum-size=1'], freed_space_regex)
+    return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
 
 
 def apt_autoremove():
