@@ -46,6 +46,8 @@ python tests/TestAll.py
 
 If you have multiple commits around multiple themes (such as adding two, unrelated features), please consider breaking them up into multiple pull requests by using multiple branches. Smaller pull requests are easier to review and commit.
 
+Please consider reviewing someone else's pull requests and asking him or her to do the same for you. This can improve quality and get your changes merged sooner.
+
 
 ## Style
 * Indent with four spaces instead of tabs.
