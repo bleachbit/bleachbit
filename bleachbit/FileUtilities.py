@@ -387,7 +387,7 @@ def free_space(pathname):
             # This works better with Windows XP but not UTF-8.
             # Deprecated.
             logger = logging.getLogger(__name__)
-            logger.warning('failed to start psutil (not supported on Windows XP')
+            logger.warning('failed to start psutil (not supported on Windows XP)')
             _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
             return free_bytes
     mystat = os.statvfs(pathname)
