@@ -697,41 +697,29 @@ class GUI(Gtk.ApplicationWindow):
         menu.popup(None, None, None, None, event.button, event.time)
         return True
 
-    def cb_drag_data_received(self, widget, context, x, y, data, info, time):
-        # not yet working. TODO.
-        print('drop')
-        if target_type == 80:
-            import urlparse
-            import urllib
-            assert(type(selection.data) is str)
-            file_urls = selection.data.split("\n")
-            file_paths = []
-            for file_url in file_urls:
-                # strip needed to remove "\r"
-                file_url = file_url.strip()
-                parsed_url = urlparse.urlparse(file_url)
-                if parsed_url.scheme == "file":
-                    file_path = urllib.url2pathname(parsed_url.path)
-                    file_path_unicode = file_path.decode("utf-8")
-                    file_paths.append(file_path_unicode)
-
-            self.shred_paths(file_paths)
-
     def setup_drag_n_drop(self):
-        # not yet working. TODO.
-        def cb_drag(w, context, x, y, t):
-            Gdk.drag_status(context, Gdk.DragAction.COPY, t)
-            return True
+        def cb_drag_data_received(widget, context, x, y, data, info, time):
+            print('drop')
+            if info == 80:
+                import urlparse
+                import urllib
+                uri = data.get_data().strip('\r\n\x00')
+                assert (type(uri) is str)
+                file_urls = uri.split("\n")
+                file_paths = []
+                for file_url in file_urls:
+                    # strip needed to remove "\r"
+                    file_url = file_url.strip()
+                    parsed_url = urlparse.urlparse(file_url)
+                    if parsed_url.scheme == "file":
+                        file_path = urllib.url2pathname(parsed_url.path)
+                        file_path_unicode = file_path.decode("utf-8")
+                        file_paths.append(file_path_unicode)
+                self.shred_paths(file_paths)
 
-        def drop_cb(w, context, x, y, data, info, t):
-            print('\n'.join([str(e) for e in context.list_targets()]))
-            context.finish(True, False, t)
-            return True
-        self.textview.drag_dest_set(0, [], 0)
-        self.textview.connect('drag_motion', cb_drag)
-        # self.textview.connect("drag-drop", self.cb_drag_data_received)
-        # self.textview.connect('drag-drop', drop_cb)
-        self.textview.connect('drag_data_received', drop_cb)
+        self.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+                           [Gtk.TargetEntry.new("text/uri-list", 0, 80)], Gdk.DragAction.COPY)
+        self.connect('drag_data_received', cb_drag_data_received)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
