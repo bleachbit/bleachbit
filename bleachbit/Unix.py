@@ -572,7 +572,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     error_line_regexes = [re.compile(regex) for regex in error_line_regexes or []]
 
     output = subprocess.check_output([cmd]+args, stderr=subprocess.STDOUT,
-                                     universal_newlines=True, env={'LC_ALL': 'C'})
+                                         universal_newlines=True, env={'LC_ALL': 'C'})
 
     freed_space = 0
     for line in output.split('\n'):
@@ -593,18 +593,23 @@ def journald_clean():
 
 
 def apt_autoremove():
-    """Run 'apt-get autoremove' and return the size (un-rounded, in bytes)
-        of freed space"""
+    """Run 'apt-get autoremove' and return the size (un-rounded, in bytes) of freed space"""
 
     args = ['--yes', 'autoremove']
     # After this operation, 74.7MB disk space will be freed.
-    return run_cleaner_cmd('apt-get', args, r', ([\d.]+[a-zA-Z]{2}) disk space will be freed', ['^E: '])
+    freed_space_regex = r', ([\d.]+[a-zA-Z]{2}) disk space will be freed'
+    try:
+        return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
 
 
 def apt_autoclean():
-    """Run 'apt-get autoclean' and return the size (un-rounded, in bytes)
-        of freed space"""
-    return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
+    """Run 'apt-get autoclean' and return the size (un-rounded, in bytes) of freed space"""
+    try:
+        return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
 
 
 def yum_clean():

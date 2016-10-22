@@ -186,7 +186,9 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                          "Rotated log path '%s' does not exist" % path)
 
     def test_run_cleaner_cmd(self):
+        from subprocess import CalledProcessError
         self.assertRaises(RuntimeError, run_cleaner_cmd, '/hopethisdoesntexist', [])
+        self.assertRaises(CalledProcessError, run_cleaner_cmd, 'sh', ['-c', 'echo errormsg; false'])
         # test if regexes for invalid lines work
         self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],
                           error_line_regexes=['invalid'])
