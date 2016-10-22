@@ -42,12 +42,15 @@ class UnixTestCase(unittest.TestCase):
         """Initialize unit tests"""
         self.locales = Locales()
 
-    def test_apt_autoclean(self):
-        """Unit test for method apt_autoclean()"""
+    def test_apt(self):
+        """Unit test for method apt_autoclean() and apt_autoremove()"""
         if 0 != os.geteuid() or not FileUtilities.exe_exists('apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
+            self.assertRaises(RuntimeError, apt_autoremove)
         else:
             bytes_freed = apt_autoclean()
+            self.assert_(isinstance(bytes_freed, (int, long)))
+            bytes_freed = apt_autoremove()
             self.assert_(isinstance(bytes_freed, (int, long)))
 
     def test_is_broken_xdg_desktop(self):
