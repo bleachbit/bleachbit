@@ -141,21 +141,23 @@ def csidl_to_environ(varname, csidl):
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
     if os.path.exists(pathname):
-        try:
-            win32api.MoveFileEx(
-                pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
-        except pywintypes.error, e:
-            if not 5 == e.winerror:
-                raise e
-            if shell.IsUserAnAdmin():
-                logger = logging.getLogger(__name__)
-                logger.warning(
-                    'Unable to queue locked file for deletion, even with administrator rights: %s' % pathname)
-                return
-            # show more useful message than "error: (5, 'MoveFileEx', 'Access
-            # is denied.')"
-            raise RuntimeError(
-                'Access denied when attempting to delete locked file without administrator rights: %s' % pathname)
+        MOVEFILE_DELAY_UNTIL_REBOOT = 4
+        windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT)
+        # try:
+        #     win32api.MoveFileEx(
+        #         pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
+        # except pywintypes.error, e:
+        #     if not 5 == e.winerror:
+        #         raise e
+        #     if shell.IsUserAnAdmin():
+        #         logger = logging.getLogger(__name__)
+        #         logger.warning(
+        #             'Unable to queue locked file for deletion, even with administrator rights: %s' % pathname)
+        #         return
+        #     # show more useful message than "error: (5, 'MoveFileEx', 'Access
+        #     # is denied.')"
+        #     raise RuntimeError(
+        #         'Access denied when attempting to delete locked file without administrator rights: %s' % pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
