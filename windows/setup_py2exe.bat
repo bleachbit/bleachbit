@@ -31,11 +31,6 @@ set SZ_EXE="C:\Program Files\7-Zip\7z.exe"
 set UPX_EXE=upx.exe
 set UPX_OPTS=--best --crp-ms=999999 --nrv2e
 
-echo Checking for 32-bit Python
-%PYTHON_DIR%\python.exe  -c "import struct;bits= 8 * struct.calcsize('P');print 'Python bits:', bits;exit(0 if bits==32 else 1)"
-if "%ERRORLEVEL%" neq "0" echo Python is not 32-bit
-if "%ERRORLEVEL%" neq "0" goto error_general
-
 echo Getting BleachBit version
 for /f "delims=" %%a in ('%PYTHON_DIR%\python.exe -c "import bleachbit.Common; print bleachbit.Common.APP_VERSION"') do @set BB_VER=%%a
 echo BleachBit version %BB_VER%

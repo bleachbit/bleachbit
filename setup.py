@@ -111,6 +111,11 @@ if 'py2exe' in sys.argv:
     if sys.version_info[0] == 2 and sys.version_info[1] <= 5:
         args['options']['py2exe']['includes'].append('simplejson')
 
+    # check for 32-bit
+    import struct
+    bits = 8 * struct.calcsize('P')
+    assert 32 == bits
+
 
 def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
