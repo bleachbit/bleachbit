@@ -336,6 +336,18 @@ class Ini(FileActionProvider):
             yield Command.Ini(path, self.section, self.parameter)
 
 
+class Journald(ActionProvider):
+    """Action to run 'journalctl --vacuum-time=1'"""
+    action_key = 'journald.clean'
+
+    def __init__(self, action_element, action_node):
+        super(Journald, self).__init__(action_node)
+
+    def get_commands(self):
+        if FileUtilities.exe_exists('journalctl'):
+            yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
+
+
 class Json(FileActionProvider):
 
     """Action to clean JSON configuration files"""
