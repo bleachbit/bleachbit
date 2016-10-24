@@ -59,14 +59,16 @@ def threaded(func):
 
 
 class Bleachbit(Gtk.Application):
-    def __init__(self):
+    def __init__(self, uac=True):
         Gtk.Application.__init__(self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
-
+        if uac and 'nt' == os.name and Windows.elevate_privileges():
+            # privileges escalated in other process
+            sys.exit(0)
         self._window = None
 
     def build_app_menu(self):
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(bleachbit_exe_path,'..','data','app-menu.ui'))
+        builder.add_from_file(os.path.join(bleachbit_exe_path, '..', 'data', 'app-menu.ui'))
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
