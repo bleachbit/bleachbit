@@ -340,8 +340,8 @@ class Journald(ActionProvider):
     """Action to run 'journalctl --vacuum-time=1'"""
     action_key = 'journald.clean'
 
-    def __init__(self, action_element, action_node):
-        super(Journald, self).__init__(action_node)
+    def __init__(self, action_element):
+        pass
 
     def get_commands(self):
         if FileUtilities.exe_exists('journalctl'):
