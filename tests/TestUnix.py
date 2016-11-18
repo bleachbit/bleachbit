@@ -42,12 +42,15 @@ class UnixTestCase(unittest.TestCase):
         """Initialize unit tests"""
         self.locales = Locales()
 
-    def test_apt_autoclean(self):
-        """Unit test for method apt_autoclean()"""
+    def test_apt(self):
+        """Unit test for method apt_autoclean() and apt_autoremove()"""
         if 0 != os.geteuid() or not FileUtilities.exe_exists('apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
+            self.assertRaises(RuntimeError, apt_autoremove)
         else:
             bytes_freed = apt_autoclean()
+            self.assert_(isinstance(bytes_freed, (int, long)))
+            bytes_freed = apt_autoremove()
             self.assert_(isinstance(bytes_freed, (int, long)))
 
     def test_is_broken_xdg_desktop(self):
@@ -90,6 +93,12 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         exe = os.path.basename(os.path.realpath(sys.executable))
         self.assertTrue(is_running(exe))
         self.assertFalse(is_running('does-not-exist'))
+
+    def test_journald_clean(self):
+        if not FileUtilities.exe_exists('journalctl'):
+            self.assertRaises(RuntimeError,journald_clean)
+        else:
+            journald_clean()
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
@@ -178,6 +187,22 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         for path in rotated_logs():
             self.assert_(os.path.exists(path),
                          "Rotated log path '%s' does not exist" % path)
+
+    def test_run_cleaner_cmd(self):
+        from subprocess import CalledProcessError
+        self.assertRaises(RuntimeError, run_cleaner_cmd, '/hopethisdoesntexist', [])
+        self.assertRaises(CalledProcessError, run_cleaner_cmd, 'sh', ['-c', 'echo errormsg; false'])
+        # test if regexes for invalid lines work
+        self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],
+                          error_line_regexes=['invalid'])
+
+        freed_space_regex = r'^Freed ([\d.]+[kMT]?B)'
+        lines = ['Test line',
+                 'Freed 100B on your hard drive',
+                 'Freed 1.9kB, hooray!',
+                 'Fred 12MB']
+        freed_space = run_cleaner_cmd('echo', ['\n'.join(lines)], freed_space_regex)
+        self.assertEqual(freed_space, 2000)
 
     def test_start_with_computer(self):
         """Unit test for start_with_computer*"""
