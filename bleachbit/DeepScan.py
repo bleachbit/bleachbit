@@ -23,6 +23,7 @@
 Scan directory tree for files to delete
 """
 
+import Common
 
 import os
 import re
@@ -59,7 +60,7 @@ class DeepScan:
 
     def scan(self):
         """Perform requested searches and yield each match"""
-        print 'debug: DeepScan.scan: searches=', self.searches
+        Common.logger.debug('DeepScan.scan: searches=%s', str(self.searches))
         import time
         yield_time = time.time()
 

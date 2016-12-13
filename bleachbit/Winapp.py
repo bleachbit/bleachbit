@@ -26,7 +26,6 @@ Import Winapp2.ini files
 
 import Cleaner
 import Common
-import ConfigParser
 import Windows
 import os
 import glob
@@ -36,6 +35,7 @@ import traceback
 from Action import Delete, Winreg
 from Common import _
 from xml.dom.minidom import parseString
+import Common
 
 
 MAX_DETECT = 50
@@ -146,14 +146,14 @@ class Winapp:
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
-        self.parser = ConfigParser.RawConfigParser()
+        self.parser = Common.RawConfigParser()
         self.parser.read(pathname)
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
             except:
                 self.errors += 1
-                print 'ERROR: parsing error in section %s' % section
+                Common.logger.error('parsing error in section %s', section)
                 traceback.print_exc()
 
     def add_section(self, cleaner_id, name):
@@ -277,7 +277,7 @@ class Winapp:
         elif self.parser.has_option(section, 'section'):
             langsecref_num = self.parser.get(section, 'section')
         else:
-            print 'ERROR: neither option LangSecRef nor Section found in section %s' % (section)
+            Common.logger.error('neither option LangSecRef nor Section found in section %s', section)
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
@@ -296,7 +296,7 @@ class Winapp:
                     or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
                 pass
             else:
-                print 'WARNING: unknown option %s in section %s' % (option, section)
+                Common.logger.warning('unknown option %s in section %s', option, section)
                 return
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
@@ -354,7 +354,7 @@ class Winapp:
                 recurse = True
                 removeself = True
             else:
-                print 'WARNING: unknown file option %s in section %s' % (element, ini_section)
+                Common.logger.warning('unknown file option %s in section %s', element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
@@ -393,7 +393,7 @@ def load_cleaners():
         try:
             inicleaner = Winapp(pathname)
         except:
-            print "Error reading winapp2.ini cleaner '%s'" % pathname
+            Common.logger.error("Error reading winapp2.ini cleaner '%s'", pathname)
             traceback.print_exc()
         else:
             for cleaner in inicleaner.get_cleaners():

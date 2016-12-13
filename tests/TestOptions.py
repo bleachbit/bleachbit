@@ -26,10 +26,11 @@ Test case for module Options
 import os
 import sys
 import unittest
-import ConfigParser
+
 
 sys.path.append('.')
 import bleachbit.Options
+from bleachbit.Common import NoOptionError
 
 
 class OptionsTestCase(unittest.TestCase):
@@ -137,7 +138,7 @@ class OptionsTestCase(unittest.TestCase):
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
         self.assertRaises(
-            ConfigParser.NoOptionError, lambda: o3.get_hashpath(pathname))
+            NoOptionError, lambda: o3.get_hashpath(pathname))
 
         # clean up
         os.rmdir(dirname)

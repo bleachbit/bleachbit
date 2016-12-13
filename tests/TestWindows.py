@@ -39,6 +39,7 @@ if 'win32' == sys.platform:
 sys.path.append('.')
 from bleachbit.FileUtilities import extended_path
 from bleachbit.Windows import *
+from bleachbit.Common import logger
 
 
 def put_files_into_recycle_bin():
@@ -94,7 +95,7 @@ class WindowsTestCase(unittest.TestCase):
                 else:
                     raise
             self.assert_(os.path.exists(pathname))
-        print 'NOTE: reboot Windows and check the three files are deleted'
+        logger.note('reboot Windows and check the three files are deleted')
 
     def test_delete_registry_key(self):
         """Unit test for delete_registry_key"""

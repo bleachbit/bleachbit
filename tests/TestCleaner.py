@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test case for module Cleaner
 """
@@ -26,13 +28,13 @@ Test case for module Cleaner
 
 import sys
 import tempfile
-import types
 import unittest
 from xml.dom.minidom import parseString
 
 sys.path.append('.')
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
+import bleachbit.Common
 
 import common
 
@@ -103,7 +105,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
         for cmd in cleaner.get_commands('option2'):
-            print cmd
+            print(cmd)
             self.assert_(False, 'option2 should yield nothing')
         # should fail
         self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
@@ -157,7 +159,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
 
     def test_get_commands(self):
         for key in sorted(backends):
-            print "debug: test_get_commands: key='%s'" % (key, )
+            bleachbit.Common.logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
                     for result in cmd.execute(really_delete=False):

@@ -26,7 +26,6 @@ Store and retrieve user preferences
 import os
 import re
 import traceback
-import ConfigParser
 
 import Common
 import General
@@ -60,7 +59,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = ConfigParser.SafeConfigParser()
+        self.config = Common.SafeConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config._boolean_states['t'] = True
         self.config._boolean_states['f'] = False
@@ -76,11 +75,11 @@ class Options:
         _file = open(Common.options_file, 'wb')
         try:
             self.config.write(_file)
-        except IOError, e:
-            print e
+        except IOError as e:
+            print(e)
             from errno import ENOSPC
             if e.errno == ENOSPC:
-                print "Error: disk is full writing configuration '%s'" % Common.options_file
+                Common.logger.error("disk is full writing configuration '%s'", Common.options_file)
             else:
                 raise
         if mkfile and General.sudo_mode():
@@ -103,7 +102,7 @@ class Options:
             except:
                 # this deals with corrupt keys
                 # https://www.bleachbit.org/forum/bleachbit-wont-launch-error-startup
-                print 'ERROR: error checking whether path exists: %s ' % pathname
+                Common.logger.error('error checking whether path exists: %s ', pathname)
             if not exists:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
@@ -204,7 +203,7 @@ class Options:
                 self.set_list('shred_drives', guess_overwrite_paths())
             except:
                 traceback.print_exc()
-                print 'ERROR: error setting default shred drives'
+                Common.logger.error('error setting default shred drives')
 
         # set defaults
         self.__set_default("auto_hide", True)
@@ -225,7 +224,7 @@ class Options:
             if -1 != pos:
                 lang = lang[0: pos]
             for _lang in set([lang, 'en']):
-                print "info: automatically preserving language '%s'" % lang
+                Common.logger.info("automatically preserving language '%s'", lang)
                 self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever

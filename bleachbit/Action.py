@@ -33,6 +33,7 @@ import Command
 import FileUtilities
 import General
 import Special
+import Common
 
 from Common import _
 
@@ -410,15 +411,13 @@ class Process(ActionProvider):
                     rc = 0  # unknown because we don't wait
                     from subprocess import Popen
                     Popen(self.cmd)
-            except Exception, e:
+            except Exception as e:
                 raise RuntimeError(
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             else:
                 if not 0 == rc:
-                    logger = logging.getLogger(__name__)
-                    logger.warning(
-                        'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n' %
-                        (self.cmd, rc, stdout, stderr))
+                    Common.logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
+                                          self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 

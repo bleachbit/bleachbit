@@ -18,10 +18,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 General code
 """
 
+import Common
 
 import os
 import sys
@@ -68,9 +71,9 @@ def chownself(path):
     if 'posix' != os.name:
         return
     uid = getrealuid()
-    print 'debug: chown(%s, uid=%s)' % (path, uid)
+    Common.logger.debug('chown(%s, uid=%s)', path, uid)
     if 0 == path.find('/root'):
-        print 'note: chown for path /root aborted'
+        Common.logger.info('chown for path /root aborted')
         return
     try:
         os.chown(path, uid, -1)
@@ -107,7 +110,7 @@ def getrealuid():
 def makedirs(path):
     """Make directory recursively considering sudo permissions.
     'Path' should not end in a delimiter."""
-    print "debug: makedirs(%s)" % path
+    Common.logger.debug('makedirs(%s)', path)
     if os.path.lexists(path):
         return
     parentdir = os.path.split(path)[0]
@@ -120,7 +123,7 @@ def makedirs(path):
 
 def run_external(args, stdout=False, env=None):
     """Run external command and return (return code, stdout, stderr)"""
-    print 'debug: running cmd ', args
+    Common.logger.debug('running cmd ' + ' '.join(args))
     import subprocess
     if False == stdout:
         stdout = subprocess.PIPE
@@ -139,10 +142,10 @@ def run_external(args, stdout=False, env=None):
         out = p.communicate()
     except KeyboardInterrupt:
         out = p.communicate()
-        print out[0]
-        print out[1]
+        print(out[0])
+        print(out[1])
         raise
-    return (p.returncode, out[0], out[1])
+    return p.returncode, out[0], out[1]
 
 
 def sudo_mode():

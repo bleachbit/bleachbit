@@ -27,10 +27,10 @@ import logging
 import math
 import os
 import sys
-import traceback
 
 import DeepScan
 import FileUtilities
+import Common
 from Cleaner import backends
 from Common import _, ungettext
 
@@ -73,8 +73,7 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
-        logger = logging.getLogger(__name__)
-        logger.error(err, exc_info=True)
+        Common.logger.error(err, exc_info=True)
         self.total_errors += 1
 
     def execute(self, cmd):
@@ -93,14 +92,12 @@ class Worker:
             # 2 = does not exist
             # 13 = permission denied
             from errno import ENOENT, EACCES
-            logger = logging.getLogger(__name__)
-            if (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
+            if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
-                logger.error('%s: %s' % (str(e), str(cmd)))
+                Common.logger.error('%s: %s', e, cmd)
             else:
                 # For other errors, show the traceback.
-                logger.error('Error in execution of %s' %
-                             str(cmd), exc_info=True)
+                Common.logger.error('Error in execution of %s', cmd, exc_info=True)
             self.total_errors += 1
         else:
             if None == ret:
@@ -129,9 +126,7 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        logger = logging.getLogger(__name__)
-        logger.debug("clean_operation('%s'), options = '%s'" %
-                     (operation, operation_options))
+        Common.logger.debug("clean_operation('%s'), options = '%s'", operation, operation_options)
 
         if not operation_options:
             raise StopIteration

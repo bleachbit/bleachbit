@@ -28,6 +28,7 @@ import unittest
 
 sys.path.append('.')
 from bleachbit.General import *
+from bleachbit.Common import logger
 
 
 class GeneralTestCase(unittest.TestCase):
@@ -54,15 +55,15 @@ class GeneralTestCase(unittest.TestCase):
         self.assert_(0 <= uid <= 65535)
         if sudo_mode():
             self.assert_(uid > 0)
-        print "debug: os.getenv('LOGNAME') =", os.getenv('LOGNAME')
-        print "debug: os.getenv('SUDO_UID') =", os.getenv('SUDO_UID')
-        print 'debug: os.geteuid() =', os.geteuid()
-        print 'debug: os.getuid() =', os.getuid()
+        logger.debug("os.getenv('LOGNAME') = %s", os.getenv('LOGNAME'))
+        logger.debug("os.getenv('SUDO_UID') = %s", os.getenv('SUDO_UID'))
+        logger.debug('os.geteuid() = %d', os.geteuid())
+        logger.debug('os.getuid() = %d', str(os.getuid()))
         try:
-            print 'debug: os.login() =', os.getlogin()
+            logger.debug('os.login() = %s', os.getlogin())
         except:
             traceback.print_exc()
-            print 'debug: os.login() raised exception'
+            logger.debug('os.login() raised exception')
 
     def test_makedirs(self):
         """Unit test for makedirs"""

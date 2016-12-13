@@ -39,7 +39,6 @@ import sys
 import subprocess
 import tempfile
 import time
-import ConfigParser
 import Common
 
 if 'nt' == os.name:
@@ -56,7 +55,8 @@ def open_files_linux():
 
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
-        run_lsof = lambda: subprocess.check_output(["lsof", "-Fn", "-n"])
+        def run_lsof():
+            subprocess.check_output(["lsof", "-Fn", "-n"])
     for f in run_lsof().split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"
@@ -171,7 +171,7 @@ def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file"""
 
     # read file to parser
-    config = ConfigParser.RawConfigParser()
+    config = Common.RawConfigParser()
     fp = codecs.open(path, 'r', encoding='utf_8_sig')
     config.readfp(fp)
 
@@ -242,7 +242,6 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        parameter, the path will be shredded unless allow_shred = False.
     """
     from Options import options
-    logger = logging.getLogger(__name__)
     is_special = False
     path = extended_path(path)
     if not os.path.lexists(path):
@@ -266,7 +265,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
-                logger.info("directory is not empty: %s", path)
+                Common.logger.info("directory is not empty: %s", path)
             else:
                 raise
         except WindowsError, e:
@@ -275,7 +274,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # Error 145 may happen if the files are scheduled for deletion
             # during reboot.
             if 145 == e.winerror:
-                logger.info("directory is not empty: %s", path)
+                Common.logger.info("directory is not empty: %s", path)
             else:
                 raise
     elif os.path.isfile(path):
@@ -283,16 +282,16 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if allow_shred and (shred or options.get('shred')):
             try:
                 wipe_contents(path)
-            except IOError, e:
+            except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'", e.errno, path)
+                Common.logger.debug("IOError #%s shredding '%s'", e.errno, path)
             # wipe name
             os.remove(wipe_name(path))
         else:
             # unlink
             os.remove(path)
     else:
-        logger.info("special file type cannot be deleted: %s", path)
+        Common.logger.info("special file type cannot be deleted: %s", path)
 
 
 def ego_owner(filename):
@@ -542,8 +541,7 @@ def sync():
         import ctypes
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
-            logger = logging.getLogger(__name__)
-            logge.error('sync() returned code %d' % rc)
+            Common.logger.error('sync() returned code %d', rc)
     if 'nt' == os.name:
         import ctypes
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()

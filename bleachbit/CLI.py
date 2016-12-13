@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Command line interface
 """
@@ -33,10 +35,10 @@ from Common import _, APP_VERSION, encoding
 import Diagnostic
 import Options
 import Worker
+import Common
 
 
 class CliCallback:
-
     """Command line's callback passed to Worker"""
 
     def __init__(self):
@@ -48,7 +50,7 @@ class CliCallback:
         # If the encoding is not explicitly handled on a non-UTF-8
         # system, then special Latin-1 characters such as umlauts may
         # raise an exception as an encoding error.
-        print msg.strip('\n').encode(self.encoding, 'replace')
+        print(msg.strip('\n').encode(self.encoding, 'replace'))
 
     def update_progress_bar(self, status):
         """Not used"""
@@ -79,7 +81,7 @@ def cleaners_list():
 def list_cleaners():
     """Display available cleaners"""
     for cleaner in cleaners_list():
-        print cleaner
+        print (cleaner)
 
 
 def preview_or_clean(operations, really_clean):
@@ -103,7 +105,7 @@ def args_to_operations(args, preset):
                     args.append('.'.join([c_id, o_id]))
     for arg in args:
         if 2 != len(arg.split('.')):
-            print _("not a valid cleaner: %s") % arg
+            Common.logger.warning(_("not a valid cleaner: %s"), arg)
             continue
         (cleaner_id, option_id) = arg.split('.')
         # enable all options (for example, firefox.*)
@@ -165,22 +167,20 @@ def process_cmd_line():
     (options, args) = parser.parse_args()
     did_something = False
     if options.debug_log:
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.addHandler(logging.FileHandler(options.debug_log))
-        logger.info('BleachBit version %s' % APP_VERSION)
-        logger.info(Diagnostic.diagnostic_info())
+        Common.logger.addHandler(logging.FileHandler(options.debug_log))
+        Common.logger.info('BleachBit version %s', APP_VERSION)
+        Common.logger.info(Diagnostic.diagnostic_info())
     if options.version:
-        print """
+        print("""
 BleachBit version %s
 Copyright (C) 2008-2016 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
+There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if 'nt' == os.name and options.update_winapp2:
         import Update
-        print "Checking online for updates to winapp2.ini"
+        Common.logger.info("Checking online for updates to winapp2.ini")
         Update.check_updates(False, True,
                              lambda x: sys.stdout.write("%s\n" % x),
                              lambda: None)
@@ -192,14 +192,14 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
     if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)
         if not operations:
-            print 'ERROR: No work to do.  Specify options.'
+            Common.logger.error('No work to do.  Specify options.')
             sys.exit(1)
     if options.preview:
         preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
         if not options.clean or options.shred:
-            print 'NOTE: --overwrite is intended only for use with --clean'
+            Common.logger.info('--overwrite is intended only for use with --clean')
         Options.options.set('shred', True, commit=False)
     if options.clean:
         preview_or_clean(operations, True)
@@ -219,7 +219,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.sysinfo:
-        print Diagnostic.diagnostic_info()
+        print(Diagnostic.diagnostic_info())
         sys.exit(0)
     if not did_something:
         parser.print_help()

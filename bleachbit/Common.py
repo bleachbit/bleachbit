@@ -31,7 +31,7 @@ import sys
 #
 # Config Parser got renamed in Python 3
 #
-if sys.version_info >= (3,0):
+if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser

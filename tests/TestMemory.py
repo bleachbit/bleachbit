@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test case for module Memory
 """
@@ -29,6 +31,8 @@ import sys
 
 sys.path.append('.')
 from bleachbit.Memory import *
+
+running_linux = sys.platform.startswith('linux')
 
 
 class MemoryTestCase(unittest.TestCase):
@@ -113,14 +117,13 @@ Swapouts:                              20258188.
             return
         swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
-            print 'no active swap device detected'
+            print('no active swap device detected')
             return
         size = get_swap_size_linux(swapdev)
         self.assert_(isinstance(size, (int, long)))
         self.assert_(size > 1024 ** 2)
-        print "debug: size of swap '%s': %d B (%d MB)" % \
-            (swapdev, size, size / (1024 ** 2))
-        proc_swaps = file('/proc/swaps').read()
+        logger.debug("size of swap '%s': %d B (%d MB)", swapdev, size, size / (1024 ** 2))
+        proc_swaps = open('/proc/swaps').read()
         size2 = get_swap_size_linux(swapdev, proc_swaps)
         self.assertEqual(size, size2)
 
@@ -141,13 +144,10 @@ Swapouts:                              20258188.
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
 
+    @unittest.skipUnless(running_linux, 'not running linux')
+    @unittest.skipUnless(General.sudo_mode() or os.getuid() > 0, 'not enough privileges')
     def test_swap_off_swap_on(self):
         """Test for disabling and enabling swap"""
-        if not sys.platform.startswith('linux'):
-            return
-        if not General.sudo_mode() and os.getuid() > 0:
-            print 'NOTE: skipping test_swap_off_swap_on() because not enough privileges'
-            return
         devices = disable_swap_linux()
         enable_swap_linux()
 

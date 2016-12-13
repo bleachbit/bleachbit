@@ -22,9 +22,11 @@
 Perform (or assist with) cleaning operations.
 """
 
+from Common import _
+from FileUtilities import children_in_directory, expandvars
+from Options import options
 
 import glob
-import logging
 import os.path
 import re
 import sys
@@ -35,15 +37,12 @@ import Command
 import FileUtilities
 import Memory
 import Special
+import Common
 
 if 'posix' == os.name:
     import Unix
 elif 'nt' == os.name:
     import Windows
-
-from Common import _
-from FileUtilities import children_in_directory, expandvars
-from Options import options
 
 # Suppress GTK warning messages while running in CLI #34
 warnings.simplefilter("ignore", Warning)
@@ -97,7 +96,8 @@ class Cleaner:
                     if isinstance(ds, dict):
                         return False
             except:
-                print 'warning: exception in auto_hide(), cleaner=%s, option=%s' % (self.name, option_id)
+                Common.logger.warning('exception in auto_hide(), cleaner=%s, option=%s',
+                               self.name, option_id)
                 traceback.print_exc()
         return True
 
@@ -157,17 +157,17 @@ class Cleaner:
             pathname = running[1]
             if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
-                    print "debug: process '%s' is running" % pathname
+                    Common.logger.debug("process '%s' is running", pathname)
                     return True
             elif 'exe' == test and 'nt' == os.name:
                 if Windows.is_process_running(pathname):
-                    print "debug: process '%s' is running" % pathname
+                    Common.logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
                 expanded = os.path.expanduser(expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
-                        print "debug: file '%s' exists indicating '%s' is running" % (globbed, self.name)
+                        logger.debug("file '%s' exists indicating '%s' is running", self.name)
                         return True
             else:
                 raise RuntimeError(
@@ -771,7 +771,6 @@ class System(Cleaner):
             try:
                 Windows.empty_recycle_bin(None, True)
             except:
-                logger = logging.getLogger(__name__)
                 logger.info('error in empty_recycle_bin()', exc_info=True)
 
         # Windows Updates

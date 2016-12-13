@@ -30,6 +30,7 @@ import subprocess
 import sys
 import traceback
 
+import Common
 import FileUtilities
 import General
 
@@ -52,7 +53,7 @@ def get_proc_swaps():
     (rc, stdout, _) = General.run_external(['swapon', '-s'])
     if 0 == rc:
         return stdout
-    print 'debug: "swapoff -s" failed so falling back to /proc/swaps'
+    Common.logger.debug('"swapoff -s" failed so falling back to /proc/swaps')
     return open("/proc/swaps").read()
 
 
@@ -72,7 +73,7 @@ def disable_swap_linux():
     """Disable Linux swap and return list of devices"""
     if 0 == count_swap_linux():
         return
-    print "debug: disabling swap"
+    Common.logger.debug('disabling swap"')
     args = ["swapoff", "-a", "-v"]
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
@@ -92,7 +93,7 @@ def disable_swap_linux():
 
 def enable_swap_linux():
     """Enable Linux swap"""
-    print "debug: re-enabling swap"
+    Common.logger.debug('re-enabling swap"')
     args = ["swapon", "-a"]
     p = subprocess.Popen(args, stderr=subprocess.PIPE)
     p.wait()
@@ -112,13 +113,12 @@ def make_self_oom_target_linux():
         if os.path.exists(path):
             open(path, 'w').write('15')
     # OOM likes nice processes
-    print 'debug: new nice value', os.nice(19)
+    Common.logger.debug('new nice value %d', os.nice(19))
     # OOM prefers non-privileged processes
     try:
         uid = General.getrealuid()
         if uid > 0:
-            print "debug: dropping privileges of pid %d to uid %d" % \
-                (os.getpid(), uid)
+            Common.logger.debug('dropping privileges of pid %d to uid %d', os.getpid(), uid)
             os.seteuid(uid)
     except:
         traceback.print_exc()
@@ -168,7 +168,7 @@ def get_swap_uuid(device):
         ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if None != ret:
             uuid = ret.group(1)
-    print "debug: uuid(%s)='%s'" % (device, uuid)
+    Common.logger.debug("uuid(%s)='%s'", device, uuid)
     return uuid
 
 
@@ -233,7 +233,7 @@ def physical_free_windows():
         return x
 
     z = GlobalMemoryStatusEx()
-    print z
+    print(z)
     return z.ullAvailPhys
 
 
@@ -252,8 +252,7 @@ def report_free():
     """Report free memory"""
     bytes_free = physical_free()
     bytes_str = FileUtilities.bytes_to_human(bytes_free)
-    print "debug: physical free: %s (%d B)" % \
-        (bytes_str, bytes_free)
+    Common.logger.debug('physical free: %s (%d B)', bytes_str, bytes_free)
 
 
 def wipe_swap_linux(devices, proc_swaps):
@@ -263,7 +262,7 @@ def wipe_swap_linux(devices, proc_swaps):
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
-        print "info: wiping swap device '%s'" % device
+        Common.logger.info("wiping swap device '%s'", device)
         safety_limit_bytes = 16 * 1024 ** 3  # 16 gibibytes
         actual_size_bytes = get_swap_size_linux(device, proc_swaps)
         if actual_size_bytes > safety_limit_bytes:
@@ -274,7 +273,7 @@ def wipe_swap_linux(devices, proc_swaps):
         # wipe
         FileUtilities.wipe_contents(device, truncate=False)
         # reinitialize
-        print "debug: reinitializing swap device %s" % device
+        Common.logger.debug('reinitializing swap device %s', device)
         args = ['mkswap', device]
         if uuid:
             args.append("-U")
@@ -290,7 +289,7 @@ def wipe_memory():
     proc_swaps = get_proc_swaps()
     devices = disable_swap_linux()
     yield True  # process GTK+ idle loop
-    print 'debug: detected swap devices:', devices
+    Common.logger.debug('detected swap devices: ' + str(devices))
     wipe_swap_linux(devices, proc_swaps)
     yield True
     child_pid = os.fork()
@@ -299,10 +298,9 @@ def wipe_memory():
         fill_memory_linux()
         sys.exit(0)
     else:
-        print 'debug: wipe_memory() pid %d waiting for child pid %d' % \
-            (os.getpid(), child_pid)
+        Common.logger.debug('wipe_memory() pid %d waiting for child pid %d', os.getpid(), child_pid)
         rc = os.waitpid(child_pid, 0)[1]
         if 0 != rc:
-            print 'warning: child process returned code %d' % rc
+            Common.logger.warning('child process returned code %d', rc)
     enable_swap_linux()
     yield 0  # how much disk space was recovered

@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Launcher
 """
@@ -41,7 +43,7 @@ if 1 == len(sys.argv):
     try:
         gtk.gdk.Screen().get_display()
     except RuntimeError:
-        print "Could not open X display"
+        print("Could not open X display")
         sys.exit(1)
     import bleachbit.GUI
     gui = bleachbit.GUI.GUI()

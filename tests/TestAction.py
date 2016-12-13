@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test cases for module Action
 """
@@ -56,7 +58,7 @@ def _action_str_to_results(action_str):
 def benchmark_filter(this_filter):
     """Measure how fast listing files is with and without filter"""
     n_files = 100000
-    print 'benchmark of %d files' % n_files
+    print('benchmark of %d files' % n_files)
 
     # make a directory with many files
     dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
@@ -77,8 +79,7 @@ def benchmark_filter(this_filter):
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
-    print 'filter %s: elapsed: %.2f seconds, %.2f files/second' % (this_filter,
-                                                                   elapsed_seconds, rate)
+    print('filter %s: elapsed: %.2f seconds, %.2f files/second' % (this_filter, elapsed_seconds, rate))
 
     # clean up
     shutil.rmtree(dirname)
@@ -125,7 +126,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
                 self.assertLExists(filename)
                 os.remove(filename)
                 self.assertNotLExists(filename)
-            elif command in ('process'):
+            elif command in 'process':
                 pass
             elif command in ('ini', 'json'):
                 self.assertLExists(filename)
@@ -389,7 +390,6 @@ if __name__ == '__main__':
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis
-            print 'rates for filter %s=%s' % (this_filter,
-                                              ','.join([str(rate) for rate in rates]))
+            print('rates for filter %s=%s' % (this_filter, ','.join([str(rate) for rate in rates])))
         sys.exit()
     unittest.main()

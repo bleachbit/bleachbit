@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test case for module Update
 """
@@ -25,14 +27,13 @@ Test case for module Update
 
 import os
 import os.path
-import socket
 import sys
-import types
 import unittest
 import urllib2
 
 sys.path.append('.')
 from bleachbit import Common
+from bleachbit.Common import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
 
 
@@ -97,13 +98,13 @@ class UpdateTestCase(unittest.TestCase):
         from bleachbit.Common import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
-            print 'note: deleting %s' % fn
+            logger.info('deleting %s', fn)
             os.unlink(fn)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
 
         def append_text(s):
-            print s
+            print(s)
 
         succeeded = {'r': False}  # scope
 
@@ -130,7 +131,7 @@ class UpdateTestCase(unittest.TestCase):
     def test_user_agent(self):
         """Unit test for method user_agent()"""
         agent = user_agent()
-        print "debug: user agent = '%s'" % (agent, )
+        logger.debug("user agent = '%s'", agent)
         self.assert_(isinstance(agent, str))
 
 

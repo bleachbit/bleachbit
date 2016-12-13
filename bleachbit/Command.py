@@ -26,6 +26,7 @@ Command design pattern implementation for cleaning
 import os
 import types
 import FileUtilities
+import Common
 
 from sqlite3 import DatabaseError
 from Common import _
@@ -151,7 +152,7 @@ class Function:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
-                    print 'Warning:', e.message
+                    Common.logger.warning(e.message)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)
@@ -286,8 +287,7 @@ class Winreg:
         self.valuename = valuename
 
     def __str__(self):
-        return 'Command to clean registry, key=%, value=%s ' % \
-            (self.keyname, self.valuename)
+        return 'Command to clean registry, key=%s, value=%s ' % (self.keyname, self.valuename)
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""

@@ -31,6 +31,7 @@ import sys
 import traceback
 
 from Common import _, _p, online_update_notification_enabled
+import Common
 from Options import options
 import GuiBasic
 
@@ -312,7 +313,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        print "warning: '%s' already exists in whitelist" % pathname
+                        Common.logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -326,7 +327,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        print "warning: '%s' already exists in whitelist" % pathname
+                        Common.logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])
@@ -353,7 +354,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        print "warning: '%s' already exists in whitelist" % pathname
+                        Common.logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -367,7 +368,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        print "warning: '%s' already exists in whitelist" % pathname
+                        Common.logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])
