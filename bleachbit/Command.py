@@ -115,7 +115,7 @@ class Function:
 
     def execute(self, really_delete):
 
-        if None != self.path and FileUtilities.whitelisted(self.path):
+        if self.path is not None and FileUtilities.whitelisted(self.path):
             yield whitelist(self.path)
             return
 
@@ -127,7 +127,7 @@ class Function:
             'size': None}
 
         if really_delete:
-            if None == self.path:
+            if self.path is None:
                 # Function takes no path.  It returns the size.
                 func_ret = self.func()
                 if isinstance(func_ret, types.GeneratorType):

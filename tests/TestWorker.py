@@ -280,7 +280,7 @@ class WorkerTestCase(unittest.TestCase):
         self_assert = self.assert_
 
         def increment_count():
-            self.scanned = self.scanned + 1
+            self.scanned += 1
 
         class MyDeepScan:
 

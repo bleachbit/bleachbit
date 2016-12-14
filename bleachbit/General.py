@@ -114,7 +114,7 @@ def makedirs(path):
     parentdir = os.path.split(path)[0]
     if not os.path.lexists(parentdir):
         makedirs(parentdir)
-    os.mkdir(path, 0700)
+    os.mkdir(path, 0o700)
     if sudo_mode():
         chownself(path)
 
@@ -123,7 +123,7 @@ def run_external(args, stdout=False, env=None):
     """Run external command and return (return code, stdout, stderr)"""
     Common.logger.debug('running cmd ' + ' '.join(args))
     import subprocess
-    if False == stdout:
+    if not stdout:
         stdout = subprocess.PIPE
     kwargs = {}
     if subprocess.mswindows:
@@ -157,4 +157,4 @@ def sudo_mode():
         # Fedora 13: os.getenv('USER') = 'root' under sudo
         # return False
 
-    return os.getenv('SUDO_UID') != None
+    return os.getenv('SUDO_UID') is not None

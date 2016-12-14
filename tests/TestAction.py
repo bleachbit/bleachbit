@@ -190,7 +190,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
         def execute_ini(path, section, parameter):
             effective_parameter = ""
-            if None != parameter:
+            if parameter is not None:
                 effective_parameter = 'parameter="%s"' % parameter
             action_str = '<action command="ini" search="file" path="%s" section="%s" %s />' \
                 % (path, section, effective_parameter)

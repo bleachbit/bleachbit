@@ -165,7 +165,7 @@ def open_url(url, parent_window=None, prompt=True):
     if prompt:
         # find hostname
         import re
-        ret = re.search('^http(s)?://([a-z\.]+)', url)
+        ret = re.search('^http(s)?://([a-z.]+)', url)
         if None == ret:
             host = url
         else:

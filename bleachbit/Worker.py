@@ -100,7 +100,7 @@ class Worker:
                 Common.logger.error('Error in execution of %s', cmd, exc_info=True)
             self.total_errors += 1
         else:
-            if None == ret:
+            if ret is None:
                 return
             if isinstance(ret['size'], (int, long)):
                 size = FileUtilities.bytes_to_human(ret['size'])

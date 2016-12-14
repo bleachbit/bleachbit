@@ -170,7 +170,7 @@ except:
     user_locale = None
     encoding = None
 
-if None == user_locale:
+if user_locale is None:
     user_locale = 'C'
     logger.warning("no default locale found.  Assuming '%s'" % user_locale)
 

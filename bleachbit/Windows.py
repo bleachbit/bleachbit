@@ -114,7 +114,7 @@ def browse_files(_, title):
 def browse_folder(hwnd, title):
     """Ask the user to select a folder.  Return full path."""
     pidl = shell.SHBrowseForFolder(hwnd, None, title)[0]
-    if None == pidl:
+    if pidl is None:
         # user cancelled
         return None
     fullpath = shell.SHGetPathFromIDList(pidl)
@@ -509,7 +509,7 @@ def is_process_running_win32(name):
                 # Filter out non-ASCII characters which we don't need
                 # and which may cause display warnings
                 clean_modname2 = re.sub(
-                    r'[^a-z\.]', '_', clean_modname.lower())
+                    r'[^a-z.]', '_', clean_modname.lower())
                 if clean_modname2 == name.lower():
                     return True
 
@@ -522,7 +522,7 @@ def is_process_running_wmic(name):
     Works on Windows XP Professional but not on XP Home
     """
 
-    clean_name = re.sub(r'[^A-Za-z\.]', '_', name).lower()
+    clean_name = re.sub(r'[^A-Za-z.]', '_', name).lower()
     args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" %
             clean_name, 'get', 'Caption']
     (_, stdout, _) = General.run_external(args)
@@ -614,7 +614,7 @@ def split_registry_key(full_key):
         'HKU': _winreg.HKEY_USERS}
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
-    return (hive_map[k1], k2)
+    return hive_map[k1], k2
 
 
 def start_with_computer(enabled):

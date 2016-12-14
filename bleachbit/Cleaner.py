@@ -798,19 +798,18 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
-            '^/var/tmp/kdecache-']
-        regexes.append('^' + os.path.expanduser('~/.cache/wallpaper/'))
-        # Clean Firefox cache from Firefox cleaner (LP#1295826)
-        regexes.append('^' + os.path.expanduser('~/.cache/mozilla'))
-        # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-        regexes.append('^' + os.path.expanduser('~/.cache/google-chrome'))
-        regexes.append(
-            '^' + os.path.expanduser('~/.cache/gnome-control-center/'))
-        # iBus Pinyin
-        # https://bugs.launchpad.net/bleachbit/+bug/1538919
-        regexes.append('^' + os.path.expanduser('~/.cache/ibus/'))
+            '^/var/tmp/kdecache-',
+            '^' + os.path.expanduser('~/.cache/wallpaper/'),
+            # Clean Firefox cache from Firefox cleaner (LP#1295826)
+            '^' + os.path.expanduser('~/.cache/mozilla'),
+            # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
+            '^' + os.path.expanduser('~/.cache/google-chrome'),
+            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
+            # iBus Pinyin
+            # https://bugs.launchpad.net/bleachbit/+bug/1538919
+            '^' + os.path.expanduser('~/.cache/ibus/')]
         for regex in regexes:
-            if None != re.match(regex, pathname):
+            if re.match(regex, pathname) is not None:
                 return True
         return False
 

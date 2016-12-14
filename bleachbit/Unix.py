@@ -572,7 +572,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     error_line_regexes = [re.compile(regex) for regex in error_line_regexes or []]
 
     output = subprocess.check_output([cmd]+args, stderr=subprocess.STDOUT,
-                                         universal_newlines=True, env={'LC_ALL': 'C'})
+                                     universal_newlines=True, env={'LC_ALL': 'C'})
 
     freed_space = 0
     for line in output.split('\n'):

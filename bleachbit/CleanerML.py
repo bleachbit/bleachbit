@@ -55,7 +55,7 @@ class CleanerML:
         self.option_description = None
         self.option_warning = None
         self.xlate_cb = xlate_cb
-        if None == self.xlate_cb:
+        if self.xlate_cb is None:
             self.xlate_mode = False
             self.xlate_cb = lambda x, y=None: None  # do nothing
         else:
@@ -171,7 +171,7 @@ class CleanerML:
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
-        if None == provider:
+        if provider is None:
             raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)
 

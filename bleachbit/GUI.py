@@ -691,7 +691,7 @@ class GUI:
         __iter = model.get_iter_root()
         while __iter:
             if model[__iter][2] == option:
-                if (option_id == -1):
+                if option_id == -1:
                     model[__iter][3] = text
                 else:
                     child = model.iter_children(__iter)

@@ -60,7 +60,7 @@ def actions_to_cleaner(action_strs):
         cleaner.add_action('option%d' % count, provider)
         cleaner.add_option('option%d' % count, 'name%d' %
                            count, 'description%d' % count)
-        count = count + 1
+        count += 1
     return cleaner
 
 

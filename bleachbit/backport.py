@@ -45,7 +45,7 @@ def expandvars(path):
         elif c == '%':  # variable or '%'
             if path[index + 1:index + 2] == '%':
                 res = res + c
-                index = index + 1
+                index += 1
             else:
                 path = path[index + 1:]
                 pathlen = len(path)
@@ -63,7 +63,7 @@ def expandvars(path):
         elif c == '$':  # variable or '$$'
             if path[index + 1:index + 2] == '$':
                 res = res + c
-                index = index + 1
+                index += 1
             elif path[index + 1:index + 2] == '{':
                 path = path[index + 2:]
                 pathlen = len(path)
@@ -79,19 +79,19 @@ def expandvars(path):
                     index = pathlen - 1
             else:
                 var = ''
-                index = index + 1
+                index += 1
                 c = path[index:index + 1]
                 while c != '' and c in varchars:
                     var = var + c
-                    index = index + 1
+                    index += 1
                     c = path[index:index + 1]
                 try:
                     res = res + getenv(var)
                 except KeyError:
                     res = res + '$' + var
                 if c != '':
-                    index = index - 1
+                    index -= 1
         else:
             res = res + c
-        index = index + 1
+        index += 1
     return res

@@ -148,15 +148,16 @@ class RecognizeCleanerML:
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
-        body = file(pathname).read()
+        with open(pathname) as f:
+            body = f.read()
         new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get_hashpath(pathname)
         except Common.NoOptionError:
             return NEW, new_hash
         if new_hash == known_hash:
-            return (KNOWN, new_hash)
-        return (CHANGED, new_hash)
+            return KNOWN, new_hash
+        return CHANGED, new_hash
 
     def __scan(self):
         """Look for files and act accordingly"""

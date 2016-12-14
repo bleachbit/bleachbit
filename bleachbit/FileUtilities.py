@@ -104,8 +104,7 @@ class OpenFiles:
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
-        if None == self.last_scan_time or (time.time() -
-                                           self.last_scan_time) > 10:
+        if self.last_scan_time is None or (time.time() - self.last_scan_time) > 10:
             self.scan()
         return os.path.realpath(filename) in self.files
 
@@ -113,10 +112,11 @@ class OpenFiles:
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
     return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
-                   for i in xrange(length))
+                   for i in range(length))
 
 
 def bytes_to_human(bytes_i):
+    # type: (int) -> str
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
     if bytes_i < 0:
@@ -178,7 +178,7 @@ def clean_ini(path, section, parameter):
     # change file
     changed = False
     if config.has_section(section):
-        if None == parameter:
+        if parameter is None:
             changed = True
             config.remove_section(section)
         elif config.has_option(section, parameter):
@@ -404,7 +404,7 @@ def getsize(path):
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
         finddata = win32file.FindFilesW(extended_path(path))
-        if finddata == []:
+        if not finddata:
             # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
@@ -624,7 +624,7 @@ def wipe_name(pathname1):
             os.rename(pathname2, pathname3)
             break
         except:
-            i = i + 1
+            i += 1
             if i > 100:
                 logger.info('exhausted short rename: %s', pathname2)
                 pathname3 = pathname2
@@ -682,7 +682,7 @@ def wipe_path(pathname, idle=False):
         done_time = time.time() - start_time
         rate = done_bytes / (done_time + 0.0001)  # bytes per second
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
-        return (1, done_percent, remaining_seconds)
+        return 1, done_percent, remaining_seconds
 
     logger.debug("wipe_path('%s')", pathname)
     files = []

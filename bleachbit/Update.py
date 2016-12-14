@@ -174,7 +174,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         if element:
             ver = element[0].getAttribute('ver')
             url = element[0].firstChild.data
-            return (ver, url)
+            return ver, url
         return ()
 
     stable = parse_updates(dom.getElementsByTagName("stable"))
@@ -189,9 +189,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return (stable, beta)
+        return stable, beta
     if stable:
-        return (stable,)
+        return stable,
     if beta and check_beta:
-        return (beta,)
+        return beta,
     return ()

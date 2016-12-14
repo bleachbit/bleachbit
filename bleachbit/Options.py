@@ -176,7 +176,7 @@ class Options:
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.  The child may be None."""
         option = parent
-        if None != child:
+        if child is not None:
             option += "." + child
         if not self.config.has_option('tree', option):
             return False
@@ -298,7 +298,7 @@ class Options:
         if not self.config.has_section("tree"):
             self.config.add_section("tree")
         option = parent
-        if None != child:
+        if child is not None:
             option = option + "." + child
         if self.config.has_option('tree', option) and not value:
             self.config.remove_option('tree', option)

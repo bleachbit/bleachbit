@@ -111,14 +111,14 @@ def winapp_expand_vars(pathname):
         pattern = re.compile(r'\${%s}' % sub_orig, flags=re.IGNORECASE)
         if pattern.match(pathname):
             expand2 = pattern.sub('${%s}' % sub_repl, pathname)
-            return (expand1, os.path.expandvars(expand2))
-    return (expand1,)
+            return expand1, os.path.expandvars(expand2)
+    return expand1,
 
 
 def detect_file(pathname):
     """Check whether a path exists for DetectFile#="""
     for expanded in winapp_expand_vars(pathname):
-        for thispath in glob.iglob(expanded):
+        for _ in glob.iglob(expanded):
             return True
     return False
 
@@ -249,7 +249,7 @@ class Winapp:
                 option_id = 'detectfile%d' % n
                 if self.parser.has_option(section, option_id):
                     if detect_file(self.parser.get(section, option_id)):
-                        matches = matches + 1
+                        matches += 1
             if 0 == matches:
                 return
         if self.parser.has_option(section, 'detect1'):
@@ -258,7 +258,7 @@ class Winapp:
                 option_id = 'detect%d' % n
                 if self.parser.has_option(section, option_id):
                     if Windows.detect_registry_key(self.parser.get(section, option_id)):
-                        matches = matches + 1
+                        matches += 1
             if 0 == matches:
                 return
         # excludekeys ignores a file, path, or registry key
