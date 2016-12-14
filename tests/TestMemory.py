@@ -144,10 +144,11 @@ Swapouts:                              20258188.
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
 
-    @unittest.skipUnless(running_linux, 'not running linux')
-    @unittest.skipUnless(General.sudo_mode() or os.getuid() > 0, 'not enough privileges')
+    @unittest.skipUnless(running_linux, 'skipping test on non-linux')
     def test_swap_off_swap_on(self):
         """Test for disabling and enabling swap"""
+        if not General.sudo_mode() or os.getuid() > 0:
+            self.skipTest('not enough privileges')
         devices = disable_swap_linux()
         enable_swap_linux()
 
