@@ -80,7 +80,7 @@ class Delete:
         if really_delete:
             try:
                 FileUtilities.delete(self.path, self.shred)
-            except WindowsError, e:
+            except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: u'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
@@ -148,7 +148,7 @@ class Function:
                 oldsize = FileUtilities.getsize(self.path)
                 try:
                     self.func(self.path)
-                except DatabaseError, e:
+                except DatabaseError as e:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
@@ -156,7 +156,7 @@ class Function:
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)
-                except OSError, e:
+                except OSError as e:
                     from errno import ENOENT
                     if e.errno == ENOENT:
                         # file does not exist

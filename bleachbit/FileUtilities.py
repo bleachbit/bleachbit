@@ -261,14 +261,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
-        except OSError, e:
+        except OSError as e:
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 Common.logger.info("directory is not empty: %s", path)
             else:
                 raise
-        except WindowsError, e:
+        except WindowsError as e:
             # WindowsError: [Error 145] The directory is not empty:
             # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
             # Error 145 may happen if the files are scheduled for deletion
@@ -333,10 +333,10 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.DatabaseError, exc:
+        except sqlite3.DatabaseError as exc:
             raise sqlite3.DatabaseError(
                 '%s: %s' % (Common.decode_str(exc), path))
-        except sqlite3.OperationalError, exc:
+        except sqlite3.OperationalError as exc:
             logger = logging.getLogger(__name__)
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -398,7 +398,7 @@ def getsize(path):
     if 'posix' == os.name:
         try:
             __stat = os.lstat(path)
-        except OSError, e:
+        except OSError as e:
             # OSError: [Errno 13] Permission denied
             # can happen when a regular user is trying to find the size of /var/log/hp/tmp
             # where /var/log/hp is 0774 and /var/log/hp/tmp is 1774
@@ -521,7 +521,7 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except pywintypes.error, e:
+        except pywintypes.error as e:
             if 5 == e.winerror:
                 # Microsoft Office 2010 Starter Edition has a virtual
                 # drive that gives access denied
@@ -584,9 +584,9 @@ def wipe_contents(path, truncate=True):
     size = getsize(path)
     try:
         f = open(path, 'wb')
-    except IOError, e:
+    except IOError as e:
         if e.errno == errno.EACCES:  # permission denied
-            os.chmod(path, 0200)  # user write only
+            os.chmod(path, 0o200)  # user write only
             f = open(path, 'wb')
         else:
             raise
@@ -663,7 +663,7 @@ def wipe_path(pathname, idle=False):
                 atexit.register(
                     delete, f.name, allow_shred=False, ignore_missing=True)
                 break
-            except OSError, e:
+            except OSError as e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT):
                     # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
                     # Shrinking the size helps.
@@ -703,7 +703,7 @@ def wipe_path(pathname, idle=False):
         try:
             logger.debug('creating new, temporary file to wipe path')
             f = temporaryfile()
-        except OSError, e:
+        except OSError as e:
             # Linux gives errno 24
             # Windows gives errno 28 No space left on device
             if e.errno in (errno.EMFILE, errno.ENOSPC):
@@ -716,7 +716,7 @@ def wipe_path(pathname, idle=False):
         while True:
             try:
                 f.write(blanks)
-            except IOError, e:
+            except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
@@ -771,7 +771,7 @@ def wipe_path(pathname, idle=False):
                 # to do actually close (and therefore delete) a temporary file
                 f.close()
                 break
-            except IOError, e:
+            except IOError as e:
                 if e.errno == 0:
                     logger.debug('handled unknown error 0')
                     time.sleep(0.1)

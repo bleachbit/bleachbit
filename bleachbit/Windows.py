@@ -75,7 +75,7 @@ def browse_file(_, title):
                                         | win32con.OFN_FILEMUSTEXIST
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
-    except pywintypes.error, e:
+    except pywintypes.error as e:
         logger = logging.getLogger(__name__)
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
@@ -138,7 +138,7 @@ def delete_locked_file(pathname):
         try:
             win32api.MoveFileEx(
                 pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
-        except pywintypes.error, e:
+        except pywintypes.error as e:
             if not 5 == e.winerror:
                 raise e
             if shell.IsUserAnAdmin():
@@ -160,7 +160,7 @@ def delete_registry_value(key, value_name, really_delete):
         try:
             hkey = _winreg.OpenKey(hive, sub_key, 0, _winreg.KEY_SET_VALUE)
             _winreg.DeleteValue(hkey, value_name)
-        except WindowsError, e:
+        except WindowsError as e:
             if e.winerror == 2:
                 # 2 = 'file not found' means value does not exist
                 return False
@@ -170,7 +170,7 @@ def delete_registry_value(key, value_name, really_delete):
     try:
         hkey = _winreg.OpenKey(hive, sub_key)
         _winreg.QueryValueEx(hkey, value_name)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             return False
         raise
@@ -189,7 +189,7 @@ def delete_registry_key(parent_key, really_delete):
     hkey = None
     try:
         hkey = _winreg.OpenKey(hive, parent_sub_key)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False
@@ -248,7 +248,7 @@ def detect_registry_key(parent_key):
     hkey = None
     try:
         hkey = _winreg.OpenKey(hive, parent_sub_key)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False

@@ -741,15 +741,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-
-        try:
-            import sqlite3
-        except ImportError, e:
-            if sys.version_info[0] == 2 and sys.version_info[1] < 5:
-                print("Warning: Skipping test_vacuum_sqlite3() on old Python")
-                return
-            else:
-                raise e
+        import sqlite3
 
         path = os.path.abspath('bleachbit.tmp.sqlite3')
         if os.path.lexists(path):

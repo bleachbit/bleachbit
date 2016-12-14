@@ -88,7 +88,7 @@ class Worker:
                     yield ret
         except SystemExit:
             pass
-        except Exception, e:
+        except Exception as e:
             # 2 = does not exist
             # 13 = permission denied
             from errno import ENOENT, EACCES
