@@ -36,13 +36,11 @@ running_linux = sys.platform.startswith('linux')
 
 
 class MemoryTestCase(unittest.TestCase):
-
     """Test case for module Memory"""
 
+    @unittest.skipUnless(running_linux, 'not running linux')
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
-        if not sys.platform.startswith('linux'):
-            return
         ret = get_proc_swaps()
         self.assert_(isinstance(ret, str))
         self.assert_(len(ret) > 10)
@@ -50,10 +48,9 @@ class MemoryTestCase(unittest.TestCase):
             raise RuntimeError(
                 "Unexpected first line in swap summary '%s'" % ret)
 
+    @unittest.skipUnless(running_linux, 'not running linux')
     def test_make_self_oom_target_linux(self):
         """Test for method make_self_oom_target_linux"""
-        if not sys.platform.startswith('linux'):
-            return
 
         # preserve
         euid = os.geteuid()
@@ -64,15 +61,13 @@ class MemoryTestCase(unittest.TestCase):
         # restore
         os.seteuid(euid)
 
+    @unittest.skipUnless(running_linux, 'not running linux')
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
-        if not sys.platform.startswith('linux'):
-            return
         n_swaps = count_swap_linux()
         self.assert_(isinstance(n_swaps, (int, long)))
         self.assert_(n_swaps >= 0)
         self.assert_(n_swaps < 10)
-
 
     def test_physical_free_darwin(self):
         self.assertEqual(physical_free_darwin(lambda:
@@ -111,10 +106,9 @@ Swapouts:                              20258188.
         self.assert_(physical_free() > 0)
         report_free()
 
+    @unittest.skipUnless(running_linux, 'not running linux')
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        if not sys.platform.startswith('linux'):
-            return
         swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
             print('no active swap device detected')
@@ -127,10 +121,9 @@ Swapouts:                              20258188.
         size2 = get_swap_size_linux(swapdev, proc_swaps)
         self.assertEqual(size, size2)
 
+    @unittest.skipUnless(running_linux, 'not running linux')
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
-        if not sys.platform.startswith('linux'):
-            return
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
     def test_parse_swapoff(self):

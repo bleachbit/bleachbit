@@ -25,9 +25,6 @@ from __future__ import print_function
 Test case for module FileUtilities
 """
 
-# for Python 2.5 on Windows
-from __future__ import with_statement
-
 import platform
 import sys
 import unittest
@@ -376,7 +373,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test file with mode 0444/-r--r--r--
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-0444')
         os.close(fd)
-        os.chmod(filename, 0444)
+        os.chmod(filename, 0o444)
         delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
@@ -397,10 +394,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         delete(path, shred)
         self.assert_(not os.path.exists(path))
 
+    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
-        if 'nt' == os.name:
-            return
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
     def test_exists_in_path(self):
@@ -731,9 +727,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
+
         if None == os.getenv('ALLTESTS'):
-            print('warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set')
-            return
+            self.skipTest('warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set')
+
         pathname = tempfile.gettempdir()
         for ret in wipe_path(pathname):
             # no idle handler
@@ -768,10 +765,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         delete(path)
 
+    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
-        if 'nt' == os.name:
-            return
 
         (handle, filename) = tempfile.mkstemp(
             prefix='bleachbit-test-open-files')
@@ -795,8 +791,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_open_files_lsof(self):
         self.assertEqual(list(open_files_lsof(lambda:
-            'n/bar/foo\nn/foo/bar\nnoise'
-        )), ['/bar/foo', '/foo/bar'])
+                                              'n/bar/foo\nn/foo/bar\nnoise'
+                                              )), ['/bar/foo', '/foo/bar'])
 
 
 def suite():

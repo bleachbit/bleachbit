@@ -84,10 +84,9 @@ class CLITestCase(unittest.TestCase):
                         cleaner,
                         unicode))
 
+    @unittest.skipUnless('posix' == os.name, 'skipping on non-Unix')
     def test_encoding(self):
         """Unit test for encoding"""
-        if 'posix' != os.name:
-            return
 
         (fd, filename) = tempfile.mkstemp(
             prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')

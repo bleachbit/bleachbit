@@ -27,8 +27,6 @@ Test case for module Windows
 import sys
 import tempfile
 import unittest
-import platform
-from decimal import Decimal
 
 import common
 
@@ -46,7 +44,7 @@ def put_files_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
     # make a file and move it to the recycle bin
     import tempfile
-    tests = (('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100))
+    tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
     for test in tests:
         (fd, filename) = tempfile.mkstemp(
             prefix='bleachbit-recycle-file', suffix=test)
@@ -58,6 +56,7 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
+@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WindowsTestCase(unittest.TestCase):
 
     """Test case for module Windows"""
@@ -81,7 +80,7 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
-        tests = (('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100))
+        tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
             (fd, pathname) = tempfile.mkstemp(
                 prefix='bleachbit-delete-locked-file', suffix=test)
@@ -95,7 +94,7 @@ class WindowsTestCase(unittest.TestCase):
                 else:
                     raise
             self.assert_(os.path.exists(pathname))
-        logger.note('reboot Windows and check the three files are deleted')
+        logger.info('reboot Windows and check the three files are deleted')
 
     def test_delete_registry_key(self):
         """Unit test for delete_registry_key"""

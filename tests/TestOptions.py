@@ -111,7 +111,7 @@ class OptionsTestCase(unittest.TestCase):
         import tempfile
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-options')
         pathname = os.path.join(dirname, 'foo.xml')
-        file(pathname, 'w').write('')  # make an empty file
+        open(pathname, 'w').close()  # make an empty file
         self.assertTrue(os.path.exists(pathname))
         myhash = '0ABCD'
         o1.set_hashpath(pathname, myhash)
@@ -137,8 +137,8 @@ class OptionsTestCase(unittest.TestCase):
         # write something, which triggers the purge
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
-        self.assertRaises(
-            NoOptionError, lambda: o3.get_hashpath(pathname))
+        self.assertRaises(NoOptionError, lambda: o3.get_hashpath(pathname))
+
 
         # clean up
         os.rmdir(dirname)

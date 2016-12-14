@@ -108,10 +108,9 @@ class GeneralTestCase(unittest.TestCase):
         (rc, stdout, stderr) = run_external(args)
         self.assertNotEqual(0, rc)
 
+    @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
-        if not 'posix' == os.name:
-            return
         self.assert_(isinstance(sudo_mode(), bool))
 
 

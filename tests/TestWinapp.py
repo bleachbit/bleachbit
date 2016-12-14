@@ -65,13 +65,14 @@ def get_winapp2():
             logger.info('deleting stale file %s ', fn)
             os.remove(fn)
     if not os.path.exists(fn):
-        f = file(fn, 'w')
+        f = open(fn, 'w')
         import urllib2
         txt = urllib2.urlopen(url).read()
         f.write(txt)
     return fn
 
 
+@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WinappTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for Winapp"""
@@ -161,15 +162,15 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
         f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
-        file(f1, 'w').write('')
+        open(f1, 'w').close()
 
         dirname2 = os.path.join(dirname, 'sub')
         os.mkdir(dirname2)
         f2 = os.path.join(dirname2, 'deleteme.log')
-        file(f2, 'w').write('')
+        open(f2, 'w').close()
 
         fbak = os.path.join(dirname, 'deleteme.bak')
-        file(fbak, 'w').write('')
+        open(fbak, 'w').close()
 
         self.assertExists(f1)
         self.assertExists(f2)
@@ -180,11 +181,11 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
         self.assertTrue(detect_registry_key(keyfull))
         self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
 
-        return (dirname, f1, f2, fbak)
+        return dirname, f1, f2, fbak
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
-        ini = file(self.ini_fn, 'w')
+        ini = open(self.ini_fn, 'w')
         ini.write('[someapp]\n')
         ini.write('LangSecRef=3021\n')
         ini.write(body)

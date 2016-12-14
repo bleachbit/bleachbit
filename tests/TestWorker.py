@@ -248,10 +248,9 @@ class WorkerTestCase(unittest.TestCase):
         """Test Worker using Action.InvalidEncodingAction"""
         self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
 
+    @unittest.skipUnless('nt' == os.name, 'skipping on non-Windows')
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
-        if not 'nt' == os.name:
-            return
         self.action_test_helper('locked', 0, 0, None, None, 3 + 0, 2)
 
     def test_RuntimeError(self):

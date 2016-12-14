@@ -90,8 +90,6 @@ def getrealuid():
     if os.getenv('SUDO_UID'):
         return int(os.getenv('SUDO_UID'))
 
-    login = None
-
     try:
         login = os.getlogin()
         # On Ubuntu 9.04, getlogin() under sudo returns non-root user.
