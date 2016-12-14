@@ -62,7 +62,7 @@ def get_winapp2():
         import stat
         age_seconds = time.time() - os.stat(fn)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
-            logger.note('deleting stale file %s ', fn)
+            logger.info('deleting stale file %s ', fn)
             os.remove(fn)
     if not os.path.exists(fn):
         f = file(fn, 'w')
@@ -149,7 +149,7 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
             for pathname in dir_32_unique:
                 tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
         else:
-            logger.note('skipping %ProgramW6432% tests because WoW64 not detected')
+            logger.info('skipping %ProgramW6432% tests because WoW64 not detected')
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
