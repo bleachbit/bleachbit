@@ -6,18 +6,14 @@ environment:
 
 init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
-  - ver
 
 install:
   - '%PYTHON_HOME%\python.exe -V'
   - '%PYTHON_HOME%\Scripts\pip.exe --version'
   - '%PYTHON_HOME%\Scripts\pip.exe install pypiwin32'
-  - '%PYTHON_HOME%\Scripts\pip.exe install winshell'
-  - '%PYTHON_HOME%\Scripts\pip.exe install psutil'
   - ps: Start-FileDownload "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi"
   - msiexec /i pygtk-all-in-one-2.24.2.win32-py2.7.msi /qn /norestart /log pygtk-install.log TARGETDIR=C:\Python27 ALLUSERS=1
-# download Winapp.ini for TestWinapp.py
-  - ps: Start-FileDownload http://www.winapp2.com/Winapp2.ini -FileName "$Env:TMP\bleachbit_test_winapp2.ini"
+
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
