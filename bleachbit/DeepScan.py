@@ -53,7 +53,7 @@ class DeepScan:
 
     def add_search(self, dirname, regex):
         """Starting in dirname, look for files matching regex"""
-        if not self.searches.has_key(dirname):
+        if dirname not in self.searches:
             self.searches[dirname] = [regex]
         else:
             self.searches[dirname].append(regex)

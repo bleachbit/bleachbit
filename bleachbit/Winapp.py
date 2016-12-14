@@ -172,7 +172,7 @@ class Winapp:
             return langsecref_map[langsecref][0]
         # custom, such as games
         cleanerid = 'winapp2_' + section2option(langsecref)
-        if not cleanerid in self.cleaners:
+        if cleanerid not in self.cleaners:
             # never seen before
             self.add_section(cleanerid, langsecref)
         return cleanerid

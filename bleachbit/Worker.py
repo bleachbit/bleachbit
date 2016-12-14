@@ -169,7 +169,7 @@ class Worker:
                 if 'delete' != ds['command']:
                     raise NotImplementedError(
                         'Deep scan only supports deleting now')
-                if not self.deepscans.has_key(ds['path']):
+                if ds['path'] not in self.deepscans:
                     self.deepscans[ds['path']] = []
                 self.deepscans[ds['path']].append(ds)
         self.ui.update_item_size(operation, -1, total_size)

@@ -110,16 +110,16 @@ def args_to_operations(args, preset):
         (cleaner_id, option_id) = arg.split('.')
         # enable all options (for example, firefox.*)
         if '*' == option_id:
-            if operations.has_key(cleaner_id):
+            if cleaner_id in operations:
                 del operations[cleaner_id]
             operations[cleaner_id] = []
             for (option_id2, o_name) in backends[cleaner_id].get_options():
                 operations[cleaner_id].append(option_id2)
             continue
         # add the specified option
-        if not operations.has_key(cleaner_id):
+        if cleaner_id not in operations:
             operations[cleaner_id] = []
-        if not option_id in operations[cleaner_id]:
+        if option_id not in operations[cleaner_id]:
             operations[cleaner_id].append(option_id)
     for (k, v) in operations.iteritems():
         operations[k] = sorted(v)

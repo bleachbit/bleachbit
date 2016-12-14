@@ -107,7 +107,7 @@ class Cleaner:
             if option_id == action[0]:
                 for cmd in action[1].get_commands():
                     yield cmd
-        if not self.options.has_key(option_id):
+        if option_id not in self.options:
             raise RuntimeError("Unknown option '%s'" % option_id)
 
     def get_deep_scan(self, option_id):
@@ -116,7 +116,7 @@ class Cleaner:
             if option_id == action[0]:
                 for ds in action[1].get_deep_scan():
                     yield ds
-        if not self.options.has_key(option_id):
+        if option_id not in self.options:
             raise RuntimeError("Unknown option '%s'" % option_id)
 
     def get_description(self):
