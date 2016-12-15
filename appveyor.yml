@@ -25,6 +25,7 @@ install:
   - ps: Start-FileDownload "http://github.com/upx/upx/releases/download/v3.92/upx392w.zip"
   - '%SZ_EXE% x upx392w.zip -oupx392w'
   - '%make% -C po local'
+  - ps: grep -l os=.linux. cleaners/*xml | xargs rm -f
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
 
 
