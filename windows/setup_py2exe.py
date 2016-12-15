@@ -41,25 +41,25 @@ if len(sys.argv) > 1 and  sys.argv[1] == 'fast':
     fast = True
 
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append( ROOT_DIR )
 
 
 GTK_DIR  = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
-NSIS_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
-SZ_EXE   = 'C:\\Program Files\\7-Zip\\7z.exe'
+NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
+SZ_EXE   = 'C:\\Program Files (x86)\\7-Zip\\7z.exe'
 UPX_EXE  = 'C:\\win-build\\bin\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
- 
+
 def compress(UPX_EXE, UPX_OPTS, file):
     cmd= UPX_EXE + ' ' + UPX_OPTS + ' '+ file
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
     stdout, stderr = p.communicate()
-    logger.info(stdout)  
-    if stderr : 
-        logger.error(stderr) 
+    logger.info(stdout)
+    if stderr :
+        logger.error(stderr)
 
 
 def recursive_glob(rootdir, patterns):
@@ -74,7 +74,7 @@ def assert_exist(path, msg=None):
         logger.error( path + ' not found')
         if msg:
             logger.error(msg)
-        sys.exit(1) 
+        sys.exit(1)
 
 
 def check_exist(path, msg=None):
@@ -91,17 +91,17 @@ def assert_module(module):
     except ImportError:
         logger.error('Failed to import '+ module)
         logger.error('Process aborted because of error!')
-        sys.exit(1) 
+        sys.exit(1)
 
 def run_cmd(cmd):
-    logger.info(cmd) 
+    logger.info(cmd)
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
     stdout, stderr = p.communicate()
-    logger.info(stdout)  
-    if stderr : 
-        logger.error(stderr)    
+    logger.info(stdout)
+    if stderr :
+        logger.error(stderr)
 
- 
+
 logger.info('Getting BleachBit version')
 import bleachbit.Common
 BB_VER = bleachbit.Common.APP_VERSION
@@ -133,18 +133,18 @@ check_exist(NSIS_EXE, 'NSIS executable not found: will try to build portable Ble
 #if not fast:
 #    logger.info('echo Pre-compressing executables')
 #    python_install_path =  os.path.dirname( sys.executable )
-#    
-#    python_files = recursive_glob(python_install_path, ['*.pyd']) 
+#
+#    python_files = recursive_glob(python_install_path, ['*.pyd'])
 #    for file in python_files:
 #        compress(UPX_EXE, UPX_OPTS, file)
 #
-#    gtk_files = recursive_glob(GTK_DIR, ['*.exe', '*.dll']) 
+#    gtk_files = recursive_glob(GTK_DIR, ['*.exe', '*.dll'])
 #    for file in gtk_files:
 #        compress(UPX_EXE, UPX_OPTS, file)
 #
 #    pywintypes27 = python_install_path + '\\Lib\\site-packages\\pywin32_system32\\pywintypes27.dll'
 #    compress(UPX_EXE, UPX_OPTS, pywintypes27)
- 
+
 logger.info('Deleting directories build and dist')
 shutil.rmtree('build', ignore_errors=True)
 shutil.rmtree('dist', ignore_errors=True)
@@ -167,13 +167,13 @@ shutil.copytree(GTK_DIR + '\\lib', 'dist\\lib')
 shutil.copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
- 
-#logger.info('Compressing executables')    
-#files = recursive_glob('dist', ['*.pyd', '*.dll', '*.exe']) 
+
+#logger.info('Compressing executables')
+#files = recursive_glob('dist', ['*.pyd', '*.dll', '*.exe'])
 #for file in files:
 #    compress(UPX_EXE, UPX_OPTS, file)
 
- 
+
 logger.info('Purging unnecessary GTK+ files')
 cmd= sys.executable +  ' setup.py clean-dist'
 run_cmd(cmd)
@@ -187,7 +187,7 @@ assert_exist( 'dist\\share\\locale\\es\\LC_MESSAGES\\bleachbit.mo' )
 logger.info('Copying BleachBit cleaners')
 if not os.path.exists( 'dist\\share\\cleaners'):
     os.makedirs( 'dist\\share\\cleaners')
-cleaners_files = recursive_glob('cleaners', ['*.xml']) 
+cleaners_files = recursive_glob('cleaners', ['*.xml'])
 for file in cleaners_files:
     shutil.copy( file,  'dist\\share\\cleaners')
 
@@ -200,7 +200,7 @@ logger.info('Checking for Linux-only cleaners')
 if os.path.exists( 'dist\\share\\cleaners\\wine.xml'):
     logger.info('grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f')
 
- 
+
 
 logger.info('Signing code')
 if os.path.exists('CodeSign.bat') :
@@ -218,53 +218,53 @@ if not fast:
         logger.warning(SZ_EXE + ' does not exist')
     else:
         if not os.path.exists( 'dist\\library' ):
-            os.makedirs( 'dist\\library' ) 
+            os.makedirs( 'dist\\library' )
         cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-        logger.info( cmd )  
+        logger.info( cmd )
         run_cmd(cmd)
         file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
-        logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')  
+        logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')
         shutil.rmtree('dist\\library.zip', ignore_errors=True)
 
         cmd = SZ_EXE + '  a -tzip -mx=9 -mfb=255 ..\\library.zip'
-        logger.info( cmd )  
+        logger.info( cmd )
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd='dist\\library')
         stdout, stderr = p.communicate()
-        logger.info(stdout)  
-        if stderr : 
-            logger.error(stderr) 
+        logger.info(stdout)
+        if stderr :
+            logger.error(stderr)
 
         file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
-        logger.info( 'Size after 7zip recompression ' + str( file_size ) + ' Mb') 
-        shutil.rmtree( 'dist\\library', ignore_errors=True ) 
+        logger.info( 'Size after 7zip recompression ' + str( file_size ) + ' Mb')
+        shutil.rmtree( 'dist\\library', ignore_errors=True )
         assert_exist( 'dist\\library.zip')
 
         logger.info('Building portable')
         if os.path.exists( 'BleachBit-portable' ):
-            shutil.rmtree( 'BleachBit-portable', ignore_errors=True ) 
-        
+            shutil.rmtree( 'BleachBit-portable', ignore_errors=True )
+
         shutil.copytree('dist', 'BleachBit-portable')
         with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
             text_file.write( "[Portable]" )
-        
-        cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER) 
+
+        cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
         run_cmd(cmd)
 else:
-    logger.warning( 'Skip Recompressing library.zip with 7-Zip' )  
+    logger.warning( 'Skip Recompressing library.zip with 7-Zip' )
     logger.warning( 'Skip Building portable' )
 
 
 # NSIS
-logger.info( 'Building installer' )  
+logger.info( 'Building installer' )
 if not fast:
-    cmd = NSIS_EXE + ' /X"SetCompressor /FINAL zlib" /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER) 
+    cmd = NSIS_EXE + ' /X"SetCompressor /FINAL zlib" /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
     run_cmd(cmd)
 else:
-    cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER) 
+    cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
     run_cmd(cmd)
 
 if os.path.exists('CodeSign.bat') :
-    logger.info( 'Signing code' )  
+    logger.info( 'Signing code' )
     cmd = 'CodeSign.bat windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     run_cmd(cmd)
 else:
@@ -275,15 +275,15 @@ if not fast:
     cmd = NSIS_EXE + ' /DNoTranslations /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
     run_cmd(cmd)
     if os.path.exists('CodeSign.bat') :
-        logger.info( 'Signing code' )  
+        logger.info( 'Signing code' )
         cmd = 'CodeSign.bat windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
         run_cmd(cmd)
 
 
-logger.info( 'Zipping installer' ) 
+logger.info( 'Zipping installer' )
 #Please note that the archive does not have the folder name
 cmd = SZ_EXE + '  a -mx=9  windows\\BleachBit-{0}-setup.zip .\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
 run_cmd(cmd)
 
 
-logger.info( 'Success!' )  
+logger.info( 'Success!' )
