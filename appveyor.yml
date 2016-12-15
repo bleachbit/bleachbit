@@ -1,9 +1,9 @@
 build: off
 
 environment:
-    PYTHON_HOME: 'C:\\Python27'
-    NSIS_EXE :   'C:\\Program Files(x86)\\NSIS\\makensis.exe'
-    SZ_EXE   :   'C:\\Program Files(x86)\\7-Zip\\7z.exe'
+    PYTHON_HOME: 'C:/Python27'
+    NSIS_EXE :   'C:/Program Files(x86)/NSIS/makensis.exe'
+    SZ_EXE   :   'C:/Program Files(x86)/7-Zip/7z.exe'
 
 
 
@@ -11,9 +11,9 @@ init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - 'echo NSIS_EXE=%NSIS_EXE%'
   - 'echo SZ_EXE=%SZ_EXE%'
-  - '%PYTHON_HOME%\python.exe -V'
-  - '%PYTHON_HOME%\Scripts\pip.exe --version'
-  - '"%NSIS_EXE%"  -v'
+  - '%PYTHON_HOME%/python.exe -V'
+  - '%PYTHON_HOME%/Scripts/pip.exe --version'
+  - '%NSIS_EXE%  -v'
   - '%SZ_EXE%  -v'
 
 install:
