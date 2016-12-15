@@ -9,7 +9,6 @@ environment:
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
 
 
-
 init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - '%PYTHON_HOME%/python.exe -V'
