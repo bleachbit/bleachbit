@@ -48,8 +48,8 @@ sys.path.append( ROOT_DIR )
 
 GTK_DIR  = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
-SZ_EXE   = 'C:\\Program Files (x86)\\7-Zip\\7z.exe'
-UPX_EXE  = 'C:\\win-build\\bin\\upx.exe'
+SZ_EXE   = 'C:\\Program Files\\7-Zi\\7z.exe'
+UPX_EXE  = 'upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 
