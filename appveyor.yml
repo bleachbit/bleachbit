@@ -14,6 +14,7 @@ init:
   - '%PYTHON_HOME%/python.exe -V'
   - '%PYTHON_HOME%/Scripts/pip.exe --version'
 
+
 install:
   - '%PYTHON_HOME%\Scripts\pip.exe install pypiwin32'
   - '%PYTHON_HOME%\Scripts\pip.exe install py2exe_py2'

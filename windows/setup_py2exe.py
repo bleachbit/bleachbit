@@ -153,11 +153,9 @@ logger.info('Running py2exe')
 shutil.copyfile( 'bleachbit.py', 'bleachbit_console.py')
 cmd= sys.executable +  ' -OO setup.py py2exe'
 run_cmd(cmd)
-os.remove('bleachbit_console.py')
-
-
 assert_exist('dist\\bleachbit.exe')
 assert_exist('dist\\bleachbit_console.exe')
+os.remove('bleachbit_console.py')
 
 
 if not os.path.exists('dist'):
@@ -285,6 +283,7 @@ if not fast:
 
 
 logger.info( 'Zipping installer' )
+assert_exist( '.\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER) )
 #Please note that the archive does not have the folder name
 cmd = SZ_EXE + '  a -mx=9  windows\\BleachBit-{0}-setup.zip .\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
 run_cmd(cmd)
