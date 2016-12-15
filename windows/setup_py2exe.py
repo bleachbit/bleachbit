@@ -156,6 +156,10 @@ run_cmd(cmd)
 os.remove('bleachbit_console.py')
 
 
+assert_exist('dist\\bleachbit.exe')
+assert_exist('dist\\bleachbit_console.exe')
+
+
 if not os.path.exists('dist'):
     os.makedirs('dist')
 
