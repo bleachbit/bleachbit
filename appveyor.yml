@@ -1,4 +1,8 @@
-build: off
+version: 1.0.{build}
+branches:
+  only:
+  - utf8filenames
+
 
 environment:
     PYTHON_HOME: 'C:/Python27'
