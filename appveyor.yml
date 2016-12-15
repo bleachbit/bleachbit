@@ -9,12 +9,10 @@ environment:
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
-
 init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - '%PYTHON_HOME%/python.exe -V'
   - '%PYTHON_HOME%/Scripts/pip.exe --version'
-
 
 install:
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
@@ -27,7 +25,6 @@ install:
   - '%make% -C po local'
   - ps: grep -l os=.linux. cleaners/*xml | xargs rm -f
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
-
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
