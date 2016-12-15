@@ -3,7 +3,6 @@ branches:
   only:
   - utf8filenames
 
-
 environment:
     PYTHON_HOME: 'C:/Python27'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
@@ -30,4 +29,3 @@ cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
 
 test_script:
-
