@@ -285,7 +285,7 @@ if not fast:
 logger.info( 'Zipping installer' )
 assert_exist( '.\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER) )
 #Please note that the archive does not have the folder name
-cmd = SZ_EXE + '  a -mx=9  windows\\BleachBit-{0}-setup.zip .\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+cmd = SZ_EXE + '  a -mx=9  .\\windows\\BleachBit-{0}-setup.zip .\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
 run_cmd(cmd)
 
 
