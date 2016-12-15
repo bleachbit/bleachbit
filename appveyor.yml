@@ -23,7 +23,7 @@ install:
   - ps: Start-FileDownload "http://github.com/upx/upx/releases/download/v3.92/upx392w.zip"
   - '%SZ_EXE% x upx392w.zip -oupx392w'
   - 'echo echo %cd%'
-  - '%cd%/upx392w/upx.exe -v'
+  - '%cd%\\upx392w\\upx.exe -v'
 
 
 
