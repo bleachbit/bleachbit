@@ -16,7 +16,6 @@ init:
 
 
 install:
-  - 'dir "C:/Program Files/7-Zip/"'
   - '%PYTHON_HOME%\Scripts\pip.exe install pypiwin32'
   - '%PYTHON_HOME%\Scripts\pip.exe install py2exe_py2'
   - ps: Start-FileDownload "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi"

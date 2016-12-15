@@ -282,14 +282,15 @@ if not fast:
         run_cmd(cmd)
 
 
-logger.info( 'Zipping installer' )
-#Please note that the archive does not have the folder name
-outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-assert_exist(infile)
-assert_exist(SZ_EXE)
-
-cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
-run_cmd(cmd)
+if os.path.exists( SZ_EXE ) :
+    logger.info( 'Zipping installer' )
+    #Please note that the archive does not have the folder name
+    outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
+    infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    assert_exist(infile)
+    cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
+    run_cmd(cmd)
+else:
+    logger.warning(SZ_EXE + ' does not exist')
 
 logger.info( 'Success!' )
