@@ -298,7 +298,7 @@ class Worker:
         self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
         yield True  # allow GTK to update the screen
         ds = DeepScan.DeepScan()
-        for (path, dsdict) in self.deepscans.iteritems():
+        for (path, dsdict) in self.deepscans.items():
             logger.debug('deepscan path=%s, dict=%s' % (path, dsdict))
             for dsdict2 in dsdict:
                 ds.add_search(path, dsdict2['regex'])

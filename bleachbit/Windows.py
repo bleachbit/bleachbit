@@ -279,11 +279,11 @@ def elevate_privileges():
 
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
-        exe = unicode(sys.executable, sys.getfilesystemencoding())
+        exe = sys.executable.decode(sys.getfilesystemencoding())
         parameters = "--gui --no-uac"
     else:
         # __file__ is absolute path to bleachbit/Windows.py
-        pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
+        pydir = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
         pyfile = os.path.join(pydir, 'GUI.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be

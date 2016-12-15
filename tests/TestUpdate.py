@@ -29,13 +29,12 @@ import os
 import os.path
 import sys
 import unittest
-import urllib2
 
 sys.path.append('.')
 from bleachbit import Common
 from bleachbit.Common import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
-
+import bleachbit.Update
 
 class UpdateTestCase(unittest.TestCase):
 
@@ -58,7 +57,7 @@ class UpdateTestCase(unittest.TestCase):
         update_tests.append(('<updates></updates>', ()))
 
         # fake network
-        original_open = urllib2.build_opener
+        original_open = bleachbit.Update.build_opener
         xml = ""
 
         class fake_opener:
@@ -72,12 +71,12 @@ class UpdateTestCase(unittest.TestCase):
             def open(self, url):
                 return self
 
-        urllib2.build_opener = fake_opener
+        bleachbit.Update.build_opener = fake_opener
         for update_test in update_tests:
             xml = update_test[0]
             updates = check_updates(True, False, None, None)
             self.assertEqual(updates, update_test[1])
-        urllib2.build_opener = original_open
+        bleachbit.Update.build_opener = original_open
 
         # real network
         for update in check_updates(True, False, None, None):

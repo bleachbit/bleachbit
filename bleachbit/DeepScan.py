@@ -38,7 +38,7 @@ def normalize_filename(fn):
     """
     if 'darwin' == sys.platform:
         return unicodedata.normalize(
-            'NFC', unicode(fn, 'utf-8')).encode('utf-8')
+            'NFC', fn.decode('utf-8')).encode('utf-8')
     else:
         return fn
 
@@ -64,7 +64,7 @@ class DeepScan:
         import time
         yield_time = time.time()
 
-        for (top, regexes) in self.searches.iteritems():
+        for (top, regexes) in self.searches.items():
             for (dirpath, dirnames, filenames) in os.walk(top):
                 for regex in regexes:
                     # fixme, don't match filename twice

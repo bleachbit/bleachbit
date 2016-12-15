@@ -62,7 +62,7 @@ def benchmark_filter(this_filter):
 
     # make a directory with many files
     dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
-    for x in xrange(0, n_files):
+    for x in range(0, n_files):
         common.touch_file(os.path.join(dirname, str(x)))
 
     # scan directory
@@ -386,7 +386,7 @@ if __name__ == '__main__':
             iterations = 1
             if 3 == len(sys.argv):
                 iterations = int(sys.argv[2])
-            for x in xrange(0, iterations):
+            for x in range(0, iterations):
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis

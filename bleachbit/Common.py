@@ -69,12 +69,10 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(
-        unicode(sys.executable, sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
     # __file__ is absolute path to bleachbit/Common.py
-    bleachbit_exe_path = os.path.dirname(
-        unicode(__file__, sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
 
 # license
 license_filename = None

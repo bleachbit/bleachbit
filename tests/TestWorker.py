@@ -77,7 +77,7 @@ class FunctionGeneratorAction(ActionProvider):
     def get_commands(self):
         # function generator without path, should succeed
         def funcgenerator():
-            yield long(10)
+            yield 10
         yield Command.Function(None, funcgenerator, 'funcgenerator')
 
         # real file, should succeed

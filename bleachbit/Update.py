@@ -30,8 +30,12 @@ import os.path
 import platform
 import socket
 import sys
-import traceback
-import urllib2
+if sys.version >= (3, 0):
+    from urllib.request import build_opener
+    from urllib.error import URLError
+else:
+    from urllib2 import build_opener, URLError
+
 import xml.dom.minidom
 
 import Common

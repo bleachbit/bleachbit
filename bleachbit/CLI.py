@@ -121,7 +121,7 @@ def args_to_operations(args, preset):
             operations[cleaner_id] = []
         if option_id not in operations[cleaner_id]:
             operations[cleaner_id].append(option_id)
-    for (k, v) in operations.iteritems():
+    for (k, v) in operations.items():
         operations[k] = sorted(v)
     return operations
 
