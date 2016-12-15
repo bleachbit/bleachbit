@@ -287,6 +287,7 @@ logger.info( 'Zipping installer' )
 outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
 infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
 assert_exist(infile)
+assert_exist(SZ_EXE)
 
 cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
 run_cmd(cmd)
