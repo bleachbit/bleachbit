@@ -83,7 +83,7 @@ def check_exist(path, msg=None):
         if msg:
             logger.warning(msg)
         logger.warning('Press Enter to continue...')
-        raw_input()
+        #raw_input()
 
 def assert_module(module):
     try:
