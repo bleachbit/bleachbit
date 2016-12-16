@@ -45,8 +45,6 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append( ROOT_DIR )
 
-logger.info('getenv(PATH) ' + str(os.getenv('PATH')))
-
 
 
 GTK_DIR  = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
