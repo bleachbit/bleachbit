@@ -45,6 +45,9 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append( ROOT_DIR )
 
+logger.info('getenv(PATH) ' + str(os.getenv('PATH')))
+
+
 
 GTK_DIR  = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
@@ -240,20 +243,20 @@ if not fast:
         logger.info( 'Size after 7zip recompression ' + str( file_size ) + ' Mb')
         shutil.rmtree( 'dist\\library', ignore_errors=True )
         assert_exist( 'dist\\library.zip')
-
-        logger.info('Building portable')
-        if os.path.exists( 'BleachBit-portable' ):
-            shutil.rmtree( 'BleachBit-portable', ignore_errors=True )
-
-        shutil.copytree('dist', 'BleachBit-portable')
-        with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
-            text_file.write( "[Portable]" )
-
-        cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
-        run_cmd(cmd)
 else:
     logger.warning( 'Skip Recompressing library.zip with 7-Zip' )
-    logger.warning( 'Skip Building portable' )
+
+
+logger.info('Building portable')
+if os.path.exists( 'BleachBit-portable' ):
+    shutil.rmtree( 'BleachBit-portable', ignore_errors=True )
+
+shutil.copytree('dist', 'BleachBit-portable')
+with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+    text_file.write( "[Portable]" )
+
+cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
+run_cmd(cmd)
 
 
 # NSIS
