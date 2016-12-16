@@ -168,11 +168,11 @@ files = recursive_glob('dist', ['*.exe'])
 for file in files:
     compress(UPX_EXE, UPX_OPTS, file)
 
-logger.info('Stripping executables')
-files = recursive_glob('dist', ['*.dll', '*.exe'])
-for file in files:
-    cmd = 'strip --strip-all ' + file
-    run_cmd(cmd)
+#logger.info('Stripping executables')
+#files = recursive_glob('dist', ['*.dll', '*.exe'])
+#for file in files:
+#    cmd = 'strip --strip-all ' + file
+#    run_cmd(cmd)
 
 
 logger.info('Purging unnecessary GTK+ files')
