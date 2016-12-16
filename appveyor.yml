@@ -24,8 +24,9 @@ install:
   - '%SZ_EXE% x upx392w.zip'
   - ps: Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip"
   - '%SZ_EXE% x gettext0.19.8.1-iconv1.14-static-32.zip -ogettext'
-  - 'set PATH=%PATH%;%cd%/gettext/bin'
+  - 'set PATH=%PATH%;%cd%/gettext/bin;C:/MinGW/bin/'
   - 'msgunfmt -V'
+  - 'strip.exe -V'
   - '%make% -C po local'
   - ps: grep -l os=.linux. cleaners/*xml | xargs rm -f
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
