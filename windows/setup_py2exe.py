@@ -102,6 +102,11 @@ def run_cmd(cmd):
     if stderr :
         logger.error(stderr)
 
+def check_file_for_string(filename, string):
+    with open(filename) as fin:
+         return string in fin.read()
+
+
 
 logger.info('Getting BleachBit version')
 import bleachbit.Common
@@ -131,27 +136,14 @@ logger.info('Checking for NSIS')
 check_exist(NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
 
 
-#if not fast:
-#    logger.info('echo Pre-compressing executables')
-#    python_install_path =  os.path.dirname( sys.executable )
-#
-#    python_files = recursive_glob(python_install_path, ['*.pyd'])
-#    for file in python_files:
-#        compress(UPX_EXE, UPX_OPTS, file)
-#
-#    gtk_files = recursive_glob(GTK_DIR, ['*.exe', '*.dll'])
-#    for file in gtk_files:
-#        compress(UPX_EXE, UPX_OPTS, file)
-#
-#    pywintypes27 = python_install_path + '\\Lib\\site-packages\\pywin32_system32\\pywintypes27.dll'
-#    compress(UPX_EXE, UPX_OPTS, pywintypes27)
-
 logger.info('Deleting directories build and dist')
-shutil.rmtree('build', ignore_errors=True)
-shutil.rmtree('dist', ignore_errors=True)
+shutil.rmtree( 'build', ignore_errors=True)
+shutil.rmtree( 'dist', ignore_errors=True)
+shutil.rmtree( 'BleachBit-portable', ignore_errors=True )
+
 
 logger.info('Running py2exe')
-shutil.copyfile( 'bleachbit.py', 'bleachbit_console.py')
+shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
 cmd= sys.executable +  ' -OO setup.py py2exe'
 run_cmd(cmd)
 assert_exist('dist\\bleachbit.exe')
@@ -171,10 +163,16 @@ shutil.copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
 
-#logger.info('Compressing executables')
-#files = recursive_glob('dist', ['*.pyd', '*.dll', '*.exe'])
-#for file in files:
-#    compress(UPX_EXE, UPX_OPTS, file)
+logger.info('Compressing executables')
+files = recursive_glob('dist', ['*.exe'])
+for file in files:
+    compress(UPX_EXE, UPX_OPTS, file)
+
+logger.info('Stripping executables')
+files = recursive_glob('dist', ['*.dll', '*.exe'])
+for file in files:
+    cmd = 'strip --strip-all ' + file
+    run_cmd(cmd)
 
 
 logger.info('Purging unnecessary GTK+ files')
@@ -196,12 +194,16 @@ for file in cleaners_files:
 
 
 logger.info('Checking for CleanerML')
-assert_exist( 'dist\\share\\cleaners\\internet_explorer.xml' )
+assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
 
 logger.info('Checking for Linux-only cleaners')
 if os.path.exists( 'dist\\share\\cleaners\\wine.xml'):
-    run_cmd( 'grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f' )
+    files = recursive_glob('dist/share/cleaners/', ['*.xml'])
+    for file in files:
+        if check_file_for_string(file, 'os="linux"'):
+            logger.warning('delete ' + file)
+            os.remove( file )
 
 
 
@@ -213,6 +215,14 @@ if os.path.exists('CodeSign.bat') :
 else:
     logger.error('CodeSign.bat not found')
 
+
+logger.info('Building portable')
+shutil.copytree('dist', 'BleachBit-portable')
+with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+    text_file.write( "[Portable]" )
+
+cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
+run_cmd(cmd)
 
 
 if not fast:
@@ -243,18 +253,6 @@ if not fast:
         assert_exist( 'dist\\library.zip')
 else:
     logger.warning( 'Skip Recompressing library.zip with 7-Zip' )
-
-
-logger.info('Building portable')
-if os.path.exists( 'BleachBit-portable' ):
-    shutil.rmtree( 'BleachBit-portable', ignore_errors=True )
-
-shutil.copytree('dist', 'BleachBit-portable')
-with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
-    text_file.write( "[Portable]" )
-
-cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
-run_cmd(cmd)
 
 
 # NSIS
