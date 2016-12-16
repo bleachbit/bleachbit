@@ -120,7 +120,7 @@ if 'py2exe' in sys.argv:
 def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
 
-    if not bleachbit.FileUtilities.exe_exists('msgunfmt'):
+    if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
         print 'warning: msgunfmt missing: skipping recompile'
         return
 
