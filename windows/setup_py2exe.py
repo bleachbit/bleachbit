@@ -203,7 +203,7 @@ assert_exist( 'dist\\share\\cleaners\\internet_explorer.xml' )
 
 logger.info('Checking for Linux-only cleaners')
 if os.path.exists( 'dist\\share\\cleaners\\wine.xml'):
-    run_cmd( 'powershell.exe grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f' )
+    run_cmd( 'grep -l os=.linux. dist/share/cleaners/*xml | xargs rm -f' )
 
 
 
