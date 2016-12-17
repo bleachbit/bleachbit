@@ -49,6 +49,10 @@ sys.path.append( ROOT_DIR )
 
 GTK_DIR  = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
+NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
+if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
+    logger.info('NSIS found in alternate location:' + NSIS_ALT_EXE)
+    NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE   = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE  = ROOT_DIR + '\\upx392w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
