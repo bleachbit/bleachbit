@@ -256,30 +256,33 @@ else:
 
 
 # NSIS
-logger.info( 'Building installer' )
-if not fast:
-    cmd = NSIS_EXE + ' /X"SetCompressor /FINAL zlib" /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-    run_cmd(cmd)
+if not os.path.exists( path ):
+    logger.warning('NSIS not found, so not building installer')
 else:
-    cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-    run_cmd(cmd)
+    logger.info( 'Building installer' )
+    if not fast:
+        cmd = NSIS_EXE + ' /X"SetCompressor /FINAL zlib" /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
+        run_cmd(cmd)
+    else:
+        cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
+        run_cmd(cmd)
 
-sign_code('windows\\BleachBit-{0}-setup.exe'.format(BB_VER))
+    sign_code('windows\\BleachBit-{0}-setup.exe'.format(BB_VER))
 
-if not fast:
-    cmd = NSIS_EXE + ' /DNoTranslations /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-    run_cmd(cmd)
-    sign_code('windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
+    if not fast:
+        cmd = NSIS_EXE + ' /DNoTranslations /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
+        run_cmd(cmd)
+        sign_code('windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
 
-if os.path.exists( SZ_EXE ) :
-    logger.info( 'Zipping installer' )
-    #Please note that the archive does not have the folder name
-    outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-    infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    assert_exist(infile)
-    cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
-    run_cmd(cmd)
-else:
-    logger.warning(SZ_EXE + ' does not exist')
+    if os.path.exists( SZ_EXE ) :
+        logger.info( 'Zipping installer' )
+        #Please note that the archive does not have the folder name
+        outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
+        infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+        assert_exist(infile)
+        cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
+        run_cmd(cmd)
+    else:
+        logger.warning(SZ_EXE + ' does not exist')
 
 logger.info( 'Success!' )
