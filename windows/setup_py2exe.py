@@ -106,7 +106,13 @@ def check_file_for_string(filename, string):
     with open(filename) as fin:
          return string in fin.read()
 
-
+def sign_code(filename):
+    if os.path.exists('CodeSign.bat'):
+        logger.info('Signing code: %s' % filename)
+        cmd = 'CodeSign.bat %s' % filename
+        run_cmd(cmd)
+    else:
+        logger.warning('CodeSign.bat not available for %s' % filename)
 
 logger.info('Getting BleachBit version')
 import bleachbit.Common
@@ -207,14 +213,8 @@ if os.path.exists( 'dist\\share\\cleaners\\wine.xml'):
 
 
 
-logger.info('Signing code')
-if os.path.exists('CodeSign.bat') :
-    cmds = ['CodeSign.bat dist\\bleachbit.exe', 'CodeSign.bat dist\\bleachbit_console.exe']
-    for c in cmds:
-        run_cmd(c)
-else:
-    logger.error('CodeSign.bat not found')
-
+sign_code('dist\\bleachbit.exe')
+sign_code('dist\\bleachbit_console.exe')
 
 logger.info('Building portable')
 shutil.copytree('dist', 'BleachBit-portable')
@@ -264,22 +264,12 @@ else:
     cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
     run_cmd(cmd)
 
-if os.path.exists('CodeSign.bat') :
-    logger.info( 'Signing code' )
-    cmd = 'CodeSign.bat windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    run_cmd(cmd)
-else:
-    logger.error('CodeSign.bat not found')
-
+sign_code('windows\\BleachBit-{0}-setup.exe'.format(BB_VER))
 
 if not fast:
     cmd = NSIS_EXE + ' /DNoTranslations /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
     run_cmd(cmd)
-    if os.path.exists('CodeSign.bat') :
-        logger.info( 'Signing code' )
-        cmd = 'CodeSign.bat windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
-        run_cmd(cmd)
-
+    sign_code('windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
 
 if os.path.exists( SZ_EXE ) :
     logger.info( 'Zipping installer' )
