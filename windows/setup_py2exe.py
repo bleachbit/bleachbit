@@ -83,8 +83,8 @@ def check_exist(path, msg=None):
         logger.warning( path + ' not found')
         if msg:
             logger.warning(msg)
-        logger.warning('Press Enter to continue...')
-        #raw_input()
+        import time
+        time.sleep(5)
 
 def assert_module(module):
     try:
