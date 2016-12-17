@@ -256,7 +256,7 @@ else:
 
 
 # NSIS
-if not os.path.exists( path ):
+if not os.path.exists(NSIS_EXE):
     logger.warning('NSIS not found, so not building installer')
 else:
     logger.info( 'Building installer' )
