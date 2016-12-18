@@ -253,7 +253,6 @@ if not fast:
         if not os.path.exists( 'dist\\library' ):
             os.makedirs( 'dist\\library' )
         cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-        logger.info( cmd )
         run_cmd(cmd)
         file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
         logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')
