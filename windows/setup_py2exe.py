@@ -200,7 +200,11 @@ shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
 logger.info('Deleting unnecessary files')
 old_dir_size = get_dir_size('dist')
-shutil.rmtree('dist\\share\\doc', ignore_errors=True)
+delete_dirs = ['dist\\share\\doc', 'dist\share\\gtk-doc','dist\\share\man']
+for delete_dir in delete_dirs:
+    if not os.path.exists(delete_dir):
+        logger.warning('Directory does not exist: ' + delete_dir)
+    shutil.rmtree(delete_dir, ignore_errors=True)
 new_dir_size = get_dir_size('dist')
 dir_size_diff = old_dir_size - new_dir_size
 logger.info('Reduced size of the dist directory by {} from {} to {}'.format(dir_size_diff, old_dir_size, new_dir_size))
