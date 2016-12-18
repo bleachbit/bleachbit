@@ -59,7 +59,7 @@ SZ_EXE   = 'C:\\Program Files\\7-Zip\\7z.exe'
 # mpass=passes for deflate encoder
 # mfb=number of fast bytes
 # bso0 bsp0 quiet output
-SZ_OPTS  = '-tzip -mm=Deflate -mfb=258 -mpass=15 -bso0 -bsp0' # best compression
+SZ_OPTS  = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0' # best compression
 if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
