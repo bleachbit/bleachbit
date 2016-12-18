@@ -135,6 +135,15 @@ def sign_code(filename):
     else:
         logger.warning('CodeSign.bat not available for %s' % filename)
 
+def get_dir_size(start_path = '.'):
+    #http://stackoverflow.com/questions/1392413/calculating-a-directory-size-using-python
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
+
 logger.info('Getting BleachBit version')
 import bleachbit.Common
 BB_VER = bleachbit.Common.APP_VERSION
@@ -189,6 +198,12 @@ shutil.copytree(GTK_DIR + '\\lib', 'dist\\lib')
 shutil.copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
+logger.info('Deleting unnecessary files')
+old_dir_size = get_dir_size('dist')
+shutil.rmtree('dist\\share\\doc', ignore_errors=True)
+new_dir_size = get_dir_size('dist')
+dir_size_diff = old_dir_size - new_dir_size
+logger.info('Reduced size of the dist directory by {} from {} to {}'.format(dir_size_diff, old_dir_size, new_dir_size))
 
 logger.info('Compressing executables')
 files = recursive_glob('dist', ['*.exe'])
