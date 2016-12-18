@@ -54,6 +54,15 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
     logger.info('NSIS found in alternate location:' + NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE   = 'C:\\Program Files\\7-Zip\\7z.exe'
+# maximum compression with maximum compatibility
+# mm=deflate method because deflate64 not widely supported
+# mpass=passes for deflate encoder
+# mfb=number of fast bytes
+# bso0 bsp0 quiet output
+SZ_OPTS  = '-tzip -mm=Deflate -mfb=258 -mpass=15 -bso0 -bsp0' # best compression
+if fast:
+    # fast compression
+    SZ_OPTS = '-mx=1 -bso0 -bsp0'
 UPX_EXE  = ROOT_DIR + '\\upx392w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
@@ -66,6 +75,11 @@ def compress(UPX_EXE, UPX_OPTS, file):
     if stderr :
         logger.error(stderr)
 
+def archive(infile, outfile):
+    assert_exist(infile)
+    cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS, outfile, infile)
+    run_cmd(cmd)
+    assert_exist(outfile)
 
 def recursive_glob(rootdir, patterns):
     return [os.path.join(looproot, filename)
@@ -225,9 +239,7 @@ shutil.copytree('dist', 'BleachBit-portable')
 with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
     text_file.write( "[Portable]" )
 
-cmd = SZ_EXE + '  a -mx=9  BleachBit-{0}-portable.zip BleachBit-portable'.format(BB_VER)
-run_cmd(cmd)
-
+archive('BleachBit-portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
 
 if not fast:
     logger.info('Recompressing library.zip with 7-Zip')
@@ -283,9 +295,7 @@ else:
         #Please note that the archive does not have the folder name
         outfile = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
         infile  = ROOT_DIR +'\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-        assert_exist(infile)
-        cmd = SZ_EXE + ' a -mx=9  ' + outfile + ' ' + infile
-        run_cmd(cmd)
+        archive(infile, outfile)
     else:
         logger.warning(SZ_EXE + ' does not exist')
 
