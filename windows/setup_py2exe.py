@@ -62,7 +62,7 @@ SZ_EXE   = 'C:\\Program Files\\7-Zip\\7z.exe'
 SZ_OPTS  = '-tzip -mm=Deflate -mfb=258 -mpass=15 -bso0 -bsp0' # best compression
 if fast:
     # fast compression
-    SZ_OPTS = '-mx=1 -bso0 -bsp0'
+    SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
 UPX_EXE  = ROOT_DIR + '\\upx392w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
@@ -249,6 +249,7 @@ if not fast:
     if not os.path.exists( SZ_EXE ) :
         logger.warning(SZ_EXE + ' does not exist')
     else:
+        # extract library.zip
         if not os.path.exists( 'dist\\library' ):
             os.makedirs( 'dist\\library' )
         cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
@@ -258,7 +259,8 @@ if not fast:
         logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')
         os.remove('dist\\library.zip')
 
-        cmd = SZ_EXE + '  a -tzip -mx=9 -mfb=255 ..\\library.zip'
+        # recompress library.zip
+        cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
         logger.info( cmd )
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd='dist\\library')
         stdout, stderr = p.communicate()
