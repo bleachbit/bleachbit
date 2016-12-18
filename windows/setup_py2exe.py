@@ -77,6 +77,9 @@ def compress(UPX_EXE, UPX_OPTS, file):
 
 def archive(infile, outfile):
     assert_exist(infile)
+    if os.path.exists(outfile):
+        logger.warning('Deleting output archive that already exists: ' + outfile)
+        os.remove(outfile)
     cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS, outfile, infile)
     run_cmd(cmd)
     assert_exist(outfile)
