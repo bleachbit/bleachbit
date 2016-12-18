@@ -198,6 +198,7 @@ shutil.copytree(GTK_DIR + '\\lib', 'dist\\lib')
 shutil.copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
+
 logger.info('Deleting unnecessary files')
 old_dir_size = get_dir_size('dist')
 # Remove SVG to reduce space and avoid this error
@@ -207,10 +208,13 @@ delete_dirs = ['dist\\share\\doc', 'dist\share\\gtk-doc','dist\\share\man', 'dis
 for delete_dir in delete_dirs:
     if not os.path.exists(delete_dir):
         logger.warning('Directory does not exist: ' + delete_dir)
+        continue
+    this_dir_size = get_dir_size(delete_dir)
     shutil.rmtree(delete_dir, ignore_errors=True)
+    logger.info('Deleting {} saved {:,} bytes'.format(delete_dir, this_dir_size))
 new_dir_size = get_dir_size('dist')
 dir_size_diff = old_dir_size - new_dir_size
-logger.info('Reduced size of the dist directory by {} from {} to {}'.format(dir_size_diff, old_dir_size, new_dir_size))
+logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(dir_size_diff, old_dir_size, new_dir_size))
 
 logger.info('Compressing executables')
 files = recursive_glob('dist', ['*.exe'])
@@ -276,8 +280,7 @@ if not fast:
             os.makedirs( 'dist\\library' )
         cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
         run_cmd(cmd)
-        file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
-        logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')
+        file_size_old = os.path.getsize( 'dist\\library.zip' )
         os.remove('dist\\library.zip')
 
         # recompress library.zip
@@ -289,8 +292,9 @@ if not fast:
         if stderr :
             logger.error(stderr)
 
-        file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
-        logger.info( 'Size after 7zip recompression ' + str( file_size ) + ' Mb')
+        file_size_new = os.path.getsize( 'dist\\library.zip' )
+        file_size_diff = file_size_old - file_size_new
+        logger.info( 'Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(file_size_diff, file_size_old, file_size_new))
         shutil.rmtree( 'dist\\library', ignore_errors=True )
         assert_exist( 'dist\\library.zip')
 else:
