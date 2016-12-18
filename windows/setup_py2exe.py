@@ -273,7 +273,7 @@ if not fast:
         shutil.rmtree( 'dist\\library', ignore_errors=True )
         assert_exist( 'dist\\library.zip')
 else:
-    logger.warning( 'Skip Recompressing library.zip with 7-Zip' )
+    logger.warning( 'Skipped recompression library.zip with 7-Zip' )
 
 
 # NSIS
