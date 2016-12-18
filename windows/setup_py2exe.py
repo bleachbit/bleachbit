@@ -276,23 +276,25 @@ else:
 
 
 # NSIS
+def nsis(opts, exe_name):
+    if os.path.exists(exe_name):
+        logger.info('Deleting old file: ' + exe_name)
+        os.remove(exe_name)
+    cmd = NSIS_EXE + ' {} /DVERSION={} windows\\bleachbit.nsi'.format(opts, BB_VER)
+    run_cmd(cmd)
+    assert_exist(exe_name)
+    sign_code(exe_name)
+
 if not os.path.exists(NSIS_EXE):
     logger.warning('NSIS not found, so not building installer')
 else:
     logger.info( 'Building installer' )
-    if not fast:
-        cmd = NSIS_EXE + ' /X"SetCompressor /FINAL zlib" /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-        run_cmd(cmd)
-    else:
-        cmd = NSIS_EXE + ' /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-        run_cmd(cmd)
-
-    sign_code('windows\\BleachBit-{0}-setup.exe'.format(BB_VER))
+    exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    nsis(opts, exe_name)
 
     if not fast:
-        cmd = NSIS_EXE + ' /DNoTranslations /DVERSION={0} windows\\bleachbit.nsi'.format(BB_VER)
-        run_cmd(cmd)
-        sign_code('windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
+        nsis('/DNoTranslations', 'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
 
     if os.path.exists( SZ_EXE ) :
         logger.info( 'Zipping installer' )
