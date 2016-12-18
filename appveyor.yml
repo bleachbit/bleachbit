@@ -24,12 +24,14 @@ install:
   - '%SZ_EXE% x upx392w.zip'
   - ps: Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip"
   - '%SZ_EXE% x gettext0.19.8.1-iconv1.14-static-32.zip -ogettext'
+  - 'set OLDPATH=%PATH%'
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
   - 'msgunfmt -V'
   - 'strip.exe -V'
   - '%make% -C po local'
   - ps: grep -l os=.linux. cleaners/*xml | xargs rm -f
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
+  - 'set PATH=%OLDPATH%' # restore old path to not affect test script
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
