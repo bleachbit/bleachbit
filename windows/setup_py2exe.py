@@ -200,7 +200,10 @@ shutil.copyfile( 'bleachbit.png',  'dist\\share\\bleachbit.png')
 
 logger.info('Deleting unnecessary files')
 old_dir_size = get_dir_size('dist')
-delete_dirs = ['dist\\share\\doc', 'dist\share\\gtk-doc','dist\\share\man']
+# Remove SVG to reduce space and avoid this error
+# Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
+# https://bugs.launchpad.net/bleachbit/+bug/1650907
+delete_dirs = ['dist\\share\\doc', 'dist\share\\gtk-doc','dist\\share\man', 'dist\\share\\icons\\Tango\\scalable', 'dist\\lib\\gdk-pixbuf-2.0']
 for delete_dir in delete_dirs:
     if not os.path.exists(delete_dir):
         logger.warning('Directory does not exist: ' + delete_dir)
