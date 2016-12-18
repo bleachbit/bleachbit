@@ -29,7 +29,6 @@ install:
   - 'msgunfmt -V'
   - 'strip.exe -V'
   - '%make% -C po local'
-  - ps: grep -l os=.linux. cleaners/*xml | xargs rm -f
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
   - 'set PATH=%OLDPATH%' # restore old path to not affect test script
 
