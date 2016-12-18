@@ -256,7 +256,7 @@ if not fast:
         run_cmd(cmd)
         file_size = os.path.getsize( 'dist\\library.zip' ) / (1024*1024.0)
         logger.info( 'Size before 7zip recompression ' + str( file_size ) + ' Mb')
-        shutil.rmtree('dist\\library.zip', ignore_errors=True)
+        os.remove('dist\\library.zip')
 
         cmd = SZ_EXE + '  a -tzip -mx=9 -mfb=255 ..\\library.zip'
         logger.info( cmd )
