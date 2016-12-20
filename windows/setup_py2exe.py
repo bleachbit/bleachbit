@@ -230,8 +230,19 @@ for delete_dir in delete_dirs:
         continue
     this_dir_size = get_dir_size(delete_dir)
     shutil.rmtree(delete_dir, ignore_errors=True)
-    logger.info('Deleting {} saved {:,} bytes'.format(
+    logger.info('Deleting directory {} saved {:,}B'.format(
         delete_dir, this_dir_size))
+delete_globs = [
+    '*.a',
+    '*.def',
+    '*.lib'
+]
+for glob in delete_globs:
+    total_size = 0
+    for f in recursive_glob('dist', [glob]):
+        total_size += os.path.getsize(f)
+        os.remove(f)
+    logger.info('Deleting glob {} saved {:,}B'.format(glob, total_size))
 new_dir_size = get_dir_size('dist')
 dir_size_diff = old_dir_size - new_dir_size
 logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
