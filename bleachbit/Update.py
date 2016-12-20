@@ -57,7 +57,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
         f.close()
         delete_current = True
     # download update
-    opener = urllib2.build_opener()
+    opener = build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
     kwargs = {'fullurl': url}
     if sys.hexversion >= 0x02060000:
@@ -156,13 +156,13 @@ def update_dialog(parent, updates):
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
-    opener = urllib2.build_opener()
+    opener = build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
     logger = logging.getLogger(__name__)
     try:
         handle = opener.open(Common.update_check_url)
-    except urllib2.URLError:
+    except URLError:
         logger.exception(
             _('Error when opening a network connection to %s to check for updates. Please verify the network is working.' %
                 Common.update_check_url))
