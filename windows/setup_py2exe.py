@@ -232,17 +232,18 @@ for delete_dir in delete_dirs:
     shutil.rmtree(delete_dir, ignore_errors=True)
     logger.info('Deleting directory {} saved {:,}B'.format(
         delete_dir, this_dir_size))
-delete_globs = [
+# by wildcard
+delete_wildcards = [
     '*.a',
     '*.def',
     '*.lib'
 ]
-for glob in delete_globs:
+for wc in delete_wildcards:
     total_size = 0
-    for f in recursive_glob('dist', [glob]):
+    for f in recursive_glob('dist', [wc]):
         total_size += os.path.getsize(f)
         os.remove(f)
-    logger.info('Deleting glob {} saved {:,}B'.format(glob, total_size))
+    logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
 # unsupported translations
 os.remove(r'dist\share\locale\locale.alias')
 pygtk_translations = os.listdir('dist/share/locale')
