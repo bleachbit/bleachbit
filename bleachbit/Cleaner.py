@@ -765,14 +765,19 @@ class System(Cleaner):
             # opens the recycle bin folder.
 
             # This is a hack to refresh the icon.
-            import tempfile
-            tmpdir = tempfile.mkdtemp()
-            Windows.move_to_recycle_bin(tmpdir)
-            try:
-                Windows.empty_recycle_bin(None, True)
-            except:
-                logger = logging.getLogger(__name__)
-                logger.info('error in empty_recycle_bin()', exc_info=True)
+            def empty_recycle_bin_func():
+                import tempfile
+                tmpdir = tempfile.mkdtemp()
+                Windows.move_to_recycle_bin(tmpdir)
+                try:
+                    Windows.empty_recycle_bin(None, True)
+                except:
+                    logger = logging.getLogger(__name__)
+                    logger.info('error in empty_recycle_bin()', exc_info=True)
+                yield 0
+            # Using the Function Command prevents emptying the recycle bin
+            # when in preview mode.
+            yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:
