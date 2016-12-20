@@ -14,15 +14,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import sys
-import os
-import logging
-import imp
-import shutil
 import fnmatch
-
-import subprocess
+import glob
+import imp
+import logging
+import os
 import shlex
+import shutil
+import subprocess
+import sys
 
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
@@ -243,6 +243,17 @@ for glob in delete_globs:
         total_size += os.path.getsize(f)
         os.remove(f)
     logger.info('Deleting glob {} saved {:,}B'.format(glob, total_size))
+# unsupported translations
+os.remove(r'dist\share\locale\locale.alias')
+pygtk_translations = os.listdir('dist/share/locale')
+supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
+translations_size = 0
+for pt in pygtk_translations:
+    if pt not in supported_translations:
+        path = 'dist/share/locale/'+pt
+        translations_size += get_dir_size(path)
+        shutil.rmtree(path)
+logger.info('Deleting unsupported translations saved {:,}B'.format(translations_size))
 new_dir_size = get_dir_size('dist')
 dir_size_diff = old_dir_size - new_dir_size
 logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
