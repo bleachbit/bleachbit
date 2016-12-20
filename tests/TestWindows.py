@@ -27,6 +27,8 @@ Test case for module Windows
 import sys
 import tempfile
 import unittest
+import platform
+from decimal import Decimal
 
 import common
 
