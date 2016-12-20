@@ -236,7 +236,11 @@ for delete_dir in delete_dirs:
 delete_wildcards = [
     '*.a',
     '*.def',
-    '*.lib'
+    '*.lib',
+    'atk10.mo',
+    'gdk-pixbuf.mo',
+    'glib20.mo',
+    'gtk20-properties.mo',
 ]
 for wc in delete_wildcards:
     total_size = 0
