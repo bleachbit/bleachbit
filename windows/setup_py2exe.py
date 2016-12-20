@@ -215,8 +215,15 @@ old_dir_size = get_dir_size('dist')
 # Remove SVG to reduce space and avoid this error
 # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
 # https://bugs.launchpad.net/bleachbit/+bug/1650907
-delete_dirs = ['dist\\share\\doc', 'dist\share\\gtk-doc', 'dist\\share\man',
-               'dist\\share\\icons\\Tango\\scalable', 'dist\\lib\\gdk-pixbuf-2.0']
+delete_dirs = [
+    r'dist\lib\gdk-pixbuf-2.0',
+    r'dist\lib\glib-2.0',
+    r'dist\lib\pkgconfig',
+    r'dist\share\doc',
+    r'dist\share\gtk-doc',
+    r'dist\share\icons\Tango\scalable',
+    r'dist\share\man',
+]
 for delete_dir in delete_dirs:
     if not os.path.exists(delete_dir):
         logger.warning('Directory does not exist: ' + delete_dir)
