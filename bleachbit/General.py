@@ -26,7 +26,7 @@ General code
 import os
 import sys
 import traceback
-
+import Common
 
 #
 # XML
@@ -107,7 +107,7 @@ def getrealuid():
 def makedirs(path):
     """Make directory recursively considering sudo permissions.
     'Path' should not end in a delimiter."""
-    print "debug: makedirs(%s)" % path
+    print "debug: makedirs(%s)" % path.encode(Common.FSE)
     if os.path.lexists(path):
         return
     parentdir = os.path.split(path)[0]
@@ -127,10 +127,9 @@ def run_external(args, stdout=False, env=None):
     kwargs = {}
     if subprocess.mswindows:
         # hide the 'DOS box' window
+        import win32process, win32con
         stui = subprocess.STARTUPINFO()
-        import win32process
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
-        import win32con
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
     p = subprocess.Popen(args, stdout=stdout,

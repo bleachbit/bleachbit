@@ -67,6 +67,7 @@ import Command
 import Common
 import FileUtilities
 import General
+from Common import expandvars
 
 
 def browse_file(_, title):
@@ -217,11 +218,11 @@ def delete_registry_key(parent_key, really_delete):
 
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
-    windir = os.path.expandvars('$windir')
+    windir = expandvars('$windir')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
-    dirs += [os.path.expandvars('$windir\\SoftwareDistribution\\Download')]
-    dirs += [os.path.expandvars('$windir\\ie7updates')]
-    dirs += [os.path.expandvars('$windir\\ie8updates')]
+    dirs += [expandvars('$windir\\SoftwareDistribution\\Download')]
+    dirs += [expandvars('$windir\\ie7updates')]
+    dirs += [expandvars('$windir\\ie8updates')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
@@ -366,11 +367,9 @@ def get_autostart_path():
         # Windows 7:
         # C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start
         # Menu\Programs\Startup
-        startupdir = os.path.expandvars(
-            '$USERPROFILE\\Start Menu\\Programs\\Startup')
+        startupdir = expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
         if not os.path.exists(startupdir):
-            startupdir = os.path.expandvars(
-                '$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+            startupdir = expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
     return os.path.join(startupdir, 'bleachbit.lnk')
 
 
@@ -383,7 +382,7 @@ def get_fixed_drives():
             # and free_space() returns access denied.
             # https://bugs.launchpad.net/bleachbit/+bug/1474848
             if os.path.isdir(drive):
-                yield drive
+                yield unicode(drive)
 
 
 def get_known_folder_path(folder_name):
@@ -574,7 +573,6 @@ def shell_change_notify():
                          None, None)
     return 0
 
-
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     logger = logging.getLogger(__name__)
@@ -586,13 +584,16 @@ def set_environ(varname, path):
     if os.environ.has_key(varname):
         logger.debug('set_environ(%s, %s): skipping because environment variable is already defined' %
                      (varname, path))
+        if 'nt' == os.name:
+            os.environ[varname] = expandvars(u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
+        # But re-encode them with utf-8 instead of mbcs
         return
     try:
         if not os.path.exists(path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path
+        os.environ[varname] = path.encode('utf8')
         logger.debug('set_environ(%s, %s), set' % (varname, path))
     except:
         logger.exception(
@@ -645,12 +646,16 @@ def start_with_computer(enabled):
         return
     if os.path.lexists(autostart_path):
         return
-    import win32com.client
-    wscript_shell = win32com.client.Dispatch('WScript.Shell')
-    shortcut = wscript_shell.CreateShortCut(autostart_path)
-    shortcut.TargetPath = os.path.join(
-        Common.bleachbit_exe_path, 'bleachbit.exe')
-    shortcut.save()
+    import winshell
+    winshell.CreateShortcut(Path=autostart_path,
+                            Target=os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe'))
+
+    # import win32com.client
+    # wscript_shell = win32com.client.Dispatch('WScript.Shell')
+    # shortcut = wscript_shell.CreateShortCut(autostart_path)
+    # shortcut.TargetPath = os.path.join(
+    #     Common.bleachbit_exe_path, 'bleachbit.exe')
+    # shortcut.save()
 
 
 def start_with_computer_check():

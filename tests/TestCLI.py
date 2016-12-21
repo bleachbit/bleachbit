@@ -124,7 +124,6 @@ class CLITestCase(unittest.TestCase):
             args_list.append([sys.executable, path, '--preview', cleaner])
             big_args.append(cleaner)
         args_list.append(big_args)
-
         for args in args_list:
             self._test_preview(args)
 
@@ -134,7 +133,7 @@ class CLITestCase(unittest.TestCase):
         os.close(fd)
         if 'nt' == os.name:
             import win32api
-            filename = os.path.normcase(win32api.GetLongPathName(filename))
+            filename = os.path.normcase(filename)
         # replace delete function for testing
         save_delete = FileUtilities.delete
         deleted_paths = []
