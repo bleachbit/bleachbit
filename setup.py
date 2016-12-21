@@ -99,6 +99,7 @@ if 'py2exe' in sys.argv:
             'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
             'excludes': ['_ssl', 'pyreadline', 'difflib', 'doctest',
                          'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
+            'dll_excludes' : ['w9xpopen.exe'], # not needed for modern Windows
             'compressed': True  # create a compressed zipfile
         }
     }
