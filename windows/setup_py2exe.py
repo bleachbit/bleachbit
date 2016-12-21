@@ -262,10 +262,11 @@ supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
 translations_size = 0
 for pt in pygtk_translations:
     if pt not in supported_translations:
-        path = 'dist/share/locale/'+pt
+        path = 'dist/share/locale/' + pt
         translations_size += get_dir_size(path)
         shutil.rmtree(path)
-logger.info('Deleting unsupported translations saved {:,}B'.format(translations_size))
+logger.info('Deleting unsupported translations saved {:,}B'.format(
+    translations_size))
 new_dir_size = get_dir_size('dist')
 dir_size_diff = old_dir_size - new_dir_size
 logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
