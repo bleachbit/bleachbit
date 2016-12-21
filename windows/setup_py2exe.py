@@ -153,6 +153,13 @@ def get_dir_size(start_path='.'):
             total_size += os.path.getsize(fp)
     return total_size
 
+def copytree(src, dst):
+    # Microsoft xcopy is about twice as fast as shutil.copytree
+    logger.info('copying {} to {}'.format(src, dst))
+    cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
+    os.system(cmd)
+
+
 logger.info('Getting BleachBit version')
 import bleachbit.Common
 BB_VER = bleachbit.Common.APP_VERSION
@@ -204,9 +211,9 @@ if not os.path.exists('dist'):
 logger.info('Copying GTK files and icon')
 shutil.copyfile(GTK_DIR + '\\bin\\intl.dll',  'dist\\intl.dll')
 
-shutil.copytree(GTK_DIR + '\\etc', 'dist\\etc')
-shutil.copytree(GTK_DIR + '\\lib', 'dist\\lib')
-shutil.copytree(GTK_DIR + '\\share', 'dist\\share')
+copytree(GTK_DIR + '\\etc', 'dist\\etc')
+copytree(GTK_DIR + '\\lib', 'dist\\lib')
+copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
 
 
@@ -283,7 +290,7 @@ run_cmd(cmd)
 
 logger.info('Copying BleachBit localizations')
 shutil.rmtree('dist\\share\\locale', ignore_errors=True)
-shutil.copytree('locale', 'dist\\share\\locale')
+copytree('locale', 'dist\\share\\locale')
 assert_exist('dist\\share\\locale\\es\\LC_MESSAGES\\bleachbit.mo')
 
 logger.info('Copying BleachBit cleaners')
@@ -311,7 +318,7 @@ sign_code('dist\\bleachbit.exe')
 sign_code('dist\\bleachbit_console.exe')
 
 logger.info('Building portable')
-shutil.copytree('dist', 'BleachBit-portable')
+copytree('dist', 'BleachBit-portable')
 with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
     text_file.write("[Portable]")
 
