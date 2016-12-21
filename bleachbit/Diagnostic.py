@@ -62,6 +62,19 @@ def diagnostic_info():
                 platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
+            
+    # Mac Version Name - Dictonary "masosx_dict"
+    macosx_dict = {'5':'Lepoard','6':'Snow Lepoard','7':'Lion','8':'Mountain Lion','9':'Mavericks','10':'Yosemite','11':'El Capitan','12':'Sierra'}
+
+    if sys.platform.startswith('darwin'):
+        if hasattr(platform, 'mac_ver'):
+            for key in macosx_dict:
+                if (platform.mac_ver()[0].split('.')[1] == key):
+                    s += "\nplatform.mac_ver() = %s" % str(
+                        platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
+        else:
+            s += "\nplatform.dist() = %s" % str(platform.dist())
+
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
     s += "\nplatform.platform = %s" % platform.platform()
