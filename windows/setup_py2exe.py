@@ -272,16 +272,32 @@ dir_size_diff = old_dir_size - new_dir_size
 logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
     dir_size_diff, old_dir_size, new_dir_size))
 
+logger.info('Stripping executables')
+old_dir_size = get_dir_size('dist')
+strip_list = recursive_glob('dist', ['*.dll'])
+strip_whitelist = [
+    'freetype6.dll',
+    'python27.dll',
+    'pythoncom27.dll',
+    'pywintypes27.dll',
+    'sqlite3.dll',
+    'zlib1.dll',
+]
+strip_files_str = [f for f in strip_list if os.path.basename(
+    f) not in strip_whitelist]
+cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
+    ' '.join(strip_files_str)
+run_cmd(cmd)
+new_dir_size = get_dir_size('dist')
+dir_size_diff = old_dir_size - new_dir_size
+logger.info('Strip reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
+    dir_size_diff, old_dir_size, new_dir_size))
+
+
 logger.info('Compressing executables')
 files = recursive_glob('dist', ['*.exe'])
 for file in files:
     compress(UPX_EXE, UPX_OPTS, file)
-
-#logger.info('Stripping executables')
-#files = recursive_glob('dist', ['*.dll', '*.exe'])
-# for file in files:
-#    cmd = 'strip --strip-all ' + file
-#    run_cmd(cmd)
 
 
 logger.info('Purging unnecessary GTK+ files')
