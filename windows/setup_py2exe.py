@@ -309,7 +309,8 @@ def upx():
     else:
         logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
 
-upx()
+if not fast:
+    upx()
 
 logger.info('Purging unnecessary GTK+ files')
 cmd = sys.executable + ' setup.py clean-dist'
