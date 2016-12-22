@@ -295,7 +295,7 @@ logger.info('Strip reduced size of the dist directory by {:,} from {:,} to {:,}'
 
 
 logger.info('Compressing executables')
-files = recursive_glob('dist', ['*.exe'])
+files = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
 for file in files:
     compress(UPX_EXE, UPX_OPTS, file)
 
