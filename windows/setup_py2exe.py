@@ -151,6 +151,19 @@ def copytree(src, dst):
     os.system(cmd)
 
 
+def count_size_improvement(func):
+    def wrapper():
+        import time
+        t0 = time.time()
+        size0 = get_dir_size('dist')
+        func()
+        size1 = get_dir_size('dist')
+        t1 = time.time()
+        logger.info('Reduced size of the dist directory by {:,} B from {:,} B to {:,} B in {:.1f} s'.format(
+            size0 - size1, size0, size1, t1 - t0))
+    return wrapper
+
+
 logger.info('Getting BleachBit version')
 import bleachbit.Common
 BB_VER = bleachbit.Common.APP_VERSION
@@ -204,65 +217,66 @@ copytree(GTK_DIR + '\\share', 'dist\\share')
 shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
 
 
-logger.info('Deleting unnecessary files')
-old_dir_size = get_dir_size('dist')
-# Remove SVG to reduce space and avoid this error
-# Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
-# https://bugs.launchpad.net/bleachbit/+bug/1650907
-delete_dirs = [
-    r'dist\lib\gdk-pixbuf-2.0',
-    r'dist\lib\glib-2.0',
-    r'dist\lib\pkgconfig',
-    r'dist\share\doc',
-    r'dist\share\gtk-doc',
-    r'dist\share\icons\Tango\scalable',
-    r'dist\share\man',
-]
-for delete_dir in delete_dirs:
-    if not os.path.exists(delete_dir):
-        logger.warning('Directory does not exist: ' + delete_dir)
-        continue
-    this_dir_size = get_dir_size(delete_dir)
-    shutil.rmtree(delete_dir, ignore_errors=True)
-    logger.info('Deleting directory {} saved {:,}B'.format(
-        delete_dir, this_dir_size))
-# by wildcard
-delete_wildcards = [
-    '*.a',
-    '*.def',
-    '*.lib',
-    'atk10.mo',
-    'gdk-pixbuf.mo',
-    'glib20.mo',
-    'gtk20-properties.mo',
-]
-for wc in delete_wildcards:
-    total_size = 0
-    for f in recursive_glob('dist', [wc]):
-        total_size += os.path.getsize(f)
-        os.remove(f)
-    logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
-# unsupported translations
-os.remove(r'dist\share\locale\locale.alias')
-pygtk_translations = os.listdir('dist/share/locale')
-supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
-translations_size = 0
-for pt in pygtk_translations:
-    if pt not in supported_translations:
-        path = 'dist/share/locale/' + pt
-        translations_size += get_dir_size(path)
-        shutil.rmtree(path)
-logger.info('Deleting unsupported translations saved {:,}B'.format(
-    translations_size))
-new_dir_size = get_dir_size('dist')
-dir_size_diff = old_dir_size - new_dir_size
-logger.info('Reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
-    dir_size_diff, old_dir_size, new_dir_size))
+@count_size_improvement
+def delete_unecessary():
+    logger.info('Deleting unnecessary files')
+    # Remove SVG to reduce space and avoid this error
+    # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
+    # https://bugs.launchpad.net/bleachbit/+bug/1650907
+    delete_dirs = [
+        r'dist\lib\gdk-pixbuf-2.0',
+        r'dist\lib\glib-2.0',
+        r'dist\lib\pkgconfig',
+        r'dist\share\doc',
+        r'dist\share\gtk-doc',
+        r'dist\share\icons\Tango\scalable',
+        r'dist\share\man',
+    ]
+    for delete_dir in delete_dirs:
+        if not os.path.exists(delete_dir):
+            logger.warning('Directory does not exist: ' + delete_dir)
+            continue
+        this_dir_size = get_dir_size(delete_dir)
+        shutil.rmtree(delete_dir, ignore_errors=True)
+        logger.info('Deleting directory {} saved {:,} B'.format(
+            delete_dir, this_dir_size))
+    # by wildcard
+    delete_wildcards = [
+        '*.a',
+        '*.def',
+        '*.lib',
+        'atk10.mo',
+        'gdk-pixbuf.mo',
+        'glib20.mo',
+        'gtk20-properties.mo',
+    ]
+    for wc in delete_wildcards:
+        total_size = 0
+        for f in recursive_glob('dist', [wc]):
+            total_size += os.path.getsize(f)
+            os.remove(f)
+        logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
+
+delete_unecessary()
 
 
+@count_size_improvement
+def clean_translations():
+    logger.info('Cleaning translations')
+    os.remove(r'dist\share\locale\locale.alias')
+    pygtk_translations = os.listdir('dist/share/locale')
+    supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
+    for pt in pygtk_translations:
+        if pt not in supported_translations:
+            path = 'dist/share/locale/' + pt
+            shutil.rmtree(path)
+
+clean_translations()
+
+
+@count_size_improvement
 def strip():
     logger.info('Stripping executables')
-    old_dir_size = get_dir_size('dist')
     strip_list = recursive_glob('dist', ['*.dll'])
     strip_whitelist = [
         'freetype6.dll',
@@ -277,10 +291,6 @@ def strip():
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
         ' '.join(strip_files_str)
     run_cmd(cmd)
-    new_dir_size = get_dir_size('dist')
-    dir_size_diff = old_dir_size - new_dir_size
-    logger.info('Strip reduced size of the dist directory by {:,} from {:,} to {:,}'.format(
-        dir_size_diff, old_dir_size, new_dir_size))
 
 try:
     strip()
@@ -288,14 +298,18 @@ except Exception as e:
     logger.exception(
         'Error when running strip. Does your PATH have MINGW with binutils?')
 
-logger.info('Compressing executables')
-if os.path.exists(UPX_EXE):
-    files_list = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
-    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(files_list))
-    run_cmd(cmd)
-else:
-    logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
 
+@count_size_improvement
+def upx():
+    logger.info('Compressing executables')
+    if os.path.exists(UPX_EXE):
+        files_list = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
+        cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(files_list))
+        run_cmd(cmd)
+    else:
+        logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
+
+upx()
 
 logger.info('Purging unnecessary GTK+ files')
 cmd = sys.executable + ' setup.py clean-dist'
@@ -319,14 +333,16 @@ logger.info('Checking for CleanerML')
 assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
 
-logger.info('Checking for Linux-only cleaners')
-if os.path.exists('dist\\share\\cleaners\\wine.xml'):
+@count_size_improvement
+def delete_linux_only():
+    logger.info('Checking for Linux-only cleaners')
     files = recursive_glob('dist/share/cleaners/', ['*.xml'])
-    for file in files:
-        if check_file_for_string(file, 'os="linux"'):
-            logger.warning('delete ' + file)
-            os.remove(file)
+    for f in files:
+        if check_file_for_string(f, 'os="linux"'):
+            logger.warning('delete ' + f)
+            os.remove(f)
 
+delete_linux_only()
 
 sign_code('dist\\bleachbit.exe')
 sign_code('dist\\bleachbit_console.exe')
