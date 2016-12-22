@@ -66,16 +66,6 @@ UPX_EXE = ROOT_DIR + '\\upx392w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 
-def compress(UPX_EXE, UPX_OPTS, file):
-    cmd = UPX_EXE + ' ' + UPX_OPTS + ' ' + file
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-    logger.info(stdout)
-    if stderr:
-        logger.error(stderr)
-
-
 def archive(infile, outfile):
     assert_exist(infile)
     if os.path.exists(outfile):
@@ -178,10 +168,6 @@ assert_module('pygtk')
 
 logger.info('Checking Python win32 library')
 assert_module('win32file')
-
-logger.info('Checking for UPX')
-assert_exist(
-    UPX_EXE, 'Download UPX executable from http://upx.sourceforge.net/')
 
 logger.info('Checking for CodeSign.bat')
 check_exist('CodeSign.bat', 'Code signing is not available')
@@ -303,9 +289,12 @@ except Exception as e:
         'Error when running strip. Does your PATH have MINGW with binutils?')
 
 logger.info('Compressing executables')
-files = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
-for file in files:
-    compress(UPX_EXE, UPX_OPTS, file)
+if os.path.exists(UPX_EXE):
+    files_list = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
+    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(files_list))
+    run_cmd(cmd)
+else:
+    logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
 
 
 logger.info('Purging unnecessary GTK+ files')
