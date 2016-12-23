@@ -242,10 +242,18 @@ def delete_unnecessary():
         r'dist\lib\gdk-pixbuf-2.0',
         r'dist\lib\glib-2.0',
         r'dist\lib\pkgconfig',
+        r'dist\share\aclocal',
         r'dist\share\doc',
+        r'dist\share\glib-2.0',
+        r'dist\share\gtk-2.0',
         r'dist\share\gtk-doc',
         r'dist\share\icons\Tango\scalable',
         r'dist\share\man',
+        r'dist\share\themes\default',
+        r'dist\share\themes\emacs',
+        r'dist\share\themes\raleigh',
+        r'dist\share\xml',
+        r'dist\share\icon-naming-utils',
     ]
     for delete_dir in delete_dirs:
         if not os.path.exists(delete_dir):
@@ -262,8 +270,10 @@ def delete_unnecessary():
         '*.lib',
         'atk10.mo',
         'gdk-pixbuf.mo',
+        'gettext-runtime.mo',
         'glib20.mo',
         'gtk20-properties.mo',
+        'libgsf.mo',
     ]
     for wc in delete_wildcards:
         total_size = 0
