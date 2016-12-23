@@ -110,6 +110,21 @@ def assert_module(module):
         sys.exit(1)
 
 
+def assert_execute(args, expected_output):
+    """Run a command and check it returns the expected output"""
+    actual_output = subprocess.check_output(args)
+    if -1 == actual_output.find(expected_output):
+        raise RuntimeError('When running command {} expected output {} but got {}'.format(
+            args, expected_output, actual_output))
+
+
+def assert_execute_console():
+    """Check the application starts"""
+    logger.info('Checking bleachbit_console.exe starts')
+    assert_execute([r'dist\bleachbit_console.exe', '--version'],
+                   'This is free software')
+
+
 def run_cmd(cmd):
     logger.info(cmd)
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
@@ -278,6 +293,7 @@ def delete_icons():
 
 delete_icons()
 
+
 @count_size_improvement
 def clean_translations():
     logger.info('Cleaning translations')
@@ -321,14 +337,21 @@ except Exception as e:
 def upx():
     logger.info('Compressing executables')
     if os.path.exists(UPX_EXE):
-        files_list = recursive_glob('dist', ['*.dll', '*.exe', '*.pyd'])
+        files_list = recursive_glob('dist', ['*.dll', '*.exe'])
+        # Whitelist some files that if compressed would cause the
+        # application to not start.
+        import re
+        files_list = [f for f in files_list if not re.match(
+            '^(sqlite)|py', os.path.basename(f))]
         cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(files_list))
         run_cmd(cmd)
     else:
         logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
 
 if not fast:
+    assert_execute_console()
     upx()
+    assert_execute_console()
 
 logger.info('Purging unnecessary GTK+ files')
 cmd = sys.executable + ' setup.py clean-dist'
@@ -365,6 +388,8 @@ delete_linux_only()
 
 sign_code('dist\\bleachbit.exe')
 sign_code('dist\\bleachbit_console.exe')
+
+assert_execute_console()
 
 logger.info('Building portable')
 copytree('dist', 'BleachBit-portable')
