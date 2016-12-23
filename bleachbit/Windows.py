@@ -579,8 +579,8 @@ def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     logger = logging.getLogger(__name__)
     if not path:
-        logger.debug('set_environ(%s, %s): skipping because blank path' %
-                     (varname, path))
+        #logger.debug('set_environ(%s, %s): skipping because blank path' %
+        #             (varname, path))
         # Such as LocalAppDataLow on XP
         return
     if os.environ.has_key(varname):
@@ -596,7 +596,7 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path.encode('utf8')
-        logger.debug('set_environ(%s, %s), set' % (varname, path))
+        #logger.debug('set_environ(%s, %s), set' % (varname, path))
     except:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable' % (varname, path))
