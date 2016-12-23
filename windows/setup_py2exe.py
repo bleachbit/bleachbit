@@ -238,32 +238,38 @@ def delete_unnecessary():
     # Remove SVG to reduce space and avoid this error
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
-    delete_dirs = [
-        r'dist\lib\gdk-pixbuf-2.0',
-        r'dist\lib\glib-2.0',
-        r'dist\lib\pkgconfig',
-        r'dist\share\aclocal',
-        r'dist\share\doc',
-        r'dist\share\glib-2.0',
-        r'dist\share\gtk-2.0',
-        r'dist\share\gtk-doc',
-        r'dist\share\icons\Tango\scalable',
-        r'dist\share\man',
-        r'dist\share\themes\default',
-        r'dist\share\themes\emacs',
-        r'dist\share\themes\raleigh',
-        r'dist\share\xml',
-        r'dist\share\icon-naming-utils',
+    delete_paths = [
+        r'lib\gdk-pixbuf-2.0',
+        r'lib\glib-2.0',
+        r'lib\pkgconfig',
+        r'share\aclocal',
+        r'share\doc',
+        r'share\glib-2.0',
+        r'share\gtk-2.0',
+        r'share\gtk-doc',
+        r'share\icon-naming-utils',
+        r'share\icons\Tango\scalable',
+        r'share\man',
+        r'share\themes\default',
+        r'share\themes\emacs',
+        r'share\themes\raleigh',
+        r'share\xml',
     ]
-    for delete_dir in delete_dirs:
-        if not os.path.exists(delete_dir):
-            logger.warning('Directory does not exist: ' + delete_dir)
+    for path in delete_paths:
+        path = r'dist\{}'.format(path)
+        if not os.path.exists(path):
+            logger.warning('Path does not exist: ' + path)
             continue
-        this_dir_size = get_dir_size(delete_dir)
-        shutil.rmtree(delete_dir, ignore_errors=True)
-        logger.info('Deleting directory {} saved {:,} B'.format(
-            delete_dir, this_dir_size))
-    # by wildcard
+        if os.path.isdir(path):
+            this_dir_size = get_dir_size(path)
+            shutil.rmtree(path, ignore_errors=True)
+            logger.info('Deleting directory {} saved {:,} B'.format(
+                path, this_dir_size))
+        else:
+            logger.info('Deleting file {} saved {:,} B'.format(
+                path, os.path.getsize(path)))
+            os.remove(path)
+    # by wildcard with recursive search
     delete_wildcards = [
         '*.a',
         '*.def',
