@@ -121,8 +121,8 @@ def assert_execute(args, expected_output):
 def assert_execute_console():
     """Check the application starts"""
     logger.info('Checking bleachbit_console.exe starts')
-    assert_execute([r'dist\bleachbit_console.exe', '--version'],
-                   'This is free software')
+    assert_execute([r'dist\bleachbit_console.exe', '--gui', '--exit', '--no-uac'],
+                   'Success')
 
 
 def run_cmd(cmd):
@@ -353,19 +353,22 @@ except Exception as e:
 def upx():
     logger.info('Compressing executables')
     if os.path.exists(UPX_EXE):
-        files_list = recursive_glob('dist', ['*.dll', '*.exe'])
-        # Whitelist some files that if compressed would cause the
-        # application to not start.
-        import re
-        files_list = [f for f in files_list if not re.match(
-            '^(sqlite)|py', os.path.basename(f))]
-        cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(files_list))
+        upx_patterns = [
+            r'*.exe',
+            r'freetype6.dll',
+            r'intl.dll',
+            r'lib\gtk-2.0\2.10.0\engines\lib*.dll',
+        ]
+        upx_files = []
+        for pattern in upx_patterns:
+            pattern = r'dist\{}'.format(pattern)
+            upx_files.extend(glob.glob(pattern))
+        cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
         run_cmd(cmd)
     else:
         logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
 
 if not fast:
-    assert_execute_console()
     upx()
     assert_execute_console()
 
