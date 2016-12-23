@@ -261,6 +261,24 @@ delete_unnecessary()
 
 
 @count_size_improvement
+def delete_icons():
+    logger.info('Deleting PNG icons')
+    # This whitelist comes from analyze_process_monitor_events.py
+    png_whitelist = [
+        'dialog-information.png',
+        'dialog-warning.png',
+        'edit-delete.png',
+        'edit-find.png',
+        'gtk-preferences.png',
+    ]
+    strip_list = recursive_glob(r'dist\share\icons', ['*.png'])
+    for f in strip_list:
+        if os.path.basename(f) not in png_whitelist:
+            os.remove(f)
+
+delete_icons()
+
+@count_size_improvement
 def clean_translations():
     logger.info('Cleaning translations')
     os.remove(r'dist\share\locale\locale.alias')
