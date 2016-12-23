@@ -218,7 +218,7 @@ shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
 
 
 @count_size_improvement
-def delete_unecessary():
+def delete_unnecessary():
     logger.info('Deleting unnecessary files')
     # Remove SVG to reduce space and avoid this error
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
@@ -257,7 +257,7 @@ def delete_unecessary():
             os.remove(f)
         logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
 
-delete_unecessary()
+delete_unnecessary()
 
 
 @count_size_improvement
