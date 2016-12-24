@@ -239,9 +239,14 @@ def delete_unnecessary():
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
+        r'_win32sysloader.pyd',
+        r'bz2.pyd',
         r'lib\gdk-pixbuf-2.0',
         r'lib\glib-2.0',
         r'lib\pkgconfig',
+        r'perfmon.pyd',
+        r'select.pyd',
+        r'servicemanager.pyd',
         r'share\aclocal',
         r'share\doc',
         r'share\glib-2.0',
@@ -254,6 +259,10 @@ def delete_unnecessary():
         r'share\themes\emacs',
         r'share\themes\raleigh',
         r'share\xml',
+        r'win32evtlog.pyd',
+        r'win32pipe.pyd',
+        r'win32service.pyd',
+        r'win32wnet.pyd',
     ]
     for path in delete_paths:
         path = r'dist\{}'.format(path)
