@@ -39,6 +39,7 @@ import common
 sys.path.append('.')
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
+from bleachbit.Common import expanduser
 
 try:
     import json
@@ -199,12 +200,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
         """Unit test for function children_in_directory()"""
 
         # test an existing directory that usually exists
-        dirname = os.path.expanduser("~/.config")
+        dirname = expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
-            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
-            self.assert_(isinstance(filename, str))
             self.assert_(os.path.isabs(filename))
             self.assert_(not os.path.isdir(filename))
 
@@ -434,9 +433,14 @@ class FileUtilitiesTestCase(unittest.TestCase):
         if 'nt' == os.name:
             expand_glob_join('c:\windows', '*.exe')
 
+    def test_expandvars(self):
+        """Unit test for expandvars()."""
+        expanded = expandvars('$HOME')
+        self.assertTrue(isinstance(expanded, unicode))
+
     def test_free_space(self):
         """Unit test for free_space()"""
-        home = os.path.expanduser("~")
+        home = expanduser('~')
         result = free_space(home)
         self.assertNotEqual(result, None)
         self.assert_(result > -1)
@@ -457,8 +461,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
             if not re.match('([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split('\s+', line)
+            print 'Checking free space for %s' % drive
             bytes_free = int(bytes_free)
-            self.assertEqual(bytes_free, free_space(drive))
+            free = free_space(unicode(drive))
+            self.assertEqual(bytes_free, free)
 
     def test_getsize(self):
         """Unit test for method getsize()"""
@@ -582,7 +588,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_same_partition(self):
         """Unit test for same_partition()"""
-        home = os.path.expanduser('~')
+        home = expanduser('~')
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
             self.assertFalse(same_partition(home, '/dev'))
@@ -591,8 +597,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
-                self.assertEqual(
-                    same_partition(home, drive), home_drive == this_drive)
+                self.assertEqual(same_partition(home, drive),
+                                 home_drive == this_drive)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""

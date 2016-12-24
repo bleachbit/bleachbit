@@ -99,6 +99,7 @@ if 'py2exe' in sys.argv:
             'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
             'excludes': ['_ssl', 'pyreadline', 'difflib', 'doctest',
                          'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
+            'dll_excludes' : ['w9xpopen.exe'], # not needed for modern Windows
             'compressed': True  # create a compressed zipfile
         }
     }
@@ -111,11 +112,16 @@ if 'py2exe' in sys.argv:
     if sys.version_info[0] == 2 and sys.version_info[1] <= 5:
         args['options']['py2exe']['includes'].append('simplejson')
 
+    # check for 32-bit
+    import struct
+    bits = 8 * struct.calcsize('P')
+    assert 32 == bits
+
 
 def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
 
-    if not bleachbit.FileUtilities.exe_exists('msgunfmt'):
+    if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
         print 'warning: msgunfmt missing: skipping recompile'
         return
 
