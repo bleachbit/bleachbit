@@ -124,12 +124,12 @@ def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
 
     if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
-        print 'warning: msgunfmt missing: skipping recompile'
+        bleachbit.Common.logger.warning('msgunfmt missing: skipping recompile')
         return
 
     mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
     if not os.path.exists(mo_pathname):
-        print 'info: does not exist: %s' % mo_pathname
+        bleachbit.Common.logger.info('does not exist: %s', mo_pathname)
         return
 
     # decompile .mo to .po
@@ -175,7 +175,7 @@ def clean_dist_locale():
     langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
     for langid in sorted(os.listdir(basedir)):
-        print("debug: GTK language = '%s'" % langid)
+        bleachbit.Common.logger.debug("GTK language = '%s'", langid)
         langdir = os.path.join(basedir, langid)
         if langid in langs:
             # reduce the size of the .mo file

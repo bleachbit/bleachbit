@@ -453,7 +453,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             if not re.match('([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split('\s+', line)
-            print 'Checking free space for %s' % drive
+            print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
             free = free_space(unicode(drive))
             self.assertEqual(bytes_free, free)

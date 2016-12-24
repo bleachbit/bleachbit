@@ -215,7 +215,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         gtk.main()
         if options.exit:
             # For automated testing of Windows build
-            print 'Success'
+            print('Success')
         sys.exit(0)
     if options.shred:
         # delete arbitrary files without GUI

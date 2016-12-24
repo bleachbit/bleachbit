@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import logging
 import os
 import sys
 import threading
@@ -35,7 +36,7 @@ warnings.simplefilter('default')
 
 from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url, portable_mode \
+    online_update_notification_enabled, release_notes_url, portable_mode, \
     expanduser
 import Common
 from Cleaner import backends, register_cleaners
