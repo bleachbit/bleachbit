@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-24 19:52-0600\n"
-"PO-Revision-Date: 2016-07-06 08:41+0000\n"
-"Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2016-12-16 20:41+0000\n"
+"Last-Translator: Monkey <monkey.libre@gmail.com>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2016-07-09 03:12+0000\n"
-"X-Generator: Launchpad (build 18115)\n"
+"X-Launchpad-Export-Date: 2016-12-17 18:52+0000\n"
+"X-Generator: Launchpad (build 18298)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -52,7 +52,7 @@ msgstr "Eliminar el historial de uso"
 #: ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:372
 #: ../bleachbit/Cleaner.py:457
 msgid "Cache"
-msgstr "Caché"
+msgstr "Antememoria"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
@@ -67,7 +67,7 @@ msgstr "Caché"
 #: ../bleachbit/Cleaner.py:372 ../bleachbit/Cleaner.py:457
 #: ../bleachbit/Cleaner.py:491 ../bleachbit/Cleaner.py:493
 msgid "Delete the cache"
-msgstr "Eliminar la caché"
+msgstr "Eliminar la antememoria"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -157,24 +157,24 @@ msgstr "Usados más recientemente"
 #: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:374
 #: ../bleachbit/Cleaner.py:471
 msgid "Delete the list of recently used documents"
-msgstr "Eliminar la lista de documentos usados recientemente"
+msgstr "Eliminar la lista de elementos usados recientemente"
 
 #: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Chat client"
-msgstr "Cliente de chat"
+msgstr "Cliente de charla"
 
 #: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Chat logs"
-msgstr "Registros de chat"
+msgstr "Registros de charlas"
 
 #: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
 #: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/amsn.xml
 msgid "Delete the chat logs"
-msgstr "Eliminar los registros de chat"
+msgstr "Eliminar los registros de charlas"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -198,8 +198,8 @@ msgstr "Navegador web"
 #: ../bleachbit/Cleaner.py:195
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Eliminar la caché web, que reduce el tiempo para mostrar las páginas "
-"visitadas previamente"
+"Eliminar la antememoria de web, que permite cargar más rápido las páginas "
+"que ya ha visitado."
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -242,7 +242,7 @@ msgstr "Eliminar los archivos"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Se necesita actualizar las listas de bloqueo para que funcione."
+msgstr "Las listas de bloqueo necesitarán actualizarse para funcionar."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -250,7 +250,8 @@ msgstr "Torrents"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Elimina los torrents (solo los metadatos, no los ficheros descritos)"
+msgstr ""
+"Borra los torrents (solo los metadatos, pero no los ficheros descritos)"
 
 #: ../cleaners/transmission.xml
 msgid "Statistics"
@@ -265,11 +266,11 @@ msgstr "Eliminar el archivo"
 #: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
 #: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
 msgid "Delete the most recently used list"
-msgstr "Eliminar lista de elementos recientes"
+msgstr "Eliminar la lista de usados recientemente"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Eliminar la caché de los emoticonos y avatares"
+msgstr "Eliminar la antememoria de avatares y emoticonos"
 
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
 #: ../cleaners/vlc.xml ../cleaners/winamp.xml
@@ -431,8 +432,8 @@ msgstr "Índice"
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Eliminar el índice de búsquedas, una base de datos de palabras y los "
-"archivos que las contienen"
+"Eliminar indice de búsquedas, palabras de la base de datos y los archivos "
+"que las contienen."
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -444,7 +445,7 @@ msgstr "Podcasts descargados"
 
 #: ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "Eliminar podcasts descargados"
+msgstr "Eliminar los podcasts descargados"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
@@ -459,7 +460,7 @@ msgstr "Almacenamiento DOM"
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:201
 msgid "Delete HTML5 cookies"
-msgstr "Eliminar cookies HTML5"
+msgstr "Eliminar «cookies» de HTML5"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
@@ -474,14 +475,14 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Una base de datos de nombres de usuario y contraseñas, así como  una lista "
-"de sitios que no guardan contraseñas"
+"Base de datos de nombres de usuarios y contraseñas, así como también una "
+"lista de sitios que no guardan contraseñas"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:213
 msgid "This option will delete your saved passwords."
-msgstr "Esta opción eliminará las contraseñas guardadas."
+msgstr "Esta opción eliminará sus contraseñas guardadas."
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
@@ -611,7 +612,7 @@ msgstr "Omitir"
 #. deleted (for previews) or was actually deleted
 #: ../bleachbit/Command.py:74
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1328,6 +1329,7 @@ msgstr ""
 "  Felipe Hommen https://launchpad.net/~felihommen\n"
 "  Gonzalo Testa https://launchpad.net/~gonzalogtesta\n"
 "  José Lou Chang https://launchpad.net/~obake\n"
+"  Lucas Farias https://launchpad.net/~lukaz-f\n"
 "  Marco Antonio https://launchpad.net/~markitosco\n"
 "  Monkey https://launchpad.net/~monkey-libre\n"
 "  Nicolás Pierini https://launchpad.net/~nekun-deactivatedaccount\n"

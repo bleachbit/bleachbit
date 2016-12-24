@@ -34,6 +34,7 @@ import common
 
 sys.path.append('.')
 from bleachbit.DeepScan import DeepScan
+from bleachbit.Common import expanduser
 
 
 class DeepScanTestCase(unittest.TestCase):
@@ -75,7 +76,7 @@ class DeepScanTestCase(unittest.TestCase):
     def test_DeepScan(self):
         """Unit test for class DeepScan.  Preview real files."""
         ds = DeepScan()
-        path = os.path.expanduser('~')
+        path = expanduser('~')
         ds.add_search(path, '^Makefile$')
         ds.add_search(path, '~$')
         ds.add_search(path, 'bak$')

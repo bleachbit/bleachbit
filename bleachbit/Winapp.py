@@ -33,7 +33,7 @@ import re
 import traceback
 
 from Action import Delete, Winreg
-from Common import _
+from Common import _, FSE, expandvars
 from xml.dom.minidom import parseString
 import Common
 
@@ -103,7 +103,7 @@ def winapp_expand_vars(pathname):
     # Change %foo% to ${foo} as required by Python 2.5.4 (but not 2.7.8)
     pathname = re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', pathname)
     # This is the regular expansion
-    expand1 = os.path.expandvars(pathname)
+    expand1 = expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
@@ -111,7 +111,7 @@ def winapp_expand_vars(pathname):
         pattern = re.compile(r'\${%s}' % sub_orig, flags=re.IGNORECASE)
         if pattern.match(pathname):
             expand2 = pattern.sub('${%s}' % sub_repl, pathname)
-            return expand1, os.path.expandvars(expand2)
+            return expand1, expandvars(expand2)
     return expand1,
 
 
@@ -232,14 +232,14 @@ class Winapp:
         """Parse a section"""
         # if simple detection fails then discard the section
         if self.parser.has_option(section, 'detect'):
-            key = self.parser.get(section, 'detect')
+            key = self.parser.get(section, 'detect').decode(FSE)
             if not Windows.detect_registry_key(key):
                 return
         if self.parser.has_option(section, 'detectfile'):
-            if not detect_file(self.parser.get(section, 'detectfile')):
+            if not detect_file(self.parser.get(section, 'detectfile').decode(FSE)):
                 return
         if self.parser.has_option(section, 'detectos'):
-            required_ver = self.parser.get(section, 'detectos')
+            required_ver = self.parser.get(section, 'detectos').decode(FSE)
             if not detectos(required_ver):
                 return
         # in case of multiple detection, discard if none match
@@ -248,7 +248,7 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'detectfile%d' % n
                 if self.parser.has_option(section, option_id):
-                    if detect_file(self.parser.get(section, option_id)):
+                    if detect_file(self.parser.get(section, option_id).decode(FSE)):
                         matches += 1
             if 0 == matches:
                 return
@@ -257,7 +257,7 @@ class Winapp:
             for n in range(1, MAX_DETECT):
                 option_id = 'detect%d' % n
                 if self.parser.has_option(section, option_id):
-                    if Windows.detect_registry_key(self.parser.get(section, option_id)):
+                    if Windows.detect_registry_key(self.parser.get(section, option_id).decode(FSE)):
                         matches += 1
             if 0 == matches:
                 return
@@ -268,14 +268,14 @@ class Winapp:
                 option_id = 'excludekey%d' % n
                 if self.parser.has_option(section, option_id):
                     excludekeys.append(
-                        self.excludekey_to_nwholeregex(self.parser.get(section, option_id)))
+                        self.excludekey_to_nwholeregex(self.parser.get(section, option_id).decode(FSE)))
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
             # langsecref_num is 3021, games, etc.
-            langsecref_num = self.parser.get(section, 'langsecref')
+            langsecref_num = self.parser.get(section, 'langsecref').decode(FSE)
         elif self.parser.has_option(section, 'section'):
-            langsecref_num = self.parser.get(section, 'section')
+            langsecref_num = self.parser.get(section, 'section').decode(FSE)
         else:
             Common.logger.error('neither option LangSecRef nor Section found in section %s', section)
             return
@@ -290,7 +290,7 @@ class Winapp:
                 self.handle_regkey(lid, section, option)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
-                    section2option(section), self.parser.get(section, 'warning'))
+                    section2option(section), self.parser.get(section, 'warning').decode(FSE))
             elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section') \
                 or ['detect%d' % x for x in range(1, MAX_DETECT)] \
                     or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
@@ -327,19 +327,19 @@ class Winapp:
                 # just one
                 exclude_str = excludekeys[0]
             excludekeysxml = 'nwholeregex="%s"' % exclude_str
-        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
-            (search, xml_escape(path), regex, excludekeysxml)
+        action_str = u'<option command="delete" search="%s" path="%s" %s %s/>' % \
+                     (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            action_str = '<option command="delete" search="file" path="%s"/>' % xml_escape(
-                dirname)
+            action_str = u'<option command="delete" search="file" path="%s"/>' % \
+                         (xml_escape(dirname))
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
-        elements = self.parser.get(ini_section, ini_option).strip().split('|')
+        elements = self.parser.get(ini_section, ini_option).decode(FSE).strip().split('|')
         dirnames = winapp_expand_vars(elements.pop(0))
         filenames = ""
         if elements:
@@ -363,7 +363,7 @@ class Winapp:
 
     def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
-        elements = self.parser.get(ini_section, ini_option).strip().split('|')
+        elements = self.parser.get(ini_section, ini_option).decode(FSE).strip().split('|')
         path = xml_escape(elements[0])
         name = ""
         if 2 == len(elements):

@@ -148,6 +148,8 @@ def process_cmd_line():
                       help=_("show system information"))
     parser.add_option("--gui", action="store_true",
                       help=_("launch the graphical interface"))
+    parser.add_option('--exit', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
@@ -208,8 +210,12 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         import gtk
         import GUI
         shred_paths = args if options.shred else None
-        GUI.GUI(uac=not options.no_uac, shred_paths=shred_paths)
+        GUI.GUI(uac=not options.no_uac,
+                shred_paths=shred_paths, exit=options.exit)
         gtk.main()
+        if options.exit:
+            # For automated testing of Windows build
+            print 'Success'
         sys.exit(0)
     if options.shred:
         # delete arbitrary files without GUI

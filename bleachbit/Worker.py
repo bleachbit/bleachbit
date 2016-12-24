@@ -32,7 +32,7 @@ import DeepScan
 import FileUtilities
 import Common
 from Cleaner import backends
-from Common import _, ungettext
+from Common import _, ungettext, expanduser
 
 
 class Worker:
@@ -165,7 +165,7 @@ class Worker:
             # deep scan
             for ds in backends[operation].get_deep_scan(option_id):
                 if '' == ds['path']:
-                    ds['path'] = os.path.expanduser('~')
+                    ds['path'] = expanduser('~')
                 if 'delete' != ds['command']:
                     raise NotImplementedError(
                         'Deep scan only supports deleting now')

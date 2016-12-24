@@ -22,8 +22,8 @@
 Perform (or assist with) cleaning operations.
 """
 
-from Common import _
-from FileUtilities import children_in_directory, expandvars
+from Common import _, expanduser, expandvars
+from FileUtilities import children_in_directory
 from Options import options
 
 import glob
@@ -164,7 +164,7 @@ class Cleaner:
                     Common.logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
-                expanded = os.path.expanduser(expandvars(pathname))
+                expanded = expanduser(expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
                         logger.debug("file '%s' exists indicating '%s' is running", self.name)
@@ -252,7 +252,7 @@ class Firefox(Cleaner):
             if 'posix' == os.name:
                 # This path is whitelisted under the System - Cache cleaner,
                 # so it can be cleaned here.
-                dirs += [os.path.expanduser('~/.cache/mozilla')]
+                dirs += [expanduser('~/.cache/mozilla')]
             for dirname in dirs:
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
@@ -268,7 +268,7 @@ class Firefox(Cleaner):
                 self.profile_dir, "cookies.sqlite")
         # crash reports
         if 'posix' == os.name:
-            crashdir = os.path.expanduser("~/.mozilla/firefox/Crash Reports")
+            crashdir = expanduser("~/.mozilla/firefox/Crash Reports")
         if 'nt' == os.name:
             crashdir = expandvars(
                 "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Crash Reports")
@@ -533,7 +533,7 @@ class System(Cleaner):
 
         # cache
         if 'posix' == os.name and 'cache' == option_id:
-            dirname = os.path.expanduser("~/.cache/")
+            dirname = expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 if self.whitelisted(filename):
                     continue
@@ -640,7 +640,7 @@ class System(Cleaner):
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
-            files += [os.path.expanduser("~/.recently-used")]
+            files += [expanduser("~/.recently-used")]
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
             # in memory if it is simply deleted, so it must be shredded
             # (or at least truncated).
@@ -651,7 +651,7 @@ class System(Cleaner):
             #
             # https://bugzilla.gnome.org/show_bug.cgi?id=591404
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
-                pathname = os.path.expanduser(pathname)
+                pathname = expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
                     if HAVE_GTK:
@@ -690,7 +690,7 @@ class System(Cleaner):
 
         # trash
         if 'posix' == os.name and 'trash' == option_id:
-            dirname = os.path.expanduser("~/.Trash")
+            dirname = expanduser("~/.Trash")
             for filename in children_in_directory(dirname, False):
                 yield Command.Delete(filename)
             # fixme http://www.ramendik.ru/docs/trashspec.html
@@ -698,13 +698,13 @@ class System(Cleaner):
             # ~/.local/share/Trash
             # * GNOME 2.22, Fedora 9
             # * KDE 4.1.3, Ubuntu 8.10
-            dirname = os.path.expanduser("~/.local/share/Trash/files")
+            dirname = expanduser("~/.local/share/Trash/files")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/info")
+            dirname = expanduser("~/.local/share/Trash/info")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/expunged")
+            dirname = expanduser("~/.local/share/Trash/expunged")
             # desrt@irc.gimpnet.org tells me that the trash
             # backend puts files in here temporary, but in some situations
             # the files are stuck.
@@ -765,13 +765,18 @@ class System(Cleaner):
             # opens the recycle bin folder.
 
             # This is a hack to refresh the icon.
-            import tempfile
-            tmpdir = tempfile.mkdtemp()
-            Windows.move_to_recycle_bin(tmpdir)
-            try:
-                Windows.empty_recycle_bin(None, True)
-            except:
-                logger.info('error in empty_recycle_bin()', exc_info=True)
+            def empty_recycle_bin_func():
+                import tempfile
+                tmpdir = tempfile.mkdtemp()
+                Windows.move_to_recycle_bin(tmpdir)
+                try:
+                    Windows.empty_recycle_bin(None, True)
+                except:
+                    logger.info('error in empty_recycle_bin()', exc_info=True)
+                yield 0
+            # Using the Function Command prevents emptying the recycle bin
+            # when in preview mode.
+            yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:
@@ -799,15 +804,15 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser('~/.cache/wallpaper/'),
+            '^' + expanduser('~/.cache/wallpaper/'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser('~/.cache/mozilla'),
+            '^' + expanduser('~/.cache/mozilla'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser('~/.cache/google-chrome'),
-            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
+            '^' + expanduser('~/.cache/google-chrome'),
+            '^' + expanduser('~/.cache/gnome-control-center/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser('~/.cache/ibus/')]
+            '^' + expanduser('~/.cache/ibus/')]
         for regex in regexes:
             if re.match(regex, pathname) is not None:
                 return True

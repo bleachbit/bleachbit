@@ -44,8 +44,8 @@ def diagnostic_info():
         pass
     s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
     s += "\nlocale_dir = %s" % Common.locale_dir
-    s += "\noptions_dir = %s" % Common.options_dir
-    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir
+    s += "\noptions_dir = %s" % Common.options_dir.decode(Common.FSE)
+    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir.decode(Common.FSE)
     s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
@@ -54,14 +54,30 @@ def diagnostic_info():
         envs = ('APPDATA', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
-        s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
+        if os.getenv(env):
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(Common.FSE))
+        else:
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
+    s += "\nos.path.expanduser('~') = %s" % Common.expanduser('~').decode(Common.FSE)
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(
                 platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
+            
+    # Mac Version Name - Dictonary "masosx_dict"
+    macosx_dict = {'5':'Lepoard','6':'Snow Lepoard','7':'Lion','8':'Mountain Lion','9':'Mavericks','10':'Yosemite','11':'El Capitan','12':'Sierra'}
+
+    if sys.platform.startswith('darwin'):
+        if hasattr(platform, 'mac_ver'):
+            for key in macosx_dict:
+                if (platform.mac_ver()[0].split('.')[1] == key):
+                    s += "\nplatform.mac_ver() = %s" % str(
+                        platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
+        else:
+            s += "\nplatform.dist() = %s" % str(platform.dist())
+
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
     s += "\nplatform.platform = %s" % platform.platform()

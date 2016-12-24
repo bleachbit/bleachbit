@@ -33,6 +33,7 @@ import TestCLI
 import TestCleaner
 import TestCleanerML
 import TestCommand
+import TestCommon
 import TestDiagnostic
 import TestDeepScan
 import TestFileUtilities
@@ -50,6 +51,7 @@ suites = [TestAction.suite(),
           TestCleaner.suite(),
           TestCLI.suite(),
           TestCommand.suite(),
+          TestCommon.suite(),
           TestDeepScan.suite(),
           TestDiagnostic.suite(),
           TestFileUtilities.suite(),
@@ -59,7 +61,8 @@ suites = [TestAction.suite(),
           TestRecognizeCleanerML.suite(),
           TestSpecial.suite(),
           TestUpdate.suite(),
-          TestWorker.suite()]
+          TestWorker.suite()
+          ]
 
 if 'posix' == os.name and sys.version_info >= (2, 7, 0):
     import TestUnix

@@ -39,7 +39,7 @@ class AssertFile:
 
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
-        from bleachbit.FileUtilities import expandvars
+        from bleachbit.Common import expandvars
         path = expandvars(path)
         if not func(self.getTestPath(path)):
             raise AssertionError(
@@ -100,7 +100,7 @@ def validate_result(self, result, really_delete=False):
         return
     from bleachbit.Common import encoding
     self.assert_(isinstance(filename, (str, unicode, type(None))),
-                 "Filename is invalid: '%s' (type %s)" % (filename.encode(encoding, 'replace'), type(filename)))
+                 "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
     if isinstance(filename, (str, unicode)) and \
             not filename[0:2] == 'HK':
         if really_delete:
