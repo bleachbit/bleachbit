@@ -25,12 +25,12 @@
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Office\OffDiag\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Office\OffDiag\"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Office\Recent\"/>
+    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Office\Recent\"/>
     <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Editor\Recently Used URLs"/>
     <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recent File List"/>
     <action command="winreg" path="HKCU\Software\Microsoft\FrontPage\Explorer\FrontPage Explorer\Recently Created Servers"/>

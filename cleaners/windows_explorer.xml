@@ -56,14 +56,14 @@
     <description>Delete the list of recently used documents</description>
     <warning>This option will reset pinned locations in Quick Access to their defaults.</warning>
     <!-- Windows XP -->
-    <action command="delete" search="glob" path="$USERPROFILE\Recent\*.lnk"/>
+    <action command="delete" search="glob" path="%USERPROFILE%\Recent\*.lnk"/>
     <!-- Vista -->
-    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\*.lnk"/>
+    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\*.lnk"/>
     <!-- recent documents in start menu -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
     <!-- Windows 7 jump list -->
-    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
-    <action command="delete" search="glob" path="$APPDATA\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
+    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
+    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
   </option>
   <option id="run">
     <label translators="In Windows 'Run' is the dialog in the Start menu">Run</label>
@@ -81,7 +81,7 @@
     <description>Delete the cache</description>
     <warning>This will restart Windows Explorer.</warning>
     <action command="process" cmd="taskkill.exe /f /IM explorer.exe"/>
-    <action command="delete" search="glob" path="$LOCALAPPDATA\Microsoft\Windows\Explorer\thumbcache*.db"/>
+    <action command="delete" search="glob" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\thumbcache*.db"/>
     <!-- On 64-bit Windows, it is important to start the 64-bit Windows Explorer,
          so use the full path. Also, do not wait for the process to terminate. -->
     <action command="process" wait="false" cmd="%WINDIR%\explorer.exe"/>

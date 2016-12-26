@@ -25,7 +25,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete the files</description>
-    <action command="delete" search="walk.files" path="$commonappdata\Microsoft\Windows Defender\Scans\History\Results\Quick"/>
-    <action command="delete" search="walk.files" path="$commonappdata\Microsoft\Windows Defender\Scans\History\Results\Resource"/>
+    <action command="delete" search="walk.files" path="%COMMONAPPDATA%\Microsoft\Windows Defender\Scans\History\Results\Quick"/>
+    <action command="delete" search="walk.files" path="%COMMONAPPDATA%\Microsoft\Windows Defender\Scans\History\Results\Resource"/>
   </option>
 </cleaner>

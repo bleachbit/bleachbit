@@ -25,10 +25,10 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Cookies\"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\Cookies\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\DOMStore\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\LocalLow\Microsoft\Internet Explorer\DOMStore\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\Cookies\"/>
+    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\Cookies\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\DOMStore\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\LocalLow\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
   <option id="forms">
     <label>Form history</label>
@@ -40,20 +40,20 @@
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\History\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\History\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\Recovery\Active\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Internet Explorer\Recovery\Last Active\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\History\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\History\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Active\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Last Active\"/>
     <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLs"/>
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="$APPDATA\Microsoft\Windows\IETldCache\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
-    <action command="delete" search="walk.files" path="$USERPROFILE\Local Settings\Temporary Internet Files\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Microsoft\Feeds Cache\"/>
+    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\IETldCache\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
+    <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Feeds Cache\"/>
   </option>
 </cleaner>

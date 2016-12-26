@@ -24,7 +24,7 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="walk.all" path="$localappdata\Microsoft\Silverlight\is\"/>
-    <action command="delete" search="walk.all" path="$USERPROFILE\AppData\LocalLow\Microsoft\Silverlight\is\"/>
+    <action command="delete" search="walk.all" path="%LOCALAPPDATA%\Microsoft\Silverlight\is\"/>
+    <action command="delete" search="walk.all" path="%USERPROFILE%\AppData\LocalLow\Microsoft\Silverlight\is\"/>
   </option>
 </cleaner>
