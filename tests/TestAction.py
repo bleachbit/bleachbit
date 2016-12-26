@@ -141,9 +141,9 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         """Unit test for class Delete"""
         paths = [u'~']
         if 'nt' == os.name:
-            if sys.version_info[0] == 2 and sys.version_info[1] > 5:
-                # Python 2.6 and later supports %
-                paths.append(u'%USERPROFILE%')
+            # Python 2.6 and later supports %foo%
+            paths.append(u'%USERPROFILE%')
+            # Python 2.5 and later supports $foo
             paths.append(u'${USERPROFILE}')
             paths.append(u'$USERPROFILE')
         if 'posix' == os.name:
