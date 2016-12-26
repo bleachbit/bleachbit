@@ -26,6 +26,7 @@ Command line interface
 """
 
 
+import logging
 import optparse
 import os
 import sys
@@ -37,6 +38,7 @@ import Options
 import Worker
 import Common
 
+logger = logging.getLogger(__name__)
 
 class CliCallback:
     """Command line's callback passed to Worker"""
@@ -105,7 +107,7 @@ def args_to_operations(args, preset):
                     args.append('.'.join([c_id, o_id]))
     for arg in args:
         if 2 != len(arg.split('.')):
-            Common.logger.warning(_("not a valid cleaner: %s"), arg)
+            logger.warning(_("not a valid cleaner: %s"), arg)
             continue
         (cleaner_id, option_id) = arg.split('.')
         # enable all options (for example, firefox.*)
@@ -169,9 +171,9 @@ def process_cmd_line():
     (options, args) = parser.parse_args()
     did_something = False
     if options.debug_log:
-        Common.logger.addHandler(logging.FileHandler(options.debug_log))
-        Common.logger.info('BleachBit version %s', APP_VERSION)
-        Common.logger.info(Diagnostic.diagnostic_info())
+        logger.addHandler(logging.FileHandler(options.debug_log))
+        logger.info('BleachBit version %s', APP_VERSION)
+        logger.info(Diagnostic.diagnostic_info())
     if options.version:
         print("""
 BleachBit version %s
@@ -182,7 +184,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if 'nt' == os.name and options.update_winapp2:
         import Update
-        Common.logger.info("Checking online for updates to winapp2.ini")
+        logger.info("Checking online for updates to winapp2.ini")
         Update.check_updates(False, True,
                              lambda x: sys.stdout.write("%s\n" % x),
                              lambda: None)
@@ -194,14 +196,14 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
     if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)
         if not operations:
-            Common.logger.error('No work to do.  Specify options.')
+            logger.error('No work to do. Specify options.')
             sys.exit(1)
     if options.preview:
         preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
         if not options.clean or options.shred:
-            Common.logger.info('--overwrite is intended only for use with --clean')
+            logger.warning('--overwrite is intended only for use with --clean')
         Options.options.set('shred', True, commit=False)
     if options.clean:
         preview_or_clean(operations, True)

@@ -24,6 +24,7 @@ Check local CleanerML files as a security measure
 
 
 import gobject
+import logging
 import os
 import random
 import sys
@@ -35,6 +36,7 @@ import Common
 from CleanerML import list_cleanerml_files
 from Options import options
 
+logger = logging.getLogger(__name__)
 
 KNOWN = 1
 CHANGED = 2
@@ -120,7 +122,7 @@ def cleaner_change_dialog(changes, parent):
             # confirmation not accepted, so do not delete files
             continue
         for path in delete:
-            Common.logger.info("deleting unrecognized CleanerML '%s'", path)
+            logger.info("deleting unrecognized CleanerML '%s'", path)
             os.remove(path)
         break
     dialog.destroy()
@@ -172,6 +174,6 @@ class RecognizeCleanerML:
             for change in changes:
                 pathname = change[0]
                 myhash = change[2]
-                Common.logger.info("remembering CleanerML file '%s'", pathname)
+                logger.info("remembering CleanerML file '%s'", pathname)
                 if os.path.exists(pathname):
                     options.set_hashpath(pathname, myhash)

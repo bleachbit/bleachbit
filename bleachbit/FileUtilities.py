@@ -42,6 +42,8 @@ import time
 import Common
 from Common import expanduser
 
+logger = logging.getLogger(__name__)
+
 if 'nt' == os.name:
     import pywintypes
     import win32file
@@ -266,7 +268,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
-                Common.logger.info("directory is not empty: %s", path)
+                logger.info("directory is not empty: %s", path)
             else:
                 raise
         except WindowsError as e:
@@ -275,7 +277,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # Error 145 may happen if the files are scheduled for deletion
             # during reboot.
             if 145 == e.winerror:
-                Common.logger.info("directory is not empty: %s", path)
+                logger.info("directory is not empty: %s", path)
             else:
                 raise
     elif os.path.isfile(path):
@@ -285,14 +287,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 wipe_contents(path)
             except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                Common.logger.debug("IOError #%s shredding '%s'", e.errno, path)
+                logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
             # wipe name
             os.remove(wipe_name(path))
         else:
             # unlink
             os.remove(path)
     else:
-        Common.logger.info("special file type cannot be deleted: %s", path)
+        logger.info("special file type cannot be deleted: %s", path)
 
 
 def ego_owner(filename):
@@ -338,11 +340,10 @@ def execute_sqlite3(path, cmds):
             raise sqlite3.DatabaseError(
                 '%s: %s' % (Common.decode_str(exc), path))
         except sqlite3.OperationalError as exc:
-            logger = logging.getLogger(__name__)
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
                 # available
-                logger.warning(exc.message)
+                logger.exception(exc.message)
             else:
                 raise sqlite3.OperationalError(
                     '%s: %s' % (Common.decode_str(exc), path))
@@ -385,8 +386,7 @@ def free_space(pathname):
         except:
             # This works better with Windows XP but not UTF-8.
             # Deprecated.
-            logger = logging.getLogger(__name__)
-            logger.warning('failed to start psutil (not supported on Windows XP)')
+            logger.warning('failed to start psutil (not supported on Windows XP)', exc_info=True)
             _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
             return free_bytes
     mystat = os.statvfs(pathname)
@@ -457,7 +457,6 @@ def guess_overwrite_paths():
             ret.append('/tmp')
     elif 'nt' == os.name:
         localtmp = Common.expandvars('$TMP')
-        logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
@@ -539,7 +538,7 @@ def sync():
         import ctypes
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
-            Common.logger.error('sync() returned code %d', rc)
+            logger.error('sync() returned code %d', rc)
     if 'nt' == os.name:
         import ctypes
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
@@ -603,7 +602,6 @@ def wipe_contents(path, truncate=True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    logger = logging.getLogger(__name__)
     (head, _) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
@@ -641,8 +639,6 @@ def wipe_name(pathname1):
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
-
-    logger = logging.getLogger(__name__)
 
     def temporaryfile():
         # reference
@@ -735,7 +731,7 @@ def wipe_path(pathname, idle=False):
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
-            logger.info("info: exception on f.flush()")
+            logger.info("info: exception on f.flush()", exc_info=True)
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
         files.append(f)

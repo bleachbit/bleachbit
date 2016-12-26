@@ -24,6 +24,7 @@ Integration specific to Unix-like operating systems
 """
 
 import glob
+import logging
 import os
 import re
 import shlex
@@ -33,7 +34,9 @@ import sys
 import FileUtilities
 import General
 import Common
-from Common import _, logger
+from Common import _
+
+logger = logging.getLogger(__name__)
 
 
 class LocaleCleanerPath:
@@ -378,11 +381,11 @@ class Locales:
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
-        logger.info("is_broken_xdg_menu: missing required option 'Exec': '%s'" % desktop_pathname)
+        logger.info("is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not FileUtilities.exe_exists(exe):
-        logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'" % (exe, desktop_pathname))
+        logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'", exe, desktop_pathname)
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
@@ -400,14 +403,14 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             else:
                 break
         if not FileUtilities.exe_exists(execs[0]):
-            logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'" % (execs[0], desktop_pathname))
+            logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist '%s'" %
-                            (windows_exe, desktop_pathname))
+                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist '%s'",
+                            windows_exe, desktop_pathname)
                 return True
     return False
 
@@ -420,7 +423,7 @@ def is_unregistered_mime(mimetype):
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
-        logger.warning('error calling gio.app_info_get_all_for_type(%s)' % mimetype)
+        logger.warning('error calling gio.app_info_get_all_for_type(%s)', mimetype)
     return False
 
 
@@ -430,29 +433,29 @@ def is_broken_xdg_desktop(pathname):
     config = Common.RawConfigParser()
     config.read(pathname)
     if not config.has_section('Desktop Entry'):
-        logger.info("is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'" % pathname)
+        logger.info("is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
         return True
     if not config.has_option('Desktop Entry', 'Type'):
-        logger.info("is_broken_xdg_menu: missing required option 'Type': '%s'" % pathname)
+        logger.info("is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)
         return True
     file_type = config.get('Desktop Entry', 'Type').strip().lower()
     if 'link' == file_type:
         if not config.has_option('Desktop Entry', 'URL') and \
                 not config.has_option('Desktop Entry', 'URL[$e]'):
-            logger.info("is_broken_xdg_menu: missing required option 'URL': '%s'" % pathname)
+            logger.info("is_broken_xdg_menu: missing required option 'URL': '%s'", pathname)
             return True
         return False
     if 'mimetype' == file_type:
         if not config.has_option('Desktop Entry', 'MimeType'):
-            logger.info("is_broken_xdg_menu: missing required option 'MimeType': '%s'" % pathname)
+            logger.info("is_broken_xdg_menu: missing required option 'MimeType': '%s'", pathname)
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
         if is_unregistered_mime(mimetype):
-            logger.info("is_broken_xdg_menu: MimeType '%s' not registered '%s'" % (mimetype, pathname))
+            logger.info("is_broken_xdg_menu: MimeType '%s' not registered '%s'", mimetype, pathname)
             return True
         return False
     if 'application' != file_type:
-        logger.warning("unhandled type '%s': file '%s'" % (file_type, pathname))
+        logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
         return False
     if __is_broken_xdg_desktop_application(config, pathname):
         return True
@@ -536,7 +539,7 @@ def start_with_computer(enabled):
         # Already automatic, so exit
         return
     if not os.path.exists(Common.launcher_path):
-        logger.error('%s does not exist: ' % Common.launcher_path)
+        logger.error('%s does not exist: ', Common.launcher_path)
         return
     import shutil
     General.makedirs(os.path.dirname(Common.autostart_path))

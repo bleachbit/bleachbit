@@ -414,8 +414,8 @@ class Process(ActionProvider):
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             else:
                 if not 0 == rc:
-                    Common.logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
-                                          self.cmd, rc, stdout, stderr)
+                    logging.getLogger(__name__).warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
+                                                        self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 

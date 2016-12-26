@@ -36,6 +36,7 @@ from Common import _
 from General import boolstr_to_bool, getText
 from FileUtilities import listdir
 
+logger = logging.getLogger(__name__)
 
 class CleanerML:
 
@@ -94,10 +95,8 @@ class CleanerML:
             try:
                 self.handle_cleaner_option(option)
             except:
-                logger = logging.getLogger(__name__)
-                logger.exception(
-                    'error in handle_cleaner_option() for cleaner id = %s, option XML=%s',
-                    self.cleaner.id, option.toxml())
+                logger.exception('error in handle_cleaner_option() for cleaner id = %s, option XML=%s',
+                                 self.cleaner.id, option.toxml())
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))
@@ -199,28 +198,24 @@ def list_cleanerml_files(local_only=False):
         import stat
         st = os.stat(pathname)
         if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
-            logger = logging.getLogger(__name__)
-            logger.warning(
-                "ignoring cleaner because it is world writable: %s" % pathname)
+            logger.warning("ignoring cleaner because it is world writable: %s", pathname)
             continue
         yield pathname
 
 
 def load_cleaners():
     """Scan for CleanerML and load them"""
-    logger = logging.getLogger(__name__)
     for pathname in list_cleanerml_files():
         try:
             xmlcleaner = CleanerML(pathname)
         except:
-            logger.exception('error reading cleaner: %s' % pathname)
+            logger.exception('error reading cleaner: %s', pathname)
             continue
         cleaner = xmlcleaner.get_cleaner()
         if cleaner.is_usable():
             Cleaner.backends[cleaner.id] = cleaner
         else:
-            logger.debug(
-                'cleaner is not usable on this OS because it has no actions: %s' % pathname)
+            logger.debug('cleaner is not usable on this OS because it has no actions: %s', pathname)
 
 
 def pot_fragment(msgid, pathname, translators=None):
@@ -251,8 +246,7 @@ def create_pot():
                       lambda newstr, translators=None:
                       strings.append([newstr, translators]))
         except:
-            logger = logging.getLogger(__name__)
-            logger.exception('error reading: %s' % pathname)
+            logger.exception('error reading: %s', pathname)
             continue
         for (string, translators) in strings:
             f.write(pot_fragment(string, pathname, translators))

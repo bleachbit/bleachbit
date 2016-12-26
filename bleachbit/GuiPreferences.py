@@ -26,6 +26,7 @@ Preferences dialog
 
 
 import gtk
+import logging
 import os
 import sys
 import traceback
@@ -40,6 +41,7 @@ if 'nt' == os.name:
 if 'posix' == os.name:
     import Unix
 
+logger = logging.getLogger(__name__)
 
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
@@ -313,7 +315,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        Common.logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -327,7 +329,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        Common.logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])
@@ -354,7 +356,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        Common.logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -368,7 +370,7 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        Common.logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning("'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])

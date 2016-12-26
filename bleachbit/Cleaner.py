@@ -27,6 +27,7 @@ from FileUtilities import children_in_directory
 from Options import options
 
 import glob
+import logging
 import os.path
 import re
 import sys
@@ -96,8 +97,8 @@ class Cleaner:
                     if isinstance(ds, dict):
                         return False
             except:
-                Common.logger.warning('exception in auto_hide(), cleaner=%s, option=%s',
-                               self.name, option_id)
+                logging.getLogger(__name__).warning('exception in auto_hide(), cleaner=%s, option=%s',
+                                                    self.name, option_id)
                 traceback.print_exc()
         return True
 
@@ -152,16 +153,17 @@ class Cleaner:
 
     def is_running(self):
         """Return whether the program is currently running"""
+        logger = logging.getLogger(__name__)
         for running in self.running:
             test = running[0]
             pathname = running[1]
             if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
-                    Common.logger.debug("process '%s' is running", pathname)
+                    logger.debug("process '%s' is running", pathname)
                     return True
             elif 'exe' == test and 'nt' == os.name:
                 if Windows.is_process_running(pathname):
-                    Common.logger.debug("process '%s' is running", pathname)
+                    logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
                 expanded = expanduser(expandvars(pathname))
@@ -772,7 +774,7 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except:
-                    logger.info('error in empty_recycle_bin()', exc_info=True)
+                    logging.getLogger(__name__).info('error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.

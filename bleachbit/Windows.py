@@ -67,6 +67,8 @@ import FileUtilities
 import General
 from Common import expandvars
 
+logger = logging.getLogger(__name__)
+
 
 def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
@@ -97,9 +99,9 @@ def browse_files(_, title):
                                         Title=title)
     except pywintypes.error as e:
         if 0 == e.winerror:
-            Common.logger.debug('browse_files(): user cancelled')
+            logger.debug('browse_files(): user cancelled')
         else:
-            Common.logger.exception('exception in browse_files()')
+            logger.exception('exception in browse_files()')
         return None
     _split = ret[0].split('\x00')
     if 1 == len(_split):
@@ -127,7 +129,7 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except:
-        Common.logger.info('exception when getting special folder path for %s', varname)
+        logger.info('exception when getting special folder path for %s', varname)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
@@ -264,7 +266,7 @@ def elevate_privileges():
         return False
 
     if shell.IsUserAnAdmin():
-        Common.logger.debug('already an admin (UAC not required)')
+        logger.debug('already an admin (UAC not required)')
         return False
 
     if hasattr(sys, 'frozen'):
@@ -279,7 +281,7 @@ def elevate_privileges():
         # the administrator may not have privileges and user will not be
         # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
-            Common.logger.debug("debug: skipping UAC because '%s' is on network", pyfile)
+            logger.debug("debug: skipping UAC because '%s' is on network", pyfile)
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
@@ -287,7 +289,7 @@ def elevate_privileges():
     # add any command line parameters such as --debug-log
     parameters = "%s %s" % (parameters, ' '.join(sys.argv[1:]))
 
-    Common.logger.debug('elevate_privileges() exe=%s, parameters=%s', exe, parameters)
+    logger.debug('elevate_privileges() exe=%s, parameters=%s', exe, parameters)
 
     rc = None
     try:
@@ -297,11 +299,11 @@ def elevate_privileges():
                                   nShow=win32con.SW_SHOW)
     except pywintypes.error as e:
         if 1223 == e.winerror:
-            Common.logger.debug('user denied the UAC dialog')
+            logger.debug('user denied the UAC dialog')
             return False
         raise
 
-    Common.logger.debug('ShellExecuteEx=%s', rc)
+    logger.debug('ShellExecuteEx=%s', rc)
 
     if isinstance(rc, dict):
         return True
@@ -334,7 +336,7 @@ def get_autostart_path():
     except:
         # example of failure
         # https://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
-        Common.logger.exception('exception in get_autostart_path()')
+        logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
             str(sys.exc_info()[1]))
         import GuiBasic
@@ -555,7 +557,7 @@ def set_environ(varname, path):
     if not path:
         return
     if varname in os.environ:
-        Common.logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
+        logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = expandvars(u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
@@ -566,7 +568,7 @@ def set_environ(varname, path):
             raise RuntimeError('Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path.encode('utf8')
     except:
-        Common.logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
+        logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
 
 
 def setup_environment():
@@ -584,7 +586,7 @@ def setup_environment():
     try:
         path = get_known_folder_path('LocalAppDataLow')
     except:
-        Common.logger.exception('exception identifying LocalAppDataLow')
+        logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
 

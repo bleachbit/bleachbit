@@ -26,9 +26,12 @@ General code
 
 import Common
 
+import logging
 import os
 import sys
 import traceback
+
+logger = logging.getLogger(__name__)
 
 
 #
@@ -71,9 +74,9 @@ def chownself(path):
     if 'posix' != os.name:
         return
     uid = getrealuid()
-    Common.logger.debug('chown(%s, uid=%s)', path, uid)
+    logger.debug('chown(%s, uid=%s)', path, uid)
     if 0 == path.find('/root'):
-        Common.logger.info('chown for path /root aborted')
+        logger.info('chown for path /root aborted')
         return
     try:
         os.chown(path, uid, -1)
@@ -108,7 +111,7 @@ def getrealuid():
 def makedirs(path):
     """Make directory recursively considering sudo permissions.
     'Path' should not end in a delimiter."""
-    Common.logger.debug('makedirs(%s)', path.encode(Common.FSE))
+    logger.debug('makedirs(%s)', path.encode(Common.FSE))
     if os.path.lexists(path):
         return
     parentdir = os.path.split(path)[0]
@@ -121,7 +124,7 @@ def makedirs(path):
 
 def run_external(args, stdout=False, env=None):
     """Run external command and return (return code, stdout, stderr)"""
-    Common.logger.debug('running cmd ' + ' '.join(args))
+    logger.debug('running cmd ' + ' '.join(args))
     import subprocess
     if not stdout:
         stdout = subprocess.PIPE

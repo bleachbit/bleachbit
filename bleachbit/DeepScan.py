@@ -25,6 +25,7 @@ Scan directory tree for files to delete
 
 import Common
 
+import logging
 import os
 import re
 import sys
@@ -60,7 +61,7 @@ class DeepScan:
 
     def scan(self):
         """Perform requested searches and yield each match"""
-        Common.logger.debug('DeepScan.scan: searches=%s', str(self.searches))
+        logging.getLogger(__name__).debug('DeepScan.scan: searches=%s', str(self.searches))
         import time
         yield_time = time.time()
 

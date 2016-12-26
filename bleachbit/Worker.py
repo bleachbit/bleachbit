@@ -30,9 +30,10 @@ import sys
 
 import DeepScan
 import FileUtilities
-import Common
 from Cleaner import backends
 from Common import _, ungettext, expanduser
+
+logger = logging.getLogger(__name__)
 
 
 class Worker:
@@ -73,7 +74,7 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
-        Common.logger.error(err, exc_info=True)
+        logger.error(err, exc_info=True)
         self.total_errors += 1
 
     def execute(self, cmd):
@@ -94,10 +95,10 @@ class Worker:
             from errno import ENOENT, EACCES
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
-                Common.logger.error('%s: %s', e, cmd)
+                logger.error('%s: %s', e, cmd)
             else:
                 # For other errors, show the traceback.
-                Common.logger.error('Error in execution of %s', cmd, exc_info=True)
+                logger.error('Error in execution of %s', cmd, exc_info=True)
             self.total_errors += 1
         else:
             if ret is None:
@@ -126,7 +127,7 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        Common.logger.debug("clean_operation('%s'), options = '%s'", operation, operation_options)
+        logger.debug("clean_operation('%s'), options = '%s'", operation, operation_options)
 
         if not operation_options:
             raise StopIteration
@@ -290,7 +291,6 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger = logging.getLogger(__name__)
         logger.debug(' deepscans=%s' % self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory

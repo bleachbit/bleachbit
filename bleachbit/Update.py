@@ -41,6 +41,8 @@ import xml.dom.minidom
 import Common
 from Common import _
 
+logger = logging.getLogger(__name__)
+
 
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
@@ -106,7 +108,6 @@ def user_agent():
         import locale
         __locale = locale.getdefaultlocale()[0]  # e.g., en_US
     except:
-        logger = logging.getLogger(__name__)
         logger.exception('Exception when getting default locale')
 
     try:
@@ -159,7 +160,6 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener = build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
-    logger = logging.getLogger(__name__)
     try:
         handle = opener.open(Common.update_check_url)
     except URLError:
@@ -171,7 +171,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     try:
         dom = xml.dom.minidom.parseString(doc)
     except:
-        logger.exception('The update information does not parse: %s' % doc)
+        logger.exception('The update information does not parse: %s', doc)
         return ()
 
     def parse_updates(element):

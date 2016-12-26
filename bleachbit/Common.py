@@ -189,8 +189,7 @@ elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    logger.warning('unknown system cleaners directory for platform %s ' %
-                   sys.platform)
+    logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
 
 # local cleaners directory (for running from source tree)
 local_cleaners_dir = os.path.normpath(
@@ -234,13 +233,13 @@ FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:
-    logger.warning('error getting locale: %s' % str(sys.exc_info()[1]))
+    logger.exception('error getting locale')
     user_locale = None
     encoding = None
 
 if user_locale is None:
     user_locale = 'C'
-    logger.warning("no default locale found.  Assuming '%s'" % user_locale)
+    logger.warning("no default locale found.  Assuming '%s'", user_locale)
 
 if 'win32' == sys.platform:
     os.environ['LANG'] = user_locale

@@ -23,6 +23,7 @@ Command design pattern implementation for cleaning
 """
 
 
+import logging
 import os
 import types
 import FileUtilities
@@ -152,7 +153,7 @@ class Function:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
-                    Common.logger.warning(e.message)
+                    logging.getLogger(__name__).exception(e.message)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)

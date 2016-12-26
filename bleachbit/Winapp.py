@@ -27,6 +27,8 @@ Import Winapp2.ini files
 import Cleaner
 import Common
 import Windows
+
+import logging
 import os
 import glob
 import re
@@ -35,8 +37,8 @@ import traceback
 from Action import Delete, Winreg
 from Common import _, FSE, expandvars
 from xml.dom.minidom import parseString
-import Common
 
+logger = logging.getLogger(__name__)
 
 MAX_DETECT = 50
 
@@ -153,7 +155,7 @@ class Winapp:
                 self.handle_section(section)
             except:
                 self.errors += 1
-                Common.logger.error('parsing error in section %s', section)
+                logger.error('parsing error in section %s', section)
                 traceback.print_exc()
 
     def add_section(self, cleaner_id, name):
@@ -277,7 +279,7 @@ class Winapp:
         elif self.parser.has_option(section, 'section'):
             langsecref_num = self.parser.get(section, 'section').decode(FSE)
         else:
-            Common.logger.error('neither option LangSecRef nor Section found in section %s', section)
+            logger.error('neither option LangSecRef nor Section found in section %s', section)
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
@@ -296,7 +298,7 @@ class Winapp:
                     or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
                 pass
             else:
-                Common.logger.warning('unknown option %s in section %s', option, section)
+                logger.warning('unknown option %s in section %s', option, section)
                 return
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
@@ -354,7 +356,7 @@ class Winapp:
                 recurse = True
                 removeself = True
             else:
-                Common.logger.warning('unknown file option %s in section %s', element, ini_section)
+                logger.warning('unknown file option %s in section %s', element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
@@ -393,7 +395,7 @@ def load_cleaners():
         try:
             inicleaner = Winapp(pathname)
         except:
-            Common.logger.error("Error reading winapp2.ini cleaner '%s'", pathname)
+            logger.error("Error reading winapp2.ini cleaner '%s'", pathname)
             traceback.print_exc()
         else:
             for cleaner in inicleaner.get_cleaners():

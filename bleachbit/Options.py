@@ -23,6 +23,7 @@ Store and retrieve user preferences
 """
 
 
+import logging
 import os
 import re
 import sys
@@ -30,6 +31,8 @@ import traceback
 
 import Common
 import General
+
+logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
     from win32file import GetLongPathName
@@ -79,7 +82,7 @@ class Options:
             print(e)
             from errno import ENOSPC
             if e.errno == ENOSPC:
-                Common.logger.error("disk is full writing configuration '%s'", Common.options_file)
+                logger.error("disk is full writing configuration '%s'", Common.options_file)
             else:
                 raise
         if mkfile and General.sudo_mode():
@@ -103,7 +106,7 @@ class Options:
             except:
                 # this deals with corrupt keys
                 # https://www.bleachbit.org/forum/bleachbit-wont-launch-error-startup
-                Common.logger.error('error checking whether path exists: %s ', pathname)
+                logger.error('error checking whether path exists: %s ', pathname)
             if not exists:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
@@ -204,7 +207,7 @@ class Options:
                 self.set_list('shred_drives', guess_overwrite_paths())
             except:
                 traceback.print_exc()
-                Common.logger.error('error setting default shred drives')
+                logger.error('error setting default shred drives')
 
         # set defaults
         self.__set_default("auto_hide", True)
@@ -225,7 +228,7 @@ class Options:
             if -1 != pos:
                 lang = lang[0: pos]
             for _lang in set([lang, 'en']):
-                Common.logger.info("automatically preserving language '%s'", lang)
+                logger.info("automatically preserving language '%s'", lang)
                 self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
