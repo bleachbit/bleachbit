@@ -25,6 +25,7 @@ from __future__ import print_function
 Test case for module FileUtilities
 """
 
+import json
 import platform
 import sys
 import unittest
@@ -36,10 +37,6 @@ from bleachbit.FileUtilities import *
 from bleachbit.Options import options
 from bleachbit.Common import expanduser, logger
 
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 
 def write_file(filename, contents):

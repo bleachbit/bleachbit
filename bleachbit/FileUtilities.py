@@ -200,10 +200,7 @@ def clean_ini(path, section, parameter):
 
 def clean_json(path, target):
     """Delete key in the JSON file"""
-    try:
-        import json
-    except:
-        import simplejson as json
+    import json
     changed = False
     targets = target.split('/')
 

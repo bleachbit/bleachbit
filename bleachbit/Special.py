@@ -313,10 +313,7 @@ def get_chrome_bookmark_ids(history_path):
 
 def get_chrome_bookmark_urls(path):
     """Return a list of bookmarked URLs in Google Chrome/Chromium"""
-    try:
-        import json
-    except:
-        import simplejson as json
+    import json
 
     # read file to parser
     js = json.load(open(path, 'r'))

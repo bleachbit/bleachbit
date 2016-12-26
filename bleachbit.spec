@@ -31,7 +31,6 @@ BuildRequires:  python-devel
 Requires:       python >= 2.5
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
-Requires:       python-simplejson
 Requires:       usermode
 %endif
 
@@ -44,7 +43,6 @@ BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
-Requires:       python-simplejson
 Requires:       python-xml
 %py_requires
 %if 0%{?suse_version} >= 1030
