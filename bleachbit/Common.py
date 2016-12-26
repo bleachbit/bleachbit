@@ -109,20 +109,16 @@ def expandvars(var):
     if 'posix' == os.name:
         final = os.path.expandvars(final)
     elif 'nt' == os.name:
-        if (2, 5) == sys.version_info[0:2]:
-            import backport
-            final = backport.expandvars(final)
-        else:
-            import _winreg
-            if final.startswith('${'):
-                final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
-                               lambda x: '%%%s%%' % x.group(1),
-                               final)
-            elif final.startswith('$'):
-                final = re.sub(r'\$(.*?)(?=$|\\)',
-                               lambda x: '%%%s%%' % x.group(1),
-                               final)
-            final = _winreg.ExpandEnvironmentStrings(final)
+        import _winreg
+        if final.startswith('${'):
+            final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
+                           lambda x: '%%%s%%' % x.group(1),
+                           final)
+        elif final.startswith('$'):
+            final = re.sub(r'\$(.*?)(?=$|\\)',
+                           lambda x: '%%%s%%' % x.group(1),
+                           final)
+        final = _winreg.ExpandEnvironmentStrings(final)
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
@@ -141,24 +137,20 @@ def expanduser(path):
     if 'posix' == os.name:
         final = os.path.expanduser(final)
     elif 'nt' == os.name:
-        if (2, 5) == sys.version_info[0:2]:
-            import backport
-            final = backport.expandvars(final)
-        elif final == '~' or final.startswith('~/') or final.startswith('~user/'):
-            found = False
-            for env in [u'%USERPROFILE%', u'%HOME%']:
-                if env in os.environ:
-                    home = expandvars(env)
-                    found = True
-                    break
-            if not found:
-                h_drive = expandvars(u'%HOMEDRIVE%')
-                h_path = expandvars(u'%HOMEPATH%')
-                home = os.path.join(h_drive, h_path)
-            final = final.replace('~user/', '')
-            final = final.replace('~/', '')
-            final = final.replace('~', '')
-            final = os.path.join(home, final)
+        found = False
+        for env in [u'%USERPROFILE%', u'%HOME%']:
+            if env in os.environ:
+                home = expandvars(env)
+                found = True
+                break
+        if not found:
+            h_drive = expandvars(u'%HOMEDRIVE%')
+            h_path = expandvars(u'%HOMEPATH%')
+            home = os.path.join(h_drive, h_path)
+        final = final.replace('~user/', '')
+        final = final.replace('~/', '')
+        final = final.replace('~', '')
+        final = os.path.join(home, final)
     return final
 
 
