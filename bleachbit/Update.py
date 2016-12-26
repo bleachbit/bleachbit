@@ -30,12 +30,18 @@ import os.path
 import platform
 import socket
 import sys
-import traceback
-import urllib2
+if sys.version >= (3, 0):
+    from urllib.request import build_opener
+    from urllib.error import URLError
+else:
+    from urllib2 import build_opener, URLError
+
 import xml.dom.minidom
 
 import Common
 from Common import _
+
+logger = logging.getLogger(__name__)
 
 
 def update_winapp2(url, hash_expected, append_text, cb_success):
@@ -53,7 +59,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
         f.close()
         delete_current = True
     # download update
-    opener = urllib2.build_opener()
+    opener = build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
     kwargs = {'fullurl': url}
     if sys.hexversion >= 0x02060000:
@@ -102,7 +108,6 @@ def user_agent():
         import locale
         __locale = locale.getdefaultlocale()[0]  # e.g., en_US
     except:
-        logger = logging.getLogger(__name__)
         logger.exception('Exception when getting default locale')
 
     try:
@@ -152,13 +157,12 @@ def update_dialog(parent, updates):
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
-    opener = urllib2.build_opener()
+    opener = build_opener()
     socket.setdefaulttimeout(Common.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
-    logger = logging.getLogger(__name__)
     try:
         handle = opener.open(Common.update_check_url)
-    except urllib2.URLError:
+    except URLError:
         logger.exception(
             _('Error when opening a network connection to %s to check for updates. Please verify the network is working.' %
                 Common.update_check_url))
@@ -167,14 +171,14 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     try:
         dom = xml.dom.minidom.parseString(doc)
     except:
-        logger.exception('The update information does not parse: %s' % doc)
+        logger.exception('The update information does not parse: %s', doc)
         return ()
 
     def parse_updates(element):
         if element:
             ver = element[0].getAttribute('ver')
             url = element[0].firstChild.data
-            return (ver, url)
+            return ver, url
         return ()
 
     stable = parse_updates(dom.getElementsByTagName("stable"))
@@ -189,9 +193,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return (stable, beta)
+        return stable, beta
     if stable:
-        return (stable,)
+        return stable,
     if beta and check_beta:
-        return (beta,)
+        return beta,
     return ()

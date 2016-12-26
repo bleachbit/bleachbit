@@ -95,18 +95,15 @@ class DeepScanTestCase(unittest.TestCase):
         """Delete files in a test environment"""
 
         # make some files
-        base = expanduser('~/bleachbit-deepscan-test')
-        if os.path.exists(base):
-            shutil.rmtree(base)
-        os.mkdir(base)
+        base = tempfile.mkdtemp(prefix='bleachbit-deepscan-test')
         f_del1 = os.path.join(base, 'foo.txt.bbtestbak')
-        file(f_del1, 'w').write('')
+        open(f_del1, 'w').close()
         f_keep = os.path.join(base, 'foo.txt')
-        file(f_keep, 'w').write('')
+        open(f_keep, 'w').close()
         subdir = os.path.join(base, 'sub')
         os.mkdir(subdir)
         f_del2 = os.path.join(base, 'sub/bar.ini.bbtestbak')
-        file(f_del2, 'w').write('')
+        open(f_del2, 'w').close()
 
         # sanity check
         self.assert_(os.path.exists(f_del1))
@@ -114,7 +111,7 @@ class DeepScanTestCase(unittest.TestCase):
         self.assert_(os.path.exists(f_del2))
 
         # run deep scan
-        astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false"/>'
+        astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
         import TestCleaner
         cleaner = TestCleaner.action_to_cleaner(astr)
         from bleachbit.Worker import backends, Worker
@@ -128,9 +125,10 @@ class DeepScanTestCase(unittest.TestCase):
             pass
 
         # validate results
-        self.assert_(not os.path.exists(f_del1))
+
+        self.assertFalse(os.path.exists(f_del1))
         self.assert_(os.path.exists(f_keep))
-        self.assert_(not os.path.exists(f_del2))
+        self.assertFalse(os.path.exists(f_del2))
 
         # clean up
         shutil.rmtree(base)

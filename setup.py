@@ -19,6 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Build BleachBit tarballs and exe
 """
@@ -36,7 +38,7 @@ if sys.platform == 'win32':
     try:
         import py2exe
     except ImportError:
-        print 'warning: py2exe not available'
+        print('warning: py2exe not available')
 
 
 #
@@ -122,12 +124,12 @@ def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
 
     if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
-        print 'warning: msgunfmt missing: skipping recompile'
+        print('warning: msgunfmt missing: skipping recompile')
         return
 
     mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
     if not os.path.exists(mo_pathname):
-        print 'info: does not exist: %s' % mo_pathname
+        print('info: does not exist: %s', mo_pathname)
         return
 
     # decompile .mo to .po
@@ -173,7 +175,7 @@ def clean_dist_locale():
     langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
     for langid in sorted(os.listdir(basedir)):
-        print "debug: GTK language = '%s'" % langid
+        print("debug: GTK language = '%s'", langid)
         langdir = os.path.join(basedir, langid)
         if langid in langs:
             # reduce the size of the .mo file
@@ -181,7 +183,7 @@ def clean_dist_locale():
         else:
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
-            print cmd
+            print(cmd)
             os.system(cmd)
     os.rmdir(tmpd)
 

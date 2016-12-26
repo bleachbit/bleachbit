@@ -25,7 +25,6 @@ Common code for unit tests
 
 import os
 import sys
-import types
 
 sys.path.append('.')
 from bleachbit.FileUtilities import extended_path
@@ -68,7 +67,7 @@ def destructive_tests(title):
     """Return true if allowed to run destructive tests.  If false print notice."""
     if os.getenv('DESTRUCTIVE_TESTS') == 'T':
         return True
-    print 'warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title
+    print('warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title)
     return False
 
 

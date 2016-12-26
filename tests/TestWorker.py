@@ -78,7 +78,7 @@ class FunctionGeneratorAction(ActionProvider):
     def get_commands(self):
         # function generator without path, should succeed
         def funcgenerator():
-            yield long(10)
+            yield 10
         yield Command.Function(None, funcgenerator, 'funcgenerator')
 
         # real file, should succeed
@@ -249,10 +249,9 @@ class WorkerTestCase(unittest.TestCase):
         """Test Worker using Action.InvalidEncodingAction"""
         self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
 
+    @unittest.skipUnless('nt' == os.name, 'skipping on non-Windows')
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
-        if not 'nt' == os.name:
-            return
         self.action_test_helper('locked', 0, 0, None, None, 3 + 0, 2)
 
     def test_RuntimeError(self):
@@ -282,7 +281,7 @@ class WorkerTestCase(unittest.TestCase):
         self_assert = self.assert_
 
         def increment_count():
-            self.scanned = self.scanned + 1
+            self.scanned += 1
 
         class MyDeepScan:
 

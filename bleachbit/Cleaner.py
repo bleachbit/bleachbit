@@ -22,6 +22,9 @@
 Perform (or assist with) cleaning operations.
 """
 
+from Common import _, expanduser, expandvars
+from FileUtilities import children_in_directory
+from Options import options
 
 import glob
 import logging
@@ -35,15 +38,12 @@ import Command
 import FileUtilities
 import Memory
 import Special
+import Common
 
 if 'posix' == os.name:
     import Unix
 elif 'nt' == os.name:
     import Windows
-
-from Common import _, expanduser, expandvars
-from FileUtilities import children_in_directory
-from Options import options
 
 # Suppress GTK warning messages while running in CLI #34
 warnings.simplefilter("ignore", Warning)
@@ -97,7 +97,8 @@ class Cleaner:
                     if isinstance(ds, dict):
                         return False
             except:
-                print 'warning: exception in auto_hide(), cleaner=%s, option=%s' % (self.name, option_id)
+                logging.getLogger(__name__).warning('exception in auto_hide(), cleaner=%s, option=%s',
+                                                    self.name, option_id)
                 traceback.print_exc()
         return True
 
@@ -107,7 +108,7 @@ class Cleaner:
             if option_id == action[0]:
                 for cmd in action[1].get_commands():
                     yield cmd
-        if not self.options.has_key(option_id):
+        if option_id not in self.options:
             raise RuntimeError("Unknown option '%s'" % option_id)
 
     def get_deep_scan(self, option_id):
@@ -116,7 +117,7 @@ class Cleaner:
             if option_id == action[0]:
                 for ds in action[1].get_deep_scan():
                     yield ds
-        if not self.options.has_key(option_id):
+        if option_id not in self.options:
             raise RuntimeError("Unknown option '%s'" % option_id)
 
     def get_description(self):
@@ -152,22 +153,23 @@ class Cleaner:
 
     def is_running(self):
         """Return whether the program is currently running"""
+        logger = logging.getLogger(__name__)
         for running in self.running:
             test = running[0]
             pathname = running[1]
             if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
-                    print "debug: process '%s' is running" % pathname
+                    logger.debug("process '%s' is running", pathname)
                     return True
             elif 'exe' == test and 'nt' == os.name:
                 if Windows.is_process_running(pathname):
-                    print "debug: process '%s' is running" % pathname
+                    logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
                 expanded = expanduser(expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
-                        print "debug: file '%s' exists indicating '%s' is running" % (globbed, self.name)
+                        logger.debug("file '%s' exists indicating '%s' is running", self.name)
                         return True
             else:
                 raise RuntimeError(
@@ -772,8 +774,7 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except:
-                    logger = logging.getLogger(__name__)
-                    logger.info('error in empty_recycle_bin()', exc_info=True)
+                    logging.getLogger(__name__).info('error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.
@@ -804,18 +805,18 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
-            '^/var/tmp/kdecache-']
-        regexes.append('^' + expanduser('~/.cache/wallpaper/'))
-        # Clean Firefox cache from Firefox cleaner (LP#1295826)
-        regexes.append('^' + expanduser('~/.cache/mozilla'))
-        # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-        regexes.append('^' + expanduser('~/.cache/google-chrome'))
-        regexes.append('^' + expanduser('~/.cache/gnome-control-center/'))
-        # iBus Pinyin
-        # https://bugs.launchpad.net/bleachbit/+bug/1538919
-        regexes.append('^' + expanduser('~/.cache/ibus/'))
+            '^/var/tmp/kdecache-',
+            '^' + expanduser('~/.cache/wallpaper/'),
+            # Clean Firefox cache from Firefox cleaner (LP#1295826)
+            '^' + expanduser('~/.cache/mozilla'),
+            # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
+            '^' + expanduser('~/.cache/google-chrome'),
+            '^' + expanduser('~/.cache/gnome-control-center/'),
+            # iBus Pinyin
+            # https://bugs.launchpad.net/bleachbit/+bug/1538919
+            '^' + expanduser('~/.cache/ibus/')]
         for regex in regexes:
-            if None != re.match(regex, pathname):
+            if re.match(regex, pathname) is not None:
                 return True
         return False
 

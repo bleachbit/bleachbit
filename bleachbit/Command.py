@@ -23,9 +23,11 @@ Command design pattern implementation for cleaning
 """
 
 
+import logging
 import os
 import types
 import FileUtilities
+import Common
 
 from sqlite3 import DatabaseError
 from Common import _
@@ -79,7 +81,7 @@ class Delete:
         if really_delete:
             try:
                 FileUtilities.delete(self.path, self.shred)
-            except WindowsError, e:
+            except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: u'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
@@ -114,7 +116,7 @@ class Function:
 
     def execute(self, really_delete):
 
-        if None != self.path and FileUtilities.whitelisted(self.path):
+        if self.path is not None and FileUtilities.whitelisted(self.path):
             yield whitelist(self.path)
             return
 
@@ -126,7 +128,7 @@ class Function:
             'size': None}
 
         if really_delete:
-            if None == self.path:
+            if self.path is None:
                 # Function takes no path.  It returns the size.
                 func_ret = self.func()
                 if isinstance(func_ret, types.GeneratorType):
@@ -147,15 +149,15 @@ class Function:
                 oldsize = FileUtilities.getsize(self.path)
                 try:
                     self.func(self.path)
-                except DatabaseError, e:
+                except DatabaseError as e:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
-                    print 'Warning:', e.message
+                    logging.getLogger(__name__).exception(e.message)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)
-                except OSError, e:
+                except OSError as e:
                     from errno import ENOENT
                     if e.errno == ENOENT:
                         # file does not exist
@@ -286,8 +288,7 @@ class Winreg:
         self.valuename = valuename
 
     def __str__(self):
-        return 'Command to clean registry, key=%, value=%s ' % \
-            (self.keyname, self.valuename)
+        return 'Command to clean registry, key=%s, value=%s ' % (self.keyname, self.valuename)
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""

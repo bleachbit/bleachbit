@@ -27,12 +27,13 @@ import logging
 import math
 import os
 import sys
-import traceback
 
 import DeepScan
 import FileUtilities
 from Cleaner import backends
 from Common import _, ungettext, expanduser
+
+logger = logging.getLogger(__name__)
 
 
 class Worker:
@@ -73,7 +74,6 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
-        logger = logging.getLogger(__name__)
         logger.error(err, exc_info=True)
         self.total_errors += 1
 
@@ -89,21 +89,19 @@ class Worker:
                     yield ret
         except SystemExit:
             pass
-        except Exception, e:
+        except Exception as e:
             # 2 = does not exist
             # 13 = permission denied
             from errno import ENOENT, EACCES
-            logger = logging.getLogger(__name__)
-            if (isinstance(e, OSError) and e.errno in (ENOENT, EACCES)):
+            if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
-                logger.error('%s: %s' % (str(e), str(cmd)))
+                logger.error('%s: %s', e, cmd)
             else:
                 # For other errors, show the traceback.
-                logger.error('Error in execution of %s' %
-                             str(cmd), exc_info=True)
+                logger.error('Error in execution of %s', cmd, exc_info=True)
             self.total_errors += 1
         else:
-            if None == ret:
+            if ret is None:
                 return
             if isinstance(ret['size'], (int, long)):
                 size = FileUtilities.bytes_to_human(ret['size'])
@@ -129,9 +127,7 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        logger = logging.getLogger(__name__)
-        logger.debug("clean_operation('%s'), options = '%s'" %
-                     (operation, operation_options))
+        logger.debug("clean_operation('%s'), options = '%s'", operation, operation_options)
 
         if not operation_options:
             raise StopIteration
@@ -174,7 +170,7 @@ class Worker:
                 if 'delete' != ds['command']:
                     raise NotImplementedError(
                         'Deep scan only supports deleting now')
-                if not self.deepscans.has_key(ds['path']):
+                if ds['path'] not in self.deepscans:
                     self.deepscans[ds['path']] = []
                 self.deepscans[ds['path']].append(ds)
         self.ui.update_item_size(operation, -1, total_size)
@@ -295,7 +291,6 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger = logging.getLogger(__name__)
         logger.debug(' deepscans=%s' % self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
@@ -303,7 +298,7 @@ class Worker:
         self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
         yield True  # allow GTK to update the screen
         ds = DeepScan.DeepScan()
-        for (path, dsdict) in self.deepscans.iteritems():
+        for (path, dsdict) in self.deepscans.items():
             logger.debug('deepscan path=%s, dict=%s' % (path, dsdict))
             for dsdict2 in dsdict:
                 ds.add_search(path, dsdict2['regex'])

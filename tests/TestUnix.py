@@ -24,7 +24,6 @@ Test case for module Unix
 """
 
 
-import os
 import sys
 import tempfile
 import unittest
@@ -32,7 +31,6 @@ import unittest
 sys.path.append('.')
 import bleachbit.Common
 from bleachbit.Unix import *
-
 
 class UnixTestCase(unittest.TestCase):
 
@@ -96,7 +94,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     def test_journald_clean(self):
         if not FileUtilities.exe_exists('journalctl'):
-            self.assertRaises(RuntimeError,journald_clean)
+            self.assertRaises(RuntimeError, journald_clean)
         else:
             journald_clean()
 
@@ -241,7 +239,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         else:
             bytes_freed = yum_clean()
             self.assert_(isinstance(bytes_freed, (int, long)))
-            print 'debug: yum bytes cleaned %d', bytes_freed
+            bleachbit.Common.logger.debug('yum bytes cleaned %d', bytes_freed)
 
 
 def suite():

@@ -32,7 +32,7 @@ import sys
 #
 # Config Parser got renamed in Python 3
 #
-if sys.version_info >= (3,0):
+if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
@@ -70,12 +70,10 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(
-        unicode(sys.executable, sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
     # __file__ is absolute path to bleachbit/Common.py
-    bleachbit_exe_path = os.path.dirname(
-        unicode(__file__, sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
 
 # license
 license_filename = None
@@ -191,8 +189,7 @@ elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    logger.warning('unknown system cleaners directory for platform %s ' %
-                   sys.platform)
+    logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
 
 # local cleaners directory (for running from source tree)
 local_cleaners_dir = os.path.normpath(
@@ -236,13 +233,13 @@ FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:
-    logger.warning('error getting locale: %s' % str(sys.exc_info()[1]))
+    logger.exception('error getting locale')
     user_locale = None
     encoding = None
 
-if None == user_locale:
+if user_locale is None:
     user_locale = 'C'
-    logger.warning("no default locale found.  Assuming '%s'" % user_locale)
+    logger.warning("no default locale found.  Assuming '%s'", user_locale)
 
 if 'win32' == sys.platform:
     os.environ['LANG'] = user_locale

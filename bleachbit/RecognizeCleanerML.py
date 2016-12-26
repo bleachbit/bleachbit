@@ -23,8 +23,8 @@ Check local CleanerML files as a security measure
 """
 
 
-import ConfigParser
 import gobject
+import logging
 import os
 import random
 import sys
@@ -32,9 +32,11 @@ import sys
 import hashlib
 
 from Common import _, _p
+import Common
 from CleanerML import list_cleanerml_files
 from Options import options
 
+logger = logging.getLogger(__name__)
 
 KNOWN = 1
 CHANGED = 2
@@ -120,7 +122,7 @@ def cleaner_change_dialog(changes, parent):
             # confirmation not accepted, so do not delete files
             continue
         for path in delete:
-            print "info: deleting unrecognized CleanerML '%s'" % path
+            logger.info("deleting unrecognized CleanerML '%s'", path)
             os.remove(path)
         break
     dialog.destroy()
@@ -141,22 +143,23 @@ class RecognizeCleanerML:
         self.parent_window = parent_window
         try:
             self.salt = options.get('hashsalt')
-        except ConfigParser.NoOptionError:
+        except Common.NoOptionError:
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.__scan()
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
-        body = file(pathname).read()
+        with open(pathname) as f:
+            body = f.read()
         new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get_hashpath(pathname)
-        except ConfigParser.NoOptionError:
-            return (NEW, new_hash)
+        except Common.NoOptionError:
+            return NEW, new_hash
         if new_hash == known_hash:
-            return (KNOWN, new_hash)
-        return (CHANGED, new_hash)
+            return KNOWN, new_hash
+        return CHANGED, new_hash
 
     def __scan(self):
         """Look for files and act accordingly"""
@@ -171,6 +174,6 @@ class RecognizeCleanerML:
             for change in changes:
                 pathname = change[0]
                 myhash = change[2]
-                print "info: remembering CleanerML file '%s'" % pathname
+                logger.info("remembering CleanerML file '%s'", pathname)
                 if os.path.exists(pathname):
                     options.set_hashpath(pathname, myhash)

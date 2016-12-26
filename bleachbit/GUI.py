@@ -38,6 +38,7 @@ from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
     help_contents_url, license_filename, options_file, options_dir, \
     online_update_notification_enabled, release_notes_url, portable_mode, \
     expanduser
+import Common
 from Cleaner import backends, register_cleaners
 from GuiPreferences import PreferencesDialog
 from Options import options
@@ -47,6 +48,8 @@ import GuiBasic
 
 if 'nt' == os.name:
     import Windows
+
+logger = logging.getLogger(__name__)
 
 
 def threaded(func):
@@ -97,10 +100,8 @@ class TreeInfoModel:
             c_name = backends[key].get_name()
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
-            if not c_value and options.get('auto_hide') \
-                    and backends[key].auto_hide():
-                logger = logging.getLogger(__name__)
-                logger.debug("automatically hiding cleaner '%s'", (c_id))
+            if not c_value and options.get('auto_hide') and backends[key].auto_hide():
+                logger.debug("automatically hiding cleaner '%s'", c_id)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
             for (o_id, o_name) in backends[key].get_options():
@@ -378,8 +379,7 @@ class GUI:
             self.textbuffer.set_text("")
             self.progressbar.show()
             self.worker = Worker.Worker(self, really_delete, operations)
-        except Exception, e:
-            logger = logging.getLogger(__name__)
+        except Exception:
             logger.exception('Error in Worker()')
         else:
             self.start_time = time.time()
@@ -403,7 +403,6 @@ class GUI:
 
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
-        logger = logging.getLogger(__name__)
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.window.is_active():
             return
@@ -571,7 +570,6 @@ class GUI:
 
         # prompt the user to confirm
         if not self.shred_paths(paths):
-            logger = logging.getLogger(__name__)
             logger.debug('user aborted shred')
             # aborted
             return
@@ -697,7 +695,7 @@ class GUI:
         __iter = model.get_iter_root()
         while __iter:
             if model[__iter][2] == option:
-                if (option_id == -1):
+                if option_id == -1:
                     model[__iter][3] = text
                 else:
                     child = model.iter_children(__iter)
@@ -888,8 +886,7 @@ class GUI:
             if updates:
                 gobject.idle_add(
                     lambda: Update.update_dialog(self.window, updates))
-        except Exception, e:
-            logger = logging.getLogger(__name__)
+        except Exception:
             logger.exception(_("Error when checking for updates: "))
 
     def __init__(self, uac=True, shred_paths=None, exit=False):
@@ -928,10 +925,8 @@ class GUI:
             # https://www.bleachbit.org/forum/074-fails-errors
             try:
                 import sqlite3
-            except ImportError, e:
-                logger = logging.getLogger(__name__)
-                logger.exception(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."))
+            except ImportError:
+                logger.exception(_("Error loading the SQLite module: the antivirus software may be blocking it."))
         if 'posix' == os.name and expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))

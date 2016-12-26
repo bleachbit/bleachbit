@@ -39,9 +39,10 @@ import sys
 import subprocess
 import tempfile
 import time
-import ConfigParser
 import Common
 from Common import expanduser
+
+logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
     import pywintypes
@@ -57,7 +58,8 @@ def open_files_linux():
 
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
-        run_lsof = lambda: subprocess.check_output(["lsof", "-Fn", "-n"])
+        def run_lsof():
+            subprocess.check_output(["lsof", "-Fn", "-n"])
     for f in run_lsof().split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"
@@ -105,8 +107,7 @@ class OpenFiles:
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
-        if None == self.last_scan_time or (time.time() -
-                                           self.last_scan_time) > 10:
+        if self.last_scan_time is None or (time.time() - self.last_scan_time) > 10:
             self.scan()
         return os.path.realpath(filename) in self.files
 
@@ -114,10 +115,11 @@ class OpenFiles:
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
     return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
-                   for i in xrange(length))
+                   for i in range(length))
 
 
 def bytes_to_human(bytes_i):
+    # type: (int) -> str
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
     if bytes_i < 0:
@@ -172,14 +174,14 @@ def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file"""
 
     # read file to parser
-    config = ConfigParser.RawConfigParser()
+    config = Common.RawConfigParser()
     fp = codecs.open(path, 'r', encoding='utf_8_sig')
     config.readfp(fp)
 
     # change file
     changed = False
     if config.has_section(section):
-        if None == parameter:
+        if parameter is None:
             changed = True
             config.remove_section(section)
         elif config.has_option(section, parameter):
@@ -243,7 +245,6 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        parameter, the path will be shredded unless allow_shred = False.
     """
     from Options import options
-    logger = logging.getLogger(__name__)
     is_special = False
     path = extended_path(path)
     if not os.path.lexists(path):
@@ -263,14 +264,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
-        except OSError, e:
+        except OSError as e:
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info("directory is not empty: %s", path)
             else:
                 raise
-        except WindowsError, e:
+        except WindowsError as e:
             # WindowsError: [Error 145] The directory is not empty:
             # 'C:\\Documents and Settings\\username\\Local Settings\\Temp\\NAILogs'
             # Error 145 may happen if the files are scheduled for deletion
@@ -284,9 +285,9 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if allow_shred and (shred or options.get('shred')):
             try:
                 wipe_contents(path)
-            except IOError, e:
+            except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'", e.errno, path)
+                logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
             # wipe name
             os.remove(wipe_name(path))
         else:
@@ -335,15 +336,14 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.DatabaseError, exc:
+        except sqlite3.DatabaseError as exc:
             raise sqlite3.DatabaseError(
                 '%s: %s' % (Common.decode_str(exc), path))
-        except sqlite3.OperationalError, exc:
-            logger = logging.getLogger(__name__)
+        except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
                 # available
-                logger.warning(exc.message)
+                logger.exception(exc.message)
             else:
                 raise sqlite3.OperationalError(
                     '%s: %s' % (Common.decode_str(exc), path))
@@ -386,8 +386,7 @@ def free_space(pathname):
         except:
             # This works better with Windows XP but not UTF-8.
             # Deprecated.
-            logger = logging.getLogger(__name__)
-            logger.warning('failed to start psutil (not supported on Windows XP)')
+            logger.warning('failed to start psutil (not supported on Windows XP)', exc_info=True)
             _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
             return free_bytes
     mystat = os.statvfs(pathname)
@@ -400,7 +399,7 @@ def getsize(path):
     if 'posix' == os.name:
         try:
             __stat = os.lstat(path)
-        except OSError, e:
+        except OSError as e:
             # OSError: [Errno 13] Permission denied
             # can happen when a regular user is trying to find the size of /var/log/hp/tmp
             # where /var/log/hp is 0774 and /var/log/hp/tmp is 1774
@@ -414,7 +413,7 @@ def getsize(path):
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
         finddata = win32file.FindFilesW(extended_path(path))
-        if finddata == []:
+        if not finddata:
             # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
@@ -458,7 +457,6 @@ def guess_overwrite_paths():
             ret.append('/tmp')
     elif 'nt' == os.name:
         localtmp = Common.expandvars('$TMP')
-        logger = logging.getLogger(__name__)
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
@@ -520,7 +518,7 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except pywintypes.error, e:
+        except pywintypes.error as e:
             if 5 == e.winerror:
                 # Microsoft Office 2010 Starter Edition has a virtual
                 # drive that gives access denied
@@ -540,8 +538,7 @@ def sync():
         import ctypes
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
-            logger = logging.getLogger(__name__)
-            logge.error('sync() returned code %d' % rc)
+            logger.error('sync() returned code %d', rc)
     if 'nt' == os.name:
         import ctypes
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
@@ -584,9 +581,9 @@ def wipe_contents(path, truncate=True):
     size = getsize(path)
     try:
         f = open(path, 'wb')
-    except IOError, e:
+    except IOError as e:
         if e.errno == errno.EACCES:  # permission denied
-            os.chmod(path, 0200)  # user write only
+            os.chmod(path, 0o200)  # user write only
             f = open(path, 'wb')
         else:
             raise
@@ -605,7 +602,6 @@ def wipe_contents(path, truncate=True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    logger = logging.getLogger(__name__)
     (head, _) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
@@ -632,7 +628,7 @@ def wipe_name(pathname1):
             os.rename(pathname2, pathname3)
             break
         except:
-            i = i + 1
+            i += 1
             if i > 100:
                 logger.info('exhausted short rename: %s', pathname2)
                 pathname3 = pathname2
@@ -643,8 +639,6 @@ def wipe_name(pathname1):
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
-
-    logger = logging.getLogger(__name__)
 
     def temporaryfile():
         # reference
@@ -663,7 +657,7 @@ def wipe_path(pathname, idle=False):
                 atexit.register(
                     delete, f.name, allow_shred=False, ignore_missing=True)
                 break
-            except OSError, e:
+            except OSError as e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT):
                     # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
                     # Shrinking the size helps.
@@ -690,7 +684,7 @@ def wipe_path(pathname, idle=False):
         done_time = time.time() - start_time
         rate = done_bytes / (done_time + 0.0001)  # bytes per second
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
-        return (1, done_percent, remaining_seconds)
+        return 1, done_percent, remaining_seconds
 
     logger.debug("wipe_path('%s')", pathname)
     files = []
@@ -703,7 +697,7 @@ def wipe_path(pathname, idle=False):
         try:
             logger.debug('creating new, temporary file to wipe path')
             f = temporaryfile()
-        except OSError, e:
+        except OSError as e:
             # Linux gives errno 24
             # Windows gives errno 28 No space left on device
             if e.errno in (errno.EMFILE, errno.ENOSPC):
@@ -716,7 +710,7 @@ def wipe_path(pathname, idle=False):
         while True:
             try:
                 f.write(blanks)
-            except IOError, e:
+            except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
@@ -737,7 +731,7 @@ def wipe_path(pathname, idle=False):
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
-            logger.info("info: exception on f.flush()")
+            logger.info("info: exception on f.flush()", exc_info=True)
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
         files.append(f)
@@ -771,7 +765,7 @@ def wipe_path(pathname, idle=False):
                 # to do actually close (and therefore delete) a temporary file
                 f.close()
                 break
-            except IOError, e:
+            except IOError as e:
                 if e.errno == 0:
                     logger.debug('handled unknown error 0')
                     time.sleep(0.1)

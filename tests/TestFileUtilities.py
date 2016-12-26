@@ -19,19 +19,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test case for module FileUtilities
 """
 
-# for Python 2.5 on Windows
-from __future__ import with_statement
-
-import locale
 import platform
-import subprocess
 import sys
-import tempfile
-import time
 import unittest
 
 import common
@@ -39,11 +34,11 @@ import common
 sys.path.append('.')
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
-from bleachbit.Common import expanduser
+from bleachbit.Common import expanduser, logger
 
 try:
     import json
-except:
+except ImportError:
     import simplejson as json
 
 
@@ -188,7 +183,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             try:
                 locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
             except:
-                print "Warning: exception when setlocale to de_DE.utf8"
+                logger.warning('exception when setlocale to de_DE.utf8')
             else:
                 self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
@@ -230,29 +225,29 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
-        print "testing test_clean_ini() with shred = False"
+        print("testing test_clean_ini() with shred = False")
         options.set('shred', False, commit=False)
         test_ini_helper(self, clean_ini)
 
-        print "testing test_clean_ini() with shred = True"
+        print("testing test_clean_ini() with shred = True")
         options.set('shred', True, commit=False)
         test_ini_helper(self, clean_ini)
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
-        print "testing test_clean_json() with shred = False"
+        print("testing test_clean_json() with shred = False")
         options.set('shred', False, commit=False)
         test_json_helper(self, clean_json)
 
-        print "testing test_clean_json() with shred = True"
+        print("testing test_clean_json() with shred = True")
         options.set('shred', True, commit=False)
         test_json_helper(self, clean_json)
 
     def test_delete(self):
         """Unit test for method delete()"""
-        print "testing delete() with shred = False"
+        print("testing delete() with shred = False")
         self.delete_helper(shred=False)
-        print "testing delete() with shred = True"
+        print("testing delete() with shred = True")
         self.delete_helper(shred=True)
         # exercise ignore_missing
         delete('does-not-exist', ignore_missing=True)
@@ -308,12 +303,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
             self.assert_(not os.path.exists(dirname))
 
         def symlink_helper(link_fn):
-
             if 'nt' == os.name:
                 from win32com.shell import shell
                 if not shell.IsUserAnAdmin():
-                    print 'WARNING: skipping symlink test because of insufficient privileges'
-                    return
+                    self.skipTest('skipping symlink test because of insufficient privileges')
 
             # make regular file
             (fd, srcname) = tempfile.mkstemp(
@@ -366,8 +359,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
             def win_symlink(src, linkname):
                 rc = kern.CreateSymbolicLinkA(linkname, src, 0)
                 if rc == 0:
-                    print 'CreateSymbolicLinkA(%s, %s)' % (linkname, src)
-                    print 'CreateSymolicLinkA() failed, error = %s' % ctypes.FormatError()
+                    print('CreateSymbolicLinkA(%s, %s)' % (linkname, src))
+                    print('CreateSymolicLinkA() failed, error = %s' % ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
 
@@ -378,7 +371,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         # test file with mode 0444/-r--r--r--
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-0444')
         os.close(fd)
-        os.chmod(filename, 0444)
+        os.chmod(filename, 0o444)
         delete(filename, shred)
         self.assert_(not os.path.exists(filename))
 
@@ -399,10 +392,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
         delete(path, shred)
         self.assert_(not os.path.exists(path))
 
+    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
-        if 'nt' == os.name:
-            return
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
     def test_exists_in_path(self):
@@ -453,7 +445,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         if rc:
-            print 'error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr)
+            print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
             return
         import re
         for line in stdout.split('\n'):
@@ -461,7 +453,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
             if not re.match('([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split('\s+', line)
-            print 'Checking free space for %s' % drive
+            print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
             free = free_space(unicode(drive))
             self.assertEqual(bytes_free, free)
@@ -493,9 +485,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
                     ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
                 output = output.replace("\n", "")
                 du_size = output.split("\t")[0] + "B"
-                print "output = '%s', size='%s'" % (output, du_size)
+                print("output = '%s', size='%s'" % (output, du_size))
                 du_bytes = human_to_bytes(du_size, 'du')
-                print output, du_size, du_bytes
+                print(output, du_size, du_bytes)
                 self.assertEqual(getsize(filename), du_bytes)
             delete(filename)
             self.assert_(not os.path.exists(filename))
@@ -740,9 +732,10 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
+
         if None == os.getenv('ALLTESTS'):
-            print 'warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set'
-            return
+            self.skipTest('warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set')
+
         pathname = tempfile.gettempdir()
         for ret in wipe_path(pathname):
             # no idle handler
@@ -750,15 +743,7 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-
-        try:
-            import sqlite3
-        except ImportError, e:
-            if sys.version_info[0] == 2 and sys.version_info[1] < 5:
-                print "Warning: Skipping test_vacuum_sqlite3() on old Python"
-                return
-            else:
-                raise e
+        import sqlite3
 
         path = os.path.abspath('bleachbit.tmp.sqlite3')
         if os.path.lexists(path):
@@ -785,10 +770,9 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
         delete(path)
 
+    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
-        if 'nt' == os.name:
-            return
 
         (handle, filename) = tempfile.mkstemp(
             prefix='bleachbit-test-open-files')
@@ -812,8 +796,8 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_open_files_lsof(self):
         self.assertEqual(list(open_files_lsof(lambda:
-            'n/bar/foo\nn/foo/bar\nnoise'
-        )), ['/bar/foo', '/foo/bar'])
+                                              'n/bar/foo\nn/foo/bar\nnoise'
+                                              )), ['/bar/foo', '/foo/bar'])
 
 
 def suite():

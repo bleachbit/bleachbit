@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test cases for module Winapp
 """
@@ -32,6 +34,7 @@ import unittest
 sys.path.append('.')
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
+from bleachbit.Common import logger
 
 import common
 
@@ -59,16 +62,17 @@ def get_winapp2():
         import stat
         age_seconds = time.time() - os.stat(fn)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
-            print 'note: deleting stale file %s ' % fn
+            logger.info('deleting stale file %s ', fn)
             os.remove(fn)
     if not os.path.exists(fn):
-        f = file(fn, 'w')
+        f = open(fn, 'w')
         import urllib2
         txt = urllib2.urlopen(url).read()
         f.write(txt)
     return fn
 
 
+@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WinappTestCase(unittest.TestCase, common.AssertFile):
 
     """Test cases for Winapp"""
@@ -146,7 +150,7 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
             for pathname in dir_32_unique:
                 tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
         else:
-            print 'NOTE: skipping %ProgramW6432% tests because WoW64 not detected'
+            logger.info('skipping %ProgramW6432% tests because WoW64 not detected')
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
@@ -158,15 +162,15 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
         f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
-        file(f1, 'w').write('')
+        open(f1, 'w').close()
 
         dirname2 = os.path.join(dirname, 'sub')
         os.mkdir(dirname2)
         f2 = os.path.join(dirname2, 'deleteme.log')
-        file(f2, 'w').write('')
+        open(f2, 'w').close()
 
         fbak = os.path.join(dirname, 'deleteme.bak')
-        file(fbak, 'w').write('')
+        open(fbak, 'w').close()
 
         self.assertExists(f1)
         self.assertExists(f2)
@@ -177,11 +181,11 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
         self.assertTrue(detect_registry_key(keyfull))
         self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
 
-        return (dirname, f1, f2, fbak)
+        return dirname, f1, f2, fbak
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
-        ini = file(self.ini_fn, 'w')
+        ini = open(self.ini_fn, 'w')
         ini.write('[someapp]\n')
         ini.write('LangSecRef=3021\n')
         ini.write(body)
@@ -257,7 +261,7 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
 
         # execute positive tests
         for test in positive_tests:
-            print 'positive test: ', test
+            print('positive test: ', test)
             (dirname, f1, f2, fbak) = self.setup_fake(test[1])
             cleaner = self.ini2cleaner(test[0] % dirname)
             self.assertEqual(test[2], cleaner.auto_hide())
@@ -283,7 +287,7 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
                     "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
                 t = [new_ini, ] + [x for x in test[1:]]
-                print 'negative test', t
+                print('negative test', t)
                 # execute the test
                 (dirname, f1, f2, fbak) = self.setup_fake()
                 cleaner = self.ini2cleaner(t[0] % dirname, False)

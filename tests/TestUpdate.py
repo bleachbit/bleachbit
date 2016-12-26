@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import print_function
+
 """
 Test case for module Update
 """
@@ -25,16 +27,14 @@ Test case for module Update
 
 import os
 import os.path
-import socket
 import sys
-import types
 import unittest
-import urllib2
 
 sys.path.append('.')
 from bleachbit import Common
+from bleachbit.Common import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
-
+import bleachbit.Update
 
 class UpdateTestCase(unittest.TestCase):
 
@@ -57,7 +57,7 @@ class UpdateTestCase(unittest.TestCase):
         update_tests.append(('<updates></updates>', ()))
 
         # fake network
-        original_open = urllib2.build_opener
+        original_open = bleachbit.Update.build_opener
         xml = ""
 
         class fake_opener:
@@ -71,12 +71,12 @@ class UpdateTestCase(unittest.TestCase):
             def open(self, url):
                 return self
 
-        urllib2.build_opener = fake_opener
+        bleachbit.Update.build_opener = fake_opener
         for update_test in update_tests:
             xml = update_test[0]
             updates = check_updates(True, False, None, None)
             self.assertEqual(updates, update_test[1])
-        urllib2.build_opener = original_open
+        bleachbit.Update.build_opener = original_open
 
         # real network
         for update in check_updates(True, False, None, None):
@@ -97,13 +97,13 @@ class UpdateTestCase(unittest.TestCase):
         from bleachbit.Common import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
-            print 'note: deleting %s' % fn.encode(Common.FSE)
+            logger.info('deleting %s', fn.encode(Common.FSE))
             os.unlink(fn)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
 
         def append_text(s):
-            print s
+            print(s)
 
         succeeded = {'r': False}  # scope
 
@@ -130,7 +130,7 @@ class UpdateTestCase(unittest.TestCase):
     def test_user_agent(self):
         """Unit test for method user_agent()"""
         agent = user_agent()
-        print "debug: user agent = '%s'" % (agent, )
+        logger.debug("user agent = '%s'", agent)
         self.assert_(isinstance(agent, str))
 
 

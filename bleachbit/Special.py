@@ -203,7 +203,7 @@ def delete_chrome_keywords(path):
     cmds = __shred_sqlite_char_columns('keywords', cols, where)
     cmds += "update keywords set usage_count = 0;"
     ver = __get_chrome_history(path, 'Web Data')
-    if ver >= 43 and ver < 49:
+    if 43 <= ver < 49:
         # keywords_backup table first seen in Google Chrome 17 / Chromium 17 which is Web Data version 43
         # In Google Chrome 25, the table is gone.
         cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
@@ -244,7 +244,7 @@ def delete_mozilla_url_history(path):
     cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
     # delete any orphaned annotations in moz_annos
-    annos_suffix =  "where id in (select moz_annos.id " \
+    annos_suffix = "where id in (select moz_annos.id " \
         "from moz_annos " \
         "left join moz_places " \
         "on moz_annos.place_id = moz_places.id " \
@@ -328,13 +328,13 @@ def get_chrome_bookmark_urls(path):
     def get_chrome_bookmark_urls_helper(node):
         if not isinstance(node, dict):
             return
-        if not node.has_key('type'):
+        if 'type' not in node:
             return
         if node['type'] == "folder":
             # folders have children
             for child in node['children']:
                 get_chrome_bookmark_urls_helper(child)
-        if node['type'] == "url" and node.has_key('url'):
+        if node['type'] == "url" and 'url' in node:
             urls.append(node['url'])
 
     # find bookmarks

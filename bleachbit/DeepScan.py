@@ -23,7 +23,9 @@
 Scan directory tree for files to delete
 """
 
+import Common
 
+import logging
 import os
 import re
 import sys
@@ -37,7 +39,7 @@ def normalize_filename(fn):
     """
     if 'darwin' == sys.platform:
         return unicodedata.normalize(
-            'NFC', unicode(fn, 'utf-8')).encode('utf-8')
+            'NFC', fn.decode('utf-8')).encode('utf-8')
     else:
         return fn
 
@@ -52,18 +54,18 @@ class DeepScan:
 
     def add_search(self, dirname, regex):
         """Starting in dirname, look for files matching regex"""
-        if not self.searches.has_key(dirname):
+        if dirname not in self.searches:
             self.searches[dirname] = [regex]
         else:
             self.searches[dirname].append(regex)
 
     def scan(self):
         """Perform requested searches and yield each match"""
-        print 'debug: DeepScan.scan: searches=', self.searches
+        logging.getLogger(__name__).debug('DeepScan.scan: searches=%s', str(self.searches))
         import time
         yield_time = time.time()
 
-        for (top, regexes) in self.searches.iteritems():
+        for (top, regexes) in self.searches.items():
             for (dirpath, dirnames, filenames) in os.walk(top):
                 for regex in regexes:
                     # fixme, don't match filename twice

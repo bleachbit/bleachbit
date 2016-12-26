@@ -41,10 +41,8 @@ These are the terms:
 import glob
 import logging
 import os
-import platform
 import re
 import sys
-import traceback
 
 from decimal import Decimal
 
@@ -69,6 +67,8 @@ import FileUtilities
 import General
 from Common import expandvars
 
+logger = logging.getLogger(__name__)
+
 
 def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
@@ -78,7 +78,7 @@ def browse_file(_, title):
                                         | win32con.OFN_FILEMUSTEXIST
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
-    except pywintypes.error, e:
+    except pywintypes.error as e:
         logger = logging.getLogger(__name__)
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
@@ -97,8 +97,7 @@ def browse_files(_, title):
                                         | win32con.OFN_FILEMUSTEXIST
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
-    except pywintypes.error, e:
-        logger = logging.getLogger(__name__)
+    except pywintypes.error as e:
         if 0 == e.winerror:
             logger.debug('browse_files(): user cancelled')
         else:
@@ -118,7 +117,7 @@ def browse_files(_, title):
 def browse_folder(hwnd, title):
     """Ask the user to select a folder.  Return full path."""
     pidl = shell.SHBrowseForFolder(hwnd, None, title)[0]
-    if None == pidl:
+    if pidl is None:
         # user cancelled
         return None
     fullpath = shell.SHGetPathFromIDList(pidl)
@@ -127,12 +126,10 @@ def browse_folder(hwnd, title):
 
 def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
-    logger = logging.getLogger(__name__)
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except:
-        logger.info(
-            'exception when getting special folder path for %s' % varname)
+        logger.info('exception when getting special folder path for %s', varname)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
@@ -143,21 +140,6 @@ def delete_locked_file(pathname):
     if os.path.exists(pathname):
         MOVEFILE_DELAY_UNTIL_REBOOT = 4
         windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT)
-        # try:
-        #     win32api.MoveFileEx(
-        #         pathname, None, win32con.MOVEFILE_DELAY_UNTIL_REBOOT)
-        # except pywintypes.error, e:
-        #     if not 5 == e.winerror:
-        #         raise e
-        #     if shell.IsUserAnAdmin():
-        #         logger = logging.getLogger(__name__)
-        #         logger.warning(
-        #             'Unable to queue locked file for deletion, even with administrator rights: %s' % pathname)
-        #         return
-        #     # show more useful message than "error: (5, 'MoveFileEx', 'Access
-        #     # is denied.')"
-        #     raise RuntimeError(
-        #         'Access denied when attempting to delete locked file without administrator rights: %s' % pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -170,7 +152,7 @@ def delete_registry_value(key, value_name, really_delete):
         try:
             hkey = _winreg.OpenKey(hive, sub_key, 0, _winreg.KEY_SET_VALUE)
             _winreg.DeleteValue(hkey, value_name)
-        except WindowsError, e:
+        except WindowsError as e:
             if e.winerror == 2:
                 # 2 = 'file not found' means value does not exist
                 return False
@@ -180,7 +162,7 @@ def delete_registry_value(key, value_name, really_delete):
     try:
         hkey = _winreg.OpenKey(hive, sub_key)
         _winreg.QueryValueEx(hkey, value_name)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             return False
         raise
@@ -199,7 +181,7 @@ def delete_registry_key(parent_key, really_delete):
     hkey = None
     try:
         hkey = _winreg.OpenKey(hive, parent_sub_key)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False
@@ -258,7 +240,7 @@ def detect_registry_key(parent_key):
     hkey = None
     try:
         hkey = _winreg.OpenKey(hive, parent_sub_key)
-    except WindowsError, e:
+    except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False
@@ -283,26 +265,23 @@ def elevate_privileges():
         # 10 = 10
         return False
 
-    logger = logging.getLogger(__name__)
-
     if shell.IsUserAnAdmin():
         logger.debug('already an admin (UAC not required)')
         return False
 
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
-        exe = unicode(sys.executable, sys.getfilesystemencoding())
+        exe = sys.executable.decode(sys.getfilesystemencoding())
         parameters = "--gui --no-uac"
     else:
         # __file__ is absolute path to bleachbit/Windows.py
-        pydir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding()))
+        pydir = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
         pyfile = os.path.join(pydir, 'GUI.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
-            logger.debug(
-                "debug: skipping UAC because '%s' is on network" % pyfile)
+            logger.debug("debug: skipping UAC because '%s' is on network", pyfile)
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
@@ -310,8 +289,7 @@ def elevate_privileges():
     # add any command line parameters such as --debug-log
     parameters = "%s %s" % (parameters, ' '.join(sys.argv[1:]))
 
-    logger.debug('elevate_privileges() exe=%s, parameters=%s' %
-                 (exe, parameters))
+    logger.debug('elevate_privileges() exe=%s, parameters=%s', exe, parameters)
 
     rc = None
     try:
@@ -319,13 +297,13 @@ def elevate_privileges():
                                   lpFile=exe,
                                   lpParameters=parameters,
                                   nShow=win32con.SW_SHOW)
-    except pywintypes.error, e:
+    except pywintypes.error as e:
         if 1223 == e.winerror:
             logger.debug('user denied the UAC dialog')
             return False
         raise
 
-    logger.debug('ShellExecuteEx=%s' % rc)
+    logger.debug('ShellExecuteEx=%s', rc)
 
     if isinstance(rc, dict):
         return True
@@ -358,7 +336,6 @@ def get_autostart_path():
     except:
         # example of failure
         # https://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
-        logger = logging.getLogger(__name__)
         logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
             str(sys.exc_info()[1]))
@@ -522,7 +499,7 @@ def is_process_running_win32(name):
                 # Filter out non-ASCII characters which we don't need
                 # and which may cause display warnings
                 clean_modname2 = re.sub(
-                    r'[^a-z\.]', '_', clean_modname.lower())
+                    r'[^a-z.]', '_', clean_modname.lower())
                 if clean_modname2 == name.lower():
                     return True
 
@@ -535,7 +512,7 @@ def is_process_running_wmic(name):
     Works on Windows XP Professional but not on XP Home
     """
 
-    clean_name = re.sub(r'[^A-Za-z\.]', '_', name).lower()
+    clean_name = re.sub(r'[^A-Za-z.]', '_', name).lower()
     args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" %
             clean_name, 'get', 'Caption']
     (_, stdout, _) = General.run_external(args)
@@ -577,15 +554,10 @@ def shell_change_notify():
 
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
-    logger = logging.getLogger(__name__)
     if not path:
-        #logger.debug('set_environ(%s, %s): skipping because blank path' %
-        #             (varname, path))
-        # Such as LocalAppDataLow on XP
         return
-    if os.environ.has_key(varname):
-        logger.debug('set_environ(%s, %s): skipping because environment variable is already defined' %
-                     (varname, path))
+    if varname in os.environ:
+        logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = expandvars(u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
@@ -593,13 +565,10 @@ def set_environ(varname, path):
         return
     try:
         if not os.path.exists(path):
-            raise RuntimeError(
-                'Variable %s points to a non-existent path %s' % (varname, path))
+            raise RuntimeError('Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path.encode('utf8')
-        #logger.debug('set_environ(%s, %s), set' % (varname, path))
     except:
-        logger.exception(
-            'set_environ(%s, %s): exception when setting environment variable' % (varname, path))
+        logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
 
 
 def setup_environment():
@@ -617,7 +586,6 @@ def setup_environment():
     try:
         path = get_known_folder_path('LocalAppDataLow')
     except:
-        logger = logging.getLogger(__name__)
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
@@ -635,7 +603,7 @@ def split_registry_key(full_key):
         'HKU': _winreg.HKEY_USERS}
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
-    return (hive_map[k1], k2)
+    return hive_map[k1], k2
 
 
 def start_with_computer(enabled):

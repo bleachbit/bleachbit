@@ -64,7 +64,7 @@ suites = [TestAction.suite(),
           TestWorker.suite()
           ]
 
-if 'posix' == os.name and sys.version_info >= (2,7,0):
+if 'posix' == os.name and sys.version_info >= (2, 7, 0):
     import TestUnix
     suites.append(TestUnix.suite())
 
