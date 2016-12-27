@@ -23,16 +23,18 @@
 Test case for module Unix
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from tests import common
+import bleachbit.Common
+from bleachbit.Unix import *
 
 import sys
 import tempfile
 import unittest
 
-sys.path.append('.')
-import bleachbit.Common
-from bleachbit.Unix import *
 
-class UnixTestCase(unittest.TestCase):
+class UnixTestCase(unittest.TestCase, common.TypeAsserts):
 
     """Test case for module Unix"""
 
@@ -47,9 +49,9 @@ class UnixTestCase(unittest.TestCase):
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
             bytes_freed = apt_autoclean()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
             bytes_freed = apt_autoremove()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
 
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
@@ -63,7 +65,7 @@ class UnixTestCase(unittest.TestCase):
         for dirname in menu_dirs:
             for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False)
                              if fn.endswith('.desktop')]:
-                self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+                self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
     def test_is_running_darwin(self):
         def run_ps():
@@ -111,10 +113,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         regex = re.compile('^' + Locales.localepattern + '$')
         for test in tests:
             m = regex.match(test[0])
-            self.assert_(m is not None, 'expected positive match for ' + test[0])
+            self.assertIsNotNone(m, 'expected positive match for ' + test[0])
             self.assertEqual(m.group("locale"), test[1])
         for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
-            self.assert_(regex.match(test) is None, 'expected negative match for '+test)
+            self.assertIsNone(regex.match(test), 'expected negative match for '+test)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -170,11 +172,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                     '</path>'
         from xml.dom.minidom import parseString
         config = parseString(configxml)
-        locales = Locales()
-        locales._paths = LocaleCleanerPath(dirname)
-        locales.add_xml(config.firstChild, None)
+        self.locales._paths = LocaleCleanerPath(dirname)
+        self.locales.add_xml(config.firstChild, None)
         # normpath because paths may contain ./
-        deletelist = [os.path.normpath(path) for path in locales.localization_paths(['en', 'de'])]
+        deletelist = [os.path.normpath(path) for path in self.locales.localization_paths(['en', 'de'])]
         for path in keepdirs + keepfiles:
             self.assert_(os.path.join(dirname, path) not in deletelist)
         for path in nukedirs + nukefiles:
@@ -215,12 +216,12 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         # opposite setting
         start_with_computer(not b)
         two_b = start_with_computer_check()
-        self.assert_(isinstance(two_b, bool))
+        self.assertIsInstance(two_b, bool)
         self.assertEqual(b, not two_b)
         # original setting
         start_with_computer(b)
         three_b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
         self.assertEqual(b, three_b)
 
     def test_wine_to_linux_path(self):
@@ -238,7 +239,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
             bleachbit.Common.logger.debug('yum bytes cleaned %d', bytes_freed)
 
 
