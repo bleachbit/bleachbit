@@ -21,13 +21,23 @@
 """
 Common code for unit tests
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
 
+from bleachbit.FileUtilities import extended_path
 
 import os
-import sys
+import six
 
-sys.path.append('.')
-from bleachbit.FileUtilities import extended_path
+
+class TypeAsserts():
+    def assertIsInteger(self, obj):
+        self.assertIsInstance(obj, six.integer_types)
+
+    def assertIsString(self, obj):
+        self.assertIsInstance(obj, six.text_type)
+
+    def assertIsBytes(self, obj):
+        self.assertIsInstance(obj, six.binary_type)
 
 
 class AssertFile:
