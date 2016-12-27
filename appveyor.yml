@@ -12,6 +12,7 @@ init:
   - '%PYTHON_HOME%/Scripts/pip.exe --version'
 
 install:
+  - '%PYTHON_HOME%/Scripts/pip.exe install psutil'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
