@@ -492,4 +492,8 @@ else:
     else:
         logger.warning(SZ_EXE + ' does not exist')
 
+# Clearly show the sizes of the files that end users download because the goa
+# is to minimize them.
+os.system(r'dir *.zip windows\*.exe windows\*.zip')
+
 logger.info('Success!')
