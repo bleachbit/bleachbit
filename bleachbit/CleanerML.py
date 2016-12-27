@@ -26,7 +26,6 @@ Create cleaners from CleanerML (markup language)
 import logging
 import os
 import sys
-import traceback
 import xml.dom.minidom
 import Cleaner
 import Common

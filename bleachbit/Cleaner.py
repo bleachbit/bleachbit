@@ -31,7 +31,6 @@ import logging
 import os.path
 import re
 import sys
-import traceback
 import warnings
 
 import Command
@@ -96,10 +95,10 @@ class Cleaner:
                 for ds in self.get_deep_scan(option_id):
                     if isinstance(ds, dict):
                         return False
-            except:
-                logging.getLogger(__name__).warning('exception in auto_hide(), cleaner=%s, option=%s',
-                                                    self.name, option_id)
-                traceback.print_exc()
+            except Exception as e:
+                logger = logging.getLogger(__name__)
+                logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
+                                 self.name, option_id)
         return True
 
     def get_commands(self, option_id):

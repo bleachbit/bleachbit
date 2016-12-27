@@ -32,7 +32,6 @@ import logging
 import os
 import glob
 import re
-import traceback
 
 from Action import Delete, Winreg
 from Common import _, FSE, expandvars
@@ -153,10 +152,9 @@ class Winapp:
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
-            except:
+            except Exception as e:
                 self.errors += 1
-                logger.error('parsing error in section %s', section)
-                traceback.print_exc()
+                logger.warning('parsing error in section %s', section)
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -394,9 +392,8 @@ def load_cleaners():
     for pathname in list_winapp_files():
         try:
             inicleaner = Winapp(pathname)
-        except:
-            logger.error("Error reading winapp2.ini cleaner '%s'", pathname)
-            traceback.print_exc()
+        except Exception as e:
+            logger.exception("Error reading winapp2.ini cleaner '%s'", pathname)
         else:
             for cleaner in inicleaner.get_cleaners():
                 Cleaner.backends[cleaner.id] = cleaner
