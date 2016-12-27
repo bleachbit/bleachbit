@@ -23,6 +23,11 @@
 Integration specific to Unix-like operating systems
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import FileUtilities, General, Common
+from bleachbit.Common import _
+
 import glob
 import logging
 import os
@@ -30,11 +35,6 @@ import re
 import shlex
 import subprocess
 import sys
-
-import FileUtilities
-import General
-import Common
-from Common import _
 
 logger = logging.getLogger(__name__)
 
@@ -578,7 +578,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
                                      universal_newlines=True, env={'LC_ALL': 'C'})
 
     freed_space = 0
-    for line in output.split('\n'):
+    for line in output.split(b'\n'):
         m = freed_space_regex.match(line)
         if m is not None:
             freed_space += FileUtilities.human_to_bytes(m.group(1))
