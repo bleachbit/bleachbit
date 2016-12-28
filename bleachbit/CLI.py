@@ -180,7 +180,7 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if 'nt' == os.name and options.update_winapp2:
-        import Update
+        from bleachbit import Update
         logger.info("Checking online for updates to winapp2.ini")
         Update.check_updates(False, True,
                              lambda x: sys.stdout.write("%s\n" % x),
@@ -207,7 +207,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if options.gui:
         import gtk
-        import GUI
+        from bleachbit import GUI
         shred_paths = args if options.shred else None
         GUI.GUI(uac=not options.no_uac,
                 shred_paths=shred_paths, exit=options.exit)

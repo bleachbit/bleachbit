@@ -25,8 +25,6 @@ File-related utilities
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
-
 from bleachbit import Common
 from bleachbit.Common import expanduser
 
@@ -41,6 +39,7 @@ import random
 import re
 import stat
 import string
+import six
 import sys
 import subprocess
 import tempfile
@@ -334,6 +333,7 @@ def exe_exists(pathname):
 
 
 def execute_sqlite3(path, cmds):
+    # type: (six.text_type, six.binary_type) -> None
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
     conn = sqlite3.connect(path)
@@ -345,7 +345,7 @@ def execute_sqlite3(path, cmds):
     if options.get('shred'):
         cursor.execute('PRAGMA secure_delete=ON')
 
-    for cmd in cmds.split(';'):
+    for cmd in cmds.split(b';'):
         try:
             cursor.execute(cmd)
         except sqlite3.DatabaseError as exc:

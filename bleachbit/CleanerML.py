@@ -37,6 +37,7 @@ from FileUtilities import listdir
 
 logger = logging.getLogger(__name__)
 
+
 class CleanerML:
 
     """Create a cleaner from CleanerML"""
