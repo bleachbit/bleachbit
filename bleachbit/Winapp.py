@@ -154,7 +154,7 @@ class Winapp:
                 self.handle_section(section)
             except Exception as e:
                 self.errors += 1
-                logger.warning('parsing error in section %s', section)
+                logger.exception('parsing error in section %s', section)
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
