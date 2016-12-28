@@ -22,17 +22,18 @@
 Cross-platform, special cleaning operations
 """
 
-import os.path
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from Options import options
-import FileUtilities
+from bleachbit.Options import options
+from bleachbit import FileUtilities
+
+import os.path
 
 
 def __get_chrome_history(path, fn='History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
-    ver = get_sqlite_int(
-        path_history, 'select value from meta where key="version"')[0]
+    ver = get_sqlite_int(path_history, 'select value from meta where key="version"')[0]
     assert ver > 1
     return ver
 

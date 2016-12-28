@@ -199,11 +199,8 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
         os.makedirs(self.dir_google_chrome_default)
 
         # google-chrome/Default/Bookmarks
-        bookmark_path = os.path.join(
-            self.dir_google_chrome_default, 'Bookmarks')
-        f = open(bookmark_path, 'w')
-        f.write(chrome_bookmarks)
-        f.close()
+        bookmark_path = os.path.join(self.dir_google_chrome_default, 'Bookmarks')
+        common.write_file(bookmark_path, chrome_bookmarks)
 
         # google-chrome/Default/Web Data
         FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
@@ -227,7 +224,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
 
         if fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
-            self.assert_(os.path.exists(filename))
+            self.assertExists(filename)
 
         # create sqlite file
         elif sql:
@@ -316,9 +313,8 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
                 ids.append(row[0])
             self.assertEqual(ids, [2, 3, 4, 5, 6])
 
-        self.sqlite_clean_helper(
-            None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
-            check_chrome_keywords)
+        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
+                                 check_chrome_keywords)
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
@@ -336,8 +332,7 @@ INSERT INTO "moz_historyvisits" VALUES(85696,0,211406,1277603269156003,1,5523649
 INSERT INTO "moz_inputhistory" VALUES(164860,'blog',0.0125459501500806);
 INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/index.html','download: OpenOffice.org 2.3.1 Downloads','gro.eciffonepo.daolnwod.',0,0,0,28,20,NULL);
 """
-        self.sqlite_clean_helper(
-            sql, None, Special.delete_mozilla_url_history)
+        self.sqlite_clean_helper(sql, None, Special.delete_mozilla_url_history)
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
@@ -353,10 +348,9 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         os.write(fd, chrome_bookmarks)
         os.close(fd)
 
-        self.assert_(os.path.exists(path))
+        self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)
-        self.assertEqual(
-            urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
+        self.assertEqual(urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
 
         os.unlink(path)
 
@@ -368,10 +362,9 @@ INSERT INTO "meta" VALUES('version','20');"""
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-sqlite')
         os.close(fd)
         FileUtilities.execute_sqlite3(filename, sql)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
         # run the test
-        ver = Special.get_sqlite_int(
-            filename, 'select value from meta where key="version"')
+        ver = Special.get_sqlite_int(filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
 
 
