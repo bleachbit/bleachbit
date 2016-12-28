@@ -34,7 +34,7 @@ import tempfile
 import unittest
 
 
-class UnixTestCase(unittest.TestCase, common.TypeAsserts):
+class UnixTestCase(unittest.TestCase, common.TypeAsserts, common.AssertFile):
 
     """Test case for module Unix"""
 
@@ -126,7 +126,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         locales.add_xml(configpath)
         counter = 0
         for path in locales.localization_paths(['en']):
-            self.assert_(os.path.lexists(path))
+            self.assertLExists(path)
             # self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
             self.assert_(path.find('/en_') == -1)
@@ -184,8 +184,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
-            self.assert_(os.path.exists(path),
-                         "Rotated log path '%s' does not exist" % path)
+            self.assertLExists(path, "Rotated log path '%s' does not exist" % path)
 
     def test_run_cleaner_cmd(self):
         from subprocess import CalledProcessError
