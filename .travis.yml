@@ -23,7 +23,7 @@ install:
   - sudo make install
   - cd ..
 # coveralls.io
-  - pip install python-coveralls requests[security]
+  - pip install python-coveralls requests[security] six
 # install mock
   - pip install mock
 script: make tests COVERAGE="coverage run --include='bleachbit/*'"
