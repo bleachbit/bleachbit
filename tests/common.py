@@ -30,14 +30,14 @@ import six
 
 
 class TypeAsserts():
-    def assertIsInteger(self, obj):
-        self.assertIsInstance(obj, six.integer_types)
+    def assertIsInteger(self, obj, msg=''):
+        self.assertIsInstance(obj, six.integer_types, msg)
 
-    def assertIsString(self, obj):
-        self.assertIsInstance(obj, six.text_type)
+    def assertIsString(self, obj, msg=''):
+        self.assertIsInstance(obj, six.text_type, msg)
 
-    def assertIsBytes(self, obj):
-        self.assertIsInstance(obj, six.binary_type)
+    def assertIsBytes(self, obj, msg=''):
+        self.assertIsInstance(obj, six.binary_type, msg)
 
 
 class AssertFile:

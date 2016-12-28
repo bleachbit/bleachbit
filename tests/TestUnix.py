@@ -205,7 +205,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_start_with_computer(self):
         """Unit test for start_with_computer*"""
         b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
 
         if not os.path.exists(bleachbit.Common.launcher_path) and \
                 os.path.exists('bleachbit.desktop'):
@@ -216,7 +216,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         start_with_computer(not b)
         two_b = start_with_computer_check()
         self.assertIsInstance(two_b, bool)
-        self.assertEqual(b, not two_b)
+        self.assertNotEqual(b, two_b)
         # original setting
         start_with_computer(b)
         three_b = start_with_computer_check()

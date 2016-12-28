@@ -23,6 +23,12 @@
 File-related utilities
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import six
+
+from bleachbit import Common
+from bleachbit.Common import expanduser
 
 import atexit
 import codecs
@@ -49,7 +55,7 @@ if 'nt' == os.name:
     import win32file
 
 if 'posix' == os.name:
-    from General import WindowsError
+    from bleachbit.General import WindowsError
 
 
 def open_files_linux():
@@ -119,13 +125,13 @@ def __random_string(length):
 
 
 def bytes_to_human(bytes_i):
-    # type: (int) -> str
+    # type: (int) -> six.binary_type
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
     if bytes_i < 0:
-        return '-' + bytes_to_human(-bytes_i)
+        return b'-' + bytes_to_human(-bytes_i)
 
-    from Options import options
+    from bleachbit.Options import options
     if options.get('units_iec'):
         prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi']
         base = 1024.0
@@ -136,7 +142,7 @@ def bytes_to_human(bytes_i):
     assert(isinstance(bytes_i, (int, long)))
 
     if 0 == bytes_i:
-        return "0"
+        return b'0'
 
     if bytes_i >= base ** 3:
         decimals = 2
@@ -152,17 +158,26 @@ def bytes_to_human(bytes_i):
             return locale.str(abbrev) + suf + 'B'
         else:
             bytes_i /= base
-    return 'A lot.'
+    return b'A lot.'
+
+
+def children_in_directories(tops, list_directories=False):
+    """Iterate files and, optionally subdirectories in directories"""
+    for top in tops:
+        for pathname in children_in_directory(top, list_directories):
+            yield pathname
 
 
 def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory"""
-    if type(top) is tuple:
+
+    if isinstance(top, tuple):
+        logger.warning('Please call children_in_directories instead')
         for top_ in top:
             for pathname in children_in_directory(top_, list_directories):
                 yield pathname
-        return
-    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
+
+    for (dirpath, dirnames, filenames) in os.walk(top.encode(Common.FSE), topdown=False):
         if list_directories:
             for dirname in dirnames:
                 yield os.path.join(dirpath, dirname)
@@ -190,7 +205,7 @@ def clean_ini(path, section, parameter):
 
     # write file
     if changed:
-        from Options import options
+        from bleachbit.Options import options
         fp.close()
         if options.get('shred'):
             delete(path, True)
@@ -228,7 +243,7 @@ def clean_json(path, target):
             break
 
     if changed:
-        from Options import options
+        from bleachbit.Options import options
         if options.get('shred'):
             delete(path, True)
         # write file
@@ -241,7 +256,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        If shred is enabled as a function parameter or the BleachBit global
        parameter, the path will be shredded unless allow_shred = False.
     """
-    from Options import options
+    from bleachbit.Options import options
     is_special = False
     path = extended_path(path)
     if not os.path.lexists(path):
@@ -326,7 +341,7 @@ def execute_sqlite3(path, cmds):
 
     # overwrites deleted content with zeros
     # https://www.sqlite.org/pragma.html#pragma_secure_delete
-    from Options import options
+    from bleachbit.Options import options
     if options.get('shred'):
         cursor.execute('PRAGMA secure_delete=ON')
 
@@ -457,7 +472,7 @@ def guess_overwrite_paths():
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
-        from Windows import get_fixed_drives
+        from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
             if localtmp and same_partition(localtmp, drive):
                 ret.append(localtmp)
@@ -543,7 +558,7 @@ def sync():
 
 def whitelisted_posix(path, check_realpath = True):
     """Check whether this POSIX path is whitelisted"""
-    from Options import options
+    from bleachbit.Options import options
     if check_realpath and os.path.islink(path):
         # also check the link name
         if whitelisted_posix(path, False):
@@ -563,7 +578,7 @@ def whitelisted_posix(path, check_realpath = True):
 
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
-    from Options import options
+    from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
         # Windows is case insensitive
         if pathname[0] == 'file' and path.lower() == pathname[1].lower():

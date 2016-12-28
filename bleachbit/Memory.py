@@ -53,7 +53,7 @@ def get_proc_swaps():
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, _) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _) = General.run_external(['swapon', '-s'], env={'LC_ALL': 'C'})
     if 0 == rc:
         return stdout
     logger.debug('"swapoff -s" failed so falling back to /proc/swaps')

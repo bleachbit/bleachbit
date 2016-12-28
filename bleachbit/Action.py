@@ -165,8 +165,7 @@ class FileActionProvider(ActionProvider):
 
         def get_walk_all(top):
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(
-                        expanded, True):
+                for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
 
         def get_walk_files(top):

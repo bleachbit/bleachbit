@@ -23,6 +23,7 @@ Test case for module Worker
 """
 
 
+import os
 import sys
 import tempfile
 import unittest

@@ -550,6 +550,7 @@ def start_with_computer(enabled):
 
 
 def start_with_computer_check():
+    # type: () -> bool
     """Return boolean whether BleachBit will start with the computer"""
     return os.path.lexists(Common.autostart_path)
 

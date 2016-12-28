@@ -19,26 +19,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Command line interface
 """
 
+from __future__ import absolute_import, division, print_function
+
+from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
+from bleachbit.Common import _, APP_VERSION, encoding
+from bleachbit import Diagnostic, Options, Worker, Common
 
 import logging
 import optparse
 import os
 import sys
 
-from Cleaner import backends, create_simple_cleaner, register_cleaners
-from Common import _, APP_VERSION, encoding
-import Diagnostic
-import Options
-import Worker
-import Common
-
 logger = logging.getLogger(__name__)
+
 
 class CliCallback:
     """Command line's callback passed to Worker"""
