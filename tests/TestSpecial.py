@@ -23,21 +23,21 @@
 Test case for module Special
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.Options import options
+from bleachbit import FileUtilities, Special
+from tests import common
 
 import os
 import os.path
 import shutil
 import sqlite3
-import sys
 import tempfile
 import unittest
 
-sys.path.append('.')
-from bleachbit.Options import options
-import bleachbit.FileUtilities
-import bleachbit.Special
 
-chrome_bookmarks = """
+chrome_bookmarks = b"""
 {
    "checksum": "0313bd70dd6343134782af4b233016bf",
    "roots": {
@@ -96,7 +96,7 @@ chrome_bookmarks = """
 }"""
 
 # <Default/History> from Google Chrome 23
-chrome_history_sql = """
+chrome_history_sql = b"""
 CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','23');
 CREATE TABLE urls(id INTEGER PRIMARY KEY,url LONGVARCHAR,title LONGVARCHAR,visit_count INTEGER DEFAULT 0 NOT NULL,typed_count INTEGER DEFAULT 0 NOT NULL,last_visit_time INTEGER NOT NULL,hidden INTEGER DEFAULT 0 NOT NULL,favicon_id INTEGER DEFAULT 0 NOT NULL);
@@ -114,7 +114,7 @@ CREATE TABLE segment_usage (id INTEGER PRIMARY KEY,segment_id INTEGER NOT NULL,t
 
 
 # <Default/Web Data> from Google Chrome 23
-chrome_webdata = """
+chrome_webdata = b"""
 CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','46');
 CREATE TABLE keywords (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,show_in_default_list INTEGER,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR,last_modified INTEGER DEFAULT 0,sync_guid VARCHAR);
@@ -165,7 +165,7 @@ INSERT INTO "server_addresses" VALUES('a','','123 anywhere','ST','City','',NULL,
 """
 
 # databases/Databases.db from Chromium 12
-chrome_databases_db = """
+chrome_databases_db = b"""
 CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
 INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
 INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
@@ -174,28 +174,28 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
 
 class SpecialAssertions:
 
-    def assertTableIsEmpty(self, path, table):
-        """Asserts SQLite table exists and is empty"""
+    def assertTablesAreEmpty(self, path, tables):
+        """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
             raise AssertionError('Path does not exist: %s' % path)
         import sqlite3
         conn = sqlite3.connect(path)
         cursor = conn.cursor()
-        cursor.execute('select 1 from %s limit 1' % table)
-        row = cursor.fetchone()
-        if row:
-            raise AssertionError('Table is not empty: %s ' % table)
+        for table in tables:
+            cursor.execute('select 1 from %s limit 1' % table)
+            row = cursor.fetchone()
+            if row:
+                raise AssertionError('Table is not empty: %s ' % table)
 
 
-class SpecialTestCase(unittest.TestCase, SpecialAssertions):
+class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
 
     """Test case for module Special"""
 
     def setUp(self):
         """Create test browser files."""
         self.dir_base = tempfile.mkdtemp(prefix='bleachbit-test-special')
-        self.dir_google_chrome_default = os.path.join(
-            self.dir_base, 'google-chrome/Default/')
+        self.dir_google_chrome_default = os.path.join(self.dir_base, 'google-chrome/Default/')
         os.makedirs(self.dir_google_chrome_default)
 
         # google-chrome/Default/Bookmarks
@@ -206,35 +206,31 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
         f.close()
 
         # google-chrome/Default/Web Data
-        bleachbit.FileUtilities.execute_sqlite3(
-            os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
+        FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
 
         # google-chrome/Default/History
-        bleachbit.FileUtilities.execute_sqlite3(
-            os.path.join(self.dir_google_chrome_default, 'History'), chrome_history_sql)
+        FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'History'), chrome_history_sql)
 
         # google-chrome/Default/databases/Databases.db
         os.makedirs(os.path.join(self.dir_google_chrome_default, 'databases'))
-        bleachbit.FileUtilities.execute_sqlite3(
+        FileUtilities.execute_sqlite3(
             os.path.join(self.dir_google_chrome_default, 'databases/Databases.db'), chrome_databases_db)
 
     def tearDown(self):
         """Remove test browser files."""
         shutil.rmtree(self.dir_base)
 
-    def sqlite_clean_helper(
-            self, sql, fn, clean_func, check_func=None, setup_func=None):
+    def sqlite_clean_helper(self, sql, fn, clean_func, check_func=None, setup_func=None):
         """Helper for cleaning special SQLite cleaning"""
 
-        self.assertFalse(
-            sql and fn, "sql and fn are mutually exclusive ways to create the data")
+        self.assertFalse(sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
         if fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
             self.assert_(os.path.exists(filename))
 
         # create sqlite file
-        if sql:
+        elif sql:
             # create test file
             tmpdir = tempfile.mkdtemp(prefix='bleachbit-test-sqlite')
             (fd, filename) = tempfile.mkstemp(dir=tmpdir)
@@ -245,11 +241,12 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
                 setup_func(filename)
 
             # before SQL creation executed, cleaning should fail
-            self.assertRaises(sqlite3.DatabaseError,
-                              clean_func, filename)
+            self.assertRaises(sqlite3.DatabaseError, clean_func, filename)
             # create
-            bleachbit.FileUtilities.execute_sqlite3(filename, sql)
-            self.assert_(os.path.exists(filename))
+            FileUtilities.execute_sqlite3(filename, sql)
+            self.assertExists(filename)
+        else:
+            raise RuntimeError('neither fn nor sql supplied')
 
         # clean the file
         old_shred = options.get('shred')
@@ -260,34 +257,30 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
         self.assertTrue(options.get('shred'))
         options.set('shred', old_shred, commit=False)
         clean_func(filename)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
 
         # check
         if check_func:
             check_func(self, filename)
 
         # tear down
-        bleachbit.FileUtilities.delete(filename)
-        self.assert_(not os.path.exists(filename))
+        FileUtilities.delete(filename)
+        self.assertNotExists(filename)
 
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
         fn = "google-chrome/Default/Web Data"
 
-        def check_autofill(self, filename):
-            self.assertTableIsEmpty(filename, 'autofill')
-            self.assertTableIsEmpty(filename, 'autofill_profile_emails')
-            self.assertTableIsEmpty(filename, 'autofill_profile_names')
-            self.assertTableIsEmpty(filename, 'autofill_profile_phones')
-            self.assertTableIsEmpty(filename, 'autofill_profiles')
-            self.assertTableIsEmpty(filename, 'server_addresses')
-        self.sqlite_clean_helper(
-            None, fn, bleachbit.Special.delete_chrome_autofill, check_func=check_autofill)
+        def check_autofill(testcase, filename):
+            testcase.assertTablesAreEmpty(filename, ['autofill','autofill_profile_emails', 'autofill_profile_names',
+                                                     'autofill_profile_phones', 'autofill_profiles','server_addresses'])
+
+        self.sqlite_clean_helper(None, fn, Special.delete_chrome_autofill, check_func=check_autofill)
 
     def test_delete_chrome_databases_db(self):
         """Unit test for delete_chrome_databases_db"""
         self.sqlite_clean_helper(
-            None, "google-chrome/Default/databases/Databases.db", bleachbit.Special.delete_chrome_databases_db)
+            None, "google-chrome/Default/databases/Databases.db", Special.delete_chrome_databases_db)
 
     def test_delete_chrome_history(self):
         """Unit test for delete_chrome_history"""
@@ -305,14 +298,11 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
             self.assertEqual(ids, [2])
 
             # these tables should always be empty after cleaning
-            self.assertTableIsEmpty(filename, 'downloads')
-            self.assertTableIsEmpty(filename, 'keyword_search_terms')
-            self.assertTableIsEmpty(filename, 'segment_usage')
-            self.assertTableIsEmpty(filename, 'segments')
-            self.assertTableIsEmpty(filename, 'visits')
+            self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
+                                                 'segment_usage', 'segments', 'visits'])
 
         self.sqlite_clean_helper(None, "google-chrome/Default/History",
-                                 bleachbit.Special.delete_chrome_history, check_chrome_history)
+                                 Special.delete_chrome_history, check_chrome_history)
 
     def test_delete_chrome_keywords(self):
         """Unit test for delete_chrome_keywords"""
@@ -327,12 +317,12 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions):
             self.assertEqual(ids, [2, 3, 4, 5, 6])
 
         self.sqlite_clean_helper(
-            None, "google-chrome/Default/Web Data", bleachbit.Special.delete_chrome_keywords,
+            None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
             check_chrome_keywords)
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
-        sql = """
+        sql = b"""
 CREATE TABLE moz_annos (id INTEGER PRIMARY KEY,place_id INTEGER NOT NULL,anno_attribute_id INTEGER,mime_type VARCHAR(32) DEFAULT NULL,content LONGVARCHAR, flags INTEGER DEFAULT 0,expiration INTEGER DEFAULT 0,type INTEGER DEFAULT 0,dateAdded INTEGER DEFAULT 0,lastModified INTEGER DEFAULT 0);
 CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY,type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER);
 CREATE TABLE moz_favicons (id INTEGER PRIMARY KEY, url LONGVARCHAR UNIQUE, data BLOB, mime_type VARCHAR(32), expiration LONG);
@@ -347,7 +337,7 @@ INSERT INTO "moz_inputhistory" VALUES(164860,'blog',0.0125459501500806);
 INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/index.html','download: OpenOffice.org 2.3.1 Downloads','gro.eciffonepo.daolnwod.',0,0,0,28,20,NULL);
 """
         self.sqlite_clean_helper(
-            sql, None, bleachbit.Special.delete_mozilla_url_history)
+            sql, None, Special.delete_mozilla_url_history)
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
@@ -355,7 +345,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         # Google Chrome 23 on Windows 8 does not create a bookmarks file on first startup
         # (maybe because the network was disconnected or because user created no bookmarks).
         self.assertEqual(
-            [], bleachbit.Special.get_chrome_bookmark_ids('does_not_exist'))
+            [], Special.get_chrome_bookmark_ids('does_not_exist'))
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
@@ -364,7 +354,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         os.close(fd)
 
         self.assert_(os.path.exists(path))
-        urls = bleachbit.Special.get_chrome_bookmark_urls(path)
+        urls = Special.get_chrome_bookmark_urls(path)
         self.assertEqual(
             urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
 
@@ -377,10 +367,10 @@ INSERT INTO "meta" VALUES('version','20');"""
         # create test file
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-sqlite')
         os.close(fd)
-        bleachbit.FileUtilities.execute_sqlite3(filename, sql)
+        FileUtilities.execute_sqlite3(filename, sql)
         self.assert_(os.path.exists(filename))
         # run the test
-        ver = bleachbit.Special.get_sqlite_int(
+        ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
 
