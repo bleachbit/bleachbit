@@ -36,11 +36,7 @@ import six
 import sys
 import unittest
 
-
-def write_file(filename, contents):
-    """Write contents to file"""
-    with open(extended_path(filename), 'w') as f:
-        f.write(contents)
+write_file = common.write_file
 
 
 def test_ini_helper(self, execute):

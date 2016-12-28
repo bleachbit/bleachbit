@@ -23,6 +23,8 @@ Common code for unit tests
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import tempfile
+
 from bleachbit.FileUtilities import extended_path
 
 import os
@@ -117,3 +119,9 @@ def validate_result(self, result, really_delete=False):
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
+
+
+def write_file(filename, contents):
+    """Write contents to file"""
+    with open(extended_path(filename), 'w') as f:
+        f.write(contents)
