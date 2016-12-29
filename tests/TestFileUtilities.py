@@ -573,7 +573,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         """Unit test for listdir()"""
         if 'posix' == os.name:
             dir1 = '/tmp'
-            dir2 = '~/.config'
+            dir2 = expanduser('~/.config')
         if 'nt' == os.name:
             dir1 = expandvars(r'%windir%\fonts')
             dir2 = expandvars(r'%userprofile%\desktop')
