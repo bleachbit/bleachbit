@@ -35,7 +35,7 @@ import common
 sys.path.append('.')
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
-from bleachbit.Common import expanduser, logger
+from bleachbit.Common import expanduser, expandvars, logger
 
 
 
@@ -122,7 +122,7 @@ def test_json_helper(self, execute):
     self.assert_(not os.path.exists(filename))
 
 
-class FileUtilitiesTestCase(unittest.TestCase):
+class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
     """Test case for module FileUtilities"""
 
@@ -571,9 +571,29 @@ class FileUtilitiesTestCase(unittest.TestCase):
 
     def test_listdir(self):
         """Unit test for listdir()"""
-        for pathname in listdir(('/tmp', '~/.config/')):
-            self.assert_(os.path.lexists(pathname),
-                         "does not exist: %s" % pathname)
+        if 'posix' == os.name:
+            dir1 = '/tmp'
+            dir2 = '~/.config'
+        if 'nt' == os.name:
+            dir1 = expandvars(r'%windir%\fonts')
+            dir2 = expandvars(r'%userprofile%\desktop')
+        # If these directories do not exist, the test results are not valid.
+        self.assertExists(dir1)
+        self.assertExists(dir2)
+        # Every path found in dir1 and dir2 should be found in (dir1, dir2).
+        paths1 = set(listdir(dir1))
+        paths2 = set(listdir(dir2))
+        paths12 = set(listdir((dir1,dir2)))
+        self.assertTrue(paths1 < paths12)
+        self.assertTrue(paths2 < paths12)
+        # The individual calls should be equivalent to a combined call.
+        self.assertSetEqual(paths1.union(paths2), paths12)
+        # The directories should not be empty.
+        self.assertGreater(len(paths1), 0)
+        self.assertGreater(len(paths2), 0)
+        # Every path found should exist.
+        for pathname in paths12:
+            self.assertLExists(pathname)
 
     def test_same_partition(self):
         """Unit test for same_partition()"""
