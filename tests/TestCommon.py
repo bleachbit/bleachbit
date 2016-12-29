@@ -38,14 +38,14 @@ class CommonTestCase(unittest.TestCase):
     def test_expandvars(self):
         """Unit test for expandvars."""
         var = Common.expandvars('$HOME')
-        self.assertTrue(isinstance(var, unicode))
+        self.assertIsInstance(var, unicode)
 
     def test_expanduser(self):
         """Unit test for expanduser."""
         var = Common.expanduser('~')
-        self.assertTrue(isinstance(var, unicode))
+        self.assertIsInstance(var, unicode)
         var = Common.expanduser(u'~')
-        self.assertTrue(isinstance(var, unicode))
+        self.assertIsInstance(var, unicode)
 
 def suite():
     return unittest.makeSuite(CommonTestCase)
