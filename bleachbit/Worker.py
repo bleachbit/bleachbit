@@ -30,6 +30,7 @@ from bleachbit.Common import _, ungettext, expanduser
 
 import logging
 import math
+import six
 import sys
 
 logger = logging.getLogger(__name__)
@@ -78,7 +79,7 @@ class Worker:
 
     def execute(self, cmd):
         """Execute or preview the command"""
-        ret = None
+        ret = {}
         try:
             for ret in cmd.execute(self.really_delete):
                 if True == ret or isinstance(ret, tuple):
@@ -100,19 +101,17 @@ class Worker:
                 logger.error('Error in execution of %s', cmd, exc_info=True)
             self.total_errors += 1
         else:
-            if ret is None:
+            if not ret:
                 return
-            if isinstance(ret['size'], (int, long)):
+            if isinstance(ret['size'], six.integer_types):
                 size = FileUtilities.bytes_to_human(ret['size'])
                 self.size += ret['size']
                 self.total_bytes += ret['size']
             else:
                 size = "?B"
 
-            if ret['path']:
-                path = ret['path']
-            else:
-                path = ''
+            path = ret['path'] or ''
+
             path = path.decode('utf8', 'replace')  # for invalid encoding
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
