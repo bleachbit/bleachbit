@@ -22,20 +22,23 @@
 Command design pattern implementation for cleaning
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.Common import _
+from bleachbit import FileUtilities
 
 import logging
 import os
+import six
 import types
-import FileUtilities
-import Common
 
 from sqlite3 import DatabaseError
-from Common import _
+
 
 if 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 else:
-    from General import WindowsError
+    from bleachbit.General import WindowsError
 
 
 def whitelist(path):
@@ -139,7 +142,7 @@ class Function:
                             # If tuple, then display progress.
                             yield func_ret
                 # either way, func_ret should be an integer
-                assert isinstance(func_ret, (int, long))
+                assert isinstance(func_ret, six.integer_types)
                 ret['size'] = func_ret
             else:
                 if os.path.isdir(self.path):

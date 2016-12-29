@@ -93,28 +93,26 @@ def touch_file(filename):
 
 def validate_result(self, result, really_delete=False):
     """Validate the command returned valid results"""
-    self.assert_(isinstance(result, dict), "result is a %s" % type(result))
+    self.assertIsInstance(result, dict, "result is a %s" % type(result))
     # label
-    self.assert_(isinstance(result['label'], (str, unicode)))
-    self.assert_(len(result['label'].strip()) > 0)
+    self.assertIsString(result['label'])
+    self.assertGreater(len(result['label'].strip()), 0)
     # n_*
-    self.assert_(isinstance(result['n_deleted'], (int, long)))
-    self.assert_(result['n_deleted'] >= 0)
-    self.assert_(result['n_deleted'] <= 1)
+    self.assertIsInteger(result['n_deleted'])
+    self.assertGreaterEqual(result['n_deleted'], 0)
+    self.assertLessEqual(result['n_deleted'], 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assert_(isinstance(result['size'], (int, long, type(None))),
-                 "size is %s" % str(result['size']))
+    self.assertIsInstance(result['size'], six.integer_types + (type(None),), "size is %s" % str(result['size']))
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
     from bleachbit.Common import encoding
-    self.assert_(isinstance(filename, (str, unicode, type(None))),
-                 "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
-    if isinstance(filename, (str, unicode)) and \
-            not filename[0:2] == 'HK':
+    self.assertIsInstance(filename, (six.text_type, type(None)),
+                          "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
+    if isinstance(filename, six.text_type) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
         else:
@@ -125,3 +123,13 @@ def write_file(filename, contents):
     """Write contents to file"""
     with open(extended_path(filename), 'w') as f:
         f.write(contents)
+
+
+def touch_temp_file(contents=b'', **kwargs):
+    """Creates a temporary file (same args as tempfile.mkstemp, optionally writes contents
+    to it and returns the filename including the path"""
+    (fd, filename) = tempfile.mkstemp(**kwargs)
+    if contents:
+        os.write(fd, contents)
+    os.close(fd)
+    return filename
