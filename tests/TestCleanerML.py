@@ -22,17 +22,15 @@
 Test cases for module CleanerML
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.CleanerML import *
+from tests import common
 
 import unittest
-import sys
-
-sys.path.append('.')
-from bleachbit.CleanerML import *
-
-import common
 
 
-class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
+class CleanerMLTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
 
     """Test cases for CleanerML"""
 
@@ -42,8 +40,8 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
             os.chdir('tests')
         xmlcleaner = CleanerML("../doc/example_cleaner.xml")
 
-        self.assert_(isinstance(xmlcleaner, CleanerML))
-        self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
+        self.assertIsInstance(xmlcleaner, CleanerML)
+        self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
 
         def run_all(really_delete):
             for (option_id, __name) in xmlcleaner.cleaner.get_options():
@@ -85,12 +83,10 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
         # should catch exception with invalid XML
         import tempfile
         pcd = Common.personal_cleaners_dir
-        Common.personal_cleaners_dir = tempfile.mkdtemp(
-            prefix='bleachbit-cleanerml-load')
+        Common.personal_cleaners_dir = tempfile.mkdtemp(prefix='bleachbit-cleanerml-load')
         fn_xml = os.path.join(Common.personal_cleaners_dir, 'invalid.xml')
-        f = open(fn_xml, 'w')
-        f.write('<xml><broken>')
-        f.close()
+        common.write_file(fn_xml, '<xml><broken>')
+
         load_cleaners()
         import shutil
         shutil.rmtree(Common.personal_cleaners_dir)
@@ -98,7 +94,7 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
-        self.assert_(isinstance(pot_fragment("Foo", 'bar.xml'), str))
+        self.assertIsString(pot_fragment("Foo", 'bar.xml'))
 
 
 def suite():

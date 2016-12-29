@@ -22,18 +22,19 @@
 Create cleaners from CleanerML (markup language)
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.Action import ActionProvider
+from bleachbit.Common import _
+from bleachbit.General import boolstr_to_bool, getText
+from bleachbit.FileUtilities import listdir
+from bleachbit import Cleaner
+from bleachbit import Common
 
 import logging
 import os
 import sys
 import xml.dom.minidom
-import Cleaner
-import Common
-
-from Action import ActionProvider
-from Common import _
-from General import boolstr_to_bool, getText
-from FileUtilities import listdir
 
 logger = logging.getLogger(__name__)
 
@@ -178,7 +179,7 @@ class CleanerML:
         """<localizations> element under <cleaner>"""
         if not 'posix' == os.name:
             return
-        import Unix
+        from bleachbit import Unix
         for localization_node in localization_nodes:
             for child_node in localization_node.childNodes:
                 Unix.locales.add_xml(child_node)
@@ -225,11 +226,7 @@ def pot_fragment(msgid, pathname, translators=None):
         translators = "#. %s\n" % translators
     else:
         translators = ""
-    ret = '''%s#: %s
-msgid "%s"
-msgstr ""
-
-''' % (translators, pathname, msgid)
+    ret = '%s#: %s\nmsgid "%s"\nmsgstr ""\n\n' % (translators, pathname, msgid)
     return ret
 
 
@@ -250,7 +247,7 @@ def create_pot():
             logger.exception('error reading: %s', pathname)
             continue
         for (string, translators) in strings:
-            f.write(pot_fragment(string, pathname, translators))
+            f.write(pot_fragment(string, pathname, translators).encode('utf8'))
 
     f.close()
 
