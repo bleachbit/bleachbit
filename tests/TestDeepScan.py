@@ -23,21 +23,19 @@
 Test case for module DeepScan
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.DeepScan import DeepScan, normalized_walk
+from bleachbit.Common import expanduser
+from tests import common
 
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 
-import common
 
-sys.path.append('.')
-from bleachbit.DeepScan import DeepScan, normalized_walk
-from bleachbit.Common import expanduser
-
-
-class DeepScanTestCase(unittest.TestCase):
+class DeepScanTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
 
     """Test Case for module DeepScan"""
 
@@ -45,7 +43,7 @@ class DeepScanTestCase(unittest.TestCase):
         """Test encoding"""
 
         tempd = tempfile.mkdtemp(prefix='bleachbit-test-deepscan')
-        self.assert_(os.path.exists(tempd))
+        self.assertExists(tempd)
 
         fullpath = os.path.join(tempd, fn)
         common.touch_file(fullpath)
@@ -61,9 +59,9 @@ class DeepScanTestCase(unittest.TestCase):
         self.assert_(found, "Did not find '%s'" % fullpath)
 
         os.unlink(fullpath)
-        self.assert_(not os.path.exists(fullpath))
+        self.assertNotExists(fullpath)
         os.rmdir(tempd)
-        self.assert_(not os.path.exists(tempd))
+        self.assertNotExists(tempd)
 
     def test_encoding(self):
         """Test encoding"""
@@ -86,10 +84,8 @@ class DeepScanTestCase(unittest.TestCase):
             if True == ret:
                 # it's yielding control to the GTK idle loop
                 continue
-            self.assert_(isinstance(ret, (str, unicode)),
-                         "Expecting string but got '%s' (%s)" %
-                         (ret, str(type(ret))))
-            self.assert_(os.path.lexists(ret))
+            self.assertIsString(ret, "Expecting string but got '%s' (%s)" % (ret, str(type(ret))))
+            self.assertLExists(ret)
 
     def test_delete(self):
         """Delete files in a test environment"""
@@ -97,18 +93,18 @@ class DeepScanTestCase(unittest.TestCase):
         # make some files
         base = tempfile.mkdtemp(prefix='bleachbit-deepscan-test')
         f_del1 = os.path.join(base, 'foo.txt.bbtestbak')
-        open(f_del1, 'w').close()
+        common.touch_file(f_del1)
         f_keep = os.path.join(base, 'foo.txt')
-        open(f_keep, 'w').close()
+        common.touch_file(f_keep)
         subdir = os.path.join(base, 'sub')
         os.mkdir(subdir)
         f_del2 = os.path.join(base, 'sub/bar.ini.bbtestbak')
-        open(f_del2, 'w').close()
+        common.touch_file(f_del2)
 
         # sanity check
-        self.assert_(os.path.exists(f_del1))
-        self.assert_(os.path.exists(f_keep))
-        self.assert_(os.path.exists(f_del2))
+        self.assertExists(f_del1)
+        self.assertExists(f_keep)
+        self.assertExists(f_del2)
 
         # run deep scan
         astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
@@ -127,7 +123,7 @@ class DeepScanTestCase(unittest.TestCase):
         # validate results
 
         self.assertFalse(os.path.exists(f_del1))
-        self.assert_(os.path.exists(f_keep))
+        self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
 
         # clean up
