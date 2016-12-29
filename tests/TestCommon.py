@@ -23,15 +23,18 @@ Test case for Common
 """
 
 
+import os
 import sys
-import unittest
 import tempfile
+import unittest
+
+import common
 
 sys.path.append('.')
 import bleachbit.Common as Common
 
 
-class CommonTestCase(unittest.TestCase):
+class CommonTestCase(unittest.TestCase, common.AssertFile):
 
     """Test case for Common."""
 
@@ -42,10 +45,26 @@ class CommonTestCase(unittest.TestCase):
 
     def test_expanduser(self):
         """Unit test for expanduser."""
+        # Return Unicode when given str.
         var = Common.expanduser('~')
         self.assertIsInstance(var, unicode)
+        # Return Unicode when given Unicode.
         var = Common.expanduser(u'~')
         self.assertIsInstance(var, unicode)
+        # Blank input should give blank output.
+        self.assertEqual(Common.expanduser(''), u'')
+        # An absolute path should not be altered.
+        if 'posix' == os.name:
+            abs_dir = os.path.expandvars('$HOME')
+        if 'nt' == os.name:
+            abs_dir = os.path.expandvars('%USERPROFILE%')
+        self.assertExists(abs_dir)
+        self.assertEqual(Common.expanduser(abs_dir), abs_dir)
+        # Path with tilde should be expanded
+        self.assertTrue(os.path.normpath(Common.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
+        # A relative path (without a reference to the home directory)
+        # should not be expanded.
+        self.assertEqual(Common.expanduser('common'), 'common')
 
 def suite():
     return unittest.makeSuite(CommonTestCase)

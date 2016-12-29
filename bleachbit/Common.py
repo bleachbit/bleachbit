@@ -126,13 +126,17 @@ def expandvars(var):
 def expanduser(path):
     """Expand the path with the home directory.
 
-    Return the argument with an initial component of "~" or "~user" replaced by
+    Return the argument with an initial component of "~" replaced by
     that user's home directory.
     """
     if isinstance(path, str):
         final = path.decode('utf-8')
     else:
         final = path
+
+    # If does not begin with tilde, do not alter.
+    if len(path) == 0 or not '~' == path[0]:
+        return final
 
     if 'posix' == os.name:
         final = os.path.expanduser(final)
