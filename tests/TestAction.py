@@ -212,15 +212,19 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     def test_process(self):
         """Unit test for process action"""
-        tests = [u'<action command="process" cmd="dir" />',
-                 u'<action command="process" wait="false" cmd="dir" />',
-                 u'<action command="process" wait="f" cmd="dir" />',
-                 u'<action command="process" wait="no" cmd="dir" />',
-                 u'<action command="process" wait="n" cmd="dir" />'
+        if 'nt' == os.name:
+            cmd = 'cmd.exe /c dir'
+        if 'posix' == os.name:
+            cmd = 'dir'
+        tests = [u'<action command="process" cmd="%s" />',
+                 u'<action command="process" wait="false" cmd="%s" />',
+                 u'<action command="process" wait="f" cmd="%s" />',
+                 u'<action command="process" wait="no" cmd="%s" />',
+                 u'<action command="process" wait="n" cmd="%s" />'
                  ]
 
         for test in tests:
-            self._test_action_str(test)
+            self._test_action_str(test % cmd)
 
     def test_regex(self):
         """Unit test for regex option"""
