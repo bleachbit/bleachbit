@@ -31,6 +31,8 @@ install:
 build_script:
   - '%make% -C po local'
   - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
+  - 'move windows\BleachBit*.exe .'
+  - 'move windows\BleachBit*.zip .'
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
@@ -41,3 +43,24 @@ test_script:
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem'
   - '%PYTHON_HOME%/python.exe tests/TestAll.py'
+
+artifacts:
+  - path: BleachBit-*-setup.exe
+    name: FullInstaller
+
+  - path: BleachBit-*-setup-English.exe
+    name: EnglishInstaller
+
+  - path: BleachBit-*-portable.zip
+    name: Portable
+
+deploy:
+  - provider: S3
+    access_key_id:
+      secure: CrPvjz7Jvg4gwOHKxUsL0PPR4mqAjB2p15/pvFw3fCk=
+    secret_access_key:
+      secure: VoAH5pVyhmTK3/KRuV5WcgfkTR3k/M9QDt7UD6ewcwNfkUvMynwjAHnKCG4vR0Rx
+    bucket: ci.bleachbit.org
+    folder: $(APPVEYOR_BUILD_VERSION)
+    artifact:
+    set-public: true
