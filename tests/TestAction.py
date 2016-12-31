@@ -90,8 +90,7 @@ def dir_is_empty(dirname):
     return not os.listdir(dirname)
 
 
-class ActionTestCase(unittest.TestCase, common.AssertFile):
-
+class ActionTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
     """Test cases for Action"""
 
     def _test_action_str(self, action_str):
@@ -233,27 +232,27 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         # should match three files using no regexes
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" />'
         results = _action_str_to_results(action_str)
-        self.assert_(3 == len(results))
+        self.assertEqual(len(results), 3)
 
         # should match second file using positive regex
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
         results = _action_str_to_results(action_str)
-        self.assert_(1 == len(results))
+        self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # On Windows should be case insensitive
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
         results = _action_str_to_results(action_str)
         if 'nt' == os.name:
-            self.assert_(1 == len(results))
+            self.assertEqual(len(results), 1)
             self.assertEqual(results[0]['path'], '/tmp/foo2')
         else:
-            self.assert_(0 == len(results))
+            self.assertEqual(len(results), 0)
 
         # should match second file using negative regex
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
         results = _action_str_to_results(action_str)
-        self.assert_(1 == len(results))
+        self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match second file using both regexes
@@ -265,17 +264,16 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
         # should match nothing using positive regex
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^bar$"/>'
         results = _action_str_to_results(action_str)
-        self.assert_(0 == len(results))
+        self.assertEqual(len(results), 0)
 
         # should match nothing using negative regex
         action_str = u'<action command="delete" search="glob" path="/tmp/foo*" nregex="."/>'
         results = _action_str_to_results(action_str)
-        self.assert_(0 == len(results))
+        self.assertEqual(len(results), 0)
 
         # should give an error
         action_str = u'<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
-        self.assertRaises(
-            RuntimeError, lambda: _action_str_to_results(action_str))
+        self.assertRaises(RuntimeError, lambda: _action_str_to_results(action_str))
 
         # clean up
         glob.iglob = _iglob
@@ -362,11 +360,9 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     def test_walk_files(self):
         """Unit test for walk.files"""
-        if 'posix' == os.name:
-            path = '/var'
-        elif 'nt' == os.name:
-            path = '$WINDIR\\system32'
-        action_str = u'<action command="delete" search="walk.files" path="%s" />' % path
+        paths = {'posix': '/var', 'nt': '$WINDIR\\system32'}
+
+        action_str = u'<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0
         for cmd in _action_str_to_commands(action_str):
             result = cmd.execute(False).next()
@@ -374,7 +370,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
             path = result['path']
             self.assert_(not os.path.isdir(path), "%s is a directory" % path)
             results += 1
-        self.assert_(results > 0)
+        self.assertGreater(results, 0)
 
 
 def suite():

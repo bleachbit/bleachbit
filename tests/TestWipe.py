@@ -18,24 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-
-import unittest
-
 """
 Test FileUtilities.wipe_path
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
+from bleachbit.General import run_external
+
+import logging
 import os
 import sys
 import tempfile
 import time
 import traceback
+import unittest
 
-sys.path.append('.')
-from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
-from bleachbit.General import run_external
-from bleachbit.Common import logger
+logger = logging.getLogger('bleachbit')
 
 
 def create_disk_image(n_bytes):
@@ -43,7 +43,7 @@ def create_disk_image(n_bytes):
     (fd, filename) = tempfile.mkstemp(
         suffix='disk-image', prefix='bleachbit-wipe-test')
     for x in range(1, int(n_bytes / 1e5)):
-        os.write(fd, '\x00' * 100000)
+        os.write(fd, b'\x00' * 100000)
     os.close(fd)
     return filename
 
@@ -62,7 +62,7 @@ def format_filesystem(filename, mkfs_cmd):
 def make_dirty(mountpoint):
     create_counter = 0
     write_counter = 0
-    contents = 'sssshhhh' * 512
+    contents = b'sssshhhh' * 512
     while True:
         try:
             fn = os.path.join(mountpoint, 'secret' + str(create_counter))
@@ -179,7 +179,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
 
         # remount
         if i > 1:
-            mount_filesystem(filename, mountpoint)\
+            mount_filesystem(filename, mountpoint)
 
         # really wipe
         print('wiping %s' % mountpoint)

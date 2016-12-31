@@ -17,14 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 General code
 """
 
-import Common
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import Common
 
 import logging
 import os

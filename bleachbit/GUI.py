@@ -18,6 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
+    help_contents_url, license_filename, options_file, options_dir, \
+    online_update_notification_enabled, release_notes_url, portable_mode, \
+    expanduser
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options
+from bleachbit import Cleaner, FileUtilities, GuiBasic
 
 import logging
 import os
@@ -34,20 +44,8 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
-    help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url, portable_mode, \
-    expanduser
-import Common
-from Cleaner import backends, register_cleaners
-from GuiPreferences import PreferencesDialog
-from Options import options
-import Cleaner
-import FileUtilities
-import GuiBasic
-
 if 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
 

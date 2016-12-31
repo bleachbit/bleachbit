@@ -37,6 +37,10 @@ These are the terms:
 
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import Command, Common, FileUtilities, General
+from bleachbit.Common import expandvars
 
 import glob
 import logging
@@ -61,11 +65,7 @@ if 'win32' == sys.platform:
     psapi = windll.psapi
     kernel = windll.kernel32
 
-import Command
-import Common
-import FileUtilities
-import General
-from Common import expandvars
+
 
 logger = logging.getLogger(__name__)
 
@@ -339,7 +339,7 @@ def get_autostart_path():
         logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
             str(sys.exc_info()[1]))
-        import GuiBasic
+        from bleachbit import GuiBasic
         GuiBasic.message_dialog(None, msg)
         # as a fallback, guess
         # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup

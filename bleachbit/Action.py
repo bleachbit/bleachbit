@@ -23,23 +23,22 @@
 Actions that perform cleaning
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import Command, FileUtilities, General, Special
+from bleachbit.Common import _, FSE, expanduser, expandvars
 
 import glob
 import logging
 import os
 import re
+import six
 import types
-import Command
-import FileUtilities
-import General
-import Special
-import Common
 
-from Common import _, FSE, expanduser, expandvars
 
 if 'posix' == os.name:
     re_flags = 0
-    import Unix
+    from bleachbit import Unix
 else:
     re_flags = re.IGNORECASE
 
@@ -87,14 +86,15 @@ class FileActionProvider(ActionProvider):
 
     def __init__(self, action_element):
         """Initialize file search"""
+        regex_or_none_type = (six.text_type, six.binary_type, types.NoneType)
         self.regex = action_element.getAttribute('regex')
-        assert(isinstance(self.regex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.regex, regex_or_none_type))
         self.nregex = action_element.getAttribute('nregex')
-        assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.nregex, regex_or_none_type))
         self.wholeregex = action_element.getAttribute('wholeregex')
-        assert(isinstance(self.wholeregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.wholeregex, regex_or_none_type))
         self.nwholeregex = action_element.getAttribute('nwholeregex')
-        assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.nwholeregex, regex_or_none_type))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self.path = expanduser(expandvars(action_element.getAttribute('path')))
@@ -107,12 +107,10 @@ class FileActionProvider(ActionProvider):
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
             self.ds['nregex'] = self.nregex
-            self.ds['cache'] = General.boolstr_to_bool(
-                action_element.getAttribute('cache'))
+            self.ds['cache'] = General.boolstr_to_bool(action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.path
-        if not any([self.object_type, self.regex, self.nregex,
-                    self.wholeregex, self.nwholeregex]):
+        if not any([self.object_type, self.regex, self.nregex, self.wholeregex, self.nwholeregex]):
             # If the filter is not needed, bypass it for speed.
             self.get_paths = self._get_paths
 
@@ -221,9 +219,7 @@ class AptAutoclean(ActionProvider):
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
         if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoclean,
-                                   'apt-get autoclean')
+            yield Command.Function(None, Unix.apt_autoclean, 'apt-get autoclean')
 
 
 class AptAutoremove(ActionProvider):
@@ -237,9 +233,7 @@ class AptAutoremove(ActionProvider):
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
         if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoremove,
-                                   'apt-get autoremove')
+            yield Command.Function(None, Unix.apt_autoremove, 'apt-get autoremove')
 
 
 class ChromeAutofill(FileActionProvider):
@@ -249,10 +243,7 @@ class ChromeAutofill(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_chrome_autofill,
-                _('Clean file'))
+            yield Command.Function(path, Special.delete_chrome_autofill, _('Clean file'))
 
 
 class ChromeDatabases(FileActionProvider):
@@ -262,10 +253,7 @@ class ChromeDatabases(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_chrome_databases_db,
-                _('Clean file'))
+            yield Command.Function(path, Special.delete_chrome_databases_db, _('Clean file'))
 
 
 class ChromeFavicons(FileActionProvider):
@@ -275,10 +263,7 @@ class ChromeFavicons(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_chrome_favicons,
-                _('Clean file'))
+            yield Command.Function(path, Special.delete_chrome_favicons, _('Clean file'))
 
 
 class ChromeHistory(FileActionProvider):
@@ -288,10 +273,7 @@ class ChromeHistory(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_chrome_history,
-                _('Clean file'))
+            yield Command.Function(path, Special.delete_chrome_history, _('Clean file'))
 
 
 class ChromeKeywords(FileActionProvider):
@@ -301,10 +283,7 @@ class ChromeKeywords(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_chrome_keywords,
-                _('Clean file'))
+            yield Command.Function(path, Special.delete_chrome_keywords, _('Clean file'))
 
 
 class Delete(FileActionProvider):
@@ -377,10 +356,7 @@ class OfficeRegistryModifications(FileActionProvider):
 
     def get_commands(self):
         for path in self.get_paths():
-            yield Command.Function(
-                path,
-                Special.delete_office_registrymodifications,
-                _('Clean'))
+            yield Command.Function(path, Special.delete_office_registrymodifications, _('Clean'))
 
 
 class Process(ActionProvider):
@@ -462,11 +438,8 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        import Windows
-        yield Command.Function(
-            None,
-            Windows.shell_change_notify,
-            None)
+        from bleachbit import Windows
+        yield Command.Function(None, Windows.shell_change_notify, None)
 
 
 class Winreg(ActionProvider):
@@ -495,7 +468,4 @@ class YumCleanAll(ActionProvider):
         if not FileUtilities.exe_exists('yum'):
             raise StopIteration
 
-        yield Command.Function(
-            None,
-            Unix.yum_clean,
-            'yum clean all')
+        yield Command.Function(None, Unix.yum_clean, 'yum clean all')

@@ -18,35 +18,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 Test case for module Memory
 """
+
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from tests import common
+from bleachbit.Memory import *
 
 
 import unittest
 import sys
 
-sys.path.append('.')
-from bleachbit.Memory import *
-
 running_linux = sys.platform.startswith('linux')
 
 
-class MemoryTestCase(unittest.TestCase):
+class MemoryTestCase(unittest.TestCase, common.TypeAsserts):
     """Test case for module Memory"""
 
     @unittest.skipUnless(running_linux, 'not running linux')
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
-        self.assert_(isinstance(ret, str))
-        self.assert_(len(ret) > 10)
-        if not re.search('Filename\s+Type\s+Size', ret):
-            raise RuntimeError(
-                "Unexpected first line in swap summary '%s'" % ret)
+        self.assertIsBytes(ret)
+        self.assertGreater(len(ret), 10)
+        if not re.search(b'Filename\s+Type\s+Size', ret):
+            raise RuntimeError("Unexpected first line in swap summary '%s'" % ret)
 
     @unittest.skipUnless(running_linux, 'not running linux')
     def test_make_self_oom_target_linux(self):
@@ -65,9 +63,8 @@ class MemoryTestCase(unittest.TestCase):
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
         n_swaps = count_swap_linux()
-        self.assert_(isinstance(n_swaps, (int, long)))
-        self.assert_(n_swaps >= 0)
-        self.assert_(n_swaps < 10)
+        self.assertIsInteger(n_swaps)
+        self.assertTrue(0 <= n_swaps < 10)
 
     def test_physical_free_darwin(self):
         self.assertEqual(physical_free_darwin(lambda:
@@ -95,15 +92,13 @@ Pageouts:                              30477017.
 Swapins:                               19424481.
 Swapouts:                              20258188.
 """), 3427905536)
-        self.assertRaises(
-            RuntimeError, physical_free_darwin, lambda: "Invalid header")
+        self.assertRaises(RuntimeError, physical_free_darwin, lambda: "Invalid header")
 
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()
-        self.assert_(isinstance(ret, (int, long)),
-                     'physical_free() returns variable type %s' % type(ret))
-        self.assert_(physical_free() > 0)
+        self.assertIsInteger(ret, 'physical_free() returns variable type %s' % type(ret))
+        self.assertGreater(physical_free(), 0)
         report_free()
 
     @unittest.skipUnless(running_linux, 'not running linux')
@@ -114,8 +109,8 @@ Swapouts:                              20258188.
             print('no active swap device detected')
             return
         size = get_swap_size_linux(swapdev)
-        self.assert_(isinstance(size, (int, long)))
-        self.assert_(size > 1024 ** 2)
+        self.assertIsInteger(size)
+        self.assertGreater(size, 1024 ** 2)
         logger.debug("size of swap '%s': %d B (%d MB)", swapdev, size, size / (1024 ** 2))
         proc_swaps = open('/proc/swaps').read()
         size2 = get_swap_size_linux(swapdev, proc_swaps)
@@ -142,13 +137,5 @@ Swapouts:                              20258188.
         """Test for disabling and enabling swap"""
         if not General.sudo_mode() or os.getuid() > 0:
             self.skipTest('not enough privileges')
-        devices = disable_swap_linux()
+        disable_swap_linux()
         enable_swap_linux()
-
-
-def suite():
-    return unittest.makeSuite(MemoryTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

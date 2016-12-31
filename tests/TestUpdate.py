@@ -18,25 +18,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test case for module Update
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
-import os.path
-import sys
-import unittest
-
-sys.path.append('.')
 from bleachbit import Common
 from bleachbit.Common import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
 import bleachbit.Update
 
-class UpdateTestCase(unittest.TestCase):
+from tests import common
+
+import os
+import os.path
+import unittest
+
+
+class UpdateTestCase(unittest.TestCase, common.TypeAsserts):
 
     """Test case for module Update"""
 
@@ -131,24 +131,24 @@ class UpdateTestCase(unittest.TestCase):
         succeeded['r'] = False
         self.assertRaises(RuntimeError, update_winapp2, url, "notahash",
                           append_text, on_success)
-        self.assert_(not succeeded['r'])
+        self.assertFalse(succeeded['r'])
 
         # blank hash, download file
         succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
-        self.assert_(succeeded['r'])
+        self.assertTrue(succeeded['r'])
 
         # blank hash, do not download again
         update_winapp2(url, None, append_text, on_success)
         succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
-        self.assert_(not succeeded['r'])
+        self.assertFalse(succeeded['r'])
 
     def test_user_agent(self):
         """Unit test for method user_agent()"""
         agent = user_agent()
         logger.debug("user agent = '%s'", agent)
-        self.assert_(isinstance(agent, str))
+        self.assertIsString(agent)
 
     def test_environment(self):
         """Check the sanity of the environment"""

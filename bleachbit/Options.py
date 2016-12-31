@@ -22,15 +22,16 @@
 Store and retrieve user preferences
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import Common, General
 
 import logging
 import os
 import re
-import sys
 import traceback
+import sys
 
-import Common
-import General
 
 logger = logging.getLogger(__name__)
 
@@ -56,16 +57,17 @@ def path_to_option(pathname):
         pathname = pathname[0] + pathname[2:]
     return pathname
 
-class Options:
 
+class Options:
     """Store and retrieve user preferences"""
 
     def __init__(self):
         self.purged = False
         self.config = Common.SafeConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
-        self.config._boolean_states['t'] = True
-        self.config._boolean_states['f'] = False
+        if sys.version_info < (3,0):
+            self.config._boolean_states['t'] = True
+            self.config._boolean_states['f'] = False
         self.restore()
 
     def __flush(self):
@@ -75,7 +77,7 @@ class Options:
         if not os.path.exists(Common.options_dir):
             General.makedirs(Common.options_dir)
         mkfile = not os.path.exists(Common.options_file)
-        _file = open(Common.options_file, 'wb')
+        _file = open(Common.options_file, 'w')
         try:
             self.config.write(_file)
         except IOError as e:
@@ -124,7 +126,7 @@ class Options:
             option = option[0] + option[2:]
         if option in boolean_keys:
             return self.config.getboolean(section, option)
-        return self.config.get(section, option.encode('utf-8'))
+        return self.config.get(section, option)
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -202,7 +204,7 @@ class Options:
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
         if not self.config.has_section("list/shred_drives"):
-            from FileUtilities import guess_overwrite_paths
+            from bleachbit.FileUtilities import guess_overwrite_paths
             try:
                 self.set_list('shred_drives', guess_overwrite_paths())
             except:
@@ -241,7 +243,7 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key.encode('utf-8'), str(value))
+        self.config.set(section, key, str(value))
         if commit:
             self.__flush()
 

@@ -113,8 +113,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
-        dirname = tempfile.mkdtemp(
-            prefix='bleachbit-test-create-simple-cleaner')
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-create-simple-cleaner')
         filename1 = os.path.join(dirname, '1')
         common.touch_file(filename1)
         # test Cyrillic for https://bugs.launchpad.net/bleachbit/+bug/1541808

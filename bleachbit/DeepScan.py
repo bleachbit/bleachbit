@@ -24,11 +24,14 @@ Scan directory tree for files to delete
 """
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from bleachbit import Common
 
 import logging
 import os
 import platform
 import re
+import six
+import sys
 import unicodedata
 
 
@@ -40,7 +43,7 @@ def to_unicode(s):
     Converts non-unicode UTF-8 string to unicode obj. Does nothing if
     string is already unicode.
     """
-    return s if isinstance(s, unicode) else unicode(s, UTF8)
+    return s if isinstance(s, six.text_type) else s.decode(UTF8)
 
 
 def normalized_walk(top, **kwargs):
@@ -70,6 +73,7 @@ class DeepScan:
 
     def add_search(self, dirname, regex):
         """Starting in dirname, look for files matching regex"""
+        dirname = Common.ensure_unicode(dirname)
         if dirname not in self.searches:
             self.searches[dirname] = [regex]
         else:

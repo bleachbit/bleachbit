@@ -23,8 +23,9 @@
 Show diagnostic information
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import Common
+from bleachbit import Common
 import locale
 import os
 import platform
@@ -67,14 +68,19 @@ def diagnostic_info():
             s += "\nplatform.dist() = %s" % str(platform.dist())
             
     # Mac Version Name - Dictonary "masosx_dict"
-    macosx_dict = {'5':'Lepoard','6':'Snow Lepoard','7':'Lion','8':'Mountain Lion','9':'Mavericks','10':'Yosemite','11':'El Capitan','12':'Sierra'}
+    macosx_versions = ['', '', '', '', '', 'Leopard', 'Snow Leopard', 'Lion', 'Mountain Lion',
+                       'Mavericks', 'Yosemite', 'El Capitan', 'Sierra']
 
     if sys.platform.startswith('darwin'):
         if hasattr(platform, 'mac_ver'):
-            for key in macosx_dict:
-                if (platform.mac_ver()[0].split('.')[1] == key):
-                    s += "\nplatform.mac_ver() = %s" % str(
-                        platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
+            s += '\nplatform.mac_ver() = ' + platform.mac_ver()[0]
+            try:
+                minor_version = int(platform.mac_ver()[0].split('.')[1])
+                s += ' (' + macosx_versions[minor_version] + ')'
+            except ValueError:
+                s += ' (unknown version)'
+            except IndexError:
+                s += '(newer than ' + macosx_versions[-1] + ')'
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
 

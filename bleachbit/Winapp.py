@@ -23,18 +23,17 @@
 Import Winapp2.ini files
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import Cleaner
-import Common
-import Windows
+from bleachbit import Cleaner, Common, Windows
+from bleachbit.Action import Delete, Winreg
+from bleachbit.Common import _, FSE, expandvars
 
 import logging
 import os
 import glob
 import re
 
-from Action import Delete, Winreg
-from Common import _, FSE, expandvars
 from xml.dom.minidom import parseString
 
 logger = logging.getLogger(__name__)

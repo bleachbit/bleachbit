@@ -23,7 +23,7 @@
 Command line interface
 """
 
-from __future__ import absolute_import, division, print_function
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit.Common import _, APP_VERSION, encoding

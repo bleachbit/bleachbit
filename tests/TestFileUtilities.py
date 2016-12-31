@@ -81,22 +81,18 @@ def test_json_helper(self, execute):
         return json.load(js_fd)
 
     # create test file
-    (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-json')
-    os.write(fd, b'{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
-    os.close(fd)
+    filename = common.touch_temp_file(b'{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }',
+                                      prefix='bleachbit-test-json')
     self.assertExists(filename)
-    self.assertEqual(load_js(filename), {
-                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
+    self.assertEqual(load_js(filename), {'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # invalid key
     execute(filename, 'doesnotexist')
-    self.assertEqual(load_js(filename), {
-                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
+    self.assertEqual(load_js(filename), {'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # invalid key
     execute(filename, 'deleteme/doesnotexist')
-    self.assertEqual(load_js(filename), {
-                     'deleteme': 1, 'spareme': {'deletemetoo': 1}})
+    self.assertEqual(load_js(filename), {'deleteme': 1, 'spareme': {'deletemetoo': 1}})
 
     # valid key
     execute(filename, 'deleteme')
@@ -115,7 +111,7 @@ def test_json_helper(self, execute):
     self.assertNotExists(filename)
 
 
-class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
+class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
 
     """Test case for module FileUtilities"""
 
@@ -164,9 +160,8 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
             error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assert_(abs(error) < 0.01,
-                         "%d (%s) is %.2f%% different than %d" %
-                         (bytes1, human, error * 100, bytes2))
+            self.assertLess(abs(error), 0.01, "%d (%s) is %.2f%% different than %d" %
+                            (bytes1, human, error * 100, bytes2))
 
         # test localization
         if hasattr(locale, 'format_string'):
@@ -208,7 +203,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         for filename in children_in_directory(dirname, True):
             self.assertEqual(filename, subdirname)
         for filename in children_in_directory(dirname, False):
-            self.assert_(False)
+            raise AssertionError('Found a file that shouldn\'t have been found: ' + filename)
         os.rmdir(subdirname)
 
         os.rmdir(dirname)
@@ -247,9 +242,9 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         """Called by test_delete() with shred = False and = True"""
 
         # test deleting with various kinds of filenames
-        hebrew = u"עִבְרִית"
-        katanana = u"アメリカ"
-        umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
+        hebrew = "עִבְרִית"
+        katanana = "アメリカ"
+        umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
         tests = [('.prefix', 'suffix'),  # simple
                  ("x".zfill(100), ".y".zfill(50)),  # long
@@ -257,9 +252,9 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
                  ("'", "'"),  # quotation mark
                  ("~`!@#$%^&()-_+=", "x"),  # non-alphanumeric characters
                  ("[]{};'.,", "x"),  # non-alphanumeric characters
-                 (u'abcd', u'efgh'),  # simple Unicode
-                 (u'J\xf8rgen', 'Scandinavian'),
-                 (u'\u2014', 'em-dash'),  # LP#1454030
+                 ('abcd', u'efgh'),  # simple Unicode
+                 ('J\xf8rgen', 'Scandinavian'),
+                 ('\u2014', 'em-dash'),  # LP#1454030
                  (hebrew, hebrew),
                  (katanana, katanana),
                  (umlauts, umlauts),
@@ -274,8 +269,8 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             tests.append(('.', '.'))
         for test in tests:
             # delete a file
-            (fd, filename) = tempfile.mkstemp(
-                prefix='bleachbit-test-delete-file' + test[0], suffix=test[1])
+            print(test[0],test[1])
+            (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-delete-file' + test[0], suffix=test[1])
             self.assertExists(filename)
             for x in range(0, 4096):
                 bytes_written = os.write(fd, b"top secret")
@@ -425,8 +420,8 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         home = expanduser('~')
         result = free_space(home)
         self.assertNotEqual(result, None)
-        self.assert_(result > -1)
-        self.assert_(isinstance(result, (int, long)))
+        self.assertGreater(result, -1)
+        self.assertIsInteger(result)
 
         # compare to WMIC
         if 'nt' != os.name:
@@ -445,7 +440,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             drive, bytes_free = re.split('\s+', line)
             print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
-            free = free_space(six.u(drive))
+            free = free_space(drive)
             self.assertEqual(bytes_free, free)
 
     def test_getsize(self):
@@ -453,6 +448,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-getsize')
 
         def test_getsize_helper(fname):
+            print(fname)
             filename = os.path.join(dirname, fname)
             write_file(filename, b"abcdefghij" * 12345)
 
@@ -508,8 +504,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         if os.path.lexists(linkname):
             delete(linkname)
         os.symlink(filename, linkname)
-        self.assert_(getsize(linkname) < 8192, "Symlink size is %d" %
-                     getsize(filename))
+        self.assertLess(getsize(linkname), 8192, "Symlink size is %d" % getsize(filename))
         delete(filename)
 
         if 'darwin' == sys.platform:
@@ -528,7 +523,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         path = '/bin'
         if 'nt' == os.name:
             path = 'c:\\windows\\system32'
-        self.assert_(getsizedir(path) > 0)
+        self.assertGreater(getsizedir(path), 0)
 
     def test_globex(self):
         """Unit test for method globex()"""
@@ -745,7 +740,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
         # test
         newname = wipe_name(filename)
-        self.assert_(len(filename) > len(newname))
+        self.assertGreater(len(filename), len(newname))
         self.assertNotExists(filename)
         self.assertExists(newname)
 
@@ -788,7 +783,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
         # wipe a directory name
         dir1new = wipe_name(dir1)
-        self.assert_(len(dir1) > len(dir1new))
+        self.assertGreater(len(dir1), len(dir1new))
         self.assertNotExists(dir1)
         self.assertExists(dir1new)
         os.rmdir(dir1new)
@@ -827,7 +822,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         conn.executemany(
             'insert into numbers (number) values ( ? ) ', number_generator())
         conn.commit()
-        self.assert_(empty_size < getsize(path))
+        self.assertLess(empty_size, getsize(path))
         conn.execute('delete from numbers')
         conn.commit()
         conn.close()

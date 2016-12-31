@@ -23,10 +23,10 @@ Common code for unit tests
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import tempfile
-
 from bleachbit.FileUtilities import extended_path
+from bleachbit.Common import ensure_unicode
 
+import tempfile
 import os
 import six
 
@@ -36,7 +36,8 @@ class TypeAsserts():
         self.assertIsInstance(obj, six.integer_types, msg)
 
     def assertIsString(self, obj, msg=''):
-        self.assertIsInstance(obj, six.text_type, msg)
+        if not isinstance(obj, six.text_type):
+            raise AssertionError('Expected: string, found: %s (%s)' % (type(obj), obj))
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, six.binary_type, msg)
@@ -110,8 +111,7 @@ def validate_result(self, result, really_delete=False):
         # the process action, for example, does not have a filename
         return
     from bleachbit.Common import encoding
-    self.assertIsInstance(filename, (six.text_type, type(None)),
-                          "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
+    self.assertIsInstance(filename, (six.text_type, type(None)))
     if isinstance(filename, six.text_type) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
@@ -121,6 +121,7 @@ def validate_result(self, result, really_delete=False):
 
 def write_file(filename, contents):
     """Write contents to file"""
+    ensure_unicode(filename)
     with open(extended_path(filename), 'w') as f:
         f.write(contents)
 

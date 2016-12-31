@@ -22,16 +22,20 @@
 Code that is commonly shared throughout BleachBit
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import gettext
 import locale
 import logging
 import os
 import re
+import six
 import sys
 
 #
 # Config Parser got renamed in Python 3
 #
+
 if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 else:
@@ -70,10 +74,13 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
+    assert (isinstance(sys.executable, six.text_type))
+    bleachbit_exe_path = os.path.dirname(sys.executable)
+    # bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
     # __file__ is absolute path to bleachbit/Common.py
-    bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
+    assert(isinstance(__file__, six.text_type))
+    bleachbit_exe_path = os.path.dirname(__file__)
 
 # license
 license_filename = None
@@ -93,6 +100,7 @@ for lf in license_filenames:
         license_filename = lf
         break
 
+
 # os.path.expandvars does not work well with non-ascii Windows paths.
 # This is a unicode-compatible reimplementation of that function.
 def expandvars(var):
@@ -101,10 +109,7 @@ def expandvars(var):
     Return the argument with environment variables expanded. Substrings of the
     form $name or ${name} or %name% are replaced by the value of environment
     variable name."""
-    if isinstance(var, str):
-        final = var.decode('utf-8')
-    else:
-        final = var
+    final = ensure_unicode(var)
 
     if 'posix' == os.name:
         final = os.path.expandvars(final)
@@ -121,6 +126,7 @@ def expandvars(var):
         final = _winreg.ExpandEnvironmentStrings(final)
     return final
 
+
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
 # This is a unicode-compatible reimplementation of that function.
 def expanduser(path):
@@ -129,7 +135,7 @@ def expanduser(path):
     Return the argument with an initial component of "~" replaced by
     that user's home directory.
     """
-    if isinstance(path, str):
+    if isinstance(path, six.binary_type):
         final = path.decode('utf-8')
     else:
         final = path
@@ -276,6 +282,18 @@ def decode_str(s):
         return s.decode(encoding)
     except:
         return s.decode('ascii', 'replace')
+
+
+def ensure_unicode(s, enc='utf8'):
+    """Transforms the supplied argument to unicode if necessary"""
+    if isinstance(s, six.binary_type):
+        logger.debug('s should have already been unicode.')
+        return s.decode(enc)
+    elif isinstance(s, six.text_type):
+        return s
+    else:
+        raise RuntimeError('no string/bytes argument supplied')
+
 
 #
 # pgettext

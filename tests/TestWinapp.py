@@ -17,26 +17,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 Test cases for module Winapp
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from tests import common
+from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
+from bleachbit.Windows import detect_registry_key, parse_windows_build
+from bleachbit.Common import logger
 
 import os
 import shutil
 import sys
 import tempfile
 import unittest
-
-sys.path.append('.')
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit.Common import logger
-
-import common
 
 
 def CreateSubKey(sub_key):
@@ -186,10 +182,10 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
         ini = open(self.ini_fn, 'w')
-        ini.write('[someapp]\n')
-        ini.write('LangSecRef=3021\n')
+        ini.write(b'[someapp]\n')
+        ini.write(b'LangSecRef=3021\n')
         ini.write(body)
-        ini.write('\n')
+        ini.write(b'\n')
         ini.close()
         self.assertExists(self.ini_fn)
         if do_next:

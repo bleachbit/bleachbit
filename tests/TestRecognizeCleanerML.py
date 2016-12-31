@@ -22,12 +22,11 @@
 Test case for RecognizeCleanerML
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import sys
-import unittest
-
-sys.path.append('.')
 from bleachbit.RecognizeCleanerML import hashdigest
+
+import unittest
 
 
 class RecognizeCleanerMLTestCase(unittest.TestCase):
@@ -39,11 +38,3 @@ class RecognizeCleanerMLTestCase(unittest.TestCase):
         digest = hashdigest('bleachbit')
         self.assertEqual(len(digest), 128)
         self.assertEqual(digest[1:10], '6382c203e')
-
-
-def suite():
-    return unittest.makeSuite(RecognizeCleanerMLTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

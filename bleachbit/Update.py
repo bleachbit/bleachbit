@@ -22,6 +22,10 @@
 Check for updates via the Internet
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit import Common
+from bleachbit.Common import _
 
 import hashlib
 import logging
@@ -30,16 +34,13 @@ import os.path
 import platform
 import socket
 import sys
+import xml.dom.minidom
+
 if sys.version >= (3, 0):
     from urllib.request import build_opener
     from urllib.error import URLError
 else:
     from urllib2 import build_opener, URLError
-
-import xml.dom.minidom
-
-import Common
-from Common import _
 
 logger = logging.getLogger(__name__)
 

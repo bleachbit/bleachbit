@@ -22,19 +22,19 @@
 Check local CleanerML files as a security measure
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from bleachbit.Common import _, _p
+from bleachbit import Common
+from bleachbit.CleanerML import list_cleanerml_files
+from bleachbit.Options import options
 
 import gobject
+import hashlib
 import logging
 import os
 import random
 import sys
-
-import hashlib
-
-from Common import _, _p
-import Common
-from CleanerML import list_cleanerml_files
-from Options import options
 
 logger = logging.getLogger(__name__)
 
