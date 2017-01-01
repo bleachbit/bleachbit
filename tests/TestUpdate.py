@@ -94,10 +94,21 @@ class UpdateTestCase(unittest.TestCase):
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
+        preserve_url = Common.update_check_url
         Common.update_check_url = "http://localhost/doesnotexist"
         self.assertEqual(
             check_updates(True, False, None, None),
             ())
+        Common.update_check_url = preserve_url
+
+    def test_update_url(self):
+        """Check connection to the update URL"""
+        from bleachbit.Update import build_opener
+        opener = build_opener()
+        handle = opener.open(Common.update_check_url)
+        doc = handle.read()
+        import xml
+        dom = xml.dom.minidom.parseString(doc)
 
     def test_update_winapp2(self):
         from bleachbit.Common import personal_cleaners_dir
