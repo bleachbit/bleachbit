@@ -42,6 +42,7 @@ cache:
 test_script:
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem'
+  - '%PYTHON_HOME%/Scripts/pip.exe install mock'
   - '%PYTHON_HOME%/python.exe tests/TestAll.py'
 
 artifacts:
