@@ -35,6 +35,6 @@ class RecognizeCleanerMLTestCase(unittest.TestCase):
 
     def test_hash(self):
         """Unit test for hash()"""
-        digest = hashdigest('bleachbit')
+        digest = hashdigest(b'bleachbit')
         self.assertEqual(len(digest), 128)
         self.assertEqual(digest[1:10], '6382c203e')
