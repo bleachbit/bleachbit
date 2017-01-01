@@ -65,9 +65,11 @@ class Options:
         self.purged = False
         self.config = Common.SafeConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
+        boolstates = {'t': True, 'T': True, 'F': False, 'f': False}
         if sys.version_info < (3,0):
-            self.config._boolean_states['t'] = True
-            self.config._boolean_states['f'] = False
+            self.config._boolean_states.update(boolstates)
+        else:
+            self.config.BOOLEAN_STATES.update(boolstates)
         self.restore()
 
     def __flush(self):
@@ -77,9 +79,9 @@ class Options:
         if not os.path.exists(Common.options_dir):
             General.makedirs(Common.options_dir)
         mkfile = not os.path.exists(Common.options_file)
-        _file = open(Common.options_file, 'w')
         try:
-            self.config.write(_file)
+            with open(Common.options_file, 'w') as _file:
+                self.config.write(_file)
         except IOError as e:
             print(e)
             from errno import ENOSPC
