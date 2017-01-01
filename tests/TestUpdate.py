@@ -133,6 +133,14 @@ class UpdateTestCase(unittest.TestCase):
         logger.debug("user agent = '%s'", agent)
         self.assert_(isinstance(agent, str))
 
+    def test_environment(self):
+        """"Check the sanity of the environment"""
+        import httplib
+        self.assertTrue(hasattr(httplib, 'HTTPS'))
+        import socket
+        self.assertTrue(hasattr(socket, 'ssl'))
+        import _ssl
+
 
 def suite():
     return unittest.makeSuite(UpdateTestCase)
