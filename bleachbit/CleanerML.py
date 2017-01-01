@@ -247,7 +247,7 @@ def create_pot():
             logger.exception('error reading: %s', pathname)
             continue
         for (string, translators) in strings:
-            f.write(pot_fragment(string, pathname, translators).encode('utf8'))
+            f.write(pot_fragment(string, pathname, translators))
 
     f.close()
 

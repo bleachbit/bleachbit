@@ -138,7 +138,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert(isinstance(bytes_i, (int, long)))
+    assert(isinstance(bytes_i, six.integer_types))
 
     if 0 == bytes_i:
         return b'0'

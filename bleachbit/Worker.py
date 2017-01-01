@@ -143,7 +143,7 @@ class Worker:
         total_size = 0
         for option_id in operation_options:
             self.size = 0
-            assert(isinstance(option_id, (str, unicode)))
+            assert(isinstance(option_id, six.text_type))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd):

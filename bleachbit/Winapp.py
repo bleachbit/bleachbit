@@ -33,6 +33,7 @@ import logging
 import os
 import glob
 import re
+import six
 
 from xml.dom.minidom import parseString
 
@@ -82,7 +83,7 @@ def detectos(required_ver, mock=False):
     current operating system, or the mock version, if given."""
     # Do not compare as string because Windows 10 (build 10.0) comes after
     # Windows 8.1 (build 6.3).
-    assert(isinstance(required_ver, (str, unicode)))
+    assert(isinstance(required_ver, six.text_type))
     current_os = (mock if mock else Windows.parse_windows_build())
     required_ver = required_ver.strip()
     if required_ver.startswith('|'):

@@ -144,7 +144,7 @@ def run_external(args, stdout=False, env=None, clean_env=True):
         env = dict((key, value)
                    for key, value in os.environ.iteritems() if key in keep_env)
         env['LC_ALL'] = 'C'
-    p = subprocess.Popen(args, stdout=stdout,
+    p = subprocess.Popen(args, stdout=stdout, universal_newlines=True,
                          stderr=subprocess.PIPE, env=env, **kwargs)
     try:
         out = p.communicate()

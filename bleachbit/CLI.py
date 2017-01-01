@@ -87,7 +87,7 @@ def preview_or_clean(operations, really_clean):
     """Preview deletes and other changes"""
     cb = CliCallback()
     worker = Worker.Worker(cb, really_clean, operations).run()
-    while worker.next():
+    while next(worker):
         pass
 
 
