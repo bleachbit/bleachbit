@@ -579,7 +579,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
                                      universal_newlines=True, env={'LC_ALL': 'C'})
 
     freed_space = 0
-    for line in output.split(b'\n'):
+    for line in output.split('\n'):
         m = freed_space_regex.match(line)
         if m is not None:
             freed_space += FileUtilities.human_to_bytes(m.group(1))

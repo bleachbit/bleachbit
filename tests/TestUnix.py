@@ -62,10 +62,9 @@ class UnixTestCase(unittest.TestCase, common.TypeAsserts, common.AssertFile):
                      '/usr/share/mimelnk',
                      '/usr/share/applnk-redhat/',
                      '/usr/local/share/applications/']
-        for dirname in menu_dirs:
-            for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False)
-                             if fn.endswith('.desktop')]:
-                self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
+        for filename in [fn for fn in FileUtilities.children_in_directories(menu_dirs, False)
+                         if fn.endswith('.desktop')]:
+            self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
     def test_is_running_darwin(self):
         def run_ps():

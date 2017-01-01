@@ -165,7 +165,7 @@ INSERT INTO "server_addresses" VALUES('a','','123 anywhere','ST','City','',NULL,
 """
 
 # databases/Databases.db from Chromium 12
-chrome_databases_db = b"""
+chrome_databases_db = """
 CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
 INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
 INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
@@ -318,7 +318,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
-        sql = b"""
+        sql = """
 CREATE TABLE moz_annos (id INTEGER PRIMARY KEY,place_id INTEGER NOT NULL,anno_attribute_id INTEGER,mime_type VARCHAR(32) DEFAULT NULL,content LONGVARCHAR, flags INTEGER DEFAULT 0,expiration INTEGER DEFAULT 0,type INTEGER DEFAULT 0,dateAdded INTEGER DEFAULT 0,lastModified INTEGER DEFAULT 0);
 CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY,type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER);
 CREATE TABLE moz_favicons (id INTEGER PRIMARY KEY, url LONGVARCHAR UNIQUE, data BLOB, mime_type VARCHAR(32), expiration LONG);
@@ -344,9 +344,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
-        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-chrome')
-        os.write(fd, chrome_bookmarks)
-        os.close(fd)
+        path = common.touch_temp_file(chrome_bookmarks.encode('utf8'), prefix='bleachbit-test-chrome')
 
         self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)

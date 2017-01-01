@@ -37,8 +37,12 @@ import sys
 #
 if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
+
+    filter = filter
 else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
+    import itertools
+    filter = itertools.ifilter
 
 
 APP_VERSION = "1.15"

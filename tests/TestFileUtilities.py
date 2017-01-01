@@ -77,8 +77,8 @@ def test_json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
-        js_fd = open(js_fn, 'r')
-        return json.load(js_fd)
+        with open(js_fn, 'r') as js_fd:
+            return json.load(js_fd)
 
     # create test file
     filename = common.touch_temp_file(b'{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }',

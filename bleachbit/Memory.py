@@ -102,7 +102,7 @@ def enable_swap_linux():
     p.wait()
     outputs = p.communicate()
     if 0 != p.returncode:
-        raise RuntimeError(outputs[1].replace("\n", ""))
+        raise RuntimeError(outputs[1].replace(b"\n", b""))
 
 
 def make_self_oom_target_linux():
@@ -189,7 +189,7 @@ def physical_free_darwin(run_vmstat=None):
     if run_vmstat is None:
         def run_vmstat():
             return subprocess.check_output(["vm_stat"])
-    output = iter(run_vmstat().split("\n"))
+    output = iter(run_vmstat().split(b"\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
     return vm_stat["Pages free"] * page_size

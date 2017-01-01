@@ -36,7 +36,7 @@ import socket
 import sys
 import xml.dom.minidom
 
-if sys.version >= (3, 0):
+if sys.version_info >= (3, 0):
     from urllib.request import build_opener
     from urllib.error import URLError
 else:
