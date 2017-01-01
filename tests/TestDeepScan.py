@@ -108,7 +108,7 @@ class DeepScanTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts)
 
         # run deep scan
         astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
-        import TestCleaner
+        from tests import TestCleaner
         cleaner = TestCleaner.action_to_cleaner(astr)
         from bleachbit.Worker import backends, Worker
         backends['test'] = cleaner

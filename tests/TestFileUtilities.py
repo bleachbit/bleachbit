@@ -144,13 +144,13 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAss
         options.set('units_iec', True)
         for test in tests:
             iec = bytes_to_human(test[0])
-            self.assertEqual(test[2], iec,
+            self.assertEqual(test[2].encode(), iec,
                              'bytes_to_human(%d) IEC = %s but expected %s' % (test[0], iec, test[2]))
 
         options.set('units_iec', False)
         for test in tests:
             si = bytes_to_human(test[0])
-            self.assertEqual(test[1], si,
+            self.assertEqual(test[1].encode(), si,
                              'bytes_to_human(%d) SI = %s but expected %s' % (test[0], si, test[1]))
 
         # test roundtrip conversion for random values
@@ -170,7 +170,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAss
             except:
                 logger.warning('exception when setlocale to de_DE.utf8')
             else:
-                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+                self.assertEqual(b"1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
         # clean up
         if 'posix' == os.name:
@@ -413,7 +413,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAss
     def test_expandvars(self):
         """Unit test for expandvars()."""
         expanded = expandvars('$HOME')
-        self.assertTrue(isinstance(expanded, unicode))
+        self.assertIsString(expanded)
 
     def test_free_space(self):
         """Unit test for free_space()"""
@@ -539,22 +539,22 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAss
         """Unit test for human_to_bytes()"""
         self.assertRaises(ValueError, human_to_bytes, '', hformat='invalid')
 
-        invalid = ['Bazillion kB',
-                   '120XB',
-                   '.12MB']
+        invalid = [b'Bazillion kB',
+                   b'120XB',
+                   b'.12MB']
         for test in invalid:
             self.assertRaises(ValueError, human_to_bytes, test)
 
-        valid = {'1kB': 1000,
-                 '1.1MB': 1100000,
-                 '12B': 12,
-                 '1.0M': 1000*1000,
-                 '1TB': 1000**4,
-                 '1000': 1000}
+        valid = {b'1kB': 1000,
+                 b'1.1MB': 1100000,
+                 b'12B': 12,
+                 b'1.0M': 1000*1000,
+                 b'1TB': 1000**4,
+                 b'1000': 1000}
         for test, result in valid.items():
             self.assertEqual(human_to_bytes(test), result)
 
-        self.assertEqual(human_to_bytes('1 MB', 'du'), 1024*1024)
+        self.assertEqual(human_to_bytes(b'1 MB', 'du'), 1024*1024)
 
     def test_listdir(self):
         """Unit test for listdir()"""
@@ -725,9 +725,9 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile, common.TypeAss
         f = open(filename, 'rb')
         while True:
             byte = f.read(1)
-            if "" == byte:
+            if b"" == byte:
                 break
-            self.assertEqual(byte, chr(0))
+            self.assertEqual(byte, bytearray(1))
         f.close()
 
         # clean up

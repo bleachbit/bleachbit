@@ -124,7 +124,6 @@ def __random_string(length):
 
 
 def bytes_to_human(bytes_i):
-    # type: (int) -> six.binary_type
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
 
     if bytes_i < 0:
@@ -132,10 +131,10 @@ def bytes_to_human(bytes_i):
 
     from bleachbit.Options import options
     if options.get('units_iec'):
-        prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi']
+        prefixes = [b'', b'Ki', b'Mi', b'Gi', b'Ti', b'Pi']
         base = 1024.0
     else:
-        prefixes = ['', 'k', 'M', 'G', 'T', 'P']
+        prefixes = [b'', b'k', b'M', b'G', b'T', b'P']
         base = 1000.0
 
     assert(isinstance(bytes_i, six.integer_types))
@@ -154,7 +153,7 @@ def bytes_to_human(bytes_i):
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
             suf = prefixes[exponent]
-            return locale.str(abbrev) + suf + 'B'
+            return locale.str(abbrev).encode() + suf + b'B'
         else:
             bytes_i /= base
     return b'A lot.'
@@ -490,18 +489,18 @@ def human_to_bytes(human, hformat='si'):
 
     if 'si' == hformat:
         base = 1000
-        suffixes = 'kMGTE'
+        suffixes = b'kMGTE'
     elif 'du' == hformat:
         base = 1024
-        suffixes = 'KMGTE'
+        suffixes = b'KMGTE'
     else:
         raise ValueError("Invalid format: '%s'" % hformat)
-    matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
+    matches = re.match(br'^(\d+(?:\.\d+)?) ?([' + suffixes + b']?)B?$', human)
     if matches is None:
         raise ValueError("Invalid input for '%s' (hformat='%s')" % (human, hformat))
     (amount, suffix) = matches.groups()
 
-    if '' == suffix:
+    if b'' == suffix:
         exponent = 0
     else:
         exponent = suffixes.find(suffix) + 1

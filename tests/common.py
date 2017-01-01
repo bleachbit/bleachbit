@@ -122,7 +122,7 @@ def validate_result(self, result, really_delete=False):
 def write_file(filename, contents):
     """Write contents to file"""
     ensure_unicode(filename)
-    with open(extended_path(filename), 'w') as f:
+    with open(extended_path(filename), 'wb') as f:
         f.write(contents)
 
 
