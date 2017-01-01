@@ -83,7 +83,12 @@
     <action command="process" cmd="taskkill.exe /f /IM explorer.exe"/>
     <action command="delete" search="glob" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\thumbcache*.db"/>
     <!-- On 64-bit Windows, it is important to start the 64-bit Windows Explorer,
-         so use the full path. Also, do not wait for the process to terminate. -->
-    <action command="process" wait="false" cmd="%WINDIR%\explorer.exe"/>
+         so use the full path. Also, do not wait for the process to terminate.
+
+         The redundant .exe is intentional to launch explorer.exe in disabled UAC
+         virtualization mode rather than elevated mode because normally it
+         inherits the mode from bleachbit.exe.
+     -->
+    <action command="process" wait="false" cmd="%WINDIR%\explorer.exe %WINDIR%\explorer.exe"/>
   </option>
 </cleaner>
