@@ -151,7 +151,7 @@ class UpdateTestCase(unittest.TestCase):
         self.assert_(isinstance(agent, str))
 
     def test_environment(self):
-        """"Check the sanity of the environment"""
+        """Check the sanity of the environment"""
         import httplib
         self.assertTrue(hasattr(httplib, 'HTTPS'))
         import socket
