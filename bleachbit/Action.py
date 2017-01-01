@@ -25,7 +25,7 @@ Actions that perform cleaning
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from bleachbit import Command, FileUtilities, General, Special
+from bleachbit import Command, Common, FileUtilities, General, Special
 from bleachbit.Common import _, FSE, expanduser, expandvars
 
 import glob
@@ -148,7 +148,7 @@ class FileActionProvider(ActionProvider):
         return True
 
     def get_paths(self):
-        for f in filter(self.path_filter, self._get_paths()):
+        for f in Common.filter(self.path_filter, self._get_paths()):
             yield f
 
     def _get_paths(self):
