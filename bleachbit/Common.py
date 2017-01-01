@@ -170,7 +170,7 @@ elif 'nt' == os.name:
         options_dir = bleachbit_exe_path
     else:
         # installed mode
-        options_dir = expandvars("${APPDATA}")
+        options_dir = expandvars(r"${APPDATA}\BleachBit")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # personal cleaners
