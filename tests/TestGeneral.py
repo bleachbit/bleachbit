@@ -26,11 +26,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from bleachbit.General import *
 from bleachbit.Common import logger
+from tests import common
 
 import unittest
 
 
-class GeneralTestCase(unittest.TestCase):
+class GeneralTestCase(unittest.TestCase, common.AssertFile):
 
     """Test case for module General"""
 
@@ -50,19 +51,18 @@ class GeneralTestCase(unittest.TestCase):
             self.assertRaises(RuntimeError, getrealuid)
             return
         uid = getrealuid()
-        self.assert_(isinstance(uid, int))
-        self.assert_(0 <= uid <= 65535)
+        self.assertIsInstance(uid, int)
+        self.assertTrue(0 <= uid <= 65535)
         if sudo_mode():
-            self.assert_(uid > 0)
+            self.assertGreater(uid, 0)
         logger.debug("os.getenv('LOGNAME') = %s", os.getenv('LOGNAME'))
         logger.debug("os.getenv('SUDO_UID') = %s", os.getenv('SUDO_UID'))
         logger.debug('os.geteuid() = %d', os.geteuid())
-        logger.debug('os.getuid() = %d', str(os.getuid()))
+        logger.debug('os.getuid() = %d', os.getuid())
         try:
             logger.debug('os.login() = %s', os.getlogin())
         except:
-            traceback.print_exc()
-            logger.debug('os.login() raised exception')
+            logger.exception('os.login() raised exception')
 
     def test_makedirs(self):
         """Unit test for makedirs"""
@@ -71,7 +71,7 @@ class GeneralTestCase(unittest.TestCase):
                 return
             os.rmdir(dir)
             os.rmdir(os.path.dirname(dir))
-            self.assert_(not os.path.lexists(dir))
+            self.assertNotLExists(dir)
 
         if 'nt' == os.name:
             dir = 'c:\\temp\\bleachbit-test-makedirs\\a'
@@ -80,10 +80,10 @@ class GeneralTestCase(unittest.TestCase):
         cleanup(dir)
         # directory does not exist
         makedirs(dir)
-        self.assert_(os.path.lexists(dir))
+        self.assertLExists(dir)
         # directory already exists
         makedirs(dir)
-        self.assert_(os.path.lexists(dir))
+        self.assertLExists(dir)
         # clean up
         cleanup(dir)
 
@@ -154,12 +154,4 @@ class GeneralTestCase(unittest.TestCase):
     @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
-        self.assert_(isinstance(sudo_mode(), bool))
-
-
-def suite():
-    return unittest.makeSuite(GeneralTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertIsInstance(sudo_mode(), bool)
