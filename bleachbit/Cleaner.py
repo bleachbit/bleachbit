@@ -39,6 +39,7 @@ except:
 import logging
 import os.path
 import re
+import six
 import sys
 import warnings
 
@@ -854,9 +855,8 @@ def create_simple_cleaner(paths):
 
         def get_commands(self):
             for path in paths:
-                if not isinstance(path, (str, unicode)):
-                    raise RuntimeError(
-                        'expected path as string but got %s' % str(path))
+                if not isinstance(path, six.text_type):
+                    raise RuntimeError('expected path as unicode string but got %s' % str(path))
                 if not os.path.isabs(path):
                     path = os.path.abspath(path)
                 if os.path.isdir(path):

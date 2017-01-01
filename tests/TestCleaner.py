@@ -86,7 +86,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
             self.actions.append(
                 '<action command="delete" search="walk.all" path="/var/log/"/>')
 
-        self.assert_(len(self.actions) > 0)
+        self.assertGreater(len(self.actions), 0)
 
         for action_str in self.actions:
             cleaner = action_to_cleaner(action_str)
@@ -105,7 +105,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
             print(cmd)
             raise AssertionError('option2 should yield nothing')
         # should fail
-        self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
+        self.assertRaises(RuntimeError, lambda: next(cleaner.get_commands('option3')))
 
     def test_auto_hide(self):
         for key in sorted(backends):
@@ -169,7 +169,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
             ret = []
             register_cleaners()
             for cmd in backends['system'].get_commands(option_id):
-                result = cmd.execute(False).next()
+                result = next(cmd.execute(False))
                 ret.append(result['path'])
             return ret
         trash_paths = get_files('trash')
