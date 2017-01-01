@@ -35,7 +35,6 @@ import sys
 #
 # Config Parser got renamed in Python 3
 #
-
 if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 else:
@@ -66,6 +65,53 @@ logger.addHandler(logger_sh)
 # for packages in repositories).
 online_update_notification_enabled = True
 
+
+#
+# string decoding
+#
+# In Python 2, some strings such as Python exceptions may be localized
+# and byte encoded.  This decodes them into Unicode.
+# See <https://bugs.launchpad.net/bleachbit/+bug/1416640>.
+#
+def decode_str(s):
+    """Decode a string into Unicode using the default encoding"""
+    if isinstance(s, Exception):
+        # for convenience
+        return decode_str(s.message)
+    try:
+        return s.decode(encoding)
+    except:
+        return s.decode('ascii', 'replace')
+
+
+def ensure_unicode(s, enc='utf8'):
+    """Transforms the supplied argument to unicode if necessary"""
+    if isinstance(s, six.binary_type):
+        logger.debug('s should have already been unicode.')
+        return s.decode(enc)
+    elif isinstance(s, six.text_type):
+        return s
+    else:
+        raise RuntimeError('no string/bytes argument supplied')
+
+
+# encoding / decoding paths
+FSE = sys.getfilesystemencoding()
+fserrorhandler = 'strict' if sys.platform == 'windows' else 'surrogateescape'
+
+
+def fsdecode(filename):
+    """Backport of os.fsencode, see https://docs.python.org/3/library/os.html#os.fsencode"""
+    if isinstance(filename, six.text_type):
+        return filename
+    return filename.decode(FSE, fserrorhandler)
+
+
+def fsencode(filename):
+    """Backport of os.fsdecode, see https://docs.python.org/3/library/os.html#os.fsencode"""
+    if isinstance(filename, six.binary_type):
+        return filename
+    return filename.encode(FSE, fserrorhandler)
 #
 # Paths
 #
@@ -74,13 +120,11 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    assert (isinstance(sys.executable, six.text_type))
-    bleachbit_exe_path = os.path.dirname(sys.executable)
+    bleachbit_exe_path = os.path.dirname(fsdecode(sys.executable))
     # bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
     # __file__ is absolute path to bleachbit/Common.py
-    assert(isinstance(__file__, six.text_type))
-    bleachbit_exe_path = os.path.dirname(__file__)
+    bleachbit_exe_path = os.path.dirname(fsdecode(__file__))
 
 # license
 license_filename = None
@@ -231,7 +275,6 @@ if 'posix' == os.name:
 #
 # gettext
 #
-FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:
@@ -264,35 +307,6 @@ except:
         if 1 == n:
             return singular
         return plural
-
-
-#
-# string decoding
-#
-# In Python 2, some strings such as Python exceptions may be localized
-# and byte encoded.  This decodes them into Unicode.
-# See <https://bugs.launchpad.net/bleachbit/+bug/1416640>.
-#
-def decode_str(s):
-    """Decode a string into Unicode using the default encoding"""
-    if isinstance(s, Exception):
-        # for convenience
-        return decode_str(s.message)
-    try:
-        return s.decode(encoding)
-    except:
-        return s.decode('ascii', 'replace')
-
-
-def ensure_unicode(s, enc='utf8'):
-    """Transforms the supplied argument to unicode if necessary"""
-    if isinstance(s, six.binary_type):
-        logger.debug('s should have already been unicode.')
-        return s.decode(enc)
-    elif isinstance(s, six.text_type):
-        return s
-    else:
-        raise RuntimeError('no string/bytes argument supplied')
 
 
 #

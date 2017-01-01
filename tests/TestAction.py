@@ -50,7 +50,7 @@ def _action_str_to_results(action_str):
 
     It lists the files, but it does not really delete them.
     """
-    return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
+    return [six.next(cmd.execute(False)) for cmd in _action_str_to_commands(action_str)]
 
 
 def benchmark_filter(this_filter):
@@ -112,11 +112,11 @@ class ActionTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
-            result = cmd.execute(really_delete=False).next()
+            result = six.next(cmd.execute(really_delete=False))
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            ret = cmd.execute(really_delete=True).next()
+            ret = six.next(cmd.execute(really_delete=True))
             if 'delete' == command:
                 self.assertNotLExists(cmd.path)
             elif 'truncate' == command:
@@ -365,7 +365,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
         action_str = u'<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0
         for cmd in _action_str_to_commands(action_str):
-            result = cmd.execute(False).next()
+            result = six.next(cmd.execute(False))
             common.validate_result(self, result)
             path = result['path']
             self.assert_(not os.path.isdir(path), "%s is a directory" % path)

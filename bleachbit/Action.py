@@ -33,7 +33,6 @@ import logging
 import os
 import re
 import six
-import types
 
 
 if 'posix' == os.name:
@@ -58,10 +57,9 @@ class PluginMount(type):
             cls.plugins.append(cls)
 
 
-class ActionProvider:
-
+# Py3: metaclass=PluginMount
+class ActionProvider(six.with_metaclass(PluginMount)):
     """Abstract base class for performing individual cleaning actions"""
-    __metaclass__ = PluginMount
 
     def __init__(self, action_node):
         """Create ActionProvider from CleanerML <action>"""
@@ -86,7 +84,7 @@ class FileActionProvider(ActionProvider):
 
     def __init__(self, action_element):
         """Initialize file search"""
-        regex_or_none_type = (six.text_type, six.binary_type, types.NoneType)
+        regex_or_none_type = (six.text_type, six.binary_type, type(None))
         self.regex = action_element.getAttribute('regex')
         assert(isinstance(self.regex, regex_or_none_type))
         self.nregex = action_element.getAttribute('nregex')

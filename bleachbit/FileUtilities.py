@@ -26,7 +26,7 @@ File-related utilities
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from bleachbit import Common
-from bleachbit.Common import expanduser
+from bleachbit.Common import expanduser, fsdecode, fsencode
 
 import atexit
 import codecs
@@ -172,16 +172,15 @@ def children_in_directory(top, list_directories=False):
 
     if isinstance(top, tuple):
         logger.warning('Please call children_in_directories instead')
-        for top_ in top:
-            for pathname in children_in_directory(top_, list_directories):
-                yield pathname
+        for filename in children_in_directories(top, list_directories):
+            yield filename
 
-    for (dirpath, dirnames, filenames) in os.walk(top.encode(Common.FSE), topdown=False):
+    for (dirpath, dirnames, filenames) in os.walk(fsencode(top), topdown=False):
         if list_directories:
             for dirname in dirnames:
-                yield os.path.join(dirpath, dirname)
+                yield fsdecode(os.path.join(dirpath, dirname))
         for filename in filenames:
-            yield os.path.join(dirpath, filename)
+            yield fsdecode(os.path.join(dirpath, filename))
 
 
 def clean_ini(path, section, parameter):
@@ -333,7 +332,6 @@ def exe_exists(pathname):
 
 
 def execute_sqlite3(path, cmds):
-    # type: (six.text_type, six.binary_type) -> None
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
     conn = sqlite3.connect(path)
@@ -345,12 +343,11 @@ def execute_sqlite3(path, cmds):
     if options.get('shred'):
         cursor.execute('PRAGMA secure_delete=ON')
 
-    for cmd in cmds.split(b';'):
+    for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
         except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (Common.decode_str(exc), path))
+            raise sqlite3.DatabaseError('%s: %s' % (exc, path))
         except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -616,7 +613,7 @@ def wipe_contents(path, truncate=True):
             f = open(path, 'wb')
         else:
             raise
-    blanks = chr(0) * 4096
+    blanks = bytearray(4096)
     while size > 0:
         f.write(blanks)
         size -= 4096
