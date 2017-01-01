@@ -148,8 +148,7 @@ class FileActionProvider(ActionProvider):
         return True
 
     def get_paths(self):
-        import itertools
-        for f in itertools.ifilter(self.path_filter, self._get_paths()):
+        for f in filter(self.path_filter, self._get_paths()):
             yield f
 
     def _get_paths(self):
