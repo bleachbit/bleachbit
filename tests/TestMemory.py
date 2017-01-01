@@ -41,9 +41,8 @@ class MemoryTestCase(unittest.TestCase, common.TypeAsserts):
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
-        self.assertIsBytes(ret)
         self.assertGreater(len(ret), 10)
-        if not re.search(b'Filename\s+Type\s+Size', ret):
+        if not re.search('Filename\s+Type\s+Size', ret):
             raise RuntimeError("Unexpected first line in swap summary '%s'" % ret)
 
     @unittest.skipUnless(running_linux, 'not running linux')
@@ -104,7 +103,8 @@ Swapouts:                              20258188.
     @unittest.skipUnless(running_linux, 'not running linux')
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        swapdev = open('/proc/swaps').read().split('\n')[1].split(' ')[0]
+        with open('/proc/swaps') as f:
+            swapdev = f.read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
             print('no active swap device detected')
             return
@@ -112,7 +112,8 @@ Swapouts:                              20258188.
         self.assertIsInteger(size)
         self.assertGreater(size, 1024 ** 2)
         logger.debug("size of swap '%s': %d B (%d MB)", swapdev, size, size / (1024 ** 2))
-        proc_swaps = open('/proc/swaps').read()
+        with open('/proc/swaps') as f:
+            proc_swaps = f.read()
         size2 = get_swap_size_linux(swapdev, proc_swaps)
         self.assertEqual(size, size2)
 

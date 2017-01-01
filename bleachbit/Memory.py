@@ -39,25 +39,26 @@ logger = logging.getLogger(__name__)
 
 def count_swap_linux():
     """Count the number of swap devices in use"""
-    f = open("/proc/swaps")
     count = 0
-    for line in f:
-        if line[0] == '/':
-            count += 1
+    with open("/proc/swaps") as f:
+        for line in f:
+            if line[0] == '/':
+                count += 1
     return count
 
 
 def get_proc_swaps():
     """Return the output of 'swapon -s'"""
+    with open("/proc/swaps") as f:
+        return f.read()
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    # fixme: only works in english locales
-    (rc, stdout, _) = General.run_external(['swapon', '-s'])
-    if 0 == rc:
-        return stdout
-    logger.debug('"swapoff -s" failed so falling back to /proc/swaps')
-    return open("/proc/swaps").read()
+    # (rc, stdout, _) = General.run_external(['swapon', '-s'])
+    # if 0 == rc:
+    #     return stdout
+    # logger.debug('"swapoff -s" failed so falling back to /proc/swaps')
+
 
 
 def parse_swapoff(swapoff):
@@ -110,11 +111,13 @@ def make_self_oom_target_linux():
     # In Linux 2.6.36 the system changed from oom_adj to oom_score_adj
     path = '/proc/%d/oom_score_adj' % os.getpid()
     if os.path.exists(path):
-        open(path, 'w').write('1000')
+        with open(path, 'w') as f:
+            f.write('1000')
     else:
         path = '/proc/%d/oomadj' % os.getpid()
         if os.path.exists(path):
-            open(path, 'w').write('15')
+            with open(path, 'w') as f:
+                f.write('15')
     # OOM likes nice processes
     logger.debug('new nice value %d', os.nice(19))
     # OOM prefers non-privileged processes
@@ -188,8 +191,8 @@ def physical_free_darwin(run_vmstat=None):
         return int(m.groups()[0])
     if run_vmstat is None:
         def run_vmstat():
-            return subprocess.check_output(["vm_stat"])
-    output = iter(run_vmstat().split(b"\n"))
+            return subprocess.check_output(["vm_stat"], universal_newlines=True)
+    output = iter(run_vmstat().split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
     return vm_stat["Pages free"] * page_size
@@ -197,18 +200,18 @@ def physical_free_darwin(run_vmstat=None):
 
 def physical_free_linux():
     """Return the physical free memory on Linux"""
-    f = open("/proc/meminfo")
-    free_bytes = 0
-    for line in f:
-        line = line.replace("\n", "")
-        ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
-        if ret is not None:
-            kb = int(ret.group(2))
-            free_bytes += kb * 1024
-    if free_bytes > 0:
-        return free_bytes
-    else:
-        raise Exception("unknown")
+    with open("/proc/meminfo") as f:
+        free_bytes = 0
+        for line in f:
+            line = line.replace("\n", "")
+            ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
+            if ret is not None:
+                kb = int(ret.group(2))
+                free_bytes += kb * 1024
+        if free_bytes > 0:
+            return free_bytes
+        else:
+            raise Exception("unknown")
 
 
 def physical_free_windows():
