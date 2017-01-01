@@ -209,6 +209,7 @@ def clean_ini(path, section, parameter):
             delete(path, True)
         fp = codecs.open(path, 'wb', encoding='utf_8')
         config.write(fp)
+    fp.close()
 
 
 def clean_json(path, target):
@@ -218,7 +219,8 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    js = json.load(open(path, 'r'))
+    with open(path, 'r') as js_fd:
+        js = json.load(js_fd)
 
     # change file
     pos = js
@@ -245,7 +247,8 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        json.dump(js, open(path, 'w'))
+        with open(path, 'w') as js_fd:
+            json.dump(js, js_fd)
 
 
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
