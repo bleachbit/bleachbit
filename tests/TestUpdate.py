@@ -40,8 +40,8 @@ class UpdateTestCase(unittest.TestCase):
 
     """Test case for module Update"""
 
-    def test_UpdateCheck(self):
-        """Unit tests for class UpdateCheck"""
+    def test_UpdateCheck_fake(self):
+        """Unit tests for class UpdateCheck using fake network"""
 
         update_tests = []
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
@@ -78,6 +78,10 @@ class UpdateTestCase(unittest.TestCase):
             self.assertEqual(updates, update_test[1])
         bleachbit.Update.build_opener = original_open
 
+
+    def test_UpdateCheck_real(self):
+        """Unit tests for class UpdateCheck using real network"""
+
         # real network
         for update in check_updates(True, False, None, None):
             if not update:
@@ -87,7 +91,9 @@ class UpdateTestCase(unittest.TestCase):
             self.assert_(isinstance(ver, (type(None), unicode)))
             self.assert_(isinstance(url, (type(None), unicode)))
 
-        # test failure
+    def test_UpdateCheck_real(self):
+        """Unit test for class UpdateCheck with bad network address"""
+        # expect connection failure
         Common.update_check_url = "http://localhost/doesnotexist"
         self.assertEqual(
             check_updates(True, False, None, None),
