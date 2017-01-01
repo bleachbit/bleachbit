@@ -204,7 +204,7 @@ class WorkerTestCase(unittest.TestCase, common.AssertFile):
         operations = {'test': ['option1']}
         worker = Worker(ui, True, operations)
         run = worker.run()
-        while run.next():
+        while next(run):
             pass
         self.assertNotExists(filename, "Path still exists '%s'" % filename)
         self.assertEqual(worker.total_special, special_expected,
@@ -293,7 +293,7 @@ class WorkerTestCase(unittest.TestCase, common.AssertFile):
         operations = {'deepscan': ['thumbs_db']}
         ui = CLI.CliCallback()
         worker = Worker(ui, False, operations).run()
-        while worker.next():
+        while next(worker):
             pass
         self.assertEqual(1, self.scanned)
 
@@ -316,7 +316,7 @@ class WorkerTestCase(unittest.TestCase, common.AssertFile):
         operations = {'test': ['option1', 'option2']}
         worker = Worker(ui, True, operations)
         run = worker.run()
-        while run.next():
+        while next(run):
             pass
         self.assertNotExists(filename1, "Path still exists '%s'" % filename1)
         self.assertNotExists(filename2, "Path still exists '%s'" % filename2)

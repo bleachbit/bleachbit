@@ -111,11 +111,11 @@ class ActionTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
-            result = six.next(cmd.execute(really_delete=False))
+            result = next(cmd.execute(really_delete=False))
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            ret = six.next(cmd.execute(really_delete=True))
+            ret = next(cmd.execute(really_delete=True))
             if 'delete' == command:
                 self.assertNotLExists(cmd.path)
             elif 'truncate' == command:
@@ -361,7 +361,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
         action_str = u'<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0
         for cmd in _action_str_to_commands(action_str):
-            result = six.next(cmd.execute(False))
+            result = next(cmd.execute(False))
             common.validate_result(self, result)
             path = result['path']
             self.assertFalse(os.path.isdir(path), "%s is a directory" % path)

@@ -41,14 +41,14 @@ class CommandTestCase(unittest.TestCase, common.AssertFile):
         self.assertExists(path)
 
         # preview
-        ret = cmd.execute(really_delete=False).next()
+        ret = next(cmd.execute(really_delete=False))
         s = str(cmd)
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertExists(path)
 
         # delete
-        ret = cmd.execute(really_delete=True).next()
+        ret = next(cmd.execute(really_delete=True))
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
@@ -61,13 +61,13 @@ class CommandTestCase(unittest.TestCase, common.AssertFile):
         self.assertGreater(os.path.getsize(path), 0)
 
         # preview
-        ret = cmd.execute(False).next()
+        ret = next(cmd.execute(False))
         self.assertExists(path)
         self.assertGreater(os.path.getsize(path), 0)
 
         # delete
-        ret = cmd.execute(True).next()
-        self.assert_(ret['size'] > 0, 'Size is %d' % ret['size'])
+        ret = next(cmd.execute(True))
+        self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
 

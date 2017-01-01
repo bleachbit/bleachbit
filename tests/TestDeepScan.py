@@ -117,7 +117,7 @@ class DeepScanTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts)
         ui = CLI.CliCallback()
         worker = Worker(ui, True, operations)
         run = worker.run()
-        while run.next():
+        while next(run):
             pass
 
         # validate results

@@ -189,7 +189,7 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
         ini.close()
         self.assertExists(self.ini_fn)
         if do_next:
-            return Winapp(self.ini_fn).get_cleaners().next()
+            return next(Winapp(self.ini_fn).get_cleaners())
         else:
             return Winapp(self.ini_fn).get_cleaners()
 
