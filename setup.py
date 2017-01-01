@@ -99,8 +99,8 @@ if 'py2exe' in sys.argv:
             'packages': 'encodings',
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
-            'excludes': ['_ssl', 'pyreadline', 'difflib', 'doctest',
-                         'pickle', 'calendar', 'ftplib', 'ssl', 'bleachbit.Unix'],
+            'excludes': ['pyreadline', 'difflib', 'doctest',
+                         'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
                 'DNSAPI.DLL',
                 'IPHLPAPI.DLL', # psutil
