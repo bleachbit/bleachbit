@@ -39,10 +39,14 @@ if sys.version_info >= (3, 0):
     from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
     filter = filter
+
+    fserrorhandler = 'strict' if sys.platform == 'windows' else 'surrogateescape'
+
 else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
     import itertools
     filter = itertools.ifilter
+    fserrorhandler = 'strict'
 
 
 APP_VERSION = "1.15"

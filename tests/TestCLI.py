@@ -37,7 +37,7 @@ import tempfile
 import unittest
 
 
-class CLITestCase(unittest.TestCase, common.AssertFile):
+class CLITestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts):
 
     """Test case for module CLI"""
 
@@ -76,20 +76,13 @@ class CLITestCase(unittest.TestCase, common.AssertFile):
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
-            self.assert_(
-                isinstance(
-                    cleaner,
-                    str) or isinstance(
-                        cleaner,
-                        unicode))
+            self.assertIsString(cleaner)
 
     @unittest.skipUnless('posix' == os.name, 'skipping on non-Unix')
     def test_encoding(self):
         """Unit test for encoding"""
 
-        (fd, filename) = tempfile.mkstemp(
-            prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')
-        os.close(fd)
+        filename = common.touch_temp_file(prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')
         self.assertExists(filename)
 
         env = copy.deepcopy(os.environ)
@@ -128,8 +121,7 @@ class CLITestCase(unittest.TestCase, common.AssertFile):
 
     def test_delete(self):
         """Unit test for --delete option"""
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-delete')
-        os.close(fd)
+        filename = common.touch_temp_file(prefix='bleachbit-test-cli-delete')
         if 'nt' == os.name:
             import win32api
             filename = os.path.normcase(filename)
@@ -146,8 +138,7 @@ class CLITestCase(unittest.TestCase, common.AssertFile):
         operations = args_to_operations(['system.tmp'], False)
         preview_or_clean(operations, True)
         FileUtilities.delete = save_delete
-        self.assert_(filename in deleted_paths,
-                     "%s not found deleted" % filename)
+        self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
         os.remove(filename)
         self.assertNotExists(filename)
 
@@ -157,9 +148,7 @@ class CLITestCase(unittest.TestCase, common.AssertFile):
         dirs = ['.', None]
         for dir_ in dirs:
             for suffix in suffixes:
-                (fd, filename) = tempfile.mkstemp(
-                    prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
-                os.close(fd)
+                filename = common.touch_temp_file(prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
                 if '.' == dir_:
                     filename = os.path.basename(filename)
                 self.assertExists(filename)
