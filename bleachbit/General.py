@@ -128,13 +128,12 @@ def run_external(args, stdout=False, env=None, clean_env=True):
     if not stdout:
         stdout = subprocess.PIPE
     kwargs = {}
-    if subprocess.mswindows:
+    # see http://stackoverflow.com/a/7006424
+    if 'windows' == sys.platform:
+        si = subprocess.STARTUPINFO()
+        si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        kwargs['startupinfo'] = si
         # hide the 'DOS box' window
-        import win32process, win32con
-        stui = subprocess.STARTUPINFO()
-        stui.dwFlags = win32process.STARTF_USESHOWWINDOW
-        stui.wShowWindow = win32con.SW_HIDE
-        kwargs['startupinfo'] = stui
     if not env and clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
