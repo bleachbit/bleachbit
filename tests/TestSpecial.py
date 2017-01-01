@@ -200,7 +200,7 @@ class SpecialTestCase(unittest.TestCase, SpecialAssertions, common.AssertFile):
 
         # google-chrome/Default/Bookmarks
         bookmark_path = os.path.join(self.dir_google_chrome_default, 'Bookmarks')
-        common.write_file(bookmark_path, chrome_bookmarks)
+        common.write_file(bookmark_path, chrome_bookmarks.encode())
 
         # google-chrome/Default/Web Data
         FileUtilities.execute_sqlite3(os.path.join(self.dir_google_chrome_default, 'Web Data'), chrome_webdata)
@@ -348,7 +348,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
 
         self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)
-        self.assertEqual(urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
+        self.assertEqual(set(urls), {u'https://www.bleachbit.org/', u'http://www.slashdot.org/'})
 
         os.unlink(path)
 
