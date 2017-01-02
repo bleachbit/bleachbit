@@ -664,6 +664,32 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         self.assertEqual(
             set(old_whitelist), set(options.get_whitelist_paths()))
 
+    def test_whitelisted_speed(self):
+        """Benchmark the speed of whitelisted()
+
+        It is called frequently, so the speed is important."""
+        d = '/usr/bin'
+        whitelist = [('file', '/home/foo'), ('folder', '/home/folder')]
+        if 'nt' == os.name:
+            d = expandvars('%windir%\system32')
+            whitelist = [('file', r'c:\\filename'), ('folder', r'c:\\folder')]
+        reps = 20
+        paths = [p for p in children_in_directory(d, True)]
+        paths = paths[:1000]  # truncate
+        self.assertGreater(len(paths), 10)
+        old_whitelist = options.get_whitelist_paths()
+        options.set_whitelist_paths(whitelist)
+
+        t0 = time.time()
+        for i in xrange(0, reps):
+            for p in paths:
+                _ = whitelisted(p)
+        t1 = time.time()
+        logger.info('whitelisted() with {} repetitions and {} paths took {:.3g} seconds '.format(
+            reps, len(paths), t1 - t0))
+
+        options.set_whitelist_paths(old_whitelist)
+
     def test_wipe_contents(self):
         """Unit test for wipe_delete()"""
 
