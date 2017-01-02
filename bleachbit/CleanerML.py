@@ -219,6 +219,7 @@ def load_cleaners():
 
 def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
+    msgid = msgid.replace('"', '\\"') # escape quotation mark
     if translators:
         translators = "#. %s\n" % translators
     else:
