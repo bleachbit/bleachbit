@@ -156,7 +156,7 @@ class PreferencesDialog:
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = gtk.CheckButton(_("Overwrite files to hide contents"))
+        cb_shred = gtk.CheckButton(_("Overwrite contents of files to prevent recovery"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
         cb_shred.set_tooltip_text(
