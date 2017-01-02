@@ -21,7 +21,7 @@
 -->
 <cleaner id="journald" os="linux">
   <label>journald</label>
-  <description>System Journals</description>
+  <description>System journals</description>
   <running type="exe">journalctl</running>
   <option id="clean">
     <label translate="false">clean</label>
