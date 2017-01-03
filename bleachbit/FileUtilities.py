@@ -541,9 +541,15 @@ def sync():
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
-def whitelisted_posix(path):
+def whitelisted_posix(path, check_realpath = True):
     """Check whether this POSIX path is whitelisted"""
     from Options import options
+    if check_realpath and os.path.islink(path):
+        # also check the link name
+        if whitelisted_posix(path, False):
+            return True
+        # resolve symlink
+        path = os.path.realpath(path)
     for pathname in options.get_whitelist_paths():
         if pathname[0] == 'file' and path == pathname[1]:
             return True

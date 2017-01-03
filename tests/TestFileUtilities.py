@@ -664,6 +664,39 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         self.assertEqual(
             set(old_whitelist), set(options.get_whitelist_paths()))
 
+
+    @unittest.skipUnless('posix' == os.name, 'skipping on non-POSIX platform')
+    def test_whitelisted_posix_symlink(self):
+        """Symlink test for whitelisted_posix()"""
+        # setup
+        old_whitelist = options.get_whitelist_paths()
+        tmpdir = tempfile.mkdtemp(prefix='bleachbit-whitelist')
+        realpath = os.path.join(tmpdir, 'real')
+        linkpath = os.path.join(tmpdir, 'link')
+        common.touch_file(realpath)
+        os.symlink(realpath, linkpath)
+        self.assertExists(realpath)
+        self.assertExists(linkpath)
+
+        # test 1: the real path is whitelisted
+        whitelist = [('file', realpath)]
+        options.set_whitelist_paths(whitelist)
+        self.assertFalse(whitelisted(tmpdir))
+        self.assertTrue(whitelisted(realpath))
+        self.assertTrue(whitelisted(linkpath))
+
+        # test 2: the link is whitelisted
+        whitelist = [('file', linkpath)]
+        options.set_whitelist_paths(whitelist)
+        self.assertFalse(whitelisted(tmpdir))
+        self.assertFalse(whitelisted(realpath))
+        self.assertTrue(whitelisted(linkpath))
+
+        # clean up
+        import shutil
+        shutil.rmtree(tmpdir)
+        options.set_whitelist_paths(old_whitelist)
+
     def test_whitelisted_speed(self):
         """Benchmark the speed of whitelisted()
 
