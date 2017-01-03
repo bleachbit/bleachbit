@@ -375,7 +375,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         # test symlink
         symlink_helper(os.symlink)
 
-        # test fifo
+        # test FIFO
         args = ["mkfifo", filename]
         ret = subprocess.call(args)
         self.assertEqual(ret, 0)
@@ -644,7 +644,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             self.assertTrue(whitelisted('C:\\WINDOWS\\FOO.LOG'))
             self.assertTrue(whitelisted('D:\\USERS'))
 
-            # drives letters have the seperator at the end while most paths
+            # drives letters have the separator at the end while most paths
             # don't
             self.assertTrue(whitelisted('D:\\FOLDER\\FOO.LOG'))
 
