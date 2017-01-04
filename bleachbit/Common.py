@@ -103,6 +103,17 @@ def ensure_unicode(s, enc='utf8'):
         raise RuntimeError('no string/bytes argument supplied')
 
 
+def ensure_bytes(b, enc='utf8'):
+    """Transforms the supplied argument to bytes if necessary"""
+    if isinstance(b, six.text_type):
+        logger.debug('b should have already been bytes.')
+        return b.encode(enc)
+    elif isinstance(b, six.binary_type):
+        return b
+    else:
+        raise RuntimeError('no string/bytes argument supplied')
+
+
 # encoding / decoding paths
 FSE = sys.getfilesystemencoding()
 fserrorhandler = 'strict' if sys.platform == 'windows' else 'surrogateescape'
