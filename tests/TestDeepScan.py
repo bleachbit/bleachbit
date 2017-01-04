@@ -65,10 +65,7 @@ class DeepScanTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts)
 
     def test_encoding(self):
         """Test encoding"""
-        tests = ('äöüßÄÖÜ',
-                 "עִבְרִית")
-
-        for test in tests:
+        for test in ('äöüßÄÖÜ', "עִבְרִית"):
             self._test_encoding(test)
 
     def test_DeepScan(self):

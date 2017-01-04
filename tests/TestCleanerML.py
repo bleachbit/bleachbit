@@ -85,7 +85,7 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile, common.TypeAsserts
         pcd = Common.personal_cleaners_dir
         Common.personal_cleaners_dir = tempfile.mkdtemp(prefix='bleachbit-cleanerml-load')
         fn_xml = os.path.join(Common.personal_cleaners_dir, 'invalid.xml')
-        common.write_file(fn_xml, '<xml><broken>')
+        common.write_file(fn_xml, b'<xml><broken>')
 
         load_cleaners()
         import shutil

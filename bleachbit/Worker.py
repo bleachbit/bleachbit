@@ -104,7 +104,7 @@ class Worker:
             if not ret:
                 return
             if isinstance(ret['size'], six.integer_types):
-                size = FileUtilities.bytes_to_human(ret['size'])
+                size = FileUtilities.bytes_to_human(ret['size']).decode()
                 self.size += ret['size']
                 self.total_bytes += ret['size']
             else:
@@ -254,7 +254,7 @@ class Worker:
                     yield True
 
         # print final stats
-        bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
+        bytes_delete = FileUtilities.bytes_to_human(self.total_bytes).decode()
 
         if self.really_delete:
             # TRANSLATORS: This refers to disk space that was

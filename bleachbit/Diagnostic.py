@@ -45,8 +45,8 @@ def diagnostic_info():
         pass
     s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
     s += "\nlocale_dir = %s" % Common.locale_dir
-    s += "\noptions_dir = %s" % Common.options_dir.decode(Common.FSE)
-    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir.decode(Common.FSE)
+    s += "\noptions_dir = %s" % Common.options_dir
+    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir
     s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:

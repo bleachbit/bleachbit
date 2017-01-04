@@ -130,9 +130,8 @@ def cleaner_change_dialog(changes, parent):
 
 
 def hashdigest(string):
-    """Return hex digest of hash for a string"""
-
-    # hashlib requires Python 2.5
+    """Return hex digest of hash for a byte string"""
+    string = Common.ensure_bytes(string)
     return hashlib.sha512(string).hexdigest()
 
 
@@ -145,6 +144,7 @@ class RecognizeCleanerML:
         try:
             self.salt = options.get('hashsalt')
         except Common.NoOptionError:
+            # Python 3: os.urandom(64).hex()
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.__scan()
@@ -153,7 +153,7 @@ class RecognizeCleanerML:
         """Is pathname recognized?"""
         with open(pathname) as f:
             body = f.read()
-        new_hash = hashdigest(self.salt + body)
+        new_hash = hashdigest((self.salt + body).encode())
         try:
             known_hash = options.get_hashpath(pathname)
         except Common.NoOptionError:
