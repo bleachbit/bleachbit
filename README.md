@@ -23,11 +23,11 @@ For information regarding the command line interface, run:
 * [BleachBit home 
 page](https://www.bleachbit.org)
 * [Support](https://www.bleachbit.org/help)
-* [Documentation](https://bleachbit.github.io/docs/)
+* [Documentation](https://docs.bleachbit.org)
 
 ### Development
 * [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  [![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)](https://ci.appveyor.com/project/az0/bleachbit)
-* [BleachBit on Travis CI](https://travis-ci.org/az0/bleachbit)  [![Build Status](https://travis-ci.org/az0/bleachbit.svg?branch=master)](https://travis-ci.org/az0/bleachbit)
+* [BleachBit on Travis CI](https://travis-ci.org/bleachbit/bleachbit)  [![Build Status](https://travis-ci.org/bleachbit/bleachbit.svg?branch=master)](https://travis-ci.org/bleachbit/bleachbit)
 * [CleanerML Repository](https://github.com/az0/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
