@@ -2,7 +2,7 @@
 
 # BleachBit
 # Copyright (C) 2008-2017 Andrew Ziem
-# http://www.bleachbit.org
+# https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
