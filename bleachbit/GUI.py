@@ -31,6 +31,7 @@ from bleachbit import Cleaner, FileUtilities, GuiBasic
 
 import logging
 import os
+import six
 import sys
 import threading
 import time
@@ -170,7 +171,8 @@ class Bleachbit(Gtk.Application):
                                  website=APP_URL,
                                  transient_for=self._window)
         try:
-            dialog.set_license(open(license_filename).read())
+            with open(license_filename) as f:
+                dialog.set_license(f.read())
         except:
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
@@ -308,8 +310,8 @@ class TreeDisplayModel:
         if None == value:
             # if not value given, toggle current value
             value = not model[path][1]
-        assert(type(value) is types.BooleanType)
-        assert(type(model) is Gtk.TreeStore)
+        assert(isinstance(value, bool))
+        assert(isinstance(model,Gtk.TreeStore))
         cleaner_id = None
         i = path
         if type(i) is str:
@@ -390,7 +392,7 @@ class GUI(Gtk.ApplicationWindow):
         super(GUI, self).__init__(*args, **kwargs)
 
         if not kwargs['exit']:
-            import RecognizeCleanerML
+            from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             register_cleaners()
 
@@ -530,7 +532,7 @@ class GUI(Gtk.ApplicationWindow):
         """Preview operations or run operations (delete files)"""
 
         assert(isinstance(really_delete, bool))
-        import Worker
+        from bleachbit import Worker
         self.start_time = None
         if None == operations:
             operations = {}
@@ -552,7 +554,7 @@ class GUI(Gtk.ApplicationWindow):
         else:
             self.start_time = time.time()
             worker = self.worker.run()
-            GLib.idle_add(worker.next)
+            GLib.idle_add(lambda: next(worker))
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
@@ -589,7 +591,7 @@ class GUI(Gtk.ApplicationWindow):
         dialog = Gtk.Dialog(_("System information"), parent)
         dialog.resize(600, 400)
         txtbuffer = Gtk.TextBuffer()
-        import Diagnostic
+        from bleachbit import Diagnostic
         txt = Diagnostic.diagnostic_info()
         txtbuffer.set_text(txt)
         textview = Gtk.TextView(txtbuffer)
@@ -727,7 +729,7 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to update the progress bar with number or text"""
         if type(status) is float:
             self.progressbar.set_fraction(status)
-        elif (type(status) is str) or (type(status) is unicode):
+        elif isinstance(status, six.text_type):
             self.progressbar.set_text(status)
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
@@ -736,7 +738,7 @@ class GUI(Gtk.ApplicationWindow):
         """Update size in tree control"""
         model = self.view.get_model()
 
-        text = FileUtilities.bytes_to_human(bytes_removed)
+        text = FileUtilities.bytes_to_human(bytes_removed).decode()
         if 0 == bytes_removed:
             text = ""
 
@@ -756,7 +758,7 @@ class GUI(Gtk.ApplicationWindow):
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
-        text = FileUtilities.bytes_to_human(bytes_removed)
+        text = FileUtilities.bytes_to_human(bytes_removed).decode()
         if 0 == bytes_removed:
             text = ""
         self.status_bar.push(context_id, text)
@@ -870,7 +872,7 @@ class GUI(Gtk.ApplicationWindow):
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        import Update
+        from bleachbit import Update
         try:
             updates = Update.check_updates(options.get('check_beta'),
                                            options.get('update_winapp2'),

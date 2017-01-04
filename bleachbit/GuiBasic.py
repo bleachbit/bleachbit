@@ -22,6 +22,8 @@
 Basic GUI code
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from bleachbit.Common import _, expanduser
 
 from gi.repository import Gtk
@@ -29,7 +31,7 @@ from gi.repository import Gdk
 import os
 
 if 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 
 
 def browse_folder(parent, title, multiple, stock_button):
