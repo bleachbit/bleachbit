@@ -754,7 +754,9 @@ class System(Cleaner):
         # recycle bin
         if 'nt' == os.name and 'recycle_bin' == option_id:
             # This method allows shredding
+            recycled_any = False
             for path in Windows.get_recycle_bin():
+                recycled_any = True
                 yield Command.Delete(path)
             # If there were any files deleted, Windows XP will show the
             # wrong icon for the recycle bin indicating it is not empty.
@@ -777,7 +779,8 @@ class System(Cleaner):
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.
-            yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
+            if recycled_any:
+                yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:
