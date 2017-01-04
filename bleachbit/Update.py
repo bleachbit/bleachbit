@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
-    from Common import personal_cleaners_dir
+    from bleachbit.Common import personal_cleaners_dir
     fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
     delete_current = False
     if os.path.exists(fn):
@@ -75,8 +75,9 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     # write file
     if not os.path.exists(personal_cleaners_dir):
         os.mkdir(personal_cleaners_dir)
-    f = open(fn, 'w')
-    f.write(doc)
+
+    with open(fn, 'w') as f:
+        f.write(doc)
     append_text(_('New winapp2.ini was downloaded.'))
     cb_success()
 

@@ -86,8 +86,8 @@ def destructive_tests(title):
 
 def touch_file(filename):
     """Create an empty file"""
-    f = open(filename, "w")
-    f.close()
+    with open(filename, "w") as f:
+        pass
     import os.path
     assert(os.path.exists(filename))
 
