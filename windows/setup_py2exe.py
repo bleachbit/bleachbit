@@ -261,7 +261,6 @@ def delete_unnecessary():
         r'share\xml',
         r'win32evtlog.pyd',
         r'win32pipe.pyd',
-        r'win32service.pyd',
         r'win32wnet.pyd',
     ]
     for path in delete_paths:
