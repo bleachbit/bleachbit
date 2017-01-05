@@ -252,6 +252,8 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
                 "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA%%\\does_not_exist",
                 "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft",
                 "\nDetect=HKCU\\Software\\Microsoft",
+                # Below checks that a space is OK in the registry key
+                "\nDetect=HKCU\\Software\\Microsoft\\Command Processor",
                 "\nDetect1=HKCU\\Software\\Microsoft\nDetect2=HKCU\\Software\\does_not_exist",
                     "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft"):
                 new_ini = test[0] + detect
