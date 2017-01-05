@@ -418,13 +418,6 @@ sign_code('dist\\bleachbit_console.exe')
 
 assert_execute_console()
 
-logger.info('Building portable')
-copytree('dist', 'BleachBit-portable')
-with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
-    text_file.write("[Portable]")
-
-archive('BleachBit-portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
-
 if not fast:
     logger.info('Recompressing library.zip with 7-Zip')
     if not os.path.exists(SZ_EXE):
@@ -456,6 +449,14 @@ if not fast:
         assert_exist('dist\\library.zip')
 else:
     logger.warning('Skipped recompression library.zip with 7-Zip')
+
+
+logger.info('Building portable')
+copytree('dist', 'BleachBit-portable')
+with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+    text_file.write("[Portable]")
+
+archive('BleachBit-portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
 
 
 # NSIS
