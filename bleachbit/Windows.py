@@ -451,11 +451,11 @@ def get_windows_version():
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running"""
 
-    if os.getenv('PROGRAMFILES(X86)'):
-        # 64-bit Windows detected
-        return is_process_running_wmic(name)
-    else:
-        # 32-bit Windows detected
+    try:
+        return is_process_running_psutil(name)
+    except ImportError:
+        # psutil does not support XP, so fall back
+        # https://github.com/giampaolo/psutil/issues/348
         return is_process_running_win32(name)
 
 
@@ -506,17 +506,21 @@ def is_process_running_win32(name):
     return False
 
 
-def is_process_running_wmic(name):
+def is_process_running_psutil(name):
     """Return boolean whether process (like firefox.exe) is running
 
-    Works on Windows XP Professional but not on XP Home
+    Works on Windows Vista or later, but on Windows XP gives an ImportError
     """
 
-    clean_name = re.sub(r'[^A-Za-z.]', '_', name).lower()
-    args = ['wmic', 'path', 'win32_process', 'where', "caption='%s'" %
-            clean_name, 'get', 'Caption']
-    (_, stdout, _) = General.run_external(args)
-    return stdout.lower().find(clean_name) > -1
+    import psutil
+    name = name.lower()
+    for proc in psutil.process_iter():
+        try:
+            if proc.name().lower() == name:
+                return True
+        except psutil.NoSuchProcess:
+            pass
+    return False
 
 
 def move_to_recycle_bin(path):
