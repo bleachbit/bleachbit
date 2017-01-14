@@ -451,6 +451,10 @@ else:
     logger.warning('Skipped recompression library.zip with 7-Zip')
 
 
+# Below there are no more optimizations of files in the `dist` folder,
+# so calculate the size of the folder, as it is a goal to shrink it.
+logger.info('Final size of the dist folder: {:,}'.format(get_dir_size('dist')))
+
 logger.info('Building portable')
 copytree('dist', 'BleachBit-portable')
 with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
