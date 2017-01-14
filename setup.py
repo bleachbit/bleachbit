@@ -233,7 +233,7 @@ def run_setup():
           download_url="https://www.bleachbit.org/download",
           license="GPLv3",
           url=bleachbit.Common.APP_URL,
-          platforms='Linux and Windows; Python v2.5 to 2.7; GTK v2.12+',
+          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v2.12+',
           packages=['bleachbit'],
           **args)
 

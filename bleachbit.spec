@@ -28,7 +28,7 @@ BuildArch:      noarch
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
-Requires:       python >= 2.5
+Requires:       python >= 2.6
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
 Requires:       usermode
