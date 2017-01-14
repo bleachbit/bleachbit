@@ -287,7 +287,7 @@ def decode_str(s):
 # Original source: http://dev.laptop.org/git/activities/clock/plain/pgettext.py
 
 
-# pgettext(msgctxt, msgid) from gettext is not supported in Python implementation < v2.6.
+# pgettext(msgctxt, msgid) from gettext is not supported in Python as of January 2017
 # http://bugs.python.org/issue2504
 # Meanwhile we get official support, we have to simulate it.
 # See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
