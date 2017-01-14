@@ -101,17 +101,15 @@ def detectos(required_ver, mock=False):
 
 def winapp_expand_vars(pathname):
     """Expand environment variables using special Winapp2.ini rules"""
-    # Change %foo% to ${foo} as required by Python 2.5.4 (but not 2.7.8)
-    pathname = re.sub(r'%([a-zA-Z0-9]+)%', r'${\1}', pathname)
     # This is the regular expansion
     expand1 = expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
     for (sub_orig, sub_repl) in subs:
-        pattern = re.compile(r'\${%s}' % sub_orig, flags=re.IGNORECASE)
+        pattern = re.compile('%{}%'.format(sub_orig), flags=re.IGNORECASE)
         if pattern.match(pathname):
-            expand2 = pattern.sub('${%s}' % sub_repl, pathname)
+            expand2 = pattern.sub('%{}%'.format(sub_repl), pathname)
             return expand1, expandvars(expand2)
     return expand1,
 
