@@ -122,7 +122,7 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout=False, clean_env=True):
+def run_external(args, stdout=False, env=None, clean_env=True):
     """Run external command and return (return code, stdout, stderr)"""
     logger.debug('running cmd ' + ' '.join(args))
     import subprocess
@@ -136,7 +136,7 @@ def run_external(args, stdout=False, clean_env=True):
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
-    if clean_env and 'posix' == os.name:
+    if not env and clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
         # strings in the output.
@@ -146,8 +146,6 @@ def run_external(args, stdout=False, clean_env=True):
         env = dict((key, value)
                    for key, value in os.environ.iteritems() if key in keep_env)
         env['LC_ALL'] = 'C'
-    else:
-        env = None
     p = subprocess.Popen(args, stdout=stdout,
                          stderr=subprocess.PIPE, env=env, **kwargs)
     try:

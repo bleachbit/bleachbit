@@ -149,6 +149,9 @@ class GeneralTestCase(unittest.TestCase):
         self.assertEqual(rc, 2)
         self.assertTrue('No such file' in stderr)
 
+        # Reset environment
+        os.unsetenv('LC_ALL')
+
     @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
