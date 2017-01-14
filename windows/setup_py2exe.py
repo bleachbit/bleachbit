@@ -208,7 +208,7 @@ check_exist(
 logger.info('Deleting directories build and dist')
 shutil.rmtree('build', ignore_errors=True)
 shutil.rmtree('dist', ignore_errors=True)
-shutil.rmtree('BleachBit-portable', ignore_errors=True)
+shutil.rmtree('BleachBit-Portable', ignore_errors=True)
 
 
 logger.info('Running py2exe')
@@ -456,11 +456,11 @@ else:
 logger.info('Final size of the dist folder: {:,}'.format(get_dir_size('dist')))
 
 logger.info('Building portable')
-copytree('dist', 'BleachBit-portable')
+copytree('dist', 'BleachBit-Portable')
 with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
     text_file.write("[Portable]")
 
-archive('BleachBit-portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
 
 
 # NSIS
