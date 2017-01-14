@@ -661,11 +661,8 @@ def wipe_path(pathname, idle=False):
         f = None
         while True:
             try:
-                kwargs = {
-                    'dir': pathname, 'suffix': __random_string(maxlen)}
-                if sys.hexversion >= 0x02060000:
-                    kwargs['delete'] = False
-                f = tempfile.NamedTemporaryFile(**kwargs)
+                f = tempfile.NamedTemporaryFile(
+                    dir=pathname, suffix=__random_string(maxlen), delete=False)
                 # In case the application closes prematurely, make sure this
                 # file is deleted
                 atexit.register(
@@ -784,9 +781,7 @@ def wipe_path(pathname, idle=False):
                     logger.debug('handled unknown error 0')
                     time.sleep(0.1)
         # explicitly delete
-        # Python 2.5.4 always deletes NamedTemporaryFile, so
-        # ignore missing in older Python here.
-        delete(f.name, ignore_missing=sys.hexversion < 0x02060000)
+        delete(f.name, ignore_missing=True)
 
 
 def vacuum_sqlite3(path):

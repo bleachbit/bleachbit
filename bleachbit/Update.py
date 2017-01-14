@@ -61,11 +61,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     # download update
     opener = build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
-    kwargs = {'fullurl': url}
-    if sys.hexversion >= 0x02060000:
-        # Python 2.6 added timeout option
-        kwargs['timeout'] = 20
-    doc = opener.open(**kwargs).read()
+    doc = opener.open(fullurl=url, timeout=20).read()
     # verify hash
     hash_actual = hashlib.sha512(doc).hexdigest()
     if hash_expected and not hash_actual == hash_expected:
