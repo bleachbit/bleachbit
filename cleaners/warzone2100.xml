@@ -19,8 +19,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<!-- Gogeden (11/19/2011): tested on Trisquel GNUx and BleachBit 0.9.1 -->
-<!-- AZ (1/13/2013): tested on Warzone 2100 3.1, Ubuntu 12.10, BleachBit 0.9.5 -->
 <cleaner id="warzone2100">
   <label>Warzone2100</label>
   <description>Game</description>
@@ -29,6 +27,5 @@
     <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="~/.warzone2100*/logs/"/>
     <action command="delete" search="walk.all" path="$USERPROFILE\My Documents\Warzone 2100*\logs\"/>
-    <action command="delete" search="walk.all" path="$USERPROFILE\My Documents\Warzone 2100 3.1\logs\"/>
   </option>
 </cleaner>
