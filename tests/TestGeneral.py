@@ -109,6 +109,47 @@ class GeneralTestCase(unittest.TestCase):
         self.assertNotEqual(0, rc)
 
     @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
+    def test_run_external_clean_env(self):
+        """Unit test for clean_env parameter to run_external()"""
+
+        # clean_env parameter should not alter the PATH, and the PATH
+        # should not be empty
+        (rc, path_clean, stderr) = run_external(
+            ['bash', '-c', 'echo $PATH'], clean_env=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(os.getenv('PATH'), path_clean.rstrip('\n'))
+        self.assertTrue(len(path_clean) > 10)
+
+        (rc, path_unclean, stderr) = run_external(
+            ['bash', '-c', 'echo $PATH'], clean_env=False)
+        self.assertEqual(rc, 0)
+        self.assertEqual(path_clean, path_unclean)
+
+        # With parent environment set to English and parameter clean_env=False,
+        # expect English.
+        os.putenv('LC_ALL', 'C')
+        (rc, stdout, stderr) = run_external(
+            ['ls', '/doesnotexist'], clean_env=False)
+        self.assertEqual(rc, 2)
+        self.assertTrue('No such file' in stderr)
+
+        # Set parent environment to Spanish.
+        os.putenv('LC_ALL', 'es_MX.UTF-8')
+        (rc, stdout, stderr) = run_external(
+            ['ls', '/doesnotexist'], clean_env=False)
+        self.assertEqual(rc, 2)
+        if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
+            # Spanish language pack is installed.
+            self.assertTrue('No existe el archivo' in stderr)
+
+        # Here the parent environment has Spanish, but the child process
+        # should use English.
+        (rc, stdout, stderr) = run_external(
+            ['ls', '/doesnotexist'], clean_env=True)
+        self.assertEqual(rc, 2)
+        self.assertTrue('No such file' in stderr)
+
+    @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assert_(isinstance(sudo_mode(), bool))
