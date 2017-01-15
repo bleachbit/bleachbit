@@ -32,7 +32,7 @@ build: build-stamp
 	# remove Windows-specific cleaners
 	grep -l os=.windows. cleaners/*xml | xargs rm -f
 	# remove Windows-specific modules
-	-rm -f bleachbit/Windows.py
+	-rm -f bleachbit/Windows*.py
 
 
 build-stamp: configure-stamp
