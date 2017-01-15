@@ -592,21 +592,35 @@ def wipe_contents(path, truncate=True):
     shown that most of today's media can be effectively cleared
     by one overwrite"
     """
-    size = getsize(path)
-    try:
-        f = open(path, 'wb')
-    except IOError as e:
-        if e.errno == errno.EACCES:  # permission denied
-            os.chmod(path, 0o200)  # user write only
+
+    def wipe_write():
+        size = getsize(path)
+        try:
             f = open(path, 'wb')
-        else:
-            raise
-    blanks = chr(0) * 4096
-    while size > 0:
-        f.write(blanks)
-        size -= 4096
-    f.flush()  # flush to OS buffer
-    os.fsync(f.fileno())  # force write to disk
+        except IOError as e:
+            if e.errno == errno.EACCES:  # permission denied
+                os.chmod(path, 0o200)  # user write only
+                f = open(path, 'wb')
+            else:
+                raise
+        blanks = chr(0) * 4096
+        while size > 0:
+            f.write(blanks)
+            size -= 4096
+        f.flush()  # flush to OS buffer
+        os.fsync(f.fileno())  # force write to disk
+
+    if 'nt' == os.name:
+        try:
+            from WindowsWipe import file_wipe
+            file_wipe(path)
+        except Exception as e:
+            logger.exception(
+                'Error wiping path %s using defragmentation API so falling back to other method' % path)
+            wipe_write()
+        f = open(path, 'wb')
+    else:
+        wipe_write(path)
     if truncate:
         f.truncate(0)
         f.flush()
