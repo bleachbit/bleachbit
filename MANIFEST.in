@@ -11,6 +11,12 @@ include bleachbit.py
 include bleachbit.spec
 include cleaners/*xml
 include cleaners/Makefile
+include debian/bleachbit.dsc
+include debian/compat
+include debian/copyright
+include debian/debian.changelog
+include debian/debian.control
+include debian/debian.rules
 include doc/cleaner_markup_language.xsd
 include doc/example_cleaner.xml
 include org.bleachbit.policy
