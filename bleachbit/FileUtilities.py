@@ -609,6 +609,7 @@ def wipe_contents(path, truncate=True):
             size -= 4096
         f.flush()  # flush to OS buffer
         os.fsync(f.fileno())  # force write to disk
+        return f
 
     if 'nt' == os.name:
         try:
@@ -620,7 +621,7 @@ def wipe_contents(path, truncate=True):
             wipe_write()
         f = open(path, 'wb')
     else:
-        wipe_write(path)
+        f = wipe_write()
     if truncate:
         f.truncate(0)
         f.flush()

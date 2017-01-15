@@ -112,6 +112,17 @@ class GeneralTestCase(unittest.TestCase):
     def test_run_external_clean_env(self):
         """Unit test for clean_env parameter to run_external()"""
 
+        # clean_env should set language to C
+        (rc, stdout, stderr) = run_external(
+            ['bash', '-c', 'echo $LANG'], clean_env=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(stdout.rstrip('\n'), 'C')
+
+        (rc, stdout, stderr) = run_external(
+            ['bash', '-c', 'echo $LC_ALL'], clean_env=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(stdout.rstrip('\n'), 'C')
+
         # clean_env parameter should not alter the PATH, and the PATH
         # should not be empty
         (rc, path_clean, stderr) = run_external(

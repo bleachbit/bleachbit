@@ -145,6 +145,7 @@ def run_external(args, stdout=False, env=None, clean_env=True):
         keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR')
         env = dict((key, value)
                    for key, value in os.environ.iteritems() if key in keep_env)
+        env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
     p = subprocess.Popen(args, stdout=stdout,
                          stderr=subprocess.PIPE, env=env, **kwargs)

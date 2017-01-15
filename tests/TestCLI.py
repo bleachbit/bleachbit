@@ -117,6 +117,9 @@ class CLITestCase(unittest.TestCase):
 
     def test_preview(self):
         """Unit test for --preview option"""
+        env = copy.deepcopy(os.environ)
+        # the language and encoding affect the test results
+        env['LANG'] = 'en_US.UTF-8'
         args_list = []
         path = os.path.join('bleachbit', 'CLI.py')
         big_args = [sys.executable, path, '--preview', ]
@@ -125,7 +128,7 @@ class CLITestCase(unittest.TestCase):
             big_args.append(cleaner)
         args_list.append(big_args)
         for args in args_list:
-            self._test_preview(args)
+            self._test_preview(args, env=env)
 
     def test_delete(self):
         """Unit test for --delete option"""
