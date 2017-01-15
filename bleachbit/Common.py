@@ -38,7 +38,7 @@ else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
 
 
-APP_VERSION = "1.13"
+APP_VERSION = "1.13.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
