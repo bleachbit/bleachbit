@@ -173,12 +173,17 @@ update-desktop-database &> /dev/null ||:
 %{_sbindir}/%{name}-root
 %endif
 %{_bindir}/%{name}
+%{_datadir}/appdata
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?suse_version} >= 1030
 %{_datadir}/applications/%{name}-root.desktop
 %endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
+%{_datadir}/polkit-1
+%{_datadir}/polkit-1/actions
+%{_datadir}/polkit-1/actions/org.bleachbit.policy
 
 
 
