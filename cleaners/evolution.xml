@@ -31,7 +31,7 @@
     <!-- IMAP? : /home/foo/.evolution/cache/tmp/mail.log.AMIoEg -->
     <!-- ? : /home/foo/.evolution/cache/http/ -->
     <action command="delete" search="walk.all" path="~/.evolution/cache/"/>
-    <!-- Evolution 3.16.5 on Ubuntu 15.10 uses ~/.cache/evolution and does not have ~/.evolution -->
-    <action command="delete" search="walk.all" path="~/.cache/evolution/"/>
+    <!-- Evolution 3.16.5 on Ubuntu 15.10 uses $XDG_CACHE_HOME/evolution and does not have ~/.evolution -->
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/evolution/"/>
   </option>
 </cleaner>

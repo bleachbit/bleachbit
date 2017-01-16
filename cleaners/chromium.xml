@@ -28,19 +28,19 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="walk.all" path="~/.config/chromium/Default/Application Cache/"/>
+    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/chromium/Default/Application Cache/"/>
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\Cache\"/>
-    <action command="delete" search="walk.files" path="~/.cache/chromium/"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/chromium/"/>
     <action command="delete" search="walk.files" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cache"/>
     <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="net/http_server_properties/servers"/>
-    <action command="json" search="file" path="~/.config/chromium/Default/Preferences" address="dns_prefetching/host_referral_list"/>
-    <action command="json" search="file" path="~/.config/chromium/Default/Preferences" address="dns_prefetching/startup_list"/>
-    <action command="json" search="file" path="~/.config/chromium/Default/Preferences" address="net/http_server_properties/servers"/>
-    <action command="json" search="file" path="~/.config/chromium/Local State" address="HostReferralList"/>
-    <action command="json" search="file" path="~/.config/chromium/Local State" address="StartupDNSPrefetchList"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Preferences" address="dns_prefetching/host_referral_list"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Preferences" address="dns_prefetching/startup_list"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Preferences" address="net/http_server_properties/servers"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Local State" address="StartupDNSPrefetchList"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -48,25 +48,25 @@
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Cookies"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Extension Cookies"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Cookies"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Cookies"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Cookies"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Extension Cookies"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
     <description>Delete HTML5 cookies</description>
     <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
     <action command="chrome.databases_db" search="glob" path="$localappdata\Chromium\User Data\Default\databases\Databases.db"/>
-    <action command="chrome.databases_db" search="glob" path="~/.config/chromium/Default/databases/Databases.db"/>
+    <action command="chrome.databases_db" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/databases/Databases.db"/>
     <action command="delete" search="glob" path="$localappdata\Chromium\User Data\Default\Local Storage\http*localstoragex"/>
-    <action command="delete" search="glob" path="~/.config/chromium/Default/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/Local Storage/http*localstorage"/>
     <action command="delete" search="walk.all" path="$localappdata\Chromium\User Data\Default\databases\http*\"/>
-    <action command="delete" search="walk.all" path="~/.config/chromium/Default/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/chromium/Default/databases/http*/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
     <action command="chrome.autofill" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
-    <action command="chrome.autofill" search="file" path="~/.config/chromium/Default/Web Data"/>
+    <action command="chrome.autofill" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Web Data"/>
   </option>
   <option id="history">
     <label>History</label>
@@ -96,41 +96,41 @@
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\JumpListIconsOld\"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History"/>
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
-    <action command="chrome.history" search="file" path="~/.config/chromium/Default/History"/>
-    <action command="chrome.favicons" search="file" path="~/.config/chromium/Default/Favicons"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Archived History"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Archived History-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/History Provider Cache"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/History-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Network Action Predictor"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Network Action Predictor-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Shortcuts"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Shortcuts-journal"/>
+    <action command="chrome.history" search="file" path="$XDG_CONFIG_HOME/chromium/Default/History"/>
+    <action command="chrome.favicons" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Favicons"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Archived History"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Archived History-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/History Provider Cache"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/History-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Network Action Predictor"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Network Action Predictor-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Origin Bound Certs-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Shortcuts"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Shortcuts-journal"/>
     <!-- Before about January 2016 Thumbnails was an SQLite database, by Chromium 48 it is a folder -->
-    <action command="delete" search="walk.files" path="~/.config/chromium/Default/Thumbnails"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Thumbnails-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Top Sites-journal"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Visited Links"/>
-    <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
-    <action command="delete" search="glob" path="~/.config/chromium/Default/History Index ????-??-journal"/>
-    <action command="delete" search="walk.files" path="~/.config/chromium/Default/Session Storage/"/>
+    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/chromium/Default/Thumbnails"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Thumbnails"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Thumbnails-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Top Sites"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Top Sites-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Visited Links"/>
+    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/History Index ????-??"/>
+    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/History Index ????-??-journal"/>
+    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/chromium/Default/Session Storage/"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
     <warning>This option will delete your saved passwords.</warning>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Login Data"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Login Data-journal"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Login Data"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Login Data-journal"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Login Data"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Login Data-journal"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
     <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
-    <action command="chrome.keywords" search="file" path="~/.config/chromium/Default/Web Data"/>
+    <action command="chrome.keywords" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Web Data"/>
     <action command="chrome.keywords" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
   </option>
   <option id="current_session">
@@ -141,10 +141,10 @@
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Last Session"/>
     <action command="delete" search="file" path="$localappdata\Chromium\User Data\Default\Last Tabs"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Current Session"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Current Session"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Current Tabs"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Last Session"/>
-    <action command="delete" search="file" path="~/.config/chromium/Default/Last Tabs"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Current Session"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Current Tabs"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Last Session"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Last Tabs"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -161,15 +161,15 @@
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Web Data"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$localappdata\Chromium\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Archived History"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Cookies-journal"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Extension Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/History"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Archived History"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Cookies-journal"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Extension Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/History"/>
     <!-- Before about January 2016 Thumbnails was an SQLite database, but by Chromium 48 it is a folder -->
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Thumbnails" type="f"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Top Sites"/>
-    <action command="sqlite.vacuum" search="file" path="~/.config/chromium/Default/Web Data"/>
-    <action command="sqlite.vacuum" search="glob" path="~/.config/chromium/Default/History Index ????-??"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Thumbnails" type="f"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Top Sites"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Web Data"/>
+    <action command="sqlite.vacuum" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/History Index ????-??"/>
   </option>
 </cleaner>

@@ -27,17 +27,17 @@
     <label translators="Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations">Blocklists</label>
     <description>Delete the files</description>
     <warning>Blocklists will need update to work.</warning>
-    <action command="delete" search="walk.files" path="~/.config/transmission/blocklists/"/>
+    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/transmission/blocklists/"/>
   </option>
   <option id="torrents">
     <label>Torrents</label>
     <description>Delete the torrents (just the metadata but not the files described)</description>
-    <action command="delete" search="walk.files" path="~/.config/transmission/resume/"/>
-    <action command="delete" search="walk.files" path="~/.config/transmission/torrents/"/>
+    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/transmission/resume/"/>
+    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/transmission/torrents/"/>
   </option>
   <option id="history">
     <label>Statistics</label>
     <description>Delete the file</description>
-    <action command="delete" search="file" path="~/.config/transmission/stats.json"/>
+    <action command="delete" search="file" path="$XDG_CONFIG_HOME/transmission/stats.json"/>
   </option>
 </cleaner>

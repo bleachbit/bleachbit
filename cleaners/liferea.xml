@@ -49,6 +49,6 @@
     <action command="sqlite.vacuum" search="file" path="~/.liferea_1.6/liferea.db"/>
     <action command="sqlite.vacuum" search="file" path="~/.liferea_1.8/liferea.db"/>
     <!-- since 1.10 Liferea follows XDG paths -->
-    <action command="sqlite.vacuum" search="file" path="~/.local/share/liferea/liferea.db"/>
+    <action command="sqlite.vacuum" search="file" path="$XDG_DATA_HOME/liferea/liferea.db"/>
   </option>
 </cleaner>

@@ -28,7 +28,7 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="$APPDATA\.libreoffice\3\user\uno_packages\cache\"/>
-    <action command="delete" search="walk.all" path="~/.config/libreoffice/3/user/uno_packages/cache/"/>
+    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/libreoffice/3/user/uno_packages/cache/"/>
     <action command="delete" search="walk.all" path="~/.libreoffice/3/user/uno_packages/cache/"/>
     <action command="delete" search="walk.all" path="~/.libreoffice/3-suse/user/config/uno_packages/cache/"/>
   </option>
@@ -40,8 +40,8 @@
     <!-- LibreOffice 3.5 on Mint 9 (Ubuntu 10.04) uses ~/.config/libreoffice/3/user/ -->
     <!-- LibreOffice 4 on Ubuntu 13.04 uses ~/.config/libreoffice/4/user -->
     <action command="office_registrymodifications" search="file" path="$APPDATA\LibreOffice\3\user\registrymodifications.xcu"/>
-    <action command="office_registrymodifications" search="file" path="~/.config/libreoffice/3/user/registrymodifications.xcu"/>
-    <action command="office_registrymodifications" search="file" path="~/.config/libreoffice/4/user/registrymodifications.xcu"/>
+    <action command="office_registrymodifications" search="file" path="$XDG_CONFIG_HOME/libreoffice/3/user/registrymodifications.xcu"/>
+    <action command="office_registrymodifications" search="file" path="$XDG_CONFIG_HOME/libreoffice/4/user/registrymodifications.xcu"/>
     <action command="office_registrymodifications" search="file" path="~/.libreoffice/3-suse/user/registrymodifications.xcu"/>
     <action command="office_registrymodifications" search="file" path="~/.libreoffice/3/user/registrymodifications.xcu"/>
   </option>

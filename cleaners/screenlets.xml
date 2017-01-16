@@ -24,6 +24,6 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action search="glob" command="delete" path="~/.config/Screenlets/*.log"/>
+    <action search="glob" command="delete" path="$XDG_CONFIG_HOME/Screenlets/*.log"/>
   </option>
 </cleaner>
