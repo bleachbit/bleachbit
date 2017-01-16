@@ -33,10 +33,21 @@ if 'nt' == os.name:
     from bleachbit.Windows import setup_environment
     setup_environment()
 
-if 'posix' == os.name and os.path.isdir('/usr/share/bleachbit'):
-    # This path contains bleachbit/{C,G}LI.py .  This section is
-    # unnecessary if installing BleachBit in site-packages.
-    sys.path.append('/usr/share/')
+if 'posix' == os.name:
+    if os.path.isdir('/usr/share/bleachbit'):
+        # This path contains bleachbit/{C,G}LI.py .  This section is
+        # unnecessary if installing BleachBit in site-packages.
+        sys.path.append('/usr/share/')
+
+    # XDG base directory specification
+    envs = {
+        'XDG_DATA_HOME': os.path.expanduser('~/.local/share'),
+        'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
+        'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
+    }
+    for varname, value in envs.iteritems():
+        if not os.getenv(varname):
+            os.putenv(varname, value)
 
 if 1 == len(sys.argv):
     import gtk
