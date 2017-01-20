@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-01-01 20:28-0700\n"
-"PO-Revision-Date: 2017-01-02 19:07+0000\n"
+"POT-Creation-Date: 2017-01-16 13:54-0700\n"
+"PO-Revision-Date: 2017-01-19 00:30+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2017-01-04 00:24+0000\n"
-"X-Generator: Launchpad (build 18298)\n"
+"X-Launchpad-Export-Date: 2017-01-20 03:32+0000\n"
+"X-Generator: Launchpad (build 18302)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -185,8 +185,8 @@ msgid "Delete cached patches and installers"
 msgstr "Eliminar instaladores e parches da caché"
 
 #: ../cleaners/hexchat.xml
-msgid "IRC chat client formerly known as XChat"
-msgstr "Cliente para conversas IRC coñecido anteriormente como XChat"
+msgid "IRC client formerly known as XChat"
+msgstr "Cliente IRC anteriormente coñecido como XChat"
 
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
@@ -970,26 +970,26 @@ msgstr "mostrar información da versión e saír"
 msgid "overwrite files to hide contents"
 msgstr "Sobrescribir os ficheiros para agochar o contido"
 
-#: ../bleachbit/Update.py:83
+#: ../bleachbit/Update.py:79
 msgid "New winapp2.ini was downloaded."
 msgstr "Descargouse un winapp2.ini novo."
 
-#: ../bleachbit/Update.py:128
+#: ../bleachbit/Update.py:124
 msgid "Update BleachBit"
 msgstr "Actualizar BleachBit"
 
-#: ../bleachbit/Update.py:133
+#: ../bleachbit/Update.py:129
 msgid "A new version is available."
 msgstr "Hai dispoñíbel unha nova versión"
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
-#: ../bleachbit/Update.py:142
+#: ../bleachbit/Update.py:138
 #, python-format
 msgid "Update to version %s"
 msgstr "Actualizar á versión %s"
 
-#: ../bleachbit/Update.py:167
+#: ../bleachbit/Update.py:163
 #, python-format
 msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
@@ -1123,7 +1123,7 @@ msgstr "Ferramentas"
 msgid "Games"
 msgstr "Xogos"
 
-#: ../bleachbit/Winapp.py:165
+#: ../bleachbit/Winapp.py:163
 msgid "Imported from winapp2.ini"
 msgstr "Importado de winapp2.ini"
 
@@ -1221,7 +1221,7 @@ msgstr "Obter previamente"
 msgid "Recycle bin"
 msgstr "Papeleira de reciclaxe"
 
-#: ../bleachbit/Cleaner.py:496 ../bleachbit/Cleaner.py:780
+#: ../bleachbit/Cleaner.py:496 ../bleachbit/Cleaner.py:783
 msgid "Empty the recycle bin"
 msgstr "Baleirar a papeleira de reciclaxe"
 
@@ -1279,13 +1279,13 @@ msgstr "Esta opción é moi lenta."
 msgid "The system in general"
 msgstr "O sistema en xeral"
 
-#: ../bleachbit/Cleaner.py:527 ../bleachbit/Cleaner.py:850
+#: ../bleachbit/Cleaner.py:527 ../bleachbit/Cleaner.py:853
 msgid "System"
 msgstr "Sistema"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:731 ../bleachbit/Cleaner.py:883
+#: ../bleachbit/Cleaner.py:731 ../bleachbit/Cleaner.py:886
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Sobrescribir o espazo libre do disco %s"
