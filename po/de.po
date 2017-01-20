@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-01-01 20:28-0700\n"
-"PO-Revision-Date: 2017-01-05 17:11+0000\n"
+"POT-Creation-Date: 2017-01-16 13:54-0700\n"
+"PO-Revision-Date: 2017-01-18 20:40+0000\n"
 "Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2017-01-05 18:52+0000\n"
+"X-Launchpad-Export-Date: 2017-01-20 03:32+0000\n"
 "X-Generator: Launchpad (build 18302)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -186,8 +186,8 @@ msgstr ""
 "Zwischengespeicherte Programmkorrekturen und Installationsprogramme löschen"
 
 #: ../cleaners/hexchat.xml
-msgid "IRC chat client formerly known as XChat"
-msgstr "IRC-Chatprogramm – vorher als XChat bekannt"
+msgid "IRC client formerly known as XChat"
+msgstr "IRC-Programm – vorher als XChat bekannt"
 
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
@@ -998,26 +998,26 @@ msgstr "Versionsinformationen anzeigen und beenden"
 msgid "overwrite files to hide contents"
 msgstr "Überschreibt Dateien, um deren Inhalt zu verstecken"
 
-#: ../bleachbit/Update.py:83
+#: ../bleachbit/Update.py:79
 msgid "New winapp2.ini was downloaded."
 msgstr "Die neue Version der Datei winapp2.ini wurde heruntergeladen."
 
-#: ../bleachbit/Update.py:128
+#: ../bleachbit/Update.py:124
 msgid "Update BleachBit"
 msgstr "BleachBit aktualisieren"
 
-#: ../bleachbit/Update.py:133
+#: ../bleachbit/Update.py:129
 msgid "A new version is available."
 msgstr "Eine neue Version ist verfügbar."
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
-#: ../bleachbit/Update.py:142
+#: ../bleachbit/Update.py:138
 #, python-format
 msgid "Update to version %s"
 msgstr "Auf Version %s aktualisieren"
 
-#: ../bleachbit/Update.py:167
+#: ../bleachbit/Update.py:163
 #, python-format
 msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
@@ -1153,7 +1153,7 @@ msgstr "Dienstprogramme und Werkzeuge"
 msgid "Games"
 msgstr "Spiele"
 
-#: ../bleachbit/Winapp.py:165
+#: ../bleachbit/Winapp.py:163
 msgid "Imported from winapp2.ini"
 msgstr "Importiert von winapp2.ini"
 
@@ -1250,7 +1250,7 @@ msgstr "Vorabruf"
 msgid "Recycle bin"
 msgstr "Papierkorb"
 
-#: ../bleachbit/Cleaner.py:496 ../bleachbit/Cleaner.py:780
+#: ../bleachbit/Cleaner.py:496 ../bleachbit/Cleaner.py:783
 msgid "Empty the recycle bin"
 msgstr "Den Papierkorb leeren"
 
@@ -1309,13 +1309,13 @@ msgstr "Diese Option verlangsamt den Vorgang."
 msgid "The system in general"
 msgstr "Das System im Allgemeinen"
 
-#: ../bleachbit/Cleaner.py:527 ../bleachbit/Cleaner.py:850
+#: ../bleachbit/Cleaner.py:527 ../bleachbit/Cleaner.py:853
 msgid "System"
 msgstr "System"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:731 ../bleachbit/Cleaner.py:883
+#: ../bleachbit/Cleaner.py:731 ../bleachbit/Cleaner.py:886
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Freien Speicherplatz von %s überschreiben"
