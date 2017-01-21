@@ -326,3 +326,19 @@ help_contents_url = "%s/help/%s" \
 release_notes_url = "%s/release-notes/%s" \
     % (base_url, APP_VERSION)
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
+
+# set up environment variables
+if 'nt' == os.name:
+    from bleachbit.Windows import setup_environment
+    setup_environment()
+
+if 'posix' == os.name:
+    # XDG base directory specification
+    envs = {
+        'XDG_DATA_HOME': os.path.expanduser('~/.local/share'),
+        'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
+        'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
+    }
+    for varname, value in envs.iteritems():
+        if not os.getenv(varname):
+            os.environ[varname] = value

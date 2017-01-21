@@ -43,6 +43,21 @@ class CommonTestCase(unittest.TestCase, common.AssertFile):
         var = Common.expandvars('$HOME')
         self.assertIsInstance(var, unicode)
 
+    def test_environment(self):
+        """Test for important environment variables"""
+        # useful for researching
+        # grep -Poh "([\\$%]\w+)" cleaners/*xml | cut -b2- | sort | uniq -i
+        if 'posix' == os.name:
+            envs = ('XDG_DATA_HOME', 'XDG_CONFIG_HOME', 'XDG_CACHE_HOME',
+                    'HOME')
+        else:
+            envs = ('AppData', 'CommonAppData', 'Documents', 'ProgramFiles',
+                    'UserProfile', 'WinDir')
+        for env in envs:
+            e = os.getenv(env)
+            self.assertIsNotNone(e)
+            self.assertTrue(len(e) > 4)
+
     def test_expanduser(self):
         """Unit test for expanduser."""
         # Return Unicode when given str.
