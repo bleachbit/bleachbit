@@ -34,6 +34,7 @@ import tempfile
 import unittest
 
 
+@unittest.skipIf('win32' == sys.platform, 'skipping unix tests on windows')
 class UnixTestCase(unittest.TestCase):
 
     """Test case for module Unix"""
