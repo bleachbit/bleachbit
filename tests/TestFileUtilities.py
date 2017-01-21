@@ -427,6 +427,22 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         expanded = expandvars('$HOME')
         self.assertTrue(isinstance(expanded, unicode))
 
+    def test_extended_path(self):
+        """Unit test for extended_path()"""
+        if 'nt' == os.name:
+            tests = (
+                (r'c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'\\?\c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'\\server\share\windows\notepad.exe', r'\\?\unc\server\share\windows\notepad.exe'),
+                (r'\\?\unc\server\share\windows\notepad.exe', r'\\?\unc\server\share\windows\notepad.exe')
+            )
+        else:
+            # unchanged
+            tests = (('/home/foo', '/home/foo'),)
+        for test in tests:
+            self.assertEqual(extended_path(test[0]), test[1])
+
     def test_free_space(self):
         """Unit test for free_space()"""
         home = expanduser('~')
