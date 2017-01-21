@@ -23,14 +23,13 @@
 Test case for module Diagnostic
 """
 
-import sys
-import unittest
 
-import common
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
+from tests import common
 from bleachbit.Diagnostic import diagnostic_info
 
+import unittest
 
 class DiagnosticTestCase(unittest.TestCase):
 

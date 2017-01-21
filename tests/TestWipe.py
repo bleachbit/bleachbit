@@ -18,24 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-
-import unittest
-
 """
 Test FileUtilities.wipe_path
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
+from bleachbit.General import run_external
+
+import logging
 import os
 import sys
 import tempfile
 import time
 import traceback
+import unittest
 
-sys.path.append('.')
-from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
-from bleachbit.General import run_external
-from bleachbit.Common import logger
+logger = logging.getLogger('bleachbit')
 
 
 def create_disk_image(n_bytes):

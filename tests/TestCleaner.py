@@ -19,25 +19,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test case for module Cleaner
 """
 
 
-import sys
+from __future__ import absolute_import, print_function
+
+from bleachbit.Action import ActionProvider
+from bleachbit.Cleaner import *
+
+from tests import common
+
+import logging
 import tempfile
 import unittest
 from xml.dom.minidom import parseString
 
-sys.path.append('.')
-from bleachbit.Action import ActionProvider
-from bleachbit.Cleaner import *
-import bleachbit.Common
-
-import common
-
+logger = logging.getLogger('bleachbit')
 
 def action_to_cleaner(action_str):
     """Given an action XML fragment, return a cleaner"""
@@ -79,6 +78,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
             self.actions.append(
                 '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
         elif 'posix' == os.name:
+            print(__file__)
             self.actions.append(
                 '<action command="delete" search="file" path="%s"/>' % __file__)
             self.actions.append(
@@ -159,7 +159,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
 
     def test_get_commands(self):
         for key in sorted(backends):
-            bleachbit.Common.logger.debug("test_get_commands: key='%s'", key)
+            Common.logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
                     for result in cmd.execute(really_delete=False):

@@ -23,14 +23,16 @@
 Test case for module Unix
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+import bleachbit.Common
+from bleachbit.Unix import *
 
 import sys
 import tempfile
 import unittest
 
-sys.path.append('.')
-import bleachbit.Common
-from bleachbit.Unix import *
 
 class UnixTestCase(unittest.TestCase):
 

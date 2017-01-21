@@ -22,12 +22,12 @@
 Common code for unit tests
 """
 
+from __future__ import absolute_import, print_function
 
-import os
-import sys
-
-sys.path.append('.')
 from bleachbit.FileUtilities import extended_path
+
+import tempfile
+import os
 
 
 class AssertFile:

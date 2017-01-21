@@ -23,12 +23,13 @@ Test case for module General
 """
 
 
-import sys
-import unittest
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
 from bleachbit.General import *
 from bleachbit.Common import logger
+from tests import common
+
+import unittest
 
 
 class GeneralTestCase(unittest.TestCase):

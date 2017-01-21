@@ -22,12 +22,11 @@
 Test case for RecognizeCleanerML
 """
 
+from __future__ import absolute_import, print_function
 
-import sys
-import unittest
-
-sys.path.append('.')
 from bleachbit.RecognizeCleanerML import hashdigest
+
+import unittest
 
 
 class RecognizeCleanerMLTestCase(unittest.TestCase):

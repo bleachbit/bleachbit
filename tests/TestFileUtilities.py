@@ -19,24 +19,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test case for module FileUtilities
 """
+
+from __future__ import absolute_import, print_function
+
+from tests import common
+from bleachbit.FileUtilities import *
+from bleachbit.Options import options
+from bleachbit.Common import expanduser, expandvars, logger
 
 import json
 import platform
 import sys
 import unittest
-
-import common
-
-sys.path.append('.')
-from bleachbit.FileUtilities import *
-from bleachbit.Options import options
-from bleachbit.Common import expanduser, expandvars, logger
-
 
 
 def write_file(filename, contents):

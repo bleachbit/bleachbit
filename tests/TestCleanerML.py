@@ -23,13 +23,12 @@ Test cases for module CleanerML
 """
 
 
-import unittest
-import sys
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
+from tests import common
 from bleachbit.CleanerML import *
 
-import common
+import unittest
 
 
 class CleanerMLTestCase(unittest.TestCase, common.AssertFile):

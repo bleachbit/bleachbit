@@ -23,27 +23,14 @@
 Run all test suites
 """
 
+from __future__ import absolute_import, print_function
+from tests import TestAction, TestCLI, TestCleaner, TestCleanerML, TestCommand, TestCommon
+from tests import TestDiagnostic, TestDeepScan, TestFileUtilities, TestGeneral, TestMemory
+from tests import TestOptions, TestRecognizeCleanerML, TestSpecial, TestUpdate, TestWorker
 
 import os
-import sys
 import unittest
-
-import TestAction
-import TestCLI
-import TestCleaner
-import TestCleanerML
-import TestCommand
-import TestCommon
-import TestDiagnostic
-import TestDeepScan
-import TestFileUtilities
-import TestGeneral
-import TestMemory
-import TestOptions
-import TestRecognizeCleanerML
-import TestSpecial
-import TestUpdate
-import TestWorker
+import sys
 
 
 suites = [TestAction.suite(),
@@ -65,12 +52,12 @@ suites = [TestAction.suite(),
           ]
 
 if 'posix' == os.name and sys.version_info >= (2, 7, 0):
-    import TestUnix
+    from tests import TestUnix
     suites.append(TestUnix.suite())
 
 if 'nt' == os.name:
-    import TestWinapp
-    import TestWindows
+    from tests import TestWinapp
+    from tests import TestWindows
     suites.append(TestWinapp.suite())
     suites.append(TestWindows.suite())
 

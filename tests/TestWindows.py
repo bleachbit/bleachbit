@@ -23,6 +23,13 @@
 Test case for module Windows
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+
+from bleachbit.FileUtilities import extended_path
+from bleachbit.Windows import *
+from bleachbit.Common import logger, FSE
 
 import sys
 import tempfile
@@ -30,16 +37,9 @@ import unittest
 import platform
 from decimal import Decimal
 
-import common
-
 if 'win32' == sys.platform:
     import _winreg
     from win32com.shell import shell
-
-sys.path.append('.')
-from bleachbit.FileUtilities import extended_path
-from bleachbit.Windows import *
-from bleachbit.Common import logger, FSE
 
 
 def put_files_into_recycle_bin():
