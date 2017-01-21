@@ -102,15 +102,16 @@ if 'py2exe' in sys.argv:
             'excludes': ['pyreadline', 'difflib', 'doctest',
                          'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
+                'CRYPT32.DLL',  # required by ssl
                 'DNSAPI.DLL',
-                'IPHLPAPI.DLL', # psutil
+                'IPHLPAPI.DLL',  # psutil
                 'MPR.dll',
                 'MSIMG32.DLL',
                 'MSWSOCK.dll',
-                'NSI.dll', # psutil
+                'NSI.dll',  # psutil
                 'PSAPI.DLL',
                 'USP10.DLL',
-                'WTSAPI32.DLL', # psutil
+                'WTSAPI32.DLL',  # psutil
                 'api-ms-win-core-apiquery-l1-1-0.dll',
                 'api-ms-win-core-crt-l1-1-0.dll',
                 'api-ms-win-core-crt-l2-1-0.dll',
