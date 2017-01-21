@@ -281,7 +281,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         # wipe contents
         if allow_shred and (shred or options.get('shred')):
             try:
-                wipe_contents(path)
+                wipe_contents(extended_path_undo(path))
             except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
@@ -370,6 +370,16 @@ def extended_path(path):
         if path.startswith(r'\\'):
             return '\\\\?\\unc\\' + path[2:]
         return '\\\\?\\' + path
+    return path
+
+
+def extended_path_undo(path):
+    """"""
+    if 'nt' == os.name:
+        if path.startswith(r'\\?\unc'):
+            return path[7:]
+        if path.startswith(r'\\?'):
+            return path[4:]
     return path
 
 
