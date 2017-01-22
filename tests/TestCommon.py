@@ -22,16 +22,14 @@
 Test case for Common
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+import bleachbit.Common as Common
 
 import os
-import sys
 import tempfile
 import unittest
-
-import common
-
-sys.path.append('.')
-import bleachbit.Common as Common
 
 
 class CommonTestCase(unittest.TestCase, common.AssertFile):

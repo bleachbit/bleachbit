@@ -19,24 +19,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test cases for module Action
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit.Action import *
+from bleachbit.Common import FSE, expanduser, expandvars
+from tests import common
 
 import shutil
 import sys
 import tempfile
 import unittest
 from xml.dom.minidom import parseString
-
-sys.path.append('.')
-from bleachbit.Action import *
-from bleachbit.Common import FSE, expanduser, expandvars
-
-import common
 
 
 def _action_str_to_commands(action_str):
@@ -187,7 +184,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     def test_ini(self):
         """Unit test for class Ini"""
-        from TestFileUtilities import test_ini_helper
+        from tests.TestFileUtilities import test_ini_helper
 
         def execute_ini(path, section, parameter):
             effective_parameter = ""
@@ -201,7 +198,7 @@ class ActionTestCase(unittest.TestCase, common.AssertFile):
 
     def test_json(self):
         """Unit test for class Json"""
-        from TestFileUtilities import test_json_helper
+        from tests.TestFileUtilities import test_json_helper
 
         def execute_json(path, address):
             action_str = u'<action command="json" search="file" path="%s" address="%s" />' \

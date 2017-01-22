@@ -23,64 +23,17 @@
 Run all test suites
 """
 
+from __future__ import absolute_import, print_function
 
 import os
-import sys
 import unittest
-
-import TestAction
-import TestCLI
-import TestCleaner
-import TestCleanerML
-import TestCommand
-import TestCommon
-import TestDiagnostic
-import TestDeepScan
-import TestFileUtilities
-import TestGeneral
-import TestMemory
-import TestOptions
-import TestRecognizeCleanerML
-import TestSpecial
-import TestUpdate
-import TestWorker
-
-
-suites = [TestAction.suite(),
-          TestCleanerML.suite(),
-          TestCleaner.suite(),
-          TestCLI.suite(),
-          TestCommand.suite(),
-          TestCommon.suite(),
-          TestDeepScan.suite(),
-          TestDiagnostic.suite(),
-          TestFileUtilities.suite(),
-          TestGeneral.suite(),
-          TestMemory.suite(),
-          TestOptions.suite(),
-          TestRecognizeCleanerML.suite(),
-          TestSpecial.suite(),
-          TestUpdate.suite(),
-          TestWorker.suite()
-          ]
-
-if 'posix' == os.name and sys.version_info >= (2, 7, 0):
-    import TestUnix
-    suites.append(TestUnix.suite())
-
-if 'nt' == os.name:
-    import TestWinapp
-    import TestWindows
-    suites.append(TestWinapp.suite())
-    suites.append(TestWindows.suite())
-
-
-def suite():
-    """Combine all the suites into one large suite"""
-    suite_ = unittest.TestSuite()
-    map(suite_.addTest, suites)
-    return suite_
+import sys
 
 if __name__ == '__main__':
-    success = unittest.TextTestRunner(verbosity=2).run(suite()).wasSuccessful()
+    print("""You should use the unittest discovery, it's much nicer:
+    python2 -m unittest discover -p Test*.py                       # run all tests
+    python2 -m unittest tests.TestCLI                              # run only the CLI tests
+    python2 -m unittest tests.TestCLI.CLITestCase.test_encoding    # run only a single test""")
+    suite = unittest.defaultTestLoader.discover(os.getcwd(), pattern='Test*.py')
+    success = unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
     sys.exit(success == False)

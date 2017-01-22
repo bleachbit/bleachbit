@@ -23,12 +23,13 @@ Test case for Command
 """
 
 
-import sys
-import unittest
-import tempfile
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
+from tests import common
 from bleachbit.Command import *
+
+import tempfile
+import unittest
 
 
 class CommandTestCase(unittest.TestCase):

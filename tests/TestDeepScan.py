@@ -23,18 +23,16 @@
 Test case for module DeepScan
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+from bleachbit.DeepScan import DeepScan, normalized_walk
+from bleachbit.Common import expanduser
 
 import os
 import shutil
-import sys
 import tempfile
 import unittest
-
-import common
-
-sys.path.append('.')
-from bleachbit.DeepScan import DeepScan, normalized_walk
-from bleachbit.Common import expanduser
 
 
 class DeepScanTestCase(unittest.TestCase):
@@ -112,7 +110,7 @@ class DeepScanTestCase(unittest.TestCase):
 
         # run deep scan
         astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
-        import TestCleaner
+        from tests import TestCleaner
         cleaner = TestCleaner.action_to_cleaner(astr)
         from bleachbit.Worker import backends, Worker
         backends['test'] = cleaner

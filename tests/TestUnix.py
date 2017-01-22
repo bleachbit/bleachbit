@@ -23,15 +23,18 @@
 Test case for module Unix
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+import bleachbit.Common
+from bleachbit.Unix import *
 
 import sys
 import tempfile
 import unittest
 
-sys.path.append('.')
-import bleachbit.Common
-from bleachbit.Unix import *
 
+@unittest.skipIf('win32' == sys.platform, 'skipping unix tests on windows')
 class UnixTestCase(unittest.TestCase):
 
     """Test case for module Unix"""

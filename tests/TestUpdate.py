@@ -18,23 +18,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test case for module Update
 """
 
 
-import os
-import os.path
-import sys
-import unittest
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
+from tests import common
 from bleachbit import Common
 from bleachbit.Common import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
 import bleachbit.Update
+
+import os
+import os.path
+import unittest
+
 
 class UpdateTestCase(unittest.TestCase):
 

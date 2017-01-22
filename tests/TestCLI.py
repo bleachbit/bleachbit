@@ -19,12 +19,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import print_function
-
 """
 Test case for module CLI
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit.CLI import *
+from bleachbit.General import run_external
+from bleachbit import FileUtilities
+from tests import common
 
 import copy
 import os
@@ -32,10 +36,6 @@ import sys
 import tempfile
 import unittest
 
-sys.path.append('.')
-from bleachbit.CLI import *
-from bleachbit.General import run_external
-from bleachbit import FileUtilities
 
 
 class CLITestCase(unittest.TestCase):
@@ -95,8 +95,8 @@ class CLITestCase(unittest.TestCase):
 
         env = copy.deepcopy(os.environ)
         env['LANG'] = 'en_US'  # not UTF-8
-        path = os.path.join('bleachbit', 'CLI.py')
-        args = [sys.executable, path, '-p', 'system.tmp']
+        module = 'bleachbit.CLI'
+        args = [sys.executable, '-m', module, '-p', 'system.tmp']
         # If Python pipes stdout to file or devnull, the test may give
         # a false negative.  It must print stdout to terminal.
         self._test_preview(args, stdout=True, env=env)
@@ -109,8 +109,8 @@ class CLITestCase(unittest.TestCase):
         lang = os.environ['LANG']
         os.environ['LANG'] = 'blahfoo'
         # tests are run from the parent directory
-        path = os.path.join('bleachbit', 'CLI.py')
-        args = [sys.executable, path, '--version']
+        module = 'bleachbit.CLI'
+        args = [sys.executable, '-m', module, '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         os.environ['LANG'] = lang
@@ -118,10 +118,10 @@ class CLITestCase(unittest.TestCase):
     def test_preview(self):
         """Unit test for --preview option"""
         args_list = []
-        path = os.path.join('bleachbit', 'CLI.py')
-        big_args = [sys.executable, path, '--preview', ]
+        module = 'bleachbit.CLI'
+        big_args = [sys.executable, '-m', module, '--preview', ]
         for cleaner in cleaners_list():
-            args_list.append([sys.executable, path, '--preview', cleaner])
+            args_list.append([sys.executable, '-m', module, '--preview', cleaner])
             big_args.append(cleaner)
         args_list.append(big_args)
         for args in args_list:
@@ -164,8 +164,7 @@ class CLITestCase(unittest.TestCase):
                 if '.' == dir_:
                     filename = os.path.basename(filename)
                 self.assert_(os.path.exists(filename))
-                path = os.path.join('bleachbit', 'CLI.py')
-                args = [sys.executable, path, '--shred', filename]
+                args = [sys.executable, '-m', 'bleachbit.CLI', '--shred', filename]
                 output = run_external(args, stdout=open(os.devnull, 'w'))
                 self.assert_(not os.path.exists(filename))
 

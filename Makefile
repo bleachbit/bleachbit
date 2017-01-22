@@ -76,7 +76,7 @@ lint:
 
 tests:
 	make -C cleaners tests; cleaners_status=$$?; \
-	$(COVERAGE) tests/TestAll.py -v; py_status=$$?; \
+	$(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status))
 
 pretty:

@@ -23,16 +23,17 @@ Test case for module Worker
 """
 
 
-import sys
-import tempfile
-import unittest
+from __future__ import absolute_import, print_function
 
-sys.path.append('.')
-import TestCleaner
+from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
 from bleachbit.Common import expanduser
+
+import os
+import tempfile
+import unittest
 
 
 class AccessDeniedActionAction(ActionProvider):

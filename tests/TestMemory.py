@@ -18,19 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 Test case for module Memory
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+from bleachbit.Memory import *
+
 
 import unittest
 import sys
-
-sys.path.append('.')
-from bleachbit.Memory import *
 
 running_linux = sys.platform.startswith('linux')
 

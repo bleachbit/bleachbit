@@ -17,26 +17,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 Test cases for module Winapp
 """
 
+from __future__ import absolute_import, print_function
+
+from tests import common
+from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
+from bleachbit.Windows import detect_registry_key, parse_windows_build
+from bleachbit.Common import logger
 
 import os
 import shutil
 import sys
 import tempfile
 import unittest
-
-sys.path.append('.')
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit.Common import logger
-
-import common
 
 
 def CreateSubKey(sub_key):
