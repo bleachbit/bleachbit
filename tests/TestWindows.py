@@ -37,7 +37,7 @@ if 'win32' == sys.platform:
     from win32com.shell import shell
 
 sys.path.append('.')
-from bleachbit.FileUtilities import extended_path
+from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
 from bleachbit.Common import logger, FSE
 
@@ -59,7 +59,7 @@ def put_files_into_recycle_bin():
 
 
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
-class WindowsTestCase(unittest.TestCase):
+class WindowsTestCase(unittest.TestCase, common.AssertFile):
 
     """Test case for module Windows"""
 
@@ -237,6 +237,61 @@ class WindowsTestCase(unittest.TestCase):
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=True)
             self.assertEqual(ret, 0)
+
+    def test_file_wipe(self):
+        """Unit test for file_wipe
+
+        There are more tests in testwipe.py
+        """
+
+        from bleachbit.WindowsWipe import file_wipe
+
+        dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
+
+        filenames = ('short', 'long' + 'x' * 250, u'utf8-ɡælɪk')
+        for filename in filenames:
+            longname = os.path.join(dirname, filename)
+            logger.debug('file_wipe(%s)', longname)
+
+            def _write_file(longname, contents):
+                common.write_file(longname, contents)
+                self.assertExists(longname)
+                return longname
+                import win32api
+                shortname = extended_path_undo(
+                    win32api.GetShortPathName(extended_path(longname)))
+                self.assertExists(shortname)
+                return shortname
+
+            def _test_wipe(contents):
+                shortname = _write_file(longname, contents)
+                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}'.format(
+                    len(longname), len(shortname), len(contents)))
+                if shell.IsUserAnAdmin():
+                    # wiping requires admin privileges
+                    file_wipe(shortname)
+                    file_wipe(longname)
+                else:
+                    with self.assertRaises(pywintypes.error):
+                        file_wipe(shortname)
+                        file_wipe(longname)
+                self.assertExists(shortname)
+                os.remove(extended_path(shortname))
+                self.assertNotExists(shortname)
+
+            # A small file that fits in MFT
+            _test_wipe('')
+
+            # requires wiping of extents
+            _test_wipe('secret' * 100000)
+
+        import shutil
+        shutil.rmtree(dirname, True)
+
+        if shell.IsUserAnAdmin():
+            logger.warning('You should also run test_file_wipe() without admin privileges.')
+        else:
+            logger.warning('You should also run test_file_wipe() with admin privileges.')
 
     def test_is_process_running(self):
         # winlogon.exe runs on Windows XP and Windows 7

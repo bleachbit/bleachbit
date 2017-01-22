@@ -105,6 +105,7 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       COMPRESSION_FORMAT_DEFAULT)
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 
+from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
 logging_level = logging.DEBUG
@@ -443,7 +444,8 @@ def truncate_file(file_handle):
 # Given a Windows file path, determine the volume that contains it.
 # Append the separator \ to it (more useful for subsequent calls).
 def volume_from_file(file_name):
-    split_path = os.path.splitdrive(file_name)
+    # strip \\?\
+    split_path = os.path.splitdrive(extended_path_undo(file_name))
     volume = split_path[0]
     if volume and volume[-1] != os.sep:
         volume += os.sep
@@ -876,6 +878,8 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
 
 # Main flow of control.
 def file_wipe(file_name):
+    # add \\?\ if it does not exist to support Unicode and long paths
+    file_name = extended_path(file_name)
     logging.basicConfig(level=logging_level)
     check_os()
     win_version, _ = determine_win_version()

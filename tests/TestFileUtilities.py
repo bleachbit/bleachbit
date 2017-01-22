@@ -39,10 +39,7 @@ from bleachbit.Common import expanduser, expandvars, logger
 
 
 
-def write_file(filename, contents):
-    """Write contents to file"""
-    with open(extended_path(filename), 'w') as f:
-        f.write(contents)
+
 
 
 def test_ini_helper(self, execute):
@@ -488,7 +485,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
         def test_getsize_helper(fname):
             filename = os.path.join(dirname, fname)
-            write_file(filename, "abcdefghij" * 12345)
+            common.write_file(filename, "abcdefghij" * 12345)
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
