@@ -23,6 +23,12 @@
 Integration specific to Unix-like operating systems
 """
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+from bleachbit import FileUtilities, General
+from bleachbit import _
+
 import glob
 import logging
 import os
@@ -30,11 +36,6 @@ import re
 import shlex
 import subprocess
 import sys
-
-import FileUtilities
-import General
-import Common
-from Common import _
 
 logger = logging.getLogger(__name__)
 
@@ -430,7 +431,7 @@ def is_unregistered_mime(mimetype):
 def is_broken_xdg_desktop(pathname):
     """Returns boolean whether the given XDG desktop entry file is broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
-    config = Common.RawConfigParser()
+    config = bleachbit.RawConfigParser()
     config.read(pathname)
     if not config.has_section('Desktop Entry'):
         logger.info("is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
@@ -530,28 +531,28 @@ def start_with_computer(enabled):
     If disabled, then delete the shortcut."""
     if not enabled:
         # User requests to not automatically start BleachBit
-        if os.path.lexists(Common.autostart_path):
+        if os.path.lexists(bleachbit.autostart_path):
             # Delete the shortcut
-            FileUtilities.delete(Common.autostart_path)
+            FileUtilities.delete(bleachbit.autostart_path)
         return
     # User requests to automatically start BleachBit
-    if os.path.lexists(Common.autostart_path):
+    if os.path.lexists(bleachbit.autostart_path):
         # Already automatic, so exit
         return
-    if not os.path.exists(Common.launcher_path):
-        logger.error('%s does not exist: ', Common.launcher_path)
+    if not os.path.exists(bleachbit.launcher_path):
+        logger.error('%s does not exist: ', bleachbit.launcher_path)
         return
     import shutil
-    General.makedirs(os.path.dirname(Common.autostart_path))
-    shutil.copy(Common.launcher_path, Common.autostart_path)
-    os.chmod(Common.autostart_path, 0o755)
+    General.makedirs(os.path.dirname(bleachbit.autostart_path))
+    shutil.copy(bleachbit.launcher_path, bleachbit.autostart_path)
+    os.chmod(bleachbit.autostart_path, 0o755)
     if General.sudo_mode():
-        General.chownself(Common.autostart_path)
+        General.chownself(bleachbit.autostart_path)
 
 
 def start_with_computer_check():
     """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(Common.autostart_path)
+    return os.path.lexists(bleachbit.autostart_path)
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):

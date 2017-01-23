@@ -22,20 +22,21 @@
 Command design pattern implementation for cleaning
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit import _
+from bleachbit import FileUtilities
 
 import logging
 import os
 import types
-import FileUtilities
-import Common
 
 from sqlite3 import DatabaseError
-from Common import _
 
 if 'nt' == os.name:
-    import Windows
+    import bleachbit.Windows
 else:
-    from General import WindowsError
+    from bleachbit.General import WindowsError
 
 
 def whitelist(path):
@@ -88,7 +89,7 @@ class Delete:
                 if 32 != e.winerror and 5 != e.winerror:
                     raise
                 try:
-                    Windows.delete_locked_file(self.path)
+                    bleachbit.Windows.delete_locked_file(self.path)
                 except:
                     raise
                 else:
@@ -298,10 +299,10 @@ class Winreg:
         ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
             _str = '%s<%s>' % (self.keyname, self.valuename)
-            ret = Windows.delete_registry_value(self.keyname,
+            ret = bleachbit.Windows.delete_registry_value(self.keyname,
                                                 self.valuename, really_delete)
         else:
-            ret = Windows.delete_registry_key(self.keyname, really_delete)
+            ret = bleachbit.Windows.delete_registry_key(self.keyname, really_delete)
             _str = self.keyname
         if not ret:
             # Nothing to delete or nothing was deleted.  This return

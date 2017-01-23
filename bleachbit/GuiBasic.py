@@ -21,15 +21,15 @@
 """
 Basic GUI code
 """
+from __future__ import absolute_import, print_function
 
+from bleachbit import _, expanduser
 
 import gtk
 import os
 
 if 'nt' == os.name:
-    import Windows
-
-from Common import _, expanduser
+    from bleachbit import Windows
 
 
 def browse_folder(parent, title, multiple, stock_button):

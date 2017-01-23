@@ -23,7 +23,9 @@
 Scan directory tree for files to delete
 """
 
-import Common
+from __future__ import absolute_import, print_function
+
+import bleachbit
 
 import logging
 import os

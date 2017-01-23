@@ -37,6 +37,10 @@ These are the terms:
 
 """
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+from bleachbit import Command, FileUtilities, General
 
 import glob
 import logging
@@ -60,12 +64,6 @@ if 'win32' == sys.platform:
 
     psapi = windll.psapi
     kernel = windll.kernel32
-
-import Command
-import Common
-import FileUtilities
-import General
-from Common import expandvars
 
 logger = logging.getLogger(__name__)
 
@@ -202,11 +200,11 @@ def delete_registry_key(parent_key, really_delete):
 
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
-    windir = expandvars('$windir')
+    windir = bleachbit.expandvars('$windir')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
-    dirs += [expandvars('$windir\\SoftwareDistribution\\Download')]
-    dirs += [expandvars('$windir\\ie7updates')]
-    dirs += [expandvars('$windir\\ie8updates')]
+    dirs += [bleachbit.expandvars('$windir\\SoftwareDistribution\\Download')]
+    dirs += [bleachbit.expandvars('$windir\\ie7updates')]
+    dirs += [bleachbit.expandvars('$windir\\ie8updates')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
@@ -339,16 +337,16 @@ def get_autostart_path():
         logger.exception('exception in get_autostart_path()')
         msg = 'Error finding user startup folder: %s ' % (
             str(sys.exc_info()[1]))
-        import GuiBasic
+        from bleachbit import GuiBasic
         GuiBasic.message_dialog(None, msg)
         # as a fallback, guess
         # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup
         # Windows 7:
         # C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start
         # Menu\Programs\Startup
-        startupdir = expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
+        startupdir = bleachbit.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
         if not os.path.exists(startupdir):
-            startupdir = expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+            startupdir = bleachbit.expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
     return os.path.join(startupdir, 'bleachbit.lnk')
 
 
@@ -563,7 +561,7 @@ def set_environ(varname, path):
     if varname in os.environ:
         logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
-            os.environ[varname] = expandvars(u'%%%s%%' % varname).encode('utf-8')
+            os.environ[varname] = bleachbit.expandvars(u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs
         return
@@ -622,7 +620,7 @@ def start_with_computer(enabled):
         return
     import winshell
     winshell.CreateShortcut(Path=autostart_path,
-                            Target=os.path.join(Common.bleachbit_exe_path, 'bleachbit.exe'))
+                            Target=os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.exe'))
 
     # import win32com.client
     # wscript_shell = win32com.client.Dispatch('WScript.Shell')

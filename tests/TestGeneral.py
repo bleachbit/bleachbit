@@ -26,7 +26,7 @@ Test case for module General
 from __future__ import absolute_import, print_function
 
 from bleachbit.General import *
-from bleachbit.Common import logger
+from bleachbit import logger
 from tests import common
 
 import unittest

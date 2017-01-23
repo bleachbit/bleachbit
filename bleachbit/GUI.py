@@ -18,6 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options
+from bleachbit import _, _p, APP_NAME, appicon_path, portable_mode
+from bleachbit import Cleaner, FileUtilities
+from bleachbit import GuiBasic
 
 import logging
 import os
@@ -34,20 +44,8 @@ import gtk
 import gobject
 warnings.simplefilter('default')
 
-from Common import _, _p, APP_NAME, APP_VERSION, APP_URL, appicon_path, \
-    help_contents_url, license_filename, options_file, options_dir, \
-    online_update_notification_enabled, release_notes_url, portable_mode, \
-    expanduser
-import Common
-from Cleaner import backends, register_cleaners
-from GuiPreferences import PreferencesDialog
-from Options import options
-import Cleaner
-import FileUtilities
-import GuiBasic
-
 if 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
 
@@ -362,7 +360,7 @@ class GUI:
         """Preview operations or run operations (delete files)"""
 
         assert(isinstance(really_delete, bool))
-        import Worker
+        from bleachbit import Worker
         self.start_time = None
         if None == operations:
             operations = {}
@@ -428,8 +426,9 @@ class GUI:
         dialog.set_comments(_("Program to clean unnecessary files"))
         dialog.set_copyright("Copyright (C) 2008-2017 Andrew Ziem")
         try:
-            dialog.set_license(open(license_filename).read())
-        except:
+            with open(bleachbit.license_filename) as f:
+                dialog.set_license(f.read())
+        except IOError:
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
         dialog.set_name(APP_NAME)
@@ -438,8 +437,8 @@ class GUI:
         # typed in Launchpad. This is a special string shown
         # in the 'About' box.
         dialog.set_translator_credits(_("translator-credits"))
-        dialog.set_version(APP_VERSION)
-        dialog.set_website(APP_URL)
+        dialog.set_version(bleachbit.APP_VERSION)
+        dialog.set_website(bleachbit.APP_URL)
         dialog.set_transient_for(self.window)
         if appicon_path and os.path.exists(appicon_path):
             icon = gtk.gdk.pixbuf_new_from_file(appicon_path)
@@ -452,7 +451,7 @@ class GUI:
         dialog = gtk.Dialog(_("System information"), parent)
         dialog.resize(600, 400)
         txtbuffer = gtk.TextBuffer()
-        import Diagnostic
+        from bleachbit import Diagnostic
         txt = Diagnostic.diagnostic_info()
         txtbuffer.set_text(txt)
         textview = gtk.TextView(txtbuffer)
@@ -564,9 +563,9 @@ class GUI:
         if portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
-            paths.append(options_file)
+            paths.append(bleachbit.options_file)
         else:
-            paths.append(options_dir)
+            paths.append(bleachbit.options_dir)
 
         # prompt the user to confirm
         if not self.shred_paths(paths):
@@ -576,7 +575,8 @@ class GUI:
 
         # in portable mode, rebuild a minimal bleachbit.ini
         if portable_mode:
-            open(options_file, 'w').write('[Portable]\n')
+            with open(bleachbit.options_file, 'w') as f:
+                f.write('[Portable]\n')
 
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
@@ -744,10 +744,10 @@ class GUI:
             ('Edit', None, _("_Edit")),
             ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None,
              lambda link: GuiBasic.open_url(
-             help_contents_url, self.window)),
+             bleachbit.help_contents_url, self.window)),
             ('ReleaseNotes', gtk.STOCK_INFO, _('_Release Notes'), None, None,
              lambda link: GuiBasic.open_url(
-             release_notes_url, self.window)),
+             bleachbit.release_notes_url, self.window)),
             ('SystemInformation', None, _('_System Information'), None,
              None, lambda foo: self.diagnostic_dialog(self.window)),
             ('About', gtk.STOCK_ABOUT, _(
@@ -877,7 +877,7 @@ class GUI:
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        import Update
+        from bleachbit import Update
         try:
             updates = Update.check_updates(options.get('check_beta'),
                                            options.get('update_winapp2'),
@@ -894,7 +894,7 @@ class GUI:
             # privileges escalated in other process
             sys.exit(0)
         if not exit:
-            import RecognizeCleanerML
+            from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             register_cleaners()
         self.create_window()
@@ -908,7 +908,7 @@ class GUI:
             # On Microsoft Windows this avoids py2exe redirecting stderr to
             # bleachbit.exe.log.
             # sys.frozen = console_exe means the console is shown
-            from Common import logger_sh
+            from bleachbit import logger_sh
             bb_logger.removeHandler(logger_sh)
         if shred_paths:
             self.shred_paths(shred_paths)
@@ -917,7 +917,7 @@ class GUI:
             pref = PreferencesDialog(self.window, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
-        if online_update_notification_enabled and options.get("check_online_updates"):
+        if bleachbit.online_update_notification_enabled and options.get("check_online_updates"):
             self.check_online_updates()
         if 'nt' == os.name:
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
@@ -927,7 +927,7 @@ class GUI:
                 import sqlite3
             except ImportError:
                 logger.exception(_("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if 'posix' == os.name and expanduser('~') == '/root':
+        if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
         if exit:

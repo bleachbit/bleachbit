@@ -22,9 +22,12 @@
 Perform (or assist with) cleaning operations.
 """
 
-from Common import _, expanduser, expandvars
-from FileUtilities import children_in_directory
-from Options import options
+from __future__ import absolute_import, print_function
+
+from bleachbit import _, expanduser, expandvars
+from bleachbit.FileUtilities import children_in_directory
+from bleachbit.Options import options
+from bleachbit import Command, FileUtilities, Memory, Special
 
 import glob
 import logging
@@ -33,16 +36,10 @@ import re
 import sys
 import warnings
 
-import Command
-import FileUtilities
-import Memory
-import Special
-import Common
-
 if 'posix' == os.name:
-    import Unix
+    from bleachbit import Unix
 elif 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 
 # Suppress GTK warning messages while running in CLI #34
 warnings.simplefilter("ignore", Warning)
@@ -837,12 +834,12 @@ def register_cleaners():
     backends["system"] = System()
 
     # register CleanerML cleaners
-    import CleanerML
+    from bleachbit import CleanerML
     CleanerML.load_cleaners()
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
-        import Winapp
+        from bleachbit import Winapp
         Winapp.load_cleaners()
 
 
@@ -852,7 +849,7 @@ def create_simple_cleaner(paths):
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
 
-    import Action
+    from bleachbit import Action
 
     class CustomFileAction(Action.ActionProvider):
         action_key = '__customfileaction'
@@ -890,7 +887,7 @@ def create_wipe_cleaner(path):
             yield ret
         yield 0
 
-    import Action
+    from bleachbit import Action
 
     class CustomWipeAction(Action.ActionProvider):
         action_key = '__customwipeaction'

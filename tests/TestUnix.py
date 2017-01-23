@@ -26,7 +26,7 @@ Test case for module Unix
 from __future__ import absolute_import, print_function
 
 from tests import common
-import bleachbit.Common
+import bleachbit
 from bleachbit.Unix import *
 
 import sys
@@ -210,10 +210,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         b = start_with_computer_check()
         self.assert_(isinstance(b, bool))
 
-        if not os.path.exists(bleachbit.Common.launcher_path) and \
+        if not os.path.exists(bleachbit.launcher_path) and \
                 os.path.exists('bleachbit.desktop'):
             # this happens when BleachBit is not installed
-            bleachbit.Common.launcher_path = 'bleachbit.desktop'
+            bleachbit.launcher_path = 'bleachbit.desktop'
 
         # opposite setting
         start_with_computer(not b)
@@ -242,7 +242,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         else:
             bytes_freed = yum_clean()
             self.assert_(isinstance(bytes_freed, (int, long)))
-            bleachbit.Common.logger.debug('yum bytes cleaned %d', bytes_freed)
+            bleachbit.logger.debug('yum bytes cleaned %d', bytes_freed)
 
 
 def suite():

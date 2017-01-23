@@ -18,15 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 Build BleachBit tarballs and exe
 """
 
+from __future__ import absolute_import, print_function
 
-import bleachbit.Common
+import bleachbit
 import bleachbit.General
 import bleachbit.FileUtilities
 import glob
@@ -226,14 +224,14 @@ def clean_dist_locale():
 
 def run_setup():
     setup(name='bleachbit',
-          version=bleachbit.Common.APP_VERSION,
+          version=bleachbit.APP_VERSION,
           description="Free space and maintain privacy",
           long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
           download_url="https://www.bleachbit.org/download",
           license="GPLv3",
-          url=bleachbit.Common.APP_URL,
+          url=bleachbit.APP_URL,
           platforms='Linux and Windows; Python v2.6 and 2.7; GTK v2.12+',
           packages=['bleachbit'],
           **args)

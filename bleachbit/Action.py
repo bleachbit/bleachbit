@@ -23,23 +23,21 @@
 Actions that perform cleaning
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit import Command, FileUtilities, General, Special
+from bleachbit import _, FSE, expanduser, expandvars
 
 import glob
 import logging
 import os
 import re
 import types
-import Command
-import FileUtilities
-import General
-import Special
-import Common
 
-from Common import _, FSE, expanduser, expandvars
 
 if 'posix' == os.name:
     re_flags = 0
-    import Unix
+    from bleachbit import Unix
 else:
     re_flags = re.IGNORECASE
 
@@ -463,7 +461,7 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        import Windows
+        from bleachbit import Windows
         yield Command.Function(
             None,
             Windows.shell_change_notify,

@@ -22,7 +22,10 @@
 """
 File-related utilities
 """
+from __future__ import absolute_import, print_function
 
+import bleachbit
+from bleachbit import expanduser
 
 import atexit
 import codecs
@@ -39,8 +42,6 @@ import sys
 import subprocess
 import tempfile
 import time
-import Common
-from Common import expanduser
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,7 @@ if 'nt' == os.name:
     import win32file
 
 if 'posix' == os.name:
-    from General import WindowsError
+    from bleachbit.General import WindowsError
 
 
 def open_files_linux():
@@ -125,7 +126,7 @@ def bytes_to_human(bytes_i):
     if bytes_i < 0:
         return '-' + bytes_to_human(-bytes_i)
 
-    from Options import options
+    from bleachbit.Options import options
     if options.get('units_iec'):
         prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi']
         base = 1024.0
@@ -174,7 +175,7 @@ def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file"""
 
     # read file to parser
-    config = Common.RawConfigParser()
+    config = bleachbit.RawConfigParser()
     fp = codecs.open(path, 'r', encoding='utf_8_sig')
     config.readfp(fp)
 
@@ -190,7 +191,7 @@ def clean_ini(path, section, parameter):
 
     # write file
     if changed:
-        from Options import options
+        from bleachbit.Options import options
         fp.close()
         if options.get('shred'):
             delete(path, True)
@@ -228,7 +229,7 @@ def clean_json(path, target):
             break
 
     if changed:
-        from Options import options
+        from bleachbit.Options import options
         if options.get('shred'):
             delete(path, True)
         # write file
@@ -241,7 +242,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        If shred is enabled as a function parameter or the BleachBit global
        parameter, the path will be shredded unless allow_shred = False.
     """
-    from Options import options
+    from bleachbit.Options import options
     is_special = False
     path = extended_path(path)
     if not os.path.lexists(path):
@@ -326,7 +327,7 @@ def execute_sqlite3(path, cmds):
 
     # overwrites deleted content with zeros
     # https://www.sqlite.org/pragma.html#pragma_secure_delete
-    from Options import options
+    from bleachbit.Options import options
     if options.get('shred'):
         cursor.execute('PRAGMA secure_delete=ON')
 
@@ -335,7 +336,7 @@ def execute_sqlite3(path, cmds):
             cursor.execute(cmd)
         except sqlite3.DatabaseError as exc:
             raise sqlite3.DatabaseError(
-                '%s: %s' % (Common.decode_str(exc), path))
+                '%s: %s' % (bleachbit.decode_str(exc), path))
         except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -343,7 +344,7 @@ def execute_sqlite3(path, cmds):
                 logger.exception(exc.message)
             else:
                 raise sqlite3.OperationalError(
-                    '%s: %s' % (Common.decode_str(exc), path))
+                    '%s: %s' % (bleachbit.decode_str(exc), path))
     cursor.close()
     conn.commit()
     conn.close()
@@ -352,14 +353,14 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = expanduser(Common.expandvars(os.path.join(pathname1, pathname2)))
+    pathname3 = expanduser(bleachbit.expandvars(os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
 
 
 def expandvars(path):
-    return Common.expandvars(path)
+    return bleachbit.expandvars(path)
 
 
 def extended_path(path):
@@ -386,7 +387,7 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        import Windows
+        from bleachbit import Windows
         if Windows.parse_windows_build() >= 6:
             # This works better with UTF-8 paths.
             import psutil
@@ -463,11 +464,11 @@ def guess_overwrite_paths():
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = Common.expandvars('$TMP')
+        localtmp = bleachbit.expandvars('$TMP')
         if not os.path.exists(localtmp):
             logger.warning('%TMP% does not exist: %s', localtmp)
             localtmp = None
-        from Windows import get_fixed_drives
+        from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
             if localtmp and same_partition(localtmp, drive):
                 ret.append(localtmp)
@@ -553,7 +554,7 @@ def sync():
 
 def whitelisted_posix(path, check_realpath = True):
     """Check whether this POSIX path is whitelisted"""
-    from Options import options
+    from bleachbit.Options import options
     if check_realpath and os.path.islink(path):
         # also check the link name
         if whitelisted_posix(path, False):
@@ -573,7 +574,7 @@ def whitelisted_posix(path, check_realpath = True):
 
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
-    from Options import options
+    from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
         # Windows is case insensitive
         if pathname[0] == 'file' and path.lower() == pathname[1].lower():
@@ -626,7 +627,7 @@ def wipe_contents(path, truncate=True):
 
     if 'nt' == os.name and IsUserAnAdmin():
         try:
-            from WindowsWipe import file_wipe
+            from bleachbit.WindowsWipe import file_wipe
             file_wipe(path)
         except Exception as e:
             logger.exception(
