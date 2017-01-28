@@ -628,8 +628,9 @@ def wipe_contents(path, truncate=True):
         except Exception as e:
             logger.exception(
                 'Error wiping path %s using defragmentation API so falling back to other method' % path)
-            wipe_write()
-        f = open(path, 'wb')
+            f = wipe_write()
+        else:
+            f = open(path, 'wb')
     else:
         f = wipe_write()
     if truncate:
