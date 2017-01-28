@@ -622,6 +622,9 @@ def wipe_contents(path, truncate=True):
         return f
 
     if 'nt' == os.name:
+        from win32com.shell.shell import IsUserAnAdmin
+
+    if 'nt' == os.name and IsUserAnAdmin():
         try:
             from WindowsWipe import file_wipe
             file_wipe(path)
