@@ -23,7 +23,6 @@ Check local CleanerML files as a security measure
 """
 
 
-import gobject
 import logging
 import os
 import random
@@ -75,6 +74,7 @@ def cleaner_change_dialog(changes, parent):
     dialog.vbox.pack_start(warnbox, False)
 
     # create tree view
+    import gobject
     liststore = gtk.ListStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING)
     treeview = gtk.TreeView(model=liststore)
 

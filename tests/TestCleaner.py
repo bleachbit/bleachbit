@@ -142,7 +142,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
         for key in sorted(backends):
             self.assert_(isinstance(backends[key].get_name(), (str, unicode)))
 
-    def test_get_descrption(self):
+    def test_get_description(self):
         for key in sorted(backends):
             self.assert_(isinstance(key, (str, unicode)))
             self.assert_(isinstance(backends[key], Cleaner))

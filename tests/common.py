@@ -73,10 +73,7 @@ def destructive_tests(title):
 
 def touch_file(filename):
     """Create an empty file"""
-    f = open(filename, "w")
-    f.close()
-    import os.path
-    assert(os.path.exists(filename))
+    write_file(filename, '')
 
 
 def validate_result(self, result, really_delete=False):
@@ -107,3 +104,11 @@ def validate_result(self, result, really_delete=False):
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
+
+
+def write_file(filename, contents):
+    """Write contents to file"""
+    with open(extended_path(filename), 'w') as f:
+        f.write(contents)
+    import os.path
+    assert(os.path.exists(extended_path(filename)))

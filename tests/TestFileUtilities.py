@@ -36,10 +36,7 @@ import sys
 import unittest
 
 
-def write_file(filename, contents):
-    """Write contents to file"""
-    with open(extended_path(filename), 'w') as f:
-        f.write(contents)
+
 
 
 def test_ini_helper(self, execute):
@@ -424,6 +421,33 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         expanded = expandvars('$HOME')
         self.assertTrue(isinstance(expanded, unicode))
 
+    def test_extended_path(self):
+        """Unit test for extended_path() and extended_path_undo()"""
+        if 'nt' == os.name:
+            tests = (
+                (r'c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'\\?\c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
+                (r'\\server\share\windows\notepad.exe', r'\\?\unc\server\share\windows\notepad.exe'),
+                (r'\\?\unc\server\share\windows\notepad.exe', r'\\?\unc\server\share\windows\notepad.exe')
+            )
+            tests_undo = (
+                (r'\\?\c:\windows\notepad.exe', r'c:\windows\notepad.exe'),
+                (r'c:\windows\notepad.exe', r'c:\windows\notepad.exe'),
+                (r'\\?\unc\\server\share\windows\notepad.exe', r'\\server\share\windows\notepad.exe'),
+                (r'\\server\share\windows\notepad.exe',
+                 r'\\server\share\windows\notepad.exe')
+            )
+
+        else:
+            # unchanged
+            tests = (('/home/foo', '/home/foo'),)
+            tests_undo = tests
+        for test in tests:
+            self.assertEqual(extended_path(test[0]), test[1])
+        for test in tests_undo:
+            self.assertEqual(extended_path_undo(test[0]), test[1])
+
     def test_free_space(self):
         """Unit test for free_space()"""
         home = expanduser('~')
@@ -458,7 +482,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
         def test_getsize_helper(fname):
             filename = os.path.join(dirname, fname)
-            write_file(filename, "abcdefghij" * 12345)
+            common.write_file(filename, "abcdefghij" * 12345)
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
