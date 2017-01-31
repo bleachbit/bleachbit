@@ -248,6 +248,9 @@ def delete_unnecessary():
         r'lib\gdk-pixbuf-2.0',
         r'lib\glib-2.0',
         r'lib\gtk-2.0\include',
+        r'lib\gtk-2.0\2.10.0\engines\libpixmap.dll',
+        r'lib\gtk-2.0\2.10.0\engines\libsvg.dll',
+        r'lib\gtk-2.0\modules\libgail.dll',
         r'lib\pkgconfig',
         r'perfmon.pyd',
         r'select.pyd',
@@ -340,15 +343,8 @@ clean_translations()
 @count_size_improvement
 def strip():
     logger.info('Stripping executables')
-    strip_list = recursive_glob('dist', ['*.dll'])
-    strip_whitelist = [
-        'freetype6.dll',
-        'python27.dll',
-        'pythoncom27.dll',
-        'pywintypes27.dll',
-        'sqlite3.dll',
-        'zlib1.dll',
-    ]
+    strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
+    strip_whitelist = []
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
@@ -366,17 +362,7 @@ except Exception as e:
 def upx():
     logger.info('Compressing executables')
     if os.path.exists(UPX_EXE):
-        upx_patterns = [
-            r'*.dll',
-            r'*.exe',
-            r'*.pyd',
-            r'lib\gtk-2.0\2.10.0\engines\*.dll',
-            r'lib\gtk-2.0\modules\*.dll',
-        ]
-        upx_files = []
-        for pattern in upx_patterns:
-            pattern = r'dist\{}'.format(pattern)
-            upx_files.extend(glob.glob(pattern))
+        upx_files = recursive_glob('dist', ['*.exe', '*.dll', '*.pyd'])
         cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
         run_cmd(cmd)
     else:
@@ -436,6 +422,11 @@ if not fast:
         run_cmd(cmd)
         file_size_old = os.path.getsize('dist\\library.zip')
         os.remove('dist\\library.zip')
+
+        # clean unused modules from library.zip
+        delete_paths = ['distutils', 'email']
+        for p in delete_paths:
+            shutil.rmtree(os.path.join('dist', 'library', p))
 
         # recompress library.zip
         cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
