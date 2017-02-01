@@ -64,7 +64,7 @@ SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
-UPX_EXE = ROOT_DIR + '\\upx392w\\upx.exe'
+UPX_EXE = ROOT_DIR + '\\upx393w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 
@@ -243,8 +243,11 @@ def delete_unnecessary():
     delete_paths = [
         r'_win32sysloader.pyd',
         r'bz2.pyd',
+        r'etc\bash_completion.d',
+        r'lib\GNU.Gettext.dll',
         r'lib\gdk-pixbuf-2.0',
         r'lib\glib-2.0',
+        r'lib\gtk-2.0\include',
         r'lib\pkgconfig',
         r'perfmon.pyd',
         r'select.pyd',
@@ -364,10 +367,11 @@ def upx():
     logger.info('Compressing executables')
     if os.path.exists(UPX_EXE):
         upx_patterns = [
+            r'*.dll',
             r'*.exe',
-            r'freetype6.dll',
-            r'intl.dll',
-            r'lib\gtk-2.0\2.10.0\engines\lib*.dll',
+            r'*.pyd',
+            r'lib\gtk-2.0\2.10.0\engines\*.dll',
+            r'lib\gtk-2.0\modules\*.dll',
         ]
         upx_files = []
         for pattern in upx_patterns:
