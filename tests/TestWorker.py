@@ -29,7 +29,7 @@ from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
-from bleachbit.Common import expanduser
+from bleachbit import expanduser
 
 import os
 import tempfile

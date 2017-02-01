@@ -27,7 +27,7 @@ from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.DeepScan import DeepScan, normalized_walk
-from bleachbit.Common import expanduser
+from bleachbit import expanduser
 
 import os
 import shutil

@@ -159,7 +159,7 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
 
     def test_get_commands(self):
         for key in sorted(backends):
-            Common.logger.debug("test_get_commands: key='%s'", key)
+            logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
                     for result in cmd.execute(really_delete=False):

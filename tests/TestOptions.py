@@ -25,7 +25,7 @@ Test case for module Options
 from __future__ import absolute_import, print_function
 
 import bleachbit.Options
-from bleachbit.Common import NoOptionError
+from bleachbit import NoOptionError
 
 import os
 import unittest

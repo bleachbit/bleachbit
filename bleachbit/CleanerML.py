@@ -22,20 +22,22 @@
 Create cleaners from CleanerML (markup language)
 """
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+from bleachbit.Action import ActionProvider
+from bleachbit import _
+from bleachbit.General import boolstr_to_bool, getText
+from bleachbit.FileUtilities import listdir
+from bleachbit import Cleaner
 
 import logging
 import os
 import sys
 import xml.dom.minidom
-import Cleaner
-import Common
-
-from Action import ActionProvider
-from Common import _
-from General import boolstr_to_bool, getText
-from FileUtilities import listdir
 
 logger = logging.getLogger(__name__)
+
 
 class CleanerML:
 
@@ -177,7 +179,7 @@ class CleanerML:
         """<localizations> element under <cleaner>"""
         if not 'posix' == os.name:
             return
-        import Unix
+        from bleachbit import Unix
         for localization_node in localization_nodes:
             for child_node in localization_node.childNodes:
                 Unix.locales.add_xml(child_node)
@@ -187,10 +189,10 @@ class CleanerML:
 
 def list_cleanerml_files(local_only=False):
     """List CleanerML files"""
-    cleanerdirs = (Common.local_cleaners_dir,
-                   Common.personal_cleaners_dir)
-    if not local_only and Common.system_cleaners_dir:
-        cleanerdirs += (Common.system_cleaners_dir, )
+    cleanerdirs = (bleachbit.local_cleaners_dir,
+                   bleachbit.personal_cleaners_dir)
+    if not local_only and bleachbit.system_cleaners_dir:
+        cleanerdirs += (bleachbit.system_cleaners_dir, )
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue

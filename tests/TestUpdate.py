@@ -26,8 +26,8 @@ Test case for module Update
 from __future__ import absolute_import, print_function
 
 from tests import common
-from bleachbit import Common
-from bleachbit.Common import logger
+import bleachbit
+from bleachbit import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
 import bleachbit.Update
 
@@ -94,27 +94,27 @@ class UpdateTestCase(unittest.TestCase):
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
-        preserve_url = Common.update_check_url
-        Common.update_check_url = "http://localhost/doesnotexist"
+        preserve_url = bleachbit.update_check_url
+        bleachbit.update_check_url = "http://localhost/doesnotexist"
         self.assertEqual(
             check_updates(True, False, None, None),
             ())
-        Common.update_check_url = preserve_url
+        bleachbit.update_check_url = preserve_url
 
     def test_update_url(self):
         """Check connection to the update URL"""
         from bleachbit.Update import build_opener
         opener = build_opener()
-        handle = opener.open(Common.update_check_url)
+        handle = opener.open(bleachbit.update_check_url)
         doc = handle.read()
         import xml
         dom = xml.dom.minidom.parseString(doc)
 
     def test_update_winapp2(self):
-        from bleachbit.Common import personal_cleaners_dir
+        from bleachbit import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
-            logger.info('deleting %s', fn.encode(Common.FSE))
+            logger.info('deleting %s', fn.encode(bleachbit.FSE))
             os.unlink(fn)
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'

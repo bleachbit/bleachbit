@@ -29,7 +29,7 @@ from tests import common
 
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
-from bleachbit.Common import logger, FSE
+from bleachbit import logger, FSE
 
 import sys
 import tempfile

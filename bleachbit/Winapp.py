@@ -23,18 +23,17 @@
 Import Winapp2.ini files
 """
 
+from __future__ import absolute_import, print_function
 
-import Cleaner
-import Common
-import Windows
+import bleachbit
+from bleachbit import Cleaner, Windows
+from bleachbit.Action import Delete, Winreg
+from bleachbit import _, FSE, expandvars
 
 import logging
 import os
 import glob
 import re
-
-from Action import Delete, Winreg
-from Common import _, FSE, expandvars
 from xml.dom.minidom import parseString
 
 logger = logging.getLogger(__name__)
@@ -145,7 +144,7 @@ class Winapp:
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
-        self.parser = Common.RawConfigParser()
+        self.parser = bleachbit.RawConfigParser()
         self.parser.read(pathname)
         for section in self.parser.sections():
             try:
@@ -379,7 +378,7 @@ class Winapp:
 
 def list_winapp_files():
     """List winapp2.ini files"""
-    for dirname in (Common.personal_cleaners_dir, Common.system_cleaners_dir):
+    for dirname in (bleachbit.personal_cleaners_dir, bleachbit.system_cleaners_dir):
         fn = os.path.join(dirname, 'winapp2.ini')
         if os.path.exists(fn):
             yield fn

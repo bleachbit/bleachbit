@@ -23,8 +23,10 @@
 Show diagnostic information
 """
 
+from __future__ import absolute_import, print_function
 
-import Common
+import bleachbit
+
 import locale
 import os
 import platform
@@ -36,17 +38,17 @@ if 'nt' == os.name:
 
 def diagnostic_info():
     """Return diagnostic information as a string"""
-    s = "BleachBit version %s" % Common.APP_VERSION
+    s = "BleachBit version %s" % bleachbit.APP_VERSION
     try:
         import gtk
         s += '\nGTK version %s' % '.'.join([str(x) for x in gtk.gtk_version])
     except:
         pass
-    s += "\nlocal_cleaners_dir = %s" % Common.local_cleaners_dir
-    s += "\nlocale_dir = %s" % Common.locale_dir
-    s += "\noptions_dir = %s" % Common.options_dir.decode(Common.FSE)
-    s += "\npersonal_cleaners_dir = %s" % Common.personal_cleaners_dir.decode(Common.FSE)
-    s += "\nsystem_cleaners_dir = %s" % Common.system_cleaners_dir
+    s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
+    s += "\nlocale_dir = %s" % bleachbit.locale_dir
+    s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
+    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(bleachbit.FSE)
+    s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
@@ -55,10 +57,10 @@ def diagnostic_info():
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         if os.getenv(env):
-            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(Common.FSE))
+            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(bleachbit.FSE))
         else:
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % Common.expanduser('~').decode(Common.FSE)
+    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser('~').decode(bleachbit.FSE)
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(

@@ -24,6 +24,11 @@
 Preferences dialog
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit import _, _p, online_update_notification_enabled
+from bleachbit.Options import options
+from bleachbit import GuiBasic
 
 import gtk
 import logging
@@ -31,15 +36,10 @@ import os
 import sys
 import traceback
 
-from Common import _, _p, online_update_notification_enabled
-import Common
-from Options import options
-import GuiBasic
-
 if 'nt' == os.name:
-    import Windows
+    from bleachbit import Windows
 if 'posix' == os.name:
-    import Unix
+    from bleachbit import Unix
 
 logger = logging.getLogger(__name__)
 

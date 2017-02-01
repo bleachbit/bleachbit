@@ -22,18 +22,19 @@
 Check local CleanerML files as a security measure
 """
 
+from __future__ import absolute_import, print_function
 
+from bleachbit import _, _p
+import bleachbit
+from bleachbit.CleanerML import list_cleanerml_files
+from bleachbit.Options import options
+
+import hashlib
 import logging
 import os
 import random
 import sys
 
-import hashlib
-
-from Common import _, _p
-import Common
-from CleanerML import list_cleanerml_files
-from Options import options
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +144,7 @@ class RecognizeCleanerML:
         self.parent_window = parent_window
         try:
             self.salt = options.get('hashsalt')
-        except Common.NoOptionError:
+        except bleachbit.NoOptionError:
             self.salt = hashdigest(str(random.random()))
             options.set('hashsalt', self.salt)
         self.__scan()
@@ -155,7 +156,7 @@ class RecognizeCleanerML:
         new_hash = hashdigest(self.salt + body)
         try:
             known_hash = options.get_hashpath(pathname)
-        except Common.NoOptionError:
+        except bleachbit.NoOptionError:
             return NEW, new_hash
         if new_hash == known_hash:
             return KNOWN, new_hash

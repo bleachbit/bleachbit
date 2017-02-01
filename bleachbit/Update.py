@@ -22,6 +22,10 @@
 Check for updates via the Internet
 """
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+from bleachbit import _
 
 import hashlib
 import logging
@@ -38,16 +42,13 @@ else:
 
 import xml.dom.minidom
 
-import Common
-from Common import _
-
 logger = logging.getLogger(__name__)
 
 
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
-    from Common import personal_cleaners_dir
+    from bleachbit import personal_cleaners_dir
     fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
     delete_current = False
     if os.path.exists(fn):
@@ -69,7 +70,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
                            (url, hash_actual, hash_expected))
     # delete current
     if delete_current:
-        from FileUtilities import delete
+        from bleachbit.FileUtilities import delete
         delete(fn, True)
     # write file
     if not os.path.exists(personal_cleaners_dir):
@@ -112,7 +113,7 @@ def user_agent():
     except:
         gtkver = ""
 
-    agent = "BleachBit/%s (%s; %s; %s%s)" % (Common.APP_VERSION,
+    agent = "BleachBit/%s (%s; %s; %s%s)" % (bleachbit.APP_VERSION,
                                              __platform, __os, __locale, gtkver)
     return agent
 
@@ -154,14 +155,14 @@ def update_dialog(parent, updates):
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
     opener = build_opener()
-    socket.setdefaulttimeout(Common.socket_timeout)
+    socket.setdefaulttimeout(bleachbit.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
     try:
-        handle = opener.open(Common.update_check_url)
+        handle = opener.open(bleachbit.update_check_url)
     except URLError:
         logger.exception(
             _('Error when opening a network connection to %s to check for updates. Please verify the network is working.' %
-                Common.update_check_url))
+                bleachbit.update_check_url))
         return ()
     doc = handle.read()
     try:

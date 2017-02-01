@@ -22,15 +22,15 @@
 Store and retrieve user preferences
 """
 
+from __future__ import absolute_import, print_function
+
+import bleachbit
+from bleachbit import General
 
 import logging
 import os
 import re
-import sys
 import traceback
-
-import Common
-import General
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = Common.SafeConfigParser()
+        self.config = bleachbit.SafeConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config._boolean_states['t'] = True
         self.config._boolean_states['f'] = False
@@ -72,21 +72,21 @@ class Options:
         """Write information to disk"""
         if not self.purged:
             self.__purge()
-        if not os.path.exists(Common.options_dir):
-            General.makedirs(Common.options_dir)
-        mkfile = not os.path.exists(Common.options_file)
-        _file = open(Common.options_file, 'wb')
+        if not os.path.exists(bleachbit.options_dir):
+            General.makedirs(bleachbit.options_dir)
+        mkfile = not os.path.exists(bleachbit.options_file)
+        _file = open(bleachbit.options_file, 'wb')
         try:
             self.config.write(_file)
         except IOError as e:
             print(e)
             from errno import ENOSPC
             if e.errno == ENOSPC:
-                logger.error("disk is full writing configuration '%s'", Common.options_file)
+                logger.error("disk is full writing configuration '%s'", bleachbit.options_file)
             else:
                 raise
         if mkfile and General.sudo_mode():
-            General.chownself(Common.options_file)
+            General.chownself(bleachbit.options_file)
 
     def __purge(self):
         """Clear out obsolete data"""
@@ -194,7 +194,7 @@ class Options:
     def restore(self):
         """Restore saved options from disk"""
         try:
-            self.config.read(Common.options_file)
+            self.config.read(bleachbit.options_file)
         except:
             traceback.print_exc()
         if not self.config.has_section("bleachbit"):
@@ -202,7 +202,7 @@ class Options:
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
         if not self.config.has_section("list/shred_drives"):
-            from FileUtilities import guess_overwrite_paths
+            from bleachbit.FileUtilities import guess_overwrite_paths
             try:
                 self.set_list('shred_drives', guess_overwrite_paths())
             except:
@@ -223,7 +223,7 @@ class Options:
             self.__set_default("update_winapp2", False)
 
         if not self.config.has_section('preserve_languages'):
-            lang = Common.user_locale
+            lang = bleachbit.user_locale
             pos = lang.find('_')
             if -1 != pos:
                 lang = lang[0: pos]
@@ -233,11 +233,11 @@ class Options:
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
-                self.get('version') != Common.APP_VERSION:
+                self.get('version') != bleachbit.APP_VERSION:
             self.set('first_start', True)
 
         # set version
-        self.set("version", Common.APP_VERSION)
+        self.set("version", bleachbit.APP_VERSION)
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""

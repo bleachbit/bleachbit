@@ -23,6 +23,10 @@
 Wipe memory
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit import FileUtilities
+from bleachbit import General
 
 import logging
 import os
@@ -30,10 +34,6 @@ import re
 import subprocess
 import sys
 import traceback
-
-import Common
-import FileUtilities
-import General
 
 logger = logging.getLogger(__name__)
 

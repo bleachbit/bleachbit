@@ -83,17 +83,17 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
 
         # should catch exception with invalid XML
         import tempfile
-        pcd = Common.personal_cleaners_dir
-        Common.personal_cleaners_dir = tempfile.mkdtemp(
+        pcd = bleachbit.personal_cleaners_dir
+        bleachbit.personal_cleaners_dir = tempfile.mkdtemp(
             prefix='bleachbit-cleanerml-load')
-        fn_xml = os.path.join(Common.personal_cleaners_dir, 'invalid.xml')
+        fn_xml = os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml')
         f = open(fn_xml, 'w')
         f.write('<xml><broken>')
         f.close()
         load_cleaners()
         import shutil
-        shutil.rmtree(Common.personal_cleaners_dir)
-        Common.personal_cleaners_dir = pcd
+        shutil.rmtree(bleachbit.personal_cleaners_dir)
+        bleachbit.personal_cleaners_dir = pcd
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""

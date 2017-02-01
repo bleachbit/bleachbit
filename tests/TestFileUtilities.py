@@ -28,7 +28,7 @@ from __future__ import absolute_import, print_function
 from tests import common
 from bleachbit.FileUtilities import *
 from bleachbit.Options import options
-from bleachbit.Common import expanduser, expandvars, logger
+from bleachbit import expanduser, expandvars, logger
 
 import json
 import platform

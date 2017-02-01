@@ -26,7 +26,7 @@ Test cases for module Action
 from __future__ import absolute_import, print_function
 
 from bleachbit.Action import *
-from bleachbit.Common import FSE, expanduser, expandvars
+from bleachbit import FSE, expanduser, expandvars
 from tests import common
 
 import shutil

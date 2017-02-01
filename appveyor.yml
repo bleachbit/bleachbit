@@ -30,7 +30,7 @@ install:
 
 build_script:
   - '%make% -C po local'
-  - '%PYTHON_HOME%/python.exe  windows/setup_py2exe.py'
+  - '%PYTHON_HOME%/python.exe -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
 

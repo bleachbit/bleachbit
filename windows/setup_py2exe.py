@@ -14,6 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from __future__ import absolute_import, print_function
+
 import fnmatch
 import glob
 import imp
@@ -180,8 +182,8 @@ def count_size_improvement(func):
 
 
 logger.info('Getting BleachBit version')
-import bleachbit.Common
-BB_VER = bleachbit.Common.APP_VERSION
+import bleachbit
+BB_VER = bleachbit.APP_VERSION
 logger.info('BleachBit version ' + BB_VER)
 
 

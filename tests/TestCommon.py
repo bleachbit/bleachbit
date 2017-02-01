@@ -25,7 +25,7 @@ Test case for Common
 from __future__ import absolute_import, print_function
 
 from tests import common
-import bleachbit.Common as Common
+import bleachbit
 
 import os
 import tempfile
@@ -38,7 +38,7 @@ class CommonTestCase(unittest.TestCase, common.AssertFile):
 
     def test_expandvars(self):
         """Unit test for expandvars."""
-        var = Common.expandvars('$HOME')
+        var = bleachbit.expandvars('$HOME')
         self.assertIsInstance(var, unicode)
 
     def test_environment(self):
@@ -59,25 +59,25 @@ class CommonTestCase(unittest.TestCase, common.AssertFile):
     def test_expanduser(self):
         """Unit test for expanduser."""
         # Return Unicode when given str.
-        var = Common.expanduser('~')
+        var = bleachbit.expanduser('~')
         self.assertIsInstance(var, unicode)
         # Return Unicode when given Unicode.
-        var = Common.expanduser(u'~')
+        var = bleachbit.expanduser(u'~')
         self.assertIsInstance(var, unicode)
         # Blank input should give blank output.
-        self.assertEqual(Common.expanduser(''), u'')
+        self.assertEqual(bleachbit.expanduser(''), u'')
         # An absolute path should not be altered.
         if 'posix' == os.name:
             abs_dir = os.path.expandvars('$HOME')
         if 'nt' == os.name:
             abs_dir = os.path.expandvars('%USERPROFILE%')
         self.assertExists(abs_dir)
-        self.assertEqual(Common.expanduser(abs_dir), abs_dir)
+        self.assertEqual(bleachbit.expanduser(abs_dir), abs_dir)
         # Path with tilde should be expanded
-        self.assertTrue(os.path.normpath(Common.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
+        self.assertTrue(os.path.normpath(bleachbit.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
         # A relative path (without a reference to the home directory)
         # should not be expanded.
-        self.assertEqual(Common.expanduser('common'), 'common')
+        self.assertEqual(bleachbit.expanduser('common'), 'common')
 
 def suite():
     return unittest.makeSuite(CommonTestCase)

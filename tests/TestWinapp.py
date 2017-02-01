@@ -26,7 +26,7 @@ from __future__ import absolute_import, print_function
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit.Common import logger
+from bleachbit import logger
 
 import os
 import shutil

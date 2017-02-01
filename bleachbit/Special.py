@@ -22,10 +22,12 @@
 Cross-platform, special cleaning operations
 """
 
-import os.path
+from __future__ import absolute_import, print_function
 
-from Options import options
-import FileUtilities
+from bleachbit.Options import options
+from bleachbit import FileUtilities
+
+import os.path
 
 
 def __get_chrome_history(path, fn='History'):

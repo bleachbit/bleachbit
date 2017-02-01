@@ -22,16 +22,15 @@
 Perform the preview or delete operations
 """
 
+from __future__ import absolute_import, print_function
+
+from bleachbit import DeepScan, FileUtilities
+from bleachbit.Cleaner import backends
+from bleachbit import _, ungettext, expanduser
 
 import logging
 import math
-import os
 import sys
-
-import DeepScan
-import FileUtilities
-from Cleaner import backends
-from Common import _, ungettext, expanduser
 
 logger = logging.getLogger(__name__)
 
@@ -308,7 +307,7 @@ class Worker:
                 yield True
                 continue
             # fixme: support non-delete commands
-            import Command
+            from bleachbit import Command
             cmd = Command.Delete(path)
             for ret in self.execute(cmd):
                 yield True

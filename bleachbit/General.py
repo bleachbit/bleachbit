@@ -17,14 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-from __future__ import print_function
-
 """
 General code
 """
 
-import Common
+from __future__ import absolute_import, print_function
+
+import bleachbit
 
 import logging
 import os
@@ -111,7 +110,7 @@ def getrealuid():
 def makedirs(path):
     """Make directory recursively considering sudo permissions.
     'Path' should not end in a delimiter."""
-    logger.debug('makedirs(%s)', path.encode(Common.FSE))
+    logger.debug('makedirs(%s)', path.encode(bleachbit.FSE))
     if os.path.lexists(path):
         return
     parentdir = os.path.split(path)[0]
