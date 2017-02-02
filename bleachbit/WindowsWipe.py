@@ -108,7 +108,6 @@ VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
-logging_level = logging.DEBUG
 simulate_concurrency = True     # remove this test function when QA complete
 #drive_letter_safety = "E"       # protection to only use removeable drives
 # don't use C: or D:, but E: and beyond OK.
@@ -116,6 +115,8 @@ tmp_file_name = "bbtemp.dat"
 spike_file_name = "bbspike"     # cluster number will be appended
 write_buf_size = 512 * 1024     # 512 kilobytes
 
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Unpacks the next element in a structure, using format requested.
 # Returns the element and the remaining content of the structure.
@@ -249,7 +250,7 @@ def extents_a_minus_b(a, b):
 # a higher number of total clusters written.
 def choose_if_bridged(volume_handle, total_clusters,
                       orig_extents, bridged_extents):
-    logging.debug(bridged_extents)
+    logger.debug(bridged_extents)
     allocated_extents = []
     volume_bitmap, bitmap_size = get_volume_bitmap(volume_handle,
                                                    total_clusters)
@@ -264,9 +265,9 @@ def choose_if_bridged(volume_handle, total_clusters,
 
     extra_allocated_clusters = count_ballocated - count_oallocated
     saving_in_extents = len(orig_extents) - len(bridged_extents)
-    logging.debug(("Bridged extents would require us to work around %d " +
+    logger.debug(("Bridged extents would require us to work around %d " +
                    "more allocated clusters.") % extra_allocated_clusters)
-    logging.debug("It would reduce extent count from %d to %d." % (
+    logger.debug("It would reduce extent count from %d to %d." % (
         len(orig_extents), len(bridged_extents)))
 
     # Use a penalty of 10 extents for each extra allocated cluster.
@@ -278,10 +279,10 @@ def choose_if_bridged(volume_handle, total_clusters,
     # we could make this calc more exact. But it's just a rule of thumb.
     tradeoff = saving_in_extents - extra_allocated_clusters * 10
     if tradeoff > 0:
-        logging.debug("Quickest method should be bridged extents")
+        logger.debug("Quickest method should be bridged extents")
         return bridged_extents
     else:
-        logging.debug("Quickest method should be original extents")
+        logger.debug("Quickest method should be original extents")
         return orig_extents
 
 
@@ -312,7 +313,7 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
             else:
                 count_free += 1
 
-    logging.debug("Extents checked: clusters free %d; allocated %d",
+    logger.debug("Extents checked: clusters free %d; allocated %d",
                   count_free, count_allocated)
     return (count_free, count_allocated)
 
@@ -336,12 +337,12 @@ def check_extents_concurrency(extents, volume_bitmap,
                 if bool(randint(0, 1)):
                     # Simulate allocated before the check, by refetching
                     # the volume bitmap.
-                    logging.debug("Simulate known allocated")
+                    logger.debug("Simulate known allocated")
                     volume_bitmap, _ = get_volume_bitmap(
                         volume_handle, total_clusters)
                 else:
                     # Simulate allocated after the check.
-                    logging.debug("Simulate unknown allocated")
+                    logger.debug("Simulate unknown allocated")
 
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
@@ -350,7 +351,7 @@ def check_extents_concurrency(extents, volume_bitmap,
             else:
                 count_free += 1
 
-    logging.debug("Extents checked: clusters free %d; allocated %d",
+    logger.debug("Extents checked: clusters free %d; allocated %d",
                   count_free, count_allocated)
     return (count_free, count_allocated)
 
@@ -373,7 +374,7 @@ def spike_cluster(volume_handle, cluster, tmp_file_path):
     write_zero_fill(file_handle, 2000)
     move_file(volume_handle, file_handle, 0, cluster, 1)
     CloseHandle(file_handle)
-    logging.debug("Spiked cluster %d with %s" % (cluster, spike_file_path))
+    logger.debug("Spiked cluster %d with %s" % (cluster, spike_file_path))
 
 
 # Check if an LCN is allocated (True) or free (False).
@@ -392,7 +393,7 @@ def check_mapped_bit(volume_bitmap, lcn):
 # Check the operating system. Go no further unless we are on
 # Windows and it's Win NT or later.
 def check_os():
-    logging.debug("OS is %s", os.name)
+    logger.debug("OS is %s", os.name)
     if os.name.lower() != "nt":
         raise RuntimeError("This function requires Windows NT or later")
 
@@ -423,11 +424,11 @@ def open_file(file_name, mode=GENERIC_READ):
 def get_file_basic_info(file_name, file_handle):
     file_attributes = GetFileAttributesW(file_name)
     file_size = GetFileSize(file_handle)
-    logging.debug("Compressed: %r",
+    logger.debug("Compressed: %r",
                   bool(file_attributes & FILE_ATTRIBUTE_COMPRESSED))
-    logging.debug("Encrypted: %r",
+    logger.debug("Encrypted: %r",
                   bool(file_attributes & FILE_ATTRIBUTE_ENCRYPTED))
-    logging.debug("Sparse: %r",
+    logger.debug("Sparse: %r",
                   bool(file_attributes & FILE_ATTRIBUTE_SPARSE_FILE))
     return file_size, bool(file_attributes & (FILE_ATTRIBUTE_COMPRESSED |
                                               FILE_ATTRIBUTE_ENCRYPTED |
@@ -458,8 +459,6 @@ def volume_from_file(file_name):
 # Second call: Sectors per Cluster; Bytes per Sector; Total # of Clusters.
 # Third call: Drive Type.
 def get_volume_information(volume):
-    logging.debug("Volume is %s", volume)
-
     # If it's a UNC path, raise an error.
     if not volume:
         raise RuntimeError(
@@ -512,7 +511,7 @@ def obtain_readwrite(volume):
                                FILE_FLAG_NO_BUFFERING |
                                FILE_FLAG_WRITE_THROUGH,
                                None)
-    logging.debug("Opened %s", volume)
+    logger.debug("Opened %s", volume)
 
     return volume_handle
 
@@ -670,7 +669,7 @@ def get_ntfs_volume_data(volume_handle):
     assert (mft_zone_start < mft_zone_end and
             mft_zone_start > 0 and mft_zone_end > 0)
 
-    logging.debug("MFT from %d to %d", mft_zone_start, mft_zone_end)
+    logger.debug("MFT from %d to %d", mft_zone_start, mft_zone_end)
     return mft_zone_start, mft_zone_end
 
 
@@ -735,7 +734,7 @@ def write_zero_fill(file_handle, write_length):
             write_length = 0
 
         # Write buffer to file.
-        #logging.debug("Write %d bytes", len(write_string))
+        #logger.debug("Write %d bytes", len(write_string))
         _, bytes_written = WriteFile(file_handle, write_string)
         assert bytes_written == len(write_string)
 
@@ -754,14 +753,14 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.
         for lcn_start, lcn_end in extents:
-            logging.debug("Wiping extent from %d to %d...",
+            logger.debug("Wiping extent from %d to %d...",
                           lcn_start, lcn_end)
             write_length = (lcn_end - lcn_start + 1) * cluster_size
             write_zero_fill(file_handle, write_length)
     else:
         # Special case - file so small it can be contained within the
         # directory entry in the MFT part of the disk.
-        logging.debug("Wiping tiny file that fits entirely on MFT")
+        logger.debug("Wiping tiny file that fits entirely on MFT")
         write_length = file_size
         write_zero_fill(file_handle, write_length)
 
@@ -780,7 +779,7 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
 def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                           total_clusters, tmp_file_path):
     assert cluster_size > 0
-    logging.debug("Examining extent from %d to %d for wipe...",
+    logger.debug("Examining extent from %d to %d for wipe...",
                   lcn_start, lcn_end)
     write_length = (lcn_end - lcn_start + 1) * cluster_size
 
@@ -826,13 +825,13 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     # loop to be sure of reaching the end of the new file's clusters.
     new_vcn = 0
     for new_lcn_start, new_lcn_end in new_extents:
-        # logging.debug("Zero-fill wrote from %d to %d",
+        # logger.debug("Zero-fill wrote from %d to %d",
         #                   new_lcn_start, new_lcn_end)
         cluster_count = new_lcn_end - new_lcn_start + 1
         cluster_dest = lcn_start + new_vcn
 
         if new_lcn_start != cluster_dest:
-            logging.debug("Move %d clusters to %d",
+            logger.debug("Move %d clusters to %d",
                           cluster_count, cluster_dest)
             try:
                 move_file(volume_handle, file_handle, new_vcn,
@@ -841,7 +840,7 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                 # Move file failed, probably because another process
                 # has allocated a cluster on disk.
                 # Break into smaller pieces and do what we can.
-                logging.debug("!! Move encountered an error !!")
+                logger.debug("!! Move encountered an error !!")
                 CloseHandle(file_handle)
                 if lcn_start < lcn_end:
                     for split_s, split_e in split_extent(lcn_start, lcn_end):
@@ -854,7 +853,7 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
         else:
             # If Windows put the zero-fill extent on the exact clusters we
             # intended to place it, no need to attempt a move.
-            logging.debug("No need to move extent from %d",
+            logging.logger("No need to move extent from %d",
                           new_lcn_start)
         new_vcn += cluster_count
 
@@ -880,7 +879,6 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
 def file_wipe(file_name):
     # add \\?\ if it does not exist to support Unicode and long paths
     file_name = extended_path(file_name)
-    logging.basicConfig(level=logging_level)
     check_os()
     win_version, _ = determine_win_version()
 
@@ -896,20 +894,19 @@ def file_wipe(file_name):
         bridged_extents = [x for x in logical_ranges_to_extents(
             get_extents(file_handle, False), True)]
     CloseHandle(file_handle)
-    logging.debug(orig_extents)
+    logger.debug(orig_extents)
 
     volume_handle = obtain_readwrite(volume)
     file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
 
     if not is_special:
         # Direct overwrite when it's a regular file.
-        logging.info("Attempting direct file wipe.")
+        logger.info("Attempting direct file wipe.")
         wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
         new_extents = get_extents(file_handle)
         CloseHandle(file_handle)
-        logging.debug(new_extents)
+        logger.debug(new_extents)
         if orig_extents == new_extents:
-            logging.info("Success!")
             clean_up(None, volume_handle, None)
             return
         # Expectation was that extents should be identical and file is wiped.
@@ -930,7 +927,7 @@ def file_wipe(file_name):
                         orig_extents)
 
     # Chase down all the freed clusters we can, and wipe them.
-    logging.info("Attempting defrag file wipe.")
+    logger.info("Attempting defrag file wipe.")
     # Put the temp file in the same folder as the target wipe file.
     # Should be able to write this path if user can write the wipe file.
     tmp_file_path = os.path.dirname(file_name) + os.sep + tmp_file_name
@@ -942,7 +939,6 @@ def file_wipe(file_name):
         result = wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
                                 cluster_size, volume_info.total_clusters,
                                 tmp_file_path)
-    logging.info("Success!")
 
     # Clean up.
     clean_up(None, volume_handle, tmp_file_path)
