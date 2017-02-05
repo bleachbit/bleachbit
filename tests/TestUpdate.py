@@ -130,24 +130,24 @@ class UpdateTestCase(common.BleachbitTestCase):
         succeeded['r'] = False
         self.assertRaises(RuntimeError, update_winapp2, url, "notahash",
                           append_text, on_success)
-        self.assert_(not succeeded['r'])
+        self.assertFalse(succeeded['r'])
 
         # blank hash, download file
         succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
-        self.assert_(succeeded['r'])
+        self.assertTrue(succeeded['r'])
 
         # blank hash, do not download again
         update_winapp2(url, None, append_text, on_success)
         succeeded['r'] = False
         update_winapp2(url, None, append_text, on_success)
-        self.assert_(not succeeded['r'])
+        self.assertFalse(succeeded['r'])
 
     def test_user_agent(self):
         """Unit test for method user_agent()"""
         agent = user_agent()
         logger.debug("user agent = '%s'", agent)
-        self.assert_(isinstance(agent, str))
+        self.assertIsString(agent)
 
     def test_environment(self):
         """Check the sanity of the environment"""

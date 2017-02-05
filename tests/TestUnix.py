@@ -50,9 +50,9 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
             bytes_freed = apt_autoclean()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
             bytes_freed = apt_autoremove()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
 
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
@@ -66,7 +66,7 @@ class UnixTestCase(common.BleachbitTestCase):
         for dirname in menu_dirs:
             for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False)
                              if fn.endswith('.desktop')]:
-                self.assert_(type(is_broken_xdg_desktop(filename) is bool))
+                self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
     def test_is_running_darwin(self):
         def run_ps():
@@ -114,10 +114,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         regex = re.compile('^' + Locales.localepattern + '$')
         for test in tests:
             m = regex.match(test[0])
-            self.assert_(m is not None, 'expected positive match for ' + test[0])
+            self.assertIsNotNone(m, 'expected positive match for ' + test[0])
             self.assertEqual(m.group("locale"), test[1])
         for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
-            self.assert_(regex.match(test) is None, 'expected negative match for '+test)
+            self.assertIsNone(regex.match(test), 'expected negative match for '+test)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -127,7 +127,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         locales.add_xml(configpath)
         counter = 0
         for path in locales.localization_paths(['en']):
-            self.assert_(os.path.lexists(path))
+            self.assertLExists(path)
             # self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
             self.assert_(path.find('/en_') == -1)
@@ -186,8 +186,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
-            self.assert_(os.path.exists(path),
-                         "Rotated log path '%s' does not exist" % path)
+            self.assertLExists(path, "Rotated log path '%s' does not exist" % path)
 
     def test_run_cleaner_cmd(self):
         from subprocess import CalledProcessError
@@ -208,7 +207,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_start_with_computer(self):
         """Unit test for start_with_computer*"""
         b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
 
         if not os.path.exists(bleachbit.launcher_path) and \
                 os.path.exists('bleachbit.desktop'):
@@ -218,12 +217,12 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         # opposite setting
         start_with_computer(not b)
         two_b = start_with_computer_check()
-        self.assert_(isinstance(two_b, bool))
-        self.assertEqual(b, not two_b)
+        self.assertIsInstance(two_b, bool)
+        self.assertNotEqual(b, two_b)
         # original setting
         start_with_computer(b)
         three_b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
         self.assertEqual(b, three_b)
 
     def test_wine_to_linux_path(self):
@@ -241,5 +240,5 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
-            self.assert_(isinstance(bytes_freed, (int, long)))
+            self.assertIsInteger(bytes_freed)
             bleachbit.logger.debug('yum bytes cleaned %d', bytes_freed)

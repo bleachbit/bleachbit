@@ -225,15 +225,14 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             self, sql, fn, clean_func, check_func=None, setup_func=None):
         """Helper for cleaning special SQLite cleaning"""
 
-        self.assertFalse(
-            sql and fn, "sql and fn are mutually exclusive ways to create the data")
+        self.assertFalse(sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
         if fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
-            self.assert_(os.path.exists(filename))
+            self.assertExists(filename)
 
         # create sqlite file
-        if sql:
+        elif sql:
             # create test file
             tmpdir = tempfile.mkdtemp(prefix='bleachbit-test-sqlite')
             (fd, filename) = tempfile.mkstemp(dir=tmpdir)
@@ -244,11 +243,12 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                 setup_func(filename)
 
             # before SQL creation executed, cleaning should fail
-            self.assertRaises(sqlite3.DatabaseError,
-                              clean_func, filename)
+            self.assertRaises(sqlite3.DatabaseError, clean_func, filename)
             # create
             FileUtilities.execute_sqlite3(filename, sql)
-            self.assert_(os.path.exists(filename))
+            self.assertExists(filename)
+        else:
+            raise RuntimeError('neither fn nor sql supplied')
 
         # clean the file
         old_shred = options.get('shred')
@@ -259,7 +259,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         self.assertTrue(options.get('shred'))
         options.set('shred', old_shred, commit=False)
         clean_func(filename)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
 
         # check
         if check_func:
@@ -267,7 +267,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         # tear down
         FileUtilities.delete(filename)
-        self.assert_(not os.path.exists(filename))
+        self.assertNotExists(filename)
 
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
@@ -362,7 +362,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         os.write(fd, chrome_bookmarks)
         os.close(fd)
 
-        self.assert_(os.path.exists(path))
+        self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)
         self.assertEqual(
             urls, [u'https://www.bleachbit.org/', u'http://www.slashdot.org/'])
@@ -377,7 +377,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-sqlite')
         os.close(fd)
         FileUtilities.execute_sqlite3(filename, sql)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
         # run the test
         ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')

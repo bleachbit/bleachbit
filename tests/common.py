@@ -53,6 +53,9 @@ class BleachbitTestCase(unittest.TestCase):
     def assertIsInteger(self, obj, msg=''):
         self.assertIsInstance(obj, (int, long), msg)
 
+    def assertIsUnicodeString(self, obj, msg=''):
+        self.assertIsInstance(obj, unicode, msg)
+
     def assertIsString(self, obj, msg=''):
         self.assertIsInstance(obj, (unicode, str), msg)
 

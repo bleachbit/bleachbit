@@ -205,7 +205,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.write(fd, '123')
         os.close(fd)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
         astr = '<action command="%s" path="%s"/>' % (command, filename)
         cleaner = TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
@@ -214,8 +214,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
-        self.assert_(not os.path.exists(filename),
-                     "Path still exists '%s'" % filename)
+        self.assertNotExists(filename, "Path still exists '%s'" % filename)
         self.assertEqual(worker.total_special, special_expected,
                          'For command %s expecting %s special operations but observed %d'
                          % (command, special_expected, worker.total_special))
@@ -316,10 +315,10 @@ class WorkerTestCase(common.BleachbitTestCase):
         ui = CLI.CliCallback()
         (fd, filename1) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.close(fd)
-        self.assert_(os.path.exists(filename1))
+        self.assertExists(filename1)
         (fd, filename2) = tempfile.mkstemp(prefix='bleachbit-test-worker')
         os.close(fd)
-        self.assert_(os.path.exists(filename2))
+        self.assertExists(filename2)
 
         astr1 = '<action command="delete" search="file" path="%s"/>' % filename1
         astr2 = '<action command="delete" search="file" path="%s"/>' % filename2
@@ -330,10 +329,8 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
-        self.assert_(not os.path.exists(filename1),
-                     "Path still exists '%s'" % filename1)
-        self.assert_(not os.path.exists(filename2),
-                     "Path still exists '%s'" % filename2)
+        self.assertNotExists(filename1, "Path still exists '%s'" % filename1)
+        self.assertNotExists(filename2, "Path still exists '%s'" % filename2)
         self.assertEqual(worker.total_special, 0)
         self.assertEqual(worker.total_errors, 0)
         self.assertEqual(worker.total_deleted, 2)

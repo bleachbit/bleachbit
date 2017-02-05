@@ -41,8 +41,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             os.chdir('tests')
         xmlcleaner = CleanerML("../doc/example_cleaner.xml")
 
-        self.assert_(isinstance(xmlcleaner, CleanerML))
-        self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
+        self.assertIsInstance(xmlcleaner, CleanerML)
+        self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
 
         def run_all(really_delete):
             for (option_id, __name) in xmlcleaner.cleaner.get_options():
@@ -97,4 +97,4 @@ class CleanerMLTestCase(common.BleachbitTestCase):
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
-        self.assert_(isinstance(pot_fragment("Foo", 'bar.xml'), str))
+        self.assertIsString(pot_fragment("Foo", 'bar.xml'))

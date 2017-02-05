@@ -42,7 +42,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         """Test encoding"""
 
         tempd = tempfile.mkdtemp(prefix='bleachbit-test-deepscan')
-        self.assert_(os.path.exists(tempd))
+        self.assertExists(tempd)
 
         fullpath = os.path.join(tempd, fn)
         common.touch_file(fullpath)
@@ -58,16 +58,13 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assert_(found, "Did not find '%s'" % fullpath)
 
         os.unlink(fullpath)
-        self.assert_(not os.path.exists(fullpath))
+        self.assertNotExists(fullpath)
         os.rmdir(tempd)
-        self.assert_(not os.path.exists(tempd))
+        self.assertNotExists(tempd)
 
     def test_encoding(self):
         """Test encoding"""
-        tests = ('äöüßÄÖÜ',
-                 "עִבְרִית")
-
-        for test in tests:
+        for test in ('äöüßÄÖÜ', "עִבְרִית"):
             self._test_encoding(test)
 
     def test_DeepScan(self):
@@ -83,10 +80,8 @@ class DeepScanTestCase(common.BleachbitTestCase):
             if True == ret:
                 # it's yielding control to the GTK idle loop
                 continue
-            self.assert_(isinstance(ret, (str, unicode)),
-                         "Expecting string but got '%s' (%s)" %
-                         (ret, str(type(ret))))
-            self.assert_(os.path.lexists(ret))
+            self.assertIsString(ret, "Expecting string but got '%s' (%s)" % (ret, str(type(ret))))
+            self.assertLExists(ret)
 
     def test_delete(self):
         """Delete files in a test environment"""
@@ -103,9 +98,9 @@ class DeepScanTestCase(common.BleachbitTestCase):
         open(f_del2, 'w').close()
 
         # sanity check
-        self.assert_(os.path.exists(f_del1))
-        self.assert_(os.path.exists(f_keep))
-        self.assert_(os.path.exists(f_del2))
+        self.assertExists(f_del1)
+        self.assertExists(f_keep)
+        self.assertExists(f_del2)
 
         # run deep scan
         astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
@@ -124,7 +119,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         # validate results
 
         self.assertFalse(os.path.exists(f_del1))
-        self.assert_(os.path.exists(f_keep))
+        self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
 
         # clean up

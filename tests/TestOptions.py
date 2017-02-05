@@ -21,7 +21,6 @@
 """
 Test case for module Options
 """
-
 from __future__ import absolute_import, print_function
 
 from tests import common
@@ -65,25 +64,25 @@ class OptionsTestCase(common.BleachbitTestCase):
         self.assertEqual(list_values, o.get_list("list_test"))
 
         # whitelist
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         whitelist = [('file', '/home/foo'), ('folder', '/home')]
         old_whitelist = o.get_whitelist_paths()
         o.config.remove_section('whitelist/paths')
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         self.assertEqual(o.get_whitelist_paths(), [])
         o.set_whitelist_paths(whitelist)
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
         o.set_whitelist_paths(old_whitelist)
         self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
 
         # these should always be set
         for bkey in bleachbit.Options.boolean_keys:
-            self.assert_(isinstance(o.get(bkey), bool))
+            self.assertIsInstance(o.get(bkey), bool)
 
         # language
         value = o.get_language('en')
-        self.assert_(isinstance(value, bool))
+        self.assertIsInstance(value, bool)
         o.set_language('en', True)
         self.assertTrue(o.get_language('en'))
         o.set_language('en', False)

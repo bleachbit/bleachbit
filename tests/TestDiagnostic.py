@@ -23,7 +23,6 @@
 Test case for module Diagnostic
 """
 
-
 from __future__ import absolute_import, print_function
 
 from tests import common
@@ -37,4 +36,4 @@ class DiagnosticTestCase(common.BleachbitTestCase):
         """Test diagnostic_info"""
         # at least it does not crash
         ret = diagnostic_info()
-        self.assertIsString(ret, (str, unicode))
+        self.assertIsString(ret)

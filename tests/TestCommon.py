@@ -37,7 +37,7 @@ class CommonTestCase(common.BleachbitTestCase):
     def test_expandvars(self):
         """Unit test for expandvars."""
         var = bleachbit.expandvars('$HOME')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(var)
 
     def test_environment(self):
         """Test for important environment variables"""
@@ -58,10 +58,10 @@ class CommonTestCase(common.BleachbitTestCase):
         """Unit test for expanduser."""
         # Return Unicode when given str.
         var = bleachbit.expanduser('~')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(var)
         # Return Unicode when given Unicode.
         var = bleachbit.expanduser(u'~')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(var)
         # Blank input should give blank output.
         self.assertEqual(bleachbit.expanduser(''), u'')
         # An absolute path should not be altered.
@@ -72,7 +72,7 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertExists(abs_dir)
         self.assertEqual(bleachbit.expanduser(abs_dir), abs_dir)
         # Path with tilde should be expanded
-        self.assertTrue(os.path.normpath(bleachbit.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
+        self.assertEqual(os.path.normpath(bleachbit.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
         # A relative path (without a reference to the home directory)
         # should not be expanded.
         self.assertEqual(bleachbit.expanduser('common'), 'common')
