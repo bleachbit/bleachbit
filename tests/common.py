@@ -95,11 +95,22 @@ class BleachbitTestCase(unittest.TestCase):
         """Create a temporary file, optionally writing contents to it"""
         if not os.path.isabs(filename):
             filename = os.path.join(self.tempdir, filename)
-        filename = extended_path(filename)
-        with open(filename, 'w') as f:
+        with open(extended_path(filename), 'wb') as f:
             f.write(contents)
-        assert (os.path.exists(filename))
+        assert (os.path.exists(extended_path(filename)))
         return filename
+
+    def mkstemp(self, **kwargs):
+        if 'dir' not in kwargs:
+            kwargs['dir'] = self.tempdir
+        (fd, filename) = tempfile.mkstemp(**kwargs)
+        os.close(fd)
+        return filename
+
+    def mkdtemp(self, **kwargs):
+        if 'dir' not in kwargs:
+            kwargs['dir'] = self.tempdir
+        return tempfile.mkdtemp(**kwargs)
 
 
 def getTestPath(path):
@@ -120,7 +131,6 @@ def touch_file(filename):
     """Create an empty file"""
     with open(filename, "w") as f:
         pass
-    import os.path
     assert(os.path.exists(filename))
 
 

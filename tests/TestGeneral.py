@@ -28,11 +28,11 @@ from bleachbit.General import *
 from bleachbit import logger
 from tests import common
 
+import shutil
 import unittest
 
 
 class GeneralTestCase(common.BleachbitTestCase):
-
     """Test case for module General"""
 
     def test_boolstr_to_bool(self):
@@ -66,18 +66,8 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_makedirs(self):
         """Unit test for makedirs"""
-        def cleanup(dir):
-            if not os.path.lexists(dir):
-                return
-            os.rmdir(dir)
-            os.rmdir(os.path.dirname(dir))
-            self.assertNotLExists(dir)
 
-        if 'nt' == os.name:
-            dir = 'c:\\temp\\bleachbit-test-makedirs\\a'
-        if 'posix' == os.name:
-            dir = '/tmp/bleachbit-test-makedirs/a'
-        cleanup(dir)
+        dir = os.path.join(self.tempdir, 'just', 'a', 'directory', 'adventure')
         # directory does not exist
         makedirs(dir)
         self.assertLExists(dir)
@@ -85,54 +75,43 @@ class GeneralTestCase(common.BleachbitTestCase):
         makedirs(dir)
         self.assertLExists(dir)
         # clean up
-        cleanup(dir)
+        shutil.rmtree(os.path.join(self.tempdir, 'just'))
 
     def test_run_external(self):
         """Unit test for run_external"""
-        if 'nt' == os.name:
-            args = ['cmd.exe', '/c', 'dir', '%windir%\system32', '/s', '/b']
-        elif 'posix' == os.name:
-            args = ['find', '/usr/bin']
-        (rc, stdout, stderr) = run_external(args)
+        args = {'nt': ['cmd.exe', '/c', 'dir', '%windir%\system32', '/s', '/b'],
+                'posix': ['find', '/usr/bin']}
+        (rc, stdout, stderr) = run_external(args[os.name])
         self.assertEqual(0, rc)
         self.assertEqual(0, len(stderr))
 
-        args = ['cmddoesnotexist']
-        self.assertRaises(OSError, run_external, args)
+        self.assertRaises(OSError, run_external, ['cmddoesnotexist'])
 
-        if 'nt' == os.name:
-            args = ['cmd.exe', '/c', 'dir', 'c:\doesnotexist']
-        elif 'posix' == os.name:
-            args = ['ls', '/doesnotexist']
-        (rc, stdout, stderr) = run_external(args)
+        args = {'nt': ['cmd.exe', '/c', 'dir', 'c:\doesnotexist'],
+                'posix': ['ls', '/doesnotexist']}
+        (rc, stdout, stderr) = run_external(args[os.name])
         self.assertNotEqual(0, rc)
 
     @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
     def test_run_external_clean_env(self):
         """Unit test for clean_env parameter to run_external()"""
 
-        # clean_env should set language to C
-        (rc, stdout, stderr) = run_external(
-            ['bash', '-c', 'echo $LANG'], clean_env=True)
-        self.assertEqual(rc, 0)
-        self.assertEqual(stdout.rstrip('\n'), 'C')
+        def run(args, clean_env):
+            (rc, stdout, stderr) = run_external(args, clean_env=clean_env)
+            self.assertEqual(rc, 0)
+            return stdout.rstrip('\n')
 
-        (rc, stdout, stderr) = run_external(
-            ['bash', '-c', 'echo $LC_ALL'], clean_env=True)
-        self.assertEqual(rc, 0)
-        self.assertEqual(stdout.rstrip('\n'), 'C')
+        # clean_env should set language to C
+        run(['sh', '-c', '[ "x$LANG" = "xC" ]'], clean_env=True)
+        run(['sh', '-c', '[ "x$LC_ALL" = "xC" ]'], clean_env=True)
 
         # clean_env parameter should not alter the PATH, and the PATH
         # should not be empty
-        (rc, path_clean, stderr) = run_external(
-            ['bash', '-c', 'echo $PATH'], clean_env=True)
-        self.assertEqual(rc, 0)
-        self.assertEqual(os.getenv('PATH'), path_clean.rstrip('\n'))
-        self.assertTrue(len(path_clean) > 10)
+        path_clean = run(['bash', '-c', 'echo $PATH'], clean_env=True)
+        self.assertEqual(os.getenv('PATH'), path_clean)
+        self.assertGreater(len(path_clean), 10)
 
-        (rc, path_unclean, stderr) = run_external(
-            ['bash', '-c', 'echo $PATH'], clean_env=False)
-        self.assertEqual(rc, 0)
+        path_unclean = run(['bash', '-c', 'echo $PATH'], clean_env=False)
         self.assertEqual(path_clean, path_unclean)
 
         # With parent environment set to English and parameter clean_env=False,

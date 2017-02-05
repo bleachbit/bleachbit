@@ -146,9 +146,7 @@ class ActionTestCase(common.BleachbitTestCase):
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
                 expanded = expanduser(expandvars(path))
-                (fd, filename) = tempfile.mkstemp(
-                    dir=expanded, prefix='bleachbit-action-delete')
-                os.close(fd)
+                filename = self.mkstemp(dir=expanded, prefix='bleachbit-action-delete')
                 command = mode
                 if 'delete_forward' == mode:
                     # forward slash needs to be normalized on Windows
@@ -166,19 +164,16 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_delete_special_filenames(self):
         """Unit test for deleting special filenames"""
-        dirname = tempfile.mkdtemp(prefix='bleachbit-action-delete-special')
         tests = [
             'normal',
             'space in name',
             'sigil$should-not-be-expanded',
         ]
         for test in tests:
-            pathname = os.path.join(dirname, test)
-            common.touch_file(pathname)
+            pathname = self.write_file(test)
             action_str = u'<action command="delete" search="file" path="%s" />' % pathname
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
-        os.rmdir(dirname)
 
     def test_ini(self):
         """Unit test for class Ini"""
@@ -207,10 +202,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_process(self):
         """Unit test for process action"""
-        if 'nt' == os.name:
-            cmd = 'cmd.exe /c dir'
-        if 'posix' == os.name:
-            cmd = 'dir'
+        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
         tests = [u'<action command="process" cmd="%s" />',
                  u'<action command="process" wait="false" cmd="%s" />',
                  u'<action command="process" wait="f" cmd="%s" />',
@@ -219,7 +211,7 @@ class ActionTestCase(common.BleachbitTestCase):
                  ]
 
         for test in tests:
-            self._test_action_str(test % cmd)
+            self._test_action_str(test % cmds[os.name])
 
     def test_regex(self):
         """Unit test for regex option"""
@@ -308,7 +300,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_type(self):
         """Unit test for type attribute"""
-        dirname = tempfile.mkdtemp(prefix='bleachbit-action-type')
+        dirname = self.mkdtemp(prefix='bleachbit-action-type')
         filename = os.path.join(dirname, 'file')
 
         # this should not delete anything
@@ -340,7 +332,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_walk_all(self):
         """Unit test for walk.all"""
-        dirname = tempfile.mkdtemp(prefix='bleachbit-walk-all')
+        dirname = self.mkdtemp(prefix='bleachbit-walk-all')
 
         # this sub-directory should be deleted
         subdir = os.path.join(dirname, 'sub')

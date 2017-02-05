@@ -21,25 +21,18 @@
 """
 Test case for Command
 """
-
-
 from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.Command import *
 
-import tempfile
-
 
 class CommandTestCase(common.BleachbitTestCase):
-
     """Test case for Command"""
 
     def test_Delete(self, cls=Delete):
         """Unit test for Delete"""
-        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
-        os.write(fd, "foo")
-        os.close(fd)
+        path = self.write_file('test_Delete', b'foo')
         cmd = cls(path)
         self.assertExists(path)
 
@@ -58,9 +51,7 @@ class CommandTestCase(common.BleachbitTestCase):
 
     def test_Function(self):
         """Unit test for Function"""
-        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
-        os.write(fd, "foo")
-        os.close(fd)
+        path = self.write_file('test_Function', b'foo')
         cmd = Function(path, FileUtilities.delete, 'bar')
         self.assertExists(path)
         self.assertGreater(os.path.getsize(path), 0)

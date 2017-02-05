@@ -35,32 +35,26 @@ import tempfile
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
-
     """Test Case for module DeepScan"""
 
     def _test_encoding(self, fn):
         """Test encoding"""
 
-        tempd = tempfile.mkdtemp(prefix='bleachbit-test-deepscan')
-        self.assertExists(tempd)
-
-        fullpath = os.path.join(tempd, fn)
-        common.touch_file(fullpath)
+        fullpath = self.write_file(fn)
 
         ds = DeepScan()
-        ds.add_search(tempd, '^%s$' % fn)
+        ds.add_search(self.tempdir, '^%s$' % fn)
         found = False
         for ret in ds.scan():
             if True == ret:
                 continue
-            self.assert_(ret == fullpath)
+            print(ret)
+            self.assertEqual(ret, fullpath)
             found = True
-        self.assert_(found, "Did not find '%s'" % fullpath)
+        self.assertTrue(found, "Did not find '%s'" % fullpath)
 
         os.unlink(fullpath)
         self.assertNotExists(fullpath)
-        os.rmdir(tempd)
-        self.assertNotExists(tempd)
 
     def test_encoding(self):
         """Test encoding"""
@@ -87,15 +81,11 @@ class DeepScanTestCase(common.BleachbitTestCase):
         """Delete files in a test environment"""
 
         # make some files
-        base = tempfile.mkdtemp(prefix='bleachbit-deepscan-test')
-        f_del1 = os.path.join(base, 'foo.txt.bbtestbak')
-        open(f_del1, 'w').close()
-        f_keep = os.path.join(base, 'foo.txt')
-        open(f_keep, 'w').close()
-        subdir = os.path.join(base, 'sub')
+        f_del1 = self.write_file('foo.txt.bbtestbak')
+        f_keep = self.write_file('foo.txt')
+        subdir = os.path.join(self.tempdir, 'sub')
         os.mkdir(subdir)
-        f_del2 = os.path.join(base, 'sub/bar.ini.bbtestbak')
-        open(f_del2, 'w').close()
+        f_del2 = self.write_file(os.path.join(subdir,'bar.ini.bbtestbak'))
 
         # sanity check
         self.assertExists(f_del1)
@@ -103,7 +93,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_del2)
 
         # run deep scan
-        astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % base
+        astr = '<action command="delete" search="deep" regex="\.bbtestbak$" cache="false" path="%s"/>' % self.tempdir
         from tests import TestCleaner
         cleaner = TestCleaner.action_to_cleaner(astr)
         from bleachbit.Worker import backends, Worker
@@ -112,18 +102,12 @@ class DeepScanTestCase(common.BleachbitTestCase):
         from bleachbit import CLI
         ui = CLI.CliCallback()
         worker = Worker(ui, True, operations)
-        run = worker.run()
-        while run.next():
-            pass
+        list(worker.run())
 
         # validate results
-
         self.assertFalse(os.path.exists(f_del1))
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
-
-        # clean up
-        shutil.rmtree(base)
 
     def test_normalized_walk_darwin(self):
         import mock

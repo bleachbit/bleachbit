@@ -37,7 +37,6 @@ import unittest
 
 
 class AccessDeniedActionAction(ActionProvider):
-
     action_key = 'access.denied'
 
     def __init__(self, action_element):
@@ -55,7 +54,6 @@ class AccessDeniedActionAction(ActionProvider):
 
 
 class DoesNotExistAction(ActionProvider):
-
     action_key = 'does.not.exist'
 
     def __init__(self, action_element):
@@ -70,7 +68,6 @@ class DoesNotExistAction(ActionProvider):
 
 
 class FunctionGeneratorAction(ActionProvider):
-
     action_key = 'function.generator'
 
     def __init__(self, action_element):
@@ -87,7 +84,6 @@ class FunctionGeneratorAction(ActionProvider):
 
 
 class FunctionPathAction(ActionProvider):
-
     action_key = 'function.path'
 
     def __init__(self, action_element):
@@ -105,7 +101,6 @@ class FunctionPathAction(ActionProvider):
 
 
 class InvalidEncodingAction(ActionProvider):
-
     action_key = 'invalid.encoding'
 
     def __init__(self, action_element):
@@ -123,7 +118,6 @@ class InvalidEncodingAction(ActionProvider):
 
 
 class FunctionPlainAction(ActionProvider):
-
     action_key = 'function.plain'
 
     def __init__(self, action_element):
@@ -202,7 +196,7 @@ class WorkerTestCase(common.BleachbitTestCase):
                            bytes_expected_posix, count_deleted_posix,
                            bytes_expected_nt, count_deleted_nt):
         ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker', dir=self.tempdir)
         os.write(fd, '123')
         os.close(fd)
         self.assertExists(filename)
@@ -238,8 +232,7 @@ class WorkerTestCase(common.BleachbitTestCase):
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
-        self.action_test_helper(
-            'function.generator', 1, 0, 4096 + 10, 1, 3 + 10, 1)
+        self.action_test_helper('function.generator', 1, 0, 4096 + 10, 1, 3 + 10, 1)
 
     def test_FunctionPath(self):
         """Test Worker using Action.FunctionPathAction"""
@@ -281,22 +274,17 @@ class WorkerTestCase(common.BleachbitTestCase):
         import bleachbit.DeepScan
         SaveDeepScan = bleachbit.DeepScan.DeepScan
         self.scanned = 0
-        self_assertequal = self.assertEqual
-        self_assert = self.assert_
-
-        def increment_count():
-            self.scanned += 1
+        parent = self
 
         class MyDeepScan:
-
             def add_search(self, dirname, regex):
-                self_assertequal(dirname, expanduser('~'))
-                self_assert(
-                    regex in ('^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'))
+                parent.assertEqual(dirname, expanduser('~'))
+                parent.assertIn(regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
             def scan(self):
-                increment_count()
+                parent.scanned+=1
                 yield True
+
         bleachbit.DeepScan.DeepScan = MyDeepScan
 
         # test
@@ -313,12 +301,8 @@ class WorkerTestCase(common.BleachbitTestCase):
     def test_multiple_options(self):
         """Test one cleaner with two options"""
         ui = CLI.CliCallback()
-        (fd, filename1) = tempfile.mkstemp(prefix='bleachbit-test-worker')
-        os.close(fd)
-        self.assertExists(filename1)
-        (fd, filename2) = tempfile.mkstemp(prefix='bleachbit-test-worker')
-        os.close(fd)
-        self.assertExists(filename2)
+        filename1 = self.mkstemp(prefix='bleachbit-test-worker')
+        filename2 = self.mkstemp(prefix='bleachbit-test-worker')
 
         astr1 = '<action command="delete" search="file" path="%s"/>' % filename1
         astr2 = '<action command="delete" search="file" path="%s"/>' % filename2
@@ -329,8 +313,8 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
-        self.assertNotExists(filename1, "Path still exists '%s'" % filename1)
-        self.assertNotExists(filename2, "Path still exists '%s'" % filename2)
+        self.assertNotExists(filename1)
+        self.assertNotExists(filename2)
         self.assertEqual(worker.total_special, 0)
         self.assertEqual(worker.total_errors, 0)
         self.assertEqual(worker.total_deleted, 2)

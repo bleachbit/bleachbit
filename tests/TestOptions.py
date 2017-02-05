@@ -31,7 +31,6 @@ import os
 
 
 class OptionsTestCase(common.BleachbitTestCase):
-
     """Test case for class Options"""
 
     def test_Options(self):
@@ -105,11 +104,7 @@ class OptionsTestCase(common.BleachbitTestCase):
         # By default ConfigParser stores keys (the filenames) as lowercase.
         # This needs special consideration when combined with purging.
         o1 = bleachbit.Options.Options()
-        import tempfile
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-options')
-        pathname = os.path.join(dirname, 'foo.xml')
-        open(pathname, 'w').close()  # make an empty file
-        self.assertTrue(os.path.exists(pathname))
+        pathname = self.write_file('foo.xml')
         myhash = '0ABCD'
         o1.set_hashpath(pathname, myhash)
         self.assertEqual(myhash, o1.get_hashpath(pathname))
@@ -135,9 +130,6 @@ class OptionsTestCase(common.BleachbitTestCase):
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
         self.assertRaises(NoOptionError, lambda: o3.get_hashpath(pathname))
-
-        # clean up
-        os.rmdir(dirname)
 
     def test_abbreviations(self):
         """Test non-standard, abbreviated booleans T and F"""

@@ -65,6 +65,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         self.assertTrue(0 <= n_swaps < 10)
 
     def test_physical_free_darwin(self):
+        # TODO: use mock
         self.assertEqual(physical_free_darwin(lambda:
 """Mach Virtual Memory Statistics: (page size of 4096 bytes)
 Pages free:                              836891.
@@ -105,8 +106,7 @@ Swapouts:                              20258188.
         with open('/proc/swaps') as f:
             swapdev = f.read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
-            print('no active swap device detected')
-            return
+            self.skipTest('no active swap device detected')
         size = get_swap_size_linux(swapdev)
         self.assertIsInteger(size)
         self.assertGreater(size, 1024 ** 2)

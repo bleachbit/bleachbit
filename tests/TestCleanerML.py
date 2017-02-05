@@ -21,18 +21,13 @@
 """
 Test cases for module CleanerML
 """
-
-
 from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.CleanerML import *
 
-import unittest
-
 
 class CleanerMLTestCase(common.BleachbitTestCase):
-
     """Test cases for CleanerML"""
 
     def test_CleanerML(self):
@@ -82,14 +77,10 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         load_cleaners()
 
         # should catch exception with invalid XML
-        import tempfile
         pcd = bleachbit.personal_cleaners_dir
-        bleachbit.personal_cleaners_dir = tempfile.mkdtemp(
-            prefix='bleachbit-cleanerml-load')
-        fn_xml = os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml')
-        f = open(fn_xml, 'w')
-        f.write('<xml><broken>')
-        f.close()
+        bleachbit.personal_cleaners_dir = self.mkdtemp(prefix='bleachbit-cleanerml-load')
+        self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
+                        contents='<xml><broken>')
         load_cleaners()
         import shutil
         shutil.rmtree(bleachbit.personal_cleaners_dir)

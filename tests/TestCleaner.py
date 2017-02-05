@@ -32,11 +32,10 @@ from bleachbit.Cleaner import *
 from tests import common
 
 import logging
-import tempfile
-import unittest
 from xml.dom.minidom import parseString
 
 logger = logging.getLogger('bleachbit')
+
 
 def action_to_cleaner(action_str):
     """Given an action XML fragment, return a cleaner"""
@@ -69,25 +68,20 @@ class CleanerTestCase(common.BleachbitTestCase):
         """Unit test for Cleaner.add_action()"""
         self.actions = []
         if 'nt' == os.name:
-            self.actions.append(
-                '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>')
-            self.actions.append(
-                '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>')
-            self.actions.append(
-                '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>')
-            self.actions.append(
-                '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>')
+            self.actions += [
+                '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>',
+                '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>',
+                '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>',
+                '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>']
         elif 'posix' == os.name:
             print(__file__)
-            self.actions.append(
-                '<action command="delete" search="file" path="%s"/>' % __file__)
-            self.actions.append(
-                '<action command="delete" search="glob" path="/bin/*sh"/>')
-            self.actions.append(
-                '<action command="delete" search="walk.files" path="/bin/"/>')
-            self.actions.append(
-                '<action command="delete" search="walk.all" path="/var/log/"/>')
-
+            self.actions += [
+                '<action command="delete" search="file" path="%s"/>' % __file__,
+                '<action command="delete" search="glob" path="/bin/*sh"/>',
+                '<action command="delete" search="walk.files" path="/bin/"/>',
+                '<action command="delete" search="walk.all" path="/var/log/"/>']
+        else:
+            raise AssertionError('Unknown OS.')
         self.assertGreater(len(self.actions), 0)
 
         for action_str in self.actions:
@@ -115,27 +109,23 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
-        dirname = tempfile.mkdtemp(
-            prefix='bleachbit-test-create-simple-cleaner')
+        dirname = self.mkdtemp(prefix='bleachbit-test-create-simple-cleaner')
         filename1 = os.path.join(dirname, '1')
         common.touch_file(filename1)
         # test Cyrillic for https://bugs.launchpad.net/bleachbit/+bug/1541808
         filename2 = os.path.join(dirname, u'чистый')
         common.touch_file(filename2)
-        self.assertExists(filename1)
-        self.assertExists(filename2)
-        cleaner = create_simple_cleaner([filename1, filename2, dirname])
+        targets = [filename1, filename2, dirname]
+        cleaner = create_simple_cleaner(targets)
         for cmd in cleaner.get_commands('files'):
             # preview
             for result in cmd.execute(False):
                 common.validate_result(self, result)
             # delete
-            for result in cmd.execute(True):
-                pass
+            list(cmd.execute(True))
 
-        self.assertNotExists(filename1)
-        self.assertNotExists(filename2)
-        self.assertNotExists(dirname)
+        for target in targets:
+            self.assertNotExists(target)
 
     def test_get_name(self):
         for key in sorted(backends):

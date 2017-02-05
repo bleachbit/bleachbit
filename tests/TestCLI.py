@@ -38,7 +38,6 @@ import unittest
 
 
 class CLITestCase(common.BleachbitTestCase):
-
     """Test case for module CLI"""
 
     def setUp(self):
@@ -82,16 +81,13 @@ class CLITestCase(common.BleachbitTestCase):
     def test_encoding(self):
         """Unit test for encoding"""
 
-        (fd, filename) = tempfile.mkstemp(
-            prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')
-        os.close(fd)
+        filename = self.write_file('/tmp/bleachbit-test-cli-encoding-\xe4\xf6\xfc~')
         # not assertExists because it doesn't cope with invalid encodings
         self.assertTrue(os.path.exists(filename))
 
         env = copy.deepcopy(os.environ)
         env['LANG'] = 'en_US'  # not UTF-8
-        module = 'bleachbit.CLI'
-        args = [sys.executable, '-m', module, '-p', 'system.tmp']
+        args = [sys.executable, '-m', 'bleachbit.CLI', '-p', 'system.tmp']
         # If Python pipes stdout to file or devnull, the test may give
         # a false negative.  It must print stdout to terminal.
         self._test_preview(args, stdout=True, env=env)
@@ -104,8 +100,7 @@ class CLITestCase(common.BleachbitTestCase):
         lang = os.environ['LANG']
         os.environ['LANG'] = 'blahfoo'
         # tests are run from the parent directory
-        module = 'bleachbit.CLI'
-        args = [sys.executable, '-m', module, '--version']
+        args = [sys.executable, '-m', 'bleachbit.CLI', '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         os.environ['LANG'] = lang
@@ -127,8 +122,7 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_delete(self):
         """Unit test for --delete option"""
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-delete')
-        os.close(fd)
+        filename = self.mkstemp(prefix='bleachbit-test-cli-delete')
         if 'nt' == os.name:
             import win32api
             filename = os.path.normcase(filename)

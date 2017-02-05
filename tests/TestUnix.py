@@ -30,7 +30,6 @@ import bleachbit
 from bleachbit.Unix import *
 
 import sys
-import tempfile
 import unittest
 
 
@@ -103,21 +102,21 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
-        tests = [('en', 'en'),
-                 ('en_US', 'en'),
-                 ('en_US@piglatin', 'en'),
-                 ('en_US.utf8', 'en'),
-                 ('ko_KR.eucKR', 'ko'),
-                 ('pl.ISO8859-2', 'pl'),
-                 ('zh_TW.Big5', 'zh')]
+        tests = {'en': 'en',
+                 'en_US': 'en',
+                 'en_US@piglatin': 'en',
+                 'en_US.utf8': 'en',
+                 'ko_KR.eucKR': 'ko',
+                 'pl.ISO8859-2': 'pl',
+                 'zh_TW.Big5': 'zh'}
         import re
         regex = re.compile('^' + Locales.localepattern + '$')
-        for test in tests:
-            m = regex.match(test[0])
-            self.assertIsNotNone(m, 'expected positive match for ' + test[0])
-            self.assertEqual(m.group("locale"), test[1])
+        for locale, tlc in tests.items():
+            m = regex.match(locale)
+            self.assertIsNotNone(m, 'expected positive match for ' + locale)
+            self.assertEqual(m.group("locale"), tlc)
         for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
-            self.assertIsNone(regex.match(test), 'expected negative match for '+test)
+            self.assertIsNone(regex.match(test), 'expected negative match for ' + test)
 
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
@@ -130,15 +129,13 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assertLExists(path)
             # self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
-            self.assert_(path.find('/en_') == -1)
+            self.assertEqual(path.find('/en_'), -1)
             counter += 1
-        self.assert_(
-            counter > 0, 'Zero files deleted by localization cleaner.'
-                         'This may be an error unless you really deleted all the files.')
+        self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner.' +
+                                       'This may be an error unless you really deleted all the files.')
 
     def test_fakelocalizationdirs(self):
         """Create a faked localization hierarchy and clean it afterwards"""
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-localizations')
 
         keepdirs = [
             'important_dontdelete',
@@ -161,9 +158,9 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             'delete/dummyfiles/ru.txt',
             'delete/locale/ru_RU.UTF8.txt']
         for path in keepdirs + nukedirs:
-            os.mkdir(os.path.join(dirname, path))
+            os.mkdir(os.path.join(self.tempdir, path))
         for path in keepfiles + nukefiles:
-            open(os.path.join(dirname, path), 'w').close()
+            self.write_file(path)
 
         configxml = '<path directoryregex="^.*$">' \
                     '  <path directoryregex="^(locale|dummyfiles)$">' \
@@ -173,15 +170,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                     '</path>'
         from xml.dom.minidom import parseString
         config = parseString(configxml)
-        locales = Locales()
-        locales._paths = LocaleCleanerPath(dirname)
-        locales.add_xml(config.firstChild, None)
+        self.locales._paths = LocaleCleanerPath(self.tempdir)
+        self.locales.add_xml(config.firstChild, None)
         # normpath because paths may contain ./
-        deletelist = [os.path.normpath(path) for path in locales.localization_paths(['en', 'de'])]
+        deletelist = [os.path.normpath(path) for path in self.locales.localization_paths(['en', 'de'])]
         for path in keepdirs + keepfiles:
-            self.assert_(os.path.join(dirname, path) not in deletelist)
+            self.assertNotIn(os.path.join(self.tempdir, path), deletelist)
         for path in nukedirs + nukefiles:
-            self.assert_(os.path.join(dirname, path) in deletelist)
+            self.assertIn(os.path.join(self.tempdir, path), deletelist)
 
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
@@ -209,8 +205,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         b = start_with_computer_check()
         self.assertIsInstance(b, bool)
 
-        if not os.path.exists(bleachbit.launcher_path) and \
-                os.path.exists('bleachbit.desktop'):
+        if not os.path.exists(bleachbit.launcher_path) and  os.path.exists('bleachbit.desktop'):
             # this happens when BleachBit is not installed
             bleachbit.launcher_path = 'bleachbit.desktop'
 
@@ -227,11 +222,10 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     def test_wine_to_linux_path(self):
         """Unit test for wine_to_linux_path()"""
-        tests = [("/home/foo/.wine",
-                  "C:\\Program Files\\NSIS\\NSIS.exe",
-                  "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe")]
-        for test in tests:
-            self.assertEqual(wine_to_linux_path(test[0], test[1]), test[2])
+        wineprefix = "/home/foo/.wine"
+        windows_pathname = "C:\\Program Files\\NSIS\\NSIS.exe"
+        result = "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe"
+        self.assertEqual(wine_to_linux_path(wineprefix, windows_pathname), result)
 
     def test_yum_clean(self):
         """Unit test for yum_clean()"""

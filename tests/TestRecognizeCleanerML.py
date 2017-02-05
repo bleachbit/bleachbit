@@ -29,7 +29,6 @@ from bleachbit.RecognizeCleanerML import hashdigest
 
 
 class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
-
     """Test case for RecognizeCleanerML"""
 
     def test_hash(self):

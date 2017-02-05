@@ -70,7 +70,6 @@ def get_winapp2():
 
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WinappTestCase(common.BleachbitTestCase):
-
     """Test cases for Winapp"""
 
     def run_all(self, cleaner, really_delete):
