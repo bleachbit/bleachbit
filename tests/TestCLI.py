@@ -37,8 +37,7 @@ import tempfile
 import unittest
 
 
-
-class CLITestCase(unittest.TestCase):
+class CLITestCase(common.BleachbitTestCase):
 
     """Test case for module CLI"""
 
@@ -170,11 +169,3 @@ class CLITestCase(unittest.TestCase):
                 args = [sys.executable, '-m', 'bleachbit.CLI', '--shred', filename]
                 output = run_external(args, stdout=open(os.devnull, 'w'))
                 self.assert_(not os.path.exists(filename))
-
-
-def suite():
-    return unittest.makeSuite(CLITestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

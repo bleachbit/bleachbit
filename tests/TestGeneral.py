@@ -32,7 +32,7 @@ from tests import common
 import unittest
 
 
-class GeneralTestCase(unittest.TestCase):
+class GeneralTestCase(common.BleachbitTestCase):
 
     """Test case for module General"""
 
@@ -168,11 +168,3 @@ class GeneralTestCase(unittest.TestCase):
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assert_(isinstance(sudo_mode(), bool))
-
-
-def suite():
-    return unittest.makeSuite(GeneralTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

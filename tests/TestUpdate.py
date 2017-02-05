@@ -33,10 +33,9 @@ import bleachbit.Update
 
 import os
 import os.path
-import unittest
 
 
-class UpdateTestCase(unittest.TestCase):
+class UpdateTestCase(common.BleachbitTestCase):
 
     """Test case for module Update"""
 
@@ -157,11 +156,3 @@ class UpdateTestCase(unittest.TestCase):
         import socket
         self.assertTrue(hasattr(socket, 'ssl'))
         import _ssl
-
-
-def suite():
-    return unittest.makeSuite(UpdateTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

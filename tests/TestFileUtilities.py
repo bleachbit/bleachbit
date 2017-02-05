@@ -36,9 +36,6 @@ import sys
 import unittest
 
 
-
-
-
 def test_ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
@@ -116,8 +113,7 @@ def test_json_helper(self, execute):
     self.assert_(not os.path.exists(filename))
 
 
-class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
-
+class FileUtilitiesTestCase(common.BleachbitTestCase):
     """Test case for module FileUtilities"""
 
     def test_bytes_to_human(self):
@@ -521,11 +517,10 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
 
     def test_getsize(self):
         """Unit test for method getsize()"""
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-getsize')
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-getsize', dir=self.tempdir)
 
         def test_getsize_helper(fname):
-            filename = os.path.join(dirname, fname)
-            common.write_file(filename, "abcdefghij" * 12345)
+            filename = self.write_file(os.path.join(dirname, fname), "abcdefghij" * 12345)
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
@@ -938,11 +933,3 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         self.assertEqual(list(open_files_lsof(lambda:
                                               'n/bar/foo\nn/foo/bar\nnoise'
                                               )), ['/bar/foo', '/foo/bar'])
-
-
-def suite():
-    return unittest.makeSuite(FileUtilitiesTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

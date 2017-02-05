@@ -24,14 +24,14 @@ Test case for module Options
 
 from __future__ import absolute_import, print_function
 
+from tests import common
 import bleachbit.Options
 from bleachbit import NoOptionError
 
 import os
-import unittest
 
 
-class OptionsTestCase(unittest.TestCase):
+class OptionsTestCase(common.BleachbitTestCase):
 
     """Test case for class Options"""
 
@@ -160,11 +160,3 @@ class OptionsTestCase(unittest.TestCase):
 
         # clean up
         del o
-
-
-def suite():
-    return unittest.makeSuite(OptionsTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

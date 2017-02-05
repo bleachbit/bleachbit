@@ -194,7 +194,7 @@ class TruncateTestAction(ActionProvider):
         yield Command.Delete(self.pathname)
 
 
-class WorkerTestCase(unittest.TestCase):
+class WorkerTestCase(common.BleachbitTestCase):
 
     """Test case for module Worker"""
 
@@ -337,11 +337,3 @@ class WorkerTestCase(unittest.TestCase):
         self.assertEqual(worker.total_special, 0)
         self.assertEqual(worker.total_errors, 0)
         self.assertEqual(worker.total_deleted, 2)
-
-
-def suite():
-    return unittest.makeSuite(WorkerTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

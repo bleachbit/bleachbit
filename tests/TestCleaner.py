@@ -63,7 +63,7 @@ def actions_to_cleaner(action_strs):
     return cleaner
 
 
-class CleanerTestCase(unittest.TestCase, common.AssertFile):
+class CleanerTestCase(common.BleachbitTestCase):
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
@@ -234,10 +234,3 @@ class CleanerTestCase(unittest.TestCase, common.AssertFile):
         for test in tests:
             self.assertEqual(
                 backends['system'].whitelisted(test[0]), test[1], test[0])
-
-
-def suite():
-    return unittest.makeSuite(CleanerTestCase)
-
-if __name__ == '__main__':
-    unittest.main()

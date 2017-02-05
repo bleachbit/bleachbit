@@ -31,7 +31,7 @@ from bleachbit.CleanerML import *
 import unittest
 
 
-class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
+class CleanerMLTestCase(common.BleachbitTestCase):
 
     """Test cases for CleanerML"""
 
@@ -98,11 +98,3 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assert_(isinstance(pot_fragment("Foo", 'bar.xml'), str))
-
-
-def suite():
-    return unittest.makeSuite(CleanerMLTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

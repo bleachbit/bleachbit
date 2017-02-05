@@ -27,14 +27,13 @@ from __future__ import absolute_import, print_function
 from tests import common
 from bleachbit.Memory import *
 
-
 import unittest
 import sys
 
 running_linux = sys.platform.startswith('linux')
 
 
-class MemoryTestCase(unittest.TestCase):
+class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
 
     @unittest.skipUnless(running_linux, 'not running linux')
@@ -143,11 +142,3 @@ Swapouts:                              20258188.
             self.skipTest('not enough privileges')
         devices = disable_swap_linux()
         enable_swap_linux()
-
-
-def suite():
-    return unittest.makeSuite(MemoryTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

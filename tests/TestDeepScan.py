@@ -32,10 +32,9 @@ from bleachbit import expanduser
 import os
 import shutil
 import tempfile
-import unittest
 
 
-class DeepScanTestCase(unittest.TestCase):
+class DeepScanTestCase(common.BleachbitTestCase):
 
     """Test Case for module DeepScan"""
 
@@ -153,11 +152,3 @@ class DeepScanTestCase(unittest.TestCase):
             ]
             mock_walk.return_value = expected
             self.assertEqual(list(normalized_walk('.')), expected)
-
-
-def suite():
-    return unittest.makeSuite(DeepScanTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -35,7 +35,7 @@ import unittest
 
 
 @unittest.skipIf('win32' == sys.platform, 'skipping unix tests on windows')
-class UnixTestCase(unittest.TestCase):
+class UnixTestCase(common.BleachbitTestCase):
 
     """Test case for module Unix"""
 
@@ -243,11 +243,3 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = yum_clean()
             self.assert_(isinstance(bytes_freed, (int, long)))
             bleachbit.logger.debug('yum bytes cleaned %d', bytes_freed)
-
-
-def suite():
-    return unittest.makeSuite(UnixTestCase)
-
-
-if __name__ == '__main__' and 'posix' == os.name:
-    unittest.main()

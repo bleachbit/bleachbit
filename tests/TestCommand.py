@@ -29,10 +29,9 @@ from tests import common
 from bleachbit.Command import *
 
 import tempfile
-import unittest
 
 
-class CommandTestCase(unittest.TestCase):
+class CommandTestCase(common.BleachbitTestCase):
 
     """Test case for Command"""
 
@@ -80,11 +79,3 @@ class CommandTestCase(unittest.TestCase):
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
-
-
-def suite():
-    return unittest.makeSuite(CommandTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

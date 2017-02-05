@@ -28,11 +28,9 @@ from tests import common
 import bleachbit
 
 import os
-import tempfile
-import unittest
 
 
-class CommonTestCase(unittest.TestCase, common.AssertFile):
+class CommonTestCase(common.BleachbitTestCase):
 
     """Test case for Common."""
 
@@ -78,10 +76,3 @@ class CommonTestCase(unittest.TestCase, common.AssertFile):
         # A relative path (without a reference to the home directory)
         # should not be expanded.
         self.assertEqual(bleachbit.expanduser('common'), 'common')
-
-def suite():
-    return unittest.makeSuite(CommonTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

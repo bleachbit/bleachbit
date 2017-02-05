@@ -34,7 +34,6 @@ import os.path
 import shutil
 import sqlite3
 import tempfile
-import unittest
 
 
 chrome_bookmarks = """
@@ -187,7 +186,7 @@ class SpecialAssertions:
             raise AssertionError('Table is not empty: %s ' % table)
 
 
-class SpecialTestCase(unittest.TestCase, SpecialAssertions):
+class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     """Test case for module Special"""
 
@@ -383,11 +382,3 @@ INSERT INTO "meta" VALUES('version','20');"""
         ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
-
-
-def suite():
-    return unittest.makeSuite(SpecialTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

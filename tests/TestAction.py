@@ -90,7 +90,7 @@ def dir_is_empty(dirname):
     return not os.listdir(dirname)
 
 
-class ActionTestCase(unittest.TestCase, common.AssertFile):
+class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 

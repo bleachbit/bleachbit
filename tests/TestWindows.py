@@ -59,7 +59,7 @@ def put_files_into_recycle_bin():
 
 
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
-class WindowsTestCase(unittest.TestCase, common.AssertFile):
+class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""
 
@@ -254,8 +254,7 @@ class WindowsTestCase(unittest.TestCase, common.AssertFile):
             logger.debug('file_wipe(%s)', longname)
 
             def _write_file(longname, contents):
-                common.write_file(longname, contents)
-                self.assertExists(longname)
+                self.write_file(longname, contents)
                 return longname
                 import win32api
                 shortname = extended_path_undo(
@@ -365,11 +364,3 @@ class WindowsTestCase(unittest.TestCase, common.AssertFile):
         """Unit test for shell_change_notify"""
         ret = shell_change_notify()
         self.assertEqual(ret, 0)
-
-
-def suite():
-    return unittest.makeSuite(WindowsTestCase)
-
-
-if __name__ == '__main__' and sys.platform == 'win32':
-    unittest.main()
