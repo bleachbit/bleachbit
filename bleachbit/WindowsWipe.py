@@ -393,7 +393,6 @@ def check_mapped_bit(volume_bitmap, lcn):
 # Check the operating system. Go no further unless we are on
 # Windows and it's Win NT or later.
 def check_os():
-    logger.debug("OS is %s", os.name)
     if os.name.lower() != "nt":
         raise RuntimeError("This function requires Windows NT or later")
 
@@ -424,15 +423,16 @@ def open_file(file_name, mode=GENERIC_READ):
 def get_file_basic_info(file_name, file_handle):
     file_attributes = GetFileAttributesW(file_name)
     file_size = GetFileSize(file_handle)
-    logger.debug("Compressed: %r",
-                  bool(file_attributes & FILE_ATTRIBUTE_COMPRESSED))
-    logger.debug("Encrypted: %r",
-                  bool(file_attributes & FILE_ATTRIBUTE_ENCRYPTED))
-    logger.debug("Sparse: %r",
-                  bool(file_attributes & FILE_ATTRIBUTE_SPARSE_FILE))
-    return file_size, bool(file_attributes & (FILE_ATTRIBUTE_COMPRESSED |
-                                              FILE_ATTRIBUTE_ENCRYPTED |
-                                              FILE_ATTRIBUTE_SPARSE_FILE))
+    is_compressed = bool(file_attributes & FILE_ATTRIBUTE_COMPRESSED)
+    is_encrypted = bool(file_attributes & FILE_ATTRIBUTE_ENCRYPTED)
+    is_sparse = bool(file_attributes & FILE_ATTRIBUTE_SPARSE_FILE)
+    is_special = is_compressed | is_encrypted | is_sparse
+    if is_special:
+        logger.debug('{}: {} {} {}'.format(file_name,
+            'compressed' if is_compressed else '',
+            'encrypted' if is_encrypted else '',
+            'sparse' if is_sparse else ''))
+    return file_size, is_special
 
 
 # Truncate a file. Do this when we want to release its clusters.
@@ -511,7 +511,7 @@ def obtain_readwrite(volume):
                                FILE_FLAG_NO_BUFFERING |
                                FILE_FLAG_WRITE_THROUGH,
                                None)
-    logger.debug("Opened %s", volume)
+    #logger.debug("Opened volume %s", volume)
 
     return volume_handle
 
@@ -894,18 +894,18 @@ def file_wipe(file_name):
         bridged_extents = [x for x in logical_ranges_to_extents(
             get_extents(file_handle, False), True)]
     CloseHandle(file_handle)
-    logger.debug(orig_extents)
+    #logger.debug('Original extents: {}'.format(orig_extents))
 
     volume_handle = obtain_readwrite(volume)
     file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
 
     if not is_special:
         # Direct overwrite when it's a regular file.
-        logger.info("Attempting direct file wipe.")
+        #logger.info("Attempting direct file wipe.")
         wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
         new_extents = get_extents(file_handle)
         CloseHandle(file_handle)
-        logger.debug(new_extents)
+        #logger.debug('New extents: {}'.format(new_extents))
         if orig_extents == new_extents:
             clean_up(None, volume_handle, None)
             return
@@ -927,7 +927,7 @@ def file_wipe(file_name):
                         orig_extents)
 
     # Chase down all the freed clusters we can, and wipe them.
-    logger.info("Attempting defrag file wipe.")
+    #logger.debug("Attempting defrag file wipe.")
     # Put the temp file in the same folder as the target wipe file.
     # Should be able to write this path if user can write the wipe file.
     tmp_file_path = os.path.dirname(file_name) + os.sep + tmp_file_name
