@@ -428,7 +428,10 @@ class GUI:
         try:
             with open(bleachbit.license_filename) as f:
                 dialog.set_license(f.read())
-        except IOError:
+        except (IOError, TypeError):
+            # In case the license file cannot be read, there will be an
+            # IOError. In case the license file does not exist, the filename
+            # will be none, causing a TypeError.
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
         dialog.set_name(APP_NAME)
