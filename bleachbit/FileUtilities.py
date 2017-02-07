@@ -378,7 +378,7 @@ def extended_path_undo(path):
     """"""
     if 'nt' == os.name:
         if path.startswith(r'\\?\unc'):
-            return path[7:]
+            return '\\' + path[7:]
         if path.startswith(r'\\?'):
             return path[4:]
     return path
