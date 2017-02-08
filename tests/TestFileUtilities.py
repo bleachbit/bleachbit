@@ -434,7 +434,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             tests_undo = (
                 (r'\\?\c:\windows\notepad.exe', r'c:\windows\notepad.exe'),
                 (r'c:\windows\notepad.exe', r'c:\windows\notepad.exe'),
-                (r'\\?\unc\\server\share\windows\notepad.exe', r'\\server\share\windows\notepad.exe'),
+                (r'\\?\unc\server\share\windows\notepad.exe', r'\\server\share\windows\notepad.exe'),
                 (r'\\server\share\windows\notepad.exe',
                  r'\\server\share\windows\notepad.exe')
             )
