@@ -629,7 +629,9 @@ def wipe_contents(path, truncate=True):
         try:
             from bleachbit.WindowsWipe import file_wipe
             file_wipe(path)
-        except Exception as e:
+        except (RuntimeError, pywintypes.error) as e:
+            # RuntimeError: file is on network
+            # pywintypes.error: locked by another process
             logger.exception(
                 'Error wiping path %s using defragmentation API so falling back to other method' % path)
             f = wipe_write()
