@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-01-16 13:54-0700\n"
-"PO-Revision-Date: 2017-02-04 11:56+0000\n"
+"PO-Revision-Date: 2017-02-07 15:57+0000\n"
 "Last-Translator: Shinichirou YAMADA "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-02-04 15:00+0000\n"
-"X-Generator: Launchpad (build 18322)\n"
+"X-Launchpad-Export-Date: 2017-02-08 04:28+0000\n"
+"X-Generator: Launchpad (build 18326)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -175,11 +175,11 @@ msgstr "チャット会話ログの削除"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
-msgstr ""
+msgstr "インストーラー"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr ""
+msgstr "キャッシュされたパッチとインストーラーの削除"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
@@ -371,7 +371,7 @@ msgstr "オフィスアプリ"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "アンチウイルス"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
@@ -893,7 +893,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:148
 msgid "shred specific files or folders"
-msgstr "特定のファイルやフォルダを shred する"
+msgstr "特定のファイルやフォルダーを shred する"
 
 #: ../bleachbit/CLI.py:150
 msgid "show system information"
@@ -929,7 +929,7 @@ msgstr "内容を隠すためにファイルを上書き"
 
 #: ../bleachbit/Update.py:79
 msgid "New winapp2.ini was downloaded."
-msgstr ""
+msgstr "新しい winapp2.ini がダウンロードされました。"
 
 #: ../bleachbit/Update.py:124
 msgid "Update BleachBit"
@@ -951,7 +951,7 @@ msgstr "バージョン %s に更新"
 msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
 "verify the network is working."
-msgstr ""
+msgstr "%s へネットワーク接続して更新を確認する際にエラーが発生しました。 ネットワークが機能していることを確認してください。"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -980,11 +980,11 @@ msgstr "メモリ"
 
 #: ../bleachbit/Worker.py:200
 msgid "Please wait. Wiping file system metadata."
-msgstr ""
+msgstr "ファイルシステムのメタデータを完全削除しています。しばらくお待ちください。"
 
 #: ../bleachbit/Worker.py:203
 msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr ""
+msgstr "ファイルシステムのメタデータを完全削除した後のクリーンアップを実行しています。しばらくお待ちください。"
 
 #: ../bleachbit/Worker.py:206
 #, python-format
@@ -1093,11 +1093,11 @@ msgstr "ブラウザが閉じられた、または正常終了しなかった後
 
 #: ../bleachbit/Cleaner.py:210
 msgid "Site preferences"
-msgstr ""
+msgstr "サイトの設定"
 
 #: ../bleachbit/Cleaner.py:210
 msgid "Settings for individual sites"
-msgstr ""
+msgstr "サイト別設定"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1270,7 +1270,7 @@ msgstr "新しいベータリリースをチェック"
 
 #: ../bleachbit/GuiPreferences.py:137
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
+msgstr "コミュニティからクリーナーをダウンロードしてアップデート（winapp2.ini）"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -1278,14 +1278,14 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:151
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "関係のないクリーナーを隠す"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:159
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "復元を防ぐためにファイルの内容を上書きする"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid ""
