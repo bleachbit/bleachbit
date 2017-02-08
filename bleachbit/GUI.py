@@ -933,6 +933,12 @@ class GUI:
         if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
+        if 'nt' == os.name and options.get('shred'):
+            from win32com.shell.shell import IsUserAnAdmin
+            if not IsUserAnAdmin():
+                self.append_text(
+                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
+                self.append_text('\n')
         if exit:
             # This is used for automated testing of whether the GUI can start.
             gobject.idle_add(
