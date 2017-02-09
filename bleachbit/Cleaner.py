@@ -648,12 +648,19 @@ class System(Cleaner):
             # shredding.
             #
             # https://bugzilla.gnome.org/show_bug.cgi?id=591404
+
+            def gtk_purge_items():
+                """Purge GTK items"""
+                gtk.RecentManager().purge_items()
+                yield 0
+
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
                 pathname = expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
-                    if HAVE_GTK:
-                        gtk.RecentManager().purge_items()
+            if HAVE_GTK:
+                # Use the Function to skip when in preview mode
+                yield Command.Function(None, gtk_purge_items, _('Recent documents list'))
 
         if 'posix' == os.name and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
