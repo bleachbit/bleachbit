@@ -237,9 +237,18 @@ class Worker:
                     self.delayed_ops.append(new_op)
 
         # standard operations
-        for dummy in self.run_operations(self.operations):
-            # yield to GTK+ idle loop
-            yield True
+        import warnings
+        with warnings.catch_warnings(record=True) as ws:
+            # This warning system allows general warnings. Duplicate will
+            # be removed, and the warnings will show near the end of
+            # the log.
+
+            warnings.simplefilter('once')
+            for dummy in self.run_operations(self.operations):
+                # yield to GTK+ idle loop
+                yield True
+            for w in ws:
+                logger.warning(w.message)
 
         # run deep scan
         if self.deepscans:

@@ -453,6 +453,9 @@ def volume_from_file(file_name):
     return volume
 
 
+class UnsupportedFileSystemError(Exception):
+    """An exception for an unsupported file system"""
+
 # Given a volume, get the relevant volume information.
 # We are interested in:
 # First call: Drive Name; Max Path; File System.
@@ -461,7 +464,7 @@ def volume_from_file(file_name):
 def get_volume_information(volume):
     # If it's a UNC path, raise an error.
     if not volume:
-        raise RuntimeError(
+        raise UnsupportedFileSystemError(
             "Only files with a Local File System path can be wiped.")
 
     result1 = GetVolumeInformation(volume)
@@ -473,13 +476,13 @@ def get_volume_information(volume):
             (DRIVE_CDROM, "a CD-ROM"),
             (DRIVE_UNKNOWN, "an unknown drive type")]:
         if result3 == drive_enum:
-            raise RuntimeError(
+            raise UnsupportedFileSystemError(
                 "This file is on %s and can't be wiped." % error_reason)
 
     # Only NTFS and FAT variations are supported.
     # UDF (file system for CD-RW etc) is not supported.
     if result1[4].upper() == "UDF":
-        raise RuntimeError(
+        raise UnsupportedFileSystemError(
             "This file system (UDF) is not supported.")
 
     volume_info = namedtuple('VolumeInfo', [

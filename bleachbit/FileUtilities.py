@@ -626,15 +626,18 @@ def wipe_contents(path, truncate=True):
         from win32com.shell.shell import IsUserAnAdmin
 
     if 'nt' == os.name and IsUserAnAdmin():
+        from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
+        import warnings
+        from bleachbit import _
         try:
-            from bleachbit.WindowsWipe import file_wipe
             file_wipe(path)
-        except (RuntimeError, pywintypes.error) as e:
-            # RuntimeError: file is on network
-            # pywintypes.error: locked by another process
-            logger.exception(
-                'Error wiping path %s using defragmentation API so falling back to other method' % path)
-            f = wipe_write()
+        except pywintypes.error as e:
+            # translate exception to mark file to deletion
+            raise WindowsError(32, 'File is locked')
+        except UnsupportedFileSystemError as e:
+            warnings.warn(
+                _('At least one file was on a file system that does not support advanced overwriting.'), UserWarning)
+            f = open(path, 'wb')
         else:
             f = open(path, 'wb')
     else:
