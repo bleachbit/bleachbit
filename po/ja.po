@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-01-16 13:54-0700\n"
-"PO-Revision-Date: 2017-02-07 15:57+0000\n"
+"PO-Revision-Date: 2017-02-08 22:57+0000\n"
 "Last-Translator: Shinichirou YAMADA "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-02-08 04:28+0000\n"
+"X-Launchpad-Export-Date: 2017-02-09 03:34+0000\n"
 "X-Generator: Launchpad (build 18326)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -124,7 +124,7 @@ msgstr "サムネイル"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr ""
+msgstr "システム上のファイルアイコン"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -251,7 +251,7 @@ msgstr ""
 
 #: ../cleaners/transmission.xml
 msgid "Statistics"
-msgstr ""
+msgstr "統計情報"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the file"
@@ -285,7 +285,7 @@ msgstr "最近使用したドキュメント一覧"
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
+msgstr "このオプションはクイックアクセスに固定された場所をデフォルトにリセットします。"
 
 #. In Windows 'Run' is the dialog in the Start menu
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
@@ -305,7 +305,7 @@ msgstr "検索履歴の削除"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr ""
+msgstr "これにより Windows Explorer が再起動します。"
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
@@ -367,7 +367,7 @@ msgstr "URL 履歴"
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
 #: ../bleachbit/Cleaner.py:378
 msgid "Office suite"
-msgstr "オフィスアプリ"
+msgstr "オフィススイート"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
@@ -399,7 +399,7 @@ msgstr "コマンド履歴の削除"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Windows ソフトウェアの互換レイヤー"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:205
@@ -764,12 +764,12 @@ msgstr "shred するファイルの選択"
 
 #: ../bleachbit/GUI.py:528
 msgid "Choose folder to shred"
-msgstr "shred するフォルダの選択"
+msgstr "shred するフォルダーの選択"
 
 #: ../bleachbit/GUI.py:591 ../bleachbit/GuiPreferences.py:197
 #: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
 msgid "Choose a folder"
-msgstr "フォルダの選択"
+msgstr "フォルダーの選択"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py:624
@@ -787,11 +787,11 @@ msgstr "ファイルを shred する(_S)"
 
 #: ../bleachbit/GUI.py:733
 msgid "Sh_red Folders"
-msgstr "フォルダを shred する"
+msgstr "フォルダーを shred する"
 
 #: ../bleachbit/GUI.py:735
 msgid "_Wipe Free Space"
-msgstr "未使用領域を完全削除する(_W)"
+msgstr "空き領域を wipe する(_W)"
 
 #: ../bleachbit/GUI.py:737
 msgid "S_hred Settings and Quit"
@@ -866,6 +866,8 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
+"BleachBit を管理者権限で実行してシステムの共有部分をクリーニングしている場合、ユーザープロファイルフォルダーへの参照は root "
+"アカウント部分のみ行います。"
 
 #: ../bleachbit/CLI.py:110
 #, python-format
@@ -917,7 +919,7 @@ msgstr "グラフィカルインターフェイスで設定されたオプショ
 
 #: ../bleachbit/CLI.py:166
 msgid "update winapp2.ini, if a new version is available"
-msgstr ""
+msgstr "新しいバージョンが利用可能であれば、winapp2.ini を更新する"
 
 #: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
@@ -937,7 +939,7 @@ msgstr "BleachBit のアップデート"
 
 #: ../bleachbit/Update.py:129
 msgid "A new version is available."
-msgstr "新しいバージョンが入手できます。"
+msgstr "新しいバージョンが利用可能です。"
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
@@ -965,13 +967,13 @@ msgstr ""
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:183
 msgid "Please wait.  Wiping free disk space."
-msgstr "ディスクの未使用領域を完全削除しています。しばらくお待ちください。"
+msgstr "ディスクの空き領域を wipe しています。しばらくお待ちください。"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:185 ../bleachbit/Worker.py:324
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "%s をクリーニング中です。お待ちください..."
+msgstr "%s をクリーニング中です。しばらくお待ちください。"
 
 #: ../bleachbit/Worker.py:185 ../bleachbit/Cleaner.py:479
 #: ../bleachbit/Cleaner.py:630
@@ -980,11 +982,11 @@ msgstr "メモリ"
 
 #: ../bleachbit/Worker.py:200
 msgid "Please wait. Wiping file system metadata."
-msgstr "ファイルシステムのメタデータを完全削除しています。しばらくお待ちください。"
+msgstr "ファイルシステムのメタデータを wipe しています。しばらくお待ちください。"
 
 #: ../bleachbit/Worker.py:203
 msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr "ファイルシステムのメタデータを完全削除した後のクリーンアップを実行しています。しばらくお待ちください。"
+msgstr "ファイルシステムのメタデータを wipe した後のクリーンアップを実行しています。しばらくお待ちください。"
 
 #: ../bleachbit/Worker.py:206
 #, python-format
@@ -1035,13 +1037,13 @@ msgstr "エラー: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:298
 msgid "Please wait.  Running deep scan."
-msgstr "しばらくお待ちください。ディープスキャンを実行しています。"
+msgstr "ディープスキャンを実行しています。しばらくお待ちください。"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:327
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "%s のプレビューを作成中です。お待ちください..."
+msgstr "%s のプレビューを作成中です。しばらくお待ちください。"
 
 #: ../bleachbit/Action.py:420
 #, python-format
@@ -1126,7 +1128,7 @@ msgstr "不要な言語ファイルの削除"
 
 #: ../bleachbit/Cleaner.py:464
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "環境設定でこのオプションを設定します。"
 
 #: ../bleachbit/Cleaner.py:470
 msgid "Rotated logs"
@@ -1178,15 +1180,15 @@ msgstr "ゴミ箱を空にする"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:499
 msgid "Update uninstallers"
-msgstr ""
+msgstr "アップデート用のアンインストーラー"
 
 #: ../bleachbit/Cleaner.py:500
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Microsoft updates が内包する hotfix や サービスパック、 Internet Explorer "
-"のアップデートのアンインストーラを削除"
+"ホットフィックス、サービスパック、および Internet Explorer のアップデートを含む Microsoft "
+"更新プログラムのアンインストーラーを削除する"
 
 #: ../bleachbit/Cleaner.py:507 ../bleachbit/Cleaner.py:723
 msgid "Clipboard"
