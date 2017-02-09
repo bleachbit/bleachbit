@@ -254,8 +254,3 @@ def create_pot():
             f.write(pot_fragment(string, pathname, translators))
 
     f.close()
-
-
-if __name__ == '__main__':
-    if 2 == len(sys.argv) and 'pot' == sys.argv[1]:
-        create_pot()

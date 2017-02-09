@@ -155,6 +155,8 @@ def process_cmd_line():
     parser.add_option("--no-uac", action="store_true", help=uac_help)
     parser.add_option("-p", "--preview", action="store_true",
                       help=_("preview files to be deleted and other changes"))
+    parser.add_option('--pot', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
     parser.add_option("--preset", action="store_true",
                       help=_("use options set in the graphical interface"))
     if 'nt' == os.name:
@@ -188,6 +190,10 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         did_something = True
     if options.list_cleaners:
         list_cleaners()
+        sys.exit(0)
+    if options.pot:
+        from bleachbit.CleanerML import create_pot
+        create_pot()
         sys.exit(0)
     if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)

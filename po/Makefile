@@ -8,7 +8,7 @@ POTFILE = $(APP).pot
 .PHONY: refresh-po spelling local install clean all
 
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
-	python ../bleachbit/CleanerML.py pot
+	python ../bleachbit.py --pot
 
 desktop.pot: ../bleachbit.desktop
 	echo "#: ../bleachbit.desktop" > desktop.pot
