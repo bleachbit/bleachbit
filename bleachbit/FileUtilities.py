@@ -46,11 +46,13 @@ import time
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
-    import pywintypes
+    from pywintypes import error as pywinerror
     import win32file
 
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
+    pywinerror = WindowsError
+
 
 
 def open_files_linux():
@@ -283,6 +285,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if allow_shred and (shred or options.get('shred')):
             try:
                 wipe_contents(path)
+            except pywinerror as e:
+                # 2 = The system cannot find the file specified.
+                # This can happen with a broken symlink
+                # https://github.com/bleachbit/bleachbit/issues/195
+                if 2 != e.winerror:
+                    raise
+                # If a broken symlink, try os.remove() below.
             except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
@@ -526,7 +535,7 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except pywintypes.error as e:
+        except pywinerror as e:
             if 5 == e.winerror:
                 # Microsoft Office 2010 Starter Edition has a virtual
                 # drive that gives access denied
@@ -631,9 +640,14 @@ def wipe_contents(path, truncate=True):
         from bleachbit import _
         try:
             file_wipe(path)
-        except pywintypes.error as e:
-            # translate exception to mark file to deletion
-            raise WindowsError(32, 'File is locked')
+        except pywinerror as e:
+            # 32=The process cannot access the file because it is being used by another process.
+            # 33=The process cannot access the file because another process has locked a portion of the file.
+            if not e.winerror in (32, 33):
+                # handle only locking errors
+                raise
+            # translate exception to mark file to deletion in Command.py
+            raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError as e:
             warnings.warn(
                 _('At least one file was on a file system that does not support advanced overwriting.'), UserWarning)

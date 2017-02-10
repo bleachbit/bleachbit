@@ -335,6 +335,7 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
             # delete regular file first
             delete(srcname, shred)
             self.assert_(not os.path.exists(srcname))
+            self.assertLExists(linkname)
 
             # clean up
             delete(linkname, shred)
