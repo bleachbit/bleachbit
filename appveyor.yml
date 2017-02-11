@@ -40,10 +40,12 @@ cache:
   - gettext0.19.8.1-iconv1.14-static-32.zip
 
 test_script:
+# coveralls.io
+  - '%PYTHON_HOME%/Scripts/pip.exe install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem'
   - '%PYTHON_HOME%/Scripts/pip.exe install mock'
-  - '%PYTHON_HOME%/python.exe tests/TestAll.py'
+  - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" -m unittest discover -p Test*.py'
 
 artifacts:
   - path: BleachBit-*-setup.exe
@@ -54,6 +56,8 @@ artifacts:
 
   - path: BleachBit-*-portable.zip
     name: Portable
+
+  - path: .coverage
 
 deploy:
   - provider: S3

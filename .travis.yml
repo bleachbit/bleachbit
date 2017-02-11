@@ -28,5 +28,9 @@ install:
   - pip install mock
 script: make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
+   - mv .coverage .coverage.travis
+   - sudo pip install appveyor-artifacts
+   - appveyor-artifacts -o az0 -n bleachbit -m download
+   - coverage combine
    - coverage report
    - coveralls
