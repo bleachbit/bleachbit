@@ -665,7 +665,7 @@ def wipe_contents(path, truncate=True):
             raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError as e:
             warnings.warn(
-                _('At least one file was on a file system that does not support advanced overwriting.'), UserWarning)
+                _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
             f = open(path, 'wb')
         else:
             # The wipe succeed, so prepare to truncate.
