@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-01-16 13:54-0700\n"
-"PO-Revision-Date: 2017-02-08 22:57+0000\n"
+"PO-Revision-Date: 2017-02-11 01:30+0000\n"
 "Last-Translator: Shinichirou YAMADA "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-02-09 03:34+0000\n"
+"X-Launchpad-Export-Date: 2017-02-11 03:04+0000\n"
 "X-Generator: Launchpad (build 18326)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -243,11 +243,11 @@ msgstr ""
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
-msgstr ""
+msgstr "Torrent"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr ""
+msgstr "Torrent の削除 (ファイルではなくメタデータのみ)"
 
 #: ../cleaners/transmission.xml
 msgid "Statistics"
@@ -255,7 +255,7 @@ msgstr "統計情報"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the file"
-msgstr ""
+msgstr "ファイルの削除"
 
 #: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
@@ -383,7 +383,7 @@ msgstr ""
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr "ドキュメントビューア―"
+msgstr "ドキュメントビューアー"
 
 #: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
 msgid "Email client"
@@ -589,7 +589,7 @@ msgstr "この項目は処理に時間がかかります。"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "不要なファイルクリーナ"
+msgstr "不要なファイルクリーナー"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
@@ -623,7 +623,7 @@ msgstr "root として実行しているため、ウェブブラウザから手�
 #: ../bleachbit/GuiBasic.py:174
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "%s をブラウザで開きますか？"
+msgstr "%s をウェブブラウザーで開きますか？"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1048,7 +1048,7 @@ msgstr "%s のプレビューを作成中です。しばらくお待ちくださ
 #: ../bleachbit/Action.py:420
 #, python-format
 msgid "Run external command: %s"
-msgstr ""
+msgstr "外部コマンドを実行する: %s"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
