@@ -147,10 +147,14 @@ class LockedAction(ActionProvider):
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
-        # Lock the file on Windows.  It should be marked for deletion.
-        f = os.open(self.pathname, os.O_RDWR | os.O_EXCL)
+        # Open the file with a non-exclusive lock, so the file should
+        # be truncated and marked for deletion. This is checked just on
+        # on Windows.
+        f = os.open(self.pathname, os.O_RDWR)
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
+        from bleachbit.FileUtilities import getsize
+        assert(0==getsize(self.pathname))
         os.close(f)
 
         # real file, should succeed

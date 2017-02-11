@@ -384,6 +384,48 @@ class FileUtilitiesTestCase(unittest.TestCase, common.AssertFile):
         delete(path, shred)
         self.assert_(not os.path.exists(path))
 
+    @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
+    def test_delete_locked(self):
+        """Unit test for delete() with locked file"""
+        # set up
+        def test_delete_locked_setup():
+            (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+            os.write(fd, '123')
+            os.close(fd)
+            self.assertExists(filename)
+            self.assertEqual(3, getsize(filename))
+            return filename
+
+        # File is open but not opened exclusive, so expect that the
+        # file is truncated but not deleted.
+        # O_EXCL = fail if file exists (i.e., not an exclusive lock)
+        filename = test_delete_locked_setup()
+        f = os.open(filename, os.O_WRONLY | os.O_EXCL)
+        self.assertExists(filename)
+        self.assertEqual(3, getsize(filename))
+        with self.assertRaises(WindowsError):
+            delete(filename)
+        os.close(f)
+        self.assertExists(filename)
+        self.assertEqual(0, getsize(filename))
+        delete(filename)
+        self.assertNotExists(filename)
+
+        # File is open with exclusive lock, so expect the file is neither
+        # deleted nor truncated.
+        filename = test_delete_locked_setup()
+        from subprocess import call
+        call('start notepad.exe>>{}'.format(filename), shell=True)
+        self.assertExists(filename)
+        self.assertEqual(3, getsize(filename))
+        with self.assertRaises(WindowsError):
+            delete(filename)
+        call('taskkill /f /im notepad.exe')
+        self.assertExists(filename)
+        self.assertEqual(3, getsize(filename))
+        delete(filename)
+        self.assertNotExists(filename)
+
     @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_ego_owner(self):
         """Unit test for ego_owner()"""

@@ -561,6 +561,13 @@ def sync():
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
+def truncate_f(f):
+    """Truncate the file object"""
+    f.truncate(0)
+    f.flush()
+    os.fsync(f.fileno())
+
+
 def whitelisted_posix(path, check_realpath = True):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options
@@ -642,10 +649,18 @@ def wipe_contents(path, truncate=True):
             file_wipe(path)
         except pywinerror as e:
             # 32=The process cannot access the file because it is being used by another process.
-            # 33=The process cannot access the file because another process has locked a portion of the file.
+            # 33=The process cannot access the file because another process has
+            # locked a portion of the file.
             if not e.winerror in (32, 33):
                 # handle only locking errors
                 raise
+            # Try to truncate the file. This makes the behavior consistent
+            # with Linux and with Windows when IsUserAdmin=False.
+            try:
+                with open(path, 'wb') as f:
+                    truncate_f(f)
+            except Exception as e2:
+                logger.exception('exception in truncate')
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError as e:
@@ -653,13 +668,12 @@ def wipe_contents(path, truncate=True):
                 _('At least one file was on a file system that does not support advanced overwriting.'), UserWarning)
             f = open(path, 'wb')
         else:
+            # The wipe succeed, so prepare to truncate.
             f = open(path, 'wb')
     else:
         f = wipe_write()
     if truncate:
-        f.truncate(0)
-        f.flush()
-        os.fsync(f.fileno())
+        truncate_f(f)
     f.close()
 
 
@@ -816,7 +830,7 @@ def wipe_path(pathname, idle=False):
                     stats.f_bsize * stats.f_bfree, stats.f_ffree)
     # truncate and close files
     for f in files:
-        f.truncate(0)
+        truncate_f(f)
 
         while True:
             try:
