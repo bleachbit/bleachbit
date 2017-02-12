@@ -659,8 +659,11 @@ def wipe_contents(path, truncate=True):
             try:
                 with open(path, 'wb') as f:
                     truncate_f(f)
-            except Exception as e2:
-                logger.exception('exception in truncate')
+            except IOError as e2:
+                if errno.EACCESS == e.errno:
+                    # Common when the file is locked
+                    # Errno 13 Permission Denied
+                    pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError as e:
