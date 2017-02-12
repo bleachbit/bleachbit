@@ -1,9 +1,23 @@
+# vim: ts=4:sw=4:expandtab
+
+# BleachBit
+# Copyright (C) 2008-2017 Andrew Ziem
+# https://www.bleachbit.org
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 """
-***
-*** filewipe.py
-*** version 0.85 (in development, milestone 2 build to upload as repo)
-***
-*** Written for Python 2.6+
 ***
 *** Owner: Andrew Ziem
 *** Author: Peter Marshall
