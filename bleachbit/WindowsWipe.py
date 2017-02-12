@@ -250,7 +250,7 @@ def extents_a_minus_b(a, b):
 # a higher number of total clusters written.
 def choose_if_bridged(volume_handle, total_clusters,
                       orig_extents, bridged_extents):
-    logger.debug(bridged_extents)
+    logger.debug('bridged extents: {}'.format(bridged_extents))
     allocated_extents = []
     volume_bitmap, bitmap_size = get_volume_bitmap(volume_handle,
                                                    total_clusters)
@@ -756,14 +756,14 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.
         for lcn_start, lcn_end in extents:
-            logger.debug("Wiping extent from %d to %d...",
-                          lcn_start, lcn_end)
+            #logger.debug("Wiping extent from %d to %d...",
+            #              lcn_start, lcn_end)
             write_length = (lcn_end - lcn_start + 1) * cluster_size
             write_zero_fill(file_handle, write_length)
     else:
         # Special case - file so small it can be contained within the
         # directory entry in the MFT part of the disk.
-        logger.debug("Wiping tiny file that fits entirely on MFT")
+        #logger.debug("Wiping tiny file that fits entirely on MFT")
         write_length = file_size
         write_zero_fill(file_handle, write_length)
 
@@ -856,7 +856,7 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
         else:
             # If Windows put the zero-fill extent on the exact clusters we
             # intended to place it, no need to attempt a move.
-            logging.logger("No need to move extent from %d",
+            logging.debug("No need to move extent from %d",
                           new_lcn_start)
         new_vcn += cluster_count
 
