@@ -947,10 +947,3 @@ def file_wipe(file_name):
     clean_up(None, volume_handle, tmp_file_path)
     return
 
-
-# Entry point.
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print('This program accepts one parameter: one file to be wiped')
-        sys.exit(1)
-    file_wipe(sys.argv[1])
