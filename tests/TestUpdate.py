@@ -33,35 +33,29 @@ import bleachbit.Update
 
 import os
 import os.path
-import unittest
 
 
-class UpdateTestCase(unittest.TestCase):
-
+class UpdateTestCase(common.BleachbitTestCase):
     """Test case for module Update"""
 
     def test_UpdateCheck_fake(self):
         """Unit tests for class UpdateCheck using fake network"""
 
-        update_tests = []
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
-        update_tests.append(
+        update_tests = [
             ('<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-                           ((u'0.8.4', u'http://084'), (u'0.8.5beta', u'http://085beta'))))
-        update_tests.append(
+                           ((u'0.8.4', u'http://084'), (u'0.8.5beta', u'http://085beta'))),
             ('<updates><stable ver="0.8.4">http://084</stable>%s</updates>' % wa,
-                           ((u'0.8.4', u'http://084'), )))
-        update_tests.append(
+                           ((u'0.8.4', u'http://084'), )),
             ('<updates><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-                           ((u'0.8.5beta', u'http://085beta'), )))
-        update_tests.append(('<updates></updates>', ()))
+                           ((u'0.8.5beta', u'http://085beta'), )),
+            ('<updates></updates>', ())]
 
         # fake network
         original_open = bleachbit.Update.build_opener
         xml = ""
 
-        class fake_opener:
-
+        class FakeOpener:
             def add_headers(self):
                 pass
 
@@ -71,15 +65,14 @@ class UpdateTestCase(unittest.TestCase):
             def open(self, url):
                 return self
 
-        bleachbit.Update.build_opener = fake_opener
-        for update_test in update_tests:
-            xml = update_test[0]
+        # TODO: mock
+        bleachbit.Update.build_opener = FakeOpener
+        for xml, expected in update_tests:
             updates = check_updates(True, False, None, None)
-            self.assertEqual(updates, update_test[1])
+            self.assertEqual(updates, expected)
         bleachbit.Update.build_opener = original_open
 
-
-    def test_UpdateCheck_real(self):
+    def test_UpdateCheck_real_network(self):
         """Unit tests for class UpdateCheck using real network"""
 
         # real network
@@ -88,8 +81,8 @@ class UpdateTestCase(unittest.TestCase):
                 continue
             ver = update[0]
             url = update[1]
-            self.assert_(isinstance(ver, (type(None), unicode)))
-            self.assert_(isinstance(url, (type(None), unicode)))
+            self.assertIsInstance(ver, (type(None), unicode))
+            self.assertIsInstance(url, (type(None), unicode))
 
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
@@ -108,7 +101,7 @@ class UpdateTestCase(unittest.TestCase):
         handle = opener.open(bleachbit.update_check_url)
         doc = handle.read()
         import xml
-        dom = xml.dom.minidom.parseString(doc)
+        xml.dom.minidom.parseString(doc)
 
     def test_update_winapp2(self):
         from bleachbit import personal_cleaners_dir
@@ -119,36 +112,30 @@ class UpdateTestCase(unittest.TestCase):
 
         url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
 
-        def append_text(s):
-            print(s)
-
-        succeeded = {'r': False}  # scope
+        def expect_failure():
+            raise AssertionError('Call should have failed')
 
         def on_success():
             succeeded['r'] = True
 
+        succeeded = {'r': False}  # scope
+
         # bad hash
-        succeeded['r'] = False
-        self.assertRaises(RuntimeError, update_winapp2, url, "notahash",
-                          append_text, on_success)
-        self.assert_(not succeeded['r'])
+        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", print, expect_failure)
 
         # blank hash, download file
-        succeeded['r'] = False
-        update_winapp2(url, None, append_text, on_success)
-        self.assert_(succeeded['r'])
+        update_winapp2(url, None, print, on_success)
+        self.assertTrue(succeeded['r'])
 
         # blank hash, do not download again
-        update_winapp2(url, None, append_text, on_success)
-        succeeded['r'] = False
-        update_winapp2(url, None, append_text, on_success)
-        self.assert_(not succeeded['r'])
+        update_winapp2(url, None, print, on_success)
+        update_winapp2(url, None, print, expect_failure)
 
     def test_user_agent(self):
         """Unit test for method user_agent()"""
         agent = user_agent()
         logger.debug("user agent = '%s'", agent)
-        self.assert_(isinstance(agent, str))
+        self.assertIsString(agent)
 
     def test_environment(self):
         """Check the sanity of the environment"""
@@ -156,12 +143,3 @@ class UpdateTestCase(unittest.TestCase):
         self.assertTrue(hasattr(httplib, 'HTTPS'))
         import socket
         self.assertTrue(hasattr(socket, 'ssl'))
-        import _ssl
-
-
-def suite():
-    return unittest.makeSuite(UpdateTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

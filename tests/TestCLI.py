@@ -37,9 +37,7 @@ import tempfile
 import unittest
 
 
-
-class CLITestCase(unittest.TestCase):
-
+class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
 
     def setUp(self):
@@ -77,40 +75,32 @@ class CLITestCase(unittest.TestCase):
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
-            self.assert_(
-                isinstance(
-                    cleaner,
-                    str) or isinstance(
-                        cleaner,
-                        unicode))
+            self.assertIsString(cleaner)
 
     @unittest.skipUnless('posix' == os.name, 'skipping on non-Unix')
     def test_encoding(self):
         """Unit test for encoding"""
 
-        (fd, filename) = tempfile.mkstemp(
-            prefix='bleachbit-test-cli-encoding-\xe4\xf6\xfc~', dir='/tmp')
-        os.close(fd)
-        self.assert_(os.path.exists(filename))
+        filename = self.write_file('/tmp/bleachbit-test-cli-encoding-\xe4\xf6\xfc~')
+        # not assertExists because it doesn't cope with invalid encodings
+        self.assertTrue(os.path.exists(filename))
 
         env = copy.deepcopy(os.environ)
         env['LANG'] = 'en_US'  # not UTF-8
-        module = 'bleachbit.CLI'
-        args = [sys.executable, '-m', module, '-p', 'system.tmp']
+        args = [sys.executable, '-m', 'bleachbit.CLI', '-p', 'system.tmp']
         # If Python pipes stdout to file or devnull, the test may give
         # a false negative.  It must print stdout to terminal.
         self._test_preview(args, stdout=True, env=env)
 
         os.remove(filename)
-        self.assert_(not os.path.exists(filename))
+        self.assertNotExists(filename)
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
         lang = os.environ['LANG']
         os.environ['LANG'] = 'blahfoo'
         # tests are run from the parent directory
-        module = 'bleachbit.CLI'
-        args = [sys.executable, '-m', module, '--version']
+        args = [sys.executable, '-m', 'bleachbit.CLI', '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         os.environ['LANG'] = lang
@@ -132,8 +122,7 @@ class CLITestCase(unittest.TestCase):
 
     def test_delete(self):
         """Unit test for --delete option"""
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-delete')
-        os.close(fd)
+        filename = self.mkstemp(prefix='bleachbit-test-cli-delete')
         if 'nt' == os.name:
             import win32api
             filename = os.path.normcase(filename)
@@ -142,18 +131,17 @@ class CLITestCase(unittest.TestCase):
         deleted_paths = []
 
         def dummy_delete(path, shred=False):
-            self.assert_(os.path.exists(path))
+            self.assertExists(path)
             deleted_paths.append(os.path.normcase(path))
         FileUtilities.delete = dummy_delete
         FileUtilities.delete(filename)
-        self.assert_(os.path.exists(filename))
+        self.assertExists(filename)
         operations = args_to_operations(['system.tmp'], False)
         preview_or_clean(operations, True)
         FileUtilities.delete = save_delete
-        self.assert_(filename in deleted_paths,
-                     "%s not found deleted" % filename)
+        self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
         os.remove(filename)
-        self.assert_(not os.path.exists(filename))
+        self.assertNotExists(filename)
 
     def test_shred(self):
         """Unit test for --shred"""
@@ -161,20 +149,13 @@ class CLITestCase(unittest.TestCase):
         dirs = ['.', None]
         for dir_ in dirs:
             for suffix in suffixes:
-                (fd, filename) = tempfile.mkstemp(
-                    prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
+                (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
                 os.close(fd)
                 if '.' == dir_:
                     filename = os.path.basename(filename)
-                self.assert_(os.path.exists(filename))
+                # not assertExists because something strange happens on Windows
+                self.assertTrue(os.path.exists(filename))
                 args = [sys.executable, '-m', 'bleachbit.CLI', '--shred', filename]
-                output = run_external(args, stdout=open(os.devnull, 'w'))
-                self.assert_(not os.path.exists(filename))
+                output = run_external(args)
+                self.assertNotExists(filename)
 
-
-def suite():
-    return unittest.makeSuite(CLITestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

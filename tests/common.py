@@ -26,24 +26,51 @@ from __future__ import absolute_import, print_function
 
 from bleachbit.FileUtilities import extended_path
 
+import unittest
+import shutil
 import tempfile
 import os
+import os.path
 
 
-class AssertFile:
+class BleachbitTestCase(unittest.TestCase):
+    """TestCase class with several convenience methods and asserts"""
 
-    def getTestPath(self, path):
-        if 'nt' == os.name:
-            return extended_path(os.path.normpath(path))
-        return path
+    @classmethod
+    def setUpClass(cls):
+        """Create a temporary directory for the testcase"""
+        cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
+        print(cls.tempdir)
 
+    @classmethod
+    def tearDownClass(cls):
+        """remove the temporary directory"""
+        shutil.rmtree(cls.tempdir)
+
+    #
+    # type asserts
+    #
+    def assertIsInteger(self, obj, msg=''):
+        self.assertIsInstance(obj, (int, long), msg)
+
+    def assertIsUnicodeString(self, obj, msg=''):
+        self.assertIsInstance(obj, unicode, msg)
+
+    def assertIsString(self, obj, msg=''):
+        self.assertIsInstance(obj, (unicode, str), msg)
+
+    def assertIsBytes(self, obj, msg=''):
+        self.assertIsInstance(obj, bytes, msg)
+
+    #
+    # file asserts
+    #
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
         from bleachbit import expandvars
         path = expandvars(path)
-        if not func(self.getTestPath(path)):
-            raise AssertionError(
-                'The file %s should exist, but it does not. %s' % (path, msg))
+        if not func(getTestPath(path)):
+            raise AssertionError('The file %s should exist, but it does not. %s' % (path, msg))
 
     def assertLExists(self, path, msg=''):
         self.assertExists(path, msg, os.path.lexists)
@@ -52,15 +79,44 @@ class AssertFile:
         self.assertNotExists(path, msg, os.path.lexists)
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
-        if func(self.getTestPath(path)):
-            raise AssertionError(
-                'The file %s should not exist, but it does. %s' % (path, msg))
+        if func(getTestPath(path)):
+            raise AssertionError('The file %s should not exist, but it does. %s' % (path, msg))
 
     def assertCondExists(self, cond, path, msg=''):
         if cond:
             self.assertExists(path, msg)
         else:
             self.assertNotExists(path, msg)
+
+    #
+    # file creation functions
+    #
+    def write_file(self, filename, contents=''):
+        """Create a temporary file, optionally writing contents to it"""
+        if not os.path.isabs(filename):
+            filename = os.path.join(self.tempdir, filename)
+        with open(extended_path(filename), 'wb') as f:
+            f.write(contents)
+        assert (os.path.exists(extended_path(filename)))
+        return filename
+
+    def mkstemp(self, **kwargs):
+        if 'dir' not in kwargs:
+            kwargs['dir'] = self.tempdir
+        (fd, filename) = tempfile.mkstemp(**kwargs)
+        os.close(fd)
+        return filename
+
+    def mkdtemp(self, **kwargs):
+        if 'dir' not in kwargs:
+            kwargs['dir'] = self.tempdir
+        return tempfile.mkdtemp(**kwargs)
+
+
+def getTestPath(path):
+    if 'nt' == os.name:
+        return extended_path(os.path.normpath(path))
+    return path
 
 
 def destructive_tests(title):
@@ -73,42 +129,36 @@ def destructive_tests(title):
 
 def touch_file(filename):
     """Create an empty file"""
-    write_file(filename, '')
+    with open(filename, "w") as f:
+        pass
+    assert(os.path.exists(filename))
 
 
 def validate_result(self, result, really_delete=False):
     """Validate the command returned valid results"""
-    self.assert_(isinstance(result, dict), "result is a %s" % type(result))
+    self.assertIsInstance(result, dict, "result is a %s" % type(result))
     # label
-    self.assert_(isinstance(result['label'], (str, unicode)))
-    self.assert_(len(result['label'].strip()) > 0)
+    self.assertIsString(result['label'])
+    self.assertGreater(len(result['label'].strip()), 0)
     # n_*
-    self.assert_(isinstance(result['n_deleted'], (int, long)))
-    self.assert_(result['n_deleted'] >= 0)
-    self.assert_(result['n_deleted'] <= 1)
+    self.assertIsInteger(result['n_deleted'])
+    self.assertGreaterEqual(result['n_deleted'], 0)
+    self.assertLessEqual(result['n_deleted'], 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assert_(isinstance(result['size'], (int, long, type(None))),
-                 "size is %s" % str(result['size']))
+    self.assertIsInstance(result['size'], (int, long, type(None),), "size is %s" % str(result['size']))
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
     from bleachbit import encoding
-    self.assert_(isinstance(filename, (str, unicode, type(None))),
+    self.assertIsInstance(filename, (str, unicode, type(None)),
                  "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
-    if isinstance(filename, (str, unicode)) and \
-            not filename[0:2] == 'HK':
+    if isinstance(filename, (str, unicode)) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
 
 
-def write_file(filename, contents):
-    """Write contents to file"""
-    with open(extended_path(filename), 'w') as f:
-        f.write(contents)
-    import os.path
-    assert(os.path.exists(extended_path(filename)))

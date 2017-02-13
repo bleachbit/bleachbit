@@ -23,28 +23,17 @@
 Test case for module Diagnostic
 """
 
-
 from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.Diagnostic import diagnostic_info
 
-import unittest
 
-class DiagnosticTestCase(unittest.TestCase):
-
+class DiagnosticTestCase(common.BleachbitTestCase):
     """Test Case for module Diagnostic"""
 
     def test_diagnostic_info(self):
         """Test diagnostic_info"""
         # at least it does not crash
         ret = diagnostic_info()
-        self.assert_(isinstance(ret, (str, unicode)))
-
-
-def suite():
-    return unittest.makeSuite(DiagnosticTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertIsString(ret)

@@ -69,8 +69,7 @@ def get_winapp2():
 
 
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
-class WinappTestCase(unittest.TestCase, common.AssertFile):
-
+class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
 
     def run_all(self, cleaner, really_delete):
@@ -404,11 +403,3 @@ class WinappTestCase(unittest.TestCase, common.AssertFile):
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
-
-
-def suite():
-    return unittest.makeSuite(WinappTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()
