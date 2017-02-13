@@ -21,18 +21,13 @@
 """
 Test cases for module CleanerML
 """
-
-
 from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.CleanerML import *
 
-import unittest
 
-
-class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
-
+class CleanerMLTestCase(common.BleachbitTestCase):
     """Test cases for CleanerML"""
 
     def test_CleanerML(self):
@@ -41,8 +36,8 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
             os.chdir('tests')
         xmlcleaner = CleanerML("../doc/example_cleaner.xml")
 
-        self.assert_(isinstance(xmlcleaner, CleanerML))
-        self.assert_(isinstance(xmlcleaner.cleaner, Cleaner.Cleaner))
+        self.assertIsInstance(xmlcleaner, CleanerML)
+        self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
 
         def run_all(really_delete):
             for (option_id, __name) in xmlcleaner.cleaner.get_options():
@@ -82,14 +77,10 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
         load_cleaners()
 
         # should catch exception with invalid XML
-        import tempfile
         pcd = bleachbit.personal_cleaners_dir
-        bleachbit.personal_cleaners_dir = tempfile.mkdtemp(
-            prefix='bleachbit-cleanerml-load')
-        fn_xml = os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml')
-        f = open(fn_xml, 'w')
-        f.write('<xml><broken>')
-        f.close()
+        bleachbit.personal_cleaners_dir = self.mkdtemp(prefix='bleachbit-cleanerml-load')
+        self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
+                        contents='<xml><broken>')
         load_cleaners()
         import shutil
         shutil.rmtree(bleachbit.personal_cleaners_dir)
@@ -97,12 +88,4 @@ class CleanerMLTestCase(unittest.TestCase, common.AssertFile):
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
-        self.assert_(isinstance(pot_fragment("Foo", 'bar.xml'), str))
-
-
-def suite():
-    return unittest.makeSuite(CleanerMLTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertIsString(pot_fragment("Foo", 'bar.xml'))

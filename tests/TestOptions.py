@@ -21,18 +21,16 @@
 """
 Test case for module Options
 """
-
 from __future__ import absolute_import, print_function
 
+from tests import common
 import bleachbit.Options
 from bleachbit import NoOptionError
 
 import os
-import unittest
 
 
-class OptionsTestCase(unittest.TestCase):
-
+class OptionsTestCase(common.BleachbitTestCase):
     """Test case for class Options"""
 
     def test_Options(self):
@@ -65,25 +63,25 @@ class OptionsTestCase(unittest.TestCase):
         self.assertEqual(list_values, o.get_list("list_test"))
 
         # whitelist
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         whitelist = [('file', '/home/foo'), ('folder', '/home')]
         old_whitelist = o.get_whitelist_paths()
         o.config.remove_section('whitelist/paths')
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         self.assertEqual(o.get_whitelist_paths(), [])
         o.set_whitelist_paths(whitelist)
-        self.assert_(type(o.get_whitelist_paths() is list))
+        self.assertIsInstance(o.get_whitelist_paths(), list)
         self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
         o.set_whitelist_paths(old_whitelist)
         self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
 
         # these should always be set
         for bkey in bleachbit.Options.boolean_keys:
-            self.assert_(isinstance(o.get(bkey), bool))
+            self.assertIsInstance(o.get(bkey), bool)
 
         # language
         value = o.get_language('en')
-        self.assert_(isinstance(value, bool))
+        self.assertIsInstance(value, bool)
         o.set_language('en', True)
         self.assertTrue(o.get_language('en'))
         o.set_language('en', False)
@@ -106,11 +104,7 @@ class OptionsTestCase(unittest.TestCase):
         # By default ConfigParser stores keys (the filenames) as lowercase.
         # This needs special consideration when combined with purging.
         o1 = bleachbit.Options.Options()
-        import tempfile
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-options')
-        pathname = os.path.join(dirname, 'foo.xml')
-        open(pathname, 'w').close()  # make an empty file
-        self.assertTrue(os.path.exists(pathname))
+        pathname = self.write_file('foo.xml')
         myhash = '0ABCD'
         o1.set_hashpath(pathname, myhash)
         self.assertEqual(myhash, o1.get_hashpath(pathname))
@@ -137,9 +131,6 @@ class OptionsTestCase(unittest.TestCase):
         # verify the path was purged
         self.assertRaises(NoOptionError, lambda: o3.get_hashpath(pathname))
 
-        # clean up
-        os.rmdir(dirname)
-
     def test_abbreviations(self):
         """Test non-standard, abbreviated booleans T and F"""
 
@@ -160,11 +151,3 @@ class OptionsTestCase(unittest.TestCase):
 
         # clean up
         del o
-
-
-def suite():
-    return unittest.makeSuite(OptionsTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -660,7 +660,7 @@ def wipe_contents(path, truncate=True):
                 with open(path, 'wb') as f:
                     truncate_f(f)
             except IOError as e2:
-                if errno.EACCESS == e.errno:
+                if errno.EACCES == e2.errno:
                     # Common when the file is locked
                     # Errno 13 Permission Denied
                     pass

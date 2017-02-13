@@ -21,70 +21,52 @@
 """
 Test case for Command
 """
-
-
 from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.Command import *
 
-import tempfile
-import unittest
 
-
-class CommandTestCase(unittest.TestCase):
-
+class CommandTestCase(common.BleachbitTestCase):
     """Test case for Command"""
 
     def test_Delete(self, cls=Delete):
         """Unit test for Delete"""
-        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
-        os.write(fd, "foo")
-        os.close(fd)
+        path = self.write_file('test_Delete', b'foo')
         cmd = cls(path)
-        self.assert_(os.path.exists(path))
+        self.assertExists(path)
 
         # preview
         ret = cmd.execute(really_delete=False).next()
         s = str(cmd)
-        self.assert_(ret['size'] > 0)
+        self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
-        self.assert_(os.path.exists(path))
+        self.assertExists(path)
 
         # delete
         ret = cmd.execute(really_delete=True).next()
-        self.assert_(ret['size'] > 0)
+        self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
-        self.assert_(not os.path.exists(path))
+        self.assertNotExists(path)
 
     def test_Function(self):
         """Unit test for Function"""
-        (fd, path) = tempfile.mkstemp(prefix='bleachbit-test-command')
-        os.write(fd, "foo")
-        os.close(fd)
+        path = self.write_file('test_Function', b'foo')
         cmd = Function(path, FileUtilities.delete, 'bar')
-        self.assert_(os.path.exists(path))
-        self.assert_(os.path.getsize(path) > 0)
+        self.assertExists(path)
+        self.assertGreater(os.path.getsize(path), 0)
 
         # preview
         ret = cmd.execute(False).next()
-        self.assert_(os.path.exists(path))
-        self.assert_(os.path.getsize(path) > 0)
+        self.assertExists(path)
+        self.assertGreater(os.path.getsize(path), 0)
 
         # delete
         ret = cmd.execute(True).next()
-        self.assert_(ret['size'] > 0, 'Size is %d' % ret['size'])
+        self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
-        self.assert_(not os.path.exists(path))
+        self.assertNotExists(path)
 
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
-
-
-def suite():
-    return unittest.makeSuite(CommandTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()

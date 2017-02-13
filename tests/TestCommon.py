@@ -28,60 +28,46 @@ from tests import common
 import bleachbit
 
 import os
-import tempfile
-import unittest
 
 
-class CommonTestCase(unittest.TestCase, common.AssertFile):
-
+class CommonTestCase(common.BleachbitTestCase):
     """Test case for Common."""
 
     def test_expandvars(self):
         """Unit test for expandvars."""
         var = bleachbit.expandvars('$HOME')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(var)
 
     def test_environment(self):
         """Test for important environment variables"""
         # useful for researching
         # grep -Poh "([\\$%]\w+)" cleaners/*xml | cut -b2- | sort | uniq -i
-        if 'posix' == os.name:
-            envs = ('XDG_DATA_HOME', 'XDG_CONFIG_HOME', 'XDG_CACHE_HOME',
-                    'HOME')
-        else:
-            envs = ('AppData', 'CommonAppData', 'Documents', 'ProgramFiles',
-                    'UserProfile', 'WinDir')
-        for env in envs:
+        envs = {'posix': ['XDG_DATA_HOME', 'XDG_CONFIG_HOME', 'XDG_CACHE_HOME', 'HOME'],
+                'nt': ['AppData', 'CommonAppData', 'Documents', 'ProgramFiles', 'UserProfile', 'WinDir']}
+        for env in envs[os.name]:
             e = os.getenv(env)
             self.assertIsNotNone(e)
-            self.assertTrue(len(e) > 4)
+            self.assertGreater(len(e), 4)
 
     def test_expanduser(self):
         """Unit test for expanduser."""
         # Return Unicode when given str.
-        var = bleachbit.expanduser('~')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(bleachbit.expanduser('~'))
+
         # Return Unicode when given Unicode.
-        var = bleachbit.expanduser(u'~')
-        self.assertIsInstance(var, unicode)
+        self.assertIsUnicodeString(bleachbit.expanduser(u'~'))
+
         # Blank input should give blank output.
         self.assertEqual(bleachbit.expanduser(''), u'')
+
         # An absolute path should not be altered.
-        if 'posix' == os.name:
-            abs_dir = os.path.expandvars('$HOME')
-        if 'nt' == os.name:
-            abs_dir = os.path.expandvars('%USERPROFILE%')
+        abs_dirs = {'posix': '$HOME', 'nt': '%USERPROFILE%'}
+        abs_dir = os.path.expandvars(abs_dirs[os.name])
         self.assertExists(abs_dir)
         self.assertEqual(bleachbit.expanduser(abs_dir), abs_dir)
         # Path with tilde should be expanded
-        self.assertTrue(os.path.normpath(bleachbit.expanduser('~')), os.path.normpath(os.path.expanduser('~')))
+        self.assertEqual(os.path.normpath(bleachbit.expanduser('~')),
+                         os.path.normpath(os.path.expanduser('~')))
         # A relative path (without a reference to the home directory)
         # should not be expanded.
         self.assertEqual(bleachbit.expanduser('common'), 'common')
-
-def suite():
-    return unittest.makeSuite(CommonTestCase)
-
-
-if __name__ == '__main__':
-    unittest.main()
