@@ -35,9 +35,7 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-
 fast = False
-
 if len(sys.argv) > 1 and sys.argv[1] == 'fast':
     logger.info('Fast build')
     fast = True
@@ -47,7 +45,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
-
+BB_VER = None
 GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
@@ -181,57 +179,73 @@ def count_size_improvement(func):
     return wrapper
 
 
-logger.info('Getting BleachBit version')
-import bleachbit
-BB_VER = bleachbit.APP_VERSION
-logger.info('BleachBit version ' + BB_VER)
+def environment_check():
+    """Check the build environment"""
+    logger.info('Checking for translations')
+    assert_exist('locale', 'run "make -C po local" to build translations')
+
+    logger.info('Checking for GTK')
+    assert_exist(GTK_DIR)
+
+    logger.info('Checking PyGTK+ library')
+    assert_module('pygtk')
+
+    logger.info('Checking Python win32 library')
+    assert_module('win32file')
+
+    logger.info('Checking for CodeSign.bat')
+    check_exist('CodeSign.bat', 'Code signing is not available')
+
+    logger.info('Checking for NSIS')
+    check_exist(
+        NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
 
 
-logger.info('Checking for translations')
-assert_exist('locale', 'run "make -C po local" to build translations')
+def build():
+    """Build the application"""
+    logger.info('Deleting directories build and dist')
+    shutil.rmtree('build', ignore_errors=True)
+    shutil.rmtree('dist', ignore_errors=True)
+    shutil.rmtree('BleachBit-Portable', ignore_errors=True)
 
-logger.info('Checking for GTK')
-assert_exist(GTK_DIR)
+    logger.info('Running py2exe')
+    shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
+    cmd = sys.executable + ' -OO setup.py py2exe'
+    run_cmd(cmd)
+    assert_exist('dist\\bleachbit.exe')
+    assert_exist('dist\\bleachbit_console.exe')
+    os.remove('bleachbit_console.py')
 
-logger.info('Checking PyGTK+ library')
-assert_module('pygtk')
+    if not os.path.exists('dist'):
+        os.makedirs('dist')
 
-logger.info('Checking Python win32 library')
-assert_module('win32file')
+    logger.info('Copying GTK files and icon')
+    shutil.copyfile(GTK_DIR + '\\bin\\intl.dll',  'dist\\intl.dll')
 
-logger.info('Checking for CodeSign.bat')
-check_exist('CodeSign.bat', 'Code signing is not available')
+    copytree(GTK_DIR + '\\etc', 'dist\\etc')
+    copytree(GTK_DIR + '\\lib', 'dist\\lib')
+    copytree(GTK_DIR + '\\share', 'dist\\share')
+    shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
 
-logger.info('Checking for NSIS')
-check_exist(
-    NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
+    logger.info('Copying BleachBit localizations')
+    shutil.rmtree('dist\\share\\locale', ignore_errors=True)
+    copytree('locale', 'dist\\share\\locale')
+    assert_exist('dist\\share\\locale\\es\\LC_MESSAGES\\bleachbit.mo')
 
+    logger.info('Copying BleachBit cleaners')
+    if not os.path.exists('dist\\share\\cleaners'):
+        os.makedirs('dist\\share\\cleaners')
+    cleaners_files = recursive_glob('cleaners', ['*.xml'])
+    for file in cleaners_files:
+        shutil.copy(file,  'dist\\share\\cleaners')
 
-logger.info('Deleting directories build and dist')
-shutil.rmtree('build', ignore_errors=True)
-shutil.rmtree('dist', ignore_errors=True)
-shutil.rmtree('BleachBit-Portable', ignore_errors=True)
+    logger.info('Checking for CleanerML')
+    assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
+    sign_code('dist\\bleachbit.exe')
+    sign_code('dist\\bleachbit_console.exe')
 
-logger.info('Running py2exe')
-shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
-cmd = sys.executable + ' -OO setup.py py2exe'
-run_cmd(cmd)
-assert_exist('dist\\bleachbit.exe')
-assert_exist('dist\\bleachbit_console.exe')
-os.remove('bleachbit_console.py')
-
-
-if not os.path.exists('dist'):
-    os.makedirs('dist')
-
-logger.info('Copying GTK files and icon')
-shutil.copyfile(GTK_DIR + '\\bin\\intl.dll',  'dist\\intl.dll')
-
-copytree(GTK_DIR + '\\etc', 'dist\\etc')
-copytree(GTK_DIR + '\\lib', 'dist\\lib')
-copytree(GTK_DIR + '\\share', 'dist\\share')
-shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
+    assert_execute_console()
 
 
 @count_size_improvement
@@ -304,8 +318,6 @@ def delete_unnecessary():
             os.remove(f)
         logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
 
-delete_unnecessary()
-
 
 @count_size_improvement
 def delete_icons():
@@ -323,8 +335,6 @@ def delete_icons():
         if os.path.basename(f) not in png_whitelist:
             os.remove(f)
 
-delete_icons()
-
 
 @count_size_improvement
 def clean_translations():
@@ -336,8 +346,6 @@ def clean_translations():
         if pt not in supported_translations:
             path = 'dist/share/locale/' + pt
             shutil.rmtree(path)
-
-clean_translations()
 
 
 @count_size_improvement
@@ -351,47 +359,21 @@ def strip():
         ' '.join(strip_files_str)
     run_cmd(cmd)
 
-try:
-    strip()
-except Exception as e:
-    logger.exception(
-        'Error when running strip. Does your PATH have MINGW with binutils?')
-
 
 @count_size_improvement
 def upx():
-    logger.info('Compressing executables')
-    if os.path.exists(UPX_EXE):
-        upx_files = recursive_glob('dist', ['*.exe', '*.dll', '*.pyd'])
-        cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
-        run_cmd(cmd)
-    else:
+    if fast:
+        logger.warning('Fast mode: Skipped executable with UPX')
+        return
+
+    if not os.path.exists(UPX_EXE):
         logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
+        return
 
-if not fast:
-    upx()
-    assert_execute_console()
-
-logger.info('Purging unnecessary GTK+ files')
-cmd = sys.executable + ' setup.py clean-dist'
-run_cmd(cmd)
-
-
-logger.info('Copying BleachBit localizations')
-shutil.rmtree('dist\\share\\locale', ignore_errors=True)
-copytree('locale', 'dist\\share\\locale')
-assert_exist('dist\\share\\locale\\es\\LC_MESSAGES\\bleachbit.mo')
-
-logger.info('Copying BleachBit cleaners')
-if not os.path.exists('dist\\share\\cleaners'):
-    os.makedirs('dist\\share\\cleaners')
-cleaners_files = recursive_glob('cleaners', ['*.xml'])
-for file in cleaners_files:
-    shutil.copy(file,  'dist\\share\\cleaners')
-
-
-logger.info('Checking for CleanerML')
-assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
+    logger.info('Compressing executables')
+    upx_files = recursive_glob('dist', ['*.exe', '*.dll', '*.pyd'])
+    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
+    run_cmd(cmd)
 
 
 @count_size_improvement
@@ -403,65 +385,95 @@ def delete_linux_only():
             logger.warning('delete ' + f)
             os.remove(f)
 
-delete_linux_only()
 
-sign_code('dist\\bleachbit.exe')
-sign_code('dist\\bleachbit_console.exe')
+@count_size_improvement
+def recompress_library():
+    """Recompress library.zip"""
+    if fast:
+        logger.warning('Fast mode: Skipped recompression of library.zip')
+        return
 
-assert_execute_console()
-
-if not fast:
-    logger.info('Recompressing library.zip with 7-Zip')
     if not os.path.exists(SZ_EXE):
         logger.warning(SZ_EXE + ' does not exist')
-    else:
-        # extract library.zip
-        if not os.path.exists('dist\\library'):
-            os.makedirs('dist\\library')
-        cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-        run_cmd(cmd)
-        file_size_old = os.path.getsize('dist\\library.zip')
-        os.remove('dist\\library.zip')
+        return
 
-        # clean unused modules from library.zip
-        delete_paths = ['distutils', 'email']
-        for p in delete_paths:
-            shutil.rmtree(os.path.join('dist', 'library', p))
+    logger.info('Recompressing library.zip with 7-Zip')
 
-        # recompress library.zip
-        cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
-        logger.info(cmd)
-        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, cwd='dist\\library')
-        stdout, stderr = p.communicate()
-        logger.info(stdout)
-        if stderr:
-            logger.error(stderr)
+    # extract library.zip
+    if not os.path.exists('dist\\library'):
+        os.makedirs('dist\\library')
+    cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
+    run_cmd(cmd)
+    file_size_old = os.path.getsize('dist\\library.zip')
+    os.remove('dist\\library.zip')
 
-        file_size_new = os.path.getsize('dist\\library.zip')
-        file_size_diff = file_size_old - file_size_new
-        logger.info('Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(
-            file_size_diff, file_size_old, file_size_new))
-        shutil.rmtree('dist\\library', ignore_errors=True)
-        assert_exist('dist\\library.zip')
-else:
-    logger.warning('Skipped recompression library.zip with 7-Zip')
+    # clean unused modules from library.zip
+    delete_paths = ['distutils', 'email']
+    for p in delete_paths:
+        shutil.rmtree(os.path.join('dist', 'library', p))
+
+    # recompress library.zip
+    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
+    logger.info(cmd)
+    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE, cwd='dist\\library')
+    stdout, stderr = p.communicate()
+    logger.info(stdout)
+    if stderr:
+        logger.error(stderr)
+
+    file_size_new = os.path.getsize('dist\\library.zip')
+    file_size_diff = file_size_old - file_size_new
+    logger.info('Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(
+        file_size_diff, file_size_old, file_size_new))
+    shutil.rmtree('dist\\library', ignore_errors=True)
+    assert_exist('dist\\library.zip')
 
 
-# Below there are no more optimizations of files in the `dist` folder,
-# so calculate the size of the folder, as it is a goal to shrink it.
-logger.info('Final size of the dist folder: {:,}'.format(get_dir_size('dist')))
+def shrink():
+    """After building, run all the applicable size optimizations"""
+    delete_unnecessary()
+    delete_icons()
+    clean_translations()
 
-logger.info('Building portable')
-copytree('dist', 'BleachBit-Portable')
-with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
-    text_file.write("[Portable]")
+    try:
+        strip()
+    except Exception as e:
+        logger.exception(
+            'Error when running strip. Does your PATH have MINGW with binutils?')
 
-archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+    if not fast:
+        upx()
+        assert_execute_console()
 
+    logger.info('Purging unnecessary GTK+ files')
+    # FIXME: move clean-dist into this program
+    cmd = sys.executable + ' setup.py clean-dist'
+    run_cmd(cmd)
+
+    delete_linux_only()
+
+    recompress_library()
+
+    # so calculate the size of the folder, as it is a goal to shrink it.
+    logger.info('Final size of the dist folder: {:,}'.format(
+        get_dir_size('dist')))
+
+
+def package_portable():
+    """Package the portable version"""
+    logger.info('Building portable')
+    copytree('dist', 'BleachBit-Portable')
+    with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+        text_file.write("[Portable]")
+
+    archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
 
 # NSIS
+
+
 def nsis(opts, exe_name):
+    """Run NSIS with the options to build exe_name"""
     if os.path.exists(exe_name):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
@@ -471,9 +483,14 @@ def nsis(opts, exe_name):
     assert_exist(exe_name)
     sign_code(exe_name)
 
-if not os.path.exists(NSIS_EXE):
-    logger.warning('NSIS not found, so not building installer')
-else:
+
+def package_installer():
+    """Package the installer"""
+
+    if not os.path.exists(NSIS_EXE):
+        logger.warning('NSIS not found, so not building installer')
+        return
+
     logger.info('Building installer')
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
@@ -493,8 +510,19 @@ else:
     else:
         logger.warning(SZ_EXE + ' does not exist')
 
-# Clearly show the sizes of the files that end users download because the goal
-# is to minimize them.
-os.system(r'dir *.zip windows\*.exe windows\*.zip')
 
-logger.info('Success!')
+if '__main__' == __name__:
+    logger.info('Getting BleachBit version')
+    import bleachbit
+    BB_VER = bleachbit.APP_VERSION
+    logger.info('BleachBit version ' + BB_VER)
+
+    environment_check()
+    build()
+    shrink()
+    package_portable()
+    package_installer()
+    # Clearly show the sizes of the files that end users download because the
+    # goal is to minimize them.
+    os.system(r'dir *.zip windows\*.exe windows\*.zip')
+    logger.info('Success!')
