@@ -338,8 +338,12 @@ def delete_icons():
 
 @count_size_improvement
 def clean_translations():
+    """Clean translations (localizations)"""
     logger.info('Cleaning translations')
-    os.remove(r'dist\share\locale\locale.alias')
+    if os.path.exists(r'dist\share\locale\locale.alias'):
+        os.remove(r'dist\share\locale\locale.alias')
+    else:
+        logger.warning('locale.alias does not exist')
     pygtk_translations = os.listdir('dist/share/locale')
     supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
     for pt in pygtk_translations:
