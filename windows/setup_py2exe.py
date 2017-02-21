@@ -39,7 +39,7 @@ logger.addHandler(ch)
 fast = False
 
 if len(sys.argv) > 1 and sys.argv[1] == 'fast':
-    logger.info('Fast buid')
+    logger.info('Fast build')
     fast = True
 
 
@@ -52,7 +52,7 @@ GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
-    logger.info('NSIS found in alternate location:' + NSIS_ALT_EXE)
+    logger.info('NSIS found in alternate location: ' + NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 # maximum compression with maximum compatibility
@@ -309,7 +309,7 @@ delete_unnecessary()
 
 @count_size_improvement
 def delete_icons():
-    logger.info('Deleting PNG icons')
+    logger.info('Deleting unused PNG icons')
     # This whitelist comes from analyze_process_monitor_events.py
     png_whitelist = [
         'dialog-information.png',
