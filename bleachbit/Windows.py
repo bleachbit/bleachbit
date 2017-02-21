@@ -559,7 +559,7 @@ def set_environ(varname, path):
     if not path:
         return
     if varname in os.environ:
-        logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
+        #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = bleachbit.expandvars(u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
