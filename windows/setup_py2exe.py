@@ -476,19 +476,19 @@ def package_portable():
 # NSIS
 
 
-def nsis(opts, exe_name):
+def nsis(opts, exe_name, nsi_path):
     """Run NSIS with the options to build exe_name"""
     if os.path.exists(exe_name):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
     cmd = NSIS_EXE + \
-        ' {} /DVERSION={} windows\\bleachbit.nsi'.format(opts, BB_VER)
+        ' {} /DVERSION={} {}'.format(opts, BB_VER, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
     sign_code(exe_name)
 
 
-def package_installer():
+def package_installer(nsi_path=r'windows\bleachbit.nsi'):
     """Package the installer"""
 
     if not os.path.exists(NSIS_EXE):
@@ -498,11 +498,12 @@ def package_installer():
     logger.info('Building installer')
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
-    nsis(opts, exe_name)
+    nsis(opts, exe_name, nsi_path)
 
     if not fast:
         nsis('/DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER))
+             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
+             nsi_path)
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
