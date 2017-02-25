@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-02-11 11:12-0700\n"
-"PO-Revision-Date: 2017-02-14 13:29+0000\n"
+"PO-Revision-Date: 2017-02-24 04:03+0000\n"
 "Last-Translator: Shinichirou YAMADA "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-02-15 00:44+0000\n"
+"X-Launchpad-Export-Date: 2017-02-24 04:28+0000\n"
 "X-Generator: Launchpad (build 18326)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -124,7 +124,7 @@ msgstr "サムネイル"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr "システム上のファイルアイコン"
+msgstr "ファイルのアイコン"
 
 #: ../cleaners/vim.xml ../cleaners/gedit.xml
 msgid "Editor"
@@ -286,7 +286,7 @@ msgstr "最近使用したドキュメント一覧"
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
-msgstr "このオプションはクイックアクセスに固定された場所をデフォルトにリセットします。"
+msgstr "このオプションはクイック アクセスにピン留めされた場所をデフォルトにリセットします。"
 
 #. In Windows 'Run' is the dialog in the Start menu
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
@@ -306,7 +306,7 @@ msgstr "検索履歴の削除"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr "これにより Windows Explorer が再起動します。"
+msgstr ""
 
 #: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
@@ -400,7 +400,7 @@ msgstr "コマンド履歴の削除"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr "Windows ソフトウェアの互換レイヤー"
+msgstr "Windows ソフトウェアのための互換レイヤー"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:202
@@ -578,7 +578,7 @@ msgstr "ディープスキャン"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "ディスク上に広く散在するファイルを削除する"
+msgstr "ディスクに広く散在するファイルを削除する"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -590,7 +590,7 @@ msgstr "この項目は処理に時間がかかります。"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "不要なファイルクリーナー"
+msgstr "不要ファイルクリーナー"
 
 #: ../bleachbit.desktop
 msgid "Free space and maintain privacy"
@@ -764,7 +764,7 @@ msgstr "不要な言語ファイルの削除"
 
 #: ../bleachbit/Cleaner.py:461
 msgid "Configure this option in the preferences."
-msgstr "環境設定でこのオプションを設定します。"
+msgstr "設定メニューでこのオプションを設定します。"
 
 #: ../bleachbit/Cleaner.py:467
 msgid "Rotated logs"
@@ -828,8 +828,8 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"ホットフィックス、サービスパック、および Internet Explorer のアップデートを含む Microsoft "
-"更新プログラムのアンインストーラーを削除する"
+"ホットフィックス、サービスパック、および Internet Explorer のアップデートを含む Microsoft Update "
+"のためのアンインストーラーを削除する"
 
 #: ../bleachbit/Cleaner.py:504 ../bleachbit/Cleaner.py:727
 msgid "Clipboard"
@@ -909,7 +909,7 @@ msgstr "ファイル名"
 #: ../bleachbit/Worker.py:74
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "実行中の例外 '%(operation)s': '%(msg)s'"
+msgstr ""
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:182
@@ -1011,7 +1011,7 @@ msgstr "バージョン %s に更新"
 msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
 "verify the network is working."
-msgstr "%s へネットワーク接続して更新を確認する際にエラーが発生しました。 ネットワークが機能していることを確認してください。"
+msgstr "アップデートを確認するために %s へネットワーク接続する際にエラーが発生しました。 ネットワークが動作していることを確認してください。"
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1024,7 +1024,7 @@ msgstr "%s は有効なクリーナではありません"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:133
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "使用法： %prog [options] cleaner.option1 cleaner.option2"
+msgstr "使用法: %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:136
 msgid "list cleaners"
@@ -1035,7 +1035,7 @@ msgstr "クリーナ一覧"
 #. spreadsheet on the desktop.
 #: ../bleachbit/CLI.py:141
 msgid "run cleaners to delete files and make other permanent changes"
-msgstr ""
+msgstr "ファイルの削除とその他の永続的な変更を加えるためにクリーナーを実行する"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
@@ -1051,7 +1051,7 @@ msgstr "グラフィカルインターフェースで起動"
 
 #: ../bleachbit/CLI.py:152
 msgid "do not prompt for administrator privileges"
-msgstr ""
+msgstr "管理者権限を要求しない"
 
 #: ../bleachbit/CLI.py:157
 msgid "preview files to be deleted and other changes"
@@ -1063,7 +1063,7 @@ msgstr "グラフィカルインターフェイスで設定されたオプショ
 
 #: ../bleachbit/CLI.py:164
 msgid "update winapp2.ini, if a new version is available"
-msgstr "新しいバージョンが利用可能であれば、winapp2.ini を更新する"
+msgstr "新しいバージョンが利用可能な場合、winapp2.ini をアップデートする"
 
 #: ../bleachbit/CLI.py:166
 msgid "output version information and exit"
@@ -1107,9 +1107,6 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
-"%(cleaner)s - %(option)s の警告:\n"
-"\n"
-"%(warning)s"
 
 #: ../bleachbit/GUI.py:372
 msgid "You must select an operation"
@@ -1251,14 +1248,14 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"BleachBit を管理者権限で実行してシステムの共有部分をクリーニングしている場合、ユーザープロファイルフォルダーへの参照は root "
-"アカウント部分のみ行います。"
+"システムの共有部分をクリーニングするために、BleachBit を管理者権限で実行しています。ユーザープロファイルフォルダーは root "
+"アカウントのみクリーンします。"
 
 #: ../bleachbit/GUI.py:940
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
-msgstr "BleachBit を管理者権限で実行することで、ファイルの内容を上書きする精度が向上します。"
+msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:64
 msgid "General"
@@ -1309,7 +1306,7 @@ msgstr "関係のないクリーナーを隠す"
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:159
 msgid "Overwrite contents of files to prevent recovery"
-msgstr "復元を防ぐためにファイルの内容を上書きする"
+msgstr "ファイルの復元を防ぐために内容を上書きする"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid ""
@@ -1323,11 +1320,11 @@ msgstr "コンピュータの起動とともに Bleachbit を開始"
 
 #: ../bleachbit/GuiPreferences.py:172
 msgid "Exit after cleaning"
-msgstr "削除後に終了する"
+msgstr "削除後に BleachBit を終了する"
 
 #: ../bleachbit/GuiPreferences.py:178
 msgid "Confirm before delete"
-msgstr "削除前に確認する"
+msgstr "削除する前に確認する"
 
 #: ../bleachbit/GuiPreferences.py:186
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1336,7 +1333,7 @@ msgstr "SI (1 kB = 1000 バイト) の代わりに IEC サイズ (1 KiB = 1024 �
 #: ../bleachbit/GuiPreferences.py:221
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
-msgstr "未使用領域を上書きするため、各ドライブの書き込み可能なフォルダーを選択してください。"
+msgstr "未使用領域を上書きするために、各ドライブの書き込み可能なフォルダーを選択してください。"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
