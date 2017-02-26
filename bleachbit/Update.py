@@ -121,7 +121,7 @@ def user_agent():
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
     import gtk
-    from GuiBasic import open_url
+    from bleachbit.GuiBasic import open_url
     dlg = gtk.Dialog(title=_("Update BleachBit"),
                      parent=parent,
                      flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
