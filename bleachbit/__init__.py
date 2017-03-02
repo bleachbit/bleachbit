@@ -74,20 +74,16 @@ if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
-    # __file__ is absolute path to bleachbit/__init__.py
-    bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
+    # __file__ is absolute path to __init__.py
+    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__.decode(sys.getfilesystemencoding())))
 
 # license
 license_filename = None
 license_filenames = ('/usr/share/common-licenses/GPL-3',  # Debian, Ubuntu
-                     os.path.join(
-                         bleachbit_exe_path, 'COPYING'),  # Microsoft Windows
-                     '/usr/share/doc/bleachbit-' + APP_VERSION +
-                     '/COPYING',  # CentOS, Fedora, RHEL
-                     '/usr/share/licenses/bleachbit/COPYING',
-                     # Fedora 21+, RHEL 7+
-                     '/usr/share/doc/packages/bleachbit/COPYING',
-                     # OpenSUSE 11.1
+                     os.path.join(bleachbit_exe_path, 'COPYING'),  # Microsoft Windows
+                     '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING',  # CentOS, Fedora, RHEL
+                     '/usr/share/licenses/bleachbit/COPYING', # Fedora 21+, RHEL 7+
+                     '/usr/share/doc/packages/bleachbit/COPYING', # OpenSUSE 11.1
                      '/usr/pkg/share/doc/bleachbit/COPYING',  # NetBSD 5
                      '/usr/share/licenses/common/GPL3/license.txt')  # Arch Linux
 for lf in license_filenames:
@@ -202,14 +198,13 @@ else:
 # local cleaners directory for running without installation (Windows or Linux)
 local_cleaners_dir = None
 if portable_mode:
-    local_cleaners_dir = os.path.normpath(
-        os.path.join(bleachbit_exe_path, '../cleaners'))
+    local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
 # application icon
 __icons = ('/usr/share/pixmaps/bleachbit.png',  # Linux
            os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'),  # Windows
            '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-           os.path.normpath(os.path.join(bleachbit_exe_path, '../bleachbit.png')))  # local
+           os.path.join(bleachbit_exe_path, 'bleachbit.png')) # local
 appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
