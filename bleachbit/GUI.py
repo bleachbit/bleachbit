@@ -93,7 +93,7 @@ class Bleachbit(Gtk.Application):
 
     def build_app_menu(self):
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(bleachbit.bleachbit_exe_path, '..', 'data', 'app-menu.ui'))
+        builder.add_from_file(os.path.join(bleachbit.bleachbit_exe_path, 'data', 'app-menu.ui'))
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
@@ -103,6 +103,7 @@ class Bleachbit(Gtk.Application):
                    'wipeFreeSpace': self.cb_wipe_free_space,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
+                   'diagnostics': self.diagnostic_dialog,
                    'about': self.about,
                    'quit': self.quit}
 
@@ -219,6 +220,31 @@ class Bleachbit(Gtk.Application):
 
     def quit(self, action=None, param=None):
         self._window.destroy()
+
+    def diagnostic_dialog(self, action, param):
+        """Show diagnostic information"""
+        dialog = Gtk.Dialog(_("System information"))
+        dialog.set_default_size(600, 400)
+        txtbuffer = Gtk.TextBuffer()
+        from bleachbit import Diagnostic
+        txt = Diagnostic.diagnostic_info()
+        txtbuffer.set_text(txt)
+        textview = Gtk.TextView.new_with_buffer(txtbuffer)
+        textview.set_editable(False)
+        swindow = Gtk.ScrolledWindow()
+        swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        swindow.add_with_viewport(textview)
+        dialog.vbox.pack_start(swindow, True, True, 0)
+        dialog.add_buttons(Gtk.STOCK_COPY, 100, Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
+        dialog.show_all()
+        while True:
+            rc = dialog.run()
+            if 100 == rc:
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.set_text(txt, -1)
+            else:
+                break
+        dialog.hide()
 
     def do_activate(self):
         if not self._window:
@@ -609,6 +635,8 @@ class GUI(Gtk.ApplicationWindow):
         if elapsed < 10 or self.is_active():
             return
         try:
+            import gi
+            gi.require_version('Notify', '0.7')
             from gi.repository import Notify
         except:
             logger.debug('Notify not available')
@@ -617,31 +645,6 @@ class GUI(Gtk.ApplicationWindow):
                 notify = Notify.Notification.new('BleachBit', _("Done."), 'bleachbit')
                 notify.show()
                 notify.set_timeout(10000)
-
-    def diagnostic_dialog(self, parent):
-        """Show diagnostic information"""
-        dialog = Gtk.Dialog(_("System information"), parent)
-        dialog.resize(600, 400)
-        txtbuffer = Gtk.TextBuffer()
-        from bleachbit import Diagnostic
-        txt = Diagnostic.diagnostic_info()
-        txtbuffer.set_text(txt)
-        textview = Gtk.TextView(txtbuffer)
-        textview.set_editable(False)
-        swindow = Gtk.ScrolledWindow()
-        swindow.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-        swindow.add_with_viewport(textview)
-        dialog.vbox.pack_start(swindow)
-        dialog.add_buttons(Gtk.STOCK_COPY, 100, Gtk.STOCK_CLOSE, Gtk.RESPONSE_CLOSE)
-        dialog.show_all()
-        while True:
-            rc = dialog.run()
-            if 100 == rc:
-                clipboard = Gtk.clipboard_get()
-                clipboard.set_text(txt)
-            else:
-                break
-        dialog.hide()
 
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""

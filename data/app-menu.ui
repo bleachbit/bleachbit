@@ -25,6 +25,10 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">_Diagnostics</attribute>
+        <attribute name="action">app.diagnostics</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Help</attribute>
         <attribute name="action">app.help</attribute>
         <attribute name="accel">F1</attribute>
