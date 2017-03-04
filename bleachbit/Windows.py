@@ -449,9 +449,9 @@ def get_windows_version():
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running"""
 
-    try:
+    if parse_windows_build() >= 6:
         return is_process_running_psutil(name)
-    except ImportError:
+    else:
         # psutil does not support XP, so fall back
         # https://github.com/giampaolo/psutil/issues/348
         return is_process_running_win32(name)
