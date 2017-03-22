@@ -74,7 +74,7 @@ if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
 else:
-    # __file__ is absolute path to bleachbit/Common.py
+    # __file__ is absolute path to bleachbit/__init__.py
     bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
 
 # license
@@ -126,6 +126,8 @@ def expandvars(var):
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
 # This is a unicode-compatible reimplementation of that function.
+
+
 def expanduser(path):
     """Expand the path with the home directory.
 
@@ -166,6 +168,10 @@ portable_mode = False
 options_dir = None
 if 'posix' == os.name:
     options_dir = expanduser("~/.config/bleachbit")
+    e1 = os.path.exists(os.path.join(bleachbit_exe_path, '../cleaners'))
+    e2 = os.path.exists(os.path.join(bleachbit_exe_path, '../Makefile'))
+    e3 = os.path.exists(os.path.join(bleachbit_exe_path, '../COPYING'))
+    portable_mode = all((e1, e2, e3))
 elif 'nt' == os.name:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
@@ -190,9 +196,11 @@ else:
     system_cleaners_dir = None
     logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
 
-# local cleaners directory (for running from source tree)
-local_cleaners_dir = os.path.normpath(
-    os.path.join(bleachbit_exe_path, '../cleaners'))
+# local cleaners directory for running without installation (Windows or Linux)
+local_cleaners_dir = None
+if portable_mode:
+    local_cleaners_dir = os.path.normpath(
+        os.path.join(bleachbit_exe_path, '../cleaners'))
 
 # application icon
 __icons = ('/usr/share/pixmaps/bleachbit.png',  # Linux

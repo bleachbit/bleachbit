@@ -563,7 +563,7 @@ class GUI:
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if portable_mode:
+        if 'nt' == os.name and portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
@@ -577,7 +577,7 @@ class GUI:
             return
 
         # in portable mode, rebuild a minimal bleachbit.ini
-        if portable_mode:
+        if 'nt' == os.name and portable_mode:
             with open(bleachbit.options_file, 'w') as f:
                 f.write('[Portable]\n')
 
