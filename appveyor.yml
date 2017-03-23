@@ -69,3 +69,4 @@ deploy:
     folder: $(APPVEYOR_BUILD_VERSION)
     artifact:
     set-public: true
+    reduced_redundancy: true
