@@ -168,10 +168,6 @@ portable_mode = False
 options_dir = None
 if 'posix' == os.name:
     options_dir = expanduser("~/.config/bleachbit")
-    e1 = os.path.exists(os.path.join(bleachbit_exe_path, '../cleaners'))
-    e2 = os.path.exists(os.path.join(bleachbit_exe_path, '../Makefile'))
-    e3 = os.path.exists(os.path.join(bleachbit_exe_path, '../COPYING'))
-    portable_mode = all((e1, e2, e3))
 elif 'nt' == os.name:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
@@ -181,6 +177,13 @@ elif 'nt' == os.name:
         # installed mode
         options_dir = expandvars(r"${APPDATA}\BleachBit")
 options_file = os.path.join(options_dir, "bleachbit.ini")
+
+# check whether the application is running from the source tree
+if not portable_mode:
+    e1 = os.path.exists(os.path.join(bleachbit_exe_path, '../cleaners'))
+    e2 = os.path.exists(os.path.join(bleachbit_exe_path, '../Makefile'))
+    e3 = os.path.exists(os.path.join(bleachbit_exe_path, '../COPYING'))
+    portable_mode = all((e1, e2, e3))
 
 # personal cleaners
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
