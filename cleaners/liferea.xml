@@ -32,12 +32,16 @@
     <action command="delete" search="walk.files" path="~/.liferea_1.8/cache/"/>
     <action command="delete" search="walk.files" path="~/.liferea_1.4/mozilla/liferea/Cache/"/>
     <!-- Note: starting with 1.6 Liferea does not use Mozilla anymore (using WebKitGTK now) -->
+    <!-- ~/.cache/liferea/ seen in version 1.10.17 -->
+    <action command="delete" search="walk.files" path="~/.cache/liferea/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="~/.liferea_1.4/mozilla/liferea/cookies.sqlite"/>
     <!-- Note: The WebkitGTK rendering used since 1.6 does not persist cookies and auth -->
+    <!-- ~/.config/liferea/cookies.txt seen in 1.10.17 -->
+    <action command="delete" search="file" path="~/.config/liferea/cookies.txt"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
