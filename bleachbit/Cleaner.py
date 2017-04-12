@@ -27,7 +27,7 @@ from __future__ import absolute_import, print_function
 from bleachbit import _, expanduser, expandvars
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
+from bleachbit import Command, FileUtilities, Memory, Special,GuiBasic
 
 import glob
 import logging
@@ -35,6 +35,8 @@ import os.path
 import re
 import sys
 import warnings
+import subprocess
+
 
 if 'posix' == os.name:
     from bleachbit import Unix
@@ -149,12 +151,47 @@ class Cleaner:
 
     def is_running(self):
         """Return whether the program is currently running"""
+        resp_cli=""
         logger = logging.getLogger(__name__)
         for running in self.running:
             test = running[0]
             pathname = running[1]
             if 'exe' == test and 'posix' == os.name:
                 if Unix.is_running(pathname):
+                    #print "debug: process '%s' is running" % pathname
+                    logger.debug("Debug: process '%s' is running", pathname)
+                    if options.get("close_run"):
+                        if not subprocess.mswindows:
+                            #print "debug: Closing process '%s'" % pathname
+                            if "--preset" in sys.argv:
+                                resp_cli = raw_input("Do you Want BleachBit to Close " + pathname + " y/n : ")
+                            else:
+                                resp = GuiBasic.message_dialog(None,"Do you Want BleachBit to Close " + pathname,gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO)
+                            if gtk.RESPONSE_YES == resp or resp_cli.lower() == "y":
+                            # user cancelled, so don't toggle option
+                                logger.debug("Debug: Closing process '%s'",pathname)
+                                subprocess.check_output(["killall", "-9", pathname])
+                            if not Unix.is_running(pathname):
+                                logger.debug("Debug: Closing process '%s' successful",pathname)
+                                return False
+                    return True
+            elif 'exe' == test and 'nt' == os.name:
+                if Windows.is_process_running(pathname):
+                    #print "debug: process '%s' is running" % pathname
+                    logger.debug("Debug: process '%s' is running", pathname)
+                    if options.get("close_run"):
+                        if subprocess.mswindows:
+                            #print "debug: Closing process '%s'" % pathname
+                            if "--preset" in sys.argv:
+                                resp_cli = raw_input("Do you Want BleachBit to Close " + pathname + " y/n : ")
+                            else:
+                                resp = GuiBasic.message_dialog(None,"Do you Want BleachBit to Close " + pathname,gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO)
+                            if gtk.RESPONSE_YES == resp or resp_cli.lower() == "y":
+                                logger.debug("debug: Closing process '%s'",pathname)
+                                subprocess.check_output(["taskkill", "/IM", pathname])
+                            if not Windows.is_process_running(pathname):
+                                logger.debug("debug: Closing process '%s' successful",pathname)
+                                return False
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'exe' == test and 'nt' == os.name:
@@ -171,6 +208,7 @@ class Cleaner:
                 raise RuntimeError(
                     "Unknown running-detection test '%s'" % test)
         return False
+
 
     def is_usable(self):
         """Return whether the cleaner is usable (has actions)"""

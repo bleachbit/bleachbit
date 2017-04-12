@@ -62,7 +62,8 @@ def open_files_linux():
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
         def run_lsof():
-            subprocess.check_output(["lsof", "-Fn", "-n"])
+            lsof = subprocess.check_output(["lsof", "-Fn", "-n"])
+            return lsof
     for f in run_lsof().split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"

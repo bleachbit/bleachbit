@@ -466,7 +466,8 @@ def is_broken_xdg_desktop(pathname):
 def is_running_darwin(exename, run_ps=None):
     if run_ps is None:
         def run_ps():
-            subprocess.check_output(["ps", "aux", "-c"])
+            ps=subprocess.check_output(["ps", "aux", "-c"])
+            return ps
     try:
         processess = (re.split(r"\s+", p, 10)[10] for p in run_ps().split("\n") if p != "")
         next(processess)  # drop the header
