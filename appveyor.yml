@@ -16,8 +16,8 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
-  - ps: if (-not (Test-Path pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe/download" }
-  - 'pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe C:\Python27 GTK Notify'
+  - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe/download" -FileName pygi-aio.exe}
+  - 'pygi-aio.exe C:\Python27 GTK Notify'
   - ps: if (-not (Test-Path upx393w.zip)) { Start-FileDownload "http://github.com/upx/upx/releases/download/v3.93/upx393w.zip" }
   - '%SZ_EXE% x upx393w.zip'
   - ps: if (-not (Test-Path gettext0.19.8.1-iconv1.14-static-32.zip)) { Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip" }
@@ -35,7 +35,7 @@ build_script:
   - 'move windows\BleachBit*.zip .'
 
 cache:
-  - pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe
+  - pygi-aio.exe
   - upx393w.zip
   - gettext0.19.8.1-iconv1.14-static-32.zip
 
