@@ -357,9 +357,11 @@ def clean_translations():
 
 @count_size_improvement
 def strip():
+    logger.info('Skipping stripping of executables for now')
+    return
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = []
+    strip_whitelist = ['_sqlite3']
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
