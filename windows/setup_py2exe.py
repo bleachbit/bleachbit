@@ -61,7 +61,7 @@ SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
-UPX_EXE = ROOT_DIR + '\\upx393w\\upx.exe'
+UPX_EXE = ROOT_DIR + '\\upx394w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 
@@ -357,9 +357,11 @@ def clean_translations():
 
 @count_size_improvement
 def strip():
+    logger.info('Skipping stripping of executables for now')
+    return
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = []
+    strip_whitelist = ['_sqlite3']
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
