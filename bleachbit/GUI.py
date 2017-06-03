@@ -88,8 +88,8 @@ class Bleachbit(Gtk.Application):
                 self.append_text('\n')
         if exit:
             # This is used for automated testing of whether the GUI can start.
-            GObject.idle_add(
-                lambda: Gtk.main_quit(), priority=GObject.PRIORITY_LOW)
+            print('Success')
+            GObject.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
         builder = Gtk.Builder()
