@@ -526,37 +526,6 @@ def rotated_logs():
             yield path
 
 
-def start_with_computer(enabled):
-    """If enabled, create shortcut to start application with computer.
-    If disabled, then delete the shortcut."""
-    if not enabled:
-        # User requests to not automatically start BleachBit
-        if os.path.lexists(bleachbit.autostart_path):
-            # Delete the shortcut
-            FileUtilities.delete(bleachbit.autostart_path)
-        return
-    # User requests to automatically start BleachBit
-    if os.path.lexists(bleachbit.autostart_path):
-        # Already automatic, so exit
-        return
-    if not os.path.exists(bleachbit.launcher_path):
-        logger.error('%s does not exist: ', bleachbit.launcher_path)
-        return
-    autostart_dir = os.path.dirname(bleachbit.autostart_path)
-    if not os.path.exists(autostart_dir):
-        General.makedirs(autostart_dir)
-    import shutil
-    shutil.copy(bleachbit.launcher_path, bleachbit.autostart_path)
-    os.chmod(bleachbit.autostart_path, 0o755)
-    if General.sudo_mode():
-        General.chownself(bleachbit.autostart_path)
-
-
-def start_with_computer_check():
-    """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(bleachbit.autostart_path)
-
-
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]

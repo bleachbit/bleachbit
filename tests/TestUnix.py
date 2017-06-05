@@ -208,28 +208,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         freed_space = run_cleaner_cmd('echo', ['\n'.join(lines)], freed_space_regex)
         self.assertEqual(freed_space, 2000)
 
-    def test_start_with_computer(self):
-        """Unit test for start_with_computer*"""
-        b = start_with_computer_check()
-        self.assertIsInstance(b, bool)
-
-        import os
-        import os.path
-        if not os.path.exists(bleachbit.launcher_path) and  os.path.exists('bleachbit.desktop'):
-            # this happens when BleachBit is not installed
-            bleachbit.launcher_path = 'bleachbit.desktop'
-
-        # opposite setting
-        start_with_computer(not b)
-        two_b = start_with_computer_check()
-        self.assertIsInstance(two_b, bool)
-        self.assertNotEqual(b, two_b)
-        # original setting
-        start_with_computer(b)
-        three_b = start_with_computer_check()
-        self.assertIsInstance(b, bool)
-        self.assertEqual(b, three_b)
-
     def test_wine_to_linux_path(self):
         """Unit test for wine_to_linux_path()"""
         wineprefix = "/home/foo/.wine"
