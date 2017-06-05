@@ -325,21 +325,6 @@ class WindowsTestCase(common.BleachbitTestCase):
             self.assertEqual(expected_hive, hive)
             self.assertEqual(expected_key, key)
 
-    def test_start_with_computer(self):
-        """Unit test for start_with_computer*"""
-        b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
-        # opposite setting
-        start_with_computer(not b)
-        two_b = start_with_computer_check()
-        self.assert_(isinstance(two_b, bool))
-        self.assertEqual(b, not two_b)
-        # original setting
-        start_with_computer(b)
-        three_b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
-        self.assertEqual(b, three_b)
-
     def test_parse_windows_build(self):
         """Unit test for parse_windows_build"""
         tests = (('5.1.2600', Decimal('5.1')),

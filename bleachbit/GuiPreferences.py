@@ -84,31 +84,9 @@ class PreferencesDialog:
                     options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.cb_refresh_operations()
-        if 'auto_start' == path:
-            if 'nt' == os.name:
-                swc = Windows.start_with_computer
-            if 'posix' == os.name:
-                swc = Unix.start_with_computer
-            try:
-                swc(options.get(path))
-            except:
-                traceback.print_exc()
-                dlg = gtk.MessageDialog(self.parent,
-                                        type=gtk.MESSAGE_ERROR,
-                                        buttons=gtk.BUTTONS_OK,
-                                        message_format=str(sys.exc_info()[1]))
-                dlg.run()
-                dlg.destroy()
 
     def __general_page(self):
         """Return a widget containing the general page"""
-
-        if 'nt' == os.name:
-            swcc = Windows.start_with_computer_check
-        if 'posix' == os.name:
-            swcc = Unix.start_with_computer_check
-
-        options.set('auto_start', swcc())
 
         vbox = gtk.VBox()
 
@@ -162,11 +140,6 @@ class PreferencesDialog:
         cb_shred.set_tooltip_text(
             _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
         vbox.pack_start(cb_shred, False)
-
-        cb_start = gtk.CheckButton(_("Start BleachBit with computer"))
-        cb_start.set_active(options.get('auto_start'))
-        cb_start.connect('toggled', self.__toggle_callback, 'auto_start')
-        vbox.pack_start(cb_start, False)
 
         # Close the application after cleaning is complete.
         cb_exit = gtk.CheckButton(_("Exit after cleaning"))
