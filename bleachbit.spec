@@ -29,7 +29,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
 Requires:       python >= 2.6
-Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
 Requires:       usermode
 %endif
@@ -41,7 +40,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  update-desktop-files
-Requires:       python-gnome
 Requires:       python-gtk >= 2.6
 Requires:       python-xml
 %py_requires
