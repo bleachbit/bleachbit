@@ -41,8 +41,7 @@ class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
 
     def setUp(self):
-        if os.path.exists('TestCLI.py'):
-            os.chdir('..')
+        super(CLITestCase, self).setUp()
 
     def _test_preview(self, args, stdout=None, env=None):
         """Helper to test preview"""

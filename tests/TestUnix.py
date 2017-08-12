@@ -29,6 +29,7 @@ from tests import common
 import bleachbit
 from bleachbit.Unix import *
 
+import os
 import sys
 import unittest
 
@@ -41,6 +42,7 @@ class UnixTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
+        super(UnixTestCase, self).setUp()
 
     def test_apt(self):
         """Unit test for method apt_autoclean() and apt_autoremove()"""
@@ -205,6 +207,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         b = start_with_computer_check()
         self.assertIsInstance(b, bool)
 
+        import os
+        import os.path
         if not os.path.exists(bleachbit.launcher_path) and  os.path.exists('bleachbit.desktop'):
             # this happens when BleachBit is not installed
             bleachbit.launcher_path = 'bleachbit.desktop'

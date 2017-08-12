@@ -192,6 +192,9 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def setUp(self):
         """Create test browser files."""
+
+        super(SpecialTestCase, self).setUp()
+
         self.dir_base = self.mkdtemp(prefix='bleachbit-test-special')
         self.dir_google_chrome_default = os.path.join(self.dir_base, 'google-chrome/Default/')
         os.makedirs(self.dir_google_chrome_default)

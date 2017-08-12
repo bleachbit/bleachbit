@@ -542,8 +542,10 @@ def start_with_computer(enabled):
     if not os.path.exists(bleachbit.launcher_path):
         logger.error('%s does not exist: ', bleachbit.launcher_path)
         return
+    autostart_dir = os.path.dirname(bleachbit.autostart_path)
+    if not os.path.exists(autostart_dir):
+        General.makedirs(autostart_dir)
     import shutil
-    General.makedirs(os.path.dirname(bleachbit.autostart_path))
     shutil.copy(bleachbit.launcher_path, bleachbit.autostart_path)
     os.chmod(bleachbit.autostart_path, 0o755)
     if General.sudo_mode():

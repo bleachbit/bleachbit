@@ -47,6 +47,12 @@ class BleachbitTestCase(unittest.TestCase):
         """remove the temporary directory"""
         shutil.rmtree(cls.tempdir)
 
+    def setUp(cls):
+        """Call before each test method"""
+        import os
+        basedir = os.path.join(os.path.dirname(__file__), '..')
+        os.chdir(basedir)
+
     #
     # type asserts
     #
