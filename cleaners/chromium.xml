@@ -117,6 +117,7 @@
     <action command="delete" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/History Index ????-??"/>
     <action command="delete" search="glob" path="$XDG_CONFIG_HOME/chromium/Default/History Index ????-??-journal"/>
     <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/chromium/Default/Session Storage/"/>
+    <action command="json" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Preferences" address="profile/content_settings/exceptions/site_engagement"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
