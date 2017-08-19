@@ -119,7 +119,7 @@ def delete_chrome_favicons(path):
     ver = __get_chrome_history(path)
     cmds = ""
 
-    if ver in [4, 20, 22, 23, 25, 26, 28, 29, 32]:
+    if ver in (4, 20, 22, 23, 25, 26, 28, 29, 32, 36):
         # Version 4 includes Chromium 12
         # Version 20 includes Chromium 14, Google Chrome 15, Google Chrome 19
         # Version 22 includes Google Chrome 20
@@ -128,6 +128,7 @@ def delete_chrome_favicons(path):
         # Version 28 is Google Chrome 30
         # Version 29 is Google Chrome 37
         # Version 32 is Google Chrome 51
+        # Version 36 is Google Chrome 60
 
         # icon_mapping
         cols = ('page_url',)
