@@ -137,7 +137,9 @@ def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
     if os.path.exists(pathname):
         MOVEFILE_DELAY_UNTIL_REBOOT = 4
-        windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT)
+        if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
+            from ctypes import WinError
+            raise WinError()
 
 
 def delete_registry_value(key, value_name, really_delete):
