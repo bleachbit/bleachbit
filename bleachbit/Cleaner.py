@@ -820,7 +820,9 @@ class System(Cleaner):
             '^' + expanduser('~/.cache/gnome-control-center/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + expanduser('~/.cache/ibus/')]
+            '^' + expanduser('~/.cache/ibus/'),
+            # Linux Bluetooth daemon obexd
+            '^' + expanduser('~/.cache/obexd/')]
         for regex in regexes:
             if re.match(regex, pathname) is not None:
                 return True
