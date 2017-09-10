@@ -140,7 +140,7 @@ def delete_chrome_favicons(path):
 
         # favicon images
         cols = ('image_data', )
-        where = "where id not in (select distinct id from icon_mapping)"
+        where = "where icon_id not in (select distinct icon_id from icon_mapping)"
         cmds += __shred_sqlite_char_columns('favicon_bitmaps', cols, where)
 
         # favicons
