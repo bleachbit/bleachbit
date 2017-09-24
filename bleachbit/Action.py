@@ -241,6 +241,22 @@ class AptAutoremove(ActionProvider):
                                    'apt-get autoremove')
 
 
+class AptClean(ActionProvider):
+
+    """Action to run 'apt-get clean'"""
+    action_key = 'apt.clean'
+
+    def __init__(self, action_element):
+        pass
+
+    def get_commands(self):
+        # Checking executable allows auto-hide to work for non-APT systems
+        if FileUtilities.exe_exists('apt-get'):
+            yield Command.Function(None,
+                                   Unix.apt_clean,
+                                   'apt-get clean')
+
+
 class ChromeAutofill(FileActionProvider):
 
     """Action to clean 'autofill' table in Google Chrome/Chromium"""

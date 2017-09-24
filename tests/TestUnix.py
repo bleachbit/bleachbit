@@ -55,6 +55,12 @@ class UnixTestCase(common.BleachbitTestCase):
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
 
+    def test_get_apt_size(self):
+        """Unit test for method get_apt_size()"""
+        size = get_apt_size()
+        self.assertIsInteger(size)
+        self.assertGreaterEqual(size, 0)
+
     def test_is_broken_xdg_desktop(self):
         """Unit test for is_broken_xdg_desktop()"""
         menu_dirs = ['/usr/share/applications',

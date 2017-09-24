@@ -89,6 +89,7 @@
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
+                            <xs:enumeration value="apt.clean"/>
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
                             <xs:enumeration value="chrome.autofill"/>

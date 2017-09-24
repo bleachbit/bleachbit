@@ -618,6 +618,35 @@ def apt_autoclean():
         raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
 
 
+def apt_clean():
+    """Run 'apt-get clean' and return the size in bytes of freed space"""
+    old_size = get_apt_size()
+    try:
+        run_cleaner_cmd('apt-get', ['clean'], '^unused regex$', ['^E: '])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Error calling '%s':\n%s" %
+                           (' '.join(e.cmd), e.output))
+    new_size = get_apt_size()
+    return old_size - new_size
+
+
+def get_apt_size():
+    """Return the size of the apt cache (in bytes)"""
+    (rc, stdout, stderr) = General.run_external(['apt-get', '-s', 'clean'])
+    paths = re.findall('/[/a-z\.\*]+', stdout)
+    return get_globs_size(paths)
+
+
+def get_globs_size(paths):
+    """Get the cumulative size (in bytes) of a list of globs"""
+    total_size = 0
+    for path in paths:
+        from glob import iglob
+        for p in iglob(path):
+            total_size += FileUtilities.getsize(p)
+    return total_size
+
+
 def yum_clean():
     """Run 'yum clean all' and return size in bytes recovered"""
     if os.path.exists('/var/run/yum.pid'):
