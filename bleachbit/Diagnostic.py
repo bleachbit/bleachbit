@@ -41,7 +41,7 @@ def diagnostic_info():
     s = "BleachBit version %s" % bleachbit.APP_VERSION
     try:
         import gtk
-        s += '\nGTK version %s' % '.'.join([str(x) for x in gtk.gtk_version])
+        s += '\nGTK+ version %s' % '.'.join([str(x) for x in gtk.gtk_version])
     except:
         pass
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
@@ -71,8 +71,8 @@ def diagnostic_info():
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
 
-    # Mac Version Name - Dictonary "masosx_dict"
-    macosx_dict = {'5': 'Lepoard', '6': 'Snow Lepoard', '7': 'Lion', '8': 'Mountain Lion',
+    # Mac Version Name - Dictionary
+    macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
                    '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}
 
     if sys.platform.startswith('darwin'):
