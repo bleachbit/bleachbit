@@ -44,6 +44,8 @@ def diagnostic_info():
         s += '\nGTK+ version %s' % '.'.join([str(x) for x in gtk.gtk_version])
     except:
         pass
+    import sqlite3
+    s += "\nSQLite version = %s" % sqlite3.sqlite_version
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
     s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
