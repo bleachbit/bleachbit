@@ -47,7 +47,8 @@ def diagnostic_info():
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
     s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
-    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(bleachbit.FSE)
+    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(
+        bleachbit.FSE)
     s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
@@ -57,19 +58,22 @@ def diagnostic_info():
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         if os.getenv(env):
-            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env).decode(bleachbit.FSE))
+            s += "\nos.getenv('%s') = %s" % (env,
+                                             os.getenv(env).decode(bleachbit.FSE))
         else:
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser('~').decode(bleachbit.FSE)
+    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser(
+        '~').decode(bleachbit.FSE)
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(
                 platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
-            
+
     # Mac Version Name - Dictonary "masosx_dict"
-    macosx_dict = {'5':'Lepoard','6':'Snow Lepoard','7':'Lion','8':'Mountain Lion','9':'Mavericks','10':'Yosemite','11':'El Capitan','12':'Sierra'}
+    macosx_dict = {'5': 'Lepoard', '6': 'Snow Lepoard', '7': 'Lion', '8': 'Mountain Lion',
+                   '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}
 
     if sys.platform.startswith('darwin'):
         if hasattr(platform, 'mac_ver'):
