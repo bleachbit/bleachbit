@@ -110,6 +110,7 @@
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Session Storage\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIcons\"/>
     <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
+    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="profile/content_settings/exceptions/site_engagement"/>
     <action command="chrome.history" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/History"/>
     <action command="chrome.favicons" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Favicons"/>
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/chrome_shutdown_ms.txt"/>
