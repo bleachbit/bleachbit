@@ -122,7 +122,7 @@ VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
-simulate_concurrency = True     # remove this test function when QA complete
+simulate_concurrency = False     # remove this test function when QA complete
 #drive_letter_safety = "E"       # protection to only use removeable drives
 # don't use C: or D:, but E: and beyond OK.
 tmp_file_name = "bbtemp.dat"
@@ -381,8 +381,8 @@ def spike_cluster(volume_handle, cluster, tmp_file_path):
     spike_file_path += spike_file_name + str(cluster)
     file_handle = CreateFile(spike_file_path,
                              GENERIC_READ | GENERIC_WRITE,
-                             0, None, CREATE_ALWAYS,
-                             0, None)
+                             FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                             None, CREATE_ALWAYS, 0, None)
     # 2000 bytes is enough to direct the file to its own cluster and not
     # land entirely in the MFT.
     write_zero_fill(file_handle, 2000)
