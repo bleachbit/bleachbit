@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-02-11 11:12-0700\n"
-"PO-Revision-Date: 2017-11-05 15:14+0000\n"
-"Last-Translator: Rodrigo Henrique <Unknown>\n"
+"PO-Revision-Date: 2017-11-13 14:30+0000\n"
+"Last-Translator: Gabriel D'Ambrosio <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2017-11-05 18:36+0000\n"
-"X-Generator: Launchpad (build 18493)\n"
+"X-Launchpad-Export-Date: 2017-11-14 02:36+0000\n"
+"X-Generator: Launchpad (build 18505)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -202,8 +202,8 @@ msgstr "Navegador de rede"
 #: ../bleachbit/Cleaner.py:193
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Apagar o cache do navegador de rede. O cache reduz o tempo para exibir "
-"páginas revisitadas"
+"Apagar o cache do navegador. O cache reduz o tempo para exibir páginas "
+"revisitadas."
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -540,7 +540,7 @@ msgstr "Apagar os cookies, URLs visitados e histórico de pesquisa"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "A history of forms entered in web sites"
-msgstr "Um histórico de formulários preenchidos em páginas de rede"
+msgstr "Um histórico de formulários preenchidos em sites da Web"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
@@ -652,13 +652,14 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
-"Você tem certeza que quer apagar permanentemente os arquivos de acordo com "
+"Você tem certeza que deseja apagar permanentemente os arquivos de acordo com "
 "as operações selecionadas? Os arquivos reais que serão excluídos podem ter "
 "mudado desde que você executou a pré-visualização."
 
 #: ../bleachbit/GuiBasic.py:125
 msgid "Are you sure you want to permanently delete these files?"
-msgstr "Você tem certeza que quer apagar permanentemente este(s) arquivo(s)?"
+msgstr ""
+"Você tem certeza que deseja apagar permanentemente este(s) arquivo(s)?"
 
 #: ../bleachbit/GuiBasic.py:162
 #, python-format
@@ -668,14 +669,14 @@ msgid ""
 "%s"
 msgstr ""
 "Pelo fato de você estar executando como root, por favor, abra manualmente "
-"este link em um navegador de red:\n"
+"este link em um navegador:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py:174
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "Abrir o navegador de rede para %s?"
+msgstr "Abrir o navegador para %s?"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -847,7 +848,7 @@ msgstr "Pré busca"
 
 #: ../bleachbit/Cleaner.py:493
 msgid "Recycle bin"
-msgstr "Lixeira de reciclagem"
+msgstr "Lixeira"
 
 #: ../bleachbit/Cleaner.py:493 ../bleachbit/Cleaner.py:787
 msgid "Empty the recycle bin"
@@ -1087,7 +1088,7 @@ msgstr "tritura arquivos e pastas específicos"
 
 #: ../bleachbit/CLI.py:146
 msgid "show system information"
-msgstr "Mostra informação do sistema"
+msgstr "mostrar informações do sistema"
 
 #: ../bleachbit/CLI.py:148
 msgid "launch the graphical interface"
@@ -1103,7 +1104,7 @@ msgstr "visualização de arquivos a serem excluídos e outras mudanças"
 
 #: ../bleachbit/CLI.py:161
 msgid "use options set in the graphical interface"
-msgstr "Usar opções definidas na interface gráfica"
+msgstr "usar opções definidas na interface gráfica"
 
 #: ../bleachbit/CLI.py:164
 msgid "update winapp2.ini, if a new version is available"
@@ -1111,7 +1112,7 @@ msgstr "atualizar winapp2.ini, se uma nova versão estiver disponível"
 
 #: ../bleachbit/CLI.py:166
 msgid "output version information and exit"
-msgstr "exibir informação de versão e sair"
+msgstr "exibir informações sobre a versão e sair"
 
 #: ../bleachbit/CLI.py:168
 msgid "overwrite files to hide contents"
@@ -1191,6 +1192,7 @@ msgstr ""
 "  Eugênio F https://launchpad.net/~eugf\n"
 "  Felipe Tanus https://launchpad.net/~fotanus\n"
 "  Fábio Nogueira https://launchpad.net/~fnogueira\n"
+"  Gabriel D'Ambrosio https://launchpad.net/~gabrieldz\n"
 "  Lucas Reis https://launchpad.net/~ubuntu-luk\n"
 "  Matheus Cavalcante https://launchpad.net/~suetamac\n"
 "  Michele Medeiros https://launchpad.net/~medeiros-michele\n"
@@ -1208,7 +1210,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:454
 msgid "System information"
-msgstr "Informação do sistema"
+msgstr "Informações do sistema"
 
 #: ../bleachbit/GUI.py:527
 msgid "Choose files to shred"
@@ -1216,7 +1218,7 @@ msgstr "Escolha os arquivos para triturar"
 
 #: ../bleachbit/GUI.py:530
 msgid "Choose folder to shred"
-msgstr "Escolha as pastas para triturar"
+msgstr "Escolha a pasta para triturar"
 
 #: ../bleachbit/GUI.py:594 ../bleachbit/GuiPreferences.py:197
 #: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
@@ -1316,9 +1318,9 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Você está executando BleachBit com privilégios administrativos para limpar "
-"partes compartilhadas do sistema. No que se refere a pasta de perfil do "
-"usuário irá limpar apenas a da conta root."
+"Você está executando o Bleachbit com privilégios administrativos para limpar "
+"partes do sistema. No que se refere a pasta de perfil do usuário irá limpar "
+"apenas a da conta root."
 
 #: ../bleachbit/GUI.py:940
 msgid ""
@@ -1386,8 +1388,8 @@ msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
-"A sobrescrição é ineficaz em alguns sistemas de arquivo e com determinadas "
-"operações BleachBit. A sobrescrição é significativamente mais lenta."
+"A sobrescrição é ineficaz em alguns sistemas de arquivos e com determinadas "
+"operações do Bleachbit. A sobrescrição é significativamente lenta."
 
 #: ../bleachbit/GuiPreferences.py:166
 msgid "Start BleachBit with computer"
