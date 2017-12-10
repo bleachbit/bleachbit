@@ -46,7 +46,7 @@ keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-combined.ini"
+    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-BleachBit.ini"
     tmpdir = None
     if 'posix' == os.name:
         tmpdir = '/tmp'
