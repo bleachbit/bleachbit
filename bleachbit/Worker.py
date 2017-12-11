@@ -28,6 +28,7 @@ from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
 from bleachbit import _, ungettext, expanduser
 
+import locale
 import logging
 import math
 import sys
@@ -113,7 +114,7 @@ class Worker:
                 path = ret['path']
             else:
                 path = ''
-            path = path.decode('utf8', 'replace')  # for invalid encoding
+            path = path.decode(locale.getpreferredencoding(), 'replace')  # for invalid encoding
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
