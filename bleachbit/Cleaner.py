@@ -220,7 +220,7 @@ class Firefox(Cleaner):
             self.add_running('exe', 'firefox-bin')
             self.add_running('pathname', self.profile_dir + 'lock')
         elif 'nt' == os.name:
-            self.profile_dir = "$USERPROFILE\\Application Data\\Mozilla\\Firefox\\Profiles\\*.default*\\"
+            self.profile_dir = "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*.default*\\"
             self.add_running('exe', 'firefox.exe')
 
         self.description = _("Web browser")
