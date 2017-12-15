@@ -96,6 +96,8 @@
     <action command="delete" search="walk.files" path="$localappdata\Chromium\User Data\Default\JumpListIconsOld\"/>
     <action command="delete" search="file" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/Archived History"/>
     <action command="delete" search="glob" path="~/.cxchromium/chromium/drive_c/windows/profiles/crossover/Local Settings/Application Data/Google/Chrome/User Data/Default/History*"/>
+    <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="profile/content_settings/exceptions/site_engagement"/>
+    <action command="json" search="file" path="$localappdata\Chromium\User Data\Default\Preferences" address="profile/content_settings/exceptions/media_engagement"/>
     <action command="chrome.history" search="file" path="$XDG_CONFIG_HOME/chromium/Default/History"/>
     <action command="chrome.favicons" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Favicons"/>
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/chromium/Default/Archived History"/>
