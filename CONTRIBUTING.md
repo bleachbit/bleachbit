@@ -3,13 +3,18 @@
 Thank you for your interest in contributing.
 
 
-## Filing issues
+## When to file a bug report
 
-Most bug reports are managed in [Launchpad](http://bugs.launchpad.net/) for historical reasons. BleachBit has been using Launchpad since at least 2009.
+Are you using the [latest version](https://www.bleachbit.org/download)?
 
-Most users should use Launchpad to file bug reports for the BleachBit applications, but please file issues in GitHub for these exceptions:
-* You plan to commit the code that will close the issue.
-* The issue is specific to one of the special repositories (i.e., CleanerML, Winapp2.ini, bleachbit-misc).
+## Where to file an issue
+
+Most bug reports should be filed in [GitHub under the BleachBit repository](https://github.com/bleachbit/bleachbit/issues/new).
+
+Bug reports were managed in [Launchpad](https://bugs.launchpad.net/bleachbit/) between about 2009 and 2016. Launchpad still contains some active issue tickets, but more recently users are encouraged to file issue tickets in GitHub.
+
+
+## Information to include with bug reports
 
 When filing a bug report, please include:
 * The version of BleachBit
@@ -17,12 +22,14 @@ When filing a bug report, please include:
 * The exact error message
 * Which exact steps you took before the error happened
 
+If you are reporting an error that happens while cleaning ([example screenshot](https://user-images.githubusercontent.com/22394276/31048383-42d469d8-a61c-11e7-9a7d-d149887ce2f3.jpg)), please try to narrow it down a single cleaning option (in other words, a single checkbox).
+
 See also [prioritization of issues](https://www.bleachbit.org/contribute/prioritization-issues).
 
 
 ## Development environment
 
-BleachBit runs on Python 2.5, 2.6, and 2.7 with PyGTK 2. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
+BleachBit runs on Python 2.7 with PyGTK 2. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
 
 The modernization branch supports GTK+ 3, but it is not yet ready. See the GitHub issues.
 
@@ -42,7 +49,7 @@ python tests/TestAll.py
 ````
 * Make commits in small, logical units to make them easier to review.
 * Submit the pull request.
-* Check that it passes the tests by Travis CI and Appveyor.
+* Check that it passes the tests by Travis CI and AppVeyor.
 
 If you have multiple commits around multiple themes (such as adding two, unrelated features), please consider breaking them up into multiple pull requests by using multiple branches. Smaller pull requests are easier to review and commit.
 
