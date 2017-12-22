@@ -35,15 +35,9 @@ if 'posix' == os.name:
 
 
 if 1 == len(sys.argv):
-    import gtk
-    try:
-        gtk.gdk.Screen().get_display()
-    except RuntimeError:
-        print("Could not open X display")
-        sys.exit(1)
     import bleachbit.GUI
-    gui = bleachbit.GUI.GUI()
-    gtk.main()
+    app = bleachbit.GUI.Bleachbit()
+    sys.exit(app.run(sys.argv))
 else:
     import bleachbit.CLI
     bleachbit.CLI.process_cmd_line()

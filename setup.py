@@ -94,12 +94,13 @@ if 'py2exe' in sys.argv:
     }]
     args['options'] = {
         'py2exe': {
-            'packages': 'encodings',
+            'packages': ['encodings', 'gi'],
             'optimize': 2,  # extra optimization (like python -OO)
-            'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
+            'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
                          'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
+                'libgstreamer-1.0-0.dll',
                 'CRYPT32.DLL',  # required by ssl
                 'DNSAPI.DLL',
                 'IPHLPAPI.DLL',  # psutil
@@ -142,12 +143,6 @@ if 'py2exe' in sys.argv:
             'compressed': True  # create a compressed zipfile
         }
     }
-    import gtk
-    from distutils import version
-    gtkver = version.StrictVersion('.'.join([str(x) for x in gtk.gtk_version]))
-    gtkmin = version.StrictVersion('2.20.0')
-    if gtkver >= gtkmin:
-        args['options']['py2exe']['includes'].append('gio')
 
     # check for 32-bit
     import struct
@@ -233,7 +228,7 @@ def run_setup():
           download_url="https://www.bleachbit.org/download",
           license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v2.12+',
+          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
           packages=['bleachbit'],
           **args)
 

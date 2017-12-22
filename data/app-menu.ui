@@ -1,0 +1,47 @@
+<interface domain="bleachbit"><menu id="app-menu">
+  <section>
+      <item>
+        <attribute name="action">app.shredFiles</attribute>
+        <attribute name="label" translatable="yes">_Shred Files</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.shredFolders</attribute>
+        <attribute name="label" translatable="yes">Sh_red Folders</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.wipeFreeSpace</attribute>
+        <attribute name="label" translatable="yes">_Wipe Free Space</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.shredQuit</attribute>
+        <attribute name="label" translatable="yes">S_hred Settings and Quit</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Diagnostics</attribute>
+        <attribute name="action">app.diagnostics</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">_About</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.quit</attribute>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="accel">&lt;Primary&gt;q</attribute>
+    </item>
+    </section>
+  </menu>
+</interface>

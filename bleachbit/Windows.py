@@ -274,9 +274,7 @@ def elevate_privileges():
         exe = sys.executable.decode(sys.getfilesystemencoding())
         parameters = "--gui --no-uac"
     else:
-        # __file__ is absolute path to bleachbit/Windows.py
-        pydir = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
-        pyfile = os.path.join(pydir, 'GUI.py')
+        pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.

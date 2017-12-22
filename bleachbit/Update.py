@@ -108,8 +108,8 @@ def user_agent():
         logger.exception('Exception when getting default locale')
 
     try:
-        import gtk
-        gtkver = '; GTK %s' % '.'.join([str(x) for x in gtk.gtk_version])
+        from gi.repository import Gtk
+        gtkver = '; GTK %s' % '.'.join([str(x) for x in Gtk.gtk_version])
     except:
         gtkver = ""
 
@@ -120,30 +120,31 @@ def user_agent():
 
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
-    import gtk
+    from gi.repository import Gtk
     from bleachbit.GuiBasic import open_url
-    dlg = gtk.Dialog(title=_("Update BleachBit"),
-                     parent=parent,
-                     flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+    dlg = Gtk.Dialog(title=_("Update BleachBit"),
+                     transient_for=parent,
+                     modal=True,
+                     destroy_with_parent=True)
     dlg.set_default_size(250, 125)
 
-    label = gtk.Label(_("A new version is available."))
-    dlg.vbox.pack_start(label)
+    label = Gtk.Label(label=_("A new version is available."))
+    dlg.vbox.pack_start(label, True, True, 0)
 
     for update in updates:
         ver = update[0]
         url = update[1]
-        box_update = gtk.HBox()
+        box_update = Gtk.Box()
         # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
         # similar
-        button_stable = gtk.Button(_("Update to version %s") % ver)
+        button_stable = Gtk.Button(_("Update to version %s") % ver)
         button_stable.connect(
             'clicked', lambda dummy: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
-        box_update.pack_start(button_stable, False, padding=10)
-        dlg.vbox.pack_start(box_update, False)
+        box_update.pack_start(button_stable, False, True, 10)
+        dlg.vbox.pack_start(box_update, False, True, 0)
 
-    dlg.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+    dlg.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
 
     dlg.show_all()
     dlg.run()
