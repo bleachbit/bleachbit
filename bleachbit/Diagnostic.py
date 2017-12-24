@@ -42,8 +42,8 @@ def diagnostic_info():
     try:
         import gtk
         s += '\nGTK+ version %s' % '.'.join([str(x) for x in gtk.gtk_version])
-    except:
-        pass
+    except ImportError:
+        s += '\nGTK+ not detected'
     import sqlite3
     s += "\nSQLite version %s" % sqlite3.sqlite_version
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir

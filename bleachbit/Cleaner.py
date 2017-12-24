@@ -47,7 +47,7 @@ warnings.simplefilter("ignore", Warning)
 try:
     import gtk
     HAVE_GTK = True
-except:
+except ImportError:
     HAVE_GTK = False
 
 # a module-level variable for holding cleaners

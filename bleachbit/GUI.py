@@ -406,7 +406,7 @@ class GUI:
             return
         try:
             import pynotify
-        except:
+        except ImportError:
             logger.debug('pynotify not available')
         else:
             if pynotify.init(APP_NAME):
