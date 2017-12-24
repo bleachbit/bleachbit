@@ -165,7 +165,8 @@ class Cleaner:
                 expanded = expanduser(expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
-                        logger.debug("file '%s' exists indicating '%s' is running", self.name)
+                        logger.debug(
+                            "file '%s' exists indicating '%s' is running", globbed, self.name)
                         return True
             else:
                 raise RuntimeError(
