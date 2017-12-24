@@ -30,8 +30,6 @@ from bleachbit.DeepScan import DeepScan, normalized_walk
 from bleachbit import expanduser
 
 import os
-import shutil
-import tempfile
 
 
 class DeepScanTestCase(common.BleachbitTestCase):

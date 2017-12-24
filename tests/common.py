@@ -49,7 +49,6 @@ class BleachbitTestCase(unittest.TestCase):
 
     def setUp(cls):
         """Call before each test method"""
-        import os
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
 
@@ -158,7 +157,6 @@ def validate_result(self, result, really_delete=False):
     if not filename:
         # the process action, for example, does not have a filename
         return
-    from bleachbit import encoding
     self.assertIsInstance(filename, (str, unicode, type(None)),
                  "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
     if isinstance(filename, (str, unicode)) and not filename[0:2] == 'HK':

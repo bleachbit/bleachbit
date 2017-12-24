@@ -123,7 +123,6 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for --delete option"""
         filename = self.mkstemp(prefix='bleachbit-test-cli-delete')
         if 'nt' == os.name:
-            import win32api
             filename = os.path.normcase(filename)
         # replace delete function for testing
         save_delete = FileUtilities.delete

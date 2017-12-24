@@ -149,7 +149,7 @@ class Winapp:
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
-            except Exception as e:
+            except Exception:
                 self.errors += 1
                 logger.exception('parsing error in section %s', section)
 

@@ -29,7 +29,7 @@ from tests import common
 
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
-from bleachbit import logger, FSE
+from bleachbit import logger
 
 import sys
 import tempfile
@@ -45,7 +45,6 @@ if 'win32' == sys.platform:
 def put_files_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
     # make a file and move it to the recycle bin
-    import tempfile
     tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
     for test in tests:
         (fd, filename) = tempfile.mkstemp(

@@ -620,7 +620,6 @@ class GUI:
         model = treeview.get_model()
         option_id = model[path][2]
         cleaner_id = model[path[0]][2]
-        cleaner_name = model[path[0]][0]
         # make a menu
         menu = gtk.Menu()
         # TRANSLATORS: this is the context menu

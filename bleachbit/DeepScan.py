@@ -25,8 +25,6 @@ Scan directory tree for files to delete
 
 from __future__ import absolute_import, print_function
 
-import bleachbit
-
 import logging
 import os
 import platform

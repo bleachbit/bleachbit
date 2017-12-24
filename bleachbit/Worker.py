@@ -186,7 +186,6 @@ class Worker:
             raise RuntimeError("Unexpected option_id in delayed ops")
         self.ui.update_progress_bar(msg)
         for cmd in backends[operation].get_commands(option_id):
-            old_phase = None
             for ret in self.execute(cmd):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)

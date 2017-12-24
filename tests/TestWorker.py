@@ -108,7 +108,6 @@ class InvalidEncodingAction(ActionProvider):
 
     def get_commands(self):
         # file with invalid encoding
-        import tempfile
         (fd, filename) = tempfile.mkstemp('invalid-encoding-\xe4\xf6\xfc~')
         os.close(fd)
         yield Command.Delete(filename)

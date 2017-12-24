@@ -442,7 +442,7 @@ def shrink():
 
     try:
         strip()
-    except Exception as e:
+    except Exception:
         logger.exception(
             'Error when running strip. Does your PATH have MINGW with binutils?')
 
