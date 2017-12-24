@@ -186,10 +186,9 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
-        version = platform.uname()[3][0:3]
         ret = get_known_folder_path('LocalAppDataLow')
         self.assertNotEqual(ret, '')
-        if version <= '6.0':
+        if parse_windows_build() <= 6.0:
             # Before Vista
             self.assertEqual(ret, None)
             return
@@ -308,8 +307,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         setup_environment()
         envs = ['commonappdata', 'documents', 'music', 'pictures', 'video',
                 'localappdata']
-        version = platform.uname()[3][0:3]
-        if version >= '6.0':
+        if parse_windows_build() >= 6.0:
             envs.append('localappdatalow')
         for env in envs:
             self.assert_(os.path.exists(os.environ[env].decode('utf8')))

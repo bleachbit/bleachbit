@@ -316,8 +316,13 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
-        if 'nt' == os.name and platform.uname()[3][0:3] > '5.1':
+        windows_xp_or_newer = False
+        if 'nt' == os.name:
+            from bleachbit.Windows import parse_windows_build
             # Windows XP = 5.1
+            windows_xp_or_newer = parse_windows_build() > 5.1
+
+        if windows_xp_or_newer:
             # test symlinks
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
