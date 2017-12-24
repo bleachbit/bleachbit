@@ -145,7 +145,7 @@ class RecognizeCleanerML:
         try:
             self.salt = options.get('hashsalt')
         except bleachbit.NoOptionError:
-            self.salt = hashdigest(str(random.random()))
+            self.salt = hashdigest(os.urandom(512))
             options.set('hashsalt', self.salt)
         self.__scan()
 
