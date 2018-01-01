@@ -176,7 +176,6 @@ class SpecialAssertions:
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
             raise AssertionError('Path does not exist: %s' % path)
-        import sqlite3
         conn = sqlite3.connect(path)
         cursor = conn.cursor()
         for table in tables:

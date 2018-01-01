@@ -32,7 +32,6 @@ from bleachbit.Options import options
 import hashlib
 import logging
 import os
-import random
 import sys
 
 

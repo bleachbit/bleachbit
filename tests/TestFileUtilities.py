@@ -31,7 +31,6 @@ from bleachbit.Options import options
 from bleachbit import expanduser, expandvars, logger
 
 import json
-import platform
 import sys
 import unittest
 
