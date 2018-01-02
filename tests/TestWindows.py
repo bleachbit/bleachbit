@@ -253,7 +253,6 @@ class WindowsTestCase(common.BleachbitTestCase):
 
             def _write_file(longname, contents):
                 self.write_file(longname, contents)
-                return longname
                 import win32api
                 shortname = extended_path_undo(
                     win32api.GetShortPathName(extended_path(longname)))
