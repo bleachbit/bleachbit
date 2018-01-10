@@ -87,13 +87,12 @@ class WindowsTestCase(common.BleachbitTestCase):
                 prefix='bleachbit-delete-locked-file', suffix=test)
             os.close(fd)
             self.assert_(os.path.exists(pathname))
-            try:
+            logger.debug('delete_locked_file(%s) ' % pathname)
+            if not shell.IsUserAnAdmin():
+                with self.assertRaises(WindowsError):
+                    delete_locked_file(pathname)
+            else:
                 delete_locked_file(pathname)
-            except pywintypes.error as e:
-                if 5 == e.winerror and not shell.IsUserAnAdmin():
-                    pass
-                else:
-                    raise
             self.assert_(os.path.exists(pathname))
         logger.info('reboot Windows and check the three files are deleted')
 
