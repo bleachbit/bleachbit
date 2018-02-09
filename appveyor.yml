@@ -18,8 +18,9 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
   - ps: if (-not (Test-Path pygtk-all-in-one-2.24.2.win32-py2.7.msi)) { Start-FileDownload "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi" }
   - 'msiexec /i pygtk-all-in-one-2.24.2.win32-py2.7.msi /qn /norestart /log pygtk-install.log TARGETDIR=C:\Python27 ALLUSERS=1'
-  - ps: if (-not (Test-Path upx393w.zip)) { Start-FileDownload "http://github.com/upx/upx/releases/download/v3.93/upx393w.zip" }
-  - '%SZ_EXE% x upx393w.zip'
+  - ps: if (-not (Test-Path upx394w.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.94/upx394w.zip" }
+  - ps: Get-FileHash upx394w.zip
+  - '%SZ_EXE% x upx394w.zip'
   - ps: if (-not (Test-Path gettext0.19.8.1-iconv1.14-static-32.zip)) { Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip" }
   - '%SZ_EXE% x gettext0.19.8.1-iconv1.14-static-32.zip -ogettext'
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
@@ -36,7 +37,7 @@ build_script:
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
-  - upx393w.zip
+  - upx394w.zip
   - gettext0.19.8.1-iconv1.14-static-32.zip
 
 test_script:
