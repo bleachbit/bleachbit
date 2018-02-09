@@ -83,9 +83,13 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for delete_locked_file"""
         tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
-            (fd, pathname) = tempfile.mkstemp(
-                prefix='bleachbit-delete-locked-file', suffix=test)
-            os.close(fd)
+            f = tempfile.NamedTemporaryFile(
+                prefix='bleachbit-delete-locked-file', suffix=test,
+                delete=False)
+            pathname = f.name
+            f.close()
+            import time
+            time.sleep(5) # avoid race condition
             self.assert_(os.path.exists(pathname))
             logger.debug('delete_locked_file(%s) ' % pathname)
             if not shell.IsUserAnAdmin():
