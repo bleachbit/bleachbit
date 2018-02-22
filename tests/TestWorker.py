@@ -144,13 +144,15 @@ class LockedAction(ActionProvider):
         # be truncated and marked for deletion. This is checked just on
         # on Windows.
         f = os.open(self.pathname, os.O_RDWR)
+        # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
         from bleachbit.FileUtilities import getsize
-        assert(0==getsize(self.pathname))
+        assert(0 == getsize(self.pathname))
         os.close(f)
 
-        # real file, should succeed
+        # Now that the file is not locked, admin privileges
+        # are not required to delete it.
         yield Command.Delete(self.pathname)
 
 
@@ -248,7 +250,17 @@ class WorkerTestCase(common.BleachbitTestCase):
     @unittest.skipUnless('nt' == os.name, 'skipping on non-Windows')
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
-        self.action_test_helper('locked', 0, 0, None, None, 3 + 0, 2)
+        from win32com.shell import shell
+        if shell.IsUserAnAdmin():
+            errors_expected = 0
+            bytes_expected = 3 + 0
+            total_deleted = 2
+        else:
+            errors_expected = 1
+            bytes_expected = 0
+            total_deleted = 1
+        self.action_test_helper(
+            'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
 
     def test_RuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction
