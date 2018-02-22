@@ -694,7 +694,7 @@ class System(Cleaner):
             logger.info('Windows temporary directory 3: %s' % dirname3)
 
             dirnames = []
-            if Windows.get_windows_version >= 6.0:
+            if Windows.get_windows_version() >= 6.0:
                 # Windows Vista or later
                 dirnames.append(dirname2)
             else:
