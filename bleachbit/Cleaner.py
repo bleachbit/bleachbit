@@ -686,13 +686,6 @@ class System(Cleaner):
                 "$USERPROFILE\\Local Settings\\Temp\\")
             dirname2 = expandvars(r'%temp%')
             dirname3 = expandvars("%windir%\\temp\\")
-            logger = logging.getLogger(__name__)
-            # this code is temporary to debug
-            # https://github.com/bleachbit/bleachbit/issues/289
-            logger.info('Windows temporary directory 1: %s' % dirname1)
-            logger.info('Windows temporary directory 2: %s' % dirname2)
-            logger.info('Windows temporary directory 3: %s' % dirname3)
-
             dirnames = []
             if Windows.get_windows_version() >= 6.0:
                 # Windows Vista or later
