@@ -1,7 +1,7 @@
 ;  vim: ts=4:sw=4:expandtab
 ;
 ;  BleachBit
-;  Copyright (C) 2008-2017 Andrew Ziem
+;  Copyright (C) 2008-2018 Andrew Ziem
 ;  https://www.bleachbit.org
 ;
 ;  This program is free software: you can redistribute it and/or modify

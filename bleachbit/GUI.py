@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2017 Andrew Ziem
+# Copyright (C) 2008-2018 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -424,7 +424,7 @@ class GUI:
                                           link: GuiBasic.open_url(link, self.window, False))
         dialog = gtk.AboutDialog()
         dialog.set_comments(_("Program to clean unnecessary files"))
-        dialog.set_copyright("Copyright (C) 2008-2017 Andrew Ziem")
+        dialog.set_copyright("Copyright (C) 2008-2018 Andrew Ziem")
         try:
             with open(bleachbit.license_filename) as f:
                 dialog.set_license(f.read())
