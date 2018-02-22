@@ -36,6 +36,7 @@ build_script:
   - '%PYTHON_HOME%/python.exe -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
+  - ps: Get-FileHash BleachBit-*
 
 cache:
   - pygtk-all-in-one-2.24.2.win32-py2.7.msi
