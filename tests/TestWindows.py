@@ -65,7 +65,7 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
-            self.assert_(os.path.exists(extended_path(f)), f)
+            self.assertExists(extended_path(f))
         if not common.destructive_tests('get_recycle_bin'):
             return
         put_files_into_recycle_bin()
@@ -74,7 +74,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         for f in get_recycle_bin():
             counter += 1
             FileUtilities.delete(f)
-        self.assert_(counter >= 3, 'deleted %d' % counter)
+        self.assertGreaterEqual(counter, 3, 'deleted %d' % counter)
         # now it should be empty
         for f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
@@ -90,14 +90,14 @@ class WindowsTestCase(common.BleachbitTestCase):
             f.close()
             import time
             time.sleep(5) # avoid race condition
-            self.assert_(os.path.exists(pathname))
+            self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
             if not shell.IsUserAnAdmin():
                 with self.assertRaises(WindowsError):
                     delete_locked_file(pathname)
             else:
                 delete_locked_file(pathname)
-            self.assert_(os.path.exists(pathname))
+            self.assertExists(pathname)
         logger.info('reboot Windows and check the three files are deleted')
 
     def test_delete_registry_key(self):
@@ -184,8 +184,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for get_autostart_path"""
         pathname = get_autostart_path()
         dirname = os.path.dirname(pathname)
-        self.assert_(os.path.exists(dirname),
-                     'startup directory does not exist: %s' % dirname)
+        self.assertExists(dirname)
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
@@ -197,7 +196,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             return
         # Vista or later
         self.assertNotEqual(ret, None)
-        self.assert_(os.path.exists(ret))
+        self.assertExists(ret)
 
     def test_get_fixed_drives(self):
         """Unit test for get_fixed_drives"""
@@ -205,32 +204,32 @@ class WindowsTestCase(common.BleachbitTestCase):
         for drive in get_fixed_drives():
             drives.append(drive)
             self.assertEqual(drive, drive.upper())
-        self.assert_("C:\\" in drives)
+        self.assertIn("C:\\", drives)
 
     def test_get_windows_version(self):
         """Unit test for get_windows_version"""
         v = get_windows_version()
-        self.assert_(v >= 5.1)
-        self.assert_(v > 5)
-        self.assert_(isinstance(v, Decimal))
+        self.assertGreaterEqual(v, 5.1)
+        self.assertGreater(v, 5)
+        self.assertIsInstance(v, Decimal)
 
     def test_empty_recycle_bin(self):
         """Unit test for empty_recycle_bin"""
         # check the function basically works
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=False)
-            self.assert_(isinstance(ret, (int, long)))
+            self.assertIsInstance(ret, (int, long))
         if not common.destructive_tests('recycle bin'):
             return
         # check it deletes files for fixed drives
         put_files_into_recycle_bin()
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=True)
-            self.assert_(isinstance(ret, (int, long)))
+            self.assertIsInstance(ret, (int, long))
         # check it deletes files for all drives
         put_files_into_recycle_bin()
         ret = empty_recycle_bin(None, really_delete=True)
-        self.assert_(isinstance(ret, (int, long)))
+        self.assertIsInstance(ret, (int, long))
         # Repeat two for reasons.
         # 1. Trying to empty an empty recycling bin can cause
         #    a 'catastrophic failure' error (handled in the function)
@@ -312,7 +311,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         if parse_windows_build() >= 6.0:
             envs.append('localappdatalow')
         for env in envs:
-            self.assert_(os.path.exists(os.environ[env].decode('utf8')))
+            self.assertExists(os.environ[env].decode('utf8'))
 
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""
@@ -327,16 +326,16 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_start_with_computer(self):
         """Unit test for start_with_computer*"""
         b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
         # opposite setting
         start_with_computer(not b)
         two_b = start_with_computer_check()
-        self.assert_(isinstance(two_b, bool))
+        self.assertIsInstance(two_b, bool)
         self.assertEqual(b, not two_b)
         # original setting
         start_with_computer(b)
         three_b = start_with_computer_check()
-        self.assert_(isinstance(b, bool))
+        self.assertIsInstance(b, bool)
         self.assertEqual(b, three_b)
 
     def test_parse_windows_build(self):
