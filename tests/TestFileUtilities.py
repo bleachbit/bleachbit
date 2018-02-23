@@ -315,14 +315,14 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
-        windows_xp_or_newer = False
+        windows_vista_or_newer = False
         if 'nt' == os.name:
             from bleachbit.Windows import parse_windows_build
-            # Windows XP = 5.1
-            windows_xp_or_newer = parse_windows_build() > 5.1
+            # Windows Vista = 6.0
+            windows_vista_or_newer = parse_windows_build() >= 6.0
 
-        if windows_xp_or_newer:
-            # test symlinks
+        if windows_vista_or_newer:
+            logger.debug('testing symbolic link')
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
 
