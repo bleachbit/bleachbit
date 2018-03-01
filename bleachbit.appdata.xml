@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-  <id type="desktop">bleachbit.desktop</id>
+<component>
+  <id>org.bleachbit.BleachBit</id>
+  <launchable type="desktop">org.bleachbit.BleachBit.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>BleachBit</name>
@@ -15,9 +16,13 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>http://lh5.ggpht.com/_1XYQfEGGEIw/SsN7hSH0IVI/AAAAAAAACfw/BltI_Fvhgzo/s800/BleachBit-065-Fedora-11-Google-Chrome.png</image>
+      <image>https://lh5.ggpht.com/_1XYQfEGGEIw/SsN7hSH0IVI/AAAAAAAACfw/BltI_Fvhgzo/s800/BleachBit-065-Fedora-11-Google-Chrome.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bleachbit.org/</url>
-  <updatecontact>andrew@bleachbit.org</updatecontact>
-</application>
+  <url type="bugtracker">https://github.com/bleachbit/bleachbit/issues</url>
+  <url type="help">https://docs.bleachbit.org/</url>
+  <url type="donation">https://www.bleachbit.org/contribute</url>
+  <url type="translate">https://www.bleachbit.org/contribute/translate</url>
+  <update_contact>andrew@bleachbit.org</update_contact>
+</component>
