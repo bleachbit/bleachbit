@@ -109,6 +109,12 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('6.2|', '6.0', False),
                  ('6.2|', '6.1', False),
                  ('6.2|', '6.2', True),
+                 # must be 6.2 or 6.3
+                 ('6.2|6.3', '6.0', False),
+                 ('6.2|6.3', '6.1', False),
+                 ('6.2|6.3', '6.2', True),
+                 ('6.2|6.3', '6.3', True),
+                 ('6.2|6.3', '10.0', False),
                  # 10.0 is the minimum
                  ('10.0|', '5.1', False),
                  ('10.0|', '10.0', True))

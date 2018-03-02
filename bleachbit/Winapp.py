@@ -85,14 +85,15 @@ def detectos(required_ver, mock=False):
     assert(isinstance(required_ver, (str, unicode)))
     current_os = (mock if mock else Windows.parse_windows_build())
     required_ver = required_ver.strip()
-    if required_ver.startswith('|'):
-        # This is the maximum version
-        # For example, |5.1 means Windows XP (5.1) but not Vista (6.0)
-        return current_os <= Windows.parse_windows_build(required_ver[1:])
-    elif required_ver.endswith('|'):
-        # This is the minimum version
-        # For example, 6.1| means Windows 7 or later
-        return current_os >= Windows.parse_windows_build(required_ver[:-1])
+    if '|' in required_ver:
+        # Format of min|max
+        req_min = required_ver.split('|')[0]
+        req_max = required_ver.split('|')[1]
+        if req_min and current_os < Windows.parse_windows_build(req_min):
+            return False
+        if req_max and current_os > Windows.parse_windows_build(req_max):
+            return False
+        return True
     else:
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
