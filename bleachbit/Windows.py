@@ -620,29 +620,3 @@ def split_registry_key(full_key):
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
 
-
-def start_with_computer(enabled):
-    """If enabled, create shortcut to start application with computer.
-    If disabled, then delete the shortcut."""
-    autostart_path = get_autostart_path()
-    if not enabled:
-        if os.path.lexists(autostart_path):
-            FileUtilities.delete(autostart_path)
-        return
-    if os.path.lexists(autostart_path):
-        return
-    import winshell
-    winshell.CreateShortcut(Path=autostart_path,
-                            Target=os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.exe'))
-
-    # import win32com.client
-    # wscript_shell = win32com.client.Dispatch('WScript.Shell')
-    # shortcut = wscript_shell.CreateShortCut(autostart_path)
-    # shortcut.TargetPath = os.path.join(
-    #     Common.bleachbit_exe_path, 'bleachbit.exe')
-    # shortcut.save()
-
-
-def start_with_computer_check():
-    """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(get_autostart_path())
