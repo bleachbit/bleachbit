@@ -190,7 +190,7 @@ class Bleachbit(Gtk.Application):
         """Create and show the about dialog"""
 
         dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
-                                 copyright='Copyright (C) 2008-2016 Andrew Ziem',
+                                 copyright='Copyright (C) 2008-2018 Andrew Ziem',
                                  name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
@@ -200,7 +200,7 @@ class Bleachbit(Gtk.Application):
                 dialog.set_license(f.read())
         except IOError:
             dialog.set_license(
-                _("GNU General Public License version 3 or later.\nSee http://www.gnu.org/licenses/gpl-3.0.txt"))
+                _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
         #dialog.set_name(APP_NAME)
         # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
