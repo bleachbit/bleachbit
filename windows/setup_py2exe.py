@@ -21,7 +21,6 @@ import glob
 import imp
 import logging
 import os
-import shlex
 import shutil
 import subprocess
 import sys
@@ -46,7 +45,7 @@ logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
 BB_VER = None
-GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
+GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gnome\\'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
@@ -187,8 +186,8 @@ def environment_check():
     logger.info('Checking for GTK')
     assert_exist(GTK_DIR)
 
-    logger.info('Checking PyGTK+ library')
-    assert_module('pygtk')
+    logger.info('Checking PyGI library')
+    assert_module('gi')
 
     logger.info('Checking Python win32 library')
     assert_module('win32file')
@@ -220,12 +219,16 @@ def build():
         os.makedirs('dist')
 
     logger.info('Copying GTK files and icon')
-    shutil.copyfile(GTK_DIR + '\\bin\\intl.dll',  'dist\\intl.dll')
-
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
-    copytree(GTK_DIR + '\\share', 'dist\\share')
+    for subpath in ['glib-2.0', 'fontconfig', 'fonts', 'icons', 'themes']:
+        copytree(os.path.join(GTK_DIR, 'share', subpath), 'dist\\share\\' + subpath)
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
+    for dll in glob.glob1(GTK_DIR, '*.dll'):
+        shutil.copyfile(os.path.join(GTK_DIR,dll), 'dist\\'+dll)
+
+    os.mkdir('dist\\data')
+    shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
@@ -354,9 +357,11 @@ def clean_translations():
 
 @count_size_improvement
 def strip():
+    logger.info('Skipping stripping of executables for now')
+    return
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = []
+    strip_whitelist = ['_sqlite3']
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
@@ -366,6 +371,7 @@ def strip():
 
 @count_size_improvement
 def upx():
+    return # skip for now
     if fast:
         logger.warning('Fast mode: Skipped executable with UPX')
         return
