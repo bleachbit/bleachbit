@@ -5,7 +5,7 @@ before_install:
   - export VIRT_ROOT=/home/travis/virtualenv/python$TRAVIS_PYTHON_VERSION
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
-  - sudo apt-get install
+  - sudo apt-get install libxml2-utils
 # coveralls.io
   - pip install python-coveralls requests[security]
 # install mock
