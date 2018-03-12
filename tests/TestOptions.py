@@ -151,3 +151,18 @@ class OptionsTestCase(common.BleachbitTestCase):
 
         # clean up
         del o
+
+    def test_percent(self):
+        """Test that the percent sign can be used without quoting the string"""
+        # https://github.com/bleachbit/bleachbit/issues/205
+
+        opt = bleachbit.Options.options.config
+        if not opt.has_section('test'):
+            opt.add_section('test')
+        opt.set('test', 'filename', '/var/log/samba/log.%m')
+
+        # read
+        self.assertEqual(opt.get('test', 'filename'), '/var/log/samba/log.%m')
+
+        # clean up
+        del opt

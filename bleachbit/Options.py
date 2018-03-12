@@ -62,7 +62,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = bleachbit.SafeConfigParser()
+        self.config = bleachbit.RawConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config._boolean_states['t'] = True
         self.config._boolean_states['f'] = False
