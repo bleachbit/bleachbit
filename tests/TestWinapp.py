@@ -68,7 +68,6 @@ def get_winapp2():
     return fn
 
 
-@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
 
@@ -79,6 +78,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(really_delete):
                     common.validate_result(self, result, really_delete)
 
+    @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
     def test_remote(self):
         """Test with downloaded file"""
         winapps = Winapp(get_winapp2())
@@ -125,6 +125,7 @@ class WinappTestCase(common.BleachbitTestCase):
                              'detectos(%s, %s)==%s instead of %s' % (s, mock,
                                                                      actual_return, expected_return))
 
+    @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
     def test_detect_file(self):
         """Test detect_file function"""
         tests = [('%windir%\\system32\\kernel32.dll', True),
@@ -198,6 +199,7 @@ class WinappTestCase(common.BleachbitTestCase):
         else:
             return Winapp(self.ini_fn).get_cleaners()
 
+    @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
     def test_fake(self):
         """Test with fake file"""
 
@@ -314,6 +316,7 @@ class WinappTestCase(common.BleachbitTestCase):
         self.run_all(cleaner, True)
         shutil.rmtree(dirname, True)
 
+    @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
     def test_excludekey(self):
         """Test for ExcludeKey"""
 
