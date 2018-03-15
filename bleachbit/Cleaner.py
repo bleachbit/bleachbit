@@ -61,6 +61,7 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
+        self.regexes_compiled = []
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
@@ -798,8 +799,8 @@ class System(Cleaner):
             if os.path.lexists(filename):
                 yield Command.Delete(filename)
 
-    def whitelisted(self, pathname):
-        """Return boolean whether file is whitelisted"""
+    def init_whitelist(self):
+        """Initialize the whitelist only once for performance"""
         regexes = [
             '^/tmp/.X0-lock$',
             '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
@@ -826,7 +827,14 @@ class System(Cleaner):
             # Linux Bluetooth daemon obexd
             '^' + expanduser('~/.cache/obexd/')]
         for regex in regexes:
-            if re.match(regex, pathname) is not None:
+            self.regexes_compiled.append(re.compile(regex))
+
+    def whitelisted(self, pathname):
+        """Return boolean whether file is whitelisted"""
+        if not self.regexes_compiled:
+            self.init_whitelist()
+        for regex in self.regexes_compiled:
+            if regex.match(pathname) is not None:
                 return True
         return False
 
