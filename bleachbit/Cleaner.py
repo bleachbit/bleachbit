@@ -521,28 +521,22 @@ class System(Cleaner):
         self.name = _("System")
 
     def get_commands(self, option_id):
-        # This variable will collect fully expanded file names, and
-        # at the end of this function, they will be checked they exist
-        # and processed through Command.Delete().
-        files = []
-
         # cache
         if 'posix' == os.name and 'cache' == option_id:
             dirname = expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
-                if self.whitelisted(filename):
-                    continue
-                files += [filename]
+                if not self.whitelisted(filename):
+                    yield Command.Delete(filename)
 
         # custom
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
                 if 'file' == c_type:
-                    files += [c_path]
+                    yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    files += [c_path]
+                    yield Command.Delete(c_path)
                     for path in children_in_directory(c_path, True):
-                        files += [path]
+                        yield Command.Delete(path)
                 else:
                     raise RuntimeError(
                         'custom folder has invalid type %s' % c_type)
@@ -617,7 +611,7 @@ class System(Cleaner):
             for path in paths:
                 expanded = expandvars(path)
                 for globbed in glob.iglob(expanded):
-                    files += [globbed]
+                    yield Command.Delete(globbed)
 
         # memory
         if sys.platform.startswith('linux') and 'memory' == option_id:
@@ -629,13 +623,15 @@ class System(Cleaner):
         if 'nt' == os.name and 'memory_dump' == option_id:
             fname = expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
-                files += [fname]
+                yield Command.Delete(fname)
             for fname in glob.iglob(expandvars('$windir\\Minidump\\*.dmp')):
-                files += [fname]
+                yield Command.Delete(fname)
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
-            files += [expanduser("~/.recently-used")]
+            ru_fn = expanduser("~/.recently-used")
+            if os.path.lexists(ru_fn):
+                yield Command.Delete(ru_fn)
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
             # in memory if it is simply deleted, so it must be shredded
             # (or at least truncated).
@@ -793,11 +789,6 @@ class System(Cleaner):
         if 'nt' == os.name and 'updates' == option_id:
             for wu in Windows.delete_updates():
                 yield wu
-
-        # return queued files
-        for filename in files:
-            if os.path.lexists(filename):
-                yield Command.Delete(filename)
 
     def init_whitelist(self):
         """Initialize the whitelist only once for performance"""
