@@ -147,6 +147,8 @@ class Winapp:
         self.errors = 0
         self.parser = bleachbit.RawConfigParser()
         self.parser.read(pathname)
+        self.re_detect = re.compile(r'^detect(\d+)?$')
+        self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
@@ -226,39 +228,40 @@ class Winapp:
         else:
             return '(%s)' % '|'.join(regexes)
 
-    def handle_section(self, section):
-        """Parse a section"""
-        # if simple detection fails then discard the section
-        if self.parser.has_option(section, 'detect'):
-            key = self.parser.get(section, 'detect').decode(FSE)
-            if not Windows.detect_registry_key(key):
-                return
-        if self.parser.has_option(section, 'detectfile'):
-            if not detect_file(self.parser.get(section, 'detectfile').decode(FSE)):
-                return
+    def detect(self, section):
+        """Check whether to show the section
+
+        The logic:
+        If the DetectOS does not match, the section is inactive.
+        If any Detect or DetectFile matches, the section is active.
+        If neither Detect or DetectFile was given, the section is active.
+        Otherwise, the section is inactive.
+        """
         if self.parser.has_option(section, 'detectos'):
             required_ver = self.parser.get(section, 'detectos').decode(FSE)
             if not detectos(required_ver):
-                return
-        # in case of multiple detection, discard if none match
-        if self.parser.has_option(section, 'detectfile1'):
-            matches = 0
-            for n in range(1, MAX_DETECT):
-                option_id = 'detectfile%d' % n
-                if self.parser.has_option(section, option_id):
-                    if detect_file(self.parser.get(section, option_id).decode(FSE)):
-                        matches += 1
-            if 0 == matches:
-                return
-        if self.parser.has_option(section, 'detect1'):
-            matches = 0
-            for n in range(1, MAX_DETECT):
-                option_id = 'detect%d' % n
-                if self.parser.has_option(section, option_id):
-                    if Windows.detect_registry_key(self.parser.get(section, option_id).decode(FSE)):
-                        matches += 1
-            if 0 == matches:
-                return
+                return False
+        any_detect_option = False
+        for option in self.parser.options(section):
+            if re.match(self.re_detect, option):
+                # Detect= checks for a registry key
+                any_detect_option = True
+                key = self.parser.get(section, option).decode(FSE)
+                if Windows.detect_registry_key(key):
+                    return True
+            elif re.match(self.re_detectfile, option):
+                # DetectFile= checks for a file
+                any_detect_option = True
+                key = self.parser.get(section, option).decode(FSE)
+                if detect_file(key):
+                    return True
+        return not any_detect_option
+
+    def handle_section(self, section):
+        """Parse a section"""
+        # check whether the section is active (i.e., whether it will be shown)
+        if not self.detect(section):
+            return
         # excludekeys ignores a file, path, or registry key
         excludekeys = []
         if self.parser.has_option(section, 'excludekey1'):

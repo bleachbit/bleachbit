@@ -255,8 +255,12 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect=HKCU\\Software\\Microsoft",
                 # Below checks that a space is OK in the registry key
                 "\nDetect=HKCU\\Software\\Microsoft\\Command Processor",
+                # Below checks Detect# where one of two keys exist.
                 "\nDetect1=HKCU\\Software\\Microsoft\nDetect2=HKCU\\Software\\does_not_exist",
-                    "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft"):
+                "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft",
+                # Below checks Detect with DetectFile where one exists
+                "\nDetect=HKCU\\Software\\Microsoft\nDetectFile=%%APPDATA%%\\does_not_exist",
+                "\nDetect=HKCU\\Software\\does_not_exist\nDetectFile=%%APPDATA%%\\Microsoft"):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
