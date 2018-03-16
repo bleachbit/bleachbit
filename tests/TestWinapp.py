@@ -151,7 +151,8 @@ class WinappTestCase(common.BleachbitTestCase):
             for pathname in dir_32_unique:
                 tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
         else:
-            logger.info('skipping %ProgramW6432% tests because WoW64 not detected')
+            logger.info(
+                'skipping %ProgramW6432% tests because WoW64 not detected')
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)

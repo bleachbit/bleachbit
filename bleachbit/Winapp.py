@@ -276,7 +276,8 @@ class Winapp:
         elif self.parser.has_option(section, 'section'):
             langsecref_num = self.parser.get(section, 'section').decode(FSE)
         else:
-            logger.error('neither option LangSecRef nor Section found in section %s', section)
+            logger.error(
+                'neither option LangSecRef nor Section found in section %s', section)
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
@@ -296,7 +297,8 @@ class Winapp:
                     or re.match(self.re_excludekey, option):
                 pass
             else:
-                logger.warning('unknown option %s in section %s', option, section)
+                logger.warning(
+                    'unknown option %s in section %s', option, section)
                 return
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
@@ -339,7 +341,8 @@ class Winapp:
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
-        elements = self.parser.get(ini_section, ini_option).decode(FSE).strip().split('|')
+        elements = self.parser.get(
+            ini_section, ini_option).decode(FSE).strip().split('|')
         dirnames = winapp_expand_vars(elements.pop(0))
         filenames = ""
         if elements:
@@ -354,7 +357,8 @@ class Winapp:
                 recurse = True
                 removeself = True
             else:
-                logger.warning('unknown file option %s in section %s', element, ini_section)
+                logger.warning(
+                    'unknown file option %s in section %s', element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
@@ -363,7 +367,8 @@ class Winapp:
 
     def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
-        elements = self.parser.get(ini_section, ini_option).decode(FSE).strip().split('|')
+        elements = self.parser.get(
+            ini_section, ini_option).decode(FSE).strip().split('|')
         path = xml_escape(elements[0])
         name = ""
         if 2 == len(elements):
@@ -393,7 +398,8 @@ def load_cleaners():
         try:
             inicleaner = Winapp(pathname)
         except Exception as e:
-            logger.exception("Error reading winapp2.ini cleaner '%s'", pathname)
+            logger.exception(
+                "Error reading winapp2.ini cleaner '%s'", pathname)
         else:
             for cleaner in inicleaner.get_cleaners():
                 Cleaner.backends[cleaner.id] = cleaner
