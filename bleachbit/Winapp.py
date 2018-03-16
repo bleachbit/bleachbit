@@ -38,7 +38,6 @@ from xml.dom.minidom import parseString
 
 logger = logging.getLogger(__name__)
 
-MAX_DETECT = 50
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = {'3021': ('winapp2_applications', _('Applications')),
@@ -149,6 +148,7 @@ class Winapp:
         self.parser.read(pathname)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
+        self.re_excludekey = re.compile(r'^excludekey\d+$')
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
@@ -264,12 +264,10 @@ class Winapp:
             return
         # excludekeys ignores a file, path, or registry key
         excludekeys = []
-        if self.parser.has_option(section, 'excludekey1'):
-            for n in range(1, MAX_DETECT):
-                option_id = 'excludekey%d' % n
-                if self.parser.has_option(section, option_id):
-                    excludekeys.append(
-                        self.excludekey_to_nwholeregex(self.parser.get(section, option_id).decode(FSE)))
+        for option in self.parser.options(section):
+            if re.match(self.re_excludekey, option):
+                excludekeys.append(
+                    self.excludekey_to_nwholeregex(self.parser.get(section, option).decode(FSE)))
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
@@ -292,9 +290,10 @@ class Winapp:
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
                     section2option(section), self.parser.get(section, 'warning').decode(FSE))
-            elif option in ('default', 'detectfile', 'detect', 'langsecref', 'section') \
-                or ['detect%d' % x for x in range(1, MAX_DETECT)] \
-                    or ['detectfile%d' % x for x in range(1, MAX_DETECT)]:
+            elif option in ('default', 'langsecref', 'section', 'detectos', 'specialdetect') \
+                    or re.match(self.re_detect, option) \
+                    or re.match(self.re_detectfile, option) \
+                    or re.match(self.re_excludekey, option):
                 pass
             else:
                 logger.warning('unknown option %s in section %s', option, section)
