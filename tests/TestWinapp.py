@@ -163,7 +163,9 @@ class WinappTestCase(common.BleachbitTestCase):
         """Setup the test environment"""
         subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
 
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
+        # put ampersand in directory name to test
+        # https://github.com/bleachbit/bleachbit/issues/308
+        dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp&')
         fname1 = os.path.join(dirname, f1_filename or 'deleteme.log')
         open(fname1, 'w').close()
 

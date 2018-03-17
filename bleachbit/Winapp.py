@@ -349,7 +349,7 @@ class Winapp:
             else:
                 # just one
                 exclude_str = excludekeys[0]
-            excludekeysxml = 'nwholeregex="%s"' % exclude_str
+            excludekeysxml = 'nwholeregex="%s"' % xml_escape(exclude_str)
         action_str = u'<option command="delete" search="%s" path="%s" %s %s/>' % \
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
