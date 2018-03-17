@@ -251,6 +251,7 @@ class WinappTestCase(common.BleachbitTestCase):
         for test in tests:
             for detect in (
                 "\nDetectFile=%%APPDATA%%\\Microsoft",
+                "\nSpecialDetect=DET_WINDOWS",
                 "\nDetectFile1=%%APPDATA%%\\Microsoft\nDetectFile2=%%APPDATA%%\\does_not_exist",
                 "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft",
                 "\nDetect=HKCU\\Software\\Microsoft",
@@ -287,6 +288,7 @@ class WinappTestCase(common.BleachbitTestCase):
         for test in tests:
             for detect in (
                 "\nDetectFile=c:\\does_not_exist",
+                "\nSpecialDetect=DET_SPACE_QUEST",
                 # special characters for XML
                 "\nDetectFile=c:\\does_not_exist_special_chars_&'",
                 "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2",

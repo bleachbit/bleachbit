@@ -121,6 +121,22 @@ def detect_file(pathname):
     return False
 
 
+def special_detect(code):
+    """Check whether the SpecialDetect== software exists"""
+    # The last two are used only for testing
+    sd_keys = {'DET_CHROME': r'HKCU\Software\Google\Chrome',
+               'DET_MOZILLA': r'HKCU\Software\Mozilla\Firefox',
+               'DET_OPERA': r'HKCU\Software\Opera Software',
+               'DET_THUNDERBIRD': r'HKLM\SOFTWARE\Clients\Mail\Mozilla Thunderbird',
+               'DET_WINDOWS': r'HKCU\Software\Microsoft',
+               'DET_SPACE_QUEST': r'HKCU\Software\Sierra Games\Space Quest'}
+    if sd_keys.has_key(code):
+        return Windows.detect_registry_key(sd_keys[code])
+    else:
+        logger.error('Unknown SpecialDetect=%s', code)
+    return False
+
+
 def fnmatch_translate(pattern):
     """Same as the original without the end"""
     import fnmatch
@@ -242,6 +258,11 @@ class Winapp:
             if not detectos(required_ver):
                 return False
         any_detect_option = False
+        if self.parser.has_option(section, 'specialdetect'):
+            any_detect_option = True
+            sd_code = self.parser.get(section, 'specialdetect')
+            if special_detect(sd_code):
+                return True
         for option in self.parser.options(section):
             if re.match(self.re_detect, option):
                 # Detect= checks for a registry key
