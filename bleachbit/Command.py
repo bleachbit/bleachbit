@@ -218,7 +218,7 @@ class Json:
         self.path = path
         self.address = address
 
-    def __str(self):
+    def __str__(self):
         return 'Command to clean JSON file, path=%s, address=%s ' % \
             (self.path, self.address)
 
