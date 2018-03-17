@@ -23,52 +23,53 @@ Test cases for module Winapp
 
 from __future__ import absolute_import, print_function
 
-from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit import logger
-
 import os
 import shutil
 import sys
 import tempfile
 import unittest
 
+from tests import common
+from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
+from bleachbit.Windows import detect_registry_key, parse_windows_build
+from bleachbit import logger
 
-def CreateSubKey(sub_key):
+
+def create_sub_key(sub_key):
+    """Create a registry key"""
     import _winreg
     hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, sub_key)
     hkey.Close()
 
 
-keyfull = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
+KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-BleachBit.ini"
     tmpdir = None
-    if 'posix' == os.name:
+    if os.name == 'posix':
         tmpdir = '/tmp'
-    if 'nt' == os.name:
+    if os.name == 'nt':
         tmpdir = os.getenv('TMP')
-    fn = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
-    if os.path.exists(fn):
+    fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
+    if os.path.exists(fname):
         import time
         import stat
-        age_seconds = time.time() - os.stat(fn)[stat.ST_MTIME]
+        age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
-            logger.info('deleting stale file %s ', fn)
-            os.remove(fn)
-    if not os.path.exists(fn):
-        f = open(fn, 'w')
+            logger.info('deleting stale file %s ', fname)
+            os.remove(fname)
+    if not os.path.exists(fname):
+        fobj = open(fname, 'w')
         import urllib2
         txt = urllib2.urlopen(url).read()
-        f.write(txt)
-    return fn
+        fobj.write(txt)
+    return fname
 
 
-@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
+@unittest.skipUnless(sys.platform == 'win32', 'not running on windows')
 class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
 
@@ -118,11 +119,11 @@ class WinappTestCase(common.BleachbitTestCase):
                  # 10.0 is the minimum
                  ('10.0|', '5.1', False),
                  ('10.0|', '10.0', True))
-        for (s, mock, expected_return) in tests:
+        for (req, mock, expected_return) in tests:
             mock = parse_windows_build(mock)
-            actual_return = detectos(s, mock)
+            actual_return = detectos(req, mock)
             self.assertEqual(expected_return, actual_return,
-                             'detectos(%s, %s)==%s instead of %s' % (s, mock,
+                             'detectos(%s, %s)==%s instead of %s' % (req, mock,
                                                                      actual_return, expected_return))
 
     def test_detect_file(self):
@@ -139,7 +140,7 @@ class WinappTestCase(common.BleachbitTestCase):
         # variable to also %ProgramW6432%, so test unique entries in
         # %ProgramW6432%.
         import struct
-        if not 32 == 8 * struct.calcsize('P'):
+        if 8 * struct.calcsize('P') != 32:
             raise NotImplementedError('expecting 32-bit Python')
         if os.getenv('ProgramW6432'):
             dir_64 = os.listdir(os.getenv('ProgramFiles'))
@@ -163,27 +164,27 @@ class WinappTestCase(common.BleachbitTestCase):
         subkey = 'Software\\BleachBit\\DeleteThisKey\\AndThisKey'
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
-        f1 = os.path.join(dirname, f1_filename or 'deleteme.log')
-        open(f1, 'w').close()
+        fname1 = os.path.join(dirname, f1_filename or 'deleteme.log')
+        open(fname1, 'w').close()
 
         dirname2 = os.path.join(dirname, 'sub')
         os.mkdir(dirname2)
-        f2 = os.path.join(dirname2, 'deleteme.log')
-        open(f2, 'w').close()
+        fname2 = os.path.join(dirname2, 'deleteme.log')
+        open(fname2, 'w').close()
 
         fbak = os.path.join(dirname, 'deleteme.bak')
         open(fbak, 'w').close()
 
-        self.assertExists(f1)
-        self.assertExists(f2)
+        self.assertExists(fname1)
+        self.assertExists(fname2)
         self.assertExists(fbak)
 
-        CreateSubKey(subkey)
+        create_sub_key(subkey)
 
-        self.assertTrue(detect_registry_key(keyfull))
+        self.assertTrue(detect_registry_key(KEYFULL))
         self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
 
-        return dirname, f1, f2, fbak
+        return dirname, fname1, fname2, fbak
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
@@ -271,14 +272,14 @@ class WinappTestCase(common.BleachbitTestCase):
         # execute positive tests
         for test in positive_tests:
             print('positive test: ', test)
-            (dirname, f1, f2, fbak) = self.setup_fake(test[1])
+            (dirname, fname1, fname2, fbak) = self.setup_fake(test[1])
             cleaner = self.ini2cleaner(test[0] % dirname)
             self.assertEqual(test[2], cleaner.auto_hide())
             self.run_all(cleaner, False)
             self.run_all(cleaner, True)
             self.assertCondExists(test[3], dirname)
-            self.assertCondExists(test[4], f1)
-            self.assertCondExists(test[5], f2)
+            self.assertCondExists(test[4], fname1)
+            self.assertCondExists(test[5], fname2)
             self.assertCondExists(test[6], fbak)
             self.assertEqual(test[7], cleaner.auto_hide())
             shutil.rmtree(dirname, True)
@@ -296,25 +297,25 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect=HKCU\\Software\\does_not_exist_&'",
                     "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
-                t = [new_ini, ] + [x for x in test[1:]]
-                print('negative test', t)
+                test_full = [new_ini, ] + [x for x in test[1:]]
+                print('negative test', test_full)
                 # execute the test
-                (dirname, f1, f2, fbak) = self.setup_fake()
-                cleaner = self.ini2cleaner(t[0] % dirname, False)
+                (dirname, fname1, fname2, fbak) = self.setup_fake()
+                cleaner = self.ini2cleaner(test_full[0] % dirname, False)
                 self.assertRaises(StopIteration, cleaner.next)
                 shutil.rmtree(dirname, True)
 
         # registry key, basic
-        (dirname, f1, f2, fbak) = self.setup_fake()
-        cleaner = self.ini2cleaner('RegKey1=%s' % keyfull)
+        (dirname, fname1, fname2, fbak) = self.setup_fake()
+        cleaner = self.ini2cleaner('RegKey1=%s' % KEYFULL)
         self.run_all(cleaner, False)
-        self.assertTrue(detect_registry_key(keyfull))
+        self.assertTrue(detect_registry_key(KEYFULL))
         self.run_all(cleaner, True)
-        self.assertFalse(detect_registry_key(keyfull))
+        self.assertFalse(detect_registry_key(KEYFULL))
         shutil.rmtree(dirname, True)
 
         # check for parse error with ampersand
-        (dirname, f1, f2, fbak) = self.setup_fake()
+        (dirname, fname1, fname2, fbak) = self.setup_fake()
         cleaner = self.ini2cleaner(
             'RegKey1=HKCU\\Software\\PeanutButter&Jelly')
         self.run_all(cleaner, False)
@@ -392,7 +393,7 @@ class WinappTestCase(common.BleachbitTestCase):
         for test in tests:
             msg = '\nTest:\n%s' % test[0]
             # setup
-            (dirname, f1, f2, fbak) = self.setup_fake()
+            (dirname, _fname1, _fname2, _fbak) = self.setup_fake()
             self.assertExists(r'%s\deleteme.log' % dirname, msg)
             self.assertExists(r'%s\deleteme.bak' % dirname, msg)
             self.assertExists(r'%s\sub\deleteme.log' % dirname, msg)

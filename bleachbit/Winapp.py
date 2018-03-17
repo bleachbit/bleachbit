@@ -25,16 +25,16 @@ Import Winapp2.ini files
 
 from __future__ import absolute_import, print_function
 
-import bleachbit
-from bleachbit import Cleaner, Windows
-from bleachbit.Action import Delete, Winreg
-from bleachbit import _, FSE, expandvars
-
 import logging
 import os
 import glob
 import re
 from xml.dom.minidom import parseString
+
+import bleachbit
+from bleachbit import Cleaner, Windows
+from bleachbit.Action import Delete, Winreg
+from bleachbit import _, FSE, expandvars
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ def detectos(required_ver, mock=False):
     current operating system, or the mock version, if given."""
     # Do not compare as string because Windows 10 (build 10.0) comes after
     # Windows 8.1 (build 6.3).
-    assert(isinstance(required_ver, (str, unicode)))
+    assert isinstance(required_ver, (str, unicode))
     current_os = (mock if mock else Windows.parse_windows_build())
     required_ver = required_ver.strip()
     if '|' in required_ver:
@@ -140,12 +140,12 @@ def special_detect(code):
 def fnmatch_translate(pattern):
     """Same as the original without the end"""
     import fnmatch
-    r = fnmatch.translate(pattern)
-    if r.endswith('$'):
-        return r[:-1]
-    if r.endswith(r'\Z(?ms)'):
-        return r[:-7]
-    return r
+    ret = fnmatch.translate(pattern)
+    if ret.endswith('$'):
+        return ret[:-1]
+    if ret.endswith(r'\Z(?ms)'):
+        return ret[:-7]
+    return ret
 
 
 class Winapp:
@@ -194,7 +194,7 @@ class Winapp:
         return cleanerid
 
     def excludekey_to_nwholeregex(self, excludekey):
-        """Translate one ExcludeKey to CleanerML nwholeregex
+        r"""Translate one ExcludeKey to CleanerML nwholeregex
 
         Supported examples
         FILE=%LocalAppData%\BleachBit\BleachBit.ini
@@ -206,18 +206,18 @@ class Winapp:
         """
         parts = excludekey.split('|')
         parts[0] = parts[0].upper()
-        if 'REG' == parts[0]:
+        if parts[0] == 'REG':
             raise NotImplementedError('REG not supported in ExcludeKey')
 
         # the last part contains the filename(s)
         files = None
         files_regex = ''
-        if 3 == len(parts):
+        if len(parts) == 3:
             files = parts[2].split(';')
-            if 1 == len(files):
+            if len(files) == 1:
                 # one file pattern like *.* or *.log
                 files_regex = fnmatch_translate(files[0])
-                if '*.*' == files_regex:
+                if files_regex == '*.*':
                     files = None
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
@@ -239,7 +239,7 @@ class Winapp:
                     fnmatch_translate(expanded), files_regex)
             regexes.append(regex)
 
-        if 1 == len(regexes):
+        if len(regexes) == 1:
             return regexes[0]
         else:
             return '(%s)' % '|'.join(regexes)
@@ -330,7 +330,7 @@ class Winapp:
             path = dirname
             if filename.startswith('*.'):
                 filename = filename.replace('*.', '.')
-            if '.*' == filename:
+            if filename == '.*':
                 if removeself:
                     search = 'walk.all'
             else:
@@ -339,7 +339,7 @@ class Winapp:
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
-            if -1 == path.find('*'):
+            if path.find('*') == -1:
                 search = 'file'
         excludekeysxml = ''
         if excludekeys:
@@ -372,9 +372,9 @@ class Winapp:
         removeself = False
         for element in elements:
             element = element.upper()
-            if 'RECURSE' == element:
+            if element == 'RECURSE':
                 recurse = True
-            elif 'REMOVESELF' == element:
+            elif element == 'REMOVESELF':
                 recurse = True
                 removeself = True
             else:
@@ -392,7 +392,7 @@ class Winapp:
             ini_section, ini_option).decode(FSE).strip().split('|')
         path = xml_escape(elements[0])
         name = ""
-        if 2 == len(elements):
+        if len(elements) == 2:
             name = 'name="%s"' % xml_escape(elements[1])
         action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
         provider = Winreg(parseString(action_str).childNodes[0])
@@ -408,9 +408,9 @@ class Winapp:
 def list_winapp_files():
     """List winapp2.ini files"""
     for dirname in (bleachbit.personal_cleaners_dir, bleachbit.system_cleaners_dir):
-        fn = os.path.join(dirname, 'winapp2.ini')
-        if os.path.exists(fn):
-            yield fn
+        fname = os.path.join(dirname, 'winapp2.ini')
+        if os.path.exists(fname):
+            yield fname
 
 
 def load_cleaners():
