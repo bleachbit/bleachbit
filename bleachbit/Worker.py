@@ -76,7 +76,7 @@ class Worker:
         logger.error(err, exc_info=True)
         self.total_errors += 1
 
-    def execute(self, cmd):
+    def execute(self, cmd, operation, option_id):
         """Execute or preview the command"""
         ret = None
         try:
@@ -97,7 +97,10 @@ class Worker:
                 logger.error('%s: %s', e, cmd)
             else:
                 # For other errors, show the traceback.
-                logger.error('Error in execution of %s', cmd, exc_info=True)
+                msg = _('Error: {operation}.{option}: {command}')
+                data = {'command': cmd, 'operation': operation,
+                        'option': option_id}
+                logger.error(msg.format(**data), exc_info=True)
             self.total_errors += 1
         else:
             if ret is None:
@@ -147,7 +150,7 @@ class Worker:
             assert(isinstance(option_id, (str, unicode)))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
-                for ret in self.execute(cmd):
+                for ret in self.execute(cmd, operation, option_id):
                     if True == ret:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort

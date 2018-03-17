@@ -119,6 +119,12 @@ class Function:
         except AssertionError:
             raise AssertionError('Expected MethodType but got %s' % type(func))
 
+    def __str__(self):
+        if self.path:
+            return 'Function: %s: %s' % (self.label, self.path)
+        else:
+            return 'Function: %s' % (self.label)
+
     def execute(self, really_delete):
 
         if self.path is not None and FileUtilities.whitelisted(self.path):
@@ -218,7 +224,7 @@ class Json:
         self.path = path
         self.address = address
 
-    def __str(self):
+    def __str__(self):
         return 'Command to clean JSON file, path=%s, address=%s ' % \
             (self.path, self.address)
 
