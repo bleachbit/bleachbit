@@ -76,7 +76,7 @@ class Worker:
         logger.error(err, exc_info=True)
         self.total_errors += 1
 
-    def execute(self, cmd, operation, option_id):
+    def execute(self, cmd, operation_option):
         """Execute or preview the command"""
         ret = None
         try:
@@ -97,9 +97,8 @@ class Worker:
                 logger.error('%s: %s', e, cmd)
             else:
                 # For other errors, show the traceback.
-                msg = _('Error: {operation}.{option}: {command}')
-                data = {'command': cmd, 'operation': operation,
-                        'option': option_id}
+                msg = _('Error: {operation_option}: {command}')
+                data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
             self.total_errors += 1
         else:
@@ -129,7 +128,8 @@ class Worker:
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
         assert(isinstance(operation_options, list))
-        logger.debug("clean_operation('%s'), options = '%s'", operation, operation_options)
+        logger.debug("clean_operation('%s'), options = '%s'",
+                     operation, operation_options)
 
         if not operation_options:
             raise StopIteration
@@ -150,7 +150,7 @@ class Worker:
             assert(isinstance(option_id, (str, unicode)))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
-                for ret in self.execute(cmd, operation, option_id):
+                for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
                     if True == ret:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
@@ -320,7 +320,7 @@ class Worker:
             # fixme: support non-delete commands
             from bleachbit import Command
             cmd = Command.Delete(path)
-            for ret in self.execute(cmd):
+            for ret in self.execute(cmd, 'deepscan'):
                 yield True
 
     def run_operations(self, my_operations):
