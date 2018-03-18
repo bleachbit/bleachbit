@@ -219,33 +219,32 @@ class WinappTestCase(common.BleachbitTestCase):
         # 4=filename1 (.\deleteme.log) exists after cleaning
         # 5=sub\deleteme.log exists after cleaning
         # 6=.\deleteme.bak exists after cleaning
-        # 7=auto-hide after cleaning
         tests = [
             # single file
             ('FileKey1=%s|deleteme.log', None,
-                False, True, False, True, True, True),
+                False, True, False, True, True),
             # single file, case matching should be insensitive
             ('FileKey1=%s|dEleteme.LOG', None,
-                False, True, False, True, True, True),
+                False, True, False, True, True),
             # special characters for XML
             ('FileKey1=%s|special_chars_&-\'.txt', 'special_chars_&-\'.txt',
-             False, True, False, True, True, True),
+             False, True, False, True, True),
             # *.log
-            ('FileKey1=%s|*.LOG', None, False, True, False, True, True, True),
+            ('FileKey1=%s|*.LOG', None, False, True, False, True, True),
             # semicolon separates different file types
             ('FileKey1=%s|*.log;*.bak', None,
-             False, True, False, True, False, True),
+             False, True, False, True, False),
             # *.*
-            ('FileKey1=%s|*.*', None, False, True, False, True, False, True),
+            ('FileKey1=%s|*.*', None, False, True, False, True, False),
             # recurse *.*
             ('FileKey1=%s|*.*|RECURSE', None, False,
-             True, False, False, False, True),
+             True, False, False, False),
             # recurse *.log
             ('FileKey1=%s|*.log|RECURSE', None, False,
-             True, False, False, True, True),
+             True, False, False, True),
             # remove self *.*, this removes the directory
             ('FileKey1=%s|*.*|REMOVESELF', None,
-             False, False, False, False, False, True),
+             False, False, False, False, False),
         ]
 
         # Add positive detection, where the detection believes the application is present,
@@ -274,6 +273,7 @@ class WinappTestCase(common.BleachbitTestCase):
         # execute positive tests
         for test in positive_tests:
             print('positive test: ', test)
+            self.assertEqual(len(test), 7)
             (dirname, fname1, fname2, fbak) = self.setup_fake(test[1])
             cleaner = self.ini2cleaner(test[0] % dirname)
             self.assertEqual(test[2], cleaner.auto_hide())
@@ -283,7 +283,6 @@ class WinappTestCase(common.BleachbitTestCase):
             self.assertCondExists(test[4], fname1)
             self.assertCondExists(test[5], fname2)
             self.assertCondExists(test[6], fbak)
-            self.assertEqual(test[7], cleaner.auto_hide())
             shutil.rmtree(dirname, True)
 
         # negative tests where the application detect believes the application
