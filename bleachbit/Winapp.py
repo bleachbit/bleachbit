@@ -179,6 +179,9 @@ class Winapp:
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
+        # The detect() function in this module effectively does what
+        # auto_hide() does, so this avoids redundant, slow processing.
+        self.cleaners[cleaner_id].auto_hide = lambda: False
 
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal
