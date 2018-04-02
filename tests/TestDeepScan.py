@@ -40,23 +40,40 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         fullpath = self.write_file(fn)
 
+        # Add Unicode paths to encourage a crash.
+        subdir = os.path.join(self.tempdir, u'ɡælɪk.dir')
+        os.mkdir(subdir)
+        subfile = os.path.join(subdir, u'ɡælɪk.file')
+        common.touch_file(subfile)
+
         ds = DeepScan()
-        ds.add_search(self.tempdir, '^%s$' % fn)
-        found = False
-        for ret in ds.scan():
-            if True == ret:
-                continue
-            print(ret)
-            self.assertEqual(ret, fullpath)
-            found = True
-        self.assertTrue(found, "Did not find '%s'" % fullpath)
+        for use_unicode in (False, True):
+            if use_unicode:
+                search_dir = unicode(self.tempdir)
+            else:
+                search_dir = self.tempdir
+                self.assertIsInstance(search_dir, str)
+            ds.add_search(search_dir, '\.[Bb][Aa][Kk]$')
+            found = False
+            for ret in ds.scan():
+                if ret == True:
+                    # True is used to yield to GTK+, but it is not
+                    # needed in this test.
+                    continue
+                self.assertExists(ret)
+                if ret == fullpath:
+                    found = True
+            self.assertTrue(found, u"Did not find '%s'" % fullpath)
 
         os.unlink(fullpath)
         self.assertNotExists(fullpath)
 
+        import shutil
+        shutil.rmtree(subdir)
+
     def test_encoding(self):
         """Test encoding"""
-        for test in ('äöüßÄÖÜ', "עִבְרִית"):
+        for test in ('ascii.bak', u'äöüßÄÖÜ.bak', u"עִבְרִית.bak", u'ɡælɪk.bak'):
             self._test_encoding(test)
 
     def test_DeepScan(self):
@@ -72,7 +89,6 @@ class DeepScanTestCase(common.BleachbitTestCase):
             if True == ret:
                 # it's yielding control to the GTK idle loop
                 continue
-            self.assertIsString(ret, "Expecting string but got '%s' (%s)" % (ret, str(type(ret))))
             self.assertLExists(ret)
 
     def test_delete(self):
