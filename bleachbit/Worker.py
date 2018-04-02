@@ -26,7 +26,7 @@ from __future__ import absolute_import, print_function
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ungettext, expanduser
+from bleachbit import _, ungettext, expanduser, encoding
 
 import logging
 import math
@@ -115,7 +115,9 @@ class Worker:
                 path = ret['path']
             else:
                 path = ''
-            path = path.decode('utf8', 'replace')  # for invalid encoding
+            if isinstanceof(path, unicode):
+                path = path.decode('utf-8', 'replace').encode(encoding)
+            path = path.decode(encoding, 'replace')  # for invalid encoding
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
