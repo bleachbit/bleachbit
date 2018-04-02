@@ -31,6 +31,7 @@ import platform
 import re
 import unicodedata
 
+import bleachbit
 
 UTF8 = 'utf-8'
 
@@ -56,7 +57,16 @@ def normalized_walk(top, **kwargs):
                 for fn in filenames
             ]
     else:
-        for result in os.walk(top, **kwargs):
+        if os.name == 'nt':
+            # NTFS stores files as Unicode, and this makes os.walk() return
+            # Unicode.
+            top2 = unicode(top)
+        else:
+            # On Linux the file system encoding may be UTF-8, but deal with
+            # bytestrings to avoid potential UnicodeDecodeError in
+            # posixpath.join()
+            top2 = str(top)
+        for result in os.walk(top2, **kwargs):
             yield result
 
 
@@ -88,7 +98,12 @@ class DeepScan:
                     r = re.compile(regex)
                     for filename in filenames:
                         if r.search(filename):
-                            yield os.path.join(dirpath, filename)
+                            full_path = os.path.join(dirpath, filename)
+                            if isinstance(full_path, str):
+                                # Convert path to Unicode.
+                                full_path = full_path.decode(bleachbit.FSE)
+                            yield full_path
+
                 if time.time() - yield_time > 0.25:
                     # allow GTK+ to process the idle loop
                     yield True
