@@ -267,7 +267,7 @@ def wipe_swap_linux(devices, proc_swaps):
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
         logger.info("wiping swap device '%s'", device)
-        safety_limit_bytes = 16 * 1024 ** 3  # 16 gibibytes
+        safety_limit_bytes = 29 * 1024 ** 3  # 29 gibibytes
         actual_size_bytes = get_swap_size_linux(device, proc_swaps)
         if actual_size_bytes > safety_limit_bytes:
             raise RuntimeError(
