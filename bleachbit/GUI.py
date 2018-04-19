@@ -645,20 +645,8 @@ class GUI:
 
     def cb_drag_data_received(self, widget, context, x, y, selection, target_type, time):
         if target_type == self.TARGET_TYPE_TEXT:
-            import urlparse
-            import urllib
-            assert(type(selection.data) is str)
-            file_urls = selection.data.split("\n")
-            file_paths = []
-            for file_url in file_urls:
-                # strip needed to remove "\r"
-                file_url = file_url.strip()
-                parsed_url = urlparse.urlparse(file_url)
-                if parsed_url.scheme == "file":
-                    file_path = urllib.url2pathname(parsed_url.path)
-                    file_path_unicode = file_path.decode("utf-8")
-                    file_paths.append(file_path_unicode)
-
+            file_uris = selection.get_uris()
+            file_paths = FileUtilities.uris_to_paths(file_uris)
             self.shred_paths(file_paths)
 
     def setup_drag_n_drop_widget(self, widget):

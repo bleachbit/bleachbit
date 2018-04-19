@@ -634,6 +634,27 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 this_drive = os.path.splitdrive(drive)[0]
                 self.assertEqual(same_partition(home, drive), home_drive == this_drive)
 
+    def test_uris_to_paths(self):
+        """Unit test for uris_to_paths()"""
+        self.assertEqual(uris_to_paths(['']), [])
+
+        # Unix-style
+        uri_u = ['file:///usr/bin/bleachbit']
+        path_u = [u'/usr/bin/bleachbit']
+        self.assertEqual(uris_to_paths(uri_u), path_u)
+
+        # Windows
+        uri_w = [r'file:///C:/software/bleachbit.exe']
+        path_w = [ur'C:/software/bleachbit.exe']
+        self.assertEqual(uris_to_paths(uri_w), path_w)
+
+        # Multiple
+        self.assertEqual(uris_to_paths(uri_u + uri_w), path_u + path_w)
+
+        # Unsupported scheme
+        uri_s = ['foo://bar']
+        self.assertEqual(uris_to_paths(uri_u + uri_w + uri_s), path_u + path_w)
+
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
         # setup

@@ -568,7 +568,30 @@ def truncate_f(f):
     os.fsync(f.fileno())
 
 
-def whitelisted_posix(path, check_realpath = True):
+def uris_to_paths(file_uris):
+    """Convert text/uri-list URLs to paths"""
+    import urlparse
+    import urllib
+    assert isinstance(file_uris, (tuple, list))
+    file_paths = []
+    for file_uri in file_uris:
+        if not file_uri:
+            # ignore blank
+            continue
+        parsed_uri = urlparse.urlparse(file_uri)
+        if parsed_uri.scheme == 'file':
+            file_path = urllib.url2pathname(parsed_uri.path)
+            if file_path[2] == ':':
+                # remove front slash for Windows-style path
+                file_path = file_path[1:]
+            file_path_unicode = file_path.decode("utf-8")
+            file_paths.append(file_path_unicode)
+        else:
+            logger.warning('Unsupported scheme: %s', file_uri)
+    return file_paths
+
+
+def whitelisted_posix(path, check_realpath=True):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options
     if check_realpath and os.path.islink(path):
