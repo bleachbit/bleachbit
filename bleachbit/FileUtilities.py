@@ -569,7 +569,7 @@ def truncate_f(f):
 
 
 def uris_to_paths(file_uris):
-    """Convert text/uri-list URLs to paths"""
+    """Return a list of paths from text/uri-list"""
     import urlparse
     import urllib
     assert isinstance(file_uris, (tuple, list))

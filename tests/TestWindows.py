@@ -186,6 +186,42 @@ class WindowsTestCase(common.BleachbitTestCase):
         dirname = os.path.dirname(pathname)
         self.assertExists(dirname)
 
+    def test_get_clipboard_paths(self):
+        """Unit test for get_clipboard_paths"""
+        # The clipboard is an unknown state, so check the function does
+        # not crash and that it returns the right data type.
+        paths = get_clipboard_paths()
+        self.assertIsInstance(paths, (type(None), tuple))
+
+        # Set the clipboard to an unsupported type (text), so expect no
+        # files are returned
+        import win32clipboard
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        fname = r'c:\windows\notepad.exe'
+        win32clipboard.SetClipboardText(fname, win32clipboard.CF_TEXT)
+        win32clipboard.SetClipboardText(fname, win32clipboard.CF_UNICODETEXT)
+        self.assertEqual(win32clipboard.GetClipboardData(
+            win32clipboard.CF_TEXT), fname)
+        self.assertEqual(win32clipboard.GetClipboardData(
+            win32clipboard.CF_UNICODETEXT), fname)
+        win32clipboard.CloseClipboard()
+
+        paths = get_clipboard_paths()
+        self.assertIsInstance(paths, (type(None), tuple))
+        self.assertEqual(paths, ())
+
+        # Put files in the clipboard in supported format
+        args = ('powershell.exe', 'Set-Clipboard',
+                '-Path', r'c:\windows\*.exe')
+        (ext_rc, _, _) = General.run_external(args)
+        self.assertEqual(ext_rc, 0)
+        paths = get_clipboard_paths()
+        self.assertIsInstance(paths, (type(None), tuple))
+        self.assertGreater(len(paths), 1)
+        for path in paths:
+            self.assertExists(path)
+
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
         ret = get_known_folder_path('LocalAppDataLow')

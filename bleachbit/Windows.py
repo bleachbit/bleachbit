@@ -352,6 +352,19 @@ def get_autostart_path():
     return os.path.join(startupdir, 'bleachbit.lnk')
 
 
+def get_clipboard_paths():
+    """Return a tuple of Unicode pathnames from the clipboard"""
+    import win32clipboard
+    win32clipboard.OpenClipboard()
+    path_list = ()
+    try:
+        path_list = win32clipboard.GetClipboardData(win32clipboard.CF_HDROP)
+    except TypeError:
+        pass
+    finally:
+        win32clipboard.CloseClipboard()
+    return path_list
+
 def get_fixed_drives():
     """Yield each fixed drive"""
     for drive in win32api.GetLogicalDriveStrings().split('\x00'):

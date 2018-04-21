@@ -640,12 +640,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # Unix-style
         uri_u = ['file:///usr/bin/bleachbit']
-        path_u = [os.path.normpath(u'/usr/bin/bleachbit')]
+        path_u = [os.path.normpath(u'/usr/bin/bleachbit'), ]
         self.assertEqual(uris_to_paths(uri_u), path_u)
 
         # Windows
-        uri_w = [r'file:///C:/software/bleachbit.exe']
-        path_w = [os.path.normpath(ur'C:/software/bleachbit.exe')]
+        uri_w = [r'file:///C:/program%20files/bleachbit.exe']
+        path_w = [os.path.normpath(ur'C:/program files/bleachbit.exe'), ]
         self.assertEqual(uris_to_paths(uri_w), path_w)
 
         # Multiple

@@ -252,6 +252,7 @@ class GUI:
         <menu action="File">
             <menuitem action="ShredFiles"/>
             <menuitem action="ShredFolders"/>
+            <menuitem action="ShredClipboard"/>
             <menuitem action="WipeFreeSpace"/>
             <menuitem action="ShredQuit"/>
             <menuitem action="Quit"/>
@@ -493,6 +494,29 @@ class GUI:
         pref = PreferencesDialog(self.window, self.cb_refresh_operations)
         pref.run()
 
+    def cb_menu_shred_clipboard(self, action):
+        """Callback for menu option: shred paths from clipboard"""
+        clipboard = gtk.clipboard_get()
+        clipboard.request_targets(self.cb_clipboard_uri_received)
+
+    def cb_clipboard_uri_received(self, clipboard, targets, data):
+        """Callback for when URIs are received from clipboard"""
+        shred_paths = None
+        if 'text/uri-list' in targets:
+            # Linux
+            shred_uris = clipboard.wait_for_contents(
+                'text/uri-list').get_uris()
+            shred_paths = FileUtilities.uris_to_paths(shred_uris)
+        elif 'FileNameW' in targets:
+            # Windows
+            # Use non-GTK+ functions because because GTK+ 2 does not work.
+            shred_paths = Windows.get_clipboard_paths()
+        if shred_paths:
+            self.shred_paths(shred_paths)
+        else:
+            logger.warning(_('No paths found in clipboard.'))
+
+
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
         # reload cleaners from disk
@@ -731,6 +755,8 @@ class GUI:
             ('File', None, _('_File')),
             ('Preferences', gtk.STOCK_PREFERENCES, _(
              "Preferences"), None, None, self.cb_preferences_dialog),
+            ('ShredClipboard', None, _("Shred Paths from Clipboard"),
+             None, None, self.cb_menu_shred_clipboard),
             ('Edit', None, _("_Edit")),
             ('HelpContents', gtk.STOCK_HELP, _('Help Contents'), 'F1', None,
              lambda link: GuiBasic.open_url(
