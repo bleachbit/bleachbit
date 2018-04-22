@@ -215,7 +215,6 @@ class Bleachbit(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
-
         self.build_app_menu()
 
     def quit(self, action=None, param=None):
@@ -734,7 +733,6 @@ class GUI(Gtk.ApplicationWindow):
         menu.show_all()
         menu.popup(None, None, None, None, event.button, event.time)
         return True
-
 
     def setup_drag_n_drop(self):
         def cb_drag_data_received(widget, context, x, y, data, info, time):
