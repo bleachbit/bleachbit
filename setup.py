@@ -94,12 +94,13 @@ if 'py2exe' in sys.argv:
     }]
     args['options'] = {
         'py2exe': {
-            'packages': 'encodings',
+            'packages': ['encodings', 'gi'],
             'optimize': 2,  # extra optimization (like python -OO)
-            'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
+            'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
                          'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
+                'libgstreamer-1.0-0.dll',
                 'CRYPT32.DLL',  # required by ssl
                 'DNSAPI.DLL',
                 'IPHLPAPI.DLL',  # psutil
@@ -142,12 +143,6 @@ if 'py2exe' in sys.argv:
             'compressed': True  # create a compressed zipfile
         }
     }
-    from gi.repository import Gtk
-    from distutils import version
-    gtkver = version.StrictVersion('{0}.{1}.{2}'.format(Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version()))
-    gtkmin = version.StrictVersion('3.12.0')
-    if gtkver >= gtkmin:
-        args['options']['py2exe']['includes'].append('gio')
 
     # check for 32-bit
     import struct
