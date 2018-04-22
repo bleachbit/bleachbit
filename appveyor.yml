@@ -17,10 +17,13 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.18.2_rev11-setup_db3872aed9e1f378a14c941fe1c05f177a60fa8c.exe/download" -FileName pygi-aio.exe}
+  - ps: Get-FileHash pygi-aio.exe
   - 'pygi-aio.exe C:\Python27 GTK Notify'
   - ps: if (-not (Test-Path upx394w.zip)) { Start-FileDownload "http://github.com/upx/upx/releases/download/v3.94/upx394w.zip" }
+  - ps: Get-FileHash upx*
   - '%SZ_EXE% x upx394w.zip'
   - ps: if (-not (Test-Path gettext0.19.8.1-iconv1.14-static-32.zip)) { Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip" }
+  - ps: Get-FileHash gettext*
   - '%SZ_EXE% x gettext0.19.8.1-iconv1.14-static-32.zip -ogettext'
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.
