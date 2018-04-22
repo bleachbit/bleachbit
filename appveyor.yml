@@ -19,7 +19,7 @@ install:
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
   - ps: Get-FileHash pygi-aio.exe
   - 'pygi-aio.exe C:\Python27 GTK Notify'
-  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "http://github.com/upx/upx/releases/download/v3.94/upx394w.zip" -FileName upx.zip }
+  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.94/upx394w.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "http://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip" -FileName gettext.zip }
