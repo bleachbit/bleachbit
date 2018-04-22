@@ -211,16 +211,9 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.gui:
-        import gtk
-        from bleachbit import GUI
-        shred_paths = args if options.shred else None
-        GUI.GUI(uac=not options.no_uac,
-                shred_paths=shred_paths, exit=options.exit)
-        gtk.main()
-        if options.exit:
-            # For automated testing of Windows build
-            print('Success')
-        sys.exit(0)
+        import bleachbit.GUI
+        app = bleachbit.GUI.Bleachbit(uac=not options.no_uac, shred_paths=args, exit=options.exit)
+        sys.exit(app.run())
     if options.shred:
         # delete arbitrary files without GUI
         # create a temporary cleaner object

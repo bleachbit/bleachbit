@@ -30,25 +30,20 @@ from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special
 
 import glob
+try:
+    from bleachbit.GuiBasic import Gtk, Gdk
+    HAVE_GTK = True
+except:
+    HAVE_GTK = False
 import logging
 import os.path
 import re
 import sys
-import warnings
 
 if 'posix' == os.name:
     from bleachbit import Unix
 elif 'nt' == os.name:
     from bleachbit import Windows
-
-# Suppress GTK warning messages while running in CLI #34
-warnings.simplefilter("ignore", Warning)
-
-try:
-    import gtk
-    HAVE_GTK = True
-except ImportError:
-    HAVE_GTK = False
 
 # a module-level variable for holding cleaners
 backends = {}
@@ -649,7 +644,7 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                gtk.RecentManager().purge_items()
+                Gtk.RecentManager().purge_items()
                 yield 0
 
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
@@ -725,10 +720,8 @@ class System(Cleaner):
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
-                gtk.gdk.threads_enter()
-                clipboard = gtk.clipboard_get()
-                clipboard.set_text("")
-                gtk.gdk.threads_leave()
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
 

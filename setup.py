@@ -142,10 +142,10 @@ if 'py2exe' in sys.argv:
             'compressed': True  # create a compressed zipfile
         }
     }
-    import gtk
+    from gi.repository import Gtk
     from distutils import version
-    gtkver = version.StrictVersion('.'.join([str(x) for x in gtk.gtk_version]))
-    gtkmin = version.StrictVersion('2.20.0')
+    gtkver = version.StrictVersion('{0}.{1}.{2}'.format(Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version()))
+    gtkmin = version.StrictVersion('3.12.0')
     if gtkver >= gtkmin:
         args['options']['py2exe']['includes'].append('gio')
 
@@ -233,7 +233,7 @@ def run_setup():
           download_url="https://www.bleachbit.org/download",
           license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v2.12+',
+          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
           packages=['bleachbit'],
           **args)
 
