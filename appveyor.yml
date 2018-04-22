@@ -47,7 +47,7 @@ test_script:
 # coveralls.io
   - '%PYTHON_HOME%/Scripts/pip.exe install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
-  - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem'
+  - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
   - '%PYTHON_HOME%/Scripts/pip.exe install mock'
   - 'SET DESTRUCTIVE_TESTS=T'
   - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" -m unittest discover -v -p Test*.py'
