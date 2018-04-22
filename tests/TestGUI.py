@@ -29,8 +29,10 @@ import os
 import unittest
 
 try:
-    import gtk
-    from bleachbit.GUI import GUI
+    import gi
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk
+    from bleachbit.GUI import Bleachbit
     HAVE_GTK = True
 except ImportError:
     HAVE_GTK = False
@@ -48,9 +50,11 @@ class GUITestCase(common.BleachbitTestCase):
     def test_GUI(self):
         """Unit test for class GUI"""
         # there should be no crashes
-        gui = GUI()
-        gui.update_total_size(0)
-        gui.update_total_size(1000)
+        app = Bleachbit(exit=True)
+        # app.do_startup()
+        # pp.do_activate()
+        app.run()
+        gui = app._window
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
