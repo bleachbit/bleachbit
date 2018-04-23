@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-02-11 11:12-0700\n"
-"PO-Revision-Date: 2017-09-04 01:19+0000\n"
-"Last-Translator: Pin-hsien Li <pspeter9931@gmail.com>\n"
+"POT-Creation-Date: 2018-04-21 15:16-0600\n"
+"PO-Revision-Date: 2018-04-23 02:18+0000\n"
+"Last-Translator: Pin-hsien Lee <pspeter9931@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-09-07 03:24+0000\n"
-"X-Generator: Launchpad (build 18446)\n"
+"X-Launchpad-Export-Date: 2018-04-23 23:00+0000\n"
+"X-Generator: Launchpad (build 18617)\n"
 "Language: zh_TW\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -33,8 +33,8 @@ msgstr "歷史記錄"
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/links2.xml
 #: ../cleaners/realplayer.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
 #: ../cleaners/easytag.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
-#: ../bleachbit/Cleaner.py:349 ../bleachbit/Cleaner.py:423
-#: ../bleachbit/Cleaner.py:432
+#: ../bleachbit/Cleaner.py:351 ../bleachbit/Cleaner.py:425
+#: ../bleachbit/Cleaner.py:434
 msgid "Delete the usage history"
 msgstr "刪除使用記錄"
 
@@ -50,8 +50,8 @@ msgstr "刪除使用記錄"
 #: ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml ../cleaners/java.xml
 #: ../cleaners/chromium.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:192 ../bleachbit/Cleaner.py:370
-#: ../bleachbit/Cleaner.py:455
+#: ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:372
+#: ../bleachbit/Cleaner.py:457
 msgid "Cache"
 msgstr "快取"
 
@@ -65,8 +65,8 @@ msgstr "快取"
 #: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/beagle.xml
 #: ../cleaners/kde.xml ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/java.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
-#: ../bleachbit/Cleaner.py:370 ../bleachbit/Cleaner.py:455
-#: ../bleachbit/Cleaner.py:489 ../bleachbit/Cleaner.py:491
+#: ../bleachbit/Cleaner.py:372 ../bleachbit/Cleaner.py:457
+#: ../bleachbit/Cleaner.py:491 ../bleachbit/Cleaner.py:493
 msgid "Delete the cache"
 msgstr "刪除快取"
 
@@ -77,15 +77,15 @@ msgstr "刪除快取"
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:214 ../bleachbit/Cleaner.py:360
-#: ../bleachbit/Action.py:445
+#: ../bleachbit/Cleaner.py:216 ../bleachbit/Cleaner.py:362
+#: ../bleachbit/Action.py:461
 msgid "Vacuum"
 msgstr "重整資料庫"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:215
+#: ../bleachbit/Cleaner.py:217
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -106,7 +106,7 @@ msgstr "遊戲"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
 #: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/screenlets.xml
 #: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../bleachbit/Cleaner.py:486
+#: ../bleachbit/Cleaner.py:488
 msgid "Logs"
 msgstr "記錄檔"
 
@@ -114,7 +114,7 @@ msgstr "記錄檔"
 #: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml ../cleaners/exaile.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/audacious.xml ../bleachbit/Cleaner.py:486
+#: ../cleaners/audacious.xml ../bleachbit/Cleaner.py:488
 msgid "Delete the logs"
 msgstr "刪除記錄檔"
 
@@ -145,14 +145,14 @@ msgstr "檔案傳輸客戶端"
 #: ../cleaners/teamviewer.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/winamp.xml
 #: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/audacious.xml
-#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:371
+#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:373
 msgid "Most recently used"
 msgstr "最近存取文件"
 
 #: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:372
-#: ../bleachbit/Cleaner.py:469
+#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:374
+#: ../bleachbit/Cleaner.py:471
 msgid "Delete the list of recently used documents"
 msgstr "刪除最近使用過的檔案清單"
 
@@ -189,14 +189,14 @@ msgstr "IRC 用戶端；前身為 XChat"
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/elinks.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../bleachbit/Cleaner.py:226
+#: ../bleachbit/Cleaner.py:228
 msgid "Web browser"
 msgstr "網頁瀏覽器"
 
 #: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
+#: ../bleachbit/Cleaner.py:195
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr "刪除網頁快取；網頁快取可減少已造訪網頁的顯示時間"
 
@@ -205,7 +205,7 @@ msgstr "刪除網頁快取；網頁快取可減少已造訪網頁的顯示時間
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:194
+#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:196
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -214,7 +214,7 @@ msgstr "Cookies"
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:195
+#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:197
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -222,7 +222,7 @@ msgstr "刪除 Cookies；Cookies 包含網站設定、身分鑑別、追蹤識�
 
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../bleachbit/Cleaner.py:213
+#: ../bleachbit/Cleaner.py:215
 msgid "List of visited web pages"
 msgstr "已造訪網頁清單"
 
@@ -233,7 +233,7 @@ msgstr "黑名單"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
-#: ../bleachbit/Cleaner.py:197
+#: ../bleachbit/Cleaner.py:199
 msgid "Delete the files"
 msgstr "刪除檔案"
 
@@ -278,8 +278,8 @@ msgid "File manager"
 msgstr "檔案管理員"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:468
-#: ../bleachbit/Cleaner.py:663
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:470
+#: ../bleachbit/Cleaner.py:661
 msgid "Recent documents list"
 msgstr "最近存取文件清單"
 
@@ -322,22 +322,22 @@ msgstr "刪除除錯記錄"
 #: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:520
+#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:522
 msgid "Temporary files"
 msgstr "暫存檔案"
 
 #: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:520
+#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:522
 msgid "Delete the temporary files"
 msgstr "刪除暫存檔案"
 
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:201
+#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:203
 msgid "Download history"
 msgstr "下載記錄"
 
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:201
+#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:203
 msgid "List of files downloaded"
 msgstr "已下載檔案清單"
 
@@ -345,11 +345,11 @@ msgstr "已下載檔案清單"
 msgid "Delete the list of visited web pages"
 msgstr "刪除已造訪網頁清單"
 
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:192
 msgid "Backup files"
 msgstr "備份檔案"
 
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:191
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:193
 msgid "Delete the backup files"
 msgstr "刪除備份檔案"
 
@@ -361,12 +361,12 @@ msgstr "本次作業階段"
 msgid "Delete the current session"
 msgstr "刪除本次作業階段"
 
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:213
+#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:215
 msgid "URL history"
 msgstr "URL 記錄"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:375
+#: ../bleachbit/Cleaner.py:377
 msgid "Office suite"
 msgstr "辦公室套件"
 
@@ -403,11 +403,11 @@ msgid "Compatibility layer for Windows software"
 msgstr "Windows 軟體相容層"
 
 #: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:202
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:204
 msgid "Form history"
 msgstr "表單記錄"
 
-#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:203
+#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:205
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "曾於網頁與搜索欄中輸入的表單記錄"
 
@@ -459,24 +459,24 @@ msgstr "命令殼 (shell)"
 
 #. TRANSLATORS: DOM = Document Object Model.
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:201
 msgid "DOM Storage"
 msgstr "DOM 存儲物件"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
+#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:201
 msgid "Delete HTML5 cookies"
 msgstr "刪除 HTML5 Cookies"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:208
+#: ../bleachbit/Cleaner.py:210
 msgid "Passwords"
 msgstr "密碼"
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:209
+#: ../bleachbit/Cleaner.py:211
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -484,7 +484,7 @@ msgstr "此資料庫儲存使用者帳號、密碼，以及設定不預存密碼
 
 #: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:211
+#: ../bleachbit/Cleaner.py:213
 msgid "This option will delete your saved passwords."
 msgstr "此項目將刪除您儲存的密碼。"
 
@@ -596,19 +596,19 @@ msgstr "無用檔案清理員"
 msgid "Free space and maintain privacy"
 msgstr "釋放空間及維護隱私"
 
-#: ../bleachbit/FileUtilities.py:668
+#: ../bleachbit/FileUtilities.py:694
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "至少一份檔案位於不支援進階覆寫的檔案系統中。"
 
-#: ../bleachbit/Unix.py:574
+#: ../bleachbit/Unix.py:576
 #, python-format
 msgid "Executable not found: %s"
 msgstr "未找到可執行檔：%s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:623 ../bleachbit/Worker.py:136
+#: ../bleachbit/Unix.py:654 ../bleachbit/Worker.py:139
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -671,70 +671,70 @@ msgid "Mark for deletion"
 msgstr "標記為刪除"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:199 ../bleachbit/Command.py:233
-#: ../bleachbit/Action.py:254 ../bleachbit/Action.py:267
-#: ../bleachbit/Action.py:280 ../bleachbit/Action.py:293
-#: ../bleachbit/Action.py:306
+#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
+#: ../bleachbit/Action.py:270 ../bleachbit/Action.py:283
+#: ../bleachbit/Action.py:296 ../bleachbit/Action.py:309
+#: ../bleachbit/Action.py:322
 msgid "Clean file"
 msgstr "清理檔案"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:275
+#: ../bleachbit/Command.py:281
 msgid "Truncate"
 msgstr "刪節"
 
-#: ../bleachbit/Command.py:317
+#: ../bleachbit/Command.py:323
 msgid "Delete registry key"
 msgstr "刪除登錄鍵"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:44
+#: ../bleachbit/Winapp.py:43
 msgid "Applications"
 msgstr "應用程式"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:47
+#: ../bleachbit/Winapp.py:46
 msgid "Internet"
 msgstr "網際網路"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:50
+#: ../bleachbit/Winapp.py:49
 msgid "Multimedia"
 msgstr "多媒體"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:53
+#: ../bleachbit/Winapp.py:52
 msgid "Utilities"
 msgstr "公用程式"
 
-#: ../bleachbit/Winapp.py:64
+#: ../bleachbit/Winapp.py:63
 msgid "Games"
 msgstr "遊戲"
 
-#: ../bleachbit/Winapp.py:162
+#: ../bleachbit/Winapp.py:181
 msgid "Imported from winapp2.ini"
 msgstr "從 winapp2.ini 匯入"
 
-#: ../bleachbit/Cleaner.py:197
+#: ../bleachbit/Cleaner.py:199
 msgid "Crash reports"
 msgstr "程式崩潰報告"
 
-#: ../bleachbit/Cleaner.py:204
+#: ../bleachbit/Cleaner.py:206
 msgid "Session restore"
 msgstr "恢復作業階段"
 
-#: ../bleachbit/Cleaner.py:205
+#: ../bleachbit/Cleaner.py:207
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "當瀏覽器關閉或崩潰後，載入最初的作業階段"
 
-#: ../bleachbit/Cleaner.py:207
+#: ../bleachbit/Cleaner.py:209
 msgid "Site preferences"
 msgstr "網站偏好設定"
 
-#: ../bleachbit/Cleaner.py:207
+#: ../bleachbit/Cleaner.py:209
 msgid "Settings for individual sites"
 msgstr "個別網站的設定"
 
@@ -745,156 +745,156 @@ msgstr "個別網站的設定"
 #. Firefox.
 #. More information:
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:453
+#: ../bleachbit/Cleaner.py:455
 msgid "Broken desktop files"
 msgstr "損毀的 .desktop 檔"
 
-#: ../bleachbit/Cleaner.py:454
+#: ../bleachbit/Cleaner.py:456
 msgid "Delete broken application menu entries and file associations"
 msgstr "刪除損毀的程式選單內部連結與檔案關聯"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:458
+#: ../bleachbit/Cleaner.py:460
 msgid "Localizations"
 msgstr "本地化"
 
-#: ../bleachbit/Cleaner.py:459
+#: ../bleachbit/Cleaner.py:461
 msgid "Delete files for unwanted languages"
 msgstr "刪除不需要的語系"
 
-#: ../bleachbit/Cleaner.py:461
+#: ../bleachbit/Cleaner.py:463
 msgid "Configure this option in the preferences."
 msgstr "請至偏好設定設定此項目。"
 
-#: ../bleachbit/Cleaner.py:467
+#: ../bleachbit/Cleaner.py:469
 msgid "Rotated logs"
 msgstr "循環記錄檔"
 
-#: ../bleachbit/Cleaner.py:467
+#: ../bleachbit/Cleaner.py:469
 msgid "Delete old system logs"
 msgstr "刪除過時的系統記錄檔"
 
-#: ../bleachbit/Cleaner.py:470
+#: ../bleachbit/Cleaner.py:472
 msgid "Trash"
 msgstr "資源回收桶"
 
-#: ../bleachbit/Cleaner.py:470
+#: ../bleachbit/Cleaner.py:472
 msgid "Empty the trash"
 msgstr "清空回收桶內的垃圾"
 
-#: ../bleachbit/Cleaner.py:476 ../bleachbit/Cleaner.py:627
-#: ../bleachbit/Worker.py:184
+#: ../bleachbit/Cleaner.py:478 ../bleachbit/Cleaner.py:623
+#: ../bleachbit/Worker.py:187
 msgid "Memory"
 msgstr "記憶體"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:478
+#: ../bleachbit/Cleaner.py:480
 msgid "Wipe the swap and free memory"
 msgstr "抹除 swap 並釋放記憶體"
 
-#: ../bleachbit/Cleaner.py:480
+#: ../bleachbit/Cleaner.py:482
 msgid "This option is experimental and may cause system problems."
 msgstr "此實驗性項目有導致系統問題的風險。"
 
-#: ../bleachbit/Cleaner.py:488
+#: ../bleachbit/Cleaner.py:490
 msgid "Memory dump"
 msgstr "記憶體傾印檔"
 
-#: ../bleachbit/Cleaner.py:488
+#: ../bleachbit/Cleaner.py:490
 msgid "Delete the file memory.dmp"
 msgstr "刪除 memory.dmp 檔案"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:491
+#: ../bleachbit/Cleaner.py:493
 msgid "Prefetch"
 msgstr "預讀"
 
-#: ../bleachbit/Cleaner.py:493
+#: ../bleachbit/Cleaner.py:495
 msgid "Recycle bin"
 msgstr "回收桶"
 
-#: ../bleachbit/Cleaner.py:493 ../bleachbit/Cleaner.py:787
+#: ../bleachbit/Cleaner.py:495 ../bleachbit/Cleaner.py:793
 msgid "Empty the recycle bin"
 msgstr "清空回收桶"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:496
+#: ../bleachbit/Cleaner.py:498
 msgid "Update uninstallers"
 msgstr "更新解除安裝程式"
 
-#: ../bleachbit/Cleaner.py:497
+#: ../bleachbit/Cleaner.py:499
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr "刪除 Microsoft 更新的解除安裝程式，包括 hotfix、service pack、Internet Explorer 更新等"
 
-#: ../bleachbit/Cleaner.py:504 ../bleachbit/Cleaner.py:727
+#: ../bleachbit/Cleaner.py:506 ../bleachbit/Cleaner.py:733
 msgid "Clipboard"
 msgstr "剪貼簿"
 
-#: ../bleachbit/Cleaner.py:505
+#: ../bleachbit/Cleaner.py:507
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr "桌面環境的剪貼簿；用途為複製與貼上操作"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:512 ../bleachbit/GuiPreferences.py:66
+#: ../bleachbit/Cleaner.py:514 ../bleachbit/GuiPreferences.py:66
 msgid "Custom"
 msgstr "自訂"
 
-#: ../bleachbit/Cleaner.py:513
+#: ../bleachbit/Cleaner.py:515
 msgid "Delete user-specified files and folders"
 msgstr "刪除使用者自訂的檔案/資料夾"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:515
+#: ../bleachbit/Cleaner.py:517
 msgid "Free disk space"
 msgstr "硬碟可用空間"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:517
+#: ../bleachbit/Cleaner.py:519
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "覆寫硬碟的可用空間以隱藏已刪除的檔案"
 
-#: ../bleachbit/Cleaner.py:518
+#: ../bleachbit/Cleaner.py:520
 msgid "This option is very slow."
 msgstr "此項目相當緩慢。"
 
-#: ../bleachbit/Cleaner.py:522
+#: ../bleachbit/Cleaner.py:524
 msgid "The system in general"
 msgstr "系統通用"
 
-#: ../bleachbit/Cleaner.py:524 ../bleachbit/Cleaner.py:857
+#: ../bleachbit/Cleaner.py:526 ../bleachbit/Cleaner.py:867
 msgid "System"
 msgstr "系統"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:735 ../bleachbit/Cleaner.py:890
+#: ../bleachbit/Cleaner.py:741 ../bleachbit/Cleaner.py:900
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "覆寫 %s 的可用空間"
 
-#: ../bleachbit/RecognizeCleanerML.py:59
+#: ../bleachbit/RecognizeCleanerML.py:58
 msgid "Security warning"
 msgstr "安全性警示"
 
-#: ../bleachbit/RecognizeCleanerML.py:72
+#: ../bleachbit/RecognizeCleanerML.py:71
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr "以下是新匯入或更動過的清理定義檔。惡意定義檔有損壞系統的風險。若您不信任這些更動，請刪除這些檔案或是離開程式。"
 
-#: ../bleachbit/RecognizeCleanerML.py:88
+#: ../bleachbit/RecognizeCleanerML.py:87
 msgctxt "column_label"
 msgid "Delete"
 msgstr "刪除"
 
-#: ../bleachbit/RecognizeCleanerML.py:93
+#: ../bleachbit/RecognizeCleanerML.py:92
 msgctxt "column_label"
 msgid "Filename"
 msgstr "檔案名稱"
@@ -908,26 +908,31 @@ msgstr "檔案名稱"
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "執行「%(operation)s」時發生錯誤：「%(msg)s」"
 
+#: ../bleachbit/Worker.py:100
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr "錯誤：{operation_option}: {command}"
+
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:182
+#: ../bleachbit/Worker.py:185
 msgid "Please wait.  Wiping free disk space."
 msgstr "請稍待。正在抹除硬碟可用空間。"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:184 ../bleachbit/Worker.py:332
+#: ../bleachbit/Worker.py:187 ../bleachbit/Worker.py:334
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "請稍待。正在清理 %s。"
 
-#: ../bleachbit/Worker.py:199
+#: ../bleachbit/Worker.py:201
 msgid "Please wait. Wiping file system metadata."
 msgstr "請稍待。正在抹除檔案系統中介資料。"
 
-#: ../bleachbit/Worker.py:202
+#: ../bleachbit/Worker.py:204
 msgid "Please wait. Cleaning up after wiping file system metadata."
 msgstr "請稍待。正在執行抹除檔案系統中介資料的後續清理。"
 
-#: ../bleachbit/Worker.py:205
+#: ../bleachbit/Worker.py:207
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -935,38 +940,38 @@ msgstr[0] "估計剩 %d 分鐘。"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:272
+#: ../bleachbit/Worker.py:274
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "%s 的硬碟空間已恢復"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:276
+#: ../bleachbit/Worker.py:278
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "即將恢復 %s 的硬碟空間"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:281
+#: ../bleachbit/Worker.py:283
 #, python-format
 msgid "Files deleted: %d"
 msgstr "%d 份檔案已刪除"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:285
+#: ../bleachbit/Worker.py:287
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "即將刪除 %d 份檔案"
 
-#: ../bleachbit/Worker.py:288
+#: ../bleachbit/Worker.py:290
 #, python-format
 msgid "Special operations: %d"
 msgstr "%d 項特殊操作"
 
-#: ../bleachbit/Worker.py:291
+#: ../bleachbit/Worker.py:293
 #, python-format
 msgid "Errors: %d"
 msgstr "%d 項錯誤"
@@ -974,12 +979,12 @@ msgstr "%d 項錯誤"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:306
+#: ../bleachbit/Worker.py:308
 msgid "Please wait.  Running deep scan."
 msgstr "請稍待。正在進行深層掃描。"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:335
+#: ../bleachbit/Worker.py:337
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "請稍待。正在預覽 %s。"
@@ -1071,11 +1076,11 @@ msgid "overwrite files to hide contents"
 msgstr "覆寫檔案以隱藏內容"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:382 ../bleachbit/GUI.py:632
+#: ../bleachbit/Action.py:398 ../bleachbit/GUI.py:654
 msgid "Clean"
 msgstr "清理"
 
-#: ../bleachbit/Action.py:418
+#: ../bleachbit/Action.py:434
 #, python-format
 msgid "Run external command: %s"
 msgstr "執行外部指令：%s"
@@ -1108,19 +1113,19 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:372
+#: ../bleachbit/GUI.py:373
 msgid "You must select an operation"
 msgstr "您必須選擇至少一項操作"
 
-#: ../bleachbit/GUI.py:391 ../bleachbit/GUI.py:413
+#: ../bleachbit/GUI.py:392 ../bleachbit/GUI.py:414
 msgid "Done."
 msgstr "完成。"
 
-#: ../bleachbit/GUI.py:426
+#: ../bleachbit/GUI.py:427
 msgid "Program to clean unnecessary files"
 msgstr "無用檔案的清理程式"
 
-#: ../bleachbit/GUI.py:436
+#: ../bleachbit/GUI.py:437
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1132,123 +1137,131 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:442
+#: ../bleachbit/GUI.py:443
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Cheng-Chia Tseng https://launchpad.net/~zerng07\n"
-"  Pin-hsien Li https://launchpad.net/~plesry\n"
+"  Pin-hsien Lee https://launchpad.net/~plesry\n"
 "  taijuin lee https://launchpad.net/~taijuin"
 
-#: ../bleachbit/GUI.py:454
+#: ../bleachbit/GUI.py:455
 msgid "System information"
 msgstr "系統資訊"
 
-#: ../bleachbit/GUI.py:527
+#: ../bleachbit/GUI.py:516
+msgid "No paths found in clipboard."
+msgstr "剪貼簿內沒有任何路徑。"
+
+#: ../bleachbit/GUI.py:550
 msgid "Choose files to shred"
 msgstr "選擇要粉碎的檔案"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:553
 msgid "Choose folder to shred"
 msgstr "選擇要粉碎的資料夾"
 
-#: ../bleachbit/GUI.py:594 ../bleachbit/GuiPreferences.py:197
+#: ../bleachbit/GUI.py:617 ../bleachbit/GuiPreferences.py:197
 #: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
 msgid "Choose a folder"
 msgstr "選擇一個資料夾"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:627
+#: ../bleachbit/GUI.py:649
 msgid "Preview"
 msgstr "預覽"
 
-#: ../bleachbit/GUI.py:734
+#: ../bleachbit/GUI.py:744
 msgid "_Shred Files"
 msgstr "粉碎檔案(_S)"
 
-#: ../bleachbit/GUI.py:736
+#: ../bleachbit/GUI.py:746
 msgid "Sh_red Folders"
 msgstr "粉碎資料夾(_R)"
 
-#: ../bleachbit/GUI.py:738
+#: ../bleachbit/GUI.py:748
 msgid "_Wipe Free Space"
 msgstr "抹除可用空間(_W)"
 
-#: ../bleachbit/GUI.py:740
+#: ../bleachbit/GUI.py:750
 msgid "S_hred Settings and Quit"
 msgstr "粉碎設定值後退出(_H)"
 
-#: ../bleachbit/GUI.py:742
+#: ../bleachbit/GUI.py:752
 msgid "_Quit"
 msgstr "退出(_Q)"
 
-#: ../bleachbit/GUI.py:744
+#: ../bleachbit/GUI.py:754
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: ../bleachbit/GUI.py:746 ../bleachbit/GuiPreferences.py:58
+#: ../bleachbit/GUI.py:756 ../bleachbit/GuiPreferences.py:58
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: ../bleachbit/GUI.py:747
+#: ../bleachbit/GUI.py:757
+msgid "Shred Paths from Clipboard"
+msgstr "從剪貼簿粉碎路徑"
+
+#: ../bleachbit/GUI.py:758
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../bleachbit/GUI.py:748
+#: ../bleachbit/GUI.py:759
 msgid "Help Contents"
 msgstr "幫助文件"
 
-#: ../bleachbit/GUI.py:751
+#: ../bleachbit/GUI.py:762
 msgid "_Release Notes"
 msgstr "發行備註(_R)"
 
-#: ../bleachbit/GUI.py:754
+#: ../bleachbit/GUI.py:765
 msgid "_System Information"
 msgstr "系統資訊(_S)"
 
-#: ../bleachbit/GUI.py:757
+#: ../bleachbit/GUI.py:768
 msgid "_About"
 msgstr "關於(_A)"
 
-#: ../bleachbit/GUI.py:758
+#: ../bleachbit/GUI.py:769
 msgid "_Help"
 msgstr "幫助(_H)"
 
-#: ../bleachbit/GUI.py:783
+#: ../bleachbit/GUI.py:794
 msgctxt "button"
 msgid "Preview"
 msgstr "預覽"
 
-#: ../bleachbit/GUI.py:788
+#: ../bleachbit/GUI.py:799
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "預覽所選操作的目標檔案；不會真正刪除檔案"
 
-#: ../bleachbit/GUI.py:798
+#: ../bleachbit/GUI.py:809
 msgctxt "button"
 msgid "Clean"
 msgstr "清理"
 
-#: ../bleachbit/GUI.py:802
+#: ../bleachbit/GUI.py:813
 msgid "Clean files in the selected operations"
 msgstr "根據所選操作清理檔案"
 
-#: ../bleachbit/GUI.py:893
+#: ../bleachbit/GUI.py:904
 msgid "Error when checking for updates: "
 msgstr "檢查更新時發生錯誤： "
 
-#: ../bleachbit/GUI.py:932
+#: ../bleachbit/GUI.py:943
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "載入 SQLite 模組時發生錯誤：也許有防毒軟體阻擋了連線？"
 
-#: ../bleachbit/GUI.py:935
+#: ../bleachbit/GUI.py:946
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr "您正以管理權限執行 BleachBit。BleachBit 將清理系統共享的部分，以及 root 帳號下存放使用者設定的資料夾。"
 
-#: ../bleachbit/GUI.py:940
+#: ../bleachbit/GUI.py:951
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
