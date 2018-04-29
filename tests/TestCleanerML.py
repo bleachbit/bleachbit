@@ -30,17 +30,10 @@ from bleachbit.CleanerML import *
 class CleanerMLTestCase(common.BleachbitTestCase):
     """Test cases for CleanerML"""
 
-    def setUp(self):
-        """Prepare for each test method"""
-        # BleachbitTestCase.setUp() resets the current working directory
-        super(CleanerMLTestCase, self).setUp()
-        # This test case expects another working directory.
-        os.chdir('tests')
-
     def test_CleanerML(self):
         """Unit test for class CleanerML"""
 
-        xmlcleaner = CleanerML("../doc/example_cleaner.xml")
+        xmlcleaner = CleanerML("doc/example_cleaner.xml")
 
         self.assertIsInstance(xmlcleaner, CleanerML)
         self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
@@ -71,7 +64,11 @@ class CleanerMLTestCase(common.BleachbitTestCase):
 
     def test_create_pot(self):
         """Unit test for create_pot()"""
-        create_pot()
+        os.chdir('po')
+        try:
+            create_pot()
+        finally:
+            os.chdir('..')
 
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
