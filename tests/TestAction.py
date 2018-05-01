@@ -180,19 +180,19 @@ class ActionTestCase(common.BleachbitTestCase):
         # each test is a tuple in format (input_str, vars, expected)
         tests = (
             # no variables
-            ('/tmp/foo1', None, ('/tmp/foo1',)),
+            ('/var/foo1', None, ('/var/foo1',)),
             # unknown variable
-            ('/tmp/foo2$$bar$$', None, ('/tmp/foo2$$bar$$',)),
+            ('/var/foo2$$bar$$', None, ('/var/foo2$$bar$$',)),
             # unused variable
-            ('/tmp/foo3_$$bar$$', {'baz': ('a',)}, ('/tmp/foo3_$$bar$$',)),
+            ('/var/foo3_$$bar$$', {'baz': ('a',)}, ('/var/foo3_$$bar$$',)),
             # used variable with one value
-            ('/tmp/foo4_$$bar$$', {'bar': ('a',)}, ('/tmp/foo4_a',)),
+            ('/var/foo4_$$bar$$', {'bar': ('a',)}, ('/var/foo4_a',)),
             # used variable with two values
-            ('/tmp/foo5_$$bar$$', {'bar': ('a', 'b')},
-             ('/tmp/foo5_a', '/tmp/foo5_b')),
+            ('/var/foo5_$$bar$$', {'bar': ('a', 'b')},
+             ('/var/foo5_a', '/var/foo5_b')),
             # the system is case sensitive
-            ('/tmp/foo6_$$BAR$$', {'bar': ('a',)}, ('/tmp/foo6_$$BAR$$',)),
-            ('/tmp/foo7_$$bar$$', {'BAR': ('a',)}, ('/tmp/foo7_$$bar$$',)),
+            ('/var/foo6_$$BAR$$', {'bar': ('a',)}, ('/var/foo6_$$BAR$$',)),
+            ('/var/foo7_$$bar$$', {'BAR': ('a',)}, ('/var/foo7_$$bar$$',)),
             # Windows-style
             (r'c:\temp\foo8_$$bar$$', {'bar': ('a',)}, (r'c:\temp\foo8_a',)),
             (r'$$basepath$$\file9.log', {'basepath': (
