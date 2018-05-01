@@ -56,6 +56,7 @@ class CleanerML:
         self.option_name = None
         self.option_description = None
         self.option_warning = None
+        self.vars = {}
         self.xlate_cb = xlate_cb
         if self.xlate_cb is None:
             self.xlate_mode = False
@@ -92,6 +93,8 @@ class CleanerML:
         description = cleaner.getElementsByTagName('description')
         if description and description[0].parentNode == cleaner:
             self.handle_cleaner_description(description[0])
+        for var in cleaner.getElementsByTagName('var'):
+            self.handle_cleaner_var(var)
         for option in cleaner.getElementsByTagName('option'):
             try:
                 self.handle_cleaner_option(option)
@@ -170,7 +173,7 @@ class CleanerML:
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
-                provider = actionplugin(action_node)
+                provider = actionplugin(action_node, self.vars)
         if provider is None:
             raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)
@@ -185,6 +188,26 @@ class CleanerML:
                 Unix.locales.add_xml(child_node)
         # Add a dummy action so the file isn't reported as unusable
         self.cleaner.add_action('localization', ActionProvider(None))
+
+    def handle_cleaner_var(self, var):
+        """Handle one <var> element under <cleaner>.
+
+        Example:
+
+        <var name="basepath">
+         <value>~/.config/foo</value>
+         <value>%AppData\foo</value>
+         </var>
+        """
+        var_name = var.getAttribute('name')
+        for value_element in var.getElementsByTagName('value'):
+            value_str = getText(value_element.childNodes)
+            if self.vars.has_key(var_name):
+                # append
+                self.vars[var_name] = [value_str, ] + self.vars[var_name]
+            else:
+                # initialize
+                self.vars[var_name] = [value_str, ]
 
 
 def list_cleanerml_files(local_only=False):

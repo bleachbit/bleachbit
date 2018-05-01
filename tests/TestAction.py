@@ -175,6 +175,37 @@ class ActionTestCase(common.BleachbitTestCase):
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
 
+    def test_expand_multi_var(self):
+        """Unit test for the function expand_multi_var"""
+        # each test is a tuple in format (input_str, vars, expected)
+        tests = (
+            # no variables
+            ('/tmp/foo1', None, ('/tmp/foo1',)),
+            # unknown variable
+            ('/tmp/foo2$$bar$$', None, ('/tmp/foo2$$bar$$',)),
+            # unused variable
+            ('/tmp/foo3_$$bar$$', {'baz': ('a',)}, ('/tmp/foo3_$$bar$$',)),
+            # used variable with one value
+            ('/tmp/foo4_$$bar$$', {'bar': ('a',)}, ('/tmp/foo4_a',)),
+            # used variable with two values
+            ('/tmp/foo5_$$bar$$', {'bar': ('a', 'b')},
+             ('/tmp/foo5_a', '/tmp/foo5_b')),
+            # the system is case sensitive
+            ('/tmp/foo6_$$BAR$$', {'bar': ('a',)}, ('/tmp/foo6_$$BAR$$',)),
+            ('/tmp/foo7_$$bar$$', {'BAR': ('a',)}, ('/tmp/foo7_$$bar$$',)),
+            # Windows-style
+            (r'c:\temp\foo8_$$bar$$', {'bar': ('a',)}, (r'c:\temp\foo8_a',)),
+            (r'$$basepath$$\file9.log', {'basepath': (
+                r'c:\temp',)}, (r'c:\temp\file9.log',)),
+        )
+
+        for test in tests:
+            input_str = test[0]
+            variables = test[1]
+            expected = test[2]
+            actual = expand_multi_var(input_str, variables)
+            self.assertSequenceEqual(actual, expected)
+
     def test_ini(self):
         """Unit test for class Ini"""
         from tests.TestFileUtilities import test_ini_helper
