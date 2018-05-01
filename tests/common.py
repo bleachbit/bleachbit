@@ -134,6 +134,10 @@ def destructive_tests(title):
 
 def touch_file(filename):
     """Create an empty file"""
+    dname = os.path.dirname(filename)
+    if not os.path.exists(dname):
+        # Make the directory, if it does not exist.
+        os.makedirs(dname)
     with open(filename, "w") as f:
         pass
     assert(os.path.exists(filename))

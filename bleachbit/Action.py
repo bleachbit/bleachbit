@@ -41,11 +41,41 @@ if 'posix' == os.name:
 else:
     re_flags = re.IGNORECASE
 
+logger = logging.getLogger(__name__)
+
+
+def expand_multi_var(s, variables):
+    """Expand string s with potentially-multiple values.
+
+    The placeholder is written in the format $$foo$$.
+
+    The function always returns a list of one or more strings.
+    """
+    if not variables or s.find('$$') == -1:
+        # The input string is missing $$ or no variables are given.
+        return (s,)
+    matched = False
+    ret = []
+    for var_key, var_values in variables.iteritems():
+        sub = '$$%s$$' % var_key
+        if s.find(sub) == -1:
+            continue
+        matched = True
+        for var_value in var_values:
+            modified = s.replace(sub, var_value)
+            ret.append(modified)
+    if matched:
+        return ret
+    else:
+        # The string has $$, but it did not match anything
+        return (s,)
 
 #
 # Plugin framework
 # http://martyalchin.com/2008/jan/10/simple-plugin-framework/
 #
+
+
 class PluginMount(type):
 
     """A simple plugin framework"""
@@ -62,7 +92,7 @@ class ActionProvider:
     """Abstract base class for performing individual cleaning actions"""
     __metaclass__ = PluginMount
 
-    def __init__(self, action_node):
+    def __init__(self, action_node, path_vars=None):
         """Create ActionProvider from CleanerML <action>"""
         pass
 
@@ -83,7 +113,7 @@ class FileActionProvider(ActionProvider):
     """Base class for providers which work on individual files"""
     action_key = '_file'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
         self.regex = action_element.getAttribute('regex')
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
@@ -95,12 +125,7 @@ class FileActionProvider(ActionProvider):
         assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
-        self.path = expanduser(expandvars(action_element.getAttribute('path')))
-        if 'nt' == os.name and self.path:
-            # convert forward slash to backslash for compatibility with getsize()
-            # and for display.  Do not convert an empty path, or it will become
-            # the current directory (.).
-            self.path = os.path.normpath(self.path)
+        self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = {}
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
@@ -108,11 +133,27 @@ class FileActionProvider(ActionProvider):
             self.ds['cache'] = General.boolstr_to_bool(
                 action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
-            self.ds['path'] = self.path
+            self.ds['path'] = self.paths[0]
+            if not len(self.paths) == 1:
+                logger.warning(
+                    'deep scan does not support multi-value variables')
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
             # If the filter is not needed, bypass it for speed.
             self.get_paths = self._get_paths
+
+    def _set_paths(self, raw_path, path_vars):
+        """Set the list of paths to work on"""
+        self.paths = []
+        # expand special $$foo$$ which may give multiple values
+        for path2 in expand_multi_var(raw_path, path_vars):
+            path3 = expanduser(expandvars(path2))
+            if os.name == 'nt' and path3:
+                # convert forward slash to backslash for compatibility with getsize()
+                # and for display.  Do not convert an empty path, or it will become
+                # the current directory (.).
+                path3 = os.path.normpath(path3)
+            self.paths.append(path3)
 
     def get_deep_scan(self):
         if 0 == len(self.ds):
@@ -197,8 +238,9 @@ class FileActionProvider(ActionProvider):
         if self.nwholeregex:
             self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
 
-        for path in func(self.path):
-            yield path
+        for input_path in self.paths:
+            for path in func(input_path):
+                yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
@@ -214,7 +256,7 @@ class AptAutoclean(ActionProvider):
     """Action to run 'apt-get autoclean'"""
     action_key = 'apt.autoclean'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         pass
 
     def get_commands(self):
@@ -230,7 +272,7 @@ class AptAutoremove(ActionProvider):
     """Action to run 'apt-get autoremove'"""
     action_key = 'apt.autoremove'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         pass
 
     def get_commands(self):
@@ -246,7 +288,7 @@ class AptClean(ActionProvider):
     """Action to run 'apt-get clean'"""
     action_key = 'apt.clean'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         pass
 
     def get_commands(self):
@@ -337,8 +379,8 @@ class Ini(FileActionProvider):
     """Action to clean .ini configuration files"""
     action_key = 'ini'
 
-    def __init__(self, action_element):
-        FileActionProvider.__init__(self, action_element)
+    def __init__(self, action_element, path_vars=None):
+        FileActionProvider.__init__(self, action_element, path_vars)
         self.section = action_element.getAttribute('section')
         self.parameter = action_element.getAttribute('parameter')
         if self.parameter == "":
@@ -353,7 +395,7 @@ class Journald(ActionProvider):
     """Action to run 'journalctl --vacuum-time=1'"""
     action_key = 'journald.clean'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         pass
 
     def get_commands(self):
@@ -366,8 +408,8 @@ class Json(FileActionProvider):
     """Action to clean JSON configuration files"""
     action_key = 'json'
 
-    def __init__(self, action_element):
-        FileActionProvider.__init__(self, action_element)
+    def __init__(self, action_element, path_vars=None):
+        FileActionProvider.__init__(self, action_element, path_vars)
         self.address = action_element.getAttribute('address')
 
     def get_commands(self):
@@ -403,7 +445,7 @@ class Process(ActionProvider):
     """Action to run a process"""
     action_key = 'process'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         self.cmd = expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
@@ -428,8 +470,8 @@ class Process(ActionProvider):
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             else:
                 if not 0 == rc:
-                    logging.getLogger(__name__).warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
-                                                        self.cmd, rc, stdout, stderr)
+                    logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
+                                   self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
@@ -489,7 +531,7 @@ class Winreg(ActionProvider):
     """Action to clean the Windows Registry"""
     action_key = 'winreg'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         self.keyname = action_element.getAttribute('path')
         self.name = action_element.getAttribute('name')
 
@@ -502,7 +544,7 @@ class YumCleanAll(ActionProvider):
     """Action to run 'yum clean all'"""
     action_key = 'yum.clean_all'
 
-    def __init__(self, action_element):
+    def __init__(self, action_element, path_vars=None):
         pass
 
     def get_commands(self):

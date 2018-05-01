@@ -30,6 +30,13 @@ from bleachbit.CleanerML import *
 class CleanerMLTestCase(common.BleachbitTestCase):
     """Test cases for CleanerML"""
 
+    def run_all(self, xmlcleaner, really_delete):
+        """Helper function to execute all options in a cleaner"""
+        for (option_id, __name) in xmlcleaner.cleaner.get_options():
+            for cmd in xmlcleaner.cleaner.get_commands(option_id):
+                for result in cmd.execute(really_delete):
+                    common.validate_result(self, result, really_delete)
+
     def test_CleanerML(self):
         """Unit test for class CleanerML"""
 
@@ -38,18 +45,12 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertIsInstance(xmlcleaner, CleanerML)
         self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
 
-        def run_all(really_delete):
-            for (option_id, __name) in xmlcleaner.cleaner.get_options():
-                for cmd in xmlcleaner.cleaner.get_commands(option_id):
-                    for result in cmd.execute(really_delete):
-                        common.validate_result(self, result, really_delete)
-
         # preview
-        run_all(False)
+        self.run_all(xmlcleaner, False)
 
         # really delete if user allows
         if common.destructive_tests('example_cleaner.xml'):
-            run_all(True)
+            self.run_all(xmlcleaner, True)
 
 
     def test_boolstr_to_bool(self):
@@ -93,3 +94,51 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assertIsString(pot_fragment("Foo", 'bar.xml'))
+
+    def test_var(self):
+        """Test the <var> element"""
+        xml_str = r"""
+<cleaner id="testvar">
+    <label>cleaner label</label>
+    <description>cleaner description</description>
+    <var name="basepath">
+        <value>%%LocalAppData%%\FooDoesNotExist</value>
+        <value>~/.config/FooDoesNotExist</value>
+        <value>{tempdir}/a</value>
+        <value>{tempdir}/b</value>
+    </var>
+    <option id="option1">
+        <label>option1 label</label>
+        <description>option1 description</description>
+        <action search="file" command="delete" path="$$basepath$$/test.log" />
+    </option>
+</cleaner>
+""".format(**{'tempdir': self.tempdir})
+        # write XML cleaner
+        cml_path = os.path.join(self.tempdir, 'test.xml')
+        self.write_file(cml_path, xml_str)
+
+        # create two canaries
+        test_log_path_a = os.path.join(self.tempdir, 'a', 'test.log')
+        test_log_path_b = os.path.join(self.tempdir, 'b', 'test.log')
+        common.touch_file(test_log_path_a)
+        common.touch_file(test_log_path_b)
+        self.assertExists(test_log_path_a)
+        self.assertExists(test_log_path_b)
+
+        # parse XML to XML cleaner instance
+        xmlc = CleanerML(cml_path)
+        self.assertIsInstance(xmlc, CleanerML)
+        self.assertIsInstance(xmlc.cleaner, Cleaner.Cleaner)
+        self.assertTrue(xmlc.cleaner.is_usable())
+
+        # run preview
+        self.run_all(xmlc, False)
+        self.assertExists(test_log_path_a)
+        self.assertExists(test_log_path_b)
+
+        # really delete
+        self.run_all(xmlc, True)
+        self.assertNotExists(test_log_path_a)
+        self.assertNotExists(test_log_path_b)
+
