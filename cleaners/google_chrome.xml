@@ -24,40 +24,39 @@
   <description>Web browser</description>
   <running type="exe">chrome.exe</running>
   <running type="exe">chrome</running>
+  <var name="base">
+    <value>%LocalAppData%\Google\Chrome\User Data</value>
+    <value>$XDG_CONFIG_HOME/google-chrome</value>
+  </var>
+  <var name="profile">
+    <value>%LocalAppData%\Google\Chrome\User Data\Default</value>
+    <value>$XDG_CONFIG_HOME/google-chrome/Default</value>
+  </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\B*.tmp"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Application Cache\"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\CacheWritableAdobeRoot\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Cache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\GPUCache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Media Cache\"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/host_referral_list"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="dns_prefetching/startup_list"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="net/http_server_properties/servers"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="HostReferralList"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Local State" address="StartupDNSPrefetchList"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/google-chrome/Default/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/google-chrome/Default/Application Cache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="HostReferralList"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
+    <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="dns_prefetching/host_referral_list"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="dns_prefetching/startup_list"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="net/http_server_properties/servers"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Local State" address="HostReferralList"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Local State" address="StartupDNSPrefetchList"/>
+    <!-- Windows-specific -->
+    <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome\User Data\B*.tmp"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome\User Data\Default\Application Cache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\Cache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\Media Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Cookies"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Cookies-journal"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\*\Extension Cookies"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\*\Pepper Data\Shockwave Flash\WritableRoot\"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/*/Cookies"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/*/Cookies-journal"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/*/Extension Cookies"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/google-chrome/*/Pepper Data/Shockwave Flash/WritableRoot/"/>
+    <action command="delete" search="glob" path="$$profile$$/Cookies"/>
+    <action command="delete" search="glob" path="$$profile$$/Cookies-journal"/>
+    <action command="delete" search="glob" path="$$profile$$/Extension Cookies"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
   </option>
   <option id="dom">
     <label>DOM Storage</label>
@@ -65,133 +64,89 @@
     <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
         ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
         ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->
-    <action command="chrome.databases_db" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases\Databases.db"/>
-    <action command="chrome.databases_db" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/databases/Databases.db"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstorage"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\Local Storage\http*localstorage-journal"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/Local Storage/http*localstorage"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/Local Storage/http*localstorage-journal"/>
-    <action command="delete" search="walk.all" path="$localappdata\Google\Chrome\User Data\Default\databases\http*\"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/google-chrome/Default/databases/http*/"/>
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
-    <action command="chrome.autofill" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
-    <action command="chrome.autofill" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Web Data"/>
+    <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
-    <action command="chrome.history" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
-    <action command="chrome.favicons" search="file" path="$localappdata\Google\Chrome\User Data\Default\Favicons"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\chrome_shutdown_ms.txt"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Safe Browsing Cookies-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History Provider Cache"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\History-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Network Action Predictor-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\QuotaManager-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Shortcuts-journal"/>
+    <action command="chrome.history" search="file" path="$$profile$$/History"/>
+    <action command="chrome.favicons" search="file" path="$$profile$$/Favicons"/>
+    <action command="delete" search="file" path="$$base$$/chrome_shutdown_ms.txt"/>
+    <action command="delete" search="file" path="$$base$$/Safe Browsing Cookies-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Archived History"/>
+    <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
+    <action command="delete" search="file" path="$$profile$$/History-journal"/>
+    <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
+    <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
+    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites-journal"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Visited Links"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
-    <action command="delete" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??-journal"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\Session Storage\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIcons\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="profile/content_settings/exceptions/site_engagement"/>
-    <action command="json" search="file" path="$localappdata\Google\Chrome\User Data\Default\Preferences" address="profile/content_settings/exceptions/media_engagement"/>
-    <action command="chrome.history" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/History"/>
-    <action command="chrome.favicons" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Favicons"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/chrome_shutdown_ms.txt"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Safe Browsing Cookies-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Archived History"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Archived History-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/History Provider Cache"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/History-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Network Action Predictor"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Network Action Predictor-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Shortcuts"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Shortcuts-journal"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Thumbnails"/>
-    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/google-chrome/Default/Thumbnails"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Thumbnails-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Top Sites"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Top Sites-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Visited Links"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/History Index ????-??"/>
-    <action command="delete" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/History Index ????-??-journal"/>
-    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/google-chrome/Default/Session Storage/"/>
-    <action command="delete" search="walk.files" path="$XDG_CONFIG_HOME/google-chrome/Default/Sync Data Backup/"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="profile/content_settings/exceptions/site_engagement"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="profile/content_settings/exceptions/media_engagement"/>
-    <action command="json" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Preferences" address="profile/content_settings/exceptions/media_engagement"/>
+    <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
+    <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
+    <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Visited Links"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions/site_engagement"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions/media_engagement"/>
+    <!-- Windows-specific -->
+    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIcons\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
     <warning>This option will delete your saved passwords.</warning>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Login Data-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Login Data"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
     <description translators="'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html">Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
-    <action command="chrome.keywords" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Web Data"/>
-    <action command="chrome.keywords" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
+    <action command="chrome.keywords" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="session">
     <label>Session</label>
     <description>Delete the current and last sessions</description>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Current Session"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Current Tabs"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Last Session"/>
-    <action command="delete" search="file" path="$localappdata\Google\Chrome\User Data\Default\Last Tabs"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Current Session"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Current Tabs"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Last Session"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Last Tabs"/>
+    <action command="delete" search="file" path="$$profile$$/Current Session"/>
+    <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
+    <action command="delete" search="file" path="$$profile$$/Last Session"/>
+    <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Archived History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Extension Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\History"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Extension Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Thumbnails" type="f"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Top Sites"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\Web Data"/>
-    <action command="sqlite.vacuum" search="file" path="$localappdata\Google\Chrome\User Data\Default\databases\Databases.db"/>
-    <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\History Index ????-??"/>
-    <action command="sqlite.vacuum" search="glob" path="$localappdata\Google\Chrome\User Data\Default\databases\http*\?"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Extension Cookies"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/History"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Thumbnails" type="f"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Top Sites"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/Web Data"/>
-    <action command="sqlite.vacuum" search="file" path="$XDG_CONFIG_HOME/google-chrome/Default/databases/Databases.db"/>
-    <action command="sqlite.vacuum" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/History Index ????-??"/>
-    <action command="sqlite.vacuum" search="glob" path="$XDG_CONFIG_HOME/google-chrome/Default/databases/http*/?"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+    <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
+    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
+    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
+    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
   </option>
 </cleaner>
