@@ -137,6 +137,12 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
@@ -144,6 +150,7 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Sync Data/SyncData.sqlite3"/>
     <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
