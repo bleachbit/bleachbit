@@ -35,7 +35,12 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
