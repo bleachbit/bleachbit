@@ -74,6 +74,7 @@
     <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
     <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
     <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
