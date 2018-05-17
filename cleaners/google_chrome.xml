@@ -111,8 +111,7 @@
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions/site_engagement"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions/media_engagement"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIcons\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
