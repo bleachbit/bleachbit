@@ -111,7 +111,6 @@
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIcons\"/>
@@ -137,6 +136,12 @@
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+  </option>
+ <option id="sync">
+    <label>Sync data</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
