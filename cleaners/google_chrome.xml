@@ -139,7 +139,7 @@
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
   </option>
- <option id="sync">
+  <option id="sync">
     <label>Sync data</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
