@@ -18,15 +18,40 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+Notes about Opera
+- Opera version 15 switched layout engine to Blink like Chromium
+- Unlike Chromium, Opera does not support multiple profiles
+
 -->
 <cleaner id="opera">
   <label>Opera</label>
   <description>Web browser</description>
   <running type="exe">opera</running>
   <running type="exe">opera.exe</running>
+  <var name="base">
+    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value>$XDG_CONFIG_HOME/opera</value>
+  </var>
+  <var name="profile">
+    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value>$XDG_CONFIG_HOME/opera</value>
+  </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
+    <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
+    <!-- Linux-specific -->
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/"/>
+    <!-- Windows-specific -->
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Cache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Media Cache\"/>
+    <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\cache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\opcache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\thumbnails\"/>
@@ -40,23 +65,22 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <action command="delete" search="file" path="$$profile$$/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+    <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\cookies4.dat"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
   </option>
-  <option id="current_session">
-    <label>Current session</label>
-    <description>Delete the current session</description>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win.bak"/>
-    <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
-    <action command="delete" search="file" path="~/.opera/sessions/autosave.win.bak"/>
-  </option>
   <option id="dom">
     <label>DOM Storage</label>
     <description>Delete HTML5 cookies</description>
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="walk.all" path="$appdata\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
@@ -66,6 +90,11 @@
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
+  </option>
+  <option id="form_history">
+    <label>Form history</label>
+    <description>A history of forms entered in web sites</description>
+    <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
@@ -80,6 +109,17 @@
     <description>Delete the search history</description>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\search_field_history.dat"/>
     <action command="delete" search="glob" path="~/.opera/search_field_history.dat"/>
+  </option>
+  <option id="session">
+    <label>Session</label>
+    <description>Delete the current and last sessions</description>
+    <action command="delete" search="file" path="$$profile$$/Current Session"/>
+    <action command="delete" search="file" path="$$profile$$/Last Session"/>
+    <!-- below are entries valid before Opera 15 -->
+    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win"/>
+    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win.bak"/>
+    <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
+    <action command="delete" search="file" path="~/.opera/sessions/autosave.win.bak"/>
   </option>
   <option id="url_history">
     <label>URL history</label>
