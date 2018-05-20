@@ -113,7 +113,9 @@
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsRecentClosed\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
   </option>
   <option id="passwords">
