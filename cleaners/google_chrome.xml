@@ -50,10 +50,10 @@
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
     <!-- Windows-specific -->
-    <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome\User Data\B*.tmp"/>
-    <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome\User Data\Default\Application Cache\"/>
-    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\Cache\"/>
-    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\Media Cache\"/>
+    <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -113,8 +113,8 @@
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
-    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIcons\"/>
-    <action command="delete" search="walk.files" path="%LocalAppData%\Google\Chrome\User Data\Default\JumpListIconsOld\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
