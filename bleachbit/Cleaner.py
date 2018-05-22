@@ -138,7 +138,14 @@ class Cleaner:
     def get_long_option_description(self, key):
         """Yield the name and a potentially more verbose description for a single option"""
         if self.options:
-            return (self.options[key][0], self.options[key][1])
+            ret = self.options[key][1]
+            ret += "\n\nThis cleanup option will perform the following actions:\n\n"
+            for action in self.actions:
+                if key != action[0]: continue
+                act = action[1]
+                ret += str(act)
+                ret += "\n"
+            return (self.options[key][0], ret)
 
 
     def get_options(self):

@@ -104,7 +104,8 @@ class ActionProvider:
         """Yield each command (which can be previewed or executed)"""
         pass
 
-
+    def __str__(self):
+        return self.action_key
 #
 # base class
 #
@@ -194,6 +195,21 @@ class FileActionProvider(ActionProvider):
         import itertools
         for f in itertools.ifilter(self.path_filter, self._get_paths()):
             yield f
+
+    def __str__(self):
+        ret = self.action_key+":   "
+        ret += "and   ".join(self.paths)
+        if self.regex:
+            ret += "   if   "+self.regex
+        if self.nregex:
+            ret += "   if not   "+self.nregex
+        if self.wholeregex:
+            ret += "   if whole   "+self.wholeregex
+        if self.nwholeregex:
+            ret += "   if not whole   "+self.nwholeregex
+        if self.object_type:
+            ret += "   if type   "+self.object_type
+        return ret
 
     def _get_paths(self):
         """Return a filtered list of files"""
@@ -537,6 +553,9 @@ class Winreg(ActionProvider):
 
     def get_commands(self):
         yield Command.Winreg(self.keyname, self.name)
+
+    def __str__(self):
+        return "winreg:   "+self.keyname+"   "+self.name
 
 
 class YumCleanAll(ActionProvider):
