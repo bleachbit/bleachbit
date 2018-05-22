@@ -134,6 +134,12 @@ class Cleaner:
         if self.options:
             for key in sorted(self.options.keys()):
                 yield (self.options[key][0], self.options[key][1])
+                
+    def get_long_option_description(self, key):
+        """Yield the name and a potentially more verbose description for a single option"""
+        if self.options:
+            return (self.options[key][0], self.options[key][1])
+
 
     def get_options(self):
         """Return user-configurable options in 2-tuple (id, name)"""

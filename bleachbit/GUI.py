@@ -295,20 +295,29 @@ class GUI:
         row = paths[0]
         name = model[row][0]
         cleaner_id = model[row][2]
+        selected_option = None
+        if len(paths) > 1:
+            selected_option = model[paths][2]
         self.progressbar.hide()
-        description = backends[cleaner_id].get_description()
-        self.textbuffer.set_text("")
-        self.append_text(name + "\n", 'operation')
-        if not description:
-            description = ""
-        self.append_text(description + "\n\n\n")
-        for (label, description) in backends[cleaner_id].get_option_descriptions():
-            self.append_text(label, 'option_label')
-            if description:
-                self.append_text(': ', 'option_label')
-                self.append_text(description)
-            self.append_text("\n\n")
-
+        if selected_option is None:
+            description = backends[cleaner_id].get_description()
+            self.textbuffer.set_text("")
+            self.append_text(name + "\n", 'operation')
+            if not description:
+                description = ""
+            self.append_text(description + "\n\n\n")
+            for (label, description) in backends[cleaner_id].get_option_descriptions():
+                self.append_text(label, 'option_label')
+                if description:
+                    self.append_text(': ', 'option_label')
+                    self.append_text(description)
+                self.append_text("\n\n")
+        else:
+            label, long_description = backends[cleaner_id].get_long_option_description(selected_option)
+            self.textbuffer.set_text("")
+            self.append_text(name + " - " + label + "\n", 'operation')
+            self.append_text(long_description + "\n\n\n")
+            
     def get_selected_operations(self):
         """Return a list of the IDs of the selected operations in the tree view"""
         ret = []
