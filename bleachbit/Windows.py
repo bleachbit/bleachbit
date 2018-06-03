@@ -89,7 +89,9 @@ def browse_file(_, title):
 def browse_files(_, title):
     """Ask the user to select files.  Return full paths"""
     try:
+        # The File parameter is a hack to increase the buffer length.
         ret = win32gui.GetOpenFileNameW(None,
+                                        File = '\x00' * 10240,
                                         Flags=win32con.OFN_ALLOWMULTISELECT
                                         | win32con.OFN_EXPLORER
                                         | win32con.OFN_FILEMUSTEXIST
