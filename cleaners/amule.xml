@@ -36,4 +36,24 @@
     <action command="delete" search="walk.files" path="~/.aMule/Temp/"/>
     <action command="delete" search="walk.files" path="$APPDATA\aMule\Temp\"/>
   </option>
+  <option id="known_files">
+    <label>Known files history</label>
+    <description>Delete history of known and cancelled files</description>
+    <action command="delete" search="file" path="~/.aMule/known.met"/>
+    <action command="delete" search="file" path="~/.aMule/known2_64.met"/>
+    <action command="delete" search="file" path="~/.aMule/canceled.met"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\known.met"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\known2_64.met"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\canceled.met"/>
+  </option>
+  <option id="known_clients">
+    <label>Known clients</label>
+    <description>Delete known clients and friends</description>
+    <action command="delete" search="file" path="~/.aMule/emfriends.met"/>
+    <action command="delete" search="file" path="~/.aMule/clients.met"/>
+    <action command="delete" search="file" path="~/.aMule/clients.met.bak"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\emfriends.met"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\clients.met"/>
+    <action command="delete" search="file" path="$APPDATA\aMule\clients.met.bak"/>
+  </option>
 </cleaner>
