@@ -38,6 +38,7 @@ if 'nt' == os.name:
 
 def diagnostic_info():
     """Return diagnostic information as a string"""
+    # this section is for application and library versions
     s = "BleachBit version %s" % bleachbit.APP_VERSION
     try:
         import gtk
@@ -46,12 +47,17 @@ def diagnostic_info():
         s += '\nGTK+ not detected'
     import sqlite3
     s += "\nSQLite version %s" % sqlite3.sqlite_version
+
+    # this section is for variables defined in __init__.py
+    s += "\nFSE = %s" % bleachbit.FSE
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
     s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
     s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(
         bleachbit.FSE)
     s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
+
+    # this section is for information about the system environment
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
