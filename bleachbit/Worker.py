@@ -26,7 +26,7 @@ from __future__ import absolute_import, print_function
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ungettext, expanduser
+from bleachbit import _, ungettext, expanduser, FSE
 
 import logging
 import math
@@ -94,7 +94,8 @@ class Worker:
             from errno import ENOENT, EACCES
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
-                logger.error('%s: %s', e, cmd)
+                exc_message = str(e).decode(FSE)
+                logger.error('%s: %s', exc_message, cmd)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
