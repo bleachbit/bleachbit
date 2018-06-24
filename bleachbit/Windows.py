@@ -608,6 +608,10 @@ def setup_environment():
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
+    # %cd% can be helpful for cleaning portable applications when
+    # BleachBit is portable. It is the same variable name as defined by
+    # cmd.exe .
+    set_environ('cd', os.getcwd())
 
 
 def split_registry_key(full_key):
