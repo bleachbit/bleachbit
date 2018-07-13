@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-21 15:16-0600\n"
-"PO-Revision-Date: 2018-05-07 00:50+0000\n"
-"Last-Translator: William Beltrán <Unknown>\n"
+"PO-Revision-Date: 2018-07-10 12:35+0000\n"
+"Last-Translator: Adolfo Jayme <Unknown>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2018-05-08 03:04+0000\n"
-"X-Generator: Launchpad (build 18623)\n"
+"X-Launchpad-Export-Date: 2018-07-10 19:56+0000\n"
+"X-Generator: Launchpad (build 18719)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -35,7 +35,7 @@ msgstr "Historial"
 #: ../bleachbit/Cleaner.py:351 ../bleachbit/Cleaner.py:425
 #: ../bleachbit/Cleaner.py:434
 msgid "Delete the usage history"
-msgstr "Eliminar el uso del historial"
+msgstr "Eliminar el historial de uso"
 
 #: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/thumbnails.xml ../cleaners/safari.xml ../cleaners/emesene.xml
@@ -52,7 +52,7 @@ msgstr "Eliminar el uso del historial"
 #: ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:372
 #: ../bleachbit/Cleaner.py:457
 msgid "Cache"
-msgstr "Caché"
+msgstr "Antememoria"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
@@ -67,7 +67,7 @@ msgstr "Caché"
 #: ../bleachbit/Cleaner.py:372 ../bleachbit/Cleaner.py:457
 #: ../bleachbit/Cleaner.py:491 ../bleachbit/Cleaner.py:493
 msgid "Delete the cache"
-msgstr "Eliminar caché"
+msgstr "Eliminar la antememoria"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -182,7 +182,7 @@ msgstr "Instaladores"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr "Eliminar parches e instaladores almacenados en caché"
+msgstr "Eliminar parches e instaladores almacenados en antememoria"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
@@ -202,7 +202,8 @@ msgstr "Navegador web"
 #: ../bleachbit/Cleaner.py:195
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Eliminar caché web, la cual reduce el tiempo para cargar páginas ya visitadas"
+"Eliminar la antememoria de web, que permite cargar más rápido las páginas "
+"que ya ha visitado."
 
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
 #: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
@@ -235,7 +236,7 @@ msgstr "Lista de páginas visitadas"
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr "Listas de el bloqueo"
+msgstr "Listas de bloqueo"
 
 #: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
@@ -274,7 +275,7 @@ msgstr "Eliminar lista de elementos recientes"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Eliminar avatares y emoticonos en caché"
+msgstr "Eliminar la antememoria de avatares y emoticonos"
 
 #: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
 #: ../cleaners/vlc.xml ../cleaners/winamp.xml
@@ -394,7 +395,7 @@ msgstr "Limpiar los registros  a diarios los archivos antiguos"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr "Visor de documento"
+msgstr "Visor de documentos"
 
 #: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
 msgid "Email client"
@@ -434,11 +435,11 @@ msgstr "Eliminar los archivos obsoletos"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
-msgstr "Listado  los paquetes"
+msgstr "Listas de paquetes"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "Abrir el multimedia"
+msgstr "Visor multimedia"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -961,7 +962,7 @@ msgstr "Error: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:185
 msgid "Please wait.  Wiping free disk space."
-msgstr "Espere. Limpiando el espacio libre."
+msgstr "Espere. Limpiando el espacio libre del disco."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:187 ../bleachbit/Worker.py:334
