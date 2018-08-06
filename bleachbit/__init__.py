@@ -195,6 +195,8 @@ elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
+elif sys.platform.startswith('openbsd'):
+    system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
     logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
