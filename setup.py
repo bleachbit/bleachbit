@@ -31,7 +31,7 @@ import glob
 import os
 import sys
 import tempfile
-from distutils.core import setup
+from setuptools import setup
 if sys.platform == 'win32':
     try:
         import py2exe
