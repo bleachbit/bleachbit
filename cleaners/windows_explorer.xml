@@ -75,6 +75,8 @@
     <label>Search history</label>
     <description>Delete the search history</description>
     <action command="winreg" path="HKCU\Software\Microsoft\Search Assistant\ACMru"/>
+    <!-- Windows 10 -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"/>
   </option>
   <option id="thumbnails">
     <label>Thumbnails</label>
