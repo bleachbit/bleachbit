@@ -67,6 +67,8 @@ Notes about Opera
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Extension Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
