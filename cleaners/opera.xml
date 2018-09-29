@@ -84,46 +84,38 @@ Notes about Opera
     <action command="delete" search="walk.all" path="$appdata\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
-  <option id="download_history">
-    <label>Download history</label>
-    <description>List of files downloaded</description>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\download.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
-    <action command="delete" search="file" path="~/.opera/download.dat"/>
-  </option>
   <option id="form_history">
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
     <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
   </option>
-  <option id="passwords">
-    <label>Passwords</label>
-    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
-    <warning>This option will delete your saved passwords.</warning>
-    <action command="delete" search="file" path="~/.opera/wand.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera Software\Opera Stable\Login Data"/>
-    <action command="delete" search="file" path="$appdata\Opera Software\Opera Stable\Login Data-journal"/>
-  </option>
-  <option id="search_history">
-    <label>Search history</label>
-    <description>Delete the search history</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
+    <!-- keep /History before /Favicons -->
+    <action command="chrome.history" search="file" path="$$profile$$/History"/>
+    <action command="chrome.favicons" search="file" path="$$profile$$/Favicons"/>
+    <action command="delete" search="file" path="$$profile$$/History-journal"/>
+    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
+    <action command="delete" search="file" path="$$profile$$/Favicons-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Visited Links"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
+    <!-- Windows-specific -->
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
+    <!-- below are entries valid before Opera 15 -->
+    <action command="delete" search="glob" path="$appdata\Opera\Opera*\download.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
+    <action command="delete" search="file" path="~/.opera/download.dat"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\search_field_history.dat"/>
     <action command="delete" search="glob" path="~/.opera/search_field_history.dat"/>
-  </option>
-  <option id="session">
-    <label>Session</label>
-    <description>Delete the current and last sessions</description>
-    <action command="delete" search="file" path="$$profile$$/Current Session"/>
-    <action command="delete" search="file" path="$$profile$$/Last Session"/>
-    <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\sessions\autosave.win.bak"/>
-    <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
-    <action command="delete" search="file" path="~/.opera/sessions/autosave.win.bak"/>
-  </option>
-  <option id="url_history">
-    <label>URL history</label>
-    <description>List of visited web pages</description>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\typed_history.xml"/>
@@ -144,5 +136,44 @@ Notes about Opera
     <action command="delete" search="glob" path="~/.opera/icons/*.ico"/>
     <action command="delete" search="glob" path="~/.opera/icons/*.idx"/>
     <action command="delete" search="glob" path="~/.opera/vps/????/md.dat"/>
+  </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <warning>This option will delete your saved passwords.</warning>
+    <action command="delete" search="file" path="$$profile$$/Login Data"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <!-- below are entries valid before Opera 15 -->
+    <action command="delete" search="file" path="~/.opera/wand.dat"/>
+  </option>
+  <option id="session">
+    <label>Session</label>
+    <description>Delete the current and last sessions</description>
+    <action command="delete" search="file" path="$$profile$$/Current Session"/>
+    <action command="delete" search="file" path="$$profile$$/Last Session"/>
+    <!-- below are entries valid before Opera 15 -->
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win.bak"/>
+    <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
+    <action command="delete" search="file" path="~/.opera/sessions/autosave.win.bak"/>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/autoupdate_checker.sqlite"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
+    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
   </option>
 </cleaner>
