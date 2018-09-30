@@ -28,7 +28,7 @@ import bleachbit
 from bleachbit.Action import ActionProvider
 from bleachbit import _
 from bleachbit.General import boolstr_to_bool, getText
-from bleachbit.FileUtilities import listdir
+from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit import Cleaner
 
 import logging
@@ -195,6 +195,7 @@ class CleanerML:
         Example:
 
         <var name="basepath">
+         <value search="glob">~/.config/f*</value>
          <value>~/.config/foo</value>
          <value>%AppData\foo</value>
          </var>
@@ -202,12 +203,17 @@ class CleanerML:
         var_name = var.getAttribute('name')
         for value_element in var.getElementsByTagName('value'):
             value_str = getText(value_element.childNodes)
+            is_glob = value_element.getAttribute('search') == 'glob'
+            if is_glob:
+                value_list = expand_glob_join(value_str, '')
+            else:
+                value_list = [value_str, ]
             if self.vars.has_key(var_name):
                 # append
-                self.vars[var_name] = [value_str, ] + self.vars[var_name]
+                self.vars[var_name] = value_list + self.vars[var_name]
             else:
                 # initialize
-                self.vars[var_name] = [value_str, ]
+                self.vars[var_name] = value_list
 
 
 def list_cleanerml_files(local_only=False):
