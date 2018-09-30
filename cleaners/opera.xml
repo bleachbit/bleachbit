@@ -46,6 +46,8 @@ Notes about Opera
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
+    <!-- suggestions.cache was found on Opera 56 but not on Google Chrome 69 -->
+    <action command="delete" search="file" path="$$profile$$/suggestions_cache.json"/>
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/"/>
     <!-- Windows-specific -->
@@ -153,6 +155,8 @@ Notes about Opera
     <description>Delete the current and last sessions</description>
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
+    <!-- Last Tabs was found on Opera 56 but not on Google Chrome 69 -->
+    <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win.bak"/>
