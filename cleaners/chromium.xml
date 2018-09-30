@@ -37,6 +37,7 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
