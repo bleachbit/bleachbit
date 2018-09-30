@@ -87,8 +87,8 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
   </option>
   <option id="passwords">
     <label>Passwords</label>
-    <warning>This option will delete your saved passwords.</warning>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <warning>This option will delete your saved passwords.</warning>
     <!-- http://kb.mozillazine.org/Password_Manager -->
     <action command="delete" search="file" path="$$profile$$/signons.txt"/>
     <action command="delete" search="file" path="$$profile$$/signons2.txt"/>
