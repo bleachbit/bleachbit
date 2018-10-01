@@ -123,6 +123,7 @@ upgrade.jsonlz4-20180905220717
   <option id="url_history">
     <label>URL history</label>
     <description>List of visited web pages</description>
+    <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.txt"/>
     <!-- Firefox versions 1 and 2 -->
     <action command="delete" search="file" path="$$profile$$/history.dat"/>
     <action command="delete" search="file" path="$$profile$$/downloads.rdf"/>
