@@ -25,6 +25,8 @@
   <running type="exe">chrome.exe</running>
   <!-- Fedora 14 -->
   <running type="exe">chromium-browser</running>
+  <!-- OpenBSD and FreeBSD -->
+  <running type="exe">chrome</running>
   <var name="base">
     <value>%LocalAppData%\Chromium\User Data</value>
     <value>$XDG_CONFIG_HOME/chromium</value>
