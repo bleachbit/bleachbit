@@ -413,6 +413,10 @@ class GUI:
             if pynotify.init(APP_NAME):
                 notify = pynotify.Notification('BleachBit', _("Done."),
                                                icon='bleachbit')
+                if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
+                    notify.set_hint("desktop-entry", "bleachbit-root")
+                else:
+                    notify.set_hint("desktop-entry", "bleachbit")
                 notify.show()
                 notify.set_timeout(10000)
 
