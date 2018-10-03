@@ -466,7 +466,7 @@ def is_broken_xdg_desktop(pathname):
 def is_running_darwin(exename, run_ps=None):
     if run_ps is None:
         def run_ps():
-            subprocess.check_output(["ps", "aux", "-c"])
+            return subprocess.check_output(["ps", "aux", "-c"])
     try:
         processess = (re.split(r"\s+", p, 10)[10] for p in run_ps().split("\n") if p != "")
         next(processess)  # drop the header
@@ -496,7 +496,9 @@ def is_running(exename):
     """Check whether exename is running"""
     if sys.platform.startswith('linux'):
         return is_running_linux(exename)
-    elif 'darwin' == sys.platform:
+    elif ('darwin' == sys.platform or
+          sys.platform.startswith('openbsd') or
+          sys.platform.startswith('freebsd')):
         return is_running_darwin(exename)
     else:
         raise RuntimeError('unsupported platform for physical_free()')

@@ -55,6 +55,8 @@ class UnixTestCase(common.BleachbitTestCase):
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
 
+    @unittest.skipUnless(FileUtilities.exe_exists('apt-get'),
+                         'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
         """Unit test for method get_apt_size()"""
         size = get_apt_size()
@@ -139,7 +141,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             # /usr/share/locale/en_* should be ignored
             self.assertEqual(path.find('/en_'), -1)
             counter += 1
-        self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner.' +
+        self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner. ' +
                                        'This may be an error unless you really deleted all the files.')
 
     def test_fakelocalizationdirs(self):
