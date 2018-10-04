@@ -124,7 +124,8 @@ def verify_cleanliness(filename):
     return clean
 
 
-@unittest.skipIf('nt' == os.name, 'test_wipe() not supported on Windows')
+@unittest.skipIf('nt' == os.name or sys.platform.startswith('freebsd'),
+                 'test_wipe() not supported on Windows or FreeBSD')
 def test_wipe_sub(n_bytes, mkfs_cmd):
     """Test FileUtilities.wipe_path"""
 

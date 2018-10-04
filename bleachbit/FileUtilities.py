@@ -62,7 +62,7 @@ def open_files_linux():
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
         def run_lsof():
-            subprocess.check_output(["lsof", "-Fn", "-n"])
+            return subprocess.check_output(["lsof", "-Fn", "-n"])
     for f in run_lsof().split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"
@@ -71,7 +71,7 @@ def open_files_lsof(run_lsof=None):
 def open_files():
     if sys.platform.startswith('linux'):
         files = open_files_linux()
-    elif 'darwin' == sys.platform:
+    elif 'darwin' == sys.platform or sys.platform.startswith('freebsd'):
         files = open_files_lsof()
     else:
         raise RuntimeError('unsupported platform for open_files()')
