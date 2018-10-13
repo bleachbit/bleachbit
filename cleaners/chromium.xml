@@ -137,6 +137,10 @@
     <description>Delete the files</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <!-- Sync Data Backup not seen in Chromium 65 -->
+    <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
