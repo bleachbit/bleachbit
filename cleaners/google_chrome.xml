@@ -134,10 +134,14 @@
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
   </option>
   <option id="sync">
-    <label>Sync data</label>
-    <description>Delete the files</description>
+    <label>Sync</label>
+    <description>Delete the sync data and sign out of the browser</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
