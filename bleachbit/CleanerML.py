@@ -72,17 +72,32 @@ class CleanerML:
         """Return the created cleaner"""
         return self.cleaner
 
-    def os_match(self, os_str):
-        """Return boolean whether operating system matches"""
+    def os_match(self, os_str, platform=sys.platform):
+        """Return boolean whether operating system matches
+
+        Keyword arguments:
+        os_str -- the required operating system as written in XML
+        platform -- used only for unit tests
+        """
         # If blank or if in .pot-creation-mode, return true.
         if len(os_str) == 0 or self.xlate_mode:
             return True
         # Otherwise, check platform.
-        if os_str == 'linux' and sys.platform.startswith('linux'):
-            return True
-        if os_str == 'windows' and sys.platform == 'win32':
-            return True
-        return False
+        # Define the current operating system.
+        if platform == 'darwin':
+            current_os = ('darwin', 'bsd', 'unix')
+        elif platform.startswith('linux'):
+            current_os = ('linux', 'unix')
+        elif platform.startswith('openbsd'):
+            current_os = ('bsd', 'openbsd', 'unix')
+        elif platform.startswith('netbsd'):
+            current_os = ('bsd', 'netbsd', 'unix')
+        elif platform == 'win32':
+            current_os = ('windows')
+        else:
+            raise RuntimeError('Unknown operating system: %s ' % sys.platform)
+        # Compare current OS against required OS.
+        return os_str in current_os
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""

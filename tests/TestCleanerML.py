@@ -91,6 +91,27 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    def test_os_match(self):
+        """Unit test for os_match"""
+        xmlcleaner = CleanerML("doc/example_cleaner.xml")
+
+        # blank always matches
+        self.assertTrue(xmlcleaner.os_match(""))
+
+        # as Linux
+        self.assertFalse(xmlcleaner.os_match('windows', 'linux2'))
+        self.assertTrue(xmlcleaner.os_match('linux', 'linux2'))
+        self.assertTrue(xmlcleaner.os_match('unix', 'linux2'))
+
+        # as Windows
+        self.assertFalse(xmlcleaner.os_match('linux', 'win32'))
+        self.assertFalse(xmlcleaner.os_match('unix', 'win32'))
+        self.assertTrue(xmlcleaner.os_match('windows', 'win32'))
+
+        # as unknown operating system
+        with self.assertRaises(RuntimeError):
+            xmlcleaner.os_match('linux', 'hal9000')
+
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assertIsString(pot_fragment("Foo", 'bar.xml'))
