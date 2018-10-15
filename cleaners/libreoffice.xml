@@ -22,8 +22,8 @@
 <cleaner id="libreoffice">
   <label>LibreOffice</label>
   <description>Office suite</description>
-  <running type="exe">soffice.bin</running>
-  <running type="exe">soffice.exe</running>
+  <running type="exe" os="linux">soffice.bin</running>
+  <running type="exe" os="windows">soffice.exe</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>

@@ -137,6 +137,9 @@ class CleanerML:
         """<running> element under <cleaner>"""
         # example: <running type="command">opera</running>
         for running in running_elements:
+            os_type = running.getAttribute('os')
+            if os_type and not self.os_match(os_type):
+                continue
             detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
             self.cleaner.add_running(detection_type, value)

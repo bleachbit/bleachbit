@@ -22,8 +22,8 @@
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
   <description>Web browser</description>
-  <running type="exe">chrome.exe</running>
-  <running type="exe">chrome</running>
+  <running type="exe" os="windows">chrome.exe</running>
+  <running type="exe" os="linux">chrome</running>
   <var name="base">
     <value>%LocalAppData%\Google\Chrome\User Data</value>
     <value>$XDG_CONFIG_HOME/google-chrome</value>

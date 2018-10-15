@@ -26,8 +26,8 @@ Notes about Opera
 <cleaner id="opera">
   <label>Opera</label>
   <description>Web browser</description>
-  <running type="exe">opera</running>
-  <running type="exe">opera.exe</running>
+  <running type="exe" os="linux">opera</running>
+  <running type="exe" os="windows">opera.exe</running>
   <var name="base">
     <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
     <value>$XDG_CONFIG_HOME/opera</value>

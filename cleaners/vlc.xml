@@ -23,8 +23,8 @@
 <cleaner id="vlc">
   <label>VLC media player</label>
   <description>Media player</description>
-  <running type="exe">vlc.exe</running>
-  <running type="exe">vlc</running>
+  <running type="exe" os="windows">vlc.exe</running>
+  <running type="exe" os="linux">vlc</running>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
