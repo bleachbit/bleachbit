@@ -29,12 +29,12 @@
     for Chromium when Google Chrome is running. -->
   <running type="exe" os="bsd">chrome</running>
   <var name="base">
-    <value>%LocalAppData%\Chromium\User Data</value>
-    <value>$XDG_CONFIG_HOME/chromium</value>
+    <value os="windows">%LocalAppData%\Chromium\User Data</value>
+    <value os="linux">$XDG_CONFIG_HOME/chromium</value>
   </var>
   <var name="profile">
-    <value>%LocalAppData%\Chromium\User Data\Default</value>
-    <value>$XDG_CONFIG_HOME/chromium/Default</value>
+    <value os="windows">%LocalAppData%\Chromium\User Data\Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/chromium/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>

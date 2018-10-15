@@ -137,8 +137,7 @@ class CleanerML:
         """<running> element under <cleaner>"""
         # example: <running type="command">opera</running>
         for running in running_elements:
-            os_type = running.getAttribute('os')
-            if os_type and not self.os_match(os_type):
+            if not self.os_match(running.getAttribute('os')):
                 continue
             detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
@@ -187,6 +186,8 @@ class CleanerML:
 
     def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""
+        if not self.os_match(action_node.getAttribute('os')):
+            return
         command = action_node.getAttribute('command')
         provider = None
         for actionplugin in ActionProvider.plugins:
@@ -220,6 +221,8 @@ class CleanerML:
         """
         var_name = var.getAttribute('name')
         for value_element in var.getElementsByTagName('value'):
+            if not self.os_match(value_element.getAttribute('os')):
+                continue
             value_str = getText(value_element.childNodes)
             is_glob = value_element.getAttribute('search') == 'glob'
             if is_glob:

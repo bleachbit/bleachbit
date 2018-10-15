@@ -80,6 +80,7 @@
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
+                      <xs:attributeGroup ref="operatingSystem"/>
                       <xs:attribute name="search" use="optional" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
@@ -154,6 +155,7 @@
                       <xs:attribute name="nwholeregex" type="xs:string"/>
                       <xs:attribute name="type" type="xs:string"/>
                       <xs:attribute name="wait" type="xs:string"/>
+                      <xs:attributeGroup ref="operatingSystem"/>
                       <xs:attribute name="search">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">

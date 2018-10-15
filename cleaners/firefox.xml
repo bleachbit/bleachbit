@@ -28,12 +28,12 @@
   <running type="exe" os="windows">firefox.exe</running>
   <running type="pathname">~/.mozilla/firefox/lock</running>
   <var name="base">
-    <value>%AppData%\Mozilla\Firefox</value>
-    <value>~/.mozilla/firefox</value>
+    <value os="windows">%AppData%\Mozilla\Firefox</value>
+    <value os="linux">~/.mozilla/firefox</value>
   </var>
   <var name="profile">
-    <value search="glob">%AppData%\Mozilla\Firefox\Profiles\*</value>
-    <value search="glob">~/.mozilla/firefox/*</value>
+    <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
+    <value search="glob" os="linux">~/.mozilla/firefox/*</value>
   </var>
   <option id="backup">
     <label>Backup files</label>
