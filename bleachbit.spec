@@ -90,10 +90,7 @@ EOF
 
 %endif
 
-# remove Windows-specific cleaners
-grep -l os=.windows. cleaners/*xml | xargs rm -f
-# remove Windows-specific modules
-rm -f bleachbit/Windows*.py
+make delete_windows_files
 
 %if 0%{?rhel_version} || 0%{?centos_version}
 echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
