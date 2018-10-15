@@ -28,12 +28,12 @@ Tested on Windows 7 with Flash version 29.0.0.140
   <label>Flash</label>
   <description>Multimedia viewer</description>
   <var name="adobe">
-    <value>%AppData%\Adobe\Flash Player</value>
-    <value>~/.adobe/Flash_Player</value>
+    <value os="windows">%AppData%\Adobe\Flash Player</value>
+    <value os="linux">~/.adobe/Flash_Player</value>
   </var>
   <var name="macromedia">
-    <value>%AppData%\Macromedia\Flash Player</value>
-    <value>~/.macromedia/Flash_Player</value>
+    <value os="windows">%AppData%\Macromedia\Flash Player</value>
+    <value os="linux">~/.macromedia/Flash_Player</value>
   </var>
   <option id="cache">
     <label>Cache</label>

@@ -25,12 +25,12 @@
   <running type="exe" os="windows">chrome.exe</running>
   <running type="exe" os="linux">chrome</running>
   <var name="base">
-    <value>%LocalAppData%\Google\Chrome\User Data</value>
-    <value>$XDG_CONFIG_HOME/google-chrome</value>
+    <value os="windows">%LocalAppData%\Google\Chrome\User Data</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome</value>
   </var>
   <var name="profile">
-    <value>%LocalAppData%\Google\Chrome\User Data\Default</value>
-    <value>$XDG_CONFIG_HOME/google-chrome/Default</value>
+    <value os="windows">%LocalAppData%\Google\Chrome\User Data\Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>
