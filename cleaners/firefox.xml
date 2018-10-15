@@ -23,9 +23,9 @@
 <cleaner id="firefox">
   <label>Firefox</label>
   <description>Web browser</description>
-  <running type="exe">firefox</running>
-  <running type="exe">firefox-bin</running>
-  <running type="exe">firefox.exe</running>
+  <running type="exe" os="unix">firefox</running>
+  <running type="exe" os="unix">firefox-bin</running>
+  <running type="exe" os="windows">firefox.exe</running>
   <running type="pathname">~/.mozilla/firefox/lock</running>
   <var name="base">
     <value>%AppData%\Mozilla\Firefox</value>

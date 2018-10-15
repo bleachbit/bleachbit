@@ -22,11 +22,12 @@
 <cleaner id="chromium">
   <label>Chromium</label>
   <description>Web browser</description>
-  <running type="exe">chrome.exe</running>
-  <!-- Fedora 14 -->
-  <running type="exe">chromium-browser</running>
-  <!-- OpenBSD and FreeBSD -->
-  <running type="exe">chrome</running>
+  <running type="exe" os="windows">chrome.exe</running>
+  <running type="exe" os="linux">chromium-browser</running>
+  <!-- OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
+    Google Chrome. In other words, on Linux this could give a false positive
+    for Chromium when Google Chrome is running. -->
+  <running type="exe" os="bsd">chrome</running>
   <var name="base">
     <value>%LocalAppData%\Chromium\User Data</value>
     <value>$XDG_CONFIG_HOME/chromium</value>

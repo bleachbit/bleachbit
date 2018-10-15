@@ -22,8 +22,8 @@
 <cleaner id="thunderbird">
   <label>Thunderbird</label>
   <description>Email client</description>
-  <running type="exe">thunderbird.exe</running>
-  <running type="exe">thunderbird-bin</running>
+  <running type="exe" os="windows">thunderbird.exe</running>
+  <running type="exe" os="linux">thunderbird-bin</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>

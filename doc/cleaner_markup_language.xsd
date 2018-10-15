@@ -20,6 +20,21 @@
 
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:attributeGroup name="operatingSystem">
+    <xs:attribute name="os" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="bsd"/>
+          <xs:enumeration value="darwin"/>
+          <xs:enumeration value="linux"/>
+          <xs:enumeration value="netbsd"/>
+          <xs:enumeration value="openbsd"/>
+          <xs:enumeration value="unix"/>
+          <xs:enumeration value="windows"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
   <xs:element name="cleaner">
     <xs:complexType>
       <xs:sequence>
@@ -45,6 +60,7 @@
           <xs:complexType>
             <xs:simpleContent>
               <xs:extension base="xs:string">
+                <xs:attributeGroup ref="operatingSystem"/>
                 <xs:attribute name="type" use="required">
                   <xs:simpleType>
                     <xs:restriction base="xs:string">
@@ -167,14 +183,7 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="id" type="xs:string" use="required"/>
-      <xs:attribute name="os" use="optional">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="linux"/>
-            <xs:enumeration value="windows"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+      <xs:attributeGroup ref="operatingSystem"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="path">
