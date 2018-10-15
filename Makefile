@@ -77,6 +77,13 @@ lint:
 	done; \
 	exit 0
 
+delete_windows_files:
+	# This is used for building .deb and .rpm packages.
+	# Remove Windows-specific cleaners.
+	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*xml | xargs rm -f
+	# Remove Windows-specific modules.
+	rm -f bleachbit/Windows*.py
+
 tests:
 	make -C cleaners tests; cleaners_status=$$?; \
 	$(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
