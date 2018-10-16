@@ -28,6 +28,7 @@ BuildArch:      noarch
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 Requires:       python >= 2.6
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
@@ -40,6 +41,7 @@ BuildRequires:  desktop-file-utils
 %endif
 BuildRequires:  make
 BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
