@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-12 17:48-0600\n"
-"PO-Revision-Date: 2018-10-15 16:24+0000\n"
+"POT-Creation-Date: 2018-10-15 17:17-0600\n"
+"PO-Revision-Date: 2018-10-22 11:32+0000\n"
 "Last-Translator: Shinichirou Yamada "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2018-10-15 23:20+0000\n"
-"X-Generator: Launchpad (build 18790)\n"
+"X-Launchpad-Export-Date: 2018-10-22 21:28+0000\n"
+"X-Generator: Launchpad (build 18801)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -177,8 +177,7 @@ msgstr "クラッシュレポート"
 
 #: ../cleaners/firefox.xml ../cleaners/transmission.xml
 #: ../cleaners/windows_defender.xml ../cleaners/beagle.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../cleaners/deepscan.xml
+#: ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
 msgid "Delete the files"
 msgstr "ファイルの削除"
 
@@ -191,7 +190,7 @@ msgstr "DOM ストレージ"
 #: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Delete HTML5 cookies"
-msgstr "HTML5 cookie を削除"
+msgstr "HTML5 cookie の削除"
 
 #: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -214,7 +213,7 @@ msgstr "パスワード"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr "パスワードを記憶させるサイトと、そのユーザ名とパスワードのデータベース"
+msgstr "ユーザー名とパスワードのデータベース及びパスワードを保存しないサイトの一覧"
 
 #: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -311,7 +310,7 @@ msgstr "ブロックリスト"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "ブロックリストを動作させるのに更新が必要となります。"
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -441,7 +440,7 @@ msgstr "システムのジャーナル"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "古いジャーナルを削除"
+msgstr "古いジャーナルの削除"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -461,19 +460,19 @@ msgstr "コマンド履歴の削除"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "既知のファイル履歴"
 
 #: ../cleaners/amule.xml
 msgid "Delete history of known and cancelled files"
-msgstr ""
+msgstr "既知のファイルとキャンセルされたファイルの履歴の削除"
 
 #: ../cleaners/amule.xml
 msgid "Known clients"
-msgstr ""
+msgstr "既知のクライアント"
 
 #: ../cleaners/amule.xml
 msgid "Delete known clients and friends"
-msgstr ""
+msgstr "既知のクライアントと友達の削除"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -544,7 +543,7 @@ msgstr "現在と以前のセッションの削除"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "フォルダのカスタム設定がリセットされます。"
+msgstr "フォルダーのカスタム設定がリセットされます。"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -586,7 +585,15 @@ msgstr "検索エンジン"
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
-msgstr "検索エンジンの使用履歴をリセットし、自動的に追加されたサードパーティの検索エンジンを削除"
+msgstr "検索エンジンの使用履歴のリセットと、自動的に追加されたサードパーティー製検索エンジンの削除"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "Sync"
+msgstr "同期"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+msgid "Delete the sync data and sign out of the browser"
+msgstr "同期データの削除とブラウザーのログアウト"
 
 #: ../cleaners/audacious.xml
 msgid "Audio player"
@@ -600,11 +607,7 @@ msgstr "データベース"
 msgid ""
 "Delete the database, which contain information such as play count and last "
 "played"
-msgstr "再生回数や最終再生日時などの情報を含むデータベースを削除する"
-
-#: ../cleaners/google_chrome.xml
-msgid "Sync data"
-msgstr ""
+msgstr "再生回数や最終再生日時などの情報を含むデータベースの削除"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
@@ -620,7 +623,7 @@ msgstr "ディープスキャン"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "ディスク全体に広く散在するファイルを削除する"
+msgstr "ディスク全体に広く散在するファイルの削除"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -826,7 +829,7 @@ msgstr "メモリダンプ"
 
 #: ../bleachbit/Cleaner.py:311
 msgid "Delete the file memory.dmp"
-msgstr "memory.dmp ファイルを削除"
+msgstr "memory.dmp ファイルの削除"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:314
@@ -852,8 +855,7 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"ホットフィックス、サービスパック、および Internet Explorer のアップデートを含む Microsoft Update "
-"のためのアンインストーラーを削除する"
+"ホットフィックス、サービスパック、Internet Explorer のアップデートを含んだ Microsoft Update のアンインストーラーの削除"
 
 #: ../bleachbit/Cleaner.py:327 ../bleachbit/Cleaner.py:554
 msgid "Clipboard"
@@ -872,7 +874,7 @@ msgstr "カスタム"
 
 #: ../bleachbit/Cleaner.py:336
 msgid "Delete user-specified files and folders"
-msgstr "ユーザー指定のファイルとフォルダーを削除する"
+msgstr "ユーザー指定のファイルとフォルダーの削除"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:338
@@ -963,7 +965,7 @@ msgstr "ファイルシステムのメタデータを wipe した後のクリー
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] "残り約 %d 分"
+msgstr[0] "残り約%d分です。"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
@@ -1045,7 +1047,7 @@ msgstr "アップデートを確認するために %s へネットワーク接�
 #: ../bleachbit/CLI.py:106
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "%s は有効なクリーナではありません"
+msgstr "無効なクリーナー: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -1057,7 +1059,7 @@ msgstr "使用法: %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:136
 msgid "list cleaners"
-msgstr "クリーナ一覧"
+msgstr "クリーナー一覧"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
@@ -1374,7 +1376,7 @@ msgstr "SI (1 kB = 1000 バイト) の代わりに IEC サイズ (1 KiB = 1024 �
 #: ../bleachbit/GuiPreferences.py:221
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
-msgstr "未使用領域を上書きするために、各ドライブの書き込み可能なフォルダーを選択してください。"
+msgstr "未使用領域を上書きするための、各ドライブの書き込み可能なフォルダーを選択してください。"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
