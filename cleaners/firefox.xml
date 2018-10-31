@@ -30,10 +30,14 @@
   <var name="base">
     <value os="windows">%AppData%\Mozilla\Firefox</value>
     <value os="linux">~/.mozilla/firefox</value>
+    <value os="freebsd">~/.mozilla/firefox</value>
+    <value os="openbsd">~/.mozilla/firefox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
     <value search="glob" os="linux">~/.mozilla/firefox/*</value>
+    <value search="glob" os="freebsd">~/.mozilla/firefox/*</value>
+    <value search="glob" os="openbsd">~/.mozilla/firefox/*</value>
   </var>
   <option id="backup">
     <label>Backup files</label>

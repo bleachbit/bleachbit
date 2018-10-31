@@ -19,8 +19,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="gwenview" os="linux">
+<cleaner id="gwenview" os="unix">
   <label>Gwenview</label>
+  <running type="exe" os="freebsd">gwenview</running>
   <option id="recent_documents">
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
@@ -30,5 +31,7 @@
     <!-- Fedora 11 KDE 4.3.1 has ~/.kde/ -->
     <action command="delete" search="glob" path="~/.kde/share/apps/gwenview/recentfolders/*rc"/>
     <action command="delete" search="glob" path="~/.kde/share/apps/gwenview/recenturls/*rc"/>
+    <!-- FreeBSD -->
+    <action command="delete" search="glob" path="$XDG_DATA_HOME/gwenview/recentfolders/*rc"/>
   </option>
 </cleaner>
