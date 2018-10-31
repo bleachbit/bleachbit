@@ -92,6 +92,8 @@ class CleanerML:
             current_os = ('bsd', 'openbsd', 'unix')
         elif platform.startswith('netbsd'):
             current_os = ('bsd', 'netbsd', 'unix')
+        elif platform.startswith('freebsd'):
+            current_os = ('bsd', 'freebsd', 'unix')
         elif platform == 'win32':
             current_os = ('windows')
         else:
