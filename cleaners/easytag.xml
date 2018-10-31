@@ -20,9 +20,10 @@
 
 -->
 <!-- FIXME: No idea if this is available for Windows. -->
-<cleaner id="easytag" os="linux">
+<cleaner id="easytag" os="unix">
   <label>EasyTAG</label>
   <description translators="This software edits metadata tags, such as title and artist, in audio files">Audio files tagger</description>
+  <running type="exe" os="freebsd">easytag</running>
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>

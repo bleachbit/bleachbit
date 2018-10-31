@@ -24,6 +24,7 @@
   <description>Email client</description>
   <running type="exe" os="windows">thunderbird.exe</running>
   <running type="exe" os="linux">thunderbird-bin</running>
+  <running type="exe" os="freebsd">thunderbird</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
