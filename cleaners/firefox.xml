@@ -134,6 +134,6 @@ upgrade.jsonlz4-20180905220717
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
-    <action command="delete" search="glob" path="$$profile$$/*.sqlite"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/*.sqlite"/>
   </option>
 </cleaner>
