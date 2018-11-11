@@ -204,6 +204,7 @@ SectionEnd
 
 
 SectionGroup /e Shortcuts
+    SetShellVarContext all
     Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
@@ -296,6 +297,7 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
+    SetShellVarContext all
     RMDir /r "$INSTDIR"
     DeleteRegKey HKCU "Software\${prodname}"
     # delete normal shortcuts
