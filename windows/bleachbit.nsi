@@ -204,8 +204,8 @@ SectionEnd
 
 
 SectionGroup /e Shortcuts
-    SetShellVarContext all
     Section "Start menu" SectionStart
+        SetShellVarContext all
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
@@ -218,18 +218,21 @@ SectionGroup /e Shortcuts
     SectionEnd
 
     Section "Desktop" SectionDesktop
+        SetShellVarContext all
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
     Section /o "Quick launch" SectionQuickLaunch
+        SetShellVarContext all
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
     Section /o "Start automatically" SectionStartUp
+        SetShellVarContext all
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
