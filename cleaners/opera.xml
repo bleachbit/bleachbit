@@ -41,6 +41,7 @@ Notes about Opera
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>
