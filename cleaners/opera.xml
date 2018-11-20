@@ -52,6 +52,8 @@ Notes about Opera
     <action command="delete" search="file" path="$$profile$$/suggestions_cache.json"/>
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/"/>
+    <!-- Opera will complain if you delete ~/snap/opera/common/.cache/gdk-pixbuf-loaders.cache -->
+    <action command="delete" search="walk.files" path="~/snap/opera/common/.cache/opera"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Cache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Media Cache\"/>
