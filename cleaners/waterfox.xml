@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2018 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+-->
+<cleaner id="waterfox">
+  <label>Waterfox</label>
+  <description>Web browser</description>
+  <running type="exe" os="unix">waterfox</running>
+  <running type="exe" os="unix">waterfox-bin</running>
+  <running type="exe" os="windows">waterfox.exe</running>
+  <running type="pathname">~/.waterfox/*.default/lock</running>
+  <var name="base">
+    <value os="windows">%AppData%\Waterfox</value>
+    <value os="linux">~/.waterfox</value>
+    <value os="freebsd">~/.waterfox</value>
+    <value os="openbsd">~/.waterfox</value>
+  </var>
+  <var name="profile">
+    <value search="glob" os="windows">%AppData%\Waterfox\Profiles\*</value>
+    <value search="glob" os="linux">~/.waterfox/*</value>
+    <value search="glob" os="freebsd">~/.waterfox/*</value>
+    <value search="glob" os="openbsd">~/.waterfox/*</value>
+  </var>
+  <option id="backup">
+    <label>Backup files</label>
+    <description>Delete the backup files</description>
+    <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.json"/>
+    <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.jsonlz4"/>
+  </option>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!-- 
+This Linux path is whitelisted under the System - Cache cleaner, so it is not
+redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
+-->
+    <action command="delete" search="walk.all" path="~/.cache/waterfox/"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\jumpListCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\OfflineCache"/>
+    <!--
+This file no longer exists in Firefox <=62
+
+Necko Predictive Network Actions
+https://wiki.mozilla.org/Privacy/Reviews/Necko
+-->
+    <action command="delete" search="file" path="$$profile$$/netpredictions.sqlite"/>
+  </option>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <action command="delete" search="file" path="$$profile$$/cookies.txt"/>
+    <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/cookies.sqlite-shm"/>
+    <action command="delete" search="file" path="$$profile$$/cookies.sqlite-wal"/>
+  </option>
+  <option id="crash_reports">
+    <label>Crash reports</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
+  </option>
+  <option id="dom">
+    <label translators="DOM=Document Object Model">DOM Storage</label>
+    <description>Delete HTML5 cookies</description>
+    <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
+  </option>
+  <option id="forms">
+    <label>Form history</label>
+    <description>A history of forms entered in web sites and in the Search bar</description>
+    <action command="delete" search="file" path="$$profile$$/formhistory.dat"/>
+    <action command="delete" search="file" path="$$profile$$/formhistory.sqlite"/>
+  </option>
+  <option id="passwords">
+    <label>Passwords</label>
+    <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
+    <warning>This option will delete your saved passwords.</warning>
+    <!-- http://kb.mozillazine.org/Password_Manager -->
+    <action command="delete" search="file" path="$$profile$$/signons.txt"/>
+    <action command="delete" search="file" path="$$profile$$/signons2.txt"/>
+    <action command="delete" search="file" path="$$profile$$/signons3.txt"/>
+    <action command="delete" search="file" path="$$profile$$/signons.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/logins.json"/>
+  </option>
+  <option id="session_restore">
+    <label>Session restore</label>
+    <description>Loads the initial session after the browser closes or crashes</description>
+    <!--
+example names
+sessionstore.js
+sessionstore.jsonlz4
+sessionstore.bak
+sessionstore.bak-20140715214327
+sessionstore-1.js
+upgrade.jsonlz4-20180905220717
+-->
+    <action command="delete" search="glob" path="$$profile$$/sessionstore*.js*"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore.bak*"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/previous.js*"/>
+    <action command="delete" search="file" path="$$profile$$/sessionstore-backups/recovery.js"/>
+    <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
+  </option>
+  <option id="site_preferences">
+    <label>Site preferences</label>
+    <description>Settings for individual sites</description>
+    <action command="delete" search="file" path="$$profile$$/content-prefs.sqlite"/>
+  </option>
+  <option id="url_history">
+    <label>URL history</label>
+    <description>List of visited web pages</description>
+    <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.txt"/>
+    <!-- Firefox versions 1 and 2 -->
+    <action command="delete" search="file" path="$$profile$$/history.dat"/>
+    <action command="delete" search="file" path="$$profile$$/downloads.rdf"/>
+    <!-- Firefox 3 introduced downloads.sqlite and places.sqlite -->
+    <action command="delete" search="file" path="$$profile$$/downloads.sqlite"/>
+    <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/*.sqlite"/>
+  </option>
+</cleaner>
