@@ -46,8 +46,11 @@ warnings.simplefilter("ignore", Warning)
 
 try:
     import gtk
-    HAVE_GTK = True
-except ImportError:
+    # Import was successful, but is a display available?
+    HAVE_GTK = gtk.gdk.get_default_root_window() is not None
+except (ImportError, RuntimeError) as e:
+    # ImportError happens when GTK is not installed.
+    # RuntimeError can happen when X is not available (e.g., cron, ssh).
     HAVE_GTK = False
 
 # a module-level variable for holding cleaners
