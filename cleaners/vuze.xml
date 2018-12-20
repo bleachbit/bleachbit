@@ -18,6 +18,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	CleanerML written by https://github.com/Tobias-B-Besemer
+	v0.1 done on 2018-12-20
+
 -->
 <cleaner id="vuze">
   <label>Vuze / Azureus</label>
@@ -29,14 +32,14 @@
     <action command="delete" search="glob" path="$APPDATA\Azureus\active\*.bak"/>
   </option>
   <option id="cache">
-    <label>Cache</label>
-    <description>Delete the cache</description>
+    <label>IPFilter Cache</label>
+    <description>Delete the IPFilter Cache</description>
     <action command="delete" search="file" path="~/.azureus/ipfilter.cache"/>
     <action command="delete" search="file" path="$APPDATA\Azureus\ipfilter.cache"/>
   </option>
   <option id="logs">
     <label>Logs</label>
-    <description>Delete the logs</description>
+    <description>Delete all logs (inlc. tracker and update)</description>
     <action command="delete" search="walk.all" path="~/.azureus/logs/"/>
     <action command="delete" search="file" path="~/.azureus/update.log"/>
     <action command="delete" search="file" path="~/.azureus/tracker.log"/>
