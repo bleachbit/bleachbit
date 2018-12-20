@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	CleanerML written by https://github.com/Tobias-B-Besemer
-	v0.1 done on 2018-12-19
+	v0.1 done on 2018-12-20
 
 -->
 <cleaner id="biglybt">
@@ -28,8 +28,8 @@
   <option id="backup_files">
     <label>Backup files</label>
     <description>Delete the backup files</description>
-        <action command="delete" search="glob" path="~/.biglybt/active/*.bak"/>
-        <action command="delete" search="glob" path="$APPDATA\BiglyBT\active\*.bak"/>
+    <action command="delete" search="glob" path="~/.biglybt/active/*.bak"/>
+    <action command="delete" search="glob" path="$APPDATA\BiglyBT\active\*.bak"/>
   </option>
   <option id="cache">
     <label>IPFilter Cache</label>
@@ -44,6 +44,8 @@
     <action command="delete" search="file" path="~/.biglybt/tracker.log"/>
     <action command="delete" search="file" path="~/.biglybt/update.log"/>
     <action command="delete" search="walk.all" path="$APPDATA\BiglyBT\logs\"/>
+    <action command="delete" search="file" path="%ProgramFiles%\BiglyBT\*.log"/>
+    <action command="delete" search="file" path="%ProgramFiles%\BiglyBT\.install4j\*.log"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
