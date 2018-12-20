@@ -32,14 +32,14 @@
     <action command="delete" search="glob" path="$APPDATA\BiglyBT\active\*.bak"/>
   </option>
   <option id="cache">
-    <label>IPFilter Cache</label>
+    <label>Cache</label>
     <description>Delete the IPFilter Cache</description>
     <action command="delete" search="file" path="~/.biglybt/ipfilter.cache"/>
     <action command="delete" search="file" path="$APPDATA\BiglyBT\ipfilter.cache"/>
   </option>
   <option id="logs">
     <label>Logs</label>
-    <description>Delete all logs (inlc. tracker and update)</description>
+    <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="~/.biglybt/logs/"/>
     <action command="delete" search="file" path="~/.biglybt/tracker.log"/>
     <action command="delete" search="file" path="~/.biglybt/update.log"/>
