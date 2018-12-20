@@ -32,14 +32,14 @@
     <action command="delete" search="glob" path="$APPDATA\Azureus\active\*.bak"/>
   </option>
   <option id="cache">
-    <label>IPFilter Cache</label>
+    <label>Cache</label>
     <description>Delete the IPFilter Cache</description>
     <action command="delete" search="file" path="~/.azureus/ipfilter.cache"/>
     <action command="delete" search="file" path="$APPDATA\Azureus\ipfilter.cache"/>
   </option>
   <option id="logs">
     <label>Logs</label>
-    <description>Delete all logs (inlc. tracker and update)</description>
+    <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="~/.azureus/logs/"/>
     <action command="delete" search="file" path="~/.azureus/update.log"/>
     <action command="delete" search="file" path="~/.azureus/tracker.log"/>
