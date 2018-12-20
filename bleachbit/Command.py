@@ -190,7 +190,7 @@ class Ini:
         self.parameter = parameter
 
     def __str__(self):
-        return 'Command to clean .ini path=%s, section=-%s, parameter=%s ' % \
+        return 'Command to clean .ini path=%s, section=%s, parameter=%s ' % \
             (self.path, self.section, self.parameter)
 
     def execute(self, really_delete):
