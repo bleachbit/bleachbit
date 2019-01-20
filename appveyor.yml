@@ -36,6 +36,8 @@ install:
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
 
 build_script:
+  - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
+  - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - '%make% -C po local'
   - '%PYTHON_HOME%/python.exe -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
