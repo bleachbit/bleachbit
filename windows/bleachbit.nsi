@@ -18,7 +18,6 @@
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 ;--------------------------------
 ;Include Modern UI
 
@@ -30,6 +29,7 @@
 
   ;Name and file
   !define prodname "BleachBit"
+  !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
   Name "${prodname}"
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
@@ -40,16 +40,41 @@
 !endif
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${prodname}"
+  ; NsisMultiUser sets the directory.
+  ;InstallDir "$PROGRAMFILES\${prodname}"
 
   ;Get installation folder from registry if available
   InstallDirRegKey HKCU "Software\${prodname}" ""
 
   ;Request application privileges for Windows Vista
-  RequestExecutionLevel admin
+  ; NsisMultiUser sets this, when needed.
+  ;RequestExecutionLevel admin
 
   ;Best compression
   SetCompressor /SOLID lzma
+
+
+;--------------------------------
+; multi-user
+;
+; See https://github.com/Drizin/NsisMultiUser
+;
+!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
+!addplugindir /x86-unicode ".\NsisPluginsUnicode\"
+!addincludedir ".\NsisInclude"
+!include UAC.nsh
+!include NsisMultiUser.nsh
+!include LogicLib.nsh
+!include StdUtils.nsh
+
+!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
+!define PROGEXE "${prodname}.exe"
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
+!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
+!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
+!define MULTIUSER_INSTALLMODE_64_BIT 0
 
 
 ;--------------------------------
@@ -70,9 +95,11 @@
 ;--------------------------------
 ;Pages
 
+; installer
   !insertmacro MUI_PAGE_LICENSE "..\COPYING"
-  !insertmacro MUI_PAGE_COMPONENTS
+  !insertmacro MULTIUSER_PAGE_INSTALLMODE
   !insertmacro MUI_PAGE_DIRECTORY
+  !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
@@ -81,6 +108,8 @@
   !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
   !insertmacro MUI_PAGE_FINISH
 
+; uninstaller
+  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
 
@@ -140,6 +169,9 @@
   !insertmacro MUI_LANGUAGE "Vietnamese"
 !endif
 
+
+!include NsisMultiUserLang.nsh
+
 ;--------------------------------
 ;Function
 
@@ -175,31 +207,20 @@ Section Core (Required)
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
+
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
     # register uninstaller in Add/Remove Programs
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "DisplayName" "${prodname}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "DisplayVersion" "${VERSION}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+    !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "HelpLink" "https://www.bleachbit.org/help"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "NoModify" "1"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "NoRepair" "1"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "Publisher" "BleachBit"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "UninstallString" "$INSTDIR\uninstall.exe"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLInfoAbout" "https://www.bleachbit.org/"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-        "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
+    ; FIXME later: Restore QuietUninstallString
 SectionEnd
 
 
@@ -253,10 +274,19 @@ Section "Integrate Shred" SectionShred
 SectionEnd
 !endif
 
+; Keep this section last. It must be last because that is when the
+; actual size is known.
+; This is a hidden section.
+Section "-Write Install Size"
+    !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
+SectionEnd
+
 ;--------------------------------
 ;Installer Functions
 
 Function .onInit
+
+  !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
   !insertmacro MUI_LANGDLL_DISPLAY
@@ -306,8 +336,9 @@ Section "Uninstall"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # remove file association
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-    # remove registration in Add/Remove Programs
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
+    # Remove the uninstaller from registry as the very last step.
+    # If something goes wrong, let the user run it again.
+    !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
 
@@ -315,6 +346,8 @@ SectionEnd
 ;Uninstaller Functions
 
 Function un.onInit
+
+  !insertmacro MULTIUSER_UNINIT
 
   !insertmacro MUI_UNGETLANGUAGE
 
