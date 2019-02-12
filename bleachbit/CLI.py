@@ -175,7 +175,7 @@ def process_cmd_line():
     cmd_count = sum(x is True for x in cmd_list)
     if cmd_count > 1:
         logger.error(
-            _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --cleaner'))
+            _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
         sys.exit(1)
 
     did_something = False
