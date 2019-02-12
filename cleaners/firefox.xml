@@ -18,6 +18,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
+	Done on 2019-02-12
 
 -->
 <cleaner id="firefox">
@@ -44,6 +46,11 @@
     <description>Delete the backup files</description>
     <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.json"/>
     <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.jsonlz4"/>
+    <action command="delete" search="glob" path="$$profile$$\sessionstore-backups"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore.bak-*"/>
+    <action command="delete" search="glob" path="$$profile$$\*.bak"/>
+    <action command="delete" search="glob" path="$$profile$$\*.bak-*"/>
+    <action command="delete" search="glob" path="$$profile$$\prefs-*.js"/>
   </option>
   <option id="cache">
     <label>Cache</label>
@@ -56,8 +63,10 @@ redundant. Also, this Linux path contains the cache2 and OfflineCache directorie
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\OfflineCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\startupCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\thumbnails"/>
     <!--
-This file no longer exists in Firefox <=62
+This file no longer exists in Firefox >=62
 
 Necko Predictive Network Actions
 https://wiki.mozilla.org/Privacy/Reviews/Necko
@@ -77,6 +86,9 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
+    <action command="delete" search="glob" path="$$profile$$/minidumps/*.extra"/>
+    <action command="delete" search="glob" path="%LocalAppData%\CrashDumps\firefox.exe.*.dmp"/>
+    <action command="delete" search="glob" path="$$profile$$\crashes\events"/>
   </option>
   <option id="dom">
     <label translators="DOM=Document Object Model">DOM Storage</label>
@@ -139,5 +151,22 @@ upgrade.jsonlz4-20180905220717
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/*.sqlite"/>
+  </option>
+  <option id="temp">
+    <label>Temp Files</label>
+    <description>Delete Temp Files</description>
+    <action command="delete" search="glob" path="$$profile$$\storage\temporary"/>
+    <action command="delete" search="glob" path="$$profile$$\hotfix.*.json"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\*.tmp"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\safebrowsing-failedupdate"/>
+    <action command="delete" search="glob" path="%AppData%\LocalLow\Mozilla\Temp-*"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Temp\tmpaddon-*"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Temp\tmp-*.xpi"/>
+  </option>
+  <option id="installer_junk">
+    <label>Installer Junk</label>
+    <description>Delete Installer Junk</description>
+    <action command="delete" search="glob" path="$$base$$/Crash Reports/InstallTime*"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\updates"/>
   </option>
 </cleaner>
