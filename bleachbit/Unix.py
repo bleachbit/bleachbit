@@ -87,7 +87,9 @@ class LocaleCleanerPath:
                     for element in os.listdir(path):
                         match = child.match(element)
                         if match is not None:
-                            yield (match.group('locale'), os.path.join(path, element))
+                            yield (match.group('locale'),
+                                   match.group('specifier'),
+                                   os.path.join(path, element))
 
 
 class Locales:
@@ -100,7 +102,7 @@ class Locales:
     # to match jp.eucJP might also match jp.importantfileextension
     localepattern =\
         r'(?P<locale>[a-z]{2,3})' \
-        r'(?:[_-][A-Z]{2,4}(?:\.[\w]+[\d-]+|@\w+)?)?' \
+        r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
         r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
     native_locale_names = \
@@ -294,6 +296,7 @@ class Locales:
          'so': 'Soomaaliga',
          'sq': 'Shqip',
          'sr': 'Српски',
+         'sr': 'Српски (ijekavian)',
          'ss': 'SiSwati',
          'st': 'Sesotho',
          'su': 'Basa Sunda',
@@ -390,8 +393,10 @@ class Locales:
         purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
                                        if locale not in locales_to_keep))
 
-        for (locale, path) in self._paths.get_localizations('/'):
-            if locale in purgeable_locales:
+        for (locale, specifier, path) in self._paths.get_localizations('/'):
+            specific = locale + (specifier or '')
+            if specific in purgeable_locales or \
+                    (locale in purgeable_locales and specific not in locales_to_keep):
                 yield path
 
 
