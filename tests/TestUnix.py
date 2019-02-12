@@ -135,7 +135,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             '<path location="/usr/share/locale/" />').firstChild
         locales.add_xml(configpath)
         counter = 0
-        for path in locales.localization_paths(['en']):
+        for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
             self.assertLExists(path)
             # self.assert_(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
