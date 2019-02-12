@@ -7,7 +7,8 @@ before_install:
 install:
   - sudo apt-get install git libgtk2.0-dev libglib2.0-dev
 # install PyGObject from source
-  - wget http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.tar.bz2
+  - wget https://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.tar.bz2
+  - sha256sum pygobject-2.28.6.tar.bz2
   - tar xf pygobject-2.28.6.tar.bz2
   - cd pygobject-2.28.6
   - ./configure --prefix=$VIRT_ROOT --disable-introspection > /dev/null
@@ -15,7 +16,8 @@ install:
   - make install > /dev/null
   - cd ..
 # install PyGTK from source
-  - wget http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.bz2
+  - wget https://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.bz2
+  - sha256sum pygtk-2.24.0.tar.bz2
   - tar xf pygtk-2.24.0.tar.bz2
   - cd pygtk-2.24.0
   - ./configure --prefix=$VIRT_ROOT

@@ -162,11 +162,22 @@ def process_cmd_line():
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
+    parser.add_option("-w", "--wipe-free-space", action="store_true",
+                      help=_("wipe free space in the given paths"))
     parser.add_option("-v", "--version", action="store_true",
                       help=_("output version information and exit"))
     parser.add_option('-o', '--overwrite', action='store_true',
                       help=_('overwrite files to hide contents'))
     (options, args) = parser.parse_args()
+
+    cmd_list = (options.list_cleaners, options.wipe_free_space,
+                options.preview, options.clean)
+    cmd_count = sum(x is True for x in cmd_list)
+    if cmd_count > 1:
+        logger.error(
+            _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --cleaner'))
+        sys.exit(1)
+
     did_something = False
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
@@ -186,7 +197,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         Update.check_updates(False, True,
                              lambda x: sys.stdout.write("%s\n" % x),
                              lambda: None)
-        # updates can be combined with --list, --preview, --clean
+        # updates can be combined with --list-cleaners, --preview, --clean
         did_something = True
     if options.list_cleaners:
         list_cleaners()
@@ -194,6 +205,22 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
     if options.pot:
         from bleachbit.CleanerML import create_pot
         create_pot()
+        sys.exit(0)
+    if options.wipe_free_space:
+        if len(args) < 1:
+            logger.error('No directories given for --wipe-free-space')
+            sys.exit(1)
+        for wipe_path in args:
+            if not os.path.isdir(wipe_path):
+                logger.error(
+                    'Path to wipe must be an existing directory: %s', wipe_path)
+                sys.exit(1)
+        logger.info('Wiping free space can take a long time.')
+        for wipe_path in args:
+            logger.info('Wiping free space in path: %s', wipe_path)
+            import bleachbit.FileUtilities
+            for ret in bleachbit.FileUtilities.wipe_path(wipe_path):
+                pass
         sys.exit(0)
     if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)

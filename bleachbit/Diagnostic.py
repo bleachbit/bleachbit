@@ -40,6 +40,12 @@ def diagnostic_info():
     """Return diagnostic information as a string"""
     # this section is for application and library versions
     s = "BleachBit version %s" % bleachbit.APP_VERSION
+
+    try:
+        from bleachbit.Revision import revision
+        s += '\nGit revision %s' % revision
+    except:
+        pass
     try:
         import gtk
         s += '\nGTK+ version %s' % '.'.join([str(x) for x in gtk.gtk_version])

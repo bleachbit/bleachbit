@@ -54,7 +54,6 @@ if 'posix' == os.name:
     pywinerror = WindowsError
 
 
-
 def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
@@ -827,11 +826,13 @@ def wipe_path(pathname, idle=False):
         # Write to OS buffer
         try:
             f.flush()
-        except:
+        except IOError as e:
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
-            logger.info("info: exception on f.flush()", exc_info=True)
+            if not e.errno == errno.ENOSPC:
+                logger.error("info: exception on f.flush()")
+
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
         files.append(f)
