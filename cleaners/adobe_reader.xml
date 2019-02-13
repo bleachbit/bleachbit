@@ -18,6 +18,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
+	Done on 2019-02-13
+
 -->
 <cleaner id="adobe_reader">
   <label>Adobe Reader</label>
@@ -41,10 +44,15 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\10.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles_old"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFolders"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
+    <action command="delete" search="glob" path="$localappdata\Temp\acrord32_sbx"/>
+    <action command="delete" search="glob" path="$localappdata\Temp\AdobeARM*"/>
   </option>
 </cleaner>
