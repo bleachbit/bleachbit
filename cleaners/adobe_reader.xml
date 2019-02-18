@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-17
+	Done on 2019-02-18
 
 -->
 <cleaner id="adobe_reader">
@@ -32,6 +32,26 @@
     <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache"/>
     <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\Cache"/>
     <action command="delete" search="glob" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\9.0\Search\*.idx"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\10.0\Cache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\10.0\*.lst"/>
+    <action command="delete" search="file" path="$UserProfile\AppData\Local\Adobe\Acrobat\10.0\UserCache.bin"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\10.0\JSCache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\10.0\Security\CRLCache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\11.0\Cache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\11.0\*.lst"/>
+    <action command="delete" search="file" path="$UserProfile\AppData\Local\Adobe\Acrobat\11.0\UserCache.bin"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\11.0\JSCache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\11.0\Security\CRLCache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\Cache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\*.lst"/>
+    <action command="delete" search="file" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\IconCacheRdr.dat"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\IconCacheRdr*.dat"/>
+    <action command="delete" search="file" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\UserCache.bin"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Local\Adobe\Acrobat\DC\ToolsSearchCacheRdr\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\DC\ConnectorIcons\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\DC\Search\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\DC\JSCache\*"/>
+    <action command="delete" search="glob" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\DC\Security\CRLCache\*"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
@@ -52,6 +72,7 @@
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
+    <action command="delete" search="walk.all" path="$LocalAppData\Temp\acrord32_sbx"/>
     <action command="delete" search="glob" path="$LocalAppData\Temp\acrord32_sbx"/>
     <action command="delete" search="glob" path="$LocalAppData\Temp\AdobeARM*"/>
   </option>
