@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-17
+	Done on 2019-02-18
 
 -->
 <cleaner id="firefox">
@@ -159,7 +159,8 @@ upgrade.jsonlz4-20180905220717
     <action command="delete" search="glob" path="$$profile$$\hotfix.*.json"/>
     <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\*.tmp"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\safebrowsing-failedupdate"/>
-    <action command="delete" search="walk.all" path="%AppData%\LocalLow\Mozilla\Temp-*"/>
+    <action command="delete" search="walk.all" path="%USERPROFILE%\AppData\LocalLow\Mozilla\Temp-*"/>
+    <action command="delete" search="glob" path="%USERPROFILE%\AppData\LocalLow\Mozilla\Temp-*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\tmpaddon-*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\tmp-*.xpi"/>
     <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-backup-update.log"/>
