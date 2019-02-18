@@ -65,6 +65,15 @@ redundant. Also, this Linux path contains the cache2 and OfflineCache directorie
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\OfflineCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\startupCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\thumbnails"/>
+
+<!-- Just a test to delete the storage -> Doesn't work!
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\storage\default\*\cache\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\storage\default\*\cache\"/>
+-->
+<!-- A other try...
+    <action command="delete" search="deep" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\storage\default\*\cache"/>
+....-> Gives no error msg or something like that, no, the complete option just disappear! :-/ -->
+
     <!--
 This file no longer exists in Firefox >=62
 
