@@ -87,7 +87,9 @@ class LocaleCleanerPath:
                     for element in os.listdir(path):
                         match = child.match(element)
                         if match is not None:
-                            yield (match.group('locale'), os.path.join(path, element))
+                            yield (match.group('locale'),
+                                   match.group('specifier'),
+                                   os.path.join(path, element))
 
 
 class Locales:
@@ -100,12 +102,13 @@ class Locales:
     # to match jp.eucJP might also match jp.importantfileextension
     localepattern =\
         r'(?P<locale>[a-z]{2,3})' \
-        r'(?:[_-][A-Z]{2,4}(?:\.[\w]+[\d-]+|@\w+)?)?' \
-        r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf)[\d-]+|(?:euc|EUC)[A-Z]+))?'
+        r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
+        r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
     native_locale_names = \
         {'aa': 'Afaraf',
          'ab': 'аҧсуа бызшәа',
+         'ace': 'بهسا اچيه',
          'ach': 'Acoli',
          'ae': 'avesta',
          'af': 'Afrikaans',
@@ -113,6 +116,7 @@ class Locales:
          'am': 'አማርኛ',
          'an': 'aragonés',
          'ang': 'Old English',
+         'anp': 'Angika',
          'ar': 'العربية',
          'as': 'অসমীয়া',
          'ast': 'Asturianu',
@@ -129,6 +133,7 @@ class Locales:
          'bn': 'বাংলা',
          'bo': 'བོད་ཡིག',
          'br': 'brezhoneg',
+         'brx': 'Bodo (India)',
          'bs': 'босански',
          'byn': 'Bilin',
          'ca': 'català',
@@ -146,6 +151,7 @@ class Locales:
          'cy': 'Cymraeg',
          'da': 'dansk',
          'de': 'Deutsch',
+         'doi': 'डोगरी; ڈوگرى',
          'dv': 'ދިވެހި',
          'dz': 'རྫོང་ཁ',
          'ee': 'Eʋegbe',
@@ -156,14 +162,18 @@ class Locales:
          'en_GB': 'British English',
          'eo': 'Esperanto',
          'es': 'Español',
+         'es_419': 'Latin American Spanish',
          'et': 'eesti',
          'eu': 'euskara',
          'fa': 'فارسی',
          'ff': 'Fulfulde',
          'fi': 'suomen kieli',
+         'fil': 'Wikang Filipino',
+         'fin': 'suomen kieli',
          'fj': 'vosa Vakaviti',
          'fo': 'føroyskt',
          'fr': 'Français',
+         'frp': 'Arpitan',
          'fur': 'Frilian',
          'fy': 'Frysk',
          'ga': 'Gaeilge',
@@ -190,6 +200,8 @@ class Locales:
          'ig': 'Asụsụ Igbo',
          'ii': 'ꆈꌠ꒿',
          'ik': 'Iñupiaq',
+         'ilo': 'Ilokano',
+         'ina': 'Interlingua',
          'io': 'Ido',
          'is': 'Íslenska',
          'it': 'Italiano',
@@ -198,6 +210,8 @@ class Locales:
          'ja': '日本語',
          'jv': 'basa Jawa',
          'ka': 'ქართული',
+         'kab': 'Tazwawt',
+         'kac': 'Jingpho',
          'kg': 'Kikongo',
          'ki': 'Gĩkũyũ',
          'kj': 'Kuanyama',
@@ -230,6 +244,7 @@ class Locales:
          'mk': 'македонски јазик',
          'ml': 'മലയാളം',
          'mn': 'монгол',
+         'mni': 'Manipuri',
          'mr': 'मराठी',
          'ms': 'بهاس ملايو',
          'mt': 'Malti',
@@ -253,6 +268,8 @@ class Locales:
          'or': 'ଓଡ଼ିଆ',
          'os': 'ирон æвзаг',
          'pa': 'ਪੰਜਾਬੀ',
+         'pap': 'Papiamentu',
+         'pau': 'a tekoi er a Belau',
          'pi': 'पाऴि',
          'pl': 'polski',
          'ps': 'پښتو',
@@ -265,6 +282,7 @@ class Locales:
          'ru': 'Pусский',
          'rw': 'Ikinyarwanda',
          'sa': 'संस्कृतम्',
+         'sat': 'ᱥᱟᱱᱛᱟᱲᱤ',
          'sc': 'sardu',
          'sd': 'सिन्धी',
          'se': 'Davvisámegiella',
@@ -278,6 +296,7 @@ class Locales:
          'so': 'Soomaaliga',
          'sq': 'Shqip',
          'sr': 'Српски',
+         'sr': 'Српски (ijekavian)',
          'ss': 'SiSwati',
          'st': 'Sesotho',
          'su': 'Basa Sunda',
@@ -374,8 +393,10 @@ class Locales:
         purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
                                        if locale not in locales_to_keep))
 
-        for (locale, path) in self._paths.get_localizations('/'):
-            if locale in purgeable_locales:
+        for (locale, specifier, path) in self._paths.get_localizations('/'):
+            specific = locale + (specifier or '')
+            if specific in purgeable_locales or \
+                    (locale in purgeable_locales and specific not in locales_to_keep):
                 yield path
 
 
