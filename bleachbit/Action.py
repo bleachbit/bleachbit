@@ -136,7 +136,7 @@ class FileActionProvider(ActionProvider):
             self.ds['path'] = self.paths[0]
             if not len(self.paths) == 1:
                 logger.warning(
-                    'deep scan does not support multi-value variables')
+                    _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
             # If the filter is not needed, bypass it for speed.

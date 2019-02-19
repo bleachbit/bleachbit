@@ -116,8 +116,10 @@ class CleanerML:
             try:
                 self.handle_cleaner_option(option)
             except:
-                logger.exception('error in handle_cleaner_option() for cleaner id = %s, option XML=%s',
-                                 self.cleaner.id, option.toxml())
+                exc_msg = _(
+                    "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
+                logger.exception(exc_msg.format(
+                    cleaner_id=exc_dict, option_xml=option.toxml()))
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))
@@ -253,7 +255,8 @@ def list_cleanerml_files(local_only=False):
         import stat
         st = os.stat(pathname)
         if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
-            logger.warning("ignoring cleaner because it is world writable: %s", pathname)
+            logger.warning(
+                _("Ignoring cleaner because it is world writable: %s"), pathname)
             continue
         yield pathname
 
@@ -264,13 +267,14 @@ def load_cleaners():
         try:
             xmlcleaner = CleanerML(pathname)
         except:
-            logger.exception('error reading cleaner: %s', pathname)
+            logger.exception(_("Error reading cleaner: %s"), pathname)
             continue
         cleaner = xmlcleaner.get_cleaner()
         if cleaner.is_usable():
             Cleaner.backends[cleaner.id] = cleaner
         else:
-            logger.debug('cleaner is not usable on this OS because it has no actions: %s', pathname)
+            logger.debug(
+                _("Cleaner is not usable on this OS because it has no actions: %s"), pathname)
 
 
 def pot_fragment(msgid, pathname, translators=None):
@@ -302,7 +306,7 @@ def create_pot():
                       lambda newstr, translators=None:
                       strings.append([newstr, translators]))
         except:
-            logger.exception('error reading: %s', pathname)
+            logger.exception(_("Error reading cleaner: %s"), pathname)
             continue
         for (string, translators) in strings:
             f.write(pot_fragment(string, pathname, translators))

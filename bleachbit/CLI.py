@@ -139,7 +139,7 @@ def process_cmd_line():
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
-    parser.add_option('--debug-log', help='log debug messages to file')
+    parser.add_option('--debug-log', help=_("log debug messages to file"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
     parser.add_option("--sysinfo", action="store_true",
@@ -193,7 +193,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if 'nt' == os.name and options.update_winapp2:
         from bleachbit import Update
-        logger.info("Checking online for updates to winapp2.ini")
+        logger.info(_("Checking online for updates to winapp2.ini"))
         Update.check_updates(False, True,
                              lambda x: sys.stdout.write("%s\n" % x),
                              lambda: None)
@@ -208,14 +208,14 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if options.wipe_free_space:
         if len(args) < 1:
-            logger.error('No directories given for --wipe-free-space')
+            logger.error(_("No directories given for --wipe-free-space"))
             sys.exit(1)
         for wipe_path in args:
             if not os.path.isdir(wipe_path):
                 logger.error(
-                    'Path to wipe must be an existing directory: %s', wipe_path)
+                    _("Path to wipe must be an existing directory: %s"), wipe_path)
                 sys.exit(1)
-        logger.info('Wiping free space can take a long time.')
+        logger.info(_("Wiping free space can take a long time."))
         for wipe_path in args:
             logger.info('Wiping free space in path: %s', wipe_path)
             import bleachbit.FileUtilities
@@ -225,14 +225,15 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
     if options.preview or options.clean:
         operations = args_to_operations(args, options.preset)
         if not operations:
-            logger.error('No work to do. Specify options.')
+            logger.error(_("No work to do. Specify options."))
             sys.exit(1)
     if options.preview:
         preview_or_clean(operations, False)
         sys.exit(0)
     if options.overwrite:
         if not options.clean or options.shred:
-            logger.warning('--overwrite is intended only for use with --clean')
+            logger.warning(
+                _("--overwrite is intended only for use with --clean"))
         Options.options.set('shred', True, commit=False)
     if options.clean:
         preview_or_clean(operations, True)
