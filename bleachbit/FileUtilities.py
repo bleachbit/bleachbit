@@ -267,7 +267,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # [Errno 39] Directory not empty
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
-                logger.info("directory is not empty: %s", path)
+                logger.info(_("Directory is not empty: %s"), path)
             else:
                 raise
         except WindowsError as e:
@@ -276,7 +276,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # Error 145 may happen if the files are scheduled for deletion
             # during reboot.
             if 145 == e.winerror:
-                logger.info("directory is not empty: %s", path)
+                logger.info(_("Directory is not empty: %s"), path)
             else:
                 raise
     elif os.path.isfile(path):
@@ -300,7 +300,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # unlink
             os.remove(path)
     else:
-        logger.info("special file type cannot be deleted: %s", path)
+        logger.info(_("Special file type cannot be deleted: %s"), path)
 
 
 def ego_owner(filename):
@@ -474,7 +474,7 @@ def guess_overwrite_paths():
     elif 'nt' == os.name:
         localtmp = bleachbit.expandvars('$TMP')
         if not os.path.exists(localtmp):
-            logger.warning('%TMP% does not exist: %s', localtmp)
+            logger.warning(_("%TMP% does not exist: %s"), localtmp)
             localtmp = None
         from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
