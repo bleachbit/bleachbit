@@ -26,6 +26,7 @@ from __future__ import absolute_import, print_function
 
 import bleachbit
 from bleachbit import General
+from bleachbit import _
 
 import logging
 import os
