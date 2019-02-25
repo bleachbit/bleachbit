@@ -33,9 +33,9 @@
     <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache"/>
     <!--Windows:-->
     <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\Cache\*"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\*.lst"/>
+    <action command="delete" search="glob" path="$LocalAppData\Adobe\Acrobat\*\*.lst"/>
     <action command="delete" search="file" path="$LocalAppData\Adobe\Acrobat\*\IconCacheRdr.dat"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\IconCacheRdr*.dat"/>
+    <action command="delete" search="glob" path="$LocalAppData\Adobe\Acrobat\*\IconCacheRdr*.dat"/>
     <action command="delete" search="file" path="$LocalAppData\Adobe\Acrobat\*\UserCache.bin"/>
     <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\ToolsSearchCacheRdr\*"/>
     <action command="delete" search="walk.files" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\*\ConnectorIcons\*"/>
@@ -66,6 +66,6 @@
     <!--Windows:-->
     <action command="delete" search="walk.all" path="$LocalAppData\Temp\acrord32_sbx"/>
     <action command="delete" search="glob" path="$LocalAppData\Temp\acrord32_sbx"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Temp\AdobeARM*"/>
+    <action command="delete" search="glob" path="$LocalAppData\Temp\AdobeARM*"/>
   </option>
 </cleaner>
