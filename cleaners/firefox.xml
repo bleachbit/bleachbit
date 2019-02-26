@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-18
+	Done on 2019-02-26
 
 -->
 <cleaner id="firefox">
@@ -176,9 +176,10 @@ upgrade.jsonlz4-20180905220717
     <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-last-update.log"/>
   </option>
   <option id="installer_junk">
-    <label>Installer Junk</label>
-    <description>Delete Installer Junk</description>
+    <label>Junk Files</label>
+    <description>Delete Junk Files</description>
     <action command="delete" search="glob" path="$$base$$/Crash Reports/InstallTime*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Mozilla\updates"/>
+    <action command="delete" search="file" path="%ProgramData%\Microsoft\Windows\Start Menu\Programs\Aurora.lnk"/>
   </option>
 </cleaner>
