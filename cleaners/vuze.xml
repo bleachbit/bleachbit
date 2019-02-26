@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written by https://github.com/Tobias-B-Besemer
-	v0.5 done on 2019-02-25
+	v0.5.5 done on 2019-02-26
 
 -->
 <cleaner id="vuze">
@@ -32,8 +32,8 @@
     <action command="delete" search="glob" path="$APPDATA\Azureus\*.bak"/>
     <action command="delete" search="glob" path="$APPDATA\Azureus\active\*.bak"/>
     <action command="delete" search="glob" path="$APPDATA\Azureus\subs\*.vuze.bak"/>
-    <action command="delete" search="walk.all" path="%ProgramFiles%\Vuze\backup\"/>
-    <action command="delete" search="walk.all" path="%ProgramFiles%\Vuze\Vuze AzConfigBackup\"/>
+    <action command="delete" search="walk.all" path="$ProgramFiles\Vuze\backup\"/>
+    <action command="delete" search="walk.all" path="$ProgramFiles\Vuze\Vuze AzConfigBackup\"/>
   </option>
   <option id="cache">
     <label>Cache</label>
@@ -58,9 +58,9 @@
     <action command="delete" search="glob" path="$APPDATA\Azureus\stats\*"/>
     <action command="delete" search="file" path="$APPDATA\Azureus\update.log"/>
     <action command="delete" search="file" path="$APPDATA\Azureus\tracker.log"/>
-    <action command="delete" search="glob" path="%ProgramFiles%\Vuze\*.log"/>
-    <action command="delete" search="walk.files" path="%ProgramFiles%\Vuze\log\"/>
-    <action command="delete" search="glob" path="%ProgramFiles%\Vuze\.install4j\*.log"/>
+    <action command="delete" search="glob" path="$ProgramFiles\Vuze\*.log"/>
+    <action command="delete" search="walk.files" path="$ProgramFiles\Vuze\log\"/>
+    <action command="delete" search="glob" path="$ProgramFiles\Vuze\.install4j\*.log"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
