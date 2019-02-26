@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-25
+	Done on 2019-02-26
 
 -->
 <cleaner id="adobe_reader">
@@ -57,6 +57,13 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles_old"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFolders"/>
+  </option>
+  <option id="search">
+    <label>Delete the search</label>
+    <description>Delete the list of recently used search terms</description>
+    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\ToolsSearchCacheRdr\*"/>
+    <action command="delete" search="walk.files" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\*\Search\*"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
