@@ -19,7 +19,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-17
+	Done on 2019-02-26
 
 -->
 <cleaner id="windows_explorer" os="windows">
@@ -134,7 +134,10 @@
      -->
     <action command="process" wait="false" cmd="%WINDIR%\explorer.exe %WINDIR%\explorer.exe"/>
 
-    <action command="delete" search="glob" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\ThumbCacheToDelete\*"/>
+    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\ThumbCacheToDelete\"/>
+
+    <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db"/>
+    <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db.backup"/>
   </option>
   <option id="mountpoints2">
     <label>Mount Points</label>
