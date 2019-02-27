@@ -44,6 +44,11 @@ else:
 logger = logging.getLogger(__name__)
 
 
+def has_glob(s):
+    """Checks whether the string contains any glob characters"""
+    return re.search('[?*\[\]]', s) is not None
+
+
 def expand_multi_var(s, variables):
     """Expand string s with potentially-multiple values.
 
@@ -239,6 +244,9 @@ class FileActionProvider(ActionProvider):
             self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
 
         for input_path in self.paths:
+            if self.search == 'glob' and not has_glob(input_path):
+                # lint for people who develop cleaners
+                logger.debug(_('%s is not a glob pattern') % input_path)
             for path in func(input_path):
                 yield path
 
