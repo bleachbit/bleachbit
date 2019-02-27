@@ -214,6 +214,8 @@ class FileActionProvider(ActionProvider):
                         expanded, True):
                     any_match = True
                     yield path
+                # This is a lint checker because this scenario may
+                # indicate the cleaner developer made a mistake.
                 if not any_match and os.path.isfile(expanded):
                     logger.debug(
                         _('search="walk.all" used with regular file path="%s"'), expanded)
