@@ -206,6 +206,18 @@ class ActionTestCase(common.BleachbitTestCase):
             actual = expand_multi_var(input_str, variables)
             self.assertSequenceEqual(actual, expected)
 
+    def test_has_glob(self):
+        """Unit test for function has_glob()"""
+        tests = ((r'c:\windows\*.log', True),
+                 (r'c:\windows\temp.log', False),
+                 (r'c:\windows\temp?.log', True),
+                 (r'c:\windows\temp[abc].log', True))
+        for (test_input, test_expected) in tests:
+            test_actual = has_glob(test_input)
+            test_msg = 'test input: %s, expected: %s, actual: %s' % (
+                test_input, test_expected, test_actual)
+            self.assertEqual(test_actual, test_expected, test_msg)
+
     def test_ini(self):
         """Unit test for class Ini"""
         from tests.TestFileUtilities import test_ini_helper
