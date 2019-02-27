@@ -209,9 +209,14 @@ class FileActionProvider(ActionProvider):
 
         def get_walk_all(top):
             for expanded in glob.iglob(top):
+                any_match = False
                 for path in FileUtilities.children_in_directory(
                         expanded, True):
+                    any_match = True
                     yield path
+                if not any_match and os.path.isfile(expanded):
+                    logger.debug(
+                        _('search="walk.all" used with regular file path="%s"'), expanded)
 
         def get_walk_files(top):
             for expanded in glob.iglob(top):
@@ -246,7 +251,7 @@ class FileActionProvider(ActionProvider):
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
                 # lint for people who develop cleaners
-                logger.debug(_('%s is not a glob pattern') % input_path)
+                logger.debug(_('path="%s" is not a glob pattern'), input_path)
             for path in func(input_path):
                 yield path
 
