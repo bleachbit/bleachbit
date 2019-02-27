@@ -154,6 +154,7 @@ def expanduser(path):
             home = os.path.join(h_drive, h_path)
         final = final.replace('~user/', '')
         final = final.replace('~/', '')
+        final = final.replace('~\\', '')
         final = final.replace('~', '')
         final = os.path.join(home, final)
     return final
