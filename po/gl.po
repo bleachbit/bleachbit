@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-02-18 20:35-0700\n"
-"PO-Revision-Date: 2019-02-27 06:51+0000\n"
+"PO-Revision-Date: 2019-03-03 05:16+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-02 20:12+0000\n"
+"X-Launchpad-Export-Date: 2019-03-03 19:24+0000\n"
 "X-Generator: Launchpad (build 18888)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -1181,7 +1181,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:142
 msgid "log debug messages to file"
-msgstr ""
+msgstr "rexistrar as mensaxes de depuración nun ficheiro"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
@@ -1230,14 +1230,16 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Especificar só unha destas ordes: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:196
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Buscando actualizacións para winapp2.ini"
 
 #: ../bleachbit/CLI.py:211
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Non se indicaron directorios para --wipe-free-space"
 
 #: ../bleachbit/CLI.py:216
 #, python-format
@@ -1250,11 +1252,11 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:228
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Non hai tarefas que facer. Especificar opcións."
 
 #: ../bleachbit/CLI.py:236
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite está pensado unicamente para usar con --clean"
 
 #: ../bleachbit/Action.py:139
 msgid "Deep scan does not support multi-value variable."
@@ -1618,24 +1620,26 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Fallou a orde «swapoff -s» polo que recorremos a /proc/swaps para obter "
+"información da memoria de intercambio."
 
 #: ../bleachbit/Memory.py:81
 msgid "Disabling swap."
-msgstr ""
+msgstr "Desactivando a memoria de intercambio."
 
 #: ../bleachbit/Memory.py:101
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "Reactivando a memoria de intercambio."
 
 #: ../bleachbit/Memory.py:121
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Estabelecendo o valor de «nice» %d para este proceso."
 
 #: ../bleachbit/Memory.py:127
 #, python-format
 msgid "Dropping privileges of pid %d to uid %d."
-msgstr ""
+msgstr "Reducindo privilexios de pid %d a uid %d."
 
 #: ../bleachbit/Memory.py:140
 #, python-format
@@ -1645,7 +1649,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:148
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Liberando %s de memoria."
 
 #: ../bleachbit/Memory.py:178
 #, python-format
@@ -1665,7 +1669,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:285
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "Reiniciando o dispositivo da memoria de intercambio %s."
 
 #: ../bleachbit/Memory.py:301
 #, python-format
