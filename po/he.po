@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-02-18 20:35-0700\n"
-"PO-Revision-Date: 2019-02-27 14:01+0000\n"
+"PO-Revision-Date: 2019-03-04 07:56+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-02 20:12+0000\n"
+"X-Launchpad-Export-Date: 2019-03-05 04:44+0000\n"
 "X-Generator: Launchpad (build 18888)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -1152,7 +1152,7 @@ msgstr "הרצת מנגנוני ניקוי למחיקת קבצים ולביצו�
 
 #: ../bleachbit/CLI.py:142
 msgid "log debug messages to file"
-msgstr ""
+msgstr "log debug messages to file"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
@@ -1184,7 +1184,7 @@ msgstr "עדכון winapp2.ini, אם גרסה חדשה זמינה"
 
 #: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "wipe free space in the given paths"
 
 #: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
@@ -1199,19 +1199,21 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:196
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Checking online for updates to winapp2.ini"
 
 #: ../bleachbit/CLI.py:211
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "No directories given for --wipe-free-space"
 
 #: ../bleachbit/CLI.py:216
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Path to wipe must be an existing directory: %s"
 
 #: ../bleachbit/CLI.py:218
 msgid "Wiping free space can take a long time."
