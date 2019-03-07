@@ -74,7 +74,7 @@
     <!-- Was, and didn't worked: -->
     <!-- <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/> -->
     <action command="delete" search="walk.all" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
-    <action command="delete" search="glob" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
+    <action command="delete" search="glob" path="%USERPROFILE%\Local Settings\Temporary Internet Files\*"/>
 
     <!-- Deletes Feeds Cache: -->
     <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Feeds Cache\"/>
