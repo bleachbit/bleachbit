@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-02-18 20:35-0700\n"
-"PO-Revision-Date: 2019-03-03 05:16+0000\n"
+"PO-Revision-Date: 2019-03-06 01:56+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-03 19:24+0000\n"
+"X-Launchpad-Export-Date: 2019-03-06 13:36+0000\n"
 "X-Generator: Launchpad (build 18888)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -707,6 +707,7 @@ msgstr "Produciuse un erro comprobando se a ruta existe: %s"
 #: ../bleachbit/Options.py:213
 msgid "Error when setting the default drives to shred."
 msgstr ""
+"Produciuse un erro estabelecendo os dispositivos predeterminados a destruír."
 
 #: ../bleachbit/Options.py:234
 #, python-format
@@ -994,7 +995,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:259
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Ignorando o limpador porque é escribíbel por calquera: %s"
 
 #: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
 #, python-format
@@ -1005,6 +1006,7 @@ msgstr "Produciuse un erro lendo o limpador: %s"
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"O limpador non é usábel neste sistema operativo porque non ten accións: %s"
 
 #: ../bleachbit/RecognizeCleanerML.py:58
 msgid "Security warning"
@@ -1215,7 +1217,7 @@ msgstr "actualice winapp2.ini, se hai unha nova versión dispoñíbel"
 
 #: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "limpar o espazo libre nas rutas dadas"
 
 #: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
@@ -1244,11 +1246,11 @@ msgstr "Non se indicaron directorios para --wipe-free-space"
 #: ../bleachbit/CLI.py:216
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "A ruta para limpar debe ser un cartafol existente: %s"
 
 #: ../bleachbit/CLI.py:218
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "Limpar o espazo libre pode levar unha boa miga."
 
 #: ../bleachbit/CLI.py:228
 msgid "No work to do. Specify options."
@@ -1260,7 +1262,7 @@ msgstr "--overwrite está pensado unicamente para usar con --clean"
 
 #: ../bleachbit/Action.py:139
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "A análise en profundidade no acepta variábeis multi-valor."
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/Action.py:442 ../bleachbit/GUI.py:659
@@ -1644,7 +1646,7 @@ msgstr "Reducindo privilexios de pid %d a uid %d."
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s (%d B) of memory."
-msgstr ""
+msgstr "Asignando e limpando %s (%d B) de memoria."
 
 #: ../bleachbit/Memory.py:148
 #, python-format
@@ -1654,17 +1656,17 @@ msgstr "Liberando %s de memoria."
 #: ../bleachbit/Memory.py:178
 #, python-format
 msgid "Found UUID for swap file %s is %s."
-msgstr ""
+msgstr "Atopouse o UUID do ficheiro da memoria de intercambio %s é %s."
 
 #: ../bleachbit/Memory.py:263
 #, python-format
 msgid "Physical free memory is %s (%d B)."
-msgstr ""
+msgstr "A memoria física libre é de %s (%d B)."
 
 #: ../bleachbit/Memory.py:274
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "Limpando o dispositivo de intercambio %s."
 
 #: ../bleachbit/Memory.py:285
 #, python-format
@@ -1674,14 +1676,14 @@ msgstr "Reiniciando o dispositivo da memoria de intercambio %s."
 #: ../bleachbit/Memory.py:301
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "Detectados estes dispositivos de memoria de intercambio: %s"
 
 #: ../bleachbit/Memory.py:310
 #, python-format
 msgid "The function wipe_memory() with pid %d is waiting for child pid %d."
-msgstr ""
+msgstr "A función wipe_memory() co pid %d está esperando polo pid %d fillo."
 
 #: ../bleachbit/Memory.py:314
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "O proceso fillo de limpeza de memoria devolveu o código %d."
