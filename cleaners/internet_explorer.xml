@@ -54,12 +54,32 @@
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\IETldCache\"/>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
+    <!-- Was: <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\IETldCache\"/> -->
+    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IETldCache\"/> <!-- Used e.g. in Win7 -->
 
+    <!-- Was: <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/> -->
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Windows\Temporary Internet Files\"/> <!-- Used e.g. in Win7 -->
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Windows\Temporary Internet Files\"/>
+
+    <!-- Windows 7 Support: -->
+    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IECompatUACache\"/>
+    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IECompatCache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Windows\WebCache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Windows\WebCache.old\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Windows\WebCache.old\"/>
+
+    <!-- Windows XP Support: -->
+    <!-- Was, and didn't worked: -->
+    <!-- <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/> -->
     <action command="delete" search="walk.all" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
     <action command="delete" search="glob" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
 
+    <!-- Deletes Feeds Cache: -->
     <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Feeds Cache\"/>
+  </option>
+  <option id="downloads">
+    <label>Downloads history</label>
+    <description>Deletes the Downloads history</description>
+    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IEDownloadHistory\"/> <!-- Used e.g. in Win7 -->
   </option>
 </cleaner>
