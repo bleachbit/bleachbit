@@ -12,11 +12,14 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
+	Done on 2019-03-07
 
 -->
 <cleaner id="windows_media_player" os="windows">
@@ -29,5 +32,15 @@
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\RecentURLList"/>
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="OpenDir"/>
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="SaveAsDir"/>
+  </option>
+  <option id="caches">
+    <label>Caches</label>
+    <description>Cleaning up some caches</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Cache*\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Media Player\Cache*\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Grafikcache\LocalMLS\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Media Player\Grafikcache\LocalMLS\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Transcoded Files Cache"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Media Player\Transcoded Files Cache"/>
   </option>
 </cleaner>
