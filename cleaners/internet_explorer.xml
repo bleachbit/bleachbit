@@ -62,8 +62,10 @@
     <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Windows\Temporary Internet Files\"/>
 
     <!-- Windows 7 Support: -->
-    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IECompatUACache\"/>
-    <action command="delete" search="walk.all" path="%APPDATA%\Microsoft\Windows\IECompatCache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Internet Explorer\UserData\"/>
+    <action command="delete" search="glob" path="%AppData%\Microsoft\Internet Explorer\UserData\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatUACache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatCache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Windows\WebCache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Windows\WebCache.old\"/>
     <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Windows\WebCache.old\"/>
