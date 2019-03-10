@@ -14,8 +14,8 @@ echo There is NO WARRANTY, to the extent permitted by law.
 echo.
 echo Based on "Makefile" of Andrew Ziem.
 echo.
-echo Version: 0.3
-echo Date: 2019-03-09
+echo Version: 0.3.5
+echo Date: 2019-03-10
 echo.
 if "%1"=="-file" goto file
 if "%1"=="-folder" goto folder
@@ -51,7 +51,7 @@ goto end
 :folder
 if "%2"=="" goto errorfolder
 
-for %%f in (.\%2\*.*) do Makefile.bat -file %%f
+for %%f in (.\%2\*.xml) do Makefile.bat -file %%f
 goto end
 
 :file
