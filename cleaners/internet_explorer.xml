@@ -18,8 +18,14 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-03-09
+    @url https://www.microsoft.com/en-us/download/internet-explorer.aspx
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-11
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
 
 -->
 <cleaner id="internet_explorer" os="windows">
@@ -66,8 +72,8 @@
     <!-- Used e.g. in Windows XP (and maybe before on NT) - English-only-Support: -->
     <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\History\"/>
     <!-- Used e.g. in Windows XP (and maybe before on NT) - some none-English-Support: -->
+    <!-- Polish Windows XP Support: -->
     <action command="delete" search="walk.files" path="%USERPROFILE%\Ustawienia lokalne\History\"/>
-    <!-- Polish-Support -->
   </option>
   <option id="temporary_files">
     <label>Temporary files</label>
@@ -111,10 +117,10 @@
     <action command="delete" search="walk.all" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
     <action command="delete" search="glob" path="%USERPROFILE%\Local Settings\Temporary Internet Files\*"/>
     <!-- Used e.g. in Windows XP (and maybe before on NT) - some none-English-Support: -->
+    <!-- Polish Windows XP Support: -->
     <action command="delete" search="walk.all" path="%USERPROFILE%\Ustawienia lokalne\Temporary Internet Files\"/>
-    <!-- Polish-Support -->
+    <!-- Polish Windows XP Support: -->
     <action command="delete" search="glob" path="%USERPROFILE%\Ustawienia lokalne\Temporary Internet Files\*"/>
-    <!-- Polish-Support -->
     <!-- Deletes Feeds Cache: -->
     <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Feeds Cache\"/>
   </option>
