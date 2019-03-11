@@ -14,8 +14,8 @@ echo There is NO WARRANTY, to the extent permitted by law.
 echo.
 echo Based on "Makefile" of Andrew Ziem.
 echo.
-echo Version: 0.3.5
-echo Date: 2019-03-10
+echo Version: 0.3.7
+echo Date: 2019-03-11
 echo.
 if "%1"=="-file" goto file
 if "%1"=="-folder" goto folder
@@ -57,18 +57,36 @@ goto end
 :file
 if "%2"=="" goto errorfile
 
-rem pretty:
+rem Make pretty:
 xmllint --format %2 >%2.pretty
 diff -q %2 %2.pretty
 echo.
 echo %2 is pretty now!
 echo.
-del %2
-move %2.pretty %2
+rem A "if" to prevent 0-Byte-File because e.g. xmllint not found
+if exist %2.pretty del %2
+if exist %2.pretty move %2.pretty %2
+if not exist %2.pretty goto somethingmissing
 echo.
 
-:tests
-rem tests:
-xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
+:test
+rem Make test:
+
+:workaround-xmllint-schema-crash
+rem goto end
+
+if exist ..\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
+if exist ..\doc\cleaner_markup_language.xsd goto end
+if exist ..\bleachbit\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
+if exist ..\bleachbit\doc\cleaner_markup_language.xsd goto end
+echo.
+echo cleaner_markup_language.xsd missing !!!
+goto end
+
+:somethingmissing
+echo Something missing !!!
+echo Do you have installed xmllint ???
+echo Do you have the path to MinGW\msys\1.0\bin\ in the system environment variable "path" ???
+goto end
 
 :end
