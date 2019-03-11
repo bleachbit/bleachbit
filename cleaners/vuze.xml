@@ -18,60 +18,70 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Rules in CleanerML written by https://github.com/Tobias-B-Besemer
-	v0.5.5 done on 2019-02-26
+    @url http://www.vuze.com/
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-11
+    @cleanerby https://github.com/Tobias-B-Besemer
+    @tested ok 
+    @testeddate 
+    @testedby 
+    @note 
 
 -->
 <cleaner id="vuze">
   <label>Vuze/Azureus</label>
   <description>File transfer client</description>
-  <option id="backup_files">
+  <var name="profile">
+    <value search="glob" os="windows">$APPDATA\Azureus</value>
+    <value search="glob" os="linux">~/.azureus</value>
+  </var>
+  <var name="programfiles">
+    <value search="glob" os="windows">$ProgramFiles\Vuze</value>
+    <!-- Not yet figured out! I will do this later! Tobias
+    <value search="glob" os="linux">~/.azureus</value>
+    -->
+  </var>
+  <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
-    <action command="delete" search="glob" path="~/.azureus/active/*.bak"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\*.bak"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\active\*.bak"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\subs\*.vuze.bak"/>
-    <action command="delete" search="walk.all" path="$ProgramFiles\Vuze\backup\"/>
-    <action command="delete" search="walk.all" path="$ProgramFiles\Vuze\Vuze AzConfigBackup\"/>
+    <action command="delete" search="glob" path="$$profile$$\*.bak"/>
+    <action command="delete" search="glob" path="$$profile$$\active\*.bak"/>
+    <action command="delete" search="glob" path="$$profile$$\subs\*.vuze.bak"/>
+    <action command="delete" search="walk.all" path="$$programfiles$$\backup\"/>
+    <action command="delete" search="walk.all" path="$$programfiles$$\Vuze AzConfigBackup\"/>
   </option>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the Caches</description>
-    <action command="delete" search="file" path="~/.azureus/ipfilter.cache"/>
-    <action command="delete" search="file" path="$APPDATA\Azureus\ipfilter.cache"/>
-    <action command="delete" search="walk.all" path="$APPDATA\Azureus\cache"/>
-    <!--<action command="delete" search="walk.all" path="$APPDATA\Azureus\shares\cache*\"/>-->
+    <action command="delete" search="file" path="$$profile$$\ipfilter.cache"/>
+    <action command="delete" search="walk.all" path="$$profile$$\cache"/>
+    <!--<action command="delete" search="walk.all" path="$$profile$$\shares\cache*\"/>-->
     <!--Seems that not normal caches and shouldn't be deleted!-->
   </option>
   <option id="logs">
     <label>Logs and Stats</label>
     <description>Delete the Logs and Stats</description>
-    <action command="delete" search="walk.all" path="~/.azureus/logs/"/>
-    <action command="delete" search="file" path="~/.azureus/update.log"/>
-    <action command="delete" search="file" path="~/.azureus/tracker.log"/>
-    <action command="delete" search="walk.all" path="$APPDATA\Azureus\logs\"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\plugins\*\*.log"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\plugins\*\eventlog.txt"/>
-    <action command="delete" search="walk.all" path="$APPDATA\Azureus\stats\"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\stats\*"/>
-    <action command="delete" search="file" path="$APPDATA\Azureus\update.log"/>
-    <action command="delete" search="file" path="$APPDATA\Azureus\tracker.log"/>
-    <action command="delete" search="glob" path="$ProgramFiles\Vuze\*.log"/>
-    <action command="delete" search="walk.files" path="$ProgramFiles\Vuze\log\"/>
-    <action command="delete" search="glob" path="$ProgramFiles\Vuze\.install4j\*.log"/>
+    <action command="delete" search="walk.all" path="$$profile$$\logs\"/>
+    <action command="delete" search="glob" path="$$profile$$\plugins\*\*.log"/>
+    <action command="delete" search="glob" path="$$profile$$\plugins\*\eventlog.txt"/>
+    <action command="delete" search="walk.all" path="$$profile$$\stats\"/>
+    <action command="delete" search="glob" path="$$profile$$\stats\*"/>
+    <action command="delete" search="file" path="$$profile$$\update.log"/>
+    <action command="delete" search="file" path="$$profile$$\tracker.log"/>
+    <action command="delete" search="glob" path="$$programfiles$$\*.log"/>
+    <action command="delete" search="walk.files" path="$$programfiles$$\log\"/>
+    <action command="delete" search="glob" path="$$programfiles$$\.install4j\*.log"/>
   </option>
-  <option id="tmp">
+  <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="~/.azureus/tmp/"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Azureus\tmp\"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\torrents\*.tmp"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\subs\*.results.bad*"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Azureus\subs\temp\"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\torrents\*.tmp._az"/>
-    <action command="delete" search="glob" path="$APPDATA\Azureus\torrents\*.torrent._az.saving"/>
-    <action command="delete" search="walk.all" path="$APPDATA\Azureus\updates\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\tmp\"/>
+    <action command="delete" search="glob" path="$$profile$$\torrents\*.tmp"/>
+    <action command="delete" search="glob" path="$$profile$$\subs\*.results.bad*"/>
+    <action command="delete" search="walk.files" path="$$profile$$\subs\temp\"/>
+    <action command="delete" search="glob" path="$$profile$$\torrents\*.tmp._az"/>
+    <action command="delete" search="glob" path="$$profile$$\torrents\*.torrent._az.saving"/>
+    <action command="delete" search="walk.all" path="$$profile$$\updates\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Temp\AzureusInstall\"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\AzureusInstall\"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\core_Azureus*"/>
