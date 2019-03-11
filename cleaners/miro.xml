@@ -18,16 +18,28 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    @url http://www.getmiro.com/
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-11
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok 
+    @testeddate 
+    @testedby 
+    @note 
+
 -->
 <cleaner id="miro">
   <label>Miro</label>
   <description>Multimedia viewer</description>
+  <var name="cache-profile">
+    <value search="glob" os="windows">$APPDATA\Participatory Culture Foundation\Miro\Support</value>
+    <value search="glob" os="linux">~/.miro</value>
+  </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.files" path="~/.miro/icon-cache/"/>
-    <action command="delete" search="walk.files" path="~/.miro/mozilla/Cache/"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Participatory Culture Foundation\Miro\Support\icon-cache\"/>
+    <action command="delete" search="walk.files" path="$$cache-profile$$/icon-cache/"/>
+    <action command="delete" search="walk.files" path="$$cache-profile$$/mozilla/Cache/"/>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -39,5 +51,10 @@
     <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log"/>
     <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log.1"/>
     <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro_Download_Daemon_a.txt"/>
+    <!-- Polish Windows XP Support: -->
+    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro-downloader.log"/>
+    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro.log"/>
+    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro.log.1"/>
+    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro_Download_Daemon_a.txt"/>
   </option>
 </cleaner>
