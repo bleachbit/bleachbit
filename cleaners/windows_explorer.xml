@@ -53,18 +53,13 @@
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
     <!--  printer ports -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
-
-
     <!--  more MRUs -->
-
     <!-- Completely deleted by CCleaner !!!
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32"/>
     -->
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\CIDSizeMRU"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\FirstFolder"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRULegacy"/>
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComputerDescriptions"/>
     <action command="winreg" path="HKLM\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
@@ -79,18 +74,12 @@
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers" name="BackgroundHistoryPath2"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers" name="BackgroundHistoryPath3"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers" name="BackgroundHistoryPath4"/>
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StreamMRU"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Streams"/>
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"/>
-
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\ShellNoRoam\MUICache"/>
     <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache"/>
-
-
   </option>
   <option id="recent_documents">
     <label>Recent documents list</label>
@@ -133,9 +122,7 @@
          inherits the mode from bleachbit.exe.
      -->
     <action command="process" wait="false" cmd="%WINDIR%\explorer.exe %WINDIR%\explorer.exe"/>
-
     <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\ThumbCacheToDelete\"/>
-
     <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db"/>
     <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db.backup"/>
   </option>
