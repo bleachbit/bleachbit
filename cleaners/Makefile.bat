@@ -14,7 +14,7 @@ echo There is NO WARRANTY, to the extent permitted by law.
 echo.
 echo Based on "Makefile" of Andrew Ziem.
 echo.
-echo Version: 0.3.7
+echo Version: 0.3.8
 echo Date: 2019-03-11
 echo.
 if "%1"=="-file" goto file
@@ -64,9 +64,9 @@ echo.
 echo %2 is pretty now!
 echo.
 rem A "if" to prevent 0-Byte-File because e.g. xmllint not found
+if not exist %2.pretty goto somethingmissing
 if exist %2.pretty del %2
 if exist %2.pretty move %2.pretty %2
-if not exist %2.pretty goto somethingmissing
 echo.
 
 :test
