@@ -19,18 +19,25 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 	Rules in CleanerML written/updated by https://github.com/Tobias-B-Besemer
-	Done on 2019-02-26
+	Done on 2019-03-11
 
 -->
 <cleaner id="adobe_reader">
   <label>Adobe Reader</label>
   <description>Document viewer</description>
-  <running type="exe">acroread</running>
+  <running type="exe" os="unix">acroread</running>
+  <!--
+  Tobias B. Besemer:
+  Seems to not be necessary on Windows!
+  But if, it would be the following line...
+  <running type="exe" os="windows">AcroRd32.exe</running>
+  -->
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
     <!--Linux:-->
     <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache"/>
+    <!-- Not sure, if we should define a $$profile$$! Will check the existent of the files deleted on Windows on Linux later, too! Tobias. -->
     <!--Windows:-->
     <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\Cache\*"/>
     <action command="delete" search="glob" path="$LocalAppData\Adobe\Acrobat\*\*.lst"/>
@@ -46,7 +53,9 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
+    <!--Linux:-->
     <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
+    <!--Windows:-->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
@@ -56,11 +65,16 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles_old"/>
+    <!-- Not sure if this would be necessary for Adobe Reader 5.0-11.0, too! Can maybe check this later, if necessary. Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFolders"/>
+    <!-- Not sure if this would be necessary for Adobe Reader 5.0-11.0, too! Can maybe check this later, if necessary. Tobias. -->
   </option>
   <option id="search">
-    <label>Delete the search</label>
+    <label>Search</label>
     <description>Delete the list of recently used search terms</description>
+    <!--Linux:-->
+    <!-- Missing ??? Can maybe check this later... Tobias. -->
+    <!--Windows:-->
     <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\ToolsSearchCacheRdr\*"/>
     <action command="delete" search="walk.files" path="$UserProfile\AppData\LocalLow\Adobe\Acrobat\*\Search\*"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
