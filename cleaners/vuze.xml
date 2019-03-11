@@ -41,7 +41,6 @@
     <action command="delete" search="file" path="~/.azureus/ipfilter.cache"/>
     <action command="delete" search="file" path="$APPDATA\Azureus\ipfilter.cache"/>
     <action command="delete" search="walk.all" path="$APPDATA\Azureus\cache"/>
-    
     <!--<action command="delete" search="walk.all" path="$APPDATA\Azureus\shares\cache*\"/>-->
     <!--Seems that not normal caches and shouldn't be deleted!-->
   </option>
