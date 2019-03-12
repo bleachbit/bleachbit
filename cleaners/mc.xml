@@ -12,19 +12,34 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+    @url http://midnight-commander.org/
+    @url https://sourceforge.net/projects/mcwin32/
+    @cleanerversion v0.2.0
+    @cleanerdate 2019-03-11
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
 
 -->
-<cleaner id="midnightcommander" os="linux">
+<cleaner id="midnightcommander">
   <label>Midnight Commander</label>
+  <description>File Manager</description>
+  <var name="profile">
+    <value os="windows">%USERPROFILE%\Midnight Commander</value>
+    <value os="linux">~/.mc</value>
+  </var>
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action command="delete" search="file" path="~/.mc/filepos"/>
-    <action command="delete" search="file" path="~/.mc/history"/>
+    <action command="delete" search="file" path="$$profile$$/filepos"/>
+    <action command="delete" search="file" path="$$profile$$/history"/>
   </option>
 </cleaner>
