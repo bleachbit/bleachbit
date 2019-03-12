@@ -107,8 +107,9 @@ class ActionTestCase(common.BleachbitTestCase):
                 provider = actionplugin(action_node)
         self.assertNotEqual(provider, None)
         for cmd in provider.get_commands():
-            self.assertIsInstance(cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function))
-            if 'process' != command:
+            self.assertIsInstance(
+                cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function))
+            if 'process' != command and not has_glob(filename):
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
