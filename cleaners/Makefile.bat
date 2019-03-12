@@ -14,8 +14,8 @@ echo There is NO WARRANTY, to the extent permitted by law.
 echo.
 echo Based on "Makefile" of Andrew Ziem.
 echo.
-echo Version: 0.3.8
-echo Date: 2019-03-11
+echo Version: 0.4.0
+echo Date: 2019-03-12
 echo.
 if "%1"=="-file" goto file
 if "%1"=="-folder" goto folder
@@ -61,12 +61,23 @@ rem Make pretty:
 xmllint --format %2 >%2.pretty
 diff -q %2 %2.pretty
 echo.
-echo %2 is pretty now!
-echo.
-rem A "if" to prevent 0-Byte-File because e.g. xmllint not found
+
+rem A "if not" to prevent 0-Byte-File because e.g. xmllint not found...
 if not exist %2.pretty goto somethingmissing
-if exist %2.pretty del %2
-if exist %2.pretty move %2.pretty %2
+
+rem ...and some code to prevent 0-Byte-File because e.g. XML Syntax Problems...
+FOR /F "usebackq" %%A IN ('%2.pretty') DO set size=%%~zA
+if %size% LSS 1 (
+    echo We got a problem !!! 0-Byte !!! I revert !!!
+    del %2.pretty
+    goto end
+)
+
+rem -> File there, and no 0-Bytes! ->
+del %2
+move %2.pretty %2
+echo.
+echo %2 is pretty now!
 echo.
 
 :test
