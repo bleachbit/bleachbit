@@ -313,6 +313,26 @@ class ActionTestCase(common.BleachbitTestCase):
         glob.iglob = _iglob
         FileUtilities.getsize = _getsize
 
+    def test_search_glob(self):
+        """Unit test for search=glob"""
+
+        fname = 'abcdefg'
+        pathname = self.write_file(fname)
+        tests = (pathname,
+                 os.path.join(self.tempdir, 'abc*'),
+                 os.path.join(self.tempdir, '*efg'),
+                 os.path.join(self.tempdir, 'a*c*e*g'),
+                 os.path.join(self.tempdir, 'a?cdefg'),
+                 os.path.join(self.tempdir, 'a?????g'),
+                 os.path.join(self.tempdir, '[a-z]b?d*'))
+        for test in tests:
+            print('search="glob" test: %s' % test)
+            pathname = self.write_file(fname)
+            self.assertExists(pathname)
+            action_str = u'<action command="delete" search="glob" path="%s" />' % test
+            self._test_action_str(action_str)
+            self.assertNotExists(pathname)
+
     def test_wholeregex(self):
         """Unit test for wholeregex filter"""
         _iglob = glob.iglob
