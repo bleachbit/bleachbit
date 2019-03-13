@@ -18,9 +18,11 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+    @app WinRAR
     @url https://www.win-rar.com/
+    @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-11
+    @cleanerdate 2019-03-13
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v5.x, Windows 7
     @testeddate 2019-03-10
@@ -33,7 +35,7 @@
   <description>File archiver</description>
   <option id="private">
     <label>Private Data</label>
-    <description>Deletes the Private Data</description>
+    <description>Deletes the data</description>
     <action command="winreg" path="HKCU\Software\WinRAR\ArcHistory"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcName"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcCmtName"/>
@@ -47,8 +49,8 @@
     <action command="winreg" path="HKCU\Software\WinRAR SFX"/>
   </option>
   <option id="temp">
-    <label>Temp Files</label>
-    <description>Deletes the Temp Files</description>
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
     <action command="delete" search="walk.all" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\*.tmp"/>
     <action command="delete" search="glob" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\*.tmp"/>
     <action command="delete" search="walk.all" path="%ProgramFiles%\WinRAR\*.tmp"/>
