@@ -18,9 +18,11 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+    @app Microsoft Windows Explorer
     @url https://www.microsoft.com/en-us/windows
+    @os Windows
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-11
+    @cleanerdate 2019-03-13
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
@@ -45,27 +47,28 @@
     <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
     <!-- common open dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
-    <!--  Windows Vista/7 -->
+    <!-- Windows Vista/7 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU"/>
-    <!--  common save as dialog -->
+    <!-- common save as dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU"/>
-    <!--  Windows Vista/7 -->
+    <!-- Windows Vista/7 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU"/>
-    <!--  find files command -->
+    <!-- find files command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
-    <!--  find Computer command -->
+    <!-- find Computer command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
-    <!--  map network drives -->
+    <!-- map network drives -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
-    <!--  printer ports -->
+    <!-- printer ports -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
-    <!--  more MRUs -->
-    <!-- Completely deleted by CCleaner !!!
-    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32"/>
-    -->
+    <!-- more MRUs -->
+    <!--
+    If CCleaner deletes HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32 complete, we can be generous! ;-) Tobias.
+     -> Beginning... -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\CIDSizeMRU"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\FirstFolder"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRULegacy"/>
+    <!-- End! -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComputerDescriptions"/>
     <action command="winreg" path="HKLM\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
@@ -95,7 +98,7 @@
     <action command="delete" search="glob" path="%USERPROFILE%\Recent\*.lnk"/>
     <!-- Vista and above -->
     <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\*.lnk"/>
-    <!-- recent documents in start menu -->
+    <!-- Recent documents in start menu -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
     <!-- Windows 7 jump list -->
     <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
@@ -134,7 +137,7 @@
   </option>
   <option id="mountpoints2">
     <label>Mount Points</label>
-    <description>Delete the Mount Points</description>
+    <description>Delete the files</description>
     <warning>This will delete your old Mount Points. Only delete if you know what you are doing!</warning>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2"/>
   </option>
