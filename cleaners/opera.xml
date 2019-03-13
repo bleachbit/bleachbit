@@ -21,7 +21,7 @@
     @app Opera
     @url https://www.opera.com/
     @os Windows, Linux
-    @cleanerversion v1.1.0
+    @cleanerversion v1.5.0
     @cleanerdate 2019-03-13
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok 
@@ -37,13 +37,13 @@
   <running type="exe" os="linux">opera</running>
   <running type="exe" os="windows">opera.exe</running>
   <var name="base">
-    <value>%AppData%\Opera Software\Opera Stable</value>
-    <value>$XDG_CONFIG_HOME/opera</value>
+    <value search="glob" os="windows">%AppData%\Opera Software\Opera Stable</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <value>%AppData%\Opera Software\Opera Stable</value>
-    <value>$XDG_CONFIG_HOME/opera</value>
-    <value>~/snap/opera/current/.config/opera</value>
+    <value search="glob" os="windows">%AppData%\Opera Software\Opera Stable</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/opera</value>
+    <value search="glob" os="linux">~/snap/opera/current/.config/opera</value>
   </var>
   <option id="cache">
     <label>Cache</label>
