@@ -18,14 +18,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+    @app Mozilla Firefox
     @url https://www.mozilla.org/en-US/firefox/new/
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-11
+    @os Windows, Linux
+    @cleanerdate 2019-03-13
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
-    @note 
+    @note The cleaner is for different editions, like the normal "Mozilla Firefox" edition and e.g. the "Mozilla Firefox Developer Edition"...
 
 -->
 <cleaner id="firefox">
@@ -34,7 +36,22 @@
   <running type="exe" os="unix">firefox</running>
   <running type="exe" os="unix">firefox-bin</running>
   <running type="exe" os="windows">firefox.exe</running>
+  <!--
   <running type="pathname">~/.mozilla/firefox/*.default/lock</running>
+  
+  What is, if the user have multiple profiles that he maybe have renamed ???
+  Or from different versions of FF ??? (E.g. Developer Edition...)
+  On Windows I have profile folders that have e.g. the following names:
+  - zypzyju5.default
+  - zxzu78e2.dev-edition-default (From the Developer Edition !!!)
+  - uaj16i8x.Default User (Some day renamed ???)
+  - 5umya027.Test (Surely renamed...)
+  
+  So I guess the line should be:
+  <running type="pathname">~/.mozilla/firefox/*/lock</running>
+  
+  But as we already check if the executable is running, I prefer to remove this line...
+  -->
   <var name="base">
     <value os="windows">%AppData%\Mozilla\Firefox</value>
     <value os="linux">~/.mozilla/firefox</value>
@@ -171,22 +188,22 @@
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/*.sqlite"/>
   </option>
   <option id="temp">
-    <label>Temp Files</label>
-    <description>Delete Temp Files</description>
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
     <action command="delete" search="walk.all" path="$$profile$$\storage\temporary"/>
     <action command="delete" search="glob" path="$$profile$$\hotfix.*.json"/>
     <action command="delete" search="glob" path="$$localprofile$$\*.tmp"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\safebrowsing-failedupdate"/>
-    <action command="delete" search="walk.all" path="%USERPROFILE%\AppData\LocalLow\Mozilla\Temp-*"/>
-    <action command="delete" search="glob" path="%USERPROFILE%\AppData\LocalLow\Mozilla\Temp-*"/>
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\tmpaddon-*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Temp\tmp-*.xpi"/>
     <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-backup-update.log"/>
     <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-last-update.log"/>
   </option>
-  <option id="installer_junk">
-    <label>Junk Files</label>
-    <description>Delete Junk Files</description>
+  <option id="junk">
+    <label>Junk files and folders</label>
+    <description>Delete the junk files and folders</description>
     <action command="delete" search="glob" path="$$base$$/Crash Reports/InstallTime*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Mozilla\updates"/>
     <!-- Old name of Firefox Developer Edition: -->
