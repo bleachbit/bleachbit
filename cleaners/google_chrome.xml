@@ -18,9 +18,11 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+    @app Google Chrome
     @url https://www.google.com/intl/en_us/chrome/
-    @cleanerversion v1.1.0
-    @cleanerdate 2019-03-11
+    @os Windows, Linux
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-13
     @cleanerby https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-11
@@ -192,9 +194,10 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$\Plugin Data\Google Gears\permissions.db"/>
   </option>
-  <option id="installer_junk">
-    <label>Junk Files</label>
-    <description>Delete Junk Files</description>
+  <option id="junk">
+    <label>Junk files and folders</label>
+    <description>Delete the junk files and folders</description>
+    <action command="delete" search="file" path="%TMP%\chrome_installer.log"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
     <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
     <!-- Maybe belongs to a other Google Program... Should we make a google_general.xml? Tobias. -->
