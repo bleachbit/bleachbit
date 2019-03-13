@@ -18,14 +18,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+    @app Vuze
     @url http://www.vuze.com/
+    @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-11
+    @cleanerdate 2019-03-13
     @cleanerby https://github.com/Tobias-B-Besemer
-    @tested ok 
-    @testeddate 
-    @testedby 
-    @note 
+    @tested ok v???, Windows 7
+    @testeddate ???
+    @testedby https://github.com/Tobias-B-Besemer
+    @note Linux $ProgramFiles not yet figured out! I will do this later! Tobias.
 
 -->
 <cleaner id="vuze">
@@ -37,7 +39,8 @@
   </var>
   <var name="programfiles">
     <value search="glob" os="windows">$ProgramFiles\Vuze</value>
-    <!-- Not yet figured out! I will do this later! Tobias
+    <!--
+    Linux $ProgramFiles not yet figured out! I will do this later! Tobias.
     <value search="glob" os="linux">~/.azureus</value>
     -->
   </var>
@@ -52,25 +55,26 @@
   </option>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the Caches</description>
+    <description>Delete the cache</description>
     <action command="delete" search="file" path="$$profile$$\ipfilter.cache"/>
     <action command="delete" search="walk.all" path="$$profile$$\cache"/>
     <!--<action command="delete" search="walk.all" path="$$profile$$\shares\cache*\"/>-->
-    <!--Seems that not normal caches and shouldn't be deleted!-->
+    <!--Seems that no normal caches and shouldn't be deleted!-->
   </option>
   <option id="logs">
-    <label>Logs and Stats</label>
-    <description>Delete the Logs and Stats</description>
+    <label>Logs</label>
+    <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="$$profile$$\logs\"/>
     <action command="delete" search="glob" path="$$profile$$\plugins\*\*.log"/>
     <action command="delete" search="glob" path="$$profile$$\plugins\*\eventlog.txt"/>
-    <action command="delete" search="walk.all" path="$$profile$$\stats\"/>
-    <action command="delete" search="glob" path="$$profile$$\stats\*"/>
     <action command="delete" search="file" path="$$profile$$\update.log"/>
     <action command="delete" search="file" path="$$profile$$\tracker.log"/>
     <action command="delete" search="glob" path="$$programfiles$$\*.log"/>
     <action command="delete" search="walk.files" path="$$programfiles$$\log\"/>
     <action command="delete" search="glob" path="$$programfiles$$\.install4j\*.log"/>
+    <!-- Delete the stats, too: -->
+    <action command="delete" search="walk.all" path="$$profile$$\stats\"/>
+    <action command="delete" search="glob" path="$$profile$$\stats\*"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
@@ -82,8 +86,8 @@
     <action command="delete" search="glob" path="$$profile$$\torrents\*.tmp._az"/>
     <action command="delete" search="glob" path="$$profile$$\torrents\*.torrent._az.saving"/>
     <action command="delete" search="walk.all" path="$$profile$$\updates\"/>
-    <action command="delete" search="walk.all" path="%LocalAppData%\Temp\AzureusInstall\"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Temp\AzureusInstall\"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Temp\core_Azureus*"/>
+    <action command="delete" search="walk.all" path="%TMP%\AzureusInstall\"/>
+    <action command="delete" search="glob" path="%TMP%\AzureusInstall\"/>
+    <action command="delete" search="glob" path="%TMP%\core_Azureus*"/>
   </option>
 </cleaner>
