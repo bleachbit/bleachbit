@@ -1,3 +1,11 @@
+# Copyright (C) 2014-2019 by Andrew Ziem.  All rights reserved.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+# This is free software: You are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+#
+# Makefile edited by https://github.com/Tobias-B-Besemer
+# Done on 2019-03-13
+
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL := /bin/bash
 
@@ -51,7 +59,7 @@ install:
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
-	$(INSTALL_DATA) cleaners/*xml $(DESTDIR)$(datadir)/bleachbit/cleaners
+	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
@@ -70,7 +78,7 @@ lint:
 	[ -x "$$(command -v pylint)" ] ||  echo "WARNING: pylint not found"
 	for f in *py */*py; \
 	do \
-		echo "$$f" ; \
+		echo "$$f"; \
 		( [ -x "$$(command -v pychecker)" ] && pyflakes "$$f" > "$$f".pychecker.log ); \
 		( [ -x "$$(command -v pyflakes)" ] && pyflakes "$$f" > "$$f".pyflakes.log ); \
 		( [ -x "$$(command -v pylint)" ] && pylint "$$f" > "$$f".pylint.log ); \
@@ -80,7 +88,7 @@ lint:
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.
 	# Remove Windows-specific cleaners.
-	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*xml | xargs rm -f
+	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
 	# Remove Windows-specific modules.
 	rm -f bleachbit/Windows*.py
 
