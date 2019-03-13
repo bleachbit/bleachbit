@@ -12,15 +12,23 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-Notes about Opera
-- Opera version 15 switched layout engine to Blink like Chromium
-- Unlike Chromium, Opera does not support multiple profiles
+    @app Opera
+    @url https://www.opera.com/
+    @os Windows, Linux
+    @cleanerversion v1.1.0
+    @cleanerdate 2019-03-13
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok 
+    @testeddate 
+    @testedby 
+    @note Opera version 15 switched layout engine to Blink like Chromium
+    @note Unlike Chromium, Opera does not support multiple profiles
 
 -->
 <cleaner id="opera">
@@ -29,11 +37,11 @@ Notes about Opera
   <running type="exe" os="linux">opera</running>
   <running type="exe" os="windows">opera.exe</running>
   <var name="base">
-    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value>%AppData%\Opera Software\Opera Stable</value>
     <value>$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value>%AppData%\Opera Software\Opera Stable</value>
     <value>$XDG_CONFIG_HOME/opera</value>
     <value>~/snap/opera/current/.config/opera</value>
   </var>
@@ -78,8 +86,8 @@ Notes about Opera
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\cookies4.dat"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\profile\cookies4.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\cookies4.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
   </option>
   <option id="dom">
@@ -119,19 +127,19 @@ Notes about Opera
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
     <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\download.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\search_field_history.dat"/>
-    <action command="delete" search="glob" path="~/.opera/search_field_history.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\search_field_history.dat"/>
+    <action command="delete" search="file" path="~/.opera/search_field_history.dat"/>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\typed_history.xml"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\vlink4.dat"/>
     <action command="delete" search="file" path="$localappdata\Opera\Opera\profile\vps\????\md.dat"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\global_history.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\global_history.dat"/>
     <action command="delete" search="glob" path="$appdata\Opera\Opera*\typed_history.xml"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\vlink4.dat"/>
+    <action command="delete" search="file" path="$appdata\Opera\Opera*\vlink4.dat"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.gif"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.ico"/>
     <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.idx"/>
