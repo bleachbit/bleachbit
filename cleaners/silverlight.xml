@@ -12,19 +12,40 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+    @app Microsoft Silverlight
+    @url https://www.microsoft.com/silverlight/
+    @os Windows
+    @cleanerversion v1.5.0
+    @cleanerdate 2019-03-13
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-13
+    @testedby https://github.com/Tobias-B-Besemer
+    @note Deprecated application framework for writing and running rich Internet applications, similar to Adobe Flash.
 
 -->
 <cleaner id="silverlight" os="windows">
   <label>Silverlight</label>
+  <description>Multimedia viewer</description>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="walk.all" path="%LOCALAPPDATA%\Microsoft\Silverlight\is\"/>
-    <action command="delete" search="walk.all" path="%USERPROFILE%\AppData\LocalLow\Microsoft\Silverlight\is\"/>
+    <action command="delete" search="walk.all" path="%LOCALAPPDATALow%\Microsoft\Silverlight\is\"/>
   </option>
 </cleaner>
+  <option id="temp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="file" path="%TMP%\Silverlight*.log"/>
+    <!-- Example:
+    Silverlight0.log
+    SilverlightMSI.log
+    -->
+  </option>
