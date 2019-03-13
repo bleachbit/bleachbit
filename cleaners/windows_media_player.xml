@@ -12,11 +12,22 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+    @app Windows Media Player
+    @url https://www.microsoft.com/en-us/download/media-players.aspx
+    @os Windows
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-13
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
 
 -->
 <cleaner id="windows_media_player" os="windows">
@@ -29,5 +40,15 @@
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\RecentURLList"/>
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="OpenDir"/>
     <action command="winreg" path="HKCU\Software\Microsoft\MediaPlayer\Player\Settings" name="SaveAsDir"/>
+  </option>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Cache*\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Media Player\Cache*\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Grafikcache\LocalMLS\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Transcoded Files Cache\"/>
+    <!-- Let's say the temp folder is a kind of cache, too... ;-) Tobias. -->
+    <action command="delete" search="file" path="%TMP%\wmsetup.log"/>
   </option>
 </cleaner>
