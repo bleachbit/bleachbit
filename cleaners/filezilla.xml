@@ -53,7 +53,7 @@
     This is how IMHO a CleanerML-XML-Cleaning-Syntax maybe can look like (Part 5). Tobias.
     <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/Setting" attribute="name=Last Server Path"/>
     Explanation: Deletes with a "name=value" as value of "attribute" the content of "<element attribute="value">".
-....Example:
+    Example:
     <FileZilla3 version="3.32.0" platform="windows">
         <Settings>
             <Setting name="Last Server Path">ftp://ftp.demo.org</Setting>
