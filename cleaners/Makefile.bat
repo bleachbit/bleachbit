@@ -1,4 +1,10 @@
 @echo off
+rem Set "cleaner-xsd" if the path to your cleaner_markup_language.xsd is not one of the following:
+rem - ..\doc\cleaner_markup_language.xsd
+rem - ..\bleachbit\doc\cleaner_markup_language.xsd
+rem DON'T FORGET TO REMOVE THE "rem " AT THE BEGINNING OF THE NEXT LINE !!!
+rem set cleaner-xsd=I:\GitHub\bleachbit\doc\cleaner_markup_language.xsd
+
 if "%1"=="" goto shorthelp
 if "%1"=="-help" goto help
 if "%1"=="-file" goto help
@@ -14,17 +20,23 @@ echo There is NO WARRANTY, to the extent permitted by law.
 echo.
 echo Based on "Makefile" of Andrew Ziem.
 echo.
-echo Version: 0.4.0
-echo Date: 2019-03-12
+echo Version: 0.5.0
+echo Date: 2019-03-13
 echo.
 if "%1"=="-file" goto file
 if "%1"=="-folder" goto folder
-echo Requirements:
+echo Requirements with MinGW:
 echo - MinGW
 echo - msys-libxml2-bin of MinGW and its dependencies
 echo - msys-diffutils-bin of MinGW and its dependencies
 rem echo - msys-grep-bin of MinGW and its dependencies
 echo - Path to MinGW\msys\1.0\bin\ in the system environment variable "path"
+echo.
+echo Or Requirements with Cygwin:
+echo - Cygwin
+echo - libxml2 of Cygwin
+echo - diffutils (included in the standard installation of Cygwin)
+echo - Path to \cygwin\bin or \cygwin64\bin in the system environment variable "path"
 echo.
 if "%1"=="-help" goto shorthelp
 
@@ -86,6 +98,8 @@ rem Make test:
 :workaround-xmllint-schema-crash
 rem goto end
 
+if not "%cleaner-xsd%"=="" xmllint --noout --schema %cleaner-xsd% %2
+if not "%cleaner-xsd%"=="" goto end
 if exist ..\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
 if exist ..\doc\cleaner_markup_language.xsd goto end
 if exist ..\bleachbit\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
