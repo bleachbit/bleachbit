@@ -12,24 +12,59 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+    @app Filezilla
+    @url https://filezilla-project.org/
+    @cleanerversion v1.5.0
+    @os Windows, Linux
+    @cleanerdate 2019-03-13
+    @cleanerby https://github.com/Tobias-B-Besemer
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10 (... with an old version of the cleaner!)
+    @testedby https://github.com/Tobias-B-Besemer
+    @note As long we have no command="xml", we need to delete the complete file!
 
 -->
 <cleaner id="filezilla">
   <label>Filezilla</label>
   <description>File transfer client</description>
-  <!-- fixme: in ~/.filezilla/filezilla.xml delete XML nodes
-       <Setting name="Last Server Path"
-       <LastServer>
-       -->
+  <var name="profile">
+    <value search="glob" os="windows">%AppData%\FileZilla</value>
+    <value search="glob" os="linux">~/.filezilla</value>
+  </var>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action command="delete" search="file" path="~/.filezilla/recentservers.xml"/>
-    <action command="delete" search="file" path="$APPDATA\FileZilla\recentservers.xml"/>
+    <action command="delete" search="file" path="$$profile$$/recentservers.xml"/>
   </option>
+  <!-- Option not for end-user !!!
+  <option id="last_server_path">
+    <label>Last Server Path</label>
+    <description>Delete the last server path</description>
+    <warning>As long we have no command="xml", we need to delete the complete file! Use this option only if you know what you do!</warning>
+    <action command="delete" search="file" path="$$profile$$/filezilla.xml"/>
+    -->
+    <!--
+    This is how IMHO a CleanerML-XML-Cleaning-Syntax maybe can look like (Part 5). Tobias.
+    <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/Setting" attribute="name=Last Server Path"/>
+    Explanation: Deletes with a "name=value" as value of "attribute" the content of "<element attribute="value">".
+....Example:
+    <FileZilla3 version="3.32.0" platform="windows">
+        <Settings>
+            <Setting name="Last Server Path">ftp://ftp.demo.org</Setting>
+    -> Deletes "ftp://ftp.demo.org"
+    -->
+    <!--
+    For later! Would be Example Part4...
+    Explanation: Deletes with "/*" at the end the content of the element.
+    <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/LastServer/*"/>
+    -->
+  <!--
+  </option>
+  -->
 </cleaner>
