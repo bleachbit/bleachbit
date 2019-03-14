@@ -12,18 +12,18 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Vuze
     @url http://www.vuze.com/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
-    @cleanerby https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-14
+    @cleanerby Andrew Ziem (first release: 2009-02-15) & https://github.com/Tobias-B-Besemer (2018/2019)
     @tested ok v???, Windows 7
     @testeddate ???
     @testedby https://github.com/Tobias-B-Besemer
@@ -74,7 +74,6 @@
     <action command="delete" search="glob" path="$$programfiles$$\.install4j\*.log"/>
     <!-- Delete the stats, too: -->
     <action command="delete" search="walk.all" path="$$profile$$\stats\"/>
-    <action command="delete" search="glob" path="$$profile$$\stats\*"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
@@ -87,7 +86,7 @@
     <action command="delete" search="glob" path="$$profile$$\torrents\*.torrent._az.saving"/>
     <action command="delete" search="walk.all" path="$$profile$$\updates\"/>
     <action command="delete" search="walk.all" path="%TMP%\AzureusInstall\"/>
-    <action command="delete" search="glob" path="%TMP%\AzureusInstall\"/>
+    <action command="delete" search="file" path="%TMP%\AzureusInstall\"/>
     <action command="delete" search="glob" path="%TMP%\core_Azureus*"/>
   </option>
 </cleaner>
