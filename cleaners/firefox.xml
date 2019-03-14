@@ -12,17 +12,17 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Mozilla Firefox
     @url https://www.mozilla.org/en-US/firefox/new/
     @cleanerversion v2.0.0
-    @os Windows, Linux
-    @cleanerdate 2019-03-13
+    @os Windows, Linux, FreeBSD, OpenBSD
+    @cleanerdate 2019-03-14
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-10
@@ -36,6 +36,10 @@
   <running type="exe" os="unix">firefox</running>
   <running type="exe" os="unix">firefox-bin</running>
   <running type="exe" os="windows">firefox.exe</running>
+  <!--
+  Just a guess! I will figure this out later! Tobias.
+  <running type="exe" os="linux">firefox</running>
+  -->
   <!--
   <running type="pathname">~/.mozilla/firefox/*.default/lock</running>
   
@@ -78,7 +82,8 @@
     <description>Delete the backup files</description>
     <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.json"/>
     <action command="delete" search="glob" path="$$profile$$/bookmarkbackups/*.jsonlz4"/>
-    <action command="delete" search="glob" path="$$profile$$\sessionstore-backups"/>
+    <action command="delete" search="walk.files" path="$$profile$$\sessionstore-backups\"/>
+    <action command="delete" search="file" path="$$profile$$\sessionstore-backups\"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore.bak-*"/>
     <action command="delete" search="glob" path="$$profile$$\*.bak"/>
     <action command="delete" search="glob" path="$$profile$$\*.bak-*"/>
@@ -98,8 +103,7 @@
     <action command="delete" search="walk.all" path="$$localprofile$$\startupCache"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\thumbnails"/>
     <!-- This should later delete the storage cache in FF >= v62 -->
-    <action command="delete" search="walk.all" path="$$localprofile$$\storage\default\*\cache\"/>
-    <action command="delete" search="glob" path="$$localprofile$$\storage\default\*\cache\"/>
+    <action command="delete" search="glob" path="$$localprofile$$\storage\default\*\cache\*"/>
     <!--
     This file no longer exists in Firefox >=62
     
@@ -196,10 +200,10 @@
     <action command="delete" search="walk.all" path="$$localprofile$$\safebrowsing-failedupdate"/>
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
     <action command="delete" search="glob" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Temp\tmpaddon-*"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Temp\tmp-*.xpi"/>
-    <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-backup-update.log"/>
-    <action command="delete" search="file" path="%LocalAppData%\Temp\moz-update-newest-last-update.log"/>
+    <action command="delete" search="glob" path="%Temp%\tmpaddon-*"/>
+    <action command="delete" search="glob" path="%Temp%\tmp-*.xpi"/>
+    <action command="delete" search="file" path="%Temp%\moz-update-newest-backup-update.log"/>
+    <action command="delete" search="file" path="%Temp%\moz-update-newest-last-update.log"/>
   </option>
   <option id="junk">
     <label>Junk files and folders</label>
