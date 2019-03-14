@@ -34,11 +34,16 @@
   <label>Vuze/Azureus</label>
   <description>File transfer client</description>
   <var name="profile">
-    <value search="glob" os="windows">$APPDATA\Azureus</value>
+    <value search="glob" os="windows">$AppData\Azureus</value>
     <value search="glob" os="linux">~/.azureus</value>
   </var>
   <var name="programfiles">
-    <value search="glob" os="windows">$ProgramFiles\Vuze</value>
+    <!--
+    Windows itself changes %ProgramFiles% for 32-bit processes running in a 64-bit operating system as documented here:
+    https://docs.microsoft.com/en-us/windows/desktop/winprog64/wow64-implementation-details
+    ...so we use %SystemDrive%\Program Files\...
+    -->
+    <value search="glob" os="windows">%SystemDrive%\Program Files\Vuze</value>
     <!--
     Linux $ProgramFiles not yet figured out! I will do this later! Tobias.
     <value search="glob" os="linux">~/.azureus</value>
@@ -52,6 +57,8 @@
     <action command="delete" search="glob" path="$$profile$$\subs\*.vuze.bak"/>
     <action command="delete" search="walk.all" path="$$programfiles$$\backup\"/>
     <action command="delete" search="walk.all" path="$$programfiles$$\Vuze AzConfigBackup\"/>
+    <!-- The following line should later delete *.bak recursive! -->
+    <action command="delete" search="glob" path="$$profile$$\*.bak"/>
   </option>
   <option id="cache">
     <label>Cache</label>
@@ -72,7 +79,10 @@
     <action command="delete" search="glob" path="$$programfiles$$\*.log"/>
     <action command="delete" search="walk.files" path="$$programfiles$$\log\"/>
     <action command="delete" search="glob" path="$$programfiles$$\.install4j\*.log"/>
-    <!-- Delete the stats, too: -->
+  </option>
+  <option id="stats">
+    <label>Statistics</label>
+    <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$profile$$\stats\"/>
   </option>
   <option id="temp">
