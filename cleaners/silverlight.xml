@@ -12,17 +12,17 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Microsoft Silverlight
     @url https://www.microsoft.com/silverlight/
     @os Windows
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-13
+    @cleanerdate 2019-03-14
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-13
@@ -39,7 +39,6 @@
     <action command="delete" search="walk.all" path="%LOCALAPPDATA%\Microsoft\Silverlight\is\"/>
     <action command="delete" search="walk.all" path="%LOCALAPPDATALow%\Microsoft\Silverlight\is\"/>
   </option>
-</cleaner>
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
@@ -49,3 +48,4 @@
     SilverlightMSI.log
     -->
   </option>
+</cleaner>
