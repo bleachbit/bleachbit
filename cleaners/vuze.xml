@@ -22,8 +22,8 @@
     @url http://www.vuze.com/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-14
-    @cleanerby Andrew Ziem (first release: 2009-02-15) & https://github.com/Tobias-B-Besemer (2018/2019)
+    @cleanerdate 2019-03-15
+    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-04) & Tobias B. Besemer (2018-12-20 - 2019-03-15)
     @tested ok v???, Windows 7
     @testeddate ???
     @testedby https://github.com/Tobias-B-Besemer
@@ -95,8 +95,8 @@
     <action command="delete" search="glob" path="$$profile$$\torrents\*.tmp._az"/>
     <action command="delete" search="glob" path="$$profile$$\torrents\*.torrent._az.saving"/>
     <action command="delete" search="walk.all" path="$$profile$$\updates\"/>
-    <action command="delete" search="walk.all" path="%TMP%\AzureusInstall\"/>
-    <action command="delete" search="file" path="%TMP%\AzureusInstall\"/>
-    <action command="delete" search="glob" path="%TMP%\core_Azureus*"/>
+    <action command="delete" search="walk.all" path="%Temp%\AzureusInstall\"/>
+    <action command="delete" search="file" path="%Temp%\AzureusInstall\"/>
+    <action command="delete" search="glob" path="%Temp%\core_Azureus*"/>
   </option>
 </cleaner>
