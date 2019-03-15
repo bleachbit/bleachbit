@@ -22,7 +22,7 @@
     @url https://www.mozilla.org/en-US/firefox/new/
     @cleanerversion v2.0.0
     @os Windows, Linux, FreeBSD, OpenBSD
-    @cleanerdate 2019-03-14
+    @cleanerdate 2019-03-15
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-10
@@ -103,7 +103,7 @@
     <action command="delete" search="walk.all" path="$$localprofile$$\startupCache"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\thumbnails"/>
     <!-- This should later delete the storage cache in FF >= v62 -->
-    <action command="delete" search="glob" path="$$localprofile$$\storage\default\*\cache\*"/>
+    <action command="delete" search="walk.all" path="$$profile$$\storage\default\*\cache\"/>
     <!--
     This file no longer exists in Firefox >=62
     
