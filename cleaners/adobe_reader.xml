@@ -12,22 +12,22 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Adobe Reader
     @url https://get.adobe.com/reader/otherversions/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
-    @cleanerby https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-17
+    @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok vDC, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
-    @note Not sure, if we should define a $$profile$$! Will check the existent of the files deleted on Windows on Linux later, too! Tobias.
+    @note Was not sure, but I defined a $$profile$$! Will check the existent of the files deleted on Windows on Linux later, too! Tobias.
 
 -->
 <cleaner id="adobe_reader">
@@ -40,29 +40,30 @@
   But if, it would be the following line...
   <running type="exe" os="windows">AcroRd32.exe</running>
   -->
+  <var name="profile">
+    <value search="glob" os="windows">$LocalAppData\Adobe\Acrobat\*</value>
+    <value search="glob" os="linux">~/.adobe/Acrobat/*</value>
+  </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <!--Linux:-->
-    <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache/*"/>
-    <!--Windows:-->
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\Cache\*"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\*.lst"/>
-    <action command="delete" search="file" path="$LocalAppData\Adobe\Acrobat\*\IconCacheRdr.dat"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\IconCacheRdr*.dat"/>
-    <action command="delete" search="file" path="$LocalAppData\Adobe\Acrobat\*\UserCache.bin"/>
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\ToolsSearchCacheRdr\*"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Cache\"/>
+    <action command="delete" search="glob" path="$$profile$$\*.lst"/>
+    <action command="delete" search="file" path="$$profile$$\IconCacheRdr.dat"/>
+    <action command="delete" search="walk.files" path="$$profile$$\IconCacheRdr*.dat"/>
+    <action command="delete" search="file" path="$$profile$$\UserCache.bin"/>
+    <action command="delete" search="walk.files" path="$$profile$$\ToolsSearchCacheRdr\*"/>
     <action command="delete" search="walk.files" path="$LocalAppDataLow\Adobe\Acrobat\*\ConnectorIcons\*"/>
     <action command="delete" search="walk.files" path="$LocalAppDataLow\Adobe\Acrobat\*\Search\*"/>
-    <action command="delete" search="walk.files" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\*\JSCache\*"/>
-    <action command="delete" search="walk.files" path="$UserProfile\AppData\Roaming\Adobe\Acrobat\*\Security\CRLCache\*"/>
+    <action command="delete" search="walk.files" path="$AppData\Adobe\Acrobat\*\JSCache\"/>
+    <action command="delete" search="walk.files" path="$AppData\Adobe\Acrobat\*\Security\CRLCache\"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <!--Linux:-->
-    <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
-    <!--Windows:-->
+    <!-- Seen on Linux: -->
+    <action command="delete" search="file" path="$$profile$$/Preferences/reader_prefs"/>
+    <!-- Windows: -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>
@@ -75,14 +76,18 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles_old"/>
     <!-- Not sure if this would be necessary for Adobe Reader 5.0-11.0, too! Can maybe check this later, if necessary. Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFolders"/>
+    <!-- Just to go sure, adding this for Adobe Reader 11, too. Tobias. -->
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles_old"/>
+    <!-- Just to go sure, adding this for Adobe Reader 11, too. Tobias. -->
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFolders"/>
   </option>
   <option id="search">
-    <label>Search</label>
-    <description>Delete the list of recently used search terms</description>
+    <label>Search history</label>
+    <description>Delete the search history</description>
     <!--Linux:-->
     <!-- Missing ??? Can maybe check this later... Tobias. -->
     <!--Windows:-->
-    <action command="delete" search="walk.files" path="$LocalAppData\Adobe\Acrobat\*\ToolsSearchCacheRdr\*"/>
+    <action command="delete" search="walk.files" path="$$profile$$\ToolsSearchCacheRdr\*"/>
     <action command="delete" search="walk.files" path="$LocalAppDataLow\Adobe\Acrobat\*\Search\*"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
   </option>
@@ -92,14 +97,14 @@
     <!--Linux:-->
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
     <!--Windows:-->
-    <action command="delete" search="walk.all" path="$TMP\acrocef_low"/>
-    <action command="delete" search="glob" path="$TMP\acrocef_low"/>
-    <action command="delete" search="walk.all" path="$TMP\acrord32_sbx"/>
-    <action command="delete" search="glob" path="$TMP\acrord32_sbx"/>
-    <action command="delete" search="walk.all" path="$TMP\WebInstaller"/>
-    <action command="delete" search="glob" path="$TMP\WebInstaller"/>
-    <action command="delete" search="walk.files" path="$TMP\AdobeARM*"/>
-    <action command="delete" search="file" path="$TMP\AdobeARM.log"/>
+    <action command="delete" search="walk.all" path="%Temp%\acrocef_low"/>
+    <action command="delete" search="file" path="%Temp%\acrocef_low"/>
+    <action command="delete" search="walk.all" path="%Temp%\acrord32_sbx"/>
+    <action command="delete" search="file" path="%Temp%\acrord32_sbx"/>
+    <action command="delete" search="walk.all" path="%Temp%\WebInstaller"/>
+    <action command="delete" search="file" path="%Temp%\WebInstaller"/>
+    <action command="delete" search="walk.files" path="%Temp%\AdobeARM*"/>
+    <action command="delete" search="file" path="%Temp%\AdobeARM.log"/>
     <action command="delete" search="file" path="%windir%\Temp\AdobeARM.log"/>
     <action command="delete" search="file" path="%windir%\Temp\AdobeARM_NotLocked.log"/>
   </option>
