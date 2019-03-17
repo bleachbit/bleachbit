@@ -22,10 +22,10 @@
     @url http://www.getmiro.com/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
+    @cleanerdate 2019-03-14
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows XP
-    @testeddate 2019-03-12
+    @testeddate 2019-03-12 (... with an old version of the cleaner!)
     @testedby https://github.com/bleachbit/bleachbit/issues/460#issuecomment-471987298
     @note 
 
@@ -34,7 +34,7 @@
   <label>Miro</label>
   <description>Multimedia viewer</description>
   <var name="cache-profile">
-    <value search="glob" os="windows">$APPDATA\Participatory Culture Foundation\Miro\Support</value>
+    <value search="glob" os="windows">$AppData\Participatory Culture Foundation\Miro\Support</value>
     <value search="glob" os="linux">~/.miro</value>
   </var>
   <option id="cache">
@@ -49,14 +49,17 @@
     <action command="delete" search="file" path="~/.miro/miro-downloader-log"/>
     <action command="delete" search="file" path="~/.miro/miro-log"/>
     <action command="delete" search="file" path="~/.miro/miro-log.1"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro-downloader.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log.1"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro_Download_Daemon_a.txt"/>
-    <!-- Polish Windows XP Support: -->
-    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro-downloader.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro.log.1"/>
-    <action command="delete" search="file" path="$USERPROFILE\Ustawienia lokalne\Temp\Miro_Download_Daemon_a.txt"/>
+    <action command="delete" search="file" path="$Temp\Miro-downloader.log"/>
+    <action command="delete" search="file" path="$Temp\Miro.log"/>
+    <action command="delete" search="file" path="$Temp\Miro.log.1"/>
+    <action command="delete" search="file" path="$Temp\Miro_Download_Daemon_a.txt"/>
+  </option>
+  <option id="temp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="file" path="$Temp\Miro-downloader.log"/>
+    <action command="delete" search="file" path="$Temp\Miro.log"/>
+    <action command="delete" search="file" path="$Temp\Miro.log.1"/>
+    <action command="delete" search="file" path="$Temp\Miro_Download_Daemon_a.txt"/>
   </option>
 </cleaner>
