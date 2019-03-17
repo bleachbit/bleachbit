@@ -56,9 +56,10 @@ If you have multiple commits around multiple themes (such as adding two, unrelat
 Please consider reviewing someone else's pull requests and asking him or her to do the same for you. This can improve quality and get your changes merged sooner.
 
 
-## Style
+## Coding style
+
 * Indent with four spaces instead of tabs.
 * Format your code using PEP-8 standards like this:
 ````autopep8 -i bleachbit/Action.py````
 * Follow other best practices such as they relate to readability, documentation, error handling, and performance.
-
+* See OpenStack [Git Commit Good Practice](https://wiki.openstack.org/wiki/GitCommitMessages) for advice on writing good Git commit messages. In particular, the first line of the commit message is important.
