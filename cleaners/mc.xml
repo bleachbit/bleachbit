@@ -12,18 +12,18 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Midnight Commander
     @url http://midnight-commander.org/
     @url https://sourceforge.net/projects/mcwin32/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
+    @cleanerdate 2019-03-17
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
@@ -35,7 +35,7 @@
   <label>Midnight Commander</label>
   <description>File Manager</description>
   <var name="profile">
-    <value os="windows">%USERPROFILE%\Midnight Commander</value>
+    <value os="windows">%UserProfile%\Midnight Commander</value>
     <value os="linux">~/.mc</value>
   </var>
   <option id="history">

@@ -12,17 +12,17 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Windows Media Player
     @url https://www.microsoft.com/en-us/download/media-players.aspx
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
+    @cleanerdate 2019-03-17
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
@@ -49,6 +49,6 @@
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Grafikcache\LocalMLS\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Transcoded Files Cache\"/>
     <!-- Let's say the temp folder is a kind of cache, too... ;-) Tobias. -->
-    <action command="delete" search="file" path="%TMP%\wmsetup.log"/>
+    <action command="delete" search="file" path="%Temp%\wmsetup.log"/>
   </option>
 </cleaner>
