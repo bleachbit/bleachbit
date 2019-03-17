@@ -34,7 +34,7 @@
   <label>TeamViewer</label>
   <description>Remote control software</description>
   <var name="profile">
-    <value search="glob" os="windows">$AppData\TeamViewer</value>
+    <value os="windows">$AppData\TeamViewer</value>
     <!--
     Linux $profile not yet figured out! I will do this maybe later! Tobias.
     <value search="glob" os="linux">~/.teamviewer</value>
