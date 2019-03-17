@@ -12,17 +12,17 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app WinRAR
     @url https://www.win-rar.com/
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-13
+    @cleanerdate 2019-03-17
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v5.x, Windows 7
     @testeddate 2019-03-10
@@ -51,9 +51,7 @@
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.all" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\*.tmp"/>
-    <action command="delete" search="glob" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\*.tmp"/>
-    <action command="delete" search="walk.all" path="%ProgramFiles%\WinRAR\*.tmp"/>
-    <action command="delete" search="glob" path="%ProgramFiles%\WinRAR\*.tmp"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
+    <action command="delete" search="walk.files" path="%ProgramFiles%\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
   </option>
 </cleaner>
