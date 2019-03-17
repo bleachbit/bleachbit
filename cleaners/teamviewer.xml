@@ -43,14 +43,14 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action command="delete" search="glob" path="$profile\TeamViewer*_Logfile.log"/>
+    <action command="delete" search="glob" path="$$profile$$\TeamViewer*_Logfile.log"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action command="delete" search="walk.files" path="$profile\MRU\"/>
-    <action command="delete" search="file" path="$profile\MRU\"/>
-    <action command="delete" search="file" path="$profile\Connections.txt"/>
+    <action command="delete" search="walk.files" path="$$profile$$\MRU\"/>
+    <action command="delete" search="file" path="$$profile$$\MRU\"/>
+    <action command="delete" search="file" path="$$profile$$\Connections.txt"/>
     <!-- Windows: -->
     <action command="winreg" path="HKCU\Software\TeamViewer\Version4" name="Last_Machine_Connections"/>
   </option>
