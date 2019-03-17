@@ -22,8 +22,8 @@
     @url http://www.vuze.com/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-15
-    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-04) & Tobias B. Besemer (2018-12-20 - 2019-03-15)
+    @cleanerdate 2019-03-17
+    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-04) & Tobias B. Besemer (2018-12-20 - 2019-03-17)
     @tested ok v???, Windows 7
     @testeddate ???
     @testedby https://github.com/Tobias-B-Besemer
@@ -57,8 +57,8 @@
     <action command="delete" search="glob" path="$$profile$$\subs\*.vuze.bak"/>
     <action command="delete" search="walk.all" path="$$programfiles$$\backup\"/>
     <action command="delete" search="walk.all" path="$$programfiles$$\Vuze AzConfigBackup\"/>
-    <!-- The following line should later delete *.bak recursive! -->
-    <action command="delete" search="glob" path="$$profile$$\*.bak"/>
+    <!-- Delete *.bak recursive: -->
+    <action command="delete" search="walk.files" path="$$profile$$\" regex="\.[Bb][Aa][Kk]$"/>
   </option>
   <option id="cache">
     <label>Cache</label>
