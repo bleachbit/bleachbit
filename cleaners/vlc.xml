@@ -22,8 +22,8 @@
     @url https://www.videolan.org/vlc/index.html
     @os Windows, Linux, FreeBSD, NetBSD, OpenBSD
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18
-    @cleanerby Vincent DUVERNET - Nolmë Informatique & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18.2
+    @cleanerby Andrew Ziem (2010-09-23 - 2018-10-15) & tiemay (2014-06-06) & theatre-x (2015-02-05) & ROCKNROLLKID (2017-01-14) & Vincent DUVERNET - Nolmë Informatique (???) & Tobias B. Besemer (2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -41,25 +41,31 @@
   <running type="exe" os="FreeBSD">vlc</running>
   <running type="exe" os="NetBSD">vlc</running>
   <running type="exe" os="OpenBSD">vlc</running>
+  Guess it would be:
+  <running type="exe" os="unix">vlc</running>
   -->
   <var name="Profile">
-    <value search="glob" os="windows">%AppData%\vlc</value>
-    <value search="glob" os="linux">$XDG_CONFIG_HOME/vlc</value>
+    <value os="windows">%AppData%\vlc</value>
+    <value os="linux">$XDG_CONFIG_HOME/vlc</value>
     <!--
     BSD $$Profile$$ not yet figured out!
-    <value search="glob" os="FreeBSD">$XDG_CONFIG_HOME/vlc</value>
-    <value search="glob" os="NetBSD">$XDG_CONFIG_HOME/vlc</value>
-    <value search="glob" os="OpenBSD">$XDG_CONFIG_HOME/vlc</value>
+    <value os="FreeBSD">$XDG_CONFIG_HOME/vlc</value>
+    <value os="NetBSD">$XDG_CONFIG_HOME/vlc</value>
+    <value os="OpenBSD">$XDG_CONFIG_HOME/vlc</value>
+    Guess it would be:
+    <value os="unix">$XDG_CONFIG_HOME/vlc</value>
     -->
   </var>
   <var name="Config-File">
-    <value search="glob" os="windows">vlc-qt-interface.ini</value>
-    <value search="glob" os="linux">vlc-qt-interface.conf</value>
+    <value os="windows">vlc-qt-interface.ini</value>
+    <value os="linux">vlc-qt-interface.conf</value>
     <!--
     BSD $$Config-File$$ not yet figured out!
-    <value search="glob" os="FreeBSD">vlc-qt-interface.conf</value>
-    <value search="glob" os="NetBSD">vlc-qt-interface.conf</value>
-    <value search="glob" os="OpenBSD">vlc-qt-interface.conf</value>
+    <value os="FreeBSD">vlc-qt-interface.conf</value>
+    <value os="NetBSD">vlc-qt-interface.conf</value>
+    <value os="OpenBSD">vlc-qt-interface.conf</value>
+    Guess it would be:
+    <value os="unix">vlc-qt-interface.conf</value>
     -->
   </var>
   <option id="mru">
