@@ -22,8 +22,8 @@
     @url https://www.microsoft.com/silverlight/
     @os Windows
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-14
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2010-09-28 - 2016-12-26) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-13
     @testedby https://github.com/Tobias-B-Besemer
@@ -36,13 +36,13 @@
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="walk.all" path="%LOCALAPPDATA%\Microsoft\Silverlight\is\"/>
-    <action command="delete" search="walk.all" path="%LOCALAPPDATALow%\Microsoft\Silverlight\is\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Silverlight\is\"/>
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Silverlight\is\"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="file" path="%TMP%\Silverlight*.log"/>
+    <action command="delete" search="glob" path="%Temp%\Silverlight*.log"/>
     <!-- Example:
     Silverlight0.log
     SilverlightMSI.log
