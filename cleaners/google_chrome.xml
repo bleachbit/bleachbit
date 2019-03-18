@@ -22,7 +22,7 @@
     @url https://www.google.com/intl/en_us/chrome/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
+    @cleanerdate 2019-03-18
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-11
@@ -56,9 +56,9 @@
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$base$$\PnaclTranslationCache\"/>
-    <action command="delete" search="glob" path="$$base$$\PnaclTranslationCache\"/>
+    <action command="delete" search="file" path="$$base$$\PnaclTranslationCache\"/>
     <action command="delete" search="walk.all" path="$$profile$$\Media Cache\"/>
-    <action command="delete" search="glob" path="$$profile$$\Media Cache\"/>
+    <action command="delete" search="file" path="$$profile$$\Media Cache\"/>
     <action command="delete" search="file" path="$$profile$$\ChromeDWriteFontCache"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
@@ -197,30 +197,35 @@
   <option id="junk">
     <label>Junk files and folders</label>
     <description>Delete the junk files and folders</description>
-    <action command="delete" search="file" path="%TMP%\chrome_installer.log"/>
+    <action command="delete" search="file" path="%Temp%\chrome_installer.log"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
+    <action command="delete" search="file" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
     <!-- Maybe belongs to a other Google Program... Should we make a google_general.xml? Tobias. -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\CrashReports\"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%LocalAppData%\Google\CrashReports\"/>
+    <!-- And some more ... Includes a Chrome-last.dmp! -->
+    <action command="delete" search="walk.all" path="%SystemDrive%\Program Files\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\CrashReports\"/>
+    <action command="delete" search="walk.all" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
     <!-- File Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Avatars\"/>
-    <action command="delete" search="glob" path="$$base$$\Avatars\"/>
+    <action command="delete" search="file" path="$$base$$\Avatars\"/>
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Caps\"/>
-    <action command="delete" search="glob" path="$$base$$\Caps\"/>
+    <action command="delete" search="file" path="$$base$$\Caps\"/>
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Crash Reports\"/>
-    <action command="delete" search="glob" path="$$base$$\Crash Reports\"/>
+    <action command="delete" search="file" path="$$base$$\Crash Reports\"/>
     <!-- File Date: 2015-09-02 -->
     <action command="delete" search="walk.all" path="$$base$$\EVWhitelist\"/>
-    <action command="delete" search="glob" path="$$base$$\EVWhitelist\"/>
+    <action command="delete" search="file" path="$$base$$\EVWhitelist\"/>
     <!-- File Date: 2014-01-25 -->
     <action command="delete" search="walk.all" path="$$base$$\PnaclTranslationCache\"/>
-    <action command="delete" search="glob" path="$$base$$\PnaclTranslationCache\"/>
+    <action command="delete" search="file" path="$$base$$\PnaclTranslationCache\"/>
     <!-- File Date: 2014-01-16 -->
     <action command="delete" search="walk.all" path="$$base$$\SwiftShader\"/>
-    <action command="delete" search="glob" path="$$base$$\SwiftShader\"/>
+    <action command="delete" search="file" path="$$base$$\SwiftShader\"/>
     <!-- File Date: 2011-11-17 -->
     <action command="delete" search="file" path="$$base$$\.ChromotingConfig.json"/>
     <!-- File Date: 2013-12-16 -->
@@ -229,28 +234,28 @@
     <action command="delete" search="file" path="$$base$$\Service State"/>
     <!-- Empty Folder! Folder Date: 2015-09-20 -->
     <action command="delete" search="walk.all" path="$$profile$$\Application Cache\"/>
-    <action command="delete" search="glob" path="$$profile$$\Application Cache\"/>
+    <action command="delete" search="file" path="$$profile$$\Application Cache\"/>
     <!-- Empty Folder! Folder Date: 2015-09-17 -->
     <action command="delete" search="walk.all" path="$$profile$$\Feedback Reports\"/>
-    <action command="delete" search="glob" path="$$profile$$\Feedback Reports\"/>
+    <action command="delete" search="file" path="$$profile$$\Feedback Reports\"/>
     <!-- Empty Folder! Folder Date: 2015-11-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Media Cache\"/>
-    <action command="delete" search="glob" path="$$profile$$\Media Cache\"/>
+    <action command="delete" search="file" path="$$profile$$\Media Cache\"/>
     <!-- Folder Date: 2015-05-15 -->
     <action command="delete" search="walk.all" path="$$profile$$\Pepper Data\"/>
-    <action command="delete" search="glob" path="$$profile$$\Pepper Data\"/>
+    <action command="delete" search="file" path="$$profile$$\Pepper Data\"/>
     <!-- File Date: 2015-10-17 -->
     <action command="delete" search="walk.all" path="$$profile$$\Platform Notifications\"/>
-    <action command="delete" search="glob" path="$$profile$$\Platform Notifications\"/>
+    <action command="delete" search="file" path="$$profile$$\Platform Notifications\"/>
     <!-- Empty Folder! Folder Date: 2015-11-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache\"/>
-    <action command="delete" search="glob" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache\"/>
+    <action command="delete" search="file" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache\"/>
     <!-- File Date: 2015-05-03 -->
     <action command="delete" search="walk.all" path="$$profile$$\Sync App Settings\"/>
-    <action command="delete" search="glob" path="$$profile$$\Sync App Settings\"/>
+    <action command="delete" search="file" path="$$profile$$\Sync App Settings\"/>
     <!-- File Date: 2015-04-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Sync Data Backup\"/>
-    <action command="delete" search="glob" path="$$profile$$\Sync Data Backup\"/>
+    <action command="delete" search="file" path="$$profile$$\Sync Data Backup\"/>
     <!-- File Date: 2015-04-10 -->
     <action command="delete" search="file" path="$$profile$$\ChromeDWriteFontCache"/>
     <!-- File Date: 2015-04-10 -->
@@ -261,6 +266,9 @@
     <action command="delete" search="glob" path="$$profile$$\*.log"/>
     <!-- Empty Folder! Folder Date: 2016-03-19 -->
     <action command="delete" search="walk.all" path="%AppData%\Google\Local Search History\"/>
-    <action command="delete" search="glob" path="%AppData%\Google\Local Search History\"/>
+    <action command="delete" search="file" path="%AppData%\Google\Local Search History\"/>
+    <!-- File Date: 2018-12-20 - But it's just a debug.log! ;-) -->
+    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\Chrome\Application\debug.log"/>
+    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\Chrome\Application\debug.log"/>
   </option>
 </cleaner>
