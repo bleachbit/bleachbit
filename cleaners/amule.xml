@@ -22,8 +22,8 @@
     @url http://www.amule.org/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-14
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby juancarlospaco (2009-06-25) & Andrew Ziem (2009-06-25 - 2009-10-04) & pereorga (2018-06-10) & Tobias B. Besemer (2019-03-15 - 2019-03-18)
     @tested ok v???, ???
     @testeddate 
     @testedby 
@@ -34,8 +34,8 @@
   <label>aMule</label>
   <description>File transfer client</description>
   <var name="profile">
-    <value search="glob" os="windows">%AppData%\aMule</value>
-    <value search="glob" os="linux">~/.aMule</value>
+    <value os="windows">%AppData%\aMule</value>
+    <value os="linux">~/.aMule</value>
   </var>
   <option id="logs">
     <label>Logs</label>
@@ -43,7 +43,7 @@
     <action command="delete" search="file" path="$$profile$$\logfile"/>
     <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
   </option>
-  <option id="tmp">
+  <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="walk.files" path="$$profile$$\Temp\"/>
