@@ -22,18 +22,19 @@
     @url https://get.adobe.com/reader/otherversions/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18.2
+    @cleanerby Andrew Ziem (2009-05-20 - 2015-11-27) & theatre-x (2015-02-05) & Tobias B. Besemer (2019-03-11 - 2019-03-18)
     @tested ok vDC, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
     @note Was not sure, but I defined a $$Profile$$! Will check the existent of the files deleted on Windows on Linux later, too! Tobias.
+    @note v2.0.0 of the cleaner makes the entry in WinApp2.ini no more necessary!
 
 -->
 <cleaner id="adobe_reader">
   <label>Adobe Reader</label>
   <description>Document viewer</description>
-  <running type="exe" os="unix">acroread</running>
+  <running type="exe" os="linux">acroread</running>
   <!--
   Tobias B. Besemer:
   Seems to not be necessary on Windows!
@@ -71,6 +72,14 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\10.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionFromPDF"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionToPDF"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cDockables"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cToolbars"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\RememberedViews\cNoCategoryFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\11.0"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFolders"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles"/>
     <!-- Not sure if this would be necessary for Adobe Reader 5.0-11.0, too! Can maybe check this later, if necessary. Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles_old"/>
@@ -80,6 +89,17 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles_old"/>
     <!-- Just to go sure, adding this for Adobe Reader 11, too. Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFolders"/>
+    <!-- Folders exist on demo machine, too, but have no content. To go sure, I delete it anyway! Tobias. -->
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionFromPDF"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionToPDF"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cDockables"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cToolbars"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\RememberedViews\cNoCategoryFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\DC"/>
+    <!-- Also a v10.0 folder exist... -->
+    <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\10.0"/>
+    <!-- On the demo machine, there is a cTaskPanes folder, too! -->
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cTaskPanes"/>
   </option>
   <option id="search">
     <label>Search history</label>
