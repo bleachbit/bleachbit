@@ -21,9 +21,9 @@
     @app Microsoft Windows Explorer
     @url https://www.microsoft.com/en-us/windows
     @os Windows
-    @cleanerversion v1.5.0
-    @cleanerdate 2019-03-13
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-10-11 - 2017-01-01) & theatre-x (2015-02-05) & mgziminsky (2018-08-08) & Tobias B. Besemer (2019-02-12 - 2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
@@ -36,32 +36,32 @@
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <!-- applications executed including date and time, Windows XP -->
+    <!-- Applications executed including date and time, Windows XP: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{5E6AB780-7743-11CF-A12B-00AA004AE837}\Count"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{75048700-EF1F-11D0-9888-006097DEACF9}\Count"/>
-    <!-- applications executed including date and time, Windows 7 -->
+    <!-- Applications executed including date and time, Windows 7: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}\Count"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}\Count"/>
-    <!-- refresh Windows shell after UserAssist -->
+    <!-- Refresh Windows shell after UserAssist: -->
     <action command="win.shell.change.notify"/>
-    <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
-    <!-- common open dialog -->
+    <!-- Reference: reference: http://support.microsoft.com/kb/142298 -->
+    <!-- Common open dialog: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
-    <!-- Windows Vista/7 -->
+    <!-- Windows Vista/7: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU"/>
-    <!-- common save as dialog -->
+    <!-- Common save as dialog: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU"/>
-    <!-- Windows Vista/7 -->
+    <!-- Windows Vista/7: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU"/>
-    <!-- find files command -->
+    <!-- Find files command: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
-    <!-- find Computer command -->
+    <!-- Find computer command: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
-    <!-- map network drives -->
+    <!-- Map network drives: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
-    <!-- printer ports -->
+    <!-- Printer ports: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
-    <!-- more MRUs -->
+    <!-- More MRUs: -->
     <!--
     If CCleaner deletes HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32 complete, we can be generous! ;-) Tobias.
      -> Beginning... -->
@@ -94,27 +94,27 @@
     <label>Recent documents list</label>
     <description>Delete the list of recently used documents</description>
     <warning>This option will reset pinned locations in Quick Access to their defaults.</warning>
-    <!-- Windows XP -->
-    <action command="delete" search="glob" path="%USERPROFILE%\Recent\*.lnk"/>
-    <!-- Vista and above -->
-    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\*.lnk"/>
-    <!-- Recent documents in start menu -->
+    <!-- Windows XP: -->
+    <action command="delete" search="glob" path="%UserProfile%\Recent\*.lnk"/>
+    <!-- Vista and above: -->
+    <action command="delete" search="glob" path="%AppData%\Microsoft\Windows\Recent\*.lnk"/>
+    <!-- Recent documents in start menu: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"/>
-    <!-- Windows 7 jump list -->
-    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
-    <action command="delete" search="glob" path="%APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
+    <!-- Windows 7 jump list: -->
+    <action command="delete" search="glob" path="%AppData%\Microsoft\Windows\Recent\AutomaticDestinations\*.automaticDestinations-ms"/>
+    <action command="delete" search="glob" path="%AppData%\Microsoft\Windows\Recent\CustomDestinations\*customDestinations-ms"/>
   </option>
   <option id="run">
     <label translators="In Windows 'Run' is the dialog in the Start menu">Run</label>
     <description>Delete the most recently used list</description>
-    <!--  run command -->
+    <!-- Run command: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
   </option>
   <option id="search_history">
     <label>Search history</label>
     <description>Delete the search history</description>
     <action command="winreg" path="HKCU\Software\Microsoft\Search Assistant\ACMru"/>
-    <!-- Windows 10 -->
+    <!-- Windows 10: -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"/>
   </option>
   <option id="thumbnails">
@@ -122,7 +122,7 @@
     <description>Delete the cache</description>
     <warning>This will restart Windows Explorer.</warning>
     <action command="process" cmd="taskkill.exe /f /IM explorer.exe"/>
-    <action command="delete" search="glob" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\thumbcache*.db"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Windows\Explorer\thumbcache*.db"/>
     <!-- On 64-bit Windows, it is important to start the 64-bit Windows Explorer,
          so use the full path. Also, do not wait for the process to terminate.
 
@@ -130,15 +130,15 @@
          virtualization mode rather than elevated mode because normally it
          inherits the mode from bleachbit.exe.
      -->
-    <action command="process" wait="false" cmd="%WINDIR%\explorer.exe %WINDIR%\explorer.exe"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\ThumbCacheToDelete\"/>
-    <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db"/>
-    <action command="delete" search="file" path="%LOCALAPPDATA%\IconCache.db.backup"/>
+    <action command="process" wait="false" cmd="%WinDir%\explorer.exe %WINDIR%\explorer.exe"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Windows\Explorer\ThumbCacheToDelete\"/>
+    <action command="delete" search="file" path="%LocalAppData%\IconCache.db"/>
+    <action command="delete" search="file" path="%LocalAppData%\IconCache.db.backup"/>
   </option>
   <option id="mountpoints2">
     <label>Mount Points</label>
-    <description>Delete the files</description>
-    <warning>This will delete your old Mount Points. Only delete if you know what you are doing!</warning>
+    <description>Delete the data</description>
+    <warning>Use the option only if you know what you do!</warning>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2"/>
   </option>
 </cleaner>
