@@ -20,10 +20,10 @@
 
     @app Filezilla
     @url https://filezilla-project.org/
-    @cleanerversion v1.5.0
     @os Windows, Linux
-    @cleanerdate 2019-03-17
-    @cleanerby https://github.com/Tobias-B-Besemer
+    @cleanerversion v1.5.0
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -34,8 +34,8 @@
   <label>Filezilla</label>
   <description>File transfer client</description>
   <var name="profile">
-    <value search="glob" os="windows">%AppData%\FileZilla</value>
-    <value search="glob" os="linux">~/.filezilla</value>
+    <value os="windows">%AppData%\FileZilla</value>
+    <value os="linux">~/.filezilla</value>
   </var>
   <option id="mru">
     <label>Most recently used</label>
