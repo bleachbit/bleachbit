@@ -390,18 +390,21 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # File is open with exclusive lock, so expect the file is neither
         # deleted nor truncated.
-        filename = test_delete_locked_setup()
-        from subprocess import call
-        call('start notepad.exe>>{}'.format(filename), shell=True)
-        self.assertExists(filename)
-        self.assertEqual(3, getsize(filename))
-        with self.assertRaises(WindowsError):
+        for allow_shred in (False, True):
+            filename = test_delete_locked_setup()
+            self.assertEqual(3, getsize(filename))
+            fd = os.open(filename, os.O_APPEND | os.O_EXCL)
+            self.assertExists(filename)
+            self.assertEqual(3, getsize(filename))
+            with self.assertRaises(WindowsError):
+                delete(filename, shred=allow_shred, allow_shred=allow_shred)
+            os.close(fd)
+            self.assertExists(filename)
+            if not allow_shred:
+                # A shredding attempt truncates the file.
+                self.assertEqual(3, getsize(filename))
             delete(filename)
-        call('taskkill /f /im notepad.exe')
-        self.assertExists(filename)
-        self.assertEqual(3, getsize(filename))
-        delete(filename)
-        self.assertNotExists(filename)
+            self.assertNotExists(filename)
 
     @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_ego_owner(self):
