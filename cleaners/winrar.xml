@@ -22,8 +22,8 @@
     @url https://www.win-rar.com/
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-07-08 - 2015-09-11) & Tobias B. Besemer (2019-03-07 - 2019-03-18)
     @tested ok v5.x, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
@@ -33,9 +33,9 @@
 <cleaner id="winrar" os="windows">
   <label>WinRAR</label>
   <description>File archiver</description>
-  <option id="private">
-    <label>Private Data</label>
-    <description>Deletes the data</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the usage history</description>
     <action command="winreg" path="HKCU\Software\WinRAR\ArcHistory"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcName"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcCmtName"/>
