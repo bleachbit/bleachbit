@@ -22,7 +22,7 @@
     @url https://www.teamviewer.com/en/
     @os Windows, Linux
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-17
+    @cleanerdate 2019-03-18
     @cleanerby ??? & https://github.com/Tobias-B-Besemer
     @tested ok v???, Windows 7
     @testeddate 2019-03-13
@@ -33,8 +33,8 @@
 <cleaner id="teamviewer" os="windows">
   <label>TeamViewer</label>
   <description>Remote control software</description>
-  <var name="profile">
-    <value os="windows">$AppData\TeamViewer</value>
+  <var name="Profile">
+    <value search="glob" os="windows">%AppData%\TeamViewer</value>
     <!--
     Linux $profile not yet figured out! I will do this maybe later! Tobias.
     <value search="glob" os="linux">~/.teamviewer</value>
@@ -43,14 +43,14 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action command="delete" search="glob" path="$$profile$$\TeamViewer*_Logfile.log"/>
+    <action command="delete" search="glob" path="$$Profile$$\TeamViewer*_Logfile.log"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action command="delete" search="walk.files" path="$$profile$$\MRU\"/>
-    <action command="delete" search="file" path="$$profile$$\MRU\"/>
-    <action command="delete" search="file" path="$$profile$$\Connections.txt"/>
+    <action command="delete" search="walk.files" path="$$Profile$$\MRU\"/>
+    <action command="delete" search="file" path="$$Profile$$\MRU\"/>
+    <action command="delete" search="file" path="$$Profile$$\Connections.txt"/>
     <!-- Windows: -->
     <action command="winreg" path="HKCU\Software\TeamViewer\Version4" name="Last_Machine_Connections"/>
   </option>
