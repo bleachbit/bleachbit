@@ -22,8 +22,8 @@
     @url https://www.microsoft.com/en-us/safety/pc-security/windows-defender.aspx
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby MixCool (2009-10-11) & theatre-x (2015-09-11) & Tobias B. Besemer (2019-03-14 - 2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-13
     @testedby https://github.com/Tobias-B-Besemer
@@ -43,26 +43,26 @@
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="file" path="%windir%\Temp\MpCmdRun.log"/>
-    <action command="delete" search="file" path="%windir%\Temp\MpSigStub.log"/>
+    <action command="delete" search="file" path="%WinDir%\Temp\MpCmdRun.log"/>
+    <action command="delete" search="file" path="%WinDir%\Temp\MpSigStub.log"/>
     <!-- Definition Update: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\mpas-d.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\mpas-d.exe"/>
     <!-- Definition Update: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\mpas-fe.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\mpas-fe.exe"/>
     <!-- Definition Update: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\mpas-fe_bd.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\mpas-fe_bd.exe"/>
     <!-- AS Engine: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\AS_Engine.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Engine.exe"/>
     <!-- AS Engine Patch: -->
-    <action command="delete" search="glob" path="%windir%\SoftwareDistribution\Download\Install\AS_Engine_Patch_*.exe"/>
+    <action command="delete" search="glob" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Engine_Patch_*.exe"/>
     <!-- AS Base: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\AS_Base.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Base.exe"/>
     <!-- AS Base: -->
-    <action command="delete" search="glob" path="%windir%\SoftwareDistribution\Download\Install\AS_Base_Patch*.exe"/>
+    <action command="delete" search="glob" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Base_Patch*.exe"/>
     <!-- AntiMaleware Definition Update: -->
-    <action command="delete" search="file" path="%windir%\SoftwareDistribution\Download\Install\AS_Delta.exe"/>
+    <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Delta.exe"/>
     <!-- AntiMaleware Definition Update: -->
-    <action command="delete" search="glob" path="%windir%\SoftwareDistribution\Download\Install\AS_Delta_Patch_*.exe"/>
+    <action command="delete" search="glob" path="%WinDir%\SoftwareDistribution\Download\Install\AS_Delta_Patch_*.exe"/>
     <!-- Definition Updates: -->
     <action command="delete" search="walk.files" path="%CommonAppData%\Microsoft\Windows Defender\Definition Updates\Updates\"/>
   </option>
