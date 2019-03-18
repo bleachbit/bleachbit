@@ -22,8 +22,8 @@
     @url https://www.microsoft.com/en-us/download/internet-explorer.aspx
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-05-17 - 2016-12-26) & Tobias B. Besemer (2019-03-07 - 2019-03-18)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -35,12 +35,12 @@
   <description>Web browser</description>
   <var name="IELocalAppData">
     <!-- Windows 7 Support (and maybe other Windows versions): -->
-    <value search="glob">%LocalAppData%\Microsoft\Windows</value>
+    <value>%LocalAppData%\Microsoft\Windows</value>
     <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - English-only-Support: -->
-    <value search="glob">%UserProfile%\Local Settings</value>
+    <value>%UserProfile%\Local Settings</value>
     <!-- And now some none-English-Support... -->
     <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - Polish-Support: -->
-    <value search="glob">%UserProfile%\Ustawienia lokalne</value>
+    <value>%UserProfile%\Ustawienia lokalne</value>
   </var>
   <option id="cookies">
     <label>Cookies</label>
@@ -127,5 +127,13 @@
     <description>Delete the usage history</description>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer" name="Download Directory"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main" name="Save Directory"/>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.txt"/>
+    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
   </option>
 </cleaner>
