@@ -22,8 +22,8 @@
     @url https://www.opera.com/
     @os Windows, Linux
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-17
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-10-04 - 2018-11-20) & theatre-x (2014-11-04) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
     @tested ok 
     @testeddate 
     @testedby 
@@ -37,13 +37,13 @@
   <running type="exe" os="linux">opera</running>
   <running type="exe" os="windows">opera.exe</running>
   <var name="base">
-    <value search="glob" os="windows">%AppData%\Opera Software\Opera Stable</value>
-    <value search="glob" os="linux">$XDG_CONFIG_HOME/opera</value>
+    <value os="windows">%AppData%\Opera Software\Opera Stable</value>
+    <value os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <value search="glob" os="windows">%AppData%\Opera Software\Opera Stable</value>
-    <value search="glob" os="linux">$XDG_CONFIG_HOME/opera</value>
-    <value search="glob" os="linux">~/snap/opera/current/.config/opera</value>
+    <value os="windows">%AppData%\Opera Software\Opera Stable</value>
+    <value os="linux">$XDG_CONFIG_HOME/opera</value>
+    <value os="linux">~/snap/opera/current/.config/opera</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -66,11 +66,11 @@
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Cache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Media Cache\"/>
     <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\cache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\opcache\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\thumbnails\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\profile\cache4\"/>
-    <action command="delete" search="walk.files" path="$localappdata\Opera\Opera*\profile\opcache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\cache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\opcache\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\thumbnails\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\profile\cache4\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\profile\opcache\"/>
     <action command="delete" search="walk.files" path="~/.opera/cache/"/>
     <action command="delete" search="walk.files" path="~/.opera/cache4/"/>
     <action command="delete" search="walk.files" path="~/.opera/opcache/"/>
@@ -86,8 +86,8 @@
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\cookies4.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\profile\cookies4.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\cookies4.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
   </option>
   <option id="dom">
@@ -97,7 +97,7 @@
     <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
     <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="walk.all" path="$appdata\Opera\Opera*\pstorage\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
   <option id="form_history">
@@ -127,23 +127,23 @@
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
     <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\download.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\download.dat"/>
+    <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\search_field_history.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\search_field_history.dat"/>
     <action command="delete" search="file" path="~/.opera/search_field_history.dat"/>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
-    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\global.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\typed_history.xml"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera\profile\vlink4.dat"/>
-    <action command="delete" search="file" path="$localappdata\Opera\Opera\profile\vps\????\md.dat"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\global_history.dat"/>
-    <action command="delete" search="glob" path="$appdata\Opera\Opera*\typed_history.xml"/>
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\vlink4.dat"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.gif"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.ico"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\icons\*.idx"/>
-    <action command="delete" search="glob" path="$localappdata\Opera\Opera*\vps\????\md.dat"/>
+    <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\global.dat"/>
+    <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\typed_history.xml"/>
+    <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\vlink4.dat"/>
+    <action command="delete" search="file" path="%LocalAppData%\Opera\Opera\profile\vps\????\md.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\global_history.dat"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\typed_history.xml"/>
+    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\vlink4.dat"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Opera\Opera*\icons\*.gif"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Opera\Opera*\icons\*.ico"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Opera\Opera*\icons\*.idx"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Opera\Opera*\vps\????\md.dat"/>
     <action command="delete" search="file" path="~/.opera/global.dat"/>
     <action command="delete" search="file" path="~/.opera/global_history.dat"/>
     <action command="delete" search="file" path="~/.opera/typed_history.xml"/>
