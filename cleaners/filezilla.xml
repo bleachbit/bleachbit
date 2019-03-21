@@ -22,8 +22,8 @@
     @url https://filezilla-project.org/
     @os Windows, Linux
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-18
-    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-21)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -39,7 +39,7 @@
   </var>
   <option id="mru">
     <label>Most recently used</label>
-    <description>Delete the list of recently used documents</description>
+    <description>Delete the usage history</description>
     <action command="delete" search="file" path="$$profile$$/recentservers.xml"/>
   </option>
   <!-- Option not for end-user !!!
