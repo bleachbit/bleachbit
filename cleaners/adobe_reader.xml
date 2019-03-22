@@ -63,7 +63,7 @@
     <!-- ...end! Tobias. -->
     <!-- Also in WinApp2.ini/[Adobe Reader Touch *]! Start... -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\INet*\"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\NVIDIA Corporation\NV_Cache\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\NVIDIA Corporation\NV_Cache\*"/>
     <!-- ...end! Tobias. -->
   </option>
   <option id="mru">
@@ -124,7 +124,7 @@
     <!-- Missing ??? Can maybe check this later... Tobias. -->
     <!--Windows:-->
     <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\"/>
-    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
   </option>
   <option id="tmp">
