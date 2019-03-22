@@ -22,13 +22,13 @@
     @url https://get.adobe.com/reader/otherversions/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18.2
-    @cleanerby Andrew Ziem (2009-05-20 - 2015-11-27) & theatre-x (2015-02-05) & Tobias B. Besemer (2019-03-11 - 2019-03-18)
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2009-05-20 - 2015-11-27) & theatre-x (2015-02-05) & Tobias B. Besemer (2019-03-11 - 2019-03-21)
     @tested ok vDC, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
     @note Was not sure, but I defined a $$Profile$$! Will check the existent of the files deleted on Windows on Linux later, too! Tobias.
-    @note v2.0.0 of the cleaner makes the entry in WinApp2.ini no more necessary!
+    @note v2.0.0 of the cleaner makes the entries in WinApp2.ini no more necessary!
 
 -->
 <cleaner id="adobe_reader">
@@ -51,13 +51,20 @@
     <action command="delete" search="walk.all" path="$$Profile$$\Cache\"/>
     <action command="delete" search="glob" path="$$Profile$$\*.lst"/>
     <action command="delete" search="file" path="$$Profile$$\IconCacheRdr.dat"/>
-    <action command="delete" search="walk.files" path="$$Profile$$\IconCacheRdr*.dat"/>
+    <action command="delete" search="glob" path="$$Profile$$\IconCacheRdr*.dat"/>
+    <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\ConnectorIcons\*"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
+    <action command="delete" search="glob" path="%AppData%\Adobe\Acrobat\*\JSCache\*"/>
+    <!-- Also in WinApp2.ini! Start... -->
     <action command="delete" search="file" path="$$Profile$$\UserCache.bin"/>
-    <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\*"/>
-    <action command="delete" search="walk.files" path="%LocalAppDataLow%\Adobe\Acrobat\*\ConnectorIcons\*"/>
-    <action command="delete" search="walk.files" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
-    <action command="delete" search="walk.files" path="%AppData%\Adobe\Acrobat\*\JSCache\"/>
-    <action command="delete" search="walk.files" path="%AppData%\Adobe\Acrobat\*\Security\CRLCache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Adobe\Acrobat\*\Security\CRLCache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Adobe\AcroCef\*\Acrobat\Cache\"/>
+    <!-- ...end! Tobias. -->
+    <!-- Also in WinApp2.ini/[Adobe Reader Touch *]! Start... -->
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\INet*\"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\NVIDIA Corporation\NV_Cache\"/>
+    <!-- ...end! Tobias. -->
   </option>
   <option id="mru">
     <label>Most recently used</label>
@@ -72,12 +79,14 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\9.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\10.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
+    <!-- Also in WinApp2.ini! Start... -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionFromPDF"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionToPDF"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cDockables"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cToolbars"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\RememberedViews\cNoCategoryFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\11.0"/>
+    <!-- ...end! Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFolders"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentFiles"/>
@@ -89,17 +98,24 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles_old"/>
     <!-- Just to go sure, adding this for Adobe Reader 11, too. Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFolders"/>
+    <!-- Also in WinApp2.ini! Start... -->
     <!-- Folders exist on demo machine, too, but have no content. To go sure, I delete it anyway! Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionFromPDF"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionToPDF"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cDockables"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentToolsList"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cToolbars"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\RememberedViews\cNoCategoryFiles"/>
+    <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\ShareIdentity"/>
     <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\DC"/>
+    <!-- ...end! Tobias. -->
     <!-- Also a v10.0 folder exist... -->
     <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\10.0"/>
     <!-- On the demo machine, there is a cTaskPanes folder, too! -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cTaskPanes"/>
+    <!-- Also in WinApp2.ini/[Adobe Reader Touch *]! Start... -->
+    <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\AdobeSystemsIncorporated.AdobeReader_ynb6jyjzte8ga\PersistedStorageItemTable\MostRecentlyUsed"/>
+    <!-- ...end! Tobias. -->
   </option>
   <option id="search">
     <label>Search history</label>
@@ -107,8 +123,8 @@
     <!--Linux:-->
     <!-- Missing ??? Can maybe check this later... Tobias. -->
     <!--Windows:-->
-    <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\*"/>
-    <action command="delete" search="walk.files" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
+    <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
   </option>
   <option id="tmp">
@@ -123,7 +139,7 @@
     <action command="delete" search="file" path="%Temp%\acrord32_sbx"/>
     <action command="delete" search="walk.all" path="%Temp%\WebInstaller"/>
     <action command="delete" search="file" path="%Temp%\WebInstaller"/>
-    <action command="delete" search="walk.files" path="%Temp%\AdobeARM*"/>
+    <action command="delete" search="glob" path="%Temp%\AdobeARM*"/>
     <action command="delete" search="file" path="%Temp%\AdobeARM.log"/>
     <action command="delete" search="file" path="%WinDir%\Temp\AdobeARM.log"/>
     <action command="delete" search="file" path="%WinDir%\Temp\AdobeARM_NotLocked.log"/>
