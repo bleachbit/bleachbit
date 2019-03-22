@@ -22,8 +22,8 @@
     @url https://www.microsoft.com/en-us/download/internet-explorer.aspx
     @os Windows
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18
-    @cleanerby Andrew Ziem (2009-05-17 - 2016-12-26) & Tobias B. Besemer (2019-03-07 - 2019-03-18)
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2009-05-17 - 2016-12-26) & Tobias B. Besemer (2019-03-07 - 2019-03-21)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -48,7 +48,7 @@
     <action command="delete" search="walk.files" path="%UserProfile%\Cookies\"/>
     <action command="delete" search="walk.files" path="%AppData%\Microsoft\Windows\Cookies\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\DOMStore\"/>
-    <action command="delete" search="walk.files" path="$IELocalAppData\INetCookies\"/>
+    <action command="delete" search="walk.files" path="$$IELocalAppData$$\INetCookies\"/>
     <action command="delete" search="walk.files" path="%LocalAppDataLow%\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
   <option id="forms">
@@ -61,7 +61,7 @@
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action command="delete" search="walk.files" path="$IELocalAppData\History\"/>
+    <action command="delete" search="walk.files" path="$$IELocalAppData$$\History\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Active\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Last Active\"/>
@@ -84,21 +84,21 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.all" path="$IELocalAppData\Temporary Internet Files\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\Temporary Internet Files\"/>
     <!-- Windows 7 Support (and maybe other Windows versions): -->
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Internet Explorer\UserData\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IETldCache\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatCache\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatUACache\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompat*Cache\"/>
-    <action command="delete" search="walk.all" path="$IELocalAppData\INetCache\"/>
-    <action command="delete" search="walk.all" path="$IELocalAppData\WebCache\"/>
-    <action command="delete" search="walk.all" path="$IELocalAppData\WebCache.old\"/>
-    <action command="delete" search="file" path="$IELocalAppData\WebCache.old\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\INetCache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache.old\"/>
+    <action command="delete" search="file" path="$$IELocalAppData$$\WebCache.old\"/>
     <!-- Empty folder on the demo machine: (Tobias) -->
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Internet Explorer\iconcache\"/>
     <!-- Extras - making WinApp2.ini obsolete: -->
-    <action command="delete" search="walk.all" path="$IELocalAppData\AppCache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\AppCache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\AppCache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IECompat*Cache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\INet*\"/>
