@@ -22,8 +22,8 @@
     @url https://www.mozilla.org/en-US/firefox/new/
     @os Windows, Linux, FreeBSD, OpenBSD
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
-    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-17)
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-21)
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-15 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -213,7 +213,7 @@
   </option>
   <option id="junk">
     <label>Junk files and folders</label>
-    <description>Delete the junk files and folders</description>
+    <description>Delete old files and folders that are no more needed</description>
     <action command="delete" search="glob" path="$$base$$/Crash Reports/InstallTime*"/>
     <action command="delete" search="glob" path="%LocalAppData%\Mozilla\updates"/>
     <!-- Old name of Firefox Developer Edition: -->
