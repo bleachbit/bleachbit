@@ -22,8 +22,8 @@
     @url https://www.google.com/intl/en_us/chrome/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18.2
-    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-18)
+    @cleanerdate 2019-03-22
+    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-22)
     @tested ok v???, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -208,7 +208,7 @@
   </option>
   <option id="junk">
     <label>Junk files and folders</label>
-    <description>Delete the junk files and folders</description>
+    <description>Delete old files and folders that are no more needed</description>
     <action command="delete" search="file" path="%Temp%\chrome_installer.log"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
     <action command="delete" search="file" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
@@ -274,5 +274,10 @@
     <!-- File Date: 2018-12-20 - But it's just a debug.log! ;-) -->
     <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\Chrome\Application\debug.log"/>
     <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\Chrome\Application\debug.log"/>
+    <!-- From WinApp2.ini/[ART *]: -->
+    <!-- Delete *.tmp recursive: -->
+    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\" regex="\.[Tt][Mm][Pp]$"/>
+    <!-- From WinApp2.ini/[ART *]: -->
+    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\Preferences.bak"/>
   </option>
 </cleaner>
