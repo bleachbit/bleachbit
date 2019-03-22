@@ -22,8 +22,8 @@
     @url https://www.teamviewer.com/en/
     @os Windows, Linux
     @cleanerversion v1.5.0
-    @cleanerdate 2019-03-18
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-22
+    @cleanerby MixCool (2009-06-23) & Andrew Ziem (2009-06-23 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-22)
     @tested ok v???, Windows 7
     @testeddate 2019-03-13
     @testedby https://github.com/Tobias-B-Besemer
@@ -36,8 +36,8 @@
   <var name="Profile">
     <value os="windows">%AppData%\TeamViewer</value>
     <!--
-    Linux $profile not yet figured out! I will do this maybe later! Tobias.
-    <value search="glob" os="linux">~/.teamviewer</value>
+    Linux $$Profile$$ not yet figured out! I will do this maybe later! Tobias.
+    <value os="linux">~/.teamviewer</value>
     -->
   </var>
   <option id="logs">
