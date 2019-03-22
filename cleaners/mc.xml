@@ -23,8 +23,8 @@
     @url https://sourceforge.net/projects/mcwin32/
     @os Windows, Linux
     @cleanerversion v2.0.0
-    @cleanerdate 2019-03-17
-    @cleanerby ??? & https://github.com/Tobias-B-Besemer
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-17) & Tobias B. Besemer (2019-03-10 - 2019-03-21)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
@@ -33,7 +33,7 @@
 -->
 <cleaner id="midnightcommander">
   <label>Midnight Commander</label>
-  <description>File Manager</description>
+  <description>File manager</description>
   <var name="profile">
     <value os="windows">%UserProfile%\Midnight Commander</value>
     <value os="linux">~/.mc</value>
@@ -41,7 +41,7 @@
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <action command="delete" search="file" path="$$profile$$/filepos"/>
     <action command="delete" search="file" path="$$profile$$/history"/>
+    <action command="delete" search="file" path="$$profile$$/filepos"/>
   </option>
 </cleaner>
