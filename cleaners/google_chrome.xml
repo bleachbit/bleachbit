@@ -21,9 +21,9 @@
     @app Google Chrome
     @url https://www.google.com/intl/en_us/chrome/
     @os Windows, Linux
-    @cleanerversion v2.0.0
-    @cleanerdate 2019-03-22
-    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-22)
+    @cleanerversion v2.1.0
+    @cleanerdate 2019-03-23
+    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-23)
     @tested ok v???, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -35,14 +35,33 @@
   <description>Web browser</description>
   <running type="exe" os="windows">chrome.exe</running>
   <running type="exe" os="linux">chrome</running>
+  <!-- Lets work with wildcards, like WinApp2.ini (and CCleaner [removed rules]) do... -->
   <var name="base">
-    <value os="windows">%LocalAppData%\Google\Chrome\User Data</value>
-    <value os="linux">$XDG_CONFIG_HOME/google-chrome</value>
+    <value os="windows">%LocalAppData%\Google\Chrome*\User Data</value>
+    <!-- Next problem: Seems $XDG_CONFIG_HOME is not always defined...
+         https://wiki.archlinux.org/index.php/XDG_Base_Directory -->
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome*</value>
+    <!-- $XDG_CONFIG_HOME: Where user-specific configurations should be written (analogous to /etc).
+         Should default to "$HOME/.config".
+         So we go sure: -->
+    <value os="linux">~/.config/google-chrome*</value>
   </var>
   <var name="profile">
+    <!--
+    Please read: https://www.howtogeek.com/255653/how-to-find-your-chrome-profile-folder-on-windows-mac-and-linux/
+    As we use wildcards now, these lines get replaced...
     <value os="windows">%LocalAppData%\Google\Chrome\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
+    ...with: -->
+    <value os="windows">%LocalAppData%\Google\Chrome*\User Data\*</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome*/*</value>
+    <value os="linux">~/.config/google-chrome*/*</value>
+    <!--
+    Btw.: Looks like CCleaner & WinApp2.ini have lots of rules for "Chrome/Chromium based browsers" that also
+    include Google's Chrome. So maybe we can later have a look about sharing code of the cleaners and/or have/create
+    a "All-in-One"-Cleaner... Tobias.
+    -->
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -154,6 +173,11 @@
   <option id="sync">
     <label>Sync</label>
     <description>Delete the sync data and sign out of the browser</description>
+    <!--
+    WinApp2.ini do in [Login Data Extras *] (the removed entries that were lost due to CCleaner) the following:
+    FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|Login Data*
+    Yes, with "Login Data*"! But the solution that follows works for me, too. Tobias.
+    -->
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
     <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
@@ -199,37 +223,37 @@
     <description>Delete the files</description>
     <!-- Maybe belongs to a other Google Program... Should we make a google_general.xml? Tobias. -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\CrashReports\"/>
-    <action command="delete" search="file" path="%LocalAppData%\Google\CrashReports\"/>
-    <!-- And some more... Includes a Chrome-last.dmp! -->
+    <action command="delete" search="file" path="%LocalAppData%\Google\CrashReports"/>
+    <!-- And some more... Includes a "Chrome-last.dmp"! -->
     <action command="delete" search="walk.all" path="%SystemDrive%\Program Files\Google\CrashReports\"/>
-    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\CrashReports"/>
     <action command="delete" search="walk.all" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
-    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\CrashReports"/>
   </option>
   <option id="junk">
     <label>Junk files and folders</label>
     <description>Delete old files and folders that are no more needed</description>
     <action command="delete" search="file" path="%Temp%\chrome_installer.log"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
-    <action command="delete" search="file" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
+    <action command="delete" search="file" path="%LocalAppData%\Google\Chrome Cleanup Tool"/>
     <!-- File Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Avatars\"/>
-    <action command="delete" search="file" path="$$base$$\Avatars\"/>
+    <action command="delete" search="file" path="$$base$$\Avatars"/>
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Caps\"/>
-    <action command="delete" search="file" path="$$base$$\Caps\"/>
+    <action command="delete" search="file" path="$$base$$\Caps"/>
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Crash Reports\"/>
-    <action command="delete" search="file" path="$$base$$\Crash Reports\"/>
+    <action command="delete" search="file" path="$$base$$\Crash Reports"/>
     <!-- File Date: 2015-09-02 -->
     <action command="delete" search="walk.all" path="$$base$$\EVWhitelist\"/>
-    <action command="delete" search="file" path="$$base$$\EVWhitelist\"/>
+    <action command="delete" search="file" path="$$base$$\EVWhitelist"/>
     <!-- File Date: 2014-01-25 -->
     <action command="delete" search="walk.all" path="$$base$$\PnaclTranslationCache\"/>
-    <action command="delete" search="file" path="$$base$$\PnaclTranslationCache\"/>
+    <action command="delete" search="file" path="$$base$$\PnaclTranslationCache"/>
     <!-- File Date: 2014-01-16 -->
     <action command="delete" search="walk.all" path="$$base$$\SwiftShader\"/>
-    <action command="delete" search="file" path="$$base$$\SwiftShader\"/>
+    <action command="delete" search="file" path="$$base$$\SwiftShader"/>
     <!-- File Date: 2011-11-17 -->
     <action command="delete" search="file" path="$$base$$\.ChromotingConfig.json"/>
     <!-- File Date: 2013-12-16 -->
@@ -238,28 +262,28 @@
     <action command="delete" search="file" path="$$base$$\Service State"/>
     <!-- Empty Folder! Folder Date: 2015-09-20 -->
     <action command="delete" search="walk.all" path="$$profile$$\Application Cache\"/>
-    <action command="delete" search="file" path="$$profile$$\Application Cache\"/>
+    <action command="delete" search="file" path="$$profile$$\Application Cache"/>
     <!-- Empty Folder! Folder Date: 2015-09-17 -->
     <action command="delete" search="walk.all" path="$$profile$$\Feedback Reports\"/>
-    <action command="delete" search="file" path="$$profile$$\Feedback Reports\"/>
+    <action command="delete" search="file" path="$$profile$$\Feedback Reports"/>
     <!-- Empty Folder! Folder Date: 2015-11-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Media Cache\"/>
-    <action command="delete" search="file" path="$$profile$$\Media Cache\"/>
+    <action command="delete" search="file" path="$$profile$$\Media Cache"/>
     <!-- Folder Date: 2015-05-15 -->
     <action command="delete" search="walk.all" path="$$profile$$\Pepper Data\"/>
-    <action command="delete" search="file" path="$$profile$$\Pepper Data\"/>
+    <action command="delete" search="file" path="$$profile$$\Pepper Data"/>
     <!-- File Date: 2015-10-17 -->
     <action command="delete" search="walk.all" path="$$profile$$\Platform Notifications\"/>
-    <action command="delete" search="file" path="$$profile$$\Platform Notifications\"/>
+    <action command="delete" search="file" path="$$profile$$\Platform Notifications"/>
     <!-- Empty Folder! Folder Date: 2015-11-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache\"/>
-    <action command="delete" search="file" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache\"/>
+    <action command="delete" search="file" path="$$profile$$\Storage\ext\chrome-signin\def\GPUCache"/>
     <!-- File Date: 2015-05-03 -->
     <action command="delete" search="walk.all" path="$$profile$$\Sync App Settings\"/>
-    <action command="delete" search="file" path="$$profile$$\Sync App Settings\"/>
+    <action command="delete" search="file" path="$$profile$$\Sync App Settings"/>
     <!-- File Date: 2015-04-10 -->
     <action command="delete" search="walk.all" path="$$profile$$\Sync Data Backup\"/>
-    <action command="delete" search="file" path="$$profile$$\Sync Data Backup\"/>
+    <action command="delete" search="file" path="$$profile$$\Sync Data Backup"/>
     <!-- File Date: 2015-04-10 -->
     <action command="delete" search="file" path="$$profile$$\ChromeDWriteFontCache"/>
     <!-- File Date: 2015-04-10 -->
@@ -270,14 +294,34 @@
     <action command="delete" search="glob" path="$$profile$$\*.log"/>
     <!-- Empty Folder! Folder Date: 2016-03-19 -->
     <action command="delete" search="walk.all" path="%AppData%\Google\Local Search History\"/>
-    <action command="delete" search="file" path="%AppData%\Google\Local Search History\"/>
+    <action command="delete" search="file" path="%AppData%\Google\Local Search History"/>
     <!-- File Date: 2018-12-20 - But it's just a debug.log! ;-) -->
     <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\Chrome\Application\debug.log"/>
     <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\Chrome\Application\debug.log"/>
-    <!-- From WinApp2.ini/[ART *]: -->
+    <!-- From WinApp2.ini/[ART *]: (We have no option "temp", ATM!) -->
     <!-- Delete *.tmp recursive: -->
     <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\" regex="\.[Tt][Mm][Pp]$"/>
-    <!-- From WinApp2.ini/[ART *]: -->
+    <!-- From WinApp2.ini/[ART *]: (We have no option "backup", ATM!) -->
     <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\Preferences.bak"/>
   </option>
 </cleaner>
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[ART *]
+LangSecRef=3029
+DetectFile=%LocalAppData%\Google\Chrome*
+Default=False
+FileKey1=%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*|*.tmp|RECURSE
+FileKey2=%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*|Preferences.bak
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Login Data Extras *]
+FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|Login Data*
+...end "Trimmer Block".
+-->
