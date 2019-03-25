@@ -21,30 +21,120 @@
     @app Google Chrome
     @url https://www.google.com/intl/en_us/chrome/
     @os Windows, Linux
-    @cleanerversion v2.1.0
-    @cleanerdate 2019-03-23
-    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-23)
+    @cleanerversion v2.2.0
+    @cleanerdate 2019-03-25
+    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-25)
     @tested ok v???, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
-    @note 
+    @note Linux $$ProgramFiles$$ not yet figured out! I will do this later! Tobias.
+    @note Linux $$InstallDirs$$ not yet figured out! I will do this later! Tobias.
+    @note Linux $$home$$ not yet figured out! I will do this later! Tobias.
 
+-->
+<!--
+This cleaner includes first steps to make a universal "All Chromium based browsers"-Code-Base!
+I will fork all_chromium_based.xml later from this file.
+And then fork for each browser a file from all_chromium_based.xml.
+Tobias.
 -->
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
   <description>Web browser</description>
   <running type="exe" os="windows">chrome.exe</running>
   <running type="exe" os="linux">chrome</running>
+  <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+  <!--
+  <running type="exe" os="windows">vivaldi.exe</running>
+  <running type="exe" os="linux">vivaldi-bin</running>
+  -->
+  <var name="Browser">
+    <!-- The "Browser", the forked file later should serve! -->
+    <value os="windows">Google\Chrome*</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!--
+    <value os="windows">brave</value>
+    <value os="windows">Opera Software\Opera*</value>
+    <value os="windows">7Star\7Star</value>
+    <value os="windows">360Browser\Browser</value>
+    <value os="windows">Amigo</value>
+    <value os="windows">BraveSoftware\Brave-Browser*</value>
+    <value os="windows">CentBrowser</value>
+    <value os="windows">Chromium</value>
+    <value os="windows">CocCoc\Browser</value>
+    <value os="windows">Comodo\Dragon</value>
+    <value os="windows">Coowon\Coowon</value>
+    <value os="windows">Epic Privacy Browser</value>
+    <value os="windows">Flock</value>
+    <value os="windows">Iridium</value>
+    <value os="windows">MapleStudio\ChromePlus</value>
+    <value os="windows">RockMelt</value>
+    <value os="windows">Slimjet</value>
+    <value os="windows">Superbird</value>
+    <value os="windows">Torch</value>
+    <value os="windows">Vivaldi</value>
+    <value os="windows">Yandex\YandexBrowser</value>
+    -->
+    <!-- Linux $$Browser$$ must be figured out for each browser, too! Tobias. -->
+    <value os="linux">google-chrome*</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!--
+    <value os="windows">vivaldi</value>
+    -->
+  </var>
+  <var name="ProgramFiles">
+    <!--
+    Windows itself changes %ProgramFiles% for 32-bit processes running in a 64-bit operating system as documented here:
+    https://docs.microsoft.com/en-us/windows/desktop/winprog64/wow64-implementation-details
+    ...so we used "%SystemDrive%\Program Files\" & "%SystemDrive%\Program Files (x86)\"...
+    <value os="windows">%SystemDrive%\Program Files\[ProgramName]</value>
+    <value os="windows">%SystemDrive%\Program Files (x86)\[ProgramName]</value>
+    ...but %ProgramFiles% & %ProgramFiles(x86)% don't need to be on %SystemDrive% !!!
+    So we use: -->
+    <value os="windows">%ProgramW6432%\$$Browser$$</value>
+    <!-- ...that BleachBit as 32-bit program can find "\Program Files\$$Browser$$" and... -->
+    <value os="windows">%ProgramFiles(x86)%\$$Browser$$</value>
+    <!-- ...that BleachBit can find "\Program Files (x86)\$$Browser$$" and... -->
+    <value os="windows">%ProgramFiles%\$$Browser$$</value>
+    <!-- ...that BleachBit can find "\Program Files\$$Browser$$" on a x86 system...
+    ...and later, as 64-bit program, "\Program Files\$$Browser$$" (x64)!
+    So all cases solved! ;-) Tobias. -->
+    <!--
+    Linux $$ProgramFiles$$ not yet figured out! I will do this later! Tobias.
+    <value os="linux">~/.$$Browser$$</value>
+    -->
+  </var>
+  <var name="InstallDirs">
+    <!-- The install directories of $$Browser$$. -->
+    <value os="windows">$$ProgramFiles$$</value>
+    <value os="windows">%LocalAppData%\$$Browser$$</value>
+    <!-- Some Chromium based browsers install into %AppData%! -->
+    <!--
+    <value os="windows">%AppData%\$$Browser$$</value>
+    -->
+    <!--
+    Linux $$InstallDirs$$ not yet figured out! I will do this later! Tobias.
+    <value os="linux">~/.$$Browser$$</value>
+    -->
+  </var>
+  <var name="home">
+    <!-- The "home" directory of $$Browser$$. -->
+    <value os="windows">%LocalAppData%\$$Browser$$</value>
+    <!--
+    Linux $$home$$ not yet figured out! I will do this later! Tobias.
+    <value os="linux">~/.$$Browser$$</value>
+    -->
+  </var>
   <!-- Lets work with wildcards, like WinApp2.ini (and CCleaner [removed rules]) do... -->
   <var name="base">
-    <value os="windows">%LocalAppData%\Google\Chrome*\User Data</value>
+    <value os="windows">%LocalAppData%\$$Browser$$\User Data</value>
     <!-- Next problem: Seems $XDG_CONFIG_HOME is not always defined...
          https://wiki.archlinux.org/index.php/XDG_Base_Directory -->
-    <value os="linux">$XDG_CONFIG_HOME/google-chrome*</value>
+    <value os="linux">$XDG_CONFIG_HOME/$$Browser$$</value>
     <!-- $XDG_CONFIG_HOME: Where user-specific configurations should be written (analogous to /etc).
          Should default to "$HOME/.config".
          So we go sure: -->
-    <value os="linux">~/.config/google-chrome*</value>
+    <value os="linux">~/.config/$$Browser$$</value>
   </var>
   <var name="profile">
     <!--
@@ -54,9 +144,9 @@
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
     ...with: -->
-    <value os="windows">%LocalAppData%\Google\Chrome*\User Data\*</value>
-    <value os="linux">$XDG_CONFIG_HOME/google-chrome*/*</value>
-    <value os="linux">~/.config/google-chrome*/*</value>
+    <value os="windows">%LocalAppData%\$$Browser$$\User Data\*</value>
+    <value os="linux">$XDG_CONFIG_HOME/$$Browser$$/*</value>
+    <value os="linux">~/.config/$$Browser$$/*</value>
     <!--
     Btw.: Looks like CCleaner & WinApp2.ini have lots of rules for "Chrome/Chromium based browsers" that also
     include Google's Chrome. So maybe we can later have a look about sharing code of the cleaners and/or have/create
@@ -84,14 +174,25 @@
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
     <action command="json" search="file" path="$$base$$/Local State" address="HostReferralList"/>
     <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
-    <!-- Linux-specific -->
+    <!-- From WinApp2.ini/[Blob Storage *]: -->
+    <!-- About "Blob Storage": https://en.wikipedia.org/wiki/Binary_large_object -->
+    <action command="delete" search="walk.all" path="$$profile$$\blob_storage\"/>
+    <!-- From WinApp2.ini/[Bookmarks Icons *]: -->
+    <action command="delete" search="file" path="$$profile$$\Favicons"/>
+    <!-- Linux-specific: -->
+    <!-- Lets make it universal! Was:
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/"/>
-    <!-- Windows-specific -->
+    Is now: -->
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/$$Browser$$/"/>
+    <!-- Windows-specific: -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
-    <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
+    <!-- Seems this line never worked !!! Was:
+    <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
+    Is now: -->
+    <action command="delete" search="walk.all" path="$$profile$$\Application Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -175,15 +276,16 @@
     <description>Delete the sync data and sign out of the browser</description>
     <!--
     WinApp2.ini do in [Login Data Extras *] (the removed entries that were lost due to CCleaner) the following:
-    FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|Login Data*
+    FileKey14=%LocalAppData%\$$Browser$$\User Data\*|Login Data*
     Yes, with "Login Data*"! But the solution that follows works for me, too. Tobias.
     -->
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
     <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>
+    <!-- Google Chrome specific: -->
+    <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
@@ -215,8 +317,12 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Sync Data/SyncData.sqlite3"/>
     <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$\Archived History"/>
+    <!-- Google Chrome specific: -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$\Plugin Data\Google Gears\permissions.db"/>
+    <!-- Would this work, to be more universal:
+    <action command="sqlite.vacuum" search="file" path="$$profile$$" regex="\.[Dd][Bb]$"/>
+    -->
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
@@ -229,6 +335,29 @@
     <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\CrashReports"/>
     <action command="delete" search="walk.all" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
     <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\CrashReports"/>
+  </option>
+  <option id="backup">
+    <label>Backup files</label>
+    <description>Delete the backup files</description>
+    <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
+    <action command="delete" search="file" path="$$profile$$/Archived History"/>
+    <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
+    <!-- From WinApp2.ini/[Backup *]: -->
+    <action command="delete" search="file" path="$$InstallDirs$$\Application\old_chrome.exe"/>
+    <!-- From WinApp2.ini/[Bookmarks Backup *]: -->
+    <action command="delete" search="glob" path="$$profile$$\*Bookmarks.bak"/>
+    <!-- From WinApp2.ini/[ART *]: -->
+    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\Preferences.bak"/>
+  </option>
+  <option id="temp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <!-- From WinApp2.ini/[Temps Extras *]: -->
+    <!-- Delete *.tmp recursive: -->
+    <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome*\" regex="\.[Tt][Mm][Pp]$"/>
+    <!-- From WinApp2.ini/[ART *]: -->
+    <!-- Delete *.tmp recursive: -->
+    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\" regex="\.[Tt][Mm][Pp]$"/>
   </option>
   <option id="junk">
     <label>Junk files and folders</label>
@@ -296,14 +425,21 @@
     <action command="delete" search="walk.all" path="%AppData%\Google\Local Search History\"/>
     <action command="delete" search="file" path="%AppData%\Google\Local Search History"/>
     <!-- File Date: 2018-12-20 - But it's just a debug.log! ;-) -->
-    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\Chrome\Application\debug.log"/>
-    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\Chrome\Application\debug.log"/>
-    <!-- From WinApp2.ini/[ART *]: (We have no option "temp", ATM!) -->
-    <!-- Delete *.tmp recursive: -->
-    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\" regex="\.[Tt][Mm][Pp]$"/>
-    <!-- From WinApp2.ini/[ART *]: (We have no option "backup", ATM!) -->
-    <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\Preferences.bak"/>
+    <action command="delete" search="file" path="$$InstallDirs$$\Application\debug.log"/>
   </option>
+  <!-- Changes suggested by https://github.com/jeroen7s ...
+  <option id="indexed_db">
+    <label>Local Storage IndexedDB</label>
+    <description>Delete the Local Storage</description>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/http*"/>
+  </option>
+  <option id="local_storage">
+    <label>Local Storage GlobalDB</label>
+    <description>Delete the Local Storage</description>
+    <warning>This option may delete some extension data.</warning>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+  </option>
+  ...end of suggested changes fromhttps://github.com/jeroen7s ... -->
 </cleaner>
 <!--
 Start "Trimmer Block"...
@@ -321,7 +457,56 @@ FileKey2=%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*|Preferences.b
 Start "Trimmer Block"...
 @trimmercheckedversion: 190312
 @trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Backup *]
+LangSecRef=3029
+DetectFile=%LocalAppData%\Google\Chrome*
+Default=False
+FileKey1=%LocalAppData%\Google\Chrome*\Application|old_chrome.exe
+FileKey2=%ProgramFiles%\Google\Chrome*\Application|old_chrome.exe
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Blob Storage *]
+DetectFile2=%LocalAppData%\Google\Chrome*
+FileKey14=%LocalAppData%\Google\Chrome*\User Data\*\blob_storage|*.*|RECURSE
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Bookmarks Backup *]
+DetectFile2=%LocalAppData%\Google\Chrome*
+FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|*Bookmarks.bak
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Bookmarks Icons *]
+DetectFile2=%LocalAppData%\Google\Chrome*
+FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|Favicons
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
 [Login Data Extras *]
+DetectFile2=%LocalAppData%\Google\Chrome*
 FileKey14=%LocalAppData%\Google\Chrome*\User Data\*|Login Data*
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Temps Extras *]
+DetectFile2=%LocalAppData%\Google\Chrome*
+FileKey14=%LocalAppData%\Google\Chrome*|*.tmp|RECURSE
 ...end "Trimmer Block".
 -->
