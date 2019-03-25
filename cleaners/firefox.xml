@@ -21,14 +21,20 @@
     @app Mozilla Firefox
     @url https://www.mozilla.org/en-US/firefox/new/
     @os Windows, Linux, FreeBSD, OpenBSD
-    @cleanerversion v2.0.0
-    @cleanerdate 2019-03-22
-    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-22)
+    @cleanerversion v2.1.0
+    @cleanerdate 2019-03-25
+    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-25)
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-15 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
     @note The cleaner is for different editions, like the normal "Mozilla Firefox" edition and e.g. the "Mozilla Firefox Developer Edition"...
 
+-->
+<!--
+This cleaner includes first steps to make a universal "All Firefox based browsers"-Code-Base!
+I will fork all_firefox_based.xml later from this file.
+And then fork for each browser a file from all_firefox_based.xml.
+Tobias.
 -->
 <cleaner id="firefox">
   <label>Firefox</label>
@@ -39,6 +45,12 @@
   <!--
   Just a guess! I will figure this out later! Tobias.
   <running type="exe" os="linux">firefox</running>
+  -->
+  <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+  <!-- The following values are just guesses... -->
+  <!--
+  <running type="exe" os="windows">seamonkey.exe</running>
+  <running type="exe" os="linux">seamonkey-bin</running>
   -->
   <!--
   <running type="pathname">~/.mozilla/firefox/*.default/lock</running>
@@ -52,29 +64,47 @@
   - 5umya027.Test (Surely renamed...)
   
   So I guess the line should be:
-  <running type="pathname">~/.mozilla/firefox/*/lock</running>
+  <running type="pathname" search=glob">~/.mozilla/firefox/*/lock</running>
   
   But as we already check if the executable is running, I prefer to remove this line...
   -->
+  <var name="Browser">
+    <!-- The "Browser", the forked file later should serve! -->
+    <value os="windows">Mozilla\Firefox</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!--
+    <value os="windows">Moonchild Productions\Pale Moon</value>
+    <value os="windows">Mozilla\SeaMonkey</value>
+    <value os="windows">Waterfox</value>
+    -->
+    <!-- Linux $$Browser$$ must be figured out for each browser, too! Tobias. -->
+    <value os="linux">mozilla/firefox</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!-- The following values are just guesses... -->
+    <!--
+    <value os="linux">seamonkey</value>
+    <value os="linux">waterfox</value>
+    -->
+  </var>
   <var name="base">
-    <value os="windows">%AppData%\Mozilla\Firefox</value>
-    <value os="linux">~/.mozilla/firefox</value>
-    <value os="freebsd">~/.mozilla/firefox</value>
-    <value os="openbsd">~/.mozilla/firefox</value>
+    <value os="windows">%AppData%\$$Browser$$</value>
+    <value os="linux">~/.$$Browser$$</value>
+    <value os="freebsd">~/.$$Browser$$</value>
+    <value os="openbsd">~/.$$Browser$$</value>
   </var>
   <var name="profile">
-    <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
-    <value search="glob" os="linux">~/.mozilla/firefox/*</value>
-    <value search="glob" os="freebsd">~/.mozilla/firefox/*</value>
-    <value search="glob" os="openbsd">~/.mozilla/firefox/*</value>
+    <value search="glob" os="windows">%AppData%\$$Browser$$\Profiles\*</value>
+    <value search="glob" os="linux">~/.$$Browser$$/*</value>
+    <value search="glob" os="freebsd">~/.$$Browser$$/*</value>
+    <value search="glob" os="openbsd">~/.$$Browser$$/*</value>
   </var>
   <var name="localprofile">
-    <value search="glob" os="windows">%LocalAppData%\Mozilla\Firefox\Profiles\*</value>
+    <value search="glob" os="windows">%LocalAppData%\$$Browser$$\Profiles\*</value>
     <!-- Unknow by other OSes, yet! Tobias B. Besemer will do Linux Part, later! -->
     <!--
-    <value search="glob" os="linux">~/.mozilla/firefox/*</value>
-    <value search="glob" os="freebsd">~/.mozilla/firefox/*</value>
-    <value search="glob" os="openbsd">~/.mozilla/firefox/*</value>
+    <value search="glob" os="linux">~/.$$Browser$$/*</value>
+    <value search="glob" os="freebsd">~/.$$Browser$$/*</value>
+    <value search="glob" os="openbsd">~/.$$Browser$$/*</value>
     -->
   </var>
   <option id="backup">
@@ -100,21 +130,21 @@
     This Linux path is whitelisted under the System - Cache cleaner, so it is not
     redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
     -->
-    <action command="delete" search="walk.all" path="~/.cache/mozilla/"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\cache2"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\jumpListCache"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\OfflineCache"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\startupCache"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\thumbnails"/>
-    <!-- This should later delete the storage cache in FF >= v62 -->
+    <!-- This delete the storage cache in FF >= v62: -->
     <action command="delete" search="walk.all" path="$$profile$$\storage\default\*\cache\"/>
     <!--
-    This file no longer exists in Firefox >=62
-    
+    This file no longer exists in Firefox >= v62:
     Necko Predictive Network Actions
     https://wiki.mozilla.org/Privacy/Reviews/Necko
     -->
     <action command="delete" search="file" path="$$profile$$/netpredictions.sqlite"/>
+    <!-- Mozilla Firefox specific: -->
+    <action command="delete" search="walk.all" path="~/.cache/mozilla/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -130,8 +160,9 @@
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.extra"/>
+    <action command="delete" search="walk.all" path="$$profile$$\crashes\events\"/>
+    <!-- Mozilla Firefox specific: -->
     <action command="delete" search="glob" path="%LocalAppData%\CrashDumps\firefox.exe.*.dmp"/>
-    <action command="delete" search="glob" path="$$profile$$\crashes\events"/>
   </option>
   <option id="dom">
     <label translators="DOM=Document Object Model">DOM Storage</label>
@@ -174,11 +205,13 @@
     <!-- Is now: (Tobias) -->
     <action command="delete" search="glob" path="$$profile$$/sessionstore*.*"/>
     <!--
-    In FF v68.0a1 the SessionStore changed again!
-    Seems they work on "multi sessions"...
-    New SS file not yet figured out!
+    Beginning with at least FF v67.0b4 the SessionStore changes again!
+    In FF67.0b4 "sessionstore.jsonlz4" disappear (gets deleted)!
+    In FF68.0a1 SS seems to change more...
+    ...seems they work on "multi sessions"...
+    New SS file not yet figured out! (2019-03-23)
     Best candidate: ???
-    Seems sessionCheckpoints.json belongs also to it...
+    Seems "sessionCheckpoints.json" belongs also to it...
     If you want go deeper, start maybe with this bug:
     Bug 1528598 (mult_sessions1) Allow Firefox/session managers to manage multiple sessions at the same time
     https://bugzilla.mozilla.org/show_bug.cgi?id=1528598
@@ -229,14 +262,15 @@
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.all" path="$$profile$$\storage\temporary"/>
+    <action command="delete" search="walk.all" path="$$profile$$\storage\temporary\"/>
     <action command="delete" search="glob" path="$$profile$$\hotfix.*.json"/>
     <action command="delete" search="glob" path="$$localprofile$$\*.tmp"/>
     <action command="delete" search="walk.all" path="$$localprofile$$\safebrowsing-failedupdate"/>
-    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
-    <action command="delete" search="glob" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
     <action command="delete" search="glob" path="%Temp%\tmpaddon-*"/>
     <action command="delete" search="glob" path="%Temp%\tmp-*.xpi"/>
+    <!-- Mozilla Firefox specific: -->
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Mozilla\Temp-*\"/>
+    <action command="delete" search="glob" path="%LocalAppDataLow%\Mozilla\Temp-*"/>
     <action command="delete" search="file" path="%Temp%\moz-update-newest-backup-update.log"/>
     <action command="delete" search="file" path="%Temp%\moz-update-newest-last-update.log"/>
   </option>
@@ -244,11 +278,6 @@
     <label>Junk files and folders</label>
     <description>Delete old files and folders that are no more needed</description>
     <action command="delete" search="glob" path="$$base$$/Crash Reports/InstallTime*"/>
-    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\updates"/>
-    <!-- Old name of Firefox Developer Edition: -->
-    <action command="delete" search="file" path="%ProgramData%\Microsoft\Windows\Start Menu\Programs\Aurora.lnk"/>
-    <!-- Seems to be wrongly created by any build: -->
-    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\firefox"/>
     <!--
     Lets delete some old profile files that got converted a long time ago!
     But respect (for now) the people that still use Windows XP/Vista!
@@ -260,7 +289,7 @@
     -->
     <!-- No more used since at least 2016-03-19: -->
     <action command="delete" search="walk.all" path="$$localprofile$$\chrome_debugger_profile\"/>
-    <action command="delete" search="glob" path="$$localprofile$$\chrome_debugger_profile"/>
+    <action command="delete" search="file" path="$$localprofile$$\chrome_debugger_profile"/>
     <!-- No more used since at least 2016-03-19: -->
     <action command="delete" search="file" path="$$localprofile$$\_CACHE_CLEAN_"/>
     <!-- No more used since at least 2013-03-27: -->
@@ -269,19 +298,19 @@
     <action command="delete" search="file" path="$$localprofile$$\urlclassifier3.sqlite"/>
     <!-- No more used since at least 2016-01-06: -->
     <action command="delete" search="walk.all" path="$$profile$$\extension-data\"/>
-    <action command="delete" search="glob" path="$$profile$$\extension-data"/>
+    <action command="delete" search="file" path="$$profile$$\extension-data"/>
     <!-- No more used since at least 2015-11-24: -->
     <action command="delete" search="walk.all" path="$$profile$$\healthreport\"/>
-    <action command="delete" search="glob" path="$$profile$$\healthreport"/>
+    <action command="delete" search="file" path="$$profile$$\healthreport"/>
     <!-- No more used since at least 2016-03-09: -->
     <action command="delete" search="walk.all" path="$$profile$$\jetpack\"/>
-    <action command="delete" search="glob" path="$$profile$$\jetpack"/>
+    <action command="delete" search="file" path="$$profile$$\jetpack"/>
     <!-- No more used since at least 2014-05-02: -->
     <!-- Empty folder on demo system of Tobias B. Besemer. -->
-    <action command="delete" search="glob" path="$$profile$$\metro"/>
+    <action command="delete" search="file" path="$$profile$$\metro"/>
     <!-- No more used since at least 2013-04-09: -->
     <action command="delete" search="file" path="$$profile$$\searchplugins\askcom.xml"/>
-    <action command="delete" search="glob" path="$$profile$$\searchplugins"/>
+    <action command="delete" search="file" path="$$profile$$\searchplugins"/>
     <!-- No more used since at least 2016-03-20: -->
     <action command="delete" search="file" path="$$profile$$\sessionstore-backups\previous.js"/>
     <action command="delete" search="glob" path="$$profile$$\sessionstore-backups\upgrade.js-*"/>
@@ -292,7 +321,7 @@
     -->
     <!-- No more used since at least 2014-04-01: -->
     <action command="delete" search="walk.all" path="$$profile$$\TestPilotExperimentFiles\"/>
-    <action command="delete" search="glob" path="$$profile$$\TestPilotExperimentFiles"/>
+    <action command="delete" search="file" path="$$profile$$\TestPilotExperimentFiles"/>
     <!-- No more used since at least 2016-03-08: -->
     <action command="delete" search="file" path="$$profile$$\cert_override.txt"/>
     <!-- No more used since at least 2018-04-06 (Replaced with cert9.db?): -->
@@ -334,10 +363,18 @@
     <action command="delete" search="file" path="$$profile$$\signedInUserOAuthTokens.json"/>
     <!-- No more used since at least 2014-06-20: -->
     <action command="delete" search="file" path="$$profile$$\TestPilotErrorLog.log"/>
-    <action command="delete" search="walk.files" path="$$profile$$\TestPilotErrorLog.log*"/>
+    <action command="delete" search="glob" path="$$profile$$\TestPilotErrorLog.log*"/>
     <!-- No more used since at least 2013-05-20: -->
     <action command="delete" search="file" path="$$profile$$\times.json"/>
     <!-- No more used since at least 2014-03-20: -->
     <action command="delete" search="file" path="$$profile$$\urlclassifierkey3.txt"/>
+    <!-- Mozilla Firefox specific: -->
+    <action command="delete" search="file" path="%LocalAppData%\Mozilla\updates"/>
+    <!-- Mozilla Firefox specific: -->
+    <!-- Old name of Firefox Developer Edition: -->
+    <action command="delete" search="file" path="%ProgramData%\Microsoft\Windows\Start Menu\Programs\Aurora.lnk"/>
+    <!-- Mozilla Firefox specific: -->
+    <!-- Seems to be wrongly created by any build: -->
+    <action command="delete" search="file" path="$$localprofile$$\firefox"/>
   </option>
 </cleaner>
