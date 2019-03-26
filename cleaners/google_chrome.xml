@@ -21,7 +21,7 @@
     @app Google Chrome
     @url https://www.google.com/chrome/
     @os Windows, Linux
-    @cleanerversion v2.3.0
+    @cleanerversion v2.3.1
     @cleanerdate 2019-03-26
     @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-26)
     @tested ok v???, Windows 7
@@ -214,7 +214,7 @@ Tobias.
     <value os="linux">$XDG_CONFIG_HOME/$$Browser$$</value>
     <value os="linux">~/.config/$$Browser$$</value>
     -->
-    <!-- Maybe "current" should be replaced with "*" - I will figure this out later. Tobias.
+    <!-- Maybe "current" should be replaced with "*" - I will figure this out later. Tobias. -->
     <!--
     <value os="linux">~/snap/$$Browser$$/current/.config/$$Browser$$</value>
     -->
