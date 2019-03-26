@@ -19,11 +19,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     @app Google Chrome
-    @url https://www.google.com/intl/en_us/chrome/
+    @url https://www.google.com/chrome/
     @os Windows, Linux
-    @cleanerversion v2.2.1
-    @cleanerdate 2019-03-25
-    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-25)
+    @cleanerversion v2.3.0
+    @cleanerdate 2019-03-26
+    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-26)
     @tested ok v???, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -38,6 +38,7 @@ I will fork all_chromium_based.xml later from this file.
 And then fork for each browser a file from all_chromium_based.xml.
 Tobias.
 -->
+<!-- OK, getting to much comments! ^^ Time for fork !? Tobias. -->
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
   <description>Web browser</description>
@@ -45,7 +46,22 @@ Tobias.
   <running type="exe" os="linux">chrome</running>
   <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
   <!--
+  <running type="exe" os="linux">opera</running>
+  <running type="exe" os="windows">opera.exe</running>
+  <running type="exe" os="windows">chrome.exe</running>
+  <running type="exe" os="linux">chromium-browser</running>
+  A break of the block for Chromium... -->
+  <!--
+  OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
+  Google Chrome. In other words, on Linux this could give a false positive
+  for Chromium when Google Chrome is running.
+  -->
+  <!-- ...end of break for Chromium!
+  <running type="exe" os="bsd">chrome</running>
   <running type="exe" os="windows">vivaldi.exe</running>
+  -->
+  <!-- Have taken this from vivaldi.xml, guess this should be just "vivaldi", but I figure that out later. Tobias. -->
+  <!--
   <running type="exe" os="linux">vivaldi-bin</running>
   -->
   <var name="Browser">
@@ -75,12 +91,49 @@ Tobias.
     <value os="windows">Vivaldi</value>
     <value os="windows">Yandex\YandexBrowser</value>
     -->
+    <!-- https://en.wikipedia.org/wiki/Chromium_(web_browser)#Other_browsers_based_on_Chromium -->
+	<!-- https://en.wikipedia.org/wiki/List_of_web_browsers#Blink-based -->
+    <!-- More browsers based on Chromium: (List for later!)
+    Amazon Silk
+    Avast Secure Browser
+    Blisk
+    CodeWeavers CrossOver
+    Coc Coc
+    Dartium
+    Falkon
+    Microsoft Edge (2019)
+    Qihoo 360 Secure Browser
+    SalamWeb
+    Samsung Internet
+    Sleipnir
+    SRWare Iron
+    CoolNovo
+    Maelstrom
+    Redcore
+    Titan Browser
+    Ecosia
+    qutebrowser
+    Puffin Browser
+    Dooble
+    -->
     <!-- Linux $$Browser$$ must be figured out for each browser, too! Tobias. -->
     <value os="linux">google-chrome*</value>
     <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
     <!--
+    <value os="linux">opera</value>
+    <value os="linux">chromium</value>
     <value os="linux">vivaldi</value>
+    A break of the block for Iron... -->
+    <!-- Just a guess, maybe I will figure this out later. Tobias.
     <value os="linux">iron</value>
+    -->
+    <!-- ...end of break for Iron!
+    -->
+    <!-- BSD $$Browser$$ must be figured out for each browser, too! Tobias. -->
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!--
+    <value os="freebsd">chromium</value>
+    <value os="openbsd">chromium</value>
     -->
   </var>
   <var name="ProgramFiles">
@@ -122,6 +175,10 @@ Tobias.
   <var name="home">
     <!-- The "home" directory of $$Browser$$. -->
     <value os="windows">%LocalAppData%\$$Browser$$</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
+    <!--
+    <value os="windows">%AppData%\$$Browser$$</value>
+    -->
     <!--
     Linux $$home$$ not yet figured out! I will do this later! Tobias.
     <value os="linux">~/.$$Browser$$</value>
@@ -149,7 +206,22 @@ Tobias.
     <value os="windows">%LocalAppData%\$$Browser$$\User Data\*</value>
     <value os="linux">$XDG_CONFIG_HOME/$$Browser$$/*</value>
     <value os="linux">~/.config/$$Browser$$/*</value>
+    <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
     <!--
+    A break of the block for Opera... -->
+    <!-- Opera: -->
+    <!--
+    <value os="linux">$XDG_CONFIG_HOME/$$Browser$$</value>
+    <value os="linux">~/.config/$$Browser$$</value>
+    -->
+    <!-- Maybe "current" should be replaced with "*" - I will figure this out later. Tobias.
+    <!--
+    <value os="linux">~/snap/$$Browser$$/current/.config/$$Browser$$</value>
+    -->
+    <!-- ...end of break for Opera!
+    -->
+    <!--
+    A old note from a previous version...
     Btw.: Looks like CCleaner & WinApp2.ini have lots of rules for "Chrome/Chromium based browsers" that also
     include Google's Chrome. So maybe we can later have a look about sharing code of the cleaners and/or have/create
     a "All-in-One"-Cleaner... Tobias.
@@ -195,6 +267,7 @@ Tobias.
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     Is now: -->
     <action command="delete" search="walk.all" path="$$profile$$\Application Cache\"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Code Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -208,15 +281,27 @@ Tobias.
   <option id="dom">
     <label>DOM Storage</label>
     <description>Delete HTML5 cookies</description>
+    <warning>This option may delete some extension data!</warning>
     <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
         ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
         ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="glob" path="$$profile$$/databases/http*"/>
     <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
     <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Local Storage/leveldb/"/>
   </option>
+  <!-- Changes suggested by https://github.com/jeroen7s ... -->
+  <option id="local_storage">
+    <label>Local Storage</label>
+    <description>Delete the files</description>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Local Storage/leveldb/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/http*"/>
+  </option>
+  <!-- ...end of suggested changes from https://github.com/jeroen7s ... -->
   <option id="form_history">
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
@@ -281,8 +366,22 @@ Tobias.
     FileKey14=%LocalAppData%\$$Browser$$\User Data\*|Login Data*
     Yes, with "Login Data*"! But the solution that follows works for me, too. Tobias.
     -->
+    <!--
+    OK, update! Version 74.0 (2019-03-25) have the following sub-folders:
+    - Sync App Settings       (have sub-folders)    (Folder date: 2015-05-03)
+    - Sync Data               (have sub-folders)    (Folder date: 2019-03-25)
+    - Sync Data Backup        (have no sub-folders) (Folder date: 2015-09-20)
+    - Sync Extension Settings (have sub-folders)    (Folder date: 2019-03-25)
+    As we say "Delete the sync data", it should include all...
+    So I'm changing some things...
+    Was:
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
+    Is now: -->
+    <action command="delete" search="walk.all" path="$$profile$$/Sync */"/>
+    <action command="delete" search="glob" path="$$profile$$/Sync *"/>
+    <!-- Finish! -->
+    <!-- There exist some more Login files... -->
     <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>
@@ -329,19 +428,35 @@ Tobias.
   <option id="crash_reports">
     <label>Crash reports</label>
     <description>Delete the files</description>
+    <!-- Empty folder! Last used: 2013-12-16 -->
     <!-- Maybe belongs to a other Google Program... Should we make a google_general.xml? Tobias. -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\CrashReports\"/>
     <action command="delete" search="file" path="%LocalAppData%\Google\CrashReports"/>
+    <!-- Empty folder! Last used: 2015-04-09 -->
+    <action command="delete" search="walk.all" path="$$base$$\CrashReports\"/>
+    <action command="delete" search="file" path="$$base$$\CrashReports"/>
+    <!-- Seems to a actual folder: -->
+    <action command="delete" search="walk.all" path="%WinDir%\Temp\Crashpad\"/>
+    <action command="delete" search="file" path="%WinDir%\Temp\Crashpad"/>
+    <!-- Seems to be the actual folder: -->
+    <action command="delete" search="walk.all" path="$$base$$\Crashpad\"/>
+    <action command="delete" search="file" path="$$base$$\Crashpad"/>
     <!-- And some more... Includes a "Chrome-last.dmp"! -->
-    <action command="delete" search="walk.all" path="%SystemDrive%\Program Files\Google\CrashReports\"/>
-    <action command="delete" search="file" path="%SystemDrive%\Program Files\Google\CrashReports"/>
-    <action command="delete" search="walk.all" path="%SystemDrive%\Program Files (x86)\Google\CrashReports\"/>
-    <action command="delete" search="file" path="%SystemDrive%\Program Files (x86)\Google\CrashReports"/>
+    <!-- Last used: 2015-10-12 -->
+    <action command="delete" search="walk.all" path="%ProgramFiles(x86)%\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%ProgramFiles(x86)%\Google\CrashReports"/>
+    <!-- Doesn't exist on the demo machine! Fallback for 32-bit Windows! -->
+    <action command="delete" search="walk.all" path="%ProgramFiles%\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%ProgramFiles%\Google\CrashReports"/>
   </option>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
+    <!-- Delete *.old recursive: -->
+    <action command="delete" search="file" path="$$profile$$/" regex="\.[Oo][Ll][Dd]$"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
+    <action command="delete" search="file" path="$$profile$$/Sync Data Backup"/>
+    <!-- Not really sure about that: -->
     <action command="delete" search="file" path="$$profile$$/Archived History"/>
     <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
     <!-- From WinApp2.ini/[Backup *]: -->
@@ -350,10 +465,27 @@ Tobias.
     <action command="delete" search="glob" path="$$profile$$\*Bookmarks.bak"/>
     <!-- From WinApp2.ini/[ART *]: -->
     <action command="delete" search="glob" path="%CommonProgramFiles%\Microsoft\ART\Backup\Google Chrome\*\Preferences.bak"/>
+    <action command="delete" search="walk.files" path="$$profile$$/JumpListIconsOld/"/>
+    <action command="delete" search="file" path="$$profile$$/JumpListIconsOld"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
+    <!-- %Temp%\: -->
+    <!-- Was:
+    <action command="delete" search="file" path="%Temp%\chrome_installer.log"/>
+    Is now: -->
+    <action command="delete" search="glob" path="%Temp%\chrome_*"/>
+    <!-- "scoped_*" folders belong to Chrome, too! -->
+    <action command="delete" search="walk.all" path="%Temp%\scoped_*"/>
+    <action command="delete" search="glob" path="%Temp%\scoped_*"/>
+    <!-- %WinDir%\Temp\: -->
+    <action command="delete" search="walk.all" path="%WinDir%\Temp\Crashpad\"/>
+    <action command="delete" search="file" path="%WinDir%\Temp\Crashpad"/>
+    <action command="delete" search="glob" path="%WinDir%\Temp\chrome_*"/>
+    <!-- "scoped_*" folders belong to Chrome, too! -->
+    <action command="delete" search="walk.all" path="%WinDir%\Temp\scoped_*"/>
+    <action command="delete" search="glob" path="%WinDir%\Temp\scoped_*"/>
     <!-- From WinApp2.ini/[Temps Extras *]: -->
     <!-- Delete *.tmp recursive: -->
     <action command="delete" search="glob" path="%LocalAppData%\Google\Chrome*\" regex="\.[Tt][Mm][Pp]$"/>
@@ -364,7 +496,6 @@ Tobias.
   <option id="junk">
     <label>Junk files and folders</label>
     <description>Delete old files and folders that are no more needed</description>
-    <action command="delete" search="file" path="%Temp%\chrome_installer.log"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Google\Chrome Cleanup Tool\"/>
     <action command="delete" search="file" path="%LocalAppData%\Google\Chrome Cleanup Tool"/>
     <!-- File Date: 2015-04-09 -->
@@ -373,6 +504,10 @@ Tobias.
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Caps\"/>
     <action command="delete" search="file" path="$$base$$\Caps"/>
+    <!-- Empty folder! Last used: 2013-12-16 -->
+    <!-- Maybe belongs to a other Google Program... Should we make a google_general.xml? Tobias. -->
+    <action command="delete" search="walk.all" path="%LocalAppData%\Google\CrashReports\"/>
+    <action command="delete" search="file" path="%LocalAppData%\Google\CrashReports"/>
     <!-- Empty Folder! Folder Date: 2015-04-09 -->
     <action command="delete" search="walk.all" path="$$base$$\Crash Reports\"/>
     <action command="delete" search="file" path="$$base$$\Crash Reports"/>
@@ -413,7 +548,7 @@ Tobias.
     <action command="delete" search="walk.all" path="$$profile$$\Sync App Settings\"/>
     <action command="delete" search="file" path="$$profile$$\Sync App Settings"/>
     <!-- File Date: 2015-04-10 -->
-    <action command="delete" search="walk.all" path="$$profile$$\Sync Data Backup\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Sync Data Backup\"/>
     <action command="delete" search="file" path="$$profile$$\Sync Data Backup"/>
     <!-- File Date: 2015-04-10 -->
     <action command="delete" search="file" path="$$profile$$\ChromeDWriteFontCache"/>
@@ -428,20 +563,13 @@ Tobias.
     <action command="delete" search="file" path="%AppData%\Google\Local Search History"/>
     <!-- File Date: 2018-12-20 - But it's just a debug.log! ;-) -->
     <action command="delete" search="file" path="$$InstallDirs$$\Application\debug.log"/>
+    <!-- Empty folder on the demo machine! I delete it, if he is empty! -->
+    <action command="delete" search="file" path="%AppData%\Google\Chrome\User Data"/>
+    <action command="delete" search="file" path="%AppData%\Google\Chrome"/>
+    <action command="delete" search="file" path="%AppData%\Google"/>
+    <!-- Old "Chrome App Launcher"-Icon on the Desktop - no functionality anymore! -->
+    <action command="delete" search="file" path="%SystemDrive%\Users\Public\Desktop\Chrome App Launcher.lnk"/>
   </option>
-  <!-- Changes suggested by https://github.com/jeroen7s ...
-  <option id="indexed_db">
-    <label>Local Storage IndexedDB</label>
-    <description>Delete the Local Storage</description>
-    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/http*"/>
-  </option>
-  <option id="local_storage">
-    <label>Local Storage GlobalDB</label>
-    <description>Delete the Local Storage</description>
-    <warning>This option may delete some extension data.</warning>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
-  </option>
-  ...end of suggested changes fromhttps://github.com/jeroen7s ... -->
 </cleaner>
 <!--
 Start "Trimmer Block"...
