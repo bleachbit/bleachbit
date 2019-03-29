@@ -22,9 +22,9 @@
     @url http://midnight-commander.org/
     @url https://sourceforge.net/projects/mcwin32/
     @os Windows, Linux
-    @cleanerversion v2.0.0
-    @cleanerdate 2019-03-21
-    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-17) & Tobias B. Besemer (2019-03-10 - 2019-03-21)
+    @cleanerversion v2.1.0
+    @cleanerdate 2019-03-29
+    @cleanerby Andrew Ziem (2009-02-15 - 2009-10-17) & Tobias B. Besemer (2019-03-10 - 2019-03-29) & dngray (2019-03-28)
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
@@ -37,6 +37,7 @@
   <var name="profile">
     <value os="windows">%UserProfile%\Midnight Commander</value>
     <value os="linux">~/.mc</value>
+    <value os="linux">~/.local/share/mc</value>
   </var>
   <option id="history">
     <label>History</label>
