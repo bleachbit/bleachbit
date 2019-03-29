@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-02-11 11:12-0700\n"
+"POT-Creation-Date: 2019-03-17 22:16-0600\n"
 "PO-Revision-Date: 2017-03-26 06:41+0000\n"
 "Last-Translator: Rockworld <sumoisrock@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -15,76 +15,167 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2017-03-26 18:48+0000\n"
-"X-Generator: Launchpad (build 18334)\n"
+"X-Launchpad-Export-Date: 2019-03-29 20:49+0000\n"
+"X-Generator: Launchpad (build 18910)\n"
 
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
-#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/windows_defender.xml
-#: ../cleaners/d4x.xml ../cleaners/sqlite3.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/bash.xml ../cleaners/nautilus.xml
-#: ../cleaners/octave.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml
-msgid "History"
-msgstr "ประวัติ"
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+msgid "Web browser"
+msgstr "เว็บเบราว์เซอร์"
 
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/links2.xml
-#: ../cleaners/realplayer.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
-#: ../bleachbit/Cleaner.py:349 ../bleachbit/Cleaner.py:423
-#: ../bleachbit/Cleaner.py:432
-msgid "Delete the usage history"
-msgstr "ลบประวัติการใช้"
-
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/thumbnails.xml ../cleaners/safari.xml ../cleaners/emesene.xml
-#: ../cleaners/liferea.xml ../cleaners/seamonkey.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
-#: ../cleaners/tremulous.xml ../cleaners/libreoffice.xml ../cleaners/xine.xml
-#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/opera.xml
-#: ../cleaners/amsn.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/beagle.xml ../cleaners/kde.xml ../cleaners/epiphany.xml
-#: ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml ../cleaners/java.xml
-#: ../cleaners/chromium.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:192 ../bleachbit/Cleaner.py:370
-#: ../bleachbit/Cleaner.py:455
+#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
+#: ../cleaners/kde.xml ../cleaners/waterfox.xml ../cleaners/evolution.xml
+#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/opera.xml
+#: ../cleaners/nexuiz.xml ../cleaners/vuze.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/xine.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/thunderbird.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
+#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/emesene.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
 msgid "Cache"
 msgstr "แคช"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
-#: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
-#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/xine.xml
-#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
-#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/beagle.xml
-#: ../cleaners/kde.xml ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/java.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
-#: ../bleachbit/Cleaner.py:370 ../bleachbit/Cleaner.py:455
-#: ../bleachbit/Cleaner.py:489 ../bleachbit/Cleaner.py:491
-msgid "Delete the cache"
-msgstr "ลบแคช"
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/thunderbird.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr "ลบเว็บแคช ซึ่งลดเวลาในการแสดงหน้าที่เข้าชมแล้ว"
+
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
+#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
+#: ../cleaners/silverlight.xml
+msgid "Cookies"
+msgstr "คุกกี้"
+
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
+#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
+#: ../cleaners/silverlight.xml
+msgid ""
+"Delete cookies, which contain information such as web site preferences, "
+"authentication, and tracking identification"
+msgstr ""
+"ลบคุกกี้ ซึ่งบรรจุข้อมูล เช่น ค่าปรับแต่งเว็บไซต์, ยืนยันตัวบุคคล "
+"และการติดตามการระบุตัวตน"
+
+#. DOM=Document Object Model
+#. DOM=Document Object Model
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+msgid "DOM Storage"
+msgstr "DOM Storage"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+msgid "Delete HTML5 cookies"
+msgstr "ลบคุกกี้ HTML5"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/chromium.xml
+msgid "Form history"
+msgstr "แบบฟอร์มประวัติ"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "A history of forms entered in web sites"
+msgstr "ประวัติการกรอกแบบฟอร์มในเว็บไซต์"
+
+#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
+#: ../cleaners/nautilus.xml ../cleaners/opera.xml ../cleaners/bash.xml
+#: ../cleaners/mc.xml ../cleaners/octave.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/links2.xml ../cleaners/vim.xml ../cleaners/elinks.xml
+#: ../cleaners/d4x.xml ../cleaners/windows_defender.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/sqlite3.xml ../cleaners/easytag.xml
+msgid "History"
+msgstr "ประวัติ"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "ลบประวัติ ซึ่งรวมถึง ไซต์ที่เยี่ยมชม, การดาวน์โหลดและภาพย่อ"
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Search engines"
+msgstr "เครื่องมือค้นหา"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Session"
+msgstr "วาระ"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Delete the current and last sessions"
+msgstr "ลบวาระล่าสุดและวาระปัจจุบัน"
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Sync"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Delete the sync data and sign out of the browser"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid "Passwords"
+msgstr "รหัสผ่าน"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"ฐานข้อมูลของชื่อผู้ใช้และรหัสผ่าน รวมถึงบัญชีของไซต์ที่ไม่น่าจะเก็บรหัสผ่าน"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid "This option will delete your saved passwords."
+msgstr "การเลือกตัวเลือกนี้จะลบรหัสผ่านที่คุณได้บันทึกไว้"
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:214 ../bleachbit/Cleaner.py:360
-#: ../bleachbit/Action.py:445
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/yum.xml ../bleachbit/Action.py:520
 msgid "Vacuum"
 msgstr "กระชับ"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:215
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/yum.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -92,32 +183,184 @@ msgstr ""
 "ขจัดการแยกส่วนของฐานข้อมูลเพื่อลดพื้นที่และเพิ่มความเร็วโดยไม่ต้องทำการลบข้อม"
 "ูลใดๆ"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../bleachbit/Cleaner.py:201
+msgid "Office suite"
+msgstr "ชุดโปรแกรมสำนักงาน"
+
+#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/kde.xml
+#: ../cleaners/waterfox.xml ../cleaners/evolution.xml
+#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/nexuiz.xml
+#: ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/xine.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
+#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/amsn.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:317
+msgid "Delete the cache"
+msgstr "ลบแคช"
+
+#: ../cleaners/libreoffice.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
+#: ../cleaners/mc.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:249
+#: ../bleachbit/Cleaner.py:258
+msgid "Delete the usage history"
+msgstr "ลบประวัติการใช้"
+
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gedit.xml
+#: ../bleachbit/Cleaner.py:294 ../bleachbit/Cleaner.py:485
+msgid "Recent documents list"
+msgstr "รายชื่อเอกสารล่าสุด"
+
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/gedit.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:198
+#: ../bleachbit/Cleaner.py:295
+msgid "Delete the list of recently used documents"
+msgstr "ลบรายชื่อของเอกสารที่ใช้ล่าสุด"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "วาระปัจจุบัน"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "ลบวาระปัจจุบัน"
+
+#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "ประวัติ URL"
+
+#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/safari.xml
+msgid "List of visited web pages"
+msgstr "รายการหน้าเว็บที่เข้าชมแล้ว"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "ประวัติค้นหา"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "ลบประวัติค้นหา"
+
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winetricks.xml ../cleaners/deepscan.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Temporary files"
+msgstr "แฟ้มชั่วคราว"
+
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winetricks.xml ../cleaners/deepscan.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Delete the temporary files"
+msgstr "ลบแฟ้มชั่วคราว"
+
+#: ../cleaners/apt.xml ../cleaners/yum.xml
 msgid "Package manager"
 msgstr "เครื่องมือจัดการแพคเกจ"
 
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
-#: ../cleaners/secondlife_viewer.xml
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "ลบแฟ้มที่ล้าสมัย"
+
+#: ../cleaners/apt.xml
+msgid "Package lists"
+msgstr "รายการแพคเกจ"
+
+#: ../cleaners/kde.xml ../cleaners/gnome.xml
+msgid "Desktop environment"
+msgstr "สภาพแวดล้อมพื้นโต๊ะ"
+
+#: ../cleaners/warzone2100.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 msgid "Game"
 msgstr "เกม"
 
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../bleachbit/Cleaner.py:486
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/easytag.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:312
 msgid "Logs"
 msgstr "ปูม"
 
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml ../cleaners/exaile.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/audacious.xml ../bleachbit/Cleaner.py:486
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/miro.xml
+#: ../bleachbit/Cleaner.py:312
 msgid "Delete the logs"
 msgstr "ลบปูม"
+
+#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "แฟ้มสำรอง"
+
+#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "ลบแฟ้มสำรอง"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Crash reports"
+msgstr "การรายงานปัญหา"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/beagle.xml ../cleaners/windows_defender.xml
+#: ../cleaners/transmission.xml ../cleaners/deepscan.xml
+msgid "Delete the files"
+msgstr "ลบแฟ้ม"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "แบบฟอร์มประวัติที่ถูกป้อนลงในเว็บไซต์และในแถบค้นหา"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Session restore"
+msgstr "เรียกคืนวาระ"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr "โหลดวาระตั้งต้นหลังจากเบราว์เซอร์ปิดหรือขัดข้อง"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Site preferences"
+msgstr "ตั้งค่าไซต์"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Settings for individual sites"
+msgstr ""
+
+#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "ไคลเอนต์อีเมล"
+
+#: ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "ตัวจัดการแฟ้ม"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "โฟลเดอร์กำหนดเองจะถูกล้าง"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -127,118 +370,229 @@ msgstr "ภาพย่อ"
 msgid "Icons for files on the system"
 msgstr "ไอคอนสำหรับแฟ้มที่อยู่ในระบบ"
 
-#: ../cleaners/vim.xml ../cleaners/gedit.xml
+#: ../cleaners/bash.xml
+msgid "Shell"
+msgstr "Shell"
+
+#: ../cleaners/bash.xml ../cleaners/octave.xml ../cleaners/sqlite3.xml
+msgid "Delete the command history"
+msgstr "ลบประวัติคำสั่ง"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "เรียกใช้"
+
+#: ../cleaners/vuze.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml ../cleaners/smartftp.xml ../cleaners/transmission.xml
+msgid "File transfer client"
+msgstr "โปรแกรมลูกข่ายสำหรับรับส่งแฟ้ม"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "โปรแกรมแก้ไขรูปภาพ"
+
+#: ../cleaners/mc.xml
+msgid "File Manager"
+msgstr ""
+
+#: ../cleaners/recoll.xml ../cleaners/beagle.xml
+msgid "Search tool"
+msgstr "เครื่องมือค้นหา"
+
+#: ../cleaners/recoll.xml ../cleaners/thunderbird.xml ../cleaners/beagle.xml
+msgid "Index"
+msgstr "ดรรชนี"
+
+#: ../cleaners/recoll.xml
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr "ลบดรรชนีค้นหา ฐานข้อมูลของคำศัพท์และแฟ้มที่บรรจุไว้"
+
+#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/teamviewer.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:197
+msgid "Most recently used"
+msgstr "ที่ใช้ล่าสุด"
+
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "ที่หลัก ๆ"
+
+#: ../cleaners/epiphany.xml
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"web sites"
+msgstr ""
+"ฐานข้อมูลของ URL ที่รวมถึง ที่คั่นหน้า, favicon "
+"และประวัติเว็บไซต์ที่เยี่ยมชมแล้ว"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "ตัวเลือกนี้ลบที่คั่นหน้าทั้งหมด"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr ""
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr ""
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "ระบบการวางหน้าต่าง"
+
+#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/gl-117.xml
+msgid "Debug logs"
+msgstr "ปูมดีบั๊ก"
+
+#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
+#: ../cleaners/gl-117.xml
+msgid "Delete the debug logs"
+msgstr "ลบปูมดีบั๊ก"
+
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "วิดเจ็ตสำหรับพื้นโต๊ะ"
+
+#: ../cleaners/windows_explorer.xml ../cleaners/vlc.xml
+#: ../cleaners/teamviewer.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "ลบรายการที่ใช้ล่าสุด"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+"ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "การดำเนินการนี้จะเป็นการเริ่มการทำงานของ Windows Explorer ใหม่"
+
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
+msgid "Media player"
+msgstr "เครื่องเล่นสื่อ"
+
+#: ../cleaners/xine.xml ../cleaners/flash.xml ../cleaners/miro.xml
+msgid "Multimedia viewer"
+msgstr "เครื่องมือดูสื่อผสม"
+
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "โปรแกรมดูเอกสาร"
+
+#: ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
 msgstr "เครื่องมือแก้ไข"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr ""
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat client"
+msgstr "โปรแกรมลูกข่ายสนทนา"
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/hexchat.xml
+msgid "Chat logs"
+msgstr "ปูมสนทนา"
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/hexchat.xml
+msgid "Delete the chat logs"
+msgstr "ลบปูมสนทนา"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr ""
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contain information such as play count and last "
+"played"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Delete history of known and cancelled files"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Known clients"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Delete known clients and friends"
+msgstr ""
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "เลเยอร์ความเข้ากันได้สำหรับซอฟต์แวร์ Windows"
+
+#: ../cleaners/audacious.xml
+msgid "Audio player"
+msgstr "โปรแกรมเล่นเสียง"
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr "ลบ ~/.viminfo ซึ่งประกอบไปด้วยประวัติแฟ้ม, ประวัติคำสั่ง และบัฟเฟอร์"
 
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-#: ../cleaners/amule.xml ../cleaners/gftp.xml
-msgid "File transfer client"
-msgstr "โปรแกรมลูกข่ายสำหรับรับส่งแฟ้ม"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "ลบคุกกี้, URL ที่เยี่ยมชม และประวัติค้นหา"
 
-#: ../cleaners/filezilla.xml ../cleaners/paint.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/audacious.xml
-#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:371
-msgid "Most recently used"
-msgstr "ที่ใช้ล่าสุด"
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "โปรแกรมป้องกันไวรัส"
 
-#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:372
-#: ../bleachbit/Cleaner.py:469
-msgid "Delete the list of recently used documents"
-msgstr "ลบรายชื่อของเอกสารที่ใช้ล่าสุด"
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "ลบรายชื่อเกมเซิร์ฟเวอร์"
 
-#: ../cleaners/skype.xml ../cleaners/emesene.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Chat client"
-msgstr "โปรแกรมลูกข่ายสนทนา"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "ลบแคชรูปแทนตัวและรูปสีหน้า"
 
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Chat logs"
-msgstr "ปูมสนทนา"
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "ตัวจัดการแฟ้มจัดเก็บ"
 
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Delete the chat logs"
-msgstr "ลบปูมสนทนา"
+#: ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "ประวัติดาวน์โหลด"
 
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "โปรแกรมติดตั้ง"
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "รายการแฟ้มที่ดาวน์โหลดแล้ว"
 
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "ล้างแคชของแพชและโปรแกรมติดตั้งต่าง ๆ"
-
-#: ../cleaners/hexchat.xml
-msgid "IRC client formerly known as XChat"
-msgstr ""
-
-#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/elinks.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../bleachbit/Cleaner.py:226
-msgid "Web browser"
-msgstr "เว็บเบราว์เซอร์"
-
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:193
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "ลบเว็บแคช ซึ่งลดเวลาในการแสดงหน้าที่เข้าชมแล้ว"
-
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:194
-msgid "Cookies"
-msgstr "คุกกี้"
-
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:195
-msgid ""
-"Delete cookies, which contain information such as web site preferences, "
-"authentication, and tracking identification"
-msgstr ""
-"ลบคุกกี้ ซึ่งบรรจุข้อมูล เช่น ค่าปรับแต่งเว็บไซต์, ยืนยันตัวบุคคล "
-"และการติดตามการระบุตัวตน"
-
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../bleachbit/Cleaner.py:213
-msgid "List of visited web pages"
-msgstr "รายการหน้าเว็บที่เข้าชมแล้ว"
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "ลบรายการหน้าเว็บที่เข้าชมแล้ว"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
 msgstr "บล็อกลิสต์"
-
-#: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
-#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
-#: ../bleachbit/Cleaner.py:197
-msgid "Delete the files"
-msgstr "ลบแฟ้ม"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
@@ -260,194 +614,21 @@ msgstr "สถิติ"
 msgid "Delete the file"
 msgstr "ลบแฟ้มนี้"
 
-#: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "ลบรายการที่ใช้ล่าสุด"
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "โปรแกรมประมวลผลคำ"
 
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "ลบแคชรูปแทนตัวและรูปสีหน้า"
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "โปรแกรมติดตั้ง"
 
-#: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-msgid "Media player"
-msgstr "เครื่องเล่นสื่อ"
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "ล้างแคชของแพชและโปรแกรมติดตั้งต่าง ๆ"
 
-#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml
-msgid "File manager"
-msgstr "ตัวจัดการแฟ้ม"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:468
-#: ../bleachbit/Cleaner.py:663
-msgid "Recent documents list"
-msgstr "รายชื่อเอกสารล่าสุด"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
+#: ../cleaners/hexchat.xml
+msgid "IRC client formerly known as XChat"
 msgstr ""
-"ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
-
-#. In Windows 'Run' is the dialog in the Start menu
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
-msgid "Run"
-msgstr "เรียกใช้"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml ../cleaners/gnome.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "ประวัติค้นหา"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml ../cleaners/gnome.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "ลบประวัติค้นหา"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "การดำเนินการนี้จะเป็นการเริ่มการทำงานของ Windows Explorer ใหม่"
-
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "ปูมดีบั๊ก"
-
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/easytag.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "ลบปูมดีบั๊ก"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:520
-msgid "Temporary files"
-msgstr "แฟ้มชั่วคราว"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:520
-msgid "Delete the temporary files"
-msgstr "ลบแฟ้มชั่วคราว"
-
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:201
-msgid "Download history"
-msgstr "ประวัติดาวน์โหลด"
-
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:201
-msgid "List of files downloaded"
-msgstr "รายการแฟ้มที่ดาวน์โหลดแล้ว"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "ลบรายการหน้าเว็บที่เข้าชมแล้ว"
-
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:190
-msgid "Backup files"
-msgstr "แฟ้มสำรอง"
-
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:191
-msgid "Delete the backup files"
-msgstr "ลบแฟ้มสำรอง"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
-msgid "Current session"
-msgstr "วาระปัจจุบัน"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
-msgid "Delete the current session"
-msgstr "ลบวาระปัจจุบัน"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:213
-msgid "URL history"
-msgstr "ประวัติ URL"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:375
-msgid "Office suite"
-msgstr "ชุดโปรแกรมสำนักงาน"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "โปรแกรมป้องกันไวรัส"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr ""
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr ""
-
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "โปรแกรมดูเอกสาร"
-
-#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
-msgid "Email client"
-msgstr "ไคลเอนต์อีเมล"
-
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "ลบรายชื่อเกมเซิร์ฟเวอร์"
-
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "ลบประวัติคำสั่ง"
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "เลเยอร์ความเข้ากันได้สำหรับซอฟต์แวร์ Windows"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:202
-msgid "Form history"
-msgstr "แบบฟอร์มประวัติ"
-
-#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:203
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "แบบฟอร์มประวัติที่ถูกป้อนลงในเว็บไซต์และในแถบค้นหา"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "ตัวแท็กแฟ้มเสียง"
-
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "ลบแฟ้มที่ล้าสมัย"
-
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "รายการแพคเกจ"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "เครื่องมือดูสื่อผสม"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml
-msgid "Search tool"
-msgstr "เครื่องมือค้นหา"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml ../cleaners/thunderbird.xml
-msgid "Index"
-msgstr "ดรรชนี"
-
-#: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr "ลบดรรชนีค้นหา ฐานข้อมูลของคำศัพท์และแฟ้มที่บรรจุไว้"
-
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "โปรแกรมแก้ไขรูปภาพ"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -457,127 +638,10 @@ msgstr "พอดคาสต์ที่ดาวน์โหลดแล้ว
 msgid "Delete downloaded podcasts"
 msgstr "ลบพอดแคสต์ที่ดาวน์โหลดแล้ว"
 
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Shell"
-
-#. TRANSLATORS: DOM = Document Object Model.
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
-msgid "DOM Storage"
-msgstr "DOM Storage"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
-msgid "Delete HTML5 cookies"
-msgstr "ลบคุกกี้ HTML5"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:208
-msgid "Passwords"
-msgstr "รหัสผ่าน"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:209
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-"ฐานข้อมูลของชื่อผู้ใช้และรหัสผ่าน รวมถึงบัญชีของไซต์ที่ไม่น่าจะเก็บรหัสผ่าน"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:211
-msgid "This option will delete your saved passwords."
-msgstr "การเลือกตัวเลือกนี้จะลบรหัสผ่านที่คุณได้บันทึกไว้"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "โฟลเดอร์กำหนดเองจะถูกล้าง"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "สภาพแวดล้อมพื้นโต๊ะ"
-
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "วิดเจ็ตสำหรับพื้นโต๊ะ"
-
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "ที่หลัก ๆ"
-
-#: ../cleaners/epiphany.xml
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"web sites"
-msgstr ""
-"ฐานข้อมูลของ URL ที่รวมถึง ที่คั่นหน้า, favicon "
-"และประวัติเว็บไซต์ที่เยี่ยมชมแล้ว"
-
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "ตัวเลือกนี้ลบที่คั่นหน้าทั้งหมด"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "ตัวจัดการแฟ้มจัดเก็บ"
-
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "ลบคุกกี้, URL ที่เยี่ยมชม และประวัติค้นหา"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "A history of forms entered in web sites"
-msgstr "ประวัติการกรอกแบบฟอร์มในเว็บไซต์"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "ลบประวัติ ซึ่งรวมถึง ไซต์ที่เยี่ยมชม, การดาวน์โหลดและภาพย่อ"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Search engines"
-msgstr "เครื่องมือค้นหา"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "โปรแกรมเล่นเสียง"
-
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr ""
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contain information such as play count and last "
-"played"
-msgstr ""
-
-#: ../cleaners/google_chrome.xml
-msgid "Session"
-msgstr "วาระ"
-
-#: ../cleaners/google_chrome.xml
-msgid "Delete the current and last sessions"
-msgstr "ลบวาระล่าสุดและวาระปัจจุบัน"
-
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "ระบบการวางหน้าต่าง"
-
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "โปรแกรมประมวลผลคำ"
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "ตัวแท็กแฟ้มเสียง"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -603,19 +667,52 @@ msgstr "เครื่องมือลบแฟ้มที่ไม่จำ
 msgid "Free space and maintain privacy"
 msgstr "เนื้อที่ว่างและการรักษาความเป็นส่วนตัว"
 
-#: ../bleachbit/FileUtilities.py:668
+#: ../bleachbit/FileUtilities.py:270 ../bleachbit/FileUtilities.py:279
+#, python-format
+msgid "Directory is not empty: %s"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:303
+#, python-format
+msgid "Special file type cannot be deleted: %s"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:477
+msgid "%TMP% does not exist: %s"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:693
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
 
-#: ../bleachbit/Unix.py:574
+#: ../bleachbit/Options.py:88
+#, python-format
+msgid "Disk was full when writing configuration to file %s"
+msgstr ""
+
+#: ../bleachbit/Options.py:113
+#, python-format
+msgid "Error checking whether path exists: %s"
+msgstr ""
+
+#: ../bleachbit/Options.py:214
+msgid "Error when setting the default drives to shred."
+msgstr ""
+
+#: ../bleachbit/Options.py:235
+#, python-format
+msgid "Automatically preserving language %s."
+msgstr ""
+
+#: ../bleachbit/Unix.py:599
 #, python-format
 msgid "Executable not found: %s"
 msgstr "ไม่พบแฟ้มโปรแกรม: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:623 ../bleachbit/Worker.py:136
+#: ../bleachbit/Unix.py:677 ../bleachbit/Worker.py:140
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -682,72 +779,52 @@ msgid "Mark for deletion"
 msgstr "ทำเครื่องหมายสำหรับการลบ"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:199 ../bleachbit/Command.py:233
-#: ../bleachbit/Action.py:254 ../bleachbit/Action.py:267
-#: ../bleachbit/Action.py:280 ../bleachbit/Action.py:293
-#: ../bleachbit/Action.py:306
+#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
+#: ../bleachbit/Action.py:327 ../bleachbit/Action.py:340
+#: ../bleachbit/Action.py:353 ../bleachbit/Action.py:366
+#: ../bleachbit/Action.py:379 ../bleachbit/Action.py:444
 msgid "Clean file"
 msgstr "ลบแฟ้มทั้งหมด"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:275
+#: ../bleachbit/Command.py:281
 msgid "Truncate"
 msgstr "ตัดท้าย"
 
-#: ../bleachbit/Command.py:317
+#: ../bleachbit/Command.py:323
 msgid "Delete registry key"
 msgstr "ลบคีย์เรจิสตรี"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:44
+#: ../bleachbit/Winapp.py:43
 msgid "Applications"
 msgstr "แอพพลิเคชั่น"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:47
+#: ../bleachbit/Winapp.py:46
 msgid "Internet"
 msgstr "อินเทอร์เน็ต"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:50
+#: ../bleachbit/Winapp.py:49
 msgid "Multimedia"
 msgstr "มัลติมีเดีย"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported
 #. from winapp2.ini
-#: ../bleachbit/Winapp.py:53
+#: ../bleachbit/Winapp.py:52
 msgid "Utilities"
 msgstr "อรรถประโยชน์"
 
-#: ../bleachbit/Winapp.py:64
+#: ../bleachbit/Winapp.py:63
 msgid "Games"
 msgstr "เกม"
 
-#: ../bleachbit/Winapp.py:162
+#: ../bleachbit/Winapp.py:181
 msgid "Imported from winapp2.ini"
 msgstr "นำเข้าจาก winapp2.ini"
-
-#: ../bleachbit/Cleaner.py:197
-msgid "Crash reports"
-msgstr "การรายงานปัญหา"
-
-#: ../bleachbit/Cleaner.py:204
-msgid "Session restore"
-msgstr "เรียกคืนวาระ"
-
-#: ../bleachbit/Cleaner.py:205
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr "โหลดวาระตั้งต้นหลังจากเบราว์เซอร์ปิดหรือขัดข้อง"
-
-#: ../bleachbit/Cleaner.py:207
-msgid "Site preferences"
-msgstr "ตั้งค่าไซต์"
-
-#: ../bleachbit/Cleaner.py:207
-msgid "Settings for individual sites"
-msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -756,86 +833,86 @@ msgstr ""
 #. Firefox.
 #. More information:
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:453
+#: ../bleachbit/Cleaner.py:279
 msgid "Broken desktop files"
 msgstr "แฟ้มเดส์กท็อปชำรุด"
 
-#: ../bleachbit/Cleaner.py:454
+#: ../bleachbit/Cleaner.py:280
 msgid "Delete broken application menu entries and file associations"
 msgstr "ลบรายการเมนูโปรแกรมชำรุดและการเชื่อมโยงของแฟ้ม"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:458
+#: ../bleachbit/Cleaner.py:284
 msgid "Localizations"
 msgstr "แฟ้มภาษา"
 
-#: ../bleachbit/Cleaner.py:459
+#: ../bleachbit/Cleaner.py:285
 msgid "Delete files for unwanted languages"
 msgstr "ลบแฟ้มสำหรับภาษาที่ไม่ต้องการ"
 
-#: ../bleachbit/Cleaner.py:461
+#: ../bleachbit/Cleaner.py:287
 msgid "Configure this option in the preferences."
 msgstr "ตั้งค่าตัวเลือกนี้ในเมนูการตั้งค่า"
 
-#: ../bleachbit/Cleaner.py:467
+#: ../bleachbit/Cleaner.py:293
 msgid "Rotated logs"
 msgstr "ปูมหมุนเวียน"
 
-#: ../bleachbit/Cleaner.py:467
+#: ../bleachbit/Cleaner.py:293
 msgid "Delete old system logs"
 msgstr "ลบปูมเก่าของระบบ"
 
-#: ../bleachbit/Cleaner.py:470
+#: ../bleachbit/Cleaner.py:296
 msgid "Trash"
 msgstr "ถังขยะ"
 
-#: ../bleachbit/Cleaner.py:470
+#: ../bleachbit/Cleaner.py:296
 msgid "Empty the trash"
 msgstr "ทำความสะอาดถังขยะ"
 
-#: ../bleachbit/Cleaner.py:476 ../bleachbit/Cleaner.py:627
-#: ../bleachbit/Worker.py:184
+#: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:447
+#: ../bleachbit/Worker.py:188
 msgid "Memory"
 msgstr "ความจำ"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:478
+#: ../bleachbit/Cleaner.py:304
 msgid "Wipe the swap and free memory"
 msgstr "ลบพื้นที่สลับและคืนหน่วยความจำ"
 
-#: ../bleachbit/Cleaner.py:480
+#: ../bleachbit/Cleaner.py:306
 msgid "This option is experimental and may cause system problems."
 msgstr "ตัวเลือกนี้เป็นการทดลองและอาจทำให้เกิดปัญหาของระบบ"
 
-#: ../bleachbit/Cleaner.py:488
+#: ../bleachbit/Cleaner.py:314
 msgid "Memory dump"
 msgstr "memory dump"
 
-#: ../bleachbit/Cleaner.py:488
+#: ../bleachbit/Cleaner.py:314
 msgid "Delete the file memory.dmp"
 msgstr "ลบแฟ้ม memory.dmp"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:491
+#: ../bleachbit/Cleaner.py:317
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:493
+#: ../bleachbit/Cleaner.py:319
 msgid "Recycle bin"
 msgstr "ถังขยะ"
 
-#: ../bleachbit/Cleaner.py:493 ../bleachbit/Cleaner.py:787
+#: ../bleachbit/Cleaner.py:319 ../bleachbit/Cleaner.py:617
 msgid "Empty the recycle bin"
 msgstr "เทขยะ"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:496
+#: ../bleachbit/Cleaner.py:322
 msgid "Update uninstallers"
 msgstr "ล้างโปรแกรมถอนการติดตั้ง"
 
-#: ../bleachbit/Cleaner.py:497
+#: ../bleachbit/Cleaner.py:323
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
@@ -843,59 +920,59 @@ msgstr ""
 "ล้าง uninstallers ทั้งหมดที่ใช้ลบข้อมูลอัปเดตของ Microsoft ซึ่งได้แก่ "
 "hotfixes, service packs, และการปรับปรุง Internet Explorer"
 
-#: ../bleachbit/Cleaner.py:504 ../bleachbit/Cleaner.py:727
+#: ../bleachbit/Cleaner.py:330 ../bleachbit/Cleaner.py:557
 msgid "Clipboard"
 msgstr "คลิปบอร์ด"
 
-#: ../bleachbit/Cleaner.py:505
+#: ../bleachbit/Cleaner.py:331
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr "คลิปบอร์ดของสภาพแวดล้อมเดสก์ท็อปที่ใช้ในการกระทำคัดลอกและแปะ"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:512 ../bleachbit/GuiPreferences.py:66
+#: ../bleachbit/Cleaner.py:338 ../bleachbit/GuiPreferences.py:66
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: ../bleachbit/Cleaner.py:513
+#: ../bleachbit/Cleaner.py:339
 msgid "Delete user-specified files and folders"
 msgstr "ลบแฟ้มและโฟลเดอร์ที่ผู้ใช้สร้างไว้"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:515
+#: ../bleachbit/Cleaner.py:341
 msgid "Free disk space"
 msgstr "เนื้อที่ว่างในดิสก์"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:517
+#: ../bleachbit/Cleaner.py:343
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "เขียนทับเนื้อที่ว่างในดิสก์เพื่อซ่อนแฟ้มที่ถูกลบ"
 
-#: ../bleachbit/Cleaner.py:518
+#: ../bleachbit/Cleaner.py:344
 msgid "This option is very slow."
 msgstr "ตัวเลือกนี้จะทำงานได้ช้ามาก"
 
-#: ../bleachbit/Cleaner.py:522
+#: ../bleachbit/Cleaner.py:348
 msgid "The system in general"
 msgstr "ระบบทั่วไป"
 
-#: ../bleachbit/Cleaner.py:524 ../bleachbit/Cleaner.py:857
+#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:690
 msgid "System"
 msgstr "ระบบ"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:735 ../bleachbit/Cleaner.py:890
+#: ../bleachbit/Cleaner.py:565 ../bleachbit/Cleaner.py:723
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "เขียนทับบนพื้นที่ว่างของดิสก์ %s"
 
-#: ../bleachbit/RecognizeCleanerML.py:59
+#: ../bleachbit/RecognizeCleanerML.py:58
 msgid "Security warning"
 msgstr "คำเตือนความปลอดภัย"
 
-#: ../bleachbit/RecognizeCleanerML.py:72
+#: ../bleachbit/RecognizeCleanerML.py:71
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -905,15 +982,37 @@ msgstr ""
 "คำจำกัดความที่เป็นอันตรายสามารถทำลายระบบของคุณ "
 "ถ้าคุณไม่เชื่อถือการเปลี่ยนแปลงเหล่านี้ ลบแฟ้มต่างๆ หรือออกจากโปรแกรม"
 
-#: ../bleachbit/RecognizeCleanerML.py:88
+#: ../bleachbit/RecognizeCleanerML.py:87
 msgctxt "column_label"
 msgid "Delete"
 msgstr "ลบ"
 
-#: ../bleachbit/RecognizeCleanerML.py:93
+#: ../bleachbit/RecognizeCleanerML.py:92
 msgctxt "column_label"
 msgid "Filename"
 msgstr "ชื่อแฟ้ม"
+
+#: ../bleachbit/CleanerML.py:120
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:259
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr ""
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -924,26 +1023,31 @@ msgstr "ชื่อแฟ้ม"
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "ข้อยกเว้นขณะกำลังเรียกทำงาน '%(operation)s': '%(msg)s'"
 
+#: ../bleachbit/Worker.py:101
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr ""
+
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:182
+#: ../bleachbit/Worker.py:186
 msgid "Please wait.  Wiping free disk space."
 msgstr "โปรดรอสักครู่ กำลังล้างเพื่อเพิ่มพื้นที่ว่าง"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:184 ../bleachbit/Worker.py:332
+#: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "กรุณารอ  กำลังทำความสะอาด %s"
 
-#: ../bleachbit/Worker.py:199
+#: ../bleachbit/Worker.py:202
 msgid "Please wait. Wiping file system metadata."
 msgstr "โปรดรอสักครู่ กำลังล้าง file system metadata"
 
-#: ../bleachbit/Worker.py:202
+#: ../bleachbit/Worker.py:205
 msgid "Please wait. Cleaning up after wiping file system metadata."
 msgstr "โปรดรอสักครู่ กำลังเก็บกวาดหลังการล้าง file system metadata"
 
-#: ../bleachbit/Worker.py:205
+#: ../bleachbit/Worker.py:208
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -951,38 +1055,38 @@ msgstr[0] "เหลืออีกประมาณ %d นาที"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:272
+#: ../bleachbit/Worker.py:275
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "เนื้อที่ว่างในดิสก์ที่กู้คืน: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:276
+#: ../bleachbit/Worker.py:279
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "เนื้อที่ว่างในดิสก์ที่กู้คืน:% s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:281
+#: ../bleachbit/Worker.py:284
 #, python-format
 msgid "Files deleted: %d"
 msgstr "แฟ้มที่ลบ: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:285
+#: ../bleachbit/Worker.py:288
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "แฟ้มที่ลบ: %d"
 
-#: ../bleachbit/Worker.py:288
+#: ../bleachbit/Worker.py:291
 #, python-format
 msgid "Special operations: %d"
 msgstr "การทำงานพิเศษ: %d"
 
-#: ../bleachbit/Worker.py:291
+#: ../bleachbit/Worker.py:294
 #, python-format
 msgid "Errors: %d"
 msgstr "ข้อผิดพลาด: %d"
@@ -990,12 +1094,12 @@ msgstr "ข้อผิดพลาด: %d"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:306
+#: ../bleachbit/Worker.py:309
 msgid "Please wait.  Running deep scan."
 msgstr "โปรดรอสักครู่ กำลังทำการสแกนละเอียด"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:335
+#: ../bleachbit/Worker.py:338
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "กรุณารอ  กำลังแสดงตัวอย่าง %s"
@@ -1054,6 +1158,10 @@ msgstr "รายชื่อเครื่องมือทำความส
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "เรียกโปรแกรมล้างเพื่อลบแฟ้มและทำการเปลี่ยนแปลงสิทธิ์"
 
+#: ../bleachbit/CLI.py:142
+msgid "log debug messages to file"
+msgstr ""
+
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
 msgstr "ล้างแฟ้มหรือโฟลเดอร์ที่เลือก"
@@ -1083,19 +1191,68 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "อัปเดตข้อมูลสำหรับ winapp2.ini ถ้ามีเวอร์ชั่นใหม่ที่ใช้ได้"
 
 #: ../bleachbit/CLI.py:166
+msgid "wipe free space in the given paths"
+msgstr ""
+
+#: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
 msgstr "แสดงข้อมูลรุ่นของโปรแกรมแล้วออก"
 
-#: ../bleachbit/CLI.py:168
+#: ../bleachbit/CLI.py:170
 msgid "overwrite files to hide contents"
 msgstr "เขียนทับแฟ้มเพื่อซ่อนข้อมูล"
 
+#: ../bleachbit/CLI.py:178
+msgid ""
+"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
+msgstr ""
+
+#: ../bleachbit/CLI.py:196
+msgid "Checking online for updates to winapp2.ini"
+msgstr ""
+
+#: ../bleachbit/CLI.py:211
+msgid "No directories given for --wipe-free-space"
+msgstr ""
+
+#: ../bleachbit/CLI.py:216
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr ""
+
+#: ../bleachbit/CLI.py:218
+msgid "Wiping free space can take a long time."
+msgstr ""
+
+#: ../bleachbit/CLI.py:228
+msgid "No work to do. Specify options."
+msgstr ""
+
+#: ../bleachbit/CLI.py:236
+msgid "--overwrite is intended only for use with --clean"
+msgstr ""
+
+#: ../bleachbit/Action.py:144
+msgid "Deep scan does not support multi-value variable."
+msgstr ""
+
+#: ../bleachbit/Action.py:221
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr ""
+
+#: ../bleachbit/Action.py:256
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr ""
+
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:382 ../bleachbit/GUI.py:632
+#: ../bleachbit/Action.py:457 ../bleachbit/GUI.py:659
 msgid "Clean"
 msgstr "ล้าง"
 
-#: ../bleachbit/Action.py:418
+#: ../bleachbit/Action.py:493
 #, python-format
 msgid "Run external command: %s"
 msgstr ""
@@ -1125,19 +1282,19 @@ msgid ""
 "%(warning)s"
 msgstr ""
 
-#: ../bleachbit/GUI.py:372
+#: ../bleachbit/GUI.py:373
 msgid "You must select an operation"
 msgstr "คุณต้องเลือกการทำงาน"
 
-#: ../bleachbit/GUI.py:391 ../bleachbit/GUI.py:413
+#: ../bleachbit/GUI.py:392 ../bleachbit/GUI.py:414
 msgid "Done."
 msgstr "เสร็จแล้ว"
 
-#: ../bleachbit/GUI.py:426
+#: ../bleachbit/GUI.py:431
 msgid "Program to clean unnecessary files"
 msgstr "โปรแกรมล้างแฟ้มที่ไม่จำเป็น"
 
-#: ../bleachbit/GUI.py:436
+#: ../bleachbit/GUI.py:441
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1149,7 +1306,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:442
+#: ../bleachbit/GUI.py:447
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -1158,115 +1315,123 @@ msgstr ""
 "  SiraNokyoongtong https://launchpad.net/~gumara\n"
 "  shane.fox https://launchpad.net/~shanefox"
 
-#: ../bleachbit/GUI.py:454
+#: ../bleachbit/GUI.py:459
 msgid "System information"
 msgstr "ข้อมูลระบบ"
 
-#: ../bleachbit/GUI.py:527
+#: ../bleachbit/GUI.py:521
+msgid "No paths found in clipboard."
+msgstr ""
+
+#: ../bleachbit/GUI.py:555
 msgid "Choose files to shred"
 msgstr "เลือกแฟ้มที่แบ่งปัน"
 
-#: ../bleachbit/GUI.py:530
+#: ../bleachbit/GUI.py:558
 msgid "Choose folder to shred"
 msgstr "เลือกโฟลเดอร์ที่จะล้าง"
 
-#: ../bleachbit/GUI.py:594 ../bleachbit/GuiPreferences.py:197
+#: ../bleachbit/GUI.py:622 ../bleachbit/GuiPreferences.py:197
 #: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
 msgid "Choose a folder"
 msgstr "เลือกโฟลเดอร์"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:627
+#: ../bleachbit/GUI.py:654
 msgid "Preview"
 msgstr "ตัวอย่าง"
 
-#: ../bleachbit/GUI.py:734
+#: ../bleachbit/GUI.py:749
 msgid "_Shred Files"
 msgstr "แ_บ่งปันแฟ้ม"
 
-#: ../bleachbit/GUI.py:736
+#: ../bleachbit/GUI.py:751
 msgid "Sh_red Folders"
 msgstr "ล้า_งโฟลเดอร์"
 
-#: ../bleachbit/GUI.py:738
+#: ../bleachbit/GUI.py:753
 msgid "_Wipe Free Space"
 msgstr "_ล้างเพื่อเพิ่มพื้นที่ว่าง"
 
-#: ../bleachbit/GUI.py:740
+#: ../bleachbit/GUI.py:755
 msgid "S_hred Settings and Quit"
 msgstr "ล้_างค่าตั้งทั้งหมดแล้วออก"
 
-#: ../bleachbit/GUI.py:742
+#: ../bleachbit/GUI.py:757
 msgid "_Quit"
 msgstr "_ออก"
 
-#: ../bleachbit/GUI.py:744
+#: ../bleachbit/GUI.py:759
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: ../bleachbit/GUI.py:746 ../bleachbit/GuiPreferences.py:58
+#: ../bleachbit/GUI.py:761 ../bleachbit/GuiPreferences.py:58
 msgid "Preferences"
 msgstr "ปรับแต่ง"
 
-#: ../bleachbit/GUI.py:747
+#: ../bleachbit/GUI.py:762
+msgid "Shred Paths from Clipboard"
+msgstr ""
+
+#: ../bleachbit/GUI.py:764
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../bleachbit/GUI.py:748
+#: ../bleachbit/GUI.py:765
 msgid "Help Contents"
 msgstr "สารบัญวิธีใช้"
 
-#: ../bleachbit/GUI.py:751
+#: ../bleachbit/GUI.py:768
 msgid "_Release Notes"
 msgstr "_บันทึกประจำรุ่น"
 
-#: ../bleachbit/GUI.py:754
+#: ../bleachbit/GUI.py:771
 msgid "_System Information"
 msgstr "ข้อมูล_ระบบ"
 
-#: ../bleachbit/GUI.py:757
+#: ../bleachbit/GUI.py:774
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: ../bleachbit/GUI.py:758
+#: ../bleachbit/GUI.py:775
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../bleachbit/GUI.py:783
+#: ../bleachbit/GUI.py:800
 msgctxt "button"
 msgid "Preview"
 msgstr "แสดงตัวอย่าง"
 
-#: ../bleachbit/GUI.py:788
+#: ../bleachbit/GUI.py:805
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "ตัวอย่างแฟ้มในการทำงานที่เลือก (โดยไม่ลบแฟ้มใดๆ)"
 
-#: ../bleachbit/GUI.py:798
+#: ../bleachbit/GUI.py:815
 msgctxt "button"
 msgid "Clean"
 msgstr "ล้าง"
 
-#: ../bleachbit/GUI.py:802
+#: ../bleachbit/GUI.py:819
 msgid "Clean files in the selected operations"
 msgstr "ล้างแฟ้มโดยทำตามคำสั่งที่เลือก"
 
-#: ../bleachbit/GUI.py:893
+#: ../bleachbit/GUI.py:910
 msgid "Error when checking for updates: "
 msgstr "เกิดข้อผิดพลาดเมื่อกำลังตรวจสอบการปรับรุ่น: "
 
-#: ../bleachbit/GUI.py:932
+#: ../bleachbit/GUI.py:949
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "ไม่สามารถโหลดมอดูล SQLite ได้: อาจมีซอฟต์แวร์ป้องกันไวรัสบล็อกมันไว้"
 
-#: ../bleachbit/GUI.py:935
+#: ../bleachbit/GUI.py:952
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
 
-#: ../bleachbit/GUI.py:940
+#: ../bleachbit/GUI.py:957
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1422,3 +1587,72 @@ msgstr "เพิ่มเอกสาร"
 msgctxt "button"
 msgid "Add folder"
 msgstr "เพิ่มโฟลเดอร์"
+
+#: ../bleachbit/Memory.py:61
+msgid ""
+"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"information."
+msgstr ""
+
+#: ../bleachbit/Memory.py:81
+msgid "Disabling swap."
+msgstr ""
+
+#: ../bleachbit/Memory.py:101
+msgid "Re-enabling swap."
+msgstr ""
+
+#: ../bleachbit/Memory.py:121
+#, python-format
+msgid "Setting nice value %d for this process."
+msgstr ""
+
+#: ../bleachbit/Memory.py:127
+#, python-format
+msgid "Dropping privileges of pid %d to uid %d."
+msgstr ""
+
+#: ../bleachbit/Memory.py:140
+#, python-format
+msgid "Allocating and wiping %s (%d B) of memory."
+msgstr ""
+
+#: ../bleachbit/Memory.py:148
+#, python-format
+msgid "Freeing %s of memory."
+msgstr ""
+
+#: ../bleachbit/Memory.py:178
+#, python-format
+msgid "Found UUID for swap file %s is %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:263
+#, python-format
+msgid "Physical free memory is %s (%d B)."
+msgstr ""
+
+#: ../bleachbit/Memory.py:274
+#, python-format
+msgid "Wiping the swap device %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:285
+#, python-format
+msgid "Reinitializing the swap device %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:301
+#, python-format
+msgid "Detected these swap devices: %s"
+msgstr ""
+
+#: ../bleachbit/Memory.py:310
+#, python-format
+msgid "The function wipe_memory() with pid %d is waiting for child pid %d."
+msgstr ""
+
+#: ../bleachbit/Memory.py:314
+#, python-format
+msgid "The child memory-wiping process returned code %d."
+msgstr ""

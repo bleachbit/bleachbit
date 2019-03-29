@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-18 20:35-0700\n"
+"POT-Creation-Date: 2019-03-17 22:16-0600\n"
 "PO-Revision-Date: 2019-02-27 04:57+0000\n"
 "Last-Translator: Remon Shai <remonshai@gmail.com>\n"
 "Language-Team: Bengali <bn@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-02 20:08+0000\n"
-"X-Generator: Launchpad (build 18888)\n"
+"X-Launchpad-Export-Date: 2019-03-29 20:49+0000\n"
+"X-Generator: Launchpad (build 18910)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
 #: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -38,7 +38,8 @@ msgstr "ওয়েব ব্রাউজার"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/emesene.xml
 #: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml ../cleaners/exaile.xml
+#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
 #: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
 msgid "Cache"
 msgstr "ক্যাশ"
@@ -164,7 +165,7 @@ msgstr "এই অপশনটি আপনার সঞ্চয়কৃত[saved
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
 #: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
 #: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/yum.xml ../bleachbit/Action.py:505
+#: ../cleaners/yum.xml ../bleachbit/Action.py:520
 msgid "Vacuum"
 msgstr "সু-শৃঙ্খল"
 
@@ -193,9 +194,9 @@ msgstr "অফিস স্যুট"
 #: ../cleaners/audacious.xml ../cleaners/smartftp.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/amsn.xml
-#: ../cleaners/exaile.xml ../cleaners/miro.xml ../bleachbit/Cleaner.py:196
-#: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
-#: ../bleachbit/Cleaner.py:317
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:317
 msgid "Delete the cache"
 msgstr "ক্যাশ পরিস্কার করো"
 
@@ -387,6 +388,10 @@ msgstr ""
 msgid "Graphics editor"
 msgstr ""
 
+#: ../cleaners/mc.xml
+msgid "File Manager"
+msgstr ""
+
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
 msgstr ""
@@ -483,6 +488,10 @@ msgstr ""
 #: ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
 msgstr "সম্পাদক"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr ""
 
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -670,32 +679,32 @@ msgid ""
 "overwriting."
 msgstr ""
 
-#: ../bleachbit/Options.py:87
+#: ../bleachbit/Options.py:88
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr ""
 
-#: ../bleachbit/Options.py:112
+#: ../bleachbit/Options.py:113
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr ""
 
-#: ../bleachbit/Options.py:213
+#: ../bleachbit/Options.py:214
 msgid "Error when setting the default drives to shred."
 msgstr ""
 
-#: ../bleachbit/Options.py:234
+#: ../bleachbit/Options.py:235
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr ""
 
-#: ../bleachbit/Unix.py:578
+#: ../bleachbit/Unix.py:599
 #, python-format
 msgid "Executable not found: %s"
 msgstr ""
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:656 ../bleachbit/Worker.py:140
+#: ../bleachbit/Unix.py:677 ../bleachbit/Worker.py:140
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -757,9 +766,9 @@ msgstr ""
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
-#: ../bleachbit/Action.py:312 ../bleachbit/Action.py:325
-#: ../bleachbit/Action.py:338 ../bleachbit/Action.py:351
-#: ../bleachbit/Action.py:364 ../bleachbit/Action.py:429
+#: ../bleachbit/Action.py:327 ../bleachbit/Action.py:340
+#: ../bleachbit/Action.py:353 ../bleachbit/Action.py:366
+#: ../bleachbit/Action.py:379 ../bleachbit/Action.py:444
 msgid "Clean file"
 msgstr ""
 
@@ -943,6 +952,27 @@ msgstr ""
 msgid "Overwrite free disk space %s"
 msgstr ""
 
+#: ../bleachbit/RecognizeCleanerML.py:58
+msgid "Security warning"
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:71
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:87
+msgctxt "column_label"
+msgid "Delete"
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:92
+msgctxt "column_label"
+msgid "Filename"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py:120
 #, python-brace-format
 msgid ""
@@ -963,27 +993,6 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-
-#: ../bleachbit/RecognizeCleanerML.py:58
-msgid "Security warning"
-msgstr ""
-
-#: ../bleachbit/RecognizeCleanerML.py:71
-msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
-msgstr ""
-
-#: ../bleachbit/RecognizeCleanerML.py:87
-msgctxt "column_label"
-msgid "Delete"
-msgstr ""
-
-#: ../bleachbit/RecognizeCleanerML.py:92
-msgctxt "column_label"
-msgid "Filename"
 msgstr ""
 
 #. TRANSLATORS: This indicates an error.  The special keyword
@@ -1202,16 +1211,26 @@ msgstr ""
 msgid "--overwrite is intended only for use with --clean"
 msgstr ""
 
-#: ../bleachbit/Action.py:139
+#: ../bleachbit/Action.py:144
 msgid "Deep scan does not support multi-value variable."
 msgstr ""
 
+#: ../bleachbit/Action.py:221
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr ""
+
+#: ../bleachbit/Action.py:256
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr ""
+
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:442 ../bleachbit/GUI.py:659
+#: ../bleachbit/Action.py:457 ../bleachbit/GUI.py:659
 msgid "Clean"
 msgstr ""
 
-#: ../bleachbit/Action.py:478
+#: ../bleachbit/Action.py:493
 #, python-format
 msgid "Run external command: %s"
 msgstr ""

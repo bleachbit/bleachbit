@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-01-09 21:05-0700\n"
+"POT-Creation-Date: 2019-03-17 22:16-0600\n"
 "PO-Revision-Date: 2015-01-13 08:08+0000\n"
 "Last-Translator: Nguyen Kim Kha <Unknown>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
@@ -15,189 +15,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2015-01-13 15:56+0000\n"
-"X-Generator: Launchpad (build 17298)\n"
+"X-Launchpad-Export-Date: 2019-03-29 20:49+0000\n"
+"X-Generator: Launchpad (build 18910)\n"
 
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
-#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/windows_defender.xml
-#: ../cleaners/d4x.xml ../cleaners/sqlite3.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/bash.xml ../cleaners/nautilus.xml
-#: ../cleaners/octave.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml
-msgid "History"
-msgstr "Lịch sử"
-
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/links2.xml
-#: ../cleaners/realplayer.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
-#: ../bleachbit/Cleaner.py:345 ../bleachbit/Cleaner.py:419
-#: ../bleachbit/Cleaner.py:428
-msgid "Delete the usage history"
-msgstr "Xóa lịch sử sử dụng"
-
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/thumbnails.xml ../cleaners/safari.xml ../cleaners/emesene.xml
-#: ../cleaners/liferea.xml ../cleaners/seamonkey.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
-#: ../cleaners/tremulous.xml ../cleaners/libreoffice.xml ../cleaners/xine.xml
-#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/opera.xml
-#: ../cleaners/amsn.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/beagle.xml ../cleaners/kde.xml ../cleaners/epiphany.xml
-#: ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/java.xml ../cleaners/chromium.xml ../cleaners/audacious.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:189
-#: ../bleachbit/Cleaner.py:366 ../bleachbit/Cleaner.py:451
-msgid "Cache"
-msgstr "Bộ nhớ đệm"
-
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
-#: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
-#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/xine.xml
-#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/amsn.xml
-#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/beagle.xml
-#: ../cleaners/kde.xml ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/java.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
-#: ../bleachbit/Cleaner.py:366 ../bleachbit/Cleaner.py:451
-#: ../bleachbit/Cleaner.py:485 ../bleachbit/Cleaner.py:487
-msgid "Delete the cache"
-msgstr "Xóa bộ nhớ đệm"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Action.py:335 ../bleachbit/Cleaner.py:209
-#: ../bleachbit/Cleaner.py:356
-msgid "Vacuum"
-msgstr "Chống phân mảnh cơ sở dữ liệu"
-
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:210
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"Dọn dẹp cơ sở dữ liệu bị phân mảnh để lấy lại dung lượng và cải thiện tốc độ "
-"mà không cần xóa bất kì dữ liệu nào"
-
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../bleachbit/Cleaner.py:482
-msgid "Logs"
-msgstr "Nhật ký"
-
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
-#: ../cleaners/exaile.xml ../cleaners/screenlets.xml ../cleaners/gftp.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:482
-msgid "Delete the logs"
-msgstr "Xóa các nhật kí"
-
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
-#: ../cleaners/secondlife_viewer.xml
-msgid "Game"
-msgstr "Trò chơi"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Hình thu nhỏ"
-
-#: ../cleaners/vim.xml ../cleaners/gedit.xml
-msgid "Editor"
-msgstr "Trình soạn thảo"
-
-#: ../cleaners/vim.xml
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "Xóa ~/.viminfo chứa tập tin lịch sử, lịch sử dòng lệnh, và bộ đệm"
-
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-#: ../cleaners/amule.xml ../cleaners/gftp.xml
-msgid "File transfer client"
-msgstr "Chương trình truyền tải tập tin"
-
-#: ../cleaners/filezilla.xml ../cleaners/paint.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/audacious.xml
-#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:367
-msgid "Most recently used"
-msgstr "Sử dụng gần đây"
-
-#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:368
-#: ../bleachbit/Cleaner.py:465
-msgid "Delete the list of recently used documents"
-msgstr "Xóa danh sách các tài liệu được sử dụng gần đây nhất"
-
-#: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Chat logs"
-msgstr "Nhật kí trò chuyện"
-
-#: ../cleaners/skype.xml ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Delete the chat logs"
-msgstr "Xóa các nhật kí trò chuyện"
-
-#: ../cleaners/xchat.xml ../cleaners/emesene.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
-msgid "Chat client"
-msgstr "Chương trình nhắn tin"
-
-#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/elinks.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../bleachbit/Cleaner.py:222
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/links2.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
 msgid "Web browser"
 msgstr "Trình duyệt web"
 
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:190
+#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
+#: ../cleaners/kde.xml ../cleaners/waterfox.xml ../cleaners/evolution.xml
+#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/opera.xml
+#: ../cleaners/nexuiz.xml ../cleaners/vuze.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/xine.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/thunderbird.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
+#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/emesene.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+msgid "Cache"
+msgstr "Bộ nhớ đệm"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/thunderbird.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Xóa bộ nhớ đệm web, bộ đệm giúp làm giảm thời gian hiển thị các trang đã ghé "
 "thăm"
 
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:191
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
+#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
+#: ../cleaners/silverlight.xml
 msgid "Cookies"
 msgstr "Cookie"
 
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:192
+#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
+#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
+#: ../cleaners/silverlight.xml
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -205,152 +76,207 @@ msgstr ""
 "Xóa cookie, các cookie chứa thông tin như các thiết lập trên trang web, "
 "thông tin xác thực, và xác định theo dấu"
 
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../bleachbit/Cleaner.py:208
-msgid "List of visited web pages"
-msgstr "Danh sách các trang web đã ghé thăm"
+#. DOM=Document Object Model
+#. DOM=Document Object Model
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+msgid "DOM Storage"
+msgstr "Lưu trữ DOM"
 
-#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
-#: ../cleaners/transmission.xml
-msgid "Blocklists"
-msgstr "Danh sách chặn"
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+msgid "Delete HTML5 cookies"
+msgstr "Xóa các cookie HTML5"
 
-#: ../cleaners/transmission.xml ../cleaners/windows_defender.xml
-#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
-#: ../bleachbit/Cleaner.py:194
-msgid "Delete the files"
-msgstr "Xóa các tập tin"
-
-#: ../cleaners/transmission.xml
-msgid "Blocklists will need update to work."
-msgstr "Danh sách chặn cần được cập nhật để làm việc."
-
-#: ../cleaners/transmission.xml
-msgid "Torrents"
-msgstr "Torrents"
-
-#: ../cleaners/transmission.xml
-msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Xóa Torrents (chỉ phần metadata, không phải các file được liệt kê)"
-
-#: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "Xóa danh sách sử dụng gần đây"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Xóa bộ nhớ đệm hình đại diện và biểu tượng cảm xúc"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:464
-msgid "Recent documents list"
-msgstr "Danh sách các tài liệu gần đây"
-
-#. In Windows 'Run' is the dialog in the Start menu
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
-msgid "Run"
-msgstr "Chạy"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "Lịch sử tìm kiếm"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "Xóa lịch sử tìm kiếm"
-
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "Gỡ lỗi nhật kí"
-
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/easytag.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "Xóa nhật kí gỡ lỗi"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
-#: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml ../cleaners/gimp.xml
-#: ../cleaners/kde.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:516
-msgid "Temporary files"
-msgstr "Các tập tin tạm"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml
-#: ../cleaners/vuze.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml ../cleaners/gimp.xml
-#: ../cleaners/kde.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:516
-msgid "Delete the temporary files"
-msgstr "Xóa các tập tin tạm"
-
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:198
-msgid "Download history"
-msgstr "Lịch sử tải xuống"
-
-#: ../cleaners/seamonkey.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:198
-msgid "List of files downloaded"
-msgstr "Danh sách các tập tin đã tải về"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "Xóa danh sách các trang web đã ghé thăm"
-
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:187
-msgid "Backup files"
-msgstr "Các tập tin sao lưu"
-
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:188
-msgid "Delete the backup files"
-msgstr "Xóa các tập tin sao lưu"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
-msgid "Current session"
-msgstr "Phiên hiện tại"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../cleaners/chromium.xml
-msgid "Delete the current session"
-msgstr "Xóa phiên hiện tại"
-
-#: ../cleaners/konqueror.xml ../cleaners/opera.xml ../bleachbit/Cleaner.py:208
-msgid "URL history"
-msgstr "Lịch sử URL"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:380
-msgid "Office suite"
-msgstr "Bộ công cụ văn phòng"
-
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "Xóa danh sách các máy chủ trò chơi"
-
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Xóa lịch sử dòng lệnh"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:199
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/chromium.xml
 msgid "Form history"
 msgstr "Lịch sử biểu mẫu"
 
-#: ../cleaners/internet_explorer.xml ../bleachbit/Cleaner.py:200
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
-"Một lịch sử của các biểu mẫu được nhập trong các trang web và trong thanh "
-"Tìm kiếm"
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "A history of forms entered in web sites"
+msgstr "Một lịch sử của các biểu mẫu đã nhập trên các trang web"
 
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
+#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
+#: ../cleaners/nautilus.xml ../cleaners/opera.xml ../cleaners/bash.xml
+#: ../cleaners/mc.xml ../cleaners/octave.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/links2.xml ../cleaners/vim.xml ../cleaners/elinks.xml
+#: ../cleaners/d4x.xml ../cleaners/windows_defender.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/sqlite3.xml ../cleaners/easytag.xml
+msgid "History"
+msgstr "Lịch sử"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr ""
+"Xóa lịch sử chứa các trang web đã ghé thăm, các tải về, và các hình thu nhỏ"
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Search engines"
+msgstr "Các cỗ máy tìm kiếm"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"Thiết đặt lại lịch sử sử dụng của các cỗ máy tìm kiếm và xóa các cỗ máy tìm "
+"kiếm không phải mặc định"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Session"
+msgstr "Phiên chạy"
+
+#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+msgid "Delete the current and last sessions"
+msgstr "Xóa phiên hiện tại và các phiên gần nhất"
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Sync"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+msgid "Delete the sync data and sign out of the browser"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid "Passwords"
+msgstr "Mật khẩu"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"Một cơ sở dữ liệu chứa tên người dùng và mật khẩu cũng như danh sách các "
+"trang không nên lưu giữ mật khẩu"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml
+msgid "This option will delete your saved passwords."
+msgstr "Tùy chọn này sẽ xóa các mật khẩu được lưu của bạn."
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/yum.xml ../bleachbit/Action.py:520
+msgid "Vacuum"
+msgstr "Chống phân mảnh cơ sở dữ liệu"
+
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
+#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
+#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
+#: ../cleaners/yum.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"Dọn dẹp cơ sở dữ liệu bị phân mảnh để lấy lại dung lượng và cải thiện tốc độ "
+"mà không cần xóa bất kì dữ liệu nào"
+
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../bleachbit/Cleaner.py:201
+msgid "Office suite"
+msgstr "Bộ công cụ văn phòng"
+
+#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/kde.xml
+#: ../cleaners/waterfox.xml ../cleaners/evolution.xml
+#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/nexuiz.xml
+#: ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/xine.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
+#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/amsn.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:317
+msgid "Delete the cache"
+msgstr "Xóa bộ nhớ đệm"
+
+#: ../cleaners/libreoffice.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
+#: ../cleaners/mc.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:249
+#: ../bleachbit/Cleaner.py:258
+msgid "Delete the usage history"
+msgstr "Xóa lịch sử sử dụng"
+
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gedit.xml
+#: ../bleachbit/Cleaner.py:294 ../bleachbit/Cleaner.py:485
+msgid "Recent documents list"
+msgstr "Danh sách các tài liệu gần đây"
+
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/gedit.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:198
+#: ../bleachbit/Cleaner.py:295
+msgid "Delete the list of recently used documents"
+msgstr "Xóa danh sách các tài liệu được sử dụng gần đây nhất"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Phiên hiện tại"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "Xóa phiên hiện tại"
+
+#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "Lịch sử URL"
+
+#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/safari.xml
+msgid "List of visited web pages"
+msgstr "Danh sách các trang web đã ghé thăm"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "Lịch sử tìm kiếm"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "Xóa lịch sử tìm kiếm"
+
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winetricks.xml ../cleaners/deepscan.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Temporary files"
+msgstr "Các tập tin tạm"
+
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
+#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winetricks.xml ../cleaners/deepscan.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Delete the temporary files"
+msgstr "Xóa các tập tin tạm"
+
+#: ../cleaners/apt.xml ../cleaners/yum.xml
+msgid "Package manager"
 msgstr ""
 
 #: ../cleaners/apt.xml
@@ -361,15 +287,129 @@ msgstr "Xóa các tập tin ít dùng"
 msgid "Package lists"
 msgstr "Danh sách gói"
 
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "Trình xem tập tin đa phương tiện"
+#: ../cleaners/kde.xml ../cleaners/gnome.xml
+msgid "Desktop environment"
+msgstr ""
+
+#: ../cleaners/warzone2100.xml ../cleaners/nexuiz.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+msgid "Game"
+msgstr "Trò chơi"
+
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/easytag.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:312
+msgid "Logs"
+msgstr "Nhật ký"
+
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/miro.xml
+#: ../bleachbit/Cleaner.py:312
+msgid "Delete the logs"
+msgstr "Xóa các nhật kí"
+
+#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "Các tập tin sao lưu"
+
+#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
+#: ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "Xóa các tập tin sao lưu"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Crash reports"
+msgstr "Báo hỏng"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/beagle.xml ../cleaners/windows_defender.xml
+#: ../cleaners/transmission.xml ../cleaners/deepscan.xml
+msgid "Delete the files"
+msgstr "Xóa các tập tin"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr ""
+"Một lịch sử của các biểu mẫu được nhập trong các trang web và trong thanh "
+"Tìm kiếm"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Session restore"
+msgstr "Hồi phục phiên làm việc"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr "Nạp phiên làm việc lúc đầu sau khi trình duyệt đóng hay bị sự cố"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Site preferences"
+msgstr "Tùy chỉnh trang"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+msgid "Settings for individual sites"
+msgstr "Thiết lập cho các trang cá nhân"
+
+#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr ""
+
+#: ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr ""
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Các thư mục tùy chọn sẽ được thiết đặt lại."
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Hình thu nhỏ"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr ""
+
+#: ../cleaners/bash.xml
+msgid "Shell"
+msgstr ""
+
+#: ../cleaners/bash.xml ../cleaners/octave.xml ../cleaners/sqlite3.xml
+msgid "Delete the command history"
+msgstr "Xóa lịch sử dòng lệnh"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "Chạy"
+
+#: ../cleaners/vuze.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
+#: ../cleaners/amule.xml ../cleaners/smartftp.xml ../cleaners/transmission.xml
+msgid "File transfer client"
+msgstr "Chương trình truyền tải tập tin"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr ""
+
+#: ../cleaners/mc.xml
+msgid "File Manager"
+msgstr ""
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
 msgstr "Công cụ tìm kiếm"
 
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml ../cleaners/thunderbird.xml
+#: ../cleaners/recoll.xml ../cleaners/thunderbird.xml ../cleaners/beagle.xml
 msgid "Index"
 msgstr "Giá trị"
 
@@ -378,57 +418,14 @@ msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr "Xóa chỉ mục tìm kiếm, một cơ sở dữ liệu các từ và tập tin mà nó chứa"
 
-#: ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "Các podcast đã tải về"
-
-#: ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "Xóa các podcast đã tải về"
-
-#. TRANSLATORS: DOM = Document Object Model.
-#: ../cleaners/opera.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:196
-msgid "DOM Storage"
-msgstr "Lưu trữ DOM"
-
-#: ../cleaners/opera.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../bleachbit/Cleaner.py:196
-msgid "Delete HTML5 cookies"
-msgstr "Xóa các cookie HTML5"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:205
-msgid "Passwords"
-msgstr "Mật khẩu"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-#: ../bleachbit/Cleaner.py:206
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-"Một cơ sở dữ liệu chứa tên người dùng và mật khẩu cũng như danh sách các "
-"trang không nên lưu giữ mật khẩu"
-
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-msgid "This option will delete your saved passwords."
-msgstr "Tùy chọn này sẽ xóa các mật khẩu được lưu của bạn."
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Các thư mục tùy chọn sẽ được thiết đặt lại."
-
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "Tiện ích cho màn hình làm việc"
-
-#: ../cleaners/kde.xml
-msgid "This option may be incompatible with kdesudo"
-msgstr "Tùy chọn này có thể không tương thích với kdesudo"
+#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/teamviewer.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:197
+msgid "Most recently used"
+msgstr "Sử dụng gần đây"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -446,44 +443,220 @@ msgstr ""
 msgid "This option deletes all bookmarks."
 msgstr "Tùy chỉnh này sẽ xóa tất cả các đánh dấu."
 
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr ""
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr ""
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr ""
+
+#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/gl-117.xml
+msgid "Debug logs"
+msgstr "Gỡ lỗi nhật kí"
+
+#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
+#: ../cleaners/gl-117.xml
+msgid "Delete the debug logs"
+msgstr "Xóa nhật kí gỡ lỗi"
+
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "Tiện ích cho màn hình làm việc"
+
+#: ../cleaners/windows_explorer.xml ../cleaners/vlc.xml
+#: ../cleaners/teamviewer.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "Xóa danh sách sử dụng gần đây"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr ""
+
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
+msgid "Media player"
+msgstr ""
+
+#: ../cleaners/xine.xml ../cleaners/flash.xml ../cleaners/miro.xml
+msgid "Multimedia viewer"
+msgstr "Trình xem tập tin đa phương tiện"
+
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr ""
+
+#: ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Trình soạn thảo"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr ""
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
+msgid "Chat client"
+msgstr "Chương trình nhắn tin"
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/hexchat.xml
+msgid "Chat logs"
+msgstr "Nhật kí trò chuyện"
+
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/hexchat.xml
+msgid "Delete the chat logs"
+msgstr "Xóa các nhật kí trò chuyện"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr ""
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contain information such as play count and last "
+"played"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Delete history of known and cancelled files"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Known clients"
+msgstr ""
+
+#: ../cleaners/amule.xml
+msgid "Delete known clients and friends"
+msgstr ""
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr ""
+
+#: ../cleaners/audacious.xml
+msgid "Audio player"
+msgstr ""
+
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr "Xóa ~/.viminfo chứa tập tin lịch sử, lịch sử dòng lệnh, và bộ đệm"
+
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "Xóa cookie, các liên kết web đã xem, và lịch sử tìm kiếm"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "A history of forms entered in web sites"
-msgstr "Một lịch sử của các biểu mẫu đã nhập trên các trang web"
-
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
 msgstr ""
-"Xóa lịch sử chứa các trang web đã ghé thăm, các tải về, và các hình thu nhỏ"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Search engines"
-msgstr "Các cỗ máy tìm kiếm"
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Xóa danh sách các máy chủ trò chơi"
 
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Xóa bộ nhớ đệm hình đại diện và biểu tượng cảm xúc"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
 msgstr ""
-"Thiết đặt lại lịch sử sử dụng của các cỗ máy tìm kiếm và xóa các cỗ máy tìm "
-"kiếm không phải mặc định"
 
-#: ../cleaners/google_chrome.xml
-msgid "Session"
-msgstr "Phiên chạy"
+#: ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "Lịch sử tải xuống"
 
-#: ../cleaners/google_chrome.xml
-msgid "Delete the current and last sessions"
-msgstr "Xóa phiên hiện tại và các phiên gần nhất"
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "Danh sách các tập tin đã tải về"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Xóa danh sách các trang web đã ghé thăm"
+
+#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
+#: ../cleaners/transmission.xml
+msgid "Blocklists"
+msgstr "Danh sách chặn"
+
+#: ../cleaners/transmission.xml
+msgid "Blocklists will need update to work."
+msgstr "Danh sách chặn cần được cập nhật để làm việc."
+
+#: ../cleaners/transmission.xml
+msgid "Torrents"
+msgstr "Torrents"
+
+#: ../cleaners/transmission.xml
+msgid "Delete the torrents (just the metadata but not the files described)"
+msgstr "Xóa Torrents (chỉ phần metadata, không phải các file được liệt kê)"
+
+#: ../cleaners/transmission.xml
+msgid "Statistics"
+msgstr ""
+
+#: ../cleaners/transmission.xml
+msgid "Delete the file"
+msgstr ""
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr ""
+
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr ""
+
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr ""
+
+#: ../cleaners/hexchat.xml
+msgid "IRC client formerly known as XChat"
+msgstr ""
+
+#: ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "Các podcast đã tải về"
+
+#: ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "Xóa các podcast đã tải về"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
 msgstr "Quét sâu"
+
+#: ../cleaners/deepscan.xml
+msgid "Clean files widely scattered across the disk"
+msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -501,273 +674,58 @@ msgstr "Trình dọn dẹp tập tin không cần thiết"
 msgid "Free space and maintain privacy"
 msgstr "Làm trống ổ đĩa và bảo vệ sự riêng tư"
 
-#. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:192 ../bleachbit/Action.py:205
-#: ../bleachbit/Action.py:218 ../bleachbit/Action.py:231
-#: ../bleachbit/Action.py:244 ../bleachbit/Command.py:181
-#: ../bleachbit/Command.py:211
-msgid "Clean file"
-msgstr "Dọn dẹp tập tin"
+#: ../bleachbit/FileUtilities.py:270 ../bleachbit/FileUtilities.py:279
+#, python-format
+msgid "Directory is not empty: %s"
+msgstr ""
 
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:308 ../bleachbit/GUI.py:578
-msgid "Clean"
-msgstr "Dọn dẹp"
+#: ../bleachbit/FileUtilities.py:303
+#, python-format
+msgid "Special file type cannot be deleted: %s"
+msgstr ""
 
-#: ../bleachbit/Cleaner.py:194
-msgid "Crash reports"
-msgstr "Báo hỏng"
+#: ../bleachbit/FileUtilities.py:477
+msgid "%TMP% does not exist: %s"
+msgstr ""
 
-#: ../bleachbit/Cleaner.py:201
-msgid "Session restore"
-msgstr "Hồi phục phiên làm việc"
-
-#: ../bleachbit/Cleaner.py:202
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Nạp phiên làm việc lúc đầu sau khi trình duyệt đóng hay bị sự cố"
-
-#: ../bleachbit/Cleaner.py:204
-msgid "Site preferences"
-msgstr "Tùy chỉnh trang"
-
-#: ../bleachbit/Cleaner.py:204
-msgid "Settings for individual sites"
-msgstr "Thiết lập cho các trang cá nhân"
-
-#. TRANSLATORS: desktop entries are .desktop files in Linux tha
-#. make up the application menu (the menu that shows BleachBit,
-#. Firefox, and others.  The .desktop files also associate file
-#. types, so clicking on an .html file in Nautilus brings up
-#. Firefox.
-#. More information:
-#. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:449
-msgid "Broken desktop files"
-msgstr "Các tập tin trên màn hình làm việc bị hỏng"
-
-#: ../bleachbit/Cleaner.py:450
-msgid "Delete broken application menu entries and file associations"
-msgstr "Xóa các mục trình đơn ứng dụng bị hỏng và các liên kết tập tin"
-
-#. TRANSLATORS: Localizations are files supporting specific
-#. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:454
-msgid "Localizations"
-msgstr "Bản địa hoá"
-
-#: ../bleachbit/Cleaner.py:455
-msgid "Delete files for unwanted languages"
-msgstr "Xóa các tập tin ngôn ngữ không mong muốn"
-
-#: ../bleachbit/Cleaner.py:457
-msgid "Configure this option in the preferences."
-msgstr "Cấu hình mục này trong tùy chỉnh."
-
-#: ../bleachbit/Cleaner.py:463
-msgid "Rotated logs"
-msgstr "Nhật kí luân chuyển"
-
-#: ../bleachbit/Cleaner.py:463
-msgid "Delete old system logs"
-msgstr "Xóa các bản ghi hệ thống cũ"
-
-#: ../bleachbit/Cleaner.py:466
-msgid "Trash"
-msgstr "Sọt rác"
-
-#: ../bleachbit/Cleaner.py:466
-msgid "Empty the trash"
-msgstr "Dọn trống sọt rác"
-
-#: ../bleachbit/Cleaner.py:472 ../bleachbit/Cleaner.py:624
-#: ../bleachbit/Worker.py:169
-msgid "Memory"
-msgstr "Bộ nhớ"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:474
-msgid "Wipe the swap and free memory"
-msgstr "Dọn dẹp bộ nhớ trao đổi và vùng nhớ trống"
-
-#: ../bleachbit/Cleaner.py:476
-msgid "This option is experimental and may cause system problems."
-msgstr "Tính năng này chưa ổn định và nó có thể gây rắc rối cho hệ thống."
-
-#: ../bleachbit/Cleaner.py:484
-msgid "Memory dump"
-msgstr "Kết xuất bộ nhớ"
-
-#: ../bleachbit/Cleaner.py:484
-msgid "Delete the file memory.dmp"
-msgstr "Xóa tập tin memory.dmp"
-
-#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:487
-msgid "Prefetch"
-msgstr "Prefetch"
-
-#: ../bleachbit/Cleaner.py:489
-msgid "Recycle bin"
-msgstr "Recycle bin"
-
-#: ../bleachbit/Cleaner.py:489
-msgid "Empty the recycle bin"
-msgstr "Xóa trống recycle bin"
-
-#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
-#. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:492
-msgid "Update uninstallers"
-msgstr "Cập nhật cho các trình tháo gỡ"
-
-#: ../bleachbit/Cleaner.py:493
+#: ../bleachbit/FileUtilities.py:693
 msgid ""
-"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
-"and Internet Explorer updates"
+"There was at least one file on a file system that does not support advanced "
+"overwriting."
 msgstr ""
-"Xóa trình tháo gỡ cho các cập nhật Microsoft bao gồm các bản vá khẩn, "
-"service pack, và cập nhật Internet Explorer"
 
-#: ../bleachbit/Cleaner.py:500 ../bleachbit/Cleaner.py:713
-msgid "Clipboard"
-msgstr "Bộ nhớ đệm"
+#: ../bleachbit/Options.py:88
+#, python-format
+msgid "Disk was full when writing configuration to file %s"
+msgstr ""
 
-#: ../bleachbit/Cleaner.py:501
+#: ../bleachbit/Options.py:113
+#, python-format
+msgid "Error checking whether path exists: %s"
+msgstr ""
+
+#: ../bleachbit/Options.py:214
+msgid "Error when setting the default drives to shred."
+msgstr ""
+
+#: ../bleachbit/Options.py:235
+#, python-format
+msgid "Automatically preserving language %s."
+msgstr ""
+
+#: ../bleachbit/Unix.py:599
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Không tìm thấy thuộc tính thực thi: %s"
+
+#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+#: ../bleachbit/Unix.py:677 ../bleachbit/Worker.py:140
+#, python-format
 msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
-msgstr "Bộ đệm của môi trường đồ họa dùng cho thao tác chép và dán"
-
-#. TRANSLATORS: "Custom" is an option allowing the user to specify which
-#. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:508 ../bleachbit/GuiPreferences.py:63
-msgid "Custom"
-msgstr "Tùy chọn"
-
-#: ../bleachbit/Cleaner.py:509
-msgid "Delete user-specified files and folders"
+"%s cannot be cleaned because it is currently running.  Close it, and try "
+"again."
 msgstr ""
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:511
-msgid "Free disk space"
-msgstr "Dung lượng đĩa chưa phân vùng"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:513
-msgid "Overwrite free disk space to hide deleted files"
-msgstr "Ghi đè phần đĩa trống để ẩn các tập tin bị xóa"
-
-#: ../bleachbit/Cleaner.py:514
-msgid "This option is very slow."
-msgstr "Tính năng này rất chậm."
-
-#: ../bleachbit/Cleaner.py:519
-msgid "The system in general"
-msgstr "Khái quát hệ thống"
-
-#: ../bleachbit/Cleaner.py:525 ../bleachbit/Cleaner.py:819
-msgid "System"
-msgstr "Hệ thống"
-
-#. TRANSLATORS: 'Free' means 'unallocated.'
-#. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:721 ../bleachbit/Cleaner.py:850
-#, python-format
-msgid "Overwrite free disk space %s"
-msgstr "Ghi đè phần đĩa trống %s"
-
-#. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
-#: ../bleachbit/Cleaner.py:748
-#, python-format
-msgid "Recycle bin %s"
-msgstr "Recycle bin %s"
-
-#: ../bleachbit/CLI.py:107
-#, python-format
-msgid "not a valid cleaner: %s"
-msgstr "không phải trình dọn dẹp hợp lệ: %s"
-
-#. TRANSLATORS: This is the command line usage.  Don't translate
-#. %prog, but do translate usage, options, cleaner, and option.
-#. More information about the command line is here
-#. http://bleachbit.sourceforge.net/documentation/command-line
-#: ../bleachbit/CLI.py:134
-msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "sử dụng: %prog [tùy_chỉnh] cleaner.option1 cleaner.option2"
-
-#: ../bleachbit/CLI.py:137
-msgid "list cleaners"
-msgstr "danh sách các trình dọn dẹp"
-
-#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
-#. This is different than cleaning an arbitrary file, such as a
-#. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:142
-msgid "run cleaners to delete files and make other permanent changes"
-msgstr ""
-
-#: ../bleachbit/CLI.py:144
-msgid "shred specific files or folders"
-msgstr ""
-
-#: ../bleachbit/CLI.py:146
-msgid "show system information"
-msgstr "hiện thông tin hệ thống"
-
-#: ../bleachbit/CLI.py:148
-msgid "launch the graphical interface"
-msgstr "khởi chạy giao diện đồ họa"
-
-#: ../bleachbit/CLI.py:150
-msgid "do not prompt for administrator privileges"
-msgstr "không hỏi quyền quản trị"
-
-#: ../bleachbit/CLI.py:155
-msgid "preview files to be deleted and other changes"
-msgstr "xem trước các tập tin bị xóa và các thay đổi khác"
-
-#: ../bleachbit/CLI.py:157
-msgid "use options set in the graphical interface"
-msgstr "sử dụng các tùy chọn được thiết lập trong giao diện đồ họa"
-
-#: ../bleachbit/CLI.py:160
-msgid "update winapp2.ini, if a new version is available"
-msgstr ""
-
-#: ../bleachbit/CLI.py:162
-msgid "output version information and exit"
-msgstr "hiện thông tin phiên bản và thoát"
-
-#: ../bleachbit/CLI.py:164
-msgid "overwrite files to hide contents"
-msgstr "ghi đè các tập tin để ẩn nội dung"
-
-#. TRANSLATORS: This is the label in the log indicating was
-#. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:44
-msgid "Skip"
-msgstr "Bỏ qua"
-
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:70
-msgid "Delete"
-msgstr "Xóa"
-
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:91
-msgid "Mark for deletion"
-msgstr "Đánh dấu để xóa"
-
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:247
-msgid "Truncate"
-msgstr "Cắt bỏ"
-
-#: ../bleachbit/Command.py:286
-msgid "Delete registry key"
-msgstr "Xóa khóa registry"
+"%s không thể bị xóa vì nó hiện đang chạy. Đóng nó lại, và thử lần nữa."
 
 #: ../bleachbit/GuiBasic.py:112
 msgid "Delete confirmation"
@@ -797,177 +755,529 @@ msgstr ""
 "trong trình duyệt:\n"
 "%s"
 
-#. TRANSLATORS: %s expands to bleachbit.sourceforge.net or similar
+#. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py:174
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "Mở trang %s bằng trình duyệt?"
 
-#: ../bleachbit/GuiPreferences.py:55 ../bleachbit/GUI.py:633
-msgid "Preferences"
-msgstr "Tùy chỉnh"
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:47
+msgid "Skip"
+msgstr "Bỏ qua"
 
-#: ../bleachbit/GuiPreferences.py:61
-msgid "General"
-msgstr "Tổng quát"
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:77
+msgid "Delete"
+msgstr "Xóa"
 
-#: ../bleachbit/GuiPreferences.py:64
-msgid "Drives"
-msgstr "Ổ đĩa"
-
-#: ../bleachbit/GuiPreferences.py:67
-msgid "Languages"
-msgstr "Ngôn ngữ"
-
-#: ../bleachbit/GuiPreferences.py:69
-msgid "Whitelist"
-msgstr "Ngoại lệ"
-
-#: ../bleachbit/GuiPreferences.py:114
-msgid "Check periodically for software updates via the Internet"
-msgstr "Kiểm tra định kì các cập nhật phần mềm thông qua Internet"
-
-#: ../bleachbit/GuiPreferences.py:119
+#: ../bleachbit/Command.py:99
 msgid ""
-"If an update is found, you will be given the option to view information "
-"about it.  Then, you may manually download and install the update."
-msgstr ""
-"Nếu có cập nhật, sẽ có tùy chọn để xem thông tin về nó. Sau đó, bạn có thể "
-"tải về và cài đặt bản cập nhật một cách thủ công."
-
-#: ../bleachbit/GuiPreferences.py:125
-msgid "Check for new beta releases"
-msgstr "Kiểm tra phát hành beta mới"
-
-#: ../bleachbit/GuiPreferences.py:134
-msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr "Tải và cập nhật trình dọn dẹp từ cộng đồng (winapp2.ini)"
-
-#. TRANSLATORS: This means to hide cleaners which would do
-#. nothing.  For example, if Firefox were never used on
-#. this system, this option would hide Firefox to simplify
-#. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:148
-msgid "Hide irrelevant cleaners"
+"At least one file was locked by another process, so its contents could not "
+"be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
 
-#. TRANSLATORS: Overwriting is the same as shredding.  It is a way
-#. to prevent recovery of the data. You could also translate
-#. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:156
-msgid "Overwrite files to hide contents"
-msgstr "Xóa tập tin và ngăn cản phục hồi"
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:102
+msgid "Mark for deletion"
+msgstr "Đánh dấu để xóa"
 
-#: ../bleachbit/GuiPreferences.py:160
+#. TRANSLATORS: Parts of this file will be deleted
+#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
+#: ../bleachbit/Action.py:327 ../bleachbit/Action.py:340
+#: ../bleachbit/Action.py:353 ../bleachbit/Action.py:366
+#: ../bleachbit/Action.py:379 ../bleachbit/Action.py:444
+msgid "Clean file"
+msgstr "Dọn dẹp tập tin"
+
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:281
+msgid "Truncate"
+msgstr "Cắt bỏ"
+
+#: ../bleachbit/Command.py:323
+msgid "Delete registry key"
+msgstr "Xóa khóa registry"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:43
+msgid "Applications"
+msgstr "Ứng dụng"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:46
+msgid "Internet"
+msgstr "Internet"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:49
+msgid "Multimedia"
+msgstr "Đa phương tiện"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:52
+msgid "Utilities"
+msgstr "Tiện ích"
+
+#: ../bleachbit/Winapp.py:63
+msgid "Games"
+msgstr ""
+
+#: ../bleachbit/Winapp.py:181
+msgid "Imported from winapp2.ini"
+msgstr "Đã nhập từ winapp2.ini"
+
+#. TRANSLATORS: desktop entries are .desktop files in Linux that
+#. make up the application menu (the menu that shows BleachBit,
+#. Firefox, and others.  The .desktop files also associate file
+#. types, so clicking on an .html file in Nautilus brings up
+#. Firefox.
+#. More information:
+#. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+#: ../bleachbit/Cleaner.py:279
+msgid "Broken desktop files"
+msgstr "Các tập tin trên màn hình làm việc bị hỏng"
+
+#: ../bleachbit/Cleaner.py:280
+msgid "Delete broken application menu entries and file associations"
+msgstr "Xóa các mục trình đơn ứng dụng bị hỏng và các liên kết tập tin"
+
+#. TRANSLATORS: Localizations are files supporting specific
+#. languages, so applications appear in Spanish, etc.
+#: ../bleachbit/Cleaner.py:284
+msgid "Localizations"
+msgstr "Bản địa hoá"
+
+#: ../bleachbit/Cleaner.py:285
+msgid "Delete files for unwanted languages"
+msgstr "Xóa các tập tin ngôn ngữ không mong muốn"
+
+#: ../bleachbit/Cleaner.py:287
+msgid "Configure this option in the preferences."
+msgstr "Cấu hình mục này trong tùy chỉnh."
+
+#: ../bleachbit/Cleaner.py:293
+msgid "Rotated logs"
+msgstr "Nhật kí luân chuyển"
+
+#: ../bleachbit/Cleaner.py:293
+msgid "Delete old system logs"
+msgstr "Xóa các bản ghi hệ thống cũ"
+
+#: ../bleachbit/Cleaner.py:296
+msgid "Trash"
+msgstr "Sọt rác"
+
+#: ../bleachbit/Cleaner.py:296
+msgid "Empty the trash"
+msgstr "Dọn trống sọt rác"
+
+#: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:447
+#: ../bleachbit/Worker.py:188
+msgid "Memory"
+msgstr "Bộ nhớ"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:304
+msgid "Wipe the swap and free memory"
+msgstr "Dọn dẹp bộ nhớ trao đổi và vùng nhớ trống"
+
+#: ../bleachbit/Cleaner.py:306
+msgid "This option is experimental and may cause system problems."
+msgstr "Tính năng này chưa ổn định và nó có thể gây rắc rối cho hệ thống."
+
+#: ../bleachbit/Cleaner.py:314
+msgid "Memory dump"
+msgstr "Kết xuất bộ nhớ"
+
+#: ../bleachbit/Cleaner.py:314
+msgid "Delete the file memory.dmp"
+msgstr "Xóa tập tin memory.dmp"
+
+#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
+#: ../bleachbit/Cleaner.py:317
+msgid "Prefetch"
+msgstr "Prefetch"
+
+#: ../bleachbit/Cleaner.py:319
+msgid "Recycle bin"
+msgstr "Recycle bin"
+
+#: ../bleachbit/Cleaner.py:319 ../bleachbit/Cleaner.py:617
+msgid "Empty the recycle bin"
+msgstr "Xóa trống recycle bin"
+
+#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
+#. the uninstallers for software updates.
+#: ../bleachbit/Cleaner.py:322
+msgid "Update uninstallers"
+msgstr "Cập nhật cho các trình tháo gỡ"
+
+#: ../bleachbit/Cleaner.py:323
 msgid ""
-"Overwriting is ineffective on some file systems and with certain BleachBit "
-"operations.  Overwriting is significantly slower."
+"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
+"and Internet Explorer updates"
 msgstr ""
-"Ghi đè không có hiệu quả trên một số tập tin hệ thống và với các thao tác "
-"nhất định của Bleachbit. Ghi đè gây chậm đáng kể."
+"Xóa trình tháo gỡ cho các cập nhật Microsoft bao gồm các bản vá khẩn, "
+"service pack, và cập nhật Internet Explorer"
 
-#: ../bleachbit/GuiPreferences.py:163
-msgid "Start BleachBit with computer"
-msgstr "Bật Bleachbit cùng với hệ điều hành"
+#: ../bleachbit/Cleaner.py:330 ../bleachbit/Cleaner.py:557
+msgid "Clipboard"
+msgstr "Bộ nhớ đệm"
 
-#: ../bleachbit/GuiPreferences.py:169
-msgid "Exit after cleaning"
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:175
-msgid "Confirm before delete"
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:188 ../bleachbit/GuiPreferences.py:319
-#: ../bleachbit/GuiPreferences.py:360 ../bleachbit/GUI.py:540
-msgid "Choose a folder"
-msgstr "Chọn thư mục"
-
-#: ../bleachbit/GuiPreferences.py:212
+#: ../bleachbit/Cleaner.py:331
 msgid ""
-"Choose a writable folder for each drive for which to overwrite free space."
-msgstr "Chọn một thư mục có thể ghi được cho mỗi ổ đĩa để ghi đè vùng trống."
+"The desktop environment's clipboard used for copy and paste operations"
+msgstr "Bộ đệm của môi trường đồ họa dùng cho thao tác chép và dán"
 
-#. TRANSLATORS: In the preferences dialog, this button adds a path to
-#. the list of paths
-#: ../bleachbit/GuiPreferences.py:234
-msgctxt "button"
-msgid "Add"
-msgstr "Thêm"
+#. TRANSLATORS: "Custom" is an option allowing the user to specify which
+#. files and folders will be erased.
+#: ../bleachbit/Cleaner.py:338 ../bleachbit/GuiPreferences.py:66
+msgid "Custom"
+msgstr "Tùy chọn"
 
-#. TRANSLATORS: In the preferences dialog, this button removes a path
-#. from the list of paths
-#: ../bleachbit/GuiPreferences.py:238 ../bleachbit/GuiPreferences.py:451
-msgctxt "button"
-msgid "Remove"
-msgstr "Loại bỏ"
+#: ../bleachbit/Cleaner.py:339
+msgid "Delete user-specified files and folders"
+msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:263
-msgid "All languages will be deleted except those checked."
-msgstr "Tất cả ngôn ngữ sẽ bị xóa ngoại trừ những ngôn ngữ được chọn."
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:341
+msgid "Free disk space"
+msgstr "Dung lượng đĩa chưa phân vùng"
 
-#: ../bleachbit/GuiPreferences.py:281
-msgid "Preserve"
-msgstr "Giữ lại"
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:343
+msgid "Overwrite free disk space to hide deleted files"
+msgstr "Ghi đè phần đĩa trống để ẩn các tập tin bị xóa"
 
-#: ../bleachbit/GuiPreferences.py:285
-msgid "Code"
-msgstr "Mã"
+#: ../bleachbit/Cleaner.py:344
+msgid "This option is very slow."
+msgstr "Tính năng này rất chậm."
 
-#: ../bleachbit/GuiPreferences.py:289 ../bleachbit/GUI.py:130
+#: ../bleachbit/Cleaner.py:348
+msgid "The system in general"
+msgstr "Khái quát hệ thống"
+
+#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:690
+msgid "System"
+msgstr "Hệ thống"
+
+#. TRANSLATORS: 'Free' means 'unallocated.'
+#. %s expands to a path such as C:\ or /tmp/
+#: ../bleachbit/Cleaner.py:565 ../bleachbit/Cleaner.py:723
+#, python-format
+msgid "Overwrite free disk space %s"
+msgstr "Ghi đè phần đĩa trống %s"
+
+#: ../bleachbit/RecognizeCleanerML.py:58
+msgid "Security warning"
+msgstr "Cảnh báo an ninh"
+
+#: ../bleachbit/RecognizeCleanerML.py:71
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Các định nghĩa trình dọn dẹp này được tạo mới hay thay đổi. Các định nghĩa "
+"nguy hiểm có thể gây sự cố cho hệ thống. Nếu bạn không chắc chắn về những "
+"thay đổi này, hãy xóa các tập tin hoặc thoát."
+
+#: ../bleachbit/RecognizeCleanerML.py:87
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Xóa"
+
+#: ../bleachbit/RecognizeCleanerML.py:92
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Tên tập tin"
+
+#: ../bleachbit/CleanerML.py:120
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:259
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr ""
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:74
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Loại bỏ tiến trình đang chạy '%(operation)s': '%(msg)s'"
+
+#: ../bleachbit/Worker.py:101
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr ""
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:186
+msgid "Please wait.  Wiping free disk space."
+msgstr "Xin hãy chờ. Đang dọn dẹp vùng chưa được phân bổ."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Vui lòng đợi. Đang dọn dẹp %s."
+
+#: ../bleachbit/Worker.py:202
+msgid "Please wait. Wiping file system metadata."
+msgstr ""
+
+#: ../bleachbit/Worker.py:205
+msgid "Please wait. Cleaning up after wiping file system metadata."
+msgstr ""
+
+#: ../bleachbit/Worker.py:208
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Còn lại khoảng %d phút."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:275
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Dung lượng đã phục hồi: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:279
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Dung lượng sẽ được phục hồi: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:284
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Tập tin đã xóa: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:288
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Tập tin sẽ bị xóa: %d"
+
+#: ../bleachbit/Worker.py:291
+#, python-format
+msgid "Special operations: %d"
+msgstr "Thao tác đặc biệt: %d"
+
+#: ../bleachbit/Worker.py:294
+#, python-format
+msgid "Errors: %d"
+msgstr "Lỗi: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:309
+msgid "Please wait.  Running deep scan."
+msgstr "Vui lòng đợi. Đang quét sâu."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:338
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Vui lòng chờ. Đang xem trước %s."
+
+#: ../bleachbit/Update.py:80
+msgid "New winapp2.ini was downloaded."
+msgstr "Có winapp2.ini mới đã được tải về"
+
+#: ../bleachbit/Update.py:125
+msgid "Update BleachBit"
+msgstr "Cập nhật cho Bleachbit"
+
+#: ../bleachbit/Update.py:130
+msgid "A new version is available."
+msgstr "Có phiên bản mới."
+
+#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
+#. similar
+#: ../bleachbit/Update.py:139
+#, python-format
+msgid "Update to version %s"
+msgstr "Cập nhật lên phiên bản %s"
+
+#: ../bleachbit/Update.py:164
+#, python-format
+msgid ""
+"Error when opening a network connection to %s to check for updates. Please "
+"verify the network is working."
+msgstr ""
+
+#: ../bleachbit/CLI.py:106
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "không phải trình dọn dẹp hợp lệ: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog, but do translate usage, options, cleaner, and option.
+#. More information about the command line is here
+#. https://www.bleachbit.org/documentation/command-line
+#: ../bleachbit/CLI.py:133
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "sử dụng: %prog [tùy_chỉnh] cleaner.option1 cleaner.option2"
+
+#: ../bleachbit/CLI.py:136
+msgid "list cleaners"
+msgstr "danh sách các trình dọn dẹp"
+
+#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
+#. This is different than cleaning an arbitrary file, such as a
+#. spreadsheet on the desktop.
+#: ../bleachbit/CLI.py:141
+msgid "run cleaners to delete files and make other permanent changes"
+msgstr ""
+
+#: ../bleachbit/CLI.py:142
+msgid "log debug messages to file"
+msgstr ""
+
+#: ../bleachbit/CLI.py:144
+msgid "shred specific files or folders"
+msgstr ""
+
+#: ../bleachbit/CLI.py:146
+msgid "show system information"
+msgstr "hiện thông tin hệ thống"
+
+#: ../bleachbit/CLI.py:148
+msgid "launch the graphical interface"
+msgstr "khởi chạy giao diện đồ họa"
+
+#: ../bleachbit/CLI.py:152
+msgid "do not prompt for administrator privileges"
+msgstr "không hỏi quyền quản trị"
+
+#: ../bleachbit/CLI.py:157
+msgid "preview files to be deleted and other changes"
+msgstr "xem trước các tập tin bị xóa và các thay đổi khác"
+
+#: ../bleachbit/CLI.py:161
+msgid "use options set in the graphical interface"
+msgstr "sử dụng các tùy chọn được thiết lập trong giao diện đồ họa"
+
+#: ../bleachbit/CLI.py:164
+msgid "update winapp2.ini, if a new version is available"
+msgstr ""
+
+#: ../bleachbit/CLI.py:166
+msgid "wipe free space in the given paths"
+msgstr ""
+
+#: ../bleachbit/CLI.py:168
+msgid "output version information and exit"
+msgstr "hiện thông tin phiên bản và thoát"
+
+#: ../bleachbit/CLI.py:170
+msgid "overwrite files to hide contents"
+msgstr "ghi đè các tập tin để ẩn nội dung"
+
+#: ../bleachbit/CLI.py:178
+msgid ""
+"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
+msgstr ""
+
+#: ../bleachbit/CLI.py:196
+msgid "Checking online for updates to winapp2.ini"
+msgstr ""
+
+#: ../bleachbit/CLI.py:211
+msgid "No directories given for --wipe-free-space"
+msgstr ""
+
+#: ../bleachbit/CLI.py:216
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr ""
+
+#: ../bleachbit/CLI.py:218
+msgid "Wiping free space can take a long time."
+msgstr ""
+
+#: ../bleachbit/CLI.py:228
+msgid "No work to do. Specify options."
+msgstr ""
+
+#: ../bleachbit/CLI.py:236
+msgid "--overwrite is intended only for use with --clean"
+msgstr ""
+
+#: ../bleachbit/Action.py:144
+msgid "Deep scan does not support multi-value variable."
+msgstr ""
+
+#: ../bleachbit/Action.py:221
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr ""
+
+#: ../bleachbit/Action.py:256
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr ""
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/Action.py:457 ../bleachbit/GUI.py:659
+msgid "Clean"
+msgstr "Dọn dẹp"
+
+#: ../bleachbit/Action.py:493
+#, python-format
+msgid "Run external command: %s"
+msgstr ""
+
+#: ../bleachbit/GUI.py:135 ../bleachbit/GuiPreferences.py:296
 msgid "Name"
 msgstr "Tên"
 
-#: ../bleachbit/GuiPreferences.py:306 ../bleachbit/GuiPreferences.py:347
-msgid "Choose a file"
-msgstr "Chọn tập tin"
-
-#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
-#: ../bleachbit/GuiPreferences.py:398
-msgid "File"
-msgstr "Tập tin"
-
-#: ../bleachbit/GuiPreferences.py:327 ../bleachbit/GuiPreferences.py:368
-#: ../bleachbit/GuiPreferences.py:400
-msgid "Folder"
-msgstr "Thư mục"
-
-#: ../bleachbit/GuiPreferences.py:410
-msgid "Theses paths will not be deleted or modified."
-msgstr "Các đường dẫn này sẽ không bị xóa hay chỉnh sửa."
-
-#: ../bleachbit/GuiPreferences.py:413
-msgid "These locations can be selected for deletion."
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:421
-msgid "Type"
-msgstr "Loại"
-
-#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
-#. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:427
-msgid "Path"
-msgstr "Đường dẫn"
-
-#: ../bleachbit/GuiPreferences.py:439
-msgctxt "button"
-msgid "Add file"
-msgstr "Thêm tập tin"
-
-#: ../bleachbit/GuiPreferences.py:445
-msgctxt "button"
-msgid "Add folder"
-msgstr "Thêm thư mục"
-
-#: ../bleachbit/GUI.py:138
+#: ../bleachbit/GUI.py:143
 msgid "Active"
 msgstr "Hoạt động"
+
+#. TRANSLATORS: Size is the label for the column that shows how
+#. much space an option would clean or did clean
+#: ../bleachbit/GUI.py:155
+msgid "Size"
+msgstr ""
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:169
+#: ../bleachbit/GUI.py:186
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -978,19 +1288,19 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:336
+#: ../bleachbit/GUI.py:373
 msgid "You must select an operation"
 msgstr "Bạn phải chọn một thao tác"
 
-#: ../bleachbit/GUI.py:357 ../bleachbit/GUI.py:379
+#: ../bleachbit/GUI.py:392 ../bleachbit/GUI.py:414
 msgid "Done."
 msgstr "Xong."
 
-#: ../bleachbit/GUI.py:392
+#: ../bleachbit/GUI.py:431
 msgid "Program to clean unnecessary files"
 msgstr "Chương trình dùng để dọn dẹp các tập tin không cần thiết"
 
-#: ../bleachbit/GUI.py:398
+#: ../bleachbit/GUI.py:441
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See http://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1002,282 +1312,349 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:404
+#: ../bleachbit/GUI.py:447
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Lê Trường An https://launchpad.net/~truongan\n"
 "  Nguyen Kim Kha https://launchpad.net/~nkimkha"
 
-#: ../bleachbit/GUI.py:416
+#: ../bleachbit/GUI.py:459
 msgid "System information"
 msgstr "Thông tin hệ thống"
 
-#: ../bleachbit/GUI.py:489
+#: ../bleachbit/GUI.py:521
+msgid "No paths found in clipboard."
+msgstr ""
+
+#: ../bleachbit/GUI.py:555
 msgid "Choose files to shred"
 msgstr "Chọn (các) tập tin để xóa"
 
-#: ../bleachbit/GUI.py:492
+#: ../bleachbit/GUI.py:558
 msgid "Choose folder to shred"
 msgstr "Chọn thư mục để xóa"
 
+#: ../bleachbit/GUI.py:622 ../bleachbit/GuiPreferences.py:197
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
+msgid "Choose a folder"
+msgstr "Chọn thư mục"
+
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:573
+#: ../bleachbit/GUI.py:654
 msgid "Preview"
 msgstr "Xem trước"
 
-#: ../bleachbit/GUI.py:621
+#: ../bleachbit/GUI.py:749
 msgid "_Shred Files"
 msgstr "_Xóa tập tin"
 
-#: ../bleachbit/GUI.py:623
+#: ../bleachbit/GUI.py:751
 msgid "Sh_red Folders"
 msgstr "Xóa thư _mục"
 
-#: ../bleachbit/GUI.py:625
+#: ../bleachbit/GUI.py:753
 msgid "_Wipe Free Space"
 msgstr "_Dọn dẹp không gian trống"
 
-#: ../bleachbit/GUI.py:627
+#: ../bleachbit/GUI.py:755
 msgid "S_hred Settings and Quit"
 msgstr "Thiết lập xóa và thoát"
 
-#: ../bleachbit/GUI.py:629
+#: ../bleachbit/GUI.py:757
 msgid "_Quit"
 msgstr "T_hoát"
 
-#: ../bleachbit/GUI.py:631
+#: ../bleachbit/GUI.py:759
 msgid "_File"
 msgstr "_Tập tin"
 
-#: ../bleachbit/GUI.py:634
+#: ../bleachbit/GUI.py:761 ../bleachbit/GuiPreferences.py:58
+msgid "Preferences"
+msgstr "Tùy chỉnh"
+
+#: ../bleachbit/GUI.py:762
+msgid "Shred Paths from Clipboard"
+msgstr ""
+
+#: ../bleachbit/GUI.py:764
 msgid "_Edit"
 msgstr "_Chỉnh sửa"
 
-#: ../bleachbit/GUI.py:635
+#: ../bleachbit/GUI.py:765
 msgid "Help Contents"
 msgstr "Nội dung trợ giúp"
 
-#: ../bleachbit/GUI.py:638
+#: ../bleachbit/GUI.py:768
 msgid "_Release Notes"
 msgstr "Ghi chú phát hành"
 
-#: ../bleachbit/GUI.py:641
+#: ../bleachbit/GUI.py:771
 msgid "_System Information"
 msgstr "_Thông tin hệ thống"
 
-#: ../bleachbit/GUI.py:644
+#: ../bleachbit/GUI.py:774
 msgid "_About"
 msgstr "_Giới thiệu"
 
-#: ../bleachbit/GUI.py:645
+#: ../bleachbit/GUI.py:775
 msgid "_Help"
 msgstr "Trợ _giúp"
 
-#: ../bleachbit/GUI.py:670
+#: ../bleachbit/GUI.py:800
 msgctxt "button"
 msgid "Preview"
 msgstr "Xem thử"
 
-#: ../bleachbit/GUI.py:675
+#: ../bleachbit/GUI.py:805
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Xem trước các tập tin trong những hành động đã chọn (không xóa tập tin)"
 
-#: ../bleachbit/GUI.py:685
+#: ../bleachbit/GUI.py:815
 msgctxt "button"
 msgid "Clean"
 msgstr "Dọn"
 
-#: ../bleachbit/GUI.py:689
+#: ../bleachbit/GUI.py:819
 msgid "Clean files in the selected operations"
 msgstr "Dọn các tập tin trong các thao tác đã chọn"
 
-#: ../bleachbit/GUI.py:778
+#: ../bleachbit/GUI.py:910
 msgid "Error when checking for updates: "
 msgstr "Lỗi khi kiểm tra cập nhật: "
 
-#: ../bleachbit/GUI.py:808
+#: ../bleachbit/GUI.py:949
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "Lỗi khi nạp mô-đun SQLite: có thể phần mềm diệt virus đã khóa nó."
 
-#: ../bleachbit/GUI.py:811
+#: ../bleachbit/GUI.py:952
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
 
-#: ../bleachbit/RecognizeCleanerML.py:57
-msgid "Security warning"
-msgstr "Cảnh báo an ninh"
-
-#: ../bleachbit/RecognizeCleanerML.py:70
+#: ../bleachbit/GUI.py:957
 msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
 msgstr ""
-"Các định nghĩa trình dọn dẹp này được tạo mới hay thay đổi. Các định nghĩa "
-"nguy hiểm có thể gây sự cố cho hệ thống. Nếu bạn không chắc chắn về những "
-"thay đổi này, hãy xóa các tập tin hoặc thoát."
 
-#: ../bleachbit/RecognizeCleanerML.py:85
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Xóa"
+#: ../bleachbit/GuiPreferences.py:64
+msgid "General"
+msgstr "Tổng quát"
 
-#: ../bleachbit/RecognizeCleanerML.py:90
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Tên tập tin"
+#: ../bleachbit/GuiPreferences.py:67
+msgid "Drives"
+msgstr "Ổ đĩa"
 
-#: ../bleachbit/Unix.py:383 ../bleachbit/Unix.py:413 ../bleachbit/Unix.py:603
-#, python-format
-msgid "Executable not found: %s"
-msgstr "Không tìm thấy thuộc tính thực thi: %s"
+#: ../bleachbit/GuiPreferences.py:70
+msgid "Languages"
+msgstr "Ngôn ngữ"
 
-#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:600 ../bleachbit/Worker.py:128
-#, python-format
+#: ../bleachbit/GuiPreferences.py:72
+msgid "Whitelist"
+msgstr "Ngoại lệ"
+
+#: ../bleachbit/GuiPreferences.py:117
+msgid "Check periodically for software updates via the Internet"
+msgstr "Kiểm tra định kì các cập nhật phần mềm thông qua Internet"
+
+#: ../bleachbit/GuiPreferences.py:122
 msgid ""
-"%s cannot be cleaned because it is currently running.  Close it, and try "
-"again."
+"If an update is found, you will be given the option to view information "
+"about it.  Then, you may manually download and install the update."
 msgstr ""
-"%s không thể bị xóa vì nó hiện đang chạy. Đóng nó lại, và thử lần nữa."
+"Nếu có cập nhật, sẽ có tùy chọn để xem thông tin về nó. Sau đó, bạn có thể "
+"tải về và cài đặt bản cập nhật một cách thủ công."
 
-#: ../bleachbit/Update.py:72
-msgid "New winapp2.ini was downloaded."
-msgstr "Có winapp2.ini mới đã được tải về"
+#: ../bleachbit/GuiPreferences.py:128
+msgid "Check for new beta releases"
+msgstr "Kiểm tra phát hành beta mới"
 
-#: ../bleachbit/Update.py:117
-msgid "Update BleachBit"
-msgstr "Cập nhật cho Bleachbit"
+#: ../bleachbit/GuiPreferences.py:137
+msgid "Download and update cleaners from community (winapp2.ini)"
+msgstr "Tải và cập nhật trình dọn dẹp từ cộng đồng (winapp2.ini)"
 
-#: ../bleachbit/Update.py:122
-msgid "A new version is available."
-msgstr "Có phiên bản mới."
-
-#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
-#. similar
-#: ../bleachbit/Update.py:131
-#, python-format
-msgid "Update to version %s"
-msgstr "Cập nhật lên phiên bản %s"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:44
-msgid "Applications"
-msgstr "Ứng dụng"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:47
-msgid "Internet"
-msgstr "Internet"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:50
-msgid "Multimedia"
-msgstr "Đa phương tiện"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:53
-msgid "Utilities"
-msgstr "Tiện ích"
-
-#: ../bleachbit/Winapp.py:68
-msgid "Games"
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing.  For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
+#: ../bleachbit/GuiPreferences.py:151
+msgid "Hide irrelevant cleaners"
 msgstr ""
 
-#: ../bleachbit/Winapp.py:155
-msgid "Imported from winapp2.ini"
-msgstr "Đã nhập từ winapp2.ini"
-
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:71
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Loại bỏ tiến trình đang chạy '%(operation)s': '%(msg)s'"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:167
-msgid "Please wait.  Wiping free disk space."
-msgstr "Xin hãy chờ. Đang dọn dẹp vùng chưa được phân bổ."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:169 ../bleachbit/Worker.py:308
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Vui lòng đợi. Đang dọn dẹp %s."
-
-#: ../bleachbit/Worker.py:184
-msgid "Please wait. Wiping file system metadata."
+#. TRANSLATORS: Overwriting is the same as shredding.  It is a way
+#. to prevent recovery of the data. You could also translate
+#. 'Shred files to prevent recovery.'
+#: ../bleachbit/GuiPreferences.py:159
+msgid "Overwrite contents of files to prevent recovery"
 msgstr ""
 
-#: ../bleachbit/Worker.py:187
-msgid "Please wait. Cleaning up after wiping file system metadata."
+#: ../bleachbit/GuiPreferences.py:163
+msgid ""
+"Overwriting is ineffective on some file systems and with certain BleachBit "
+"operations.  Overwriting is significantly slower."
+msgstr ""
+"Ghi đè không có hiệu quả trên một số tập tin hệ thống và với các thao tác "
+"nhất định của Bleachbit. Ghi đè gây chậm đáng kể."
+
+#: ../bleachbit/GuiPreferences.py:166
+msgid "Start BleachBit with computer"
+msgstr "Bật Bleachbit cùng với hệ điều hành"
+
+#: ../bleachbit/GuiPreferences.py:172
+msgid "Exit after cleaning"
 msgstr ""
 
-#: ../bleachbit/Worker.py:190
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Còn lại khoảng %d phút."
+#: ../bleachbit/GuiPreferences.py:178
+msgid "Confirm before delete"
+msgstr ""
 
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:247
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Dung lượng đã phục hồi: %s"
+#: ../bleachbit/GuiPreferences.py:186
+msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
+msgstr ""
 
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:251
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Dung lượng sẽ được phục hồi: %s"
+#: ../bleachbit/GuiPreferences.py:221
+msgid ""
+"Choose a writable folder for each drive for which to overwrite free space."
+msgstr "Chọn một thư mục có thể ghi được cho mỗi ổ đĩa để ghi đè vùng trống."
 
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:256
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Tập tin đã xóa: %d"
+#. TRANSLATORS: In the preferences dialog, this button adds a path to
+#. the list of paths
+#: ../bleachbit/GuiPreferences.py:243
+msgctxt "button"
+msgid "Add"
+msgstr "Thêm"
 
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:260
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Tập tin sẽ bị xóa: %d"
+#. TRANSLATORS: In the preferences dialog, this button removes a path
+#. from the list of paths
+#: ../bleachbit/GuiPreferences.py:247 ../bleachbit/GuiPreferences.py:458
+msgctxt "button"
+msgid "Remove"
+msgstr "Loại bỏ"
 
-#: ../bleachbit/Worker.py:263
-#, python-format
-msgid "Special operations: %d"
-msgstr "Thao tác đặc biệt: %d"
+#: ../bleachbit/GuiPreferences.py:272
+msgid "All languages will be deleted except those checked."
+msgstr "Tất cả ngôn ngữ sẽ bị xóa ngoại trừ những ngôn ngữ được chọn."
 
-#: ../bleachbit/Worker.py:266
-#, python-format
-msgid "Errors: %d"
-msgstr "Lỗi: %d"
+#: ../bleachbit/GuiPreferences.py:288
+msgid "Preserve"
+msgstr "Giữ lại"
 
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:281
-msgid "Please wait.  Running deep scan."
-msgstr "Vui lòng đợi. Đang quét sâu."
+#: ../bleachbit/GuiPreferences.py:292
+msgid "Code"
+msgstr "Mã"
 
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:311
+#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
+msgid "Choose a file"
+msgstr "Chọn tập tin"
+
+#: ../bleachbit/GuiPreferences.py:320 ../bleachbit/GuiPreferences.py:361
+#: ../bleachbit/GuiPreferences.py:405
+msgid "File"
+msgstr "Tập tin"
+
+#: ../bleachbit/GuiPreferences.py:334 ../bleachbit/GuiPreferences.py:375
+#: ../bleachbit/GuiPreferences.py:407
+msgid "Folder"
+msgstr "Thư mục"
+
+#: ../bleachbit/GuiPreferences.py:417
+msgid "Theses paths will not be deleted or modified."
+msgstr "Các đường dẫn này sẽ không bị xóa hay chỉnh sửa."
+
+#: ../bleachbit/GuiPreferences.py:420
+msgid "These locations can be selected for deletion."
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:428
+msgid "Type"
+msgstr "Loại"
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:434
+msgid "Path"
+msgstr "Đường dẫn"
+
+#: ../bleachbit/GuiPreferences.py:446
+msgctxt "button"
+msgid "Add file"
+msgstr "Thêm tập tin"
+
+#: ../bleachbit/GuiPreferences.py:452
+msgctxt "button"
+msgid "Add folder"
+msgstr "Thêm thư mục"
+
+#: ../bleachbit/Memory.py:61
+msgid ""
+"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"information."
+msgstr ""
+
+#: ../bleachbit/Memory.py:81
+msgid "Disabling swap."
+msgstr ""
+
+#: ../bleachbit/Memory.py:101
+msgid "Re-enabling swap."
+msgstr ""
+
+#: ../bleachbit/Memory.py:121
 #, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Vui lòng chờ. Đang xem trước %s."
+msgid "Setting nice value %d for this process."
+msgstr ""
+
+#: ../bleachbit/Memory.py:127
+#, python-format
+msgid "Dropping privileges of pid %d to uid %d."
+msgstr ""
+
+#: ../bleachbit/Memory.py:140
+#, python-format
+msgid "Allocating and wiping %s (%d B) of memory."
+msgstr ""
+
+#: ../bleachbit/Memory.py:148
+#, python-format
+msgid "Freeing %s of memory."
+msgstr ""
+
+#: ../bleachbit/Memory.py:178
+#, python-format
+msgid "Found UUID for swap file %s is %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:263
+#, python-format
+msgid "Physical free memory is %s (%d B)."
+msgstr ""
+
+#: ../bleachbit/Memory.py:274
+#, python-format
+msgid "Wiping the swap device %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:285
+#, python-format
+msgid "Reinitializing the swap device %s."
+msgstr ""
+
+#: ../bleachbit/Memory.py:301
+#, python-format
+msgid "Detected these swap devices: %s"
+msgstr ""
+
+#: ../bleachbit/Memory.py:310
+#, python-format
+msgid "The function wipe_memory() with pid %d is waiting for child pid %d."
+msgstr ""
+
+#: ../bleachbit/Memory.py:314
+#, python-format
+msgid "The child memory-wiping process returned code %d."
+msgstr ""
