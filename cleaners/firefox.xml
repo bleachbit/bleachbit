@@ -21,9 +21,9 @@
     @app Mozilla Firefox
     @url https://www.mozilla.org/en-US/firefox/new/
     @os Windows, Linux, FreeBSD, OpenBSD
-    @cleanerversion v2.1.0
-    @cleanerdate 2019-03-25
-    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-25)
+    @cleanerversion v2.1.1
+    @cleanerdate 2019-03-29
+    @cleanerby Andrew Ziem (2018-10-01 - 2018-11-05) & luoliyan (2018-10-31) & danielk43 (2018-11-29) & Tobias B. Besemer (2019-02-12 - 2019-03-29)
     @tested ok v67.0a1, Windows 7
     @testeddate 2019-03-15 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -93,7 +93,7 @@ Tobias.
     <value os="openbsd">~/.$$Browser$$</value>
   </var>
   <var name="profile">
-    <value search="glob" os="windows">%AppData%\$$Browser$$\Profiles\*</value>
+    <value search="glob" os="windows">$$base$$\Profiles\*</value>
     <value search="glob" os="linux">~/.$$Browser$$/*</value>
     <value search="glob" os="freebsd">~/.$$Browser$$/*</value>
     <value search="glob" os="openbsd">~/.$$Browser$$/*</value>
