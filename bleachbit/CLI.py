@@ -128,7 +128,7 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
-    # Don't translate "usage:" - it gets added by Python.
+    # Don't translate and add "usage:" - it gets added by Python.
     # More information about the command line is here
     # https://www.bleachbit.org/documentation/command-line
     usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
