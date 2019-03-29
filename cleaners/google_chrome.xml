@@ -21,9 +21,9 @@
     @app Google Chrome
     @url https://www.google.com/chrome/
     @os Windows, Linux
-    @cleanerversion v2.3.1
-    @cleanerdate 2019-03-26
-    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-26)
+    @cleanerversion v2.3.2
+    @cleanerdate 2019-03-29
+    @cleanerby Andrew Ziem (2015-12-27 - 2018-11-20) & Tobias B. Besemer (2019-03-11 - 2019-03-29)
     @tested ok v???, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -193,7 +193,9 @@ Tobias.
     <!-- $XDG_CONFIG_HOME: Where user-specific configurations should be written (analogous to /etc).
          Should default to "$HOME/.config".
          So we go sure: -->
+    <!-- Not needed, because __init__.py makes sure we have $XDG_CONFIG_HOME !!!
     <value os="linux">~/.config/$$Browser$$</value>
+    -->
   </var>
   <var name="profile">
     <!--
@@ -203,9 +205,11 @@ Tobias.
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
     ...with: -->
+    <!-- Got obsolete...
     <value os="windows">%LocalAppData%\$$Browser$$\User Data\*</value>
     <value os="linux">$XDG_CONFIG_HOME/$$Browser$$/*</value>
-    <value os="linux">~/.config/$$Browser$$/*</value>
+    ...with: -->
+    <value>$$base$$\*</value>
     <!-- If you already wanna give the universal cleaner a try: Remove the comment-marks from the following block... -->
     <!--
     A break of the block for Opera... -->
