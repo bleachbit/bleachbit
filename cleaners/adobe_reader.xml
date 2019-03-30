@@ -21,9 +21,9 @@
     @app Adobe Reader
     @url https://get.adobe.com/reader/otherversions/
     @os Windows, Linux
-    @cleanerversion v2.0.0
-    @cleanerdate 2019-03-21
-    @cleanerby Andrew Ziem (2009-05-20 - 2015-11-27) & theatre-x (2015-02-05) & Tobias B. Besemer (2019-03-11 - 2019-03-21)
+    @cleanerversion v2.0.2
+    @cleanerdate 2019-03-30
+    @cleanerby Andrew Ziem (2009-05-20 - 2015-11-27) & theatre-x (2015-02-05) & Tobias B. Besemer (2019-03-11 - 2019-03-30)
     @tested ok vDC, Windows 7
     @testeddate 2019-03-11 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
@@ -54,11 +54,12 @@
     <action command="delete" search="glob" path="$$Profile$$\IconCacheRdr*.dat"/>
     <action command="delete" search="walk.files" path="$$Profile$$\ToolsSearchCacheRdr\"/>
     <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\ConnectorIcons\*"/>
-    <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\"/>
     <action command="delete" search="glob" path="%AppData%\Adobe\Acrobat\*\JSCache\*"/>
     <!-- Also in WinApp2.ini! Start... -->
     <action command="delete" search="file" path="$$Profile$$\UserCache.bin"/>
     <action command="delete" search="walk.all" path="%AppData%\Adobe\Acrobat\*\Security\CRLCache\"/>
+    <!-- https://helpx.adobe.com/acrobat/kb/RdrCEF-exe-and-AcroCEF-exe-can-I-disable.html -->
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Adobe\AcroCef\*\Acrobat\Cache\"/>
     <!-- ...end! Tobias. -->
     <!-- Also in WinApp2.ini/[Adobe Reader Touch *]! Start... -->
@@ -85,6 +86,7 @@
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cDockables"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cToolbars"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\RememberedViews\cNoCategoryFiles"/>
+    <!-- https://www.techwalla.com/articles/what-is-adobe-synchronizer -->
     <action command="winreg" path="HKCU\Software\Adobe\Adobe Synchronizer\11.0"/>
     <!-- ...end! Tobias. -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFiles"/>
@@ -127,21 +129,85 @@
     <action command="delete" search="glob" path="%LocalAppDataLow%\Adobe\Acrobat\*\Search\*"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentSearch"/>
   </option>
-  <option id="tmp">
+  <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <!--Linux:-->
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
     <!--Windows:-->
-    <action command="delete" search="walk.all" path="%Temp%\acrocef_low"/>
+    <action command="delete" search="walk.all" path="%Temp%\acrocef_low\"/>
     <action command="delete" search="file" path="%Temp%\acrocef_low"/>
-    <action command="delete" search="walk.all" path="%Temp%\acrord32_sbx"/>
+    <action command="delete" search="walk.all" path="%Temp%\acrord32_sbx\"/>
     <action command="delete" search="file" path="%Temp%\acrord32_sbx"/>
-    <action command="delete" search="walk.all" path="%Temp%\WebInstaller"/>
+    <action command="delete" search="walk.all" path="%Temp%\WebInstaller\"/>
     <action command="delete" search="file" path="%Temp%\WebInstaller"/>
+    <!-- https://www.bleepingcomputer.com/startups/AdobeARM.exe-25493.html -->
     <action command="delete" search="glob" path="%Temp%\AdobeARM*"/>
     <action command="delete" search="file" path="%Temp%\AdobeARM.log"/>
     <action command="delete" search="file" path="%WinDir%\Temp\AdobeARM.log"/>
     <action command="delete" search="file" path="%WinDir%\Temp\AdobeARM_NotLocked.log"/>
   </option>
 </cleaner>
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Adobe Reader 2017 *]
+LangSecRef=3021
+Detect=HKCU\Software\Adobe\Acrobat Reader\2017
+Default=False
+RegKey1=HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFiles
+RegKey2=HKCU\Software\Adobe\Acrobat Reader\2017\AVGeneral\cRecentFolders
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Adobe Reader DC *]
+LangSecRef=3021
+Detect=HKLM\Software\Adobe\Acrobat Reader\DC
+Default=False
+FileKey1=%AppData%\Adobe\Acrobat\DC\Security\CRLCache|*.*|RECURSE
+FileKey2=%LocalAppData%\Adobe\Acrobat\DC|UserCache.bin
+FileKey3=%LocalLowAppData%\Adobe\AcroCef\DC\Acrobat\Cache|*.*|RECURSE
+RegKey1=HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionFromPDF
+RegKey2=HKCU\Software\Adobe\Acrobat Reader\DC\AVConversionToPDF
+RegKey3=HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cDockables
+RegKey4=HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cRecentToolsList
+RegKey5=HKCU\Software\Adobe\Acrobat Reader\DC\AVGeneral\cToolbars
+RegKey6=HKCU\Software\Adobe\Acrobat Reader\DC\RememberedViews\cNoCategoryFiles
+RegKey7=HKCU\Software\Adobe\Acrobat Reader\DC\ShareIdentity
+RegKey8=HKCU\Software\Adobe\Adobe Synchronizer\DC
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Adobe Reader Touch *]
+LangSecRef=3031
+Detect=HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\AdobeSystemsIncorporated.AdobeReader_ynb6jyjzte8ga
+DetectFile=%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_ynb6jyjzte8ga
+Default=False
+FileKey1=%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\INet*|*.*|RECURSE
+FileKey2=%LocalAppData%\Packages\AdobeSystemsIncorporated.AdobeReader_*\AC\NVIDIA Corporation\NV_Cache|*.*
+RegKey1=HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\AdobeSystemsIncorporated.AdobeReader_ynb6jyjzte8ga\PersistedStorageItemTable\MostRecentlyUsed
+...end "Trimmer Block".
+-->
+<!--
+Start "Trimmer Block"...
+@trimmercheckedversion: 190312
+@trimmercheckedby: https://github.com/Tobias-B-Besemer
+[Adobe Reader XI *]
+LangSecRef=3021
+Detect=HKCU\Software\Adobe\Acrobat Reader\11.0
+Default=False
+RegKey1=HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionFromPDF
+RegKey2=HKCU\Software\Adobe\Acrobat Reader\11.0\AVConversionToPDF
+RegKey3=HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cDockables
+RegKey4=HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cToolbars
+RegKey5=HKCU\Software\Adobe\Acrobat Reader\11.0\RememberedViews\cNoCategoryFiles
+RegKey6=HKCU\Software\Adobe\Adobe Synchronizer\11.0
+...end "Trimmer Block".
+-->
