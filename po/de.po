@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-03-17 22:16-0600\n"
-"PO-Revision-Date: 2019-03-29 20:39+0000\n"
+"PO-Revision-Date: 2019-03-30 04:13+0000\n"
 "Last-Translator: Tobias B. Besemer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-29 20:48+0000\n"
+"X-Launchpad-Export-Date: 2019-03-30 04:28+0000\n"
 "X-Generator: Launchpad (build 18910)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -1048,12 +1048,14 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Fehler beim Lesen des Reinigers: %s"
 
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"Reiniger ist auf diesem Betriebssystem nicht verwendbar, weil er keine "
+"Aktionen hat: %s"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1206,7 +1208,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:142
 msgid "log debug messages to file"
-msgstr ""
+msgstr "schreibe Debug-Nachrichten in Datei"
 
 #: ../bleachbit/CLI.py:144
 msgid "shred specific files or folders"
@@ -1239,7 +1241,7 @@ msgstr "winapp2.ini aktualisieren, wenn eine neue Version verfügbar ist"
 
 #: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "putze freien Raum in den gegebenen Pfaden"
 
 #: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
@@ -1254,45 +1256,47 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Verwende nur eines dieser Kommandos: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:196
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Überprüfe online nach Updates für winapp2.ini"
 
 #: ../bleachbit/CLI.py:211
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Keine Verzeichnisse gegeben für --wipe-free-space"
 
 #: ../bleachbit/CLI.py:216
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Pfad zum Reinigen muss ein existierendes Vereichnis sein: %s"
 
 #: ../bleachbit/CLI.py:218
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "Freien Raum reinigen kann eine lange Zeit dauern."
 
 #: ../bleachbit/CLI.py:228
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Keine Arbeit zu tun. Gebe Optionen an."
 
 #: ../bleachbit/CLI.py:236
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite ist nur gedacht in Verwendung mit --clean"
 
 #: ../bleachbit/Action.py:144
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Tiefenuntersuchung unterstützt nicht Multi-Wert-Variable."
 
 #: ../bleachbit/Action.py:221
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" verwendet mit regulärem Datei-Pfad=\"%s\""
 
 #: ../bleachbit/Action.py:256
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" ist kein glob-Muster"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/Action.py:457 ../bleachbit/GUI.py:659
@@ -1677,66 +1681,68 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Der Befehl \"swapoff -s\" schlug fehl, falle somit zurück zu /proc/swaps für "
+"Swap-Informationen."
 
 #: ../bleachbit/Memory.py:81
 msgid "Disabling swap."
-msgstr ""
+msgstr "Deaktiviere Swap."
 
 #: ../bleachbit/Memory.py:101
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "Reaktiviere Swap."
 
 #: ../bleachbit/Memory.py:121
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Setze netten Wert %d für diesen Prozess."
 
 #: ../bleachbit/Memory.py:127
 #, python-format
 msgid "Dropping privileges of pid %d to uid %d."
-msgstr ""
+msgstr "Lasse Privilegien fallen von pid %d zu uid %d."
 
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s (%d B) of memory."
-msgstr ""
+msgstr "Allokiere und reinige %s (%d B) von Speicher."
 
 #: ../bleachbit/Memory.py:148
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Befreie %s von Speicher."
 
 #: ../bleachbit/Memory.py:178
 #, python-format
 msgid "Found UUID for swap file %s is %s."
-msgstr ""
+msgstr "Fand UUID von Swap-Datei %s in %s."
 
 #: ../bleachbit/Memory.py:263
 #, python-format
 msgid "Physical free memory is %s (%d B)."
-msgstr ""
+msgstr "Physikalischer freier Speicher ist %s (%d B)."
 
 #: ../bleachbit/Memory.py:274
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "Reinige das Swap-Gerät %s."
 
 #: ../bleachbit/Memory.py:285
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "Reinitalisiere das Swap-Gerät %s."
 
 #: ../bleachbit/Memory.py:301
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "Gefunden diese Swap-Geräte: %s"
 
 #: ../bleachbit/Memory.py:310
 #, python-format
 msgid "The function wipe_memory() with pid %d is waiting for child pid %d."
-msgstr ""
+msgstr "Die Funktion wipe_memory() mit pid %d wartet auf Kind pid %d."
 
 #: ../bleachbit/Memory.py:314
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Der Kind-Speicher-Reinigung-Prozess gab Code %d zurück."
