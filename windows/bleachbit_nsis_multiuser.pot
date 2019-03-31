@@ -1,0 +1,93 @@
+# English translation of bleachbit_nsis_multiuser.pot
+# Copyright (C) 2019 Andrew Ziem
+# This file is distributed under the same license as the BleachBit package.
+# Tobias B. Besemer <Tobias.Besemer@Googlemail.com>, 2019.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: bleachbit\n"
+"Report-Msgid-Bugs-To: <ahz001+github@gmail.com>\n"
+"POT-Creation-Date: 2019-03-31 08:45+0200\n"
+"PO-Revision-Date: 2019-03-31 08:45+0200\n"
+"Last-Translator: Tobias B. Besemer <Tobias.Besemer@Googlemail.com>\n"
+"Language-Team: English <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "MULTIUSER_PAGE_TITLE"
+msgstr "Choose Users"
+
+msgid "MULTIUSER_INSTALL_PAGE_SUBTITLE"
+msgstr "Choose for which users to install $(^NameDA)."
+
+msgid "MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
+msgstr "Choose for which users to remove $(^NameDA)."
+
+msgid "MULTIUSER_INSTALL_HEADER"
+msgstr "Select whether to install $(^NameDA) for all users or for current user."
+
+msgid "MULTIUSER_UNINSTALL_HEADER"
+msgstr "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
+
+msgid "MULTIUSER_ALL_USERS"
+msgstr "For anyone who uses this computer (all users)"
+
+msgid "MULTIUSER_CURRENT_USER"
+msgstr "For me ({USER})"
+
+msgid "MULTIUSER_NEW_INSTALLATION_ALL_USERS"
+msgstr "Fresh install for all users."
+
+msgid "MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
+msgstr "Fresh install for current user."
+
+msgid "MULTIUSER_INSTALLED_ALL_USERS"
+msgstr "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
+
+msgid "MULTIUSER_INSTALLED_CURRENT_USER"
+msgstr "Version {VERSION} is installed for current user in $\"{FOLDER}$\"."
+
+msgid "MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
+msgstr "Reinstall version {VERSION} for all users."
+
+msgid "MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
+msgstr "Reinstall version {VERSION} for current user."
+
+msgid "MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
+msgstr "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
+
+msgid "MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
+msgstr "Uninstall version {OLD_VERSION} and install version {VERSION} for current user."
+
+msgid "MULTIUSER_RUN_AS_ADMIN"
+msgstr "You need to run this program as administrator."
+
+msgid "MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
+msgstr "Administrator credentials required."
+
+msgid "MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
+msgstr "Administrator credentials required for uninstall."
+
+msgid "MULTIUSER_INVALID_PARAMS"
+msgstr "Invalid combination of paramaters."
+
+msgid "MULTIUSER_NOT_INSTALLED"
+msgstr "There is no installation of $(^NameDA)."
+
+msgid "MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
+msgstr "The operating system doesn't support current user installations."
+
+msgid "MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
+msgstr "You need to login with an account that is a member of the administrators group to continue."
+
+msgid "MULTIUSER_ELEVATION_NOT_SUPPORTED"
+msgstr "The operating system doesn't support elevation."
+
+msgid "MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
+msgstr "Unable to elevate, Secondary Logon service not running."
+
+msgid "MULTIUSER_ELEVATION_ERROR"
+msgstr "Unable to elevate, error {ERROR}."
+

@@ -17,6 +17,7 @@
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;  2019-03-31 added better multi-language support by https://github.com/Tobias-B-Besemer
 
 ;--------------------------------
 ;Include Modern UI
@@ -169,6 +170,7 @@
   !insertmacro MUI_LANGUAGE "Vietnamese"
 !endif
 
+!include bleachbit_lang.nsh
 
 !include NsisMultiUserLang.nsh
 
@@ -269,7 +271,7 @@ SectionEnd
 !ifndef NoSectionShred
 Section "Integrate Shred" SectionShred
     # register file association verb
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 SectionEnd
 !endif
@@ -299,8 +301,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
-    upgrading, or click 'Cancel' to abort the upgrade." \
+    $(BLEACHBIT_UPGRADE_UNINSTALL) \
     /SD IDOK \
     IDOK uninstall_old
 
@@ -323,7 +324,7 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 
 Section "Uninstall"
     RMDir /r "$INSTDIR"
