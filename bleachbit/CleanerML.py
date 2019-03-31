@@ -255,6 +255,8 @@ def list_cleanerml_files(local_only=False):
         import stat
         st = os.stat(pathname)
         if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
+            # TRANSLATORS: When BleachBit detects the file permissions are
+            # insecure, it will not load the cleaner as if it did not exist.
             logger.warning(
                 _("Ignoring cleaner because it is world writable: %s"), pathname)
             continue
