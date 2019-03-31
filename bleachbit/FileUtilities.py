@@ -25,7 +25,7 @@ File-related utilities
 from __future__ import absolute_import, print_function
 
 import bleachbit
-from bleachbit import expanduser
+from bleachbit import expanduser, _
 
 import atexit
 import codecs
