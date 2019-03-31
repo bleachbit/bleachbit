@@ -232,6 +232,17 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         delete('does-not-exist', ignore_missing=True)
         self.assertRaises(OSError, delete, 'does-not-exist')
 
+    def test_delete_not_empty(self):
+        """Test for scenario directory is not empty"""
+        print('hello')
+        fn =os.path.join(self.tempdir, 'make-directory-not-empty')
+        common.touch_file(fn)
+        self.assertExists(fn)
+        self.assertExists(self.tempdir)
+        delete(self.tempdir, allow_shred=False)
+        self.assertExists(fn)
+        self.assertExists(self.tempdir)
+
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
 
