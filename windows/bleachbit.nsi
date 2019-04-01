@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1008
+;  @scriptversion v2.3.1009
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -122,7 +122,7 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
 
-  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT 0
+  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
@@ -295,8 +295,8 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
   SectionEnd
 
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
-    ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's 0 by default. If 1: NO DESKTOP SHORTCUT!
-    ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} <> 1
+    ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's "No" by default. If "Yes": NO DESKTOP SHORTCUT!
+    ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} == "No"
       SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
       CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
       Call RefreshShellIcons
@@ -418,7 +418,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    IntOp ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} + 1
+    !define /redef COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
   ${endif}
   ${GetOptions} "/currentuser /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
   ${ifnot} ${errors}
@@ -430,7 +430,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    IntOp ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} + 1
+    !define /redef COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
   ${endif}
   ${if} ${errors}
     Goto command_line_help
