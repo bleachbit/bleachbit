@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1003
+;  @scriptversion v2.3.1004
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -47,7 +47,7 @@
 
   ;Name and file
   !define prodname "BleachBit"
-  !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
+  !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
   Name "${prodname}"
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
@@ -246,14 +246,14 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   SetOutPath "$INSTDIR\share\"
   File "..\bleachbit.png"
 
-  # Uninstaller
+  ; Uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   SetOutPath "$INSTDIR\"
   CreateDirectory "$SMPROGRAMS\${prodname}"
   CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
-  # Register uninstaller in Add/Remove Programs
+  ; Register uninstaller in Add/Remove Programs
   !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
     "HelpLink" "https://www.bleachbit.org/help"
@@ -263,7 +263,7 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     "URLUpdateInfo" "https://www.bleachbit.org/download"
 
   ; Restore QuietUninstallString
-  ${if} $6 == 666
+  ${if} $6 = 666
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
       WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
@@ -280,7 +280,7 @@ SectionEnd
 
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
-    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" \
       "$INSTDIR\${prodname}.exe"
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC)" \
@@ -293,22 +293,22 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
       "InternetShortcut" "URL" "https://www.bleachbit.org/"
   SectionEnd
 
-  ${ifnot} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} == 1
+  ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} <> 1
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
-    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     Call RefreshShellIcons
   SectionEnd
   ${endif}
 
   Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
-    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     Call RefreshShellIcons
   SectionEnd
 
   Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
-    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     Call RefreshShellIcons
   SectionEnd
@@ -324,7 +324,7 @@ SectionEnd
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
 Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
-  # register file association verb
+  ; register file association verb
   WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
   WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
   WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
@@ -502,21 +502,21 @@ UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 Section "Uninstall"
   RMDir /r "$INSTDIR"
   DeleteRegKey HKCU "Software\${prodname}"
-  # Delete normal shortcuts
+  ; Delete normal shortcuts
   RMDir /r "$SMPROGRAMS\${prodname}"
-  # Delete any extra shortcuts
+  ; Delete any extra shortcuts
   Delete "$DESKTOP\BleachBit.lnk"
   Delete "$QUICKLAUNCH\BleachBit.lnk"
   Delete "$SMSTARTUP\BleachBit.lnk"
-  # Remove file association
+  ; Remove file association
   DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-  # Check for QuietUninstallString and SetErrorLevel
+  ; Check for QuietUninstallString and SetErrorLevel
   ClearErrors
   ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'QuietUninstallString'
   IfErrors 2 0
   SetErrorLevel 666
-  # Remove the uninstaller from registry as the very last step.
-  # If something goes wrong, let the user run it again.
+  ; Remove the uninstaller from registry as the very last step.
+  ; If something goes wrong, let the user run it again.
   !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
