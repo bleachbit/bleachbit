@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1007
+;  @scriptversion v2.3.1008
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -418,7 +418,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    IntOp $COMMAND_LINE_NO_DESKTOP_SHORTCUT 1 +
+    IntOp ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} + 1
   ${endif}
   ${GetOptions} "/currentuser /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
   ${ifnot} ${errors}
@@ -430,7 +430,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    IntOp $COMMAND_LINE_NO_DESKTOP_SHORTCUT 1 +
+    IntOp ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} + 1
   ${endif}
   ${if} ${errors}
     Goto command_line_help
