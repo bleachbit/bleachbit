@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1004
+;  @scriptversion v2.3.1005
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -69,7 +69,8 @@
   ;RequestExecutionLevel admin
 
   ;Best compression
-  SetCompressor /SOLID lzma
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
 
 
 ;--------------------------------
@@ -121,7 +122,7 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
 
-  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT
+  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT 0
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
@@ -293,12 +294,12 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
       "InternetShortcut" "URL" "https://www.bleachbit.org/"
   SectionEnd
 
-  ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} <> 1
-  Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
-    SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
-    CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-    Call RefreshShellIcons
-  SectionEnd
+  ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} = 0
+    Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
+      SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
+      CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+      Call RefreshShellIcons
+    SectionEnd
   ${endif}
 
   Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
@@ -416,7 +417,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    $COMMAND_LINE_no-desktop-shortcut = 1
+    $COMMAND_LINE_NO_DESKTOP_SHORTCUT = 1
   ${endif}
   ${GetOptions} "/currentuser /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
   ${ifnot} ${errors}
@@ -428,7 +429,7 @@ Function .onInit
     ; SetErrorLevel 2 - (un)installation aborted by script
     ;SetErrorLevel 2
     ;Quit
-    $COMMAND_LINE_no-desktop-shortcut = 1
+    $COMMAND_LINE_NO_DESKTOP_SHORTCUT = 1
   ${endif}
   ${if} ${errors}
     Goto command_line_help
