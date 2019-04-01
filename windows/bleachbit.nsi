@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1005
+;  @scriptversion v2.3.1006
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -294,13 +294,14 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
       "InternetShortcut" "URL" "https://www.bleachbit.org/"
   SectionEnd
 
-  ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} = 0
-    Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
+  Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
+    ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's 0 by default. If 1: NO DESKTOP SHORTCUT!
+    ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} <> 1
       SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
       CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
       Call RefreshShellIcons
-    SectionEnd
-  ${endif}
+    ${endif}
+  SectionEnd
 
   Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
