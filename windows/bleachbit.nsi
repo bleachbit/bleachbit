@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1009
+;  @scriptversion v2.3.1010
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -327,8 +327,8 @@ SectionEnd
 !ifndef NoSectionShred
 Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
   ; register file association verb
-  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
-  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
+  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" "$(BLEACHBIT_SHELL_TITLE)"
+  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe"
   WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 SectionEnd
 !endif
@@ -512,10 +512,12 @@ Section "Uninstall"
   Delete "$SMSTARTUP\BleachBit.lnk"
   ; Remove file association
   DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-  ; Check for QuietUninstallString and SetErrorLevel
+  ; Check for QuietUninstallString and SetErrorLevel 666
   ClearErrors
-  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'QuietUninstallString'
-  IfErrors 2 0
+  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString"
+  IfErrors 0 +3
+  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "QuietUninstallString"
+  IfErrors +2 0
   SetErrorLevel 666
   ; Remove the uninstaller from registry as the very last step.
   ; If something goes wrong, let the user run it again.
