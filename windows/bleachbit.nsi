@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1010
+;  @scriptversion v2.3.1011
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -363,103 +363,111 @@ Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
 
   command_line:
-  ; Copied from NsisMultiUser.nsh (starting line 480) and modified process parameters
+  ${GetParameters} $R0
+
+  ; Case: /?
   ${GetOptions} $R0 "/?" $R1
-  ${ifnot} ${errors}
+  ${IfNot} ${errors}
     Goto command_line_help
-  ${endif}
+  ${EndIf}
+
+  ; Case: -?
   ${GetOptions} $R0 "-?" $R1
-  ${ifnot} ${errors}
+  ${IfNot} ${errors}
     Goto command_line_help
-  ${endif}
+  ${EndIf}
+
+  ; Case: /h
   ${GetOptions} $R0 "/h" $R1
-  ${ifnot} ${errors}
+  ${IfNot} ${errors}
     Goto command_line_help
-  ${endif}
+  ${EndIf}
+
+  ; Case: -h
   ${GetOptions} $R0 "-h" $R1
-  ${ifnot} ${errors}
+  ${IfNot} ${errors}
     Goto command_line_help
-  ${endif}
+  ${EndIf}
+
+  ; Case: --help
   ${GetOptions} $R0 "--help" $R1
-  ${ifnot} ${errors}
+  ${IfNot} ${errors}
     Goto command_line_help
-  ${endif}
-  ${GetOptions} $R0 "/no-desktop-shortcut" $R1
-  ${ifnot} ${errors}
+  ${EndIf}
+
+  ; Case: /S /no-desktop-shortcut /D
+  ${If} $R0 == "/S /no-desktop-shortcut /D"
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
-      /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
-      $\tshortcut, must be last parameter before /D (if used),\r$\n\
-      $\tcase-sensitive"
-    ; SetErrorLevel 2 - (un)installation aborted by script
-    SetErrorLevel 2
-    Quit
-  ${endif}
-  ${GetOptions} "/S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
-  ${ifnot} ${errors}
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      Called: /S /no-desktop-shortcut /D$\r$\n\
       $\r$\n\
       /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
       $\tcase-sensitive$\r$\n\
-      /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
-      $\tshortcut, must be last parameter before /D (if used),\r$\n\
+      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
+      $\tcase-sensitive$\r$\n\
+      /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
+      $\twithout quotes, case-sensitive"
+    ; SetErrorLevel 2 - (un)installation aborted by script
+    SetErrorLevel 2
+    Quit
+  ${EndIf}
+
+  ; Case: /S /no-desktop-shortcut
+  ${If} $R0 == "/S /no-desktop-shortcut"
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /S /no-desktop-shortcut$\r$\n\
+      $\r$\n\
+      /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
+      $\tcase-sensitive$\r$\n\
+      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
       $\tcase-sensitive"
     ; SetErrorLevel 2 - (un)installation aborted by script
     SetErrorLevel 2
     Quit
-  ${endif}
-  ${GetOptions} "/allusers /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
-  ${ifnot} ${errors}
+  ${EndIf}
+
+  ; Case: /no-desktop-shortcut
+  ${If} $R0 == "/no-desktop-shortcut"
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
-      Called: /allusers /S /no-desktop-shortcut\r$\n\
+      Called: /no-desktop-shortcut$\r$\n\
       $\r$\n\
-      /no-desktop-shortcut$\t- Not implementedy, yet!"
+      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
+      $\tcase-sensitive"
     ; SetErrorLevel 2 - (un)installation aborted by script
-    ;SetErrorLevel 2
-    ;Quit
-    !define /redef COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
-  ${endif}
-  ${GetOptions} "/currentuser /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
-  ${ifnot} ${errors}
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /currentuser /S /no-desktop-shortcut\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut$\t- Not implementedy, yet!"
-    ; SetErrorLevel 2 - (un)installation aborted by script
-    ;SetErrorLevel 2
-    ;Quit
-    !define /redef COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
-  ${endif}
-  ${if} ${errors}
-    Goto command_line_help
-  ${endif}
+    SetErrorLevel 2
+    Quit
+  ${EndIf}
 
-  previous_version_check:
-  ; Check whether application is already installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-    "UninstallString"
-  ; If not already installed, skip uninstallation
-  StrCmp $R0 "" new_install
+  ; Case: /allusers or /currentuser (/S) /no-desktop-shortcut (/D)
+  ${GetOptions} $R0 "/no-desktop-shortcut" $R1
+  ${IfNot} ${errors}
+    Goto previous_version_check
+  ${EndIf}
 
-  upgrade_uninstall_msg:
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
-  ; SetErrorLevel 2 - (un)installation aborted by script
-  SetErrorLevel 2
-  Quit
+  ; Case: ""
+  ${GetOptions} $R0 "" $R1
+  ${IfNot} ${errors}
+    Goto previous_version_check
+  ${EndIf}
 
-  uninstall_old:
-  ; If installing in silent mode, also uninstall in silent mode
-  Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
-  IfSilent 0 +2
-  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
-  ExecWait $uninstaller_cmd $6
+  ; Case: /uninstall
+  ${GetOptions} $R0 "/uninstall" $R1
+  ${IfNot} ${errors}
+    Goto uninstall_old
+  ${EndIf}
 
-  new_install:
-  Goto end
+  ; In case of a unknow parameter:
+  MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+    $\r$\n\
+    Called: $R0$\r$\n\
+    $\r$\n\
+    $R0 - Parameter not known!"
+  Goto command_line_help
 
   command_line_help:
   ; Copied from NsisMultiUser.nsh (starting line 480) and modified process /? parameter
@@ -470,8 +478,8 @@ Function .onInit
     $\t/currentuser, case-insensitive$\r$\n\
     /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
     $\tcase-sensitive$\r$\n\
-    /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
-    $\tshortcut, must be last parameter before /D (if used),\r$\n\
+    /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+    $\tshortcut, must be last parameter before /D (if used),$\r$\n\
     $\tcase-sensitive$\r$\n\
     /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
     $\twithout quotes, case-sensitive$\r$\n\
@@ -491,6 +499,39 @@ Function .onInit
     other$\t- Windows error code when trying to start elevated instance"
   SetErrorLevel 0
   Quit
+
+  previous_version_check:
+  ; Check whether application is already installed
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+    "UninstallString"
+  ; If not already installed, skip uninstallation
+  StrCmp $R0 "" new_install
+  Goto upgrade_uninstall_msg
+
+  upgrade_uninstall_msg:
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
+  ; SetErrorLevel 2 - (un)installation aborted by script
+  SetErrorLevel 2
+  Quit
+
+  uninstall_old:
+  ; If installing in silent mode, also uninstall in silent mode
+  Var /GLOBAL uninstaller_cmd
+  StrCpy $uninstaller_cmd "$R0 _?=$INSTDIR"
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
+  ExecWait $uninstaller_cmd $6
+  ${If} $R0 == "/uninstall"
+    Quit
+  ${EndIf}
+  ${If} ErrorLevel = 1
+    Quit
+  ${EndIf}
+  Goto new_install
+
+  new_install:
+  Goto end
 
   end:
 FunctionEnd
