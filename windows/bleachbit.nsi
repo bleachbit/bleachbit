@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.1.2
+;  @scriptversion v2.1.3
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -228,14 +228,14 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"
 
-    # uninstaller
+    # Uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
-    # register uninstaller in Add/Remove Programs
+    # Register uninstaller in Add/Remove Programs
     !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "HelpLink" "https://www.bleachbit.org/help"
@@ -246,10 +246,17 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
 
     ; Restore QuietUninstallString
     ${if} $6 == 666
-        ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
-        WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-            "QuietUninstallString" "$7"
-        DeleteRegKey SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
+        ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+            ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
+            WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+                "QuietUninstallString" "$7"
+            DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
+        ${else}
+            ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
+            WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+                "QuietUninstallString" "$7"
+            DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
+        ${endif}
     ${endif}
 SectionEnd
 
