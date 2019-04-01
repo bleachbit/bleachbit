@@ -17,12 +17,29 @@
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;  2019-03-31 added better multi-language support by https://github.com/Tobias-B-Besemer
+;  @app BleachBit NSIS Installer Script
+;  @url https://nsis.sourceforge.io/Main_Page
+;  @os Windows
+;  @scriptversion v2.0.0
+;  @scriptdate 2019-04-01
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
+;  @tested ok v2.0.0, Windows 7
+;  @testeddate 2019-04-01
+;  @testedby https://github.com/Tobias-B-Besemer
+;  @note 
+
+
+;--------------------------------
+;Include FileFunc.nsh
+;for e.g. command line arguments managment requested by issue #437 "Install option to skip desktop icon"
+
+  !include FileFunc.nsh
+
 
 ;--------------------------------
 ;Include Modern UI
 
-  !include "MUI2.nsh"
+  !include MUI2.nsh
 
 
 ;--------------------------------
@@ -76,6 +93,7 @@
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
 !define MULTIUSER_INSTALLMODE_64_BIT 0
+!define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
 
 
 ;--------------------------------
@@ -105,7 +123,7 @@
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-  !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site"
+  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
   !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
   !insertmacro MUI_PAGE_FINISH
 
@@ -174,6 +192,7 @@
 
 !include NsisMultiUserLang.nsh
 
+
 ;--------------------------------
 ;Function
 
@@ -184,9 +203,10 @@ Function RefreshShellIcons
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
 FunctionEnd
 
+
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "$(BLEACHBIT_SECTION_CORE_TITLE)" SectionCore (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
@@ -226,8 +246,8 @@ Section Core (Required)
 SectionEnd
 
 
-SectionGroup /e Shortcuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(BLEACHBIT_SECTIONGROUP_SHORTCUTS_TITLE)" SectionShortcuts
+    Section "$(BLEACHBIT_SECTION_STARTMENU_TITLE)" SectionStartMenu
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
@@ -239,29 +259,28 @@ SectionGroup /e Shortcuts
         WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(BLEACHBIT_SECTION_DESKTOP_TITLE)" SectionDesktop
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
-    Section /o "Quick launch" SectionQuickLaunch
+    Section /o "$(BLEACHBIT_SECTION_QUICKLAUNCH_TITLE)" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
-    Section /o "Start automatically" SectionStartUp
+    Section /o "$(BLEACHBIT_SECTION_AUTOSTART_TITLE)" SectionAutostart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
-
 SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
+Section "$(BLEACHBIT_SECTION_TRANSLATIONS_TITLE)" SectionTranslations
     SetOutPath $INSTDIR\share\locale
     File /r "..\dist\share\locale\*.*"
 SectionEnd
@@ -269,9 +288,10 @@ SectionEnd
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-Section "Integrate Shred" SectionShred
+Section "$(BLEACHBIT_SECTION_INTEGRATESHRED_TITLE)" SectionShred
     # register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 SectionEnd
 !endif
@@ -283,6 +303,18 @@ Section "-Write Install Size"
     !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
 SectionEnd
 
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_SECTION_CORE_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_SECTIONGROUP_SHORTCUTS_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_SECTION_STARTMENU_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_SECTION_DESKTOP_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_SECTION_QUICKLAUNCH_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_SECTION_AUTOSTART_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_SECTION_TRANSLATIONS_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_SECTION_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
 ;--------------------------------
 ;Installer Functions
 
@@ -293,18 +325,54 @@ Function .onInit
   ; Language display dialog
   !insertmacro MUI_LANGDLL_DISPLAY
 
+  command_line:
+  ; Copied from NsisMultiUser.nsh (starting line 480) and modified
+  ; process parameters
+  ${GetOptions} $R0 "/?" $R1
+  ${ifnot} ${errors}
+    Goto command_line_help
+  ${endif}
+  ${GetOptions} $R0 "-?" $R1
+  ${ifnot} ${errors}
+    Goto command_line_help
+  ${endif}
+  ${GetOptions} $R0 "/h" $R1
+  ${ifnot} ${errors}
+    Goto command_line_help
+  ${endif}
+  ${GetOptions} $R0 "-h" $R1
+  ${ifnot} ${errors}
+    Goto command_line_help
+  ${endif}
+  ${GetOptions} $R0 "--help" $R1
+  ${ifnot} ${errors}
+    Goto command_line_help
+  ${endif}
+  ${GetOptions} $R0 "/no-desktop-shortcut" $R1
+  ${ifnot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      /no-desktop-shortcut$\t- Not implementedy, yet!"
+    ; SetErrorLevel 2 - (un)installation aborted by script
+    SetErrorLevel 2
+    Quit
+  ${endif}
+  ${if} ${errors}
+    Goto command_line_help
+  ${endif}
+
+  previous_version_check:
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
      "UninstallString"
-
   ; If not already installed, skip uninstallation
   StrCmp $R0 "" new_install
 
+  upgrade_uninstall_msg:
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     $(BLEACHBIT_UPGRADE_UNINSTALL) \
     /SD IDOK \
     IDOK uninstall_old
-
   Abort
 
   uninstall_old:
@@ -316,8 +384,39 @@ Function .onInit
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
+  Goto :end
 
+  command_line_help:
+  ; Copied from NsisMultiUser.nsh (starting line 480) and modified
+  ; process /? parameter
+  MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
+    /allusers$\t- (un)install for all users, case-insensitive$\r$\n\
+    /currentuser - (un)install for current user only, case-insensitive$\r$\n\
+    /uninstall$\t- (installer only) run uninstaller, requires /allusers or$\r$\n\
+    $\t/currentuser, case-insensitive$\r$\n\
+    /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
+    $\tcase-sensitive$\r$\n\
+    /no-desktop-shortcut$\t- (installer only) install without desktop$\r$\n\
+    $\tshortcut, must be second last parameter$\r$\n\
+    /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
+    $\twithout quotes, case-sensitive$\r$\n\
+    /?$\t- display this message$\r$\n\
+    $\r$\n\
+    $\r$\n\
+    Return codes (decimal):$\r$\n\
+    0$\t- normal execution (no error)$\r$\n\
+    1$\t- (un)installation aborted by user (Cancel button)$\r$\n\
+    2$\t- (un)installation aborted by script$\r$\n\
+    666660$\t- invalid command-line parameters$\r$\n\
+    666661$\t- elevation is not allowed by defines$\r$\n\
+    666662$\t- uninstaller detected there's no installed version$\r$\n\
+    666663$\t- executing uninstaller from the installer failed$\r$\n\
+    666666$\t- cannot start elevated instance$\r$\n\
+    other$\t- Windows error code when trying to start elevated instance"
+  SetErrorLevel 0
+  Quit
 
+  end:
 FunctionEnd
 
 
