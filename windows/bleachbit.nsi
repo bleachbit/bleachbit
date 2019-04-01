@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.0.4
+;  @scriptversion v2.1.0
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -121,6 +121,8 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
 
+  !define COMMAND_LINE_no-desktop-shortcut
+
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
   !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
@@ -206,7 +208,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section "-$(BLEACHBIT_SECTION_CORE_TITLE)" SectionCore ; (Required)
+Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
@@ -229,7 +231,6 @@ Section "-$(BLEACHBIT_SECTION_CORE_TITLE)" SectionCore ; (Required)
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
-
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
@@ -242,12 +243,18 @@ Section "-$(BLEACHBIT_SECTION_CORE_TITLE)" SectionCore ; (Required)
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-    ; FIXME later: Restore QuietUninstallString
+
+    ; Restore QuietUninstallString
+    ${if} $6=666
+        ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'UninstallString'
+        WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+            "QuietUninstallString" "$7"
+        DeleteRegKey SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'UninstallString'
+    ${endif}
 SectionEnd
 
-
-SectionGroup /e "$(BLEACHBIT_SECTIONGROUP_SHORTCUTS_TITLE)" SectionShortcuts
-    Section "$(BLEACHBIT_SECTION_STARTMENU_TITLE)" SectionStartMenu
+SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
+    Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
@@ -259,28 +266,29 @@ SectionGroup /e "$(BLEACHBIT_SECTIONGROUP_SHORTCUTS_TITLE)" SectionShortcuts
         WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
 
-    Section "$(BLEACHBIT_SECTION_DESKTOP_TITLE)" SectionDesktop
+    ${ifnot} COMMAND_LINE_no-desktop-shortcut = 1
+    Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
+    ${endif}
 
-    Section /o "$(BLEACHBIT_SECTION_QUICKLAUNCH_TITLE)" SectionQuickLaunch
+    Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
-    Section /o "$(BLEACHBIT_SECTION_AUTOSTART_TITLE)" SectionAutostart
+    Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 SectionGroupEnd
 
-
 !ifndef NoTranslations
-Section "$(BLEACHBIT_SECTION_TRANSLATIONS_TITLE)" SectionTranslations
+Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionTranslations
     SetOutPath $INSTDIR\share\locale
     File /r "..\dist\share\locale\*.*"
 SectionEnd
@@ -288,7 +296,7 @@ SectionEnd
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-Section "$(BLEACHBIT_SECTION_INTEGRATESHRED_TITLE)" SectionShred
+Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
     # register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
@@ -304,14 +312,14 @@ Section "-Write Install Size"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_SECTION_CORE_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_SECTIONGROUP_SHORTCUTS_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_SECTION_STARTMENU_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_SECTION_DESKTOP_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_SECTION_QUICKLAUNCH_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_SECTION_AUTOSTART_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_SECTION_TRANSLATIONS_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_SECTION_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+!insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -352,6 +360,44 @@ Function .onInit
   ${ifnot} ${errors}
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
+      /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
+      $\tshortcut, must be last parameter before /D (if used),\r$\n\
+      $\tcase-sensitive"
+    ; SetErrorLevel 2 - (un)installation aborted by script
+    SetErrorLevel 2
+    Quit
+  ${endif}
+  ${GetOptions} "/S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
+  ${ifnot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
+      $\tcase-sensitive$\r$\n\
+      /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
+      $\tshortcut, must be last parameter before /D (if used),\r$\n\
+      $\tcase-sensitive"
+    ; SetErrorLevel 2 - (un)installation aborted by script
+    SetErrorLevel 2
+    Quit
+  ${endif}
+  ${GetOptions} "/allusers /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
+  ${ifnot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /allusers /S /no-desktop-shortcut\r$\n\
+      $\r$\n\
+      /no-desktop-shortcut$\t- Not implementedy, yet!"
+    ; SetErrorLevel 2 - (un)installation aborted by script
+    SetErrorLevel 2
+    ;Quit
+    $COMMAND_LINE_no-desktop-shortcut = 1
+  ${endif}
+  ${GetOptions} "/currentuser /S /no-desktop-shortcut" "/no-desktop-shortcut" $R1
+  ${ifnot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /currentuser /S /no-desktop-shortcut\r$\n\
+      $\r$\n\
       /no-desktop-shortcut$\t- Not implementedy, yet!"
     ; SetErrorLevel 2 - (un)installation aborted by script
     SetErrorLevel 2
@@ -369,8 +415,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   upgrade_uninstall_msg:
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK
-  IDOK uninstall_old
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
   ; SetErrorLevel 2 - (un)installation aborted by script
   SetErrorLevel 2
   Quit
@@ -381,7 +426,8 @@ Function .onInit
   StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ExecWait $uninstaller_cmd ; Actually run the uninstaller
+  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
+  ExecWait $uninstaller_cmd $6
 
   new_install:
   Goto end
@@ -397,7 +443,8 @@ Function .onInit
     /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
     $\tcase-sensitive$\r$\n\
     /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
-    $\tshortcut, must be second last parameter$\r$\n\
+    $\tshortcut, must be last parameter before /D (if used),\r$\n\
+    $\tcase-sensitive$\r$\n\
     /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
     $\twithout quotes, case-sensitive$\r$\n\
     /?$\t- display this message$\r$\n\
@@ -436,6 +483,11 @@ Section "Uninstall"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # remove file association
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+    # Check for QuietUninstallString and SetErrorLevel
+    ClearErrors
+    ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'QuietUninstallString'
+    IfErrors 2 0
+    SetErrorLevel 666
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
