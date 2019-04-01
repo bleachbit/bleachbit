@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.1.3
+;  @scriptversion v2.3.1003
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -121,7 +121,7 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
 
-  !define COMMAND_LINE_no-desktop-shortcut
+  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
@@ -138,8 +138,10 @@
 ;--------------------------------
 ;Languages
 
+;Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
   !insertmacro MUI_LANGUAGE "English"
 !ifndef NoTranslations
+; !insertmacro MUI_LANGUAGE "AFRIKAANS"
   !insertmacro MUI_LANGUAGE "Albanian"
   !insertmacro MUI_LANGUAGE "Arabic"
   !insertmacro MUI_LANGUAGE "Armenian"
@@ -147,47 +149,63 @@
   !insertmacro MUI_LANGUAGE "Basque"
   !insertmacro MUI_LANGUAGE "Belarusian"
   !insertmacro MUI_LANGUAGE "Bosnian"
+; !insertmacro MUI_LANGUAGE "BRETON"
   !insertmacro MUI_LANGUAGE "Bulgarian"
   !insertmacro MUI_LANGUAGE "Catalan"
+; !insertmacro MUI_LANGUAGE "CORSICAN"
   !insertmacro MUI_LANGUAGE "Croatian"
   !insertmacro MUI_LANGUAGE "Czech"
   !insertmacro MUI_LANGUAGE "Danish"
   !insertmacro MUI_LANGUAGE "Dutch"
+; !insertmacro MUI_LANGUAGE "ESPERANTO"
   !insertmacro MUI_LANGUAGE "Estonian"
+; !insertmacro MUI_LANGUAGE "FARSI"
   !insertmacro MUI_LANGUAGE "Finnish"
   !insertmacro MUI_LANGUAGE "French"
   !insertmacro MUI_LANGUAGE "Galician"
+; !insertmacro MUI_LANGUAGE "GEORGIAN"
   !insertmacro MUI_LANGUAGE "German"
   !insertmacro MUI_LANGUAGE "Greek"
   !insertmacro MUI_LANGUAGE "Hebrew"
   !insertmacro MUI_LANGUAGE "Hungarian"
+; !insertmacro MUI_LANGUAGE "ICELANDIC"
   !insertmacro MUI_LANGUAGE "Indonesian"
+; !insertmacro MUI_LANGUAGE "IRISH"
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro MUI_LANGUAGE "Japanese"
   !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro MUI_LANGUAGE "Kurdish"
   !insertmacro MUI_LANGUAGE "Latvian"
   !insertmacro MUI_LANGUAGE "Lithuanian"
+; !insertmacro MUI_LANGUAGE "LUXEMBOURGISH"
+; !insertmacro MUI_LANGUAGE "MACEDONIAN"
   !insertmacro MUI_LANGUAGE "Malay"
+; !insertmacro MUI_LANGUAGE "MONGOLIAN"
   !insertmacro MUI_LANGUAGE "Norwegian"
   !insertmacro MUI_LANGUAGE "NorwegianNynorsk"
+; !insertmacro MUI_LANGUAGE "PASHTO"
   !insertmacro MUI_LANGUAGE "Polish"
   !insertmacro MUI_LANGUAGE "Portuguese"
   !insertmacro MUI_LANGUAGE "PortugueseBR"
   !insertmacro MUI_LANGUAGE "Romanian"
   !insertmacro MUI_LANGUAGE "Russian"
+; !insertmacro MUI_LANGUAGE "SCOTSGAELIC"
   !insertmacro MUI_LANGUAGE "Serbian"
+; !insertmacro MUI_LANGUAGE "SERBIANLATIN"
   !insertmacro MUI_LANGUAGE "SimpChinese"
   !insertmacro MUI_LANGUAGE "Slovak"
   !insertmacro MUI_LANGUAGE "Slovenian"
   !insertmacro MUI_LANGUAGE "Spanish"
+; !insertmacro MUI_LANGUAGE "SPANISHINTERNATIONAL"
   !insertmacro MUI_LANGUAGE "Swedish"
+; !insertmacro MUI_LANGUAGE "TATAR"
   !insertmacro MUI_LANGUAGE "Thai"
   !insertmacro MUI_LANGUAGE "TradChinese"
   !insertmacro MUI_LANGUAGE "Turkish"
   !insertmacro MUI_LANGUAGE "Ukrainian"
   !insertmacro MUI_LANGUAGE "Uzbek"
   !insertmacro MUI_LANGUAGE "Vietnamese"
+; !insertmacro MUI_LANGUAGE "WELSH"
 !endif
 
 !include bleachbit_lang.nsh
@@ -209,105 +227,107 @@ FunctionEnd
 ;--------------------------------
 ;Default section
 Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
-    SectionIn RO
+  SectionIn RO
 
-    SetOutPath $INSTDIR
-    File "..\dist\*.*"
-    File "..\COPYING"
-    SetOutPath $INSTDIR\etc
-    File /r "..\dist\etc\*.*"
-    SetOutPath $INSTDIR\lib
-    File /r "..\dist\lib\*.*"
-    SetOutPath $INSTDIR\share
-    File "..\dist\share\bleachbit.png"
-    SetOutPath $INSTDIR\share\cleaners
-    File /r "..\dist\share\cleaners\*.*"
-    SetOutPath $INSTDIR\share\themes
-    File /r "..\dist\share\themes\*.*"
+  SetOutPath $INSTDIR
+  File "..\dist\*.*"
+  File "..\COPYING"
+  SetOutPath $INSTDIR\etc
+  File /r "..\dist\etc\*.*"
+  SetOutPath $INSTDIR\lib
+  File /r "..\dist\lib\*.*"
+  SetOutPath $INSTDIR\share
+  File "..\dist\share\bleachbit.png"
+  SetOutPath $INSTDIR\share\cleaners
+  File /r "..\dist\share\cleaners\*.*"
+  SetOutPath $INSTDIR\share\themes
+  File /r "..\dist\share\themes\*.*"
 
-    SetOutPath "$INSTDIR\share\"
-    File "..\bleachbit.png"
+  SetOutPath "$INSTDIR\share\"
+  File "..\bleachbit.png"
 
-    # Uninstaller
-    WriteUninstaller "$INSTDIR\uninstall.exe"
+  # Uninstaller
+  WriteUninstaller "$INSTDIR\uninstall.exe"
 
-    SetOutPath "$INSTDIR\"
-    CreateDirectory "$SMPROGRAMS\${prodname}"
-    CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+  SetOutPath "$INSTDIR\"
+  CreateDirectory "$SMPROGRAMS\${prodname}"
+  CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
-    # Register uninstaller in Add/Remove Programs
-    !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-        "HelpLink" "https://www.bleachbit.org/help"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-        "URLInfoAbout" "https://www.bleachbit.org/"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-        "URLUpdateInfo" "https://www.bleachbit.org/download"
+  # Register uninstaller in Add/Remove Programs
+  !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    "HelpLink" "https://www.bleachbit.org/help"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    "URLInfoAbout" "https://www.bleachbit.org/"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    "URLUpdateInfo" "https://www.bleachbit.org/download"
 
-    ; Restore QuietUninstallString
-    ${if} $6 == 666
-        ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
-            ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
-            WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-                "QuietUninstallString" "$7"
-            DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
-        ${else}
-            ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
-            WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-                "QuietUninstallString" "$7"
-            DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
-        ${endif}
+  ; Restore QuietUninstallString
+  ${if} $6 == 666
+    ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+      ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
+      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+        "QuietUninstallString" "$7"
+      DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
+    ${else}
+      ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
+      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+        "QuietUninstallString" "$7"
+      DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
     ${endif}
+  ${endif}
 SectionEnd
 
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
-    Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
-        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
-            "$INSTDIR\${prodname}.exe" \
-            "--no-uac --gui"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
-            "$INSTDIR\${prodname}_console.exe"
-        Call RefreshShellIcons
-        WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
-    SectionEnd
+  Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
+    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" \
+      "$INSTDIR\${prodname}.exe"
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC)" \
+      "$INSTDIR\${prodname}.exe" \
+      "--no-uac --gui"
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL)" \
+      "$INSTDIR\${prodname}_console.exe"
+    Call RefreshShellIcons
+    WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE).url" \
+      "InternetShortcut" "URL" "https://www.bleachbit.org/"
+  SectionEnd
 
-    ${ifnot} COMMAND_LINE_no-desktop-shortcut = 1
-    Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
-        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-        Call RefreshShellIcons
-    SectionEnd
-    ${endif}
+  ${ifnot} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} == 1
+  Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
+    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    Call RefreshShellIcons
+  SectionEnd
+  ${endif}
 
-    Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
-        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-        Call RefreshShellIcons
-    SectionEnd
+  Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
+    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    Call RefreshShellIcons
+  SectionEnd
 
-    Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
-        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-        Call RefreshShellIcons
-    SectionEnd
+  Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
+    SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
+    CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    Call RefreshShellIcons
+  SectionEnd
 SectionGroupEnd
 
 !ifndef NoTranslations
 Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionTranslations
-    SetOutPath $INSTDIR\share\locale
-    File /r "..\dist\share\locale\*.*"
+  SetOutPath $INSTDIR\share\locale
+  File /r "..\dist\share\locale\*.*"
 SectionEnd
 !endif
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
 Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
-    # register file association verb
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
+  # register file association verb
+  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" '$(BLEACHBIT_SHELL_TITLE)'
+  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" '$INSTDIR\bleachbit.exe'
+  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
 SectionEnd
 !endif
 
@@ -319,14 +339,14 @@ Section "-Write Install Size"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
-!insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -341,8 +361,7 @@ Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
 
   command_line:
-  ; Copied from NsisMultiUser.nsh (starting line 480) and modified
-  ; process parameters
+  ; Copied from NsisMultiUser.nsh (starting line 480) and modified process parameters
   ${GetOptions} $R0 "/?" $R1
   ${ifnot} ${errors}
     Goto command_line_help
@@ -441,8 +460,7 @@ Function .onInit
   Goto end
 
   command_line_help:
-  ; Copied from NsisMultiUser.nsh (starting line 480) and modified
-  ; process /? parameter
+  ; Copied from NsisMultiUser.nsh (starting line 480) and modified process /? parameter
   MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
     /allusers$\t- (un)install for all users, case-insensitive$\r$\n\
     /currentuser - (un)install for current user only, case-insensitive$\r$\n\
@@ -482,24 +500,24 @@ FunctionEnd
 UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 
 Section "Uninstall"
-    RMDir /r "$INSTDIR"
-    DeleteRegKey HKCU "Software\${prodname}"
-    # delete normal shortcuts
-    RMDir /r "$SMPROGRAMS\${prodname}"
-    # delete any extra shortcuts
-    Delete "$DESKTOP\BleachBit.lnk"
-    Delete "$QUICKLAUNCH\BleachBit.lnk"
-    Delete "$SMSTARTUP\BleachBit.lnk"
-    # remove file association
-    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-    # Check for QuietUninstallString and SetErrorLevel
-    ClearErrors
-    ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'QuietUninstallString'
-    IfErrors 2 0
-    SetErrorLevel 666
-    # Remove the uninstaller from registry as the very last step.
-    # If something goes wrong, let the user run it again.
-    !insertmacro MULTIUSER_RegistryRemoveInstallInfo
+  RMDir /r "$INSTDIR"
+  DeleteRegKey HKCU "Software\${prodname}"
+  # Delete normal shortcuts
+  RMDir /r "$SMPROGRAMS\${prodname}"
+  # Delete any extra shortcuts
+  Delete "$DESKTOP\BleachBit.lnk"
+  Delete "$QUICKLAUNCH\BleachBit.lnk"
+  Delete "$SMSTARTUP\BleachBit.lnk"
+  # Remove file association
+  DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+  # Check for QuietUninstallString and SetErrorLevel
+  ClearErrors
+  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" 'QuietUninstallString'
+  IfErrors 2 0
+  SetErrorLevel 666
+  # Remove the uninstaller from registry as the very last step.
+  # If something goes wrong, let the user run it again.
+  !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
 
