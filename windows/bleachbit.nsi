@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.0.3
+;  @scriptversion v2.0.4
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -364,16 +364,16 @@ Function .onInit
   previous_version_check:
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-     "UninstallString"
+    "UninstallString"
   ; If not already installed, skip uninstallation
   StrCmp $R0 "" new_install
 
   upgrade_uninstall_msg:
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    $(BLEACHBIT_UPGRADE_UNINSTALL) \
-    /SD IDOK \
-    IDOK uninstall_old
-  Abort
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK
+  IDOK uninstall_old
+  ; SetErrorLevel 2 - (un)installation aborted by script
+  SetErrorLevel 2
+  Quit
 
   uninstall_old:
   ; If installing in silent mode, also uninstall in silent mode
