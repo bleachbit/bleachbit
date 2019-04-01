@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1011
+;  @scriptversion v2.3.1012
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -368,30 +368,35 @@ Function .onInit
   ; Case: /?
   ${GetOptions} $R0 "/?" $R1
   ${IfNot} ${errors}
+    SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
   ; Case: -?
   ${GetOptions} $R0 "-?" $R1
   ${IfNot} ${errors}
+    SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
   ; Case: /h
   ${GetOptions} $R0 "/h" $R1
   ${IfNot} ${errors}
+    SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
   ; Case: -h
   ${GetOptions} $R0 "-h" $R1
   ${IfNot} ${errors}
+    SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
   ; Case: --help
   ${GetOptions} $R0 "--help" $R1
   ${IfNot} ${errors}
+    SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
@@ -401,13 +406,14 @@ Function .onInit
       $\r$\n\
       Called: /S /no-desktop-shortcut /D$\r$\n\
       $\r$\n\
-      /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
-      $\tcase-sensitive$\r$\n\
+      $\r$\n\
+      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
       /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
-      $\tcase-sensitive$\r$\n\
+      shortcut, must be last parameter before '/D' (if used), case-sensitive$\r$\n\
+      $\r$\n\
       /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
-      $\twithout quotes, case-sensitive"
+      without quotes, case-sensitive"
     ; SetErrorLevel 2 - (un)installation aborted by script
     SetErrorLevel 2
     Quit
@@ -419,11 +425,11 @@ Function .onInit
       $\r$\n\
       Called: /S /no-desktop-shortcut$\r$\n\
       $\r$\n\
-      /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
-      $\tcase-sensitive$\r$\n\
+      $\r$\n\
+      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
       /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
-      $\tcase-sensitive"
+      shortcut, must be last parameter before '/D' (if used), case-sensitive"
     ; SetErrorLevel 2 - (un)installation aborted by script
     SetErrorLevel 2
     Quit
@@ -435,9 +441,9 @@ Function .onInit
       $\r$\n\
       Called: /no-desktop-shortcut$\r$\n\
       $\r$\n\
+      $\r$\n\
       /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      $\tshortcut, must be last parameter before /D (if used),$\r$\n\
-      $\tcase-sensitive"
+      shortcut, must be last parameter before '/D' (if used), case-sensitive"
     ; SetErrorLevel 2 - (un)installation aborted by script
     SetErrorLevel 2
     Quit
@@ -449,16 +455,15 @@ Function .onInit
     Goto previous_version_check
   ${EndIf}
 
-  ; Case: ""
-  ${GetOptions} $R0 "" $R1
-  ${IfNot} ${errors}
-    Goto previous_version_check
-  ${EndIf}
-
   ; Case: /uninstall
   ${GetOptions} $R0 "/uninstall" $R1
   ${IfNot} ${errors}
     Goto uninstall_old
+  ${EndIf}
+
+  ; Case: No Parameter
+  ${If} $R0 == ""
+    Goto previous_version_check
   ${EndIf}
 
   ; In case of a unknow parameter:
@@ -467,22 +472,27 @@ Function .onInit
     Called: $R0$\r$\n\
     $\r$\n\
     $R0 - Parameter not known!"
+  SetErrorLevel 2
   Goto command_line_help
 
   command_line_help:
   ; Copied from NsisMultiUser.nsh (starting line 480) and modified process /? parameter
   MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
     /allusers$\t- (un)install for all users, case-insensitive$\r$\n\
+    $\r$\n\
     /currentuser - (un)install for current user only, case-insensitive$\r$\n\
-    /uninstall$\t- (installer only) run uninstaller, requires /allusers or$\r$\n\
-    $\t/currentuser, case-insensitive$\r$\n\
-    /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
-    $\tcase-sensitive$\r$\n\
+    $\r$\n\
+    /uninstall$\t- (installer only) run uninstaller, requires '/allusers' or$\r$\n\
+    '/currentuser', case-insensitive$\r$\n\
+    $\r$\n\
+    /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+    $\r$\n\
     /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-    $\tshortcut, must be last parameter before /D (if used),$\r$\n\
-    $\tcase-sensitive$\r$\n\
+    shortcut, must be last parameter before '/D' (if used), case-sensitive$\r$\n\
+    $\r$\n\
     /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
-    $\twithout quotes, case-sensitive$\r$\n\
+    without quotes, case-sensitive$\r$\n\
+    $\r$\n\
     /?$\t- display this message$\r$\n\
     $\r$\n\
     $\r$\n\
@@ -497,7 +507,6 @@ Function .onInit
     666663$\t- executing uninstaller from the installer failed$\r$\n\
     666666$\t- cannot start elevated instance$\r$\n\
     other$\t- Windows error code when trying to start elevated instance"
-  SetErrorLevel 0
   Quit
 
   previous_version_check:
@@ -525,6 +534,7 @@ Function .onInit
   ${If} $R0 == "/uninstall"
     Quit
   ${EndIf}
+  ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ${If} ErrorLevel = 1
     Quit
   ${EndIf}
