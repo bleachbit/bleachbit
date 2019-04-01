@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.0.2
+;  @scriptversion v2.0.3
 ;  @scriptdate 2019-04-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
 ;  @tested ok v2.0.0, Windows 7
@@ -384,7 +384,7 @@ Function .onInit
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
-  Goto :end
+  Goto end
 
   command_line_help:
   ; Copied from NsisMultiUser.nsh (starting line 480) and modified
@@ -396,7 +396,7 @@ Function .onInit
     $\t/currentuser, case-insensitive$\r$\n\
     /S$\t- silent mode, requires /allusers or /currentuser,$\r$\n\
     $\tcase-sensitive$\r$\n\
-    /no-desktop-shortcut$\t- (installer only) install without desktop$\r$\n\
+    /no-desktop-shortcut$\t- (silent mode only) install without desktop$\r$\n\
     $\tshortcut, must be second last parameter$\r$\n\
     /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
     $\twithout quotes, case-sensitive$\r$\n\
@@ -417,7 +417,6 @@ Function .onInit
   Quit
 
   end:
-
 FunctionEnd
 
 
