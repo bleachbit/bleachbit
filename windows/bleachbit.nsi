@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1020
+;  @scriptversion v2.3.1021
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -96,7 +96,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
-;Multi-User
+;MultiUser
 
 ; See https://github.com/Drizin/NsisMultiUser
 !addplugindir /x86-ansi ".\NsisPluginsAnsi\"
@@ -113,9 +113,68 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
+!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
 !define MULTIUSER_INSTALLMODE_64_BIT 0
 !define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
+
+
+;--------------------------------
+;Insert Macro MULTIUSER_INIT
+
+!insertmacro MULTIUSER_INIT
+
+
+;--------------------------------
+;Pages
+
+; Installer:
+  !insertmacro MUI_PAGE_WELCOME
+  !insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
+  !insertmacro MULTIUSER_PAGE_INSTALLMODE
+  !insertmacro MUI_PAGE_DIRECTORY
+  !insertmacro MUI_PAGE_COMPONENTS
+  !insertmacro MUI_PAGE_INSTFILES
+
+  !define MUI_FINISHPAGE_NOAUTOCLOSE
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+  !define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
+  !insertmacro MUI_PAGE_FINISH
+
+; Uninstaller:
+  ; !insertmacro MUI_UNPAGE_WELCOME
+  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
+  !insertmacro MUI_UNPAGE_CONFIRM
+  ; !insertmacro MUI_UNPAGE_COMPONENTS
+  !insertmacro MUI_UNPAGE_INSTFILES
+  ; !insertmacro MUI_UNPAGE_FINISH
+
+; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
+
+
+;--------------------------------
+;Descriptions for the Installer Components
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
+
+;Assign descriptions to sections
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+;--------------------------------
+;Insert Macro MUI_LANGDLL_DISPLAY
+
+; Language display dialog
+!insertmacro MUI_LANGDLL_DISPLAY
 
 
 ;--------------------------------
@@ -124,20 +183,25 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !define MUI_ABORTWARNING
 
 ; Show all languages, despite user's codepage
+; https://nsis.sourceforge.io/Why_does_the_language_selection_dialog_hide_some_languages
 !define MUI_LANGDLL_ALLLANGUAGES
 
 
 ;--------------------------------
 ;Language Selection Dialog Settings
 
+; Better not doing that, or the user can never ever change his language!
+
 ; Remember the installer language
-!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
-!define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
-!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+; !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+; !define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
+; !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 
 ;--------------------------------
 ;Languages
+
+; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
 ; Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
 !insertmacro MUI_LANGUAGE "English"
@@ -524,10 +588,10 @@ Function .onInit
 
   previous_version_check:
   ; Check whether application is already installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
     "UninstallString"
   ; If not already installed, skip uninstallation
-  StrCmp $R0 "" new_install
+  StrCmp $R1 "" new_install
   Goto upgrade_uninstall_msg
 
   upgrade_uninstall_msg:
@@ -539,20 +603,22 @@ Function .onInit
   uninstall_old:
   ; If installing in silent mode, also uninstall in silent mode
   Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd "$R0 _?=$INSTDIR"
+  StrCpy $uninstaller_cmd "$R9 _?=$INSTDIR"
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
   ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
-  ExecWait $uninstaller_cmd ${ERRORLEVEL}
+  ExecWait $uninstaller_cmd $R6
+  !define ERRORLEVEL "$R6"
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
   ; Debug-Box:
-  MessageBox MB_ICONINFORMATION "ErrorLevel: ${ERRORLEVEL}"
+  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / ${ERRORLEVEL} / $R0"
   ${If} ${ERRORLEVEL} == "1"
   ${OrIf} ${ERRORLEVEL} == "2"
     Abort
   ${EndIf}
-  ${If} $R0 == "/uninstall"
+  ${GetOptionsS} $R0 "/uninstall" $R1
+  ${IfNot} ${errors}
     Abort
   ${EndIf}
   Goto new_install
@@ -574,61 +640,6 @@ Function RefreshShellIcons
   !define SHCNF_IDLIST 0
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
 FunctionEnd
-
-
-;--------------------------------
-;Pages
-
-; Installer:
-  ; !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
-  !insertmacro MULTIUSER_PAGE_INSTALLMODE
-  !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_COMPONENTS
-  !insertmacro MUI_PAGE_INSTFILES
-
-  !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-  !define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
-  !insertmacro MUI_PAGE_FINISH
-
-; Uninstaller:
-  ; !insertmacro MUI_UNPAGE_WELCOME
-  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-  !insertmacro MUI_UNPAGE_CONFIRM
-  ; !insertmacro MUI_UNPAGE_COMPONENTS
-  !insertmacro MUI_UNPAGE_INSTFILES
-  ; !insertmacro MUI_UNPAGE_FINISH
-
-
-;--------------------------------
-;Insert Macro
-
-; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
-
-; Language display dialog
-!insertmacro MUI_LANGDLL_DISPLAY
-
-!insertmacro MULTIUSER_INIT
-
-
-;--------------------------------
-;Descriptions for the Installer Components
-
-;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
-
-;Assign descriptions to sections
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ;--------------------------------
