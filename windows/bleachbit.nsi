@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1016
+;  @scriptversion v2.3.1017
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -38,20 +38,6 @@
 
 
 ;--------------------------------
-;Packing
-
-; Best compression
-; SetCompressor /SOLID lzma
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
-
-; Reserve Files
-; If you are using solid compression, files that are required before
-; the actual installation should be stored first in the data block,
-; because this will make your installer start faster.
-!insertmacro MUI_RESERVEFILE_LANGDLL
-
-
-;--------------------------------
 ;Include FileFunc.nsh
 
 ; FileFunc.nsh for e.g. command line arguments managment requested
@@ -63,6 +49,20 @@
 ;Include Modern UI
 
 !include MUI2.nsh
+
+
+;--------------------------------
+;Packing
+
+; Best compression
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+
+; Reserve Files
+; If you are using solid compression, files that are required before
+; the actual installation should be stored first in the data block,
+; because this will make your installer start faster.
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 
 ;--------------------------------
