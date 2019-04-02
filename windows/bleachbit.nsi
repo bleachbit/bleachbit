@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1015
+;  @scriptversion v2.3.1016
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -30,25 +30,48 @@
 
 
 ;--------------------------------
-;Include FileFunc.nsh
-;for e.g. command line arguments managment requested by issue #437 "Install option to skip desktop icon"
+;System
 
-  !include FileFunc.nsh
+; Request application privileges for Windows Vista
+; NsisMultiUser sets this, when needed.
+; RequestExecutionLevel admin
+
+
+;--------------------------------
+;Packing
+
+; Best compression
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+
+; Reserve Files
+; If you are using solid compression, files that are required before
+; the actual installation should be stored first in the data block,
+; because this will make your installer start faster.
+!insertmacro MUI_RESERVEFILE_LANGDLL
+
+
+;--------------------------------
+;Include FileFunc.nsh
+
+; FileFunc.nsh for e.g. command line arguments managment requested
+; by issue #437 "Install option to skip desktop icon"
+!include FileFunc.nsh
 
 
 ;--------------------------------
 ;Include Modern UI
 
-  !include MUI2.nsh
+!include MUI2.nsh
 
 
 ;--------------------------------
 ;General
 
-  ;Name and file
-  !define prodname "BleachBit"
-  !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
-  Name "${prodname}"
+; Name and file
+!define prodname "BleachBit"
+!define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
+Name "${prodname}"
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
@@ -57,27 +80,18 @@
   Unicode true
 !endif
 
-  ;Default installation folder
-  ; NsisMultiUser sets the directory.
-  ;InstallDir "$PROGRAMFILES\${prodname}"
+; Default installation folder
+; NsisMultiUser sets the directory.
+; InstallDir "$PROGRAMFILES\${prodname}"
 
-  ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\${prodname}" ""
-
-  ;Request application privileges for Windows Vista
-  ; NsisMultiUser sets this, when needed.
-  ;RequestExecutionLevel admin
-
-  ;Best compression
-; SetCompressor /SOLID lzma
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+; Get installation folder from registry if available
+InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
-; multi-user
-;
+;Multi-User
+
 ; See https://github.com/Drizin/NsisMultiUser
-;
 !addplugindir /x86-ansi ".\NsisPluginsAnsi\"
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
@@ -100,57 +114,26 @@
 ;--------------------------------
 ;Interface Settings
 
-  !define MUI_ABORTWARNING
+!define MUI_ABORTWARNING
 
-  ;Show all languages, despite user's codepage
-  !define MUI_LANGDLL_ALLLANGUAGES
+; Show all languages, despite user's codepage
+!define MUI_LANGDLL_ALLLANGUAGES
 
 
 ;--------------------------------
 ;Language Selection Dialog Settings
 
-  ;Remember the installer language
-  !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
-  !define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
-  !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
-
-
-;--------------------------------
-;Command Line
-
-  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
-
-;--------------------------------
-;Pages
-
-; Installer:
-  ;!insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "..\COPYING"
-  !insertmacro MULTIUSER_PAGE_INSTALLMODE
-  !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_COMPONENTS
-  !insertmacro MUI_PAGE_INSTFILES
-
-  !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-  !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
-  !insertmacro MUI_PAGE_FINISH
-
-; Uninstaller:
-  ;!insertmacro MUI_UNPAGE_WELCOME
-  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-  !insertmacro MUI_UNPAGE_CONFIRM
-  ;!insertmacro MUI_UNPAGE_COMPONENTS
-  !insertmacro MUI_UNPAGE_INSTFILES
-  ;!insertmacro MUI_UNPAGE_FINISH
+; Remember the installer language
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 
 ;--------------------------------
 ;Languages
 
 ; Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
-  !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "English"
 !ifndef NoTranslations
 ; !insertmacro MUI_LANGUAGE "AFRIKAANS"
   !insertmacro MUI_LANGUAGE "Albanian"
@@ -226,28 +209,30 @@
 
 ;--------------------------------
 ;License used in MUI_PAGE_LICENSE
-; For maybe later... Tobias.
 
-;LangString BLEACHBIT_LICENSE ${LANG_ENGLISH} "..\COPYING"
-;LangString BLEACHBIT_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
-;LangString BLEACHBIT_LICENSE ${LANG_GERMAN} "..\COPYING_Ger"
+LangString BLEACHBIT_LICENSE "..\COPYING" ; keep it general
+; For maybe later... Tobias.
+; LangString BLEACHBIT_LICENSE ${LANG_ENGLISH} "..\COPYING"
+; LangString BLEACHBIT_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
+; LangString BLEACHBIT_LICENSE ${LANG_GERMAN} "..\COPYING_Ger"
 
 
 ;--------------------------------
 ;PageEx License
+
 ; For maybe later... Tobias.
 
 ; Translations of "License"
-;LangString License_Text ${LANG_ENGLISH} "License"
-;LangString License_Text ${LANG_FRENCH} "Licence"
-;LangString License_Text ${LANG_GERMAN} "Lizenz"
+; LangString License_Text ${LANG_ENGLISH} "License"
+; LangString License_Text ${LANG_FRENCH} "Licence"
+; LangString License_Text ${LANG_GERMAN} "Lizenz"
 
 ; LicenseLangString
 ; Does the same as LangString only it loads the string from a text/RTF file and defines
 ; a special LangString that can be used only by LicenseData.
-;LicenseLangString License_Data ${LANG_ENGLISH} license-english.txt
-;LicenseLangString License_Data ${LANG_FRENCH} license-french.txt
-;LicenseLangString License_Data ${LANG_GERMAN} license-german.txt
+; LicenseLangString License_Data ${LANG_ENGLISH} license-english.txt
+; LicenseLangString License_Data ${LANG_FRENCH} license-french.txt
+; LicenseLangString License_Data ${LANG_GERMAN} license-german.txt
 
 ; LicenseData
 ; Specifies a text file or a RTF file to use for the license that the user can read.
@@ -255,26 +240,336 @@
 ; If you make your license file a RTF file it is recommended you edit it with WordPad and not MS Word.
 ; Using WordPad will result in a much smaller file.
 
-;https://nsis.sourceforge.io/Reference/PageEx
-;PageEx License
-;  LicenseText $(License_Text)
-;  LicenseData $(License_Data)
-;  LicenseForceSelection checkbox
-;PageExEnd
+; https://nsis.sourceforge.io/Reference/PageEx
+; PageEx License
+  ; LicenseText $(License_Text)
+  ; LicenseData $(License_Data)
+  ; LicenseForceSelection checkbox
+; PageExEnd
 
 
 ;--------------------------------
-;Reserve Files
-  
-  ;If you are using solid compression, files that are required before
-  ;the actual installation should be stored first in the data block,
-  ;because this will make your installer start faster.
-  
-  !insertmacro MUI_RESERVEFILE_LANGDLL
+;Insert Macro
+
+; Language display dialog
+!insertmacro MUI_LANGDLL_DISPLAY
+
+!insertmacro MULTIUSER_INIT
 
 
 ;--------------------------------
-;Function
+;Command Line Variable
+
+!define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
+
+
+;--------------------------------
+;Installer Functions
+
+Function .onInit
+
+  ; Handle the command line parameters
+  command_line:
+  ${GetParameters} $R0
+
+  ; Case: /?
+  ${GetOptionsS} $R0 "/?" $R1
+  ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Goto command_line_help
+  ${EndIf}
+
+  ; Case: -?
+  ${GetOptionsS} $R0 "-?" $R1
+  ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Goto command_line_help
+  ${EndIf}
+
+  ; Case: /h
+  ${GetOptionsS} $R0 "/h" $R1
+  ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Goto command_line_help
+  ${EndIf}
+
+  ; Case: -h
+  ${GetOptionsS} $R0 "-h" $R1
+  ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Goto command_line_help
+  ${EndIf}
+
+  ; Case: --help
+  ${GetOptionsS} $R0 "--help" $R1
+  ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Goto command_line_help
+  ${EndIf}
+
+  ; Case: /error-code
+  ${GetOptionsS} $R0 "/error-code" $R1
+  ${IfNot} ${errors}
+    ; Copied from NsisMultiUser.nsh (starting line 480) and modified
+    MessageBox MB_ICONINFORMATION "Error codes (decimal):$\r$\n\
+      0$\t- normal execution (no error)$\r$\n\
+      1$\t- (un)installation aborted by user (Cancel button)$\r$\n\
+      2$\t- (un)installation aborted by script$\r$\n\
+      666$\t- uninstaller had QuietUninstallString$\r$\n\
+      666660$\t- invalid command-line parameters$\r$\n\
+      666661$\t- elevation is not allowed by defines$\r$\n\
+      666662$\t- uninstaller detected there's no installed version$\r$\n\
+      666663$\t- executing uninstaller from the installer failed$\r$\n\
+      666666$\t- cannot start elevated instance$\r$\n\
+      other$\t- Windows error code when trying to start elevated instance$\r$\n\
+      more$\t- in the documentation and on request"
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Abort
+  ${EndIf}
+
+  ; Case: (/allusers or /currentuser) (/S) /uninstall
+  ; In case "${GetOptionsS} $R0":
+  ${GetOptionsS} $R0 "/uninstall" $R1
+  ${IfNot} ${errors}
+    ${GetOptionsS} $R0 "/allusers" $R1
+    ${IfNot} ${errors}
+      Goto uninstall_old
+    ${EndIf}
+    ${GetOptionsS} $R0 "/currentuser" $R1
+    ${IfNot} ${errors}
+      Goto uninstall_old
+    ${EndIf}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: (/S) /uninstall$\r$\n\
+      $\r$\n\
+      /uninstall:$\r$\n\
+      (installer only) run uninstaller, requires '/allusers' or '/currentuser',$\r$\n\
+      case-insensitive$\r$\n\
+      $\r$\n\
+      /allusers:$\r$\n\
+      uninstall for all users, case-insensitive$\r$\n\
+      $\r$\n\
+      /currentuser:$\r$\n\
+      uninstall for current user only, case-insensitive$\r$\n\
+      $\r$\n\
+      /S:$\r$\n\
+      silent mode, requires '/allusers' or '/currentuser', case-sensitive"
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
+    Abort
+  ${EndIf}
+
+  ; Case: (/allusers or /currentuser) (/S) /no-desktop-shortcut (/D)
+  ${GetOptionsS} $R0 "/no-desktop-shortcut" $R1
+  ${IfNot} ${errors}
+    ${GetOptionsS} $R0 "/S" $R1
+    ${IfNot} ${errors}
+      ${GetOptionsS} $R0 "/allusers" $R1
+      ${IfNot} ${errors}
+        Goto previous_version_check
+      ${EndIf}
+      ${GetOptionsS} $R0 "/currentuser" $R1
+      ${IfNot} ${errors}
+        Goto previous_version_check
+      ${EndIf}
+      Goto error_no-desktop-shortcut
+    ${EndIf}
+    Goto error_no-desktop-shortcut
+  ${EndIf}
+
+  ; Case: (/allusers or /currentuser) /S (/D)
+  ${GetOptionsS} $R0 "/S" $R1
+  ${IfNot} ${errors}
+    ${GetOptionsS} $R0 "/allusers" $R1
+    ${IfNot} ${errors}
+      Goto previous_version_check
+    ${EndIf}
+    ${GetOptionsS} $R0 "/currentuser" $R1
+    ${IfNot} ${errors}
+      Goto previous_version_check
+    ${EndIf}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /S (/D)$\r$\n\
+      $\r$\n\
+      /S:$\r$\n\
+      silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
+      /allusers:$\r$\n\
+      (un)install for all users, case-insensitive$\r$\n\
+      $\r$\n\
+      /currentuser:$\r$\n\
+      (un)install for current user only, case-insensitive$\r$\n\
+      $\r$\n\
+      /D:$\r$\n\
+      (installer only) set install directory, must be last parameter,$\r$\n\
+      without quotes, case-sensitive"
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
+    Abort
+  ${EndIf}
+
+  ; Case: /allusers
+  ${GetOptionsS} $R0 "/allusers" $R1
+  ${IfNot} ${errors}
+    Goto previous_version_check
+  ${EndIf}
+
+  ; Case: /currentuser
+  ${GetOptionsS} $R0 "/currentuser" $R1
+  ${IfNot} ${errors}
+    Goto previous_version_check
+  ${EndIf}
+
+  ; Case: No Parameter
+  ; In case $R0 == "": (No "${GetOptionsS} $R0"!)
+  ${If} $R0 == ""
+    Goto previous_version_check
+  ${EndIf}
+
+  ; In case of just /D:
+  ${GetOptionsS} $R0 "/D" $R1
+  ${IfNot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: $R0$\r$\n\
+      $\r$\n\
+      /D:$\r$\n\
+      (installer only) set install directory, must be last parameter, without$\r$\n\
+      quotes, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
+      /S:$\r$\n\
+      silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
+      /allusers:$\r$\n\
+      uninstall for all users, case-insensitive$\r$\n\
+      $\r$\n\
+      /currentuser:$\r$\n\
+      uninstall for current user only, case-insensitive"
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
+    Abort
+  ${EndIf}
+
+  ; In case of a unknow parameter:
+  MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+    $\r$\n\
+    Called: $R0$\r$\n\
+    $\r$\n\
+    $R0 - Unknown parameter!"
+  ; SetErrorLevel 666660 - invalid command-line parameters
+  SetErrorLevel 666660
+  Goto command_line_help
+
+  error_no-desktop-shortcut:
+  MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+    $\r$\n\
+    Called: (/allusers or /currentuser) (/S) /no-desktop-shortcut (/D)$\r$\n\
+    $\r$\n\
+    /no-desktop-shortcut:$\r$\n\
+    (silent mode only) install without desktop shortcut, must be$\r$\n\
+    last parameter before '/D' (if used), case-sensitive$\r$\n\
+    $\r$\n\
+    /S:$\r$\n\
+    silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+    $\r$\n\
+    /allusers:$\r$\n\
+    install for all users, case-insensitive$\r$\n\
+    $\r$\n\
+    /currentuser:$\r$\n\
+    install for current user only, case-insensitive$\r$\n\
+    $\r$\n\
+    /D:$\r$\n\
+    (installer only) set install directory, must be last parameter,$\r$\n\
+    without quotes, case-sensitive"
+  ; SetErrorLevel 666660 - invalid command-line parameters
+  SetErrorLevel 666660
+  Abort
+
+  command_line_help:
+  ; Copied from NsisMultiUser.nsh (starting line 480) and modified
+  MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
+    $\r$\n\
+    /allusers:$\r$\n\
+    (un)install for all users, case-insensitive$\r$\n\
+    $\r$\n\
+    /currentuser:$\r$\n\
+    (un)install for current user only, case-insensitive$\r$\n\
+    $\r$\n\
+    /uninstall:$\r$\n\
+    (installer only) run uninstaller, requires '/allusers' or '/currentuser',$\r$\n\
+    case-insensitive$\r$\n\
+    $\r$\n\
+    /S:$\r$\n\
+    silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+    $\r$\n\
+    /no-desktop-shortcut:$\r$\n\
+    (silent mode only) install without desktop shortcut, must be$\r$\n\
+    last parameter before '/D' (if used), case-sensitive$\r$\n\
+    $\r$\n\
+    /D:$\r$\n\
+    (installer only) set install directory, must be last parameter,$\r$\n\
+    without quotes, case-sensitive$\r$\n\
+    $\r$\n\
+    /error-code:$\r$\n\
+    the error codes the program gives back$\r$\n\
+    $\r$\n\
+    /?:$\r$\n\
+    display this message"
+  Abort
+
+  previous_version_check:
+  ; Check whether application is already installed
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+    "UninstallString"
+  ; If not already installed, skip uninstallation
+  StrCmp $R0 "" new_install
+  Goto upgrade_uninstall_msg
+
+  upgrade_uninstall_msg:
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
+  ; SetErrorLevel 2 - (un)installation aborted by script
+  SetErrorLevel 2
+  Abort
+
+  uninstall_old:
+  ; If installing in silent mode, also uninstall in silent mode
+  Var /GLOBAL uninstaller_cmd
+  StrCpy $uninstaller_cmd "$R0 _?=$INSTDIR"
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
+  ExecWait $uninstaller_cmd ${ERRORLEVEL}
+  ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
+  ; ErrorLevel = 2 - uninstallation aborted by script
+  ; Debug-Box:
+  MessageBox MB_ICONINFORMATION "ErrorLevel: ${ERRORLEVEL}"
+  ${If} ${ERRORLEVEL} == "1"
+  ${OrIf} ${ERRORLEVEL} == "2"
+    Abort
+  ${EndIf}
+  ${If} $R0 == "/uninstall"
+    Abort
+  ${EndIf}
+  Goto new_install
+
+  new_install:
+  Goto end
+
+  end:
+FunctionEnd
+; And now starts the GUI Installer...
+
+
+;--------------------------------
+;Function RefreshShellIcons
 
 ; http://nsis.sourceforge.net/RefreshShellIcons
 Function RefreshShellIcons
@@ -285,7 +580,51 @@ FunctionEnd
 
 
 ;--------------------------------
-;Default section
+;Pages
+
+; Installer:
+  ; !insertmacro MUI_PAGE_WELCOME
+  !insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
+  !insertmacro MULTIUSER_PAGE_INSTALLMODE
+  !insertmacro MUI_PAGE_DIRECTORY
+  !insertmacro MUI_PAGE_COMPONENTS
+  !insertmacro MUI_PAGE_INSTFILES
+
+  !define MUI_FINISHPAGE_NOAUTOCLOSE
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+  !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
+  !insertmacro MUI_PAGE_FINISH
+
+; Uninstaller:
+  ; !insertmacro MUI_UNPAGE_WELCOME
+  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
+  !insertmacro MUI_UNPAGE_CONFIRM
+  ; !insertmacro MUI_UNPAGE_COMPONENTS
+  !insertmacro MUI_UNPAGE_INSTFILES
+  ; !insertmacro MUI_UNPAGE_FINISH
+
+
+;--------------------------------
+;Descriptions
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
+
+;Assign descriptions to sections
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+;--------------------------------
+;Installer Section
 
 ; BleachBit Core
 Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
@@ -410,238 +749,8 @@ SectionEnd
 ; actual size is known.
 ; This is a hidden section.
 Section "-Write Install Size"
-    !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
+  !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
 SectionEnd
-
-
-;--------------------------------
-;Descriptions
-
-;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
-
-;Assign descriptions to sections
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-
-;--------------------------------
-;Installer Functions
-
-Function .onInit
-
-  ; Language display dialog
-  !insertmacro MUI_LANGDLL_DISPLAY
-
-  !insertmacro MULTIUSER_INIT
-
-  command_line:
-  ${GetParameters} $R0
-
-  ; Case: /?
-  ${GetOptions} $R0 "/?" $R1
-  ${IfNot} ${errors}
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Goto command_line_help
-  ${EndIf}
-
-  ; Case: -?
-  ${GetOptions} $R0 "-?" $R1
-  ${IfNot} ${errors}
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Goto command_line_help
-  ${EndIf}
-
-  ; Case: /h
-  ${GetOptions} $R0 "/h" $R1
-  ${IfNot} ${errors}
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Goto command_line_help
-  ${EndIf}
-
-  ; Case: -h
-  ${GetOptions} $R0 "-h" $R1
-  ${IfNot} ${errors}
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Goto command_line_help
-  ${EndIf}
-
-  ; Case: --help
-  ${GetOptions} $R0 "--help" $R1
-  ${IfNot} ${errors}
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Goto command_line_help
-  ${EndIf}
-
-  ; Case: /no-desktop-shortcut
-  ; In case $R0 == "/no-desktop-shortcut": (No "${GetOptions} $R0"!)
-  ${If} $R0 == "/no-desktop-shortcut"
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /no-desktop-shortcut$\r$\n\
-      $\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 666660 - invalid command-line parameters
-    SetErrorLevel 666660
-    Quit
-  ${EndIf}
-
-  ; Case: /S /no-desktop-shortcut
-  ${GetOptions} $R0 "/S /no-desktop-shortcut" $R1
-  ${IfNot} ${errors}
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /S /no-desktop-shortcut$\r$\n\
-      $\r$\n\
-      $\r$\n\
-      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 666660 - invalid command-line parameters
-    SetErrorLevel 666660
-    Quit
-  ${EndIf}
-
-  ; Case: /S /no-desktop-shortcut /D
-  ${GetOptions} $R0 "/S /no-desktop-shortcut /D" $R1
-  ${IfNot} ${errors}
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /S /no-desktop-shortcut /D$\r$\n\
-      $\r$\n\
-      $\r$\n\
-      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      shortcut, must be last parameter before '/D' (if used), case-sensitive$\r$\n\
-      $\r$\n\
-      /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
-      without quotes, case-sensitive"
-    ; SetErrorLevel 666660 - invalid command-line parameters
-    SetErrorLevel 666660
-    Quit
-  ${EndIf}
-
-  ; Case: /allusers or /currentuser (/S) /no-desktop-shortcut (/D)
-  ${GetOptions} $R0 "/no-desktop-shortcut" $R1
-  ${IfNot} ${errors}
-    Goto previous_version_check
-  ${EndIf}
-
-  ; Case: /uninstall
-  ; In case $R0 == "/uninstall": (No "${GetOptions} $R0"!)
-  ${If} $R0 == "/uninstall"
-    Goto uninstall_old
-  ${EndIf}
-
-  ; Case: No Parameter
-  ; In case $R0 == "": (No "${GetOptions} $R0"!)
-  ${If} $R0 == ""
-    Goto previous_version_check
-  ${EndIf}
-
-  ; In case of a unknow parameter:
-  MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-    $\r$\n\
-    Called: $R0$\r$\n\
-    $\r$\n\
-    $R0 - Unknown parameter or syntax wrong!"
-  ; SetErrorLevel 666660 - invalid command-line parameters
-  SetErrorLevel 666660
-  Goto command_line_help
-
-  command_line_help:
-  ; Copied from NsisMultiUser.nsh (starting line 480) and modified process /? parameter
-  MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
-    $\r$\n\
-    /allusers$\t- (un)install for all users, case-insensitive$\r$\n\
-    $\r$\n\
-    /currentuser - (un)install for current user only, case-insensitive$\r$\n\
-    $\r$\n\
-    /uninstall$\t- (installer only) run uninstaller, requires '/allusers' or$\r$\n\
-    '/currentuser', case-insensitive$\r$\n\
-    $\r$\n\
-    /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
-    $\r$\n\
-    /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-    shortcut, must be last parameter before '/D' (if used), case-sensitive$\r$\n\
-    $\r$\n\
-    /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
-    without quotes, case-sensitive$\r$\n\
-    $\r$\n\
-    /?$\t- display this message$\r$\n\
-    $\r$\n\
-    $\r$\n\
-    Return codes (decimal):$\r$\n\
-    0$\t- normal execution (no error)$\r$\n\
-    1$\t- (un)installation aborted by user (Cancel button)$\r$\n\
-    2$\t- (un)installation aborted by script$\r$\n\
-    666$\t- uninstaller had QuietUninstallString$\r$\n\
-    666660$\t- invalid command-line parameters$\r$\n\
-    666661$\t- elevation is not allowed by defines$\r$\n\
-    666662$\t- uninstaller detected there's no installed version$\r$\n\
-    more$\t- in the documentation and on request"
-    ; "more on request", because NSIS cutted the MessageBox!
-    ; "more" is:
-    ; 666663$\t- executing uninstaller from the installer failed$\r$\n\
-    ; 666666$\t- cannot start elevated instance$\r$\n\
-    ; other$\t- Windows error code when trying to start elevated instance"
-  Quit
-
-  previous_version_check:
-  ; Check whether application is already installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-    "UninstallString"
-  ; If not already installed, skip uninstallation
-  StrCmp $R0 "" new_install
-  Goto upgrade_uninstall_msg
-
-  upgrade_uninstall_msg:
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
-  ; SetErrorLevel 2 - (un)installation aborted by script
-  SetErrorLevel 2
-  Quit
-
-  uninstall_old:
-  ; If installing in silent mode, also uninstall in silent mode
-  Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd "$R0 _?=$INSTDIR"
-  IfSilent 0 +2
-  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
-  ExecWait $uninstaller_cmd
-  ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
-  ; ErrorLevel = 2 - uninstallation aborted by script
-  ${If} ${ERRORLEVEL} == "1"
-  ${OrIf} ${ERRORLEVEL} == "2"
-    Quit
-  ${EndIf}
-  ${If} $R0 == "/uninstall"
-    Quit
-  ${EndIf}
-  Goto new_install
-
-  new_install:
-  Goto end
-
-  end:
-  ; And now starts the install...
-FunctionEnd
 
 
 ;--------------------------------
@@ -683,4 +792,3 @@ Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
 
 FunctionEnd
-
