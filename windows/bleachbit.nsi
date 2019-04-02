@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1013
+;  @scriptversion v2.3.1014
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -447,6 +447,7 @@ Function .onInit
   ; Case: /?
   ${GetOptions} $R0 "/?" $R1
   ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
@@ -454,6 +455,7 @@ Function .onInit
   ; Case: -?
   ${GetOptions} $R0 "-?" $R1
   ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
@@ -461,6 +463,7 @@ Function .onInit
   ; Case: /h
   ${GetOptions} $R0 "/h" $R1
   ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
@@ -468,6 +471,7 @@ Function .onInit
   ; Case: -h
   ${GetOptions} $R0 "-h" $R1
   ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
@@ -475,12 +479,46 @@ Function .onInit
   ; Case: --help
   ${GetOptions} $R0 "--help" $R1
   ${IfNot} ${errors}
+    ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Goto command_line_help
   ${EndIf}
 
+  ; Case: /no-desktop-shortcut
+  ; In case $R0 == "/no-desktop-shortcut": (No "${GetOptions} $R0"!)
+  ${If} $R0 == "/no-desktop-shortcut"
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /no-desktop-shortcut$\r$\n\
+      $\r$\n\
+      $\r$\n\
+      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+      shortcut, must be last parameter before '/D' (if used), case-sensitive"
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
+    Quit
+  ${EndIf}
+
+  ; Case: /S /no-desktop-shortcut
+  ${GetOptions} $R0 "/S /no-desktop-shortcut" $R1
+  ${IfNot} ${errors}
+    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
+      $\r$\n\
+      Called: /S /no-desktop-shortcut$\r$\n\
+      $\r$\n\
+      $\r$\n\
+      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
+      $\r$\n\
+      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
+      shortcut, must be last parameter before '/D' (if used), case-sensitive"
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
+    Quit
+  ${EndIf}
+
   ; Case: /S /no-desktop-shortcut /D
-  ${If} $R0 == "/S /no-desktop-shortcut /D"
+  ${GetOptions} $R0 "/S /no-desktop-shortcut /D" $R1
+  ${IfNot} ${errors}
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
       Called: /S /no-desktop-shortcut /D$\r$\n\
@@ -498,36 +536,6 @@ Function .onInit
     Quit
   ${EndIf}
 
-  ; Case: /S /no-desktop-shortcut
-  ${If} $R0 == "/S /no-desktop-shortcut"
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /S /no-desktop-shortcut$\r$\n\
-      $\r$\n\
-      $\r$\n\
-      /S$\t- silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 666660 - invalid command-line parameters
-    SetErrorLevel 666660
-    Quit
-  ${EndIf}
-
-  ; Case: /no-desktop-shortcut
-  ${If} $R0 == "/no-desktop-shortcut"
-    MessageBox MB_ICONINFORMATION "Error:$\r$\n\
-      $\r$\n\
-      Called: /no-desktop-shortcut$\r$\n\
-      $\r$\n\
-      $\r$\n\
-      /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
-      shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 666660 - invalid command-line parameters
-    SetErrorLevel 666660
-    Quit
-  ${EndIf}
-
   ; Case: /allusers or /currentuser (/S) /no-desktop-shortcut (/D)
   ${GetOptions} $R0 "/no-desktop-shortcut" $R1
   ${IfNot} ${errors}
@@ -535,12 +543,13 @@ Function .onInit
   ${EndIf}
 
   ; Case: /uninstall
-  ${GetOptions} $R0 "/uninstall" $R1
-  ${IfNot} ${errors}
+  ; In case $R0 == "/uninstall": (No "${GetOptions} $R0"!)
+  ${If} $R0 == "/uninstall"
     Goto uninstall_old
   ${EndIf}
 
   ; Case: No Parameter
+  ; In case $R0 == "": (No "${GetOptions} $R0"!)
   ${If} $R0 == ""
     Goto previous_version_check
   ${EndIf}
@@ -550,7 +559,8 @@ Function .onInit
     $\r$\n\
     Called: $R0$\r$\n\
     $\r$\n\
-    $R0 - Parameter not known!"
+    $R0 - Unknown parameter or syntax wrong!"
+  ; SetErrorLevel 666660 - invalid command-line parameters
   SetErrorLevel 666660
   Goto command_line_help
 
@@ -616,8 +626,8 @@ Function .onInit
   ExecWait $uninstaller_cmd
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
-  ${If} ${ERRORLEVEL} = 1
-  ${OrIf} ${ERRORLEVEL} = 2
+  ${If} ${ERRORLEVEL} == "1"
+  ${OrIf} ${ERRORLEVEL} == "2"
     Quit
   ${EndIf}
   ${If} $R0 == "/uninstall"
@@ -629,6 +639,7 @@ Function .onInit
   Goto end
 
   end:
+  ; And now starts the install...
 FunctionEnd
 
 
