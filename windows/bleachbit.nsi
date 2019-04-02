@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1026
+;  @scriptversion v2.3.1027
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -123,13 +123,13 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 ; Installer:
 !define MUI_WELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
+!define MUI_HEADERIMAGE_BITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !insertmacro MUI_PAGE_LICENSE "${BLEACHBIT_LICENSE}"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_COMPONENTS
-!define MUI_HEADERIMAGE_BITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
@@ -140,12 +140,12 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 ; Uninstaller:
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
 !insertmacro MUI_UNPAGE_DIRECTORY
 !insertmacro MUI_UNPAGE_COMPONENTS
-!define MUI_HEADERIMAGE_UNBITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -315,7 +315,7 @@ Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
 
   ;Command line variable:
-  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
+  Var /GLOBAL COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
 
   ; Get the command line parameters:
   ${GetParameters} $R0
@@ -423,10 +423,12 @@ Function .onInit
     ${IfNot} ${errors}
       ${GetOptionsS} $R0 "/allusers" $R1
       ${IfNot} ${errors}
+        StrCpy $COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
         Goto previous_version_check
       ${EndIf}
       ${GetOptionsS} $R0 "/currentuser" $R1
       ${IfNot} ${errors}
+        StrCpy $COMMAND_LINE_NO_DESKTOP_SHORTCUT "Yes"
         Goto previous_version_check
       ${EndIf}
       Goto error_no-desktop-shortcut
@@ -583,7 +585,7 @@ Function .onInit
   StrCmp $R1 "" no_uninstall_needed
   Var /GLOBAL uninstaller_cmd
   ; Save the uninstaller for later:
-  !define uninstaller_cmd "$R1"
+  StrCpy $uninstaller_cmd "$R1"
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK true IDCANCEL false
   false:
   ; SetErrorLevel 1 - (un)installation aborted by user (Cancel button)
@@ -595,13 +597,14 @@ Function .onInit
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
   ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
   ExecWait $uninstaller_cmd $R6
-  !define ERRORLEVEL "$R6"
+  Var /GLOBAL ERRORLEVEL
+  StrCpy ERRORLEVEL "$R6"
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
   ; Debug-Box:
-  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / ${ERRORLEVEL} / $R0"
-  ${If} ${ERRORLEVEL} == "1"
-  ${OrIf} ${ERRORLEVEL} == "2"
+  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / $ERRORLEVEL / $R0"
+  ${If} $ERRORLEVEL == "1"
+  ${OrIf} $ERRORLEVEL == "2"
     Abort
   ${EndIf}
   ${GetOptionsS} $R0 "/uninstall" $R1
@@ -689,7 +692,7 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     "URLUpdateInfo" "https://www.bleachbit.org/download"
 
   ; Restore QuietUninstallString
-  ${if} ${ERRORLEVEL} == "666"
+  ${if} $ERRORLEVEL == "666"
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
       WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
@@ -727,7 +730,7 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
   ; BleachBit Desktop Shortcut
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
     ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's "No" by default. If "Yes": NO DESKTOP SHORTCUT!
-    ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} == "No"
+    ${if} $COMMAND_LINE_NO_DESKTOP_SHORTCUT == "No"
       SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
       CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
       Call RefreshShellIcons
