@@ -20,9 +20,9 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1030
-;  @scriptdate 2019-04-02
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
+;  @scriptversion v2.3.1031
+;  @scriptdate 2019-04-03
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
 ;  @tested ok v2.0.0, Windows 7
 ;  @testeddate 2019-04-01
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -144,8 +144,8 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-!insertmacro MUI_UNPAGE_DIRECTORY
-!insertmacro MUI_UNPAGE_COMPONENTS
+;!insertmacro MUI_UNPAGE_DIRECTORY
+;!insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -380,11 +380,11 @@ Function .onInit
   ${IfNot} ${errors}
     ${GetOptionsS} $R0 "/allusers" $R1
     ${IfNot} ${errors}
-      Goto previous_version_check
+      Goto inseringmacros
     ${EndIf}
     ${GetOptionsS} $R0 "/currentuser" $R1
     ${IfNot} ${errors}
-      Goto previous_version_check
+      Goto inseringmacros
     ${EndIf}
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
@@ -570,13 +570,28 @@ Function .onInit
 
   previous_version_check: ; and uninstall old
   ; Check whether application is already installed
-  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-    "UninstallString"
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
+  IfErrors 0 +6
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
+  IfErrors 0 +4
+  ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
+  IfErrors 0 +2
+  ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
+  IfErrors 0 +0
   ; If not already installed, skip uninstallation
-  StrCmp $R1 "" no_uninstall_needed
+  StrCmp $R1 "" no_uninstall_possible
   ; Save the uninstaller for later:
   Var /GLOBAL uninstaller_cmd
   StrCpy $uninstaller_cmd "$R1"
+  ; We also need the InstallLocation:
+  ReadRegStr $R2 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
+  IfErrors 0 +1
+  ReadRegStr $R2 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
+  Var /GLOBAL uninstaller_path
+  StrCpy $uninstaller_path "$R2"
+  StrCmp $uninstaller_path "" 0 +2
+  ; If not set, we have a problem... ^^
+  StrCpy $uninstaller_path "$%Temp%"
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK true IDCANCEL false
   false:
   ; SetErrorLevel 1 - (un)installation aborted by user (Cancel button)
@@ -586,43 +601,27 @@ Function .onInit
   ; If installing in silent mode, also uninstall in silent mode
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
+  ; Run the old uninstaller and SetErrorLevel (needed to restore QuietUninstallString):
+  StrCpy $uninstaller_cmd "$uninstaller_cmd _?=$uninstaller_path"
   ExecWait $uninstaller_cmd $R6
   Var /GLOBAL ERRORLEVEL
   StrCpy $ERRORLEVEL "$R6"
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
-  ; Debug-Box:
-  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / $ERRORLEVEL / $R0"
+  ; ErrorLevel = 666 - installation was with QuietUninstallString
+  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / $ERRORLEVEL / $R0" ; Debug-Box
   ${If} $ERRORLEVEL == "1"
   ${OrIf} $ERRORLEVEL == "2"
     Abort
   ${EndIf}
-  ${GetOptionsS} $R0 "/uninstall" $R1
-  ${IfNot} ${errors}
-    Abort
-  ${EndIf}
-  Goto new_install
+  Goto inseringmacros
 
-  no_uninstall_needed:
-  ; Check if the installer was started with "/uninstall":
-  ${GetOptionsS} $R0 "/uninstall" $R1
-  ${IfNot} ${errors}
-    ; FIXME LATER: Translate this string!
-    ; Doesn't get translated! Command line is English only!
-    MessageBox MB_OK "BleachBit is already uninstalled!" /SD IDOK
-    ; SetErrorLevel 0 - normal execution (no error)
-    SetErrorLevel 0
-    Abort
-  ${Else}
-    Goto new_install
-  ${EndIf}
+  no_uninstall_possible:
+  ; If BleachBit is installed - we can't detect it, ATM!
+  ; Move on! ^^
 
-  new_install:
-  ; Goto end, it starts the GUI and loads the Installer Sections...
-  Goto end
-
-  end:
+  inseringmacros:
+  ; It starts the GUI and loads the Installer Sections...
   ; Insering the macros at the end that they don't effect the error messages of the command line.
 
   ; Insert Macro MULTIUSER_INIT:
@@ -635,6 +634,13 @@ Function .onInit
   ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
   ; Command IfSilent not valid outside Section or Function!
   !insertmacro MUI_LANGDLL_DISPLAY
+
+  ; First handle this case: /allusers or /currentuser (/S) /uninstall
+  ${GetOptionsS} $R0 "/uninstall" $R1
+  ${IfNot} ${errors}
+    Call Uninstall
+    Abort
+  ${EndIf}
 FunctionEnd
 
 ; And now starts the GUI Installer...
@@ -803,11 +809,10 @@ SectionEnd
 
 
 ;--------------------------------
-;Uninstaller Section
+;Function Uninstall
 
-UninstallText $(BLEACHBIT_UNINSTALLTEXT)
-
-Section "Uninstall"
+; Move the code from Section "Uninstall" into a Function that he can be executed somewhere else
+Function Uninstall
   RMDir /r "$INSTDIR"
   DeleteRegKey HKCU "Software\${prodname}"
   ; Delete normal shortcuts
@@ -828,6 +833,16 @@ Section "Uninstall"
   ; Remove the uninstaller from registry as the very last step.
   ; If something goes wrong, let the user run it again.
   !insertmacro MULTIUSER_RegistryRemoveInstallInfo
+FunctionEnd
+
+
+;--------------------------------
+;Uninstaller Section
+
+UninstallText $(BLEACHBIT_UNINSTALLTEXT)
+
+Section "Uninstall"
+  Call Uninstall
 SectionEnd
 
 
