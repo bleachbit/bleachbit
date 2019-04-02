@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1019
+;  @scriptversion v2.3.1020
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -55,11 +55,18 @@
 ;General
 
 ; Name and file
-!define prodname "BleachBit"
 !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
+!define PRODNAME "BleachBit"
+!define PRODURL "https://www.bleachbit.org"
+!define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
+; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
+
 Name "${prodname}"
+
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
+  ; Unicode requires NSIS version 3 or later
+  Unicode true
 !else
   OutFile "${prodname}-${VERSION}-setup.exe"
   ; Unicode requires NSIS version 3 or later
@@ -210,8 +217,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;--------------------------------
 ;License used in MUI_PAGE_LICENSE
 
-!define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
-
 ; For maybe later... Tobias.
 ; LangString BLEACHBIT_LICENSE ${LANG_ENGLISH} "..\COPYING"
 ; LangString BLEACHBIT_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
@@ -247,15 +252,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
   ; LicenseData $(License_Data)
   ; LicenseForceSelection checkbox
 ; PageExEnd
-
-
-;--------------------------------
-;Insert Macro
-
-; Language display dialog
-!insertmacro MUI_LANGDLL_DISPLAY
-
-!insertmacro MULTIUSER_INIT
 
 
 ;--------------------------------
@@ -594,7 +590,7 @@ FunctionEnd
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
   !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-  !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
+  !define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
   !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller:
@@ -604,6 +600,35 @@ FunctionEnd
   ; !insertmacro MUI_UNPAGE_COMPONENTS
   !insertmacro MUI_UNPAGE_INSTFILES
   ; !insertmacro MUI_UNPAGE_FINISH
+
+
+;--------------------------------
+;Insert Macro
+
+; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
+
+; Language display dialog
+!insertmacro MUI_LANGDLL_DISPLAY
+
+!insertmacro MULTIUSER_INIT
+
+
+;--------------------------------
+;Descriptions for the Installer Components
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
+
+;Assign descriptions to sections
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ;--------------------------------
@@ -734,24 +759,6 @@ SectionEnd
 Section "-Write Install Size"
   !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
 SectionEnd
-
-
-;--------------------------------
-;Descriptions for the Installer Components
-
-;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
-
-;Assign descriptions to sections
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ;--------------------------------
