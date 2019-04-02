@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1021
+;  @scriptversion v2.3.1022
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -119,35 +119,28 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
-;Insert Macro MULTIUSER_INIT
-
-!insertmacro MULTIUSER_INIT
-
-
-;--------------------------------
 ;Pages
 
 ; Installer:
-  !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
-  !insertmacro MULTIUSER_PAGE_INSTALLMODE
-  !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_COMPONENTS
-  !insertmacro MUI_PAGE_INSTFILES
-
-  !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-  !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-  !define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
-  !insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
+!insertmacro MULTIUSER_PAGE_INSTALLMODE
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+!define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
+!insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller:
-  ; !insertmacro MUI_UNPAGE_WELCOME
-  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-  !insertmacro MUI_UNPAGE_CONFIRM
-  ; !insertmacro MUI_UNPAGE_COMPONENTS
-  !insertmacro MUI_UNPAGE_INSTFILES
-  ; !insertmacro MUI_UNPAGE_FINISH
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MULTIUSER_UNPAGE_INSTALLMODE
+!insertmacro MUI_UNPAGE_COMPONENTS
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
@@ -168,6 +161,13 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+;--------------------------------
+;Insert Macro MULTIUSER_INIT
+
+; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
+!insertmacro MULTIUSER_INIT
 
 
 ;--------------------------------
