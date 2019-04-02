@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1027
+;  @scriptversion v2.3.1028
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -303,24 +303,14 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;Installer Functions
 
 Function .onInit
-  ; Insert Macro MULTIUSER_INIT:
-  ; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
-  ; Command Call not valid outside Section or Function!
-  !insertmacro MULTIUSER_INIT
+  ; Command line variable:
+  ; If "Yes": NO DESKTOP SHORTCUT!
+  Var /GLOBAL COMMAND_LINE_NO_DESKTOP_SHORTCUT "No"
 
-  ; Insert Macro MUI_LANGDLL_DISPLAY:
-  ; This is the language display dialog!
-  ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
-  ; Command IfSilent not valid outside Section or Function!
-  !insertmacro MUI_LANGDLL_DISPLAY
-
-  ;Command line variable:
-  Var /GLOBAL COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
-
-  ; Get the command line parameters:
+  ; Get the command line parameters...
   ${GetParameters} $R0
 
-  ; And handle the command line parameters...
+  ; ...and handle the command line parameters...
 
   ; Case: /?
   ${GetOptionsS} $R0 "/?" $R1
@@ -362,8 +352,8 @@ Function .onInit
     Goto command_line_help
   ${EndIf}
 
-  ; Case: /error-code
-  ${GetOptionsS} $R0 "/error-code" $R1
+  ; Case: /error-codes
+  ${GetOptionsS} $R0 "/error-codes" $R1
   ${IfNot} ${errors}
     ; Copied from NsisMultiUser.nsh (starting line 480) and modified
     MessageBox MB_ICONINFORMATION "Error codes (decimal):$\r$\n\
@@ -399,17 +389,17 @@ Function .onInit
       $\r$\n\
       Called: (/S) /uninstall$\r$\n\
       $\r$\n\
-      /uninstall:$\r$\n\
+      '/uninstall':$\r$\n\
       (installer only) run uninstaller, requires '/allusers' or '/currentuser',$\r$\n\
       case-insensitive$\r$\n\
       $\r$\n\
-      /allusers:$\r$\n\
+      '/allusers':$\r$\n\
       uninstall for all users, case-insensitive$\r$\n\
       $\r$\n\
-      /currentuser:$\r$\n\
+      '/currentuser':$\r$\n\
       uninstall for current user only, case-insensitive$\r$\n\
       $\r$\n\
-      /S:$\r$\n\
+      '/S':$\r$\n\
       silent mode, requires '/allusers' or '/currentuser', case-sensitive"
     ; SetErrorLevel 666660 - invalid command-line parameters
     SetErrorLevel 666660
@@ -451,16 +441,16 @@ Function .onInit
       $\r$\n\
       Called: /S (/D)$\r$\n\
       $\r$\n\
-      /S:$\r$\n\
+      '/S':$\r$\n\
       silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
       $\r$\n\
-      /allusers:$\r$\n\
+      '/allusers':$\r$\n\
       (un)install for all users, case-insensitive$\r$\n\
       $\r$\n\
-      /currentuser:$\r$\n\
+      '/currentuser':$\r$\n\
       (un)install for current user only, case-insensitive$\r$\n\
       $\r$\n\
-      /D:$\r$\n\
+      '/D':$\r$\n\
       (installer only) set install directory, must be last parameter,$\r$\n\
       without quotes, case-sensitive"
     ; SetErrorLevel 666660 - invalid command-line parameters
@@ -487,17 +477,17 @@ Function .onInit
       $\r$\n\
       Called: $R0$\r$\n\
       $\r$\n\
-      /D:$\r$\n\
+      '/D':$\r$\n\
       (installer only) set install directory, must be last parameter, without$\r$\n\
       quotes, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
       $\r$\n\
-      /S:$\r$\n\
+      '/S':$\r$\n\
       silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
       $\r$\n\
-      /allusers:$\r$\n\
+      '/allusers':$\r$\n\
       uninstall for all users, case-insensitive$\r$\n\
       $\r$\n\
-      /currentuser:$\r$\n\
+      '/currentuser':$\r$\n\
       uninstall for current user only, case-insensitive"
     ; SetErrorLevel 666660 - invalid command-line parameters
     SetErrorLevel 666660
@@ -525,20 +515,20 @@ Function .onInit
     $\r$\n\
     Called: (/allusers or /currentuser) (/S) /no-desktop-shortcut (/D)$\r$\n\
     $\r$\n\
-    /no-desktop-shortcut:$\r$\n\
+    '/no-desktop-shortcut':$\r$\n\
     (silent mode only) install without desktop shortcut, must be$\r$\n\
     last parameter before '/D' (if used), case-sensitive$\r$\n\
     $\r$\n\
-    /S:$\r$\n\
+    '/S':$\r$\n\
     silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
     $\r$\n\
-    /allusers:$\r$\n\
+    '/allusers':$\r$\n\
     install for all users, case-insensitive$\r$\n\
     $\r$\n\
-    /currentuser:$\r$\n\
+    '/currentuser':$\r$\n\
     install for current user only, case-insensitive$\r$\n\
     $\r$\n\
-    /D:$\r$\n\
+    '/D':$\r$\n\
     (installer only) set install directory, must be last parameter,$\r$\n\
     without quotes, case-sensitive"
   ; SetErrorLevel 666660 - invalid command-line parameters
@@ -549,31 +539,31 @@ Function .onInit
   ; Copied from NsisMultiUser.nsh (starting line 480) and modified
   MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
     $\r$\n\
-    /allusers:$\r$\n\
+    '/allusers':$\r$\n\
     (un)install for all users, case-insensitive$\r$\n\
     $\r$\n\
-    /currentuser:$\r$\n\
+    '/currentuser':$\r$\n\
     (un)install for current user only, case-insensitive$\r$\n\
     $\r$\n\
-    /uninstall:$\r$\n\
+    '/uninstall':$\r$\n\
     (installer only) run uninstaller, requires '/allusers' or '/currentuser',$\r$\n\
     case-insensitive$\r$\n\
     $\r$\n\
-    /S:$\r$\n\
+    '/S':$\r$\n\
     silent mode, requires '/allusers' or '/currentuser', case-sensitive$\r$\n\
     $\r$\n\
-    /no-desktop-shortcut:$\r$\n\
-    (silent mode only) install without desktop shortcut, must be$\r$\n\
-    last parameter before '/D' (if used), case-sensitive$\r$\n\
+    '/no-desktop-shortcut':$\r$\n\
+    (silent mode only) install without desktop shortcut, must be last$\r$\n\
+    parameter before '/D' (if used), case-sensitive$\r$\n\
     $\r$\n\
-    /D:$\r$\n\
-    (installer only) set install directory, must be last parameter,$\r$\n\
-    without quotes, case-sensitive$\r$\n\
+    '/D':$\r$\n\
+    (installer only) set install directory, must be last parameter, without$\r$\n\
+    quotes, case-sensitive$\r$\n\
     $\r$\n\
-    /error-code:$\r$\n\
+    '/error-codes':$\r$\n\
     the error codes the program gives back$\r$\n\
     $\r$\n\
-    /?:$\r$\n\
+    '/?':$\r$\n\
     display this message"
   Abort
 
@@ -618,7 +608,8 @@ Function .onInit
   ${GetOptionsS} $R0 "/uninstall" $R1
   ${IfNot} ${errors}
     ; FIXME LATER: Translate this string!
-    MessageBox MB_OK "BleachBit was already uninstalled!" /SD IDOK
+    ; Doesn't get translated! Command line is English only!
+    MessageBox MB_OK "BleachBit is already uninstalled!" /SD IDOK
     ; SetErrorLevel 0 - normal execution (no error)
     SetErrorLevel 0
     Abort
@@ -631,6 +622,18 @@ Function .onInit
   Goto end
 
   end:
+  ; Insering the macros at the end that they don't effect the error messages of the command line.
+
+  ; Insert Macro MULTIUSER_INIT:
+  ; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
+  ; Command Call not valid outside Section or Function!
+  !insertmacro MULTIUSER_INIT
+
+  ; Insert Macro MUI_LANGDLL_DISPLAY:
+  ; This is the language display dialog!
+  ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
+  ; Command IfSilent not valid outside Section or Function!
+  !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
 ; And now starts the GUI Installer...
