@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1014
+;  @scriptversion v2.3.1015
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -123,7 +123,7 @@
 ;--------------------------------
 ;Pages
 
-; installer
+; Installer:
   ;!insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "..\COPYING"
   !insertmacro MULTIUSER_PAGE_INSTALLMODE
@@ -137,7 +137,7 @@
   !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
   !insertmacro MUI_PAGE_FINISH
 
-; uninstaller
+; Uninstaller:
   ;!insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -149,7 +149,7 @@
 ;--------------------------------
 ;Languages
 
-;Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
+; Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
   !insertmacro MUI_LANGUAGE "English"
 !ifndef NoTranslations
 ; !insertmacro MUI_LANGUAGE "AFRIKAANS"
@@ -288,7 +288,8 @@ FunctionEnd
 ;Default section
 
 ; BleachBit Core
-Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
+Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
+  ; "SectionIn RO" means: Section defined mandatory, so that the user can not unselect them!
   SectionIn RO
 
   ; Copy files
@@ -309,7 +310,7 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   SetOutPath "$INSTDIR\share\"
   File "..\bleachbit.png"
 
-  ; Uninstaller
+  ; Write uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   ; Register uninstaller in Add/Remove Programs
@@ -436,10 +437,10 @@ SectionEnd
 
 Function .onInit
 
-  !insertmacro MULTIUSER_INIT
-
   ; Language display dialog
   !insertmacro MUI_LANGDLL_DISPLAY
+
+  !insertmacro MULTIUSER_INIT
 
   command_line:
   ${GetParameters} $R0

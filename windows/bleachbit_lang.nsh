@@ -18,7 +18,7 @@
 ;  @app BleachBit NSIS Installer Script - LangString File
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1013
+;  @scriptversion v2.3.1015
 ;  @scriptdate 2019-04-02
 ;  @scriptby Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -675,7 +675,7 @@
 !endif
 
 !ifdef LANG_GERMAN
-	; 2019-04-01 by https://github.com/Tobias-B-Besemer
+	; Translation 2019-04-01 - 2019-04-02 by https://github.com/Tobias-B-Besemer
 	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GERMAN} "${prodname} ist bereits installiert. Klicke 'OK' zum Deinstallieren der alten Version vor dem Upgrade, oder klicke 'Abbrechen' zum Abbruch des Upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_GERMAN} "Kern"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_GERMAN} "Installiert den BleachBit Kern"
@@ -690,7 +690,7 @@
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_GERMAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_GERMAN} "Erzeugt Desktop-Verknüpfung für BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_GERMAN} "Schnellstart"
-	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION ${LANG_GERMAN} "Erzeugt Schnellstart-Verknüpfung für BleachBit"
+	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION ${LANG_GERMAN} "Erzeugt Schnellstart- Verknüpfung für BleachBit"
 	LangString BLEACHBIT_COMPONENT_AUTOSTART_TITLE ${LANG_GERMAN} "Autostart"
 	LangString BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION ${LANG_GERMAN} "Erzeugt Autostart-Verknüpfung für BleachBit"
 	LangString BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE ${LANG_GERMAN} "Übersetzungen"
