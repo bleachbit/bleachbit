@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1025
+;  @scriptversion v2.3.1026
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -389,11 +389,11 @@ Function .onInit
   ${IfNot} ${errors}
     ${GetOptionsS} $R0 "/allusers" $R1
     ${IfNot} ${errors}
-      Goto uninstall_old
+      Goto previous_version_check
     ${EndIf}
     ${GetOptionsS} $R0 "/currentuser" $R1
     ${IfNot} ${errors}
-      Goto uninstall_old
+      Goto previous_version_check
     ${EndIf}
     MessageBox MB_ICONINFORMATION "Error:$\r$\n\
       $\r$\n\
@@ -580,7 +580,7 @@ Function .onInit
   ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
     "UninstallString"
   ; If not already installed, skip uninstallation
-  StrCmp $R1 "" new_install
+  StrCmp $R1 "" no_uninstall_needed
   Var /GLOBAL uninstaller_cmd
   ; Save the uninstaller for later:
   !define uninstaller_cmd "$R1"
@@ -609,6 +609,19 @@ Function .onInit
     Abort
   ${EndIf}
   Goto new_install
+
+  no_uninstall_needed:
+  ; Check if the installer was started with "/uninstall":
+  ${GetOptionsS} $R0 "/uninstall" $R1
+  ${IfNot} ${errors}
+    ; FIXME LATER: Translate this string!
+    MessageBox MB_OK "BleachBit was already uninstalled!" /SD IDOK
+    ; SetErrorLevel 0 - normal execution (no error)
+    SetErrorLevel 0
+    Abort
+  ${Else}
+    Goto new_install
+  ${EndIf}
 
   new_install:
   ; Goto end, it starts the GUI and loads the Installer Sections...
