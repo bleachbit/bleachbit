@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1024
+;  @scriptversion v2.3.1025
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -32,7 +32,7 @@
 ;--------------------------------
 ;System
 
-; Request application privileges for Windows Vista
+; Request application privileges for Windows Vista:
 ; NsisMultiUser sets this, when needed.
 ; RequestExecutionLevel admin
 
@@ -122,24 +122,32 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;Pages
 
 ; Installer:
+!define MUI_WELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "$(BLEACHBIT_LICENSE)"
+!define MUI_LICENSEPAGE_RADIOBUTTONS
+!insertmacro MUI_PAGE_LICENSE "${BLEACHBIT_LICENSE}"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_COMPONENTS
+!define MUI_HEADERIMAGE_BITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
 !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-!define MUI_FINISHPAGE_LINK_LOCATION "$(PRODURL)"
+!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller:
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
+!insertmacro MUI_UNPAGE_DIRECTORY
 !insertmacro MUI_UNPAGE_COMPONENTS
+!define MUI_HEADERIMAGE_UNBITMAP "bleachbit_150x57.bmp"
 !insertmacro MUI_UNPAGE_INSTFILES
+!define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
@@ -148,9 +156,13 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;--------------------------------
 ;Interface Settings
 
+; Show a message box with a warning when the user wants to close the installer:
 !define MUI_ABORTWARNING
+!define MUI_ABORTWARNING_CANCEL_DEFAULT
+!define MUI_UNABORTWARNING
+!define MUI_UNABORTWARNING_CANCEL_DEFAULT
 
-; Show all languages, despite user's codepage
+; Show all languages, despite user's codepage:
 ; https://nsis.sourceforge.io/Why_does_the_language_selection_dialog_hide_some_languages
 !define MUI_LANGDLL_ALLLANGUAGES
 
@@ -159,11 +171,12 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;Language Selection Dialog Settings
 
 ; Better not doing that, or the user can never ever change his language!
+; OK, we give it with the new code a try again... ^^
 
 ; Remember the installer language
-; !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
-; !define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
-; !define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 
 ;--------------------------------
@@ -290,7 +303,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;Installer Functions
 
 Function .onInit
-
   ; Insert Macro MULTIUSER_INIT:
   ; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
   ; Command Call not valid outside Section or Function!
@@ -299,14 +311,16 @@ Function .onInit
   ; Insert Macro MUI_LANGDLL_DISPLAY:
   ; This is the language display dialog!
   ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
+  ; Command IfSilent not valid outside Section or Function!
   !insertmacro MUI_LANGDLL_DISPLAY
 
   ;Command line variable:
   !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
 
-  ; Handle the command line parameters:
-  command_line:
+  ; Get the command line parameters:
   ${GetParameters} $R0
+
+  ; And handle the command line parameters...
 
   ; Case: /?
   ${GetOptionsS} $R0 "/?" $R1
@@ -561,24 +575,22 @@ Function .onInit
     display this message"
   Abort
 
-  previous_version_check:
+  previous_version_check: ; and uninstall old
   ; Check whether application is already installed
   ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
     "UninstallString"
   ; If not already installed, skip uninstallation
   StrCmp $R1 "" new_install
-  Goto upgrade_uninstall_msg
-
-  upgrade_uninstall_msg:
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK uninstall_old
-  ; SetErrorLevel 2 - (un)installation aborted by script
-  SetErrorLevel 2
-  Abort
-
-  uninstall_old:
-  ; If installing in silent mode, also uninstall in silent mode
   Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd "$R9 _?=$INSTDIR"
+  ; Save the uninstaller for later:
+  !define uninstaller_cmd "$R1"
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK true IDCANCEL false
+  false:
+  ; SetErrorLevel 1 - (un)installation aborted by user (Cancel button)
+  SetErrorLevel 1
+  Abort
+  true:
+  ; If installing in silent mode, also uninstall in silent mode
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
   ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
@@ -763,7 +775,9 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+!ifndef NoTranslations
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
