@@ -18,16 +18,16 @@
 ;  @app BleachBit NSIS Installer Script - LangString File
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1003
-;  @scriptdate 2019-04-01
-;  @scriptby Tobias B. Besemer (2019-03-31 - 2019-04-01)
+;  @scriptversion v2.3.1013
+;  @scriptdate 2019-04-02
+;  @scriptby Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
 ;  @testeddate 2019-04-01
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
 
 !ifdef LANG_ENGLISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ENGLISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ENGLISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ENGLISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ENGLISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ENGLISH} "Shortcuts"
@@ -37,6 +37,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ENGLISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ENGLISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ENGLISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ENGLISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ENGLISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ENGLISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ENGLISH} "Quick launch"
@@ -53,7 +54,7 @@
 !endif
 
 !ifdef LANG_AFRIKAANS
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_AFRIKAANS} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_AFRIKAANS} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_AFRIKAANS} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_AFRIKAANS} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_AFRIKAANS} "Shortcuts"
@@ -63,6 +64,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_AFRIKAANS} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_AFRIKAANS} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_AFRIKAANS} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_AFRIKAANS} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_AFRIKAANS} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_AFRIKAANS} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_AFRIKAANS} "Quick launch"
@@ -79,7 +81,7 @@
 !endif
 
 !ifdef LANG_ALBANIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ALBANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ALBANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ALBANIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ALBANIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ALBANIAN} "Shortcuts"
@@ -89,6 +91,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ALBANIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ALBANIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ALBANIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ALBANIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ALBANIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ALBANIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ALBANIAN} "Quick launch"
@@ -105,7 +108,7 @@
 !endif
 
 !ifdef LANG_ARABIC
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ARABIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ARABIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ARABIC} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ARABIC} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ARABIC} "Shortcuts"
@@ -115,6 +118,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ARABIC} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ARABIC} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ARABIC} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ARABIC} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ARABIC} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ARABIC} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ARABIC} "Quick launch"
@@ -131,7 +135,7 @@
 !endif
 
 !ifdef LANG_ARMENIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ARMENIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ARMENIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ARMENIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ARMENIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ARMENIAN} "Shortcuts"
@@ -141,6 +145,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ARMENIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ARMENIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ARMENIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ARMENIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ARMENIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ARMENIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ARMENIAN} "Quick launch"
@@ -157,7 +162,7 @@
 !endif
 
 !ifdef LANG_ASTURIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ASTURIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ASTURIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ASTURIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ASTURIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ASTURIAN} "Shortcuts"
@@ -167,6 +172,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ASTURIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ASTURIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ASTURIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ASTURIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ASTURIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ASTURIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ASTURIAN} "Quick launch"
@@ -183,7 +189,7 @@
 !endif
 
 !ifdef LANG_BASQUE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BASQUE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BASQUE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_BASQUE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_BASQUE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_BASQUE} "Shortcuts"
@@ -193,6 +199,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_BASQUE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_BASQUE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_BASQUE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_BASQUE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_BASQUE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_BASQUE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_BASQUE} "Quick launch"
@@ -209,7 +216,7 @@
 !endif
 
 !ifdef LANG_BELARUSIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BELARUSIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BELARUSIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_BELARUSIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_BELARUSIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_BELARUSIAN} "Shortcuts"
@@ -219,6 +226,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_BELARUSIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_BELARUSIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_BELARUSIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_BELARUSIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_BELARUSIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_BELARUSIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_BELARUSIAN} "Quick launch"
@@ -235,7 +243,7 @@
 !endif
 
 !ifdef LANG_BOSNIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BOSNIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BOSNIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_BOSNIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_BOSNIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_BOSNIAN} "Shortcuts"
@@ -245,6 +253,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_BOSNIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_BOSNIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_BOSNIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_BOSNIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_BOSNIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_BOSNIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_BOSNIAN} "Quick launch"
@@ -261,7 +270,7 @@
 !endif
 
 !ifdef LANG_BRETON
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BRETON} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BRETON} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_BRETON} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_BRETON} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_BRETON} "Shortcuts"
@@ -271,6 +280,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_BRETON} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_BRETON} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_BRETON} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_BRETON} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_BRETON} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_BRETON} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_BRETON} "Quick launch"
@@ -287,7 +297,7 @@
 !endif
 
 !ifdef LANG_BULGARIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BULGARIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_BULGARIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_BULGARIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_BULGARIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_BULGARIAN} "Shortcuts"
@@ -297,6 +307,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_BULGARIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_BULGARIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_BULGARIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_BULGARIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_BULGARIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_BULGARIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_BULGARIAN} "Quick launch"
@@ -313,7 +324,7 @@
 !endif
 
 !ifdef LANG_CATALAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CATALAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CATALAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_CATALAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_CATALAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_CATALAN} "Shortcuts"
@@ -323,6 +334,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_CATALAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_CATALAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_CATALAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_CATALAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_CATALAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_CATALAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_CATALAN} "Quick launch"
@@ -339,7 +351,7 @@
 !endif
 
 !ifdef LANG_CORSICAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CORSICAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CORSICAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_CORSICAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_CORSICAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_CORSICAN} "Shortcuts"
@@ -349,6 +361,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_CORSICAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_CORSICAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_CORSICAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_CORSICAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_CORSICAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_CORSICAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_CORSICAN} "Quick launch"
@@ -365,7 +378,7 @@
 !endif
 
 !ifdef LANG_CROATIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CROATIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CROATIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_CROATIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_CROATIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_CROATIAN} "Shortcuts"
@@ -375,6 +388,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_CROATIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_CROATIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_CROATIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_CROATIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_CROATIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_CROATIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_CROATIAN} "Quick launch"
@@ -391,7 +405,7 @@
 !endif
 
 !ifdef LANG_CZECH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CZECH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_CZECH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_CZECH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_CZECH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_CZECH} "Shortcuts"
@@ -401,6 +415,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_CZECH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_CZECH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_CZECH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_CZECH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_CZECH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_CZECH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_CZECH} "Quick launch"
@@ -417,7 +432,7 @@
 !endif
 
 !ifdef LANG_DANISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_DANISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_DANISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_DANISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_DANISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_DANISH} "Shortcuts"
@@ -427,6 +442,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_DANISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_DANISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_DANISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_DANISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_DANISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_DANISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_DANISH} "Quick launch"
@@ -443,7 +459,7 @@
 !endif
 
 !ifdef LANG_DUTCH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_DUTCH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_DUTCH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_DUTCH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_DUTCH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_DUTCH} "Shortcuts"
@@ -453,6 +469,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_DUTCH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_DUTCH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_DUTCH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_DUTCH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_DUTCH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_DUTCH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_DUTCH} "Quick launch"
@@ -469,7 +486,7 @@
 !endif
 
 !ifdef LANG_ESPERANTO
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ESPERANTO} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ESPERANTO} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ESPERANTO} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ESPERANTO} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ESPERANTO} "Shortcuts"
@@ -479,6 +496,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ESPERANTO} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ESPERANTO} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ESPERANTO} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ESPERANTO} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ESPERANTO} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ESPERANTO} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ESPERANTO} "Quick launch"
@@ -495,7 +513,7 @@
 !endif
 
 !ifdef LANG_ESTONIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ESTONIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ESTONIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ESTONIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ESTONIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ESTONIAN} "Shortcuts"
@@ -505,6 +523,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ESTONIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ESTONIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ESTONIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ESTONIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ESTONIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ESTONIAN} "Quick launch"
@@ -521,7 +540,7 @@
 !endif
 
 !ifdef LANG_FARSI
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FARSI} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FARSI} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_FARSI} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_FARSI} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_FARSI} "Shortcuts"
@@ -531,6 +550,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_FARSI} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_FARSI} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_FARSI} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_FARSI} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_FARSI} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_FARSI} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_FARSI} "Quick launch"
@@ -547,7 +567,7 @@
 !endif
 
 !ifdef LANG_FINNISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FINNISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FINNISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_FINNISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_FINNISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_FINNISH} "Shortcuts"
@@ -557,6 +577,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_FINNISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_FINNISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_FINNISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_FINNISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_FINNISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_FINNISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_FINNISH} "Quick launch"
@@ -573,7 +594,7 @@
 !endif
 
 !ifdef LANG_FRENCH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FRENCH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_FRENCH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_FRENCH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_FRENCH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_FRENCH} "Shortcuts"
@@ -583,6 +604,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_FRENCH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_FRENCH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_FRENCH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_FRENCH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_FRENCH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_FRENCH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_FRENCH} "Quick launch"
@@ -599,7 +621,7 @@
 !endif
 
 !ifdef LANG_GALICIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GALICIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GALICIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_GALICIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_GALICIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_GALICIAN} "Shortcuts"
@@ -609,6 +631,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_GALICIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_GALICIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_GALICIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_GALICIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_GALICIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_GALICIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_GALICIAN} "Quick launch"
@@ -625,7 +648,7 @@
 !endif
 
 !ifdef LANG_GEORGIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GEORGIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GEORGIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_GEORGIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_GEORGIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_GEORGIAN} "Shortcuts"
@@ -635,6 +658,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_GEORGIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_GEORGIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_GEORGIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_GEORGIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_GEORGIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_GEORGIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_GEORGIAN} "Quick launch"
@@ -652,7 +676,7 @@
 
 !ifdef LANG_GERMAN
 	; 2019-04-01 by https://github.com/Tobias-B-Besemer
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GERMAN} "${prodname} ist bereits installiert. Klicke 'OK' zum Deinstallieren der alten Version bevor\upgrade, oder Klicke 'Abbrechen' zum Abbruch des Upgrades."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GERMAN} "${prodname} ist bereits installiert. Klicke 'OK' zum Deinstallieren der alten Version vor dem Upgrade, oder klicke 'Abbrechen' zum Abbruch des Upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_GERMAN} "Kern"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_GERMAN} "Installiert den BleachBit Kern"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_GERMAN} "Verknüpfungen"
@@ -662,6 +686,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_GERMAN} "Keine Benutzerkontensteuerung"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_GERMAN} "Debugging-Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_GERMAN} "Homepage"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_GERMAN} "Uninstaller"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_GERMAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_GERMAN} "Erzeugt Desktop-Verknüpfung für BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_GERMAN} "Schnellstart"
@@ -678,7 +703,7 @@
 !endif
 
 !ifdef LANG_GREEK
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GREEK} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_GREEK} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_GREEK} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_GREEK} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_GREEK} "Shortcuts"
@@ -688,6 +713,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_GREEK} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_GREEK} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_GREEK} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_GREEK} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_GREEK} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_GREEK} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_GREEK} "Quick launch"
@@ -704,7 +730,7 @@
 !endif
 
 !ifdef LANG_HEBREW
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_HEBREW} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_HEBREW} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_HEBREW} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_HEBREW} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_HEBREW} "Shortcuts"
@@ -714,6 +740,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_HEBREW} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_HEBREW} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_HEBREW} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_HEBREW} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_HEBREW} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_HEBREW} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_HEBREW} "Quick launch"
@@ -730,7 +757,7 @@
 !endif
 
 !ifdef LANG_HUNGARIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_HUNGARIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_HUNGARIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_HUNGARIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_HUNGARIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_HUNGARIAN} "Shortcuts"
@@ -740,6 +767,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_HUNGARIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_HUNGARIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_HUNGARIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_HUNGARIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_HUNGARIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_HUNGARIAN} "Quick launch"
@@ -756,7 +784,7 @@
 !endif
 
 !ifdef LANG_ICELANDIC
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ICELANDIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ICELANDIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ICELANDIC} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ICELANDIC} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ICELANDIC} "Shortcuts"
@@ -766,6 +794,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ICELANDIC} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ICELANDIC} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ICELANDIC} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ICELANDIC} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ICELANDIC} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ICELANDIC} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ICELANDIC} "Quick launch"
@@ -782,7 +811,7 @@
 !endif
 
 !ifdef LANG_INDONESIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_INDONESIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_INDONESIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_INDONESIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_INDONESIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_INDONESIAN} "Shortcuts"
@@ -792,6 +821,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_INDONESIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_INDONESIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_INDONESIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_INDONESIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_INDONESIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_INDONESIAN} "Quick launch"
@@ -808,7 +838,7 @@
 !endif
 
 !ifdef LANG_IRISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_IRISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_IRISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_IRISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_IRISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_IRISH} "Shortcuts"
@@ -818,6 +848,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_IRISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_IRISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_IRISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_IRISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_IRISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_IRISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_IRISH} "Quick launch"
@@ -834,7 +865,7 @@
 !endif
 
 !ifdef LANG_ITALIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ITALIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ITALIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ITALIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ITALIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ITALIAN} "Shortcuts"
@@ -844,6 +875,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ITALIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ITALIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ITALIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ITALIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ITALIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ITALIAN} "Quick launch"
@@ -860,7 +892,7 @@
 !endif
 
 !ifdef LANG_JAPANESE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_JAPANESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_JAPANESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_JAPANESE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_JAPANESE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_JAPANESE} "Shortcuts"
@@ -870,6 +902,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_JAPANESE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_JAPANESE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_JAPANESE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_JAPANESE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_JAPANESE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_JAPANESE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_JAPANESE} "Quick launch"
@@ -886,7 +919,7 @@
 !endif
 
 !ifdef LANG_KOREAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_KOREAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_KOREAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_KOREAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_KOREAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_KOREAN} "Shortcuts"
@@ -896,6 +929,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_KOREAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_KOREAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_KOREAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_KOREAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_KOREAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_KOREAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_KOREAN} "Quick launch"
@@ -912,7 +946,7 @@
 !endif
 
 !ifdef LANG_KURDISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_KURDISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_KURDISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_KURDISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_KURDISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_KURDISH} "Shortcuts"
@@ -922,6 +956,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_KURDISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_KURDISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_KURDISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_KURDISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_KURDISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_KURDISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_KURDISH} "Quick launch"
@@ -938,7 +973,7 @@
 !endif
 
 !ifdef LANG_LATVIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LATVIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LATVIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_LATVIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_LATVIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_LATVIAN} "Shortcuts"
@@ -948,6 +983,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_LATVIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_LATVIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_LATVIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_LATVIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_LATVIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_LATVIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_LATVIAN} "Quick launch"
@@ -964,7 +1000,7 @@
 !endif
 
 !ifdef LANG_LITHUANIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LITHUANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LITHUANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_LITHUANIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_LITHUANIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_LITHUANIAN} "Shortcuts"
@@ -974,6 +1010,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_LITHUANIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_LITHUANIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_LITHUANIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_LITHUANIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_LITHUANIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_LITHUANIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_LITHUANIAN} "Quick launch"
@@ -990,7 +1027,7 @@
 !endif
 
 !ifdef LANG_LUXEMBOURGISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LUXEMBOURGISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_LUXEMBOURGISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_LUXEMBOURGISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_LUXEMBOURGISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_LUXEMBOURGISH} "Shortcuts"
@@ -1000,6 +1037,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_LUXEMBOURGISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_LUXEMBOURGISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_LUXEMBOURGISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_LUXEMBOURGISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_LUXEMBOURGISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_LUXEMBOURGISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_LUXEMBOURGISH} "Quick launch"
@@ -1016,7 +1054,7 @@
 !endif
 
 !ifdef LANG_MACEDONIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MACEDONIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MACEDONIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_MACEDONIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_MACEDONIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_MACEDONIAN} "Shortcuts"
@@ -1026,6 +1064,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_MACEDONIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_MACEDONIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_MACEDONIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_MACEDONIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_MACEDONIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_MACEDONIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_MACEDONIAN} "Quick launch"
@@ -1042,7 +1081,7 @@
 !endif
 
 !ifdef LANG_MALAY
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MALAY} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MALAY} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_MALAY} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_MALAY} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_MALAY} "Shortcuts"
@@ -1052,6 +1091,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_MALAY} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_MALAY} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_MALAY} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_MALAY} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_MALAY} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_MALAY} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_MALAY} "Quick launch"
@@ -1068,7 +1108,7 @@
 !endif
 
 !ifdef LANG_MONGOLIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MONGOLIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_MONGOLIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_MONGOLIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_MONGOLIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_MONGOLIAN} "Shortcuts"
@@ -1078,6 +1118,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_MONGOLIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_MONGOLIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_MONGOLIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_MONGOLIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_MONGOLIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_MONGOLIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_MONGOLIAN} "Quick launch"
@@ -1094,7 +1135,7 @@
 !endif
 
 !ifdef LANG_NORWEGIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_NORWEGIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_NORWEGIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_NORWEGIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_NORWEGIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_NORWEGIAN} "Shortcuts"
@@ -1104,6 +1145,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_NORWEGIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_NORWEGIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_NORWEGIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_NORWEGIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_NORWEGIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_NORWEGIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_NORWEGIAN} "Quick launch"
@@ -1120,7 +1162,7 @@
 !endif
 
 !ifdef LANG_NORWEGIANNYNORSK
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_NORWEGIANNYNORSK} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_NORWEGIANNYNORSK} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_NORWEGIANNYNORSK} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_NORWEGIANNYNORSK} "Shortcuts"
@@ -1130,6 +1172,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_NORWEGIANNYNORSK} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_NORWEGIANNYNORSK} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_NORWEGIANNYNORSK} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_NORWEGIANNYNORSK} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_NORWEGIANNYNORSK} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_NORWEGIANNYNORSK} "Quick launch"
@@ -1146,7 +1189,7 @@
 !endif
 
 !ifdef LANG_PASHTO
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PASHTO} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PASHTO} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_PASHTO} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_PASHTO} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_PASHTO} "Shortcuts"
@@ -1156,6 +1199,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_PASHTO} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_PASHTO} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_PASHTO} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_PASHTO} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_PASHTO} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_PASHTO} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_PASHTO} "Quick launch"
@@ -1172,7 +1216,7 @@
 !endif
 
 !ifdef LANG_POLISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_POLISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_POLISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_POLISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_POLISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_POLISH} "Shortcuts"
@@ -1182,6 +1226,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_POLISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_POLISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_POLISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_POLISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_POLISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_POLISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_POLISH} "Quick launch"
@@ -1198,7 +1243,7 @@
 !endif
 
 !ifdef LANG_PORTUGUESE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PORTUGUESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PORTUGUESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_PORTUGUESE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_PORTUGUESE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_PORTUGUESE} "Shortcuts"
@@ -1208,6 +1253,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_PORTUGUESE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_PORTUGUESE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_PORTUGUESE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_PORTUGUESE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_PORTUGUESE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_PORTUGUESE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_PORTUGUESE} "Quick launch"
@@ -1224,7 +1270,7 @@
 !endif
 
 !ifdef LANG_PORTUGUESEBR
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PORTUGUESEBR} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_PORTUGUESEBR} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_PORTUGUESEBR} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_PORTUGUESEBR} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_PORTUGUESEBR} "Shortcuts"
@@ -1234,6 +1280,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_PORTUGUESEBR} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_PORTUGUESEBR} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_PORTUGUESEBR} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_PORTUGUESEBR} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_PORTUGUESEBR} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_PORTUGUESEBR} "Quick launch"
@@ -1250,7 +1297,7 @@
 !endif
 
 !ifdef LANG_ROMANIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ROMANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_ROMANIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_ROMANIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_ROMANIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_ROMANIAN} "Shortcuts"
@@ -1260,6 +1307,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_ROMANIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_ROMANIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_ROMANIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_ROMANIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_ROMANIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_ROMANIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_ROMANIAN} "Quick launch"
@@ -1276,7 +1324,7 @@
 !endif
 
 !ifdef LANG_RUSSIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_RUSSIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_RUSSIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_RUSSIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_RUSSIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_RUSSIAN} "Shortcuts"
@@ -1286,6 +1334,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_RUSSIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_RUSSIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_RUSSIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_RUSSIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_RUSSIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_RUSSIAN} "Quick launch"
@@ -1302,7 +1351,7 @@
 !endif
 
 !ifdef LANG_SCOTSGAELIC
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SCOTSGAELIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SCOTSGAELIC} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SCOTSGAELIC} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SCOTSGAELIC} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SCOTSGAELIC} "Shortcuts"
@@ -1312,6 +1361,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SCOTSGAELIC} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SCOTSGAELIC} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SCOTSGAELIC} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SCOTSGAELIC} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SCOTSGAELIC} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SCOTSGAELIC} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SCOTSGAELIC} "Quick launch"
@@ -1328,7 +1378,7 @@
 !endif
 
 !ifdef LANG_SERBIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SERBIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SERBIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SERBIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SERBIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SERBIAN} "Shortcuts"
@@ -1338,6 +1388,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SERBIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SERBIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SERBIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SERBIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SERBIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SERBIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SERBIAN} "Quick launch"
@@ -1354,7 +1405,7 @@
 !endif
 
 !ifdef LANG_SERBIANLATIN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SERBIANLATIN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SERBIANLATIN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SERBIANLATIN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SERBIANLATIN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SERBIANLATIN} "Shortcuts"
@@ -1364,6 +1415,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SERBIANLATIN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SERBIANLATIN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SERBIANLATIN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SERBIANLATIN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SERBIANLATIN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SERBIANLATIN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SERBIANLATIN} "Quick launch"
@@ -1380,7 +1432,7 @@
 !endif
 
 !ifdef LANG_SIMPCHINESE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SIMPCHINESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SIMPCHINESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SIMPCHINESE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SIMPCHINESE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SIMPCHINESE} "Shortcuts"
@@ -1390,6 +1442,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SIMPCHINESE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SIMPCHINESE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SIMPCHINESE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SIMPCHINESE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SIMPCHINESE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SIMPCHINESE} "Quick launch"
@@ -1406,7 +1459,7 @@
 !endif
 
 !ifdef LANG_SLOVAK
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SLOVAK} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SLOVAK} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SLOVAK} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SLOVAK} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SLOVAK} "Shortcuts"
@@ -1416,6 +1469,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SLOVAK} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SLOVAK} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SLOVAK} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SLOVAK} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SLOVAK} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SLOVAK} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SLOVAK} "Quick launch"
@@ -1432,7 +1486,7 @@
 !endif
 
 !ifdef LANG_SLOVENIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SLOVENIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SLOVENIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SLOVENIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SLOVENIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SLOVENIAN} "Shortcuts"
@@ -1442,6 +1496,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SLOVENIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SLOVENIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SLOVENIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SLOVENIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SLOVENIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SLOVENIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SLOVENIAN} "Quick launch"
@@ -1458,7 +1513,7 @@
 !endif
 
 !ifdef LANG_SPANISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SPANISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SPANISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SPANISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SPANISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SPANISH} "Shortcuts"
@@ -1468,6 +1523,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SPANISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SPANISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SPANISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SPANISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SPANISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SPANISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SPANISH} "Quick launch"
@@ -1484,7 +1540,7 @@
 !endif
 
 !ifdef LANG_SPANISHINTERNATIONAL
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SPANISHINTERNATIONAL} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SPANISHINTERNATIONAL} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SPANISHINTERNATIONAL} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SPANISHINTERNATIONAL} "Shortcuts"
@@ -1494,6 +1550,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SPANISHINTERNATIONAL} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SPANISHINTERNATIONAL} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SPANISHINTERNATIONAL} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SPANISHINTERNATIONAL} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SPANISHINTERNATIONAL} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SPANISHINTERNATIONAL} "Quick launch"
@@ -1510,7 +1567,7 @@
 !endif
 
 !ifdef LANG_SWEDISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SWEDISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_SWEDISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_SWEDISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_SWEDISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_SWEDISH} "Shortcuts"
@@ -1520,6 +1577,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_SWEDISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_SWEDISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_SWEDISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_SWEDISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_SWEDISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_SWEDISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_SWEDISH} "Quick launch"
@@ -1536,7 +1594,7 @@
 !endif
 
 !ifdef LANG_TATAR
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TATAR} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TATAR} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_TATAR} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_TATAR} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_TATAR} "Shortcuts"
@@ -1546,6 +1604,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_TATAR} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_TATAR} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_TATAR} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_TATAR} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_TATAR} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_TATAR} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_TATAR} "Quick launch"
@@ -1562,7 +1621,7 @@
 !endif
 
 !ifdef LANG_THAI
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_THAI} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_THAI} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_THAI} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_THAI} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_THAI} "Shortcuts"
@@ -1572,6 +1631,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_THAI} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_THAI} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_THAI} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_THAI} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_THAI} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_THAI} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_THAI} "Quick launch"
@@ -1588,7 +1648,7 @@
 !endif
 
 !ifdef LANG_TRADCHINESE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TRADCHINESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TRADCHINESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_TRADCHINESE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_TRADCHINESE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_TRADCHINESE} "Shortcuts"
@@ -1598,6 +1658,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_TRADCHINESE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_TRADCHINESE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_TRADCHINESE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_TRADCHINESE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_TRADCHINESE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_TRADCHINESE} "Quick launch"
@@ -1614,7 +1675,7 @@
 !endif
 
 !ifdef LANG_TURKISH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TURKISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_TURKISH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_TURKISH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_TURKISH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_TURKISH} "Shortcuts"
@@ -1624,6 +1685,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_TURKISH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_TURKISH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_TURKISH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_TURKISH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_TURKISH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_TURKISH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_TURKISH} "Quick launch"
@@ -1640,7 +1702,7 @@
 !endif
 
 !ifdef LANG_UKRAINIAN
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_UKRAINIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_UKRAINIAN} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_UKRAINIAN} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_UKRAINIAN} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_UKRAINIAN} "Shortcuts"
@@ -1650,6 +1712,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_UKRAINIAN} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_UKRAINIAN} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_UKRAINIAN} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_UKRAINIAN} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_UKRAINIAN} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_UKRAINIAN} "Quick launch"
@@ -1666,7 +1729,7 @@
 !endif
 
 !ifdef LANG_UZBEK
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_UZBEK} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_UZBEK} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_UZBEK} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_UZBEK} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_UZBEK} "Shortcuts"
@@ -1676,6 +1739,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_UZBEK} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_UZBEK} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_UZBEK} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_UZBEK} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_UZBEK} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_UZBEK} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_UZBEK} "Quick launch"
@@ -1692,7 +1756,7 @@
 !endif
 
 !ifdef LANG_VIETNAMESE
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_VIETNAMESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_VIETNAMESE} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_VIETNAMESE} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_VIETNAMESE} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_VIETNAMESE} "Shortcuts"
@@ -1702,6 +1766,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_VIETNAMESE} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_VIETNAMESE} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_VIETNAMESE} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_VIETNAMESE} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_VIETNAMESE} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_VIETNAMESE} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_VIETNAMESE} "Quick launch"
@@ -1718,7 +1783,7 @@
 !endif
 
 !ifdef LANG_WELSH
-	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_WELSH} "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+	LangString BLEACHBIT_UPGRADE_UNINSTALL ${LANG_WELSH} "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_COMPONENT_CORE_TITLE ${LANG_WELSH} "Core"
 	LangString BLEACHBIT_COMPONENT_CORE_DESCRIPTION ${LANG_WELSH} "Installs the BleachBit Core"
 	LangString BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE ${LANG_WELSH} "Shortcuts"
@@ -1728,6 +1793,7 @@
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC ${LANG_WELSH} "No User Account Control"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL ${LANG_WELSH} "Debugging Terminal"
 	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE ${LANG_WELSH} "Home Page"
+	LangString BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL ${LANG_WELSH} "Uninstall"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_TITLE ${LANG_WELSH} "Desktop"
 	LangString BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION ${LANG_WELSH} "Creates Desktop Shortcut for BleachBit"
 	LangString BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE ${LANG_WELSH} "Quick launch"

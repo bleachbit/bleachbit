@@ -9,16 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: <ahz001+github@gmail.com>\n"
 "POT-Creation-Date: 2019-03-31 08:45+0200\n"
-"PO-Revision-Date: 2019-04-01 19:20+0200\n"
+"PO-Revision-Date: 2019-04-02 05:30+0200\n"
 "Last-Translator: Tobias B. Besemer <Tobias.Besemer@Googlemail.com>\n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgctxt "With '\' you can make a linebreak."
 msgid "BLEACHBIT_UPGRADE_UNINSTALL"
-msgstr "${prodname} is already installed. Click 'OK' to uninstall the old version before \ upgrading, or click 'Cancel' to abort the upgrade."
+msgstr "${prodname} is already installed. Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 
 msgid "BLEACHBIT_COMPONENT_CORE_TITLE"
 msgstr "Core"
@@ -46,6 +45,9 @@ msgstr "Debugging Terminal"
 
 msgid "BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE"
 msgstr "Home Page"
+
+msgid "BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL"
+msgstr "Uninstall"
 
 msgid "BLEACHBIT_COMPONENT_DESKTOP_TITLE"
 msgstr "Desktop"
@@ -83,7 +85,6 @@ msgstr "Shred with BleachBit"
 msgid "BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgstr "Visit the ${prodname} web site"
 
-msgctxt "With '\' you can make a linebreak."
 msgid "BLEACHBIT_UNINSTALLTEXT"
 msgstr "BleachBit will be uninstalled from the following folder. Click 'Uninstall' to start the uninstallation. WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed!"
 

@@ -20,9 +20,9 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1012
-;  @scriptdate 2019-04-01
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-01)
+;  @scriptversion v2.3.1013
+;  @scriptdate 2019-04-02
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
 ;  @testeddate 2019-04-01
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -102,6 +102,9 @@
 
   !define MUI_ABORTWARNING
 
+  ;Show all languages, despite user's codepage
+  !define MUI_LANGDLL_ALLLANGUAGES
+
 
 ;--------------------------------
 ;Language Selection Dialog Settings
@@ -113,16 +116,20 @@
 
 
 ;--------------------------------
+;Command Line
+
+  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
+
+;--------------------------------
 ;Pages
 
 ; installer
+  ;!insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "..\COPYING"
   !insertmacro MULTIUSER_PAGE_INSTALLMODE
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_INSTFILES
-
-  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
 
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
@@ -131,9 +138,12 @@
   !insertmacro MUI_PAGE_FINISH
 
 ; uninstaller
+  ;!insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
   !insertmacro MUI_UNPAGE_CONFIRM
+  ;!insertmacro MUI_UNPAGE_COMPONENTS
   !insertmacro MUI_UNPAGE_INSTFILES
+  ;!insertmacro MUI_UNPAGE_FINISH
 
 
 ;--------------------------------
@@ -209,9 +219,58 @@
 ; !insertmacro MUI_LANGUAGE "WELSH"
 !endif
 
+!include NsisMultiUserLang.nsh
+
 !include bleachbit_lang.nsh
 
-!include NsisMultiUserLang.nsh
+
+;--------------------------------
+;License used in MUI_PAGE_LICENSE
+; For maybe later... Tobias.
+
+;LangString BLEACHBIT_LICENSE ${LANG_ENGLISH} "..\COPYING"
+;LangString BLEACHBIT_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
+;LangString BLEACHBIT_LICENSE ${LANG_GERMAN} "..\COPYING_Ger"
+
+
+;--------------------------------
+;PageEx License
+; For maybe later... Tobias.
+
+; Translations of "License"
+;LangString License_Text ${LANG_ENGLISH} "License"
+;LangString License_Text ${LANG_FRENCH} "Licence"
+;LangString License_Text ${LANG_GERMAN} "Lizenz"
+
+; LicenseLangString
+; Does the same as LangString only it loads the string from a text/RTF file and defines
+; a special LangString that can be used only by LicenseData.
+;LicenseLangString License_Data ${LANG_ENGLISH} license-english.txt
+;LicenseLangString License_Data ${LANG_FRENCH} license-french.txt
+;LicenseLangString License_Data ${LANG_GERMAN} license-german.txt
+
+; LicenseData
+; Specifies a text file or a RTF file to use for the license that the user can read.
+; Omit this to not have a license displayed. Note that the file must be in the evil DOS text format (\r\n, yeah!).
+; If you make your license file a RTF file it is recommended you edit it with WordPad and not MS Word.
+; Using WordPad will result in a much smaller file.
+
+;https://nsis.sourceforge.io/Reference/PageEx
+;PageEx License
+;  LicenseText $(License_Text)
+;  LicenseData $(License_Data)
+;  LicenseForceSelection checkbox
+;PageExEnd
+
+
+;--------------------------------
+;Reserve Files
+  
+  ;If you are using solid compression, files that are required before
+  ;the actual installation should be stored first in the data block,
+  ;because this will make your installer start faster.
+  
+  !insertmacro MUI_RESERVEFILE_LANGDLL
 
 
 ;--------------------------------
@@ -227,9 +286,12 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
+
+; BleachBit Core
 Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   SectionIn RO
 
+  ; Copy files
   SetOutPath $INSTDIR
   File "..\dist\*.*"
   File "..\COPYING"
@@ -250,12 +312,14 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   ; Uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
-  SetOutPath "$INSTDIR\"
-  CreateDirectory "$SMPROGRAMS\${prodname}"
-  CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-
   ; Register uninstaller in Add/Remove Programs
   !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+    "HelpLink" "https://www.bleachbit.org/help"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+    "URLInfoAbout" "https://www.bleachbit.org/"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+    "URLUpdateInfo" "https://www.bleachbit.org/download"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
     "HelpLink" "https://www.bleachbit.org/help"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
@@ -264,7 +328,7 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     "URLUpdateInfo" "https://www.bleachbit.org/download"
 
   ; Restore QuietUninstallString
-  ${if} $6 = 666
+  ${if} ${ERRORLEVEL} == "666"
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
       WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
@@ -279,21 +343,27 @@ Section "-$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   ${endif}
 SectionEnd
 
+; BleachBit Shortcuts
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
+  ; BleachBit Start Menu Shortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
+    CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" \
       "$INSTDIR\${prodname}.exe"
-    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC)" \
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC).lnk" \
       "$INSTDIR\${prodname}.exe" \
       "--no-uac --gui"
-    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL)" \
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_DEBUGGING_TERMINAL).lnk" \
       "$INSTDIR\${prodname}_console.exe"
-    Call RefreshShellIcons
     WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_HOME_PAGE).url" \
       "InternetShortcut" "URL" "https://www.bleachbit.org/"
+    CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_STARTMENU_LINK_UNINSTALL).lnk" \
+      "$INSTDIR\uninstall.exe"
+    Call RefreshShellIcons
   SectionEnd
 
+  ; BleachBit Desktop Shortcut
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
     ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's "No" by default. If "Yes": NO DESKTOP SHORTCUT!
     ${if} ${COMMAND_LINE_NO_DESKTOP_SHORTCUT} == "No"
@@ -303,6 +373,7 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
     ${endif}
   SectionEnd
 
+  ; BleachBit Quick Launch Shortcut
   Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
@@ -316,6 +387,7 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
   SectionEnd
 SectionGroupEnd
 
+; BleachBit Translations
 !ifndef NoTranslations
 Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionTranslations
   SetOutPath $INSTDIR\share\locale
@@ -340,6 +412,13 @@ Section "-Write Install Size"
     !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
 SectionEnd
 
+
+;--------------------------------
+;Descriptions
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
+
+;Assign descriptions to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
@@ -414,8 +493,8 @@ Function .onInit
       $\r$\n\
       /D$\t- (installer only) set install directory, must be last parameter,$\r$\n\
       without quotes, case-sensitive"
-    ; SetErrorLevel 2 - (un)installation aborted by script
-    SetErrorLevel 2
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
     Quit
   ${EndIf}
 
@@ -430,8 +509,8 @@ Function .onInit
       $\r$\n\
       /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
       shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 2 - (un)installation aborted by script
-    SetErrorLevel 2
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
     Quit
   ${EndIf}
 
@@ -444,8 +523,8 @@ Function .onInit
       $\r$\n\
       /no-desktop-shortcut - (silent mode only) install without desktop$\r$\n\
       shortcut, must be last parameter before '/D' (if used), case-sensitive"
-    ; SetErrorLevel 2 - (un)installation aborted by script
-    SetErrorLevel 2
+    ; SetErrorLevel 666660 - invalid command-line parameters
+    SetErrorLevel 666660
     Quit
   ${EndIf}
 
@@ -472,12 +551,13 @@ Function .onInit
     Called: $R0$\r$\n\
     $\r$\n\
     $R0 - Parameter not known!"
-  SetErrorLevel 2
+  SetErrorLevel 666660
   Goto command_line_help
 
   command_line_help:
   ; Copied from NsisMultiUser.nsh (starting line 480) and modified process /? parameter
   MessageBox MB_ICONINFORMATION "Usage:$\r$\n\
+    $\r$\n\
     /allusers$\t- (un)install for all users, case-insensitive$\r$\n\
     $\r$\n\
     /currentuser - (un)install for current user only, case-insensitive$\r$\n\
@@ -504,9 +584,12 @@ Function .onInit
     666660$\t- invalid command-line parameters$\r$\n\
     666661$\t- elevation is not allowed by defines$\r$\n\
     666662$\t- uninstaller detected there's no installed version$\r$\n\
-    666663$\t- executing uninstaller from the installer failed$\r$\n\
-    666666$\t- cannot start elevated instance$\r$\n\
-    other$\t- Windows error code when trying to start elevated instance"
+    more$\t- in the documentation and on request"
+    ; "more on request", because NSIS cutted the MessageBox!
+    ; "more" is:
+    ; 666663$\t- executing uninstaller from the installer failed$\r$\n\
+    ; 666666$\t- cannot start elevated instance$\r$\n\
+    ; other$\t- Windows error code when trying to start elevated instance"
   Quit
 
   previous_version_check:
@@ -530,12 +613,14 @@ Function .onInit
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
   ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
-  ExecWait $uninstaller_cmd $6
-  ${If} $R0 == "/uninstall"
+  ExecWait $uninstaller_cmd
+  ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
+  ; ErrorLevel = 2 - uninstallation aborted by script
+  ${If} ${ERRORLEVEL} = 1
+  ${OrIf} ${ERRORLEVEL} = 2
     Quit
   ${EndIf}
-  ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
-  ${If} ErrorLevel = 1
+  ${If} $R0 == "/uninstall"
     Quit
   ${EndIf}
   Goto new_install
