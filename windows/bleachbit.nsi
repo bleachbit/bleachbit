@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1029
+;  @scriptversion v2.3.1030
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -306,7 +306,7 @@ Function .onInit
   ; Command line variable:
   ; If "Yes": NO DESKTOP SHORTCUT!
   Var /GLOBAL COMMAND_LINE_NO_DESKTOP_SHORTCUT
-  StrCpy COMMAND_LINE_NO_DESKTOP_SHORTCUT "No"
+  StrCpy $COMMAND_LINE_NO_DESKTOP_SHORTCUT "No"
 
   ; Get the command line parameters...
   ${GetParameters} $R0
@@ -589,7 +589,7 @@ Function .onInit
   ; Actually run the uninstaller and SetErrorLevel (needed to restore QuietUninstallString)
   ExecWait $uninstaller_cmd $R6
   Var /GLOBAL ERRORLEVEL
-  StrCpy ERRORLEVEL "$R6"
+  StrCpy $ERRORLEVEL "$R6"
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
   ; Debug-Box:
