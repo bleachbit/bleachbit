@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1031
+;  @scriptversion v2.3.1032
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
 ;  @tested ok v2.0.0, Windows 7
@@ -98,7 +98,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;--------------------------------
 ;MultiUser
 
-; See https://github.com/Drizin/NsisMultiUser
+; See: https://github.com/Drizin/NsisMultiUser
 !addplugindir /x86-ansi ".\NsisPluginsAnsi\"
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
@@ -144,8 +144,10 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-;!insertmacro MUI_UNPAGE_DIRECTORY
-;!insertmacro MUI_UNPAGE_COMPONENTS
+; MUI_UNPAGE_DIRECTORY not needed, ATM.
+; !insertmacro MUI_UNPAGE_DIRECTORY
+; MUI_UNPAGE_COMPONENTS not needed, ATM.
+; !insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -570,6 +572,11 @@ Function .onInit
 
   previous_version_check: ; and uninstall old
   ; Check whether application is already installed
+  ; Wow6432Node is e.g. used on Windows 7 64-bit for 32-bit programs
+  ReadRegStr $R1 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
+  IfErrors 0 +10
+  ReadRegStr $R1 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
+  IfErrors 0 +8
   ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
   IfErrors 0 +6
   ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
@@ -577,20 +584,22 @@ Function .onInit
   ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
   IfErrors 0 +2
   ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
-  IfErrors 0 +0
+  IfErrors 0 0
   ; If not already installed, skip uninstallation
   StrCmp $R1 "" no_uninstall_possible
   ; Save the uninstaller for later:
   Var /GLOBAL uninstaller_cmd
   StrCpy $uninstaller_cmd "$R1"
   ; We also need the InstallLocation:
+  ReadRegStr $R2 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
+  IfErrors 0 +3
   ReadRegStr $R2 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
   IfErrors 0 +1
   ReadRegStr $R2 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
   Var /GLOBAL uninstaller_path
   StrCpy $uninstaller_path "$R2"
   StrCmp $uninstaller_path "" 0 +2
-  ; If not set, we have a problem... ^^
+  ; If not set, we have a problem... ^^ (...but BleachBit set it normaly.)
   StrCpy $uninstaller_path "$%Temp%"
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK true IDCANCEL false
   false:
@@ -614,6 +623,7 @@ Function .onInit
   ${OrIf} $ERRORLEVEL == "2"
     Abort
   ${EndIf}
+  ; ErrorLevel = 666 do we handle later!
   Goto inseringmacros
 
   no_uninstall_possible:
@@ -635,7 +645,7 @@ Function .onInit
   ; Command IfSilent not valid outside Section or Function!
   !insertmacro MUI_LANGDLL_DISPLAY
 
-  ; First handle this case: /allusers or /currentuser (/S) /uninstall
+  ; But first handle this case: /allusers or /currentuser (/S) /uninstall
   ${GetOptionsS} $R0 "/uninstall" $R1
   ${IfNot} ${errors}
     Call Uninstall
@@ -705,13 +715,11 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   ${if} $ERRORLEVEL == "666"
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
-      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-        "QuietUninstallString" "$7"
+      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString" "$7"
       DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
     ${else}
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
-      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-        "QuietUninstallString" "$7"
+      WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "QuietUninstallString" "$7"
       DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString"
     ${endif}
   ${endif}
