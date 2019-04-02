@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1022
+;  @scriptversion v2.3.1023
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -143,31 +143,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MUI_UNPAGE_FINISH
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
-
-
-;--------------------------------
-;Descriptions for the Installer Components
-
-;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
-
-;Assign descriptions to sections
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-
-;--------------------------------
-;Insert Macro MULTIUSER_INIT
-
-; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
-!insertmacro MULTIUSER_INIT
 
 
 ;--------------------------------
@@ -328,6 +303,11 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;Installer Functions
 
 Function .onInit
+
+  ; Insert Macro MULTIUSER_INIT:
+  ; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
+  ; Command Call not valid outside Section or Function!
+  !insertmacro MULTIUSER_INIT
 
   ; Handle the command line parameters
   command_line:
@@ -643,7 +623,7 @@ FunctionEnd
 
 
 ;--------------------------------
-;Installer Section
+;Installer Sections
 
 ; BleachBit Core
 Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
@@ -770,6 +750,25 @@ SectionEnd
 Section "-Write Install Size"
   !insertmacro MULTIUSER_RegistryAddInstallSizeInfo
 SectionEnd
+
+
+;--------------------------------
+;Descriptions for the Installer Components
+
+;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGUAGE SPECIFIC
+
+; Assign descriptions to sections:
+; Variable/Constant must be declared by Installer Sections! Place MUI_FUNCTION_DESCRIPTION after it!
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore} $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortcuts} $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} $(BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionAutostart} $(BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ;--------------------------------
