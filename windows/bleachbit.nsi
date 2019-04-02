@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1023
+;  @scriptversion v2.3.1024
 ;  @scriptdate 2019-04-02
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-02)
 ;  @tested ok v2.0.0, Windows 7
@@ -143,13 +143,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MUI_UNPAGE_FINISH
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
-
-
-;--------------------------------
-;Insert Macro MUI_LANGDLL_DISPLAY
-
-; Language display dialog
-!insertmacro MUI_LANGDLL_DISPLAY
 
 
 ;--------------------------------
@@ -294,12 +287,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
-;Command Line Variable
-
-!define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
-
-
-;--------------------------------
 ;Installer Functions
 
 Function .onInit
@@ -309,7 +296,15 @@ Function .onInit
   ; Command Call not valid outside Section or Function!
   !insertmacro MULTIUSER_INIT
 
-  ; Handle the command line parameters
+  ; Insert Macro MUI_LANGDLL_DISPLAY:
+  ; This is the language display dialog!
+  ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
+  !insertmacro MUI_LANGDLL_DISPLAY
+
+  ;Command line variable:
+  !define COMMAND_LINE_NO_DESKTOP_SHORTCUT "No" ; If "Yes": NO DESKTOP SHORTCUT!
+
+  ; Handle the command line parameters:
   command_line:
   ${GetParameters} $R0
 
@@ -469,12 +464,6 @@ Function .onInit
     Goto previous_version_check
   ${EndIf}
 
-  ; Case: No Parameter
-  ; In case $R0 == "": (No "${GetOptionsS} $R0"!)
-  ${If} $R0 == ""
-    Goto previous_version_check
-  ${EndIf}
-
   ; In case of just /D:
   ${GetOptionsS} $R0 "/D" $R1
   ${IfNot} ${errors}
@@ -497,6 +486,12 @@ Function .onInit
     ; SetErrorLevel 666660 - invalid command-line parameters
     SetErrorLevel 666660
     Abort
+  ${EndIf}
+
+  ; Case: No Parameter
+  ; In case $R0 == "": (No "${GetOptionsS} $R0"!)
+  ${If} $R0 == ""
+    Goto previous_version_check
   ${EndIf}
 
   ; In case of a unknow parameter:
@@ -604,10 +599,12 @@ Function .onInit
   Goto new_install
 
   new_install:
+  ; Goto end, it starts the GUI and loads the Installer Sections...
   Goto end
 
   end:
 FunctionEnd
+
 ; And now starts the GUI Installer...
 
 
