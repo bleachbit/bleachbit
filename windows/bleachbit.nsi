@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1040
+;  @scriptversion v2.3.1041
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1039, Windows 7
+;  @tested ok v2.3.1040, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
@@ -38,21 +38,6 @@
 !define PRODURL "https://www.bleachbit.org"
 !define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
 ; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
-
-; Default installation folder
-; NsisMultiUser sets the directory.
-; InstallDir "$PROGRAMFILES\${prodname}"
-
-; Get installation folder from registry if available
-InstallDirRegKey HKCU "Software\${prodname}" ""
-
-
-;--------------------------------
-;System
-
-; Request application privileges for Windows Vista:
-; NsisMultiUser sets this, when needed.
-; RequestExecutionLevel admin
 
 
 ;--------------------------------
@@ -87,6 +72,10 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;--------------------------------
 ;Packing
 
+; Best compression
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+
 Name "${prodname}"
 
 !ifdef NoTranslations
@@ -102,10 +91,6 @@ Name "${prodname}"
 !ifdef NoSectionShred
   ; Definded but not used!
 !endif
-
-; Best compression
-; SetCompressor /SOLID lzma
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
 
 
 ;--------------------------------
@@ -124,6 +109,21 @@ Name "${prodname}"
 ; the actual installation should be stored first in the data block,
 ; because this will make your installer start faster.
 !insertmacro MUI_RESERVEFILE_LANGDLL
+
+
+;--------------------------------
+;System
+
+; Request application privileges for Windows Vista:
+; NsisMultiUser sets this, when needed.
+; RequestExecutionLevel admin
+
+; Default installation folder
+; NsisMultiUser sets the directory.
+; InstallDir "$PROGRAMFILES\${prodname}"
+
+; Get installation folder from registry if available
+InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
@@ -205,6 +205,8 @@ Name "${prodname}"
 
 ; Better not doing that, or the user can never ever change his language!
 ; OK, we give it with the new code a try again... ^^
+; Seems to doesn't work! At least at Windows 7, 64-bit!
+; No Registry Key HKCU\Software\${prodname}!
 
 ; Remember the installer language
 !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
@@ -346,6 +348,14 @@ Name "${prodname}"
     ; Core:
     RMDir /r "$INSTDIR"
     DeleteRegKey HKCU "Software\${prodname}"
+
+    ; Use SetShellVarContext to use the right folders.
+    ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
+    ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+      SetShellVarContext all
+    ${else}
+      SetShellVarContext current
+    ${endif}
 
     ; Delete normal, Start menu shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}"
@@ -782,22 +792,25 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
 
   ; Register uninstaller in Add/Remove Programs
   !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-    "HelpLink" "https://www.bleachbit.org/help"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-    "URLInfoAbout" "https://www.bleachbit.org/"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-    "URLUpdateInfo" "https://www.bleachbit.org/download"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-    "NoModify" "0"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-    "HelpLink" "https://www.bleachbit.org/help"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-    "URLInfoAbout" "https://www.bleachbit.org/"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-    "URLUpdateInfo" "https://www.bleachbit.org/download"
-  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-    "NoModify" "0"
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "HelpLink" "https://www.bleachbit.org/help"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "URLInfoAbout" "https://www.bleachbit.org/"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "URLUpdateInfo" "https://www.bleachbit.org/download"
+    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "NoModify" 0
+  ${else}
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "HelpLink" "https://www.bleachbit.org/help"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "URLInfoAbout" "https://www.bleachbit.org/"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "URLUpdateInfo" "https://www.bleachbit.org/download"
+    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "NoModify" 0
+  ${endif}
 
   ; Restore QuietUninstallString
   ${if} $ErrorLevel == "666"
@@ -815,6 +828,14 @@ SectionEnd
 
 ; BleachBit Shortcuts
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
+  ; Use SetShellVarContext to use the right folders.
+  ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    SetShellVarContext all
+  ${else}
+    SetShellVarContext current
+  ${endif}
+
   ; BleachBit Start Menu Shortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
@@ -871,7 +892,7 @@ SectionGroupEnd
   Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
     ; register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" "$(BLEACHBIT_SHELL_TITLE)"
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe"
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
   SectionEnd
 !endif
@@ -896,6 +917,14 @@ SectionEnd
 
 ; BleachBit Shortcuts
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionUnShortcuts
+  ; Use SetShellVarContext to use the right folders.
+  ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    SetShellVarContext all
+  ${else}
+    SetShellVarContext current
+  ${endif}
+
   ; BleachBit Start Menu Shortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionUnStartMenu
     ; Delete normal, Start menu shortcuts
