@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1035
+;  @scriptversion v2.3.1036
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1034, Windows 7
+;  @tested ok v2.3.1035, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
@@ -52,15 +52,70 @@
 
 
 ;--------------------------------
-;General
+;Include MultiUser
 
-; Name and file
+; See: https://github.com/Drizin/NsisMultiUser
+!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
+!addplugindir /x86-unicode ".\NsisPluginsUnicode\"
+!addincludedir ".\NsisInclude"
+!include UAC.nsh
+!include NsisMultiUser.nsh
+!include LogicLib.nsh
+!include StdUtils.nsh
+
+
+;--------------------------------
+;General defines
+
 !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
 !define PRODNAME "BleachBit"
 !define UNINSTALL_FILENAME "uninstall.exe" ; suggested by NsisMultiUser
 !define PRODURL "https://www.bleachbit.org"
 !define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
 ; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
+
+
+;--------------------------------
+;MultiUser defines
+
+; https://github.com/Drizin/NsisMultiUser/wiki/Defines
+!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
+; !define VERSION "2.3"
+; "VERSION" already defined!
+!define PROGEXE "${prodname}.exe"
+; !define COMPANY_NAME "BleachBit"
+; "COMPANY_NAME" already defined!
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
+; and per-machine installations on the same machine are allowed. If set to disallow, the installer
+; alaways requires elevation when there's per-machine installation in order to remove it first.
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
+; If elevation is disabled, the per-machine option becomes available only if the (un)installer
+; is started elevated from Windows and is disabled otherwise.
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
+
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
+!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
+!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
+!define MULTIUSER_INSTALLMODE_64_BIT 0
+!define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
+!define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
+
+
+;--------------------------------
+;Packing
+
+; Best compression
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+
+; Reserve Files
+; If you are using solid compression, files that are required before
+; the actual installation should be stored first in the data block,
+; because this will make your installer start faster.
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 Name "${prodname}"
 
@@ -80,58 +135,6 @@ Name "${prodname}"
 
 ; Get installation folder from registry if available
 InstallDirRegKey HKCU "Software\${prodname}" ""
-
-
-;--------------------------------
-;Packing
-
-; Best compression
-; SetCompressor /SOLID lzma
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
-
-; Reserve Files
-; If you are using solid compression, files that are required before
-; the actual installation should be stored first in the data block,
-; because this will make your installer start faster.
-!insertmacro MUI_RESERVEFILE_LANGDLL
-
-
-;--------------------------------
-;MultiUser
-
-; See: https://github.com/Drizin/NsisMultiUser
-!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
-!addplugindir /x86-unicode ".\NsisPluginsUnicode\"
-!addincludedir ".\NsisInclude"
-!include UAC.nsh
-!include NsisMultiUser.nsh
-!include LogicLib.nsh
-!include StdUtils.nsh
-
-; https://github.com/Drizin/NsisMultiUser/wiki/Defines
-!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
-; !define VERSION "2.3"
-; "VERSION" already defined!
-; Our ${VERSION} have a "v" before - but lets have a look...
-!define PROGEXE "${prodname}.exe"
-!define COMPANY_NAME "${COMPANY_NAME}"
-
-; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
-; and per-machine installations on the same machine are allowed. If set to disallow, the installer
-; alaways requires elevation when there's per-machine installation in order to remove it first.
-!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1
-
-; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
-; If elevation is disabled, the per-machine option becomes available only if the (un)installer
-; is started elevated from Windows and is disabled otherwise.
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
-
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
-!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
-!define MULTIUSER_INSTALLMODE_64_BIT 0
-!define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
-!define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
 ;--------------------------------
