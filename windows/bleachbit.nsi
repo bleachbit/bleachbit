@@ -20,35 +20,13 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1039
+;  @scriptversion v2.3.1040
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1038, Windows 7
+;  @tested ok v2.3.1039, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
-
-
-;--------------------------------
-;System
-
-; Request application privileges for Windows Vista:
-; NsisMultiUser sets this, when needed.
-; RequestExecutionLevel admin
-
-
-;--------------------------------
-;Include FileFunc.nsh
-
-; FileFunc.nsh for e.g. command line arguments managment requested
-; by issue #437 "Install option to skip desktop icon"
-!include FileFunc.nsh
-
-
-;--------------------------------
-;Include Modern UI
-
-!include MUI2.nsh
 
 
 ;--------------------------------
@@ -67,6 +45,14 @@
 
 ; Get installation folder from registry if available
 InstallDirRegKey HKCU "Software\${prodname}" ""
+
+
+;--------------------------------
+;System
+
+; Request application privileges for Windows Vista:
+; NsisMultiUser sets this, when needed.
+; RequestExecutionLevel admin
 
 
 ;--------------------------------
@@ -101,10 +87,6 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ;--------------------------------
 ;Packing
 
-; Best compression
-; SetCompressor /SOLID lzma
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
-
 Name "${prodname}"
 
 !ifdef NoTranslations
@@ -121,11 +103,9 @@ Name "${prodname}"
   ; Definded but not used!
 !endif
 
-; Reserve Files
-; If you are using solid compression, files that are required before
-; the actual installation should be stored first in the data block,
-; because this will make your installer start faster.
-!insertmacro MUI_RESERVEFILE_LANGDLL
+; Best compression
+; SetCompressor /SOLID lzma
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
 
 
 ;--------------------------------
@@ -135,6 +115,29 @@ Name "${prodname}"
 !addplugindir /x86-ansi ".\NsisPluginsAnsi\"
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
+
+
+;--------------------------------
+;Reserve Files
+
+; If you are using solid compression, files that are required before
+; the actual installation should be stored first in the data block,
+; because this will make your installer start faster.
+!insertmacro MUI_RESERVEFILE_LANGDLL
+
+
+;--------------------------------
+;Include FileFunc.nsh
+
+; FileFunc.nsh for e.g. command line arguments managment requested
+; by issue #437 "Install option to skip desktop icon"
+!include FileFunc.nsh
+
+
+;--------------------------------
+;Include Modern UI
+
+!include MUI2.nsh
 
 
 ;--------------------------------
