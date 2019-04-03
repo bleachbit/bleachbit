@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1037
+;  @scriptversion v2.3.1038
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1036, Windows 7
+;  @tested ok v2.3.1037, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
@@ -49,16 +49,6 @@
 ;Include Modern UI
 
 !include MUI2.nsh
-
-
-;--------------------------------
-;Include MultiUser
-
-; See: https://github.com/Drizin/NsisMultiUser
-!include UAC.nsh
-!include NsisMultiUser.nsh
-!include LogicLib.nsh
-!include StdUtils.nsh
 
 
 ;--------------------------------
@@ -141,6 +131,16 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !addplugindir /x86-ansi ".\NsisPluginsAnsi\"
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
+
+
+;--------------------------------
+;Include MultiUser
+
+; See: https://github.com/Drizin/NsisMultiUser
+!include UAC.nsh
+!include NsisMultiUser.nsh
+!include LogicLib.nsh
+!include StdUtils.nsh
 
 
 ;--------------------------------
