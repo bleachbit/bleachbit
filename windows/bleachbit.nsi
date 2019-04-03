@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1034
+;  @scriptversion v2.3.1035
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1032, Windows 7
+;  @tested ok v2.3.1034, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
@@ -110,7 +110,9 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 ; https://github.com/Drizin/NsisMultiUser/wiki/Defines
 !define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
-!define VERSION "${VERSION}" ; Our ${VERSION} have a "v" before - but lets give it a try!
+; !define VERSION "2.3"
+; "VERSION" already defined!
+; Our ${VERSION} have a "v" before - but lets have a look...
 !define PROGEXE "${prodname}.exe"
 !define COMPANY_NAME "${COMPANY_NAME}"
 
