@@ -20,11 +20,11 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1032
+;  @scriptversion v2.3.1033
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.0.0, Windows 7
-;  @testeddate 2019-04-01
+;  @tested ok v2.3.1032, Windows 7
+;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
 
@@ -109,8 +109,17 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 !define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
 !define PROGEXE "${prodname}.exe"
-!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
+; and per-machine installations on the same machine are allowed. If set to disallow, the installer
+; alaways requires elevation when there's per-machine installation in order to remove it first.
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
+; If elevation is disabled, the per-machine option becomes available only if the (un)installer
+; is started elevated from Windows and is disabled otherwise.
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
+
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
@@ -584,7 +593,6 @@ Function .onInit
   ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "UninstallString"
   IfErrors 0 +2
   ReadRegStr $R1 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "QuietUninstallString"
-  IfErrors 0 0
   ; If not already installed, skip uninstallation
   StrCmp $R1 "" no_uninstall_possible
   ; Save the uninstaller for later:
@@ -592,13 +600,13 @@ Function .onInit
   StrCpy $uninstaller_cmd "$R1"
   ; We also need the InstallLocation:
   ReadRegStr $R2 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
-  IfErrors 0 +3
+  IfErrors 0 +4
   ReadRegStr $R2 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
-  IfErrors 0 +1
+  IfErrors 0 +2
   ReadRegStr $R2 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" "InstallLocation"
   Var /GLOBAL uninstaller_path
   StrCpy $uninstaller_path "$R2"
-  StrCmp $uninstaller_path "" 0 +2
+  StrCmp $uninstaller_path "" 0 +3
   ; If not set, we have a problem... ^^ (...but BleachBit set it normaly.)
   StrCpy $uninstaller_path "$%Temp%"
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_UPGRADE_UNINSTALL)" /SD IDOK IDOK true IDCANCEL false
@@ -613,14 +621,14 @@ Function .onInit
   ; Run the old uninstaller and SetErrorLevel (needed to restore QuietUninstallString):
   StrCpy $uninstaller_cmd "$uninstaller_cmd _?=$uninstaller_path"
   ExecWait $uninstaller_cmd $R6
-  Var /GLOBAL ERRORLEVEL
-  StrCpy $ERRORLEVEL "$R6"
+  Var /GLOBAL ErrorLevel
+  StrCpy $ErrorLevel "$R6"
   ; ErrorLevel = 1 - uninstallation aborted by user (Cancel button)
   ; ErrorLevel = 2 - uninstallation aborted by script
   ; ErrorLevel = 666 - installation was with QuietUninstallString
-  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / $ERRORLEVEL / $R0" ; Debug-Box
-  ${If} $ERRORLEVEL == "1"
-  ${OrIf} $ERRORLEVEL == "2"
+  MessageBox MB_ICONINFORMATION "ErrorLevel: $R6 / $ErrorLevel / $R0" ; Debug-Box
+  ${If} $ErrorLevel == "1"
+  ${OrIf} $ErrorLevel == "2"
     Abort
   ${EndIf}
   ; ErrorLevel = 666 do we handle later!
@@ -648,7 +656,7 @@ Function .onInit
   ; But first handle this case: /allusers or /currentuser (/S) /uninstall
   ${GetOptionsS} $R0 "/uninstall" $R1
   ${IfNot} ${errors}
-    Call Uninstall
+    Call un.Uninstall
     Abort
   ${EndIf}
 FunctionEnd
@@ -712,7 +720,7 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     "URLUpdateInfo" "https://www.bleachbit.org/download"
 
   ; Restore QuietUninstallString
-  ${if} $ERRORLEVEL == "666"
+  ${if} $ErrorLevel == "666"
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       ReadRegStr $7 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString"
       WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString" "$7"
@@ -820,17 +828,26 @@ SectionEnd
 ;Function Uninstall
 
 ; Move the code from Section "Uninstall" into a Function that he can be executed somewhere else
-Function Uninstall
+Function un.Uninstall
+  ; Core:
   RMDir /r "$INSTDIR"
   DeleteRegKey HKCU "Software\${prodname}"
-  ; Delete normal shortcuts
+
+  ; Delete normal, Start menu shortcuts
   RMDir /r "$SMPROGRAMS\${prodname}"
-  ; Delete any extra shortcuts
+
+  ; Delete Desktop shortcut
   Delete "$DESKTOP\BleachBit.lnk"
+
+  ; Delete Quick launch shortcut
   Delete "$QUICKLAUNCH\BleachBit.lnk"
+
+  ; Delete Autostart shortcut
   Delete "$SMSTARTUP\BleachBit.lnk"
-  ; Remove file association
+
+  ; Remove file association (Shredder)
   DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+
   ; Check for QuietUninstallString and SetErrorLevel 666
   ClearErrors
   ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString"
@@ -840,6 +857,7 @@ Function Uninstall
   SetErrorLevel 666
   ; Remove the uninstaller from registry as the very last step.
   ; If something goes wrong, let the user run it again.
+
   !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 FunctionEnd
 
@@ -850,7 +868,7 @@ FunctionEnd
 UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 
 Section "Uninstall"
-  Call Uninstall
+  Call un.Uninstall
 SectionEnd
 
 
