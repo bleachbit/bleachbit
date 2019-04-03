@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1038
+;  @scriptversion v2.3.1039
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1037, Windows 7
+;  @tested ok v2.3.1038, Windows 7
 ;  @testeddate 2019-04-03
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
@@ -60,6 +60,13 @@
 !define PRODURL "https://www.bleachbit.org"
 !define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
 ; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
+
+; Default installation folder
+; NsisMultiUser sets the directory.
+; InstallDir "$PROGRAMFILES\${prodname}"
+
+; Get installation folder from registry if available
+InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
@@ -98,12 +105,6 @@
 ; SetCompressor /SOLID lzma
 ; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
 
-; Reserve Files
-; If you are using solid compression, files that are required before
-; the actual installation should be stored first in the data block,
-; because this will make your installer start faster.
-!insertmacro MUI_RESERVEFILE_LANGDLL
-
 Name "${prodname}"
 
 !ifdef NoTranslations
@@ -116,12 +117,15 @@ Name "${prodname}"
   Unicode true
 !endif
 
-; Default installation folder
-; NsisMultiUser sets the directory.
-; InstallDir "$PROGRAMFILES\${prodname}"
+!ifdef NoSectionShred
+  ; Definded but not used!
+!endif
 
-; Get installation folder from registry if available
-InstallDirRegKey HKCU "Software\${prodname}" ""
+; Reserve Files
+; If you are using solid compression, files that are required before
+; the actual installation should be stored first in the data block,
+; because this will make your installer start faster.
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 
 ;--------------------------------
@@ -853,20 +857,20 @@ SectionGroupEnd
 
 ; BleachBit Translations
 !ifndef NoTranslations
-Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionTranslations
-  SetOutPath $INSTDIR\share\locale
-  File /r "..\dist\share\locale\*.*"
-SectionEnd
+  Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionTranslations
+    SetOutPath $INSTDIR\share\locale
+    File /r "..\dist\share\locale\*.*"
+  SectionEnd
 !endif
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
-  ; register file association verb
-  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" "$(BLEACHBIT_SHELL_TITLE)"
-  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe"
-  WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
-SectionEnd
+  Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
+    ; register file association verb
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" "$(BLEACHBIT_SHELL_TITLE)"
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe"
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
+  SectionEnd
 !endif
 
 ; Keep this section last. It must be last because that is when the
@@ -916,17 +920,17 @@ SectionGroupEnd
 
 ; BleachBit Translations
 !ifndef NoTranslations
-Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionUnTranslations
-  Delete "$INSTDIR\share\locale\*.*"
-SectionEnd
+  Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionUnTranslations
+    Delete "$INSTDIR\share\locale\*.*"
+  SectionEnd
 !endif
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionUnShred
-  ; Remove file association (Shredder)
-  DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-SectionEnd
+  Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionUnShred
+    ; Remove file association (Shredder)
+    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+  SectionEnd
 !endif
 
 
