@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1033
+;  @scriptversion v2.3.1034
 ;  @scriptdate 2019-04-03
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
 ;  @tested ok v2.3.1032, Windows 7
@@ -57,6 +57,7 @@
 ; Name and file
 !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
 !define PRODNAME "BleachBit"
+!define UNINSTALL_FILENAME "uninstall.exe" ; suggested by NsisMultiUser
 !define PRODURL "https://www.bleachbit.org"
 !define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
 ; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
@@ -107,8 +108,11 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !include LogicLib.nsh
 !include StdUtils.nsh
 
+; https://github.com/Drizin/NsisMultiUser/wiki/Defines
 !define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
+!define VERSION "${VERSION}" ; Our ${VERSION} have a "v" before - but lets give it a try!
 !define PROGEXE "${prodname}.exe"
+!define COMPANY_NAME "${COMPANY_NAME}"
 
 ; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
 ; and per-machine installations on the same machine are allowed. If set to disallow, the installer
@@ -125,6 +129,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
 !define MULTIUSER_INSTALLMODE_64_BIT 0
 !define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
+!define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
 ;--------------------------------
@@ -155,8 +160,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
 ; MUI_UNPAGE_DIRECTORY not needed, ATM.
 ; !insertmacro MUI_UNPAGE_DIRECTORY
-; MUI_UNPAGE_COMPONENTS not needed, ATM.
-; !insertmacro MUI_UNPAGE_COMPONENTS
+!insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -308,6 +312,60 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
   ; LicenseData $(License_Data)
   ; LicenseForceSelection checkbox
 ; PageExEnd
+
+
+;--------------------------------
+;Macro/Function "Uninstall"
+
+; We need to move the code from Section "Uninstall" into a function that he can
+; be executed from command line with /uninstall, too.
+; As we only can call functions starting with "un." from the uninstaller section,
+; and only functions without "un." from the installer section, we have to move the
+; funtion into a macro.
+
+!macro uninstallmacro un
+  Function ${un}uninstallfunction
+    ; Core:
+    RMDir /r "$INSTDIR"
+    DeleteRegKey HKCU "Software\${prodname}"
+
+    ; Delete normal, Start menu shortcuts
+    RMDir /r "$SMPROGRAMS\${prodname}"
+
+    ; Delete Desktop shortcut
+    Delete "$DESKTOP\BleachBit.lnk"
+
+    ; Delete Quick launch shortcut
+    Delete "$QUICKLAUNCH\BleachBit.lnk"
+
+    ; Delete Autostart shortcut
+    Delete "$SMSTARTUP\BleachBit.lnk"
+
+    ; Remove file association (Shredder)
+    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+
+    ; Check for QuietUninstallString and SetErrorLevel 666
+    ClearErrors
+    ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString"
+    IfErrors 0 +3
+    ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "QuietUninstallString"
+    IfErrors +2 0
+    SetErrorLevel 666
+    ; Remove the uninstaller from registry as the very last step.
+    ; If something goes wrong, let the user run it again.
+
+    ; Remove the uninstaller from registry as the very last step - if sth. goes wrong, let the user run it again
+    !insertmacro MULTIUSER_RegistryRemoveInstallInfo 
+
+    ; And in the example follows after that:
+    Delete "$INSTDIR\${UNINSTALL_FILENAME}"
+    RMDir "$INSTDIR"
+  FunctionEnd
+!macroend
+
+; Insert function as an installer and uninstaller function:
+!insertmacro uninstallmacro ""
+!insertmacro uninstallmacro "un."
 
 
 ;--------------------------------
@@ -656,7 +714,7 @@ Function .onInit
   ; But first handle this case: /allusers or /currentuser (/S) /uninstall
   ${GetOptionsS} $R0 "/uninstall" $R1
   ${IfNot} ${errors}
-    Call un.Uninstall
+    Call uninstallfunction
     Abort
   ${EndIf}
 FunctionEnd
@@ -712,12 +770,16 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
     "URLInfoAbout" "https://www.bleachbit.org/"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
     "URLUpdateInfo" "https://www.bleachbit.org/download"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+    "NoModify" "0"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
     "HelpLink" "https://www.bleachbit.org/help"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
     "URLInfoAbout" "https://www.bleachbit.org/"
   WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
     "URLUpdateInfo" "https://www.bleachbit.org/download"
+  WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    "NoModify" "0"
 
   ; Restore QuietUninstallString
   ${if} $ErrorLevel == "666"
@@ -770,6 +832,7 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
     Call RefreshShellIcons
   SectionEnd
 
+  ; BleachBit Autostart Shortcut
   Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
@@ -804,7 +867,60 @@ SectionEnd
 
 
 ;--------------------------------
-;Descriptions for the Installer Components
+;Uninstaller Section
+
+UninstallText $(BLEACHBIT_UNINSTALLTEXT)
+
+; BleachBit Core
+Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionUnCore
+  Call un.uninstallfunction
+SectionEnd
+
+; BleachBit Shortcuts
+SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionUnShortcuts
+  ; BleachBit Start Menu Shortcuts
+  Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionUnStartMenu
+    ; Delete normal, Start menu shortcuts
+    RMDir /r "$SMPROGRAMS\${prodname}"
+  SectionEnd
+
+  ; BleachBit Desktop Shortcut
+  Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionUnDesktop
+    ; Delete Desktop shortcut
+    Delete "$DESKTOP\BleachBit.lnk"
+  SectionEnd
+
+  ; BleachBit Quick Launch Shortcut
+  Section "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionUnQuickLaunch
+    ; Delete Quick launch shortcut
+    Delete "$QUICKLAUNCH\BleachBit.lnk"
+  SectionEnd
+
+  ; BleachBit Autostart Shortcut
+  Section "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionUnAutostart
+    ; Delete Autostart shortcut
+    Delete "$SMSTARTUP\BleachBit.lnk"
+  SectionEnd
+SectionGroupEnd
+
+; BleachBit Translations
+!ifndef NoTranslations
+Section "$(BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE)" SectionUnTranslations
+  Delete "$INSTDIR\share\locale\*.*"
+SectionEnd
+!endif
+
+;Section for making Shred Integration Optional
+!ifndef NoSectionShred
+Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionUnShred
+  ; Remove file association (Shredder)
+  DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+SectionEnd
+!endif
+
+
+;--------------------------------
+;Descriptions for the Installer/Uninstaller Components
 
 ;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGUAGE SPECIFIC
 
@@ -822,54 +938,6 @@ SectionEnd
 !endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-
-;--------------------------------
-;Function Uninstall
-
-; Move the code from Section "Uninstall" into a Function that he can be executed somewhere else
-Function un.Uninstall
-  ; Core:
-  RMDir /r "$INSTDIR"
-  DeleteRegKey HKCU "Software\${prodname}"
-
-  ; Delete normal, Start menu shortcuts
-  RMDir /r "$SMPROGRAMS\${prodname}"
-
-  ; Delete Desktop shortcut
-  Delete "$DESKTOP\BleachBit.lnk"
-
-  ; Delete Quick launch shortcut
-  Delete "$QUICKLAUNCH\BleachBit.lnk"
-
-  ; Delete Autostart shortcut
-  Delete "$SMSTARTUP\BleachBit.lnk"
-
-  ; Remove file association (Shredder)
-  DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-
-  ; Check for QuietUninstallString and SetErrorLevel 666
-  ClearErrors
-  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString"
-  IfErrors 0 +3
-  ReadRegStr $5 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "QuietUninstallString"
-  IfErrors +2 0
-  SetErrorLevel 666
-  ; Remove the uninstaller from registry as the very last step.
-  ; If something goes wrong, let the user run it again.
-
-  !insertmacro MULTIUSER_RegistryRemoveInstallInfo
-FunctionEnd
-
-
-;--------------------------------
-;Uninstaller Section
-
-UninstallText $(BLEACHBIT_UNINSTALLTEXT)
-
-Section "Uninstall"
-  Call un.Uninstall
-SectionEnd
 
 
 ;--------------------------------
