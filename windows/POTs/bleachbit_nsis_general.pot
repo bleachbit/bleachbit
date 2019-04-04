@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: <ahz001+github@gmail.com>\n"
 "POT-Creation-Date: 2019-03-31 08:45+0200\n"
-"PO-Revision-Date: 2019-04-02 05:30+0200\n"
+"PO-Revision-Date: 2019-04-03 23:45+0200\n"
 "Last-Translator: Tobias B. Besemer <Tobias.Besemer@Googlemail.com>\n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,20 +22,23 @@ msgstr "${prodname} is already installed. Click 'OK' to uninstall the old versio
 msgid "BLEACHBIT_COMPONENT_CORE_TITLE"
 msgstr "Core"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_CORE_DESCRIPTION"
-msgstr "Installs the BleachBit Core"
+msgstr "The BleachBit Core"
 
 msgid "BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE"
 msgstr "Shortcuts"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENTGROUP_SHORTCUTS_DESCRIPTION"
-msgstr "Creates Shortcuts for BleachBit"
+msgstr "Shortcuts for BleachBit"
 
 msgid "BLEACHBIT_COMPONENT_STARTMENU_TITLE"
 msgstr "Start menu"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_STARTMENU_DESCRIPTION"
-msgstr "Creates Start menu Shortcuts for BleachBit"
+msgstr "Start menu Shortcuts for BleachBit"
 
 msgid "BLEACHBIT_COMPONENT_STARTMENU_LINK_NO_UAC"
 msgstr "No User Account Control"
@@ -52,32 +55,37 @@ msgstr "Uninstall"
 msgid "BLEACHBIT_COMPONENT_DESKTOP_TITLE"
 msgstr "Desktop"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_DESKTOP_DESCRIPTION"
-msgstr "Creates Desktop Shortcut for BleachBit"
+msgstr "Desktop Shortcut for BleachBit"
 
 msgid "BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE"
 msgstr "Quick launch"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_QUICKLAUNCH_DESCRIPTION"
-msgstr "Creates Quick launch Shortcut for BleachBit"
+msgstr "Quick launch Shortcut for BleachBit"
 
 msgid "BLEACHBIT_COMPONENT_AUTOSTART_TITLE"
 msgstr "Autostart"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_AUTOSTART_DESCRIPTION"
-msgstr "Creates Autostart Shortcut for BleachBit"
+msgstr "Autostart Shortcut for BleachBit"
 
 msgid "BLEACHBIT_COMPONENT_TRANSLATIONS_TITLE"
 msgstr "Translations"
 
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
 msgid "BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION"
 msgstr "BleachBit Translations"
 
-msgid "BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE"
-msgstr "Integrate Shred"
+msgid "BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE"
+msgstr "Shred for Explorer"
 
-msgid "BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION"
-msgstr "Integrate BleachBit's Shred into Windows Explorer"
+msgctxt "BLEACHBIT_COMPONENT_xyz_DESCRIPTION is used as description of the component in the installer and uninstaller! So don't use words like 'install', 'create', 'integrate', etc. in the description!"
+msgid "BLEACHBIT_COMPONENT_SHREDFOREXPLORER_DESCRIPTION"
+msgstr "BleachBit Shred for Windows Explorer Shell"
 
 msgid "BLEACHBIT_SHELL_TITLE"
 msgstr "Shred with BleachBit"

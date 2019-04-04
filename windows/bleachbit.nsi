@@ -20,11 +20,11 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.1043
-;  @scriptdate 2019-04-03
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-03)
-;  @tested ok v2.3.1042, Windows 7
-;  @testeddate 2019-04-03
+;  @scriptversion v2.3.1044
+;  @scriptdate 2019-04-04
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-04)
+;  @tested ok v2.3.1043, Windows 7
+;  @testeddate 2019-04-04
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
 
@@ -32,12 +32,14 @@
 ;--------------------------------
 ;General defines
 
+; Set this "!define" if you want to generate a installer at home:
+!define VERSION "2.3.xxxx"
+
 !define COMPANY_NAME "BleachBit" ; used by NsisMultiUser
 !define PRODNAME "BleachBit"
+!define LICENSE "$(MUI_LICENSE)" ; keep it general
 !define UNINSTALL_FILENAME "uninstall.exe" ; suggested by NsisMultiUser
 !define PRODURL "https://www.bleachbit.org"
-!define BLEACHBIT_LICENSE "..\COPYING" ; keep it general
-; Look at the section "License used in MUI_PAGE_LICENSE" for a Multi-Language-Solution!
 
 
 ;--------------------------------
@@ -94,12 +96,15 @@ Name "${prodname}"
 
 
 ;--------------------------------
-;AddPluginDir MultiUser
+;AddPluginDir & AddIncludeDir
 
 ; See: https://github.com/Drizin/NsisMultiUser
-!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
-!addplugindir /x86-unicode ".\NsisPluginsUnicode\"
-!addincludedir ".\NsisInclude"
+; !AddPluginDir /x86-ansi ".\NsisPluginsAnsi\" ; removing ANSI will shrink the installer
+!AddPluginDir /x86-unicode ".\NsisPluginsUnicode\"
+
+; https://nsis.sourceforge.io/Reference/!addincludedir
+!AddIncludeDir ".\NsisIncludeOthers"
+!AddIncludeDir ".\NsisIncludeOwn"
 
 
 ;--------------------------------
@@ -114,6 +119,7 @@ Name "${prodname}"
 ; InstallDir "$PROGRAMFILES\${prodname}"
 
 ; Get installation folder from registry if available
+; FIXME LATER !!!
 InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
@@ -132,13 +138,29 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
+;Include ???
+
+; FIXME LATER !!!
+; Included for what ???
+
+!include UAC.nsh
+!include LogicLib.nsh
+!include StdUtils.nsh
+
+
+;--------------------------------
 ;Include MultiUser
 
 ; See: https://github.com/Drizin/NsisMultiUser
-!include UAC.nsh
 !include NsisMultiUser.nsh
-!include LogicLib.nsh
-!include StdUtils.nsh
+
+
+;--------------------------------
+;Language files
+
+!include NsisMultiUserLang.nsh
+
+!include bleachbit_lang.nsh
 
 
 ;--------------------------------
@@ -151,14 +173,43 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
+;Interface Settings
+
+; Show all languages, despite user's codepage:
+; https://nsis.sourceforge.io/Why_does_the_language_selection_dialog_hide_some_languages
+!define MUI_LANGDLL_ALLLANGUAGES
+
+; Show a message box with a warning when the user wants to close the installer:
+!define MUI_ABORTWARNING
+!define MUI_ABORTWARNING_CANCEL_DEFAULT
+!define MUI_UNABORTWARNING
+!define MUI_UNABORTWARNING_CANCEL_DEFAULT
+
+
+;--------------------------------
+;Language Selection Dialog Settings
+
+; Better not doing that, or the user can never ever change his language!
+; OK, we give it with the new code a try again... ^^
+; Seems to doesn't work! At least at Windows 7, 64-bit!
+; No Registry Key HKCU\Software\${prodname}!
+
+; Remember the installer language
+; FIXME LATER !!!
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+
+
+;--------------------------------
 ;Pages
 
 ; Installer:
-!define MUI_WELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
-!define MUI_HEADERIMAGE_BITMAP "bleachbit_150x57.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
+!define MUI_HEADERIMAGE_BITMAP "..\art-work\bleachbit_150x57.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "${BLEACHBIT_LICENSE}"
+!insertmacro MUI_PAGE_LICENSE "${LICENSE}"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_COMPONENTS
@@ -171,8 +222,8 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller:
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "bleachbit_164x314.bmp"
-!define MUI_HEADERIMAGE_UNBITMAP "bleachbit_150x57.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "..\art-work\bleachbit_150x57.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
@@ -187,35 +238,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
-;Interface Settings
-
-; Show a message box with a warning when the user wants to close the installer:
-!define MUI_ABORTWARNING
-!define MUI_ABORTWARNING_CANCEL_DEFAULT
-!define MUI_UNABORTWARNING
-!define MUI_UNABORTWARNING_CANCEL_DEFAULT
-
-; Show all languages, despite user's codepage:
-; https://nsis.sourceforge.io/Why_does_the_language_selection_dialog_hide_some_languages
-!define MUI_LANGDLL_ALLLANGUAGES
-
-
-;--------------------------------
-;Language Selection Dialog Settings
-
-; Better not doing that, or the user can never ever change his language!
-; OK, we give it with the new code a try again... ^^
-; Seems to doesn't work! At least at Windows 7, 64-bit!
-; No Registry Key HKCU\Software\${prodname}!
-
-; Remember the installer language
-!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
-!define MUI_LANGDLL_REGISTRY_KEY "Software\${prodname}"
-!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
-
-
-;--------------------------------
-;Languages
+;MUI_LANGUAGE
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
@@ -289,18 +312,81 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 ; !insertmacro MUI_LANGUAGE "WELSH"
 !endif
 
-!include NsisMultiUserLang.nsh
-
-!include bleachbit_lang.nsh
-
 
 ;--------------------------------
 ;License used in MUI_PAGE_LICENSE
 
-; For maybe later... Tobias.
-; LangString BLEACHBIT_LICENSE ${LANG_ENGLISH} "..\COPYING"
-; LangString BLEACHBIT_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
-; LangString BLEACHBIT_LICENSE ${LANG_GERMAN} "..\COPYING_Ger"
+; Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments
+  LangString MUI_LICENSE ${LANG_ENGLISH} "..\COPYING"
+!ifndef NoTranslations
+;  LangString MUI_LICENSE ${LANG_FRENCH} "..\COPYING_Fre"
+;  LangString MUI_LICENSE ${LANG_GERMAN} "..\COPYING_Ger"
+;  LangString MUI_LICENSE ${LANG_AFRIKAANS} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Albanian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Arabic} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Armenian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Asturian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Basque} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Belarusian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Bosnian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_BRETON} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Bulgarian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Catalan} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_CORSICAN} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Croatian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Czech} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Danish} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Dutch} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_ESPERANTO} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Estonian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_FARSI} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Finnish} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_French} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Galician} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_GEORGIAN} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_German} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Greek} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Hebrew} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Hungarian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_ICELANDIC} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Indonesian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_IRISH} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Italian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Japanese} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Korean} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Kurdish} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Latvian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Lithuanian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_LUXEMBOURGISH} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_MACEDONIAN} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Malay} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_MONGOLIAN} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Norwegian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_NorwegianNynorsk} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_PASHTO} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Polish} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Portuguese} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_PortugueseBR} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Romanian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Russian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_SCOTSGAELIC} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Serbian} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_SERBIANLATIN} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_SimpChinese} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Slovak} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Slovenian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Spanish} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_SPANISHINTERNATIONAL} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Swedish} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_TATAR} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Thai} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_TradChinese} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Turkish} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Ukrainian} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Uzbek} "..\COPYING"
+  LangString MUI_LICENSE ${LANG_Vietnamese} "..\COPYING"
+;  LangString MUI_LICENSE ${LANG_WELSH} "..\COPYING"
+!endif
 
 
 ;--------------------------------
@@ -335,7 +421,39 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 
 ;--------------------------------
+;Macro/Function "SetShellVarContext"
+
+; FIXME LATER !!!
+; Is this really true ???
+
+; As we need SetShellVarContext on different places, and must call it each time,
+; we move it into a Function.
+; As we only can call functions starting with "un." from the uninstaller section,
+; and only functions without "un." from the installer section, we have to move the
+; funtion into a macro.
+
+!macro SetShellVarContextMacro un
+  Function ${un}SetShellVarContextFunction
+    ; Use SetShellVarContext to use the right folders.
+    ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
+    ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+      SetShellVarContext all
+    ${else}
+      SetShellVarContext current
+    ${endif}
+    FunctionEnd
+!macroend
+
+; Insert function as an installer and uninstaller function:
+!insertmacro SetShellVarContextMacro ""
+; !insertmacro SetShellVarContextMacro "un."
+
+
+;--------------------------------
 ;Macro/Function "Uninstall"
+
+; FIXME LATER !!!
+; Is this really true ???
 
 ; We need to move the code from Section "Uninstall" into a function that he can
 ; be executed from command line with /uninstall, too.
@@ -393,7 +511,7 @@ InstallDirRegKey HKCU "Software\${prodname}" ""
 
 ; Insert function as an installer and uninstaller function:
 !insertmacro uninstallmacro ""
-!insertmacro uninstallmacro "un."
+; !insertmacro uninstallmacro "un."
 
 
 ;--------------------------------
@@ -458,7 +576,8 @@ Function .onInit
       0$\t- normal execution (no error)$\r$\n\
       1$\t- (un)installation aborted by user (Cancel button)$\r$\n\
       2$\t- (un)installation aborted by script$\r$\n\
-      666$\t- uninstaller had QuietUninstallString$\r$\n\
+      665$\t- installation had SystemComponent (if not EC666)$\r$\n\
+      666$\t- installation had QuietUninstallString$\r$\n\
       666660$\t- invalid command-line parameters$\r$\n\
       666661$\t- elevation is not allowed by defines$\r$\n\
       666662$\t- uninstaller detected there's no installed version$\r$\n\
@@ -770,22 +889,20 @@ Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionCore ; (Required)
   SectionIn RO
 
   ; Copy files
-  SetOutPath $INSTDIR
+  SetOutPath "$INSTDIR\"
   File "..\dist\*.*"
   File "..\COPYING"
-  SetOutPath $INSTDIR\etc
+  SetOutPath "$INSTDIR\etc\"
   File /r "..\dist\etc\*.*"
-  SetOutPath $INSTDIR\lib
+  SetOutPath "$INSTDIR\lib\"
   File /r "..\dist\lib\*.*"
-  SetOutPath $INSTDIR\share
-  File "..\dist\share\bleachbit.png"
-  SetOutPath $INSTDIR\share\cleaners
-  File /r "..\dist\share\cleaners\*.*"
-  SetOutPath $INSTDIR\share\themes
-  File /r "..\dist\share\themes\*.*"
-
   SetOutPath "$INSTDIR\share\"
-  File "..\bleachbit.png"
+;  File "..\dist\share\bleachbit.png" ; not possible, or it's got overwritten
+  File "..\art-work\bleachbit.png"
+  SetOutPath "$INSTDIR\share\cleaners\"
+  File /r "..\dist\share\cleaners\*.*"
+  SetOutPath "$INSTDIR\share\themes\"
+  File /r "..\dist\share\themes\*.*"
 
   ; Write uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -828,16 +945,11 @@ SectionEnd
 
 ; BleachBit Shortcuts
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
-  ; Use SetShellVarContext to use the right folders.
-  ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
-  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
-    SetShellVarContext all
-  ${else}
-    SetShellVarContext current
-  ${endif}
 
   ; BleachBit Start Menu Shortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionStartMenu
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" \
@@ -858,6 +970,8 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionDesktop
     ; Checking for COMMAND_LINE_NO_DESKTOP_SHORTCUT. It's "No" by default. If "Yes": NO DESKTOP SHORTCUT!
     ${if} $COMMAND_LINE_NO_DESKTOP_SHORTCUT == "No"
+      ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+      Call SetShellVarContextFunction
       SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
       CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
       Call RefreshShellIcons
@@ -866,6 +980,8 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
 
   ; BleachBit Quick Launch Shortcut
   Section /o "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionQuickLaunch
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     Call RefreshShellIcons
@@ -873,6 +989,8 @@ SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionShortcuts
 
   ; BleachBit Autostart Shortcut
   Section /o "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionAutostart
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
     Call RefreshShellIcons
@@ -889,7 +1007,7 @@ SectionGroupEnd
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-  Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionShred
+  Section "$(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE)" SectionShred
     ; register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" "$(BLEACHBIT_SHELL_TITLE)"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
@@ -912,39 +1030,40 @@ UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 
 ; BleachBit Core
 Section "$(BLEACHBIT_COMPONENT_CORE_TITLE)" SectionUnCore
-  Call un.uninstallfunction
+  Call uninstallfunction
 SectionEnd
 
 ; BleachBit Shortcuts
 SectionGroup /e "$(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)" SectionUnShortcuts
-  ; Use SetShellVarContext to use the right folders.
-  ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
-  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
-    SetShellVarContext all
-  ${else}
-    SetShellVarContext current
-  ${endif}
 
   ; BleachBit Start Menu Shortcuts
   Section "$(BLEACHBIT_COMPONENT_STARTMENU_TITLE)" SectionUnStartMenu
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     ; Delete normal, Start menu shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}"
   SectionEnd
 
   ; BleachBit Desktop Shortcut
   Section "$(BLEACHBIT_COMPONENT_DESKTOP_TITLE)" SectionUnDesktop
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     ; Delete Desktop shortcut
     Delete "$DESKTOP\BleachBit.lnk"
   SectionEnd
 
   ; BleachBit Quick Launch Shortcut
   Section "$(BLEACHBIT_COMPONENT_QUICKLAUNCH_TITLE)" SectionUnQuickLaunch
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     ; Delete Quick launch shortcut
     Delete "$QUICKLAUNCH\BleachBit.lnk"
   SectionEnd
 
   ; BleachBit Autostart Shortcut
   Section "$(BLEACHBIT_COMPONENT_AUTOSTART_TITLE)" SectionUnAutostart
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     ; Delete Autostart shortcut
     Delete "$SMSTARTUP\BleachBit.lnk"
   SectionEnd
@@ -959,7 +1078,7 @@ SectionGroupEnd
 
 ;Section for making Shred Integration Optional
 !ifndef NoSectionShred
-  Section "$(BLEACHBIT_COMPONENT_INTEGRATESHRED_TITLE)" SectionUnShred
+  Section "$(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE)" SectionUnShred
     ; Remove file association (Shredder)
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
   SectionEnd
@@ -983,7 +1102,7 @@ SectionGroupEnd
 !ifndef NoTranslations
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} $(BLEACHBIT_COMPONENT_TRANSLATIONS_DESCRIPTION)
 !endif
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_INTEGRATESHRED_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred} $(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
