@@ -25,9 +25,9 @@ install:
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/gettext0.19.8.1-iconv1.14-static-32.zip" -FileName gettext.zip}
   - ps: Get-FileHash gettext.zip
   - '%SZ_EXE% x gettext.zip -ogettext'
-  - ps: if (-not (Test-Path sqlite-dll-win32-x86-3250200.zip)) { Start-FileDownload "https://sqlite.org/2018/sqlite-dll-win32-x86-3250200.zip" }
-  - ps: Get-FileHash sqlite-dll-win32-x86-3250200.zip -Algorithm SHA1
-  - '%SZ_EXE% x sqlite-dll-win32-x86-3250200.zip'
+  - ps: if (-not (Test-Path sqlite-dll-win32-x86-3260000.zip)) { Start-FileDownload "https://sqlite.org/2018/sqlite-dll-win32-x86-3260000.zip" }
+  - ps: Get-FileHash sqlite-dll-win32-x86-3260000.zip -Algorithm SHA1
+  - '%SZ_EXE% x sqlite-dll-win32-x86-3260000.zip'
   - 'move /y sqlite3.dll c:\python27\DLLs\'
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.
@@ -46,7 +46,7 @@ cache:
   - pygi-aio.exe -> appveyor.yml
   - upx.zip -> appveyor.yml
   - gettext.zip -> appveyor.yml
-  - sqlite-dll-win32-x86-3250200.zip
+  - sqlite-dll-win32-x86-3260000.zip
 
 test_script:
 # coveralls.io
