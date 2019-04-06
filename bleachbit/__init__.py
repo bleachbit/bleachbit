@@ -194,7 +194,7 @@ elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 elif sys.platform[:6] == 'netbsd':
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
-elif sys.platform.startswith('openbsd'):
+elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
@@ -206,10 +206,13 @@ if portable_mode:
     local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
 # application icon
-__icons = ('/usr/share/pixmaps/bleachbit.png',  # Linux
-           os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'),  # Windows
-           '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-           os.path.join(bleachbit_exe_path, 'bleachbit.png')) # local
+__icons = (
+    '/usr/share/pixmaps/bleachbit.png',  # Linux
+    os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'),  # Windows
+    '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
+    '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
+    os.path.normpath(os.path.join(bleachbit_exe_path, '../bleachbit.png')),  # local
+   )
 appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
@@ -228,6 +231,9 @@ else:
         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
     elif sys.platform[:6] == 'netbsd':
         locale_dir = "/usr/pkg/share/locale/"
+    elif (sys.platform.startswith('openbsd') or
+          sys.platform.startswith('freebsd')):
+        locale_dir = "/usr/local/share/locale/"
 
 
 # launcher
