@@ -642,6 +642,10 @@ class GUI(Gtk.ApplicationWindow):
         else:
             if Notify.init(APP_NAME):
                 notify = Notify.Notification.new('BleachBit', _("Done."), 'bleachbit')
+                if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
+                    notify.set_hint("desktop-entry", "bleachbit-root")
+                else:
+                    notify.set_hint("desktop-entry", "bleachbit")
                 notify.show()
                 notify.set_timeout(10000)
 
