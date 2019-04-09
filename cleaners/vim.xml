@@ -19,6 +19,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2019 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <cleaner id="vim">
   <label>VIM</label>
   <description>Editor</description>
@@ -27,5 +48,17 @@
     <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
     <action command="delete" search="file" path="~/.viminfo"/>
     <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
+  </option>
+  <option id="swap">
+    <label>Swap Files</label>
+    <description>Delete swap files ~/.files.sw? </description>
+    <warning>Inspect the preview for any files you want to keep.</warning>
+    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false"/>
+  </option>
+  <option id="swapR">
+    <label>Swap Files root</label>
+    <description>Delete swap files /.files.sw? </description>
+    <warning>Inspect the preview for any files you want to keep.</warning>
+    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false" path="/" />
   </option>
 </cleaner>
