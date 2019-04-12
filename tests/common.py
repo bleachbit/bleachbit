@@ -45,7 +45,8 @@ class BleachbitTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
-        shutil.rmtree(cls.tempdir)
+        if os.path.exists(cls.tempdir):
+            shutil.rmtree(cls.tempdir)
 
     def setUp(cls):
         """Call before each test method"""
