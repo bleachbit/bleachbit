@@ -164,7 +164,6 @@ VIFileVersion ${VERSION}
 ; https://nsis.sourceforge.io/Reference/!addincludedir
 !AddIncludeDir ".\NsisIncludeOthers"
 !AddIncludeDir ".\NsisIncludeOwn"
-!AddIncludeDir ".\UltraModernUI"
 
 
 ;--------------------------------
