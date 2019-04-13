@@ -26,7 +26,8 @@
 ;  @tested ok v2.3.0.1053, Windows 7
 ;  @testeddate 2019-04-13
 ;  @testedby https://github.com/Tobias-B-Besemer
-;  @note 
+;  @note You need to use a NSIS build from: https://sourceforge.net/projects/ultramodernui/
+;  @note Else is NSIS not able to build the EXEs with UMUI Code!
 
 
 ;--------------------------------
@@ -220,20 +221,29 @@ VIFileVersion ${VERSION}
 !define UMUI_LANGUAGE_ALWAYSSHOW
 ;!define MUI_HEADERIMAGE
 ;!define MUI_HEADERIMAGE_BITMAP "..\art-work\bleachbit_150x57.bmp"
-!define UMUI_SKIN SoftGray
-!define /IfNDef UMUI_LEFTIMAGE_BMP "picture\Left_BleachBit_SoftGray.bmp"
+;!define UMUI_SKIN SoftGray
+!include bleachbit_ultramodernui_skin_softgray.nsh
+;!define /IfNDef UMUI_LEFTIMAGE_BMP "picture\Left_BleachBit_SoftGray.bmp"
 ;!define /IfNDef UMUI_PAGEBGIMAGE_BMP "picture\PageBG_SoftGray.bmp"
-!define /IfNDef UMUI_PAGEBGIMAGE_BMP
+;!define /IfNDef UMUI_PAGEBGIMAGE_BMP
+;UMUI_VERBUILD_REGISTRY_VALUENAME
+;UMUI_VERBUILD
+;UMUI_INSTALLERFULLPATH_REGISTRY_VALUENAME
+;UMUI_COMPONENTSPAGE_REGISTRY_VALUENAME
+;UMUI_COMPONENTSPAGE_INSTTYPE_REGISTRY_VALUENAME
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
 ; Installer:
 !insertmacro UMUI_PAGE_MULTILANGUAGE
+;!insertmacro UMUI_PAGE_MAINTENANCE
+;!insertmacro UMUI_PAGE_UPDATE
 ;!define MUI_WELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro UMUI_PAGE_SETUPTYPE
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
@@ -246,12 +256,14 @@ VIFileVersion ${VERSION}
 
 ; Uninstaller:
 !insertmacro UMUI_UNPAGE_MULTILANGUAGE
+;!insertmacro UMUI_UNPAGE_MAINTENANCE
 ;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
 ; MUI_UNPAGE_DIRECTORY not needed, ATM.
 ; !insertmacro MUI_UNPAGE_DIRECTORY
+!insertmacro UMUI_UNPAGE_SETUPTYPE
 !insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
