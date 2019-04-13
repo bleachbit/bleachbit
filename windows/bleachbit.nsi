@@ -20,11 +20,11 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1050
-;  @scriptdate 2019-04-12
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-12)
-;  @tested ok v2.3.0.1050, Windows 7
-;  @testeddate 2019-04-12
+;  @scriptversion v2.3.0.1053
+;  @scriptdate 2019-04-13
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-13)
+;  @tested ok v2.3.0.1053, Windows 7
+;  @testeddate 2019-04-13
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
 
@@ -34,7 +34,7 @@
 
 ; Set this "!define" if you want to generate a installer at home:
 ; Format: 1.2.3.4
-; !define VERSION "2.3.0.1050"
+; !define VERSION "2.3.0.1053"
 
 ; These "!define"s specify the build you get: (Only set one!)
 ; !define NoTranslations ; -> "${prodname}-${VERSION}-Setup-English_US-only.exe"
@@ -47,7 +47,7 @@
 !define UNINSTALL_FILENAME "uninstall.exe" ; suggested by NsisMultiUser
 !define PRODURL "https://www.bleachbit.org"
 
-!define PathToCleanerML "..\CleanerML\" ; Andrew
+; !define PathToCleanerML ".." ; Andrew
 ; !define PathToCleanerML "I:\work\Cleaner\NSIS" ; Tobias
 
 
@@ -97,7 +97,7 @@ XPStyle on
 ; https://nsis.sourceforge.io/Docs/Chapter4.html#flags
 
 ; Best compression:
-; https://nsis.sourceforge.io/Docs/Chapter1.html
+; https://nsis.sourceforge.io/Docs/Chapter1.html#intro-features
 ; SetCompressor /SOLID lzma
 ; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
 
@@ -135,7 +135,9 @@ Name "${prodname}"
 ; https://nsis.sourceforge.io/Docs/Chapter1.html#intro-unicode
 Unicode true
 
-; !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" "$%TEMP%\exehead.tmp"'
+!ifdef packhdr
+  !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" "$%TEMP%\exehead.tmp"'
+!endif
 
 
 ;--------------------------------
@@ -162,6 +164,7 @@ VIFileVersion ${VERSION}
 ; https://nsis.sourceforge.io/Reference/!addincludedir
 !AddIncludeDir ".\NsisIncludeOthers"
 !AddIncludeDir ".\NsisIncludeOwn"
+!AddIncludeDir ".\UltraModernUI"
 
 
 ;--------------------------------
@@ -184,9 +187,6 @@ VIFileVersion ${VERSION}
 ;--------------------------------
 ;Include NSH-Files and insert Macros
 
-; Include Modern UI 2:
-!include MUI2.nsh
-
 ; Include LogicLib:
 ; https://nsis.sourceforge.io/LogicLib
 !include LogicLib.nsh
@@ -203,6 +203,12 @@ VIFileVersion ${VERSION}
 ; https://github.com/lordmulder/stdutils
 ; include StdUtils.nsh
 
+; Include Modern UI 2:
+; !include MUI2.nsh
+
+; Include Ultra-Modern UI:
+!include UMUI.nsh
+
 ; Include MultiUser:
 ; See: https://github.com/Drizin/NsisMultiUser
 !include NsisMultiUser.nsh
@@ -212,12 +218,18 @@ VIFileVersion ${VERSION}
 ;Pages
 
 ; General:
-!define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "..\art-work\bleachbit_150x57.bmp"
+!define UMUI_LANGUAGE_ALWAYSSHOW
+;!define MUI_HEADERIMAGE
+;!define MUI_HEADERIMAGE_BITMAP "..\art-work\bleachbit_150x57.bmp"
+!define UMUI_SKIN SoftGray
+!define /IfNDef UMUI_LEFTIMAGE_BMP "picture\Left_BleachBit_SoftGray.bmp"
+;!define /IfNDef UMUI_PAGEBGIMAGE_BMP "picture\PageBG_SoftGray.bmp"
+!define /IfNDef UMUI_PAGEBGIMAGE_BMP
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
 ; Installer:
-!define MUI_WELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
+!insertmacro UMUI_PAGE_MULTILANGUAGE
+;!define MUI_WELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
@@ -231,9 +243,11 @@ VIFileVersion ${VERSION}
 !define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !insertmacro MUI_PAGE_FINISH
+!insertmacro UMUI_PAGE_ABORT
 
 ; Uninstaller:
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
+!insertmacro UMUI_UNPAGE_MULTILANGUAGE
+;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
@@ -243,6 +257,7 @@ VIFileVersion ${VERSION}
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
+!insertmacro UMUI_UNPAGE_ABORT
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
@@ -285,6 +300,30 @@ VIFileVersion ${VERSION}
   InstType $(BLEACHBIT_INSTALLATIONTYPE_TYPICAL) ; INSTTYPE_2
   InstType $(BLEACHBIT_INSTALLATIONTYPE_MINIMAL) ; INSTTYPE_3
 !endif
+
+
+;--------------------------------
+;Add/Remove callback functions
+
+!macro SectionList BB_Language_InstallerSections_Translations_PerformRemoveOperations
+  ; This macro used to perform operation on multiple sections.
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Stable"
+  !ifdef BetaTester
+    !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Beta"
+    !ifdef AlphaTester
+      !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Alpha"
+    !endif
+  !endif
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Installer"
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcuts Start Menu"
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Desktop"
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Quick Launch"
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Autostart"
+  !ifndef NoTranslations
+    !include bleachbit_language_code_addremove_performremoveoperations.nsi
+  !endif
+  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shred for Explorer"
+!macroend
 
 
 ;--------------------------------
@@ -359,7 +398,7 @@ Section SectionCore "Core" ; (Required)
   SetOutPath "$INSTDIR\lib\"
   File /r "..\dist\lib\*.*"
   SetOutPath "$INSTDIR\share\"
-  File "..\art-work\bleachbit.png"
+  File "..\bleachbit.png"
   SetOutPath "$INSTDIR\share\themes\"
   File /r "..\dist\share\themes\*.*"
 
@@ -599,33 +638,14 @@ SectionGroupEnd
 
 
 ;--------------------------------
-;Add/Remove callback functions
-
-!macro SectionList BB_Language_InstallerSections_Translations_PerformRemoveOperations
-  ; This macro used to perform operation on multiple sections.
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Stable"
-  !ifdef BetaTester
-    !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Beta"
-    !ifdef AlphaTester
-      !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Alpha"
-    !endif
-  !endif
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Installer"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcuts Start Menu"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Desktop"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Quick Launch"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Autostart"
-  !ifndef NoTranslations
-    !include bleachbit_language_code_addremove_performremoveoperations.nsi
-  !endif
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shred for Explorer"
-!macroend
-
-
-;--------------------------------
 ;Installer Functions
 
 Function .onInit
+  ; Start NsisMultiUser_LVC_Addon_onInit-Functionality:
+  Call NsisMultiUser_LVC_Addon_onInit
+
+  !insertmacro UMUI_MULTILANG_GET
+
   ; To access the section index, curly brackets must be used and the code must be located below the section in the script.
   ; -> Place Function .onInit below the Sections!
   SectionSetText "${Core}" $(BLEACHBIT_COMPONENT_CORE_TITLE)
@@ -694,9 +714,6 @@ Function .onInit
     SetCurInstType 2
   !endif
 
-  ; Start NsisMultiUser_LVC_Addon_onInit-Functionality:
-  Call NsisMultiUser_LVC_Addon_onInit
-
   ; Reads components status from registry
   ; But only if it is not a fresh install!
   !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_InitSection"
@@ -726,7 +743,7 @@ Section -Post
 SectionEnd
 
 ;--------------------------------
-;Uninstaller Section
+;Uninstaller Sections
 
 UninstallText $(BLEACHBIT_UNINSTALLTEXT)
 
@@ -860,8 +877,7 @@ Function un.onInit
   ; Start un.NsisMultiUser_LVC_Addon_un.onInit-Functionality:
   Call un.NsisMultiUser_LVC_Addon_un.onInit
 
-  !insertmacro MULTIUSER_UNINIT
-  !insertmacro MUI_UNGETLANGUAGE
+  !insertmacro UMUI_MULTILANG_GET
 
   ; To access the section index, curly brackets must be used and the code must be located below the section in the script.
   ; -> Place Function un.onInit below the un.Sections!
@@ -886,7 +902,10 @@ Function un.onInit
     SectionSetText "${un.Shred for Explorer}" $(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE)
   !endif
 
-  # Calculate size of data dir:
+  ; Reads components status from registry
+  !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_InitSection"
+
+  # Calculate size of data dirs:
   var /GLOBAL DirSizeCore
   ; ${GetSize} $INSTDIR "/S=0K" $0 $1 $2
   IntFmt $DirSizeCore "0x%08X" "10300" ; hard-coded for now because of installer.exe, cleaners dir, etc.
@@ -903,15 +922,15 @@ Function un.onInit
   ${GetSize} $INSTDIR\share\locale "/S=0K" $0 $1 $2
   IntFmt $DirSizeGroupTranslations "0x%08X" $0
 
-  # Add size of data dir to appropriate section:
+  # Add size of data dirs to appropriate section:
   SectionSetSize "${un.Core}" $DirSizeCore
   SectionSetSize "${un.Group Cleaners}" $DirSizeGroupCleaners
   SectionSetSize "${un.Installer}" $DirSizeInstaller
   SectionSetSize "${un.Group Translations}" $DirSizeGroupTranslations
 
-  ; Reads components status from registry
-  !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_InitSection"
 FunctionEnd
+
+; And now starts the GUI UnInstaller...
 
 Section -un.FinishComponents
   ; Writes component status to registry if it is no a complete uninstall
@@ -931,5 +950,4 @@ Section -un.Post
   ; We need also "MUI_LANGDLL_ALWAYSSHOW", or the user can never ever change his language!
   Call un.NsisMultiUser_LVC_Addon_SectionPost
 SectionEnd
-
 

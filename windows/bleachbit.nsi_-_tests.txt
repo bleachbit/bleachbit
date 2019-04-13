@@ -1,0 +1,131 @@
+bleachbit.nsi_-_tests.txt
+=========================
+
+Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality, System Integration):
+
+- By first start installer: Is the right language suggested?
+
+- By first start UNinstaller: Is the right language suggested?
+
+- Do a normal install/uninstall work?
+
+- Does the translations in the installer/uninstaller work?
+
+- Is the language saved in the installer/uninstaller?
+
+- Does a install/uninstall work with a other language then the system language?
+
+- Multi-Language License Support: Are the delivered licenses OK?
+
+- Multi-Language Support: Are the translations for the language names OK?
+
+- By a normal install should the install language be selected as component to install - does this work?
+
+- Does adding one or more components work?
+
+- Does removing one or more components work?
+
+- By a "AllUsers"-Install, is HKLM/Wow6432Node used for Software/BleachBit & the Uninstall Section?
+
+- By a "AllUsers"-Install, is for the shortcuts in Start menu, Quick launch & Desktop the shared folders used?
+
+- By a "CurrentUser"-Install, is HKCU used for Software/BleachBit & the Uninstall Section?
+
+- By a "CurrentUser"-Install, is for the shortcuts in Start menu, Quick launch & Desktop the users folders used?
+
+- Works a upgrade?
+
+- Comes a downgrade error message?
+
+- When re-run the installer, is there a Add/Remove Functionality?
+
+- By the Add/Remove Functionality, are the installed components selected in the installer?
+
+- Is in the installer a estimated size calculated?
+
+- Does the Add/Remove Functionality work?
+
+- When "Installer" as component selected during install, is there after that a installer.exe in the install folder?
+
+- When "Installer" as component selected during install, is there after that a shortcut to it in the start menu?
+
+- When "Installer" as component NOT selected during install, is there after that NO shortcut to it in the start menu?
+
+- Is registry key set for "NoRepair" & "NoModify" by install type "AllUsers"?
+
+- Is the right "ModifyPath" set by install type "AllUsers"?
+
+- Is registry key set for "NoRepair" & "NoModify" by install type "CurrentUsers"?
+
+- By remove component "Installer": "NoRepair" & "NoModify" reset by install type "AllUsers"?
+
+- By remove component "Installer": "NoRepair" & "NoModify" reset by install type "CurrentUsers"?
+
+- Gets "ModifyPath" deleted by install type "AllUsers"?
+
+- Gets "ModifyPath" deleted by install type "CurrentUsers"?
+
+- Does shortcut "Repair" in start menu deleted by removing component "Installer" by install type "AllUsers"?
+
+- Does shortcut "Repair" in start menu deleted by removing component "Installer" by install type "CurrentUser"?
+
+- Is the right "ModifyPath" set by install type "CurrentUsers"?
+
+- When running the uninstaller, are the installed components selected?
+
+- Is in the UNinstaller a estimated size calculated?
+
+- Is after a uninstall the complete install folder deleted?
+
+- Are after a uninstall all registry entries deleted in HKCU/HKLM Software/BleachBit & in the Uninstall Section of HKCU/HKLM/Wow6432Node?
+
+- When making a upgrade, are the before installed components selected?
+
+- Is the icon of Shred shown in the Windows Explorer Shell?
+
+- Is Shred for Windows Explorer integrated with translation?
+
+- Are the shortcuts in the start menu translated?
+
+- Does the EXEs of the installer/uninstaller have a necessary informations when the properties of them get opened in Explorer?
+
+- Who can help to translate the new strings in other languages?
+
+- Who wants to make art-work for the installer/uninstaller ???
+
+
+
+Later (Command Line, System Integration 2):
+
+- Does the command line help work like expected?
+
+- Does the command line error codes help work like expected?
+
+- Command line switch "/no-desktop-shortcut"
+
+- Do the command line (CLI) switches from "NSIS Multi User Plugin" work in the different combinations?
+
+- Do the CLI switches "/uninstall" & "/uninstall /S" of the installer work?
+
+- Give the CLI switch "/uninstall" of the installer a message out after uninstall?
+
+- Do the switch "/downgrade" of the installer work?
+
+- Do the switch "/upgrade" of the uninstaller work?
+
+- Get QuietUninstallString written?
+
+- Get the install date written in the installer section of the registry?
+
+- Get "SystemComponent" restored?
+
+- Gives the uninstaller a error code for "Was installed with SystemComponent"?
+
+- Is after a normal uninstall the complete install folder deleted?
+
+- Are after a normal uninstall all registry entries deleted in HKCU/HKLM Software/BleachBit & in the Uninstall Section of HKCU/HKLM/Wow6432Node?
+
+- Is after a uninstall with "/uninstall" of the installer the complete install folder deleted?
+
+- Are after a uninstall with "/uninstall" of the installer all registry entries deleted in HKCU/HKLM Software/BleachBit & in the Uninstall Section of HKCU/HKLM/Wow6432Node?
+

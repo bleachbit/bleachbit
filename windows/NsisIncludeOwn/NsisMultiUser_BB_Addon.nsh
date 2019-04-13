@@ -44,7 +44,7 @@
 ; If you are using solid compression, files that are required before
 ; the actual installation should be stored first in the data block,
 ; because this will make your installer start faster.
-!insertmacro MUI_RESERVEFILE_LANGDLL
+;!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; Interface Settings:
 ; Show all languages, despite user's codepage:

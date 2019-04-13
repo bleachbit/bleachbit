@@ -19,10 +19,10 @@
 ;  @url https://github.com/LV-Crew
 ;  @os Windows
 ;  @scriptversion v1.0.0
-;  @scriptdate 2019-04-12
-;  @scriptby Tobias B. Besemer (2019-03-31 - 2019-04-12)
+;  @scriptdate 2019-04-13
+;  @scriptby Tobias B. Besemer (2019-03-31 - 2019-04-13)
 ;  @tested ok v1.0.0, Windows 7
-;  @testeddate 2019-04-12
+;  @testeddate 2019-04-13
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note Addon for https://github.com/Drizin/NsisMultiUser/
 
@@ -108,6 +108,7 @@ Var NsisMultiUser_LVC_Addon_Uninstaller_Path
 ; Insert function as an installer and uninstaller function:
 ; !insertmacro NsisMultiUser_LVC_Addon_SectionPost ""
 ; !insertmacro NsisMultiUser_LVC_Addon_SectionPost "un."
+  ; FIXME later !!! Do only if instdir still exist
   Function ${un}NsisMultiUser_LVC_Addon_SectionPost
     ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
       WriteRegStr HKLM "Software\${prodname}" "NSIS Language" $Language
@@ -587,6 +588,7 @@ Function NsisMultiUser_LVC_Addon_onInit
   ; Move on from here!
   Goto inseringmacros
 
+  ; Insering the macros at the end that they don't effect the error messages of the command line:
   inseringmacros:
   ; Insert Macro MULTIUSER_INIT:
   ; Must be loaded after "!insertmacro MULTIUSER_PAGE_INSTALLMODE"!
@@ -630,12 +632,9 @@ Function NsisMultiUser_LVC_Addon_onInit
   ; This is the language display dialog!
   ; MUI_LANGDLL_DISPLAY should only be used after inserting the MUI_LANGUAGE macro(s)!
   ; Command IfSilent not valid outside Section or Function!
-  !insertmacro MUI_LANGDLL_DISPLAY
-
-  Call NsisMultiUser_LVC_Addon_SectionPost
+  ;!insertmacro MUI_LANGDLL_DISPLAY
 
   ; It starts the GUI and loads the Installer Sections...
-  ; Insering the macros at the end that they don't effect the error messages of the command line.
 FunctionEnd
 !macroend
 
@@ -862,7 +861,11 @@ Function un.NsisMultiUser_LVC_Addon_un.onInit
     StrCpy $Language "$2"
   ${endif}
 
-  call un.NsisMultiUser_LVC_Addon_SectionPost
+  ; Insering the macros at the end that they don't effect the error messages of the command line:
+  !insertmacro MULTIUSER_UNINIT
+  ;!insertmacro MUI_UNGETLANGUAGE
+
+  ; It starts the GUI and loads the UnInstaller Sections...
 FunctionEnd
 !macroend
 
