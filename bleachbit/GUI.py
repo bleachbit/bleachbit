@@ -54,6 +54,7 @@ def threaded(func):
 
 class Bleachbit(Gtk.Application):
     _window = None
+    _shred_paths = None
 
     def __init__(self, uac=True, shred_paths=None, exit=False):
         if uac and 'nt' == os.name and Windows.elevate_privileges():
@@ -67,7 +68,7 @@ class Bleachbit(Gtk.Application):
         GObject.threads_init()
 
         if shred_paths:
-            self.shred_paths(shred_paths)
+            self._shred_paths = shred_paths
             return
         if 'nt' == os.name:
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
@@ -249,6 +250,9 @@ class Bleachbit(Gtk.Application):
         if not self._window:
             self._window = GUI(application=self,title=APP_NAME)
         self._window.present()
+        if self._shred_paths:
+            GUI.shred_paths(self._window, self._shred_paths)
+            GObject.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
 
 
 class TreeInfoModel:
