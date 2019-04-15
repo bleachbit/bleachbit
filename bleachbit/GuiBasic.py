@@ -157,7 +157,7 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
     return resp
 
 
-def open_url(self, action, url, parent_window=None, prompt=True):
+def open_url(url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
     # drop privileges so the web browser is running as a normal process
     if 'posix' == os.name and 0 == os.getuid():
