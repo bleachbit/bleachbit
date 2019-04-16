@@ -17,15 +17,20 @@
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;  @app BleachBit NSIS Installer Script
+;  @url https://nsis.sourceforge.io/Main_Page
+;  @os Windows
+;  @scriptversion v2.3.0.1058
+;  @scriptdate 2019-04-16
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-16)
+;  @tested ok v2.3.0.1058, Windows 7
+;  @testeddate 2019-04-16
+;  @testedby https://github.com/Tobias-B-Besemer
+;  @note 
+
 
 ;--------------------------------
-;Include Modern UI
-
-  !include "MUI2.nsh"
-
-
-;--------------------------------
-;General
+;General defines
 
   ;Name and file
   !define prodname "BleachBit"
@@ -75,6 +80,13 @@
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
 !define MULTIUSER_INSTALLMODE_64_BIT 0
+
+
+;--------------------------------
+;Include NSH-Files and insert Macros
+
+; Include Modern UI 2:
+!include MUI2.nsh
 
 
 ;--------------------------------
@@ -195,18 +207,14 @@ Section Core (Required)
     SetOutPath $INSTDIR\lib
     File /r "..\dist\lib\*.*"
     SetOutPath $INSTDIR\share
-    File "..\dist\share\bleachbit.png"
+    File "..\bleachbit.png"
     SetOutPath $INSTDIR\share\cleaners
     File /r "..\dist\share\cleaners\*.*"
     SetOutPath $INSTDIR\share\themes
     File /r "..\dist\share\themes\*.*"
 
-    SetOutPath "$INSTDIR\share\"
-    File "..\bleachbit.png"
-
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
-
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
