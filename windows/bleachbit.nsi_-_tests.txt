@@ -1,7 +1,8 @@
 bleachbit.nsi_-_tests.txt
 =========================
 
-Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality, System Integration):
+GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality, System Integration:
+------------------------------------------------------------------------------------------------
 
 - By first start installer: Is the right language suggested?
 
@@ -19,7 +20,7 @@ Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality
 
 - Multi-Language Support: Are the translations for the language names OK?
 
-- By a normal install should the install language be selected as component to install - does this work?
+- By a "Typical" install should the install language be selected as component to install - does this work?
 
 - Does adding one or more components work?
 
@@ -71,6 +72,12 @@ Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality
 
 - Is the right "ModifyPath" set by install type "CurrentUsers"?
 
+- Get the install date written (format: yyyymmdd) in the installer section of the registry?
+
+- Get the install date UPDATED in the installer section of the registry when a component gets added or removed?
+
+- Get the install date UPDATED in the installer section of the registry when BleachBit gets repaired?
+
 - When running the uninstaller, are the installed components selected?
 
 - Is in the UNinstaller a estimated size calculated?
@@ -87,7 +94,11 @@ Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality
 
 - Are the shortcuts in the start menu translated?
 
-- Does the EXEs of the installer/uninstaller have a necessary informations when the properties of them get opened in Explorer?
+- Does the EXEs of the installer/uninstaller have the necessary informations, when the properties of them get opened in Explorer?
+
+- Does the EXEs of the installer/uninstaller identify as "multi-language" builds, when the properties of them get opened in Explorer?
+
+- Does the EXE of the installer/uninstaller of the "English_US-only" build identify as "English" build, when the properties of them get opened in Explorer?
 
 - Do all builds (Normal, NoTranslations, BetaTester, AlphaTester) work like expected?
 
@@ -97,7 +108,8 @@ Now (GUI Installer/Uninstaller, Multi-Language-Support, Add/Remove Functionality
 
 
 
-Later (Command Line, System Integration 2):
+Command Line, System Integration 2:
+-----------------------------------
 
 - Does the command line help work like expected?
 
@@ -116,8 +128,6 @@ Later (Command Line, System Integration 2):
 - Do the switch "/upgrade" of the uninstaller work?
 
 - Get QuietUninstallString written?
-
-- Get the install date written in the installer section of the registry?
 
 - Get "SystemComponent" restored?
 

@@ -18,11 +18,11 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File UnInstallerSectionsTranslations
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1050
-;  @scriptdate 2019-04-12
-;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-12)
-;  @tested ok v2.3.0.1050, Windows 7
-;  @testeddate 2019-04-12
+;  @scriptversion v2.3.0.1059
+;  @scriptdate 2019-04-18
+;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-18)
+;  @tested ok v2.3.0.1059, Windows 7
+;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
 

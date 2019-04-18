@@ -20,11 +20,11 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1053
-;  @scriptdate 2019-04-13
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-13)
-;  @tested ok v2.3.0.1053, Windows 7
-;  @testeddate 2019-04-13
+;  @scriptversion v2.3.0.1059
+;  @scriptdate 2019-04-18
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-18)
+;  @tested ok v2.3.0.1059, Windows 7
+;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note You need to use a NSIS build from: https://sourceforge.net/projects/ultramodernui/
 ;  @note Else is NSIS not able to build the EXEs with UMUI Code!
@@ -49,7 +49,10 @@
 !define PRODURL "https://www.bleachbit.org"
 
 ; !define PathToCleanerML ".." ; Andrew
-; !define PathToCleanerML "I:\work\Cleaner\NSIS" ; Tobias
+; !define PathToCleanerML ".." ; Tobias
+
+; Define for InstallDate in Registry:
+!define /date InstallDate "%Y%m%d"
 
 
 ;--------------------------------
@@ -59,6 +62,7 @@
 !define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
 ; !define VERSION "2.3"
 ; "VERSION" already defined!
+
 !define PROGEXE "${prodname}.exe"
 ; !define COMPANY_NAME "BleachBit"
 ; "COMPANY_NAME" already defined!
@@ -74,10 +78,20 @@
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
 
 !define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
+
+; MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS:
+; 0 or 1, (only available if MULTIUSER_INSTALLMODE_ALLOW_ELEVATION = 1 and there are 0 or 2 installations
+; on the system) when running as user and is set to 1, per-machine installation is pre-selected, otherwise
+; per-user installation.
 !define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
+
+; MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER:
+; 0 or 1, (only available if there are 0 or 2 installations on the system) when running as admin and
+; is set to 1, per-user installation is pre-selected, otherwise per-machine installation.
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
+
 !define MULTIUSER_INSTALLMODE_64_BIT 0
-!define MULTIUSER_INSTALLMODE_NO_HELP_DIALOG 1
+
 !define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
@@ -85,12 +99,61 @@
 ;Installer-/UnInstaller-Attributes - General Attributes
 ; https://nsis.sourceforge.io/Docs/Chapter4.html#attribgen
 
+; Unicode requires NSIS version 3 or later
+; https://nsis.sourceforge.io/Docs/Chapter1.html#intro-unicode
+; ANSI is for Windows 9x!
+Unicode true
+
+; ManifestSupportedOS:
+ManifestSupportedOS all
+
+; XPStyle:
+XPStyle on
+
 ; ShowInstDetails/ShowUninstDetails:
 ShowInstDetails show
 ShowUninstDetails show
 
-; XPStyle:
-XPStyle on
+; Icons:
+Icon "${NSISDIR}\Contrib\Graphics\Icons\orange-install-nsis.ico"
+UninstallIcon "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall-nsis.ico"
+
+
+;--------------------------------
+;Installer-/UnInstaller-Attributes - Version Information
+; https://nsis.sourceforge.io/Docs/Chapter4.html#versioninfo
+
+!define File_VERSION 2.3.0.0
+; Later:
+;!define File_VERSION ${VERSION}
+
+!ifdef NoTranslations
+  VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
+  VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalCopyright" "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
+  VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
+!endif
+
+!ifndef NoTranslations
+  VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
+  VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
+  VIAddVersionKey /LANG=0 "LegalCopyright" "BleachBit.org"
+  VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
+  VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
+!endif
+
+VIProductVersion ${File_VERSION}
+VIFileVersion ${File_VERSION}
+
+
+;--------------------------------
+;Pack header:
+!ifdef packhdr
+  !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" "$%TEMP%\exehead.tmp"'
+!endif
 
 
 ;--------------------------------
@@ -131,29 +194,6 @@ Name "${prodname}"
 !ifdef NoInstTypes ; allow user to switch the usage of InstTypes
   ; Definded but not used!
 !endif
-
-; Unicode requires NSIS version 3 or later
-; https://nsis.sourceforge.io/Docs/Chapter1.html#intro-unicode
-Unicode true
-
-!ifdef packhdr
-  !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" "$%TEMP%\exehead.tmp"'
-!endif
-
-
-;--------------------------------
-;Installer-/UnInstaller-Attributes - Version Information
-; https://nsis.sourceforge.io/Docs/Chapter4.html#versioninfo
-
-VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
-VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
-VIAddVersionKey /LANG=0 "LegalCopyright" "BleachBit.org"
-VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
-VIAddVersionKey /LANG=0 "ProductVersion" "${VERSION}"
-VIAddVersionKey /LANG=0 "FileVersion" "${VERSION}"
-
-VIProductVersion ${VERSION}
-VIFileVersion ${VERSION}
 
 
 ;--------------------------------
@@ -203,11 +243,10 @@ VIFileVersion ${VERSION}
 ; https://github.com/lordmulder/stdutils
 ; include StdUtils.nsh
 
-; Include Modern UI 2:
-; !include MUI2.nsh
-
 ; Include Ultra-Modern UI:
-!include UMUI.nsh
+; We need to use the patched version by Tobias!
+; PR pending: https://github.com/SuperPat45/UltraModernUI/pull/6
+!include NsisIncludeOthers\UMUI.nsh
 
 ; Include MultiUser:
 ; See: https://github.com/Drizin/NsisMultiUser
@@ -215,65 +254,122 @@ VIFileVersion ${VERSION}
 
 
 ;--------------------------------
+; Interface Settings:
+; Show all languages, despite user's codepage:
+; https://nsis.sourceforge.io/Why_does_the_language_selection_dialog_hide_some_languages
+!ifndef NoTranslations
+  !define /IfNDef MUI_LANGDLL_ALLLANGUAGES
+!endif
+
+; Show a message box with a warning when the user wants to close the installer:
+!define MUI_ABORTWARNING
+!define MUI_ABORTWARNING_CANCEL_DEFAULT
+!define MUI_UNABORTWARNING
+!define MUI_UNABORTWARNING_CANCEL_DEFAULT
+
+
+;--------------------------------
 ;Pages
 
 ; General:
+;!define UMUI_SKIN SoftGray ; We use our own with "!include":
+!include bleachbit_ultramodernui_skin_softgray_by_tobias.nsh
+!define UMUI_DEFAULT_SHELLVARCONTEXT all
+!define UMUI_PARAMS_REGISTRY_ROOT HKLM ; Temporary define, because we do this while runtime!
+!define UMUI_PARAMS_REGISTRY_KEY "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
+; https://nsis.sourceforge.io/Add_uninstall_information_to_Add/Remove_Programs
+; Win.Undoc.Uninstall.htm: https://docs.google.com/document/pub?id=1aeNBd1vdLhLznaktvP_xF2nKaaUG3kNlb_0VSRJ8mCI
+!define UMUI_INSTALLDIR_REGISTRY_VALUENAME "InstallLocation"
+!define UMUI_VERSION ${VERSION}
+!define UMUI_VERSION_REGISTRY_VALUENAME "Version"
+!define UMUI_VERBUILD ${VERSION}
+!define UMUI_VERBUILD_REGISTRY_VALUENAME "DisplayVersion"
+!define UMUI_INSTALLERFULLPATH_REGISTRY_VALUENAME "ModifyPath"
+!define UMUI_UNINSTALLPATH_REGISTRY_VALUENAME "UninstallString"
+!define UMUI_UNINSTALL_FULLPATH "$INSTDIR\Uninstall.exe"
+!define UMUI_LANGUAGE_REGISTRY_VALUENAME "Language"
 !define UMUI_LANGUAGE_ALWAYSSHOW
-;!define MUI_HEADERIMAGE
-;!define MUI_HEADERIMAGE_BITMAP "..\art-work\bleachbit_150x57.bmp"
-;!define UMUI_SKIN SoftGray
-!include bleachbit_ultramodernui_skin_softgray.nsh
-;!define /IfNDef UMUI_LEFTIMAGE_BMP "picture\Left_BleachBit_SoftGray.bmp"
-;!define /IfNDef UMUI_PAGEBGIMAGE_BMP "picture\PageBG_SoftGray.bmp"
-;!define /IfNDef UMUI_PAGEBGIMAGE_BMP
-;UMUI_VERBUILD_REGISTRY_VALUENAME
-;UMUI_VERBUILD
-;UMUI_INSTALLERFULLPATH_REGISTRY_VALUENAME
-;UMUI_COMPONENTSPAGE_REGISTRY_VALUENAME
-;UMUI_COMPONENTSPAGE_INSTTYPE_REGISTRY_VALUENAME
+!define UMUI_PREUNINSTALL_FUNCTION "PreUninstall_Function"
+!define UMUI_SETUPTYPE_REGISTRY_VALUENAME "SetupType"
+!define UMUI_COMPONENTS_REGISTRY_VALUENAME "Components"
+!define UMUI_COMPONENTSINSTTYPE_REGISTRY_VALUENAME "InstType"
+!define UMUI_COMPONENTSPAGE_REGISTRY_VALUENAME "Components"
+!define UMUI_COMPONENTSPAGE_INSTTYPE_REGISTRY_VALUENAME "InstType"
 !define MUI_COMPONENTSPAGE_SMALLDESC
+!define UMUI_INSTFILEPAGE_ENABLE_CANCEL_BUTTON "uninstallfunction"
 
 ; Installer:
 !insertmacro UMUI_PAGE_MULTILANGUAGE
-;!insertmacro UMUI_PAGE_MAINTENANCE
-;!insertmacro UMUI_PAGE_UPDATE
-;!define MUI_WELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
+!define MUI_PAGE_CUSTOMFUNCTION_PRE "MULTIUSER_PAGE_INSTALLMODE_Pre"
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW "MULTIUSER_PAGE_INSTALLMODE_Show"
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "MULTIUSER_PAGE_INSTALLMODE_Leave"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
+; UMUI_PAGE_MAINTENANCE & UMUI_PAGE_UPDATE after MULTIUSER_PAGE_INSTALLMODE
+; that Installmode and folders are defined!
+!define UMUI_MAINTENANCEPAGE_TEXT "$(BLEACHBIT_UNINSTALL_WARNING)"
+!define UMUI_MAINTENANCEPAGE_MODIFY
+!define UMUI_MAINTENANCEPAGE_REPAIR
+!define UMUI_MAINTENANCEPAGE_REMOVE
+!define UMUI_MAINTENANCEPAGE_DEFAULTCHOICE ${UMUI_MODIFY}
+!insertmacro UMUI_PAGE_MAINTENANCE
+!define UMUI_UPDATEPAGE_TEXT $(BLEACHBIT_UNINSTALL_WARNING)
+!define UMUI_UPDATEPAGE_DEFAULTCHOICE ${UMUI_UPDATE}
+!insertmacro UMUI_PAGE_UPDATE
 !insertmacro MUI_PAGE_DIRECTORY
+!define UMUI_SETUPTYPEPAGE_COMPLETE "$(BLEACHBIT_INSTALLATIONTYPE_COMPLETE)"
+!define UMUI_SETUPTYPEPAGE_STANDARD "$(BLEACHBIT_INSTALLATIONTYPE_STANDARD)"
+!define UMUI_SETUPTYPEPAGE_MINIMAL "$(BLEACHBIT_INSTALLATIONTYPE_MINIMAL)"
+!ifndef NoTranslations
+  !define UMUI_SETUPTYPEPAGE_DEFAULTCHOICE ${UMUI_STANDARD}
+!endif
+!ifdef NoTranslations
+  !define UMUI_SETUPTYPEPAGE_DEFAULTCHOICE ${UMUI_MINIMAL}
+!endif
 !insertmacro UMUI_PAGE_SETUPTYPE
 !insertmacro MUI_PAGE_COMPONENTS
+!define UMUI_CONFIRMPAGE_TEXTBOX "Confirm_Function"
+!insertmacro UMUI_PAGE_CONFIRM
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
 !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
-!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
+!define MUI_FINISHPAGE_LINK_LOCATION ${PRODURL}
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !insertmacro MUI_PAGE_FINISH
 !insertmacro UMUI_PAGE_ABORT
 
 ; Uninstaller:
 !insertmacro UMUI_UNPAGE_MULTILANGUAGE
-;!insertmacro UMUI_UNPAGE_MAINTENANCE
-;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\art-work\bleachbit_164x314.bmp"
 !insertmacro MUI_UNPAGE_WELCOME
-!insertmacro MUI_UNPAGE_CONFIRM
+!define MUI_PAGE_CUSTOMFUNCTION_PRE "un.MULTIUSER_UnPAGE_INSTALLMODE_Pre"
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW "un.MULTIUSER_UnPAGE_INSTALLMODE_Show"
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "un.MULTIUSER_UnPAGE_INSTALLMODE_Leave"
 !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-; MUI_UNPAGE_DIRECTORY not needed, ATM.
-; !insertmacro MUI_UNPAGE_DIRECTORY
+; UMUI_UnPAGE_MAINTENANCE after MULTIUSER_PAGE_INSTALLMODE
+; that Installmode and folders are defined!
+!define UMUI_MAINTENANCEPAGE_TEXT "$(BLEACHBIT_UNINSTALL_WARNING)"
+!define UMUI_MAINTENANCEPAGE_MODIFY
+!define UMUI_MAINTENANCEPAGE_REPAIR
+!define UMUI_MAINTENANCEPAGE_REMOVE
+!define UMUI_MAINTENANCEPAGE_DEFAULTCHOICE ${UMUI_REMOVE}
+!insertmacro UMUI_UNPAGE_MAINTENANCE
+; !insertmacro MUI_UNPAGE_DIRECTORY ; MUI_UNPAGE_DIRECTORY not needed, ATM.
 !insertmacro UMUI_UNPAGE_SETUPTYPE
 !insertmacro MUI_UNPAGE_COMPONENTS
+!insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
+!define MUI_UNFINISHPAGE_NOREBOOTSUPPORT
 !insertmacro MUI_UNPAGE_FINISH
 !insertmacro UMUI_UNPAGE_ABORT
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
 ;--------------------------------
-;Include after the MUI_[UN]PAGE_* macros some more NSH-Files and insert Macros
+;Include after the MUI_[UN]PAGE_* macros some more NSH-Files and set defines
 
 ; Our Language Code:
 ; Must be loaded before the language files!
@@ -288,14 +384,13 @@ VIFileVersion ${VERSION}
 ; Must be loaded after MUI_LANGUAGE (bleachbit_language_code.nsh)!
 !include NsisMultiUser_LVC_Addon_Lang.nsh
 
+; Set NsisMultiUser_LVC_Addon_GUI_Update with "!define" to "Yes", if you use UMUI_PAGE_UPDATE!
+!define NsisMultiUser_LVC_Addon_GUI_UPDATE Yes
+
 ; Include NsisMultiUser LVC Addon:
 ; See: https://github.com/LV-Crew
 ; Must be loaded after MULTIUSER_PAGE_INSTALLMODE!
 !include NsisMultiUser_LVC_Addon.nsh
-
-; Include NsisMultiUser BleachBit Addon:
-; Must be loaded after MULTIUSER_PAGE_INSTALLMODE!
-!include NsisMultiUser_BB_Addon.nsh
 
 
 ;--------------------------------
@@ -307,33 +402,62 @@ VIFileVersion ${VERSION}
 ; Sections.nsh
  
 !ifndef NoInstTypes  ; allow user to switch the usage of InstTypes
-  InstType $(BLEACHBIT_INSTALLATIONTYPE_FULL)    ; INSTTYPE_1
-  InstType $(BLEACHBIT_INSTALLATIONTYPE_TYPICAL) ; INSTTYPE_2
-  InstType $(BLEACHBIT_INSTALLATIONTYPE_MINIMAL) ; INSTTYPE_3
+  InstType $(BLEACHBIT_INSTALLATIONTYPE_COMPLETE) ; ${INSTTYPE_1}
+  InstType $(BLEACHBIT_INSTALLATIONTYPE_STANDARD) ; ${INSTTYPE_2}
+  InstType $(BLEACHBIT_INSTALLATIONTYPE_MINIMAL)  ; ${INSTTYPE_3}
 !endif
 
 
 ;--------------------------------
-;Add/Remove callback functions
+;Macro/Function "SetShellVarContext"
 
-!macro SectionList BB_Language_InstallerSections_Translations_PerformRemoveOperations
-  ; This macro used to perform operation on multiple sections.
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Stable"
-  !ifdef BetaTester
-    !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Beta"
-    !ifdef AlphaTester
-      !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Cleaners Alpha"
-    !endif
-  !endif
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Installer"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcuts Start Menu"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Desktop"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Quick Launch"
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shortcut Autostart"
-  !ifndef NoTranslations
-    !include bleachbit_language_code_addremove_performremoveoperations.nsi
-  !endif
-  !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Shred for Explorer"
+!macro SetShellVarContextMacro un
+  ; As we need SetShellVarContext on different places, and must call it each time,
+  ; we move it into a Function.
+  ; As we only can call functions starting with "un." from the uninstaller section,
+  ; and only functions without "un." from the installer section, we have to move the
+  ; funtion into a macro.
+  ; Insert function as an installer and uninstaller function:
+  ; !insertmacro NsisMultiUser_BB_Addon_SetShellVarContextMacro ""
+  ; !insertmacro NsisMultiUser_BB_Addon_SetShellVarContextMacro "un."
+  Function ${un}SetShellVarContextFunction
+    ; Use SetShellVarContext to use the right folders.
+    ; See: https://nsis.sourceforge.io/Reference/SetShellVarContext
+    ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+      SetShellVarContext all
+    ${else}
+      SetShellVarContext current
+    ${endif}
+  FunctionEnd
+!macroend
+
+; Macro/Function "SetShellVarContext":
+; Insert function as an installer and uninstaller function:
+!insertmacro SetShellVarContextMacro ""
+!insertmacro SetShellVarContextMacro "un."
+
+
+;--------------------------------
+;Function RefreshShellIcons
+
+; http://nsis.sourceforge.net/RefreshShellIcons
+Function RefreshShellIcons
+  !define SHCNE_ASSOCCHANGED 0x08000000
+  !define SHCNF_IDLIST 0
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+
+;--------------------------------
+;Macro "Confirm_Addline"
+
+!macro Confirm_Addline section
+  SectionGetFlags ${${section}} $1
+  IntOp $1 $1 & ${SF_SELECTED}
+  IntCmp $1 ${SF_SELECTED} 0 "n${section}" "n${section}"
+    SectionGetText ${${section}} $1
+    !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "    - $1"
+  "n${section}:"
 !macroend
 
 
@@ -348,40 +472,49 @@ VIFileVersion ${VERSION}
 
 !macro uninstallmacro un
   Function ${un}uninstallfunction
-    ; Set Error Level 665 if "SystemComponent" and Error Level 666 if "QuietUninstallString" was set.
-    Call ${un}NsisMultiUser_LVC_Addon_ErrorLevel-665-666_Set
+    ; Set Error Level 666 if "SystemComponent" was set.
+    Call ${un}NsisMultiUser_LVC_Addon_ErrorLevel-666_Set
 
-    ; Core:
+    ; Core and all folders & files in $INSTDIR:
     RMDir /r "$INSTDIR"
 
-    ; We only delete the registry keys to BleachBit if we don't make a upgrade
-    ${GetOptions} $R0 "/upgrade" $R1
-    ${If} ${errors}
-      DeleteRegKey HKCU "Software\${prodname}"
-      DeleteRegKey HKLM "Software\${prodname}"
-    ${EndIf}
-
-    ; Delete normal, Start menu shortcuts
+    ; Delete normal, Start menu shortcuts:
     RMDir /r "$SMPROGRAMS\${prodname}"
 
-    ; Delete Desktop shortcut
+    ; Delete Desktop shortcut:
     Delete "$DESKTOP\BleachBit.lnk"
 
-    ; Delete Quick launch shortcut
+    ; Delete Quick launch shortcut:
     Delete "$QUICKLAUNCH\BleachBit.lnk"
 
-    ; Delete Autostart shortcut
+    ; Delete Autostart shortcut:
     Delete "$SMSTARTUP\BleachBit.lnk"
 
-    ; Remove file association (Shredder)
+    ; Remove file association (Shredder):
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+
+    ; We only delete the registry keys to BleachBit if we don't make a upgrade
+    StrCmp $NsisMultiUser_LVC_Addon_Upgrade "Yes" after_registry
+
+    ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+
+      DeleteRegKey HKLM "Software\${prodname}"
+      DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
+      DeleteRegKey HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
+
+    ${else}
+      DeleteRegKey HKCU "Software\${prodname}"
+      DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
+    ${endif}
 
     ; Remove the uninstaller from registry as the very last step - if something goes wrong, let the user run it again.
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 
+    after_registry:
+
     ; And in the example follows after that:
     Delete "$INSTDIR\${UNINSTALL_FILENAME}"
-    RMDir "$INSTDIR"
+    RMDir /r "$INSTDIR"
   FunctionEnd
 !macroend
 
@@ -402,8 +535,10 @@ Section SectionCore "Core" ; (Required)
   SetOutPath "$INSTDIR\"
   File "..\dist\*.*"
   File "..\COPYING"
+!ifndef NoTranslations
   SetOutPath "$INSTDIR\license\"
   File "..\license\*.*"
+!endif
   SetOutPath "$INSTDIR\etc\"
   File /r "..\dist\etc\*.*"
   SetOutPath "$INSTDIR\lib\"
@@ -420,27 +555,34 @@ Section SectionCore "Core" ; (Required)
   !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
   ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "Contact" "info@bleachbit.org"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
       "HelpLink" "https://www.bleachbit.org/help"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
       "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
       "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-      "NoModify" 0
+    ; https://nsis.sourceforge.io/Add_uninstall_information_to_Add/Remove_Programs#Recommended_values
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
+      "QuietUninstallString" '"$INSTDIR\unistall.exe" /allusers /S /D="$INSTDIR"'
   ${else}
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "Contact" "info@bleachbit.org"
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
       "HelpLink" "https://www.bleachbit.org/help"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
       "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
       "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-      "NoModify" 0
+    ; https://nsis.sourceforge.io/Add_uninstall_information_to_Add/Remove_Programs#Recommended_values
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+      "QuietUninstallString" '"$INSTDIR\unistall.exe" /currentuser /S /D="$INSTDIR"'
   ${endif}
 
-  ; Handle Error Level 665 if "SystemComponent" and Error Level 666 if "QuietUninstallString" was set.
+  ; Handle Error Level 666 if "SystemComponent" was set.
   ; Restores the old settings by install.
-  Call NsisMultiUser_LVC_Addon_ErrorLevel-665-666_Handle
+  Call NsisMultiUser_LVC_Addon_ErrorLevel-666_Handle
+
 SectionEnd
 
 ; BleachBit Cleaners
@@ -449,81 +591,56 @@ SectionGroup SectionGroupCleaners "Group Cleaners"
     SetOutPath "$INSTDIR\share\cleaners\"
     File "..\dist\share\cleaners\*.*"
   SectionEnd
-  !macro "Remove_${Cleaners Stable}"
-    ;Removes component
-    Delete "$INSTDIR\share\cleaners\*.*"
-  !macroend
 
 !ifdef BetaTester
   Section SectionCleanersBeta "Cleaners Beta"
     SetOutPath "$INSTDIR\share\cleaners\"
     File "${PathToCleanerML}\cleanerml\release\*.*"
   SectionEnd
-  !macro "Remove_${Cleaners Beta}"
-    ;Removes component
-    Delete "$INSTDIR\share\cleaners\*.*"
-  !macroend
 
 !ifdef AlphaTester
   Section SectionCleanersAlpha "Cleaners Alpha"
     SetOutPath "$INSTDIR\share\cleaners\"
     File "${PathToCleanerML}\cleanerml\pending\*.*"
   SectionEnd
-  !macro "Remove_${Cleaners Alpha}"
-    ;Removes component
-    Delete "$INSTDIR\share\cleaners\*.*"
-  !macroend
 !endif
 !endif
 SectionGroupEnd
 
 ; BleachBit Installer
 Section SectionInstaller "Installer"
+  ; We need to copy the installer in four steps to make sure the install "arrives" in all cases!
+  ; We can't use installer.exe as name, because installer.exe seems to be a protected name!
   ; https://stackoverflow.com/questions/14936193/nsis-how-to-get-the-filename-of-the-installer-executable
   ; https://nsis.sourceforge.io/Get_installer_filename
-  CopyFiles /SILENT "$EXEDIR\$EXEFILE" "$INSTDIR\installer.exe"
+  IfFileExists "$INSTDIR\install.exe" +4 0
+  CopyFiles /SILENT "$EXEDIR\$EXEFILE" "$INSTDIR"
+  SetOutPath "$INSTDIR"
+  Rename /REBOOTOK "$INSTDIR\$EXEFILE" "install.exe"
+
   ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
     WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
       "NoRepair" 0
     WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
       "NoModify" 0
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-      "ModifyPath" '"$INSTDIR\installer.exe" /allusers /D "$INSTDIR"'
+      "ModifyPath" '"$INSTDIR\install.exe" /allusers /D="$INSTDIR"'
   ${else}
     WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
       "NoRepair" 0
     WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
       "NoModify" 0
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-      "ModifyPath" '"$INSTDIR\installer.exe" /currentuser /D "$INSTDIR"'
+      "ModifyPath" '"$INSTDIR\install.exe" /currentuser /D="$INSTDIR"'
   ${endif}
 SectionEnd
-!macro "Remove_${Installer}"
-  ;Removes component
-  Delete "$INSTDIR\installer.exe"
-  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
-    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-      "NoRepair" 1
-    DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-      "NoModify"
-    DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-      "ModifyPath"
-  ${else}
-    WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-      "NoRepair" 1
-    DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-      "NoModify"
-    DeleteRegValue SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
-      "ModifyPath"
-  ${endif}
-!macroend
 
 ; BleachBit Shortcuts
 SectionGroup /e SectionGroupShortcuts "Group Shortcuts"
   ; BleachBit Start Menu Shortcuts
   Section SectionShortcutsStartMenu "Shortcuts Start Menu"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateDirectory "$SMPROGRAMS\${prodname}"
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" \
@@ -535,66 +652,46 @@ SectionGroup /e SectionGroupShortcuts "Group Shortcuts"
       "$INSTDIR\${prodname}_console.exe"
     WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_HOME_PAGE).url" \
       "InternetShortcut" "URL" "https://www.bleachbit.org/"
-    IfFileExists "$INSTDIR\installer.exe" 0 +6
+    IfFileExists "$INSTDIR\install.exe" 0 +6
       ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_REPAIR).lnk" '"$INSTDIR\installer.exe" /allusers /D "$INSTDIR"'
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_REPAIR).lnk" "$INSTDIR\install.exe" '/allusers /D="$INSTDIR"'
       ${else}
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_REPAIR).lnk" '"$INSTDIR\installer.exe" /currentuser /D "$INSTDIR"'
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_REPAIR).lnk" "$INSTDIR\install.exe" '/currentuser /D="$INSTDIR"'
       ${endif}
     CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_LINK_UNINSTALL).lnk" \
       "$INSTDIR\uninstall.exe"
-    Call NsisMultiUser_BB_Addon_RefreshShellIcons
+    Call RefreshShellIcons
   SectionEnd
-  !macro "Remove_${Shortcuts Start Menu}"
-    ;Removes component
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
-    RMDir /r "$SMPROGRAMS\${prodname}\"
-  !macroend
 
   ; BleachBit Desktop Shortcut
   Section SectionShortcutsDesktop "Shortcut Desktop"
     ; Checking for NsisMultiUser_LVC_Addon_Command_Line_No_Desktop_Shortcut. It's "No" by default. If "Yes": NO DESKTOP SHORTCUT!
     ${if} $NsisMultiUser_LVC_Addon_Command_Line_No_Desktop_Shortcut == "No"
-      ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-      Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
+      ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+      Call SetShellVarContextFunction
       SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
       CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-      Call NsisMultiUser_BB_Addon_RefreshShellIcons
+      Call RefreshShellIcons
     ${endif}
   SectionEnd
-  !macro "Remove_${Shortcut Desktop}"
-    ;Removes component
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
-    Delete "$DESKTOP\BleachBit.lnk"
-  !macroend
 
   ; BleachBit Quick Launch Shortcut
   Section /o SectionShortcutsQuickLaunch "Shortcut Quick Launch"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-    Call NsisMultiUser_BB_Addon_RefreshShellIcons
+    Call RefreshShellIcons
   SectionEnd
-  !macro "Remove_${Shortcut Quick Launch}"
-    ;Removes component
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
-    Delete "$QUICKLAUNCH\BleachBit.lnk"
-  !macroend
 
   ; BleachBit Autostart Shortcut
   Section /o SectionShortcutsAutostart "Shortcut Autostart"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
     CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-    Call NsisMultiUser_BB_Addon_RefreshShellIcons
+    Call RefreshShellIcons
   SectionEnd
-  !macro "Remove_${Shortcut Autostart}"
-    ;Removes component
-    Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
-    Delete "$SMSTARTUP\BleachBit.lnk"
-  !macroend
 SectionGroupEnd
 
 ; BleachBit Translations
@@ -610,17 +707,34 @@ SectionGroupEnd
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
   SectionEnd
-  !macro "Remove_${Shred for Explorer}"
-    ;Removes component
-    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
-  !macroend
 !endif
 
 
 ;--------------------------------
 ;Descriptions for the Installer Components
 
-; USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGUAGE SPECIFIC
+; Declare all the components:
+; Needed by UMUI_COMPONENTSPAGE_REGISTRY_VALUENAME!
+; Needs PR from: https://github.com/SuperPat45/UltraModernUI/pull/6
+!insertmacro UMUI_DECLARECOMPONENTS_BEGIN
+  !insertmacro UMUI_COMPONENT "Core"
+  !insertmacro UMUI_COMPONENT "Cleaners Stable"
+  !ifdef BetaTester
+    !insertmacro UMUI_COMPONENT "Cleaners Beta"
+    !ifdef AlphaTester
+      !insertmacro UMUI_COMPONENT "Cleaners Alpha"
+    !endif
+  !endif
+  !insertmacro UMUI_COMPONENT "Installer"
+  !insertmacro UMUI_COMPONENT "Shortcuts Start Menu"
+  !insertmacro UMUI_COMPONENT "Shortcut Desktop"
+  !insertmacro UMUI_COMPONENT "Shortcut Quick Launch"
+  !insertmacro UMUI_COMPONENT "Shortcut Autostart"
+  !insertmacro BB_Language_Installer_UMUI_COMPONENT_Translations
+  !ifndef NoSectionShred
+    !insertmacro UMUI_COMPONENT "Shred for Explorer"
+  !endif
+!insertmacro UMUI_DECLARECOMPONENTS_END
 
 ; Assign descriptions to sections:
 ; Variable/Constant must be declared by Installer Sections! Place MUI_FUNCTION_DESCRIPTION after it!
@@ -628,7 +742,7 @@ SectionGroupEnd
   !insertmacro MUI_DESCRIPTION_TEXT "${Core}" $(BLEACHBIT_COMPONENT_CORE_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT "${Group Cleaners}" $(BLEACHBIT_COMPONENTGROUP_CLEANERS_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT "${Cleaners Stable}" $(BLEACHBIT_COMPONENT_CLEANERS_STABLE_DESCRIPTION)
-  !ifdef BetaTester 
+  !ifdef BetaTester
     !insertmacro MUI_DESCRIPTION_TEXT "${Cleaners Beta}" $(BLEACHBIT_COMPONENT_CLEANERS_BETA_DESCRIPTION)
     !ifdef AlphaTester
       !insertmacro MUI_DESCRIPTION_TEXT "${Cleaners Alpha}" $(BLEACHBIT_COMPONENT_CLEANERS_ALPHA_DESCRIPTION)
@@ -656,29 +770,6 @@ Function .onInit
   Call NsisMultiUser_LVC_Addon_onInit
 
   !insertmacro UMUI_MULTILANG_GET
-
-  ; To access the section index, curly brackets must be used and the code must be located below the section in the script.
-  ; -> Place Function .onInit below the Sections!
-  SectionSetText "${Core}" $(BLEACHBIT_COMPONENT_CORE_TITLE)
-  SectionSetText "${Group Cleaners}" $(BLEACHBIT_COMPONENTGROUP_CLEANERS_TITLE)
-  SectionSetText "${Cleaners Stable}" "Stable"
-  !ifdef BetaTester
-    SectionSetText "${Cleaners Beta}" "Beta"
-    !ifdef AlphaTester
-      SectionSetText "${Cleaners Alpha}" "Alpha"
-    !endif
-  !endif
-  SectionSetText "${Installer}" $(BLEACHBIT_COMPONENT_INSTALLER_TITLE)
-  SectionSetText "${Group Shortcuts}" $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)
-  SectionSetText "${Shortcuts Start Menu}" $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_TITLE)
-  SectionSetText "${Shortcut Desktop}" $(BLEACHBIT_COMPONENT_SHORTCUTS_DESKTOP_TITLE)
-  SectionSetText "${Shortcut Quick Launch}" $(BLEACHBIT_COMPONENT_SHORTCUTS_QUICKLAUNCH_TITLE)
-  SectionSetText "${Shortcut Autostart}" $(BLEACHBIT_COMPONENT_SHORTCUTS_AUTOSTART_TITLE)
-  SectionSetText "${Group Translations}" $(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE)
-  !insertmacro BB_Language_Installer_SectionSetText_Translations
-  !ifndef NoSectionShred
-    SectionSetText "${Shred for Explorer}" $(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE)
-  !endif
 
   ; Add the Sections to the InstTypes:
   ; MUI_LANGDLL_DISPLAY must be loaded first!
@@ -715,7 +806,7 @@ Function .onInit
     !insertmacro SetSectionInInstType "${Shred for Explorer}" "${INSTTYPE_3}"
   !endif
 
-  ; Set the current Installation Type to 1. (1 = "Typical")
+  ; Set the current Installation Type to 1. (1 = "Standard")
   ; SetCurInstType must be set after "!insertmacro SetSectionInInstType"!
   ; https://nsis.sourceforge.io/Reference/SetCurInstType
   !ifndef NoTranslations
@@ -724,20 +815,82 @@ Function .onInit
   !ifdef NoTranslations
     SetCurInstType 2
   !endif
-
-  ; Reads components status from registry
-  ; But only if it is not a fresh install!
-  !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_InitSection"
-
 FunctionEnd
 
 ; And now starts the GUI Installer...
 
+Function MULTIUSER_PAGE_INSTALLMODE_Pre
+  ; It figured out that in some cases we get a wrong "$INSTDIR" (via command line). Seems to be a bug in
+  ; NsisMultiUser we can't find for now. So to go sure, we set some values before we start again with
+  ; NsisMultiUser.
+  Call NsisMultiUser_LVC_Addon_Set_NsisMultiUser
+FunctionEnd
 
-Section -FinishComponents
-  ; Removes unselected components and writes component status to registry
-  !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_FinishSection"
-SectionEnd
+Function MULTIUSER_PAGE_INSTALLMODE_Show
+  ; If the UMUI_(UN)PAGE_ABORT page is inserted, you need to use the UMUI_ABORT_IF_INSTALLFLAG_IS
+  ; macro with the ${UMUI_CANCELLED} flag to hide the page when user cancel the installation:
+  !insertmacro UMUI_ABORT_IF_INSTALLFLAG_IS ${UMUI_CANCELLED}
+FunctionEnd
+
+Function MULTIUSER_PAGE_INSTALLMODE_Leave
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    SetShellVarContext all
+    !define /redef UMUI_DEFAULT_SHELLVARCONTEXT all
+    !define /redef UMUI_PARAMS_REGISTRY_ROOT HKLM
+  ${else}
+    SetShellVarContext current
+    !define /redef UMUI_DEFAULT_SHELLVARCONTEXT current
+    !define /redef UMUI_PARAMS_REGISTRY_ROOT HKCU
+  ${endif}
+
+  ; SectionSetText:
+  !insertmacro BB_Language_Installer_SectionSetText
+FunctionEnd
+
+Function PreUninstall_Function
+  ; Execute this function only in Modify, Repair and Update function:
+  !insertmacro UMUI_IF_INSTALLFLAG_IS ${UMUI_MODIFY}|${UMUI_REPAIR}|${UMUI_REMOVE}|${UMUI_UPDATE}
+    StrCpy $NsisMultiUser_LVC_Addon_Upgrade "Yes"
+
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call SetShellVarContextFunction
+
+    Call uninstallfunction
+  !insertmacro UMUI_ENDIF_INSTALLFLAG
+FunctionEnd
+
+Function Confirm_Function
+  !insertmacro BB_Language_Installer_SectionSetText
+
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "$(UMUI_TEXT_INSTCONFIRM_TEXTBOX_DESTINATION_LOCATION)"
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "    $INSTDIR"
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE ""
+
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "$(UMUI_TEXT_SETUPTYPE_TITLE):"
+  !insertmacro UMUI_GET_CHOOSEN_SETUP_TYPE_TEXT
+  Pop $R0
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "    $R0"
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE ""
+
+  !insertmacro UMUI_CONFIRMPAGE_TEXTBOX_ADDLINE "$(UMUI_TEXT_INSTCONFIRM_TEXTBOX_COMPNENTS)"
+
+  ; List all the components:
+  !insertmacro Confirm_Addline "Core"
+  !insertmacro Confirm_Addline "Cleaners Stable"
+  !ifdef BetaTester
+    !insertmacro Confirm_Addline "Cleaners Beta"
+    !ifdef AlphaTester
+      !insertmacro Confirm_Addline "Cleaners Alpha"
+    !endif
+  !endif
+  !insertmacro Confirm_Addline "Installer"
+  !insertmacro Confirm_Addline "Shortcuts Start Menu"
+  !insertmacro Confirm_Addline "Shortcut Desktop"
+  !insertmacro Confirm_Addline "Shortcut Quick Launch"
+  !insertmacro Confirm_Addline "Shortcut Autostart"
+  !insertmacro BB_Language_Installer_Confirm_Addline_Translations
+  !insertmacro Confirm_Addline "Shred for Explorer"
+FunctionEnd
 
 ; Keep this section last. It must be last because that is when the
 ; actual size is known.
@@ -747,6 +900,13 @@ Section "-Write Install Size"
 SectionEnd
 
 Section -Post
+  ; Write/Update the "InstallDate" (also after component add/remove & repair):
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "InstallDate" "${InstallDate}"
+  ${else}
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "InstallDate" "${InstallDate}"
+  ${endif}
+
   ; Macro/Function "NsisMultiUser_LVC_Addon_SectionPost"
   ; Save the Language Selection Dialog Setting
   ; We need also "MUI_LANGDLL_ALWAYSSHOW", or the user can never ever change his language!
@@ -756,12 +916,10 @@ SectionEnd
 ;--------------------------------
 ;Uninstaller Sections
 
-UninstallText $(BLEACHBIT_UNINSTALLTEXT)
-
 ; BleachBit Core
 Section un.SectionCore "un.Core"
-  ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-  Call un.NsisMultiUser_BB_Addon_SetShellVarContextFunction
+  ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+  Call un.SetShellVarContextFunction
 
   Call un.uninstallfunction
 SectionEnd
@@ -805,32 +963,32 @@ SectionEnd
 SectionGroup /e un.SectionGroupShortcuts "un.Group Shortcuts"
   ; BleachBit Start Menu Shortcuts
   Section un.SectionShortcutsStartMenu "un.Shortcuts Start Menu"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call un.NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call un.SetShellVarContextFunction
     ; Delete normal, Start menu shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}\"
   SectionEnd
 
   ; BleachBit Desktop Shortcut
   Section un.SectionShortcutsDesktop "un.Shortcut Desktop"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call un.NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call un.SetShellVarContextFunction
     ; Delete Desktop shortcut
     Delete "$DESKTOP\BleachBit.lnk"
   SectionEnd
 
   ; BleachBit Quick Launch Shortcut
   Section un.SectionShortcutsQuickLaunch "un.Shortcut Quick Launch"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call un.NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call un.SetShellVarContextFunction
     ; Delete Quick launch shortcut
     Delete "$QUICKLAUNCH\BleachBit.lnk"
   SectionEnd
 
   ; BleachBit Autostart Shortcut
   Section un.SectionShortcutsAutostart "un.Shortcut Autostart"
-    ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
-    Call un.NsisMultiUser_BB_Addon_SetShellVarContextFunction
+    ; Use SetShellVarContextFunction to use the right folders (All Users/Current User)
+    Call un.SetShellVarContextFunction
     ; Delete Autostart shortcut
     Delete "$SMSTARTUP\BleachBit.lnk"
   SectionEnd
@@ -890,32 +1048,6 @@ Function un.onInit
 
   !insertmacro UMUI_MULTILANG_GET
 
-  ; To access the section index, curly brackets must be used and the code must be located below the section in the script.
-  ; -> Place Function un.onInit below the un.Sections!
-  SectionSetText "${un.Core}" $(BLEACHBIT_COMPONENT_CORE_TITLE)
-  SectionSetText "${un.Group Cleaners}" $(BLEACHBIT_COMPONENTGROUP_CLEANERS_TITLE)
-  SectionSetText "${un.Cleaners Stable}" "Stable"
-  !ifdef BetaTester
-    SectionSetText "${un.Cleaners Beta}" "Beta"
-    !ifdef AlphaTester
-      SectionSetText "${un.Cleaners Alpha}" "Alpha"
-    !endif
-  !endif
-  SectionSetText "${un.Installer}" $(BLEACHBIT_COMPONENT_INSTALLER_TITLE)
-  SectionSetText "${un.Group Shortcuts}" $(BLEACHBIT_COMPONENTGROUP_SHORTCUTS_TITLE)
-  SectionSetText "${un.Shortcuts Start Menu}" $(BLEACHBIT_COMPONENT_SHORTCUTS_STARTMENU_TITLE)
-  SectionSetText "${un.Shortcut Desktop}" $(BLEACHBIT_COMPONENT_SHORTCUTS_DESKTOP_TITLE)
-  SectionSetText "${un.Shortcut Quick Launch}" $(BLEACHBIT_COMPONENT_SHORTCUTS_QUICKLAUNCH_TITLE)
-  SectionSetText "${un.Shortcut Autostart}" $(BLEACHBIT_COMPONENT_SHORTCUTS_AUTOSTART_TITLE)
-  SectionSetText "${un.Group Translations}" $(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE)
-  !insertmacro BB_Language_UnInstaller_SectionSetText_Translations
-  !ifndef NoSectionShred
-    SectionSetText "${un.Shred for Explorer}" $(BLEACHBIT_COMPONENT_SHREDFOREXPLORER_TITLE)
-  !endif
-
-  ; Reads components status from registry
-  !insertmacro SectionList "NsisMultiUser_BB_Addon_AddRemove_InitSection"
-
   # Calculate size of data dirs:
   var /GLOBAL DirSizeCore
   ; ${GetSize} $INSTDIR "/S=0K" $0 $1 $2
@@ -938,15 +1070,37 @@ Function un.onInit
   SectionSetSize "${un.Group Cleaners}" $DirSizeGroupCleaners
   SectionSetSize "${un.Installer}" $DirSizeInstaller
   SectionSetSize "${un.Group Translations}" $DirSizeGroupTranslations
-
 FunctionEnd
 
 ; And now starts the GUI UnInstaller...
 
-Section -un.FinishComponents
-  ; Writes component status to registry if it is no a complete uninstall
-  !insertmacro SectionList "un.NsisMultiUser_BB_Addon_AddRemove_un.FinishSection"
-SectionEnd
+Function un.MULTIUSER_UnPAGE_INSTALLMODE_Pre
+  ; It figured out that in some cases we get a wrong "$INSTDIR" (via command line). Seems to be a bug in
+  ; NsisMultiUser we can't find for now. So to go sure, we set some values before we start again with
+  ; NsisMultiUser.
+  Call un.NsisMultiUser_LVC_Addon_Set_NsisMultiUser
+FunctionEnd
+
+Function un.MULTIUSER_UnPAGE_INSTALLMODE_Show
+  ; If the UMUI_(UN)PAGE_ABORT page is inserted, you need to use the UMUI_ABORT_IF_INSTALLFLAG_IS
+  ; macro with the ${UMUI_CANCELLED} flag to hide the page when user cancel the installation:
+  !insertmacro UMUI_ABORT_IF_INSTALLFLAG_IS ${UMUI_CANCELLED}
+FunctionEnd
+
+Function un.MULTIUSER_UnPAGE_INSTALLMODE_Leave
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    SetShellVarContext all
+    !define /redef UMUI_DEFAULT_SHELLVARCONTEXT all
+    !define /redef UMUI_PARAMS_REGISTRY_ROOT HKLM
+  ${else}
+    SetShellVarContext current
+    !define /redef UMUI_DEFAULT_SHELLVARCONTEXT current
+    !define /redef UMUI_PARAMS_REGISTRY_ROOT HKCU
+  ${endif}
+
+  ; SectionSetText:
+  !insertmacro BB_Language_UnInstaller_SectionSetText
+FunctionEnd
 
 ; Keep this section last. It must be last because that is when the
 ; actual size is known.
@@ -956,6 +1110,18 @@ Section "-un.Write Install Size"
 SectionEnd
 
 Section -un.Post
+  ; Update the "InstallDate" (also after component remove):
+  ; But only if "InstallDate" still exist (no complete de-install)!
+  ${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
+    ReadRegStr $R1 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "InstallDate"
+    IfErrors +2 +1
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "InstallDate" "${InstallDate}"
+  ${else}
+    ReadRegStr $R1 SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "InstallDate"
+    IfErrors +2 +1
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "InstallDate" "${InstallDate}"
+  ${endif}
+
   ; Macro/Function "NsisMultiUser_LVC_Addon_SectionPost"
   ; Save the Language Selection Dialog Setting
   ; We need also "MUI_LANGDLL_ALWAYSSHOW", or the user can never ever change his language!
