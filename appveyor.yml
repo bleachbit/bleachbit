@@ -1,5 +1,5 @@
 build: off
-version: 2.3.{build}
+version: 2.3.0.{build}
 
 environment:
     PYTHON_HOME: 'C:/Python27'
@@ -64,13 +64,19 @@ test_script:
   - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" -m unittest discover -v -p Test*.py'
 
 artifacts:
-  - path: BleachBit-*-setup.exe
+  - path: BleachBit-*-Setup.exe
     name: FullInstaller
 
-  - path: BleachBit-*-setup-English.exe
+  - path: BleachBit-*-Setup-English_US-only.exe
     name: EnglishInstaller
 
-  - path: BleachBit-*-portable.zip
+  - path: BleachBit-*-Setup-Beta-Tester.exe
+    name: BetaTesterInstaller
+
+  - path: BleachBit-*-Setup-Alpha-Tester.exe"
+    name: AlphaTesterInstaller
+
+  - path: BleachBit-*-Portable.zip
     name: Portable
 
   - path: .coverage
