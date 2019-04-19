@@ -135,8 +135,6 @@ class FileActionProvider(ActionProvider):
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
             self.ds['nregex'] = self.nregex
-            self.ds['cache'] = General.boolstr_to_bool(
-                action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.paths[0]
             if not len(self.paths) == 1:

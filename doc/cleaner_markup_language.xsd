@@ -119,7 +119,6 @@
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
                       <xs:attribute name="address" type="xs:string"/>
-                      <xs:attribute name="cache" type="xs:string"/>
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
