@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-03-17 22:16-0600\n"
-"PO-Revision-Date: 2019-03-21 08:20+0000\n"
-"Last-Translator: Jiri Grönroos <Unknown>\n"
+"PO-Revision-Date: 2019-04-09 11:40+0000\n"
+"Last-Translator: emp <emp500@hotmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-24 19:12+0000\n"
-"X-Generator: Launchpad (build 18910)\n"
+"X-Launchpad-Export-Date: 2019-04-19 20:12+0000\n"
+"X-Generator: Launchpad (build 18928)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
 #: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -712,7 +712,7 @@ msgstr "Virhe tarkistaessa onko polkua olemassa: %s"
 
 #: ../bleachbit/Options.py:214
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Virhe asetettaessa oletusasemia tuhottavaksi"
 
 #: ../bleachbit/Options.py:235
 #, python-format
@@ -1018,12 +1018,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:259
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Sivuutetaan puhdistaja, koska se on täysin kirjoitettavissa: %s"
 
 #: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Virhe luettaessa puhdistajaa: %s"
 
 #: ../bleachbit/CleanerML.py:277
 #, python-format
@@ -1232,7 +1232,7 @@ msgstr "Tarkista verkosta winapp2.ini-päivitykset"
 
 #: ../bleachbit/CLI.py:211
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Ei määriteltyjä hakemistoja --wipe-free-space -argumentille"
 
 #: ../bleachbit/CLI.py:216
 #, python-format
@@ -1241,7 +1241,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:218
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "Vapaan tilan puhdistaminen voi viedä paljon aikaa."
 
 #: ../bleachbit/CLI.py:228
 msgid "No work to do. Specify options."
@@ -1253,7 +1253,7 @@ msgstr ""
 
 #: ../bleachbit/Action.py:144
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Syväskannaus ei tue useamman arvon muuttujia."
 
 #: ../bleachbit/Action.py:221
 #, python-format
@@ -1339,6 +1339,7 @@ msgstr ""
 "  Pekka Niemi https://launchpad.net/~pekka-niemi\n"
 "  Sami Korkalainen https://launchpad.net/~zazaamm\n"
 "  Tommi Saira https://launchpad.net/~tommisaira\n"
+"  emp https://launchpad.net/~emp500\n"
 "  papukaija https://launchpad.net/~papukaija"
 
 #: ../bleachbit/GUI.py:459
@@ -1628,6 +1629,8 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Komento 'swapoff -s' epäonnistui, joten palaudutaan käyttämään /proc/swaps "
+"swap-tietoja varten."
 
 #: ../bleachbit/Memory.py:81
 msgid "Disabling swap."
@@ -1645,12 +1648,12 @@ msgstr "Asetetaan nice-arvo %d tälle prosessille."
 #: ../bleachbit/Memory.py:127
 #, python-format
 msgid "Dropping privileges of pid %d to uid %d."
-msgstr ""
+msgstr "Lasketaan pid'n %d oikeudet uid:lle %d."
 
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s (%d B) of memory."
-msgstr ""
+msgstr "Varataan ja puhdistetaan %s (%d tavua) muistia."
 
 #: ../bleachbit/Memory.py:148
 #, python-format
@@ -1660,7 +1663,7 @@ msgstr "Vapautetaan %s muistia."
 #: ../bleachbit/Memory.py:178
 #, python-format
 msgid "Found UUID for swap file %s is %s."
-msgstr ""
+msgstr "UUID swap-tiedostolle %s on %s."
 
 #: ../bleachbit/Memory.py:263
 #, python-format
@@ -1670,12 +1673,12 @@ msgstr "Fyysistä vapaata muistia on %s (%d t)."
 #: ../bleachbit/Memory.py:274
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "Puhdistetaan swap-laite %s."
 
 #: ../bleachbit/Memory.py:285
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "Uudelleenalustetaan swap-laite %s."
 
 #: ../bleachbit/Memory.py:301
 #, python-format
