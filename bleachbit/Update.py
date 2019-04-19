@@ -160,10 +160,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener.addheaders = [('User-Agent', user_agent())]
     try:
         handle = opener.open(bleachbit.update_check_url)
-    except URLError:
-        logger.exception(
-            _('Error when opening a network connection to %s to check for updates. Please verify the network is working.' %
-                bleachbit.update_check_url))
+    except URLError as e:
+        logger.error(
+            _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
         return ()
     doc = handle.read()
     try:
