@@ -37,7 +37,7 @@ These are the terms:
 
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit import Command, FileUtilities, General

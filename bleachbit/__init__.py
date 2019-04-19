@@ -22,7 +22,7 @@
 Code that is commonly shared throughout BleachBit
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import gettext
 import locale
@@ -188,7 +188,6 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # system cleaners
 if os.path.isdir(os.path.join(bleachbit_exe_path,'cleaners')):
     system_cleaners_dir = os.path.join(bleachbit_exe_path,'cleaners')
-    print(system_cleaners_dir)
 elif sys.platform.startswith('linux') or sys.platform == 'darwin':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':

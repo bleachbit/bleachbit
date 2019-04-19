@@ -22,7 +22,7 @@
 Store and retrieve user preferences
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit import General
@@ -31,7 +31,6 @@ from bleachbit import _
 import logging
 import os
 import re
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +80,6 @@ class Options:
         try:
             self.config.write(_file)
         except IOError as e:
-            print(e)
             from errno import ENOSPC
             if e.errno == ENOSPC:
                 logger.error(
@@ -192,7 +190,7 @@ class Options:
             return self.config.getboolean('tree', option)
         except:
             # in case of corrupt configuration (Launchpad #799130)
-            traceback.print_exc()
+            logger.exception('Error in get_tree()')
             return False
 
     def restore(self):
@@ -200,7 +198,7 @@ class Options:
         try:
             self.config.read(bleachbit.options_file)
         except:
-            traceback.print_exc()
+            logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):

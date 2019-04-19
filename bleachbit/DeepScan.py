@@ -23,7 +23,7 @@
 Scan directory tree for files to delete
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import logging
 import os

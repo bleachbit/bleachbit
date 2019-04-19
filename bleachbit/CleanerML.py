@@ -22,7 +22,7 @@
 Create cleaners from CleanerML (markup language)
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit.Action import ActionProvider

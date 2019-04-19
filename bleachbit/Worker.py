@@ -22,7 +22,7 @@
 Perform the preview or delete operations
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends

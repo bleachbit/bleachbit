@@ -470,8 +470,6 @@ class GUI(Gtk.ApplicationWindow):
             try:
                 import sqlite3
             except ImportError as e:
-                print(e)
-                print(dir(e))
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 

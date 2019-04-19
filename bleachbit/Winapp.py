@@ -23,7 +23,7 @@
 Import Winapp2.ini files
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import logging
 import os

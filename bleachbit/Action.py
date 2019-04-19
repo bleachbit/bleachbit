@@ -23,7 +23,7 @@
 Actions that perform cleaning
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import Command, FileUtilities, General, Special
 from bleachbit import _, expanduser, expandvars

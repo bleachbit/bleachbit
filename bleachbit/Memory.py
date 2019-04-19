@@ -23,7 +23,7 @@
 Wipe memory
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import FileUtilities
 from bleachbit import General
@@ -34,7 +34,6 @@ import os
 import re
 import subprocess
 import sys
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +126,7 @@ def make_self_oom_target_linux():
                 _("Dropping privileges of pid %d to uid %d."), os.getpid(), uid)
             os.seteuid(uid)
     except:
-        traceback.print_exc()
+        logger.exception('Error when dropping privileges')
 
 
 def fill_memory_linux():
@@ -241,7 +240,6 @@ def physical_free_windows():
         return x
 
     z = GlobalMemoryStatusEx()
-    print(z)
     return z.ullAvailPhys
 
 

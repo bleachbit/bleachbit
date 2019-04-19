@@ -24,7 +24,7 @@
 Preferences dialog
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
@@ -34,7 +34,6 @@ from gi.repository import Gtk
 import logging
 import os
 import sys
-import traceback
 
 if 'nt' == os.name:
     from bleachbit import Windows

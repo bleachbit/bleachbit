@@ -28,7 +28,6 @@ import bleachbit
 import logging
 import os
 import sys
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +79,7 @@ def chownself(path):
     try:
         os.chown(path, uid, -1)
     except:
-        traceback.print_exc()
+        logger.exception('Error in chown() under chownself()')
 
 
 def getrealuid():

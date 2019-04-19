@@ -22,7 +22,7 @@
 Command design pattern implementation for cleaning
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import _
 from bleachbit import FileUtilities

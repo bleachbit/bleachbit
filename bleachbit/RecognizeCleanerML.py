@@ -22,7 +22,7 @@
 Check local CleanerML files as a security measure
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import _, _p
 import bleachbit

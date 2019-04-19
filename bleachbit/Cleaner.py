@@ -22,7 +22,7 @@
 Perform (or assist with) cleaning operations.
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import _, expanduser, expandvars
 from bleachbit.FileUtilities import children_in_directory
