@@ -137,7 +137,7 @@ class Bleachbit(Gtk.Application):
             return
         GUI.shred_paths(self._window, paths)
 
-    def cb_shred_quit(self, action):
+    def cb_shred_quit(self, action, param):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
