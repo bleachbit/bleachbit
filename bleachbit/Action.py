@@ -50,7 +50,7 @@ def has_glob(s):
 
 
 def expand_multi_var(s, variables):
-    """Expand string s with potentially-multiple values.
+    """Expand strings with potentially-multiple values.
 
     The placeholder is written in the format $$foo$$.
 
