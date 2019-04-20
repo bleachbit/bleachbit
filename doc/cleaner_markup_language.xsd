@@ -164,6 +164,7 @@
                             <xs:enumeration value="glob"/>
                             <xs:enumeration value="walk.all"/>
                             <xs:enumeration value="walk.files"/>
+                            <xs:enumeration value="walk.top"/>
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>

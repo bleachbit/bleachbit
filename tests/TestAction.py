@@ -394,24 +394,31 @@ class ActionTestCase(common.BleachbitTestCase):
         self._test_action_str(action_str)
         self.assertNotExists(dirname)
 
-    def test_walk_all(self):
-        """Unit test for walk.all"""
-        dirname = self.mkdtemp(prefix='bleachbit-walk-all')
+    def test_walk_all_top(self):
+        """Unit test for walk.all and walk.top"""
 
-        # this sub-directory should be deleted
-        subdir = os.path.join(dirname, 'sub')
-        os.mkdir(subdir)
-        self.assertExists(subdir)
+        variants = ('all', 'top')
+        for variant in variants:
+            dirname = self.mkdtemp(prefix='bleachbit-walk-%s' % variant)
 
-        # this file should be deleted too
-        filename = os.path.join(subdir, 'file')
-        common.touch_file(filename)
+            # this sub-directory should be deleted
+            subdir = os.path.join(dirname, 'sub')
+            os.mkdir(subdir)
+            self.assertExists(subdir)
 
-        action_str = u'<action command="delete" search="walk.all" path="%s" />' % dirname
-        self._test_action_str(action_str)
-        self.assertNotExists(subdir)
+            # this file should be deleted too
+            filename = os.path.join(subdir, 'file')
+            common.touch_file(filename)
 
-        os.rmdir(dirname)
+            action_str = u'<action command="delete" search="walk.%s" path="%s" />' % (
+                variant, dirname)
+            self._test_action_str(action_str)
+            self.assertNotExists(subdir)
+            if variant == 'all':
+                self.assertExists(dirname)
+                os.rmdir(dirname)
+            elif variant == 'top':
+                self.assertNotExists(dirname)
 
     def test_walk_files(self):
         """Unit test for walk.files"""

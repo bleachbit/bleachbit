@@ -206,6 +206,7 @@ class FileActionProvider(ActionProvider):
                 yield path
 
         def get_walk_all(top):
+            """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
                 any_match = False
                 for path in FileUtilities.children_in_directory(
@@ -219,9 +220,16 @@ class FileActionProvider(ActionProvider):
                         _('search="walk.all" used with regular file path="%s"'), expanded)
 
         def get_walk_files(top):
+            """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
                 for path in FileUtilities.children_in_directory(expanded, False):
                     yield path
+
+        def get_top(top):
+            """Delete directory contents and the directory itself"""
+            for f in get_walk_all(top):
+                yield f
+            yield top
 
         if 'deep' == self.search:
             raise StopIteration
@@ -233,6 +241,8 @@ class FileActionProvider(ActionProvider):
             func = get_walk_all
         elif 'walk.files' == self.search:
             func = get_walk_files
+        elif 'walk.top' == self.search:
+            func = get_top
         else:
             raise RuntimeError("invalid search='%s'" % self.search)
 
