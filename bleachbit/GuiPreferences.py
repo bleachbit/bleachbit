@@ -72,6 +72,15 @@ class PreferencesDialog:
         self.dialog.get_content_area().pack_start(notebook, True, True, 0)
         self.dialog.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
 
+        self.refresh_operations = False
+
+
+    def __del__(self):
+        """Destructor called when the dialog is closing"""
+        if self.refresh_operations:
+            # refresh the list of cleaners
+            self.cb_refresh_operations()
+
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
         options.toggle(path)
@@ -80,7 +89,7 @@ class PreferencesDialog:
             if 'nt' == os.name:
                 self.cb_winapp2.set_sensitive(options.get('check_online_updates'))
         if 'auto_hide' == path:
-            self.cb_refresh_operations()
+            self.refresh_operations = True
 
     def __general_page(self):
         """Return a widget containing the general page"""
