@@ -90,6 +90,8 @@ class PreferencesDialog:
                 self.cb_winapp2.set_sensitive(options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.refresh_operations = True
+        if 'dark_mode' == path:
+            Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
     def __general_page(self):
         """Return a widget containing the general page"""
@@ -165,6 +167,14 @@ class PreferencesDialog:
         cb_units_iec.set_active(options.get("units_iec"))
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
+
+        # Dark theme
+        cb_dark_mode = Gtk.CheckButton(
+            _("Dark mode"))
+        cb_dark_mode.set_active(options.get("dark_mode"))
+        cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
+        vbox.pack_start(cb_dark_mode, False, True, 0)
+
         return vbox
 
     def __drives_page(self):

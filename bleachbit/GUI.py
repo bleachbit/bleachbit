@@ -457,6 +457,9 @@ class GUI(Gtk.ApplicationWindow):
             from bleachbit import logger_sh
             bb_logger.removeHandler(logger_sh)
 
+
+        Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
+
         if options.get("first_start") and 'posix' == os.name:
             pref = PreferencesDialog(self, self.cb_refresh_operations)
             pref.run()
