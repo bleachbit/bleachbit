@@ -52,6 +52,7 @@ if 'posix' == os.name:
 elif 'nt' == os.name:
     from bleachbit import Windows
 
+
 # a module-level variable for holding cleaners
 backends = {}
 
