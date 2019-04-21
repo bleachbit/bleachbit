@@ -28,16 +28,24 @@
     <action command="delete" search="file" path="~/.viminfo"/>
     <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
   </option>
-  <option id="swap">
-    <label>Swap Files</label>
-    <description>Delete swap files ~/.files.sw? </description>
+  <option id="swap_user">
+    <label>Swap files under user profile</label>
+    <description>Delete the backup files</description>
     <warning>Inspect the preview for any files you want to keep.</warning>
+    <!--
+Here is an example. When editing foo.txt, VIM makes a file called .foo.txt.swp
+that starts with a period.
+
+If the .swp file exists, it will cycle through the alphabet according to
+this post
+https://groups.google.com/forum/#!msg/vim_use/JBHSs3kPPJU/X9WeMsZcfWAJ
+-->
     <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false"/>
   </option>
-  <option id="swapR">
-    <label>Swap Files root</label>
-    <description>Delete swap files /.files.sw? </description>
+  <option id="swap_root" os="linux">
+    <label>Swap files across system</label>
+    <description>Delete the backup files</description>
     <warning>Inspect the preview for any files you want to keep.</warning>
-    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false" path="/" />
+    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false" path="/"/>
   </option>
 </cleaner>
