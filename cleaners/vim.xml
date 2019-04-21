@@ -40,12 +40,12 @@ If the .swp file exists, it will cycle through the alphabet according to
 this post
 https://groups.google.com/forum/#!msg/vim_use/JBHSs3kPPJU/X9WeMsZcfWAJ
 -->
-    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false"/>
+    <action command="delete" search="deep" regex="^\..*sw[a-z]$"/>
   </option>
-  <option id="swap_root" os="linux">
+  <option id="swap_root">
     <label>Swap files across system</label>
     <description>Delete the backup files</description>
     <warning>Inspect the preview for any files you want to keep.</warning>
-    <action command="delete" search="deep" regex="^\..*sw[a-z]$" cache="false" path="/"/>
+    <action command="delete" search="deep" regex="^\..*sw[a-z]$" path="/" os="linux"/>
   </option>
 </cleaner>
