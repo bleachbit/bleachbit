@@ -198,7 +198,7 @@ class Bleachbit(Gtk.Application):
         try:
             with open(bleachbit.license_filename) as f:
                 dialog.set_license(f.read())
-        except IOError:
+        except (IOError, TypeError):
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
         #dialog.set_name(APP_NAME)

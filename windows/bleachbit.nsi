@@ -188,18 +188,8 @@ Section Core (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
-    File "..\dist\*.*"
+    File /r "..\dist\*.*"
     File "..\COPYING"
-    SetOutPath $INSTDIR\etc
-    File /r "..\dist\etc\*.*"
-    SetOutPath $INSTDIR\lib
-    File /r "..\dist\lib\*.*"
-    SetOutPath $INSTDIR\share
-    File "..\dist\share\bleachbit.png"
-    SetOutPath $INSTDIR\share\cleaners
-    File /r "..\dist\share\cleaners\*.*"
-    SetOutPath $INSTDIR\share\themes
-    File /r "..\dist\share\themes\*.*"
 
     SetOutPath "$INSTDIR\share\"
     File "..\bleachbit.png"

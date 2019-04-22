@@ -240,6 +240,9 @@ def build():
     logger.info('Checking for CleanerML')
     assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
+    logger.info('Copying license')
+    shutil.copy('COPYING', 'dist')
+
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
 
