@@ -192,7 +192,7 @@ class Bleachbit(Gtk.Application):
 
         dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
                                  copyright='Copyright (C) 2008-2018 Andrew Ziem',
-                                 name=APP_NAME,
+                                 program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
                                  transient_for=self._window)
@@ -448,6 +448,7 @@ class GUI(Gtk.ApplicationWindow):
         RecognizeCleanerML.RecognizeCleanerML()
         register_cleaners()
 
+        self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
 
         # Redirect logging to the GUI.
