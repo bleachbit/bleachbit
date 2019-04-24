@@ -20,13 +20,27 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1059
-;  @scriptdate 2019-04-18
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-18)
-;  @tested ok v2.3.0.1059, Windows 7
-;  @testeddate 2019-04-18
+;  @scriptversion v2.3.0.1080
+;  @scriptdate 2019-04-24
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-24)
+;  @tested ok v2.3.0.1080, Windows 7
+;  @testeddate 2019-04-24
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note 
+
+
+;--------------------------------
+;Pack header:
+
+; Compress installer exehead with an executable compressor (such as UPX / Petite).
+
+; Paths should be absolute to allow building from any location.
+; Note that your executable compressor should not compress the first icon.
+
+!ifdef packhdr
+  !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
+  ;!packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\Petite\petite.exe" -9 -b0 -r** -p0 -y "$%TEMP%\exehead.tmp"'
+!endif
 
 
 ;--------------------------------
@@ -147,20 +161,15 @@ VIFileVersion ${File_VERSION}
 
 
 ;--------------------------------
-;Pack header:
-!ifdef packhdr
-  !packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" "$%TEMP%\exehead.tmp"'
-!endif
-
-
-;--------------------------------
 ;Installer-/UnInstaller-Attributes - Compiler Flags
 ; https://nsis.sourceforge.io/Docs/Chapter4.html#flags
 
-; Best compression:
-; https://nsis.sourceforge.io/Docs/Chapter1.html#intro-features
-; SetCompressor /SOLID lzma
+; Set default compressor:
 ; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+; Best compression: https://nsis.sourceforge.io/Docs/Chapter1.html#intro-features
+!ifdef Compressor
+  SetCompressor /SOLID lzma
+!endif
 
 Name "${prodname}"
 
@@ -442,14 +451,15 @@ Section SectionCore "Core" ; (Required)
   SetOutPath "$INSTDIR\license\"
   File "..\license\*.*"
 !endif
+  SetOutPath "$INSTDIR\data\"
+  File /r "..\dist\data\*.*"
   SetOutPath "$INSTDIR\etc\"
   File /r "..\dist\etc\*.*"
   SetOutPath "$INSTDIR\lib\"
   File /r "..\dist\lib\*.*"
   SetOutPath "$INSTDIR\share\"
+  File /r "..\dist\share\*.*"
   File "..\bleachbit.png"
-  SetOutPath "$INSTDIR\share\themes\"
-  File /r "..\dist\share\themes\*.*"
 
   ; Write uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -637,7 +647,9 @@ SectionGroup /e SectionGroupShortcuts "Group Shortcuts"
     ; Use NsisMultiUser_BB_Addon_SetShellVarContextFunction to use the right folders (All Users/Current User)
     Call NsisMultiUser_BB_Addon_SetShellVarContextFunction
     SetOutPath "$INSTDIR\" ; this affects CreateShortCut's 'Start in' directory
-    CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
+    ; Making shortcuts run minimized in NSIS:
+    ; https://stackoverflow.com/questions/1018563/making-shortcuts-run-minimized-in-nsis
+    CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe" "" "" "" SW_SHOWMINIMIZED
     Call NsisMultiUser_BB_Addon_RefreshShellIcons
   SectionEnd
   !macro "Remove_${Shortcut Autostart}"
