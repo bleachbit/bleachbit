@@ -382,6 +382,22 @@ def upx():
 
 
 @count_size_improvement
+def upx_package_installer():
+    if fast:
+        logger.warning('Fast mode: Skipped executable with UPX')
+        return
+
+    if not os.path.exists(UPX_EXE):
+        logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
+        return
+
+    logger.info('Compressing executables')
+    upx_files = 'BleachBit-*.exe'
+    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
+    run_cmd(cmd)
+
+
+@count_size_improvement
 def delete_linux_only():
     logger.info('Checking for Linux-only cleaners')
     files = recursive_glob('dist/share/cleaners/', ['*.xml'])
@@ -474,7 +490,7 @@ def package_portable():
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
 
-    archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+    archive('BleachBit-Portable', 'BleachBit-{}-Portable.zip'.format(BB_VER))
 
 # NSIS
 
@@ -485,7 +501,7 @@ def nsis(opts, exe_name, nsi_path):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
     cmd = NSIS_EXE + \
-        ' {} /DVERSION={} {}'.format(opts, BB_VER, nsi_path)
+        ' {} /DVERSION={} /DPathToCleanerML=".." {}'.format(opts, BB_VER, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
     sign_code(exe_name)
@@ -499,21 +515,27 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         return
 
     logger.info('Building installer')
-    exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    exe_name = 'windows\\BleachBit-{0}-Setup.exe'.format(BB_VER)
+    opts = '' if fast else '/X"SetCompressor /SOLID LZMA"'
     nsis(opts, exe_name, nsi_path)
 
     if not fast:
         nsis('/DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
+             'windows\\BleachBit-{0}-Setup-English_US-only.exe'.format(BB_VER),
+             nsi_path)
+        nsis('/DAlphaTester',
+             'windows\\BleachBit-{0}-Setup-Alpha-Tester.exe'.format(BB_VER),
+             nsi_path)
+        nsis('/DBetaTester',
+             'windows\\BleachBit-{0}-Setup-Beta-Tester.exe'.format(BB_VER),
              nsi_path)
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
         outfile = ROOT_DIR + \
-            '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-        infile = ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+            '\\windows\\BleachBit-{0}-Setup.zip'.format(BB_VER)
+        infile = ROOT_DIR + '\\windows\\BleachBit-{0}-Setup.exe'.format(BB_VER)
         archive(infile, outfile)
     else:
         logger.warning(SZ_EXE + ' does not exist')
@@ -530,6 +552,7 @@ if '__main__' == __name__:
     shrink()
     package_portable()
     package_installer()
+    upx_package_installer()
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
     os.system(r'dir *.zip windows\*.exe windows\*.zip')
