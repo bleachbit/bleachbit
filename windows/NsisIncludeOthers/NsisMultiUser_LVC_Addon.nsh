@@ -162,7 +162,7 @@ Var NsisMultiUser_LVC_Addon_Upgrade
       StrCpy $CmdLineInstallMode "currentuser"
       StrCpy $HasPerUserInstallation 0
       IfFileExists '"$%AppData%"\*.*' 0 +3
-      StrCpy $INSTDIR '"$%AppData%"\${prodname} ; In double inverted comma, or else problems with paths with spaces!
+      StrCpy $INSTDIR '"$%AppData%"\${prodname}' ; In double inverted comma, or else problems with paths with spaces!
       Goto +3
       IfFileExists "C:\*.*" 0 +3
       StrCpy $INSTDIR "C:\${prodname}"
