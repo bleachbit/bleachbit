@@ -20,10 +20,10 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1080
+;  @scriptversion v2.3.0.1084
 ;  @scriptdate 2019-04-24
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-24)
-;  @tested ok v2.3.0.1080, Windows 7
+;  @tested ok v2.3.0.1084, Windows 7
 ;  @testeddate 2019-04-24
 ;  @testedby https://github.com/Tobias-B-Besemer
 ;  @note You need to use a NSIS build from: https://sourceforge.net/projects/ultramodernui/
@@ -282,8 +282,12 @@ Name "${prodname}"
 ;Pages
 
 ; General:
-;!define UMUI_SKIN SoftGray ; We use our own with "!include":
-!include bleachbit_ultramodernui_skin_softgray_by_tobias.nsh
+; !define UMUI_SKIN SoftGray ; We use our own with "!include":
+; !define UMUI_SKIN Gray
+; !define UMUI_SKIN Gray2
+; !include bleachbit_ultramodernui_skin_softgray_by_tobias.nsh
+!include bleachbit_ultramodernui_skin_gray_by_tobias.nsh
+; !include bleachbit_ultramodernui_skin_gray2_by_tobias.nsh
 !define UMUI_DEFAULT_SHELLVARCONTEXT all
 !define UMUI_PARAMS_REGISTRY_ROOT HKLM ; Temporary define, because we do this while runtime!
 !define UMUI_PARAMS_REGISTRY_KEY "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}"
