@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-03-17 22:16-0600\n"
-"PO-Revision-Date: 2019-03-18 01:25+0000\n"
+"PO-Revision-Date: 2019-04-21 12:40+0000\n"
 "Last-Translator: Sabri Ünal <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-24 19:12+0000\n"
-"X-Generator: Launchpad (build 18910)\n"
+"X-Launchpad-Export-Date: 2019-04-21 21:12+0000\n"
+"X-Generator: Launchpad (build 18928)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
 #: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -142,7 +142,7 @@ msgstr "Eşitle"
 
 #: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+msgstr "Eşitleme verisini sil ve tarayıcı oturumunu kapat"
 
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
 #: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
@@ -400,7 +400,7 @@ msgstr "Grafik düzenleyici"
 
 #: ../cleaners/mc.xml
 msgid "File Manager"
-msgstr ""
+msgstr "Dosya Yöneticisi"
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -505,7 +505,7 @@ msgstr "Editör"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Uzaktan denetim yazılımı"
 
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -544,11 +544,11 @@ msgstr "Bilinen ve iptal edilmiş dosyalar geçmişini sil."
 
 #: ../cleaners/amule.xml
 msgid "Known clients"
-msgstr ""
+msgstr "Bilinen istemciler"
 
 #: ../cleaners/amule.xml
 msgid "Delete known clients and friends"
-msgstr ""
+msgstr "Bilinen istemciler ve arkadaşları sil"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -636,7 +636,7 @@ msgstr "Önbelleğe alınan yamaları ve yükleyicileri sil"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "Daha önce XChat olarak bilinen IRC istemcisi"
 
 #: ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -694,6 +694,7 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"Gelişmiş üzerine yazma işlemini desteklemeyen en az bir bir dosya vardı."
 
 #: ../bleachbit/Options.py:88
 #, python-format
@@ -707,12 +708,12 @@ msgstr ""
 
 #: ../bleachbit/Options.py:214
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Varsayılan sürücüleri parçalamak üzere ayarlarken hata oluştu."
 
 #: ../bleachbit/Options.py:235
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "%s dili otomatik olarak korunuyor."
 
 #: ../bleachbit/Unix.py:599
 #, python-format
@@ -781,6 +782,9 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
+"En az bir dosya başka bir işlem tarafından kilitlendi, bu yüzden içeriğinin "
+"üzerine yazılamadı. Sistem yeniden başlatıldığında silmek için "
+"işaretlenecektir."
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1017,12 +1021,13 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:270 ../bleachbit/CleanerML.py:309
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Temizleyici okuma hatası: %s"
 
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"Temizleyici bu işletim sisteminde kullanılamaz çünkü hiçbir eylem yok: %s"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1141,6 +1146,8 @@ msgid ""
 "Error when opening a network connection to %s to check for updates. Please "
 "verify the network is working."
 msgstr ""
+"Güncellemeleri kontrol etmek için %s ağ bağlantısı açılırken hata oluştu. "
+"Lütfen ağın çalıştığını doğrulayın."
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1203,7 +1210,7 @@ msgstr "yeni bir sürümü mevcutsa winapp2.ini dosyasını güncelle"
 
 #: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "verilen yollardaki boş alanları sil"
 
 #: ../bleachbit/CLI.py:168
 msgid "output version information and exit"
@@ -1218,10 +1225,12 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Bu komutlardan sadece birini belirtin: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:196
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "winapp2.ini güncellemeleri çevrimiçi denetleniyor"
 
 #: ../bleachbit/CLI.py:211
 msgid "No directories given for --wipe-free-space"
@@ -1246,7 +1255,7 @@ msgstr ""
 
 #: ../bleachbit/Action.py:144
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Derin tarama çoklu değer değişkenini desteklemez."
 
 #: ../bleachbit/Action.py:221
 #, python-format
