@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-18 20:35-0700\n"
-"PO-Revision-Date: 2019-03-14 00:39+0000\n"
+"POT-Creation-Date: 2019-03-17 22:16-0600\n"
+"PO-Revision-Date: 2019-04-25 06:40+0000\n"
 "Last-Translator: Jonatan Nyberg <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-03-14 13:28+0000\n"
-"X-Generator: Launchpad (build 18901)\n"
+"X-Launchpad-Export-Date: 2019-04-26 01:28+0000\n"
+"X-Generator: Launchpad (build 18928)\n"
 "Language: sv\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -40,7 +40,8 @@ msgstr "Webbläsare"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/emesene.xml
 #: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml ../cleaners/exaile.xml
+#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
 #: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
 msgid "Cache"
 msgstr "Cache"
@@ -174,7 +175,7 @@ msgstr "Detta alternativ kommer att ta bort sparade lösenord."
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
 #: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
 #: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/yum.xml ../bleachbit/Action.py:505
+#: ../cleaners/yum.xml ../bleachbit/Action.py:520
 msgid "Vacuum"
 msgstr "Komprimera databas"
 
@@ -205,9 +206,9 @@ msgstr "Kontorspaket"
 #: ../cleaners/audacious.xml ../cleaners/smartftp.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/amsn.xml
-#: ../cleaners/exaile.xml ../cleaners/miro.xml ../bleachbit/Cleaner.py:196
-#: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
-#: ../bleachbit/Cleaner.py:317
+#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
+#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:317
 msgid "Delete the cache"
 msgstr "Ta bort cache"
 
@@ -399,6 +400,10 @@ msgstr "Filöverföringsklient"
 msgid "Graphics editor"
 msgstr "Grafikredigerare"
 
+#: ../cleaners/mc.xml
+msgid "File Manager"
+msgstr "Filhanterare"
+
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
 msgstr "Sökverktyg"
@@ -499,6 +504,10 @@ msgstr "Dokumentvisare"
 #: ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
 msgstr "Redigerare"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr ""
 
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
@@ -692,32 +701,32 @@ msgstr ""
 "Det fanns åtminstone en fil i ett filsystem som inte har stöd för avancerad "
 "överskrivning."
 
-#: ../bleachbit/Options.py:87
+#: ../bleachbit/Options.py:88
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr "Disken var full när du skrev konfigurationen till filen %s"
 
-#: ../bleachbit/Options.py:112
+#: ../bleachbit/Options.py:113
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "Felkontroll av om sökvägen finns: %s"
 
-#: ../bleachbit/Options.py:213
+#: ../bleachbit/Options.py:214
 msgid "Error when setting the default drives to shred."
 msgstr "Fel vid inställning av standardenheter till strimla."
 
-#: ../bleachbit/Options.py:234
+#: ../bleachbit/Options.py:235
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "Bevara automatiskt språk %s."
 
-#: ../bleachbit/Unix.py:578
+#: ../bleachbit/Unix.py:599
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Körbar fil hittades inte: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:656 ../bleachbit/Worker.py:140
+#: ../bleachbit/Unix.py:677 ../bleachbit/Worker.py:140
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -788,9 +797,9 @@ msgstr "Markera för borttagning"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
-#: ../bleachbit/Action.py:312 ../bleachbit/Action.py:325
-#: ../bleachbit/Action.py:338 ../bleachbit/Action.py:351
-#: ../bleachbit/Action.py:364 ../bleachbit/Action.py:429
+#: ../bleachbit/Action.py:327 ../bleachbit/Action.py:340
+#: ../bleachbit/Action.py:353 ../bleachbit/Action.py:366
+#: ../bleachbit/Action.py:379 ../bleachbit/Action.py:444
 msgid "Clean file"
 msgstr "Rensa fil"
 
@@ -978,6 +987,30 @@ msgstr "System"
 msgid "Overwrite free disk space %s"
 msgstr "Skriv över ledigt diskutrymme %s"
 
+#: ../bleachbit/RecognizeCleanerML.py:58
+msgid "Security warning"
+msgstr "Säkerhetsvarning"
+
+#: ../bleachbit/RecognizeCleanerML.py:71
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"De här städdefinitionerna är nya eller så har de ändrats. Skadliga "
+"definitioner kan skada ditt system. Ta bort filerna om du inte litar på de "
+"här ändringarna eller avsluta."
+
+#: ../bleachbit/RecognizeCleanerML.py:87
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Ta bort"
+
+#: ../bleachbit/RecognizeCleanerML.py:92
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Filnamn"
+
 #: ../bleachbit/CleanerML.py:120
 #, python-brace-format
 msgid ""
@@ -1003,30 +1036,6 @@ msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
 "Rensaren kan inte användas på det här operativsystemet eftersom den inte har "
 "några åtgärder: %s"
-
-#: ../bleachbit/RecognizeCleanerML.py:58
-msgid "Security warning"
-msgstr "Säkerhetsvarning"
-
-#: ../bleachbit/RecognizeCleanerML.py:71
-msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
-msgstr ""
-"De här städdefinitionerna är nya eller så har de ändrats. Skadliga "
-"definitioner kan skada ditt system. Ta bort filerna om du inte litar på de "
-"här ändringarna eller avsluta."
-
-#: ../bleachbit/RecognizeCleanerML.py:87
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Ta bort"
-
-#: ../bleachbit/RecognizeCleanerML.py:92
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Filnamn"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1249,16 +1258,26 @@ msgstr "Inget arbete att göra. Ange alternativ."
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite är endast avsett för användning med --clean"
 
-#: ../bleachbit/Action.py:139
+#: ../bleachbit/Action.py:144
 msgid "Deep scan does not support multi-value variable."
 msgstr "Djupsökning stöder inte flervärdiga variabler."
 
+#: ../bleachbit/Action.py:221
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr "sök=\"walk.all\" används med vanlig sökväg=\"%s\""
+
+#: ../bleachbit/Action.py:256
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr "sökväg=\"%s\" är inte ett globmönster"
+
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:442 ../bleachbit/GUI.py:659
+#: ../bleachbit/Action.py:457 ../bleachbit/GUI.py:659
 msgid "Clean"
 msgstr "Rensa"
 
-#: ../bleachbit/Action.py:478
+#: ../bleachbit/Action.py:493
 #, python-format
 msgid "Run external command: %s"
 msgstr "Kör externt kommando: %s"
