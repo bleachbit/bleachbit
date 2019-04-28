@@ -239,12 +239,6 @@ SectionGroup /e Shortcuts
         Call RefreshShellIcons
     SectionEnd
 
-    Section /o "Start automatically" SectionStartUp
-        SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortcut "$SMSTARTUP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
-        Call RefreshShellIcons
-    SectionEnd
-
 SectionGroupEnd
 
 
