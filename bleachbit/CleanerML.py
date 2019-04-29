@@ -39,6 +39,22 @@ import xml.dom.minidom
 logger = logging.getLogger(__name__)
 
 
+def default_vars():
+    """Return default multi-value variables"""
+    ret = {}
+    if not os.name == 'nt':
+        return ret
+    # Expand ProgramFiles to also be ProgramW6432, etc.
+    wowvars = (('ProgramFiles', 'ProgramW6432'),
+               ('CommonProgramFiles', 'CommonProgramW6432'))
+    for v1, v2 in wowvars:
+        # Remove None, if variable is not found.
+        # Make list unique.
+        mylist = list(set([x for x in os.getenv(v1), os.getenv(v2) if x]))
+        ret[v1] = mylist
+    return ret
+
+
 class CleanerML:
 
     """Create a cleaner from CleanerML"""
@@ -56,7 +72,7 @@ class CleanerML:
         self.option_name = None
         self.option_description = None
         self.option_warning = None
-        self.vars = {}
+        self.vars = default_vars()
         self.xlate_cb = xlate_cb
         if self.xlate_cb is None:
             self.xlate_mode = False
