@@ -9,6 +9,10 @@
         <attribute name="label" translatable="yes">Sh_red Folders</attribute>
       </item>
       <item>
+        <attribute name="action">app.shredClipboard</attribute>
+        <attribute name="label" translatable="yes">Shred Paths from Clipboard</attribute>
+      </item>
+      <item>
         <attribute name="action">app.wipeFreeSpace</attribute>
         <attribute name="label" translatable="yes">_Wipe Free Space</attribute>
       </item>

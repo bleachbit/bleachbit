@@ -114,9 +114,9 @@ def browse_files(_, title):
     return pathnames
 
 
-def browse_folder(hwnd, title):
+def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    pidl = shell.SHBrowseForFolder(hwnd, None, title)[0]
+    pidl = shell.SHBrowseForFolder(None, None, title)[0]
     if pidl is None:
         # user cancelled
         return None

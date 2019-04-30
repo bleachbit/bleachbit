@@ -101,6 +101,7 @@ class Bleachbit(Gtk.Application):
         # set up mappings between <attribute name="action"> in app-menu.ui and methods in this class
         actions = {'shredFiles': self.cb_shred_file,
                    'shredFolders': self.cb_shred_folder,
+                   'shredClipboard': self.cb_shred_clipboard,
                    'wipeFreeSpace': self.cb_wipe_free_space,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
@@ -137,6 +138,28 @@ class Bleachbit(Gtk.Application):
         if not paths:
             return
         GUI.shred_paths(self._window, paths)
+
+    def cb_shred_clipboard(self, action, param):
+        """Callback for menu option: shred paths from clipboard"""
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.request_targets(self.cb_clipboard_uri_received)
+
+    def cb_clipboard_uri_received(self, clipboard, targets, data):
+        """Callback for when URIs are received from clipboard"""
+        shred_paths = None
+        if Gdk.atom_intern_static_string('text/uri-list') in targets:
+            # Linux
+            shred_uris = clipboard.wait_for_contents(
+                Gdk.atom_intern_static_string('text/uri-list')).get_uris()
+            shred_paths = FileUtilities.uris_to_paths(shred_uris)
+        elif Gdk.atom_intern_static_string('FileNameW') in targets:
+            # Windows
+            # Use non-GTK+ functions because because GTK+ 2 does not work.
+            shred_paths = Windows.get_clipboard_paths()
+        if shred_paths:
+            GUI.shred_paths(self._window, shred_paths)
+        else:
+            logger.warning(_('No paths found in clipboard.'))
 
     def cb_shred_quit(self, action, param):
         """Shred settings (for privacy reasons) and quit"""
@@ -751,9 +774,14 @@ class GUI(Gtk.ApplicationWindow):
                 paths = FileUtilities.uris_to_paths(uris)
                 self.shred_paths(paths)
 
-        self.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+        def setup_widget(widget):
+            widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
                            [Gtk.TargetEntry.new("text/uri-list", 0, 80)], Gdk.DragAction.COPY)
-        self.connect('drag_data_received', cb_drag_data_received)
+            widget.connect('drag_data_received', cb_drag_data_received)
+
+        setup_widget(self)
+        setup_widget(self.textview)
+        self.textview.connect('drag_motion', lambda widget, context, x, y, time: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
