@@ -185,4 +185,4 @@ def open_url(url, parent_window=None, prompt=True):
         import webbrowser
         webbrowser.open(url)
     else:
-        Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
+        Gtk.show_uri_on_window(parent_window, url, Gdk.CURRENT_TIME)

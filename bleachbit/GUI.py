@@ -97,6 +97,7 @@ class Bleachbit(Gtk.Application):
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
                    'diagnostics': self.diagnostic_dialog,
+                   'help': self.cb_help,
                    'about': self.about,
                    'quit': self.quit}
 
@@ -105,10 +106,9 @@ class Bleachbit(Gtk.Application):
             action.connect('activate', callback)
             self.add_action(action)
 
-        # help needs more parameters and needs to be declared separately
-        helpAction = Gio.SimpleAction.new('help', None)
-        helpAction.connect('activate', GuiBasic.open_url, bleachbit.help_contents_url, self._window)
-        self.add_action(helpAction)
+    def cb_help(self, action, param):
+        """Callback for help"""
+        GuiBasic.open_url(bleachbit.help_contents_url, self._window)
 
     def cb_shred_file(self, action, param):
         """Callback for shredding a file"""
