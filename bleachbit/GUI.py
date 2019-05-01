@@ -164,7 +164,7 @@ class Bleachbit(Gtk.Application):
             paths.append(bleachbit.options_dir)
 
         # prompt the user to confirm
-        if not self.shred_paths(paths):
+        if not GUI.shred_paths(self._window, paths):
             logger.debug('user aborted shred')
             # aborted
             return
@@ -178,8 +178,7 @@ class Bleachbit(Gtk.Application):
         # to delete the files.  Use the lowest priority because the worker
         # uses the standard priority.  Otherwise, this will quit before
         # the files are deleted.
-        GLib.idle_add(
-            lambda: Gtk.main_quit(), priority=GObject.PRIORITY_LOW)
+        GLib.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
