@@ -79,14 +79,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""
         # normal
-        load_cleaners()
+        list(load_cleaners())
 
         # should catch exception with invalid XML
         pcd = bleachbit.personal_cleaners_dir
         bleachbit.personal_cleaners_dir = self.mkdtemp(prefix='bleachbit-cleanerml-load')
         self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
                         contents='<xml><broken>')
-        load_cleaners()
+        list(load_cleaners())
         import shutil
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd

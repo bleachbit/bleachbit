@@ -152,7 +152,7 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname):
+    def __init__(self, pathname, cb_progress = lambda x: None):
         """Create cleaners from a Winapp2.ini-style file"""
 
         self.cleaners = {}
@@ -165,12 +165,17 @@ class Winapp:
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
+        section_total_count = len(self.parser.sections())
+        section_done_count = 0
         for section in self.parser.sections():
             try:
                 self.handle_section(section)
             except Exception:
                 self.errors += 1
                 logger.exception('parsing error in section %s', section)
+            else:
+                section_done_count += 1
+                cb_progress(1.0*section_done_count/section_total_count)
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -416,14 +421,16 @@ def list_winapp_files():
             yield fname
 
 
-def load_cleaners():
+def load_cleaners(cb_progress = lambda x: None):
     """Scan for winapp2.ini files and load them"""
+    cb_progress(0.0)
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname)
+            inicleaner = Winapp(pathname, cb_progress)
         except Exception as e:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)
         else:
             for cleaner in inicleaner.get_cleaners():
                 Cleaner.backends[cleaner.id] = cleaner
+        yield True

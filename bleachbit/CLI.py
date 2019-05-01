@@ -69,7 +69,7 @@ class CliCallback:
 
 def cleaners_list():
     """Yield each cleaner-option pair"""
-    register_cleaners()
+    list(register_cleaners())
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, o_name) in backends[key].get_options():
@@ -92,7 +92,7 @@ def preview_or_clean(operations, really_clean):
 
 def args_to_operations(args, preset):
     """Read arguments and return list of operations"""
-    register_cleaners()
+    list(register_cleaners())
     operations = {}
     if preset:
         # restore presets from the GUI

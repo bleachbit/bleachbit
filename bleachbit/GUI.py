@@ -62,10 +62,6 @@ class Bleachbit(Gtk.Application):
             sys.exit(0)
         Gtk.Application.__init__(
             self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
-        if not exit:
-            from bleachbit import RecognizeCleanerML
-            RecognizeCleanerML.RecognizeCleanerML()
-            register_cleaners()
         GObject.threads_init()
 
         if shred_paths:
@@ -83,7 +79,7 @@ class Bleachbit(Gtk.Application):
         if exit:
             # This is used for automated testing of whether the GUI can start.
             print('Success')
-            GObject.idle_add(lambda: self.quit(),
+            GLib.idle_add(lambda: self.quit(),
                              priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
@@ -271,7 +267,7 @@ class Bleachbit(Gtk.Application):
         self._window.present()
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
-            GObject.idle_add(lambda: self.quit(),
+            GLib.idle_add(lambda: self.quit(),
                              priority=GObject.PRIORITY_LOW)
 
 
@@ -464,10 +460,6 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
-        from bleachbit import RecognizeCleanerML
-        RecognizeCleanerML.RecognizeCleanerML()
-        register_cleaners()
-
         self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
 
@@ -489,8 +481,6 @@ class GUI(Gtk.ApplicationWindow):
             pref = PreferencesDialog(self, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
-        if bleachbit.online_update_notification_enabled and options.get("check_online_updates"):
-            self.check_online_updates()
         if 'nt' == os.name:
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
@@ -510,6 +500,8 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+
+        GLib.idle_add(self.cb_refresh_operations)
 
     def shred_paths(self, paths):
         """Shred file or folders
@@ -702,12 +694,34 @@ class GUI(Gtk.ApplicationWindow):
 
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
+        # Is this the first time in this session?
+        if not hasattr(self, 'recognized_cleanerml'):
+            from bleachbit import RecognizeCleanerML
+            RecognizeCleanerML.RecognizeCleanerML()
+            self.recognized_cleanerml = True
         # reload cleaners from disk
-        register_cleaners()
+        self.view.expand_all()
+        self.progressbar.show()
+        self.update_progress_bar('Loading')
+        rc = register_cleaners(self.update_progress_bar, self.cb_register_cleaners_done)
+        GLib.idle_add(rc.next)
+        return False
+
+
+    def cb_register_cleaners_done(self):
+        """Called from register_cleaners()"""
+        self.progressbar.hide()
         # update tree view
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
+
+        # Check for online updates.
+        if bleachbit.online_update_notification_enabled and options.get("check_online_updates") and \
+            not hasattr(self, 'checked_for_updates'):
+            self.checked_for_updates = True
+            self.check_online_updates()
+
         # remove from idle loop (see GObject.idle_add)
         return False
 
@@ -798,6 +812,7 @@ class GUI(Gtk.ApplicationWindow):
         if type(status) is float:
             self.progressbar.set_fraction(status)
         elif (type(status) is str) or (type(status) is unicode):
+            self.progressbar.set_show_text(True)
             self.progressbar.set_text(status)
         else:
             raise RuntimeError('unexpected type: ' + str(type(status)))
@@ -938,7 +953,6 @@ class GUI(Gtk.ApplicationWindow):
         # done
         self.show_all()
         self.progressbar.hide()
-        return
 
     @threaded
     def check_online_updates(self):

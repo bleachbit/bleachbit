@@ -659,7 +659,7 @@ class System(Cleaner):
         return False
 
 
-def register_cleaners():
+def register_cleaners(cb_progress = lambda x: None, cb_done = lambda: None):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
     global backends
 
@@ -673,12 +673,20 @@ def register_cleaners():
 
     # register CleanerML cleaners
     from bleachbit import CleanerML
-    CleanerML.load_cleaners()
+    cb_progress(_('Loading native cleaners.'))
+    for ret in CleanerML.load_cleaners(cb_progress):
+        yield ret
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
+        cb_progress(_('Importing cleaners from Winapp2.ini.'))
         from bleachbit import Winapp
-        Winapp.load_cleaners()
+        for ret in Winapp.load_cleaners(cb_progress):
+            yield ret
+
+    cb_done()
+
+    yield False # end the iteration
 
 
 def create_simple_cleaner(paths):

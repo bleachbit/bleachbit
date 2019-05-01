@@ -279,9 +279,17 @@ def list_cleanerml_files(local_only=False):
         yield pathname
 
 
-def load_cleaners():
+def load_cleaners(cb_progress = lambda x: None):
     """Scan for CleanerML and load them"""
-    for pathname in list_cleanerml_files():
+    cleanerml_files = list(list_cleanerml_files())
+    cleanerml_files.sort()
+    if not cleanerml_files:
+        logger.debug('No CleanerML files to load.')
+        return
+    total_files = len(cleanerml_files)
+    cb_progress(0.0)
+    files_done = 0
+    for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(pathname)
         except:
@@ -293,6 +301,9 @@ def load_cleaners():
         else:
             logger.debug(
                 _("Cleaner is not usable on this OS because it has no actions: %s"), pathname)
+        files_done += 1
+        cb_progress(1.0* files_done / total_files)
+        yield True
 
 
 def pot_fragment(msgid, pathname, translators=None):

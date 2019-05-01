@@ -160,7 +160,7 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         def get_files(option_id):
             ret = []
-            register_cleaners()
+            list(register_cleaners())
             for cmd in backends['system'].get_commands(option_id):
                 result = cmd.execute(False).next()
                 ret.append(result['path'])
@@ -197,8 +197,8 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
-        register_cleaners()
-        register_cleaners()
+        list(register_cleaners())
+        list(register_cleaners())
 
     def test_whitelist(self):
         tests = [
@@ -218,7 +218,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('/tmp/pulse-foo/pid', True),
             ('/tmp/tmpsDOBFd', False)
         ]
-        register_cleaners()
+        list(register_cleaners())
         for test in tests:
             self.assertEqual(
                 backends['system'].whitelisted(test[0]), test[1], test[0])

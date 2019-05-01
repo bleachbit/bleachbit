@@ -279,7 +279,7 @@ class WorkerTestCase(common.BleachbitTestCase):
 
         # load cleaners from XML
         import bleachbit.CleanerML
-        bleachbit.CleanerML.load_cleaners()
+        list(bleachbit.CleanerML.load_cleaners())
 
         # DeepScan itself is tested elsewhere, so replace it here
         import bleachbit.DeepScan
