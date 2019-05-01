@@ -78,15 +78,6 @@ class Bleachbit(Gtk.Application):
                 import sqlite3
             except ImportError:
                 logger.exception(_("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
-            self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
-        if 'nt' == os.name and options.get('shred'):
-            from win32com.shell.shell import IsUserAnAdmin
-            if not IsUserAnAdmin():
-                self.append_text(
-                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
-                self.append_text('\n')
         if exit:
             # This is used for automated testing of whether the GUI can start.
             print('Success')
@@ -504,6 +495,15 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
+        if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
+            self.append_text(
+                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
+        if 'nt' == os.name and options.get('shred'):
+            from win32com.shell.shell import IsUserAnAdmin
+            if not IsUserAnAdmin():
+                self.append_text(
+                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
+                self.append_text('\n')
     def shred_paths(self, paths):
         """Shred file or folders
 
