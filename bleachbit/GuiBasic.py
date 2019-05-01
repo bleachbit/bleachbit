@@ -45,8 +45,9 @@ def browse_folder(parent, title, multiple, stock_button):
     # fall back to GTK+
     chooser = Gtk.FileChooserDialog(transient_for=parent,
                                     title=title,
-                                    action = Gtk.FileChooserAction.SELECT_FOLDER)
-    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, stock_button, Gtk.ResponseType.OK)
+                                    action=Gtk.FileChooserAction.SELECT_FOLDER)
+    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL,
+                        stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(multiple)
     chooser.set_current_folder(expanduser('~'))
@@ -72,7 +73,8 @@ def browse_file(parent, title):
     chooser = Gtk.FileChooserDialog(title=title,
                                     transient_for=parent,
                                     action=Gtk.FileChooserAction.OPEN)
-    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Open"), Gtk.ResponseType.OK)
+    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL,
+                        _("_Open"), Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_current_folder(expanduser('~'))
     resp = chooser.run()
@@ -95,7 +97,8 @@ def browse_files(parent, title):
     chooser = Gtk.FileChooserDialog(title=title,
                                     transient_for=parent,
                                     action=Gtk.FileChooserAction.OPEN)
-    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL, _("_Delete"), Gtk.ResponseType.OK)
+    chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL,
+                        _("_Delete"), Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(True)
     chooser.set_current_folder(expanduser('~'))
@@ -117,7 +120,8 @@ def delete_confirmation_dialog(parent, mention_preview):
                         destroy_with_parent=True)
     dialog.set_default_size(300, -1)
 
-    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=False, spacing=10)
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
+                   homogeneous=False, spacing=10)
     if mention_preview:
         question_text = _(
             "Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")

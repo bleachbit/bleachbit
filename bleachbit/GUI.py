@@ -60,7 +60,8 @@ class Bleachbit(Gtk.Application):
         if uac and 'nt' == os.name and Windows.elevate_privileges():
             # privileges escalated in other process
             sys.exit(0)
-        Gtk.Application.__init__(self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
+        Gtk.Application.__init__(
+            self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
         if not exit:
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
@@ -77,15 +78,18 @@ class Bleachbit(Gtk.Application):
             try:
                 import sqlite3
             except ImportError:
-                logger.exception(_("Error loading the SQLite module: the antivirus software may be blocking it."))
+                logger.exception(
+                    _("Error loading the SQLite module: the antivirus software may be blocking it."))
         if exit:
             # This is used for automated testing of whether the GUI can start.
             print('Success')
-            GObject.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
+            GObject.idle_add(lambda: self.quit(),
+                             priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(bleachbit.bleachbit_exe_path, 'data', 'app-menu.ui'))
+        builder.add_from_file(os.path.join(
+            bleachbit.bleachbit_exe_path, 'data', 'app-menu.ui'))
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
@@ -197,7 +201,8 @@ class Bleachbit(Gtk.Application):
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(self._window, self._window.cb_refresh_operations)
+        pref = PreferencesDialog(
+            self._window, self._window.cb_refresh_operations)
         pref.run()
 
     def about(self, action, param):
@@ -215,7 +220,7 @@ class Bleachbit(Gtk.Application):
         except (IOError, TypeError):
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
-        #dialog.set_name(APP_NAME)
+        # dialog.set_name(APP_NAME)
         # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
         # typed in Launchpad. This is a special string shown
@@ -248,7 +253,8 @@ class Bleachbit(Gtk.Application):
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.add_with_viewport(textview)
         dialog.vbox.pack_start(swindow, True, True, 0)
-        dialog.add_buttons(Gtk.STOCK_COPY, 100, Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
+        dialog.add_buttons(Gtk.STOCK_COPY, 100,
+                           Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
         dialog.show_all()
         while True:
             rc = dialog.run()
@@ -261,11 +267,12 @@ class Bleachbit(Gtk.Application):
 
     def do_activate(self):
         if not self._window:
-            self._window = GUI(application=self,title=APP_NAME)
+            self._window = GUI(application=self, title=APP_NAME)
         self._window.present()
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
-            GObject.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
+            GObject.idle_add(lambda: self.quit(),
+                             priority=GObject.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -475,8 +482,8 @@ class GUI(Gtk.ApplicationWindow):
             from bleachbit import logger_sh
             bb_logger.removeHandler(logger_sh)
 
-
-        Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
+        Gtk.Settings.get_default().set_property(
+            'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
         if options.get("first_start") and 'posix' == os.name:
             pref = PreferencesDialog(self, self.cb_refresh_operations)
@@ -503,6 +510,7 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+
     def shred_paths(self, paths):
         """Shred file or folders
 
@@ -669,7 +677,8 @@ class GUI(Gtk.ApplicationWindow):
             logger.debug('Notify not available')
         else:
             if Notify.init(APP_NAME):
-                notify = Notify.Notification.new('BleachBit', _("Done."), 'bleachbit')
+                notify = Notify.Notification.new(
+                    'BleachBit', _("Done."), 'bleachbit')
                 if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
                     notify.set_hint("desktop-entry", "bleachbit-root")
                 else:
@@ -680,7 +689,8 @@ class GUI(Gtk.ApplicationWindow):
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
         scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.set_policy(
+            Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
@@ -775,12 +785,13 @@ class GUI(Gtk.ApplicationWindow):
 
         def setup_widget(widget):
             widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-                           [Gtk.TargetEntry.new("text/uri-list", 0, 80)], Gdk.DragAction.COPY)
+                                 [Gtk.TargetEntry.new("text/uri-list", 0, 80)], Gdk.DragAction.COPY)
             widget.connect('drag_data_received', cb_drag_data_received)
 
         setup_widget(self)
         setup_widget(self.textview)
-        self.textview.connect('drag_motion', lambda widget, context, x, y, time: True)
+        self.textview.connect('drag_motion', lambda widget,
+                              context, x, y, time: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
@@ -832,12 +843,13 @@ class GUI(Gtk.ApplicationWindow):
         # create the preview button
         preview_icon = Gio.ThemedIcon(name='edit-find')
 
-
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
         preview_button = Gtk.Button()
-        preview_button.add(Gtk.Image.new_from_gicon(preview_icon, Gtk.IconSize.BUTTON))
-        preview_button.connect('clicked', lambda *dummy: self.preview_or_run_operations(False))
+        preview_button.add(Gtk.Image.new_from_gicon(
+            preview_icon, Gtk.IconSize.BUTTON))
+        preview_button.connect(
+            'clicked', lambda *dummy: self.preview_or_run_operations(False))
         preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
         box.add(preview_button)
@@ -849,7 +861,8 @@ class GUI(Gtk.ApplicationWindow):
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
         run_button.add(Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON))
-        run_button.set_tooltip_text(_("Clean files in the selected operations"))
+        run_button.set_tooltip_text(
+            _("Clean files in the selected operations"))
         run_button.connect("clicked", self.run_operations)
         box.add(run_button)
 
@@ -905,7 +918,8 @@ class GUI(Gtk.ApplicationWindow):
         tt.add(style_operation)
 
         style_description = Gtk.TextTag.new('description')
-        style_description.set_property('justification', Gtk.Justification.CENTER)
+        style_description.set_property(
+            'justification', Gtk.Justification.CENTER)
         tt.add(style_description)
 
         style_option_label = Gtk.TextTag.new('option_label')
