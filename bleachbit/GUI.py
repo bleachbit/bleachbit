@@ -365,10 +365,7 @@ class TreeDisplayModel:
 
         # third column
         self.renderer2 = Gtk.CellRendererText()
-        if hasattr(self.renderer2, 'set_alignment'):
-            # requires PyGTK 2.22
-            # http://www.pygtk.org/pygtk2reference/class-gtkcellrenderer.html#method-gtkcellrenderer--set-alignment
-            self.renderer2.set_alignment(1.0, 0.0)
+        self.renderer2.set_alignment(1.0, 0.0)
         # TRANSLATORS: Size is the label for the column that shows how
         # much space an option would clean or did clean
         self.column2 = Gtk.TreeViewColumn(_("Size"), self.renderer2, text=3)
