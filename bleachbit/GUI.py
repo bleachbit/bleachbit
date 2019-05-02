@@ -85,7 +85,7 @@ class Bleachbit(Gtk.Application):
             # This is used for automated testing of whether the GUI can start.
             print('Success')
             GLib.idle_add(self.quit,
-                             priority=GObject.PRIORITY_LOW)
+                          priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
         builder = Gtk.Builder()
@@ -273,7 +273,7 @@ class Bleachbit(Gtk.Application):
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
             GLib.idle_add(self.quit,
-                             priority=GObject.PRIORITY_LOW)
+                          priority=GObject.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -548,7 +548,7 @@ class GUI(Gtk.ApplicationWindow):
         """When the tree view selection changed"""
         model = self.view.get_model()
         selected_rows = selection.get_selected_rows()
-        if not selected_rows[1]: # empty
+        if not selected_rows[1]:  # empty
             # happens when searching in the tree view
             return
         paths = selected_rows[1][0]
@@ -629,7 +629,7 @@ class GUI(Gtk.ApplicationWindow):
             for operation in self.get_selected_operations():
                 operations[operation] = self.get_operation_options(operation)
         assert isinstance(operations, dict)
-        if not operations: # empty
+        if not operations:  # empty
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
                                     Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
@@ -706,10 +706,10 @@ class GUI(Gtk.ApplicationWindow):
         # reload cleaners from disk
         self.view.expand_all()
         self.progressbar.show()
-        rc = register_cleaners(self.update_progress_bar, self.cb_register_cleaners_done)
+        rc = register_cleaners(self.update_progress_bar,
+                               self.cb_register_cleaners_done)
         GLib.idle_add(rc.next)
         return False
-
 
     def cb_register_cleaners_done(self):
         """Called from register_cleaners()"""
@@ -721,7 +721,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # Check for online updates.
         if bleachbit.online_update_notification_enabled and options.get("check_online_updates") and \
-            not hasattr(self, 'checked_for_updates'):
+                not hasattr(self, 'checked_for_updates'):
             self.checked_for_updates = True
             self.check_online_updates()
 
