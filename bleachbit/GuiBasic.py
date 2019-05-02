@@ -23,22 +23,21 @@ Basic GUI code
 """
 from __future__ import absolute_import
 
-from bleachbit import _, expanduser
-
-import gi
 import os
 
+import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
-if 'nt' == os.name:
+from bleachbit import _, expanduser
+if os.name == 'nt':
     from bleachbit import Windows
 
 
 def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
-    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
+    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
         ret = Windows.browse_folder(parent, title)
         return [ret] if multiple and not ret is None else ret
 
@@ -67,7 +66,7 @@ def browse_folder(parent, title, multiple, stock_button):
 def browse_file(parent, title):
     """Prompt user to select a single file"""
 
-    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
+    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
         return Windows.browse_file(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -91,7 +90,7 @@ def browse_file(parent, title):
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
-    if 'nt' == os.name and None == os.getenv('BB_NATIVE'):
+    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
         return Windows.browse_files(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -163,7 +162,7 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
 def open_url(url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
     # drop privileges so the web browser is running as a normal process
-    if 'posix' == os.name and 0 == os.getuid():
+    if os.name == 'posix' and os.getuid() == 0:
         msg = _(
             "Because you are running as root, please manually open this link in a web browser:\n%s") % url
         message_dialog(None, msg, Gtk.MessageType.INFO)
@@ -172,7 +171,7 @@ def open_url(url, parent_window=None, prompt=True):
         # find hostname
         import re
         ret = re.search('^http(s)?://([a-z.]+)', url)
-        if None == ret:
+        if not ret:
             host = url
         else:
             host = ret.group(2)
@@ -183,7 +182,7 @@ def open_url(url, parent_window=None, prompt=True):
         if Gtk.ResponseType.OK != resp:
             return
     # open web browser
-    if 'nt' == os.name:
+    if os.name == 'nt':
         # in Gtk.show_uri() avoid 'glib.GError: No application is registered as
         # handling this file'
         import webbrowser

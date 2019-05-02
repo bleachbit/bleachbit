@@ -18,16 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+GTK graphical user interface
+"""
+
 from __future__ import absolute_import, print_function
-
-import bleachbit
-
-from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Options import options
-from bleachbit import _, APP_NAME, appicon_path, portable_mode
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import GuiBasic
 
 import logging
 import os
@@ -36,9 +31,19 @@ import threading
 import time
 import types
 
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-if 'nt' == os.name:
+import bleachbit
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options
+from bleachbit import _, APP_NAME, appicon_path, portable_mode
+from bleachbit import Cleaner, FileUtilities
+from bleachbit import GuiBasic
+
+if os.name == 'nt':
     from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
@@ -56,8 +61,8 @@ class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
 
-    def __init__(self, uac=True, shred_paths=None, exit=False):
-        if uac and 'nt' == os.name and Windows.elevate_privileges():
+    def __init__(self, uac=True, shred_paths=None, auto_exit=False):
+        if uac and os.name == 'nt' and Windows.elevate_privileges():
             # privileges escalated in other process
             sys.exit(0)
         Gtk.Application.__init__(
@@ -67,7 +72,7 @@ class Bleachbit(Gtk.Application):
         if shred_paths:
             self._shred_paths = shred_paths
             return
-        if 'nt' == os.name:
+        if os.name == 'nt':
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
             # https://www.bleachbit.org/forum/074-fails-errors
@@ -76,10 +81,10 @@ class Bleachbit(Gtk.Application):
             except ImportError:
                 logger.exception(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if exit:
+        if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             print('Success')
-            GLib.idle_add(lambda: self.quit(),
+            GLib.idle_add(self.quit,
                              priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
@@ -101,8 +106,8 @@ class Bleachbit(Gtk.Application):
                    'about': self.about,
                    'quit': self.quit}
 
-        for actionName, callback in actions.items():
-            action = Gio.SimpleAction.new(actionName, None)
+        for action_name, callback in actions.items():
+            action = Gio.SimpleAction.new(action_name, None)
             action.connect('activate', callback)
             self.add_action(action)
 
@@ -156,7 +161,7 @@ class Bleachbit(Gtk.Application):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if 'nt' == os.name and portable_mode:
+        if os.name == 'nt' and portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
@@ -170,15 +175,15 @@ class Bleachbit(Gtk.Application):
             return
 
         # in portable mode, rebuild a minimal bleachbit.ini
-        if 'nt' == os.name and portable_mode:
-            with open(bleachbit.options_file, 'w') as f:
-                f.write('[Portable]\n')
+        if os.name == 'nt' and portable_mode:
+            with open(bleachbit.options_file, 'w') as f_ini:
+                f_ini.write('[Portable]\n')
 
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
         # uses the standard priority.  Otherwise, this will quit before
         # the files are deleted.
-        GLib.idle_add(lambda: self.quit(), priority=GObject.PRIORITY_LOW)
+        GLib.idle_add(self.quit, priority=GObject.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
@@ -201,7 +206,7 @@ class Bleachbit(Gtk.Application):
             self._window, self._window.cb_refresh_operations)
         pref.run()
 
-    def about(self, action, param):
+    def about(self, _action, _param):
         """Create and show the about dialog"""
 
         dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
@@ -211,8 +216,8 @@ class Bleachbit(Gtk.Application):
                                  website=bleachbit.APP_URL,
                                  transient_for=self._window)
         try:
-            with open(bleachbit.license_filename) as f:
-                dialog.set_license(f.read())
+            with open(bleachbit.license_filename) as f_license:
+                dialog.set_license(f_license.read())
         except (IOError, TypeError):
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
@@ -232,12 +237,12 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.do_startup(self)
         self.build_app_menu()
 
-    def quit(self, action=None, param=None):
+    def quit(self, _action=None, _param=None):
         self._window.destroy()
 
-    def diagnostic_dialog(self, action, param):
+    def diagnostic_dialog(self, _action, _param):
         """Show diagnostic information"""
-        dialog = Gtk.Dialog(_("System information"))
+        dialog = Gtk.Dialog(_("System information"), self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
         from bleachbit import Diagnostic
@@ -254,7 +259,7 @@ class Bleachbit(Gtk.Application):
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if 100 == rc:
+            if rc == 100:
                 clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
                 clipboard.set_text(txt, -1)
             else:
@@ -267,7 +272,7 @@ class Bleachbit(Gtk.Application):
         self._window.present()
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
-            GLib.idle_add(lambda: self.quit(),
+            GLib.idle_add(self.quit,
                              priority=GObject.PRIORITY_LOW)
 
 
@@ -277,7 +282,7 @@ class TreeInfoModel:
     def __init__(self):
         self.tree_store = Gtk.TreeStore(
             GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_PYOBJECT, GObject.TYPE_STRING)
-        if None == self.tree_store:
+        if not self.tree_store:
             raise Exception("cannot create tree store")
         self.row_changed_handler_id = None
         self.refresh_rows()
@@ -292,14 +297,14 @@ class TreeInfoModel:
         """Event handler for when a row changes"""
         parent = self.tree_store[path[0]][2]
         child = None
-        if 2 == len(path):
+        if len(path) == 2:
             child = self.tree_store[path][2]
         value = self.tree_store[path][1]
         options.set_tree(parent, child, value)
 
     def refresh_rows(self):
         """Clear rows (cleaners) and add them fresh"""
-        if None != self.row_changed_handler_id:
+        if self.row_changed_handler_id:
             self.tree_store.disconnect(self.row_changed_handler_id)
         self.tree_store.clear()
         for key in sorted(backends):
@@ -320,13 +325,13 @@ class TreeInfoModel:
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 
-    def sort_func(self, model, iter1, iter2, user_data):
+    def sort_func(self, model, iter1, iter2, _user_data):
         """Sort the tree by the display name"""
-        s1 = model[iter1][0].lower()
-        s2 = model[iter2][0].lower()
-        if s1 == s2:
+        value1 = model[iter1][0].lower()
+        value2 = model[iter2][0].lower()
+        if value1 == value2:
             return 0
-        if s1 > s2:
+        if value1 > value2:
             return 1
         return -1
 
@@ -376,18 +381,18 @@ class TreeDisplayModel:
 
     def set_cleaner(self, path, model, parent_window, value=None):
         """Activate or deactive option of cleaner."""
-        if None == value:
+        if not value:
             # if not value given, toggle current value
             value = not model[path][1]
-        assert(type(value) is types.BooleanType)
-        assert(type(model) is Gtk.TreeStore)
+        assert isinstance(value, types.BooleanType)
+        assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
         i = path
-        if type(i) is str:
+        if isinstance(i, str):
             # type is either str or gtk.TreeIter
             i = model.get_iter(path)
         parent = model.iter_parent(i)
-        if None != parent:
+        if parent:
             # this is an option (child), not a cleaner (parent)
             cleaner_id = model[parent][2]
             option_id = model[path][2]
@@ -416,7 +421,7 @@ class TreeDisplayModel:
         i = model.get_iter(path)
         # if toggled on, enable the parent
         parent = model.iter_parent(i)
-        if None != parent and model[path][1]:
+        if parent and model[path][1]:
             model[parent][1] = True
         # if all siblings toggled off, disable the parent
         if parent and not model[path][1]:
@@ -467,7 +472,7 @@ class GUI(Gtk.ApplicationWindow):
         bb_logger = logging.getLogger('bleachbit')
         gtklog = GtkLoggerHandler(self.append_text)
         bb_logger.addHandler(gtklog)
-        if 'nt' == os.name and 'windows_exe' == getattr(sys, 'frozen', None):
+        if os.name == 'nt' and getattr(sys, 'frozen', None) == 'windows_exe':
             # On Microsoft Windows this avoids py2exe redirecting stderr to
             # bleachbit.exe.log.
             # sys.frozen = console_exe means the console is shown
@@ -477,11 +482,11 @@ class GUI(Gtk.ApplicationWindow):
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
-        if options.get("first_start") and 'posix' == os.name:
+        if options.get("first_start") and os.name == 'posix':
             pref = PreferencesDialog(self, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
-        if 'nt' == os.name:
+        if os.name == 'nt':
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
             # http://bleachbit.sourceforge.net/forum/074-fails-errors
@@ -491,10 +496,10 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
-        if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
+        if os.name == 'posix' and bleachbit.expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
-        if 'nt' == os.name and options.get('shred'):
+        if os.name == 'nt' and options.get('shred'):
             from win32com.shell.shell import IsUserAnAdmin
             if not IsUserAnAdmin():
                 self.append_text(
@@ -543,7 +548,7 @@ class GUI(Gtk.ApplicationWindow):
         """When the tree view selection changed"""
         model = self.view.get_model()
         selected_rows = selection.get_selected_rows()
-        if 0 == len(selected_rows[1]):
+        if not selected_rows[1]: # empty
             # happens when searching in the tree view
             return
         paths = selected_rows[1][0]
@@ -585,7 +590,7 @@ class GUI(Gtk.ApplicationWindow):
         while __iter:
             if operation == model[__iter][2]:
                 iterc = model.iter_children(__iter)
-                if None == iterc:
+                if not iterc:
                     return None
                 while iterc:
                     if model[iterc][1]:
@@ -616,15 +621,15 @@ class GUI(Gtk.ApplicationWindow):
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
 
-        assert(isinstance(really_delete, bool))
+        assert isinstance(really_delete, bool)
         from bleachbit import Worker
         self.start_time = None
-        if None == operations:
+        if not operations:
             operations = {}
             for operation in self.get_selected_operations():
                 operations[operation] = self.get_operation_options(operation)
-        assert(isinstance(operations, dict))
-        if 0 == len(operations):
+        assert isinstance(operations, dict)
+        if not operations: # empty
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
                                     Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
@@ -662,7 +667,6 @@ class GUI(Gtk.ApplicationWindow):
         if elapsed < 10 or self.is_active():
             return
         try:
-            import gi
             gi.require_version('Notify', '0.7')
             from gi.repository import Notify
         except:
@@ -671,7 +675,7 @@ class GUI(Gtk.ApplicationWindow):
             if Notify.init(APP_NAME):
                 notify = Notify.Notification.new(
                     'BleachBit', _("Done."), 'bleachbit')
-                if 'posix' == os.name and bleachbit.expanduser('~') == '/root':
+                if os.name == 'posix' and bleachbit.expanduser('~') == '/root':
                     notify.set_hint("desktop-entry", "bleachbit-root")
                 else:
                     notify.set_hint("desktop-entry", "bleachbit")
@@ -758,13 +762,13 @@ class GUI(Gtk.ApplicationWindow):
         if event.button != 3:
             return False
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
-        if None == pathinfo:
+        if not pathinfo:
             return False
-        path, col, cellx, celly = pathinfo
+        path, col, _cellx, _celly = pathinfo
         treeview.grab_focus()
         treeview.set_cursor(path, col, 0)
         # context menu applies only to children, not parents
-        if 2 != len(path):
+        if len(path) != 2:
             return False
         # find the seleted option
         model = treeview.get_model()
@@ -790,7 +794,7 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(widget, context, x, y, data, info, time):
+        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
@@ -808,9 +812,9 @@ class GUI(Gtk.ApplicationWindow):
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
-        if type(status) is float:
+        if isinstance(status, float):
             self.progressbar.set_fraction(status)
-        elif (type(status) is str) or (type(status) is unicode):
+        elif isinstance(status, (str, unicode)):
             self.progressbar.set_show_text(True)
             self.progressbar.set_text(status)
         else:
@@ -821,7 +825,7 @@ class GUI(Gtk.ApplicationWindow):
         model = self.view.get_model()
 
         text = FileUtilities.bytes_to_human(bytes_removed)
-        if 0 == bytes_removed:
+        if bytes_removed == 0:
             text = ""
 
         __iter = model.get_iter(Gtk.TreePath(0))
@@ -841,15 +845,15 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to update the total size cleaned"""
         context_id = self.status_bar.get_context_id('size')
         text = FileUtilities.bytes_to_human(bytes_removed)
-        if 0 == bytes_removed:
+        if bytes_removed == 0:
             text = ""
         self.status_bar.push(context_id, text)
 
     def create_headerbar(self):
         """Create the headerbar"""
-        hb = Gtk.HeaderBar()
-        hb.props.show_close_button = True
-        hb.props.title = APP_NAME
+        hbar = Gtk.HeaderBar()
+        hbar.props.show_close_button = True
+        hbar.props.title = APP_NAME
 
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
@@ -880,8 +884,8 @@ class GUI(Gtk.ApplicationWindow):
         run_button.connect("clicked", self.run_operations)
         box.add(run_button)
 
-        hb.pack_start(box)
-        return hb
+        hbar.pack_start(box)
+        return hbar
 
     def populate_window(self):
         """Create the main application window"""

@@ -241,7 +241,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if options.gui:
         import bleachbit.GUI
-        app = bleachbit.GUI.Bleachbit(uac=not options.no_uac, shred_paths=args, exit=options.exit)
+        app = bleachbit.GUI.Bleachbit(uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
     if options.shred:
         # delete arbitrary files without GUI
