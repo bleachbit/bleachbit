@@ -702,7 +702,6 @@ class GUI(Gtk.ApplicationWindow):
         # reload cleaners from disk
         self.view.expand_all()
         self.progressbar.show()
-        self.update_progress_bar('Loading')
         rc = register_cleaners(self.update_progress_bar, self.cb_register_cleaners_done)
         GLib.idle_add(rc.next)
         return False
