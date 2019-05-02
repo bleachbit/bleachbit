@@ -10,11 +10,15 @@ install:
   - pip install python-coveralls requests[security]
 # install mock
   - pip install mock
-script: make tests COVERAGE="coverage run --include='bleachbit/*'"
+script:
+# Make the same file as on AppVeyor, so coveralls does not complain.
+   - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
+# Run tests.
+   - make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
    - mv .coverage .coverage.travis
    - sudo pip install appveyor-artifacts
-   - appveyor-artifacts -o az0 -n bleachbit -m download
+   - appveyor-artifacts -o az0 -n bleachbit -m -c $TRAVIS_COMMIT download
    - coverage combine
    - coverage report
    - coveralls
