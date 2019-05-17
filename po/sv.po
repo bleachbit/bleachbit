@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-04-25 21:15-0600\n"
-"PO-Revision-Date: 2019-05-01 15:10+0000\n"
+"POT-Creation-Date: 2019-05-02 22:39-0600\n"
+"PO-Revision-Date: 2019-05-12 20:51+0000\n"
 "Last-Translator: Jonatan Nyberg <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-05-03 04:40+0000\n"
-"X-Generator: Launchpad (build 18953)\n"
+"X-Launchpad-Export-Date: 2019-05-14 02:24+0000\n"
+"X-Generator: Launchpad (build 18962)\n"
 "Language: sv\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
@@ -740,8 +740,8 @@ msgstr ""
 "%s kan inte rensas eftersom att den körs för närvarande.  Stäng den och "
 "försök igen."
 
-#: ../bleachbit/GuiBasic.py:50 ../bleachbit/GuiBasic.py:76
-#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:135
+#: ../bleachbit/GuiBasic.py:48 ../bleachbit/GuiBasic.py:75
+#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:137
 msgid "_Cancel"
 msgstr "_Avbryt"
 
@@ -749,16 +749,16 @@ msgstr "_Avbryt"
 msgid "_Open"
 msgstr "_Öppna"
 
-#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:136
-#: ../bleachbit/GUI.py:136
+#: ../bleachbit/GuiBasic.py:100 ../bleachbit/GuiBasic.py:138
+#: ../bleachbit/GUI.py:133
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: ../bleachbit/GuiBasic.py:116
+#: ../bleachbit/GuiBasic.py:117
 msgid "Delete confirmation"
 msgstr "Bekräfta borttagning"
 
-#: ../bleachbit/GuiBasic.py:124
+#: ../bleachbit/GuiBasic.py:126
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -768,22 +768,23 @@ msgstr ""
 "metoderna?  De aktuella filerna som tas bort kan ha ändrats sedan du körde "
 "förhandsvisningen."
 
-#: ../bleachbit/GuiBasic.py:127
+#: ../bleachbit/GuiBasic.py:129
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Är du säker på att du vill ta bort dessa filer permanent?"
 
-#: ../bleachbit/GuiBasic.py:165
+#: ../bleachbit/GuiBasic.py:167
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
 "%s"
 msgstr ""
-"Då du kör som root, öppna denna länk manuellt i en webbläsare:\n"
+"Eftersom du kör som root, vänligen öppna den här länken manuellt i en "
+"webbläsare:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:177
+#: ../bleachbit/GuiBasic.py:179
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "Öppna webbläsaren för %s?"
@@ -988,18 +989,26 @@ msgstr "Detta val är mycket långsamt."
 msgid "The system in general"
 msgstr "Systemet i allmänhet"
 
-#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:688
+#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:696
 msgid "System"
 msgstr "System"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:721
+#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:729
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Skriv över ledigt diskutrymme %s"
 
-#: ../bleachbit/CleanerML.py:120
+#: ../bleachbit/Cleaner.py:676
+msgid "Loading native cleaners."
+msgstr "Läser in inbyggda rensare."
+
+#: ../bleachbit/Cleaner.py:682
+msgid "Importing cleaners from Winapp2.ini."
+msgstr "Importerar rensare från Winapp2.ini."
+
+#: ../bleachbit/CleanerML.py:136
 #, python-brace-format
 msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
@@ -1008,17 +1017,17 @@ msgstr ""
 "Fel i handle_cleaner_option() för renare id = {cleaner_id}, alternativ "
 "XML={option_xml}"
 
-#: ../bleachbit/CleanerML.py:261
+#: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr "Ignorera rensaren eftersom den är världs skrivbar: %s"
 
-#: ../bleachbit/CleanerML.py:272 ../bleachbit/CleanerML.py:311
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:338
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Fel vid läsning av renare: %s"
 
-#: ../bleachbit/CleanerML.py:279
+#: ../bleachbit/CleanerML.py:303
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
@@ -1042,21 +1051,21 @@ msgstr "Fel: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:186
 msgid "Please wait.  Wiping free disk space."
-msgstr "Vänta.  Raderar ledigt diskutrymme."
+msgstr "Vänligen vänta.  Raderar ledigt diskutrymme."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Vänta.  Rensar %s."
+msgstr "Vänligen vänta. Rensar %s."
 
 #: ../bleachbit/Worker.py:202
 msgid "Please wait. Wiping file system metadata."
-msgstr "Vänta. Raderar filsystemsmetadata."
+msgstr "Vänligen vänta. Raderar filsystemsmetadata."
 
 #: ../bleachbit/Worker.py:205
 msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr "Vänta. Rensar upp efter radering av filsystemsmetadata."
+msgstr "Vänligen vänta. Rensar upp efter radering av filsystemsmetadata."
 
 #: ../bleachbit/Worker.py:208
 #, python-format
@@ -1108,13 +1117,13 @@ msgstr "Fel: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:309
 msgid "Please wait.  Running deep scan."
-msgstr "Vänta.  Djupsökning körs."
+msgstr "Vänligen vänta.  Djupsökning körs."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:338
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Vänta.  Förhandsgranskar %s."
+msgstr "Vänligen vänta.  Förhandsgranskar %s."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1142,8 +1151,8 @@ msgid ""
 "Error message: {}"
 msgstr ""
 "Fel vid öppning av en nätverksanslutning för att söka efter uppdateringar. "
-"Kontrollera att nätverket fungerar och att en brandvägg inte blockerar det "
-"här programmet. Felmeddelande: {}"
+"Vänligen kontrollera att nätverket fungerar och att en brandvägg inte "
+"blockerar det här programmet. Felmeddelande: {}"
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1263,7 +1272,7 @@ msgid "path=\"%s\" is not a glob pattern"
 msgstr "sökväg=\"%s\" är inte ett globmönster"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:465 ../bleachbit/GUI.py:736
+#: ../bleachbit/Action.py:465 ../bleachbit/GUI.py:767
 msgid "Clean"
 msgstr "Rensa"
 
@@ -1272,50 +1281,35 @@ msgstr "Rensa"
 msgid "Run external command: %s"
 msgstr "Kör externt kommando: %s"
 
-#: ../bleachbit/GUI.py:80 ../bleachbit/GUI.py:482
+#: ../bleachbit/GUI.py:83 ../bleachbit/GUI.py:494
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
 "Fel vid inläsning av SQLite-modulen: antivirusprogrammet kanske blockerar "
 "den."
 
-#: ../bleachbit/GUI.py:83
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"Du kör BleachBit med administrativa rättigheter för att rensa delade delar "
-"av systemet, referenser till användarens hemmapp kommer endast att städa "
-"root-kontot."
-
-#: ../bleachbit/GUI.py:88
-msgid ""
-"Run BleachBit with administrator privileges to improve the accuracy of "
-"overwriting the contents of files."
-msgstr ""
-"Kör BleachBit med administrativa privilegier för att förbättra "
-"träffsäkerheten för att skriva över filernas innehåll."
-
-#: ../bleachbit/GUI.py:125
+#: ../bleachbit/GUI.py:122
 msgid "Choose files to shred"
 msgstr "Välj filer att strimla"
 
-#: ../bleachbit/GUI.py:134
+#: ../bleachbit/GUI.py:131
 msgid "Choose folder to shred"
 msgstr "Välj mapp att strimla"
 
-#: ../bleachbit/GUI.py:173 ../bleachbit/GUI.py:699
-#: ../bleachbit/GuiPreferences.py:185 ../bleachbit/GuiPreferences.py:310
-#: ../bleachbit/GuiPreferences.py:351
+#: ../bleachbit/GUI.py:158
+msgid "No paths found in clipboard."
+msgstr "Inga sökvägar finns i urklipp."
+
+#: ../bleachbit/GUI.py:191 ../bleachbit/GuiPreferences.py:185
+#: ../bleachbit/GuiPreferences.py:310 ../bleachbit/GuiPreferences.py:351
 msgid "Choose a folder"
 msgstr "Välj en mapp"
 
-#: ../bleachbit/GUI.py:174
+#: ../bleachbit/GUI.py:192
 msgid "_OK"
 msgstr "_OK"
 
-#: ../bleachbit/GUI.py:204
+#: ../bleachbit/GUI.py:223
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1327,7 +1321,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:210
+#: ../bleachbit/GUI.py:229
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -1343,28 +1337,28 @@ msgstr ""
 "  sweidre https://launchpad.net/~info-idre\n"
 "  Åke Engelbrektson https://launchpad.net/~eson"
 
-#: ../bleachbit/GUI.py:226
+#: ../bleachbit/GUI.py:245
 msgid "System information"
 msgstr "Systeminformation"
 
-#: ../bleachbit/GUI.py:333 ../bleachbit/GuiPreferences.py:280
+#: ../bleachbit/GUI.py:354 ../bleachbit/GuiPreferences.py:280
 msgid "Name"
 msgstr "Namn"
 
-#: ../bleachbit/GUI.py:341
+#: ../bleachbit/GUI.py:362
 msgid "Active"
 msgstr "Aktiv"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:353
+#: ../bleachbit/GUI.py:371
 msgid "Size"
 msgstr "Storlek"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:384
+#: ../bleachbit/GUI.py:402
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1375,28 +1369,46 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:607
+#: ../bleachbit/GUI.py:498
+msgid ""
+"You are running BleachBit with administrative privileges for cleaning shared "
+"parts of the system, and references to the user profile folder will clean "
+"only the root account."
+msgstr ""
+"Du kör BleachBit med administrativa rättigheter för att rensa delade delar "
+"av systemet, referenser till användarens hemmapp kommer endast att städa "
+"root-kontot."
+
+#: ../bleachbit/GUI.py:503
+msgid ""
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
+msgstr ""
+"Kör BleachBit med administrativa privilegier för att förbättra "
+"träffsäkerheten för att skriva över filernas innehåll."
+
+#: ../bleachbit/GUI.py:631
 msgid "You must select an operation"
 msgstr "Du måste välja en åtgärd"
 
-#: ../bleachbit/GUI.py:626 ../bleachbit/GUI.py:650
+#: ../bleachbit/GUI.py:650 ../bleachbit/GUI.py:674
 msgid "Done."
 msgstr "Klar."
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:731
+#: ../bleachbit/GUI.py:762
 msgid "Preview"
 msgstr "Förhandvisning"
 
-#: ../bleachbit/GUI.py:815
+#: ../bleachbit/GUI.py:854
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Förhandsvisa filer i valda funktioner (utan att ta bort några filer)"
 
-#: ../bleachbit/GUI.py:825
+#: ../bleachbit/GUI.py:865
 msgid "Clean files in the selected operations"
 msgstr "Rensa filer i de markerade åtgärderna"
 
-#: ../bleachbit/GUI.py:915
+#: ../bleachbit/GUI.py:955
 msgid "Error when checking for updates: "
 msgstr "Fel vid uppdateringssökning: "
 
@@ -1427,11 +1439,11 @@ msgstr "Tillbehör"
 msgid "Games"
 msgstr "Spel"
 
-#: ../bleachbit/Winapp.py:181
+#: ../bleachbit/Winapp.py:186
 msgid "Imported from winapp2.ini"
 msgstr "Importerat från winapp2.ini"
 
-#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:23
+#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:27
 msgid "Preferences"
 msgstr "Inställningar"
 
@@ -1678,25 +1690,29 @@ msgid "Sh_red Folders"
 msgstr "F_örstör mappar"
 
 #: ../data/app-menu.ui:13
+msgid "Shred Paths from Clipboard"
+msgstr "Strimla sökvägar från urklipp"
+
+#: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
 msgstr "_Rensa ledigt utrymme"
 
-#: ../data/app-menu.ui:17
+#: ../data/app-menu.ui:21
 msgid "S_hred Settings and Quit"
 msgstr "För_stör inställningar och avsluta"
 
-#: ../data/app-menu.ui:28
+#: ../data/app-menu.ui:32
 msgid "_Diagnostics"
 msgstr "_Diagnos"
 
-#: ../data/app-menu.ui:32
+#: ../data/app-menu.ui:36
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: ../data/app-menu.ui:38
+#: ../data/app-menu.ui:42
 msgid "_About"
 msgstr "_Om"
 
-#: ../data/app-menu.ui:42
+#: ../data/app-menu.ui:46
 msgid "_Quit"
 msgstr "Av_sluta"
