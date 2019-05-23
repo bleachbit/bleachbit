@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-05-02 22:39-0600\n"
-"PO-Revision-Date: 2019-05-07 14:47+0000\n"
+"PO-Revision-Date: 2019-05-19 18:50+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-05-07 18:04+0000\n"
-"X-Generator: Launchpad (build 18958)\n"
+"X-Launchpad-Export-Date: 2019-05-23 03:32+0000\n"
+"X-Generator: Launchpad (build 18962)\n"
 
 #: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
 #: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
@@ -985,11 +985,11 @@ msgstr "שכתוב השטח הפנוי במיקום %s"
 
 #: ../bleachbit/Cleaner.py:676
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "המנקים המובנים נטענים."
 
 #: ../bleachbit/Cleaner.py:682
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "מיובאים מנקים מ־Winapp2.ini."
 
 #: ../bleachbit/CleanerML.py:136
 #, python-brace-format
@@ -997,6 +997,8 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"שגיאה ב־handle_cleaner_option()‎ עבור מזהה מנקה = {cleaner_id}, אפשרות "
+"ב־XML‏={option_xml}"
 
 #: ../bleachbit/CleanerML.py:277
 #, python-format
@@ -1006,12 +1008,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:338
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "שגיאה בקריאת המנקה: %s"
 
 #: ../bleachbit/CleanerML.py:303
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
+msgstr "המנקה אינו שמיש במערכת ההפעלה הזאת כיוון שאין לו את הפעולות: %s"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1129,6 +1131,8 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"שגיאה בעת פתיחת חיבור רשת לאיתור עדכונים. נא לוודא שהרשת עובדת ושחומת האש "
+"אינה חוסמת את היישום הזה. הודעת השגיאה: {}"
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1222,11 +1226,11 @@ msgstr "Path to wipe must be an existing directory: %s"
 
 #: ../bleachbit/CLI.py:219
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "מחיקת המקום הפנוי עשויה לארוך זמן רב."
 
 #: ../bleachbit/CLI.py:229
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "אין עבודה לבצע. נא לציין אפשרויות."
 
 #: ../bleachbit/CLI.py:237
 msgid "--overwrite is intended only for use with --clean"
@@ -1234,7 +1238,7 @@ msgstr ""
 
 #: ../bleachbit/Action.py:142
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "סריקה עמוקה לא תומכת במשתנים מרובי ערכים."
 
 #: ../bleachbit/Action.py:220
 #, python-format
@@ -1271,7 +1275,7 @@ msgstr "בחירת תיקייה להשמדה"
 
 #: ../bleachbit/GUI.py:158
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "לא נמצאו נתיבים בלוח הגזירים."
 
 #: ../bleachbit/GUI.py:191 ../bleachbit/GuiPreferences.py:185
 #: ../bleachbit/GuiPreferences.py:310 ../bleachbit/GuiPreferences.py:351
@@ -1287,6 +1291,8 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"גרסה 3 ומעלה של הרישיון הציבורי הכללי של גנו.\n"
+"לעיונך: https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1593,7 +1599,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "מתפנים %s של זיכרון"
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
@@ -1604,7 +1610,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "הזיכרון הפיזי הפנוי הוא %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:277
@@ -1646,7 +1652,7 @@ msgstr "ה_שמדת תיקיות"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "השמדת נתיבים מלוח הגזירים"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1658,7 +1664,7 @@ msgstr "_חיסול ההגדרות ויציאה"
 
 #: ../data/app-menu.ui:32
 msgid "_Diagnostics"
-msgstr ""
+msgstr "_ניתוח"
 
 #: ../data/app-menu.ui:36
 msgid "_Help"
