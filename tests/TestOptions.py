@@ -99,6 +99,31 @@ class OptionsTestCase(common.BleachbitTestCase):
         # clean up
         del o
 
+    def test_init_configuration(self):
+        """Test for init_configuration()"""
+        bleachbit.Options.init_configuration()
+        self.assertExists(bleachbit.options_file)
+
+    def test_is_corrupt(self):
+        """Test is_corrupt()"""
+        def _test_is_corrupt(contents, expect_is_corrupt):
+            with open(bleachbit.options_file, 'w') as f:
+                f.write(contents)
+            o = bleachbit.Options.Options()
+            self.assertEqual(o.is_corrupt(), expect_is_corrupt)
+
+        # test blank
+        _test_is_corrupt('', False)
+        _test_is_corrupt('[bleachbit]\n', False)
+
+        # test valid but non-standard boolean
+        _test_is_corrupt('[bleachbit]\nshred=f\n', False)
+
+        # test invalid boolean
+        # https://github.com/bleachbit/bleachbit/issues/560#issuecomment-497361700
+        _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
+        os.remove(bleachbit.options_file)
+
     def test_purge(self):
         """Test purging"""
         # By default ConfigParser stores keys (the filenames) as lowercase.

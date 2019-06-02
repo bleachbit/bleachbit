@@ -57,6 +57,20 @@ def path_to_option(pathname):
     return pathname
 
 
+def init_configuration():
+    """Initialize an empty configuration, if necessary"""
+    if os.path.lexists(bleachbit.options_file):
+        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+        os.remove(bleachbit.options_file)
+    with open(bleachbit.options_file, 'w') as f_ini:
+        f_ini.write('[bleachbit]\n')
+        if os.name == 'nt' and bleachbit.portable_mode:
+            f_ini.write('[Portable]\n')
+    for section in options.config.sections():
+        options.config.remove_section(section)
+    options.restore()
+
+
 class Options:
 
     """Store and retrieve user preferences"""
@@ -192,6 +206,16 @@ class Options:
             # in case of corrupt configuration (Launchpad #799130)
             logger.exception('Error in get_tree()')
             return False
+
+    def is_corrupt(self):
+        """Perform a self-check for corruption of the configuration"""
+        # no boolean key must raise an exception
+        for boolean_key in boolean_keys:
+            try:
+                val = self.config.getboolean('bleachbit', boolean_key)
+            except ValueError:
+                return True
+        return False
 
     def restore(self):
         """Restore saved options from disk"""

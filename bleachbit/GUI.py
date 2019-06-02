@@ -175,9 +175,7 @@ class Bleachbit(Gtk.Application):
             return
 
         # in portable mode, rebuild a minimal bleachbit.ini
-        if os.name == 'nt' and portable_mode:
-            with open(bleachbit.options_file, 'w') as f_ini:
-                f_ini.write('[Portable]\n')
+        bleachbit.Options.init_configuration()
 
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
@@ -478,6 +476,11 @@ class GUI(Gtk.ApplicationWindow):
 
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
+
+        if options.is_corrupt():
+            logger.error(
+                _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
+            bleachbit.Options.init_configuration()
 
         if options.get("first_start") and os.name == 'posix':
             pref = PreferencesDialog(self, self.cb_refresh_operations)
