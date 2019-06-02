@@ -52,8 +52,7 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     logger.setLevel(logging.ERROR)
 else:
     # debug if command line asks for it or if this a non-final release
-    if any(arg.startswith('--debug-log') for arg in sys.argv) or \
-            int(APP_VERSION.split('.')[1]) % 2:
+    if any(arg.startswith('--debug-log') for arg in sys.argv):
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
