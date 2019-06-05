@@ -109,8 +109,7 @@ class Bleachbit(Gtk.Application):
                    'preferences': self.cb_preferences_dialog,
                    'diagnostics': self.diagnostic_dialog,
                    'help': self.cb_help,
-                   'about': self.about,
-                   'quit': self.quit}
+                   'about': self.about}
 
         for action_name, callback in actions.items():
             action = Gio.SimpleAction.new(action_name, None)
