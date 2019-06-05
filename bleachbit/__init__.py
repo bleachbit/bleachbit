@@ -217,6 +217,8 @@ for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
 
+# menu
+app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
 
 # locale directory
 if os.path.exists("./locale/"):

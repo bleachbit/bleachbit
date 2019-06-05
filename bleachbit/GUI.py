@@ -88,9 +88,15 @@ class Bleachbit(Gtk.Application):
                           priority=GObject.PRIORITY_LOW)
 
     def build_app_menu(self):
+        """Build the application menu
+
+        On Linux with GTK 3.24, this code is necessary but not sufficient for
+        the menu to work. The headerbar code is also needed.
+
+        On Windows with GTK 3.18, this cde is sufficient for the menu to work.
+        """
         builder = Gtk.Builder()
-        builder.add_from_file(os.path.join(
-            bleachbit.bleachbit_exe_path, 'data', 'app-menu.ui'))
+        builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
@@ -870,6 +876,21 @@ class GUI(Gtk.ApplicationWindow):
         box.add(run_button)
 
         hbar.pack_start(box)
+
+        # Add hamburger menu on the right.
+        # This is not needed for Microsoft Windows because other code places its
+        # menu on the left side.
+        if os.name == 'nt':
+            return hbar
+        menu_button = Gtk.MenuButton()
+        icon = Gio.ThemedIcon(name="open-menu-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        builder = Gtk.Builder()
+        builder.add_from_file(bleachbit.app_menu_filename)
+        menu_button.set_menu_model(builder.get_object('app-menu'))
+        menu_button.add(image)
+        hbar.pack_end(menu_button)
+
         return hbar
 
     def populate_window(self):
