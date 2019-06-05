@@ -207,10 +207,11 @@ if portable_mode:
 # application icon
 __icons = (
     '/usr/share/pixmaps/bleachbit.png',  # Linux
-    os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'),  # Windows
     '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
     '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
-    os.path.normpath(os.path.join(bleachbit_exe_path, '../bleachbit.png')),  # local
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')),  # Windows
+    # When running from source (i.e., not installed).
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
    )
 appicon_path = None
 for __icon in __icons:
