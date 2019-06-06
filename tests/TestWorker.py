@@ -143,13 +143,15 @@ class LockedAction(ActionProvider):
         # Open the file with a non-exclusive lock, so the file should
         # be truncated and marked for deletion. This is checked just on
         # on Windows.
-        f = os.open(self.pathname, os.O_RDWR)
+        fd = os.open(self.pathname, os.O_RDWR)
+        from bleachbit.FileUtilities import getsize
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
-        from bleachbit.FileUtilities import getsize
-        assert(0 == getsize(self.pathname))
-        os.close(f)
+        fsize = getsize(self.pathname)
+        if not fsize == 3: # Contents is "123"
+            raise RuntimeError('Locked file has size %dB (not 3B)' % fsize)
+        os.close(fd)
 
         # Now that the file is not locked, admin privileges
         # are not required to delete it.
@@ -252,12 +254,15 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.LockedAction"""
         from win32com.shell import shell
         if shell.IsUserAnAdmin():
+            # If an admin, the first attempt will mark for delete (3 bytes),
+            # and the second attempt will actually delete it (3 bytes).
             errors_expected = 0
-            bytes_expected = 3 + 0
+            bytes_expected = 3 + 3
             total_deleted = 2
         else:
+            # If not an admin, the first attempt will fail, and the second wil succeed.
             errors_expected = 1
-            bytes_expected = 0
+            bytes_expected = 3
             total_deleted = 1
         self.action_test_helper(
             'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
