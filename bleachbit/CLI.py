@@ -182,7 +182,6 @@ def process_cmd_line():
     did_something = False
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
-        logger.info('BleachBit version %s', APP_VERSION)
         logger.info(Diagnostic.diagnostic_info())
     if options.version:
         print("""
