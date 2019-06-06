@@ -838,8 +838,9 @@ def wipe_path(pathname, idle=False):
         files.append(f)
         # For statistics
         total_bytes += f.tell()
-        # If no bytes were written, then quit
-        if f.tell() < 1:
+        # If no bytes were written, then quit.
+        # See https://github.com/bleachbit/bleachbit/issues/502
+        if f.tell() < 2:
             break
     # sync to disk
     sync()
