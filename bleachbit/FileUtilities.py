@@ -785,7 +785,7 @@ def wipe_path(pathname, idle=False):
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
         return 1, done_percent, remaining_seconds
 
-    logger.debug("wipe_path('%s')", pathname)
+    logger.debug(_("Wiping path: %s") % pathname)
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)
@@ -794,7 +794,7 @@ def wipe_path(pathname, idle=False):
     # this loop is sometimes necessary to create multiple files.
     while True:
         try:
-            logger.debug('creating new, temporary file to wipe path')
+            logger.debug(_('Creating new, temporary file to wipe.'))
             f = temporaryfile()
         except OSError as e:
             # Linux gives errno 24
@@ -831,7 +831,7 @@ def wipe_path(pathname, idle=False):
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
             if not e.errno == errno.ENOSPC:
-                logger.error("info: exception on f.flush()")
+                logger.error(_("Error #%d when flushing the file buffer." % e.errno))
 
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
@@ -847,15 +847,15 @@ def wipe_path(pathname, idle=False):
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s',
-                len(files), total_bytes, elapsed_sec, rate_mbs)
+    logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
+                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
     # how much free space is left (should be near zero)
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d bytes and %d inodes available to non-super-user',
-                    stats.f_bsize * stats.f_bavail, stats.f_favail)
-        logger.info('%d bytes and %d inodes available to super-user',
-                    stats.f_bsize * stats.f_bfree, stats.f_ffree)
+        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
+                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
+        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
+                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
     # truncate and close files
     for f in files:
         truncate_f(f)
@@ -869,7 +869,7 @@ def wipe_path(pathname, idle=False):
                 break
             except IOError as e:
                 if e.errno == 0:
-                    logger.debug('handled unknown error 0')
+                    logger.debug(_("Handled unknown error 0 while truncating file."))
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name, ignore_missing=True)
