@@ -534,7 +534,7 @@ class GUI(Gtk.ApplicationWindow):
         # user aborted
         return False
 
-    def append_text(self, text, tag=None, __iter=None):
+    def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
@@ -545,9 +545,10 @@ class GUI(Gtk.ApplicationWindow):
         # Scroll to end.  If the command is run directly instead of
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
-        GLib.idle_add(lambda:
-                      self.textview.scroll_mark_onscreen(
-                          self.textbuffer.get_insert()))
+        if scroll:
+            GLib.idle_add(lambda:
+                          self.textview.scroll_mark_onscreen(
+                              self.textbuffer.get_insert()))
 
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""
@@ -563,16 +564,16 @@ class GUI(Gtk.ApplicationWindow):
         self.progressbar.hide()
         description = backends[cleaner_id].get_description()
         self.textbuffer.set_text("")
-        self.append_text(name + "\n", 'operation')
+        self.append_text(name + "\n", 'operation', scroll=False)
         if not description:
             description = ""
-        self.append_text(description + "\n\n\n", 'description')
+        self.append_text(description + "\n\n\n", 'description', scroll=False)
         for (label, description) in backends[cleaner_id].get_option_descriptions():
-            self.append_text(label, 'option_label')
+            self.append_text(label, 'option_label', scroll=False)
             if description:
-                self.append_text(': ', 'option_label')
-                self.append_text(description)
-            self.append_text("\n\n")
+                self.append_text(': ', 'option_label', scroll=False)
+                self.append_text(description, scroll=False)
+            self.append_text("\n\n", scroll=False)
 
     def get_selected_operations(self):
         """Return a list of the IDs of the selected operations in the tree view"""
