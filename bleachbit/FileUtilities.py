@@ -794,7 +794,7 @@ def wipe_path(pathname, idle=False):
     # this loop is sometimes necessary to create multiple files.
     while True:
         try:
-            logger.debug(_('Creating new, temporary file to wipe.'))
+            logger.debug(_('Creating new, temporary file for wiping free space.'))
             f = temporaryfile()
         except OSError as e:
             # Linux gives errno 24
@@ -869,7 +869,7 @@ def wipe_path(pathname, idle=False):
                 break
             except IOError as e:
                 if e.errno == 0:
-                    logger.debug(_("Handled unknown error 0 while truncating file."))
+                    logger.debug(_("Handled unknown error #0 while truncating file."))
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name, ignore_missing=True)
