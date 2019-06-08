@@ -373,6 +373,29 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertNotExists(path)
 
     @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
+    def test_delete_read_only(self):
+        """Unit test for delete() with read-only file"""
+        fn = os.path.join(self.tempdir, 'read-only')
+        common.touch_file(fn)
+        import stat
+        os.chmod(fn, stat.S_IREAD)
+        self.assertExists(fn)
+        delete(fn)
+        self.assertNotExists(fn)
+
+    @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
+    def test_delete_hidden(self):
+        """Unit test for delete() with hidden file"""
+        fn = os.path.join(self.tempdir, 'hidden')
+        common.touch_file(fn)
+        import win32api
+        import win32con
+        win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
+        self.assertExists(fn)
+        delete(fn)
+        self.assertNotExists(fn)
+
+    @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
     def test_delete_locked(self):
         """Unit test for delete() with locked file"""
         # set up
