@@ -93,6 +93,7 @@ from win32api import (GetVolumeInformation, GetDiskFreeSpace,
 from win32file import (CreateFile, CreateFileW,
                        CloseHandle, GetDriveType,
                        GetFileSize, GetFileAttributesW,
+                       SetFileAttributesW,
                        DeviceIoControl, SetFilePointer,
                        ReadFile, WriteFile,
                        LockFile, DeleteFile,
@@ -113,6 +114,7 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_ATTRIBUTE_COMPRESSED,
                       FILE_ATTRIBUTE_SPARSE_FILE,
                       FILE_ATTRIBUTE_HIDDEN,
+                      FILE_ATTRIBUTE_READONLY,
                       FILE_FLAG_RANDOM_ACCESS,
                       FILE_FLAG_NO_BUFFERING,
                       FILE_FLAG_WRITE_THROUGH,
@@ -914,6 +916,10 @@ def file_wipe(file_name):
     #logger.debug('Original extents: {}'.format(orig_extents))
 
     volume_handle = obtain_readwrite(volume)
+    attrs = GetFileAttributesW(file_name)
+    if attrs & FILE_ATTRIBUTE_READONLY:
+        # Remove read-only attribute to avoid "access denied" in CreateFileW().
+        SetFileAttributesW(file_name, attrs & ~FILE_ATTRIBUTE_READONLY)
     file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
 
     if not is_special:
