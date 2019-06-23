@@ -508,7 +508,10 @@ def is_running_linux(exename):
         except OSError:
             # 13 = permission denied
             continue
-        if exename == os.path.basename(target):
+        # Google Chrome shows 74 on Ubuntu 19.04 shows up as
+        # /opt/google/chrome/chrome (deleted)
+        found_exename = os.path.basename(target).replace(' (deleted)', '')
+        if exename == found_exename:
             return True
     return False
 
