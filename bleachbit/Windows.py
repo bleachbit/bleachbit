@@ -328,30 +328,6 @@ def empty_recycle_bin(path, really_delete):
         shell.SHEmptyRecycleBin(None, path, flags)
     return bytes_used
 
-
-def get_autostart_path():
-    """Return the path of the BleachBit shortcut in the user's startup folder"""
-    try:
-        startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
-    except:
-        # example of failure
-        # https://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
-        logger.exception('exception in get_autostart_path()')
-        msg = 'Error finding user startup folder: %s ' % (
-            str(sys.exc_info()[1]))
-        from bleachbit import GuiBasic
-        GuiBasic.message_dialog(None, msg)
-        # as a fallback, guess
-        # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup
-        # Windows 7:
-        # C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start
-        # Menu\Programs\Startup
-        startupdir = bleachbit.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
-        if not os.path.exists(startupdir):
-            startupdir = bleachbit.expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
-    return os.path.join(startupdir, 'bleachbit.lnk')
-
-
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     import win32clipboard

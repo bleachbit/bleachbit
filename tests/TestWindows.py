@@ -218,12 +218,6 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assert_(detect_registry_key('HKCU\\Software\\Microsoft\\'))
         self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
 
-    def test_get_autostart_path(self):
-        """Unit test for get_autostart_path"""
-        pathname = get_autostart_path()
-        dirname = os.path.dirname(pathname)
-        self.assertExists(dirname)
-
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
         # The clipboard is an unknown state, so check the function does

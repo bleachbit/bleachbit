@@ -240,8 +240,6 @@ else:
 
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
-if 'posix' == os.name:
-    autostart_path = expanduser('~/.config/autostart/bleachbit.desktop')
 
 
 #
