@@ -206,16 +206,16 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
-                any_match = False
-                for path in FileUtilities.children_in_directory(
-                        expanded, True):
-                    any_match = True
+                for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
-                # This is a lint checker because this scenario may
-                # indicate the cleaner developer made a mistake.
-                if not any_match and os.path.isfile(expanded):
-                    logger.debug(
-                        _('search="walk.all" used with regular file path="%s"'), expanded)
+                else:
+                    # This is a lint checker because this scenario may
+                    # indicate the cleaner developer made a mistake.
+                    if os.path.isfile(expanded):
+                        logger.debug(
+                            _('search="walk.all" used with regular file path="%s"'),
+                            expanded,
+                        )
 
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
