@@ -165,40 +165,36 @@ class FileActionProvider(ActionProvider):
             raise StopIteration
         yield self.ds
 
-    def path_filter(self, path):
+    def get_paths(self):
         """Process the filters: regex, nregex, type
 
         If a filter is defined and it fails to match, this function
         returns False. Otherwise, this function returns True."""
 
-        if self.regex:
-            if not self.regex_c.search(os.path.basename(path)):
-                return False
+        for path in self._get_paths():
+            if self.regex:
+                if not self.regex_c.search(os.path.basename(path)):
+                    continue
 
-        if self.nregex:
-            if self.nregex_c.search(os.path.basename(path)):
-                return False
+            if self.nregex:
+                if self.nregex_c.search(os.path.basename(path)):
+                    continue
 
-        if self.wholeregex:
-            if not self.wholeregex_c.search(path):
-                return False
+            if self.wholeregex:
+                if not self.wholeregex_c.search(path):
+                    continue
 
-        if self.nwholeregex:
-            if self.nwholeregex_c.search(path):
-                return False
+            if self.nwholeregex:
+                if self.nwholeregex_c.search(path):
+                    continue
 
-        if self.object_type:
-            if 'f' == self.object_type and not os.path.isfile(path):
-                return False
-            elif 'd' == self.object_type and not os.path.isdir(path):
-                return False
+            if self.object_type:
+                if 'f' == self.object_type and not os.path.isfile(path):
+                    continue
+                elif 'd' == self.object_type and not os.path.isdir(path):
+                    continue
 
-        return True
-
-    def get_paths(self):
-        import itertools
-        for f in itertools.ifilter(self.path_filter, self._get_paths()):
-            yield f
+            yield path
 
     def _get_paths(self):
         """Return a filtered list of files"""
