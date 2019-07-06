@@ -267,14 +267,15 @@ class FileActionProvider(ActionProvider):
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
             # use cache
-            if self.search in self.CACHEABLE_SEARCHERS:
-                if cache[0] == self.search and cache[1] == input_path:
-                    logger.debug(_('using cached walk for %s'), input_path)
-                    for x in cache[2]:
-                        yield x
-                    return
-                else:
+            if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
+                logger.debug(_('using cached walk for %s'), input_path)
+                for x in cache[2]:
+                    yield x
+                return
+            else:
+                if self.search in self.CACHEABLE_SEARCHERS:
                     logger.debug(_('not using cache because it has (%s,%s) and we want (%s,%s)'), cache[0], cache[1], self.search, input_path)
+                self.__class__.cache = ('cleared by', input_path, tuple())
 
             # build new cache
             logger.debug(_('%s walking %s'), id(self), input_path)
