@@ -279,10 +279,15 @@ class FileActionProvider(ActionProvider):
 
             # build new cache
             logger.debug(_('%s walking %s'), id(self), input_path)
-            cache = self.__class__.cache = (self.search, input_path, [])
-            for path in func(input_path):
-                cache[2].append(path)
-                yield path
+
+            if self.search in self.CACHEABLE_SEARCHERS:
+                cache = self.__class__.cache = (self.search, input_path, [])
+                for path in func(input_path):
+                    cache[2].append(path)
+                    yield path
+            else:
+                for path in func(input_path):
+                    yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
