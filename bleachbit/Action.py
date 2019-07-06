@@ -171,27 +171,50 @@ class FileActionProvider(ActionProvider):
         If a filter is defined and it fails to match, this function
         returns False. Otherwise, this function returns True."""
 
+        # optimize tight loop, avoid slow python "."
+        regex = self.regex
+        nregex = self.nregex
+        wholeregex = self.wholeregex
+        nwholeregex = self.nwholeregex
+        basename = os.path.basename
+        object_type = self.object_type
+        if self.regex:
+            regex_c_search = re.compile(self.regex, re_flags).search
+        else:
+            regex_c_search = None
+
+        if self.nregex:
+            nregex_c_search = re.compile(self.nregex, re_flags).search
+        else:
+            nregex_c_search = None
+
+        if self.wholeregex:
+            wholeregex_c_search = re.compile(self.wholeregex, re_flags).search
+        else:
+            wholeregex_c_search = None
+
+        if self.nwholeregex:
+            nwholeregex_c_search = re.compile(self.nwholeregex, re_flags).search
+        else:
+            nwholeregex_c_search = None
+
         for path in self._get_paths():
-            if self.regex:
-                if not self.regex_c.search(os.path.basename(path)):
-                    continue
+            if regex and not regex_c_search(basename(path)):
+                continue
 
-            if self.nregex:
-                if self.nregex_c.search(os.path.basename(path)):
-                    continue
+            if nregex and nregex_c_search(basename(path)):
+                continue
 
-            if self.wholeregex:
-                if not self.wholeregex_c.search(path):
-                    continue
+            if wholeregex and not wholeregex_c_search(path):
+                continue
 
-            if self.nwholeregex:
-                if self.nwholeregex_c.search(path):
-                    continue
+            if nwholeregex and nwholeregex_c_search(path):
+                continue
 
-            if self.object_type:
-                if 'f' == self.object_type and not os.path.isfile(path):
+            if object_type:
+                if 'f' == object_type and not os.path.isfile(path):
                     continue
-                elif 'd' == self.object_type and not os.path.isdir(path):
+                elif 'd' == object_type and not os.path.isdir(path):
                     continue
 
             yield path
@@ -243,18 +266,6 @@ class FileActionProvider(ActionProvider):
             func = get_top
         else:
             raise RuntimeError("invalid search='%s'" % self.search)
-
-        if self.regex:
-            self.regex_c = re.compile(self.regex, re_flags)
-
-        if self.nregex:
-            self.nregex_c = re.compile(self.nregex, re_flags)
-
-        if self.wholeregex:
-            self.wholeregex_c = re.compile(self.wholeregex, re_flags)
-
-        if self.nwholeregex:
-            self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
 
         cache = self.__class__.cache
         for input_path in self.paths:
