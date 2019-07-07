@@ -422,3 +422,44 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_many_patterns(self):
+        """Test a cleaner like Steam Installers and related performance improvement
+
+        https://github.com/bleachbit/bleachbit/issues/325
+        """
+
+        # set up environment
+        file_count = 1000
+        dir_count = 10
+        print('Making %d files in each of %d directories.' %
+              (file_count, dir_count))
+        tmp_dir = tempfile.mkdtemp()
+        for i_d in range(1, dir_count+1):
+            sub_dir = os.path.join(tmp_dir, 'dir%d' % i_d)
+            for i_f in range(1, file_count+1):
+                tmp_fn = os.path.join(sub_dir, 'file%d' % i_f)
+                common.touch_file(tmp_fn)
+
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        import string
+        searches = ';'.join(
+            ['*.%s' % letter for letter in string.letters[0:26]])
+        cleaner = self.ini2cleaner(
+            'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
+
+        # preview
+        import time
+        t0 = time.time()
+        self.run_all(cleaner, False)
+        t1 = time.time()
+        print('Elapsed time in preview: %.4f seconds ' % (t1-t0))
+
+        # delete
+        self.run_all(cleaner, False)
+
+        # clean up
+        shutil.rmtree(tmp_dir)
