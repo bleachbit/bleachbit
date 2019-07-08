@@ -141,14 +141,16 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH, subject_model
 
 
 def generate_emails(number_of_emails, content_model_path, subject_model_path, email_output_dir,
-                    number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES, *kwargs):
+                    number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES, on_progress=None, *kwargs):
     logger.debug('Loading two email models')
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
     logger.debug('Generating {:,} emails'.format(number_of_emails))
-    for _ in range(number_of_emails):
+    for i in range(1, number_of_emails + 1):
         with tempfile.NamedTemporaryFile(prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
             email_generator = email.generator.Generator(email_output_file)
             msg = _generate_email(
                 subject_model, content_model, number_of_sentences=number_of_sentences)
             email_generator.write(msg.as_string())
+        if on_progress:
+            on_progress(1.0*i/number_of_emails)

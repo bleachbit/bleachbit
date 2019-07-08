@@ -37,6 +37,12 @@ import os
 logger = logging.getLogger(__name__)
 
 
+def make_files_thread(email_count, content_model_path, subject_model_path, email_output_folder, on_progress):
+    generate_emails(email_count, content_model_path,
+                    subject_model_path, email_output_folder, on_progress=on_progress)
+    on_progress(1)
+
+
 class ChaffDialog(Gtk.Dialog):
 
     """Present the dialog to make chaff"""
@@ -72,9 +78,13 @@ class ChaffDialog(Gtk.Dialog):
         folder_box.add(self.choose_folder_button)
         box.add(folder_box)
 
-        make_button = Gtk.Button(_("Make files"))
-        make_button.connect('clicked', self.on_make_files)
-        box.add(make_button)
+        self.progressbar = Gtk.ProgressBar()
+        box.add(self.progressbar)
+        self.progressbar.hide()
+
+        self.make_button = Gtk.Button(_("Make files"))
+        self.make_button.connect('clicked', self.on_make_files)
+        box.add(self.make_button)
 
     def download_models_gui(self):
         """Download models and return whether successful as boolean"""
@@ -115,9 +125,22 @@ class ChaffDialog(Gtk.Dialog):
             if not self.download_models_dialog():
                 return
 
-        logger.info('Generating emails')
-        generate_emails(email_count, self.content_model_path,
-                        self.subject_model_path, email_output_folder)
+        def on_progress(fraction):
+            self.progressbar.set_fraction(fraction)
+            if fraction >= 1:
+                self.progressbar.hide()
+                self.make_button.set_sensitive(True)
+
+        msg = _('Generating emails')
+        logger.info(msg)
+        self.progressbar.show()
+        self.progressbar.set_text(msg)
+        self.progressbar.set_fraction(0.0)
+        self.make_button.set_sensitive(False)
+        import threading
+        t = threading.Thread(target=make_files_thread, args=(
+            email_count, self.content_model_path, self.subject_model_path, email_output_folder, on_progress))
+        t.start()
 
     def run(self):
         """Run the dialog"""
