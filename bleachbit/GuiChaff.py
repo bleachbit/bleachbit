@@ -80,6 +80,8 @@ class ChaffDialog(Gtk.Dialog):
         self.choose_folder_button = Gtk.FileChooserButton()
         self.choose_folder_button.set_action(
             Gtk.FileChooserAction.SELECT_FOLDER)
+        import tempfile
+        self.choose_folder_button.set_filename(tempfile.gettempdir())
         folder_box.add(self.choose_folder_button)
         box.add(folder_box)
 
