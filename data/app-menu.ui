@@ -17,6 +17,10 @@
         <attribute name="label" translatable="yes">_Wipe Free Space</attribute>
       </item>
       <item>
+        <attribute name="action">app.makeChaff</attribute>
+        <attribute name="label" translatable="yes">_Make Chaff</attribute>
+      </item>
+      <item>
         <attribute name="action">app.shredQuit</attribute>
         <attribute name="label" translatable="yes">S_hred Settings and Quit</attribute>
       </item>

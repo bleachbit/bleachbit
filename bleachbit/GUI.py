@@ -105,6 +105,7 @@ class Bleachbit(Gtk.Application):
                    'shredFolders': self.cb_shred_folder,
                    'shredClipboard': self.cb_shred_clipboard,
                    'wipeFreeSpace': self.cb_wipe_free_space,
+                   'makeChaff': self.cb_make_chaff,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
                    'diagnostics': self.diagnostic_dialog,
@@ -119,6 +120,12 @@ class Bleachbit(Gtk.Application):
     def cb_help(self, action, param):
         """Callback for help"""
         GuiBasic.open_url(bleachbit.help_contents_url, self._window)
+
+    def cb_make_chaff(self, action, param):
+        """Callback to make chaff"""
+        from bleachbit.GuiChaff import ChaffDialog
+        cd = ChaffDialog(self._window)
+        cd.run()
 
     def cb_shred_file(self, action, param):
         """Callback for shredding a file"""

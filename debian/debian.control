@@ -9,7 +9,7 @@ XS-Python-Version: >= 2.6
 
 Package: bleachbit
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python (>= 2.6), python-gtk2 (>= 2.14)
+Depends: ${misc:Depends}, ${python:Depends}, python (>= 2.6), python-gtk2 (>= 2.14), python-unidecode
 Recommends: python-notify
 Description: Removes unnecessary files
  Delete traces of your activities and other junk files to free disk

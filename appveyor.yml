@@ -16,6 +16,7 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
+  - '%PYTHON_HOME%/Scripts/pip.exe install unidecode'
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
   - ps: Get-FileHash pygi-aio.exe
   - 'pygi-aio.exe C:\Python27 GTK Notify'
