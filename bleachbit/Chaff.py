@@ -28,6 +28,13 @@ import random
 import tempfile
 from datetime import datetime, timedelta
 
+try:
+    import certifi
+except:
+    HAVE_CERTIFI = False
+else:
+    HAVE_CERTIFI = True
+
 from bleachbit import _
 from bleachbit import options_dir
 
@@ -104,13 +111,17 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH, subject_model
     from urllib2 import urlopen, URLError, HTTPError
     from httplib import HTTPException
     import socket
+    if HAVE_CERTIFI:
+        cafile = certifi.where()
+    else:
+        cafile = None
     for (url, fn) in ((URL_SUBJECT, subject_model_path), (URL_CONTENT, content_model_path)):
         if os.path.exists(fn):
             logger.debug('File %s already exists', fn)
             continue
         logger.info('Downloading %s to %s', url, fn)
         try:
-            resp = urlopen(url)
+            resp = urlopen(url, cafile=cafile)
             with open(fn, 'wb') as f:
                 f.write(resp.read())
         except (URLError, HTTPError, HTTPException, socket.error) as exc:
