@@ -117,6 +117,8 @@ class FileActionProvider(ActionProvider):
 
     """Base class for providers which work on individual files"""
     action_key = '_file'
+    CACHEABLE_SEARCHERS = ('walk.files',)
+    cache = ('nothing', '', tuple())  # global cache <search_type, path, list_of_entries>
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
@@ -163,40 +165,59 @@ class FileActionProvider(ActionProvider):
             raise StopIteration
         yield self.ds
 
-    def path_filter(self, path):
+    def get_paths(self):
         """Process the filters: regex, nregex, type
 
         If a filter is defined and it fails to match, this function
         returns False. Otherwise, this function returns True."""
 
+        # optimize tight loop, avoid slow python "."
+        regex = self.regex
+        nregex = self.nregex
+        wholeregex = self.wholeregex
+        nwholeregex = self.nwholeregex
+        basename = os.path.basename
+        object_type = self.object_type
         if self.regex:
-            if not self.regex_c.search(os.path.basename(path)):
-                return False
+            regex_c_search = re.compile(self.regex, re_flags).search
+        else:
+            regex_c_search = None
 
         if self.nregex:
-            if self.nregex_c.search(os.path.basename(path)):
-                return False
+            nregex_c_search = re.compile(self.nregex, re_flags).search
+        else:
+            nregex_c_search = None
 
         if self.wholeregex:
-            if not self.wholeregex_c.search(path):
-                return False
+            wholeregex_c_search = re.compile(self.wholeregex, re_flags).search
+        else:
+            wholeregex_c_search = None
 
         if self.nwholeregex:
-            if self.nwholeregex_c.search(path):
-                return False
+            nwholeregex_c_search = re.compile(self.nwholeregex, re_flags).search
+        else:
+            nwholeregex_c_search = None
 
-        if self.object_type:
-            if 'f' == self.object_type and not os.path.isfile(path):
-                return False
-            elif 'd' == self.object_type and not os.path.isdir(path):
-                return False
+        for path in self._get_paths():
+            if regex and not regex_c_search(basename(path)):
+                continue
 
-        return True
+            if nregex and nregex_c_search(basename(path)):
+                continue
 
-    def get_paths(self):
-        import itertools
-        for f in itertools.ifilter(self.path_filter, self._get_paths()):
-            yield f
+            if wholeregex and not wholeregex_c_search(path):
+                continue
+
+            if nwholeregex and nwholeregex_c_search(path):
+                continue
+
+            if object_type:
+                if 'f' == object_type and not os.path.isfile(path):
+                    continue
+                elif 'd' == object_type and not os.path.isdir(path):
+                    continue
+
+            yield path
 
     def _get_paths(self):
         """Return a filtered list of files"""
@@ -208,16 +229,19 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
-                any_match = False
-                for path in FileUtilities.children_in_directory(
-                        expanded, True):
-                    any_match = True
+                path = None # sentinel value
+                for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
-                # This is a lint checker because this scenario may
-                # indicate the cleaner developer made a mistake.
-                if not any_match and os.path.isfile(expanded):
-                    logger.debug(
-                        _('search="walk.all" used with regular file path="%s"'), expanded)
+                # This condition executes when there are zero iterations
+                # in the loop above.
+                if path is None:
+                    # This is a lint checker because this scenario may
+                    # indicate the cleaner developer made a mistake.
+                    if os.path.isfile(expanded):
+                        logger.debug(
+                            _('search="walk.all" used with regular file path="%s"'),
+                            expanded,
+                        )
 
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
@@ -246,24 +270,35 @@ class FileActionProvider(ActionProvider):
         else:
             raise RuntimeError("invalid search='%s'" % self.search)
 
-        if self.regex:
-            self.regex_c = re.compile(self.regex, re_flags)
-
-        if self.nregex:
-            self.nregex_c = re.compile(self.nregex, re_flags)
-
-        if self.wholeregex:
-            self.wholeregex_c = re.compile(self.wholeregex, re_flags)
-
-        if self.nwholeregex:
-            self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
-
+        cache = self.__class__.cache
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
                 # lint for people who develop cleaners
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
-            for path in func(input_path):
-                yield path
+
+            # use cache
+            if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
+                logger.debug(_('using cached walk for path %s'), input_path)
+                for x in cache[2]:
+                    yield x
+                return
+            else:
+                if self.search in self.CACHEABLE_SEARCHERS:
+                    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
+                                 cache[0], cache[1], self.search, input_path)
+                self.__class__.cache = ('cleared by', input_path, tuple())
+
+            # build new cache
+            logger.debug('%s walking %s', id(self), input_path)
+
+            if self.search in self.CACHEABLE_SEARCHERS:
+                cache = self.__class__.cache = (self.search, input_path, [])
+                for path in func(input_path):
+                    cache[2].append(path)
+                    yield path
+            else:
+                for path in func(input_path):
+                    yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
