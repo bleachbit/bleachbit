@@ -37,10 +37,15 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def make_files_thread(email_count, content_model_path, subject_model_path, email_output_folder, on_progress):
-    generate_emails(email_count, content_model_path,
-                    subject_model_path, email_output_folder, on_progress=on_progress)
-    on_progress(1)
+def make_files_thread(email_count, content_model_path, subject_model_path, email_output_folder, delete_when_finished, on_progress):
+    generated_file_names = generate_emails(email_count, content_model_path,
+                                           subject_model_path, email_output_folder, on_progress=on_progress)
+    if delete_when_finished:
+        on_progress(0, msg=_('Deleting files'))
+        for i in range(0, email_count):
+            os.unlink(generated_file_names[i])
+            on_progress(1.0 * (i+1)/email_count)
+    on_progress(1.0, is_done=True)
 
 
 class ChaffDialog(Gtk.Dialog):
@@ -78,6 +83,17 @@ class ChaffDialog(Gtk.Dialog):
         folder_box.add(self.choose_folder_button)
         box.add(folder_box)
 
+        delete_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        delete_box.add(Gtk.Label(_("When finished")))
+        self.when_finished_combo = Gtk.ComboBoxText()
+        self.combo_options = (
+            _('Delete without shredding'), _('Do not delete'))
+        for combo_option in self.combo_options:
+            self.when_finished_combo.append_text(combo_option)
+        self.when_finished_combo.set_active(0)  # Set default
+        delete_box.add(self.when_finished_combo)
+        box.add(delete_box)
+
         self.progressbar = Gtk.ProgressBar()
         box.add(self.progressbar)
         self.progressbar.hide()
@@ -114,6 +130,7 @@ class ChaffDialog(Gtk.Dialog):
         """Callback for make files button"""
         email_count = self.file_count.get_value_as_int()
         email_output_folder = self.choose_folder_button.get_filename()
+        delete_when_finished = self.when_finished_combo.get_active() == 0
         if not email_output_folder:
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
                                        Gtk.ButtonsType.CANCEL, _("Select destination folder"))
@@ -125,9 +142,11 @@ class ChaffDialog(Gtk.Dialog):
             if not self.download_models_dialog():
                 return
 
-        def on_progress(fraction):
+        def on_progress(fraction, msg=None, is_done=False):
+            if msg:
+                self.progressbar.set_text(msg)
             self.progressbar.set_fraction(fraction)
-            if fraction >= 1:
+            if is_done:
                 self.progressbar.hide()
                 self.make_button.set_sensitive(True)
 
@@ -135,11 +154,12 @@ class ChaffDialog(Gtk.Dialog):
         logger.info(msg)
         self.progressbar.show()
         self.progressbar.set_text(msg)
+        self.progressbar.set_show_text(True)
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
         import threading
-        t = threading.Thread(target=make_files_thread, args=(
-            email_count, self.content_model_path, self.subject_model_path, email_output_folder, on_progress))
+        t = threading.Thread(target=make_files_thread, args=(email_count, self.content_model_path,
+                                                             self.subject_model_path, email_output_folder, delete_when_finished, on_progress))
         t.start()
 
     def run(self):

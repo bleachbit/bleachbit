@@ -28,10 +28,11 @@ from __future__ import absolute_import
 import os
 import unittest
 from tempfile import mkdtemp
-from glob import glob
+from shutil import rmtree
 
 from tests import common
 from bleachbit.Chaff import download_models, generate_emails
+from bleachbit.FileUtilities import getsize
 
 
 class ChaffTestCase(common.BleachbitTestCase):
@@ -39,7 +40,7 @@ class ChaffTestCase(common.BleachbitTestCase):
 
     def test_Chaff(self):
         """Unit test for class Chaff"""
-        tmp_dir = mkdtemp()
+        tmp_dir = mkdtemp(prefix='bleachbit-chaff')
         con_path = os.path.join(tmp_dir, 'content.json.bz2')
         sub_path = os.path.join(tmp_dir, 'subject.json.bz2')
 
@@ -49,7 +50,12 @@ class ChaffTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ret, bool)
             self.assertTrue(ret)
 
-        generate_emails(5, con_path, sub_path, tmp_dir)
+        generated_file_names = generate_emails(5, con_path, sub_path, tmp_dir)
 
-        matches = glob(os.path.join(tmp_dir, 'outlook*.eml'))
-        self.assertEqual(len(matches), 5)
+        self.assertEqual(len(generated_file_names), 5)
+
+        for fn in generated_file_names:
+            self.assertExists(fn)
+            self.assertGreater(getsize(fn), 100)
+
+        rmtree(tmp_dir)
