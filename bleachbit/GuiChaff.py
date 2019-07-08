@@ -27,12 +27,11 @@ GUI for making chaff
 from __future__ import absolute_import
 
 from bleachbit import _
+from bleachbit.Chaff import download_models, generate_emails, DEFAULT_CONTENT_MODEL_PATH, DEFAULT_SUBJECT_MODEL_PATH
 
 from gi.repository import Gtk
 import logging
 import os
-URL_SUBJECT = 'https://sourceforge.net/projects/bleachbit/files/chaff/subject_model.json.bz2/download'
-URL_CONTENT = 'https://sourceforge.net/projects/bleachbit/files/chaff/content_model.json.bz2/download'
 
 
 logger = logging.getLogger(__name__)
@@ -43,11 +42,8 @@ class ChaffDialog(Gtk.Dialog):
     """Present the dialog to make chaff"""
 
     def __init__(self, parent):
-        from bleachbit import options_dir
-        self.content_model_path = os.path.join(
-            options_dir, 'clinton_content_model.json.bz2')
-        self.subject_model_path = os.path.join(
-            options_dir, 'clinton_subject_model.json.bz2')
+        self.content_model_path = DEFAULT_CONTENT_MODEL_PATH
+        self.subject_model_path = DEFAULT_SUBJECT_MODEL_PATH
 
         self._make_dialog(parent)
 
@@ -80,33 +76,15 @@ class ChaffDialog(Gtk.Dialog):
         make_button.connect('clicked', self.on_make_files)
         box.add(make_button)
 
-    def download_models(self):
-        from urllib2 import urlopen, URLError, HTTPError
-        from httplib import HTTPException
-        import socket
-        for (url, fn) in ((URL_SUBJECT, self.subject_model_path), (URL_CONTENT, self.content_model_path)):
-            if os.path.exists(fn):
-                logger.debug('File %s already exists', fn)
-                continue
-            logger.info('Downloading %s to %s', url, fn)
-            try:
-                resp = urlopen(url)
-                with open(fn, 'wb') as f:
-                    f.write(resp.read())
-            except (URLError, HTTPError, HTTPException, socket.error) as exc:
-                msg = _('Downloading url failed: %s') % url
-                msg2 = '{}: {}'.format(type(exc).__name__, exc)
-                logger.exception(msg)
-                dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                                           Gtk.ButtonsType.CANCEL, msg)
-                dialog.format_secondary_text(msg2)
-                dialog.run()
-                dialog.destroy()
-                from bleachbit.FileUtilities import delete
-                delete(fn, ignore_missing=True)  # delete any partial download
-                return False
-
-        return True
+    def download_models_gui(self):
+        """Download models and return whether successful as boolean"""
+        def on_download_error(msg, msg2):
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                                       Gtk.ButtonsType.CANCEL, msg)
+            dialog.format_secondary_text(msg2)
+            dialog.run()
+            dialog.destroy()
+        return download_models(on_error=on_download_error)
 
     def download_models_dialog(self):
         """Download models"""
@@ -116,7 +94,7 @@ class ChaffDialog(Gtk.Dialog):
         ret = None
         if response == Gtk.ResponseType.OK:
             # User wants to download
-            ret = self.download_models()  # True if successful
+            ret = self.download_models_gui()  # True if successful
         elif response == Gtk.ResponseType.CANCEL:
             ret = False
         dialog.destroy()
@@ -137,7 +115,6 @@ class ChaffDialog(Gtk.Dialog):
             if not self.download_models_dialog():
                 return
 
-        from bleachbit.Chaff import generate_emails
         logger.info('Generating emails')
         generate_emails(email_count, self.content_model_path,
                         self.subject_model_path, email_output_folder)
