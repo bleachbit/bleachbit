@@ -229,9 +229,12 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
+                path = None # sentinel value
                 for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
-                else:
+                # This condition executes when there are zero iterations
+                # in the loop above.
+                if path is None:
                     # This is a lint checker because this scenario may
                     # indicate the cleaner developer made a mistake.
                     if os.path.isfile(expanded):
