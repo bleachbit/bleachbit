@@ -284,11 +284,12 @@ class FileActionProvider(ActionProvider):
                 return
             else:
                 if self.search in self.CACHEABLE_SEARCHERS:
-                    logger.debug(_('not using cache because it has (%s,%s) and we want (%s,%s)'), cache[0], cache[1], self.search, input_path)
+                    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
+                                 cache[0], cache[1], self.search, input_path)
                 self.__class__.cache = ('cleared by', input_path, tuple())
 
             # build new cache
-            logger.debug(_('%s walking %s'), id(self), input_path)
+            logger.debug('%s walking %s', id(self), input_path)
 
             if self.search in self.CACHEABLE_SEARCHERS:
                 cache = self.__class__.cache = (self.search, input_path, [])
