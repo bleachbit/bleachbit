@@ -278,7 +278,7 @@ class FileActionProvider(ActionProvider):
 
             # use cache
             if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
-                logger.debug(_('using cached walk for %s'), input_path)
+                logger.debug(_('using cached walk for path %s'), input_path)
                 for x in cache[2]:
                     yield x
                 return
