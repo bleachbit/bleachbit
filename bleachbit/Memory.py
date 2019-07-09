@@ -53,7 +53,7 @@ def get_proc_swaps():
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, _) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _stderr) = General.run_external(['swapon', '-s'])
     if 0 == rc:
         return stdout
     logger.debug(
@@ -291,7 +291,7 @@ def wipe_swap_linux(devices, proc_swaps):
         if uuid:
             args.append("-U")
             args.append(uuid)
-        (rc, _, stderr) = General.run_external(args)
+        (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
 

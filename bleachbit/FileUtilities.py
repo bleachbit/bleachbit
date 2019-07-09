@@ -403,8 +403,8 @@ def free_space(pathname):
         else:
             # This works better with Windows XP but not UTF-8.
             # Deprecated.
-            _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-            return free_bytes
+            _fb, _tb, total_free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
+            return total_free_bytes
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -704,7 +704,7 @@ def wipe_contents(path, truncate=True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    (head, _) = os.path.split(pathname1)
+    (head, _tail) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
     # first, rename to a long name

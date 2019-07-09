@@ -246,7 +246,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         # Put files in the clipboard in supported format
         args = ('powershell.exe', 'Set-Clipboard',
                 '-Path', r'c:\windows\*.exe')
-        (ext_rc, _, _) = General.run_external(args)
+        (ext_rc, _stdout, _stderr) = General.run_external(args)
         self.assertEqual(ext_rc, 0)
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
