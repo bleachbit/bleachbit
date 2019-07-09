@@ -222,3 +222,18 @@ class CleanerTestCase(common.BleachbitTestCase):
         for test in tests:
             self.assertEqual(
                 backends['system'].whitelisted(test[0]), test[1], test[0])
+        # Make sure directory ~/.cache/obexd is ignored
+        # https://github.com/bleachbit/bleachbit/issues/572
+        from bleachbit import expanduser
+        obexd_dir = expanduser('~/.cache/obexd')
+        if not os.path.exists(obexd_dir):
+            os.makedirs(obexd_dir)
+        obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
+        common.touch_file(obexd_fn)
+        found_canary = False
+        for cmd in backends['system'].get_commands('cache'):
+            for result in cmd.execute(really_delete=False):
+                self.assertNotEqual(cmd.path, obexd_fn)
+                self.assertFalse('/.cache/obexd/' in cmd.path)
+        from bleachbit.FileUtilities import delete
+        delete(obexd_fn, ignore_missing=True)
