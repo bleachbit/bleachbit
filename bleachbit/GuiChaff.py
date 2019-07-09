@@ -29,7 +29,7 @@ from __future__ import absolute_import
 from bleachbit import _
 from bleachbit.Chaff import download_models, generate_emails, DEFAULT_CONTENT_MODEL_PATH, DEFAULT_SUBJECT_MODEL_PATH
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 import logging
 import os
 
@@ -144,13 +144,19 @@ class ChaffDialog(Gtk.Dialog):
             if not self.download_models_dialog():
                 return
 
-        def on_progress(fraction, msg=None, is_done=False):
+        def _on_progress(fraction, msg, is_done):
+            """Update progress bar from GLib main loop"""
             if msg:
                 self.progressbar.set_text(msg)
             self.progressbar.set_fraction(fraction)
             if is_done:
                 self.progressbar.hide()
                 self.make_button.set_sensitive(True)
+
+        def on_progress(fraction, msg=None, is_done=False):
+            """Callback for progress bar"""
+            # Use idle_add() because threads cannot make GDK calls.
+            GLib.idle_add(_on_progress, fraction, msg, is_done)
 
         msg = _('Generating emails')
         logger.info(msg)
