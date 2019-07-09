@@ -267,12 +267,15 @@ def report_free():
 
 
 def wipe_swap_linux(devices, proc_swaps):
-    """Shred the Linux swap file and then reinitilize it"""
+    """Shred the Linux swap file and then reinitialize it"""
     if devices is None:
         return
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
+        #if '/cryptswap' in device:
+        #    logger.info('Skipping encrypted swap device %s.', device)
+        #    continue
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.info(_("Wiping the swap device %s."), device)
         safety_limit_bytes = 29 * 1024 ** 3  # 29 gibibytes
