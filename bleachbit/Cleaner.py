@@ -641,6 +641,8 @@ class System(Cleaner):
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
             '^' + expanduser('~/.cache/google-chrome'),
             '^' + expanduser('~/.cache/gnome-control-center/'),
+            # Clean Evolution cache from Evolution cleaner (GitHub #249)
+            '^' + expanduser('~/.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
             '^' + expanduser('~/.cache/ibus/'),
