@@ -92,7 +92,7 @@ class Worker:
                     # display progress (if applicable).
                     yield ret
                 if self.is_aborted:
-                    break
+                    return
         except SystemExit:
             pass
         except Exception as e:
