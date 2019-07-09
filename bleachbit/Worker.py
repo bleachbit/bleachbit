@@ -193,6 +193,7 @@ class Worker:
         if 'free_disk_space' == option_id:
             # TRANSLATORS: 'free' means 'unallocated'
             msg = _("Please wait.  Wiping free disk space.")
+            self.ui.append_text(_('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")
         else:
