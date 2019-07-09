@@ -62,8 +62,13 @@ class Worker:
         self.total_errors = 0
         self.total_special = 0  # special operations
         self.yield_time = None
+        self.is_aborted = False
         if 0 == len(self.operations):
             raise RuntimeError("No work to do")
+
+    def abort(self):
+        """Stop the preview/cleaning operation"""
+        self.is_aborted = True
 
     def print_exception(self, operation):
         """Display exception"""
@@ -86,6 +91,8 @@ class Worker:
                     # allow user to abort, and
                     # display progress (if applicable).
                     yield ret
+                if self.is_aborted:
+                    break
         except SystemExit:
             pass
         except Exception as e:
@@ -157,6 +164,8 @@ class Worker:
                         # it responding allow the user to abort
                         self.yield_time = time.time()
                         yield True
+                if self.is_aborted:
+                    break
                 if time.time() - self.yield_time > 0.25:
                     if self.really_delete:
                         self.ui.update_total_size(self.total_bytes)
@@ -211,6 +220,8 @@ class Worker:
                         self.ui.update_progress_bar(msg + ' ' + msg2)
                     else:
                         self.ui.update_progress_bar(msg)
+                if self.is_aborted:
+                    break
                 if True == ret or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.

@@ -614,10 +614,12 @@ class GUI(Gtk.ApplicationWindow):
             __iter = model.iter_next(__iter)
         return None
 
-    def set_sensitive(self, true):
+    def set_sensitive(self, is_sensitive):
         """Disable commands while an operation is running"""
-        self.headerbar.set_sensitive(true)
-        self.view.set_sensitive(true)
+        self.view.set_sensitive(is_sensitive)
+        self.preview_button.set_sensitive(is_sensitive)
+        self.run_button.set_sensitive(is_sensitive)
+        self.stop_button.set_sensitive(not is_sensitive)
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
@@ -755,6 +757,10 @@ class GUI(Gtk.ApplicationWindow):
             self.preview_or_run_operations(True, operations)
             return
 
+    def cb_stop_operations(self, __widget):
+        """Callback to stop the preview/cleaning process"""
+        self.worker.abort()
+
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""
         if event.button != 3:
@@ -861,26 +867,35 @@ class GUI(Gtk.ApplicationWindow):
 
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
-        preview_button = Gtk.Button()
-        preview_button.add(Gtk.Image.new_from_gicon(
+        self.preview_button = Gtk.Button()
+        self.preview_button.add(Gtk.Image.new_from_gicon(
             preview_icon, Gtk.IconSize.BUTTON))
-        preview_button.connect(
+        self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
-        preview_button.set_tooltip_text(
+        self.preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
-        box.add(preview_button)
+        box.add(self.preview_button)
 
         # create the delete button
-        run_button = Gtk.Button()
+        self.run_button = Gtk.Button()
         icon = Gio.ThemedIcon(name="edit-clear-all-symbolic")
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
-        run_button.add(Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON))
-        run_button.set_tooltip_text(
+        self.run_button.add(Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON))
+        self.run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
-        run_button.connect("clicked", self.run_operations)
-        box.add(run_button)
+        self.run_button.connect("clicked", self.run_operations)
+        box.add(self.run_button)
+
+        # stop cleaning
+        self.stop_button = Gtk.Button()
+        stop_icon = Gio.ThemedIcon(name='process-stop')
+        self.stop_button.add(Gtk.Image.new_from_gicon(stop_icon, Gtk.IconSize.BUTTON))
+        self.stop_button.set_tooltip_text(_('Abort the preview or cleaning process'))
+        self.stop_button.set_sensitive(False)
+        self.stop_button.connect('clicked', self.cb_stop_operations)
+        box.add(self.stop_button)
 
         hbar.pack_start(box)
 
