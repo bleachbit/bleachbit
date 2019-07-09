@@ -202,16 +202,13 @@ class Worker:
             for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)
-                    phase = ret[
-                        0]  # 1=wipe free disk space, 2=wipe inodes, 3=clean up inodes files
+                    phase = ret[0]
+                    # A while ago there were other phase numbers. Currently it's just 1
+                    if phase != 1:
+                        raise RuntimeError('While wiping free space, unexpected phase %d' % phase)
                     percent_done = ret[1]
                     eta_seconds = ret[2]
                     self.ui.update_progress_bar(percent_done)
-                    if phase == 2:
-                        msg = _('Please wait. Wiping file system metadata.')
-                    elif phase == 3:
-                        msg = _(
-                            'Please wait. Cleaning up after wiping file system metadata.')
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
                         msg2 = ungettext("About %d minute remaining.",
