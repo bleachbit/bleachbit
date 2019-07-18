@@ -134,8 +134,8 @@ def delete_confirmation_dialog(parent, mention_preview):
     dialog.get_content_area().pack_start(hbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
 
-    dialog.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
     dialog.add_button(_('_Delete'), Gtk.ResponseType.ACCEPT)
+    dialog.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
     dialog.set_default_response(Gtk.ResponseType.CANCEL)
 
     dialog.show_all()
