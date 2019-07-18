@@ -39,10 +39,11 @@ if 'nt' == os.name:
 
 
 boolean_keys = ['auto_hide', 'check_beta',
-                'check_online_updates', 'dark_mode', 'first_start', 'shred', 'exit_done', 'delete_confirmation', 'units_iec']
+                'check_online_updates', 'dark_mode', 'first_start', 'shred', 'exit_done', 'delete_confirmation', 'units_iec',
+                'window_maximized', 'window_fullscreen',]
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
-
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height',]
 
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
@@ -132,6 +133,10 @@ class Options:
         if not self.config.has_option('bleachbit', key):
             self.set(key, value)
 
+    def has_option(self, option, section='bleachbit'):
+        """Check if option is set"""
+        return self.config.has_option(section, option)
+
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
@@ -140,6 +145,8 @@ class Options:
             option = option[0] + option[2:]
         if option in boolean_keys:
             return self.config.getboolean(section, option)
+        elif option in int_keys:
+            return self.config.getint(section, option)
         return self.config.get(section, option.encode('utf-8'))
 
     def get_hashpath(self, pathname):
@@ -212,7 +219,15 @@ class Options:
         # no boolean key must raise an exception
         for boolean_key in boolean_keys:
             try:
-                val = self.config.getboolean('bleachbit', boolean_key)
+                if self.config.has_option('bleachbit', boolean_key):
+                    self.config.getboolean('bleachbit', boolean_key)
+            except ValueError:
+                return True
+        # no int key must raise an exception
+        for int_key in int_keys:
+            try:
+                if self.config.has_option('bleachbit', int_key):
+                    self.config.getint('bleachbit', int_key)
             except ValueError:
                 return True
         return False
@@ -244,6 +259,8 @@ class Options:
         self.__set_default("exit_done", False)
         self.__set_default("delete_confirmation", True)
         self.__set_default("units_iec", False)
+        self.__set_default("window_maximized", False)
+        self.__set_default("window_fullscreen", False)
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
@@ -270,6 +287,9 @@ class Options:
         self.config.set(section, key.encode('utf-8'), str(value))
         if commit:
             self.__flush()
+
+    def commit(self):
+        self.__flush()
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""

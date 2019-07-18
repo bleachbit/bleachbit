@@ -915,10 +915,52 @@ class GUI(Gtk.ApplicationWindow):
 
         return hbar
 
+    def on_configure_event(self, widget, event):
+        # save window position and size
+        if self.is_maximized():
+            return
+        (x, y) = self.get_position()
+        options.set("window_x", x, commit=False)
+        options.set("window_y", y, commit=False)
+        (width, height) = self.get_size()
+        options.set("window_width", width, commit=False)
+        options.set("window_height", height, commit=False)
+        return False
+
+    def on_window_state_event(self, widget, event):
+        # save window state
+        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        options.set("window_fullscreen", fullscreen, commit=False)
+        maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
+        options.set("window_maximized", maximized, commit=False)
+        return False
+
+    def on_delete_event(self, widget, event):
+        # commit options to disk
+        options.commit()
+        return False
+
+    def on_show(self, widget):
+        # restore window position, size and state
+        if options.has_option("window_x") and options.has_option("window_y"):
+            self.move(options.get("window_x"), options.get("window_y"))
+        if options.has_option("window_width") and options.has_option("window_height"):
+            self.resize(options.get("window_width"), options.get("window_height"))
+        if options.get("window_fullscreen"):
+            self.fullscreen()
+        elif options.get("window_maximized"):
+            self.maximize()
+
     def populate_window(self):
         """Create the main application window"""
-        self.resize(800, 600)
+        screen = self.get_screen()
+        self.set_default_size(min(screen.width(), 800), min(screen.height(), 600))
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.connect("configure-event", self.on_configure_event)
+        self.connect("window-state-event", self.on_window_state_event)
+        self.connect("delete-event", self.on_delete_event)
+        self.connect("show", self.on_show)
+
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
 
