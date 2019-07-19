@@ -342,9 +342,6 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (bleachbit.decode_str(exc), path))
         except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -353,6 +350,9 @@ def execute_sqlite3(path, cmds):
             else:
                 raise sqlite3.OperationalError(
                     '%s: %s' % (bleachbit.decode_str(exc), path))
+        except sqlite3.DatabaseError as exc:
+            raise sqlite3.DatabaseError(
+                '%s: %s' % (bleachbit.decode_str(exc), path))
     cursor.close()
     conn.commit()
     conn.close()
