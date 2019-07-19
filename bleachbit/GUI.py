@@ -780,6 +780,7 @@ class GUI(Gtk.ApplicationWindow):
         cleaner_id = model[path[0]][2]
         # make a menu
         menu = Gtk.Menu()
+        menu.connect('hide', lambda widget: widget.detach())
         # TRANSLATORS: this is the context menu
         preview_item = Gtk.MenuItem(label=_("Preview"))
         preview_item.connect('activate', self.cb_run_option,
@@ -792,7 +793,7 @@ class GUI(Gtk.ApplicationWindow):
         menu.append(clean_item)
 
         # show the context menu
-        menu.attach_to_widget(treeview, menu.destroy)
+        menu.attach_to_widget(treeview)
         menu.show_all()
         menu.popup(None, None, None, None, event.button, event.time)
         return True
