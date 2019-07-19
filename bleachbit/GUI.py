@@ -181,7 +181,7 @@ class Bleachbit(Gtk.Application):
             paths.append(bleachbit.options_dir)
 
         # prompt the user to confirm
-        if not GUI.shred_paths(self._window, paths):
+        if not GUI.shred_paths(self._window, paths, shred_settings=True):
             logger.debug('user aborted shred')
             # aborted
             return
@@ -520,7 +520,7 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
-    def shred_paths(self, paths):
+    def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
         If user confirms and files are deleted, returns True.  If
@@ -533,7 +533,7 @@ class GUI(Gtk.ApplicationWindow):
         operations = {'_gui': ['files']}
         self.preview_or_run_operations(False, operations)
 
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
             return True

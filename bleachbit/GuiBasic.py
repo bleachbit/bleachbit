@@ -112,26 +112,33 @@ def browse_files(parent, title):
     return paths
 
 
-def delete_confirmation_dialog(parent, mention_preview):
+def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     """Return boolean whether OK to delete files."""
     dialog = Gtk.Dialog(title=_("Delete confirmation"), transient_for=parent,
                         modal=True,
                         destroy_with_parent=True)
     dialog.set_default_size(300, -1)
 
-    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
+    vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,
                    homogeneous=False, spacing=10)
+
+    if shred_settings:
+        notice_text = _("This function deletes all BleachBit settings and then quits the application. Use this to hide your use of BleachBit or to reset its settings. The next time you start it, the settings will initialize to default values.")
+        notice = Gtk.Label(label=notice_text)
+        notice.set_line_wrap(True)
+        vbox.pack_start(notice, False, True, 0)
+
     if mention_preview:
         question_text = _(
             "Are you sure you want to permanently delete files according to the selected operations?  The actual files that will be deleted may have changed since you ran the preview.")
     else:
         question_text = _(
             "Are you sure you want to permanently delete these files?")
-
     question = Gtk.Label(label=question_text)
     question.set_line_wrap(True)
-    hbox.pack_start(question, False, True, 0)
-    dialog.get_content_area().pack_start(hbox, False, True, 0)
+    vbox.pack_start(question, False, True, 0)
+
+    dialog.get_content_area().pack_start(vbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
 
     dialog.add_button(_('_Delete'), Gtk.ResponseType.ACCEPT)
