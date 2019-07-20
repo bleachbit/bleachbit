@@ -637,17 +637,18 @@ class System(Cleaner):
             '^/var/tmp/kdecache-',
             '^' + expanduser('~/.cache/wallpaper/'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + expanduser('~/.cache/mozilla'),
+            '^' + expanduser('~/.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + expanduser('~/.cache/google-chrome'),
+            '^' + expanduser('~/.cache/google-chrome/'),
             '^' + expanduser('~/.cache/gnome-control-center/'),
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
             '^' + expanduser('~/.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
             '^' + expanduser('~/.cache/ibus/'),
-            # Linux Bluetooth daemon obexd
-            '^' + expanduser('~/.cache/obexd/')]
+            # Linux Bluetooth daemon obexd directory is typically empty, so be careful
+            # not to delete the empty directory.
+            '^' + expanduser('~/.cache/obexd($|/)')]
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 

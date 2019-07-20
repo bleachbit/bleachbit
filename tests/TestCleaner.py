@@ -216,7 +216,12 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
              True),
             ('/tmp/pulse-foo/pid', True),
-            ('/tmp/tmpsDOBFd', False)
+            ('/tmp/tmpsDOBFd', False),
+            (os.path.expanduser('~/.cache/obexd'), True),
+            (os.path.expanduser('~/.cache/obexd/'), True),
+            (os.path.expanduser('~/.cache/obexd/foo'), True),
+            (os.path.expanduser('~/.cache/obex'), False),
+            (os.path.expanduser('~/.cache/obexd-foo'), False)
         ]
         list(register_cleaners())
         for test in tests:
