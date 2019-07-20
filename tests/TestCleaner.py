@@ -26,13 +26,14 @@ Test case for module Cleaner
 
 from __future__ import absolute_import, print_function
 
+import logging
+import unittest
+from xml.dom.minidom import parseString
+
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
 from tests import common
-
-import logging
-from xml.dom.minidom import parseString
 
 logger = logging.getLogger('bleachbit')
 
@@ -200,6 +201,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         list(register_cleaners())
         list(register_cleaners())
 
+    @unittest.skipIf(os.name == 'nt', 'skipping on Windows')
     def test_whitelist(self):
         tests = [
             ('/tmp/.truecrypt_aux_mnt1/control', True),
