@@ -636,6 +636,8 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-',
             '^' + expanduser('~/.cache/wallpaper/'),
+            # Flatpak mount point
+            '^' + expanduser('~/.cache/doc($|/)'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
             '^' + expanduser('~/.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
