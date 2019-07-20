@@ -60,6 +60,7 @@ def threaded(func):
 class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
+    _auto_exit = False
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
         if uac and os.name == 'nt' and Windows.elevate_privileges():
@@ -83,9 +84,7 @@ class Bleachbit(Gtk.Application):
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
-            print('Success')
-            GLib.idle_add(self.quit,
-                          priority=GObject.PRIORITY_LOW)
+            self.auto_exit = True
 
     def build_app_menu(self):
         """Build the application menu
@@ -278,8 +277,13 @@ class Bleachbit(Gtk.Application):
 
     def do_activate(self):
         if not self._window:
-            self._window = GUI(application=self, title=APP_NAME)
+            self._window = GUI(
+                application=self, title=APP_NAME, auto_exit=self.auto_exit)
         self._window.present()
+        if self.auto_exit:
+            GLib.idle_add(self.quit,
+                          priority=GObject.PRIORITY_LOW)
+            print('Success')
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
             GLib.idle_add(self.quit,
@@ -469,8 +473,10 @@ class GtkLoggerHandler(logging.Handler):
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
+
+        self.auto_exit = auto_exit
 
         self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
@@ -494,7 +500,7 @@ class GUI(Gtk.ApplicationWindow):
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
-        if options.get("first_start") and os.name == 'posix':
+        if options.get("first_start") and os.name == 'posix' and not auto_exit:
             pref = PreferencesDialog(self, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
@@ -714,7 +720,7 @@ class GUI(Gtk.ApplicationWindow):
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml'):
+        if not hasattr(self, 'recognized_cleanerml') and not self.auto_exit:
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             self.recognized_cleanerml = True

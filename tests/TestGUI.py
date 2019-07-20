@@ -50,7 +50,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_GUI(self):
         """Unit test for class GUI"""
         # there should be no crashes
-        app = Bleachbit(exit=True)
+        app = Bleachbit(auto_exit=True)
         # app.do_startup()
         # pp.do_activate()
         app.run()
