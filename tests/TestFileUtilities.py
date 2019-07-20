@@ -647,8 +647,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # Every path found in dir1 and dir2 should be found in (dir1, dir2).
         paths1 = set(listdir(dir1))
         paths2 = set(listdir(dir2))
-        self.assertGreater(len(paths1), 5)
-        self.assertGreater(len(paths2), 5)
+        self.assertGreater(len(paths1), 4)
+        self.assertGreater(len(paths2), 4)
         paths12 = set(listdir((dir1,dir2)))
         self.assertTrue(paths1 < paths12)
         self.assertTrue(paths2 < paths12)
