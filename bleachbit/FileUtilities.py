@@ -268,6 +268,11 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+            elif errno.EBUSY == e.errno:
+                if os.name == 'posix' and os.path.ismount(path):
+                    logger.info(_("Skipping mount point: %s"), path)
+                else:
+                    logger.info(_("Device or resource is busy: %s"), path)
             else:
                 raise
         except WindowsError as e:

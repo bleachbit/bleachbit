@@ -27,6 +27,7 @@ from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.FileUtilities import *
+from bleachbit.General import run_external, sudo_mode
 from bleachbit.Options import options
 from bleachbit import expanduser, expandvars, logger
 
@@ -442,6 +443,29 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(filename)
 
     @unittest.skipIf('nt' == os.name, 'skipping on Windows')
+    def test_delete_mount_point(self):
+        """Unit test for deleting a mount point in use"""
+        #if not sudo_mode() or os.getuid() > 0:
+        #    self.skipTest('not enough privileges')
+        from_dir = os.path.join(self.tempdir, 'mount_from')
+        to_dir = os.path.join(self.tempdir, 'mount_to')
+        os.mkdir(from_dir)
+        os.mkdir(to_dir)
+        args = ['mount', '--bind', from_dir, to_dir]
+        (rc, stdout, stderr) = run_external(args)
+        msg = 'error calling mount\nargs=%s\nstderr=%s' % (args, stderr)
+        self.assertEqual(rc, 0, msg)
+
+        delete(to_dir)
+
+        args = ['umount', to_dir]
+        (rc, stdout, stderr) = run_external(args)
+        msg = 'error calling umount\nargs=%s\nstderr=%s' % (args, stderr)
+        self.assertEqual(rc, 0, msg)
+
+
+
+    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
@@ -510,7 +534,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if 'nt' != os.name:
             return
         args = ['wmic',  'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
-        from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         if rc:
             print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
