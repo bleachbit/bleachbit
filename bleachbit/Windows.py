@@ -170,7 +170,6 @@ def delete_registry_value(key, value_name, really_delete):
         raise
     else:
         return True
-    raise RuntimeError('Unknown error in delete_registry_value')
 
 
 def delete_registry_key(parent_key, really_delete):

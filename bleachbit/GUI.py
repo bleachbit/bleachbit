@@ -60,6 +60,7 @@ def threaded(func):
 class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
+    _auto_exit = False
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
         if uac and os.name == 'nt' and Windows.elevate_privileges():
@@ -83,9 +84,7 @@ class Bleachbit(Gtk.Application):
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
-            print('Success')
-            GLib.idle_add(self.quit,
-                          priority=GObject.PRIORITY_LOW)
+            self.auto_exit = True
 
     def build_app_menu(self):
         """Build the application menu
@@ -181,7 +180,7 @@ class Bleachbit(Gtk.Application):
             paths.append(bleachbit.options_dir)
 
         # prompt the user to confirm
-        if not GUI.shred_paths(self._window, paths):
+        if not GUI.shred_paths(self._window, paths, shred_settings=True):
             logger.debug('user aborted shred')
             # aborted
             return
@@ -278,8 +277,13 @@ class Bleachbit(Gtk.Application):
 
     def do_activate(self):
         if not self._window:
-            self._window = GUI(application=self, title=APP_NAME)
+            self._window = GUI(
+                application=self, title=APP_NAME, auto_exit=self.auto_exit)
         self._window.present()
+        if self.auto_exit:
+            GLib.idle_add(self.quit,
+                          priority=GObject.PRIORITY_LOW)
+            print('Success')
         if self._shred_paths:
             GUI.shred_paths(self._window, self._shred_paths)
             GLib.idle_add(self.quit,
@@ -469,8 +473,10 @@ class GtkLoggerHandler(logging.Handler):
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
+
+        self.auto_exit = auto_exit
 
         self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
@@ -494,7 +500,7 @@ class GUI(Gtk.ApplicationWindow):
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
-        if options.get("first_start") and os.name == 'posix':
+        if options.get("first_start") and os.name == 'posix' and not auto_exit:
             pref = PreferencesDialog(self, self.cb_refresh_operations)
             pref.run()
             options.set('first_start', False)
@@ -520,7 +526,7 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
-    def shred_paths(self, paths):
+    def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
         If user confirms and files are deleted, returns True.  If
@@ -533,7 +539,7 @@ class GUI(Gtk.ApplicationWindow):
         operations = {'_gui': ['files']}
         self.preview_or_run_operations(False, operations)
 
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
             return True
@@ -714,7 +720,7 @@ class GUI(Gtk.ApplicationWindow):
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml'):
+        if not hasattr(self, 'recognized_cleanerml') and not self.auto_exit:
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             self.recognized_cleanerml = True
@@ -780,6 +786,7 @@ class GUI(Gtk.ApplicationWindow):
         cleaner_id = model[path[0]][2]
         # make a menu
         menu = Gtk.Menu()
+        menu.connect('hide', lambda widget: widget.detach())
         # TRANSLATORS: this is the context menu
         preview_item = Gtk.MenuItem(label=_("Preview"))
         preview_item.connect('activate', self.cb_run_option,
@@ -792,7 +799,7 @@ class GUI(Gtk.ApplicationWindow):
         menu.append(clean_item)
 
         # show the context menu
-        menu.attach_to_widget(treeview, menu.destroy)
+        menu.attach_to_widget(treeview)
         menu.show_all()
         menu.popup(None, None, None, None, event.button, event.time)
         return True
@@ -915,10 +922,52 @@ class GUI(Gtk.ApplicationWindow):
 
         return hbar
 
+    def on_configure_event(self, widget, event):
+        # save window position and size
+        if self.is_maximized():
+            return
+        (x, y) = self.get_position()
+        options.set("window_x", x, commit=False)
+        options.set("window_y", y, commit=False)
+        (width, height) = self.get_size()
+        options.set("window_width", width, commit=False)
+        options.set("window_height", height, commit=False)
+        return False
+
+    def on_window_state_event(self, widget, event):
+        # save window state
+        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        options.set("window_fullscreen", fullscreen, commit=False)
+        maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
+        options.set("window_maximized", maximized, commit=False)
+        return False
+
+    def on_delete_event(self, widget, event):
+        # commit options to disk
+        options.commit()
+        return False
+
+    def on_show(self, widget):
+        # restore window position, size and state
+        if options.has_option("window_x") and options.has_option("window_y"):
+            self.move(options.get("window_x"), options.get("window_y"))
+        if options.has_option("window_width") and options.has_option("window_height"):
+            self.resize(options.get("window_width"), options.get("window_height"))
+        if options.get("window_fullscreen"):
+            self.fullscreen()
+        elif options.get("window_maximized"):
+            self.maximize()
+
     def populate_window(self):
         """Create the main application window"""
-        self.resize(800, 600)
+        screen = self.get_screen()
+        self.set_default_size(min(screen.width(), 800), min(screen.height(), 600))
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.connect("configure-event", self.on_configure_event)
+        self.connect("window-state-event", self.on_window_state_event)
+        self.connect("delete-event", self.on_delete_event)
+        self.connect("show", self.on_show)
+
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
 

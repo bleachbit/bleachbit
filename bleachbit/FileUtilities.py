@@ -268,6 +268,11 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+            elif errno.EBUSY == e.errno:
+                if os.name == 'posix' and os.path.ismount(path):
+                    logger.info(_("Skipping mount point: %s"), path)
+                else:
+                    logger.info(_("Device or resource is busy: %s"), path)
             else:
                 raise
         except WindowsError as e:
@@ -342,9 +347,6 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (bleachbit.decode_str(exc), path))
         except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -353,6 +355,9 @@ def execute_sqlite3(path, cmds):
             else:
                 raise sqlite3.OperationalError(
                     '%s: %s' % (bleachbit.decode_str(exc), path))
+        except sqlite3.DatabaseError as exc:
+            raise sqlite3.DatabaseError(
+                '%s: %s' % (bleachbit.decode_str(exc), path))
     cursor.close()
     conn.commit()
     conn.close()

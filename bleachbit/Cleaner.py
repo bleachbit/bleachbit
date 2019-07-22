@@ -17,19 +17,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """
 Perform (or assist with) cleaning operations.
 """
 
-from __future__ import absolute_import
+from __future__ import absolute_import # keep at top
+
+import glob
+import logging
+import os.path
+import re
+import sys
 
 from bleachbit import _, expanduser, expandvars
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special
 
-import glob
 
 # Suppress GTK warning messages while running in CLI #34
 import warnings
@@ -42,10 +46,6 @@ except (ImportError, RuntimeError) as e:
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
     HAVE_GTK = False
 
-import logging
-import os.path
-import re
-import sys
 
 if 'posix' == os.name:
     from bleachbit import Unix
@@ -636,23 +636,29 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-',
             '^' + expanduser('~/.cache/wallpaper/'),
+            # Flatpak mount point
+            '^' + expanduser('~/.cache/doc($|/)'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + expanduser('~/.cache/mozilla'),
+            '^' + expanduser('~/.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + expanduser('~/.cache/google-chrome'),
+            '^' + expanduser('~/.cache/google-chrome/'),
             '^' + expanduser('~/.cache/gnome-control-center/'),
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
             '^' + expanduser('~/.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
             '^' + expanduser('~/.cache/ibus/'),
-            # Linux Bluetooth daemon obexd
-            '^' + expanduser('~/.cache/obexd/')]
+            # Linux Bluetooth daemon obexd directory is typically empty, so be careful
+            # not to delete the empty directory.
+            '^' + expanduser('~/.cache/obexd($|/)')]
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 
     def whitelisted(self, pathname):
         """Return boolean whether file is whitelisted"""
+        if os.name == 'nt':
+            # Whitelist is specific to POSIX
+            return False
         if not self.regexes_compiled:
             self.init_whitelist()
         for regex in self.regexes_compiled:

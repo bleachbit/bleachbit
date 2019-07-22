@@ -26,13 +26,14 @@ Test case for module Cleaner
 
 from __future__ import absolute_import, print_function
 
+import logging
+import unittest
+from xml.dom.minidom import parseString
+
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
 from tests import common
-
-import logging
-from xml.dom.minidom import parseString
 
 logger = logging.getLogger('bleachbit')
 
@@ -200,6 +201,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         list(register_cleaners())
         list(register_cleaners())
 
+    @unittest.skipIf(os.name == 'nt', 'skipping on Windows')
     def test_whitelist(self):
         tests = [
             ('/tmp/.truecrypt_aux_mnt1/control', True),
@@ -216,7 +218,12 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
              True),
             ('/tmp/pulse-foo/pid', True),
-            ('/tmp/tmpsDOBFd', False)
+            ('/tmp/tmpsDOBFd', False),
+            (os.path.expanduser('~/.cache/obexd'), True),
+            (os.path.expanduser('~/.cache/obexd/'), True),
+            (os.path.expanduser('~/.cache/obexd/foo'), True),
+            (os.path.expanduser('~/.cache/obex'), False),
+            (os.path.expanduser('~/.cache/obexd-foo'), False)
         ]
         list(register_cleaners())
         for test in tests:

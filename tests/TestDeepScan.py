@@ -30,6 +30,8 @@ from bleachbit.DeepScan import DeepScan, normalized_walk
 from bleachbit import expanduser
 
 import os
+import sys
+import unittest
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
@@ -123,6 +125,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
 
+    @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
     def test_normalized_walk_darwin(self):
         import mock
 

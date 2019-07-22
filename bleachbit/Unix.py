@@ -296,7 +296,6 @@ class Locales:
          'so': 'Soomaaliga',
          'sq': 'Shqip',
          'sr': 'Српски',
-         'sr': 'Српски (ijekavian)',
          'ss': 'SiSwati',
          'st': 'Sesotho',
          'su': 'Basa Sunda',
