@@ -87,11 +87,16 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ds.add_search(path, 'bak$')
         ds.add_search(path, '^Thumbs.db$')
         ds.add_search(path, '^Thumbs.db:encryptable$')
-        for ret in ds.scan():
-            if True == ret:
-                # it's yielding control to the GTK idle loop
-                continue
-            self.assertLExists(ret)
+        try:
+            for ret in ds.scan():
+                if True == ret:
+                    # it's yielding control to the GTK idle loop
+                    continue
+                self.assertLExists(ret)
+        except UnicodeDecodeError:
+            # Expectedly ds.scan() throws exception 
+            # when we have unicode paths and LANG==C.
+            self.assertTrue(os.environ['LANG'] == 'C')
 
     def test_delete(self):
         """Delete files in a test environment"""
