@@ -445,8 +445,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     @unittest.skipIf('nt' == os.name, 'skipping on Windows')
     def test_delete_mount_point(self):
         """Unit test for deleting a mount point in use"""
-        #if not sudo_mode() or os.getuid() > 0:
-        #    self.skipTest('not enough privileges')
+        if not sudo_mode() or os.getuid() > 0:
+            self.skipTest('not enough privileges')
         from_dir = os.path.join(self.tempdir, 'mount_from')
         to_dir = os.path.join(self.tempdir, 'mount_to')
         os.mkdir(from_dir)
