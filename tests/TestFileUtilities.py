@@ -659,8 +659,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_listdir(self):
         """Unit test for listdir()"""
         if 'posix' == os.name:
-            dir1 = '/tmp'
-            dir2 = expanduser('~/.config')
+            dir1 = '/bin'
+            dir2 = expanduser('/sbin')
         if 'nt' == os.name:
             dir1 = expandvars(r'%windir%\fonts')
             dir2 = expandvars(r'%windir%\logs')
