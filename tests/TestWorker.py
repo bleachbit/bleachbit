@@ -249,7 +249,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.InvalidEncodingAction"""
         self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
 
-    @unittest.skipUnless('nt' == os.name, 'skipping on non-Windows')
+    @common.skipUnlessWindows
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
         from win32com.shell import shell

@@ -28,15 +28,13 @@ from tests import common
 from bleachbit.Memory import *
 
 import unittest
-import sys
 
-running_linux = sys.platform.startswith('linux')
 
 
 class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
 
-    @unittest.skipUnless(running_linux, 'not running linux')
+    @common.skipIfWindows
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
@@ -44,7 +42,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         if not re.search('Filename\s+Type\s+Size', ret):
             raise RuntimeError("Unexpected first line in swap summary '%s'" % ret)
 
-    @unittest.skipUnless(running_linux, 'not running linux')
+    @common.skipIfWindows
     def test_make_self_oom_target_linux(self):
         """Test for method make_self_oom_target_linux"""
 
@@ -57,13 +55,14 @@ class MemoryTestCase(common.BleachbitTestCase):
         # restore
         os.seteuid(euid)
 
-    @unittest.skipUnless(running_linux, 'not running linux')
+    @common.skipIfWindows
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
         n_swaps = count_swap_linux()
         self.assertIsInteger(n_swaps)
         self.assertTrue(0 <= n_swaps < 10)
 
+    @common.skipIfWindows
     def test_physical_free_darwin(self):
         # TODO: use mock
         self.assertEqual(physical_free_darwin(lambda:
@@ -93,6 +92,7 @@ Swapouts:                              20258188.
 """), 3427905536)
         self.assertRaises(RuntimeError, physical_free_darwin, lambda: "Invalid header")
 
+    @common.skipIfWindows
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()
@@ -100,7 +100,7 @@ Swapouts:                              20258188.
         self.assertGreater(physical_free(), 0)
         report_free()
 
-    @unittest.skipUnless(running_linux, 'not running linux')
+    @common.skipIfWindows
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
         with open('/proc/swaps') as f:
@@ -116,7 +116,7 @@ Swapouts:                              20258188.
         size2 = get_swap_size_linux(swapdev, proc_swaps)
         self.assertEqual(size, size2)
 
-    @unittest.skipUnless(running_linux, 'not running linux')
+    @common.skipIfWindows
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
@@ -132,10 +132,10 @@ Swapouts:                              20258188.
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
 
-    @unittest.skipUnless(running_linux, 'skipping test on non-linux')
+    @common.skipIfWindows
     def test_swap_off_swap_on(self):
         """Test for disabling and enabling swap"""
-        if not General.sudo_mode() or os.getuid() > 0:
+        if not common.have_root():
             self.skipTest('not enough privileges')
         disable_swap_linux()
         enable_swap_linux()
