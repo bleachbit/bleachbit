@@ -135,7 +135,7 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_swap_off_swap_on(self):
         """Test for disabling and enabling swap"""
-        if not General.sudo_mode() or os.getuid() > 0:
+        if not common.have_root():
             self.skipTest('not enough privileges')
         disable_swap_linux()
         enable_swap_linux()

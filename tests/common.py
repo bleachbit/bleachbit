@@ -25,6 +25,7 @@ Common code for unit tests
 from __future__ import absolute_import, print_function
 
 from bleachbit.FileUtilities import extended_path
+from bleachbit.General import sudo_mode
 
 import functools
 import os
@@ -132,6 +133,11 @@ def destructive_tests(title):
         return True
     print('warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title)
     return False
+
+
+def have_root():
+    """Return true if we have root privileges on POSIX systems"""
+    return sudo_mode() or os.getuid() == 0
 
 
 def skipIfWindows(f):
