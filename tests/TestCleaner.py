@@ -201,7 +201,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         list(register_cleaners())
         list(register_cleaners())
 
-    @unittest.skipIf(os.name == 'nt', 'skipping on Windows')
+    @common.skipIfWindows
     def test_whitelist(self):
         tests = [
             ('/tmp/.truecrypt_aux_mnt1/control', True),

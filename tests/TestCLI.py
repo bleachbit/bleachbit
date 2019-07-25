@@ -76,7 +76,7 @@ class CLITestCase(common.BleachbitTestCase):
         for cleaner in cleaners_list():
             self.assertIsString(cleaner)
 
-    @unittest.skipUnless('posix' == os.name, 'skipping on non-Unix')
+    @common.skipIfWindows
     def test_encoding(self):
         """Unit test for encoding"""
 

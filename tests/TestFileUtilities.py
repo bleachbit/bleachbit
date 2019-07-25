@@ -384,7 +384,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
-    @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
+    @common.skipUnlessWindows
     def test_delete_hidden(self):
         """Unit test for delete() with hidden file"""
         for shred in (False, True):
@@ -397,7 +397,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
-    @unittest.skipIf('nt' != os.name, 'skipping on non-Windows')
+    @common.skipUnlessWindows
     def test_delete_locked(self):
         """Unit test for delete() with locked file"""
         # set up
@@ -442,7 +442,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(filename)
             self.assertNotExists(filename)
 
-    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
+    @common.skipIfWindows
     def test_delete_mount_point(self):
         """Unit test for deleting a mount point in use"""
         if not sudo_mode() or os.getuid() > 0:
@@ -465,7 +465,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
 
 
-    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
+    @common.skipIfWindows
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
@@ -773,7 +773,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertEqual(
             set(old_whitelist), set(options.get_whitelist_paths()))
 
-    @unittest.skipUnless('posix' == os.name, 'skipping on non-POSIX platform')
+    @common.skipIfWindows
     def test_whitelisted_posix_symlink(self):
         """Symlink test for whitelisted_posix()"""
         # setup
@@ -941,7 +941,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         delete(path)
 
-    @unittest.skipIf('nt' == os.name, 'skipping on Windows')
+    @common.skipIfWindows
     def test_OpenFiles(self):
         """Unit test for class OpenFiles"""
 

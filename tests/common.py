@@ -26,11 +26,12 @@ from __future__ import absolute_import, print_function
 
 from bleachbit.FileUtilities import extended_path
 
-import unittest
-import shutil
-import tempfile
+import functools
 import os
-import os.path
+import shutil
+import sys
+import tempfile
+import unittest
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -131,6 +132,29 @@ def destructive_tests(title):
         return True
     print('warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title)
     return False
+
+
+def skipIfWindows(f):
+    """Skip unit test if running on Windows
+
+    Not compatible at the class level
+    """
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        if sys.platform == 'win32':
+            return unittest.skipIf('win32' == sys.platform, 'running on Windows')
+        return f(*args, **kwargs)
+    return wrapper
+
+
+def skipUnlessWindows(f):
+    """Skip unit test unless running on Windows
+
+    Not compatible at the class level"""
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
+    return wrapper
 
 
 def touch_file(filename):
