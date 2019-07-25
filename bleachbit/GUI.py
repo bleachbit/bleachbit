@@ -84,7 +84,7 @@ class Bleachbit(Gtk.Application):
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
-            self.auto_exit = True
+            self._auto_exit = True
 
     def build_app_menu(self):
         """Build the application menu
@@ -278,9 +278,9 @@ class Bleachbit(Gtk.Application):
     def do_activate(self):
         if not self._window:
             self._window = GUI(
-                application=self, title=APP_NAME, auto_exit=self.auto_exit)
+                application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
-        if self.auto_exit:
+        if self._auto_exit:
             GLib.idle_add(self.quit,
                           priority=GObject.PRIORITY_LOW)
             print('Success')
