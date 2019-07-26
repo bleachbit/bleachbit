@@ -589,7 +589,11 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     freed_space_regex = '^Vacuuming done, freed ([\d.]+[KMGT]?) of archived journals on disk.$'
-    return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
+    try:
+        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
+
 
 
 def apt_autoremove():

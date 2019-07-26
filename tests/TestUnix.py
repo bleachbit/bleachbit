@@ -112,7 +112,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         if not FileUtilities.exe_exists('journalctl'):
             self.assertRaises(RuntimeError, journald_clean)
         else:
-            journald_clean()
+            try:
+                journald_clean()
+            except RuntimeError as rte:
+                # On my system as a regular user, this succeeds.
+                # On Travis running Trusty, this worked.
+                # On Travis running Xenial, there is a permissions error.
+                if common.have_root():
+                    raise rte
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
