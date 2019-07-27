@@ -23,10 +23,9 @@
 Test case for module Unix
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from tests import common
-import bleachbit
 from bleachbit.Unix import *
 
 import os
@@ -144,7 +143,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         """Unit test for localization_paths()"""
         from xml.dom.minidom import parseString
         configpath = parseString(
-            '<path location="/usr/share/locale/" />').firstChild
+            '<path location="/usr/share/locale/" filter="*" />').firstChild
         locales.add_xml(configpath)
         counter = 0
         for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
