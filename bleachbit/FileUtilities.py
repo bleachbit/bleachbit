@@ -43,6 +43,8 @@ import subprocess
 import tempfile
 import time
 
+import scandir
+
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
@@ -164,7 +166,7 @@ def children_in_directory(top, list_directories=False):
             for pathname in children_in_directory(top_, list_directories):
                 yield pathname
         return
-    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
+    for (dirpath, dirnames, filenames) in scandir.walk(top, topdown=False):
         if list_directories:
             for dirname in dirnames:
                 yield os.path.join(dirpath, dirname)
