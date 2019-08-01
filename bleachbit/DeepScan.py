@@ -50,8 +50,9 @@ def normalized_walk(top, **kwargs):
     is like `os.walk` but recomposes those decomposed filenames on
     macOS
     """
+    import scandir
     if 'Darwin' == platform.system():
-        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
+        for dirpath, dirnames, filenames in scandir.walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', to_unicode(fn)).encode(UTF8)
                 for fn in filenames
@@ -66,7 +67,7 @@ def normalized_walk(top, **kwargs):
             # bytestrings to avoid potential UnicodeDecodeError in
             # posixpath.join()
             top2 = str(top)
-        for result in os.walk(top2, **kwargs):
+        for result in scandir.walk(top2, **kwargs):
             yield result
 
 
