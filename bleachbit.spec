@@ -33,6 +33,7 @@ Requires:       python >= 2.6
 Requires:       gnome-python2-gnomevfs
 Requires:       pygtk2 >= 2.6
 Requires:       usermode
+Requires:       python-scandir
 %endif
 
 %if 0%{?suse_version}
@@ -46,6 +47,7 @@ BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       python-gtk >= 2.6
 Requires:       python-xml
+Requires:       python-scandir
 %py_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
