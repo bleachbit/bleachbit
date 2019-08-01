@@ -23,10 +23,9 @@
 Test case for module Unix
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from tests import common
-import bleachbit
 from bleachbit.Unix import *
 
 import os
@@ -112,7 +111,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         if not FileUtilities.exe_exists('journalctl'):
             self.assertRaises(RuntimeError, journald_clean)
         else:
-            journald_clean()
+            try:
+                journald_clean()
+            except RuntimeError as rte:
+                # On my system as a regular user, this succeeds.
+                # On Travis running Trusty, this worked.
+                # On Travis running Xenial, there is a permissions error.
+                if common.have_root():
+                    raise rte
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
@@ -137,7 +143,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         """Unit test for localization_paths()"""
         from xml.dom.minidom import parseString
         configpath = parseString(
-            '<path location="/usr/share/locale/" />').firstChild
+            '<path location="/usr/share/locale/" filter="*" />').firstChild
         locales.add_xml(configpath)
         counter = 0
         for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):

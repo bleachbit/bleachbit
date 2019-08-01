@@ -237,7 +237,6 @@ else:
           sys.platform.startswith('freebsd')):
         locale_dir = "/usr/local/share/locale/"
 
-
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
 
@@ -269,6 +268,28 @@ except:
     def _(msg):
         """Dummy replacement for ugettext"""
         return msg
+
+try:
+    locale.bindtextdomain('bleachbit', locale_dir)
+except AttributeError:
+    if sys.platform.startswith('win'):
+        try:
+            # We're on Windows; try and use libintl-8.dll instead
+            import ctypes
+            libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
+        except OSError:
+            # libintl-8.dll isn't available; give up
+            pass
+        else:
+            # bindtextdomain can not handle Unicode
+            if isinstance(locale_dir, unicode):
+                path = locale_dir.encode('utf-8')
+            else:
+                path = locale_dir
+            libintl.bindtextdomain('bleachbit', path)
+            libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
+except:
+    logger.exception('error binding text domain')
 
 try:
     ungettext = t.ungettext
