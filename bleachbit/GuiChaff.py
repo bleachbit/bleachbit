@@ -27,7 +27,7 @@ GUI for making chaff
 from __future__ import absolute_import
 
 from bleachbit import _
-from bleachbit.Chaff import download_models, generate_emails, DEFAULT_CONTENT_MODEL_PATH, DEFAULT_SUBJECT_MODEL_PATH
+from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 
 from gi.repository import Gtk, GLib
 import logging
@@ -37,14 +37,18 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def make_files_thread(email_count, content_model_path, subject_model_path, email_output_folder, delete_when_finished, on_progress):
-    generated_file_names = generate_emails(email_count, content_model_path,
-                                           subject_model_path, email_output_folder, on_progress=on_progress)
+def make_files_thread(file_count, inspiration, output_folder, delete_when_finished, on_progress):
+    if inspiration == 0:
+        generated_file_names = generate_2600(
+            file_count, output_folder, on_progress=on_progress)
+    elif inspiration == 1:
+        generated_file_names = generate_emails(
+            file_count, output_folder, on_progress=on_progress)
     if delete_when_finished:
         on_progress(0, msg=_('Deleting files'))
-        for i in range(0, email_count):
+        for i in range(0, file_count):
             os.unlink(generated_file_names[i])
-            on_progress(1.0 * (i+1)/email_count)
+            on_progress(1.0 * (i+1)/file_count)
     on_progress(1.0, is_done=True)
 
 
@@ -53,9 +57,6 @@ class ChaffDialog(Gtk.Dialog):
     """Present the dialog to make chaff"""
 
     def __init__(self, parent):
-        self.content_model_path = DEFAULT_CONTENT_MODEL_PATH
-        self.subject_model_path = DEFAULT_SUBJECT_MODEL_PATH
-
         self._make_dialog(parent)
 
     def _make_dialog(self, parent):
@@ -65,8 +66,19 @@ class ChaffDialog(Gtk.Dialog):
         box = self.get_content_area()
 
         label = Gtk.Label(
-            _("Make randomly-generated messages derived from Hillary Clinton's emails."))
+            _("Make randomly-generated messages inspired by documents."))
         box.add(label)
+
+        inspiration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        inspiration_box.add(Gtk.Label(_("Inspiration")))
+        self.inspiration_combo = Gtk.ComboBoxText()
+        self.inspiration_combo_options = (
+            _('2600 Magazine'), _("Hillary Clinton's emails"))
+        for combo_option in self.inspiration_combo_options:
+            self.inspiration_combo.append_text(combo_option)
+        self.inspiration_combo.set_active(0)  # Set default
+        inspiration_box.add(self.inspiration_combo)
+        box.add(inspiration_box)
 
         spin_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         spin_box.add(Gtk.Label(_("Number of files")))
@@ -130,17 +142,18 @@ class ChaffDialog(Gtk.Dialog):
 
     def on_make_files(self, widget):
         """Callback for make files button"""
-        email_count = self.file_count.get_value_as_int()
-        email_output_folder = self.choose_folder_button.get_filename()
+        file_count = self.file_count.get_value_as_int()
+        output_dir = self.choose_folder_button.get_filename()
         delete_when_finished = self.when_finished_combo.get_active() == 0
-        if not email_output_folder:
+        inspiration = self.inspiration_combo.get_active()
+        if not output_dir:
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
                                        Gtk.ButtonsType.CANCEL, _("Select destination folder"))
             dialog.run()
             dialog.destroy()
             return
         from bleachbit import options_dir
-        if not os.path.exists(self.content_model_path) or not os.path.exists(self.subject_model_path):
+        if not have_models():
             if not self.download_models_dialog():
                 return
 
@@ -158,7 +171,7 @@ class ChaffDialog(Gtk.Dialog):
             # Use idle_add() because threads cannot make GDK calls.
             GLib.idle_add(_on_progress, fraction, msg, is_done)
 
-        msg = _('Generating emails')
+        msg = _('Generating files')
         logger.info(msg)
         self.progressbar.show()
         self.progressbar.set_text(msg)
@@ -166,8 +179,9 @@ class ChaffDialog(Gtk.Dialog):
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
         import threading
-        t = threading.Thread(target=make_files_thread, args=(email_count, self.content_model_path,
-                                                             self.subject_model_path, email_output_folder, delete_when_finished, on_progress))
+        args = (file_count, inspiration, output_dir,
+                delete_when_finished, on_progress)
+        t = threading.Thread(target=make_files_thread, args=args)
         t.start()
 
     def run(self):
