@@ -45,13 +45,18 @@ logger = logging.getLogger(__name__)
 RECIPIENTS = ['0emillscd@state.gov', '1ilotylc@state.gov', 'abdinh@state.gov', 'abedin@state.gov', 'abedinh@state.gov', 'abendinh@state.gov', 'adedinh@state.gov', 'adlerce@state.gov', 'aliilscd@state.gov', 'baerdb@state.gov', 'baldersonkm@state.gov', 'balderstonkm@state.gov', 'bam@mikuiski.senate.gov', 'bam@mikulski.senate.gov', 'bealeca@state.gov', 'bedinh@state.gov', 'benjamin_moncrief@lemieux.senate.gov', 'blaker2@state.gov', 'brimmere@state.gov', 'brod17@clintonemail.com', 'burnswj@state.gov', 'butzgych2@state.gov', 'campbelikm@state.gov', 'carsonj@state.gov', 'cholletdh@state.gov', 'cindy.buhl@mail.house.gov', 'colemancl@state.gov', 'crowleypj@state.gov', 'danielil@state.gov', 'daniew@state.gov', 'david_garten@lautenberg.senate.gov', 'dewanll@state.gov', 'dilotylc@state.gov', 'eabedinh@state.gov', 'emillscd@state.gov', 'esullivanjj@state.gov', 'feltmanjd@state.gov', 'filotylc@state.gov', 'fuchsmh@state.gov', 'gll@state.gov', 'goldbergps@state.gov', 'goldenjr@state.gov', 'gonzalezjs@state.gov', 'gordonph@state.gov', 'h@state.gov', 'hanieymr@state.gov', 'hanleymr@state.gov', 'hanleyrnr@state.gov', 'harileymr@state.gov', 'hdr22@clintonemai1.com', 'hilicr@state.gov', 'hillcr@state.gov', 'holbrookerc@state.gov', 'hormatsrd@state.gov', 'hr15@att.blackberry.net', 'hr15@mycingular.blackberry.net', 'hrod17@clintonemail.com', 'huma@clintonemail.com', 'hyded@state.gov', 'ian1evqr@state.gov', 'ieltmanjd@state.gov', 'iewjj@state.gov', 'iilotylc@state.gov', 'imillscd@state.gov', 'info@mailva.evite.com', 'inh@state.gov',
               'iviillscd@state.gov', 'jilotylc@state.gov', 'jj@state.gov', 'jonespw2@state.gov', 'kellyc@state.gov', 'klevorickcb@state.gov', 'kohhh@state.gov', 'kohliff@state.gov', 'laszczychj@state.gov', 'lc@state.gov', 'lewij@state.gov', 'lewjj@state.gov', 'lewn@state.gov', 'lilotylc@state.gov', 'macmanusje@state.gov', 'marshalicp@state.gov', 'marshallcp@state.gov', 'mchaleja@state.gov', 'mhcaleja@state.gov', 'millscd@state.aov', 'millscd@state.gov', 'millscd@tate.gov', 'mr@state.gov', 'muscantinel@state.gov', 'muscatinel@state.gov', 'nidestr@state.gov', 'njj@state.gov', 'nulandvi@state.gov', 'ogordonph@state.gov', 'oterom2@state.gov', 'posnermh@state.gov', 'postmaster@state.gov', 'r@state.gov', 'reines@state.gov', 'reinesp@state.gov', 'reinespi@state.gov', 'ricese@state.gov', 'rnillscd@state.gov', 'rodriguezme@state.gov', 'rooneym@state.gov', 's_specialassistants@state.gov', 'schwerindb@state.gov', 'shannonta@state.gov', 'shapiroa@state.gov', 'shermanwr@state.gov', 'slaughtera@state.gov', 'smithje@state.gov', 'steinbertjb@state.gov', 'sterntd@state.gov', 'stillivaral@state.gov', 'sullivanjj@state.gov', 'tanleyrnr@state.gov', 'tauschere0@state.gov', 'tauschereo@state.gov', 'tillemannts@state.gov', 'toivnf@state.gov', 'tommy_ross@reid.senate.gov', 'u@state.gov', 'ullivanjj@state.gov', 'vaimorou@state.gov', 'valenzuelaaa@state.gov', 'valmdrou@state.gov', 'valmmorolj@state.gov', 'valmorolj@state.gov', 'vermarr@state.gov', 'verveerms@state.gov', 'walmorou@state.gov', 'werveerms@state.gov', 'woodardew@state.gov', 'yeryeerms@state.gov']
 DEFAULT_SUBJECT_LENGTH = 64
-DEFAULT_NUMBER_OF_SENTENCES = 5
-URL_SUBJECT = 'https://sourceforge.net/projects/bleachbit/files/chaff/subject_model.json.bz2/download'
-URL_CONTENT = 'https://sourceforge.net/projects/bleachbit/files/chaff/content_model.json.bz2/download'
+DEFAULT_NUMBER_OF_SENTENCES_CLINTON = 5
+# 50 sentences generates files bigger bigger than one block size
+DEFAULT_NUMBER_OF_SENTENCES_2600 = 50
+URL_CLINTON_SUBJECT = 'https://sourceforge.net/projects/bleachbit/files/chaff/clinton_subject_model.json.bz2/download'
+URL_CLINTON_CONTENT = 'https://sourceforge.net/projects/bleachbit/files/chaff/clinton_content_model.json.bz2/download'
+URL_2600 = 'https://sourceforge.net/projects/bleachbit/files/chaff/2600_model.json.bz2/download'
 DEFAULT_CONTENT_MODEL_PATH = os.path.join(
     options_dir, 'clinton_content_model.json.bz2')
 DEFAULT_SUBJECT_MODEL_PATH = os.path.join(
     options_dir, 'clinton_subject_model.json.bz2')
+DEFAULT_2600_MODEL_PATH = os.path.join(
+    options_dir, '2600_model.json.bz2')
 
 
 def _load_model(model_path):
@@ -71,6 +76,10 @@ def load_content_model(model_path):
     return _load_model(model_path)
 
 
+def load_2600_model(model_path):
+    return _load_model(model_path)
+
+
 def _get_random_recipient():
     return random.choice(RECIPIENTS)
 
@@ -82,7 +91,7 @@ def _get_random_datetime(min_year=2011, max_year=2012):
     return date.strftime('%A, %B %d, %Y %I:%M %p')
 
 
-def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES):
+def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON):
     content = []
     for _ in range(number_of_sentences):
         content.append(content_model.make_sentence())
@@ -93,7 +102,7 @@ def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SEN
         return _get_random_content(content_model, number_of_sentences=number_of_sentences)
 
 
-def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES, subject_length=DEFAULT_SUBJECT_LENGTH):
+def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON, subject_length=DEFAULT_SUBJECT_LENGTH):
     message = _get_random_content(
         content_model, number_of_sentences=number_of_sentences)
 
@@ -105,7 +114,10 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
-def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH, subject_model_path=DEFAULT_SUBJECT_MODEL_PATH, on_error=None):
+def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
+                    subject_model_path=DEFAULT_SUBJECT_MODEL_PATH,
+                    twentysixhundred_model_path=DEFAULT_2600_MODEL_PATH,
+                    on_error=None):
     """Download models
 
     Calls on_error(primary_message, secondary_message) in case of error
@@ -119,7 +131,9 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH, subject_model
         cafile = certifi.where()
     else:
         cafile = None
-    for (url, fn) in ((URL_SUBJECT, subject_model_path), (URL_CONTENT, content_model_path)):
+    for (url, fn) in ((URL_CLINTON_SUBJECT, subject_model_path),
+                      (URL_CLINTON_CONTENT, content_model_path),
+                      (URL_2600, twentysixhundred_model_path)):
         if os.path.exists(fn):
             logger.debug('File %s already exists', fn)
             continue
@@ -140,8 +154,13 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH, subject_model
     return True
 
 
-def generate_emails(number_of_emails, content_model_path, subject_model_path, email_output_dir,
-                    number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES, on_progress=None, *kwargs):
+def generate_emails(number_of_emails,
+                    email_output_dir,
+                    content_model_path=DEFAULT_CONTENT_MODEL_PATH,
+                    subject_model_path=DEFAULT_SUBJECT_MODEL_PATH,
+                    number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
+                    on_progress=None,
+                    *kwargs):
     logger.debug('Loading two email models')
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
@@ -157,3 +176,40 @@ def generate_emails(number_of_emails, content_model_path, subject_model_path, em
         if on_progress:
             on_progress(1.0*i/number_of_emails)
     return generated_file_names
+
+
+def _generate_2600_file(model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_2600):
+    content = []
+    for _ in range(number_of_sentences):
+        content.append(model.make_sentence())
+        # The space is repeated to make paragraphs longer.
+        content.append(random.choice([' ', ' ', '\n\n']))
+    return ''.join(content)
+
+
+def generate_2600(file_count,
+                  output_dir,
+                  model_path=DEFAULT_2600_MODEL_PATH,
+                  on_progress=None):
+    logger.debug('Loading 2600 model')
+    model = _load_model(model_path)
+    logger.debug('Generating {:,} files'.format(file_count))
+    generated_file_names = []
+    for i in range(1, file_count + 1):
+        with tempfile.NamedTemporaryFile(prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+            txt = _generate_2600_file(model)
+            output_file.write(txt.encode('utf-8'))
+            generated_file_names.append(output_file.name)
+        if on_progress:
+            on_progress(1.0*i/file_count)
+    return generated_file_names
+
+
+def have_models():
+    """Check whether the models exist in the default location.
+
+    Used to check whether download is needed."""
+    for fn in (DEFAULT_CONTENT_MODEL_PATH, DEFAULT_SUBJECT_MODEL_PATH, DEFAULT_2600_MODEL_PATH):
+        if not os.path.exists(fn):
+            return False
+    return True
