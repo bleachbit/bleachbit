@@ -49,7 +49,9 @@
     <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="General" parameter="filedialog-path"/>
     <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="RecentsMRL"/>
     <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="OpenDialog" parameter="netMRL"/>
+    <!-- On VLC 3.0.7.1 Vetinari under Ubuntu 19.04, album art is under ~/.cache/vlc/art/artistalbum/ -->
     <action command="delete" search="walk.files" path="$$Profile$$\art\artistalbum\*"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/vlc/art/artistalbum/"/>
   </option>
   <option id="memory_dump">
     <label>Memory dump</label>
