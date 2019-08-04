@@ -5,8 +5,6 @@
     Copyright (C) 2008-2019 Andrew Ziem
     https://www.bleachbit.org
 
-    Contributor :  Vincent DUVERNET - Nolmë Informatique
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -19,20 +17,68 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    @app VLC media player
+    @url https://www.videolan.org/vlc/index.html
+    @os Windows, Linux, FreeBSD, NetBSD, OpenBSD
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-18.2
+    @cleanerby Andrew Ziem (2010-09-23 - 2018-10-15) & tiemay (2014-06-06) & theatre-x (2015-02-05) & ROCKNROLLKID (2017-01-14) & Vincent DUVERNET - Nolmë Informatique (???) & Tobias B. Besemer (2019-03-18)
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10 (... with an old version of the cleaner!)
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
+
 -->
 <cleaner id="vlc">
   <label>VLC media player</label>
   <description>Media player</description>
+  <!-- Don't know if the check of the task is really necessary... Tobias. -->
   <running type="exe" os="windows">vlc.exe</running>
   <running type="exe" os="linux">vlc</running>
+  <!--
+  BSD tasks not yet figured out!
+  <running type="exe" os="FreeBSD">vlc</running>
+  <running type="exe" os="NetBSD">vlc</running>
+  <running type="exe" os="OpenBSD">vlc</running>
+  Guess it would be:
+  <running type="exe" os="unix">vlc</running>
+  -->
+  <var name="Profile">
+    <value os="windows">%AppData%\vlc</value>
+    <value os="linux">$XDG_CONFIG_HOME/vlc</value>
+    <!--
+    BSD $$Profile$$ not yet figured out!
+    <value os="FreeBSD">$XDG_CONFIG_HOME/vlc</value>
+    <value os="NetBSD">$XDG_CONFIG_HOME/vlc</value>
+    <value os="OpenBSD">$XDG_CONFIG_HOME/vlc</value>
+    Guess it would be:
+    <value os="unix">$XDG_CONFIG_HOME/vlc</value>
+    -->
+  </var>
+  <var name="Config-File">
+    <value os="windows">vlc-qt-interface.ini</value>
+    <value os="linux">vlc-qt-interface.conf</value>
+    <!--
+    BSD $$Config-File$$ not yet figured out!
+    <value os="FreeBSD">vlc-qt-interface.conf</value>
+    <value os="NetBSD">vlc-qt-interface.conf</value>
+    <value os="OpenBSD">vlc-qt-interface.conf</value>
+    Guess it would be:
+    <value os="unix">vlc-qt-interface.conf</value>
+    -->
+  </var>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
-    <action search="file" path="$APPDATA\vlc\vlc-qt-interface.ini" command="ini" section="General" parameter="filedialog-path"/>
-    <action search="file" path="$APPDATA\vlc\vlc-qt-interface.ini" command="ini" section="RecentsMRL"/>
-    <action search="file" path="$XDG_CONFIG_HOME/vlc/vlc-qt-interface.conf" command="ini" section="General" parameter="filedialog-path"/>
-    <action search="file" path="$XDG_CONFIG_HOME/vlc/vlc-qt-interface.conf" command="ini" section="RecentsMRL"/>
-    <action search="file" path="$XDG_CONFIG_HOME/vlc/vlc-qt-interface.conf" command="ini" section="OpenDialog" parameter="netMRL"/>
-    <action command="delete" search="walk.files" path="$APPDATA\vlc\art\artistalbum\*"/>
+    <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="General" parameter="filedialog-path"/>
+    <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="RecentsMRL"/>
+    <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="OpenDialog" parameter="netMRL"/>
+    <action command="delete" search="walk.files" path="$$Profile$$\art\artistalbum\*"/>
+  </option>
+  <option id="memory-dump">
+    <label>Memory dump</label>
+    <description>Delete the data</description>
+    <action command="delete" search="file" path="$$Profile$$\crashdump"/>
   </option>
 </cleaner>
