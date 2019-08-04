@@ -39,7 +39,7 @@ if 'nt' == os.name:
 def diagnostic_info():
     """Return diagnostic information as a string"""
     # this section is for application and library versions
-    s = "BleachBit version %s" % bleachbit.APP_VERSION
+    s = u"BleachBit version %s" % bleachbit.APP_VERSION
 
     try:
         from bleachbit.Revision import revision
@@ -58,9 +58,8 @@ def diagnostic_info():
     s += "\nFSE = %s" % bleachbit.FSE
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
-    s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
-    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(
-        bleachbit.FSE)
+    s += "\noptions_dir = %s" % bleachbit.options_dir
+    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir
     s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
 
     # this section is for information about the system environment
@@ -68,7 +67,7 @@ def diagnostic_info():
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     if 'nt' == os.name:
-        envs = ('APPDATA', 'LocalAppData', 'LocalAppDataLow', 'Music',
+        envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         if os.getenv(env):
@@ -76,8 +75,7 @@ def diagnostic_info():
                                              os.getenv(env).decode(bleachbit.FSE))
         else:
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser(
-        '~').decode(bleachbit.FSE)
+    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser('~')
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(
