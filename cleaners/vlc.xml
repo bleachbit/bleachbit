@@ -51,7 +51,7 @@
     <action search="file" path="$$Profile$$\$$Config-File$$" command="ini" section="OpenDialog" parameter="netMRL"/>
     <action command="delete" search="walk.files" path="$$Profile$$\art\artistalbum\*"/>
   </option>
-  <option id="memory-dump">
+  <option id="memory_dump">
     <label>Memory dump</label>
     <description>Delete the data</description>
     <action command="delete" search="file" path="$$Profile$$\crashdump"/>
