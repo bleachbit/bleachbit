@@ -25,7 +25,7 @@ Actions that perform cleaning
 
 from __future__ import absolute_import
 
-from bleachbit import Command, FileUtilities, General, Special
+from bleachbit import Command, FileUtilities, General, Special, FSE
 from bleachbit import _, expanduser, expandvars
 
 import glob
@@ -540,8 +540,10 @@ class Process(ActionProvider):
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             else:
                 if not 0 == rc:
-                    logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
-                                   self.cmd, rc, stdout, stderr)
+                    msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
+                    if isinstance(stdout, unicode) or isinstance(stderr, unicode):
+                        msg = msg.decode(FSE) # make it unicode
+                    logger.warning(msg, self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
