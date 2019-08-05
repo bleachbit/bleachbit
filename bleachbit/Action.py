@@ -541,9 +541,15 @@ class Process(ActionProvider):
             else:
                 if not 0 == rc:
                     msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                    if isinstance(stdout, unicode) or isinstance(stderr, unicode):
-                        msg = msg.decode(FSE) # make it unicode
-                    logger.warning(msg, self.cmd, rc, stdout, stderr)
+                    if isinstance(stdout, unicode):
+                        stdout = stdout.encode('utf-8')
+                    if isinstance(stderr, unicode):
+                        stderr = stderr.encode('utf-8')
+                    if isinstance(self.cmd, unicode):
+                        cmd = self.cmd.encode('utf-8')
+                    else:
+                        cmd = self.cmd
+                    logger.warning(msg, cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
