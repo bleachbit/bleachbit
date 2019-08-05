@@ -106,6 +106,9 @@ class Worker:
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
+                if isinstance(msg, str) and isinstance(operation_option, unicode):
+                    # if _ haven't found proper translation in locale dir it returns str
+                    msg = msg.decode(FSE)
                 data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
             self.total_errors += 1
