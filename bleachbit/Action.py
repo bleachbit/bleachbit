@@ -59,17 +59,27 @@ def expand_multi_var(s, variables):
     if not variables or s.find('$$') == -1:
         # The input string is missing $$ or no variables are given.
         return (s,)
-    matched = False
+    var_keys_used = []
     ret = []
-    for var_key, var_values in variables.iteritems():
+    for var_key in variables.iterkeys():
         sub = '$$%s$$' % var_key
-        if s.find(sub) == -1:
-            continue
-        matched = True
-        for var_value in var_values:
-            modified = s.replace(sub, var_value)
-            ret.append(modified)
-    if matched:
+        if s.find(sub) > -1:
+            var_keys_used.append(var_key)
+    if not var_keys_used:
+        # No matching variables used, so return input string unmodified.
+        return (s,)
+    # filter the dictionary to the keys used
+    vars_used = { key:value for key,value in variables.iteritems() if key in var_keys_used}
+    # create a product of combinations
+    from itertools import product
+    vars_product = (dict(zip(vars_used,x)) for x in product(*vars_used.values()))
+    for var_set in vars_product:
+        ms = s # modified version of input string
+        for var_key, var_value in var_set.iteritems():
+            sub = '$$%s$$' % var_key
+            ms = ms.replace(sub, var_value)
+        ret.append(ms)
+    if ret:
         return ret
     else:
         # The string has $$, but it did not match anything
