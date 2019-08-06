@@ -18,17 +18,40 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    @app WinRAR
+    @url https://www.win-rar.com/
+    @os Windows
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-07-08 - 2015-09-11) & Tobias B. Besemer (2019-03-07 - 2019-03-18)
+    @tested ok v5.x, Windows 7
+    @testeddate 2019-03-10
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
+
 -->
 <cleaner id="winrar" os="windows">
   <label>WinRAR</label>
   <description>File archiver</description>
-  <option id="mru">
-    <label>Most recently used</label>
-    <description>Delete the most recently used list</description>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the usage history</description>
     <action command="winreg" path="HKCU\Software\WinRAR\ArcHistory"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcName"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ArcCmtName"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\ExtrPath"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\FindArcNames"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\FindNames"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\FindText"/>
     <action command="winreg" path="HKCU\Software\WinRAR\DialogEditHistory\WizArcName"/>
     <action command="winreg" path="HKCU\Software\WinRAR\General" name="LastFolder"/>
+    <action command="winreg" path="HKCU\Software\WinRAR\General\Info" name="CommentFile"/>
+    <action command="winreg" path="HKCU\Software\WinRAR SFX"/>
+  </option>
+  <option id="temp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="walk.files" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
+    <action command="delete" search="walk.files" path="%ProgramFiles%\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
   </option>
 </cleaner>
