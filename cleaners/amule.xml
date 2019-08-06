@@ -62,10 +62,4 @@
     <action command="delete" search="file" path="$$profile$$\clients.met"/>
     <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
   </option>
-  <option id="backup">
-    <label>Backup files</label>
-    <description>Delete the backup files</description>
-    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
-    <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
-  </option>
 </cleaner>
