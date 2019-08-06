@@ -38,11 +38,11 @@
   <var name="Profile">
     <value os="windows">%AppData%\vlc</value>
     <value os="linux">$XDG_CONFIG_HOME/vlc</value>
-   </var>
+  </var>
   <var name="Config-File">
     <value os="windows">vlc-qt-interface.ini</value>
     <value os="linux">vlc-qt-interface.conf</value>
-   </var>
+  </var>
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
