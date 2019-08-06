@@ -54,7 +54,6 @@
     <!-- Reference: http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
     <!-- Reference: http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
     <action command="delete" search="walk.all" path="$$adobe$$/AssetCache/"/>
-    <action command="delete" search="glob" path="$$adobe$$/AssetCache/*"/>
     <action command="delete" search="walk.all" path="$$adobe$$/APSPrivateData2/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/NativeCache/"/>
     <!-- Reference: "Reverse Engineering" by Tobias ;-) -->
