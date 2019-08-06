@@ -29,13 +29,13 @@ Notes about Opera
   <running type="exe" os="linux">opera</running>
   <running type="exe" os="windows">opera.exe</running>
   <var name="base">
-    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
-    <value>$XDG_CONFIG_HOME/opera</value>
+    <value os="windows">%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <value>%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
-    <value>$XDG_CONFIG_HOME/opera</value>
-    <value>~/snap/opera/current/.config/opera</value>
+    <value os="windows">%UserProfile%\AppData\Roaming\Opera Software\Opera Stable</value>
+    <value os="linux">$XDG_CONFIG_HOME/opera</value>
+    <value os="linux">~/snap/opera/current/.config/opera</value>
   </var>
   <option id="cache">
     <label>Cache</label>
