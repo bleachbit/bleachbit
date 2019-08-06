@@ -18,42 +18,54 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    @app aMule
+    @url http://www.amule.org/
+    @os Windows, Linux
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-18
+    @cleanerby juancarlospaco (2009-06-25) & Andrew Ziem (2009-06-25 - 2009-10-04) & pereorga (2018-06-10) & Tobias B. Besemer (2019-03-15 - 2019-03-18)
+    @tested ok v???, ???
+    @testeddate 
+    @testedby 
+    @note 
+
 -->
 <cleaner id="amule">
   <label>aMule</label>
   <description>File transfer client</description>
+  <var name="profile">
+    <value os="windows">%AppData%\aMule</value>
+    <value os="linux">~/.aMule</value>
+  </var>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action command="delete" search="file" path="~/.aMule/logfile"/>
-    <action command="delete" search="file" path="~/.aMule/logfile.bak"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\logfile"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\logfile.bak"/>
+    <action command="delete" search="file" path="$$profile$$\logfile"/>
+    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
   </option>
-  <option id="tmp">
+  <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="~/.aMule/Temp/"/>
-    <action command="delete" search="walk.files" path="$APPDATA\aMule\Temp\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Temp\"/>
   </option>
   <option id="known_files">
     <label>Known files history</label>
-    <description>Delete history of known and cancelled files</description>
-    <action command="delete" search="file" path="~/.aMule/known.met"/>
-    <action command="delete" search="file" path="~/.aMule/known2_64.met"/>
-    <action command="delete" search="file" path="~/.aMule/canceled.met"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\known.met"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\known2_64.met"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\canceled.met"/>
+    <description>Delete the usage history</description>
+    <action command="delete" search="file" path="$$profile$$\known.met"/>
+    <action command="delete" search="file" path="$$profile$$\known2_64.met"/>
+    <action command="delete" search="file" path="$$profile$$\canceled.met"/>
   </option>
   <option id="known_clients">
-    <label>Known clients</label>
-    <description>Delete known clients and friends</description>
-    <action command="delete" search="file" path="~/.aMule/emfriends.met"/>
-    <action command="delete" search="file" path="~/.aMule/clients.met"/>
-    <action command="delete" search="file" path="~/.aMule/clients.met.bak"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\emfriends.met"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\clients.met"/>
-    <action command="delete" search="file" path="$APPDATA\aMule\clients.met.bak"/>
+    <label>Known clients and friends</label>
+    <description>Delete the usage history</description>
+    <action command="delete" search="file" path="$$profile$$\emfriends.met"/>
+    <action command="delete" search="file" path="$$profile$$\clients.met"/>
+    <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
+  </option>
+  <option id="backup">
+    <label>Backup files</label>
+    <description>Delete the backup files</description>
+    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
+    <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
   </option>
 </cleaner>
