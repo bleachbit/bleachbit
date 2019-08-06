@@ -38,26 +38,8 @@
     <value os="linux">~/.azureus</value>
   </var>
   <var name="ProgramFiles">
-    <!--
-    Windows itself changes %ProgramFiles% for 32-bit processes running in a 64-bit operating system as documented here:
-    https://docs.microsoft.com/en-us/windows/desktop/winprog64/wow64-implementation-details
-    ...so we used "%SystemDrive%\Program Files\" & "%SystemDrive%\Program Files (x86)\"...
-    <value os="windows">%SystemDrive%\Program Files\[ProgramName]</value>
-    <value os="windows">%SystemDrive%\Program Files (x86)\[ProgramName]</value>
-    ...but %ProgramFiles% & %ProgramFiles(x86)% don't need to be on %SystemDrive% !!!
-    So we use: -->
-    <value os="windows">%ProgramW6432%\Vuze</value>
-    <!-- ...that BleachBit as 32-bit program can find "\Program Files\Vuze" and... -->
-    <value os="windows">%ProgramFiles(x86)%\Vuze</value>
-    <!-- ...that BleachBit can find "\Program Files (x86)\Vuze" and... -->
-    <value os="windows">%ProgramFiles%\Vuze</value>
-    <!-- ...that BleachBit can find "\Program Files\Vuze" on a x86 system...
-    ...and later, as 64-bit program, "\Program Files\Vuze" (x64)!
-    So all cases solved! ;-) Tobias. -->
-    <!--
-    Linux $$ProgramFiles$$ not yet figured out! I will do this later! Tobias.
-    <value os="linux">~/.vuze</value>
-    -->
+    <!-- See https://docs.bleachbit.org/cml/variables.html for explanation of $$ProgramFiles$$ -->
+    <value os="windows">$$ProgramFiles$$\Vuze</value>
   </var>
   <option id="backup">
     <label>Backup files</label>
