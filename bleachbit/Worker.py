@@ -122,8 +122,11 @@ class Worker:
             if ret['path']:
                 path = ret['path']
             else:
-                path = ''
-            path = path.decode('utf8', 'replace')  # for invalid encoding
+                path = u''
+
+            if isinstance(path, str):
+                path = path.decode('utf8', 'replace')  # for invalid encoding
+
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
