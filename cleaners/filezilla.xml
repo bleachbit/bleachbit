@@ -49,7 +49,7 @@
     <warning>As long we have no command="xml", we need to delete the complete file! Use this option only if you know what you do!</warning>
     <action command="delete" search="file" path="$$profile$$/filezilla.xml"/>
     -->
-    <!--
+  <!--
     This is how IMHO a CleanerML-XML-Cleaning-Syntax maybe can look like (Part 5). Tobias.
     <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/Setting" attribute="name=Last Server Path"/>
     Explanation: Deletes with a "name=value" as value of "attribute" the content of "<element attribute="value">".
@@ -59,7 +59,7 @@
             <Setting name="Last Server Path">ftp://ftp.demo.org</Setting>
     -> Deletes "ftp://ftp.demo.org"
     -->
-    <!--
+  <!--
     For later! Would be Example Part4...
     Explanation: Deletes with "/*" at the end the content of the element.
     <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/LastServer/*"/>

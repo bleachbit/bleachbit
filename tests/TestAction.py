@@ -198,6 +198,13 @@ class ActionTestCase(common.BleachbitTestCase):
             (r'c:\temp\foo8_$$bar$$', {'bar': ('a',)}, (r'c:\temp\foo8_a',)),
             (r'$$basepath$$\file9.log', {'basepath': (
                 r'c:\temp',)}, (r'c:\temp\file9.log',)),
+            # two variables with one value each
+            ('/var/foo10_$$foo$$_$$bar$$',
+             {'foo': 'a', 'bar': 'b'}, ('/var/foo10_a_b',)),
+            # two variables with 1 and 2 values, respectively
+            ('/var/foo10_$$foo$$_$$bar$$',
+             {'foo': 'a', 'bar': ('b', 'c')}, ('/var/foo10_a_b', '/var/foo10_a_c')),
+
         )
 
         for test in tests:
