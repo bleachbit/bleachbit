@@ -570,7 +570,7 @@ def set_environ(varname, path):
     try:
         if not os.path.exists(path):
             raise RuntimeError('Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path.encode('utf8')
+        os.environ[varname] = path if isinstance(path, str) else path.encode('utf8')
     except:
         logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
 

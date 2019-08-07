@@ -32,6 +32,7 @@ from bleachbit.Windows import *
 from bleachbit import logger
 
 import sys
+import os
 import tempfile
 import unittest
 import platform
@@ -415,3 +416,14 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for shell_change_notify"""
         ret = shell_change_notify()
         self.assertEqual(ret, 0)
+
+    def test_set_environ(self):
+        for folder in [u'folderäö', 'folder']:
+            test_dir = os.path.join(self.tempdir, folder)
+            os.mkdir(test_dir)
+            self.assertExists(test_dir)
+            set_environ('cd_test', test_dir)
+            if isinstance(test_dir, unicode):
+                test_dir = test_dir.encode('utf-8')
+            self.assertEqual(os.environ['cd_test'], test_dir)
+            os.environ.pop('cd_test')
