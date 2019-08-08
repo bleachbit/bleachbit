@@ -38,12 +38,21 @@ if 'nt' == os.name:
     from win32file import GetLongPathName
 
 
-boolean_keys = ['auto_hide', 'check_beta',
-                'check_online_updates', 'dark_mode', 'first_start', 'shred', 'exit_done', 'delete_confirmation', 'units_iec',
-                'window_maximized', 'window_fullscreen',]
+boolean_keys = ['auto_hide',
+                'check_beta',
+                'check_online_updates',
+                'dark_mode',
+                'delete_confirmation',
+                'exit_done',
+                'first_start',
+                'shred',
+                'units_iec',
+                'window_maximized',
+                'window_fullscreen', ]
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
-int_keys = ['window_x', 'window_y', 'window_width', 'window_height',]
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
+
 
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
@@ -255,12 +264,12 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
-        self.__set_default("shred", False)
-        self.__set_default("exit_done", False)
         self.__set_default("delete_confirmation", True)
+        self.__set_default("exit_done", False)
+        self.__set_default("shred", False)
         self.__set_default("units_iec", False)
-        self.__set_default("window_maximized", False)
         self.__set_default("window_fullscreen", False)
+        self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
