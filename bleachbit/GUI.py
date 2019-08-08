@@ -414,8 +414,8 @@ class TreeDisplayModel:
             # %(option) may be cache, logs, cookies, etc.
             # %(warning) may be 'This option is really slow'
             msg = _("Warning regarding %(cleaner)s - %(option)s:\n\n%(warning)s") % \
-                {'cleaner': model[parent][0],
-                 'option': model[path][0],
+                {'cleaner': model[parent][0].decode('utf-8'),
+                 'option': model[path][0].decode('utf-8'),
                  'warning': warning}
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
