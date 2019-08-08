@@ -215,6 +215,9 @@ class Bleachbit(Gtk.Application):
             self._window, self._window.cb_refresh_operations)
         pref.run()
 
+        # In case the user changed the log level...
+        GUI.update_log_level(self._window)
+
     def about(self, _action, _param):
         """Create and show the about dialog"""
 
@@ -451,25 +454,6 @@ class TreeDisplayModel:
             child = model.iter_next(child)
         return
 
-
-class GtkLoggerHandler(logging.Handler):
-    def __init__(self, append_text):
-        logging.Handler.__init__(self)
-        self.append_text = append_text
-        self.min_level = logging.WARNING
-        if '--debug-log' in sys.argv:
-            self.min_level = logging.DEBUG
-
-    def emit(self, record):
-        if record.levelno < self.min_level:
-            return
-        tag = 'error' if record.levelno >= logging.WARNING else None
-        msg = record.getMessage()
-        if record.exc_text:
-            msg = msg + '\n' + record.exc_text
-        self.append_text(msg + '\n', tag)
-
-
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
 
@@ -483,8 +467,9 @@ class GUI(Gtk.ApplicationWindow):
 
         # Redirect logging to the GUI.
         bb_logger = logging.getLogger('bleachbit')
-        gtklog = GtkLoggerHandler(self.append_text)
-        bb_logger.addHandler(gtklog)
+        from bleachbit.Log import GtkLoggerHandler
+        self.gtklog = GtkLoggerHandler(self.append_text)
+        bb_logger.addHandler(self.gtklog)
         if os.name == 'nt' and getattr(sys, 'frozen', None) == 'windows_exe':
             # On Microsoft Windows this avoids py2exe redirecting stderr to
             # bleachbit.exe.log.
@@ -562,6 +547,10 @@ class GUI(Gtk.ApplicationWindow):
             GLib.idle_add(lambda:
                           self.textview.scroll_mark_onscreen(
                               self.textbuffer.get_insert()))
+
+    def update_log_level(self):
+        """This gets called when the log level might have changed via the preferences."""
+        self.gtklog.update_log_level()
 
     def on_selection_changed(self, selection):
         """When the tree view selection changed"""

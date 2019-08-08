@@ -92,6 +92,9 @@ class PreferencesDialog:
             self.refresh_operations = True
         if 'dark_mode' == path:
             Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
+        if 'debug' == path:
+            from bleachbit.Log import set_root_log_level
+            set_root_log_level()
 
     def __general_page(self):
         """Return a widget containing the general page"""
@@ -174,6 +177,12 @@ class PreferencesDialog:
         cb_dark_mode.set_active(options.get("dark_mode"))
         cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
         vbox.pack_start(cb_dark_mode, False, True, 0)
+
+        # Debug logging
+        cb_debug = Gtk.CheckButton(_("Show debug messages"))
+        cb_debug.set_active(options.get("debug"))
+        cb_debug.connect('toggled', self.__toggle_callback, 'debug')
+        vbox.pack_start(cb_debug, False, True, 0)
 
         return vbox
 
