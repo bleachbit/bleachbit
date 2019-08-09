@@ -470,12 +470,6 @@ class GUI(Gtk.ApplicationWindow):
         from bleachbit.Log import GtkLoggerHandler
         self.gtklog = GtkLoggerHandler(self.append_text)
         bb_logger.addHandler(self.gtklog)
-        if os.name == 'nt' and getattr(sys, 'frozen', None) == 'windows_exe':
-            # On Microsoft Windows this avoids py2exe redirecting stderr to
-            # bleachbit.exe.log.
-            # sys.frozen = console_exe means the console is shown
-            from bleachbit import logger_sh
-            bb_logger.removeHandler(logger_sh)
 
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))

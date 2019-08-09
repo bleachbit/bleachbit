@@ -40,17 +40,18 @@ def init_log():
     """
     logger = logging.getLogger('bleachbit')
     import sys
-    if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
-        # When frozen in py2exe, avoid bleachbit.exe.log
-        logger.setLevel(logging.ERROR)
-    else:
+    if not (hasattr(sys, 'frozen') and sys.frozen == 'windows_exe'):
         # debug if command line asks for it or if this a non-final release
         if is_debugging_enabled_via_cli():
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.INFO)
-    logger_sh = logging.StreamHandler()
-    logger.addHandler(logger_sh)
+        # On Microsoft Windows when running frozen without the console, we
+        # avoid py2exe redirecting stderr to bleachbit.exe.log by NOT adding
+        # the stream handller
+        # sys.frozen = console_exe means the console is shown.
+        logger_sh = logging.StreamHandler()
+        logger.addHandler(logger_sh)
     return logger
 
 
