@@ -55,7 +55,7 @@
   </option>
   <option id="memory_dump">
     <label>Memory dump</label>
-    <description>Delete the data</description>
+    <description>Delete the file</description>
     <action command="delete" search="file" path="$$Profile$$\crashdump"/>
   </option>
 </cleaner>
