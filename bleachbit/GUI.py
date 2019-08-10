@@ -471,6 +471,12 @@ class GUI(Gtk.ApplicationWindow):
         self.gtklog = GtkLoggerHandler(self.append_text)
         bb_logger.addHandler(self.gtklog)
 
+        # process any delayed logs
+        from bleachbit.Log import DelayLog
+        if isinstance(sys.stderr, DelayLog):
+            for msg in sys.stderr.read():
+                self.append_text(msg)
+
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
