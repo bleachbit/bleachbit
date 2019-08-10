@@ -123,7 +123,7 @@ Notes about Opera
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera*\search_field_history.dat"/>
-    <action command="delete" search="glob" path="~/.opera/search_field_history.dat"/>
+    <action command="delete" search="file" path="~/.opera/search_field_history.dat"/>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\global.dat"/>
     <action command="delete" search="file" path="$appdata\Opera\Opera\profile\typed_history.xml"/>
