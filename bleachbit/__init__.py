@@ -26,10 +26,11 @@ from __future__ import absolute_import
 
 import gettext
 import locale
-import logging
 import os
 import re
 import sys
+
+from bleachbit import Log
 
 #
 # Config Parser got renamed in Python 3
@@ -46,18 +47,7 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-logger = logging.getLogger('bleachbit')
-if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
-    # When frozen in py2exe, avoid bleachbit.exe.log
-    logger.setLevel(logging.ERROR)
-else:
-    # debug if command line asks for it or if this a non-final release
-    if any(arg.startswith('--debug-log') for arg in sys.argv):
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-logger_sh = logging.StreamHandler()
-logger.addHandler(logger_sh)
+logger = Log.init_log()
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).

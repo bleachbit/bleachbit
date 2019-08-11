@@ -305,6 +305,7 @@ class Worker:
         if self.total_errors > 0:
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
+        self.ui.append_text('\n')
 
         if self.really_delete:
             self.ui.update_total_size(self.total_bytes)

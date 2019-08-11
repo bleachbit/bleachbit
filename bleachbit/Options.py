@@ -27,6 +27,7 @@ from __future__ import absolute_import
 import bleachbit
 from bleachbit import General
 from bleachbit import _
+from bleachbit.Log import set_root_log_level
 
 import logging
 import os
@@ -43,6 +44,7 @@ boolean_keys = ['auto_hide',
                 'check_online_updates',
                 'dark_mode',
                 'delete_confirmation',
+                'debug',
                 'exit_done',
                 'first_start',
                 'shred',
@@ -153,6 +155,10 @@ class Options:
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
+                # command line overrides store configuration
+                return True
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
@@ -265,6 +271,7 @@ class Options:
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
         self.__set_default("delete_confirmation", True)
+        self.__set_default("debug", False)
         self.__set_default("exit_done", False)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)
@@ -371,3 +378,6 @@ class Options:
 
 
 options = Options()
+
+# Now that the configuration is loaded, honor the debug preference there.
+set_root_log_level()
