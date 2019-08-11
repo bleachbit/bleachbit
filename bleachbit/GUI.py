@@ -485,9 +485,15 @@ class GUI(Gtk.ApplicationWindow):
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
-        if options.get("first_start") and os.name == 'posix' and not auto_exit:
-            pref = PreferencesDialog(self, self.cb_refresh_operations)
-            pref.run()
+        if options.get("first_start") and not auto_exit:
+            if os.name == 'posix':
+                self.append_text(
+                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
+                pref = PreferencesDialog(self, self.cb_refresh_operations)
+                pref.run()
+            if os.name == 'nt':
+                self.append_text(
+                    _('Access the application menu by clicking the logo on the left of the title bar.'))
             options.set('first_start', False)
         if os.name == 'nt':
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
