@@ -493,7 +493,7 @@ class GUI(Gtk.ApplicationWindow):
                 pref.run()
             if os.name == 'nt':
                 self.append_text(
-                    _('Access the application menu by clicking the logo on the left of the title bar.'))
+                    _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)
         if os.name == 'nt':
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
