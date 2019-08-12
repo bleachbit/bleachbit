@@ -253,25 +253,39 @@ class ActionTestCase(common.BleachbitTestCase):
         test_json_helper(self, execute_json)
 
     def test_process(self):
-            """Unit test for process action"""
-            cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-            tests = [u'<action command="process" cmd="%s" />',
-                     u'<action command="process" wait="false" cmd="%s" />',
-                     u'<action command="process" wait="f" cmd="%s" />',
-                     u'<action command="process" wait="no" cmd="%s" />',
-                     u'<action command="process" wait="n" cmd="%s" />'
-                     ]
+        """Unit test for process action"""
+        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+        tests = [u'<action command="process" cmd="%s" />',
+                 u'<action command="process" wait="false" cmd="%s" />',
+                 u'<action command="process" wait="f" cmd="%s" />',
+                 u'<action command="process" wait="no" cmd="%s" />',
+                 u'<action command="process" wait="n" cmd="%s" />'
+                 ]
 
-            for test in tests:
-                self._test_action_str(test % cmds[os.name])
+        for test in tests:
+            self._test_action_str(test % cmds[os.name])
 
-            # Test what happens when we have return code != 0 and unicode string in stderr
-            # (i.e. we have an error and a non-ascii language setting).
-            with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
+    def test_process_unicode_stderr(self):
+        """
+        Test what happens when we have return code != 0 and unicode string in stderr.
+
+        In other words we have an error and a non-ascii language setting.
+        """
+
+        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+        test = u'<action command="process" cmd="%s" />'
+        with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
+            if os.name == 'nt':
                 # If exception occurs in logger `handleError` is called.
                 with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
-                    self._test_action_str(tests[0] % cmds[os.name])
+                    self._test_action_str(test % cmds[os.name])
                     MockHandleError.assert_not_called()
+
+            elif os.name == 'posix':
+                try:
+                    self._test_action_str(test % cmds[os.name])
+                except UnicodeDecodeError:
+                    self.fail("test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
 
     def test_regex(self):
         """Unit test for regex option"""
