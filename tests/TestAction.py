@@ -267,7 +267,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
             # Test what happens when we have return code != 0 and unicode string in stderr
             # (i.e. we have an error and a non-ascii language setting).
-            with mock.patch('Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
+            with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
                 # If exception occurs in logger `handleError` is called.
                 with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
                     self._test_action_str(tests[0] % cmds[os.name])
