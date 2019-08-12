@@ -95,6 +95,9 @@ class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 
+    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+    _TEST_PROCESS_SIMPLE = u'<action command="process" cmd="%s" />'
+
     def _test_action_str(self, action_str):
         """Parse <action> and test it"""
         dom = parseString(action_str)
@@ -254,8 +257,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_process(self):
         """Unit test for process action"""
-        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-        tests = [u'<action command="process" cmd="%s" />',
+        tests = [ActionTestCase._TEST_PROCESS_SIMPLE,
                  u'<action command="process" wait="false" cmd="%s" />',
                  u'<action command="process" wait="f" cmd="%s" />',
                  u'<action command="process" wait="no" cmd="%s" />',
@@ -263,27 +265,24 @@ class ActionTestCase(common.BleachbitTestCase):
                  ]
 
         for test in tests:
-            self._test_action_str(test % cmds[os.name])
+            self._test_action_str(test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
 
     def test_process_unicode_stderr(self):
         """
         Test what happens when we have return code != 0 and unicode string in stderr.
 
-        In other words we have an error and a non-ascii language setting.
+        In other words we test the case when we have an error and a non-ascii language setting.
         """
-
-        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-        test = u'<action command="process" cmd="%s" />'
         with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
             if os.name == 'nt':
                 # If exception occurs in logger `handleError` is called.
                 with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
-                    self._test_action_str(test % cmds[os.name])
+                    self._test_action_str(ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
                     MockHandleError.assert_not_called()
 
             elif os.name == 'posix':
                 try:
-                    self._test_action_str(test % cmds[os.name])
+                    self._test_action_str(ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
                 except UnicodeDecodeError:
                     self.fail("test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
 
