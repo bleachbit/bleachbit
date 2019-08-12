@@ -27,6 +27,7 @@ from __future__ import absolute_import
 import bleachbit
 from bleachbit import General
 from bleachbit import _
+from bleachbit.Log import set_root_log_level
 
 import logging
 import os
@@ -38,12 +39,22 @@ if 'nt' == os.name:
     from win32file import GetLongPathName
 
 
-boolean_keys = ['auto_hide', 'check_beta',
-                'check_online_updates', 'dark_mode', 'first_start', 'shred', 'exit_done', 'delete_confirmation', 'units_iec',
-                'window_maximized', 'window_fullscreen',]
+boolean_keys = ['auto_hide',
+                'check_beta',
+                'check_online_updates',
+                'dark_mode',
+                'delete_confirmation',
+                'debug',
+                'exit_done',
+                'first_start',
+                'shred',
+                'units_iec',
+                'window_maximized',
+                'window_fullscreen', ]
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
-int_keys = ['window_x', 'window_y', 'window_width', 'window_height',]
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
+
 
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
@@ -144,6 +155,10 @@ class Options:
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
+                # command line overrides store configuration
+                return True
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
@@ -255,12 +270,13 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
-        self.__set_default("shred", False)
-        self.__set_default("exit_done", False)
         self.__set_default("delete_confirmation", True)
+        self.__set_default("debug", False)
+        self.__set_default("exit_done", False)
+        self.__set_default("shred", False)
         self.__set_default("units_iec", False)
-        self.__set_default("window_maximized", False)
         self.__set_default("window_fullscreen", False)
+        self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
@@ -362,3 +378,6 @@ class Options:
 
 
 options = Options()
+
+# Now that the configuration is loaded, honor the debug preference there.
+set_root_log_level()

@@ -140,6 +140,7 @@ def process_cmd_line():
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option('--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
@@ -180,6 +181,9 @@ def process_cmd_line():
         sys.exit(1)
 
     did_something = False
+    if options.debug:
+        # set in __init__ so it takes effect earlier
+        pass
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
         logger.info(Diagnostic.diagnostic_info())

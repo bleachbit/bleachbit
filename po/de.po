@@ -7,68 +7,67 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-02 22:39-0600\n"
-"PO-Revision-Date: 2019-05-27 20:25+0000\n"
+"POT-Creation-Date: 2019-08-10 21:01-0600\n"
+"PO-Revision-Date: 2019-08-10 06:32+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-05-29 16:04+0000\n"
-"X-Generator: Launchpad (build 18968)\n"
+"X-Launchpad-Export-Date: 2019-08-11 04:48+0000\n"
+"X-Generator: Launchpad (build 19021)\n"
 
-#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
-#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/links2.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
+#: ../cleaners/epiphany.xml ../cleaners/links2.xml ../cleaners/firefox.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Web browser"
 msgstr "Internet-Browser"
 
-#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
-#: ../cleaners/kde.xml ../cleaners/waterfox.xml ../cleaners/evolution.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/opera.xml
-#: ../cleaners/nexuiz.xml ../cleaners/vuze.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/xine.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/thunderbird.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
-#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
-#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/emesene.xml
-#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/amsn.xml ../cleaners/seamonkey.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
-#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
+#: ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/thunderbird.xml ../cleaners/epiphany.xml
+#: ../cleaners/libreoffice.xml ../cleaners/gftp.xml ../cleaners/firefox.xml
+#: ../cleaners/vuze.xml ../cleaners/evolution.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/miro.xml ../cleaners/java.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/pidgin.xml
+#: ../cleaners/safari.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/thumbnails.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/amsn.xml ../cleaners/liferea.xml ../cleaners/opera.xml
+#: ../cleaners/beagle.xml ../cleaners/xine.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
+#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:281
 msgid "Cache"
 msgstr "Zwischenspeicher (Cache)"
 
-#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/thunderbird.xml ../cleaners/chromium.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Den Zwischenspeicher (Cache) des Internet-Browsers löschen, welcher die "
 "Anzeigezeit bereits besuchter Seiten reduziert"
 
-#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
-#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
-#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/realplayer.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Cookies"
 msgstr "Profildateien (Cookies)"
 
-#: ../cleaners/google_chrome.xml ../cleaners/konqueror.xml
-#: ../cleaners/waterfox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/liferea.xml
-#: ../cleaners/flash.xml ../cleaners/chromium.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
-#: ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/realplayer.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -79,52 +78,55 @@ msgstr ""
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/firefox.xml
+#: ../cleaners/opera.xml
 msgid "DOM Storage"
 msgstr "DOM-Speicher"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/firefox.xml
+#: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
 msgstr "HTML5-Profildateien (Cookies) löschen"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Form history"
 msgstr "Formularverlauf"
 
-#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
 msgstr ""
 "Der Verlauf von Formulareingaben die in Internetseiten eingegeben wurden"
 
-#: ../cleaners/google_chrome.xml ../cleaners/libreoffice.xml
-#: ../cleaners/nautilus.xml ../cleaners/opera.xml ../cleaners/bash.xml
-#: ../cleaners/mc.xml ../cleaners/octave.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/links2.xml ../cleaners/vim.xml ../cleaners/elinks.xml
-#: ../cleaners/d4x.xml ../cleaners/windows_defender.xml
-#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/sqlite3.xml ../cleaners/easytag.xml
+#: ../cleaners/chromium.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
+#: ../cleaners/bash.xml ../cleaners/nautilus.xml ../cleaners/octave.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/google_chrome.xml
+#: ../cleaners/seamonkey.xml ../cleaners/elinks.xml ../cleaners/links2.xml
+#: ../cleaners/libreoffice.xml ../cleaners/realplayer.xml ../cleaners/vim.xml
+#: ../cleaners/d4x.xml ../cleaners/safari.xml ../cleaners/mc.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/easytag.xml
 msgid "History"
 msgstr "Verlauf"
 
-#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
 "Den Verlauf löschen, was besuchte Seiten, Übertragungen und Vorschaubilder "
 "beinhaltet"
 
-#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
 msgstr "Suchmaschinen"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
@@ -132,31 +134,31 @@ msgstr ""
 "Den Suchmaschinenverlauf zurücksetzen und nicht vorinstallierte "
 "Suchmaschinen löschen, welche automatisch hinzugefügt wurden"
 
-#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "Sitzung"
 
-#: ../cleaners/google_chrome.xml ../cleaners/opera.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "Delete the current and last sessions"
 msgstr "Die aktuelle und die letzten Sitzungen löschen"
 
-#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Sync"
 msgstr "Synchronisation"
 
-#: ../cleaners/google_chrome.xml ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Delete the sync data and sign out of the browser"
 msgstr "Lösche die Synchronisationsdaten und melde vom Browser ab"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "Passwörter"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -164,9 +166,9 @@ msgstr ""
 "Eine Datenbank sowohl von Benutzernamen und Passwörtern als auch von Seiten, "
 "welche keine Passwörter speichern sollen"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/chromium.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "Diese Option wird Ihre gespeicherten Passwörter löschen."
 
@@ -174,17 +176,17 @@ msgstr "Diese Option wird Ihre gespeicherten Passwörter löschen."
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
-#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/yum.xml ../bleachbit/Action.py:528
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
+#: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:573
 msgid "Vacuum"
 msgstr "Datenbank komprimieren"
 
-#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml ../cleaners/opera.xml
-#: ../cleaners/firefox.xml ../cleaners/thunderbird.xml ../cleaners/liferea.xml
-#: ../cleaners/chromium.xml ../cleaners/safari.xml ../cleaners/gpodder.xml
-#: ../cleaners/yum.xml
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
+#: ../cleaners/liferea.xml ../cleaners/opera.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -192,151 +194,238 @@ msgstr ""
 "Datenbankfragmentierung wird reduziert, um – ohne Daten zu entfernen – "
 "Speicherplatz zu sparen und die Geschwindigkeit zu erhöhen"
 
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../bleachbit/Cleaner.py:201
-msgid "Office suite"
-msgstr "Büropaket"
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "Archivverwaltung"
 
-#: ../cleaners/libreoffice.xml ../cleaners/apt.xml ../cleaners/kde.xml
-#: ../cleaners/waterfox.xml ../cleaners/evolution.xml
-#: ../cleaners/thumbnails.xml ../cleaners/java.xml ../cleaners/nexuiz.xml
-#: ../cleaners/vuze.xml ../cleaners/firefox.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/xine.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/gftp.xml ../cleaners/beagle.xml
-#: ../cleaners/liferea.xml ../cleaners/pidgin.xml ../cleaners/flash.xml
-#: ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/amsn.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/exaile.xml
-#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:196 ../bleachbit/Cleaner.py:281
-#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:317
-msgid "Delete the cache"
-msgstr "Den Zwischenspeicher löschen"
-
-#: ../cleaners/libreoffice.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
-#: ../cleaners/mc.xml ../cleaners/filezilla.xml ../cleaners/links2.xml
-#: ../cleaners/d4x.xml ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:249
-#: ../bleachbit/Cleaner.py:258
+#: ../cleaners/winrar.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
+#: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
+#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/easytag.xml
+#: ../bleachbit/Cleaner.py:249 ../bleachbit/Cleaner.py:258
 msgid "Delete the usage history"
 msgstr "Den Verwendungsverlauf löschen"
 
-#: ../cleaners/gwenview.xml ../cleaners/kde.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/gedit.xml
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/gimp.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Temporary files"
+msgstr "Temporäre Dateien"
+
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/gimp.xml
+#: ../bleachbit/Cleaner.py:346
+msgid "Delete the temporary files"
+msgstr "Die temporären Dateien löschen"
+
+#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "Medienbetrachter"
+
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
+#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
+msgid "File transfer client"
+msgstr "Dateiübertragungsprogramm"
+
+#: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
+#: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:197
+msgid "Most recently used"
+msgstr "Zuletzt verwendet"
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "Antivirus"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "Quarantäne"
+
+#: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml ../cleaners/firefox.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../cleaners/beagle.xml
+msgid "Delete the files"
+msgstr "Die Dateien löschen"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "Sicherungsdateien"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/vim.xml
+#: ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "Die Sicherungsdateien löschen"
+
+#: ../cleaners/windows_defender.xml ../cleaners/screenlets.xml
+#: ../cleaners/amule.xml ../cleaners/gftp.xml ../cleaners/realplayer.xml
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/easytag.xml
+#: ../bleachbit/Cleaner.py:312
+msgid "Logs"
+msgstr "Protokolle"
+
+#: ../cleaners/windows_defender.xml ../cleaners/screenlets.xml
+#: ../cleaners/amule.xml ../cleaners/gftp.xml ../cleaners/realplayer.xml
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../bleachbit/Cleaner.py:312
+msgid "Delete the logs"
+msgstr "Die Protokolle löschen"
+
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
+#: ../cleaners/waterfox.xml ../cleaners/libreoffice.xml ../cleaners/gftp.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/evolution.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/miro.xml ../cleaners/java.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/pidgin.xml ../cleaners/apt.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/amsn.xml
+#: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/beagle.xml ../cleaners/xine.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
+#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
+#: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
+#: ../bleachbit/Cleaner.py:317
+msgid "Delete the cache"
+msgstr "Den Zwischenspeicher löschen"
+
+#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Den Befehlsverlauf löschen"
+
+#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/nexuiz.xml
+msgid "Game"
+msgstr "Spiel"
+
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Die Liste der Spiele-Server löschen"
+
+#: ../cleaners/yum.xml ../cleaners/apt.xml
+msgid "Package manager"
+msgstr "Paketverwaltung"
+
+#: ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Textbearbeitung"
+
+#: ../cleaners/gedit.xml ../cleaners/gwenview.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/kde.xml
 #: ../bleachbit/Cleaner.py:294 ../bleachbit/Cleaner.py:485
 msgid "Recent documents list"
 msgstr "Liste der zuletzt verwendeten Dokumente"
 
-#: ../cleaners/gwenview.xml ../cleaners/kde.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/gedit.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:198
-#: ../bleachbit/Cleaner.py:295
+#: ../cleaners/gedit.xml ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
+#: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:198 ../bleachbit/Cleaner.py:295
 msgid "Delete the list of recently used documents"
 msgstr "Die Liste der zuletzt benutzten Dokumente löschen"
 
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "Aktuelle Sitzung"
+#: ../cleaners/bash.xml
+msgid "Shell"
+msgstr "Shell"
 
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "Die aktuelle Sitzung löschen"
+#: ../cleaners/skype.xml ../cleaners/emesene.xml ../cleaners/pidgin.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
+msgid "Chat client"
+msgstr "Chat-Programm"
 
-#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
-msgid "URL history"
-msgstr "Adressverlauf"
+#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
+#: ../cleaners/hexchat.xml
+msgid "Chat logs"
+msgstr "Chat-Protokolle"
 
-#: ../cleaners/konqueror.xml ../cleaners/waterfox.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/safari.xml
-msgid "List of visited web pages"
-msgstr "Liste besuchter Internetseiten"
+#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
+#: ../cleaners/hexchat.xml
+msgid "Delete the chat logs"
+msgstr "Die Chat-Protokolle löschen"
 
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "Suchverlauf"
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "Installationsprogramme"
 
-#: ../cleaners/google_toolbar.xml ../cleaners/gnome.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "Den Suchverlauf löschen"
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr ""
+"Zwischengespeicherte Programmkorrekturen und Installationsprogramme löschen"
 
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winetricks.xml ../cleaners/silverlight.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:346
-msgid "Temporary files"
-msgstr "Temporäre Dateien"
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "Fenstertechniksystem"
 
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/gimp.xml ../cleaners/adobe_reader.xml ../cleaners/amule.xml
-#: ../cleaners/wine.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winetricks.xml ../cleaners/silverlight.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:346
-msgid "Delete the temporary files"
-msgstr "Die temporären Dateien löschen"
-
-#: ../cleaners/apt.xml ../cleaners/yum.xml
-msgid "Package manager"
-msgstr "Paketverwaltung"
-
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "Veraltete Dateien löschen"
-
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "Paketlisten"
-
-#: ../cleaners/kde.xml ../cleaners/gnome.xml
-msgid "Desktop environment"
-msgstr "Arbeitsumgebung"
-
-#: ../cleaners/warzone2100.xml ../cleaners/nexuiz.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/tremulous.xml
+#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-msgid "Game"
-msgstr "Spiel"
+#: ../cleaners/beagle.xml
+msgid "Debug logs"
+msgstr "Fehlersuchprotokolle"
 
-#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
-#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
-#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/easytag.xml
-#: ../cleaners/miro.xml ../bleachbit/Cleaner.py:312
-msgid "Logs"
-msgstr "Protokolle"
+#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/beagle.xml ../cleaners/easytag.xml
+msgid "Delete the debug logs"
+msgstr "Die Fehlersuchprotokolle löschen"
 
-#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/screenlets.xml
-#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/audacious.xml
-#: ../cleaners/smartftp.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/realplayer.xml ../cleaners/exaile.xml ../cleaners/miro.xml
-#: ../bleachbit/Cleaner.py:312
-msgid "Delete the logs"
-msgstr "Die Protokolle löschen"
+#: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "Dateiverwaltung"
 
-#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
-#: ../cleaners/deepscan.xml
-msgid "Backup files"
-msgstr "Sicherungsdateien"
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Benutzerdefinierte Ordner werden zurückgesetzt."
 
-#: ../cleaners/waterfox.xml ../cleaners/vuze.xml ../cleaners/firefox.xml
-#: ../cleaners/vim.xml ../cleaners/deepscan.xml
-msgid "Delete the backup files"
-msgstr "Die Sicherungsdateien löschen"
+#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
+#: ../cleaners/transmission.xml
+msgid "Blocklists"
+msgstr "Sperrlisten"
+
+#: ../cleaners/transmission.xml
+msgid "Blocklists will need update to work."
+msgstr ""
+"Um die Funktionsfähigkeit sicherzustellen, müssen Sperrlisten aktualisiert "
+"werden."
+
+#: ../cleaners/transmission.xml
+msgid "Torrents"
+msgstr "Torrents"
+
+#: ../cleaners/transmission.xml
+msgid "Delete the torrents (just the metadata but not the files described)"
+msgstr ""
+"Die Torrent-Dateien löschen (nur die Metadaten, aber nicht die beschriebenen "
+"Dateien)"
+
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml
+msgid "Statistics"
+msgstr "Statistiken"
+
+#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:314
+msgid "Delete the file"
+msgstr "Die Datei löschen"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 msgid "Crash reports"
 msgstr "Absturzberichte"
-
-#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/beagle.xml ../cleaners/windows_defender.xml
-#: ../cleaners/transmission.xml ../cleaners/deepscan.xml
-msgid "Delete the files"
-msgstr "Die Dateien löschen"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
@@ -363,33 +452,58 @@ msgstr "Seiteneinstellungen"
 msgid "Settings for individual sites"
 msgstr "Einstellungen für individuelle Seiten"
 
-#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/konqueror.xml
+msgid "URL history"
+msgstr "Adressverlauf"
+
+#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/safari.xml
+#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "Liste besuchter Internetseiten"
+
+#: ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "Übertragungsverlauf"
+
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "Liste der heruntergeladenen Dateien"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Die Liste mit den besuchten Internetseiten löschen"
+
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Den Avatar- und Smilypuffer löschen"
+
+#: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
 msgstr "E-Mail-Programm"
 
-#: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
-msgid "File manager"
-msgstr "Dateiverwaltung"
+#: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
+msgid "Index"
+msgstr "Index"
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Benutzerdefinierte Ordner werden zurückgesetzt."
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "Widgets für den Schreibtisch"
 
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Vorschaubilder"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr ""
+"Die Profildateien (Cookies) löschen, besuchte Adressen und den Suchverlauf"
 
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "Symbole für die Dateien auf dem System"
+#: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
+#: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
+msgid "Delete the most recently used list"
+msgstr "Die zuletzt benutzen Listen löschen"
 
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Shell"
-
-#: ../cleaners/bash.xml ../cleaners/octave.xml ../cleaners/sqlite3.xml
-msgid "Delete the command history"
-msgstr "Den Befehlsverlauf löschen"
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "Arbeitsumgebung"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -397,38 +511,15 @@ msgstr "Den Befehlsverlauf löschen"
 msgid "Run"
 msgstr "Ausführen"
 
-#: ../cleaners/vuze.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
-#: ../cleaners/amule.xml ../cleaners/smartftp.xml ../cleaners/transmission.xml
-msgid "File transfer client"
-msgstr "Dateiübertragungsprogramm"
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Suchverlauf"
 
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "Bildbearbeitung"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml
-msgid "Search tool"
-msgstr "Suchwerkzeug"
-
-#: ../cleaners/recoll.xml ../cleaners/thunderbird.xml ../cleaners/beagle.xml
-msgid "Index"
-msgstr "Index"
-
-#: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
-msgstr ""
-"Den Suchindex löschen, eine Wörterdatenbank und die Dateien, die sie "
-"enthalten"
-
-#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/teamviewer.xml
-#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
-#: ../cleaners/winzip.xml ../cleaners/wordpad.xml ../bleachbit/Cleaner.py:197
-msgid "Most recently used"
-msgstr "Zuletzt verwendet"
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Den Suchverlauf löschen"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -446,6 +537,24 @@ msgstr ""
 msgid "This option deletes all bookmarks."
 msgstr "Diese Option löscht alle Lesezeichen."
 
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../bleachbit/Cleaner.py:201
+msgid "Office suite"
+msgstr "Büropaket"
+
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "Verlauf der bekannten Dateien"
+
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr ""
+
+#: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "Medienspieler"
+
 #: ../cleaners/journald.xml
 msgid "System journals"
 msgstr "Systemprotokolle"
@@ -454,82 +563,9 @@ msgstr "Systemprotokolle"
 msgid "Clean old system journals"
 msgstr "Alte Systemprotokolle reinigen"
 
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "Fenstertechniksystem"
-
-#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/gl-117.xml
-msgid "Debug logs"
-msgstr "Fehlersuchprotokolle"
-
-#: ../cleaners/x11.xml ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/easytag.xml
-#: ../cleaners/gl-117.xml
-msgid "Delete the debug logs"
-msgstr "Die Fehlersuchprotokolle löschen"
-
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "Widgets für den Schreibtisch"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/vlc.xml
-#: ../cleaners/teamviewer.xml ../cleaners/smartftp.xml ../cleaners/winamp.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/winrar.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/paint.xml
-#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "Die zuletzt benutzen Listen löschen"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
-"Diese Option setzt festgelegte Positionen im Schnellzugriff auf ihre "
-"Vorgabewerte zurück."
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "Das wird den Windows-Explorer neu starten."
-
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
-msgid "Media player"
-msgstr "Medienspieler"
-
-#: ../cleaners/xine.xml ../cleaners/flash.xml ../cleaners/silverlight.xml
-#: ../cleaners/miro.xml
-msgid "Multimedia viewer"
-msgstr "Medienbetrachter"
-
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "Dokumentbetrachter"
-
-#: ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "Textbearbeitung"
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "Fernwartungssoftware"
-
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/skype.xml
-msgid "Chat client"
-msgstr "Chat-Programm"
-
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml
-msgid "Chat logs"
-msgstr "Chat-Protokolle"
-
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/amsn.xml ../cleaners/seamonkey.xml
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml
-msgid "Delete the chat logs"
-msgstr "Die Chat-Protokolle löschen"
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:314
+msgid "Memory dump"
+msgstr "Speicherabbild"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
@@ -543,29 +579,9 @@ msgstr ""
 "Die Datenbank löschen – diese enthält Informationen, wie Abspielliste und "
 "zuletzt wiedergegeben."
 
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "Verlauf der bekannten Dateien"
-
-#: ../cleaners/amule.xml
-msgid "Delete history of known and cancelled files"
-msgstr "Lösche den Verlauf der bekannten und abgebrochenen Dateien"
-
-#: ../cleaners/amule.xml
-msgid "Known clients"
-msgstr "Bekannte Klienten"
-
-#: ../cleaners/amule.xml
-msgid "Delete known clients and friends"
-msgstr "Lösche bekannte Klienten und Freunde"
-
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
 msgstr "Kompatibilitätsschicht für Windows-Programme"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Musikwiedergabe"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -588,98 +604,6 @@ msgstr ""
 msgid "Swap files across system"
 msgstr ""
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
-"Die Profildateien (Cookies) löschen, besuchte Adressen und den Suchverlauf"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "Antivirus"
-
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "Die Liste der Spiele-Server löschen"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Den Avatar- und Smilypuffer löschen"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "Archivverwaltung"
-
-#: ../cleaners/seamonkey.xml
-msgid "Download history"
-msgstr "Übertragungsverlauf"
-
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "Liste der heruntergeladenen Dateien"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "Die Liste mit den besuchten Internetseiten löschen"
-
-#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
-#: ../cleaners/transmission.xml
-msgid "Blocklists"
-msgstr "Sperrlisten"
-
-#: ../cleaners/transmission.xml
-msgid "Blocklists will need update to work."
-msgstr ""
-"Um die Funktionsfähigkeit sicherzustellen, müssen Sperrlisten aktualisiert "
-"werden."
-
-#: ../cleaners/transmission.xml
-msgid "Torrents"
-msgstr "Torrents"
-
-#: ../cleaners/transmission.xml
-msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr ""
-"Die Torrent-Dateien löschen (nur die Metadaten, aber nicht die beschriebenen "
-"Dateien)"
-
-#: ../cleaners/transmission.xml
-msgid "Statistics"
-msgstr "Statistiken"
-
-#: ../cleaners/transmission.xml
-msgid "Delete the file"
-msgstr "Die Datei löschen"
-
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "Textverarbeitung"
-
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "Installationsprogramme"
-
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr ""
-"Zwischengespeicherte Programmkorrekturen und Installationsprogramme löschen"
-
-#: ../cleaners/hexchat.xml
-msgid "IRC client formerly known as XChat"
-msgstr "IRC-Programm – vorher als XChat bekannt"
-
-#: ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "Heruntergeladene Podcasts"
-
-#: ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "Heruntergeladene Podcasts löschen"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "Tondateienverschlagwortung"
-
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
 msgstr "Tiefenprüfung"
@@ -692,6 +616,89 @@ msgstr "Weit über der Platte verstreute Dateien reinigen"
 msgid "This option is slow."
 msgstr "Diese Option verlangsamt den Vorgang."
 
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "Dokumentbetrachter"
+
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "Veraltete Dateien löschen"
+
+#: ../cleaners/apt.xml
+msgid "Package lists"
+msgstr "Paketlisten"
+
+#: ../cleaners/audacious.xml
+msgid "Audio player"
+msgstr "Musikwiedergabe"
+
+#: ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "Heruntergeladene Podcasts"
+
+#: ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "Heruntergeladene Podcasts löschen"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "Textverarbeitung"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Aktuelle Sitzung"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "Die aktuelle Sitzung löschen"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "Fernwartungssoftware"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Vorschaubilder"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "Symbole für die Dateien auf dem System"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+"Diese Option setzt festgelegte Positionen im Schnellzugriff auf ihre "
+"Vorgabewerte zurück."
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "Das wird den Windows-Explorer neu starten."
+
+#: ../cleaners/recoll.xml ../cleaners/beagle.xml
+msgid "Search tool"
+msgstr "Suchwerkzeug"
+
+#: ../cleaners/recoll.xml
+msgid ""
+"Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Den Suchindex löschen, eine Wörterdatenbank und die Dateien, die sie "
+"enthalten"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "Bildbearbeitung"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "Tondateienverschlagwortung"
+
+#: ../cleaners/hexchat.xml
+msgid "IRC client formerly known as XChat"
+msgstr "IRC-Programm – vorher als XChat bekannt"
+
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
 msgstr "Reiniger für unnötige Dateien"
@@ -700,54 +707,32 @@ msgstr "Reiniger für unnötige Dateien"
 msgid "Free space and maintain privacy"
 msgstr "Speicherplatz freigeben und die Privatsphäre schützen"
 
-#: ../bleachbit/FileUtilities.py:270 ../bleachbit/FileUtilities.py:279
-#, python-format
-msgid "Directory is not empty: %s"
-msgstr "Verzeichnis ist nicht leer: %s"
-
-#: ../bleachbit/FileUtilities.py:303
-#, python-format
-msgid "Special file type cannot be deleted: %s"
-msgstr "Spezieller Datei-Typ kann nicht gelöscht werden: %s"
-
-#: ../bleachbit/FileUtilities.py:477
-msgid "%TMP% does not exist: %s"
-msgstr "%TMP% existiert nicht: %s"
-
-#: ../bleachbit/FileUtilities.py:693
-msgid ""
-"There was at least one file on a file system that does not support advanced "
-"overwriting."
-msgstr ""
-"Es gab mindestens eine Datei auf dem Dateisystem, welche das erweitert "
-"Überschreiben nicht unterstützt."
-
-#: ../bleachbit/Options.py:86
+#: ../bleachbit/Options.py:112
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr "Festplatte war voll wen Konfiguration in Datei geschrieben wurde %s"
 
-#: ../bleachbit/Options.py:111
+#: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "Fehler beim Überprüfen ob Pfad existiert: %s"
 
-#: ../bleachbit/Options.py:212
+#: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
 msgstr "Fehler beim Setzen der Standard-Festplatten zum Schreddern."
 
-#: ../bleachbit/Options.py:233
+#: ../bleachbit/Options.py:290
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "Automatisch Sprache erhalten %s."
 
-#: ../bleachbit/Unix.py:568
+#: ../bleachbit/Unix.py:570
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Ausführbare Datei nicht gefunden: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:646 ../bleachbit/Worker.py:140
+#: ../bleachbit/Unix.py:652 ../bleachbit/Worker.py:150
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -756,122 +741,312 @@ msgstr ""
 "%s konnte nicht gereinigt werden, da es noch aktiv ist. Bitte das Programm "
 "beenden und den Vorgang wiederholen."
 
-#: ../bleachbit/GuiBasic.py:48 ../bleachbit/GuiBasic.py:75
-#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:137
-msgid "_Cancel"
-msgstr "_Abbrechen"
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:507
+msgid ""
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr ""
+"Ein Fehler ist beim Laden des SQLite-Moduls aufgetreten: Das Antivirus-"
+"Programm könnte dieses sperren."
 
-#: ../bleachbit/GuiBasic.py:76
-msgid "_Open"
-msgstr "Ö_ffnen"
-
-#: ../bleachbit/GuiBasic.py:100 ../bleachbit/GuiBasic.py:138
 #: ../bleachbit/GUI.py:133
+msgid "Choose files to shred"
+msgstr "Dateien zum Schreddern auswählen"
+
+#: ../bleachbit/GUI.py:142
+msgid "Choose folder to shred"
+msgstr "Ordner zum Schreddern auswählen"
+
+#: ../bleachbit/GUI.py:144 ../bleachbit/GuiBasic.py:100
+#: ../bleachbit/GuiBasic.py:144
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: ../bleachbit/GuiBasic.py:117
-msgid "Delete confirmation"
-msgstr "Löschbestätigung"
+#: ../bleachbit/GUI.py:169
+msgid "No paths found in clipboard."
+msgstr "Keine Pfade in Clipboard gefunden"
 
-#: ../bleachbit/GuiBasic.py:126
+#: ../bleachbit/GUI.py:200 ../bleachbit/GuiPreferences.py:194
+#: ../bleachbit/GuiPreferences.py:319 ../bleachbit/GuiPreferences.py:360
+msgid "Choose a folder"
+msgstr "Ordner auswählen"
+
+#: ../bleachbit/GUI.py:201
+msgid "_OK"
+msgstr "_OK"
+
+#: ../bleachbit/GUI.py:235
 msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
+"GNU General Public License version 3 or later.\n"
+"See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
-"Sind Sie sicher, dass Sie alle ausgewählten Dateien für immer löschen "
-"wollen? Die aktuellen Dateien, die gelöscht werden, können sich geändert "
-"haben, wenn Sie vorher eine Vorschau erstellt haben."
+"GNU General Public License Version 3 oder später.\n"
+"Siehe https://www.gnu.org/licenses/gpl-3.0.txt"
 
-#: ../bleachbit/GuiBasic.py:129
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "Sind Sie sicher, dass Sie diese Dateien für immer löschen wollen?"
+#. TRANSLATORS: Maintain the names of translators here.
+#. Launchpad does this automatically for translations
+#. typed in Launchpad. This is a special string shown
+#. in the 'About' box.
+#: ../bleachbit/GUI.py:241
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Aljosha Papsch https://launchpad.net/~joschi-papsch-deactivatedaccount\n"
+"  Andrew Ziem https://launchpad.net/~ahziem1\n"
+"  DNS https://launchpad.net/~dns\n"
+"  Dan Cooper https://launchpad.net/~pcfan1234\n"
+"  Daniel Winzen https://launchpad.net/~q-d-deactivatedaccount\n"
+"  Georg Engelmann https://launchpad.net/~georg-engelmann\n"
+"  Gerjet Kleine-Weischede https://launchpad.net/~gerjet-deactivatedaccount-"
+"deactivatedaccount\n"
+"  Heinrich Ulbricht https://launchpad.net/~heinrich-ulbricht\n"
+"  Jakob Kramer https://launchpad.net/~jakobk\n"
+"  Jens Maucher https://launchpad.net/~jensmaucher\n"
+"  Johannes Jülg https://launchpad.net/~timse201\n"
+"  Mario Blättermann https://launchpad.net/~mario.blaettermann\n"
+"  Phillip Sz https://launchpad.net/~phillip-sz\n"
+"  Samuel Mehrbrodt https://launchpad.net/~sam92\n"
+"  SpaceCafe https://launchpad.net/~spacecafe\n"
+"  Stefan https://launchpad.net/~drezil\n"
+"  Stephan Woidowski https://launchpad.net/~swoidowski\n"
+"  Tee Zocker https://launchpad.net/~teezocker\n"
+"  Tobias B. Besemer https://launchpad.net/~tobias-besemer\n"
+"  Tobias Bannert https://launchpad.net/~toba\n"
+"  Torsten Franz https://launchpad.net/~torsten.franz\n"
+"  Ubert Shok https://launchpad.net/~ushok\n"
+"  cmdrhenner https://launchpad.net/~cmdrhenner\n"
+"  jus https://launchpad.net/~jus\n"
+"  pitfd https://launchpad.net/~pitfd"
 
-#: ../bleachbit/GuiBasic.py:167
+#: ../bleachbit/GUI.py:257
+msgid "System information"
+msgstr "Systeminformationen"
+
+#: ../bleachbit/GUI.py:371 ../bleachbit/GuiPreferences.py:289
+msgid "Name"
+msgstr "Name"
+
+#: ../bleachbit/GUI.py:379
+msgid "Active"
+msgstr "Aktiv"
+
+#. TRANSLATORS: Size is the label for the column that shows how
+#. much space an option would clean or did clean
+#: ../bleachbit/GUI.py:388
+msgid "Size"
+msgstr "Größe"
+
+#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+#. %(option) may be cache, logs, cookies, etc.
+#. %(warning) may be 'This option is really slow'
+#: ../bleachbit/GUI.py:419
 #, python-format
 msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
+"Warning regarding %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 msgstr ""
-"Sie sind als Systemverwalter angemeldet, bitte den folgenden Verweis manuell "
-"in einem Internet-Browser öffnen:\n"
-"%s"
+"Bitte beachten: %(cleaner)s - %(option)s\n"
+"\n"
+"%(warning)s"
 
-#. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:179
+#: ../bleachbit/GUI.py:486
 #, python-format
-msgid "Open web browser to %s?"
-msgstr "%s im Internet-Browser öffnen"
-
-#. TRANSLATORS: This is the label in the log indicating was
-#. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:47
-msgid "Skip"
-msgstr "Übersprungen"
-
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:77
-msgid "Delete"
-msgstr "Löschen"
-
-#: ../bleachbit/Command.py:99
-msgid ""
-"At least one file was locked by another process, so its contents could not "
-"be overwritten. It will be marked for deletion upon system reboot."
+msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
-"Mindestens eine Datei würde durch einen anderen Prozess gesperrt, deshalb "
-"könnte dieser Inhalt nicht überschreiben werden. Diese Dateien wurden "
-"vorgemerkt, um sie bei einem Systemneustart zu löschen."
 
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:102
-msgid "Mark for deletion"
-msgstr "Zum Löschen auswählen"
-
-#. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
-#: ../bleachbit/Action.py:335 ../bleachbit/Action.py:348
-#: ../bleachbit/Action.py:361 ../bleachbit/Action.py:374
-#: ../bleachbit/Action.py:387 ../bleachbit/Action.py:452
-msgid "Clean file"
-msgstr "Datei bereinigen"
-
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:281
-msgid "Truncate"
-msgstr "Verkleinern"
-
-#: ../bleachbit/Command.py:323
-msgid "Delete registry key"
-msgstr "Registrierungsschlüssel löschen"
-
-#: ../bleachbit/RecognizeCleanerML.py:58
-msgid "Security warning"
-msgstr "Sicherheitswarnung"
-
-#: ../bleachbit/RecognizeCleanerML.py:72
+#: ../bleachbit/GUI.py:492
 msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
+"Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
-"Diese Reinigungsdefinitionen sind neu oder wurden verändert. Schädliche "
-"Definitionen könnten Ihr System beschädigen. Wenn Sie den Änderungen nicht "
-"trauen, löschen Sie diese Dateien oder beenden Sie das Programm."
 
-#: ../bleachbit/RecognizeCleanerML.py:87
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Löschen"
+#: ../bleachbit/GUI.py:497
+msgid ""
+"Access the application menu by clicking the logo on the left of the title "
+"bar."
+msgstr ""
 
-#: ../bleachbit/RecognizeCleanerML.py:92
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Dateiname"
+#: ../bleachbit/GUI.py:511
+msgid ""
+"You are running BleachBit with administrative privileges for cleaning shared "
+"parts of the system, and references to the user profile folder will clean "
+"only the root account."
+msgstr ""
+"Sie führen BleachBit mit Systemverwaltungsrechten aus, um gemeinsam benutzte "
+"Teile des Systems reinigen, Verweise zum Benutzerprofilordner werden nur das "
+"root-Kontos bereinigen."
+
+#: ../bleachbit/GUI.py:516
+msgid ""
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
+msgstr ""
+"BleachBit mit Systemverwaltungsrechten starten, um die Genauigkeit der zu "
+"überschriebenen Dateien zu erhöhen."
+
+#: ../bleachbit/GUI.py:651
+msgid "You must select an operation"
+msgstr "Sie müssen einen Vorgang auswählen"
+
+#: ../bleachbit/GUI.py:670 ../bleachbit/GUI.py:694
+msgid "Done."
+msgstr "Fertig."
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:787
+msgid "Preview"
+msgstr "Vorschau"
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:792 ../bleachbit/Action.py:510
+msgid "Clean"
+msgstr "Bereinigen"
+
+#: ../bleachbit/GUI.py:879
+msgid "Preview files in the selected operations (without deleting any files)"
+msgstr ""
+"Vorschau der Dateien in den ausgewählten Vorgängen (ohne irgendwelche "
+"Dateien zu löschen)"
+
+#: ../bleachbit/GUI.py:891
+msgid "Clean files in the selected operations"
+msgstr "Dateien in den ausgewählten Bereichen bereinigen"
+
+#: ../bleachbit/GUI.py:901
+msgid "Abort the preview or cleaning process"
+msgstr ""
+
+#: ../bleachbit/GUI.py:1051
+msgid "Error when checking for updates: "
+msgstr "Fehler bei der Suche nach Aktualisierungen: "
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:79
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr ""
+"Ausnahmeerscheinung während der laufenden Prozedur von »%(operation)s« "
+"entdeckt: »%(msg)s«"
+
+#: ../bleachbit/Worker.py:108
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr "Fehler: {operation_option}: {command}"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:198
+msgid "Please wait.  Wiping free disk space."
+msgstr "Bitte warten. Freier Speicherplatz wird gereinigt."
+
+#: ../bleachbit/Worker.py:199
+msgid ""
+"Wiping free disk space erases remnants of files that were deleted without "
+"shredding. It does not free up space."
+msgstr ""
+"Das Löschen von freiem Festplattenspeicher löscht Überreste von Dateien, die "
+"gelöscht wurden, ohne sie zu vernichten. Es gibt keinen Platz frei."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:201 ../bleachbit/Worker.py:348
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Bitte warten. %s wird gereinigt."
+
+#: ../bleachbit/Worker.py:201 ../bleachbit/Cleaner.py:302
+#: ../bleachbit/Cleaner.py:447
+msgid "Memory"
+msgstr "Arbeitsspeicher"
+
+#: ../bleachbit/Worker.py:218
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Noch %d Minute verbleibend."
+msgstr[1] "Noch %d Minuten verbleibend."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:287
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Gewonnener Speicherplatz: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:291
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Gewonnener Speicherplatz: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:296
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Gelöschte Dateien: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:300
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Löschbare Dateien: %d"
+
+#: ../bleachbit/Worker.py:303
+#, python-format
+msgid "Special operations: %d"
+msgstr "Spezialvorgänge: %d"
+
+#: ../bleachbit/Worker.py:306
+#, python-format
+msgid "Errors: %d"
+msgstr "Fehler: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:322
+msgid "Please wait.  Running deep scan."
+msgstr "Bitte warten. Die Tiefenprüfung wird durchgeführt."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:351
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Bitte warten. %s wird analysiert."
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:43
+msgid "Applications"
+msgstr "Anwendungen"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:46
+msgid "Internet"
+msgstr "Internet"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:49
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported
+#. from winapp2.ini
+#: ../bleachbit/Winapp.py:52
+msgid "Utilities"
+msgstr "Dienstprogramme und Werkzeuge"
+
+#: ../bleachbit/Winapp.py:63
+msgid "Games"
+msgstr "Spiele"
+
+#: ../bleachbit/Winapp.py:186
+msgid "Imported from winapp2.ini"
+msgstr "Importiert von winapp2.ini"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -918,11 +1093,6 @@ msgstr "Papierkorb"
 msgid "Empty the trash"
 msgstr "Den Papierkorb leeren"
 
-#: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:447
-#: ../bleachbit/Worker.py:188
-msgid "Memory"
-msgstr "Arbeitsspeicher"
-
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:304
 msgid "Wipe the swap and free memory"
@@ -931,14 +1101,6 @@ msgstr "Den Swap und freien Arbeitsspeicher säubern"
 #: ../bleachbit/Cleaner.py:306
 msgid "This option is experimental and may cause system problems."
 msgstr "Diese Option ist experimentell und könnte Systemfehler verursachen."
-
-#: ../bleachbit/Cleaner.py:314
-msgid "Memory dump"
-msgstr "Speicherabbild"
-
-#: ../bleachbit/Cleaner.py:314
-msgid "Delete the file memory.dmp"
-msgstr "Datei memory.dmp löschen"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:317
@@ -1008,23 +1170,281 @@ msgstr "Diese Option verlangsamt den Vorgang."
 msgid "The system in general"
 msgstr "Das System im Allgemeinen"
 
-#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:696
+#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:704
 msgid "System"
 msgstr "System"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:729
+#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:737
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Freien Speicherplatz von %s überschreiben"
 
-#: ../bleachbit/Cleaner.py:676
+#: ../bleachbit/Cleaner.py:684
 msgid "Loading native cleaners."
+msgstr "Laden von nativen Cleanern."
+
+#: ../bleachbit/Cleaner.py:690
+msgid "Importing cleaners from Winapp2.ini."
+msgstr "Importiere Cleaner aus Winapp2.ini."
+
+#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:31
+msgid "Preferences"
+msgstr "Einstellungen"
+
+#: ../bleachbit/GuiPreferences.py:64
+msgid "General"
+msgstr "Allgemein"
+
+#: ../bleachbit/GuiPreferences.py:66
+msgid "Drives"
+msgstr "Laufwerke"
+
+#: ../bleachbit/GuiPreferences.py:68
+msgid "Languages"
+msgstr "Sprachauswahl"
+
+#: ../bleachbit/GuiPreferences.py:69
+msgid "Whitelist"
+msgstr "Ausnahmen"
+
+#: ../bleachbit/GuiPreferences.py:106
+msgid "Check periodically for software updates via the Internet"
+msgstr "Regelmäßig nach Programmaktualisierungen im Internet suchen"
+
+#: ../bleachbit/GuiPreferences.py:111
+msgid ""
+"If an update is found, you will be given the option to view information "
+"about it.  Then, you may manually download and install the update."
+msgstr ""
+"Wenn eine Aktualisierung gefunden wurde, können Sie Informationen dazu "
+"einsehen und es anschließend manuell herunterladen und installieren."
+
+#: ../bleachbit/GuiPreferences.py:117
+msgid "Check for new beta releases"
+msgstr "Auf neue Beta-Versionen überprüfen"
+
+#: ../bleachbit/GuiPreferences.py:126
+msgid "Download and update cleaners from community (winapp2.ini)"
+msgstr ""
+"Reinigungseinstellungen der Gemeinschaft herunterladen und aktualisieren "
+"(winapp2.ini)"
+
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing.  For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
+#: ../bleachbit/GuiPreferences.py:139
+msgid "Hide irrelevant cleaners"
+msgstr "Nicht relevante Reiniger ausblenden"
+
+#. TRANSLATORS: Overwriting is the same as shredding.  It is a way
+#. to prevent recovery of the data. You could also translate
+#. 'Shred files to prevent recovery.'
+#: ../bleachbit/GuiPreferences.py:147
+msgid "Overwrite contents of files to prevent recovery"
+msgstr ""
+"Inhalte von Dateien überschreiben, um das Wiederherstellen zu verhindern"
+
+#: ../bleachbit/GuiPreferences.py:151
+msgid ""
+"Overwriting is ineffective on some file systems and with certain BleachBit "
+"operations.  Overwriting is significantly slower."
+msgstr ""
+"Überschreiben ist auf einigen Dateisystemen und bei einigen BleachBit-"
+"Vorgängen ineffektiv. Das Überschreiben ist wesentlich langsamer."
+
+#: ../bleachbit/GuiPreferences.py:155
+msgid "Exit after cleaning"
+msgstr "Das Programm nach dem Reinigen beenden"
+
+#: ../bleachbit/GuiPreferences.py:161
+msgid "Confirm before delete"
+msgstr "Bestätigung vor dem Löschen abwarten"
+
+#: ../bleachbit/GuiPreferences.py:169
+msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
+msgstr ""
+"IEC-Größen (1 KiB = 1024 Bytes) anstelle von SI-Größen (1 kB = 1000 Bytes) "
+"verwenden"
+
+#: ../bleachbit/GuiPreferences.py:176
+msgid "Dark mode"
+msgstr "Dunkler Modus"
+
+#: ../bleachbit/GuiPreferences.py:182
+msgid "Show debug messages"
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:682
-msgid "Importing cleaners from Winapp2.ini."
+#: ../bleachbit/GuiPreferences.py:217
+msgid ""
+"Choose a writable folder for each drive for which to overwrite free space."
+msgstr ""
+"Bitte einen beschreibbaren Ordner auf jedem Laufwerk auswählen, bei welchem "
+"Sie den freien Speicher überschreiben möchten."
+
+#. TRANSLATORS: In the preferences dialog, this button adds a path to
+#. the list of paths
+#: ../bleachbit/GuiPreferences.py:239
+msgctxt "button"
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. TRANSLATORS: In the preferences dialog, this button removes a path
+#. from the list of paths
+#: ../bleachbit/GuiPreferences.py:243 ../bleachbit/GuiPreferences.py:450
+msgctxt "button"
+msgid "Remove"
+msgstr "Entfernen"
+
+#: ../bleachbit/GuiPreferences.py:266
+msgid "All languages will be deleted except those checked."
+msgstr "Alle Sprachen, außer den angewählten, werden gelöscht."
+
+#: ../bleachbit/GuiPreferences.py:281
+msgid "Preserve"
+msgstr "Erhalten"
+
+#: ../bleachbit/GuiPreferences.py:285
+msgid "Code"
+msgstr "Code"
+
+#: ../bleachbit/GuiPreferences.py:306 ../bleachbit/GuiPreferences.py:347
+msgid "Choose a file"
+msgstr "Datei auswählen"
+
+#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
+#: ../bleachbit/GuiPreferences.py:398
+msgid "File"
+msgstr "Datei"
+
+#: ../bleachbit/GuiPreferences.py:327 ../bleachbit/GuiPreferences.py:368
+#: ../bleachbit/GuiPreferences.py:400
+msgid "Folder"
+msgstr "Ordner"
+
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
+#: ../bleachbit/GuiPreferences.py:409
+msgid "Theses paths will not be deleted or modified."
+msgstr "Diese Orte werden weder gelöscht noch verändert."
+
+#: ../bleachbit/GuiPreferences.py:411
+msgid "These locations can be selected for deletion."
+msgstr "Diese Orte können zum Löschen ausgewählt werden."
+
+#: ../bleachbit/GuiPreferences.py:419
+msgid "Type"
+msgstr "Typ"
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py:425
+msgid "Path"
+msgstr "Ort"
+
+#: ../bleachbit/GuiPreferences.py:438
+msgctxt "button"
+msgid "Add file"
+msgstr "Datei hinzufügen"
+
+#: ../bleachbit/GuiPreferences.py:444
+msgctxt "button"
+msgid "Add folder"
+msgstr "Ordner hinzufügen"
+
+#: ../bleachbit/Chaff.py:145
+#, python-format
+msgid "Downloading url failed: %s"
+msgstr ""
+
+#: ../bleachbit/RecognizeCleanerML.py:58
+msgid "Security warning"
+msgstr "Sicherheitswarnung"
+
+#: ../bleachbit/RecognizeCleanerML.py:72
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Diese Reinigungsdefinitionen sind neu oder wurden verändert. Schädliche "
+"Definitionen könnten Ihr System beschädigen. Wenn Sie den Änderungen nicht "
+"trauen, löschen Sie diese Dateien oder beenden Sie das Programm."
+
+#: ../bleachbit/RecognizeCleanerML.py:87
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Löschen"
+
+#: ../bleachbit/RecognizeCleanerML.py:92
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Dateiname"
+
+#: ../bleachbit/FileUtilities.py:272 ../bleachbit/FileUtilities.py:286
+#, python-format
+msgid "Directory is not empty: %s"
+msgstr "Verzeichnis ist nicht leer: %s"
+
+#: ../bleachbit/FileUtilities.py:275
+#, python-format
+msgid "Skipping mount point: %s"
+msgstr "Überspringe Einhängpunkt: %s"
+
+#: ../bleachbit/FileUtilities.py:277
+#, python-format
+msgid "Device or resource is busy: %s"
+msgstr "Gerät oder Ressource ist beschäftigt: %s"
+
+#: ../bleachbit/FileUtilities.py:310
+#, python-format
+msgid "Special file type cannot be deleted: %s"
+msgstr "Spezieller Datei-Typ kann nicht gelöscht werden: %s"
+
+#: ../bleachbit/FileUtilities.py:484
+msgid "%TMP% does not exist: %s"
+msgstr "%TMP% existiert nicht: %s"
+
+#: ../bleachbit/FileUtilities.py:700
+msgid ""
+"There was at least one file on a file system that does not support advanced "
+"overwriting."
+msgstr ""
+"Es gab mindestens eine Datei auf dem Dateisystem, welche das erweitert "
+"Überschreiben nicht unterstützt."
+
+#: ../bleachbit/FileUtilities.py:795
+#, python-format
+msgid "Wiping path: %s"
+msgstr "Bereinigungspfad: %s"
+
+#: ../bleachbit/FileUtilities.py:804
+msgid "Creating new, temporary file for wiping free space."
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:841
+#, python-format
+msgid "Error #%d when flushing the file buffer."
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:857
+msgid ""
+"Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
+"{rate:.2f} MB/s"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:862
+msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:864
+msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+msgstr ""
+
+#: ../bleachbit/FileUtilities.py:879
+msgid "Handled unknown error #0 while truncating file."
 msgstr ""
 
 #: ../bleachbit/CleanerML.py:136
@@ -1053,101 +1473,6 @@ msgstr ""
 "Reiniger ist auf diesem Betriebssystem nicht verwendbar, weil er keine "
 "Aktionen hat: %s"
 
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:74
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
-"Ausnahmeerscheinung während der laufenden Prozedur von »%(operation)s« "
-"entdeckt: »%(msg)s«"
-
-#: ../bleachbit/Worker.py:101
-#, python-brace-format
-msgid "Error: {operation_option}: {command}"
-msgstr "Fehler: {operation_option}: {command}"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:186
-msgid "Please wait.  Wiping free disk space."
-msgstr "Bitte warten. Freier Speicherplatz wird gereinigt."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Bitte warten. %s wird gereinigt."
-
-#: ../bleachbit/Worker.py:202
-msgid "Please wait. Wiping file system metadata."
-msgstr "Bitte warten, Dateisystemmetadaten werden entfernt."
-
-#: ../bleachbit/Worker.py:205
-msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr ""
-"Bitte warten. Es wird gereinigt, nachdem die Dateisystemmetadaten entfernt "
-"wurden."
-
-#: ../bleachbit/Worker.py:208
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Noch %d Minute verbleibend."
-msgstr[1] "Noch %d Minuten verbleibend."
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:275
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Gewonnener Speicherplatz: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:279
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Gewonnener Speicherplatz: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:284
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Gelöschte Dateien: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:288
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Löschbare Dateien: %d"
-
-#: ../bleachbit/Worker.py:291
-#, python-format
-msgid "Special operations: %d"
-msgstr "Spezialvorgänge: %d"
-
-#: ../bleachbit/Worker.py:294
-#, python-format
-msgid "Errors: %d"
-msgstr "Fehler: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:309
-msgid "Please wait.  Running deep scan."
-msgstr "Bitte warten. Die Tiefenprüfung wird durchgeführt."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:338
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Bitte warten. %s wird analysiert."
-
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
 msgstr "Die neue Version der Datei winapp2.ini wurde heruntergeladen."
@@ -1173,6 +1498,84 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+
+#: ../bleachbit/Action.py:154
+msgid "Deep scan does not support multi-value variable."
+msgstr "Tiefenuntersuchung unterstützt nicht Multi-Wert-Variable."
+
+#: ../bleachbit/Action.py:252
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr "search=\"walk.all\" verwendet mit regulärem Datei-Pfad=\"%s\""
+
+#: ../bleachbit/Action.py:287
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr "path=\"%s\" ist kein glob-Muster"
+
+#. TRANSLATORS: Parts of this file will be deleted
+#: ../bleachbit/Action.py:380 ../bleachbit/Action.py:393
+#: ../bleachbit/Action.py:406 ../bleachbit/Action.py:419
+#: ../bleachbit/Action.py:432 ../bleachbit/Action.py:497
+#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
+msgid "Clean file"
+msgstr "Datei bereinigen"
+
+#: ../bleachbit/Action.py:546
+#, python-format
+msgid "Run external command: %s"
+msgstr "Externen Befehl ausführen: %s"
+
+#: ../bleachbit/GuiBasic.py:48 ../bleachbit/GuiBasic.py:75
+#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:145
+msgid "_Cancel"
+msgstr "_Abbrechen"
+
+#: ../bleachbit/GuiBasic.py:76
+msgid "_Open"
+msgstr "Ö_ffnen"
+
+#: ../bleachbit/GuiBasic.py:117
+msgid "Delete confirmation"
+msgstr "Löschbestätigung"
+
+#: ../bleachbit/GuiBasic.py:126
+msgid ""
+"This function deletes all BleachBit settings and then quits the application. "
+"Use this to hide your use of BleachBit or to reset its settings. The next "
+"time you start it, the settings will initialize to default values."
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py:133
+msgid ""
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
+msgstr ""
+"Sind Sie sicher, dass Sie alle ausgewählten Dateien für immer löschen "
+"wollen? Die aktuellen Dateien, die gelöscht werden, können sich geändert "
+"haben, wenn Sie vorher eine Vorschau erstellt haben."
+
+#: ../bleachbit/GuiBasic.py:136
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "Sind Sie sicher, dass Sie diese Dateien für immer löschen wollen?"
+
+#: ../bleachbit/GuiBasic.py:174
+#, python-format
+msgid ""
+"Because you are running as root, please manually open this link in a web "
+"browser:\n"
+"%s"
+msgstr ""
+"Sie sind als Systemverwalter angemeldet, bitte den folgenden Verweis manuell "
+"in einem Internet-Browser öffnen:\n"
+"%s"
+
+#. TRANSLATORS: %s expands to www.bleachbit.org or similar
+#: ../bleachbit/GuiBasic.py:186
+#, python-format
+msgid "Open web browser to %s?"
+msgstr "%s im Internet-Browser öffnen"
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1202,51 +1605,55 @@ msgstr ""
 "durchzuführen"
 
 #: ../bleachbit/CLI.py:143
+msgid "set log level to verbose"
+msgstr ""
+
+#: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
 msgstr "schreibe Debug-Nachrichten in Datei"
 
-#: ../bleachbit/CLI.py:145
+#: ../bleachbit/CLI.py:146
 msgid "shred specific files or folders"
 msgstr "Bestimmte Dateien oder Ordner schreddern"
 
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:148
 msgid "show system information"
 msgstr "Systeminformationen anzeigen"
 
-#: ../bleachbit/CLI.py:149
+#: ../bleachbit/CLI.py:150
 msgid "launch the graphical interface"
 msgstr "Grafische Oberfläche starten"
 
-#: ../bleachbit/CLI.py:153
+#: ../bleachbit/CLI.py:154
 msgid "do not prompt for administrator privileges"
 msgstr "Nicht nach Systemverwaltungsrechten fragen"
 
-#: ../bleachbit/CLI.py:158
+#: ../bleachbit/CLI.py:159
 msgid "preview files to be deleted and other changes"
 msgstr "Vorschau der löschbaren Dateien und anderen Änderungen"
 
-#: ../bleachbit/CLI.py:162
+#: ../bleachbit/CLI.py:163
 msgid "use options set in the graphical interface"
 msgstr ""
 "Einstellungen verwenden, die über die grafische Oberfläche festgelegt wurden"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py:166
 msgid "update winapp2.ini, if a new version is available"
 msgstr "winapp2.ini aktualisieren, wenn eine neue Version verfügbar ist"
 
-#: ../bleachbit/CLI.py:167
+#: ../bleachbit/CLI.py:168
 msgid "wipe free space in the given paths"
 msgstr "putze freien Raum in den gegebenen Pfaden"
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py:170
 msgid "output version information and exit"
 msgstr "Versionsinformationen anzeigen und beenden"
 
-#: ../bleachbit/CLI.py:171
+#: ../bleachbit/CLI.py:172
 msgid "overwrite files to hide contents"
 msgstr "Überschreibt Dateien, um deren Inhalt zu verstecken"
 
-#: ../bleachbit/CLI.py:179
+#: ../bleachbit/CLI.py:180
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1254,394 +1661,124 @@ msgstr ""
 "Verwende nur eines dieser Kommandos: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 
-#: ../bleachbit/CLI.py:197
+#: ../bleachbit/CLI.py:200
 msgid "Checking online for updates to winapp2.ini"
 msgstr "Überprüfe online nach Updates für winapp2.ini"
 
-#: ../bleachbit/CLI.py:212
+#: ../bleachbit/CLI.py:215
 msgid "No directories given for --wipe-free-space"
 msgstr "Keine Verzeichnisse gegeben für --wipe-free-space"
 
-#: ../bleachbit/CLI.py:217
+#: ../bleachbit/CLI.py:220
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "Pfad zum Reinigen muss ein existierendes Vereichnis sein: %s"
 
-#: ../bleachbit/CLI.py:219
+#: ../bleachbit/CLI.py:222
 msgid "Wiping free space can take a long time."
 msgstr "Freien Raum reinigen kann eine lange Zeit dauern."
 
-#: ../bleachbit/CLI.py:229
+#: ../bleachbit/CLI.py:232
 msgid "No work to do. Specify options."
 msgstr "Keine Arbeit zu tun. Gebe Optionen an."
 
-#: ../bleachbit/CLI.py:237
+#: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite ist nur gedacht in Verwendung mit --clean"
 
-#: ../bleachbit/Action.py:142
-msgid "Deep scan does not support multi-value variable."
-msgstr "Tiefenuntersuchung unterstützt nicht Multi-Wert-Variable."
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:47
+msgid "Skip"
+msgstr "Übersprungen"
 
-#: ../bleachbit/Action.py:220
-#, python-format
-msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "search=\"walk.all\" verwendet mit regulärem Datei-Pfad=\"%s\""
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:77
+msgid "Delete"
+msgstr "Löschen"
 
-#: ../bleachbit/Action.py:264
-#, python-format
-msgid "path=\"%s\" is not a glob pattern"
-msgstr "path=\"%s\" ist kein glob-Muster"
-
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:465 ../bleachbit/GUI.py:767
-msgid "Clean"
-msgstr "Bereinigen"
-
-#: ../bleachbit/Action.py:501
-#, python-format
-msgid "Run external command: %s"
-msgstr "Externen Befehl ausführen: %s"
-
-#: ../bleachbit/GUI.py:83 ../bleachbit/GUI.py:494
+#: ../bleachbit/Command.py:99
 msgid ""
-"Error loading the SQLite module: the antivirus software may be blocking it."
+"At least one file was locked by another process, so its contents could not "
+"be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"Ein Fehler ist beim Laden des SQLite-Moduls aufgetreten: Das Antivirus-"
-"Programm könnte dieses sperren."
+"Mindestens eine Datei würde durch einen anderen Prozess gesperrt, deshalb "
+"könnte dieser Inhalt nicht überschreiben werden. Diese Dateien wurden "
+"vorgemerkt, um sie bei einem Systemneustart zu löschen."
 
-#: ../bleachbit/GUI.py:122
-msgid "Choose files to shred"
-msgstr "Dateien zum Schreddern auswählen"
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:102
+msgid "Mark for deletion"
+msgstr "Zum Löschen auswählen"
 
-#: ../bleachbit/GUI.py:131
-msgid "Choose folder to shred"
-msgstr "Ordner zum Schreddern auswählen"
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:281
+msgid "Truncate"
+msgstr "Verkleinern"
 
-#: ../bleachbit/GUI.py:158
-msgid "No paths found in clipboard."
-msgstr "Keine Pfade in Clipboard gefunden"
+#: ../bleachbit/Command.py:323
+msgid "Delete registry key"
+msgstr "Registrierungsschlüssel löschen"
 
-#: ../bleachbit/GUI.py:191 ../bleachbit/GuiPreferences.py:185
-#: ../bleachbit/GuiPreferences.py:310 ../bleachbit/GuiPreferences.py:351
-msgid "Choose a folder"
-msgstr "Ordner auswählen"
+#: ../bleachbit/GuiChaff.py:48
+msgid "Deleting files"
+msgstr "Dateien löschen"
 
-#: ../bleachbit/GUI.py:192
-msgid "_OK"
-msgstr "_OK"
+#: ../bleachbit/GuiChaff.py:64
+msgid "Make chaff"
+msgstr "spreu machen"
 
-#: ../bleachbit/GUI.py:223
-msgid ""
-"GNU General Public License version 3 or later.\n"
-"See https://www.gnu.org/licenses/gpl-3.0.txt"
+#: ../bleachbit/GuiChaff.py:69
+msgid "Make randomly-generated messages inspired by documents."
 msgstr ""
-"GNU General Public License Version 3 oder später.\n"
-"Siehe https://www.gnu.org/licenses/gpl-3.0.txt"
+"Zufällig generierte Nachrichten erstellen, die von Dokumenten inspiriert "
+"sind."
 
-#. TRANSLATORS: Maintain the names of translators here.
-#. Launchpad does this automatically for translations
-#. typed in Launchpad. This is a special string shown
-#. in the 'About' box.
-#: ../bleachbit/GUI.py:229
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Aljosha Papsch https://launchpad.net/~joschi-papsch-deactivatedaccount\n"
-"  Andrew Ziem https://launchpad.net/~ahziem1\n"
-"  DNS https://launchpad.net/~dns\n"
-"  Dan Cooper https://launchpad.net/~pcfan1234\n"
-"  Daniel Winzen https://launchpad.net/~q-d-deactivatedaccount\n"
-"  Georg Engelmann https://launchpad.net/~georg-engelmann\n"
-"  Gerjet Kleine-Weischede https://launchpad.net/~gerjet-deactivatedaccount-"
-"deactivatedaccount\n"
-"  Heinrich Ulbricht https://launchpad.net/~heinrich-ulbricht\n"
-"  Jakob Kramer https://launchpad.net/~jakobk\n"
-"  Jens Maucher https://launchpad.net/~jensmaucher\n"
-"  Johannes Jülg https://launchpad.net/~timse201\n"
-"  Mario Blättermann https://launchpad.net/~mario.blaettermann\n"
-"  Phillip Sz https://launchpad.net/~phillip-sz\n"
-"  Samuel Mehrbrodt https://launchpad.net/~sam92\n"
-"  SpaceCafe https://launchpad.net/~spacecafe\n"
-"  Stefan https://launchpad.net/~drezil\n"
-"  Stephan Woidowski https://launchpad.net/~swoidowski\n"
-"  Tee Zocker https://launchpad.net/~teezocker\n"
-"  Tobias B. Besemer https://launchpad.net/~tobias-besemer\n"
-"  Tobias Bannert https://launchpad.net/~toba\n"
-"  Torsten Franz https://launchpad.net/~torsten.franz\n"
-"  Ubert Shok https://launchpad.net/~ushok\n"
-"  cmdrhenner https://launchpad.net/~cmdrhenner\n"
-"  jus https://launchpad.net/~jus\n"
-"  pitfd https://launchpad.net/~pitfd"
+#: ../bleachbit/GuiChaff.py:73
+msgid "Inspiration"
+msgstr "Inspiration"
 
-#: ../bleachbit/GUI.py:245
-msgid "System information"
-msgstr "Systeminformationen"
+#: ../bleachbit/GuiChaff.py:76
+msgid "2600 Magazine"
+msgstr "2600 Magazine"
 
-#: ../bleachbit/GUI.py:354 ../bleachbit/GuiPreferences.py:280
-msgid "Name"
-msgstr "Name"
+#: ../bleachbit/GuiChaff.py:76
+msgid "Hillary Clinton's emails"
+msgstr "Hillary Clintons Emails"
 
-#: ../bleachbit/GUI.py:362
-msgid "Active"
-msgstr "Aktiv"
+#: ../bleachbit/GuiChaff.py:84
+msgid "Number of files"
+msgstr "Anzahl der Dateien"
 
-#. TRANSLATORS: Size is the label for the column that shows how
-#. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:371
-msgid "Size"
-msgstr "Größe"
+#: ../bleachbit/GuiChaff.py:91 ../bleachbit/GuiChaff.py:151
+msgid "Select destination folder"
+msgstr "Zielordner wählen"
 
-#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
-#. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:402
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
-msgstr ""
-"Bitte beachten: %(cleaner)s - %(option)s\n"
-"\n"
-"%(warning)s"
+#: ../bleachbit/GuiChaff.py:101
+msgid "When finished"
+msgstr "Wenn fertiggestellt"
 
-#: ../bleachbit/GUI.py:498
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"Sie führen BleachBit mit Systemverwaltungsrechten aus, um gemeinsam benutzte "
-"Teile des Systems reinigen, Verweise zum Benutzerprofilordner werden nur das "
-"root-Kontos bereinigen."
+#: ../bleachbit/GuiChaff.py:104
+msgid "Delete without shredding"
+msgstr "Löschen ohne schreddern"
 
-#: ../bleachbit/GUI.py:503
-msgid ""
-"Run BleachBit with administrator privileges to improve the accuracy of "
-"overwriting the contents of files."
-msgstr ""
-"BleachBit mit Systemverwaltungsrechten starten, um die Genauigkeit der zu "
-"überschriebenen Dateien zu erhöhen."
+#: ../bleachbit/GuiChaff.py:104
+msgid "Do not delete"
+msgstr "Nicht löschen"
 
-#: ../bleachbit/GUI.py:631
-msgid "You must select an operation"
-msgstr "Sie müssen einen Vorgang auswählen"
+#: ../bleachbit/GuiChaff.py:115
+msgid "Make files"
+msgstr "Erstelle Dateien"
 
-#: ../bleachbit/GUI.py:650 ../bleachbit/GUI.py:674
-msgid "Done."
-msgstr "Fertig."
+#: ../bleachbit/GuiChaff.py:132
+msgid "Download data needed for email generator?"
+msgstr "Für den Email-Generator benötigte Dateien herunterladen?"
 
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:762
-msgid "Preview"
-msgstr "Vorschau"
-
-#: ../bleachbit/GUI.py:854
-msgid "Preview files in the selected operations (without deleting any files)"
-msgstr ""
-"Vorschau der Dateien in den ausgewählten Vorgängen (ohne irgendwelche "
-"Dateien zu löschen)"
-
-#: ../bleachbit/GUI.py:865
-msgid "Clean files in the selected operations"
-msgstr "Dateien in den ausgewählten Bereichen bereinigen"
-
-#: ../bleachbit/GUI.py:955
-msgid "Error when checking for updates: "
-msgstr "Fehler bei der Suche nach Aktualisierungen: "
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:43
-msgid "Applications"
-msgstr "Anwendungen"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:46
-msgid "Internet"
-msgstr "Internet"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:49
-msgid "Multimedia"
-msgstr "Multimedia"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:52
-msgid "Utilities"
-msgstr "Dienstprogramme und Werkzeuge"
-
-#: ../bleachbit/Winapp.py:63
-msgid "Games"
-msgstr "Spiele"
-
-#: ../bleachbit/Winapp.py:186
-msgid "Imported from winapp2.ini"
-msgstr "Importiert von winapp2.ini"
-
-#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:27
-msgid "Preferences"
-msgstr "Einstellungen"
-
-#: ../bleachbit/GuiPreferences.py:64
-msgid "General"
-msgstr "Allgemein"
-
-#: ../bleachbit/GuiPreferences.py:66
-msgid "Drives"
-msgstr "Laufwerke"
-
-#: ../bleachbit/GuiPreferences.py:68
-msgid "Languages"
-msgstr "Sprachauswahl"
-
-#: ../bleachbit/GuiPreferences.py:69
-msgid "Whitelist"
-msgstr "Ausnahmen"
-
-#: ../bleachbit/GuiPreferences.py:103
-msgid "Check periodically for software updates via the Internet"
-msgstr "Regelmäßig nach Programmaktualisierungen im Internet suchen"
-
-#: ../bleachbit/GuiPreferences.py:108
-msgid ""
-"If an update is found, you will be given the option to view information "
-"about it.  Then, you may manually download and install the update."
-msgstr ""
-"Wenn eine Aktualisierung gefunden wurde, können Sie Informationen dazu "
-"einsehen und es anschließend manuell herunterladen und installieren."
-
-#: ../bleachbit/GuiPreferences.py:114
-msgid "Check for new beta releases"
-msgstr "Auf neue Beta-Versionen überprüfen"
-
-#: ../bleachbit/GuiPreferences.py:123
-msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
-"Reinigungseinstellungen der Gemeinschaft herunterladen und aktualisieren "
-"(winapp2.ini)"
-
-#. TRANSLATORS: This means to hide cleaners which would do
-#. nothing.  For example, if Firefox were never used on
-#. this system, this option would hide Firefox to simplify
-#. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:136
-msgid "Hide irrelevant cleaners"
-msgstr "Nicht relevante Reiniger ausblenden"
-
-#. TRANSLATORS: Overwriting is the same as shredding.  It is a way
-#. to prevent recovery of the data. You could also translate
-#. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:144
-msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
-"Inhalte von Dateien überschreiben, um das Wiederherstellen zu verhindern"
-
-#: ../bleachbit/GuiPreferences.py:148
-msgid ""
-"Overwriting is ineffective on some file systems and with certain BleachBit "
-"operations.  Overwriting is significantly slower."
-msgstr ""
-"Überschreiben ist auf einigen Dateisystemen und bei einigen BleachBit-"
-"Vorgängen ineffektiv. Das Überschreiben ist wesentlich langsamer."
-
-#: ../bleachbit/GuiPreferences.py:152
-msgid "Exit after cleaning"
-msgstr "Das Programm nach dem Reinigen beenden"
-
-#: ../bleachbit/GuiPreferences.py:158
-msgid "Confirm before delete"
-msgstr "Bestätigung vor dem Löschen abwarten"
-
-#: ../bleachbit/GuiPreferences.py:166
-msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
-"IEC-Größen (1 KiB = 1024 Bytes) anstelle von SI-Größen (1 kB = 1000 Bytes) "
-"verwenden"
-
-#: ../bleachbit/GuiPreferences.py:173
-msgid "Dark mode"
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:208
-msgid ""
-"Choose a writable folder for each drive for which to overwrite free space."
-msgstr ""
-"Bitte einen beschreibbaren Ordner auf jedem Laufwerk auswählen, bei welchem "
-"Sie den freien Speicher überschreiben möchten."
-
-#. TRANSLATORS: In the preferences dialog, this button adds a path to
-#. the list of paths
-#: ../bleachbit/GuiPreferences.py:230
-msgctxt "button"
-msgid "Add"
-msgstr "Hinzufügen"
-
-#. TRANSLATORS: In the preferences dialog, this button removes a path
-#. from the list of paths
-#: ../bleachbit/GuiPreferences.py:234 ../bleachbit/GuiPreferences.py:441
-msgctxt "button"
-msgid "Remove"
-msgstr "Entfernen"
-
-#: ../bleachbit/GuiPreferences.py:257
-msgid "All languages will be deleted except those checked."
-msgstr "Alle Sprachen, außer den angewählten, werden gelöscht."
-
-#: ../bleachbit/GuiPreferences.py:272
-msgid "Preserve"
-msgstr "Erhalten"
-
-#: ../bleachbit/GuiPreferences.py:276
-msgid "Code"
-msgstr "Code"
-
-#: ../bleachbit/GuiPreferences.py:297 ../bleachbit/GuiPreferences.py:338
-msgid "Choose a file"
-msgstr "Datei auswählen"
-
-#: ../bleachbit/GuiPreferences.py:304 ../bleachbit/GuiPreferences.py:345
-#: ../bleachbit/GuiPreferences.py:389
-msgid "File"
-msgstr "Datei"
-
-#: ../bleachbit/GuiPreferences.py:318 ../bleachbit/GuiPreferences.py:359
-#: ../bleachbit/GuiPreferences.py:391
-msgid "Folder"
-msgstr "Ordner"
-
-#. TRANSLATORS: "Paths" is used generically to refer to both files
-#. and folders
-#: ../bleachbit/GuiPreferences.py:400
-msgid "Theses paths will not be deleted or modified."
-msgstr "Diese Orte werden weder gelöscht noch verändert."
-
-#: ../bleachbit/GuiPreferences.py:402
-msgid "These locations can be selected for deletion."
-msgstr "Diese Orte können zum Löschen ausgewählt werden."
-
-#: ../bleachbit/GuiPreferences.py:410
-msgid "Type"
-msgstr "Typ"
-
-#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
-#. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:416
-msgid "Path"
-msgstr "Ort"
-
-#: ../bleachbit/GuiPreferences.py:429
-msgctxt "button"
-msgid "Add file"
-msgstr "Datei hinzufügen"
-
-#: ../bleachbit/GuiPreferences.py:435
-msgctxt "button"
-msgid "Add folder"
-msgstr "Ordner hinzufügen"
+#: ../bleachbit/GuiChaff.py:174
+msgid "Generating files"
+msgstr "Generiere Dateien"
 
 #: ../bleachbit/Memory.py:60
 msgid ""
@@ -1693,31 +1830,33 @@ msgid "Physical free memory is %s."
 msgstr "Physikalischer freier Speicher beträgt %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:277
+#: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
 msgstr "Reinige das Swap-Gerät %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:289
+#: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
 msgstr "Reinitalisiere das Swap-Gerät %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:306
+#: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "Gefunden diese Swap-Geräte: %s"
 
-#: ../bleachbit/Memory.py:315
+#: ../bleachbit/Memory.py:318
 #, python-brace-format
 msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"Die Funktion wipe_memory() mit Prozess-ID {pid} wartet auf Kindprozess ID "
+"{cid}."
 
-#: ../bleachbit/Memory.py:320
+#: ../bleachbit/Memory.py:323
 #, python-format
 msgid "The child memory-wiping process returned code %d."
 msgstr "Der Kind-Speicher-Reinigung-Prozess gab Code %d zurück."
@@ -1732,28 +1871,28 @@ msgstr "_Ordner schreddern"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Shreddere Pfade aus der Zwischenablage"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
 msgstr "_Freien Speicherplatz säubern"
 
 #: ../data/app-menu.ui:21
+msgid "_Make Chaff"
+msgstr ""
+
+#: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
 msgstr "_Einstellungen schreddern und beenden"
 
-#: ../data/app-menu.ui:32
+#: ../data/app-menu.ui:36
 msgid "_Diagnostics"
 msgstr "_Diagnostik"
 
-#: ../data/app-menu.ui:36
+#: ../data/app-menu.ui:40
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: ../data/app-menu.ui:42
-msgid "_About"
-msgstr "_Über"
-
 #: ../data/app-menu.ui:46
-msgid "_Quit"
-msgstr "_Beenden"
+msgid "_About BleachBit"
+msgstr "_Über BleachBit"

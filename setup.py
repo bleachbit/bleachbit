@@ -111,9 +111,11 @@ if 'py2exe' in sys.argv:
                 'MSIMG32.DLL',
                 'MSWSOCK.dll',
                 'NSI.dll',  # psutil
+                'PDH.DLL', # psutil
                 'PSAPI.DLL',
                 'POWRPROF.dll',
                 'USP10.DLL',
+                'WINNSI.DLL',  # psutil
                 'WTSAPI32.DLL',  # psutil
                 'api-ms-win-core-apiquery-l1-1-0.dll',
                 'api-ms-win-core-crt-l1-1-0.dll',
