@@ -76,7 +76,12 @@ class BleachbitTestCase(unittest.TestCase):
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
         from bleachbit import expandvars
-        path = expandvars(path)
+
+        try:
+            path = expandvars(path)
+        except UnicodeDecodeError:
+            pass
+
         if not func(getTestPath(path)):
             raise AssertionError('The file %s should exist, but it does not. %s' % (path, msg))
 
