@@ -274,17 +274,16 @@ class ActionTestCase(common.BleachbitTestCase):
         In other words we test the case when we have an error and a non-ascii language setting.
         """
         with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
-            if os.name == 'nt':
-                # If exception occurs in logger `handleError` is called.
-                with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
-                    self._test_action_str(ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
-                    MockHandleError.assert_not_called()
-
-            elif os.name == 'posix':
+            # If exception occurs in logger `handleError` is called.
+            with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
                 try:
+                    # When GtkLoggerHandler is used the exeptions are raised directly
+                    # and handleError is not called
                     self._test_action_str(ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
                 except UnicodeDecodeError:
                     self.fail("test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
+                else:
+                    MockHandleError.assert_not_called()
 
     def test_regex(self):
         """Unit test for regex option"""
