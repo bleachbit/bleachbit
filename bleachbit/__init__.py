@@ -94,6 +94,9 @@ def expandvars(var):
     else:
         final = var
 
+    return expandvars_helper(final)
+
+def expandvars_helper(final):
     if 'posix' == os.name:
         final = os.path.expandvars(final)
     elif 'nt' == os.name:
