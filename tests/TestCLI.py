@@ -126,11 +126,18 @@ class CLITestCase(common.BleachbitTestCase):
             filename = os.path.normcase(filename)
         # replace delete function for testing
         save_delete = FileUtilities.delete
+
         deleted_paths = []
+        crash = [False]
 
         def dummy_delete(path, shred=False):
-            self.assertExists(path)
+            try:
+                self.assertExists(path)
+            except:
+                crash[0] = True
+
             deleted_paths.append(os.path.normcase(path))
+
         FileUtilities.delete = dummy_delete
         FileUtilities.delete(filename)
         self.assertExists(filename)
@@ -140,6 +147,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
         os.remove(filename)
         self.assertNotExists(filename)
+        self.assertFalse(crash[0])
 
     def test_shred(self):
         """Unit test for --shred"""
