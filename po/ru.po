@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-11 09:28-0600\n"
-"PO-Revision-Date: 2019-08-14 13:43+0000\n"
+"POT-Creation-Date: 2019-08-14 21:28-0600\n"
+"PO-Revision-Date: 2019-08-15 06:04+0000\n"
 "Last-Translator: Aleksey Kabanov <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2019-08-15 02:52+0000\n"
+"X-Launchpad-Export-Date: 2019-08-15 13:00+0000\n"
 "X-Generator: Launchpad (build 19022)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -176,7 +176,7 @@ msgstr "Этот параметр удалит все сохранённые п�
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
 #: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:573
+#: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:583
 msgid "Vacuum"
 msgstr "Сжать базу данных"
 
@@ -729,7 +729,7 @@ msgstr ""
 "%s нельзя очистить, так как он сейчас запущен. Закройте его и попробуйте "
 "снова."
 
-#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:507
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:506
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "Ошибка загрузки модуля SQLite: возможно, его блокирует антивирус."
@@ -826,22 +826,22 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:486
+#: ../bleachbit/GUI.py:485
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Сброс конфигурационного файла из за его повреждения: %s"
 
-#: ../bleachbit/GUI.py:492
+#: ../bleachbit/GUI.py:491
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 "Доступ к меню приложения по щелчку на значке гамбургера в заголовке окна."
 
-#: ../bleachbit/GUI.py:497
+#: ../bleachbit/GUI.py:496
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "Доступ к меню приложения по щелчку на логотипе в заголоке окна."
 
-#: ../bleachbit/GUI.py:511
+#: ../bleachbit/GUI.py:510
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -851,7 +851,7 @@ msgstr ""
 "используемых разделов системы; ссылки, относящиеся к профилю пользователя, "
 "будут очищены только для учётной записи суперпользователя."
 
-#: ../bleachbit/GUI.py:516
+#: ../bleachbit/GUI.py:515
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -859,39 +859,98 @@ msgstr ""
 "Запустите BleachBit с правами администратора для улучшения точности "
 "перезаписи содержимого файлов."
 
-#: ../bleachbit/GUI.py:651
+#: ../bleachbit/GUI.py:650
 msgid "You must select an operation"
 msgstr "Вы должны выбрать операцию"
 
-#: ../bleachbit/GUI.py:670 ../bleachbit/GUI.py:694
+#: ../bleachbit/GUI.py:669 ../bleachbit/GUI.py:693
 msgid "Done."
 msgstr "Выполнено."
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:787
+#: ../bleachbit/GUI.py:786
 msgid "Preview"
 msgstr "Предпросмотр"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:792 ../bleachbit/Action.py:510
+#: ../bleachbit/GUI.py:791 ../bleachbit/Action.py:520
 msgid "Clean"
 msgstr "Очистка"
 
-#: ../bleachbit/GUI.py:879
+#: ../bleachbit/GUI.py:878
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Просмотреть файлы в выбранных операциях (без удаления файлов)"
 
-#: ../bleachbit/GUI.py:891
+#: ../bleachbit/GUI.py:889
 msgid "Clean files in the selected operations"
 msgstr "Очистить файлы для выбранных операций"
 
-#: ../bleachbit/GUI.py:901
+#: ../bleachbit/GUI.py:897
 msgid "Abort the preview or cleaning process"
 msgstr "Прервать процесс предпросмотра очистки"
 
-#: ../bleachbit/GUI.py:1051
+#: ../bleachbit/GUI.py:1045
 msgid "Error when checking for updates: "
 msgstr "Ошибка при проверке обновлений: "
+
+#: ../bleachbit/GuiChaff.py:48
+msgid "Deleting files"
+msgstr "Удаление файлов"
+
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py:67
+msgid "Make chaff"
+msgstr "Создать помехи"
+
+#: ../bleachbit/GuiChaff.py:72
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "Сгенерировать случайные сообщения на основе документов."
+
+#: ../bleachbit/GuiChaff.py:76
+msgid "Inspiration"
+msgstr "Основа"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "2600 Magazine"
+msgstr "Журнал 2600"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "Hillary Clinton's emails"
+msgstr "Письма Хилари Клинтон"
+
+#: ../bleachbit/GuiChaff.py:87
+msgid "Number of files"
+msgstr "Количество файлов"
+
+#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
+msgid "Select destination folder"
+msgstr "Выберите папку сохранения"
+
+#: ../bleachbit/GuiChaff.py:104
+msgid "When finished"
+msgstr "После завершения"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Delete without shredding"
+msgstr "Удалить без перезаписи"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Do not delete"
+msgstr "Не удалять"
+
+#: ../bleachbit/GuiChaff.py:118
+msgid "Make files"
+msgstr "Создать файлы"
+
+#: ../bleachbit/GuiChaff.py:135
+msgid "Download data needed for email generator?"
+msgstr "Скачать данные, нужные для генератора почтовых сообщений?"
+
+#: ../bleachbit/GuiChaff.py:177
+msgid "Generating files"
+msgstr "Генерация файлов"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1163,6 +1222,33 @@ msgstr "Загрузка уборщиков, написанных на CleanerML
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "Импорт уборщиков из Winapp2.ini."
 
+#: ../bleachbit/CleanerML.py:136
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"Ошибка в handle_cleaner_option() для уборщика с id = {cleaner_id}, option "
+"XML={option_xml}"
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "Уборщик игнорируется из-за небезопасных прав доступа к файлу: %s"
+
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "Ошибка чтения уборщика: %s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:306
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr "Уборщик непригоден в этой ОС, так как не имеет действий: %s"
+
 #: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:31
 msgid "Preferences"
 msgstr "Настройки"
@@ -1421,30 +1507,6 @@ msgstr "{bytes:,} байтов и {inodes:,} inode доступно для су�
 msgid "Handled unknown error #0 while truncating file."
 msgstr "Обнаружена неизвестная ошибка #0 при усечении файла."
 
-#: ../bleachbit/CleanerML.py:136
-#, python-brace-format
-msgid ""
-"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-msgstr ""
-"Ошибка в handle_cleaner_option() для уборщика с id = {cleaner_id}, option "
-"XML={option_xml}"
-
-#: ../bleachbit/CleanerML.py:277
-#, python-format
-msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Уборщик игнорируется из-за небезопасных прав доступа к файлу: %s"
-
-#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:338
-#, python-format
-msgid "Error reading cleaner: %s"
-msgstr "Ошибка чтения уборщика: %s"
-
-#: ../bleachbit/CleanerML.py:303
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
 msgstr "Новый winapp2.ini был загружен."
@@ -1474,29 +1536,40 @@ msgstr ""
 "Проверьте, работает ли сеть, и не заблокировано ли это приложение межсетевым "
 "экраном. Сообщение об ошибке: {}"
 
-#: ../bleachbit/Action.py:154
+#. TRANSLATORS: Multi-value variables are explained in the online documentation.
+#. Basically, they are like an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML files more concise.
+#: ../bleachbit/Action.py:157
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Глубокое сканирование не поддерживает многозначных переменых."
 
-#: ../bleachbit/Action.py:252
+#. TRANSLATORS: This is a lint-style warning that there seems to be a
+#. mild mistake in the CleanerML file because walk.all is expected to
+#. be used with directories instead of with files.
+#: ../bleachbit/Action.py:258
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" используется с регулярным файлом: path=\"%s\""
 
-#: ../bleachbit/Action.py:287
+#. TRANSLATORS: This is a lint-style warning that the CleanerML file
+#. specified a search for glob, but the path specified didn't have any
+#. wildcard patterns. Therefore, maybe the developer either missed
+#. the wildcard or should search using path="file" which does not
+#. expect or support wildcards in the path.
+#: ../bleachbit/Action.py:297
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" не является шаблоном подстановки"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:380 ../bleachbit/Action.py:393
-#: ../bleachbit/Action.py:406 ../bleachbit/Action.py:419
-#: ../bleachbit/Action.py:432 ../bleachbit/Action.py:497
+#: ../bleachbit/Action.py:390 ../bleachbit/Action.py:403
+#: ../bleachbit/Action.py:416 ../bleachbit/Action.py:429
+#: ../bleachbit/Action.py:442 ../bleachbit/Action.py:507
 #: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
 msgid "Clean file"
 msgstr "Очистить файл"
 
-#: ../bleachbit/Action.py:546
+#: ../bleachbit/Action.py:556
 #, python-format
 msgid "Run external command: %s"
 msgstr "Выполнить внешнюю команду: %s"
@@ -1698,62 +1771,6 @@ msgstr "Усечь до нулевого размера"
 msgid "Delete registry key"
 msgstr "Удалить ключ реестра"
 
-#: ../bleachbit/GuiChaff.py:48
-msgid "Deleting files"
-msgstr "Удаление файлов"
-
-#: ../bleachbit/GuiChaff.py:64
-msgid "Make chaff"
-msgstr ""
-
-#: ../bleachbit/GuiChaff.py:69
-msgid "Make randomly-generated messages inspired by documents."
-msgstr "Сгенерировать случайные сообщения на основе документов."
-
-#: ../bleachbit/GuiChaff.py:73
-msgid "Inspiration"
-msgstr "Основа"
-
-#: ../bleachbit/GuiChaff.py:76
-msgid "2600 Magazine"
-msgstr "Журнал 2600"
-
-#: ../bleachbit/GuiChaff.py:76
-msgid "Hillary Clinton's emails"
-msgstr "Письма Хилари Клинтон"
-
-#: ../bleachbit/GuiChaff.py:84
-msgid "Number of files"
-msgstr "Количество файлов"
-
-#: ../bleachbit/GuiChaff.py:91 ../bleachbit/GuiChaff.py:151
-msgid "Select destination folder"
-msgstr "Выберите папку сохранения"
-
-#: ../bleachbit/GuiChaff.py:101
-msgid "When finished"
-msgstr "После завершения"
-
-#: ../bleachbit/GuiChaff.py:104
-msgid "Delete without shredding"
-msgstr "Удалить без перезаписи"
-
-#: ../bleachbit/GuiChaff.py:104
-msgid "Do not delete"
-msgstr "Не удалять"
-
-#: ../bleachbit/GuiChaff.py:115
-msgid "Make files"
-msgstr "Создать файлы"
-
-#: ../bleachbit/GuiChaff.py:132
-msgid "Download data needed for email generator?"
-msgstr ""
-
-#: ../bleachbit/GuiChaff.py:174
-msgid "Generating files"
-msgstr "Генерация файлов"
-
 #: ../bleachbit/Memory.py:60
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
@@ -1778,13 +1795,13 @@ msgstr "Устанавливается значение nice %d для этог�
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "Понижение прав процесса с PID {pid} до пользователя с UID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Выделение и перезапись %s памяти."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1795,7 +1812,7 @@ msgstr "Освобождение %s памяти."
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "Найден UUID для файла подкачки {device} — {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
@@ -1843,7 +1860,7 @@ msgstr "Удаление каталогов (безвозвратно)"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Стереть пути из буфера обмена"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1851,7 +1868,7 @@ msgstr "_Очистить свободное место"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "Со_здать помеху"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
