@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-08-11 09:28-0600\n"
-"PO-Revision-Date: 2019-08-12 10:08+0000\n"
+"PO-Revision-Date: 2019-08-14 13:43+0000\n"
 "Last-Translator: Aleksey Kabanov <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2019-08-12 14:24+0000\n"
-"X-Generator: Launchpad (build 19021)\n"
+"X-Launchpad-Export-Date: 2019-08-15 02:52+0000\n"
+"X-Generator: Launchpad (build 19022)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -707,7 +707,7 @@ msgstr "Ошибка при проверке существования пути
 
 #: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Ошибка при задании дисков по умолчанию для перезаписи."
 
 #: ../bleachbit/Options.py:290
 #, python-format
@@ -1157,7 +1157,7 @@ msgstr "Перезаписать свободное дисковое прост�
 
 #: ../bleachbit/Cleaner.py:684
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "Загрузка уборщиков, написанных на CleanerML."
 
 #: ../bleachbit/Cleaner.py:690
 msgid "Importing cleaners from Winapp2.ini."
