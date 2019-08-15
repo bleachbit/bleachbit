@@ -315,6 +315,7 @@ def wipe_memory():
         fill_memory_linux()
         sys.exit(0)
     else:
+# TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
         logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
                      pid=os.getpid(), cid=child_pid))
         rc = os.waitpid(child_pid, 0)[1]
