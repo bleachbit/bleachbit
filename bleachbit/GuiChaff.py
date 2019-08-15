@@ -61,6 +61,9 @@ class ChaffDialog(Gtk.Dialog):
 
     def _make_dialog(self, parent):
         """Make the main dialog"""
+# TRANSLATORS: BleachBit creates digital chaff like that is like the
+# physical chaff airplanes use to protect themselves from radar-guided
+# missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, _("Make chaff"), parent)
         self.set_border_width(5)
         box = self.get_content_area()

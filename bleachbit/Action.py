@@ -151,6 +151,9 @@ class FileActionProvider(ActionProvider):
             self.ds['path'] = self.paths[0]
             if not len(self.paths) == 1:
                 logger.warning(
+# TRANSLATORS: Multi-value variables are explained in the online documentation.
+# Basically, they are like an environment variable, but each multi-value variable
+# can have multiple values. They're a way to make CleanerML files more concise.
                     _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
@@ -249,6 +252,9 @@ class FileActionProvider(ActionProvider):
                     # indicate the cleaner developer made a mistake.
                     if os.path.isfile(expanded):
                         logger.debug(
+# TRANSLATORS: This is a lint-style warning that there seems to be a
+# mild mistake in the CleanerML file because walk.all is expected to
+# be used with directories instead of with files.
                             _('search="walk.all" used with regular file path="%s"'),
                             expanded,
                         )
@@ -283,7 +289,11 @@ class FileActionProvider(ActionProvider):
         cache = self.__class__.cache
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
-                # lint for people who develop cleaners
+# TRANSLATORS: This is a lint-style warning that the CleanerML file
+# specified a search for glob, but the path specified didn't have any
+# wildcard patterns. Therefore, maybe the developer either missed
+# the wildcard or should search using path="file" which does not
+# expect or support wildcards in the path.
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
             # use cache
