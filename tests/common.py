@@ -159,7 +159,9 @@ def skipUnlessWindows(f):
     Not compatible at the class level"""
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
-        return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
+        if sys.platform != 'win32':
+            return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
+        return f(*args, **kwargs)
     return wrapper
 
 

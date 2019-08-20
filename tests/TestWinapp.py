@@ -34,6 +34,11 @@ from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import logger
 
+if sys.version_info >= (3, 0):
+    from configparser import MissingSectionHeaderError
+else:
+    from ConfigParser import MissingSectionHeaderError
+
 
 def create_sub_key(sub_key):
     """Create a registry key"""
@@ -191,17 +196,33 @@ class WinappTestCase(common.BleachbitTestCase):
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
+        self._write_to_ini(body)
+        if do_next:
+            return Winapp(self.ini_fn).get_cleaners().next()
+        else:
+            return Winapp(self.ini_fn).get_cleaners()
+
+    def _write_to_ini(self, body, has_bom=False):
         ini = open(self.ini_fn, 'w')
+        if has_bom:
+            ini.write('\xef\xbb\xbf\n')
         ini.write('[someapp]\n')
         ini.write('LangSecRef=3021\n')
         ini.write(body)
         ini.write('\n')
         ini.close()
         self.assertExists(self.ini_fn)
-        if do_next:
-            return Winapp(self.ini_fn).get_cleaners().next()
-        else:
-            return Winapp(self.ini_fn).get_cleaners()
+
+    @common.skipUnlessWindows
+    def test_read_ini_with_bom(self):
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+        self._write_to_ini('', has_bom=True)
+        try:
+            Winapp(self.ini_fn)
+        except MissingSectionHeaderError:
+            self.fail('Cannot interpred BOM bytes.')
 
     @common.skipUnlessWindows
     def test_fake(self):
