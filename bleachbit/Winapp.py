@@ -168,8 +168,6 @@ class Winapp:
             content = fp.read().decode('utf-8-sig').encode('utf8')
             self.parser.readfp(StringIO.StringIO(content))
 
-        #self.parser.read(pathname)
-
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
