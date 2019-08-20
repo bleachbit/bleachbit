@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-08-14 21:28-0600\n"
-"PO-Revision-Date: 2019-08-15 06:04+0000\n"
+"PO-Revision-Date: 2019-08-17 07:39+0000\n"
 "Last-Translator: Aleksey Kabanov <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2019-08-15 13:00+0000\n"
+"X-Launchpad-Export-Date: 2019-08-18 15:00+0000\n"
 "X-Generator: Launchpad (build 19022)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -44,7 +44,7 @@ msgstr "Веб-обозреватель"
 #: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
 #: ../bleachbit/Cleaner.py:281
 msgid "Cache"
-msgstr "Временные файлы"
+msgstr "Кэш"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
@@ -94,7 +94,7 @@ msgstr "Удалить cookie HTML5"
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Form history"
-msgstr "ЖУрнал форм ввода"
+msgstr "Журнал форм ввода"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
@@ -301,7 +301,7 @@ msgstr "Удалить журналы"
 #: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
 #: ../bleachbit/Cleaner.py:317
 msgid "Delete the cache"
-msgstr "Удалить временные файлы"
+msgstr "Удалить кэш"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -422,7 +422,7 @@ msgstr "Отчёты об ошибках"
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
 msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "ЖУрнал форм, заполненных на веб-сайтах и в поисковой панели"
+msgstr "Журнал форм, заполненных на веб-сайтах и в поисковой панели"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 msgid "Session restore"
@@ -533,11 +533,11 @@ msgstr "Офисный пакет"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr "Известная история файлов"
+msgstr "Журнал файлов"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr "Известные клиенты и друзья"
+msgstr "Клиенты и друзья"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -847,8 +847,8 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Вы запустили BleachBit с административными правами на очистку совместно "
-"используемых разделов системы; ссылки, относящиеся к профилю пользователя, "
+"Вы запустили BleachBit с административными правами для очистки совместно "
+"используемых разделов системы. Ссылки, относящиеся к профилю пользователя, "
 "будут очищены только для учётной записи суперпользователя."
 
 #: ../bleachbit/GUI.py:515
@@ -879,7 +879,7 @@ msgstr "Очистка"
 
 #: ../bleachbit/GUI.py:878
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "Просмотреть файлы в выбранных операциях (без удаления файлов)"
+msgstr "Просмотреть файлы для выбранных операций (без удаления файлов)"
 
 #: ../bleachbit/GUI.py:889
 msgid "Clean files in the selected operations"
@@ -976,8 +976,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"Необратимое стирание свободного дискового пространства уничтожает остатки "
-"файлов, которые были удалены без стирания. Оно не освобождает дополнительное "
+"Перезапись свободного дискового пространства уничтожает остатки файлов, "
+"которые были удалены без стирания. Она не освобождает дополнительное "
 "пространство на диске."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
@@ -1018,7 +1018,7 @@ msgstr "Дисковое пространство для освобождени�
 #: ../bleachbit/Worker.py:296
 #, python-format
 msgid "Files deleted: %d"
-msgstr "Файлов удалено: %d"
+msgstr "Удалено файлов: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
@@ -1090,7 +1090,7 @@ msgstr "Импортировано из winapp2.ini"
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:279
 msgid "Broken desktop files"
-msgstr "Неисправные файлы рабочего стола"
+msgstr "Неисправные файлы .desktop"
 
 #: ../bleachbit/Cleaner.py:280
 msgid "Delete broken application menu entries and file associations"
@@ -1108,7 +1108,7 @@ msgstr "Удалить файлы для ненужных языков"
 
 #: ../bleachbit/Cleaner.py:287
 msgid "Configure this option in the preferences."
-msgstr "Настроить этот параметр в настройках."
+msgstr "Настройте параметры этой операции в настройках программы."
 
 #: ../bleachbit/Cleaner.py:293
 msgid "Rotated logs"
@@ -1152,14 +1152,14 @@ msgstr "Очистить корзину"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:322
 msgid "Update uninstallers"
-msgstr "Обновить программы удаления"
+msgstr "Деинсталляторы обновлений"
 
 #: ../bleachbit/Cleaner.py:323
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Удалить программы удаления обновлений Microsoft, включая исправления, пакеты "
+"Удалить деинсталляторы обновлений Microsoft, включая исправления, пакеты "
 "обновлений, и обновления Internet Explorer"
 
 #: ../bleachbit/Cleaner.py:330 ../bleachbit/Cleaner.py:555
@@ -1186,18 +1186,18 @@ msgstr "Удаление выбранных пользователем папо�
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:341
 msgid "Free disk space"
-msgstr "Свободное место"
+msgstr "Свободное место на диске"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:343
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
-"Перезаписать свободное дисковое пространство чтобы удалённые файлы "
+"Перезаписать свободное дисковое пространство, чтобы удалённые файлы "
 "невозможно было восстановить"
 
 #: ../bleachbit/Cleaner.py:344
 msgid "This option is very slow."
-msgstr "Выполнение с этим параметром очень медленное."
+msgstr "Эта операция очень медленная."
 
 #: ../bleachbit/Cleaner.py:348
 msgid "The system in general"
@@ -1355,7 +1355,7 @@ msgstr "Удалить"
 
 #: ../bleachbit/GuiPreferences.py:266
 msgid "All languages will be deleted except those checked."
-msgstr "Все языки будут удалены кроме отмеченных здесь."
+msgstr "Все языки, кроме отмеченных здесь, будут удалены."
 
 #: ../bleachbit/GuiPreferences.py:281
 msgid "Preserve"
@@ -1473,12 +1473,12 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:795
 #, python-format
 msgid "Wiping path: %s"
-msgstr "Необратимое стирание пути: %s"
+msgstr "Перезапись пути: %s"
 
 #: ../bleachbit/FileUtilities.py:804
 msgid "Creating new, temporary file for wiping free space."
 msgstr ""
-"Создание нового временного файла для стирания свободного пространства."
+"Создание нового временного файла для очистки свободного пространства."
 
 #: ../bleachbit/FileUtilities.py:841
 #, python-format
@@ -1577,7 +1577,7 @@ msgstr "Выполнить внешнюю команду: %s"
 #: ../bleachbit/GuiBasic.py:48 ../bleachbit/GuiBasic.py:75
 #: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:145
 msgid "_Cancel"
-msgstr "_Отменить"
+msgstr "О_тменить"
 
 #: ../bleachbit/GuiBasic.py:76
 msgid "_Open"
@@ -1700,7 +1700,7 @@ msgstr "вывести информацию о версии и выйти"
 
 #: ../bleachbit/CLI.py:172
 msgid "overwrite files to hide contents"
-msgstr "перезаписать файлы чтобы скрыть содержимое"
+msgstr "перезаписать файлы, чтобы скрыть содержимое"
 
 #: ../bleachbit/CLI.py:180
 msgid ""
@@ -1733,7 +1733,7 @@ msgstr "Нечего выполнять. Укажите опции."
 
 #: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
-msgstr "--overwrite предназначен только для использования с --clean"
+msgstr "--overwrite предназначена только для использования с --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1844,19 +1844,21 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"Функция wipe_memory() с PID {pid} ожидает завершения процесса-потомка с "
+"идентификатором {cid}."
 
 #: ../bleachbit/Memory.py:323
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Потомок процесса стирания памяти вернул код %d."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr "Удаление файлов (безвозвратно)"
+msgstr "_Удаление файлов (безвозвратно)"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "Удаление каталогов (безвозвратно)"
+msgstr "У_даление каталогов (безвозвратно)"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
@@ -1872,7 +1874,7 @@ msgstr "Со_здать помеху"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
-msgstr "Обнулить настройки и выйти"
+msgstr "О_бнулить настройки и выйти"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
@@ -1880,7 +1882,7 @@ msgstr "_Диагностика"
 
 #: ../data/app-menu.ui:40
 msgid "_Help"
-msgstr "_Помощь"
+msgstr "_Справка"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
