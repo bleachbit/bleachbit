@@ -30,6 +30,7 @@ import os
 import glob
 import re
 from xml.dom.minidom import parseString
+import StringIO
 
 import bleachbit
 from bleachbit import Cleaner, Windows
@@ -160,8 +161,15 @@ class Winapp:
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
+
         self.parser = bleachbit.RawConfigParser()
-        self.parser.read(pathname)
+
+        with open(pathname, 'rb') as fp:
+            content = fp.read().decode('utf-8-sig').encode('utf8')
+            self.parser.readfp(StringIO.StringIO(content))
+
+        #self.parser.read(pathname)
+
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
