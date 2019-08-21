@@ -98,7 +98,7 @@ class ActionTestCase(common.BleachbitTestCase):
     _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
     _TEST_PROCESS_SIMPLE = u'<action command="process" cmd="%s" />'
 
-    def _test_action_str(self, action_str):
+    def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
@@ -113,7 +113,7 @@ class ActionTestCase(common.BleachbitTestCase):
         for cmd in provider.get_commands():
             self.assertIsInstance(
                 cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function))
-            if 'process' != command and not has_glob(filename):
+            if 'process' != command and not has_glob(filename) and expect_exists:
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
@@ -135,7 +135,8 @@ class ActionTestCase(common.BleachbitTestCase):
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
         if 'walk.all' == search:
-            self.assertTrue(dir_is_empty(filename), 'directory not empty after walk.all: %s' % filename)
+            if expect_exists:
+                self.assertTrue(dir_is_empty(filename), 'directory not empty after walk.all: %s' % filename)
 
     def test_delete(self):
         """Unit test for class Delete"""
@@ -447,6 +448,10 @@ class ActionTestCase(common.BleachbitTestCase):
                 os.rmdir(dirname)
             elif variant == 'top':
                 self.assertNotExists(dirname)
+
+            # If the path does not exist, it should be silently ignored.
+            # The top directory no long exists, so just replay it.
+            self._test_action_str(action_str, False)
 
     def test_walk_files(self):
         """Unit test for walk.files"""

@@ -269,7 +269,8 @@ class FileActionProvider(ActionProvider):
             """Delete directory contents and the directory itself"""
             for f in get_walk_all(top):
                 yield f
-            yield top
+            if os.path.exists(top):
+                yield top
 
         if 'deep' == self.search:
             raise StopIteration
