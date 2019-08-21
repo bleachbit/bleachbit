@@ -74,7 +74,7 @@
     <!-- Extras - making WinApp2.ini obsolete: -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CLR_v4.0\UsageLogs\"/>
     <!-- In a wider range some History... -->
-    <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\*\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\navigationHistory\"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\Audio\PolicyConfig\PropertyStore"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl"/>
@@ -93,8 +93,7 @@
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompat*Cache\"/>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\INetCache\"/>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache\"/>
-    <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache.old\"/>
-    <action command="delete" search="file" path="$$IELocalAppData$$\WebCache.old\"/>
+    <action command="delete" search="walk.top" path="$$IELocalAppData$$\WebCache.old\"/>
     <!-- Empty folder on the demo machine: (Tobias) -->
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Internet Explorer\iconcache\"/>
     <!-- Extras - making WinApp2.ini obsolete: -->
@@ -121,10 +120,6 @@
     <!-- Windows 7 Support (and maybe other Windows versions): -->
     <!-- Extras - making WinApp2.ini obsolete: -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IEDownloadHistory\"/>
-  </option>
-  <option id="download_location">
-    <label>Last download location</label>
-    <description>Delete the usage history</description>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer" name="Download Directory"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main" name="Save Directory"/>
   </option>
