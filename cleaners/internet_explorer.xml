@@ -18,17 +18,38 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    @app Microsoft Internet Explorer
+    @url https://www.microsoft.com/en-us/download/internet-explorer.aspx
+    @os Windows
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-21
+    @cleanerby Andrew Ziem (2009-05-17 - 2016-12-26) & Tobias B. Besemer (2019-03-07 - 2019-03-21)
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10 (... with an old version of the cleaner!)
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
+
 -->
 <cleaner id="internet_explorer" os="windows">
   <label>Internet Explorer</label>
   <description>Web browser</description>
+  <var name="IELocalAppData">
+    <!-- Windows 7 Support (and maybe other Windows versions): -->
+    <value>%LocalAppData%\Microsoft\Windows</value>
+    <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - English-only-Support: -->
+    <value>%UserProfile%\Local Settings</value>
+    <!-- And now some none-English-Support... -->
+    <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - Polish-Support: -->
+    <value>%UserProfile%\Ustawienia lokalne</value>
+  </var>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\Cookies\"/>
-    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\Cookies\"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\DOMStore\"/>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\LocalLow\Microsoft\Internet Explorer\DOMStore\"/>
+    <action command="delete" search="walk.files" path="%UserProfile%\Cookies\"/>
+    <action command="delete" search="walk.files" path="%AppData%\Microsoft\Windows\Cookies\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\DOMStore\"/>
+    <action command="delete" search="walk.files" path="$$IELocalAppData$$\INetCookies\"/>
+    <action command="delete" search="walk.files" path="%LocalAppDataLow%\Microsoft\Internet Explorer\DOMStore\"/>
   </option>
   <option id="forms">
     <label>Form history</label>
@@ -40,20 +61,79 @@
   <option id="history">
     <label>History</label>
     <description>List of visited web pages</description>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\History\"/>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\History\"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Active\"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Internet Explorer\Recovery\Last Active\"/>
+    <action command="delete" search="walk.files" path="$$IELocalAppData$$\History\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Active\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Last Active\"/>
     <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLs"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TabbedBrowsing\NewTabPage"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Explorer Bars\{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}\FilesNamedMRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Explorer Bars\{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}\ContainingTextMRU"/>
+    <!-- Extras - making WinApp2.ini obsolete: -->
+    <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CLR_v4.0\UsageLogs\"/>
+    <!-- In a wider range some History... -->
+    <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\*\"/>
+    <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\navigationHistory\"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\Audio\PolicyConfig\PropertyStore"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Recovery\PendingDelete"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Ext\Stats"/>
   </option>
-  <option id="temporary_files">
-    <label>Temporary files</label>
-    <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Windows\IETldCache\"/>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\AppData\Local\Microsoft\Windows\Temporary Internet Files\"/>
-    <action command="delete" search="walk.files" path="%USERPROFILE%\Local Settings\Temporary Internet Files\"/>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Feeds Cache\"/>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\Temporary Internet Files\"/>
+    <!-- Windows 7 Support (and maybe other Windows versions): -->
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Internet Explorer\UserData\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IETldCache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatCache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatUACache\"/>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompat*Cache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\INetCache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache\"/>
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache.old\"/>
+    <action command="delete" search="file" path="$$IELocalAppData$$\WebCache.old\"/>
+    <!-- Empty folder on the demo machine: (Tobias) -->
+    <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Internet Explorer\iconcache\"/>
+    <!-- Extras - making WinApp2.ini obsolete: -->
+    <action command="delete" search="walk.all" path="$$IELocalAppData$$\AppCache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\AppCache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IECompat*Cache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\INet*\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\Internet Explorer\DOMStore\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\Internet Explorer\Emie*List\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\PRICache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Temp\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\Cache\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\TempState\"/>
+    <action command="delete" search="walk.all" path="%WinDir%\System32\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
+    <action command="winreg" path="HKCR\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\windows_ie_ac_001\Internet Explorer\DOMStorage"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\DOMStorage"/>
+    <!-- Deletes Feeds Cache: -->
+    <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Feeds Cache\"/>
+  </option>
+  <option id="downloads">
+    <label>Downloads history</label>
+    <description>Delete the usage history</description>
+    <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IEDownloadHistory\"/>
+    <!-- Windows 7 Support (and maybe other Windows versions): -->
+    <!-- Extras - making WinApp2.ini obsolete: -->
+    <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IEDownloadHistory\"/>
+  </option>
+  <option id="download_location">
+    <label>Last download location</label>
+    <description>Delete the usage history</description>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer" name="Download Directory"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main" name="Save Directory"/>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.txt"/>
+    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
   </option>
 </cleaner>
