@@ -101,7 +101,7 @@ if 'py2exe' in sys.argv:
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
-                         'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
+                         'pickle', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
                 'libgstreamer-1.0-0.dll',
                 'CRYPT32.DLL',  # required by ssl

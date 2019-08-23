@@ -257,7 +257,6 @@ def delete_unnecessary():
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
         r'_win32sysloader.pyd',
-        r'bz2.pyd',
         r'etc\bash_completion.d',
         r'lib\GNU.Gettext.dll',
         r'lib\gdk-pixbuf-2.0',
@@ -272,7 +271,6 @@ def delete_unnecessary():
         r'servicemanager.pyd',
         r'share\aclocal',
         r'share\doc',
-        r'share\glib-2.0',
         r'share\gtk-2.0',
         r'share\gtk-doc',
         r'share\icon-naming-utils',
@@ -418,7 +416,7 @@ def recompress_library():
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'email']
+    delete_paths = ['distutils']
     for p in delete_paths:
         shutil.rmtree(os.path.join('dist', 'library', p))
 
