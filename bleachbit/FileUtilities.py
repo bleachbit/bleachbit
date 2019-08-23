@@ -43,8 +43,6 @@ import subprocess
 import tempfile
 import time
 
-import scandir
-
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
@@ -54,6 +52,12 @@ if 'nt' == os.name:
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
     pywinerror = WindowsError
+
+try:
+    from scandir import walk
+except ImportError:
+    logger.warning('scandir is not available, so falling back to slower os.walk()')
+    from os import walk
 
 
 def open_files_linux():
@@ -166,7 +170,7 @@ def children_in_directory(top, list_directories=False):
             for pathname in children_in_directory(top_, list_directories):
                 yield pathname
         return
-    for (dirpath, dirnames, filenames) in scandir.walk(top, topdown=False):
+    for (dirpath, dirnames, filenames) in walk(top, topdown=False):
         if list_directories:
             for dirname in dirnames:
                 yield os.path.join(dirpath, dirname)
