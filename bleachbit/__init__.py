@@ -94,6 +94,7 @@ def expandvars(var):
         try:
             final = var.decode('utf-8')
         except UnicodeDecodeError:
+            # Keep a string which won't be expanded under Windows 7.
             final = var
     else:
         final = var
@@ -110,7 +111,14 @@ def expandvars(var):
             final = re.sub(r'\$(.*?)(?=$|\\)',
                            lambda x: '%%%s%%' % x.group(1),
                            final)
-        final = _winreg.ExpandEnvironmentStrings(final)
+        try:
+            final = _winreg.ExpandEnvironmentStrings(final)
+        except TypeError:
+            # An error occurs when filename contains invalid
+            # char and we return string instead of unicode.
+            # This can happen on win7.
+            pass
+ 
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
