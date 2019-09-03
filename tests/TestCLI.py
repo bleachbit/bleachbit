@@ -121,25 +121,39 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_delete(self):
         """Unit test for --delete option"""
-        filename = self.mkstemp(prefix='bleachbit-test-cli-delete')
-        if 'nt' == os.name:
-            filename = os.path.normcase(filename)
-        # replace delete function for testing
-        save_delete = FileUtilities.delete
-        deleted_paths = []
-
-        def dummy_delete(path, shred=False):
-            self.assertExists(path)
-            deleted_paths.append(os.path.normcase(path))
-        FileUtilities.delete = dummy_delete
-        FileUtilities.delete(filename)
-        self.assertExists(filename)
-        operations = args_to_operations(['system.tmp'], False)
-        preview_or_clean(operations, True)
-        FileUtilities.delete = save_delete
-        self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
-        os.remove(filename)
-        self.assertNotExists(filename)
+        prefixes = [
+            'bleachbit-test-cli-delete', 
+            '\x8b\x8b-bad-encoding'
+        ]
+        for i in range(len(prefixes)):
+            
+            filename = self.mkstemp(prefix=prefixes[i])
+            if 'nt' == os.name:
+                filename = os.path.normcase(filename)
+            # replace delete function for testing
+            save_delete = FileUtilities.delete
+    
+            deleted_paths = []
+            crash = [False]
+    
+            def dummy_delete(path, shred=False):
+                try:
+                    self.assertExists(path)
+                except:
+                    crash[0] = True
+    
+                deleted_paths.append(os.path.normcase(path))
+    
+            FileUtilities.delete = dummy_delete
+            FileUtilities.delete(filename)
+            self.assertExists(filename)
+            operations = args_to_operations(['system.tmp'], False)
+            preview_or_clean(operations, True)
+            FileUtilities.delete = save_delete
+            self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
+            os.remove(filename)
+            self.assertNotExists(filename)
+            self.assertFalse(crash[0])
 
     def test_shred(self):
         """Unit test for --shred"""

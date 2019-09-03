@@ -83,6 +83,7 @@ for lf in license_filenames:
 
 # os.path.expandvars does not work well with non-ascii Windows paths.
 # This is a unicode-compatible reimplementation of that function.
+# Note that if there are errors in the encoding it returns just expanded str.
 def expandvars(var):
     """Expand environment variables.
 
@@ -90,7 +91,11 @@ def expandvars(var):
     form $name or ${name} or %name% are replaced by the value of environment
     variable name."""
     if isinstance(var, str):
-        final = var.decode('utf-8')
+        try:
+            final = var.decode('utf-8')
+        except UnicodeDecodeError:
+            # Keep a string which won't be expanded under Windows 7.
+            final = var
     else:
         final = var
 
@@ -106,7 +111,14 @@ def expandvars(var):
             final = re.sub(r'\$(.*?)(?=$|\\)',
                            lambda x: '%%%s%%' % x.group(1),
                            final)
-        final = _winreg.ExpandEnvironmentStrings(final)
+        try:
+            final = _winreg.ExpandEnvironmentStrings(final)
+        except TypeError:
+            # An error occurs when filename contains invalid
+            # char and we return string instead of unicode.
+            # This can happen on win7.
+            pass
+ 
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
