@@ -258,11 +258,16 @@ def delete_unnecessary():
     delete_paths = [
         r'_win32sysloader.pyd',
         r'lib\gdk-pixbuf-2.0',
+        r'lib\gdbus-2.0',
         r'perfmon.pyd',
         r'select.pyd',
         r'servicemanager.pyd',
         r'share\themes\default',
         r'share\themes\emacs',
+        r'share\fontconfig',
+        r'share\glib-2.0',
+        r'share\icons\highcontrast',
+        r'share\themes',
         r'win32evtlog.pyd',
         r'win32pipe.pyd',
         r'win32wnet.pyd',
@@ -303,16 +308,18 @@ def delete_unnecessary():
 
 @count_size_improvement
 def delete_icons():
-    logger.info('Deleting unused PNG icons')
+    logger.info('Deleting unused PNG/SVG icons')
     # This whitelist comes from analyze_process_monitor_events.py
     png_whitelist = [
-        'dialog-information.png',
-        'dialog-warning.png',
+        'edit-clear-all-symbolic.svg'
         'edit-delete.png',
         'edit-find.png',
-        'gtk-preferences.png',
+        'pan-down-symbolic.svg',
+        'window-close-symbolic.svg',
+        'window-maximize-symbolic.svg',
+        'window-minimize-symbolic.svg'
     ]
-    strip_list = recursive_glob(r'dist\share\icons', ['*.png'])
+    strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:
         if os.path.basename(f) not in png_whitelist:
             os.remove(f)
