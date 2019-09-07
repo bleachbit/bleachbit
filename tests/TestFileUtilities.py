@@ -39,32 +39,37 @@ import unittest
 def test_ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
-    teststr = b'#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n'
-    # create test file
-    filename = self.write_file('bleachbit-test-ini', teststr)
-    self.assertExists(filename)
-    size = os.path.getsize(filename)
-    self.assertEqual(len(teststr), size)
+    teststrings = [
+        b'#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n',
+        u'#Test\n[RecentsMRL]\nlist=C:\\Юзъри\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n'.encode('ISO-8859-5')
+    ]
+    for teststr in teststrings:
 
-    # section does not exist
-    execute(filename, 'Recents', None)
-    self.assertEqual(len(teststr), os.path.getsize(filename))
+        # create test file
+        filename = self.write_file('bleachbit-test-ini', teststr)
+        self.assertExists(filename)
+        size = os.path.getsize(filename)
+        self.assertEqual(len(teststr), size)
 
-    # parameter does not exist
-    execute(filename, 'RecentsMRL', 'files')
-    self.assertEqual(len(teststr), os.path.getsize(filename))
+        # section does not exist
+        execute(filename, 'Recents', None)
+        self.assertEqual(len(teststr), os.path.getsize(filename))
 
-    # parameter does exist
-    execute(filename, 'RecentsMRL', 'list')
-    self.assertEqual(14, os.path.getsize(filename))
+        # parameter does not exist
+        execute(filename, 'RecentsMRL', 'files')
+        self.assertEqual(len(teststr), os.path.getsize(filename))
 
-    # section does exist
-    execute(filename, 'RecentsMRL', None)
-    self.assertEqual(0, os.path.getsize(filename))
+        # parameter does exist
+        execute(filename, 'RecentsMRL', 'list')
+        self.assertEqual(14, os.path.getsize(filename))
 
-    # clean up
-    delete(filename)
-    self.assertNotExists(filename)
+        # section does exist
+        execute(filename, 'RecentsMRL', None)
+        self.assertEqual(0, os.path.getsize(filename))
+
+        # clean up
+        delete(filename)
+        self.assertNotExists(filename)
 
 
 def test_json_helper(self, execute):
