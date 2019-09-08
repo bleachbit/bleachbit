@@ -78,6 +78,20 @@
     <!-- Windows 10 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"/>
   </option>
+  <option id="shellbags">
+    <label>Shellbags</label>
+    <description>Delete the usage date, window position, and other data for folders</description>
+    <!-- What we need to delete: (http://support.microsoft.com/kb/813711) -->
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\Bags"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\BagMRU"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\ShellNoRoam\Bags"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Windows\ShellNoRoam\BagMRU"/>
+    <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags"/>
+    <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU"/>
+    <!-- And on 64-bit systems additionally: -->
+    <action command="winreg" path="HKCU\Software\Classes\Wow6432Node\Local Settings\Software\Microsoft\Windows\Shell\Bags"/>
+    <action command="winreg" path="HKCU\Software\Classes\Wow6432Node\Local Settings\Software\Microsoft\Windows\Shell\BagMRU"/>
+  </option>
   <option id="thumbnails">
     <label>Thumbnails</label>
     <description>Delete the cache</description>
