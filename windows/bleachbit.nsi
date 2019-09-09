@@ -19,6 +19,22 @@
 
 
 ;--------------------------------
+;Pack header:
+
+; Compress installer exehead with an executable compressor (such as UPX / Petite).
+
+; Paths should be absolute to allow building from any location.
+; Note that your executable compressor should not compress the first icon.
+
+!ifdef packhdr
+  ;!packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
+  ;Using UPX path info from setup_py2exe.py ->
+  !packhdr "$%TEMP%\exehead.tmp" '"\upx394w\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
+  ;!packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\Petite\petite.exe" -9 -b0 -r** -p0 -y "$%TEMP%\exehead.tmp"'
+!endif
+
+
+;--------------------------------
 ;Include Modern UI
 
   !include "MUI2.nsh"
@@ -50,8 +66,17 @@
   ; NsisMultiUser sets this, when needed.
   ;RequestExecutionLevel admin
 
-  ;Best compression
+
+;--------------------------------
+;Installer-/UnInstaller-Attributes - Compiler Flags
+; https://nsis.sourceforge.io/Docs/Chapter4.html#flags
+
+; Set default compressor:
+; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+; Best compression: https://nsis.sourceforge.io/Docs/Chapter1.html#intro-features
+!ifdef Compressor
   SetCompressor /SOLID lzma
+!endif
 
 
 ;--------------------------------
