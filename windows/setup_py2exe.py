@@ -422,12 +422,12 @@ def recompress_library():
     if stderr:
         logger.error(stderr)
 
-    file_size_new = os.path.getsize('dist\\library.zip')
+    file_size_new = os.path.getsize('dist\\library.7z')
     file_size_diff = file_size_old - file_size_new
     logger.info('Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(
         file_size_diff, file_size_old, file_size_new))
     shutil.rmtree('dist\\library', ignore_errors=True)
-    assert_exist('dist\\library.zip')
+    assert_exist('dist\\library.7z')
 
 
 def shrink():
