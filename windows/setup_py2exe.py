@@ -388,32 +388,32 @@ def delete_linux_only():
 
 @count_size_improvement
 def recompress_library():
-    """Recompress library.zip"""
+    """Recompress library.7z"""
     if fast:
-        logger.warning('Fast mode: Skipped recompression of library.zip')
+        logger.warning('Fast mode: Skipped recompression of library.7z')
         return
 
     if not os.path.exists(SZ_EXE):
         logger.warning(SZ_EXE + ' does not exist')
         return
 
-    logger.info('Recompressing library.zip with 7-Zip')
+    logger.info('Recompressing library.7z with 7-Zip')
 
-    # extract library.zip
+    # extract library.7z
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
-    cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
+    cmd = SZ_EXE + ' x  dist\\library.7z' + ' -odist\\library  -y'
     run_cmd(cmd)
-    file_size_old = os.path.getsize('dist\\library.zip')
-    os.remove('dist\\library.zip')
+    file_size_old = os.path.getsize('dist\\library.7z')
+    os.remove('dist\\library.7z')
 
-    # clean unused modules from library.zip
+    # clean unused modules from library.7z
     delete_paths = ['distutils']
     for p in delete_paths:
         shutil.rmtree(os.path.join('dist', 'library', p))
 
-    # recompress library.zip
-    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
+    # recompress library.7z
+    cmd = SZ_EXE + ' a {} ..\\library.7z'.format(SZ_OPTS)
     logger.info(cmd)
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, cwd='dist\\library')
@@ -467,7 +467,7 @@ def package_portable():
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
 
-    archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+    archive('BleachBit-Portable', 'BleachBit-{}-portable.7z'.format(BB_VER))
 
 # NSIS
 
@@ -505,7 +505,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
         outfile = ROOT_DIR + \
-            '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
+            '\\windows\\BleachBit-{0}-setup.7z'.format(BB_VER)
         infile = ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
         archive(infile, outfile)
     else:
@@ -525,5 +525,5 @@ if '__main__' == __name__:
     package_installer()
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
-    os.system(r'dir *.zip windows\*.exe windows\*.zip')
+    os.system(r'dir *.7z windows\*.exe windows\*.7z')
     logger.info('Success!')
