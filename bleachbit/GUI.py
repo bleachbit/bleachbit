@@ -476,6 +476,8 @@ class GUI(Gtk.ApplicationWindow):
         if isinstance(sys.stderr, DelayLog):
             for msg in sys.stderr.read():
                 self.append_text(msg)
+            # if stderr was redirected - keep redirecting it
+            sys.stderr = self.gtklog
 
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))

@@ -36,14 +36,18 @@ def is_debugging_enabled_via_cli():
 class DelayLog(object):
     def __init__(self):
         self.queue = []
+        self.msg = ''
 
     def read(self):
         for msg in self.queue:
-            yield msg+'\n'
+            yield msg
         queue = []
 
     def write(self, msg):
-        self.queue.append(msg)
+        self.msg += msg
+        if self.msg[-1] == '\n':
+            self.queue.append(self.msg)
+            self.msg = ''
 
 
 def init_log():
@@ -88,6 +92,7 @@ class GtkLoggerHandler(logging.Handler):
     def __init__(self, append_text):
         logging.Handler.__init__(self)
         self.append_text = append_text
+        self.msg = ''
         self.update_log_level()
 
     def update_log_level(self):
@@ -106,3 +111,10 @@ class GtkLoggerHandler(logging.Handler):
         if record.exc_text:
             msg = msg + '\n' + record.exc_text
         self.append_text(msg + '\n', tag)
+
+    def write(self, msg):
+        self.msg += msg
+        if self.msg[-1] == '\n':
+            tag = None
+            self.append_text(msg, tag)
+            self.msg = ''
