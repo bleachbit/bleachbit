@@ -28,17 +28,11 @@ import random
 import tempfile
 from datetime import datetime, timedelta
 
-try:
-    import certifi
-except:
-    HAVE_CERTIFI = False
-else:
-    HAVE_CERTIFI = True
-
 from bleachbit import _
 from bleachbit import options_dir
+from bleachbit import CA_BUNDLE
 
-import markovify
+from . import markovify
 
 logger = logging.getLogger(__name__)
 
@@ -126,10 +120,6 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
     from urllib2 import urlopen, URLError, HTTPError
     from httplib import HTTPException
     import socket
-    if HAVE_CERTIFI:
-        cafile = certifi.where()
-    else:
-        cafile = None
     for (url, fn) in ((URL_CLINTON_SUBJECT, subject_model_path),
                       (URL_CLINTON_CONTENT, content_model_path),
                       (URL_2600, twentysixhundred_model_path)):
@@ -138,7 +128,7 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
             continue
         logger.info('Downloading %s to %s', url, fn)
         try:
-            resp = urlopen(url, cafile=cafile)
+            resp = urlopen(url, cafile=CA_BUNDLE)
             with open(fn, 'wb') as f:
                 f.write(resp.read())
         except (URLError, HTTPError, HTTPException, socket.error) as exc:

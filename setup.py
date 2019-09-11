@@ -100,7 +100,7 @@ if 'py2exe' in sys.argv:
             'packages': ['encodings', 'gi'],
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
-            'excludes': ['pyreadline', 'difflib', 'doctest',
+            'excludes': ['certifi', 'pyreadline', 'difflib', 'doctest',
                          'pickle', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
                 'libgstreamer-1.0-0.dll',
@@ -252,7 +252,7 @@ def run_setup():
           license="GPLv3",
           url=bleachbit.APP_URL,
           platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
-          packages=['bleachbit'],
+          packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 
 
