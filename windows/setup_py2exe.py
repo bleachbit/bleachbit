@@ -491,11 +491,17 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     logger.info('Building installer')
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    #Was:
+    #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    #Now: Done in NSIS file!
+    opts = '' if fast else '/Dpackhdr /DCompressor'
     nsis(opts, exe_name, nsi_path)
 
     if not fast:
-        nsis('/DNoTranslations',
+        #Was:
+        #nsis('/DNoTranslations',
+        #Now: Compression gets now done in NSIS file!
+        nsis('/DNoTranslations /Dpackhdr /DCompressor',
              'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
              nsi_path)
 
