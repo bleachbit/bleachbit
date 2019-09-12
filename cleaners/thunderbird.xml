@@ -33,13 +33,15 @@
    <value search="glob" os="linux">~/.thunderbird/*</value>
    <value search="glob" os="linux">~/.mozilla-thunderbird/*</value>
    <value search="glob" os="linux">~/.thunderbird/Profiles/*</value>
-   <value search="glob" os="windows">%LocalAppData%\Thunderbird\Profiles\*</value>
+   <value search="glob" os="windows">%AppData%\Thunderbird\Profiles\*</value>
   </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.all" path="$$profile$$/Cache/"/>
     <action command="delete" search="walk.all" path="~/.cache/thunderbird/"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Thunderbird\Profiles\*\cache2\"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Thunderbird\Profiles\*\startupCache\"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/Cache/ -->
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/Cache/ -->
     <!-- Ubuntu 19.04 Thunderbird 60.0.80 has ~/.cache/thunderbird/ , and it is no longer under $$profile$$-->
