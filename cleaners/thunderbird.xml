@@ -39,8 +39,10 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.all" path="$$profile$$/Cache/"/>
+    <action command="delete" search="walk.all" path="~/.cache/thunderbird/"/>
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/Cache/ -->
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/Cache/ -->
+    <!-- Ubuntu 19.04 Thunderbird 60.0.80 has ~/.cache/thunderbird/ , and it is no longer under $$profile$$-->
   </option>
   <option id="cookies">
     <label>Cookies</label>
