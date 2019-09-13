@@ -132,7 +132,7 @@ class ChaffDialog(Gtk.Dialog):
     def download_models_dialog(self):
         """Download models"""
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
-                                   Gtk.ButtonsType.OK_CANCEL, _("Download data needed for email generator?"))
+                                   Gtk.ButtonsType.OK_CANCEL, _("Download data needed for chaff generator?"))
         response = dialog.run()
         ret = None
         if response == Gtk.ResponseType.OK:
