@@ -24,6 +24,7 @@ import os
 import shutil
 import subprocess
 import sys
+import certifi
 
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
@@ -216,14 +217,20 @@ def build():
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
-    for subpath in ['glib-2.0', 'fontconfig', 'fonts', 'icons', 'themes']:
+    for subpath in ['fontconfig', 'fonts', 'icons', 'themes']:
         copytree(os.path.join(GTK_DIR, 'share', subpath), 'dist\\share\\' + subpath)
+    SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
+    os.makedirs(os.path.join('dist', SCHEMAS_DIR))
+    shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'), os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
     for dll in glob.glob1(GTK_DIR, '*.dll'):
         shutil.copyfile(os.path.join(GTK_DIR,dll), 'dist\\'+dll)
 
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
+
+    logger.info('Copying CA bundle')
+    shutil.copyfile(certifi.where(), os.path.join('dist', 'cacert.pem'))
 
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
@@ -265,7 +272,6 @@ def delete_unnecessary():
         r'share\themes\default',
         r'share\themes\emacs',
         r'share\fontconfig',
-        r'share\glib-2.0',
         r'share\icons\highcontrast',
         r'share\themes',
         r'win32evtlog.pyd',
