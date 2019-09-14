@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-14 21:28-0600\n"
-"PO-Revision-Date: 2019-08-30 13:20+0000\n"
-"Last-Translator: Toni Estevez <toni.estevez@gmail.com>\n"
+"PO-Revision-Date: 2019-09-12 14:31+0000\n"
+"Last-Translator: Marc Coll Carrillo <Unknown>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-08-30 17:52+0000\n"
-"X-Generator: Launchpad (build 19044)\n"
+"X-Launchpad-Export-Date: 2019-09-13 14:08+0000\n"
+"X-Generator: Launchpad (build 19048)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -804,6 +804,7 @@ msgstr ""
 "  Jaime Muñoz Martín https://launchpad.net/~kayron8\n"
 "  José Lou Chang https://launchpad.net/~obake\n"
 "  Lucas Farias https://launchpad.net/~lukaz-f\n"
+"  Marc Coll Carrillo https://launchpad.net/~marc-coll-carrillo\n"
 "  Marco Antonio https://launchpad.net/~markitosco\n"
 "  Monkey https://launchpad.net/~monkey-libre\n"
 "  Nicolás Pierini https://launchpad.net/~nekun-deactivatedaccount\n"
@@ -1518,18 +1519,22 @@ msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"Se han escrito {files:,} ficheros y {bytes:,} bytes en {seconds:,} segundos "
+"a {rate:.2f} MB/s"
 
 #: ../bleachbit/FileUtilities.py:862
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} bytes y {inodes:,} inodos disponibles para usuarios normales"
 
 #: ../bleachbit/FileUtilities.py:864
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
+msgstr "{bytes:,} bytes y {inodes:,} inodos disponibles para superusuarios"
 
 #: ../bleachbit/FileUtilities.py:879
 msgid "Handled unknown error #0 while truncating file."
 msgstr ""
+"Se ha gestionado un error desconcido #0 mientras se truncaba el fichero."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1682,7 +1687,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:143
 msgid "set log level to verbose"
-msgstr ""
+msgstr "Establecer el nivel de registro a verboso"
 
 #: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
