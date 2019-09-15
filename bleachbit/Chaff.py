@@ -121,8 +121,9 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     # 503: service unavailable
     # 504: gateway_timeout
     status_forcelist = (408, 429, 500, 502, 503, 504)
+    # sourceforge.net directories to download mirror
     retries = Retry(total=max_retries, backoff_factor=backoff_factor,
-                    status_forcelist=status_forcelist)
+                    status_forcelist=status_forcelist, redirect=5)
     session.mount('http://', HTTPAdapter(max_retries=retries))
     msg = _('Downloading url failed: %s') % url
 
