@@ -368,7 +368,6 @@ def strip():
 
 @count_size_improvement
 def upx():
-    return # skip for now
     if fast:
         logger.warning('Fast mode: Skipped executable with UPX')
         return
