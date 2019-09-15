@@ -114,7 +114,7 @@
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Feeds Cache\"/>
   </option>
   <option id="downloads">
-    <label>Downloads history</label>
+    <label>Download history</label>
     <description>Delete the usage history</description>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IEDownloadHistory\"/>
     <!-- Windows 7 Support (and maybe other Windows versions): -->
