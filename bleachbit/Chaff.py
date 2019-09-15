@@ -126,13 +126,16 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     session.mount('http://', HTTPAdapter(max_retries=retries))
     msg = _('Downloading url failed: %s') % url
 
+    from bleachbit.Update import user_agent
+    headers = {'user_agent': user_agent()}
+
     def do_error(msg2):
         if on_error:
             on_error(msg, msg2)
         from bleachbit.FileUtilities import delete
         delete(fn, ignore_missing=True)  # delete any partial download
     try:
-        response = session.get(url)
+        response = session.get(url, headers=headers)
         content = response.content
     except requests.exceptions.RequestException as exc:
         msg2 = '{}: {}'.format(type(exc).__name__, exc)
