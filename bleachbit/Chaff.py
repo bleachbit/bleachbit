@@ -107,6 +107,50 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
+def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5):
+    """Download a URL to the given filename"""
+    logger.info('Downloading %s to %s', url, fn)
+    import requests
+    from urllib3.util.retry import Retry
+    from requests.adapters import HTTPAdapter
+    session = requests.Session()
+    # 408: request timeout
+    # 429: too many requests
+    # 500: internal server error
+    # 502: bad gateway
+    # 503: service unavailable
+    # 504: gateway_timeout
+    status_forcelist = (408, 429, 500, 502, 503, 504)
+    retries = Retry(total=max_retries, backoff_factor=backoff_factor,
+                    status_forcelist=status_forcelist)
+    session.mount('http://', HTTPAdapter(max_retries=retries))
+    msg = _('Downloading url failed: %s') % url
+
+    def do_error(msg2):
+        if on_error:
+            on_error(msg, msg2)
+        from bleachbit.FileUtilities import delete
+        delete(fn, ignore_missing=True)  # delete any partial download
+    try:
+        response = session.get(url)
+        content = response.content
+    except requests.exceptions.RequestException as exc:
+        msg2 = '{}: {}'.format(type(exc).__name__, exc)
+        logger.exception(msg)
+        do_error(msg2)
+        return False
+    else:
+        if not response.status_code == 200:
+            logger.error(msg)
+            msg2 = 'Status code: %s' % response.status_code
+            do_error(msg2)
+            return False
+
+    with open(fn, 'wb') as f:
+        f.write(content)
+    return True
+
+
 def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
                     subject_model_path=DEFAULT_SUBJECT_MODEL_PATH,
                     twentysixhundred_model_path=DEFAULT_2600_MODEL_PATH,
@@ -117,28 +161,13 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
 
     Returns success as boolean value
     """
-    from urllib2 import urlopen, URLError, HTTPError
-    from httplib import HTTPException
-    import socket
     for (url, fn) in ((URL_CLINTON_SUBJECT, subject_model_path),
                       (URL_CLINTON_CONTENT, content_model_path),
                       (URL_2600, twentysixhundred_model_path)):
         if os.path.exists(fn):
             logger.debug('File %s already exists', fn)
             continue
-        logger.info('Downloading %s to %s', url, fn)
-        try:
-            resp = urlopen(url, cafile=CA_BUNDLE)
-            with open(fn, 'wb') as f:
-                f.write(resp.read())
-        except (URLError, HTTPError, HTTPException, socket.error) as exc:
-            msg = _('Downloading url failed: %s') % url
-            msg2 = '{}: {}'.format(type(exc).__name__, exc)
-            logger.exception(msg)
-            if on_error:
-                on_error(msg, msg2)
-            from bleachbit.FileUtilities import delete
-            delete(fn, ignore_missing=True)  # delete any partial download
+        if not download_url_to_fn(url, fn):
             return False
     return True
 
