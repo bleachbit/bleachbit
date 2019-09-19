@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-09-16 08:49+0000\n"
+"PO-Revision-Date: 2019-09-17 13:22+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-09-16 23:00+0000\n"
+"X-Launchpad-Export-Date: 2019-09-18 00:40+0000\n"
 "X-Generator: Launchpad (build 19048)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -662,7 +662,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbag"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -1817,7 +1817,7 @@ msgstr "Impostazione del valore nice %d per questo processo."
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "Calo dei privilegi del processo di ID {pid} all'utente di ID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1867,11 +1867,13 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"La funzione wipe_memory() con ID di processo {pid} sta aspettando il "
+"processo figlio con ID {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Il processo figlio di pulizia di memoria ha restituito codice %d."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
