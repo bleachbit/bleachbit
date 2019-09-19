@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-09-14 09:22-0600\n"
-"PO-Revision-Date: 2019-09-12 09:45+0000\n"
+"POT-Creation-Date: 2019-09-14 19:36-0600\n"
+"PO-Revision-Date: 2019-09-16 08:49+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-09-15 01:32+0000\n"
+"X-Launchpad-Export-Date: 2019-09-16 23:00+0000\n"
 "X-Generator: Launchpad (build 19048)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -453,7 +453,7 @@ msgstr "Cronologia degli indirizzi web"
 msgid "List of visited web pages"
 msgstr "Elenco dei siti web visitati"
 
-#: ../cleaners/seamonkey.xml
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
 msgstr "Cronologia dei download"
 
@@ -666,15 +666,11 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Cancella date uso, posizioni finestre e altri dati dalle cartelle"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
 msgstr "Effettua il riavvio di Windows Explorer."
-
-#: ../cleaners/internet_explorer.xml
-msgid "Downloads history"
-msgstr ""
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -888,90 +884,31 @@ msgid "Done."
 msgstr "Fatto."
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:789
+#: ../bleachbit/GUI.py:788
 msgid "Preview"
 msgstr "Anteprima"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:794 ../bleachbit/Action.py:521
+#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
 msgid "Clean"
 msgstr "Pulisci"
 
-#: ../bleachbit/GUI.py:881
+#: ../bleachbit/GUI.py:880
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Anteprima dei file nelle operazioni selezionate (nessun file verrà eliminato)"
 
-#: ../bleachbit/GUI.py:892
+#: ../bleachbit/GUI.py:891
 msgid "Clean files in the selected operations"
 msgstr "Pulisci i file nelle operazioni selezionate"
 
-#: ../bleachbit/GUI.py:900
+#: ../bleachbit/GUI.py:899
 msgid "Abort the preview or cleaning process"
 msgstr "Annullare l'anteprima o il processo di pulizia"
 
-#: ../bleachbit/GUI.py:1049
+#: ../bleachbit/GUI.py:1047
 msgid "Error when checking for updates: "
 msgstr "Errore durante la ricerca di aggiornamenti: "
-
-#: ../bleachbit/GuiChaff.py:48
-msgid "Deleting files"
-msgstr "Eliminazione file"
-
-#. TRANSLATORS: BleachBit creates digital chaff like that is like the
-#. physical chaff airplanes use to protect themselves from radar-guided
-#. missiles. For more explanation, see the online documentation.
-#: ../bleachbit/GuiChaff.py:67
-msgid "Make chaff"
-msgstr "Crea spazzatura"
-
-#: ../bleachbit/GuiChaff.py:72
-msgid "Make randomly-generated messages inspired by documents."
-msgstr "Crea messaggi generati a caso ispirandosi ai documenti."
-
-#: ../bleachbit/GuiChaff.py:76
-msgid "Inspiration"
-msgstr "Ispirazione"
-
-#: ../bleachbit/GuiChaff.py:79
-msgid "2600 Magazine"
-msgstr "Rivista 2600"
-
-#: ../bleachbit/GuiChaff.py:79
-msgid "Hillary Clinton's emails"
-msgstr "Email di Hillary Clinton"
-
-#: ../bleachbit/GuiChaff.py:87
-msgid "Number of files"
-msgstr "Numero di file"
-
-#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
-msgid "Select destination folder"
-msgstr "Selezionare la cartella di destinazione"
-
-#: ../bleachbit/GuiChaff.py:104
-msgid "When finished"
-msgstr "Al completamento"
-
-#: ../bleachbit/GuiChaff.py:107
-msgid "Delete without shredding"
-msgstr "Cancella senza triturazione"
-
-#: ../bleachbit/GuiChaff.py:107
-msgid "Do not delete"
-msgstr "Non eliminare"
-
-#: ../bleachbit/GuiChaff.py:118
-msgid "Make files"
-msgstr "Crea i file"
-
-#: ../bleachbit/GuiChaff.py:135
-msgid "Download data needed for chaff generator?"
-msgstr ""
-
-#: ../bleachbit/GuiChaff.py:177
-msgid "Generating files"
-msgstr "Generazione file"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1247,6 +1184,8 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Errore in handle_cleaner_option() per id cancellatore = {cleaner_id}, "
+"opzione XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:277
 #, python-format
@@ -1363,7 +1302,7 @@ msgstr "{bytes:,} byte e {inodes:,} inode disponibili al super-utente"
 
 #: ../bleachbit/FileUtilities.py:926
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "Gestito errore sconosciuto #0 durante il troncamento del file."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1390,13 +1329,16 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Errore durante l'apertura di una connessione di rete per il controllo "
+"aggiornamenti. Verificare che la rete stia funzionando e che un firewall non "
+"stia bloccando questa applicazione. Messaggio di errore: {}"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:157
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "La scansione profonda non supporta le variabili multivalore."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1404,7 +1346,7 @@ msgstr ""
 #: ../bleachbit/Action.py:258
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" usato con il percorso di file normale=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1414,7 +1356,7 @@ msgstr ""
 #: ../bleachbit/Action.py:298
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" non è un glob (mancano i caratteri jolly)"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:391 ../bleachbit/Action.py:404
@@ -1512,11 +1454,11 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:143
 msgid "set log level to verbose"
-msgstr ""
+msgstr "imposta il livello di log a verboso"
 
 #: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
-msgstr ""
+msgstr "messaggi di log di debug su file"
 
 #: ../bleachbit/CLI.py:146
 msgid "shred specific files or folders"
@@ -1548,7 +1490,7 @@ msgstr "aggiorna winapp2.ini, se è disponibile una nuova versione"
 
 #: ../bleachbit/CLI.py:168
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "cancella lo spazio libero nei percorsi specificati"
 
 #: ../bleachbit/CLI.py:170
 msgid "output version information and exit"
@@ -1563,31 +1505,33 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Specificare solo uno di questi comandi: --list-cleaners, --wipe-free-space, -"
+"-preview, --clean"
 
 #: ../bleachbit/CLI.py:200
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Controllo online per aggiornamenti di winapp2.ini"
 
 #: ../bleachbit/CLI.py:215
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Nessuna cartella data per --wipe-free-space"
 
 #: ../bleachbit/CLI.py:220
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Il percorso da pulire deve essere una cartella esistente: %s"
 
 #: ../bleachbit/CLI.py:222
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "La pulizia dello spazio libero può impiegare molto tempo."
 
 #: ../bleachbit/CLI.py:232
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Nessun lavoro da effettuare. Specificare delle opzioni."
 
 #: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite va usato solo con  --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1624,6 +1568,66 @@ msgstr "Tronca"
 #: ../bleachbit/Command.py:323
 msgid "Delete registry key"
 msgstr "Elimina chiave di registro"
+
+#: ../bleachbit/GuiChaff.py:48
+msgid "Deleting files"
+msgstr "Eliminazione file"
+
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py:67
+msgid "Make chaff"
+msgstr "Crea spazzatura"
+
+#: ../bleachbit/GuiChaff.py:72
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "Crea messaggi generati a caso ispirandosi ai documenti."
+
+#: ../bleachbit/GuiChaff.py:76
+msgid "Inspiration"
+msgstr "Ispirazione"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "2600 Magazine"
+msgstr "Rivista 2600"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "Hillary Clinton's emails"
+msgstr "Email di Hillary Clinton"
+
+#: ../bleachbit/GuiChaff.py:87
+msgid "Number of files"
+msgstr "Numero di file"
+
+#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
+msgid "Select destination folder"
+msgstr "Selezionare la cartella di destinazione"
+
+#: ../bleachbit/GuiChaff.py:104
+msgid "When finished"
+msgstr "Al completamento"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Delete without shredding"
+msgstr "Cancella senza triturazione"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Do not delete"
+msgstr "Non eliminare"
+
+#: ../bleachbit/GuiChaff.py:118
+msgid "Make files"
+msgstr "Crea i file"
+
+#: ../bleachbit/GuiChaff.py:135
+msgid "Download data needed for chaff generator?"
+msgstr ""
+"Scaricare i dati necessari per il generatore di chaff (contromisure)?"
+
+#: ../bleachbit/GuiChaff.py:177
+msgid "Generating files"
+msgstr "Generazione file"
 
 #: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:31
 msgid "Preferences"
@@ -1794,6 +1798,8 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Il comando 'swapoff -s' è fallito, perciò si fa ricorso a /proc/swaps per le "
+"informazioni sullo swap (scambio)."
 
 #: ../bleachbit/Memory.py:80
 msgid "Disabling swap."
@@ -1817,7 +1823,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Allocazione e cancellazione di %s di memoria."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1852,7 +1858,7 @@ msgstr "Reinizializzazione del dispositivo di swap %s."
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "Rilevati questi dispositivi di swap: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1877,7 +1883,7 @@ msgstr "Sovrascrivi le ca_rtelle"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Percorsi di triturazione dagli appunti"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1885,7 +1891,7 @@ msgstr "_Pulisci lo spazio libero"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "Crea chaff (contro_misure)"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
@@ -1893,7 +1899,7 @@ msgstr "S_ovrascrivi le impostazioni ed esci"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
-msgstr ""
+msgstr "_Diagnostica"
 
 #: ../data/app-menu.ui:40
 msgid "_Help"
@@ -1901,4 +1907,4 @@ msgstr "_Aiuto"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_A proposito di BleachBit"
