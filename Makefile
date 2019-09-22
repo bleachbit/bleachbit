@@ -54,8 +54,8 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit
 	$(INSTALL_DATA) bleachbit/*.py $(DESTDIR)$(datadir)/bleachbit
 	cd $(DESTDIR)$(datadir)/bleachbit && \
-	python -O -c "import compileall; compileall.compile_dir('.')" && \
-	python -c "import compileall; compileall.compile_dir('.')"
+	python2 -O -c "import compileall; compileall.compile_dir('.')" && \
+	python2 -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
