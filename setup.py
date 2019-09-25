@@ -100,7 +100,7 @@ if 'py2exe' in sys.argv:
             'packages': ['encodings', 'gi'],
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
-            'excludes': ['certifi', 'pyreadline', 'difflib', 'doctest',
+            'excludes': ['pyreadline', 'difflib', 'doctest',
                          'pickle', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
                 'libgstreamer-1.0-0.dll',

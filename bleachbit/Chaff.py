@@ -30,7 +30,6 @@ from datetime import datetime, timedelta
 
 from bleachbit import _
 from bleachbit import options_dir
-from bleachbit import CA_BUNDLE
 
 from . import markovify
 

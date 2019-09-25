@@ -62,12 +62,9 @@ bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
-    CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
 else:
     # __file__ is absolute path to __init__.py
     bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__.decode(sys.getfilesystemencoding())))
-    import certifi
-    CA_BUNDLE = certifi.where()
 
 # license
 license_filename = None

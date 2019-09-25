@@ -24,7 +24,6 @@ import os
 import shutil
 import subprocess
 import sys
-import certifi
 
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
@@ -228,9 +227,6 @@ def build():
 
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
-
-    logger.info('Copying CA bundle')
-    shutil.copyfile(certifi.where(), os.path.join('dist', 'cacert.pem'))
 
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
