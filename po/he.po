@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-09-14 09:22-0600\n"
-"PO-Revision-Date: 2019-09-12 08:23+0000\n"
+"POT-Creation-Date: 2019-09-14 19:36-0600\n"
+"PO-Revision-Date: 2019-09-26 09:01+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-09-15 01:32+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-09-27 15:36+0000\n"
+"X-Generator: Launchpad (build 19056)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -445,7 +445,7 @@ msgstr "היסטוריית כתובות"
 msgid "List of visited web pages"
 msgstr "רשימת האתרים בהם ביקרתם"
 
-#: ../cleaners/seamonkey.xml
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
 msgstr "היסטוריית ההורדות"
 
@@ -650,19 +650,15 @@ msgstr "אפשרות זו תאפס את המיקומים הנעוצים בגיש
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbags"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "למחוק את תאריך השימוש, מיקום החלון ונתונים אחרים על תיקיות"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
 msgstr "פעולה זו תפעיל מחדש את סייר הקבצים של Windows."
-
-#: ../cleaners/internet_explorer.xml
-msgid "Downloads history"
-msgstr ""
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -849,89 +845,30 @@ msgid "Done."
 msgstr "בוצע."
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:789
+#: ../bleachbit/GUI.py:788
 msgid "Preview"
 msgstr "תצוגה מקדימה"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:794 ../bleachbit/Action.py:521
+#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
 msgid "Clean"
 msgstr "ניקוי"
 
-#: ../bleachbit/GUI.py:881
+#: ../bleachbit/GUI.py:880
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "תצוגה מקדימה של קבצים בפעולות הנבחרות (ללא מחיקת קבצים כלשהם)"
 
-#: ../bleachbit/GUI.py:892
+#: ../bleachbit/GUI.py:891
 msgid "Clean files in the selected operations"
 msgstr "ניקוי קבצים בפעולות הנבחרות"
 
-#: ../bleachbit/GUI.py:900
+#: ../bleachbit/GUI.py:899
 msgid "Abort the preview or cleaning process"
 msgstr "ביטול התצוגה המקדימה או תהליך הניקוי"
 
-#: ../bleachbit/GUI.py:1049
+#: ../bleachbit/GUI.py:1047
 msgid "Error when checking for updates: "
 msgstr "שגיאה בעת בדיקה אחר עדכונים: "
-
-#: ../bleachbit/GuiChaff.py:48
-msgid "Deleting files"
-msgstr "קבצים נמחקים"
-
-#. TRANSLATORS: BleachBit creates digital chaff like that is like the
-#. physical chaff airplanes use to protect themselves from radar-guided
-#. missiles. For more explanation, see the online documentation.
-#: ../bleachbit/GuiChaff.py:67
-msgid "Make chaff"
-msgstr "יצירת מוץ"
-
-#: ../bleachbit/GuiChaff.py:72
-msgid "Make randomly-generated messages inspired by documents."
-msgstr "יצירת הודעות שחוללו באופן אקראי בהשראת מסמכים."
-
-#: ../bleachbit/GuiChaff.py:76
-msgid "Inspiration"
-msgstr "השראה"
-
-#: ../bleachbit/GuiChaff.py:79
-msgid "2600 Magazine"
-msgstr "Digital Whisper"
-
-#: ../bleachbit/GuiChaff.py:79
-msgid "Hillary Clinton's emails"
-msgstr "הודעות הדוא״ל של מירי רגב"
-
-#: ../bleachbit/GuiChaff.py:87
-msgid "Number of files"
-msgstr "מספר קבצים"
-
-#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
-msgid "Select destination folder"
-msgstr "בחירת תיקיית יעד"
-
-#: ../bleachbit/GuiChaff.py:104
-msgid "When finished"
-msgstr "בעת הסיום"
-
-#: ../bleachbit/GuiChaff.py:107
-msgid "Delete without shredding"
-msgstr "למחוק מבלי לגרוס"
-
-#: ../bleachbit/GuiChaff.py:107
-msgid "Do not delete"
-msgstr "לא למחוק"
-
-#: ../bleachbit/GuiChaff.py:118
-msgid "Make files"
-msgstr "יצירת קבצים"
-
-#: ../bleachbit/GuiChaff.py:135
-msgid "Download data needed for chaff generator?"
-msgstr ""
-
-#: ../bleachbit/GuiChaff.py:177
-msgid "Generating files"
-msgstr "קבצים נוצרים"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -957,6 +894,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"איפוס המקום הפנוי מוחק את שרידי הקבצים שנמחקו במהלך הגריסה. התהליך הזה לא "
+"מפנה מקום פנוי נוסף."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:204 ../bleachbit/Worker.py:351
@@ -1207,7 +1146,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "התעלמות מהמנקה כיוון שיש הרשאות כתיבה לכולם: %s"
 
 #: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
 #, python-format
@@ -1284,11 +1223,11 @@ msgstr "היה לפחות קובץ אחד במערכת שלא תומך בשכת�
 #: ../bleachbit/FileUtilities.py:842
 #, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "הנתיב מאופס: %s"
 
 #: ../bleachbit/FileUtilities.py:851
 msgid "Creating new, temporary file for wiping free space."
-msgstr ""
+msgstr "נוצר קובץ חדש, זמני לאיפוס המקום הפנוי."
 
 #: ../bleachbit/FileUtilities.py:888
 #, python-format
@@ -1314,7 +1253,7 @@ msgstr "{bytes:,} בתים ו־{inodes:,} inodes זמינים למשתמשי ע�
 
 #: ../bleachbit/FileUtilities.py:926
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "טופלה שגיאה בלתי ידוע #0 בעת חיתוך קובץ."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1357,7 +1296,7 @@ msgstr "סריקה עמוקה לא תומכת במשתנים מרובי ערכי
 #: ../bleachbit/Action.py:258
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\"‎ נערך על קובץ רגיל path=\"%s\"‎"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1367,7 +1306,7 @@ msgstr ""
 #: ../bleachbit/Action.py:298
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" אינו תבנית גלובלית"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:391 ../bleachbit/Action.py:404
@@ -1575,6 +1514,65 @@ msgstr "קיצוץ"
 msgid "Delete registry key"
 msgstr "מחיקת רשומת המערכת"
 
+#: ../bleachbit/GuiChaff.py:48
+msgid "Deleting files"
+msgstr "קבצים נמחקים"
+
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py:67
+msgid "Make chaff"
+msgstr "יצירת מוץ"
+
+#: ../bleachbit/GuiChaff.py:72
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "יצירת הודעות שחוללו באופן אקראי בהשראת מסמכים."
+
+#: ../bleachbit/GuiChaff.py:76
+msgid "Inspiration"
+msgstr "השראה"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "2600 Magazine"
+msgstr "Digital Whisper"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "Hillary Clinton's emails"
+msgstr "הודעות הדוא״ל של מירי רגב"
+
+#: ../bleachbit/GuiChaff.py:87
+msgid "Number of files"
+msgstr "מספר קבצים"
+
+#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
+msgid "Select destination folder"
+msgstr "בחירת תיקיית יעד"
+
+#: ../bleachbit/GuiChaff.py:104
+msgid "When finished"
+msgstr "בעת הסיום"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Delete without shredding"
+msgstr "למחוק מבלי לגרוס"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Do not delete"
+msgstr "לא למחוק"
+
+#: ../bleachbit/GuiChaff.py:118
+msgid "Make files"
+msgstr "יצירת קבצים"
+
+#: ../bleachbit/GuiChaff.py:135
+msgid "Download data needed for chaff generator?"
+msgstr "להוריד את הנתונים שנדרשים ליצירת מוץ?"
+
+#: ../bleachbit/GuiChaff.py:177
+msgid "Generating files"
+msgstr "קבצים נוצרים"
+
 #: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:31
 msgid "Preferences"
 msgstr "העדפות"
@@ -1753,18 +1751,18 @@ msgstr "קובץ ההחלפה מופעל מחדש."
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "ערך ה־nice‏ %d מוגדר עבור התהליך הזה."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "ההרשאות של מזהה התהליך {pid} למזהה משתמש {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "מוקצים ומאופסים %s של זיכרון."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1775,7 +1773,7 @@ msgstr "מתפנים %s של זיכרון"
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "נמצא מזהה ייחודי לקובץ החלפה {device} שהוא {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
@@ -1787,13 +1785,13 @@ msgstr "הזיכרון הפיזי הפנוי הוא %s."
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "התקן ההחלפה %s מאופס."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "התקן ההחלפה מתאתחל מחדש %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
@@ -1808,11 +1806,12 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"הפונקציה wipe_memory()‎ עם מזהה התהליך {pid} ממתין למזהה תהליך צאצא {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "תהליך הצאצא לאיפוס הזיכרון החזיר את הקוד %d."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
