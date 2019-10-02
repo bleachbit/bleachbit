@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-06 21:45-0600\n"
-"PO-Revision-Date: 2019-07-03 01:31+0000\n"
+"POT-Creation-Date: 2019-09-14 19:36-0600\n"
+"PO-Revision-Date: 2019-09-30 02:23+0000\n"
 "Last-Translator: abuyop <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-07-06 05:16+0000\n"
-"X-Generator: Launchpad (build 19007)\n"
+"X-Launchpad-Export-Date: 2019-09-30 15:00+0000\n"
+"X-Generator: Launchpad (build 19065)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -37,7 +37,8 @@ msgstr "Pelayar Sesawang"
 #: ../cleaners/safari.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
 #: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/thumbnails.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/amsn.xml ../cleaners/liferea.xml ../cleaners/opera.xml
+#: ../cleaners/amsn.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/beagle.xml ../cleaners/xine.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
 #: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
@@ -50,8 +51,8 @@ msgstr "Cache"
 #: ../cleaners/epiphany.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Padam cache sesawang, yang mengurangkan masa pemaparan halaman yang telah "
-"dilawati"
+"Padam cache laman sesawang, yang mana dapat mengurangkan masa untuk paparkan "
+"halaman yang telah dilawati"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
@@ -72,8 +73,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Padam kuki, yang mengandungi maklumat seperti keutamaan laman web, "
-"pengesahihan dan pengenalan jejak"
+"Padam kuki, yang mana mengandungi maklumat seperti keutamaan laman sesawang, "
+"pengesahihan dan pengenalpastian jejak"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -81,7 +82,7 @@ msgstr ""
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/firefox.xml
 #: ../cleaners/opera.xml
 msgid "DOM Storage"
-msgstr "Simpanan DOM"
+msgstr "Storan DOM"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/firefox.xml
@@ -99,14 +100,15 @@ msgstr "Sejarah borang"
 msgid "A history of forms entered in web sites"
 msgstr "Sejarah borang yang dimasukkan didalam laman sesawang"
 
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/nautilus.xml
-#: ../cleaners/octave.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/google_chrome.xml ../cleaners/seamonkey.xml
-#: ../cleaners/elinks.xml ../cleaners/links2.xml ../cleaners/libreoffice.xml
-#: ../cleaners/realplayer.xml ../cleaners/vim.xml ../cleaners/d4x.xml
-#: ../cleaners/safari.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/easytag.xml
+#: ../cleaners/chromium.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
+#: ../cleaners/bash.xml ../cleaners/nautilus.xml ../cleaners/octave.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/google_chrome.xml
+#: ../cleaners/seamonkey.xml ../cleaners/elinks.xml ../cleaners/links2.xml
+#: ../cleaners/libreoffice.xml ../cleaners/realplayer.xml ../cleaners/vim.xml
+#: ../cleaners/d4x.xml ../cleaners/safari.xml ../cleaners/mc.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/easytag.xml
 msgid "History"
 msgstr "Sejarah"
 
@@ -174,7 +176,7 @@ msgstr "Pilihan ini akan memadam kata laluan tersimpan anda."
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
 #: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
-#: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:528
+#: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:592
 msgid "Vacuum"
 msgstr "Vakum"
 
@@ -193,8 +195,44 @@ msgstr ""
 msgid "File archiver"
 msgstr "Pengarkib fail"
 
-#: ../cleaners/winrar.xml ../cleaners/filezilla.xml ../cleaners/paint.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/winrar.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
+#: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
+#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:249
+#: ../bleachbit/Cleaner.py:258
+msgid "Delete the usage history"
+msgstr "Padam sejarah penggunaan"
+
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:346
+msgid "Temporary files"
+msgstr "Fail sementara"
+
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:346
+msgid "Delete the temporary files"
+msgstr "Padam fail sementara"
+
+#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "Pemapar multimedia"
+
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
+#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
+msgid "File transfer client"
+msgstr "Klien pemindahan fail"
+
+#: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
 #: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
@@ -202,57 +240,50 @@ msgstr "Pengarkib fail"
 msgid "Most recently used"
 msgstr "Paling digunakan baru-baru ini"
 
-#: ../cleaners/winrar.xml ../cleaners/paint.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
-#: ../cleaners/smartftp.xml ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the most recently used list"
-msgstr "Padam senarai guna terbaru"
-
-#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
-#: ../cleaners/xine.xml
-msgid "Multimedia viewer"
-msgstr "Pemapar multimedia"
-
-#: ../cleaners/silverlight.xml ../cleaners/winetricks.xml ../cleaners/amule.xml
-#: ../cleaners/google_earth.xml ../cleaners/vuze.xml ../cleaners/wine.xml
-#: ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/gimp.xml
-#: ../bleachbit/Cleaner.py:346
-msgid "Temporary files"
-msgstr "Fail sementara"
-
-#: ../cleaners/silverlight.xml ../cleaners/winetricks.xml ../cleaners/amule.xml
-#: ../cleaners/google_earth.xml ../cleaners/vuze.xml ../cleaners/wine.xml
-#: ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/kde.xml ../cleaners/gimp.xml
-#: ../bleachbit/Cleaner.py:346
-msgid "Delete the temporary files"
-msgstr "Padam fail sementara"
-
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
-#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
-msgid "File transfer client"
-msgstr "Klien pemindahan fail"
-
-#: ../cleaners/filezilla.xml ../cleaners/nautilus.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
-#: ../cleaners/libreoffice.xml ../cleaners/realplayer.xml ../cleaners/d4x.xml
-#: ../cleaners/mc.xml ../cleaners/easytag.xml ../bleachbit/Cleaner.py:249
-#: ../bleachbit/Cleaner.py:258
-msgid "Delete the usage history"
-msgstr "Padam sejarah penggunaan"
-
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
 msgstr "Anti-virus"
 
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "Kuarantin"
+
 #: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml ../cleaners/firefox.xml
-#: ../cleaners/deepscan.xml ../cleaners/beagle.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml ../cleaners/beagle.xml
 msgid "Delete the files"
 msgstr "Padam fail ini"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "Fail sandar"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/vim.xml
+#: ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "Padam fail sandar"
+
+#: ../cleaners/windows_defender.xml ../cleaners/screenlets.xml
+#: ../cleaners/amule.xml ../cleaners/gftp.xml ../cleaners/realplayer.xml
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:312
+msgid "Logs"
+msgstr "Log"
+
+#: ../cleaners/windows_defender.xml ../cleaners/screenlets.xml
+#: ../cleaners/amule.xml ../cleaners/gftp.xml ../cleaners/realplayer.xml
+#: ../cleaners/warzone2100.xml ../cleaners/vuze.xml ../cleaners/miro.xml
+#: ../cleaners/audacious.xml ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/teamviewer.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../bleachbit/Cleaner.py:312
+msgid "Delete the logs"
+msgstr "Padam log"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
 #: ../cleaners/waterfox.xml ../cleaners/libreoffice.xml ../cleaners/gftp.xml
@@ -264,9 +295,9 @@ msgstr "Padam fail ini"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/amsn.xml
 #: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/beagle.xml ../cleaners/xine.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
-#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
+#: ../cleaners/internet_explorer.xml ../cleaners/beagle.xml
+#: ../cleaners/xine.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:196
 #: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
 #: ../bleachbit/Cleaner.py:317
 msgid "Delete the cache"
@@ -376,23 +407,13 @@ msgstr "Torrent"
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr "Padam torent (hanya data meta bukannya fail yang diterangkan)"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
 msgstr "Statistik"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:314
 msgid "Delete the file"
 msgstr "Padam fail"
-
-#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml
-msgid "Backup files"
-msgstr "Fail sandar"
-
-#: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
-#: ../cleaners/vim.xml ../cleaners/deepscan.xml
-msgid "Delete the backup files"
-msgstr "Padam fail sandar"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml
 msgid "Crash reports"
@@ -429,7 +450,7 @@ msgstr "Sejarah URL"
 msgid "List of visited web pages"
 msgstr "Senarai laman dilawati"
 
-#: ../cleaners/seamonkey.xml
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
 msgstr "Sejarah muat turun"
 
@@ -457,27 +478,16 @@ msgstr "Indeks"
 msgid "Widgets for the desktop"
 msgstr "Widget untuk desktop"
 
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:312
-msgid "Logs"
-msgstr "Log"
-
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../bleachbit/Cleaner.py:312
-msgid "Delete the logs"
-msgstr "Padam log"
-
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "Padam kuki, URL yang dilawati dan sejarah gelintar"
+
+#: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
+#: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
+msgid "Delete the most recently used list"
+msgstr "Padam senarai guna terbaru"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -525,16 +535,8 @@ msgid "Known files history"
 msgstr "Sejarah fail-fail diketahui"
 
 #: ../cleaners/amule.xml
-msgid "Delete history of known and cancelled files"
-msgstr "Padam sejarah diketahui dan fail-fail dibatalkan"
-
-#: ../cleaners/amule.xml
-msgid "Known clients"
-msgstr "Klien diketahui"
-
-#: ../cleaners/amule.xml
-msgid "Delete known clients and friends"
-msgstr "Padam klien dan rakan diketahui"
+msgid "Known clients and friends"
+msgstr "Ketahui klien-klien dan rakan-rakan"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -548,6 +550,10 @@ msgstr "Jurnal Sistem"
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
 msgstr "Bersihkan jurnal sistem lama"
+
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:314
+msgid "Memory dump"
+msgstr "Longgokan ingatan"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
@@ -651,6 +657,16 @@ msgstr ""
 "lalainya."
 
 #: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "Shellbag"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr ""
+"Padam penggunaan tarikh, kedudukan tetingkap, dan lain-lain data untuk "
+"folder-folder"
+
+#: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
 msgstr "Tindakan ini akan memulakan semula Windows Explorer."
 
@@ -686,32 +702,32 @@ msgstr "Pembersih fail yang tak perlu"
 msgid "Free space and maintain privacy"
 msgstr "Kosongkan ruang dan kekalkan kerahsiaan"
 
-#: ../bleachbit/Options.py:100
+#: ../bleachbit/Options.py:112
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr "Cakera telah penuh ketika menulis konfigurasi ke dalam fail %s"
 
-#: ../bleachbit/Options.py:125
+#: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "Rakat ketika memeriksa sama ada laluan wujud atau sebaliknya: %s"
 
-#: ../bleachbit/Options.py:236
+#: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
 msgstr "Ralat ketika menetapkan pemacu lalai untuk dicincangkan."
 
-#: ../bleachbit/Options.py:257
+#: ../bleachbit/Options.py:290
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "Kekalkan bahasa %s secara automatik."
 
-#: ../bleachbit/Unix.py:568
+#: ../bleachbit/Unix.py:570
 #, python-format
 msgid "Executable not found: %s"
 msgstr "boleh laku tidak ditemui: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:646 ../bleachbit/Worker.py:140
+#: ../bleachbit/Unix.py:652 ../bleachbit/Worker.py:153
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -719,49 +735,252 @@ msgid ""
 msgstr ""
 "%s tidak boleh dibersihkan kerana sedang dijalankan.  Tutup dan cuba lagi."
 
-#. TRANSLATORS: This is the label in the log indicating was
-#. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:47
-msgid "Skip"
-msgstr "Langkau"
-
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:77
-msgid "Delete"
-msgstr "Padam"
-
-#: ../bleachbit/Command.py:99
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:508
 msgid ""
-"At least one file was locked by another process, so its contents could not "
-"be overwritten. It will be marked for deletion upon system reboot."
+"Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
-"Sekurang-kurangnya satu fail telah dikunci oleh proses lain  supaya "
-"kandungannya tidak ditulis-ganti. Ia akan ditanda untuk pemadaman ketika ia "
-"but-semula sistem."
+"Ralat memuatkan modul SQLite: perisian antivirus mungkin menghalangnya."
 
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:102
-msgid "Mark for deletion"
-msgstr "Tanda untuk pemadaman"
+#: ../bleachbit/GUI.py:133
+msgid "Choose files to shred"
+msgstr "Pilih fail untuk dicarik"
 
-#. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
-#: ../bleachbit/Action.py:335 ../bleachbit/Action.py:348
-#: ../bleachbit/Action.py:361 ../bleachbit/Action.py:374
-#: ../bleachbit/Action.py:387 ../bleachbit/Action.py:452
-msgid "Clean file"
-msgstr "Kosongkan fail"
+#: ../bleachbit/GUI.py:142
+msgid "Choose folder to shred"
+msgstr "Pilih folder untuk dicarik"
 
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:281
-msgid "Truncate"
-msgstr "Pangkaskan"
+#: ../bleachbit/GUI.py:144 ../bleachbit/GuiBasic.py:100
+#: ../bleachbit/GuiBasic.py:144
+msgid "_Delete"
+msgstr "Pa_dam"
 
-#: ../bleachbit/Command.py:323
-msgid "Delete registry key"
-msgstr "Padam kunci daftar"
+#: ../bleachbit/GUI.py:169
+msgid "No paths found in clipboard."
+msgstr "Tiada laluan di temui dalam papan keratan."
+
+#: ../bleachbit/GUI.py:200 ../bleachbit/GuiPreferences.py:194
+#: ../bleachbit/GuiPreferences.py:319 ../bleachbit/GuiPreferences.py:360
+msgid "Choose a folder"
+msgstr "Pilih satu folder"
+
+#: ../bleachbit/GUI.py:201
+msgid "_OK"
+msgstr "_OK"
+
+#: ../bleachbit/GUI.py:235
+msgid ""
+"GNU General Public License version 3 or later.\n"
+"See https://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+"GNU General Public License versi 3 atau yang terkini.\n"
+"Sila rujuk https://www.gnu.org/licenses/gpl-3.0.txt"
+
+#. TRANSLATORS: Maintain the names of translators here.
+#. Launchpad does this automatically for translations
+#. typed in Launchpad. This is a special string shown
+#. in the 'About' box.
+#: ../bleachbit/GUI.py:241
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Ibrahim Elias https://launchpad.net/~imen802003-netscape\n"
+"  Ronand Joe https://launchpad.net/~ronandjoe\n"
+"  abuyop https://launchpad.net/~abuyop"
+
+#: ../bleachbit/GUI.py:257
+msgid "System information"
+msgstr "Maklumat Sistem"
+
+#: ../bleachbit/GUI.py:371 ../bleachbit/GuiPreferences.py:289
+msgid "Name"
+msgstr "Nama"
+
+#: ../bleachbit/GUI.py:379
+msgid "Active"
+msgstr "Aktif"
+
+#. TRANSLATORS: Size is the label for the column that shows how
+#. much space an option would clean or did clean
+#: ../bleachbit/GUI.py:388
+msgid "Size"
+msgstr "Saiz"
+
+#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+#. %(option) may be cache, logs, cookies, etc.
+#. %(warning) may be 'This option is really slow'
+#: ../bleachbit/GUI.py:419
+#, python-format
+msgid ""
+"Warning regarding %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+msgstr ""
+"Amaran mengenai %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+
+#: ../bleachbit/GUI.py:487
+#, python-format
+msgid "Resetting the configuration file because it is corrupt: %s"
+msgstr "Menetap semula fail konfigurasi kerana ia telah rosak: %s"
+
+#: ../bleachbit/GUI.py:493
+msgid ""
+"Access the application menu by clicking the hamburger icon on the title bar."
+msgstr "Capai menu aplikasi dengan mengklik ikon burger pada palang tajuk."
+
+#: ../bleachbit/GUI.py:498
+msgid "Access the application menu by clicking the logo on the title bar."
+msgstr "Capai menu aplikasi dengan mengklik logo pada palang tajuk."
+
+#: ../bleachbit/GUI.py:512
+msgid ""
+"You are running BleachBit with administrative privileges for cleaning shared "
+"parts of the system, and references to the user profile folder will clean "
+"only the root account."
+msgstr ""
+"Anda menjalankan BleachBit dengan kelayakan pentadbir untuk membersih "
+"bahagian terkongsi sistem, dan rujukan ke folder profil pengguna akan hanya "
+"membersihkan akaun root."
+
+#: ../bleachbit/GUI.py:517
+msgid ""
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
+msgstr ""
+"Jalankan BleachBit dengan kelayakan pentadbir untuk menambahbaik ketepatan "
+"menulis-ganti kandungan fail."
+
+#: ../bleachbit/GUI.py:652
+msgid "You must select an operation"
+msgstr "Anda mesti pilih satu operasi"
+
+#: ../bleachbit/GUI.py:671 ../bleachbit/GUI.py:695
+msgid "Done."
+msgstr "Selesai."
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:788
+msgid "Preview"
+msgstr "Pratonton"
+
+#. TRANSLATORS: this is the context menu
+#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
+msgid "Clean"
+msgstr "Bersihkan"
+
+#: ../bleachbit/GUI.py:880
+msgid "Preview files in the selected operations (without deleting any files)"
+msgstr ""
+"Pratonton fail dalam operasi yang dipilih (tanpa memadam sebarang fail)"
+
+#: ../bleachbit/GUI.py:891
+msgid "Clean files in the selected operations"
+msgstr "Bersihkan fail didalam operasi pilihan"
+
+#: ../bleachbit/GUI.py:899
+msgid "Abort the preview or cleaning process"
+msgstr "Henti paksa proses pratonton atau pembersihan"
+
+#: ../bleachbit/GUI.py:1047
+msgid "Error when checking for updates: "
+msgstr "Ralat semasa memeriksa untuk kemaskini: "
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:79
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Pengecualian ketika menjalankan operasi '%(operation)s': '%(msg)s'"
+
+#: ../bleachbit/Worker.py:108
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr "Ralat: {operation_option}: {command}"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:201
+msgid "Please wait.  Wiping free disk space."
+msgstr "Tunggu sebentar. Membersihkan ruang cakera bebas."
+
+#: ../bleachbit/Worker.py:202
+msgid ""
+"Wiping free disk space erases remnants of files that were deleted without "
+"shredding. It does not free up space."
+msgstr ""
+"Mencuci ruang cakera bebas dapat memadam baki fail yang terpadam tanpa "
+"melalui pericihan. Ia tidak membebaskan ruang kosong."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:204 ../bleachbit/Worker.py:351
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Sila tunggu.  Membersih %s."
+
+#: ../bleachbit/Worker.py:204 ../bleachbit/Cleaner.py:302
+#: ../bleachbit/Cleaner.py:447
+msgid "Memory"
+msgstr "Ingatan"
+
+#: ../bleachbit/Worker.py:221
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Kira-kira %d minit berbaki."
+msgstr[1] "Kira-kira %d minit berbaki."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:290
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Ruang cakera dipulih: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:294
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Ruang cakera untuk dipulih: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:299
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Fail dipadamkan: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:303
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Fail akan dipadamkan: %d"
+
+#: ../bleachbit/Worker.py:306
+#, python-format
+msgid "Special operations: %d"
+msgstr "Operasi khas: %d"
+
+#: ../bleachbit/Worker.py:309
+#, python-format
+msgid "Errors: %d"
+msgstr "Ralat: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:325
+msgid "Please wait.  Running deep scan."
+msgstr "Tunggu sebentar. Menjalankan pengimbasan mendalam"
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:354
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Sila tunggu.  Melakukan pratonton %s."
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:43
@@ -839,11 +1058,6 @@ msgstr "Tong Sampah"
 msgid "Empty the trash"
 msgstr "Kosongkan tong sampah"
 
-#: ../bleachbit/Cleaner.py:302 ../bleachbit/Cleaner.py:447
-#: ../bleachbit/Worker.py:188
-msgid "Memory"
-msgstr "Ingatan"
-
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:304
 msgid "Wipe the swap and free memory"
@@ -854,14 +1068,6 @@ msgid "This option is experimental and may cause system problems."
 msgstr ""
 "Pilihan ini adalah dalam percubaan dan mungkin akan menyebabkan masalah "
 "sistem."
-
-#: ../bleachbit/Cleaner.py:314
-msgid "Memory dump"
-msgstr "Longgokan ingatan"
-
-#: ../bleachbit/Cleaner.py:314
-msgid "Delete the file memory.dmp"
-msgstr "Padam fail memory.dmp"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:317
@@ -929,22 +1135,22 @@ msgstr "Pilihan ini sangat pelahan"
 msgid "The system in general"
 msgstr "Umum sistem"
 
-#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:696
+#: ../bleachbit/Cleaner.py:350 ../bleachbit/Cleaner.py:704
 msgid "System"
 msgstr "Sistem"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:729
+#: ../bleachbit/Cleaner.py:563 ../bleachbit/Cleaner.py:737
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Tulis-ganti ruang cakera bebas %s"
 
-#: ../bleachbit/Cleaner.py:676
+#: ../bleachbit/Cleaner.py:684
 msgid "Loading native cleaners."
 msgstr "Memuatkan pembersih tabii."
 
-#: ../bleachbit/Cleaner.py:682
+#: ../bleachbit/Cleaner.py:690
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "Mengimport pembersih daripada Winapp2.ini."
 
@@ -962,17 +1168,25 @@ msgstr ""
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr "Mengabaikan pembersih kerana  ia boleh ditulis: %s"
 
-#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:338
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Ralat membaca pembersih: %s"
 
-#: ../bleachbit/CleanerML.py:303
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:306
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
 "Pembersih tidak boleh digunakan pada OS ini kerana ia tidak mempunyai "
 "tindakan: %s"
+
+#: ../bleachbit/Chaff.py:135
+#, python-format
+msgid "Downloading url failed: %s"
+msgstr "Gagal memuat turun url: %s"
 
 #: ../bleachbit/RecognizeCleanerML.py:58
 msgid "Security warning"
@@ -998,21 +1212,31 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Nama Fail"
 
-#: ../bleachbit/FileUtilities.py:270 ../bleachbit/FileUtilities.py:279
+#: ../bleachbit/FileUtilities.py:319 ../bleachbit/FileUtilities.py:333
 #, python-format
 msgid "Directory is not empty: %s"
 msgstr "Direktori tidak kosong: %s"
 
-#: ../bleachbit/FileUtilities.py:303
+#: ../bleachbit/FileUtilities.py:322
+#, python-format
+msgid "Skipping mount point: %s"
+msgstr "Melangkau titik lekap: %s"
+
+#: ../bleachbit/FileUtilities.py:324
+#, python-format
+msgid "Device or resource is busy: %s"
+msgstr "Peranti atau sumber sibuk: %s"
+
+#: ../bleachbit/FileUtilities.py:357
 #, python-format
 msgid "Special file type cannot be deleted: %s"
 msgstr "Jenis fail khas tidak boleh dipadamkan: %s"
 
-#: ../bleachbit/FileUtilities.py:477
+#: ../bleachbit/FileUtilities.py:531
 msgid "%TMP% does not exist: %s"
 msgstr "%TMP% tidak wujud: %s"
 
-#: ../bleachbit/FileUtilities.py:693
+#: ../bleachbit/FileUtilities.py:747
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
@@ -1020,21 +1244,21 @@ msgstr ""
 "Terdapat sekurang-kurangnya satu sistem fail yang tidak menyokong tulis-"
 "ganti."
 
-#: ../bleachbit/FileUtilities.py:788
+#: ../bleachbit/FileUtilities.py:842
 #, python-format
 msgid "Wiping path: %s"
 msgstr "Laluan cucian: %s"
 
-#: ../bleachbit/FileUtilities.py:797
+#: ../bleachbit/FileUtilities.py:851
 msgid "Creating new, temporary file for wiping free space."
 msgstr "Mencipta fail sementara, baharu untuk mencuci ruang bebas."
 
-#: ../bleachbit/FileUtilities.py:834
+#: ../bleachbit/FileUtilities.py:888
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "Ralat #%d ketika mengosongkan penimbal fail."
 
-#: ../bleachbit/FileUtilities.py:850
+#: ../bleachbit/FileUtilities.py:904
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
@@ -1042,110 +1266,18 @@ msgstr ""
 "Tulis {files:,} fail dan {bytes:,} bait dalam tempoh {seconds:,} saat pada "
 "kelajuan {rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:855
+#: ../bleachbit/FileUtilities.py:909
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
 "{bytes:,} bait dan {inodes:,} inode tersedia untuk pengguna-bukan-super"
 
-#: ../bleachbit/FileUtilities.py:857
+#: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "{bytes:,} bait dan {inodes:,} inode tersedia untuk pengguna-super"
 
-#: ../bleachbit/FileUtilities.py:872
+#: ../bleachbit/FileUtilities.py:926
 msgid "Handled unknown error #0 while truncating file."
 msgstr "Ralat tidak diketahui #0 dikendalikan ketika memangkas fail."
-
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:74
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Pengecualian ketika menjalankan operasi '%(operation)s': '%(msg)s'"
-
-#: ../bleachbit/Worker.py:101
-#, python-brace-format
-msgid "Error: {operation_option}: {command}"
-msgstr "Ralat: {operation_option}: {command}"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:186
-msgid "Please wait.  Wiping free disk space."
-msgstr "Tunggu sebentar. Membersihkan ruang cakera bebas."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Sila tunggu.  Membersih %s."
-
-#: ../bleachbit/Worker.py:202
-msgid "Please wait. Wiping file system metadata."
-msgstr "Tunggu sebentar. Mengosongkan data meta sistem fail."
-
-#: ../bleachbit/Worker.py:205
-msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr ""
-"Tunggu sebentar. Membersihkan selepas data meta sistem fail dikosongkan."
-
-#: ../bleachbit/Worker.py:208
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Kira-kira %d minit berbaki."
-msgstr[1] "Kira-kira %d minit berbaki."
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:275
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Ruang cakera dipulih: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:279
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Ruang cakera untuk dipulih: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:284
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Fail dipadamkan: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:288
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Fail akan dipadamkan: %d"
-
-#: ../bleachbit/Worker.py:291
-#, python-format
-msgid "Special operations: %d"
-msgstr "Operasi khas: %d"
-
-#: ../bleachbit/Worker.py:294
-#, python-format
-msgid "Errors: %d"
-msgstr "Ralat: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:309
-msgid "Please wait.  Running deep scan."
-msgstr "Tunggu sebentar. Menjalankan pengimbasan mendalam"
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:338
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Sila tunggu.  Melakukan pratonton %s."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1176,32 +1308,46 @@ msgstr ""
 "sahkan rangkaian berfungsi baik dan tembok api tidak menyekat aplikasi ini. "
 "Mesej ralat: {}"
 
-#: ../bleachbit/Action.py:142
+#. TRANSLATORS: Multi-value variables are explained in the online documentation.
+#. Basically, they are like an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML files more concise.
+#: ../bleachbit/Action.py:157
 msgid "Deep scan does not support multi-value variable."
 msgstr "Imbas mendalam tidak menyokong pembolehubah nilai-berbilang."
 
-#: ../bleachbit/Action.py:220
+#. TRANSLATORS: This is a lint-style warning that there seems to be a
+#. mild mistake in the CleanerML file because walk.all is expected to
+#. be used with directories instead of with files.
+#: ../bleachbit/Action.py:258
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr "search=\"walk.all\" digunakan dengan laluan fail nalar=\"%s\""
 
-#: ../bleachbit/Action.py:264
+#. TRANSLATORS: This is a lint-style warning that the CleanerML file
+#. specified a search for glob, but the path specified didn't have any
+#. wildcard patterns. Therefore, maybe the developer either missed
+#. the wildcard or should search using path="file" which does not
+#. expect or support wildcards in the path.
+#: ../bleachbit/Action.py:298
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
 msgstr "path=\"%s\" bukanlah pola glob"
 
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:465 ../bleachbit/GUI.py:776
-msgid "Clean"
-msgstr "Bersihkan"
+#. TRANSLATORS: Parts of this file will be deleted
+#: ../bleachbit/Action.py:391 ../bleachbit/Action.py:404
+#: ../bleachbit/Action.py:417 ../bleachbit/Action.py:430
+#: ../bleachbit/Action.py:443 ../bleachbit/Action.py:508
+#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
+msgid "Clean file"
+msgstr "Kosongkan fail"
 
-#: ../bleachbit/Action.py:501
+#: ../bleachbit/Action.py:565
 #, python-format
 msgid "Run external command: %s"
 msgstr "Jalankan perintah luar: %s"
 
 #: ../bleachbit/GuiBasic.py:48 ../bleachbit/GuiBasic.py:75
-#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:137
+#: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:145
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -1209,16 +1355,21 @@ msgstr "_Batal"
 msgid "_Open"
 msgstr "B_uka"
 
-#: ../bleachbit/GuiBasic.py:100 ../bleachbit/GuiBasic.py:138
-#: ../bleachbit/GUI.py:138
-msgid "_Delete"
-msgstr "Pa_dam"
-
 #: ../bleachbit/GuiBasic.py:117
 msgid "Delete confirmation"
 msgstr "Pengesahan padam"
 
 #: ../bleachbit/GuiBasic.py:126
+msgid ""
+"This function deletes all BleachBit settings and then quits the application. "
+"Use this to hide your use of BleachBit or to reset its settings. The next "
+"time you start it, the settings will initialize to default values."
+msgstr ""
+"Fungsi ini memadam semua tetapan BleachBit kemudian menutup aplikasi. Guna "
+"ini untuk sembunyi penggunaan BleachBit atau menetap semula tetapannya. "
+"Sekiranya dibuka nanti, tetapan akan berada pada kedudukan lalainya."
+
+#: ../bleachbit/GuiBasic.py:133
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -1227,11 +1378,11 @@ msgstr ""
 "Adakah anda pasti hendak memadam fail menurut operasi dipilih? Fail sebenar "
 "yang akan dipadam mungkin telah berubah semenjak anda jalankan pratonton."
 
-#: ../bleachbit/GuiBasic.py:129
+#: ../bleachbit/GuiBasic.py:136
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Adakah anda pasti untuk memadam fail ini?"
 
-#: ../bleachbit/GuiBasic.py:167
+#: ../bleachbit/GuiBasic.py:174
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -1243,138 +1394,10 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:179
+#: ../bleachbit/GuiBasic.py:186
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "Buka pelayar sesawang ke %s?"
-
-#: ../bleachbit/GUI.py:83 ../bleachbit/GUI.py:502
-msgid ""
-"Error loading the SQLite module: the antivirus software may be blocking it."
-msgstr ""
-"Ralat memuatkan modul SQLite: perisian antivirus mungkin menghalangnya."
-
-#: ../bleachbit/GUI.py:127
-msgid "Choose files to shred"
-msgstr "Pilih fail untuk dicarik"
-
-#: ../bleachbit/GUI.py:136
-msgid "Choose folder to shred"
-msgstr "Pilih folder untuk dicarik"
-
-#: ../bleachbit/GUI.py:163
-msgid "No paths found in clipboard."
-msgstr "Tiada laluan di temui dalam papan keratan."
-
-#: ../bleachbit/GUI.py:194 ../bleachbit/GuiPreferences.py:185
-#: ../bleachbit/GuiPreferences.py:310 ../bleachbit/GuiPreferences.py:351
-msgid "Choose a folder"
-msgstr "Pilih satu folder"
-
-#: ../bleachbit/GUI.py:195
-msgid "_OK"
-msgstr "_OK"
-
-#: ../bleachbit/GUI.py:226
-msgid ""
-"GNU General Public License version 3 or later.\n"
-"See https://www.gnu.org/licenses/gpl-3.0.txt"
-msgstr ""
-"GNU General Public License versi 3 atau yang terkini.\n"
-"Sila rujuk https://www.gnu.org/licenses/gpl-3.0.txt"
-
-#. TRANSLATORS: Maintain the names of translators here.
-#. Launchpad does this automatically for translations
-#. typed in Launchpad. This is a special string shown
-#. in the 'About' box.
-#: ../bleachbit/GUI.py:232
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Ibrahim Elias https://launchpad.net/~imen802003-netscape\n"
-"  Ronand Joe https://launchpad.net/~ronandjoe\n"
-"  abuyop https://launchpad.net/~abuyop"
-
-#: ../bleachbit/GUI.py:248
-msgid "System information"
-msgstr "Maklumat Sistem"
-
-#: ../bleachbit/GUI.py:357 ../bleachbit/GuiPreferences.py:280
-msgid "Name"
-msgstr "Nama"
-
-#: ../bleachbit/GUI.py:365
-msgid "Active"
-msgstr "Aktif"
-
-#. TRANSLATORS: Size is the label for the column that shows how
-#. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:374
-msgid "Size"
-msgstr "Saiz"
-
-#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
-#. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:405
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
-msgstr ""
-"Amaran mengenai %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
-
-#: ../bleachbit/GUI.py:487
-#, python-format
-msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "Menetap semula fail konfigurasi kerana ia telah rosak: %s"
-
-#: ../bleachbit/GUI.py:506
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"Anda menjalankan BleachBit dengan kelayakan pentadbir untuk membersih "
-"bahagian terkongsi sistem, dan rujukan ke folder profil pengguna akan hanya "
-"membersihkan akaun root."
-
-#: ../bleachbit/GUI.py:511
-msgid ""
-"Run BleachBit with administrator privileges to improve the accuracy of "
-"overwriting the contents of files."
-msgstr ""
-"Jalankan BleachBit dengan kelayakan pentadbir untuk menambahbaik ketepatan "
-"menulis-ganti kandungan fail."
-
-#: ../bleachbit/GUI.py:640
-msgid "You must select an operation"
-msgstr "Anda mesti pilih satu operasi"
-
-#: ../bleachbit/GUI.py:659 ../bleachbit/GUI.py:683
-msgid "Done."
-msgstr "Selesai."
-
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:771
-msgid "Preview"
-msgstr "Pratonton"
-
-#: ../bleachbit/GUI.py:863
-msgid "Preview files in the selected operations (without deleting any files)"
-msgstr ""
-"Pratonton fail dalam operasi yang dipilih (tanpa memadam sebarang fail)"
-
-#: ../bleachbit/GUI.py:874
-msgid "Clean files in the selected operations"
-msgstr "Bersihkan fail didalam operasi pilihan"
-
-#: ../bleachbit/GUI.py:979
-msgid "Error when checking for updates: "
-msgstr "Ralat semasa memeriksa untuk kemaskini: "
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1403,50 +1426,54 @@ msgstr ""
 "jalankan pencuci untuk memadam fail dan buat perubahan kekal yang lain"
 
 #: ../bleachbit/CLI.py:143
+msgid "set log level to verbose"
+msgstr "tetapkan tahap log menjadi berjela"
+
+#: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
 msgstr "log mesej nyahpepijat ke dalam fail"
 
-#: ../bleachbit/CLI.py:145
+#: ../bleachbit/CLI.py:146
 msgid "shred specific files or folders"
 msgstr "carik fail dan folder tertentu"
 
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:148
 msgid "show system information"
 msgstr "papar maklumat sistem"
 
-#: ../bleachbit/CLI.py:149
+#: ../bleachbit/CLI.py:150
 msgid "launch the graphical interface"
 msgstr "lancarkan antaramuka bergrafik"
 
-#: ../bleachbit/CLI.py:153
+#: ../bleachbit/CLI.py:154
 msgid "do not prompt for administrator privileges"
 msgstr "jangan maklumkan untuk keistimewaan pentadbir"
 
-#: ../bleachbit/CLI.py:158
+#: ../bleachbit/CLI.py:159
 msgid "preview files to be deleted and other changes"
 msgstr "Pratonton fail yang akan dipadam dan lain-lain perubahan"
 
-#: ../bleachbit/CLI.py:162
+#: ../bleachbit/CLI.py:163
 msgid "use options set in the graphical interface"
 msgstr "Guna set pilihan didalam antaramuka bergrafik"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py:166
 msgid "update winapp2.ini, if a new version is available"
 msgstr "kemaskini winapp2.ini, jika versi baru tersedia"
 
-#: ../bleachbit/CLI.py:167
+#: ../bleachbit/CLI.py:168
 msgid "wipe free space in the given paths"
 msgstr "cuci ruang bebas dalam laluan yang diberikan"
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py:170
 msgid "output version information and exit"
 msgstr "Output maklumat versi dan keluar"
 
-#: ../bleachbit/CLI.py:171
+#: ../bleachbit/CLI.py:172
 msgid "overwrite files to hide contents"
 msgstr "Tulis-ganti fail untuk sembunyi kandungan"
 
-#: ../bleachbit/CLI.py:179
+#: ../bleachbit/CLI.py:180
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1454,32 +1481,127 @@ msgstr ""
 "Hanya nyatakan salah satu daripada perintah ini: --list-cleaners, --wipe-"
 "free-space, --preview, --clean"
 
-#: ../bleachbit/CLI.py:196
+#: ../bleachbit/CLI.py:200
 msgid "Checking online for updates to winapp2.ini"
 msgstr "Memeriksa di atas-talian untuk kemaskini winapp2.ini"
 
-#: ../bleachbit/CLI.py:211
+#: ../bleachbit/CLI.py:215
 msgid "No directories given for --wipe-free-space"
 msgstr "Tiada direktori diberikan untuk --wipe-free-space"
 
-#: ../bleachbit/CLI.py:216
+#: ../bleachbit/CLI.py:220
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "Laluan untuk cuci mestilah direktori sedia ada: %s"
 
-#: ../bleachbit/CLI.py:218
+#: ../bleachbit/CLI.py:222
 msgid "Wiping free space can take a long time."
 msgstr "Mencuci ruang bebas mengambil masa yang agak lama."
 
-#: ../bleachbit/CLI.py:228
+#: ../bleachbit/CLI.py:232
 msgid "No work to do. Specify options."
 msgstr "Tiada kerja hendak dilakukan. Nyatakan pilihan."
 
-#: ../bleachbit/CLI.py:236
+#: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite hanya digunakan bersama-sama dengan --clean"
 
-#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:27
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:47
+msgid "Skip"
+msgstr "Langkau"
+
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:77
+msgid "Delete"
+msgstr "Padam"
+
+#: ../bleachbit/Command.py:99
+msgid ""
+"At least one file was locked by another process, so its contents could not "
+"be overwritten. It will be marked for deletion upon system reboot."
+msgstr ""
+"Sekurang-kurangnya satu fail telah dikunci oleh proses lain  supaya "
+"kandungannya tidak ditulis-ganti. Ia akan ditanda untuk pemadaman ketika ia "
+"but-semula sistem."
+
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:102
+msgid "Mark for deletion"
+msgstr "Tanda untuk pemadaman"
+
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:281
+msgid "Truncate"
+msgstr "Pangkaskan"
+
+#: ../bleachbit/Command.py:323
+msgid "Delete registry key"
+msgstr "Padam kunci daftar"
+
+#: ../bleachbit/GuiChaff.py:48
+msgid "Deleting files"
+msgstr "Memadam fail"
+
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py:67
+msgid "Make chaff"
+msgstr "Buat chaff"
+
+#: ../bleachbit/GuiChaff.py:72
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "Buat mesej-mesej terjana rawak yang diilham oleh dokumen-dokumen"
+
+#: ../bleachbit/GuiChaff.py:76
+msgid "Inspiration"
+msgstr "Inspirasi"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "2600 Magazine"
+msgstr "2600 Magazine"
+
+#: ../bleachbit/GuiChaff.py:79
+msgid "Hillary Clinton's emails"
+msgstr "Emel Hillary Clinton"
+
+#: ../bleachbit/GuiChaff.py:87
+msgid "Number of files"
+msgstr "Bilangan fail"
+
+#: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
+msgid "Select destination folder"
+msgstr "Pilih folder destinasi"
+
+#: ../bleachbit/GuiChaff.py:104
+msgid "When finished"
+msgstr "Seusai selesai"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Delete without shredding"
+msgstr "Padam tanpa mericih"
+
+#: ../bleachbit/GuiChaff.py:107
+msgid "Do not delete"
+msgstr "Jangan padam"
+
+#: ../bleachbit/GuiChaff.py:118
+msgid "Make files"
+msgstr "Buat fail"
+
+#: ../bleachbit/GuiChaff.py:135
+msgid "Download data needed for chaff generator?"
+msgstr "Muat turun data yang diperlukan untuk penjana chaff?"
+
+#: ../bleachbit/GuiChaff.py:177
+msgid "Generating files"
+msgstr "Menjana fail"
+
+#: ../bleachbit/GuiPreferences.py:57 ../data/app-menu.ui:31
 msgid "Preferences"
 msgstr "Keutamaan"
 
@@ -1499,11 +1621,11 @@ msgstr "Bahasa"
 msgid "Whitelist"
 msgstr "Senarai putih"
 
-#: ../bleachbit/GuiPreferences.py:103
+#: ../bleachbit/GuiPreferences.py:106
 msgid "Check periodically for software updates via the Internet"
 msgstr "Periksa secara berkala bagi kemaskini perisian melalui internet"
 
-#: ../bleachbit/GuiPreferences.py:108
+#: ../bleachbit/GuiPreferences.py:111
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -1512,11 +1634,11 @@ msgstr ""
 "mengenainya. Kemudian anda boleh muat turun secara manual dan pasang "
 "kemaskini tersebut."
 
-#: ../bleachbit/GuiPreferences.py:114
+#: ../bleachbit/GuiPreferences.py:117
 msgid "Check for new beta releases"
 msgstr "Semak pelepasan beta yang baru"
 
-#: ../bleachbit/GuiPreferences.py:123
+#: ../bleachbit/GuiPreferences.py:126
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr "Muat turun dan kemaskini pembersih dari komuniti (winapp2.ini)"
 
@@ -1524,18 +1646,18 @@ msgstr "Muat turun dan kemaskini pembersih dari komuniti (winapp2.ini)"
 #. nothing.  For example, if Firefox were never used on
 #. this system, this option would hide Firefox to simplify
 #. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:136
+#: ../bleachbit/GuiPreferences.py:139
 msgid "Hide irrelevant cleaners"
 msgstr "Sembunyi pembersih yang tidak berkenaan"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
 #. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:144
+#: ../bleachbit/GuiPreferences.py:147
 msgid "Overwrite contents of files to prevent recovery"
 msgstr "Tulis ganti kandungan fail untuk menghindari pemulihan"
 
-#: ../bleachbit/GuiPreferences.py:148
+#: ../bleachbit/GuiPreferences.py:151
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -1543,23 +1665,27 @@ msgstr ""
 "Penulis-gantian tidak efektif bagi sesetengah operasi sistem fail dan "
 "BleachBit yang tertentu.  Penulis-gantian adalah sangat lambat."
 
-#: ../bleachbit/GuiPreferences.py:152
+#: ../bleachbit/GuiPreferences.py:155
 msgid "Exit after cleaning"
 msgstr "Keluar selepas pembersihan"
 
-#: ../bleachbit/GuiPreferences.py:158
+#: ../bleachbit/GuiPreferences.py:161
 msgid "Confirm before delete"
 msgstr "Sahkan sebelum padam"
 
-#: ../bleachbit/GuiPreferences.py:166
+#: ../bleachbit/GuiPreferences.py:169
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "Guna saiz IEC (1 KiB = 1024 bait) selain dariSI (1 kB = 1000 bait)"
 
-#: ../bleachbit/GuiPreferences.py:173
+#: ../bleachbit/GuiPreferences.py:176
 msgid "Dark mode"
 msgstr "Mod gelap"
 
-#: ../bleachbit/GuiPreferences.py:208
+#: ../bleachbit/GuiPreferences.py:182
+msgid "Show debug messages"
+msgstr "Tunjuk mesej nyahpepijat"
+
+#: ../bleachbit/GuiPreferences.py:217
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
@@ -1568,70 +1694,70 @@ msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
-#: ../bleachbit/GuiPreferences.py:230
+#: ../bleachbit/GuiPreferences.py:239
 msgctxt "button"
 msgid "Add"
 msgstr "Tambah"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:234 ../bleachbit/GuiPreferences.py:441
+#: ../bleachbit/GuiPreferences.py:243 ../bleachbit/GuiPreferences.py:450
 msgctxt "button"
 msgid "Remove"
 msgstr "Buangkan"
 
-#: ../bleachbit/GuiPreferences.py:257
+#: ../bleachbit/GuiPreferences.py:266
 msgid "All languages will be deleted except those checked."
 msgstr "Semua bahasa akan dipadam kecuali yang ditandakan."
 
-#: ../bleachbit/GuiPreferences.py:272
+#: ../bleachbit/GuiPreferences.py:281
 msgid "Preserve"
 msgstr "Kekal"
 
-#: ../bleachbit/GuiPreferences.py:276
+#: ../bleachbit/GuiPreferences.py:285
 msgid "Code"
 msgstr "Kod"
 
-#: ../bleachbit/GuiPreferences.py:297 ../bleachbit/GuiPreferences.py:338
+#: ../bleachbit/GuiPreferences.py:306 ../bleachbit/GuiPreferences.py:347
 msgid "Choose a file"
 msgstr "Pilih fail"
 
-#: ../bleachbit/GuiPreferences.py:304 ../bleachbit/GuiPreferences.py:345
-#: ../bleachbit/GuiPreferences.py:389
+#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
+#: ../bleachbit/GuiPreferences.py:398
 msgid "File"
 msgstr "Fail"
 
-#: ../bleachbit/GuiPreferences.py:318 ../bleachbit/GuiPreferences.py:359
-#: ../bleachbit/GuiPreferences.py:391
+#: ../bleachbit/GuiPreferences.py:327 ../bleachbit/GuiPreferences.py:368
+#: ../bleachbit/GuiPreferences.py:400
 msgid "Folder"
 msgstr "Folder"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files
 #. and folders
-#: ../bleachbit/GuiPreferences.py:400
+#: ../bleachbit/GuiPreferences.py:409
 msgid "Theses paths will not be deleted or modified."
 msgstr "Laluan ini tidak akan dipadam atau diubahsuai."
 
-#: ../bleachbit/GuiPreferences.py:402
+#: ../bleachbit/GuiPreferences.py:411
 msgid "These locations can be selected for deletion."
 msgstr "Lokasi ini boleh dipilih untuk pemadaman"
 
-#: ../bleachbit/GuiPreferences.py:410
+#: ../bleachbit/GuiPreferences.py:419
 msgid "Type"
 msgstr "Jenis"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:416
+#: ../bleachbit/GuiPreferences.py:425
 msgid "Path"
 msgstr "Laluan"
 
-#: ../bleachbit/GuiPreferences.py:429
+#: ../bleachbit/GuiPreferences.py:438
 msgctxt "button"
 msgid "Add file"
 msgstr "Tambah fail"
 
-#: ../bleachbit/GuiPreferences.py:435
+#: ../bleachbit/GuiPreferences.py:444
 msgctxt "button"
 msgid "Add folder"
 msgstr "Tambah folder"
@@ -1686,24 +1812,25 @@ msgid "Physical free memory is %s."
 msgstr "Ingatan bebas fizikal ialah %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:277
+#: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
 msgstr "Mencuci peranti silih %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:289
+#: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
 msgstr "Mengawalkan semula peranti silih %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:306
+#: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "Peranti silih yang dikesan: %s"
 
-#: ../bleachbit/Memory.py:315
+#. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
+#: ../bleachbit/Memory.py:319
 #, python-brace-format
 msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
@@ -1712,7 +1839,7 @@ msgstr ""
 "Fungsi wipe_memory() dengan ID proses ID {pid} masih menunggu ID proses anak "
 "{cid}."
 
-#: ../bleachbit/Memory.py:320
+#: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
 msgstr "Proses pencucian-ingatan anak kembalikan kod %d."
@@ -1734,17 +1861,21 @@ msgid "_Wipe Free Space"
 msgstr "_Bersihkan Ruang Bebas"
 
 #: ../data/app-menu.ui:21
+msgid "_Make Chaff"
+msgstr "_Buat Chaff"
+
+#: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
 msgstr "_Carik Tetapan dan Keluar"
 
-#: ../data/app-menu.ui:32
+#: ../data/app-menu.ui:36
 msgid "_Diagnostics"
 msgstr "_Diagnostik"
 
-#: ../data/app-menu.ui:36
+#: ../data/app-menu.ui:40
 msgid "_Help"
 msgstr "_Bantuan"
 
-#: ../data/app-menu.ui:42
+#: ../data/app-menu.ui:46
 msgid "_About BleachBit"
 msgstr "Perih_al BleachBit"
