@@ -226,7 +226,7 @@ for __icon in __icons:
 app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
 if not os.path.exists(app_menu_filename) and system_cleaners_dir:
     # This path works when installed on Linux.
-    app_menu_filename = os.path.abspath(os.path.join(system_cleaners_dir), '../app-menu.ui')
+    app_menu_filename = os.path.abspath(os.path.join(system_cleaners_dir, '../app-menu.ui'))
 if not os.path.exists(app_menu_filename):
     logger.error('unknown location for app-menu.ui')
 
