@@ -61,6 +61,9 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
 	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
+	# menu
+	$(INSTALL_DATA) data/app-menu.ui $(DESTDIR)$(datadir)/bleachbit
+
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/

@@ -29,11 +29,12 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-Requires:       python >= 2.6
-Requires:       gnome-python2-gnomevfs
-Requires:       pygtk2 >= 2.6
+Requires:       python >= 2.7
+Requires:       gtk3
 Requires:       usermode
-Requires:       python-scandir
+# CentOS 7 does not have scandir, but BleachBit can fall back to the
+# slower mode.
+#Requires:       python-scandir
 Requires:       python-chardet
 %endif
 
@@ -46,7 +47,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
-Requires:       python-gtk >= 2.6
+Requires:       gtk3
 Requires:       python-xml
 Requires:       python-scandir
 Requires:       python-chardet
