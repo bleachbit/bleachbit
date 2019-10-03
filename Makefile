@@ -51,8 +51,10 @@ install:
 	$(INSTALL_DATA) bleachbit.appdata.xml $(DESTDIR)$(datadir)/appdata/
 
 	# Python code
-	mkdir -p $(DESTDIR)$(datadir)/bleachbit
+	mkdir -p $(DESTDIR)$(datadir)/bleachbit/markovify
 	$(INSTALL_DATA) bleachbit/*.py $(DESTDIR)$(datadir)/bleachbit
+	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
+	#note: compileall is recursive
 	cd $(DESTDIR)$(datadir)/bleachbit && \
 	python2 -O -c "import compileall; compileall.compile_dir('.')" && \
 	python2 -c "import compileall; compileall.compile_dir('.')"
