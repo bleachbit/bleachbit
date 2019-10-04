@@ -8,6 +8,7 @@ import json
 import random
 from .splitters import split_into_sentences
 from .chain import Chain, BEGIN, END
+# BleachBit does not use unidecode
 #from unidecode import unidecode
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
@@ -35,31 +36,27 @@ class Text(object):
         self.state_size = state_size
 
         if self.retain_original:
-            self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
-
-            # Rejoined text lets us assess the novelty of generated sentences
-            self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
-            self.chain = chain or Chain(self.parsed_sentences, state_size)
+            # not used in BleachBit
+            pass
         else:
             if not chain:
-                parsed = parsed_sentences or self.generate_corpus(input_text)
+                # not used in BleachBit
+                pass
             self.chain = chain or Chain(parsed, state_size)
 
     def to_dict(self):
         """
         Returns the underlying data as a Python dict.
         """
-        return {
-            "state_size": self.state_size,
-            "chain": self.chain.to_json(),
-            "parsed_sentences": self.parsed_sentences if self.retain_original else None
-        }
+        # not used in BleachBit
+        pass
 
     def to_json(self):
         """
         Returns the underlying data as a JSON string.
         """
-        return json.dumps(self.to_dict())
+        # not used in BleachBit
+        pass
 
     @classmethod
     def from_dict(cls, obj, **kwargs):
@@ -72,7 +69,8 @@ class Text(object):
 
     @classmethod
     def from_json(cls, json_str):
-        return cls.from_dict(json.loads(json_str))
+        # not used in BleachBit
+        pass
 
     def sentence_split(self, text):
         """
@@ -105,16 +103,8 @@ class Text(object):
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence.
         """
-        if len(sentence.strip()) == 0: return False
-        reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
-        # Decode unicode, mainly to normalize fancy quotation marks
-        if sentence.__class__.__name__ == "str": # pragma: no cover
-            decoded = sentence
-        else: # pragma: no cover
-            decoded = unidecode(sentence)
-        # Sentence shouldn't contain problematic characters
-        if re.search(reject_pat, decoded): return False
-        return True
+        # not used in BleachBit
+        pass
 
     def generate_corpus(self, text):
         """
@@ -122,15 +112,8 @@ class Text(object):
         "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
-        if isinstance(text, str):
-            sentences = self.sentence_split(text)
-        else:
-            sentences = []
-            for line in text:
-                sentences += self.sentence_split(line)
-        passing = filter(self.test_sentence_input, sentences)
-        runs = map(self.word_split, passing)
-        return runs
+        # not used in BleachBit
+        pass
 
     def test_sentence_output(self, words, max_overlap_ratio, max_overlap_total):
         """
@@ -140,17 +123,9 @@ class Text(object):
         smaller number of (a) `max_overlap_ratio` (default: 0.7) of the total
         number of words, and (b) `max_overlap_total` (default: 15).
         """
-        # Reject large chunks of similarity
-        overlap_ratio = int(round(max_overlap_ratio * len(words)))
-        overlap_max = min(max_overlap_total, overlap_ratio)
-        overlap_over = overlap_max + 1
-        gram_count = max((len(words) - overlap_max), 1)
-        grams = [ words[i:i+overlap_over] for i in range(gram_count) ]
-        for g in grams:
-            gram_joined = self.word_join(g)
-            if gram_joined in self.rejoined_text:
-                return False
-        return True
+        # not used in BleachBit
+        pass
+
 
     def make_sentence(self, init_state=None, **kwargs):
         """
