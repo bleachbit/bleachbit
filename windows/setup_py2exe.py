@@ -228,6 +228,10 @@ def build():
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
+    logger.info('Copying CA bundle')
+    import requests
+    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH, os.path.join('dist', 'cacert.pem'))
+
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
     copytree('locale', 'dist\\share\\locale')
@@ -263,7 +267,6 @@ def delete_unnecessary():
         r'lib\gdk-pixbuf-2.0',
         r'lib\gdbus-2.0',
         r'perfmon.pyd',
-        r'select.pyd',
         r'servicemanager.pyd',
         r'share\themes\default',
         r'share\themes\emacs',

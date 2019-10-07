@@ -28,7 +28,7 @@ import random
 import tempfile
 from datetime import datetime, timedelta
 
-from bleachbit import _
+from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir
 
 from . import markovify
@@ -110,6 +110,12 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     """Download a URL to the given filename"""
     logger.info('Downloading %s to %s', url, fn)
     import requests
+    import sys
+    if hasattr(sys, 'frozen'):
+        # when frozen by py2exe, certificates are in alternate location
+        CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
+        requests.utils.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
+        requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
     from urllib3.util.retry import Retry
     from requests.adapters import HTTPAdapter
     session = requests.Session()
