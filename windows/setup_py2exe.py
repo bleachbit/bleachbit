@@ -316,7 +316,8 @@ def delete_icons():
     logger.info('Deleting unused PNG/SVG icons')
     # This whitelist comes from analyze_process_monitor_events.py
     icon_whitelist = [
-        'edit-clear-all-symbolic.svg'
+        'edit-clear-all-symbolic.svg',
+        'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
         'list-add-symbolic.svg', # spin box in chaff dialog
@@ -324,8 +325,10 @@ def delete_icons():
         'pan-down-symbolic.svg',
         'process-stop.svg', # abort on toolbar
         'window-close-symbolic.svg',
+        'window-close.png',
         'window-maximize-symbolic.svg',
-        'window-minimize-symbolic.svg'
+        'window-minimize-symbolic.svg',
+        'window-restore-symbolic.svg'
     ]
     strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:
