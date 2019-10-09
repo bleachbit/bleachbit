@@ -323,7 +323,8 @@ def delete_icons():
         'list-add-symbolic.svg', # spin box in chaff dialog
         'list-remove-symbolic.svg', # spin box in chaff dialog
         'pan-down-symbolic.svg',
-        'process-stop.svg', # abort on toolbar
+        'process-stop-symbolic.svg', # abort on toolbar
+        'process-stop.png', # abort on toolbar
         'window-close-symbolic.svg',
         'window-close.png',
         'window-maximize-symbolic.svg',
