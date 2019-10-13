@@ -335,6 +335,15 @@ def delete_icons():
         else:
             logger.info('keeping whitelisted icon: %s', f)
 
+def remove_empty_dirs(root):
+    """Remove empty directories"""
+    import scandir
+    for entry in scandir.scandir(root):
+        if entry.is_dir():
+            remove_empty_dirs(entry.path)
+            if not os.listdir(entry.path):
+                logger.info('Deleting empty directory: %s' % entry.path)
+                os.rmdir(entry.path)
 
 @count_size_improvement
 def clean_translations():
@@ -443,6 +452,7 @@ def shrink():
     delete_unnecessary()
     delete_icons()
     clean_translations()
+    remove_empty_dirs('dist')
 
     try:
         strip()
