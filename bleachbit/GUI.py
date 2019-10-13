@@ -393,11 +393,8 @@ class TreeDisplayModel:
         self.view.expand_all()
         return self.view
 
-    def set_cleaner(self, path, model, parent_window, value=None):
+    def set_cleaner(self, path, model, parent_window, value):
         """Activate or deactive option of cleaner."""
-        if not value:
-            # if not value given, toggle current value
-            value = not model[path][1]
         assert isinstance(value, types.BooleanType)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
@@ -411,7 +408,8 @@ class TreeDisplayModel:
             cleaner_id = model[parent][2]
             option_id = model[path][2]
         if cleaner_id and value:
-            # when toggling an option, present any warnings
+            # When enabling an option, present any warnings.
+            # (When disabling an option, there is no need to present warnings.)
             warning = backends[cleaner_id].get_warning(option_id)
             # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
             # %(option) may be cache, logs, cookies, etc.
@@ -431,26 +429,27 @@ class TreeDisplayModel:
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
-        self.set_cleaner(path, model, parent_window)
+        is_toggled_on = not model[path][1] # Is the new state enabled?
+        self.set_cleaner(path, model, parent_window, is_toggled_on)
         i = model.get_iter(path)
-        # if toggled on, enable the parent
         parent = model.iter_parent(i)
-        if parent and model[path][1]:
+        if parent and is_toggled_on:
+            # If child is enabled, then also enable the parent.
             model[parent][1] = True
-        # if all siblings toggled off, disable the parent
-        if parent and not model[path][1]:
+        # If all siblings were toggled off, then also disable the parent.
+        if parent and not is_toggled_on:
             sibling = model.iter_nth_child(parent, 0)
-            any_true = False
+            any_sibling_enabled = False
             while sibling:
                 if model[sibling][1]:
-                    any_true = True
+                    any_sibling_enabled = True
                 sibling = model.iter_next(sibling)
-            if not any_true:
+            if not any_sibling_enabled:
                 model[parent][1] = False
-        # if toggled and has children, do the same for each child
+        # If toggled and has children, then do the same for each child.
         child = model.iter_children(i)
         while child:
-            self.set_cleaner(child, model, parent_window, model[path][1])
+            self.set_cleaner(child, model, parent_window, is_toggled_on)
             child = model.iter_next(child)
         return
 
