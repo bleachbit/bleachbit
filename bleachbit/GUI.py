@@ -881,7 +881,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # create the delete button
         self.run_button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="edit-clear-all-symbolic")
+        icon = Gio.ThemedIcon(name="edit-clear-all")
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
