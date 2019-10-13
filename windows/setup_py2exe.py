@@ -345,8 +345,6 @@ def clean_translations():
 
 @count_size_improvement
 def strip():
-    logger.info('Skipping stripping of executables for now')
-    return
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
     strip_whitelist = ['_sqlite3']
