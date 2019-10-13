@@ -291,24 +291,6 @@ def delete_unnecessary():
             logger.info('Deleting file {} saved {:,} B'.format(
                 path, os.path.getsize(path)))
             os.remove(path)
-    # by wildcard with recursive search
-    delete_wildcards = [
-        '*.a',
-        '*.def',
-        '*.lib',
-        'atk10.mo',
-        'gdk-pixbuf.mo',
-        'gettext-runtime.mo',
-        'glib20.mo',
-        'gtk20-properties.mo',
-        'libgsf.mo',
-    ]
-    for wc in delete_wildcards:
-        total_size = 0
-        for f in recursive_glob('dist', [wc]):
-            total_size += os.path.getsize(f)
-            os.remove(f)
-        logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
 
 
 @count_size_improvement
