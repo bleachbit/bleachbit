@@ -835,7 +835,12 @@ class GUI(Gtk.ApplicationWindow):
         if bytes_removed == 0:
             text = ""
 
-        __iter = model.get_iter(Gtk.TreePath(0))
+        treepath = Gtk.TreePath(0)
+        try:
+            __iter = model.get_iter(treepath)
+        except ValueError as e:
+            logger.warning('ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+            return
         while __iter:
             if model[__iter][2] == option:
                 if option_id == -1:
