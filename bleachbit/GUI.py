@@ -288,8 +288,7 @@ class Bleachbit(Gtk.Application):
                           priority=GObject.PRIORITY_LOW)
             print('Success')
         if self._shred_paths:
-            GUI.shred_paths(self._window, self._shred_paths)
-            GLib.idle_add(self.quit,
+            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, False, True,
                           priority=GObject.PRIORITY_LOW)
 
 
@@ -518,11 +517,15 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
-    def shred_paths(self, paths, shred_settings=False):
+    def shred_paths(self, paths, shred_settings=False, quit_when_done=False):
         """Shred file or folders
 
-        If user confirms and files are deleted, returns True.  If
-        user aborts, returns False.
+        When shredding_settings=True:
+        If user confirms to delete, then returns True.  If user aborts, returns
+        False.
+
+        When quit_when_done=True:
+        Always returns False to remove function from the idle queue.
         """
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
@@ -534,7 +537,12 @@ class GUI(Gtk.ApplicationWindow):
         if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
-            return True
+            if shred_settings:
+                return True
+
+        if quit_when_done:
+            GLib.idle_add(self.close,
+                          priority=GObject.PRIORITY_LOW)
 
         # user aborted
         return False
