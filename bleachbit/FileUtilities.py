@@ -870,7 +870,9 @@ def wipe_path(pathname, idle=False):
                         blanks = blanks[0: (len(blanks) / 2)]
                     else:
                         break
-                elif e.errno != errno.EFBIG:
+                elif e.errno == errno.EFBIG:
+                    break
+                else:
                     raise
             if idle and (time.time() - last_idle) > 2:
                 # Keep the GUI responding, and allow the user to abort.
