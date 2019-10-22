@@ -4,7 +4,7 @@ BleachBit cleans files to free disk space and to maintain privacy.
 
 ## Installation instructions
 
-### Native packages
+### Linux
 
 [![Packaging status](https://repology.org/badge/tiny-repos/bleachbit.svg)](https://repology.org/project/bleachbit/versions)
 
@@ -15,6 +15,10 @@ BleachBit cleans files to free disk space and to maintain privacy.
 #### Arch-based distros
 
 `sudo pacman -S bleachbit`
+
+### Windows
+
+Please see [official website](https://www.bleachbit.org/download/windows).
 
 ## Running from source
 
