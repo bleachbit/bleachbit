@@ -4,9 +4,7 @@ BleachBit cleans files to free disk space and to maintain privacy.
 
 ## Installation instructions
 
-### Linux
-
-[![Packaging status](https://repology.org/badge/tiny-repos/bleachbit.svg)](https://repology.org/project/bleachbit/versions)
+### Linux  [![Packaging status](https://repology.org/badge/tiny-repos/bleachbit.svg)](https://repology.org/project/bleachbit/versions)
 
 #### Ubuntu-based distros
 
