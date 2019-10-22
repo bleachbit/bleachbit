@@ -2,7 +2,26 @@
 
 BleachBit cleans files to free disk space and to maintain privacy.
 
+## Installation instructions
+
+### Native packages
+
+[![Packaging status](https://repology.org/badge/tiny-repos/bleachbit.svg)](https://repology.org/project/bleachbit/versions)
+
+#### Ubuntu-based distros
+
+`sudo apt install bleachbit`
+
+#### Arch-based distros
+
+`sudo pacman -S bleachbit`
+
 ## Running from source
+
+### Prerequisites
+
+- Python 2
+- Gtk 3
 
 To run BleachBit without installation, unpack the tarball and then run these
 commands:
