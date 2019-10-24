@@ -12,7 +12,7 @@
 %endif
 
 Name:           bleachbit
-Version:        2.3
+Version:        3.0
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 
