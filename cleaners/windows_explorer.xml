@@ -81,6 +81,7 @@
   <option id="shellbags">
     <label>Shellbags</label>
     <description>Delete the usage date, window position, and other data for folders</description>
+    <warning>This will reset the position of desktop icons.</warning>
     <!-- What we need to delete: (http://support.microsoft.com/kb/813711) -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\Bags"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\BagMRU"/>
