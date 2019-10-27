@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-09-24 05:21+0000\n"
-"Last-Translator: Jonatan Nyberg <Unknown>\n"
+"PO-Revision-Date: 2019-10-27 01:00+0000\n"
+"Last-Translator: sweidre <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-09-25 14:08+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-10-27 14:12+0000\n"
+"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -162,14 +162,14 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Databas över användarnamn och lösenord samt lista över webbplatser som inte "
-"bör lagra lösenord"
+"En databas med användarnamn och lösenord samt en lista över webbplatser som "
+"inte bör lagra lösenord"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
-msgstr "Detta alternativ kommer att ta bort dina sparade lösenord."
+msgstr "Det här alternativet tar bort dina sparade lösenord."
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -303,7 +303,7 @@ msgstr "Ta bort loggarna"
 #: ../bleachbit/Cleaner.py:281 ../bleachbit/Cleaner.py:315
 #: ../bleachbit/Cleaner.py:317
 msgid "Delete the cache"
-msgstr "Ta bort cache"
+msgstr "Rensa cache"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -465,7 +465,7 @@ msgstr "Rensa listan över besökta webbplatser"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Ta bort cache för avatarer och humörsymboler"
+msgstr "Rensa cache för avatarer och humörsymboler"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -488,7 +488,7 @@ msgstr "Ta bort kakor, besökta webbadresser och sökhistorik"
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Ta bort listan över senast använda"
+msgstr "Rensa listan över senast använda"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -519,7 +519,7 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"Databas med webbadresser inkluderande bokmärken, favoritikoner och historik "
+"En databas med webbadresser inklusive bokmärken, favicons och en historik "
 "över besökta webbplatser"
 
 #: ../cleaners/epiphany.xml
@@ -850,17 +850,17 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Du kör BleachBit med administrativa rättigheter för att rensa delade delar "
-"av systemet, referenser till användarens hemmapp kommer endast att städa "
-"root-kontot."
+"Du kör BleachBit med administratörsbehörighet för rensning av delade delar "
+"av systemet, och referenser till användarprofilmappen rengör endast root-"
+"kontot."
 
 #: ../bleachbit/GUI.py:517
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
-"Kör BleachBit med administrativa privilegier för att förbättra "
-"träffsäkerheten för att skriva över filernas innehåll."
+"Kör BleachBit med administratörsbehörighet för att förbättra noggrannheten "
+"för att skriva över innehållet i filer."
 
 #: ../bleachbit/GUI.py:652
 msgid "You must select an operation"
@@ -1013,7 +1013,7 @@ msgstr "Multimedia"
 #. from winapp2.ini
 #: ../bleachbit/Winapp.py:52
 msgid "Utilities"
-msgstr "Tillbehör"
+msgstr "Verktyg"
 
 #: ../bleachbit/Winapp.py:63
 msgid "Games"
@@ -1075,7 +1075,7 @@ msgstr "Rensa swappen och frigör minne"
 
 #: ../bleachbit/Cleaner.py:306
 msgid "This option is experimental and may cause system problems."
-msgstr "Detta val är experimentellt och kan orsaka systemproblem."
+msgstr "Det här alternativet är experimentellt och kan orsaka systemproblem."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:317
@@ -1106,14 +1106,13 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:330 ../bleachbit/Cleaner.py:555
 msgid "Clipboard"
-msgstr "Klippbord"
+msgstr "Urklipp"
 
 #: ../bleachbit/Cleaner.py:331
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Skrivbordsmiljöns klippbord används till metoder för att Kopiera och Klistra "
-"in"
+"Skrivbordsmiljöns urklipp används för kopiera och klistra operationer"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
