@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-10-04 16:04+0000\n"
-"Last-Translator: Jean-Marc <Unknown>\n"
+"PO-Revision-Date: 2019-10-26 21:24+0000\n"
+"Last-Translator: Éfrit <Unknown>\n"
 "Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2019-10-05 01:32+0000\n"
-"X-Generator: Launchpad (build af2eefe214bd95389a09b7c956720881bab16807)\n"
+"X-Launchpad-Export-Date: 2019-10-27 14:08+0000\n"
+"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -23,7 +23,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Web browser"
-msgstr "Navigateur web"
+msgstr "Navigateur Web"
 
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
@@ -162,8 +162,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Une base de données d’identifiants et de mots de passe ainsi qu’une liste de "
-"sites pour lesquels les mots de passe ne doivent pas être stockés"
+"Une base de données de noms d’utilisateur et de mots de passe ainsi qu’une "
+"liste de sites pour lesquels les mots de passe ne doivent pas être stockés"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -190,7 +190,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Défragmenter la base de données pour réduire l’espace utilisé et améliorer "
+"Défragmenter la base de données pour réduire l’espace utilisé et augmenter "
 "la vitesse sans supprimer de données"
 
 #: ../cleaners/winrar.xml
@@ -668,11 +668,13 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbags"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
+"Supprime la date d’utilisation, la position de la fenêtre et d’autres "
+"données sur les dossiers"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -957,6 +959,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"Écraser l’espace disque libre efface les vestiges des fichiers qui ont été "
+"supprimés sans être détruits. Cela ne libère pas plus d’espace."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:204 ../bleachbit/Worker.py:351
@@ -1194,11 +1198,11 @@ msgstr "Écraser l’espace libre du disque %s"
 
 #: ../bleachbit/Cleaner.py:684
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "Chargement des nettoyeurs natifs."
 
 #: ../bleachbit/Cleaner.py:690
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "Importation des nettoyeurs de Winapp2.ini."
 
 #: ../bleachbit/CleanerML.py:136
 #, python-brace-format
@@ -1212,7 +1216,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Ignorance du nettoyeur car il peut écrire partout : %s"
 
 #: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
 #, python-format
@@ -1304,7 +1308,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:888
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Erreur nᴼ %d lors du vidage du tampon de fichier."
 
 #: ../bleachbit/FileUtilities.py:904
 msgid ""
@@ -1317,6 +1321,8 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:909
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} multiplets et {inodes:,} nœuds d’index disponibles pour "
+"utilisateurs standards"
 
 #: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
@@ -1325,7 +1331,7 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:926
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "L’erreur inconnue nᴼ 0 a été gérée lors de la troncature du fichier."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1352,6 +1358,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Erreur lors de l’ouverture d’une connexion réseau pour vérifier les mises à "
+"jour. Veuillez vérifier l’état du réseau et si un pare-feu ne bloque pas "
+"l’application. Message d’erreur : {}"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
@@ -1368,6 +1377,7 @@ msgstr ""
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr ""
+"recherche=\"walk.all\" utilisé avec le fichier standard chemin d’accès=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1377,7 +1387,7 @@ msgstr ""
 #: ../bleachbit/Action.py:298
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "chemin d’accès=\"%s\" n’est pas un motif avec métacaractère"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:391 ../bleachbit/Action.py:404
@@ -1476,7 +1486,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:143
 msgid "set log level to verbose"
-msgstr ""
+msgstr "Régler le niveau de journalisation à verbeux"
 
 #: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
@@ -1600,7 +1610,7 @@ msgstr "Suppression de fichiers"
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:67
 msgid "Make chaff"
-msgstr ""
+msgstr "Générer des paillettes"
 
 #: ../bleachbit/GuiChaff.py:72
 msgid "Make randomly-generated messages inspired by documents."
@@ -1645,7 +1655,7 @@ msgstr "Créer des fichiers"
 
 #: ../bleachbit/GuiChaff.py:135
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Télécharger les données nécessaires au générateur de paillettes ?"
 
 #: ../bleachbit/GuiChaff.py:177
 msgid "Generating files"
@@ -1839,13 +1849,13 @@ msgstr "Paramétrage d’une ingénieuse valeur %d pour ce processus."
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "Délégation des privilèges du processus {pid} à l’utilisateur {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Allocation et effacement de %s de mémoire."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1857,6 +1867,8 @@ msgstr "Libération de %s de la mémoire."
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
 msgstr ""
+"L’identifiant universel unique (UUID) pour le fichier d’espace d’échange "
+"{device} est {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
@@ -1889,6 +1901,8 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"La fonction wipe_memory() avec l’identifiant de processus {pid} est en "
+"attente du processus enfant {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
@@ -1905,7 +1919,7 @@ msgstr "Dé_truire les dossiers"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Détruire les chemins d’accès du presse-papiers"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1913,7 +1927,7 @@ msgstr "Écrasement de l’e_space libre"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_Générer des paillettes"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
