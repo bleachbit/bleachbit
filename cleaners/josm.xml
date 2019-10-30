@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2019 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="josm">
+  <label>Josm</label>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="walk.all" path="~/.josm/cache"/>
+    <action command="delete" search="walk.all" path="~/.cache/JOSM"/>
+    <action command="delete" search="walk.all" path="$APPDATA\JOSM\cache\"/>
+    <action command="delete" search="walk.all" path="$USERPROFILE\AppData\Local\JOSM\cache\"/>
+  </option>
+  <option id="autosaves">
+    <label>Autosaves</label>
+    <description>Delete data that may help JOSM to recover session after a crash</description>
+    <warning>This options will remove a possibility to recover from a past crashed JOSM session and/or access to any deleted layer</warning>
+    <action command="delete" search="walk.all" path="~/.josm/autosave"/>
+    <action command="delete" search="walk.all" path="~/.local/share/JOSM/autosave"/>
+    <action command="delete" search="walk.all" path="$APPDATA\JOSM\autosave\"/>
+    <action command="delete" search="walk.all" path="$USERPROFILE\AppData\Local\JOSM\autosave\"/>
+  </option>
+</cleaner>
