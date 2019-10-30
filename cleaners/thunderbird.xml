@@ -30,10 +30,10 @@
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
     <!-- Ubuntu 9.10 Thunderbird 2.0 has ~/.mozilla-thunderbird/????????.default/ -->
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
-   <value search="glob" os="linux">~/.thunderbird/*</value>
-   <value search="glob" os="linux">~/.mozilla-thunderbird/*</value>
-   <value search="glob" os="linux">~/.thunderbird/Profiles/*</value>
-   <value search="glob" os="windows">%AppData%\Thunderbird\Profiles\*</value>
+    <value search="glob" os="linux">~/.thunderbird/*</value>
+    <value search="glob" os="linux">~/.mozilla-thunderbird/*</value>
+    <value search="glob" os="linux">~/.thunderbird/Profiles/*</value>
+    <value search="glob" os="windows">%AppData%\Thunderbird\Profiles\*</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -50,7 +50,7 @@
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
-    </option>
+  </option>
   <option id="index">
     <label>Index</label>
     <description>Delete the files</description>
