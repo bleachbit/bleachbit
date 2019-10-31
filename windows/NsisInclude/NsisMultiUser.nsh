@@ -26,6 +26,7 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 !define MULTIUSER_ERROR_INVALID_PARAMETERS 666660 ; invalid command-line parameters
 !define MULTIUSER_ERROR_ELEVATION_NOT_ALLOWED 666661 ; elevation is restricted by MULTIUSER_INSTALLMODE_ALLOW_ELEVATION or MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT
 !define MULTIUSER_ERROR_NOT_INSTALLED 666662 ; returned from uninstaller when no version is installed
+!define MULTIUSER_ERROR_RUN_UNINSTALLER_FAILED 666663 ; returned from installer if executing the uninstaller failed
 !define MULTIUSER_ERROR_ELEVATION_FAILED 666666 ; returned by the outer instance when the inner instance cannot start (user aborted elevation dialog, Logon service not running, UAC is not supported by the OS, user without admin priv. is used in the runas dialog), or started, but was not admin
 !define MULTIUSER_INNER_INSTANCE_BACK 666667 ; returned by the inner instance when the user presses the Back button on the first visible page (display outer instance)
 
@@ -37,6 +38,11 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 
 	; optional defines
 	; COMPANY_NAME - stored in uninstall info in registry
+	; CONTACT - stored in uninstall info in registry
+	; COMMENTS - stored in uninstall info in registry
+	; URL_INFO_ABOUT - stored as the Support Link in the uninstall info of the registry, and when not included, the Help Link as well.
+	; URL_HELP_LINK - stored as the Help Link in the uninstall info of the registry.
+	; URL_UPDATE_INFO - stored as the Update Information in the uninstall info of the registry.
 	; MULTIUSER_INSTALLMODE_NO_HELP_DIALOG - don't show help dialog
 
 	!define /ifndef MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1 ; 0 or 1 - whether user can install BOTH per-user and per-machine; this only affects the texts and the required elevation on the page, the actual uninstall of previous version has to be implemented by script
@@ -100,8 +106,10 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 	Var MultiUser.InstallModePage.Text
 	Var MultiUser.InstallModePage.AllUsers
 	Var MultiUser.InstallModePage.CurrentUser
-	Var MultiUser.InstallModePage.AllUsersLabel
-	Var MultiUser.InstallModePage.CurrentUserLabel
+	!ifdef UMUI_SYSVERSION
+		Var MultiUser.InstallModePage.AllUsersLabel
+		Var MultiUser.InstallModePage.CurrentUserLabel
+	!endif
 	Var MultiUser.InstallModePage.Description
 !macroend
 
@@ -528,36 +536,13 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 				; NOTES:
 				; - the _? param stops the uninstaller from copying itself to the temporary directory, which is the only way for waiting to work
 				; - $R0 passes the original parameters from the installer to the uninstaller (together with /uninstall so that uninstaller knows installer is running and skips opitional single instance checks)
-				; - using ExecWait fails if the new process requires elevation, see http://forums.winamp.com/showthread.php?p=3080202&posted=1#post3080202, so we use ShellExecuteEx
-				System::Call '*(i 60, i 0x140, i 0, t "open", t "$0\${UNINSTALL_FILENAME}", t "$R0 _?=$0", t, i ${SW_SHOW}, i, i, t, i, i, i, i) p .r2' ; allocate and fill values for SHELLEXECUTEINFO structure, returned in $2 (0x140 = SEE_MASK_NOCLOSEPROCESS|SEE_MASK_NOASYNC)
-
-				System::Call 'shell32::ShellExecuteEx(i r2) i .r0 ?e'
-				Pop $1
-				${if} $0 = 0
-					SetErrorLevel $1
-					Quit
+				; - using ExecWait fails if the new process requires elevation, see http://forums.winamp.com/showthread.php?p=3080202&posted=1#post3080202, so we use ExecShellWait
+				ExecShellWait "open" "$0\${UNINSTALL_FILENAME}" "$R0 _?=$0"
+				${if} ${errors}
+					SetErrorLevel ${MULTIUSER_ERROR_RUN_UNINSTALLER_FAILED}
+				${else}
+					SetErrorLevel 0
 				${endif}
-
-				System::Call '*$2(i, i, i, t, t, t, t, i, i, i, t, i, i, i, i .r3)' ; get the process handle in $3
-
-				System::Call 'kernel32::WaitForSingleObject(i r3, i -1) i .r0 ?e' ; wait indefinitely for the process to exit
-				Pop $1
-				${if} $0 <> 0 ; WAIT_OBJECT_0
-					SetErrorLevel $1
-					Quit
-				${endif}
-
-				System::Call 'kernel32::GetExitCodeProcess(i r3, *i .r4) i .r0 ?e' ; store exit code in $4
-				Pop $1
-				${if} $0 = 0
-					SetErrorLevel $1
-					Quit
-				${endif}
-
-				System::Call 'Kernel32::CloseHandle(i r3)' ; close the process handle in $3
-				System::Free $2 ; free SHELLEXECUTEINFO structure, stored in $2
-
-				SetErrorLevel $4 ; return exit code stored in $4
 				Quit
 			${endif}
 		!endif
@@ -767,40 +752,63 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 		!endif
 		Pop $MultiUser.InstallModePage.Text
 
-		StrCpy $0 "$(MULTIUSER_ALL_USERS)"
-		${NSD_CreateRadioButton} 30u 30% 10u 8u ""
-		Pop $MultiUser.InstallModePage.AllUsers
+		!ifdef UMUI_SYSVERSION
+			StrCpy $0 "$(MULTIUSER_ALL_USERS_UMUI)"
+			${NSD_CreateRadioButton} 30u 30% 10u 8u ""
+			Pop $MultiUser.InstallModePage.AllUsers
 
-		System::Call "advapi32::GetUserName(t. r1, *i ${NSIS_MAX_STRLEN})"
-		${${UNINSTALLER_PREFIX}StrRep} "$1" "$(MULTIUSER_CURRENT_USER)" "{USER}" "$1"
-		${NSD_CreateRadioButton} 30u 45% 10u 8u ""
-		Pop $MultiUser.InstallModePage.CurrentUser
+			System::Call "advapi32::GetUserName(t. r1, *i ${NSIS_MAX_STRLEN})"
+			${${UNINSTALLER_PREFIX}StrRep} "$1" "$(MULTIUSER_CURRENT_USER_UMUI)" "{USER}" "$1"
+			${NSD_CreateRadioButton} 30u 45% 10u 8u ""
+			Pop $MultiUser.InstallModePage.CurrentUser
 
-		; We create the radio buttons with empty text and create separate labels, because radio button font color can't be changed with XP Styles turned on,
-		; which creates problems with UMUI themes, see http://forums.winamp.com/showthread.php?p=3079742#post3079742
-		; shortcuts (&) for labels don't work and cause strange behaviour in NSIS - going to another page, etc.
-		${NSD_CreateLabel} 44u 30% 280u 16u "$0"
-		Pop $MultiUser.InstallModePage.AllUsersLabel
-		nsDialogs::SetUserData $MultiUser.InstallModePage.AllUsersLabel $MultiUser.InstallModePage.AllUsers
-		${NSD_CreateLabel} 44u 45% 280u 8u "$1"
-		Pop $MultiUser.InstallModePage.CurrentUserLabel
-		nsDialogs::SetUserData $MultiUser.InstallModePage.CurrentUserLabel $MultiUser.InstallModePage.CurrentUser
+			; We create the radio buttons with empty text and create separate labels, because radio button font color can't be changed with XP Styles turned on,
+			; which creates problems with UMUI themes, see http://forums.winamp.com/showthread.php?p=3079742#post3079742
+			; shortcuts (&) for labels don't work and cause strange behaviour in NSIS - going to another page, etc.
+			${NSD_CreateLabel} 44u 30% 280u 16u "$0"
+			Pop $MultiUser.InstallModePage.AllUsersLabel
+			nsDialogs::SetUserData $MultiUser.InstallModePage.AllUsersLabel $MultiUser.InstallModePage.AllUsers
+			${NSD_CreateLabel} 44u 45% 280u 8u "$1"
+			Pop $MultiUser.InstallModePage.CurrentUserLabel
+			nsDialogs::SetUserData $MultiUser.InstallModePage.CurrentUserLabel $MultiUser.InstallModePage.CurrentUser
 
-		${if} $PerMachineOptionAvailable = 0 ; install per-machine is not available
-			SendMessage $MultiUser.InstallModePage.AllUsersLabel ${WM_SETTEXT} 0 "STR:$0$\r$\n($(MULTIUSER_RUN_AS_ADMIN))" ; only when $PerMachineOptionAvailable = 0, we add that comment to the disabled control itself
-			${orif} $CmdLineInstallMode != ""
-			EnableWindow $MultiUser.InstallModePage.AllUsersLabel 0 ; start out disabled
-			EnableWindow $MultiUser.InstallModePage.AllUsers 0 ; start out disabled
-		${endif}
+			${if} $PerMachineOptionAvailable = 0 ; install per-machine is not available
+				SendMessage $MultiUser.InstallModePage.AllUsersLabel ${WM_SETTEXT} 0 "STR:$0$\r$\n($(MULTIUSER_RUN_AS_ADMIN))" ; only when $PerMachineOptionAvailable = 0, we add that comment to the disabled control itself
+				${orif} $CmdLineInstallMode != ""
+				EnableWindow $MultiUser.InstallModePage.AllUsersLabel 0 ; start out disabled
+				EnableWindow $MultiUser.InstallModePage.AllUsers 0 ; start out disabled
+			${endif}
 
-		${if} $CmdLineInstallMode != ""
-			EnableWindow $MultiUser.InstallModePage.CurrentUserLabel 0
-			EnableWindow $MultiUser.InstallModePage.CurrentUser 0
-		${endif}
+			${if} $CmdLineInstallMode != ""
+				EnableWindow $MultiUser.InstallModePage.CurrentUserLabel 0
+				EnableWindow $MultiUser.InstallModePage.CurrentUser 0
+			${endif}
 
-		; bind to label click
-		${NSD_OnClick} $MultiUser.InstallModePage.CurrentUserLabel ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
-		${NSD_OnClick} $MultiUser.InstallModePage.AllUsersLabel ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
+			; bind to label click
+			${NSD_OnClick} $MultiUser.InstallModePage.CurrentUserLabel ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
+			${NSD_OnClick} $MultiUser.InstallModePage.AllUsersLabel ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
+		!else
+			StrCpy $0 "$(MULTIUSER_ALL_USERS)"
+
+			System::Call "advapi32::GetUserName(t. r1, *i ${NSIS_MAX_STRLEN})"
+			${${UNINSTALLER_PREFIX}StrRep} "$1" "$(MULTIUSER_CURRENT_USER)" "{USER}" "$1"
+
+			${NSD_CreateRadioButton} 30u 30% 280u 16u "$0"
+			Pop $MultiUser.InstallModePage.AllUsers
+
+			${NSD_CreateRadioButton} 30u 45% 280u 8u "$1"
+			Pop $MultiUser.InstallModePage.CurrentUser
+
+			${if} $PerMachineOptionAvailable = 0 ; install per-machine is not available
+				SendMessage $MultiUser.InstallModePage.AllUsers ${WM_SETTEXT} 0 "STR:$0$\r$\n($(MULTIUSER_RUN_AS_ADMIN))" ; only when $PerMachineOptionAvailable = 0, we add that comment to the disabled control itself
+				${orif} $CmdLineInstallMode != ""
+				EnableWindow $MultiUser.InstallModePage.AllUsers 0 ; start out disabled
+			${endif}
+
+			${if} $CmdLineInstallMode != ""
+				EnableWindow $MultiUser.InstallModePage.CurrentUser 0
+			${endif}
+		!endif
 
 		; bind to radiobutton change
 		${NSD_OnClick} $MultiUser.InstallModePage.CurrentUser ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionClick
@@ -997,21 +1005,23 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 		System::Store L
 	FunctionEnd
 
-	Function ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
-		Exch $0 ; get clicked control's HWND, which is on the stack in $0
-		nsDialogs::GetUserData $0
-		Pop $0
+	!ifdef UMUI_SYSVERSION
+		Function ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionLabelClick
+			Exch $0 ; get clicked control's HWND, which is on the stack in $0
+			nsDialogs::GetUserData $0
+			Pop $0
 
-		${NSD_Uncheck} $MultiUser.InstallModePage.AllUsers
-		${NSD_Uncheck} $MultiUser.InstallModePage.CurrentUser
-		${NSD_Check} $0 ; ${NSD_Check} will check both radio buttons without the above 2 lines
-		${NSD_SetFocus} $0
-		Push $0
-		; ${NSD_Check} doesn't call Click event
-		Call ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionClick
+			${NSD_Uncheck} $MultiUser.InstallModePage.AllUsers
+			${NSD_Uncheck} $MultiUser.InstallModePage.CurrentUser
+			${NSD_Check} $0 ; ${NSD_Check} will check both radio buttons without the above 2 lines
+			${NSD_SetFocus} $0
+			Push $0
+			; ${NSD_Check} doesn't call Click event
+			Call ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionClick
 
-		Pop $0
-	FunctionEnd
+			Pop $0
+		FunctionEnd
+	!endif
 
 	Function ${UNINSTALLER_FUNCPREFIX}MultiUser.InstallModeOptionClick
 		Exch $0 ; get clicked control's HWND, which is on the stack in $0
@@ -1041,6 +1051,10 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 
 !macro MULTIUSER_RegistryAddInstallInfo
 	Push $0
+	Push $1
+	Push $2
+	Push $3
+	Push $4
 
 	; Write the installation path into the registry
 	WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_INSTALL_REGISTRY_KEY_PATH}" "${MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUENAME}" "$INSTDIR" ; "InstallLocation"
@@ -1054,9 +1068,11 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 	${if} $MultiUser.InstallMode == "AllUsers" ; setting defaults
 		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "DisplayName" "${MULTIUSER_INSTALLMODE_DISPLAYNAME}"
 		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "UninstallString" '"$INSTDIR\${UNINSTALL_FILENAME}" /allusers'
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" "QuietUninstallString" '"$INSTDIR\${UNINSTALL_FILENAME}" /allusers /S'
 	${else}
 		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "DisplayName" "${MULTIUSER_INSTALLMODE_DISPLAYNAME} (current user)" ; "add/remove programs" will show if installation is per-user
 		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "UninstallString" '"$INSTDIR\${UNINSTALL_FILENAME}" /currentuser'
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "QuietUninstallString" '"$INSTDIR\${UNINSTALL_FILENAME}" /currentuser /S'
 	${endif}
 
 	WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "DisplayVersion" "${VERSION}"
@@ -1064,9 +1080,40 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 	!ifdef COMPANY_NAME
 		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "Publisher" "${COMPANY_NAME}"
 	!endif
+	!ifdef CONTACT
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "Contact" "${CONTACT}"
+	!endif
+	!ifdef COMMENTS
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "Comments" "${COMMENTS}"
+	!endif
+	!ifdef URL_INFO_ABOUT
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "URLInfoAbout" "${URL_INFO_ABOUT}"
+	!endif
+	!ifdef URL_HELP_LINK
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "HelpLink" "${URL_HELP_LINK}"
+	!endif
+	!ifdef URL_UPDATE_INFO
+		WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "URLUpdateInfo" "${URL_UPDATE_INFO}"
+	!endif
 	WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "NoModify" 1
 	WriteRegDWORD SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "NoRepair" 1
 
+	; Write InstallDate string value in 'YYYYMMDD' format.
+	; Without it, Windows gets the date from the registry key metadata, which might be inaccurate.
+	System::Call /NOUNLOAD "*(&i2,&i2,&i2,&i2,&i2,&i2,&i2,&i2) i .r4"
+	System::Call /NOUNLOAD "kernel32::GetLocalTime(i)i(r4)"
+	System::Call /NOUNLOAD "*$4(&i2,&i2,&i2,&i2,&i2,&i2,&i2,&i2)i(.r1,.r2,,.r3,,,,)"
+	System::Free $4
+	IntCmp $2 9 0 0 +2
+	StrCpy $2 "0$2"
+	IntCmp $3 9 0 0 +2
+	StrCpy $3 "0$3"
+	WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" "InstallDate" "$1$2$3"
+
+	Pop $4
+	Pop $3
+	Pop $2
+	Pop $1
 	Pop $0
 !macroend
 
