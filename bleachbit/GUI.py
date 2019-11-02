@@ -879,7 +879,7 @@ class GUI(Gtk.ApplicationWindow):
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
         # create the preview button
-        preview_icon = Gio.ThemedIcon(name='edit-find')
+        preview_icon = Gio.ThemedIcon(name='edit-find-symbolic')
 
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
@@ -894,7 +894,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # create the delete button
         self.run_button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="edit-clear-all")
+        icon = Gio.ThemedIcon(name="edit-clear-all-symbolic")
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
@@ -906,7 +906,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # stop cleaning
         self.stop_button = Gtk.Button()
-        stop_icon = Gio.ThemedIcon(name='process-stop')
+        stop_icon = Gio.ThemedIcon(name='process-stop-symbolic')
         self.stop_button.add(Gtk.Image.new_from_gicon(stop_icon, Gtk.IconSize.BUTTON))
         self.stop_button.set_tooltip_text(_('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
