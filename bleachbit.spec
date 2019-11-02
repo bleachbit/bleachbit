@@ -36,6 +36,7 @@ Requires:       usermode
 # slower mode.
 #Requires:       python-scandir
 Requires:       python-chardet
+Requires:       python2-gobject
 %endif
 
 %if 0%{?suse_version}
@@ -51,6 +52,7 @@ Requires:       gtk3
 Requires:       python-xml
 Requires:       python-scandir
 Requires:       python-chardet
+Requires:       python2-gobject
 %py_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
