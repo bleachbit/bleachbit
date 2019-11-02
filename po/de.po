@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-09-19 16:54+0000\n"
-"Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
+"PO-Revision-Date: 2019-11-02 18:02+0000\n"
+"Last-Translator: Tobias B. Besemer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-09-19 20:32+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-11-02 18:12+0000\n"
+"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -593,7 +593,7 @@ msgstr ""
 
 #: ../cleaners/vim.xml
 msgid "Swap files under user profile"
-msgstr "Clipboead"
+msgstr "Swap-Dateien im Benutzer-Profil"
 
 #: ../cleaners/vim.xml ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -674,7 +674,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbags"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -1304,17 +1304,19 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:888
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Fehler #%d beim Leeren des Datei-Puffers"
 
 #: ../bleachbit/FileUtilities.py:904
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"Schrieb {files:,} Dateien und {bytes:,} Bytesin {seconds:,} Sekunden mit "
+"{rate:.2f} MB/s"
 
 #: ../bleachbit/FileUtilities.py:909
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
-msgstr ""
+msgstr "{bytes:,} Bytes und {inodes:,} Inodes verfügbar für Non-Super-User"
 
 #: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
@@ -1646,7 +1648,7 @@ msgstr "Erstelle Dateien"
 
 #: ../bleachbit/GuiChaff.py:135
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Daten benötigt für Chaff-Generator herunterladen?"
 
 #: ../bleachbit/GuiChaff.py:177
 msgid "Generating files"
@@ -1918,7 +1920,7 @@ msgstr "_Freien Speicherplatz säubern"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_Make Chaff"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
