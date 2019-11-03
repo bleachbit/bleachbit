@@ -55,6 +55,14 @@
   Unicode true
 !endif
 
+VIProductVersion "${VERSION}"
+VIAddVersionKey ProductName "${prodname}"
+VIAddVersionKey CompanyName "https://www.bleachbit.org"
+VIAddVersionKey LegalCopyright "Copyright (c) 2008-2019 Andrew Ziem"
+VIAddVersionKey FileDescription "BleachBit installer"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey ProductVersion "${VERSION}"
+
   ;Default installation folder
   ; NsisMultiUser sets the directory.
   ;InstallDir "$PROGRAMFILES\${prodname}"

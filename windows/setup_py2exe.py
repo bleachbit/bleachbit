@@ -520,6 +520,9 @@ if '__main__' == __name__:
     logger.info('Getting BleachBit version')
     import bleachbit
     BB_VER = bleachbit.APP_VERSION
+    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
+    if build_number:
+        BB_VER = '%s.%s' % (BB_VER, build_number)
     logger.info('BleachBit version ' + BB_VER)
 
     environment_check()
