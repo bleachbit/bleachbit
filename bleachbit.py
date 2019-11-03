@@ -33,6 +33,13 @@ if 'posix' == os.name:
         # unnecessary if installing BleachBit in site-packages.
         sys.path.append('/usr/share/')
 
+if os.name == 'nt':
+    # change error handling to avoid popup with GTK 3
+    # https://github.com/bleachbit/bleachbit/issues/651
+    import win32api
+    import win32con
+    win32api.SetErrorMode(win32con.SEM_FAILCRITICALERRORS |
+                          win32con.SEM_NOGPFAULTERRORBOX | win32con.SEM_NOOPENFILEERRORBOX)
 
 if 1 == len(sys.argv):
     import bleachbit.GUI
