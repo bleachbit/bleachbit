@@ -29,6 +29,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
+BuildRequires:  python2-gobject-devel
 Requires:       python >= 2.7
 Requires:       gtk3
 Requires:       usermode
@@ -36,6 +37,7 @@ Requires:       usermode
 # slower mode.
 #Requires:       python-scandir
 Requires:       python-chardet
+Requires:       python2-gobject
 %endif
 
 %if 0%{?suse_version}
@@ -45,12 +47,14 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
+BuildRequires:  python2-gobject-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       gtk3
 Requires:       python-xml
 Requires:       python-scandir
 Requires:       python-chardet
+Requires:       python2-gobject
 %py_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
