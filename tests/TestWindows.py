@@ -31,11 +31,13 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
 from bleachbit import logger
 
-import sys
+import functools
 import os
+import platform
+import shutil
+import sys
 import tempfile
 import unittest
-import platform
 from decimal import Decimal
 
 if 'win32' == sys.platform:
@@ -58,10 +60,15 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
+
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""
+
+    def skipUnlessAdmin(self):
+        if not shell.IsUserAnAdmin():
+            self.skipTest('requires administrator privileges')
 
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
@@ -82,9 +89,7 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_link(self):
         """Unit test for links with is_link() and get_recycle_bin()"""
-        if not common.destructive_tests('windows link'):
-            return
-
+        self.skipUnlessAdmin()
         # make a normal directory with a file in it
         real_dir = os.path.join(self.tempdir, 'real_dir')
         os.mkdir(real_dir)
@@ -104,6 +109,12 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_dir)
         self.assertEqual(True, is_link(link_dir))
+
+        if not common.destructive_tests('windows link'):
+            os.rmdir(link_dir)
+            self.assertNotExists(link_dir)
+            shutil.rmtree(real_dir, True)
+            self.skipTest('destructive tests are disabled')
 
         # put the link in the recycle bin
         move_to_recycle_bin(link_dir)
@@ -352,7 +363,6 @@ class WindowsTestCase(common.BleachbitTestCase):
             # requires wiping of extents
             _test_wipe('secret' * 100000)
 
-        import shutil
         shutil.rmtree(dirname, True)
 
         if shell.IsUserAnAdmin():
