@@ -29,7 +29,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python2-gobject-devel
 Requires:       python >= 2.7
 Requires:       gtk3
 Requires:       usermode
@@ -47,7 +46,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  make
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python2-gobject-devel
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
 Requires:       gtk3
