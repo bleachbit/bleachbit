@@ -881,8 +881,12 @@ class GUI(Gtk.ApplicationWindow):
         def icon_and_label(name, label):
             """Make a button image with both icon and label"""
             icon = Gio.ThemedIcon(name=name)
-            grid = Gtk.Grid()
-            img = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.LARGE_TOOLBAR)
+            grid = Gtk.Grid(column_spacing=5)
+            if os.name == 'nt':
+                icon_size = Gtk.IconSize.BUTTON
+            else:
+                icon_size = Gtk.IconSize.LARGE_TOOLBAR
+            img = Gtk.Image.new_from_gicon(icon, icon_size)
             label = Gtk.Label(label)
             grid.attach(img, 0, 0, 1, 1)
             grid.attach(label, 1, 0, 1, 1)
