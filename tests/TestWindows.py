@@ -60,7 +60,6 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
-
 @unittest.skipUnless('win32' == sys.platform, 'not running on windows')
 class WindowsTestCase(common.BleachbitTestCase):
 
@@ -87,9 +86,23 @@ class WindowsTestCase(common.BleachbitTestCase):
         for f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
 
-    def test_link(self):
-        """Unit test for links with is_link() and get_recycle_bin()"""
-        self.skipUnlessAdmin()
+    def _test_link_helper(self, mklink_option, clear_recycle_bin):
+        """Helper function for testing for links with is_link() and
+        get_recycle_bin()
+
+        It gets called four times for the combinations of the two
+        parameters. It's called by four unit tests four accounting
+        purposes. In other words, we don't want to count a test as
+        skipped if part of it succeeded.
+
+        mklink /j = directory junction
+        directory junction does not require administrator privileges
+
+        mklink /d=directory symbolic link
+        requires administrator privileges
+        """
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
         # make a normal directory with a file in it
         real_dir = os.path.join(self.tempdir, 'real_dir')
         os.mkdir(real_dir)
@@ -103,18 +116,20 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # link to the normal directory
         link_dir = os.path.join(self.tempdir, 'link_dir')
-        args = ('cmd', '/c', 'mklink', '/d', link_dir, real_dir)
+        args = ('cmd', '/c', 'mklink', mklink_option, link_dir, real_dir)
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_dir)
         self.assertEqual(True, is_link(link_dir))
 
-        if not common.destructive_tests('windows link'):
+        if not clear_recycle_bin:
             os.rmdir(link_dir)
             self.assertNotExists(link_dir)
             shutil.rmtree(real_dir, True)
-            self.skipTest('destructive tests are disabled')
+            if not common.destructive_tests('windows link'):
+                self.skipTest('destructive tests are disabled')
+            return
 
         # put the link in the recycle bin
         move_to_recycle_bin(link_dir)
@@ -125,6 +140,25 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # verify the canary is still there
         self.assertExists(canary_fn)
+
+        # clean up
+        shutil.rmtree(real_dir, True)
+
+    def test_link_junction_no_clear(self):
+        """Unit test for directory junctions without clearing recycle bin"""
+        self._test_link_helper('/j', False)
+
+    def test_link_junction_clear(self):
+        """Unit test for directory junctions with clearing recycle bin"""
+        self._test_link_helper('/j', True)
+
+    def test_link_symlink_no_clear(self):
+        """Unit test for directory symlink without clearing recycle bin"""
+        self._test_link_helper('/d', False)
+
+    def test_link_junction_clear(self):
+        """Unit test for directory junctions with clearing recycle bin"""
+        self._test_link_helper('/j', True)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
