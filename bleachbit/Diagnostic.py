@@ -42,8 +42,14 @@ def diagnostic_info():
     s = u"BleachBit version %s" % bleachbit.APP_VERSION
 
     try:
+        # Linux tarball will have a revision but not build_number
         from bleachbit.Revision import revision
         s += '\nGit revision %s' % revision
+    except:
+        pass
+    try:
+        from bleachbit.Revision import build_number
+        s += '\nBuild number %s' % build_number
     except:
         pass
     try:

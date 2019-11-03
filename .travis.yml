@@ -13,6 +13,7 @@ install:
 script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
+   - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >bleachbit/Revision.py
 # Run tests.
    - make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
