@@ -59,7 +59,7 @@ VIProductVersion "${VERSION}"
 VIAddVersionKey /LANG=0 ProductName "${prodname}"
 VIAddVersionKey /LANG=0 CompanyName "https://www.bleachbit.org"
 VIAddVersionKey /LANG=0 LegalCopyright "Copyright (c) 2008-2019 Andrew Ziem"
-VIAddVersionKey /LANG=${LANG_ENGLISH} FileDescription "BleachBit installer"
+VIAddVersionKey /LANG=1033 FileDescription "BleachBit installer"
 VIAddVersionKey /LANG=0 FileVersion "${VERSION}"
 VIAddVersionKey /LANG=0 ProductVersion "${VERSION}"
 
