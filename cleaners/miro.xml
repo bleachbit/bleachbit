@@ -18,16 +18,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+    @app Miro
+    @url http://www.getmiro.com/
+    @os Windows, Linux
+    @cleanerversion v2.0.0
+    @cleanerdate 2019-03-18
+    @cleanerby juancarlospaco (2009-06-17) & Andrew Ziem (2009-06-17 - 2009-10-04) & Tobias B. Besemer (2019-03-11 - 2019-03-18)
+    @tested ok v???, Windows XP
+    @testeddate 2019-03-12 (... with an old version of the cleaner!)
+    @testedby https://github.com/bleachbit/bleachbit/issues/460#issuecomment-471987298
+    @note 
+
 -->
 <cleaner id="miro">
   <label>Miro</label>
   <description>Multimedia viewer</description>
+  <var name="Cache-Profile">
+    <value os="windows">%AppData%\Participatory Culture Foundation\Miro\Support</value>
+    <value os="linux">~/.miro</value>
+  </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.files" path="~/.miro/icon-cache/"/>
-    <action command="delete" search="walk.files" path="~/.miro/mozilla/Cache/"/>
-    <action command="delete" search="walk.files" path="$APPDATA\Participatory Culture Foundation\Miro\Support\icon-cache\"/>
+    <action command="delete" search="walk.files" path="$$Cache-Profile$$/icon-cache/"/>
+    <action command="delete" search="walk.files" path="$$Cache-Profile$$/mozilla/Cache/"/>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -35,9 +49,22 @@
     <action command="delete" search="file" path="~/.miro/miro-downloader-log"/>
     <action command="delete" search="file" path="~/.miro/miro-log"/>
     <action command="delete" search="file" path="~/.miro/miro-log.1"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro-downloader.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro.log.1"/>
-    <action command="delete" search="file" path="$USERPROFILE\Local Settings\Temp\Miro_Download_Daemon_a.txt"/>
+    <action command="delete" search="file" path="%Temp%\Miro-downloader.log"/>
+    <action command="delete" search="file" path="%Temp%\Miro.log"/>
+    <action command="delete" search="file" path="%Temp%\Miro.log.1"/>
+    <action command="delete" search="file" path="%Temp%\Miro_Download_Daemon_a.txt"/>
   </option>
+  <!--
+  The same action shouldn't be repeated in the same cleaner file (either within the same option or in a different option).
+  First, if there are options labeled "log" and "temporary files," it implies chosing one doesn't do the other.
+  So we remove "Temporary files", again.
+  <option id="temp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="file" path="%Temp%\Miro-downloader.log"/>
+    <action command="delete" search="file" path="%Temp%\Miro.log"/>
+    <action command="delete" search="file" path="%Temp%\Miro.log.1"/>
+    <action command="delete" search="file" path="%Temp%\Miro_Download_Daemon_a.txt"/>
+  </option>
+  -->
 </cleaner>
