@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-11-02 18:02+0000\n"
+"PO-Revision-Date: 2019-11-06 06:05+0000\n"
 "Last-Translator: Tobias B. Besemer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-11-02 18:12+0000\n"
+"X-Launchpad-Export-Date: 2019-11-07 02:32+0000\n"
 "X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1413,9 +1413,9 @@ msgid ""
 "time you start it, the settings will initialize to default values."
 msgstr ""
 "Diese Funktion löscht alle BleachBit-Einstellungen und beendet dann die "
-"Anwendung. Verwenden Sie diese, um die Verwendung von BleachBit auszublenden "
-"oder die Einstellungen zurückzusetzen. Wenn Sie es das nächste Mal starten, "
-"werden die Einstellungen auf Standardwerte initialisiert."
+"Anwendung. Verwenden Sie dies, um Ihre Verwendung von BleachBit zu "
+"verstecken oder die Einstellungen zurückzusetzen. Wenn Sie es das nächste "
+"Mal starten, werden die Einstellungen auf Standardwerte initialisiert."
 
 #: ../bleachbit/GuiBasic.py:133
 msgid ""
@@ -1602,7 +1602,7 @@ msgstr "Dateien löschen"
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:67
 msgid "Make chaff"
-msgstr "spreu machen"
+msgstr "Spreu erstellen"
 
 #: ../bleachbit/GuiChaff.py:72
 msgid "Make randomly-generated messages inspired by documents."
@@ -1648,7 +1648,7 @@ msgstr "Erstelle Dateien"
 
 #: ../bleachbit/GuiChaff.py:135
 msgid "Download data needed for chaff generator?"
-msgstr "Daten benötigt für Chaff-Generator herunterladen?"
+msgstr "Daten herunterladen benötigt für Spreu-Generator!"
 
 #: ../bleachbit/GuiChaff.py:177
 msgid "Generating files"
@@ -1912,7 +1912,7 @@ msgstr "_Ordner schreddern"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Shreddere Pfade aus der Zwischenablage"
+msgstr "Schreddere Pfade aus der Zwischenablage"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1920,7 +1920,7 @@ msgstr "_Freien Speicherplatz säubern"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr "_Make Chaff"
+msgstr "_Spreu machen"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
