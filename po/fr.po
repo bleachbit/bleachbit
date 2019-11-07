@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-10-26 21:24+0000\n"
-"Last-Translator: Éfrit <Unknown>\n"
+"PO-Revision-Date: 2019-11-04 13:58+0000\n"
+"Last-Translator: Jean-Marc <Unknown>\n"
 "Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2019-10-27 14:08+0000\n"
+"X-Launchpad-Export-Date: 2019-11-05 03:12+0000\n"
 "X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -476,7 +476,7 @@ msgstr "Vider le cache des avatars et des frimousses"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
-msgstr "Client de courriel"
+msgstr "Client de messagerie"
 
 #: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Index"
@@ -865,7 +865,8 @@ msgstr ""
 #: ../bleachbit/GUI.py:487
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "Réinitialisation du fichier de configuration car il est corrompu: %s"
+msgstr ""
+"Réinitialisation du fichier de configuration car il est corrompu : %s"
 
 #: ../bleachbit/GUI.py:493
 msgid ""
@@ -928,7 +929,7 @@ msgstr "Nettoyer les fichiers des opérations sélectionnées"
 
 #: ../bleachbit/GUI.py:899
 msgid "Abort the preview or cleaning process"
-msgstr "interrompre l'aperçu ou le processus de nettoyage"
+msgstr "Interrompre l'aperçu ou le processus de nettoyage"
 
 #: ../bleachbit/GUI.py:1047
 msgid "Error when checking for updates: "
@@ -1116,7 +1117,8 @@ msgstr "Nettoyer l’espace d’échange et la mémoire libre"
 
 #: ../bleachbit/Cleaner.py:306
 msgid "This option is experimental and may cause system problems."
-msgstr "Cette option est expérimentale et peut causer des problèmes système."
+msgstr ""
+"Cette option est expérimentale et peut entraîner des problèmes système."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:317
@@ -1148,14 +1150,14 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:330 ../bleachbit/Cleaner.py:555
 msgid "Clipboard"
-msgstr "Presse-papiers"
+msgstr "Presse-papier"
 
 #: ../bleachbit/Cleaner.py:331
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Le presse-papiers de l’environnement de bureau utilisé pour les opérations "
-"de copier-coller"
+"Le presse-papier de l’environnement de bureau utilisé pour les opérations de "
+"copier-coller"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -1175,7 +1177,7 @@ msgstr "Espace disque libre"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:343
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "Écraser l’espace libre du disque pour cacher les fichiers supprimés"
+msgstr "Écraser l’espace libre du disque pour masquer les fichiers supprimés"
 
 #: ../bleachbit/Cleaner.py:344
 msgid "This option is very slow."
@@ -1271,7 +1273,7 @@ msgstr "Le répertoire n’est pas vide : %s"
 #: ../bleachbit/FileUtilities.py:322
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr "Point de montage ignoré :%s"
+msgstr "Point de montage ignoré : %s"
 
 #: ../bleachbit/FileUtilities.py:324
 #, python-format
@@ -1308,7 +1310,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:888
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr "Erreur nᴼ %d lors du vidage du tampon de fichier."
+msgstr "Erreur n° %d lors du vidage du tampon de fichier."
 
 #: ../bleachbit/FileUtilities.py:904
 msgid ""
@@ -1331,7 +1333,7 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:926
 msgid "Handled unknown error #0 while truncating file."
-msgstr "L’erreur inconnue nᴼ 0 a été gérée lors de la troncature du fichier."
+msgstr "L’erreur inconnue n° 0 a été gérée lors de la troncature du fichier."
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1350,7 +1352,7 @@ msgstr "Une nouvelle version est disponible."
 #: ../bleachbit/Update.py:140
 #, python-format
 msgid "Update to version %s"
-msgstr "Mettre à jour à la version %s"
+msgstr "Mettre à jour vers la version %s"
 
 #: ../bleachbit/Update.py:165
 msgid ""
@@ -1460,7 +1462,7 @@ msgstr "Ouvrir le navigateur Web sur %s ?"
 #: ../bleachbit/CLI.py:106
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "nettoyeur invalide : %s"
+msgstr "nettoyeur non valide : %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1510,7 +1512,7 @@ msgstr "ne pas demander les privilèges administrateur"
 
 #: ../bleachbit/CLI.py:159
 msgid "preview files to be deleted and other changes"
-msgstr "Prévisualiser les fichiers à supprimer et autres modifications"
+msgstr "prévisualiser les fichiers à supprimer et autres modifications"
 
 #: ../bleachbit/CLI.py:163
 msgid "use options set in the graphical interface"
@@ -1522,7 +1524,7 @@ msgstr "mettre winapp2.ini à jour, si une nouvelle version est disponible"
 
 #: ../bleachbit/CLI.py:168
 msgid "wipe free space in the given paths"
-msgstr "Écrase l’espace libre dans les chemins d’accès donnés"
+msgstr "écraser l’espace libre dans les chemins d’accès donnés"
 
 #: ../bleachbit/CLI.py:170
 msgid "output version information and exit"
@@ -1530,7 +1532,7 @@ msgstr "afficher les informations de version et quitter"
 
 #: ../bleachbit/CLI.py:172
 msgid "overwrite files to hide contents"
-msgstr "écraser les fichiers pour cacher leur contenu"
+msgstr "écraser les fichiers pour masquer leur contenu"
 
 #: ../bleachbit/CLI.py:180
 msgid ""
@@ -1709,7 +1711,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:139
 msgid "Hide irrelevant cleaners"
-msgstr "Cacher les nettoyeurs inadéquats"
+msgstr "Masquer les nettoyeurs inadéquats"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -1830,7 +1832,7 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"La commande « swapoff -s » a échouée, recours à /proc/swaps pour les "
+"La commande «[nNbsp]swapoff -s » a échoué, recours à /proc/swaps pour les "
 "informations sur l’espace d’échange."
 
 #: ../bleachbit/Memory.py:80
@@ -1919,7 +1921,7 @@ msgstr "Dé_truire les dossiers"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Détruire les chemins d’accès du presse-papiers"
+msgstr "Détruire les chemins d’accès du presse-papier"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1943,4 +1945,4 @@ msgstr "_Aide"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr "_A propos de BleachBit"
+msgstr "_À propos de BleachBit"
