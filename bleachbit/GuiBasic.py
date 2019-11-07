@@ -123,7 +123,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
                    homogeneous=False, spacing=10)
 
     if shred_settings:
-        notice_text = _("This function deletes all BleachBit settings and then quits the application. Use this to hide your use of BleachBit or to reset its settings. The next time you start it, the settings will initialize to default values.")
+        notice_text = _("This function deletes all BleachBit settings and then quits the application. Use this to hide your use of BleachBit or to reset its settings. The next time you start BleachBit, the settings will initialize to default values.")
         notice = Gtk.Label(label=notice_text)
         notice.set_line_wrap(True)
         vbox.pack_start(notice, False, True, 0)
