@@ -16,9 +16,8 @@ Depends:
  libgtk-3-0,
  python (>= 2.7),
  python-chardet,
- python-gi,
- python-scandir
-Recommends: python-notify
+ python-gi
+Recommends: python-notify, python-scandir
 Description: Removes unnecessary files
  Delete traces of your activities and other junk files to free disk
  space and maintain privacy.  BleachBit identifies and erases
