@@ -76,7 +76,6 @@
     <!-- In a wider range some History... -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\navigationHistory\"/>
-    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\Audio\PolicyConfig\PropertyStore"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Recovery\PendingDelete"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Ext\Stats"/>
