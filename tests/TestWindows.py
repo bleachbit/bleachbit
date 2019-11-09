@@ -104,35 +104,49 @@ class WindowsTestCase(common.BleachbitTestCase):
         if mklink_option == '/d':
             self.skipUnlessAdmin()
         # make a normal directory with a file in it
-        real_dir = os.path.join(self.tempdir, 'real_dir')
-        os.mkdir(real_dir)
-        self.assertExists(real_dir)
-        self.assertEqual(False, is_link(real_dir))
+        target_dir = os.path.join(self.tempdir, 'target_dir')
+        os.mkdir(target_dir)
+        self.assertExists(target_dir)
+        self.assertFalse(is_link(target_dir))
 
-        canary_fn = os.path.join(real_dir, 'do_not_delete')
+        from random import randint
+        canary_fn = os.path.join(target_dir, 'do_not_delete%d' % randint(1000,9999))
         common.touch_file(canary_fn)
         self.assertExists(canary_fn)
-        self.assertEqual(False, is_link(canary_fn))
+        self.assertFalse(is_link(canary_fn))
 
-        # link to the normal directory
-        link_dir = os.path.join(self.tempdir, 'link_dir')
-        args = ('cmd', '/c', 'mklink', mklink_option, link_dir, real_dir)
+        # make a normal directory to hold a link
+        container_dir = os.path.join(self.tempdir, 'container_dir')
+        os.mkdir(container_dir)
+        self.assertExists(container_dir)
+        self.assertFalse(is_link(container_dir))
+
+        # create the link
+        link_pathname = os.path.join(container_dir, 'link')
+        args = ('cmd', '/c', 'mklink', mklink_option, link_pathname, target_dir)
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
-        self.assertExists(link_dir)
-        self.assertEqual(True, is_link(link_dir))
+        self.assertExists(link_pathname)
+        self.assertTrue(is_link(link_pathname))
+
+        # put the link in the recycle bin
+        move_to_recycle_bin(container_dir)
+
+        # preview the recycle bin
+        for f in get_recycle_bin():
+            print(f)
+
+        def cleanup_dirs():
+            shutil.rmtree(container_dir, True)
+            self.assertNotExists(container_dir)
+            shutil.rmtree(target_dir, True)
 
         if not clear_recycle_bin:
-            os.rmdir(link_dir)
-            self.assertNotExists(link_dir)
-            shutil.rmtree(real_dir, True)
+            cleanup_dirs()
             if not common.destructive_tests('windows link'):
                 self.skipTest('destructive tests are disabled')
             return
-
-        # put the link in the recycle bin
-        move_to_recycle_bin(link_dir)
 
         # clear the recycle bin
         for f in get_recycle_bin():
@@ -142,7 +156,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertExists(canary_fn)
 
         # clean up
-        shutil.rmtree(real_dir, True)
+        cleanup_dirs()
 
     def test_link_junction_no_clear(self):
         """Unit test for directory junctions without clearing recycle bin"""
