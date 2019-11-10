@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-09-17 14:29+0000\n"
+"POT-Creation-Date: 2019-11-08 18:49-0700\n"
+"PO-Revision-Date: 2019-11-09 15:22+0000\n"
 "Last-Translator: Shinichirou Yamada "
 "<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2019-09-18 00:40+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-11-09 18:44+0000\n"
+"X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -567,8 +567,8 @@ msgid "Swap files under user profile"
 msgstr "ユーザープロファイル下のスワップファイル"
 
 #: ../cleaners/vim.xml ../cleaners/deepscan.xml
-msgid "Inspect the preview for any files you want to keep."
-msgstr "残したいファイルについては、プレビューを精査してください。"
+msgid "This option is slow."
+msgstr "この項目は処理に時間がかかります。"
 
 #: ../cleaners/vim.xml
 msgid "Swap files across system"
@@ -583,8 +583,8 @@ msgid "Clean files widely scattered across the disk"
 msgstr "ディスク全体に広く散在するファイルの削除"
 
 #: ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "この項目は処理に時間がかかります。"
+msgid "Inspect the preview for any files you want to keep."
+msgstr "残したいファイルについては、プレビューを精査してください。"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -646,6 +646,10 @@ msgstr "シェルバッグ"
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr "使用日時、ウィンドウの位置、その他のフォルダーに関するデータの削除"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "これはデスクトップアイコンの位置をリセットします。"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -713,7 +717,7 @@ msgid ""
 "again."
 msgstr "%s は現在実行中であるためクリーニングできません。終了してから再度実行し直してください。"
 
-#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:508
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:506
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "SQLite モジュールのロード中にエラーが発生しました。アンチウィルスソフトがブロックしたのかも知れません。"
@@ -770,24 +774,24 @@ msgstr ""
 msgid "System information"
 msgstr "システム情報"
 
-#: ../bleachbit/GUI.py:371 ../bleachbit/GuiPreferences.py:289
+#: ../bleachbit/GUI.py:370 ../bleachbit/GuiPreferences.py:289
 msgid "Name"
 msgstr "名前"
 
-#: ../bleachbit/GUI.py:379
+#: ../bleachbit/GUI.py:378
 msgid "Active"
 msgstr "有効"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:388
+#: ../bleachbit/GUI.py:387
 msgid "Size"
 msgstr "サイズ"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:419
+#: ../bleachbit/GUI.py:416
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -798,21 +802,21 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:487
+#: ../bleachbit/GUI.py:485
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "設定ファイルに問題があったためリセットします: %s"
 
-#: ../bleachbit/GUI.py:493
+#: ../bleachbit/GUI.py:491
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "タイトルバーにあるハンバーガーアイコンをクリックすると、アプリケーションメニューにアクセスできます。"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:496
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "タイトルバーにあるロゴをクリックすると、アプリケーションメニューにアクセスできます。"
 
-#: ../bleachbit/GUI.py:512
+#: ../bleachbit/GUI.py:510
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -821,43 +825,43 @@ msgstr ""
 "システムの共有部分をクリーニングするために、BleachBit を管理者権限で実行しています。ユーザープロファイルフォルダーは root "
 "アカウントのみクリーンします。"
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:515
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr "ファイルの内容を上書きする精度を向上させるには、BleachBit を管理者権限で実行してください。"
 
-#: ../bleachbit/GUI.py:652
+#: ../bleachbit/GUI.py:659
 msgid "You must select an operation"
 msgstr "操作を選択してください"
 
-#: ../bleachbit/GUI.py:671 ../bleachbit/GUI.py:695
+#: ../bleachbit/GUI.py:678 ../bleachbit/GUI.py:702
 msgid "Done."
 msgstr "完了しました。"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:788
+#: ../bleachbit/GUI.py:795
 msgid "Preview"
 msgstr "プレビュー"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
+#: ../bleachbit/GUI.py:800 ../bleachbit/Action.py:521
 msgid "Clean"
 msgstr "削除"
 
-#: ../bleachbit/GUI.py:880
+#: ../bleachbit/GUI.py:892
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "選択された操作でファイルをプレビューします (ファイルは削除しません)"
 
-#: ../bleachbit/GUI.py:891
+#: ../bleachbit/GUI.py:903
 msgid "Clean files in the selected operations"
 msgstr "選択された操作でファイルを削除します"
 
-#: ../bleachbit/GUI.py:899
+#: ../bleachbit/GUI.py:911
 msgid "Abort the preview or cleaning process"
 msgstr "プレビューまたはクリーニング作業を中止します"
 
-#: ../bleachbit/GUI.py:1047
+#: ../bleachbit/GUI.py:1059
 msgid "Error when checking for updates: "
 msgstr "更新の確認中にエラーが発生しました: "
 
@@ -1121,34 +1125,7 @@ msgstr "ネイティブなクリーナーを読み込んでいます。"
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "Winapp2.ini からクリーナーをインポートしています。"
 
-#: ../bleachbit/CleanerML.py:136
-#, python-brace-format
-msgid ""
-"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-msgstr ""
-"クリーナー ID = {cleaner_id} オプション XML={option_xml} の handle_cleaner_option() "
-"でエラーが発生しました"
-
-#: ../bleachbit/CleanerML.py:277
-#, python-format
-msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "world-writable なクリーナーを無視しています: %s"
-
-#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
-#, python-format
-msgid "Error reading cleaner: %s"
-msgstr "クリーナーの読み取り中にエラーが発生しました: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py:306
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "クリーナーにアクションが無いため、この OS 上では使用できません: %s"
-
-#: ../bleachbit/Chaff.py:135
+#: ../bleachbit/Chaff.py:133
 #, python-format
 msgid "Downloading url failed: %s"
 msgstr "URL のダウンロードに失敗しました: %s"
@@ -1215,29 +1192,56 @@ msgstr "wipe 中のパス: %s"
 msgid "Creating new, temporary file for wiping free space."
 msgstr "空き領域を wipe するための新規一時ファイルを作成します。"
 
-#: ../bleachbit/FileUtilities.py:888
+#: ../bleachbit/FileUtilities.py:890
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "ファイルバッファーのフラッシュ時にエラー #%d が発生しました。"
 
-#: ../bleachbit/FileUtilities.py:904
+#: ../bleachbit/FileUtilities.py:906
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
 "書き込んだファイル数 {files:,}、{bytes:,} バイト、所要時間 {seconds:,} 秒、速度 {rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:909
+#: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "{bytes:,} バイト、{inodes:,} ノード、非スーパーユーザーで利用可能"
 
-#: ../bleachbit/FileUtilities.py:911
+#: ../bleachbit/FileUtilities.py:913
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "{bytes:,} バイト、{inodes:,} ノード、スーパーユーザーで利用可能"
 
-#: ../bleachbit/FileUtilities.py:926
+#: ../bleachbit/FileUtilities.py:928
 msgid "Handled unknown error #0 while truncating file."
 msgstr "ファイルの切り詰め中に不明なエラー #0 をハンドルしました。"
+
+#: ../bleachbit/CleanerML.py:136
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"クリーナー ID = {cleaner_id} オプション XML={option_xml} の handle_cleaner_option() "
+"でエラーが発生しました"
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "world-writable なクリーナーを無視しています: %s"
+
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "クリーナーの読み取り中にエラーが発生しました: %s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:306
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr "クリーナーにアクションが無いため、この OS 上では使用できません: %s"
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1322,10 +1326,10 @@ msgstr "削除の確認"
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
-"time you start it, the settings will initialize to default values."
+"time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"この機能は全ての設定を削除してから BleachBit を終了します。BleachBit の設定をリセットしたり、BleachBit "
-"を使用したことを隠したりするための機能です。次に BleachBit を起動した時には、設定は初期値に戻っています。"
+"この機能は BleachBit の全ての設定を削除した後、BleachBit を終了します。BleachBit の設定を初期化したり、BleachBit "
+"を使用したことを隠蔽したりするための機能です。次に BleachBit を起動した時には、設定は初期値に戻っています。"
 
 #: ../bleachbit/GuiBasic.py:133
 msgid ""
@@ -1821,3 +1825,11 @@ msgstr "ヘルプ(_H)"
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
 msgstr "BleachBit について(_A)"
+
+#~ msgid ""
+#~ "This function deletes all BleachBit settings and then quits the application. "
+#~ "Use this to hide your use of BleachBit or to reset its settings. The next "
+#~ "time you start it, the settings will initialize to default values."
+#~ msgstr ""
+#~ "この機能は全ての設定を削除してから BleachBit を終了します。BleachBit の設定をリセットしたり、BleachBit "
+#~ "を使用したことを隠したりするための機能です。次に BleachBit を起動した時には、設定は初期値に戻っています。"
