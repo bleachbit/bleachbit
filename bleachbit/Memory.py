@@ -313,7 +313,7 @@ def wipe_memory():
     if 0 == child_pid:
         make_self_oom_target_linux()
         fill_memory_linux()
-        sys.exit(0)
+        os._exit(0)
     else:
 # TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
         logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
