@@ -41,9 +41,10 @@ warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
     HAVE_GTK = Gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError) as e:
+except (ImportError, RuntimeError, ValueError) as e:
     # ImportError happens when GTK is not installed.
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
+    # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
     HAVE_GTK = False
 
 
