@@ -917,7 +917,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # stop cleaning
         self.stop_button = Gtk.Button()
-        self.stop_button.add(icon_and_label('process_stop', _('Abort')))
+        self.stop_button.add(icon_and_label('process-stop', _('Abort')))
         self.stop_button.set_tooltip_text(
             _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
