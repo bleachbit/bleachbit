@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File UnInstallerSectionsTranslations
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1050
-;  @scriptdate 2019-04-12
-;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-12)
+;  @scriptversion v3.0.0.0
+;  @scriptdate 2019-10-30
+;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-10-30)
 ;  @tested ok v2.3.0.1050, Windows 7
 ;  @testeddate 2019-04-12
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -40,9 +40,9 @@ SectionEnd
   Section un.SectionTranslationArabic "un.Translation Arabic"
     RMDir /r "$INSTDIR\share\locale\ar"
   SectionEnd
-  Section un.SectionTranslationArmenian "un.Translation Armenian"
-    RMDir /r "$INSTDIR\share\locale\hy"
-  SectionEnd
+;  Section un.SectionTranslationArmenian "un.Translation Armenian"
+;    RMDir /r "$INSTDIR\share\locale\hy"
+;  SectionEnd
   Section un.SectionTranslationAsturian "un.Translation Asturian"
     RMDir /r "$INSTDIR\share\locale\ast"
   SectionEnd
@@ -100,9 +100,9 @@ SectionEnd
   Section un.SectionTranslationEstonian "un.Translation Estonian"
     RMDir /r "$INSTDIR\share\locale\et"
   SectionEnd
-  Section un.SectionTranslationFaroese "un.Translation Faroese"
-    RMDir /r "$INSTDIR\share\locale\fo"
-  SectionEnd
+;  Section un.SectionTranslationFaroese "un.Translation Faroese"
+;    RMDir /r "$INSTDIR\share\locale\fo"
+;  SectionEnd
   Section un.SectionTranslationFinnish "un.Translation Finnish"
     RMDir /r "$INSTDIR\share\locale\fi"
   SectionEnd
@@ -190,9 +190,9 @@ SectionEnd
   Section un.SectionTranslationSerbian "un.Translation Serbian"
     RMDir /r "$INSTDIR\share\locale\sr"
   SectionEnd
-  Section un.SectionTranslationSinhalese "un.Translation Sinhalese"
-    RMDir /r "$INSTDIR\share\locale\si"
-  SectionEnd
+;  Section un.SectionTranslationSinhalese "un.Translation Sinhalese"
+;    RMDir /r "$INSTDIR\share\locale\si"
+;  SectionEnd
   Section un.SectionTranslationSlovak "un.Translation Slovak"
     RMDir /r "$INSTDIR\share\locale\sk"
   SectionEnd

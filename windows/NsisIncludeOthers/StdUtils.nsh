@@ -72,6 +72,7 @@
 !define StdUtils.GetRealOSName    '!insertmacro _StdU_GetRealOSStr'  #Get the *real* Windows version, as a "friendly" name
 !define StdUtils.GetOSEdition     '!insertmacro _StdU_GetOSEdition'  #Get the Windows edition, i.e. "workstation" or "server"
 !define StdUtils.GetOSReleaseId   '!insertmacro _StdU_GetOSRelIdNo'  #Get the Windows release identifier (on Windows 10)
+!define StdUtils.GetOSReleaseName '!insertmacro _StdU_GetOSRelIdStr' #Get the Windows release (on Windows 10), as a "friendly" name
 !define StdUtils.VerifyOSVersion  '!insertmacro _StdU_VrfyRealOSVer' #Compare *real* operating system to an expected version number
 !define StdUtils.VerifyOSBuildNo  '!insertmacro _StdU_VrfyRealOSBld' #Compare *real* operating system to an expected build number
 !define StdUtils.HashText         '!insertmacro _StdU_HashText'      #Compute hash from text string (CRC32, MD5, SHA1/2/3, BLAKE2)
@@ -377,9 +378,13 @@
 	pop ${out}
 !macroend
 
-
 !macro _StdU_GetOSRelIdNo out
 	StdUtils::GetOsReleaseId /NOUNLOAD
+	pop ${out}
+!macroend
+
+!macro _StdU_GetOSRelIdStr out
+	StdUtils::GetOsReleaseName /NOUNLOAD
 	pop ${out}
 !macroend
 

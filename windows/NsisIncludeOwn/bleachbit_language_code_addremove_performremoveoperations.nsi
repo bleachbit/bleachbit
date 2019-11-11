@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File AddRemove PerformRemoveOperations
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1050
-;  @scriptdate 2019-04-12
-;  @scriptby Tobias B. Besemer (2019-04-08 - 2019-04-12)
+;  @scriptversion v3.0.0.0
+;  @scriptdate 2019-10-30
+;  @scriptby Tobias B. Besemer (2019-04-08 - 2019-10-30)
 ;  @tested ok v2.3.0.1050, Windows 7
 ;  @testeddate 2019-04-12
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -29,7 +29,7 @@
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Afrikaans"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Albanian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Arabic"
-!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Armenian"
+;!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Armenian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Asturian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Basque"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Belarusian"
@@ -49,7 +49,7 @@
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation English (United Kingdom)"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Esperanto"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Estonian"
-!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Faroese"
+;!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Faroese"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Finnish"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation French"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Galician"
@@ -79,7 +79,7 @@
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Romanian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Russian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Serbian"
-!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Sinhalese"
+;!insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Sinhalese"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Slovak"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Slovenian"
 !insertmacro "${BB_Language_InstallerSections_Translations_PerformRemoveOperations}" "Translation Spanish"

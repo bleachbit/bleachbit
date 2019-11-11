@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File InstallerSectionsTranslations
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1050
-;  @scriptdate 2019-04-12
-;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-12)
+;  @scriptversion v3.0.0.0
+;  @scriptdate 2019-10-30
+;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-10-30)
 ;  @tested ok v2.3.0.1050, Windows 7
 ;  @testeddate 2019-04-12
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -60,15 +60,15 @@ SectionEnd
     ;Removes component
     RMDir /r "$INSTDIR\share\locale\ar"
   !macroend
-  Section SectionTranslationArmenian "Translation Armenian"
-    CreateDirectory "$INSTDIR\share\locale\hy\"
-    SetOutPath "$INSTDIR\share\locale\hy\"
-    File /r "..\dist\share\locale\hy\*.*"
-  SectionEnd
-  !macro "Remove_${Translation Armenian}"
-    ;Removes component
-    RMDir /r "$INSTDIR\share\locale\hy"
-  !macroend
+;  Section SectionTranslationArmenian "Translation Armenian"
+;    CreateDirectory "$INSTDIR\share\locale\hy\"
+;    SetOutPath "$INSTDIR\share\locale\hy\"
+;    File /r "..\dist\share\locale\hy\*.*"
+;  SectionEnd
+;  !macro "Remove_${Translation Armenian}"
+;    ;Removes component
+;    RMDir /r "$INSTDIR\share\locale\hy"
+;  !macroend
   Section SectionTranslationAsturian "Translation Asturian"
     CreateDirectory "$INSTDIR\share\locale\ast\"
     SetOutPath "$INSTDIR\share\locale\ast\"
@@ -240,15 +240,15 @@ SectionEnd
     ;Removes component
     RMDir /r "$INSTDIR\share\locale\et"
   !macroend
-  Section SectionTranslationFaroese "Translation Faroese"
-    CreateDirectory "$INSTDIR\share\locale\fo\"
-    SetOutPath "$INSTDIR\share\locale\fo\"
-    File /r "..\dist\share\locale\fo\*.*"
-  SectionEnd
-  !macro "Remove_${Translation Faroese}"
-    ;Removes component
-    RMDir /r "$INSTDIR\share\locale\fo"
-  !macroend
+;  Section SectionTranslationFaroese "Translation Faroese"
+;    CreateDirectory "$INSTDIR\share\locale\fo\"
+;    SetOutPath "$INSTDIR\share\locale\fo\"
+;    File /r "..\dist\share\locale\fo\*.*"
+;  SectionEnd
+;  !macro "Remove_${Translation Faroese}"
+;    ;Removes component
+;    RMDir /r "$INSTDIR\share\locale\fo"
+;  !macroend
   Section SectionTranslationFinnish "Translation Finnish"
     CreateDirectory "$INSTDIR\share\locale\fi\"
     SetOutPath "$INSTDIR\share\locale\fi\"
@@ -510,15 +510,15 @@ SectionEnd
     ;Removes component
     RMDir /r "$INSTDIR\share\locale\sr"
   !macroend
-  Section SectionTranslationSinhalese "Translation Sinhalese"
-    CreateDirectory "$INSTDIR\share\locale\si\"
-    SetOutPath "$INSTDIR\share\locale\si\"
-    File /r "..\dist\share\locale\si\*.*"
-  SectionEnd
-  !macro "Remove_${Translation Sinhalese}"
-    ;Removes component
-    RMDir /r "$INSTDIR\share\locale\si"
-  !macroend
+;  Section SectionTranslationSinhalese "Translation Sinhalese"
+;    CreateDirectory "$INSTDIR\share\locale\si\"
+;    SetOutPath "$INSTDIR\share\locale\si\"
+;    File /r "..\dist\share\locale\si\*.*"
+;  SectionEnd
+;  !macro "Remove_${Translation Sinhalese}"
+;    ;Removes component
+;    RMDir /r "$INSTDIR\share\locale\si"
+;  !macroend
   Section SectionTranslationSlovak "Translation Slovak"
     CreateDirectory "$INSTDIR\share\locale\sk\"
     SetOutPath "$INSTDIR\share\locale\sk\"
