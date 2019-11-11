@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1059
-;  @scriptdate 2019-04-18
-;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-18)
+;  @scriptversion v3.0.0.0
+;  @scriptdate 2019-10-30
+;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-10-30)
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -33,7 +33,7 @@
   !insertmacro MUI_LANGUAGE "Afrikaans"
   !insertmacro MUI_LANGUAGE "Albanian"
   !insertmacro MUI_LANGUAGE "Arabic"
-  !insertmacro MUI_LANGUAGE "Armenian"
+;  !insertmacro MUI_LANGUAGE "Armenian"
   !insertmacro MUI_LANGUAGE "Asturian"
   !insertmacro MUI_LANGUAGE "Basque"
   !insertmacro MUI_LANGUAGE "Belarusian"
@@ -110,7 +110,7 @@
   LicenseLangString MUI_LICENSE ${LANG_Afrikaans} "..\COPYING"
   LicenseLangString MUI_LICENSE ${LANG_Albanian} "..\COPYING"
   LicenseLangString MUI_LICENSE ${LANG_Arabic} "..\license\GPLv3_ar.txt"
-  LicenseLangString MUI_LICENSE ${LANG_Armenian} "..\COPYING"
+;  LicenseLangString MUI_LICENSE ${LANG_Armenian} "..\COPYING"
   LicenseLangString MUI_LICENSE ${LANG_Asturian} "..\COPYING"
   LicenseLangString MUI_LICENSE ${LANG_Basque} "..\COPYING"
   LicenseLangString MUI_LICENSE ${LANG_Belarusian} "..\COPYING"
@@ -182,7 +182,7 @@
     !insertmacro UMUI_COMPONENT "Translation Afrikaans"
     !insertmacro UMUI_COMPONENT "Translation Albanian"
     !insertmacro UMUI_COMPONENT "Translation Arabic"
-    !insertmacro UMUI_COMPONENT "Translation Armenian"
+;    !insertmacro UMUI_COMPONENT "Translation Armenian"
     !insertmacro UMUI_COMPONENT "Translation Asturian"
     !insertmacro UMUI_COMPONENT "Translation Basque"
     !insertmacro UMUI_COMPONENT "Translation Belarusian"
@@ -202,7 +202,7 @@
     !insertmacro UMUI_COMPONENT "Translation English (United Kingdom)"
     !insertmacro UMUI_COMPONENT "Translation Esperanto"
     !insertmacro UMUI_COMPONENT "Translation Estonian"
-    !insertmacro UMUI_COMPONENT "Translation Faroese"
+;    !insertmacro UMUI_COMPONENT "Translation Faroese"
     !insertmacro UMUI_COMPONENT "Translation Finnish"
     !insertmacro UMUI_COMPONENT "Translation French"
     !insertmacro UMUI_COMPONENT "Translation Galician"
@@ -232,7 +232,7 @@
     !insertmacro UMUI_COMPONENT "Translation Romanian"
     !insertmacro UMUI_COMPONENT "Translation Russian"
     !insertmacro UMUI_COMPONENT "Translation Serbian"
-    !insertmacro UMUI_COMPONENT "Translation Sinhalese"
+;    !insertmacro UMUI_COMPONENT "Translation Sinhalese"
     !insertmacro UMUI_COMPONENT "Translation Slovak"
     !insertmacro UMUI_COMPONENT "Translation Slovenian"
     !insertmacro UMUI_COMPONENT "Translation Spanish"
@@ -255,7 +255,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Afrikaans}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Afrikaans"
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Albanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) gjuha shqipe" ; Albanian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Arabic}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) al-ʻArabīyah" ; Arabic
-    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
+;    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Asturian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Asturianu" ; Asturian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Basque}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) euskara" ; Basque
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Belarusian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Bielaruskaja mova" ; Belarusian
@@ -275,7 +275,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation English (United Kingdom)}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) English (United Kingdom)"
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Esperanto}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Esperanto"
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Estonian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) eesti keel" ; Estonian
-    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
+;    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Finnish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) suomen kieli" ; Finnish
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation French}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) français" ; French
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Galician}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Galego" ; Galician
@@ -305,7 +305,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Romanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) român" ; Romanian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Russian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Russkij jazyk" ; Russian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Serbian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) srpski" ; Serbian
-    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
+;    !insertmacro MUI_DESCRIPTION_TEXT "${Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Slovak}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenčina" ; Slovak
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Slovenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenščina" ; Slovenian
     !insertmacro MUI_DESCRIPTION_TEXT "${Translation Spanish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) español" ; Spanish
@@ -346,7 +346,7 @@
     SectionSetText "${Translation Afrikaans}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Afrikaans"
     SectionSetText "${Translation Albanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) gjuha shqipe" ; Albanian
     SectionSetText "${Translation Arabic}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) al-ʻArabīyah" ; Arabic
-    SectionSetText "${Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
+;    SectionSetText "${Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
     SectionSetText "${Translation Asturian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Asturianu" ; Asturian
     SectionSetText "${Translation Basque}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) euskara" ; Basque
     SectionSetText "${Translation Belarusian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Bielaruskaja mova" ; Belarusian
@@ -366,7 +366,7 @@
     SectionSetText "${Translation English (United Kingdom)}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) English (United Kingdom)"
     SectionSetText "${Translation Esperanto}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Esperanto"
     SectionSetText "${Translation Estonian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) eesti keel" ; Estonian
-    SectionSetText "${Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
+;    SectionSetText "${Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
     SectionSetText "${Translation Finnish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) suomen kieli" ; Finnish
     SectionSetText "${Translation French}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) français" ; French
     SectionSetText "${Translation Galician}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Galego" ; Galician
@@ -396,7 +396,7 @@
     SectionSetText "${Translation Romanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) român" ; Romanian
     SectionSetText "${Translation Russian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Russkij jazyk" ; Russian
     SectionSetText "${Translation Serbian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) srpski" ; Serbian
-    SectionSetText "${Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
+;    SectionSetText "${Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
     SectionSetText "${Translation Slovak}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenčina" ; Slovak
     SectionSetText "${Translation Slovenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenščina" ; Slovenian
     SectionSetText "${Translation Spanish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) español" ; Spanish
@@ -433,10 +433,10 @@
     ${If} $Language == ${LANG_Arabic}
       !insertmacro SetSectionInInstType "${Translation Arabic}" "${INSTTYPE_2}"
     ${EndIf}
-    !insertmacro SetSectionInInstType "${Translation Armenian}" "${INSTTYPE_1}"
-    ${If} $Language == ${LANG_Armenian}
-      !insertmacro SetSectionInInstType "${Translation Armenian}" "${INSTTYPE_2}"
-    ${EndIf}
+;    !insertmacro SetSectionInInstType "${Translation Armenian}" "${INSTTYPE_1}"
+;    ${If} $Language == ${LANG_Armenian}
+;      !insertmacro SetSectionInInstType "${Translation Armenian}" "${INSTTYPE_2}"
+;    ${EndIf}
     !insertmacro SetSectionInInstType "${Translation Asturian}" "${INSTTYPE_1}"
     ${If} $Language == ${LANG_Asturian}
       !insertmacro SetSectionInInstType "${Translation Asturian}" "${INSTTYPE_2}"
@@ -492,7 +492,7 @@
     ${If} $Language == ${LANG_Estonian}
       !insertmacro SetSectionInInstType "${Translation Estonian}" "${INSTTYPE_2}"
     ${EndIf}
-    !insertmacro SetSectionInInstType "${Translation Faroese}" "${INSTTYPE_1}"
+;    !insertmacro SetSectionInInstType "${Translation Faroese}" "${INSTTYPE_1}"
     !insertmacro SetSectionInInstType "${Translation Finnish}" "${INSTTYPE_1}"
     ${If} $Language == ${LANG_Finnish}
       !insertmacro SetSectionInInstType "${Translation Finnish}" "${INSTTYPE_2}"
@@ -594,7 +594,7 @@
     ${If} $Language == ${LANG_Serbian}
       !insertmacro SetSectionInInstType "${Translation Serbian}" "${INSTTYPE_2}"
     ${EndIf}
-    !insertmacro SetSectionInInstType "${Translation Sinhalese}" "${INSTTYPE_1}"
+;    !insertmacro SetSectionInInstType "${Translation Sinhalese}" "${INSTTYPE_1}"
     !insertmacro SetSectionInInstType "${Translation Slovak}" "${INSTTYPE_1}"
     ${If} $Language == ${LANG_Slovak}
       !insertmacro SetSectionInInstType "${Translation Slovak}" "${INSTTYPE_2}"
@@ -645,7 +645,7 @@
     !insertmacro Confirm_Addline "Translation Afrikaans"
     !insertmacro Confirm_Addline "Translation Albanian"
     !insertmacro Confirm_Addline "Translation Arabic"
-    !insertmacro Confirm_Addline "Translation Armenian"
+;    !insertmacro Confirm_Addline "Translation Armenian"
     !insertmacro Confirm_Addline "Translation Asturian"
     !insertmacro Confirm_Addline "Translation Basque"
     !insertmacro Confirm_Addline "Translation Belarusian"
@@ -665,7 +665,7 @@
     !insertmacro Confirm_Addline "Translation English (United Kingdom)"
     !insertmacro Confirm_Addline "Translation Esperanto"
     !insertmacro Confirm_Addline "Translation Estonian"
-    !insertmacro Confirm_Addline "Translation Faroese"
+;    !insertmacro Confirm_Addline "Translation Faroese"
     !insertmacro Confirm_Addline "Translation Finnish"
     !insertmacro Confirm_Addline "Translation French"
     !insertmacro Confirm_Addline "Translation Galician"
@@ -695,7 +695,7 @@
     !insertmacro Confirm_Addline "Translation Romanian"
     !insertmacro Confirm_Addline "Translation Russian"
     !insertmacro Confirm_Addline "Translation Serbian"
-    !insertmacro Confirm_Addline "Translation Sinhalese"
+;    !insertmacro Confirm_Addline "Translation Sinhalese"
     !insertmacro Confirm_Addline "Translation Slovak"
     !insertmacro Confirm_Addline "Translation Slovenian"
     !insertmacro Confirm_Addline "Translation Spanish"
@@ -719,7 +719,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Afrikaans}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Afrikaans"
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Albanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) gjuha shqipe" ; Albanian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Arabic}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) al-ʻArabīyah" ; Arabic
-    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
+;    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Asturian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Asturianu" ; Asturian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Basque}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) euskara" ; Basque
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Belarusian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Bielaruskaja mova" ; Belarusian
@@ -739,7 +739,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation English (United Kingdom)}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) English (United Kingdom)"
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Esperanto}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Esperanto"
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Estonian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) eesti keel" ; Estonian
-    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
+;    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Finnish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) suomen kieli" ; Finnish
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation French}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) français" ; French
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Galician}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Galego" ; Galician
@@ -769,7 +769,7 @@
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Romanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) român" ; Romanian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Russian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Russkij jazyk" ; Russian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Serbian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) srpski" ; Serbian
-    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
+;    !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Slovak}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenčina" ; Slovak
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Slovenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenščina" ; Slovenian
     !insertmacro MUI_DESCRIPTION_TEXT "${un.Translation Spanish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) español" ; Spanish
@@ -810,7 +810,7 @@
     SectionSetText "${un.Translation Afrikaans}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Afrikaans"
     SectionSetText "${un.Translation Albanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) gjuha shqipe" ; Albanian
     SectionSetText "${un.Translation Arabic}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) al-ʻArabīyah" ; Arabic
-    SectionSetText "${un.Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
+;    SectionSetText "${un.Translation Armenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Hayeren lezou" ; Armenian
     SectionSetText "${un.Translation Asturian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Asturianu" ; Asturian
     SectionSetText "${un.Translation Basque}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) euskara" ; Basque
     SectionSetText "${un.Translation Belarusian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Bielaruskaja mova" ; Belarusian
@@ -830,7 +830,7 @@
     SectionSetText "${un.Translation English (United Kingdom)}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) English (United Kingdom)"
     SectionSetText "${un.Translation Esperanto}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Esperanto"
     SectionSetText "${un.Translation Estonian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) eesti keel" ; Estonian
-    SectionSetText "${un.Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
+;    SectionSetText "${un.Translation Faroese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Føroyskt" ; Faroese
     SectionSetText "${un.Translation Finnish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) suomen kieli" ; Finnish
     SectionSetText "${un.Translation French}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) français" ; French
     SectionSetText "${un.Translation Galician}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Galego" ; Galician
@@ -860,7 +860,7 @@
     SectionSetText "${un.Translation Romanian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) român" ; Romanian
     SectionSetText "${un.Translation Russian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Russkij jazyk" ; Russian
     SectionSetText "${un.Translation Serbian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) srpski" ; Serbian
-    SectionSetText "${un.Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
+;    SectionSetText "${un.Translation Sinhalese}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) Sinhalese"
     SectionSetText "${un.Translation Slovak}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenčina" ; Slovak
     SectionSetText "${un.Translation Slovenian}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) slovenščina" ; Slovenian
     SectionSetText "${un.Translation Spanish}" "$(BLEACHBIT_COMPONENTGROUP_TRANSLATIONS_TITLE) español" ; Spanish

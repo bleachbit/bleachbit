@@ -20,9 +20,9 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1084
-;  @scriptdate 2019-04-24
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-24)
+;  @scriptversion v3.0.1.0
+;  @scriptdate 2019-11-11
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-11-11)
 ;  @tested ok v2.3.0.1084, Windows 7
 ;  @testeddate 2019-04-24
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -122,7 +122,8 @@ Unicode true
 ManifestSupportedOS all
 
 ; XPStyle:
-XPStyle on
+; XPStyle on
+; We shouldn't use that as noted in: https://github.com/SuperPat45/UltraModernUI/issues/12
 
 ; ShowInstDetails/ShowUninstDetails:
 ShowInstDetails show

@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - Language Code File InstallerSectionsTranslations
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1059
-;  @scriptdate 2019-04-18
-;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-04-18)
+;  @scriptversion v3.0.0.0
+;  @scriptdate 2019-10-30
+;  @scriptby Tobias B. Besemer (2019-04-07 - 2019-10-30)
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -48,11 +48,11 @@ SectionEnd
     SetOutPath "$INSTDIR\share\locale\ar\"
     File /r "..\dist\share\locale\ar\*.*"
   SectionEnd
-  Section SectionTranslationArmenian "Translation Armenian"
-    CreateDirectory "$INSTDIR\share\locale\hy\"
-    SetOutPath "$INSTDIR\share\locale\hy\"
-    File /r "..\dist\share\locale\hy\*.*"
-  SectionEnd
+;  Section SectionTranslationArmenian "Translation Armenian"
+;    CreateDirectory "$INSTDIR\share\locale\hy\"
+;    SetOutPath "$INSTDIR\share\locale\hy\"
+;    File /r "..\dist\share\locale\hy\*.*"
+;  SectionEnd
   Section SectionTranslationAsturian "Translation Asturian"
     CreateDirectory "$INSTDIR\share\locale\ast\"
     SetOutPath "$INSTDIR\share\locale\ast\"
@@ -148,11 +148,11 @@ SectionEnd
     SetOutPath "$INSTDIR\share\locale\et\"
     File /r "..\dist\share\locale\et\*.*"
   SectionEnd
-  Section SectionTranslationFaroese "Translation Faroese"
-    CreateDirectory "$INSTDIR\share\locale\fo\"
-    SetOutPath "$INSTDIR\share\locale\fo\"
-    File /r "..\dist\share\locale\fo\*.*"
-  SectionEnd
+;  Section SectionTranslationFaroese "Translation Faroese"
+;    CreateDirectory "$INSTDIR\share\locale\fo\"
+;    SetOutPath "$INSTDIR\share\locale\fo\"
+;    File /r "..\dist\share\locale\fo\*.*"
+;  SectionEnd
   Section SectionTranslationFinnish "Translation Finnish"
     CreateDirectory "$INSTDIR\share\locale\fi\"
     SetOutPath "$INSTDIR\share\locale\fi\"
@@ -298,11 +298,11 @@ SectionEnd
     SetOutPath "$INSTDIR\share\locale\sr\"
     File /r "..\dist\share\locale\sr\*.*"
   SectionEnd
-  Section SectionTranslationSinhalese "Translation Sinhalese"
-    CreateDirectory "$INSTDIR\share\locale\si\"
-    SetOutPath "$INSTDIR\share\locale\si\"
-    File /r "..\dist\share\locale\si\*.*"
-  SectionEnd
+;  Section SectionTranslationSinhalese "Translation Sinhalese"
+;    CreateDirectory "$INSTDIR\share\locale\si\"
+;    SetOutPath "$INSTDIR\share\locale\si\"
+;    File /r "..\dist\share\locale\si\*.*"
+;  SectionEnd
   Section SectionTranslationSlovak "Translation Slovak"
     CreateDirectory "$INSTDIR\share\locale\sk\"
     SetOutPath "$INSTDIR\share\locale\sk\"
