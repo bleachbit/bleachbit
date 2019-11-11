@@ -24,7 +24,7 @@
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
-;  @note 
+;  @note
 
 Section un.SectionTranslationEnglishUSA "un.Translation English (USA)"
 SectionEnd

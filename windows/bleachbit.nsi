@@ -415,7 +415,7 @@ Name "${prodname}"
 
 ; The defines for more than 8 installation types are included in
 ; Sections.nsh
- 
+
 !ifndef NoInstTypes  ; allow user to switch the usage of InstTypes
   InstType $(BLEACHBIT_INSTALLATIONTYPE_COMPLETE) ; ${INSTTYPE_1}
   InstType $(BLEACHBIT_INSTALLATIONTYPE_STANDARD) ; ${INSTTYPE_2}
@@ -1145,4 +1145,3 @@ Section -un.Post
   ; We need also "MUI_LANGDLL_ALWAYSSHOW", or the user can never ever change his language!
   Call un.NsisMultiUser_LVC_Addon_SectionPost
 SectionEnd
-

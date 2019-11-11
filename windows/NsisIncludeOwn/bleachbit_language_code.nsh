@@ -24,7 +24,7 @@
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-18
 ;  @testedby https://github.com/Tobias-B-Besemer
-;  @note 
+;  @note
 
 ; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 ; Languages additionaly available in bleachbit_lang.nsh and NsisMultiUserLang.nsh are in comments

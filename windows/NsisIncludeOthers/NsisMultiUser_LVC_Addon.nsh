@@ -29,56 +29,56 @@
 ;  Notes:
 ;  ======
 ;  NsisMultiUser Addon to handle command line parameters.
-;  
+;
 ;  Include MultiUser LVC Addon in header with:
 ;  !include NsisMultiUser_LVC_Addon.nsh
 ;  Must be loaded after MULTIUSER_PAGE_INSTALLMODE!
-;  
+;
 ;  Load the NsisMultiUser_LVC_Addon-Language-File with:
 ;  !include NsisMultiUser_LVC_Addon_Lang.nsh
 ;  Must be loaded after MUI_LANGUAGE!
-;  
+;
 ;  Load MultiUser LVC Addon Header Macro in header with:
 ;  !insertmacro NsisMultiUser_LVC_Addon_Header_Macro
-;  
+;
 ;  Initialize NsisMultiUser_LVC_Addon in ".onInit":
 ;  !insertmacro NsisMultiUser_LVC_Addon_onInit
-;  
+;
 ;  Start NsisMultiUser_LVC_Addon-onInit-Functionality in ".onInit":
 ;  Call NsisMultiUser_LVC_Addon_onInit
-;  
+;
 ;  Insering the macros MUI_LANGDLL_DISPLAY & MULTIUSER_INIT after
 ;  "Call NsisMultiUser_LVC_Addon_CLI" that they don't effect the
 ;  error messages of the command line!
-;  
+;
 ;  Create a "Section -Post" and a "Section -un.Post" as last sections
 ;  and the "Call NsisMultiUser_LVC_Addon_SectionPost" and
 ;  "Call un.NsisMultiUser_LVC_Addon_SectionPost".
-;  
+;
 ;  Initialize NsisMultiUser_LVC_Addon in "un.onInit":
 ;  !insertmacro NsisMultiUser_LVC_Addon_un.onInit
-;  
+;
 ;  Start NsisMultiUser_LVC_Addon-onInit-Functionality in "un.onInit":
 ;  Call NsisMultiUser_LVC_Addon_un.onInit
-;  
+;
 ;  To handle "/uninstall" in "Function .onInit", there must be
 ;  a Function "uninstallfunction".
-;  
+;
 ;  Create the Error Level in "uninstallfunction" as first point with:
 ;  Call ${un}NsisMultiUser_LVC_Addon_ErrorLevel-666_Set
-;  
+;
 ;  Use "Call $NsisMultiUser_LVC_Addon_ErrorLevel-666_Handle" as last point
 ;  in your Section "Core", to handle Error Level 666 if "SystemComponent" was set.
 ;  $NsisMultiUser_LVC_Addon_ErrorLevel-666_Handle restores the old settings.
-;  
+;
 ;  "!insertmacro MUI_LANGDLL_DISPLAY", or "!insertmacro UMUI_MULTILANG_GET" musst
 ;  be loaded after "Call NsisMultiUser_LVC_Addon_onInit"!
 ;  Same by "Call un.NsisMultiUser_LVC_Addon_un.onInit"!
-;  
+;
 ;  Set NsisMultiUser_LVC_Addon_GUI_Update with "!define" to "Yes", if you use UMUI_PAGE_UPDATE!
-;  
+;
 ;  "NsisMultiUser_LVC_Addon_Upgrade" gets "Yes" if installer got started with "/upgrade"!
-;  
+;
 ;  You can turn the command line help off with define "Yes" for NsisMultiUser_LVC_Addon_NO_HELP_DIALOG!
 
 ; FileFunc.nsh for e.g. command line arguments managment:
@@ -1072,4 +1072,3 @@ FunctionEnd
 
 ; Initialize un.NsisMultiUser_LVC_Addon_un.onInit:
 !insertmacro un.NsisMultiUser_LVC_Addon_un.onInit
-
