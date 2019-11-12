@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-09-21 07:57+0000\n"
+"POT-Creation-Date: 2019-11-08 18:49-0700\n"
+"PO-Revision-Date: 2019-11-11 03:25+0000\n"
 "Last-Translator: Pin-hsien Lee <pspeter9931@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2019-09-21 20:44+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-11-11 14:20+0000\n"
+"X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 "Language: zh_TW\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -567,8 +567,8 @@ msgid "Swap files under user profile"
 msgstr "交換檔案（使用者目錄）"
 
 #: ../cleaners/vim.xml ../cleaners/deepscan.xml
-msgid "Inspect the preview for any files you want to keep."
-msgstr "查看預覽結果以找出您想保留的檔案。"
+msgid "This option is slow."
+msgstr "這個選項將花費不少時間。"
 
 #: ../cleaners/vim.xml
 msgid "Swap files across system"
@@ -583,8 +583,8 @@ msgid "Clean files widely scattered across the disk"
 msgstr "清理分散在硬碟各處的檔案"
 
 #: ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "這個選項將花費不少時間。"
+msgid "Inspect the preview for any files you want to keep."
+msgstr "查看預覽結果以找出您想保留的檔案。"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -646,6 +646,10 @@ msgstr "Shellbags"
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr "刪除使用日期、視窗位置及目錄相關資料"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "這將重設桌面圖示的位置。"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -713,7 +717,7 @@ msgid ""
 "again."
 msgstr "無法清理 %s，因為它正在執行。將它關閉後再試一遍。"
 
-#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:508
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:506
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "載入 SQLite 模組時發生錯誤：可能被防毒軟體阻擋。"
@@ -769,24 +773,24 @@ msgstr ""
 msgid "System information"
 msgstr "系統資訊"
 
-#: ../bleachbit/GUI.py:371 ../bleachbit/GuiPreferences.py:289
+#: ../bleachbit/GUI.py:370 ../bleachbit/GuiPreferences.py:289
 msgid "Name"
 msgstr "名稱"
 
-#: ../bleachbit/GUI.py:379
+#: ../bleachbit/GUI.py:378
 msgid "Active"
 msgstr "啟用"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:388
+#: ../bleachbit/GUI.py:387
 msgid "Size"
 msgstr "大小"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:419
+#: ../bleachbit/GUI.py:416
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -797,64 +801,64 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:487
+#: ../bleachbit/GUI.py:485
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "重設損壞的設置檔：%s"
 
-#: ../bleachbit/GUI.py:493
+#: ../bleachbit/GUI.py:491
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "點擊標題欄的漢堡圖示可存取應用程式選單。"
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:496
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "點擊標題欄的圖標可存取應用程式選單。"
 
-#: ../bleachbit/GUI.py:512
+#: ../bleachbit/GUI.py:510
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr "您正以管理員權限執行 BleachBit，程式將清理系統的共享部分。與使用者設定相關的清理將只針對 root 帳號進行。"
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:515
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr "以管理員權限執行 BleachBit，提高覆寫檔案內容的準度。"
 
-#: ../bleachbit/GUI.py:652
+#: ../bleachbit/GUI.py:659
 msgid "You must select an operation"
 msgstr "您必須選擇一項操作"
 
-#: ../bleachbit/GUI.py:671 ../bleachbit/GUI.py:695
+#: ../bleachbit/GUI.py:678 ../bleachbit/GUI.py:702
 msgid "Done."
 msgstr "完成。"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:788
+#: ../bleachbit/GUI.py:795
 msgid "Preview"
 msgstr "預覽"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
+#: ../bleachbit/GUI.py:800 ../bleachbit/Action.py:521
 msgid "Clean"
 msgstr "清理"
 
-#: ../bleachbit/GUI.py:880
+#: ../bleachbit/GUI.py:892
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "預覽所選操作的目標檔案（不會刪除任何檔案）"
 
-#: ../bleachbit/GUI.py:891
+#: ../bleachbit/GUI.py:903
 msgid "Clean files in the selected operations"
 msgstr "根據所選操作清理檔案"
 
-#: ../bleachbit/GUI.py:899
+#: ../bleachbit/GUI.py:911
 msgid "Abort the preview or cleaning process"
 msgstr "中止清理程序預覽"
 
-#: ../bleachbit/GUI.py:1047
+#: ../bleachbit/GUI.py:1059
 msgid "Error when checking for updates: "
 msgstr "檢查更新時發生錯誤： "
 
@@ -1117,34 +1121,7 @@ msgstr "正在載入原生清理器…"
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "正在從 Winapp2.ini 匯入清理器…"
 
-#: ../bleachbit/CleanerML.py:136
-#, python-brace-format
-msgid ""
-"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-msgstr ""
-"函式 handle_cleaner_option() 錯誤：cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-
-#: ../bleachbit/CleanerML.py:277
-#, python-format
-msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "忽略具有「全域寫入」權限的清理器：%s"
-
-#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
-#, python-format
-msgid "Error reading cleaner: %s"
-msgstr "讀取清理器錯誤：%s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py:306
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "無法在此作業系統上使用清理器，因為沒有可用的動作：%s"
-
-#: ../bleachbit/Chaff.py:135
+#: ../bleachbit/Chaff.py:133
 #, python-format
 msgid "Downloading url failed: %s"
 msgstr "下載 URL 失敗：%s"
@@ -1209,28 +1186,55 @@ msgstr "抺寫路徑：%s"
 msgid "Creating new, temporary file for wiping free space."
 msgstr "建立新暫存檔以抹寫可用空間。"
 
-#: ../bleachbit/FileUtilities.py:888
+#: ../bleachbit/FileUtilities.py:890
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "排清檔案緩衝區時出現了錯誤 #%d。"
 
-#: ../bleachbit/FileUtilities.py:904
+#: ../bleachbit/FileUtilities.py:906
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr "寫入了 {files:,} 檔案和 {bytes:,} 位元組，花費 {seconds:,} 秒，速度 {rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:909
+#: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "一般使用者可使用 {bytes:,} bytes 和 {inodes:,} inodes"
 
-#: ../bleachbit/FileUtilities.py:911
+#: ../bleachbit/FileUtilities.py:913
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "超級使用者可用 {bytes:,} bytes 和 {inodes:,} inodes"
 
-#: ../bleachbit/FileUtilities.py:926
+#: ../bleachbit/FileUtilities.py:928
 msgid "Handled unknown error #0 while truncating file."
 msgstr "清空檔案時處理了未知錯誤 #0 。"
+
+#: ../bleachbit/CleanerML.py:136
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"函式 handle_cleaner_option() 錯誤：cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "忽略具有「全域寫入」權限的清理器：%s"
+
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "讀取清理器錯誤：%s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:306
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr "無法在此作業系統上使用清理器，因為沒有可用的動作：%s"
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1313,10 +1317,10 @@ msgstr "刪除確認"
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
-"time you start it, the settings will initialize to default values."
+"time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"此功能將刪除所有 BleachBit 設定值並結束程式，可用於隱藏您的 BleachBit 使用記錄或重置所有設定。下次啓動 BleachBit "
-"後設定將恢復為初始值。"
+"這項功能會刪除所有 BleachBit 設定並退出應用程式。用這個來隱藏您的 BleachBit 使用痕跡或重置設定。下次當您啟動 BleachBit "
+"時，設定將初始化為預設值。"
 
 #: ../bleachbit/GuiBasic.py:133
 msgid ""
