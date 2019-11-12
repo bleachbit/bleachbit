@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-11-06 06:05+0000\n"
+"POT-Creation-Date: 2019-11-08 18:49-0700\n"
+"PO-Revision-Date: 2019-11-11 09:16+0000\n"
 "Last-Translator: Tobias B. Besemer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2019-11-07 02:32+0000\n"
-"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
+"X-Launchpad-Export-Date: 2019-11-11 14:20+0000\n"
+"X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -596,10 +596,8 @@ msgid "Swap files under user profile"
 msgstr "Swap-Dateien im Benutzer-Profil"
 
 #: ../cleaners/vim.xml ../cleaners/deepscan.xml
-msgid "Inspect the preview for any files you want to keep."
-msgstr ""
-"Überprüfen Sie in der Vorschau, ob Sie Dateien finden, die Sie behalten "
-"möchten."
+msgid "This option is slow."
+msgstr "Diese Option verlangsamt den Vorgang."
 
 #: ../cleaners/vim.xml
 msgid "Swap files across system"
@@ -614,8 +612,10 @@ msgid "Clean files widely scattered across the disk"
 msgstr "Weit über der Platte verstreute Dateien reinigen"
 
 #: ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "Diese Option verlangsamt den Vorgang."
+msgid "Inspect the preview for any files you want to keep."
+msgstr ""
+"Überprüfen Sie in der Vorschau, ob Sie Dateien finden, die Sie behalten "
+"möchten."
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -680,6 +680,10 @@ msgstr "Shellbags"
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
 "Das Nutzungsdatum, die Fensterposition und andere Daten für Ordner löschen"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "Das wird die Position der Desktop-Symbole zurücksetzen."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -751,7 +755,7 @@ msgstr ""
 "%s konnte nicht gereinigt werden, da es noch aktiv ist. Bitte das Programm "
 "beenden und den Vorgang wiederholen."
 
-#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:508
+#: ../bleachbit/GUI.py:84 ../bleachbit/GUI.py:506
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -831,24 +835,24 @@ msgstr ""
 msgid "System information"
 msgstr "Systeminformationen"
 
-#: ../bleachbit/GUI.py:371 ../bleachbit/GuiPreferences.py:289
+#: ../bleachbit/GUI.py:370 ../bleachbit/GuiPreferences.py:289
 msgid "Name"
 msgstr "Name"
 
-#: ../bleachbit/GUI.py:379
+#: ../bleachbit/GUI.py:378
 msgid "Active"
 msgstr "Aktiv"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:388
+#: ../bleachbit/GUI.py:387
 msgid "Size"
 msgstr "Größe"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:419
+#: ../bleachbit/GUI.py:416
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -859,25 +863,25 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:487
+#: ../bleachbit/GUI.py:485
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Zurücksetzen der Konfigurationsdatei, weil sie fehlerhaft ist: %s"
 
-#: ../bleachbit/GUI.py:493
+#: ../bleachbit/GUI.py:491
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 "Rufen Sie das Anwendungsmenü auf, indem Sie auf das Hamburger-Symbol in der "
 "Titelleiste klicken."
 
-#: ../bleachbit/GUI.py:498
+#: ../bleachbit/GUI.py:496
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr ""
 "Rufen Sie das Anwendungsmenü auf, indem Sie auf das Logo in der Titelleiste "
 "klicken."
 
-#: ../bleachbit/GUI.py:512
+#: ../bleachbit/GUI.py:510
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -887,7 +891,7 @@ msgstr ""
 "Teile des Systems reinigen, Verweise zum Benutzerprofilordner werden nur das "
 "root-Kontos bereinigen."
 
-#: ../bleachbit/GUI.py:517
+#: ../bleachbit/GUI.py:515
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -895,39 +899,39 @@ msgstr ""
 "BleachBit mit Systemverwaltungsrechten starten, um die Genauigkeit der zu "
 "überschriebenen Dateien zu erhöhen."
 
-#: ../bleachbit/GUI.py:652
+#: ../bleachbit/GUI.py:659
 msgid "You must select an operation"
 msgstr "Sie müssen einen Vorgang auswählen"
 
-#: ../bleachbit/GUI.py:671 ../bleachbit/GUI.py:695
+#: ../bleachbit/GUI.py:678 ../bleachbit/GUI.py:702
 msgid "Done."
 msgstr "Fertig."
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:788
+#: ../bleachbit/GUI.py:795
 msgid "Preview"
 msgstr "Vorschau"
 
 #. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:793 ../bleachbit/Action.py:521
+#: ../bleachbit/GUI.py:800 ../bleachbit/Action.py:521
 msgid "Clean"
 msgstr "Bereinigen"
 
-#: ../bleachbit/GUI.py:880
+#: ../bleachbit/GUI.py:892
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Vorschau der Dateien in den ausgewählten Vorgängen (ohne irgendwelche "
 "Dateien zu löschen)"
 
-#: ../bleachbit/GUI.py:891
+#: ../bleachbit/GUI.py:903
 msgid "Clean files in the selected operations"
 msgstr "Dateien in den ausgewählten Bereichen bereinigen"
 
-#: ../bleachbit/GUI.py:899
+#: ../bleachbit/GUI.py:911
 msgid "Abort the preview or cleaning process"
 msgstr "Abbrechen des Vorschau- oder Reinigungsprozesses"
 
-#: ../bleachbit/GUI.py:1047
+#: ../bleachbit/GUI.py:1059
 msgid "Error when checking for updates: "
 msgstr "Fehler bei der Suche nach Aktualisierungen: "
 
@@ -1201,36 +1205,7 @@ msgstr "Laden von nativen Cleanern."
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "Importiere Cleaner aus Winapp2.ini."
 
-#: ../bleachbit/CleanerML.py:136
-#, python-brace-format
-msgid ""
-"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-msgstr ""
-"Fehler in handle_cleaner_option() für Reiniger id = {cleaner_id}, Option "
-"XML={option_xml}"
-
-#: ../bleachbit/CleanerML.py:277
-#, python-format
-msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Ignoriere Reiniger weil er weltweit schreibbar is: %s"
-
-#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
-#, python-format
-msgid "Error reading cleaner: %s"
-msgstr "Fehler beim Lesen des Reinigers: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py:306
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"Reiniger ist auf diesem Betriebssystem nicht verwendbar, weil er keine "
-"Aktionen hat: %s"
-
-#: ../bleachbit/Chaff.py:135
+#: ../bleachbit/Chaff.py:133
 #, python-format
 msgid "Downloading url failed: %s"
 msgstr "Download der URL fehlgeschlagen: %s"
@@ -1301,12 +1276,12 @@ msgid "Creating new, temporary file for wiping free space."
 msgstr ""
 "Erstellen einer neuen, temporären Datei zum Löschen von freiem Speicherplatz."
 
-#: ../bleachbit/FileUtilities.py:888
+#: ../bleachbit/FileUtilities.py:890
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "Fehler #%d beim Leeren des Datei-Puffers"
 
-#: ../bleachbit/FileUtilities.py:904
+#: ../bleachbit/FileUtilities.py:906
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
@@ -1314,17 +1289,46 @@ msgstr ""
 "Schrieb {files:,} Dateien und {bytes:,} Bytesin {seconds:,} Sekunden mit "
 "{rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:909
+#: ../bleachbit/FileUtilities.py:911
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "{bytes:,} Bytes und {inodes:,} Inodes verfügbar für Non-Super-User"
 
-#: ../bleachbit/FileUtilities.py:911
+#: ../bleachbit/FileUtilities.py:913
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "{bytes:,} bytes und {Inodes:,} Inodes verfügbar für super-user"
 
-#: ../bleachbit/FileUtilities.py:926
+#: ../bleachbit/FileUtilities.py:928
 msgid "Handled unknown error #0 while truncating file."
 msgstr "Unbekannter Fehler #0 beim Abschneiden der Datei behoben."
+
+#: ../bleachbit/CleanerML.py:136
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"Fehler in handle_cleaner_option() für Reiniger id = {cleaner_id}, Option "
+"XML={option_xml}"
+
+#: ../bleachbit/CleanerML.py:277
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "Ignoriere Reiniger weil er weltweit schreibbar is: %s"
+
+#: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "Fehler beim Lesen des Reinigers: %s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:306
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr ""
+"Reiniger ist auf diesem Betriebssystem nicht verwendbar, weil er keine "
+"Aktionen hat: %s"
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
@@ -1410,12 +1414,12 @@ msgstr "Löschbestätigung"
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
-"time you start it, the settings will initialize to default values."
+"time you start BleachBit, the settings will initialize to default values."
 msgstr ""
 "Diese Funktion löscht alle BleachBit-Einstellungen und beendet dann die "
-"Anwendung. Verwenden Sie dies, um Ihre Verwendung von BleachBit zu "
-"verstecken oder die Einstellungen zurückzusetzen. Wenn Sie es das nächste "
-"Mal starten, werden die Einstellungen auf Standardwerte initialisiert."
+"Anwendung. Verwenden Sie dies um Ihre Benutzung von BleachBit zu verstecken, "
+"oder um die Einstellungen zurückzusetzen. Das nächste Mal wenn Sie BleachBit "
+"starten werden die Einstellungen auf Standard-Werte initialisiert."
 
 #: ../bleachbit/GuiBasic.py:133
 msgid ""
