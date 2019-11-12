@@ -24,12 +24,12 @@
 ;  @tested ok v1.0.0, Windows 7
 ;  @testeddate 2019-04-17
 ;  @testedby https://github.com/Tobias-B-Besemer
-;  @note 
+;  @note
 
 ;  Notes:
 ;  ======
 ;  NsisMultiUser Addon for advanced multi user functionality.
-;  
+;
 ;  Must be loaded after MULTIUSER_PAGE_INSTALLMODE!
 
 ; Always show the language selection dialog, even if a language has been stored

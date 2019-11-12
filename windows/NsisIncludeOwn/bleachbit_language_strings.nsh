@@ -24,7 +24,7 @@
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-17
 ;  @testedby https://github.com/Tobias-B-Besemer
-;  @note 
+;  @note
 
 !ifdef LANG_ENGLISH
 	LangString BLEACHBIT_INSTALLATIONTYPE_COMPLETE ${LANG_ENGLISH} "Complete"
