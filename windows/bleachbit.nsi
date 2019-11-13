@@ -55,14 +55,38 @@
   Unicode true
 !endif
 
-VIProductVersion "${VERSION}"
-VIAddVersionKey /LANG=0 ProductName "${prodname}"
-VIAddVersionKey /LANG=0 CompanyName "https://www.bleachbit.org"
-VIAddVersionKey /LANG=0 LegalCopyright "Copyright (c) 2008-2019 Andrew Ziem"
-VIAddVersionKey /LANG=1033 FileDescription "BleachBit installer"
-VIAddVersionKey /LANG=0 FileVersion "${VERSION}"
-VIAddVersionKey /LANG=0 ProductVersion "${VERSION}"
 
+;--------------------------------
+;Installer-/UnInstaller-Attributes - Version Information
+; https://nsis.sourceforge.io/Docs/Chapter4.html#versioninfo
+
+;!define File_VERSION 2.3.0.0
+; Later:
+!define File_VERSION ${VERSION}
+
+!ifdef NoTranslations
+  VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
+  VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalCopyright" "Andrew Ziem"
+  VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
+  VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
+!endif
+
+!ifndef NoTranslations
+  VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
+  VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
+  VIAddVersionKey /LANG=0 "LegalCopyright" "Andrew Ziem"
+  VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
+  VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
+!endif
+
+VIProductVersion ${File_VERSION}
+VIFileVersion ${File_VERSION}
+
+
+;--------------------------------
   ;Default installation folder
   ; NsisMultiUser sets the directory.
   ;InstallDir "$PROGRAMFILES\${prodname}"
