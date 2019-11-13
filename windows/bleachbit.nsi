@@ -67,7 +67,7 @@
 !ifdef NoTranslations
   VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
   VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=1033 "LegalCopyright" "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalCopyright" "Andrew Ziem"
   VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
   VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
   VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
@@ -76,7 +76,7 @@
 !ifndef NoTranslations
   VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
   VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=0 "LegalCopyright" "BleachBit.org"
+  VIAddVersionKey /LANG=0 "LegalCopyright" "Andrew Ziem"
   VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
   VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
   VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
