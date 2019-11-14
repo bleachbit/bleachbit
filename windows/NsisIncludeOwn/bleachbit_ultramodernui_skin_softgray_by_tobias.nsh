@@ -18,9 +18,9 @@
 ;  @app BleachBit NSIS Installer Script - bleachbit_ultramodernui_skin_softgray_by_tobias.nsh
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1059
-;  @scriptdate 2019-04-16
-;  @scriptby Tobias B. Besemer (2019-04-13 - 2019-04-16)
+;  @scriptversion v3.0.1.0
+;  @scriptdate 2019-11-14
+;  @scriptby Tobias B. Besemer (2019-04-13 - 2019-11-14)
 ;  @tested ok v2.3.0.1059, Windows 7
 ;  @testeddate 2019-04-16
 ;  @testedby https://github.com/Tobias-B-Besemer
@@ -46,4 +46,5 @@
 !define /IfNDef MUI_WELCOMEFINISHPAGE_BITMAP ; "${NSISDIR}\Contrib\UltraModernUI\Skins\SoftGray\Wizard.bmp"
 !define /IfNDef MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install-nsis.ico"
 !define /IfNDef MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall-nsis.ico"
-!define /IfNDef UMUI_XPSTYLE On
+;!define /IfNDef UMUI_XPSTYLE On
+; We shouldn't use that as noted in: https://github.com/SuperPat45/UltraModernUI/issues/12
