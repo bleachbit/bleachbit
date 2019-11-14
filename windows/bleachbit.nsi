@@ -57,6 +57,44 @@
 
 
 ;--------------------------------
+;MultiUser defines
+
+; https://github.com/Drizin/NsisMultiUser/wiki/Defines
+!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
+; !define VERSION "2.3"
+; "VERSION" already defined!
+!define PROGEXE "${prodname}.exe"
+; !define COMPANY_NAME "BleachBit"
+; "COMPANY_NAME" already defined!
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
+; and per-machine installations on the same machine are allowed. If set to disallow, the installer
+; alaways requires elevation when there's per-machine installation in order to remove it first.
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
+; If elevation is disabled, the per-machine option becomes available only if the (un)installer
+; is started elevated from Windows and is disabled otherwise.
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
+
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
+
+; MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS:
+; 0 or 1, (only available if MULTIUSER_INSTALLMODE_ALLOW_ELEVATION = 1 and there are 0 or 2 installations
+; on the system) when running as user and is set to 1, per-machine installation is pre-selected, otherwise
+; per-user installation.
+!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
+
+; MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER:
+; 0 or 1, (only available if there are 0 or 2 installations on the system) when running as admin and
+; is set to 1, per-user installation is pre-selected, otherwise per-machine installation.
+!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
+
+!define MULTIUSER_INSTALLMODE_64_BIT 0
+!define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
+
+
+;--------------------------------
 ;Installer-/UnInstaller-Attributes - Version Information
 ; https://nsis.sourceforge.io/Docs/Chapter4.html#versioninfo
 
@@ -112,26 +150,14 @@ VIFileVersion ${File_VERSION}
 
 
 ;--------------------------------
-; multi-user
-;
-; See https://github.com/Drizin/NsisMultiUser
-;
-!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
+; Rest of old part "multi-user"
+
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
 !include UAC.nsh
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
 !include StdUtils.nsh
-
-!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
-!define PROGEXE "${prodname}.exe"
-!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
-!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
-!define MULTIUSER_INSTALLMODE_64_BIT 0
 
 
 ;--------------------------------
