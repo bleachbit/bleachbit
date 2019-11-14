@@ -152,7 +152,7 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress = lambda x: None):
+    def __init__(self, pathname, cb_progress=lambda x: None):
         """Create cleaners from a Winapp2.ini-style file"""
 
         self.cleaners = {}
@@ -421,7 +421,7 @@ def list_winapp_files():
             yield fname
 
 
-def load_cleaners(cb_progress = lambda x: None):
+def load_cleaners(cb_progress=lambda x: None):
     """Scan for winapp2.ini files and load them"""
     cb_progress(0.0)
     for pathname in list_winapp_files():

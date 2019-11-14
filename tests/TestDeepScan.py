@@ -94,7 +94,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
                     continue
                 self.assertLExists(ret)
         except UnicodeDecodeError:
-            # Expectedly ds.scan() throws exception 
+            # Expectedly ds.scan() throws exception
             # when we have unicode paths and LANG==C.
             self.assertTrue(os.environ['LANG'] == 'C')
 
@@ -106,7 +106,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         f_keep = self.write_file('foo.txt')
         subdir = os.path.join(self.tempdir, 'sub')
         os.mkdir(subdir)
-        f_del2 = self.write_file(os.path.join(subdir,'bar.ini.bbtestbak'))
+        f_del2 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestbak'))
 
         # sanity check
         self.assertExists(f_del1)

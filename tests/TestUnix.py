@@ -96,7 +96,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 """
         self.assertTrue(is_running_darwin('USBAgent', run_ps))
         self.assertFalse(is_running_darwin('does-not-exist', run_ps))
-        self.assertRaises(RuntimeError, is_running_darwin, 'foo', lambda: 'invalid-input')
+        self.assertRaises(RuntimeError, is_running_darwin,
+                          'foo', lambda: 'invalid-input')
 
     @common.skipIfWindows
     def test_is_running(self):
@@ -136,7 +137,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assertIsNotNone(m, 'expected positive match for ' + locale)
             self.assertEqual(m.group("locale"), tlc)
         for test in ['default', 'C', 'English', 'ru_RU.txt', 'ru.txt']:
-            self.assertIsNone(regex.match(test), 'expected negative match for ' + test)
+            self.assertIsNone(regex.match(
+                test), 'expected negative match for ' + test)
 
     @common.skipIfWindows
     def test_localization_paths(self):
@@ -195,7 +197,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.locales._paths = LocaleCleanerPath(self.tempdir)
         self.locales.add_xml(config.firstChild, None)
         # normpath because paths may contain ./
-        deletelist = [os.path.normpath(path) for path in self.locales.localization_paths(['en', 'de'])]
+        deletelist = [os.path.normpath(
+            path) for path in self.locales.localization_paths(['en', 'de'])]
         for path in keepdirs + keepfiles:
             self.assertNotIn(os.path.join(self.tempdir, path), deletelist)
         for path in nukedirs + nukefiles:
@@ -205,13 +208,16 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_rotated_logs(self):
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
-            self.assertLExists(path, "Rotated log path '%s' does not exist" % path)
+            self.assertLExists(
+                path, "Rotated log path '%s' does not exist" % path)
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
         from subprocess import CalledProcessError
-        self.assertRaises(RuntimeError, run_cleaner_cmd, '/hopethisdoesntexist', [])
-        self.assertRaises(CalledProcessError, run_cleaner_cmd, 'sh', ['-c', 'echo errormsg; false'])
+        self.assertRaises(RuntimeError, run_cleaner_cmd,
+                          '/hopethisdoesntexist', [])
+        self.assertRaises(CalledProcessError, run_cleaner_cmd,
+                          'sh', ['-c', 'echo errormsg; false'])
         # test if regexes for invalid lines work
         self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],
                           error_line_regexes=['invalid'])
@@ -221,7 +227,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                  'Freed 100B on your hard drive',
                  'Freed 1.9kB, hooray!',
                  'Fred 12MB']
-        freed_space = run_cleaner_cmd('echo', ['\n'.join(lines)], freed_space_regex)
+        freed_space = run_cleaner_cmd(
+            'echo', ['\n'.join(lines)], freed_space_regex)
         self.assertEqual(freed_space, 2000)
 
     @common.skipIfWindows
@@ -230,7 +237,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         wineprefix = "/home/foo/.wine"
         windows_pathname = "C:\\Program Files\\NSIS\\NSIS.exe"
         result = "/home/foo/.wine/drive_c/Program Files/NSIS/NSIS.exe"
-        self.assertEqual(wine_to_linux_path(wineprefix, windows_pathname), result)
+        self.assertEqual(wine_to_linux_path(
+            wineprefix, windows_pathname), result)
 
     @common.skipIfWindows
     def test_yum_clean(self):

@@ -36,4 +36,3 @@ class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
         digest = hashdigest('bleachbit')
         self.assertEqual(len(digest), 128)
         self.assertEqual(digest[1:10], '6382c203e')
-

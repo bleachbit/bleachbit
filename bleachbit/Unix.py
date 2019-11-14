@@ -63,7 +63,8 @@ class LocaleCleanerPath:
         try:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')
         except Exception as errormsg:
-            raise RuntimeError("Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
+            raise RuntimeError(
+                "Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
         self.add_child(regex)
 
     def get_subpaths(self, basepath):
@@ -357,7 +358,8 @@ class Locales:
             if xml_node.hasAttribute('directoryregex'):
                 pattern = xml_node.getAttribute('directoryregex')
                 if '/' in pattern:
-                    raise RuntimeError('directoryregex may not contain slashes.')
+                    raise RuntimeError(
+                        'directoryregex may not contain slashes.')
                 pattern = re.compile(pattern)
                 parent = parent.add_child(LocaleCleanerPath(pattern))
 
@@ -365,7 +367,8 @@ class Locales:
             else:
                 if xml_node.hasAttribute("location"):
                     # if there's a filter attribute, it should apply to this path
-                    parent = parent.add_child(LocaleCleanerPath(xml_node.getAttribute('location')))
+                    parent = parent.add_child(LocaleCleanerPath(
+                        xml_node.getAttribute('location')))
 
                 if xml_node.hasAttribute('filter'):
                     userfilter = xml_node.getAttribute('filter')
@@ -402,11 +405,13 @@ class Locales:
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
     """Returns boolean whether application deskop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
-        logger.info("is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
+        logger.info(
+            "is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not FileUtilities.exe_exists(exe):
-        logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'", exe, desktop_pathname)
+        logger.info(
+            "is_broken_xdg_menu: executable '%s' does not exist '%s'", exe, desktop_pathname)
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
@@ -424,7 +429,8 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             else:
                 break
         if not FileUtilities.exe_exists(execs[0]):
-            logger.info("is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
+            logger.info(
+                "is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
@@ -444,7 +450,8 @@ def is_unregistered_mime(mimetype):
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
-        logger.warning('error calling gio.app_info_get_all_for_type(%s)', mimetype)
+        logger.warning(
+            'error calling gio.app_info_get_all_for_type(%s)', mimetype)
     return False
 
 
@@ -454,25 +461,30 @@ def is_broken_xdg_desktop(pathname):
     config = bleachbit.RawConfigParser()
     config.read(pathname)
     if not config.has_section('Desktop Entry'):
-        logger.info("is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
+        logger.info(
+            "is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
         return True
     if not config.has_option('Desktop Entry', 'Type'):
-        logger.info("is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)
+        logger.info(
+            "is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)
         return True
     file_type = config.get('Desktop Entry', 'Type').strip().lower()
     if 'link' == file_type:
         if not config.has_option('Desktop Entry', 'URL') and \
                 not config.has_option('Desktop Entry', 'URL[$e]'):
-            logger.info("is_broken_xdg_menu: missing required option 'URL': '%s'", pathname)
+            logger.info(
+                "is_broken_xdg_menu: missing required option 'URL': '%s'", pathname)
             return True
         return False
     if 'mimetype' == file_type:
         if not config.has_option('Desktop Entry', 'MimeType'):
-            logger.info("is_broken_xdg_menu: missing required option 'MimeType': '%s'", pathname)
+            logger.info(
+                "is_broken_xdg_menu: missing required option 'MimeType': '%s'", pathname)
             return True
         mimetype = config.get('Desktop Entry', 'MimeType').strip().lower()
         if is_unregistered_mime(mimetype):
-            logger.info("is_broken_xdg_menu: MimeType '%s' not registered '%s'", mimetype, pathname)
+            logger.info(
+                "is_broken_xdg_menu: MimeType '%s' not registered '%s'", mimetype, pathname)
             return True
         return False
     if 'application' != file_type:
@@ -488,7 +500,8 @@ def is_running_darwin(exename, run_ps=None):
         def run_ps():
             return subprocess.check_output(["ps", "aux", "-c"])
     try:
-        processess = (re.split(r"\s+", p, 10)[10] for p in run_ps().split("\n") if p != "")
+        processess = (re.split(r"\s+", p, 10)[10]
+                      for p in run_ps().split("\n") if p != "")
         next(processess)  # drop the header
         return exename in processess
     except IndexError:
@@ -569,7 +582,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     if not FileUtilities.exe_exists(cmd):
         raise RuntimeError(_('Executable not found: %s') % cmd)
     freed_space_regex = re.compile(freed_space_regex)
-    error_line_regexes = [re.compile(regex) for regex in error_line_regexes or []]
+    error_line_regexes = [re.compile(regex)
+                          for regex in error_line_regexes or []]
 
     env = {'LC_ALL': 'C', 'PATH': os.getenv('PATH')}
     output = subprocess.check_output([cmd] + args, stderr=subprocess.STDOUT,
@@ -592,8 +606,8 @@ def journald_clean():
     try:
         return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
-
+        raise RuntimeError("Error calling '%s':\n%s" %
+                           (' '.join(e.cmd), e.output))
 
 
 def apt_autoremove():
@@ -605,7 +619,8 @@ def apt_autoremove():
     try:
         return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
+        raise RuntimeError("Error calling '%s':\n%s" %
+                           (' '.join(e.cmd), e.output))
 
 
 def apt_autoclean():
@@ -613,7 +628,8 @@ def apt_autoclean():
     try:
         return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" % (' '.join(e.cmd), e.output))
+        raise RuntimeError("Error calling '%s':\n%s" %
+                           (' '.join(e.cmd), e.output))
 
 
 def apt_clean():

@@ -149,7 +149,7 @@ class LockedAction(ActionProvider):
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
         fsize = getsize(self.pathname)
-        if not fsize == 3: # Contents is "123"
+        if not fsize == 3:  # Contents is "123"
             raise RuntimeError('Locked file has size %dB (not 3B)' % fsize)
         os.close(fd)
 
@@ -199,7 +199,8 @@ class WorkerTestCase(common.BleachbitTestCase):
                            bytes_expected_posix, count_deleted_posix,
                            bytes_expected_nt, count_deleted_nt):
         ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker', dir=self.tempdir)
+        (fd, filename) = tempfile.mkstemp(
+            prefix='bleachbit-test-worker', dir=self.tempdir)
         os.write(fd, '123')
         os.close(fd)
         self.assertExists(filename)
@@ -235,7 +236,8 @@ class WorkerTestCase(common.BleachbitTestCase):
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
-        self.action_test_helper('function.generator', 1, 0, 4096 + 10, 1, 3 + 10, 1)
+        self.action_test_helper('function.generator', 1,
+                                0, 4096 + 10, 1, 3 + 10, 1)
 
     def test_FunctionPath(self):
         """Test Worker using Action.FunctionPathAction"""
@@ -295,10 +297,11 @@ class WorkerTestCase(common.BleachbitTestCase):
         class MyDeepScan:
             def add_search(self, dirname, regex):
                 parent.assertEqual(dirname, expanduser('~'))
-                parent.assertIn(regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
+                parent.assertIn(
+                    regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
             def scan(self):
-                parent.scanned+=1
+                parent.scanned += 1
                 yield True
 
         bleachbit.DeepScan.DeepScan = MyDeepScan

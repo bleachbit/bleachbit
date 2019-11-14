@@ -34,6 +34,7 @@ if __name__ == '__main__':
     python2 -m unittest discover -p Test*.py                       # run all tests
     python2 -m unittest tests.TestCLI                              # run only the CLI tests
     python2 -m unittest tests.TestCLI.CLITestCase.test_encoding    # run only a single test""")
-    suite = unittest.defaultTestLoader.discover(os.getcwd(), pattern='Test*.py')
+    suite = unittest.defaultTestLoader.discover(
+        os.getcwd(), pattern='Test*.py')
     success = unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
     sys.exit(success == False)

@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import xml.dom.minidom
 """
 Check for updates via the Internet
 """
@@ -40,7 +41,6 @@ if sys.version >= (3, 0):
 else:
     from urllib2 import build_opener, URLError
 
-import xml.dom.minidom
 
 logger = logging.getLogger(__name__)
 

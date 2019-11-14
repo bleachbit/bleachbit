@@ -18,6 +18,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from bleachbit import GuiBasic
+from bleachbit import Cleaner, FileUtilities
+from bleachbit import _, APP_NAME, appicon_path, portable_mode
+from bleachbit.Options import options
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Cleaner import backends, register_cleaners
+import bleachbit
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 """
 GTK graphical user interface
 """
@@ -33,15 +41,7 @@ import types
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-import bleachbit
-from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Options import options
-from bleachbit import _, APP_NAME, appicon_path, portable_mode
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import GuiBasic
 
 if os.name == 'nt':
     from bleachbit import Windows
@@ -428,7 +428,7 @@ class TreeDisplayModel:
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
-        is_toggled_on = not model[path][1] # Is the new state enabled?
+        is_toggled_on = not model[path][1]  # Is the new state enabled?
         self.set_cleaner(path, model, parent_window, is_toggled_on)
         i = model.get_iter(path)
         parent = model.iter_parent(i)
@@ -451,6 +451,7 @@ class TreeDisplayModel:
             self.set_cleaner(child, model, parent_window, is_toggled_on)
             child = model.iter_next(child)
         return
+
 
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
@@ -847,7 +848,8 @@ class GUI(Gtk.ApplicationWindow):
         try:
             __iter = model.get_iter(treepath)
         except ValueError as e:
-            logger.warning('ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+            logger.warning(
+                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return
         while __iter:
             if model[__iter][2] == option:
@@ -972,7 +974,8 @@ class GUI(Gtk.ApplicationWindow):
         if options.has_option("window_x") and options.has_option("window_y"):
             self.move(options.get("window_x"), options.get("window_y"))
         if options.has_option("window_width") and options.has_option("window_height"):
-            self.resize(options.get("window_width"), options.get("window_height"))
+            self.resize(options.get("window_width"),
+                        options.get("window_height"))
         if options.get("window_fullscreen"):
             self.fullscreen()
         elif options.get("window_maximized"):
@@ -981,7 +984,8 @@ class GUI(Gtk.ApplicationWindow):
     def populate_window(self):
         """Create the main application window"""
         screen = self.get_screen()
-        self.set_default_size(min(screen.width(), 800), min(screen.height(), 600))
+        self.set_default_size(min(screen.width(), 800),
+                              min(screen.height(), 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)

@@ -170,7 +170,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             pathname = f.name
             f.close()
             import time
-            time.sleep(5) # avoid race condition
+            time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
             if not shell.IsUserAnAdmin():
@@ -180,7 +180,8 @@ class WindowsTestCase(common.BleachbitTestCase):
                 try:
                     delete_locked_file(pathname)
                 except WindowsError:
-                    logger.exception('delete_locked_file() threw an error, which may be a false positive')
+                    logger.exception(
+                        'delete_locked_file() threw an error, which may be a false positive')
             self.assertExists(pathname)
         logger.info('reboot Windows and check the three files are deleted')
 
@@ -400,9 +401,11 @@ class WindowsTestCase(common.BleachbitTestCase):
         shutil.rmtree(dirname, True)
 
         if shell.IsUserAnAdmin():
-            logger.warning('You should also run test_file_wipe() without admin privileges.')
+            logger.warning(
+                'You should also run test_file_wipe() without admin privileges.')
         else:
-            logger.warning('You should also run test_file_wipe() with admin privileges.')
+            logger.warning(
+                'You should also run test_file_wipe() with admin privileges.')
 
     def test_is_process_running(self):
         # winlogon.exe runs on Windows XP and Windows 7

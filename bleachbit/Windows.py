@@ -91,7 +91,7 @@ def browse_files(_, title):
     try:
         # The File parameter is a hack to increase the buffer length.
         ret = win32gui.GetOpenFileNameW(None,
-                                        File = '\x00' * 10240,
+                                        File='\x00' * 10240,
                                         Flags=win32con.OFN_ALLOWMULTISELECT
                                         | win32con.OFN_EXPLORER
                                         | win32con.OFN_FILEMUSTEXIST
@@ -129,7 +129,8 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except:
-        logger.info('exception when getting special folder path for %s', varname)
+        logger.info(
+            'exception when getting special folder path for %s', varname)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
@@ -280,7 +281,8 @@ def elevate_privileges():
         # the administrator may not have privileges and user will not be
         # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
-            logger.debug("debug: skipping UAC because '%s' is on network", pyfile)
+            logger.debug(
+                "debug: skipping UAC because '%s' is on network", pyfile)
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
@@ -327,6 +329,7 @@ def empty_recycle_bin(path, really_delete):
         shell.SHEmptyRecycleBin(None, path, flags)
     return bytes_used
 
+
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     import win32clipboard
@@ -339,6 +342,7 @@ def get_clipboard_paths():
     finally:
         win32clipboard.CloseClipboard()
     return path_list
+
 
 def get_fixed_drives():
     """Yield each fixed drive"""
@@ -556,6 +560,7 @@ def shell_change_notify():
                          None, None)
     return 0
 
+
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     if not path:
@@ -563,16 +568,20 @@ def set_environ(varname, path):
     if varname in os.environ:
         #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
-            os.environ[varname] = bleachbit.expandvars(u'%%%s%%' % varname).encode('utf-8')
+            os.environ[varname] = bleachbit.expandvars(
+                u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs
         return
     try:
         if not os.path.exists(path):
-            raise RuntimeError('Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path if isinstance(path, str) else path.encode('utf8')
+            raise RuntimeError(
+                'Variable %s points to a non-existent path %s' % (varname, path))
+        os.environ[varname] = path if isinstance(
+            path, str) else path.encode('utf8')
     except:
-        logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
+        logger.exception(
+            'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
 
 def setup_environment():
@@ -612,4 +621,3 @@ def split_registry_key(full_key):
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
-

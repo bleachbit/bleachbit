@@ -30,18 +30,18 @@ from bleachbit.Memory import *
 import unittest
 
 
-
 class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
 
     @common.skipIfWindows
-    @unittest.skipIf(os.getenv('TRAVIS','f') == 'true', 'Not supported on Travis CI')
+    @unittest.skipIf(os.getenv('TRAVIS', 'f') == 'true', 'Not supported on Travis CI')
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
         if not re.search('Filename\s+Type\s+Size', ret):
-            raise RuntimeError("Unexpected first line in swap summary '%s'" % ret)
+            raise RuntimeError(
+                "Unexpected first line in swap summary '%s'" % ret)
 
     @common.skipIfWindows
     def test_make_self_oom_target_linux(self):
@@ -67,7 +67,7 @@ class MemoryTestCase(common.BleachbitTestCase):
     def test_physical_free_darwin(self):
         # TODO: use mock
         self.assertEqual(physical_free_darwin(lambda:
-"""Mach Virtual Memory Statistics: (page size of 4096 bytes)
+                                              """Mach Virtual Memory Statistics: (page size of 4096 bytes)
 Pages free:                              836891.
 Pages active:                            588004.
 Pages inactive:                           16985.
@@ -91,13 +91,15 @@ Pageouts:                              30477017.
 Swapins:                               19424481.
 Swapouts:                              20258188.
 """), 3427905536)
-        self.assertRaises(RuntimeError, physical_free_darwin, lambda: "Invalid header")
+        self.assertRaises(RuntimeError, physical_free_darwin,
+                          lambda: "Invalid header")
 
     @common.skipIfWindows
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()
-        self.assertIsInteger(ret, 'physical_free() returns variable type %s' % type(ret))
+        self.assertIsInteger(
+            ret, 'physical_free() returns variable type %s' % type(ret))
         self.assertGreater(physical_free(), 0)
         report_free()
 
@@ -111,7 +113,8 @@ Swapouts:                              20258188.
         size = get_swap_size_linux(swapdev)
         self.assertIsInteger(size)
         self.assertGreater(size, 1024 ** 2)
-        logger.debug("size of swap '%s': %d B (%d MB)", swapdev, size, size / (1024 ** 2))
+        logger.debug("size of swap '%s': %d B (%d MB)",
+                     swapdev, size, size / (1024 ** 2))
         with open('/proc/swaps') as f:
             proc_swaps = f.read()
         size2 = get_swap_size_linux(swapdev, proc_swaps)

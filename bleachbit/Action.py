@@ -69,12 +69,14 @@ def expand_multi_var(s, variables):
         # No matching variables used, so return input string unmodified.
         return (s,)
     # filter the dictionary to the keys used
-    vars_used = { key:value for key,value in variables.iteritems() if key in var_keys_used}
+    vars_used = {key: value for key,
+                 value in variables.iteritems() if key in var_keys_used}
     # create a product of combinations
     from itertools import product
-    vars_product = (dict(zip(vars_used,x)) for x in product(*vars_used.values()))
+    vars_product = (dict(zip(vars_used, x))
+                    for x in product(*vars_used.values()))
     for var_set in vars_product:
-        ms = s # modified version of input string
+        ms = s  # modified version of input string
         for var_key, var_value in var_set.iteritems():
             sub = '$$%s$$' % var_key
             ms = ms.replace(sub, var_value)
@@ -128,7 +130,8 @@ class FileActionProvider(ActionProvider):
     """Base class for providers which work on individual files"""
     action_key = '_file'
     CACHEABLE_SEARCHERS = ('walk.files',)
-    cache = ('nothing', '', tuple())  # global cache <search_type, path, list_of_entries>
+    # global cache <search_type, path, list_of_entries>
+    cache = ('nothing', '', tuple())
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
@@ -151,9 +154,9 @@ class FileActionProvider(ActionProvider):
             self.ds['path'] = self.paths[0]
             if not len(self.paths) == 1:
                 logger.warning(
-# TRANSLATORS: Multi-value variables are explained in the online documentation.
-# Basically, they are like an environment variable, but each multi-value variable
-# can have multiple values. They're a way to make CleanerML files more concise.
+                    # TRANSLATORS: Multi-value variables are explained in the online documentation.
+                    # Basically, they are like an environment variable, but each multi-value variable
+                    # can have multiple values. They're a way to make CleanerML files more concise.
                     _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
@@ -207,7 +210,8 @@ class FileActionProvider(ActionProvider):
             wholeregex_c_search = None
 
         if self.nwholeregex:
-            nwholeregex_c_search = re.compile(self.nwholeregex, re_flags).search
+            nwholeregex_c_search = re.compile(
+                self.nwholeregex, re_flags).search
         else:
             nwholeregex_c_search = None
 
@@ -242,7 +246,7 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
-                path = None # sentinel value
+                path = None  # sentinel value
                 for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
                 # This condition executes when there are zero iterations
@@ -252,9 +256,9 @@ class FileActionProvider(ActionProvider):
                     # indicate the cleaner developer made a mistake.
                     if os.path.isfile(expanded):
                         logger.debug(
-# TRANSLATORS: This is a lint-style warning that there seems to be a
-# mild mistake in the CleanerML file because walk.all is expected to
-# be used with directories instead of with files.
+                            # TRANSLATORS: This is a lint-style warning that there seems to be a
+                            # mild mistake in the CleanerML file because walk.all is expected to
+                            # be used with directories instead of with files.
                             _('search="walk.all" used with regular file path="%s"'),
                             expanded,
                         )
@@ -290,11 +294,11 @@ class FileActionProvider(ActionProvider):
         cache = self.__class__.cache
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
-# TRANSLATORS: This is a lint-style warning that the CleanerML file
-# specified a search for glob, but the path specified didn't have any
-# wildcard patterns. Therefore, maybe the developer either missed
-# the wildcard or should search using path="file" which does not
-# expect or support wildcards in the path.
+                # TRANSLATORS: This is a lint-style warning that the CleanerML file
+                # specified a search for glob, but the path specified didn't have any
+                # wildcard patterns. Therefore, maybe the developer either missed
+                # the wildcard or should search using path="file" which does not
+                # expect or support wildcards in the path.
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
             # use cache
@@ -304,7 +308,7 @@ class FileActionProvider(ActionProvider):
                     yield x
                 return
             else:
-                #if self.search in self.CACHEABLE_SEARCHERS:
+                # if self.search in self.CACHEABLE_SEARCHERS:
                 #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
                 #                 cache[0], cache[1], self.search, input_path)
                 self.__class__.cache = ('cleared by', input_path, tuple())

@@ -58,7 +58,8 @@ class CLITestCase(common.BleachbitTestCase):
                          % (output[0], output[2]))
         pos = output[2].find('Traceback (most recent call last)')
         if pos > -1:
-            print("Saw the following error when using args '%s':\n %s" % (args, output[2]))
+            print("Saw the following error when using args '%s':\n %s" %
+                  (args, output[2]))
         self.assertEqual(pos, -1)
 
     def test_args_to_operations(self):
@@ -80,7 +81,8 @@ class CLITestCase(common.BleachbitTestCase):
     def test_encoding(self):
         """Unit test for encoding"""
 
-        filename = self.write_file('/tmp/bleachbit-test-cli-encoding-\xe4\xf6\xfc~')
+        filename = self.write_file(
+            '/tmp/bleachbit-test-cli-encoding-\xe4\xf6\xfc~')
         # not assertExists because it doesn't cope with invalid encodings
         self.assertTrue(os.path.exists(filename))
 
@@ -113,7 +115,8 @@ class CLITestCase(common.BleachbitTestCase):
         module = 'bleachbit.CLI'
         big_args = [sys.executable, '-m', module, '--preview', ]
         for cleaner in cleaners_list():
-            args_list.append([sys.executable, '-m', module, '--preview', cleaner])
+            args_list.append(
+                [sys.executable, '-m', module, '--preview', cleaner])
             big_args.append(cleaner)
         args_list.append(big_args)
         for args in args_list:
@@ -122,35 +125,36 @@ class CLITestCase(common.BleachbitTestCase):
     def test_delete(self):
         """Unit test for --delete option"""
         prefixes = [
-            'bleachbit-test-cli-delete', 
+            'bleachbit-test-cli-delete',
             '\x8b\x8b-bad-encoding'
         ]
         for i in range(len(prefixes)):
-            
+
             filename = self.mkstemp(prefix=prefixes[i])
             if 'nt' == os.name:
                 filename = os.path.normcase(filename)
             # replace delete function for testing
             save_delete = FileUtilities.delete
-    
+
             deleted_paths = []
             crash = [False]
-    
+
             def dummy_delete(path, shred=False):
                 try:
                     self.assertExists(path)
                 except:
                     crash[0] = True
-    
+
                 deleted_paths.append(os.path.normcase(path))
-    
+
             FileUtilities.delete = dummy_delete
             FileUtilities.delete(filename)
             self.assertExists(filename)
             operations = args_to_operations(['system.tmp'], False)
             preview_or_clean(operations, True)
             FileUtilities.delete = save_delete
-            self.assertIn(filename, deleted_paths, "%s not found deleted" % filename)
+            self.assertIn(filename, deleted_paths,
+                          "%s not found deleted" % filename)
             os.remove(filename)
             self.assertNotExists(filename)
             self.assertFalse(crash[0])
@@ -161,13 +165,14 @@ class CLITestCase(common.BleachbitTestCase):
         dirs = ['.', None]
         for dir_ in dirs:
             for suffix in suffixes:
-                (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
+                (fd, filename) = tempfile.mkstemp(
+                    prefix='bleachbit-test-cli-shred', suffix=suffix, dir=dir_)
                 os.close(fd)
                 if '.' == dir_:
                     filename = os.path.basename(filename)
                 # not assertExists because something strange happens on Windows
                 self.assertTrue(os.path.exists(filename))
-                args = [sys.executable, '-m', 'bleachbit.CLI', '--shred', filename]
+                args = [sys.executable, '-m',
+                        'bleachbit.CLI', '--shred', filename]
                 output = run_external(args)
                 self.assertNotExists(filename)
-

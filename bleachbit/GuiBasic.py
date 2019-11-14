@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from bleachbit import _, expanduser
+from gi.repository import Gtk, Gdk
 """
 Basic GUI code
 """
@@ -27,9 +29,7 @@ import os
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
 
-from bleachbit import _, expanduser
 if os.name == 'nt':
     from bleachbit import Windows
 

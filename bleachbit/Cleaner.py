@@ -21,7 +21,7 @@
 Perform (or assist with) cleaning operations.
 """
 
-from __future__ import absolute_import # keep at top
+from __future__ import absolute_import  # keep at top
 
 import glob
 import logging
@@ -608,7 +608,8 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except:
-                    logging.getLogger(__name__).info('error in empty_recycle_bin()', exc_info=True)
+                    logging.getLogger(__name__).info(
+                        'error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.
@@ -668,7 +669,7 @@ class System(Cleaner):
         return False
 
 
-def register_cleaners(cb_progress = lambda x: None, cb_done = lambda: None):
+def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
     global backends
 
@@ -695,7 +696,7 @@ def register_cleaners(cb_progress = lambda x: None, cb_done = lambda: None):
 
     cb_done()
 
-    yield False # end the iteration
+    yield False  # end the iteration
 
 
 def create_simple_cleaner(paths):
