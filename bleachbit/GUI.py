@@ -18,6 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+GTK graphical user interface
+"""
+
+from __future__ import absolute_import, print_function
+
 from bleachbit import GuiBasic
 from bleachbit import Cleaner, FileUtilities
 from bleachbit import _, APP_NAME, appicon_path, portable_mode
@@ -26,11 +32,7 @@ from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
-"""
-GTK graphical user interface
-"""
 
-from __future__ import absolute_import, print_function
 
 import logging
 import os

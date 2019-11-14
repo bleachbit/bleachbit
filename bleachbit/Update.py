@@ -18,7 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import xml.dom.minidom
 """
 Check for updates via the Internet
 """
@@ -35,6 +34,7 @@ import os.path
 import platform
 import socket
 import sys
+import xml.dom.minidom
 if sys.version >= (3, 0):
     from urllib.request import build_opener
     from urllib.error import URLError
