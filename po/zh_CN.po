@@ -54,7 +54,7 @@ msgstr "删除使用记录"
 msgid "Cache"
 msgstr "缓存"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
 #: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
@@ -73,7 +73,7 @@ msgstr "删除缓存文件"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Action.py:447 ../bleachbit/Cleaner.py:217
@@ -81,7 +81,7 @@ msgstr "删除缓存文件"
 msgid "Vacuum"
 msgstr "整理数据库"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:218
@@ -90,7 +90,7 @@ msgid ""
 "removing any data"
 msgstr "清理数据库碎片以减少空间并提高速度(无需删除任何数据)"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "包管理器"
 

@@ -51,7 +51,7 @@ msgstr "Fshij historinë e përdorimit"
 msgid "Cache"
 msgstr "Cache (vend i fshehtë)"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
 #: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
@@ -70,7 +70,7 @@ msgstr "Fshij cache (vend i fshehur)"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:216 ../bleachbit/Cleaner.py:362
@@ -78,7 +78,7 @@ msgstr "Fshij cache (vend i fshehur)"
 msgid "Vacuum"
 msgstr "Vakumi"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:217
@@ -89,7 +89,7 @@ msgstr ""
 "Pastro fragmentimin e databazës për të reduktuar hapësirën dhe përmirësuar "
 "shpejtësinë, pa larguar asnjë të dhënë"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "Menaxheri i pakove"
 

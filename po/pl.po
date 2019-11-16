@@ -59,7 +59,7 @@ msgstr "Usuń historię użycia"
 msgid "Cache"
 msgstr "Pamięć podręczna"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
 #: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
@@ -78,7 +78,7 @@ msgstr "Usuń pamięć podręczną"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:216 ../bleachbit/Cleaner.py:362
@@ -86,7 +86,7 @@ msgstr "Usuń pamięć podręczną"
 msgid "Vacuum"
 msgstr "Defragmentacja bazy danych"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:217
@@ -97,7 +97,7 @@ msgstr ""
 "Uporządkuj bazę danych redukując zajmowane przez nią miejsce oraz "
 "przyspieszając dostęp do niej bez usuwania żadnych danych"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "Menedżer pakietów"
 

@@ -250,3 +250,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = yum_clean()
             self.assertIsInteger(bytes_freed)
             bleachbit.logger.debug('yum bytes cleaned %d', bytes_freed)
+
+    @common.skipIfWindows
+    def test_dnf_clean(self):
+        """Unit test for dnf_clean()"""
+        if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
+                or not FileUtilities.exe_exists('dnf'):
+            self.assertRaises(RuntimeError, dnf_clean)
+        else:
+            bytes_freed = dnf_clean()
+            self.assertIsInteger(bytes_freed)
+            bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)

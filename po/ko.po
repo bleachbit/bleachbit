@@ -54,7 +54,7 @@ msgstr "사용 기록을 삭제합니다"
 msgid "Cache"
 msgstr "캐시"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
 #: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
@@ -73,7 +73,7 @@ msgstr "캐시를 삭제합니다"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:216 ../bleachbit/Cleaner.py:362
@@ -81,7 +81,7 @@ msgstr "캐시를 삭제합니다"
 msgid "Vacuum"
 msgstr "최적화"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:217
@@ -90,7 +90,7 @@ msgid ""
 "removing any data"
 msgstr "데이터베이스에 차지하는 공간을 줄이고 속도를 향상하기 위해 데이터 삭제 없이 데이터베이스를 청소합니다"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "패키지 관리자"
 

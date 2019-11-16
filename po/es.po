@@ -175,14 +175,14 @@ msgstr "Esta opción eliminará sus contraseñas guardadas."
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
 #: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/opera.xml ../bleachbit/Action.py:592
 msgid "Vacuum"
 msgstr "Compactar"
 
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/google_chrome.xml ../cleaners/waterfox.xml
 #: ../cleaners/thunderbird.xml ../cleaners/firefox.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/opera.xml
@@ -287,7 +287,7 @@ msgstr "Registros"
 msgid "Delete the logs"
 msgstr "Eliminar los registros"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/flash.xml
 #: ../cleaners/waterfox.xml ../cleaners/libreoffice.xml ../cleaners/gftp.xml
 #: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/evolution.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/miro.xml ../cleaners/java.xml
@@ -319,7 +319,7 @@ msgstr "Juego"
 msgid "Delete the list of game servers"
 msgstr "Eliminar la lista de los servidores del juegos"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "Gestor de paquetes"
 

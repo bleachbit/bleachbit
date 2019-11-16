@@ -54,7 +54,7 @@ msgstr "Delete the usage history"
 msgid "Cache"
 msgstr "Cache"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/liferea.xml
 #: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
@@ -73,7 +73,7 @@ msgstr "Delete the cache"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:216 ../bleachbit/Cleaner.py:362
@@ -81,7 +81,7 @@ msgstr "Delete the cache"
 msgid "Vacuum"
 msgstr "Compact database"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/safari.xml
 #: ../cleaners/liferea.xml ../cleaners/chromium.xml
 #: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
 #: ../bleachbit/Cleaner.py:217
@@ -92,7 +92,7 @@ msgstr ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "Package manager"
 

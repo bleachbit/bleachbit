@@ -54,7 +54,7 @@ msgstr "حذف سجل الإستخدام"
 msgid "Cache"
 msgstr "الذاكرة المؤقتة"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
 #: ../cleaners/firefox.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/liferea.xml ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml
@@ -74,14 +74,14 @@ msgstr "حذف الذاكرة المؤقتة"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/firefox.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/firefox.xml
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/thunderbird.xml ../bleachbit/Action.py:505
 msgid "Vacuum"
 msgstr "إزالة مساحات الذاكرة المهدورة"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/firefox.xml
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/firefox.xml
 #: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/opera.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/thunderbird.xml
@@ -92,7 +92,7 @@ msgstr ""
 "إزالة البيانات المبعثرة من قاعدة البيانات لتقليل حجم البيانات المستخدمه "
 "وتحسين السرعه بدون خسارة اي بيانات"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/yum.xml ../cleaners/dnf.xml ../cleaners/apt.xml
 msgid "Package manager"
 msgstr "مدير الحزم"
 
