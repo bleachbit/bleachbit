@@ -948,9 +948,17 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_configure_event(self, widget, event):
         # save window position and size
-        if self.is_maximized():
-            return
+        screen = self.get_screen()
+        (screen_w, screen_h) = (screen.get_width(), screen.get_height())
         (x, y) = self.get_position()
+        if x >= screen_w or y >= screen_h:
+            monitor = screen.get_monitor_at_window(self.get_window())
+            g = screen.get_monitor_geometry(monitor)
+            print("Fixup moving the window off the screen: window (x, y) = {}, screen (w, h) = {}, monitor (x, y) = {}, (w, h) = {}".format(
+                (x, y), (screen_w, screen_h),
+                (g.x, g.y), (g.width, g.height)))
+            self.move(g.x, g.y)
+            return True
         options.set("window_x", x, commit=False)
         options.set("window_y", y, commit=False)
         (width, height) = self.get_size()
