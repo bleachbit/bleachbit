@@ -429,11 +429,10 @@ def get_recycle_bin():
     for item in h:
         path = h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
         if os.path.isdir(path):
-            if not is_link(path):
-                # Return the contents of a normal directory, but do
-                # not recurse Windows symlinks in the Recycle Bin.
-                for child in FileUtilities.children_in_directory(path, True):
-                    yield child
+            # Return the contents of a normal directory, but do
+            # not recurse Windows symlinks in the Recycle Bin.
+            for child in FileUtilities.children_in_directory(path, True):
+                yield child
         yield path
 
 
@@ -444,7 +443,7 @@ def get_windows_version():
     return Decimal(vstr)
 
 
-def is_link(path):
+def is_junction(path):
     """Check whether the path is a link
 
     On Python 2.7 the function os.path.islink() always returns False,
