@@ -21,9 +21,9 @@
     @app aMule
     @url http://www.amule.org/
     @os Windows, Linux
-    @cleanerversion v2.0.0
-    @cleanerdate 2019-03-18
-    @cleanerby juancarlospaco (2009-06-25) & Andrew Ziem (2009-06-25 - 2009-10-04) & pereorga (2018-06-10) & Tobias B. Besemer (2019-03-15 - 2019-03-18)
+    @cleanerversion v3.0.1.0
+    @cleanerdate 2019-11-15
+    @cleanerby juancarlospaco (2009-06-25) & Andrew Ziem (2009-06-25 - 2009-10-04) & pereorga (2018-06-10) & Tobias B. Besemer (2019-03-15 - 2019-11-15)
     @tested ok v???, ???
     @testeddate 
     @testedby 
@@ -41,7 +41,6 @@
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="file" path="$$profile$$\logfile"/>
-    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
@@ -60,6 +59,11 @@
     <description>Delete the usage history</description>
     <action command="delete" search="file" path="$$profile$$\emfriends.met"/>
     <action command="delete" search="file" path="$$profile$$\clients.met"/>
+  </option>
+  <option id="backup">
+    <label>Backup files</label>
+    <description>Delete the backup files</description>
+    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
     <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
   </option>
 </cleaner>
