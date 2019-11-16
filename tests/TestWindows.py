@@ -87,7 +87,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             self.fail('recycle bin should be empty, but it is not')
 
     def _test_link_helper(self, mklink_option, clear_recycle_bin):
-        """Helper function for testing for links with is_link() and
+        """Helper function for testing for links with is_junction() and
         get_recycle_bin()
 
         It gets called four times for the combinations of the two
@@ -107,19 +107,19 @@ class WindowsTestCase(common.BleachbitTestCase):
         target_dir = os.path.join(self.tempdir, 'target_dir')
         os.mkdir(target_dir)
         self.assertExists(target_dir)
-        self.assertFalse(is_link(target_dir))
+        self.assertFalse(is_junction(target_dir))
 
         from random import randint
         canary_fn = os.path.join(target_dir, 'do_not_delete%d' % randint(1000,9999))
         common.touch_file(canary_fn)
         self.assertExists(canary_fn)
-        self.assertFalse(is_link(canary_fn))
+        self.assertFalse(is_junction(canary_fn))
 
         # make a normal directory to hold a link
         container_dir = os.path.join(self.tempdir, 'container_dir')
         os.mkdir(container_dir)
         self.assertExists(container_dir)
-        self.assertFalse(is_link(container_dir))
+        self.assertFalse(is_junction(container_dir))
 
         # create the link
         link_pathname = os.path.join(container_dir, 'link')
@@ -128,7 +128,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_pathname)
-        self.assertTrue(is_link(link_pathname))
+        self.assertTrue(is_junction(link_pathname))
 
         # put the link in the recycle bin
         move_to_recycle_bin(container_dir)

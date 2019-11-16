@@ -33,7 +33,7 @@ import errno
 import glob
 import locale
 import logging
-import os
+import os, os.path
 import random
 import re
 import stat
@@ -48,6 +48,9 @@ logger = logging.getLogger(__name__)
 if 'nt' == os.name:
     from pywintypes import error as pywinerror
     import win32file
+    import bleachbit.Windows
+    os_path_islink = os.path.islink
+    os.path.islink = lambda path: os_path_islink(path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
