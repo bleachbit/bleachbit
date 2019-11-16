@@ -57,14 +57,11 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 # mpass=passes for deflate encoder
 # mfb=number of fast bytes
 # bso0 bsp0 quiet output
-# Was: SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-SZ_OPTS = '-tzip -mx9 -mm=Deflate64' # best compression
+SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
-    # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-    # Was: SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
-    SZ_OPTS = '-tzip -mx1 -mm=Deflate64'
+    SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
 UPX_EXE = ROOT_DIR + '\\upx394w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
