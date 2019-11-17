@@ -675,5 +675,19 @@ def yum_clean():
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
+def dnf_clean():
+    """Run 'dnf clean all' and return size in bytes recovered"""
+    if os.path.exists('/var/run/dnf.pid'):
+        msg = _(
+            "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
+        raise RuntimeError(msg)
+
+    old_size = FileUtilities.getsizedir('/var/cache/dnf')
+    args = ['--enablerepo=*', 'clean', 'all']
+    invalid = ['You need to be root', 'Cannot remove rpmdb file']
+    run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
+    new_size = FileUtilities.getsizedir('/var/cache/dnf')
+    return old_size - new_size
+
 
 locales = Locales()
