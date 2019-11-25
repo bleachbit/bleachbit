@@ -121,9 +121,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_bytes_to_human(self):
         """Unit test for class bytes_to_human"""
 
-        if 'posix' == os.name:
-            old_locale = locale.getlocale(locale.LC_NUMERIC)
-            locale.setlocale(locale.LC_NUMERIC, 'en_US.UTF-8')
+        old_locale = locale.getlocale(locale.LC_NUMERIC)
+        locale.setlocale(locale.LC_NUMERIC, 'C')
 
         # test one-way conversion for predefined values
         # each test is a tuple in the format: (bytes, SI, EIC)
@@ -176,8 +175,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
         # clean up
-        if 'posix' == os.name:
-            locale.setlocale(locale.LC_NUMERIC, old_locale)
+        locale.setlocale(locale.LC_NUMERIC, old_locale)
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
