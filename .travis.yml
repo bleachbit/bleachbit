@@ -1,11 +1,13 @@
 language: python
+cache: pip
 python:
   - "2.7"
 before_install:
   - export VIRT_ROOT=/home/travis/virtualenv/python$TRAVIS_PYTHON_VERSION
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
-  - sudo apt-get install libxml2-utils
+  - sudo apt-get install gir1.2-gtk-3.0 libgirepository1.0-dev libxml2-utils
+  - pip install PyGObject
 # coveralls.io
   - pip install python-coveralls requests[security]
 # install mock
@@ -15,7 +17,7 @@ script:
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
    - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >bleachbit/Revision.py
 # Run tests.
-   - make tests COVERAGE="coverage run --include='bleachbit/*'"
+   - xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
    - mv .coverage .coverage.travis
    - sudo pip install appveyor-artifacts
