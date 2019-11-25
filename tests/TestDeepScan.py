@@ -124,6 +124,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ui = CLI.CliCallback()
         worker = Worker(ui, True, operations)
         list(worker.run())
+        del backends['test']
 
         # validate results
         self.assertFalse(os.path.exists(f_del1))
