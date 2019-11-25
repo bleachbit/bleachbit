@@ -211,18 +211,19 @@ class Bleachbit(Gtk.Application):
         operations = {'_gui': ['free_disk_space']}
         self._window.preview_or_run_operations(True, operations)
 
+    def get_preferences_dialog(self):
+        return PreferencesDialog(
+            self._window, self._window.cb_refresh_operations)
+
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(
-            self._window, self._window.cb_refresh_operations)
+        pref = self.get_preferences_dialog()
         pref.run()
 
         # In case the user changed the log level...
         GUI.update_log_level(self._window)
 
-    def about(self, _action, _param):
-        """Create and show the about dialog"""
-
+    def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
                                  copyright='Copyright (C) 2008-2018 Andrew Ziem',
                                  program_name=APP_NAME,
@@ -244,8 +245,14 @@ class Bleachbit(Gtk.Application):
         if appicon_path and os.path.exists(appicon_path):
             icon = Gtk.Image.new_from_file(appicon_path)
             dialog.set_logo(icon.get_pixbuf())
+
+        return dialog
+
+    def about(self, _action, _param):
+        """Create and show the about dialog"""
+        dialog = self.get_about_dialog()
         dialog.run()
-        dialog.hide()
+        dialog.destroy()
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -254,7 +261,7 @@ class Bleachbit(Gtk.Application):
     def quit(self, _action=None, _param=None):
         self._window.destroy()
 
-    def diagnostic_dialog(self, _action, _param):
+    def get_diagnostics_dialog(self):
         """Show diagnostic information"""
         dialog = Gtk.Dialog(_("System information"), self._window)
         dialog.set_default_size(600, 400)
@@ -270,6 +277,10 @@ class Bleachbit(Gtk.Application):
         dialog.vbox.pack_start(swindow, True, True, 0)
         dialog.add_buttons(Gtk.STOCK_COPY, 100,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
+        return dialog
+
+    def diagnostic_dialog(self, _action, _param):
+        dialog = self.get_diagnostics_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
@@ -278,7 +289,7 @@ class Bleachbit(Gtk.Application):
                 clipboard.set_text(txt, -1)
             else:
                 break
-        dialog.hide()
+        dialog.destroy()
 
     def do_activate(self):
         if not self._window:

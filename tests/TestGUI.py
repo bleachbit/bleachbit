@@ -26,7 +26,10 @@ Test case for module GUI
 from __future__ import absolute_import
 
 import os
+import time
 import unittest
+
+os.environ['LANGUAGE'] = 'en'
 
 try:
     import gi
@@ -37,24 +40,108 @@ try:
 except ImportError:
     HAVE_GTK = False
 
+from bleachbit import _
+from bleachbit.GuiPreferences import PreferencesDialog
 from tests import common
 
-IS_APPVEYOR = os.getenv('APPVEYOR') is not None
-
-
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
-@unittest.skipIf(IS_APPVEYOR, 'test not yet supported on AppVeyor')
 class GUITestCase(common.BleachbitTestCase):
+    app = Bleachbit(auto_exit=True, uac=False)
+
     """Test case for module GUI"""
+    @classmethod
+    def setUpClass(cls):
+        """Create a temporary directory for the testcase"""
+        super(GUITestCase, GUITestCase).setUpClass()
+        cls.app.run()
+
+    @classmethod
+    def refresh_gui(cls, delay=0):
+        while Gtk.events_pending():
+            Gtk.main_iteration_do(blocking=False)
+        time.sleep(delay)
+
+    @classmethod
+    def print_children(cls, widget, indent=0):
+        print('{}{}'.format(' ' * indent, c))
+        if isinstance(widget, Gtk.Container):
+            for c in widget.get_children():
+                cls.print_children(c, indent + 2)
+
+    @classmethod
+    def find_button(cls, widget, text):
+        if isinstance(widget, Gtk.Button):
+            if widget.get_label() == text:
+                return widget
+        if isinstance(widget, Gtk.Container):
+            for c in widget.get_children():
+                b = cls.find_button(c, text)
+                if b is not None:
+                    return b
+        return None
+
+    def click_button(self, dialog, text):
+        b = self.find_button(dialog, text)
+        self.assertIsNotNone(b)
+        b.clicked()
+        self.refresh_gui()
 
     def test_GUI(self):
         """Unit test for class GUI"""
         # there should be no crashes
-        app = Bleachbit(auto_exit=True)
         # app.do_startup()
-        # pp.do_activate()
-        app.run()
-        gui = app._window
+        # pp.do_activate()                            Build a unit test that that does this
+        gui = self.app._window
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
+
+    def test_shred(self):
+        """
+        - Create a named temporary file
+        - Do the equivalent of opening the menu and clicking "Shred Files"
+        - Find the named temporary files
+        - Shred it
+        - Verify it is gone
+        """
+
+    def test_preferences(self):
+        """Opens the preferences dialog and closes it"""
+
+        # show preferences dialog
+        pref = self.app.get_preferences_dialog()
+        pref.dialog.show_all()
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
+
+        # destroy
+        pref.dialog.destroy()
+
+    def test_diagnostics(self):
+        """Opens the diagnostics dialog and closes it"""
+        dialog = self.app.get_diagnostics_dialog()
+        dialog.show_all()
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(dialog, Gtk.STOCK_CLOSE)
+
+        # destroy
+        dialog.destroy()
+
+    def test_about(self):
+        """Opens the about dialog and closes it"""
+        about = self.app.get_about_dialog()
+        about.show_all()
+        self.refresh_gui()
+
+        # destroy
+        about.destroy()
+
+    def test_clean_chrome_cookies(self):
+        """
+        - Select Google Chrome/Cookies checkbox option
+        - Click preview button
+        """
