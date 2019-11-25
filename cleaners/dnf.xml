@@ -27,4 +27,9 @@
     <description>Delete the cache</description>
     <action command="dnf.clean_all"/>
   </option>
+  <option id="autoremove">
+    <label translate="false">autoremove</label>
+    <description>Autoremove orphaned packages</description>
+    <action command="dnf.autoremove"/>
+  </option>
 </cleaner>
