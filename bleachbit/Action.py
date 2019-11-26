@@ -652,8 +652,8 @@ class YumCleanAll(ActionProvider):
             None,
             Unix.yum_clean,
             'yum clean all')
-            
-            
+
+
 class DnfCleanAll(ActionProvider):
 
     """Action to run 'dnf clean all'"""
@@ -672,6 +672,7 @@ class DnfCleanAll(ActionProvider):
             Unix.dnf_clean,
             'dnf clean all')
 
+
 class DnfAutoremove(ActionProvider):
 
     """Action to run 'dnf autoremove'"""
@@ -689,5 +690,3 @@ class DnfAutoremove(ActionProvider):
             None,
             Unix.dnf_autoremove,
             'dnf autoremove')
-
-

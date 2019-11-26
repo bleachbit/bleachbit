@@ -272,5 +272,3 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
-
-
