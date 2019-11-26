@@ -29,7 +29,8 @@
   </option>
   <option id="autoremove">
     <label translate="false">autoremove</label>
-    <description>Autoremove orphaned packages</description>
+    <warning>Carefully review the list of packages that will be removed by running "dnf list autoremove".</warning>
+    <description>Remove packages that were formerly dependencies</description>
     <action command="dnf.autoremove"/>
   </option>
 </cleaner>
