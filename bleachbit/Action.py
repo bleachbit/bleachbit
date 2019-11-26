@@ -669,3 +669,22 @@ class DnfCleanAll(ActionProvider):
             Unix.dnf_clean,
             'dnf clean all')
 
+class DnfAutoremove(ActionProvider):
+
+    """Action to run 'dnf autoremove'"""
+    action_key = 'dnf.autoremove'
+
+    def __init__(self, action_element, path_vars=None):
+        pass
+
+    def get_commands(self):
+        # Checking allows auto-hide to work for non-APT systems
+        if not FileUtilities.exe_exists('dnf'):
+            raise StopIteration
+
+        yield Command.Function(
+            None,
+            Unix.dnf_autoremove,
+            'dnf autoremove')
+
+
