@@ -551,6 +551,7 @@ class System(Cleaner):
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
                 clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.set_text(' ',1)
                 clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
