@@ -29,8 +29,8 @@
   </option>
   <option id="autoremove">
     <label translate="false">autoremove</label>
-    <warning>Carefully review the list of packages that will be removed by running "dnf list autoremove".</warning>
     <description>Remove packages that were formerly dependencies</description>
+    <warning>Carefully review the list of packages that will be removed by running "dnf list autoremove".</warning>
     <action command="dnf.autoremove"/>
   </option>
 </cleaner>
