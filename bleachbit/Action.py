@@ -135,6 +135,7 @@ class FileActionProvider(ActionProvider):
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
+        ActionProvider.__init__(self, action_element, path_vars)
         self.regex = action_element.getAttribute('regex')
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.nregex = action_element.getAttribute('nregex')
@@ -340,7 +341,7 @@ class AptAutoclean(ActionProvider):
     action_key = 'apt.autoclean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -356,7 +357,7 @@ class AptAutoremove(ActionProvider):
     action_key = 'apt.autoremove'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -372,7 +373,7 @@ class AptClean(ActionProvider):
     action_key = 'apt.clean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -479,7 +480,7 @@ class Journald(ActionProvider):
     action_key = 'journald.clean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         if FileUtilities.exe_exists('journalctl'):
@@ -531,6 +532,7 @@ class Process(ActionProvider):
     action_key = 'process'
 
     def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
         self.cmd = expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
@@ -625,6 +627,7 @@ class Winreg(ActionProvider):
     action_key = 'winreg'
 
     def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
         self.keyname = action_element.getAttribute('path')
         self.name = action_element.getAttribute('name')
 
@@ -638,7 +641,7 @@ class YumCleanAll(ActionProvider):
     action_key = 'yum.clean_all'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
@@ -657,7 +660,7 @@ class DnfCleanAll(ActionProvider):
     action_key = 'dnf.clean_all'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
@@ -675,7 +678,7 @@ class DnfAutoremove(ActionProvider):
     action_key = 'dnf.autoremove'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
