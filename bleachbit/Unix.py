@@ -710,7 +710,6 @@ def dnf_autoremove():
        line = process.stdout.readline().replace("\n", "")
        if 'Error: This command has to be run under the root user.' == line:
           raise RuntimeError('dnf autoremove >> requires root permissions')
-          break
        if 'Nothing to do.' == line:
           break
        cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
