@@ -893,46 +893,39 @@ class GUI(Gtk.ApplicationWindow):
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
-        def icon_and_label(name, label):
-            """Make a button image with both icon and label"""
-            icon = Gio.ThemedIcon(name=name)
-            grid = Gtk.Grid(column_spacing=5)
-            if os.name == 'nt':
-                icon_size = Gtk.IconSize.BUTTON
-            else:
-                icon_size = Gtk.IconSize.LARGE_TOOLBAR
-            img = Gtk.Image.new_from_gicon(icon, icon_size)
-            label = Gtk.Label(label)
-            grid.attach(img, 0, 0, 1, 1)
-            grid.attach(label, 1, 0, 1, 1)
-            grid.show_all()
-            return grid
+        if os.name == 'nt':
+            icon_size = Gtk.IconSize.BUTTON
+        else:
+            icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         # create the preview button
-        self.preview_button = Gtk.Button()
+        self.preview_button = Gtk.Button.new_from_icon_name('edit-find', icon_size)
+        self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
         self.preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
-        self.preview_button.add(icon_and_label('edit-find', _('Preview')))
+        self.preview_button.set_label(_('Preview'))
         box.add(self.preview_button)
 
         # create the delete button
-        self.run_button = Gtk.Button()
+        self.run_button = Gtk.Button.new_from_icon_name('edit-clear-all', icon_size)
+        self.run_button.set_always_show_image(True)
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
-        self.run_button.add(icon_and_label('edit-clear-all', _('Clean')))
+        self.run_button.set_label(_('Clean'))
         self.run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
         # stop cleaning
-        self.stop_button = Gtk.Button()
-        self.stop_button.add(icon_and_label('process-stop', _('Abort')))
+        self.stop_button = Gtk.Button.new_from_icon_name('process-stop', icon_size)
+        self.stop_button.set_always_show_image(True)
+        self.stop_button.set_label(_('Abort'))
         self.stop_button.set_tooltip_text(
             _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)

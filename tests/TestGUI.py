@@ -27,6 +27,7 @@ from __future__ import absolute_import
 
 import os
 import time
+import types
 import unittest
 
 os.environ['LANGUAGE'] = 'en'
@@ -42,18 +43,28 @@ except ImportError:
 
 from bleachbit import _
 from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options, Options
 from tests import common
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
-    app = Bleachbit(auto_exit=True, uac=False)
+    app = Bleachbit(auto_exit=False, uac=False)
+    options_get_tree = options.get_tree
 
     """Test case for module GUI"""
     @classmethod
     def setUpClass(cls):
-        """Create a temporary directory for the testcase"""
         super(GUITestCase, GUITestCase).setUpClass()
-        cls.app.run()
+        options.set('first_start', False)
+        options.get_tree = types.MethodType(lambda self, parent, child: False, options, Options)
+        cls.app.register()
+        cls.app.activate()
+        cls.refresh_gui()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(GUITestCase, GUITestCase).tearDownClass()
+        options.get_tree = cls.options_get_tree
 
     @classmethod
     def refresh_gui(cls, delay=0):
@@ -62,26 +73,26 @@ class GUITestCase(common.BleachbitTestCase):
         time.sleep(delay)
 
     @classmethod
-    def print_children(cls, widget, indent=0):
-        print('{}{}'.format(' ' * indent, c))
+    def print_widget(cls, widget, indent=0):
+        print('{}{}'.format(' ' * indent, widget))
         if isinstance(widget, Gtk.Container):
             for c in widget.get_children():
                 cls.print_children(c, indent + 2)
 
     @classmethod
-    def find_button(cls, widget, text):
-        if isinstance(widget, Gtk.Button):
-            if widget.get_label() == text:
+    def find_widget(cls, widget, widget_class, widget_label=None):
+        if isinstance(widget, widget_class):
+            if widget_label is None or widget.get_label() == widget_label:
                 return widget
         if isinstance(widget, Gtk.Container):
             for c in widget.get_children():
-                b = cls.find_button(c, text)
+                b = cls.find_widget(c, widget_class, widget_label)
                 if b is not None:
                     return b
         return None
 
-    def click_button(self, dialog, text):
-        b = self.find_button(dialog, text)
+    def click_button(self, dialog, label):
+        b = self.find_widget(dialog, Gtk.Button, label)
         self.assertIsNotNone(b)
         b.clicked()
         self.refresh_gui()
@@ -95,15 +106,6 @@ class GUITestCase(common.BleachbitTestCase):
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
-
-    def test_shred(self):
-        """
-        - Create a named temporary file
-        - Do the equivalent of opening the menu and clicking "Shred Files"
-        - Find the named temporary files
-        - Shred it
-        - Verify it is gone
-        """
 
     def test_preferences(self):
         """Opens the preferences dialog and closes it"""
@@ -140,8 +142,39 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         about.destroy()
 
-    def test_clean_chrome_cookies(self):
-        """
-        - Select Google Chrome/Cookies checkbox option
-        - Click preview button
-        """
+    def test_preview(self):
+        """Select cleaner option and clicks preview button"""
+        gui = self.app._window
+        self.refresh_gui()
+        model = gui.view.get_model()
+        tree = self.find_widget(gui, Gtk.TreeView)
+        self.assertIsNotNone(tree)
+
+        def get_iter(model, cleaner):
+            it = model.get_iter(Gtk.TreePath(0))
+            while it:
+                if model[it][2] == cleaner:
+                    return model.iter_children(it)
+                it = model.iter_next(it)
+            return None
+
+        def find_option(model, cleaner, option):
+            it = get_iter(model, cleaner)
+            self.assertIsNotNone(it)
+            while it:
+                if model[it][2] == option:
+                    return it
+                it = model.iter_next(it)
+            return None
+
+        it = find_option(model, 'system', 'tmp')
+        self.assertIsNotNone(it)
+
+        tree.scroll_to_cell(model.get_path(it), None, False, 0, 0)
+        self.refresh_gui()
+        model[model.iter_parent(it)][1] = True
+        model[it][1] = True
+        self.refresh_gui()
+
+        b = self.click_button(gui, _("Preview"))
+        self.refresh_gui()
