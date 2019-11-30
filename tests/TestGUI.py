@@ -26,7 +26,11 @@ Test case for module GUI
 from __future__ import absolute_import
 
 import os
+import time
+import types
 import unittest
+
+os.environ['LANGUAGE'] = 'en'
 
 try:
     import gi
@@ -37,24 +41,140 @@ try:
 except ImportError:
     HAVE_GTK = False
 
+from bleachbit import _
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Options import options, Options
 from tests import common
 
-IS_APPVEYOR = os.getenv('APPVEYOR') is not None
-
-
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
-@unittest.skipIf(IS_APPVEYOR, 'test not yet supported on AppVeyor')
 class GUITestCase(common.BleachbitTestCase):
+    app = Bleachbit(auto_exit=False, uac=False)
+    options_get_tree = options.get_tree
+
     """Test case for module GUI"""
+    @classmethod
+    def setUpClass(cls):
+        super(GUITestCase, GUITestCase).setUpClass()
+        options.set('first_start', False)
+        options.get_tree = types.MethodType(lambda self, parent, child: False, options, Options)
+        cls.app.register()
+        cls.app.activate()
+        cls.refresh_gui()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(GUITestCase, GUITestCase).tearDownClass()
+        options.get_tree = cls.options_get_tree
+
+    @classmethod
+    def refresh_gui(cls, delay=0):
+        while Gtk.events_pending():
+            Gtk.main_iteration_do(blocking=False)
+        time.sleep(delay)
+
+    @classmethod
+    def print_widget(cls, widget, indent=0):
+        print('{}{}'.format(' ' * indent, widget))
+        if isinstance(widget, Gtk.Container):
+            for c in widget.get_children():
+                cls.print_children(c, indent + 2)
+
+    @classmethod
+    def find_widget(cls, widget, widget_class, widget_label=None):
+        if isinstance(widget, widget_class):
+            if widget_label is None or widget.get_label() == widget_label:
+                return widget
+        if isinstance(widget, Gtk.Container):
+            for c in widget.get_children():
+                b = cls.find_widget(c, widget_class, widget_label)
+                if b is not None:
+                    return b
+        return None
+
+    def click_button(self, dialog, label):
+        b = self.find_widget(dialog, Gtk.Button, label)
+        self.assertIsNotNone(b)
+        b.clicked()
+        self.refresh_gui()
 
     def test_GUI(self):
         """Unit test for class GUI"""
         # there should be no crashes
-        app = Bleachbit(auto_exit=True)
         # app.do_startup()
-        # pp.do_activate()
-        app.run()
-        gui = app._window
+        # pp.do_activate()                            Build a unit test that that does this
+        gui = self.app._window
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
+
+    def test_preferences(self):
+        """Opens the preferences dialog and closes it"""
+
+        # show preferences dialog
+        pref = self.app.get_preferences_dialog()
+        pref.dialog.show_all()
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
+
+        # destroy
+        pref.dialog.destroy()
+
+    def test_diagnostics(self):
+        """Opens the diagnostics dialog and closes it"""
+        dialog = self.app.get_diagnostics_dialog()
+        dialog.show_all()
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(dialog, Gtk.STOCK_CLOSE)
+
+        # destroy
+        dialog.destroy()
+
+    def test_about(self):
+        """Opens the about dialog and closes it"""
+        about = self.app.get_about_dialog()
+        about.show_all()
+        self.refresh_gui()
+
+        # destroy
+        about.destroy()
+
+    def test_preview(self):
+        """Select cleaner option and clicks preview button"""
+        gui = self.app._window
+        self.refresh_gui()
+        model = gui.view.get_model()
+        tree = self.find_widget(gui, Gtk.TreeView)
+        self.assertIsNotNone(tree)
+
+        def get_iter(model, cleaner):
+            it = model.get_iter(Gtk.TreePath(0))
+            while it:
+                if model[it][2] == cleaner:
+                    return model.iter_children(it)
+                it = model.iter_next(it)
+            return None
+
+        def find_option(model, cleaner, option):
+            it = get_iter(model, cleaner)
+            self.assertIsNotNone(it)
+            while it:
+                if model[it][2] == option:
+                    return it
+                it = model.iter_next(it)
+            return None
+
+        it = find_option(model, 'system', 'tmp')
+        self.assertIsNotNone(it)
+
+        tree.scroll_to_cell(model.get_path(it), None, False, 0, 0)
+        self.refresh_gui()
+        model[model.iter_parent(it)][1] = True
+        model[it][1] = True
+        self.refresh_gui()
+
+        b = self.click_button(gui, _("Preview"))
+        self.refresh_gui()

@@ -212,6 +212,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
+        del backends['test']
         self.assertNotExists(filename, "Path still exists '%s'" % filename)
         self.assertEqual(worker.total_special, special_expected,
                          'For command %s expecting %s special operations but observed %d'
@@ -332,6 +333,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
+        del backends['test']
         self.assertNotExists(filename1)
         self.assertNotExists(filename2)
         self.assertEqual(worker.total_special, 0)

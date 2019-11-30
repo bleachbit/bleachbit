@@ -237,7 +237,10 @@ def delete_updates():
 
 def detect_registry_key(parent_key):
     """Detect whether registry key exists"""
-    parent_key = str(parent_key)  # Unicode to byte string
+    try:
+        parent_key = str(parent_key)  # Unicode to byte string
+    except UnicodeEncodeError:
+        return False
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
@@ -448,7 +451,10 @@ def is_link(path):
     so this is needed
     """
     FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-    attr = windll.kernel32.GetFileAttributesW(unicode(path))
+    if isinstance(path, unicode):
+        attr = windll.kernel32.GetFileAttributesW(path)
+    else:
+        attr = windll.kernel32.GetFileAttributesA(path)
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
