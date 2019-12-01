@@ -52,7 +52,6 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         if common.destructive_tests('example_cleaner.xml'):
             self.run_all(xmlcleaner, True)
 
-
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
         tests = [('True', True),
@@ -83,7 +82,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
 
         # should catch exception with invalid XML
         pcd = bleachbit.personal_cleaners_dir
-        bleachbit.personal_cleaners_dir = self.mkdtemp(prefix='bleachbit-cleanerml-load')
+        bleachbit.personal_cleaners_dir = self.mkdtemp(
+            prefix='bleachbit-cleanerml-load')
         self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
                         contents='<xml><broken>')
         list(load_cleaners())
@@ -162,4 +162,3 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.run_all(xmlc, True)
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
-

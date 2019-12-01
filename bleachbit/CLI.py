@@ -140,7 +140,8 @@ def process_cmd_line():
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
-    parser.add_option('--debug', help=_("set log level to verbose"), action="store_true")
+    parser.add_option(
+        '--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
@@ -244,7 +245,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if options.gui:
         import bleachbit.GUI
-        app = bleachbit.GUI.Bleachbit(uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
+        app = bleachbit.GUI.Bleachbit(
+            uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
     if options.shred:
         # delete arbitrary files without GUI

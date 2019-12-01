@@ -85,7 +85,8 @@ def make_dirty(mountpoint):
         except:
             logger.error('while closing temporary file %s', f.name)
             break
-    logger.debug('created %d files and wrote to %d files', create_counter, write_counter)
+    logger.debug('created %d files and wrote to %d files',
+                 create_counter, write_counter)
 
 
 def mount_filesystem(filename, mountpoint):
@@ -118,7 +119,8 @@ def verify_cleanliness(filename):
     strings_ret = run_external(['strings', filename])
     secret_count = strings_ret[1].count('secret')  # filename
     sssshhhh_count = strings_ret[1].count('sssshhhh')  # contents
-    logger.debug('found %d sssshhhhh in image (contents) and %d secret (filename)', sssshhhh_count, secret_count)
+    logger.debug('found %d sssshhhhh in image (contents) and %d secret (filename)',
+                 sssshhhh_count, secret_count)
 
     clean = ((secret_count > 0) * 1) + ((sssshhhh_count > 0) * 10)
     print('%s is clean: %s', filename, clean)
@@ -226,5 +228,6 @@ def test_wipe():
         except:
             print(sys.exc_info()[1])
             traceback.print_exc()
+
 
 test_wipe()

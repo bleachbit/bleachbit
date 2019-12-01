@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from bleachbit.FileUtilities import extended_path, extended_path_undo
 """
 ***
 *** Owner: Andrew Ziem
@@ -121,11 +122,10 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       COMPRESSION_FORMAT_DEFAULT)
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 
-from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
 simulate_concurrency = False     # remove this test function when QA complete
-#drive_letter_safety = "E"       # protection to only use removeable drives
+# drive_letter_safety = "E"       # protection to only use removeable drives
 # don't use C: or D:, but E: and beyond OK.
 tmp_file_name = "bbtemp.dat"
 spike_file_name = "bbspike"     # cluster number will be appended
@@ -136,6 +136,8 @@ logger = logging.getLogger(__name__)
 
 # Unpacks the next element in a structure, using format requested.
 # Returns the element and the remaining content of the structure.
+
+
 def unpack_element(fmt, structure):
     chunk_size = struct.calcsize(fmt)
     element = struct.unpack(fmt, structure[:chunk_size])
@@ -282,7 +284,7 @@ def choose_if_bridged(volume_handle, total_clusters,
     extra_allocated_clusters = count_ballocated - count_oallocated
     saving_in_extents = len(orig_extents) - len(bridged_extents)
     logger.debug(("Bridged extents would require us to work around %d " +
-                   "more allocated clusters.") % extra_allocated_clusters)
+                  "more allocated clusters.") % extra_allocated_clusters)
     logger.debug("It would reduce extent count from %d to %d." % (
         len(orig_extents), len(bridged_extents)))
 
@@ -330,7 +332,7 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
                 count_free += 1
 
     logger.debug("Extents checked: clusters free %d; allocated %d",
-                  count_free, count_allocated)
+                 count_free, count_allocated)
     return (count_free, count_allocated)
 
 
@@ -368,7 +370,7 @@ def check_extents_concurrency(extents, volume_bitmap,
                 count_free += 1
 
     logger.debug("Extents checked: clusters free %d; allocated %d",
-                  count_free, count_allocated)
+                 count_free, count_allocated)
     return (count_free, count_allocated)
 
 
@@ -445,9 +447,9 @@ def get_file_basic_info(file_name, file_handle):
     is_special = is_compressed | is_encrypted | is_sparse
     if is_special:
         logger.debug('{}: {} {} {}'.format(file_name,
-            'compressed' if is_compressed else '',
-            'encrypted' if is_encrypted else '',
-            'sparse' if is_sparse else ''))
+                                           'compressed' if is_compressed else '',
+                                           'encrypted' if is_encrypted else '',
+                                           'sparse' if is_sparse else ''))
     return file_size, is_special
 
 
@@ -477,6 +479,8 @@ class UnsupportedFileSystemError(Exception):
 # First call: Drive Name; Max Path; File System.
 # Second call: Sectors per Cluster; Bytes per Sector; Total # of Clusters.
 # Third call: Drive Type.
+
+
 def get_volume_information(volume):
     # If it's a UNC path, raise an error.
     if not volume:
@@ -502,18 +506,18 @@ def get_volume_information(volume):
             "This file system (UDF) is not supported.")
 
     volume_info = namedtuple('VolumeInfo', [
-            'drive_name', 'max_path', 'file_system',
-            'sectors_per_cluster', 'bytes_per_sector', 'total_clusters'])
+        'drive_name', 'max_path', 'file_system',
+        'sectors_per_cluster', 'bytes_per_sector', 'total_clusters'])
 
     return volume_info(result1[0], result1[2], result1[4],
-            result2[0], result2[1], result2[3])
+                       result2[0], result2[1], result2[3])
 
 
 # Get read/write access to a volume.
 def obtain_readwrite(volume):
     # Optional protection that we are running on removable media only.
     assert volume
-    #if drive_letter_safety:
+    # if drive_letter_safety:
     #    drive_containing_file = volume[0].upper()
     #    assert drive_containing_file >= drive_letter_safety.upper()
 
@@ -772,7 +776,7 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.
         for lcn_start, lcn_end in extents:
-            #logger.debug("Wiping extent from %d to %d...",
+            # logger.debug("Wiping extent from %d to %d...",
             #              lcn_start, lcn_end)
             write_length = (lcn_end - lcn_start + 1) * cluster_size
             write_zero_fill(file_handle, write_length)
@@ -799,7 +803,7 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                           total_clusters, tmp_file_path):
     assert cluster_size > 0
     logger.debug("Examining extent from %d to %d for wipe...",
-                  lcn_start, lcn_end)
+                 lcn_start, lcn_end)
     write_length = (lcn_end - lcn_start + 1) * cluster_size
 
     # Check the state of the volume bitmap for the extent we want to
@@ -851,7 +855,7 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
 
         if new_lcn_start != cluster_dest:
             logger.debug("Move %d clusters to %d",
-                          cluster_count, cluster_dest)
+                         cluster_count, cluster_dest)
             try:
                 move_file(volume_handle, file_handle, new_vcn,
                           cluster_dest, cluster_count)
@@ -956,14 +960,13 @@ def file_wipe(file_name):
     tmp_file_path = os.path.dirname(file_name) + os.sep + tmp_file_name
     if is_special:
         orig_extents = choose_if_bridged(volume_handle,
-                                volume_info.total_clusters,
-                                orig_extents, bridged_extents)
+                                         volume_info.total_clusters,
+                                         orig_extents, bridged_extents)
     for lcn_start, lcn_end in orig_extents:
         result = wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
-                                cluster_size, volume_info.total_clusters,
-                                tmp_file_path)
+                                       cluster_size, volume_info.total_clusters,
+                                       tmp_file_path)
 
     # Clean up.
     clean_up(None, volume_handle, tmp_file_path)
     return
-

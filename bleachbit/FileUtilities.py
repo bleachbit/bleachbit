@@ -56,7 +56,8 @@ if 'posix' == os.name:
 try:
     from scandir import walk
 except ImportError:
-    logger.warning('scandir is not available, so falling back to slower os.walk()')
+    logger.warning(
+        'scandir is not available, so falling back to slower os.walk()')
     from os import walk
 
 
@@ -191,7 +192,8 @@ def clean_ini(path, section, parameter):
         if parser._defaults:
             ini_file.write("[%s]\n" % "DEFAULT")
             for (key, value) in parser._defaults.items():
-                ini_file.write("%s = %s\n" % (key, str(value).replace('\n', '\n\t')))
+                ini_file.write("%s = %s\n" %
+                               (key, str(value).replace('\n', '\n\t')))
             ini_file.write("\n")
         for section in parser._sections:
             ini_file.write("[%s]\n" % section)
@@ -211,7 +213,8 @@ def clean_ini(path, section, parameter):
 
     except ImportError:
         has_chardet = False
-        logger.warning('chardet is not available, so falling to utf-8 encoding')
+        logger.warning(
+            'chardet is not available, so falling to utf-8 encoding')
 
     else:
         has_chardet = True
@@ -220,13 +223,15 @@ def clean_ini(path, section, parameter):
             detector = chardet.universaldetector.UniversalDetector()
             for line in file_.readlines():
                 detector.feed(line)
-                if detector.done: break
+                if detector.done:
+                    break
             detector.close()
 
     # read file to parser
     config = bleachbit.RawConfigParser()
     config.write = write
-    fp = codecs.open(path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig')
+    fp = codecs.open(
+        path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig')
     config.readfp(fp)
 
     # change file
@@ -245,7 +250,8 @@ def clean_ini(path, section, parameter):
         fp.close()
         if options.get('shred'):
             delete(path, True)
-        fp = codecs.open(path, 'wb', encoding=detector.result['encoding'] if has_chardet else 'utf_8')
+        fp = codecs.open(
+            path, 'wb', encoding=detector.result['encoding'] if has_chardet else 'utf_8')
         config.write(config, fp)
 
 
@@ -347,7 +353,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 # If a broken symlink, try os.remove() below.
             except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
+                logger.debug("IOError #%s shredding '%s'",
+                             e.errno, path, exc_info=True)
             # wipe name
             os.remove(wipe_name(path))
         else:
@@ -415,7 +422,8 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = expanduser(bleachbit.expandvars(os.path.join(pathname1, pathname2)))
+    pathname3 = expanduser(bleachbit.expandvars(
+        os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
@@ -556,7 +564,8 @@ def human_to_bytes(human, hformat='si'):
         raise ValueError("Invalid format: '%s'" % hformat)
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
     if matches is None:
-        raise ValueError("Invalid input for '%s' (hformat='%s')" % (human, hformat))
+        raise ValueError("Invalid input for '%s' (hformat='%s')" %
+                         (human, hformat))
     (amount, suffix) = matches.groups()
 
     if '' == suffix:
@@ -680,6 +689,7 @@ def whitelisted_windows(path):
             if len(pathname[1]) == 3 and path.lower().startswith(pathname[1].lower()):
                 return True
     return False
+
 
 if 'nt' == os.name:
     whitelisted = whitelisted_windows
@@ -848,7 +858,8 @@ def wipe_path(pathname, idle=False):
     # this loop is sometimes necessary to create multiple files.
     while True:
         try:
-            logger.debug(_('Creating new, temporary file for wiping free space.'))
+            logger.debug(
+                _('Creating new, temporary file for wiping free space.'))
             f = temporaryfile()
         except OSError as e:
             # Linux gives errno 24
@@ -887,7 +898,8 @@ def wipe_path(pathname, idle=False):
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
             if not e.errno == errno.ENOSPC:
-                logger.error(_("Error #%d when flushing the file buffer." % e.errno))
+                logger.error(
+                    _("Error #%d when flushing the file buffer." % e.errno))
 
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
@@ -925,7 +937,8 @@ def wipe_path(pathname, idle=False):
                 break
             except IOError as e:
                 if e.errno == 0:
-                    logger.debug(_("Handled unknown error #0 while truncating file."))
+                    logger.debug(
+                        _("Handled unknown error #0 while truncating file."))
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name, ignore_missing=True)

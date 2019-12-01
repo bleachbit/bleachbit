@@ -44,11 +44,11 @@ class UpdateTestCase(common.BleachbitTestCase):
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
         update_tests = [
             ('<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-                           ((u'0.8.4', u'http://084'), (u'0.8.5beta', u'http://085beta'))),
+             ((u'0.8.4', u'http://084'), (u'0.8.5beta', u'http://085beta'))),
             ('<updates><stable ver="0.8.4">http://084</stable>%s</updates>' % wa,
-                           ((u'0.8.4', u'http://084'), )),
+             ((u'0.8.4', u'http://084'), )),
             ('<updates><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-                           ((u'0.8.5beta', u'http://085beta'), )),
+             ((u'0.8.5beta', u'http://085beta'), )),
             ('<updates></updates>', ())]
 
         # fake network

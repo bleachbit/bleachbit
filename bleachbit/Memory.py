@@ -273,7 +273,7 @@ def wipe_swap_linux(devices, proc_swaps):
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
-        #if '/cryptswap' in device:
+        # if '/cryptswap' in device:
         #    logger.info('Skipping encrypted swap device %s.', device)
         #    continue
         # TRANSLATORS: The variable is a device like /dev/sda2
@@ -315,7 +315,7 @@ def wipe_memory():
         fill_memory_linux()
         os._exit(0)
     else:
-# TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
+        # TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
         logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
                      pid=os.getpid(), cid=child_pid))
         rc = os.waitpid(child_pid, 0)[1]

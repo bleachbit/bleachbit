@@ -310,9 +310,10 @@ class Winreg:
         if self.valuename:
             _str = '%s<%s>' % (self.keyname, self.valuename)
             ret = bleachbit.Windows.delete_registry_value(self.keyname,
-                                                self.valuename, really_delete)
+                                                          self.valuename, really_delete)
         else:
-            ret = bleachbit.Windows.delete_registry_key(self.keyname, really_delete)
+            ret = bleachbit.Windows.delete_registry_key(
+                self.keyname, really_delete)
             _str = self.keyname
         if not ret:
             # Nothing to delete or nothing was deleted.  This return

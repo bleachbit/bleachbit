@@ -61,19 +61,23 @@ class PreferencesDialog:
         self.dialog.set_default_size(300, 200)
 
         notebook = Gtk.Notebook()
-        notebook.append_page(self.__general_page(), Gtk.Label(label=_("General")))
-        notebook.append_page(self.__locations_page(LOCATIONS_CUSTOM), Gtk.Label(label=_("Custom")))
-        notebook.append_page(self.__drives_page(), Gtk.Label(label=_("Drives")))
+        notebook.append_page(self.__general_page(),
+                             Gtk.Label(label=_("General")))
+        notebook.append_page(self.__locations_page(
+            LOCATIONS_CUSTOM), Gtk.Label(label=_("Custom")))
+        notebook.append_page(self.__drives_page(),
+                             Gtk.Label(label=_("Drives")))
         if 'posix' == os.name:
-            notebook.append_page(self.__languages_page(), Gtk.Label(label=_("Languages")))
-        notebook.append_page(self.__locations_page(LOCATIONS_WHITELIST), Gtk.Label(label=_("Whitelist")))
+            notebook.append_page(self.__languages_page(),
+                                 Gtk.Label(label=_("Languages")))
+        notebook.append_page(self.__locations_page(
+            LOCATIONS_WHITELIST), Gtk.Label(label=_("Whitelist")))
 
         # pack_start parameters: child, expand (reserve space), fill (actually fill it), padding
         self.dialog.get_content_area().pack_start(notebook, True, True, 0)
         self.dialog.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
 
         self.refresh_operations = False
-
 
     def __del__(self):
         """Destructor called when the dialog is closing"""
@@ -87,11 +91,13 @@ class PreferencesDialog:
         if online_update_notification_enabled:
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
             if 'nt' == os.name:
-                self.cb_winapp2.set_sensitive(options.get('check_online_updates'))
+                self.cb_winapp2.set_sensitive(
+                    options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
+            Gtk.Settings.get_default().set_property(
+                'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
@@ -114,7 +120,8 @@ class PreferencesDialog:
             updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
             updates_box.set_border_width(10)
 
-            self.cb_beta = Gtk.CheckButton.new_with_label(label=_("Check for new beta releases"))
+            self.cb_beta = Gtk.CheckButton.new_with_label(
+                label=_("Check for new beta releases"))
             self.cb_beta.set_active(options.get('check_beta'))
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
             self.cb_beta.connect(
@@ -136,7 +143,8 @@ class PreferencesDialog:
         # nothing.  For example, if Firefox were never used on
         # this system, this option would hide Firefox to simplify
         # the list of cleaners.
-        cb_auto_hide = Gtk.CheckButton.new_with_label(label=_("Hide irrelevant cleaners"))
+        cb_auto_hide = Gtk.CheckButton.new_with_label(
+            label=_("Hide irrelevant cleaners"))
         cb_auto_hide.set_active(options.get('auto_hide'))
         cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
         vbox.pack_start(cb_auto_hide, False, True, 0)
@@ -144,7 +152,8 @@ class PreferencesDialog:
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = Gtk.CheckButton(_("Overwrite contents of files to prevent recovery"))
+        cb_shred = Gtk.CheckButton(
+            _("Overwrite contents of files to prevent recovery"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
         cb_shred.set_tooltip_text(
@@ -152,7 +161,8 @@ class PreferencesDialog:
         vbox.pack_start(cb_shred, False, True, 0)
 
         # Close the application after cleaning is complete.
-        cb_exit = Gtk.CheckButton.new_with_label(label=_("Exit after cleaning"))
+        cb_exit = Gtk.CheckButton.new_with_label(
+            label=_("Exit after cleaning"))
         cb_exit.set_active(options.get('exit_done'))
         cb_exit.connect('toggled', self.__toggle_callback, 'exit_done')
         vbox.pack_start(cb_exit, False, True, 0)
@@ -192,7 +202,8 @@ class PreferencesDialog:
         def add_drive_cb(button):
             """Callback for adding a drive"""
             title = _("Choose a folder")
-            pathname = GuiBasic.browse_folder(self.parent, title, multiple=False, stock_button=Gtk.STOCK_ADD)
+            pathname = GuiBasic.browse_folder(
+                self.parent, title, multiple=False, stock_button=Gtk.STOCK_ADD)
             if pathname:
                 liststore.append([pathname])
                 pathnames.append(pathname)
@@ -213,8 +224,8 @@ class PreferencesDialog:
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         # TRANSLATORS: 'free' means 'unallocated'
-        notice = Gtk.Label(label=
-            _("Choose a writable folder for each drive for which to overwrite free space."))
+        notice = Gtk.Label(label=_(
+            "Choose a writable folder for each drive for which to overwrite free space."))
         notice.set_line_wrap(True)
         vbox.pack_start(notice, False, True, 0)
 
@@ -263,7 +274,8 @@ class PreferencesDialog:
             options.set_language(langid, value)
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        notice = Gtk.Label(label=_("All languages will be deleted except those checked."))
+        notice = Gtk.Label(
+            label=_("All languages will be deleted except those checked."))
         vbox.pack_start(notice, False, False, 0)
 
         # populate data
@@ -278,7 +290,8 @@ class PreferencesDialog:
         self.renderer0 = Gtk.CellRendererToggle()
         self.renderer0.set_property('activatable', True)
         self.renderer0.connect('toggled', preserve_toggled_cb, liststore)
-        self.column0 = Gtk.TreeViewColumn(_("Preserve"), self.renderer0, active=0)
+        self.column0 = Gtk.TreeViewColumn(
+            _("Preserve"), self.renderer0, active=0)
         treeview.append_column(self.column0)
 
         self.renderer1 = Gtk.CellRendererText()
@@ -308,7 +321,8 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning(
+                            "'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -322,7 +336,8 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning(
+                            "'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])
@@ -349,7 +364,8 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning(
+                            "'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('File'), pathname])
                 pathnames.append(['file', pathname])
@@ -363,7 +379,8 @@ class PreferencesDialog:
             if pathname:
                 for this_pathname in pathnames:
                     if pathname == this_pathname[1]:
-                        logger.warning("'%s' already exists in whitelist", pathname)
+                        logger.warning(
+                            "'%s' already exists in whitelist", pathname)
                         return
                 liststore.append([_('Folder'), pathname])
                 pathnames.append(['folder', pathname])
@@ -406,9 +423,11 @@ class PreferencesDialog:
         if LOCATIONS_WHITELIST == page_type:
             # TRANSLATORS: "Paths" is used generically to refer to both files
             # and folders
-            notice = Gtk.Label(label=_("Theses paths will not be deleted or modified."))
+            notice = Gtk.Label(
+                label=_("Theses paths will not be deleted or modified."))
         elif LOCATIONS_CUSTOM == page_type:
-            notice = Gtk.Label(label=_("These locations can be selected for deletion."))
+            notice = Gtk.Label(
+                label=_("These locations can be selected for deletion."))
         vbox.pack_start(notice, False, False, 0)
 
         # create treeview
@@ -435,13 +454,15 @@ class PreferencesDialog:
         vbox.pack_start(swindow, False, True, 0)
 
         # buttons that modify the list
-        button_add_file = Gtk.Button.new_with_label(label=_p('button', 'Add file'))
+        button_add_file = Gtk.Button.new_with_label(
+            label=_p('button', 'Add file'))
         if LOCATIONS_WHITELIST == page_type:
             button_add_file.connect("clicked", add_whitelist_file_cb)
         elif LOCATIONS_CUSTOM == page_type:
             button_add_file.connect("clicked", add_custom_file_cb)
 
-        button_add_folder = Gtk.Button.new_with_label(label=_p('button', 'Add folder'))
+        button_add_folder = Gtk.Button.new_with_label(
+            label=_p('button', 'Add folder'))
         if LOCATIONS_WHITELIST == page_type:
             button_add_folder.connect("clicked", add_whitelist_folder_cb)
         elif LOCATIONS_CUSTOM == page_type:

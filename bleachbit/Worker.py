@@ -199,7 +199,8 @@ class Worker:
         if 'free_disk_space' == option_id:
             # TRANSLATORS: 'free' means 'unallocated'
             msg = _("Please wait.  Wiping free disk space.")
-            self.ui.append_text(_('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
+            self.ui.append_text(
+                _('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")
         else:
@@ -212,7 +213,8 @@ class Worker:
                     phase = ret[0]
                     # A while ago there were other phase numbers. Currently it's just 1
                     if phase != 1:
-                        raise RuntimeError('While wiping free space, unexpected phase %d' % phase)
+                        raise RuntimeError(
+                            'While wiping free space, unexpected phase %d' % phase)
                     percent_done = ret[1]
                     eta_seconds = ret[2]
                     self.ui.update_progress_bar(percent_done)
