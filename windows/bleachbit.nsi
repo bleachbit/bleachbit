@@ -54,9 +54,10 @@
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
   OutFile "${prodname}-${VERSION}-setup.exe"
-  ; Unicode requires NSIS version 3 or later
-  Unicode true
 !endif
+
+; Unicode requires NSIS version 3 or later
+Unicode true
 
 
 ;--------------------------------
@@ -72,8 +73,12 @@
 
 ; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
 ; and per-machine installations on the same machine are allowed. If set to disallow, the installer
-; alaways requires elevation when there's per-machine installation in order to remove it first.
-!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 1
+; always requires elevation when there's per-machine installation in order to remove it first.
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
+; Decision to don't ALLOW_BOTH_INSTALLATIONS was, because it's just to risky to have to versions
+; installed at the same time and BB maybe run into unknown issues.
+; This means now, that maybe a per-machine installation gets deinstalled and a per-user installation
+; gets preferenced!
 
 ; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
 ; If elevation is disabled, the per-machine option becomes available only if the (un)installer
@@ -334,13 +339,14 @@ Section Translations
 SectionEnd
 !endif
 
-;Section for making Shred Integration Optional
+; Section for making Shred Integration optional
 !ifndef NoSectionShred
-Section "Integrate Shred" SectionShred
-    # register file association verb
+  Section "Integrate Shred" SectionShred
+    ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
-SectionEnd
+  SectionEnd
 !endif
 
 ; Keep this section last. It must be last because that is when the
@@ -403,7 +409,7 @@ Section "Uninstall"
     Delete "$DESKTOP\BleachBit.lnk"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
-    # remove file association
+    # Remove Windows Explorer Shell Extension (Shredder)
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
