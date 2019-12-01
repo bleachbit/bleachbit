@@ -20,8 +20,8 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v2.3.0.1058
-;  @scriptdate 2019-04-16
+;  @scriptversion v3.0.1.1xxx
+;  @scriptdate 2019-12-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-16)
 ;  @tested ok v2.3.0.1058, Windows 7
 ;  @testeddate 2019-04-16
