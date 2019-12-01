@@ -22,7 +22,7 @@
 ;  @os Windows
 ;  @scriptversion v3.0.1.1xxx
 ;  @scriptdate 2019-12-01
-;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-04-16)
+;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-12-01)
 ;  @tested ok v2.3.0.1058, Windows 7
 ;  @testeddate 2019-04-16
 ;  @testedby https://github.com/Tobias-B-Besemer
