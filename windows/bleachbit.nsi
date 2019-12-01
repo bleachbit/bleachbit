@@ -20,7 +20,7 @@
 ;  @app BleachBit NSIS Installer Script
 ;  @url https://nsis.sourceforge.io/Main_Page
 ;  @os Windows
-;  @scriptversion v3.0.1.1436
+;  @scriptversion v3.0.1.1437
 ;  @scriptdate 2019-12-01
 ;  @scriptby Andrew Ziem (2009-05-14 - 2019-01-21) & Tobias B. Besemer (2019-03-31 - 2019-12-01)
 ;  @tested ok v2.3.0.1058, Windows 7
@@ -166,8 +166,10 @@ VIFileVersion ${File_VERSION}
 !AddPluginDir /x86-unicode ".\NsisPluginsUnicode\"
 
 ; https://nsis.sourceforge.io/Reference/!addincludedir
-!AddIncludeDir ".\NsisIncludeOthers"
-!AddIncludeDir ".\NsisIncludeOwn"
+!AddIncludeDir ".\NsisInclude"
+;Later:
+;!AddIncludeDir ".\NsisIncludeOthers"
+;!AddIncludeDir ".\NsisIncludeOwn"
 
 
 ;--------------------------------
