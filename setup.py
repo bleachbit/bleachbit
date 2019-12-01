@@ -81,7 +81,8 @@ elif sys.platform[:6] == 'netbsd':
     data_files.append(('/usr/pkg/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
-    data_files.append(('/usr/local/share/applications', ['./bleachbit.desktop']))
+    data_files.append(
+        ('/usr/local/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
 
 
@@ -111,7 +112,7 @@ if 'py2exe' in sys.argv:
                 'MSIMG32.DLL',
                 'MSWSOCK.dll',
                 'NSI.dll',  # psutil
-                'PDH.DLL', # psutil
+                'PDH.DLL',  # psutil
                 'PSAPI.DLL',
                 'POWRPROF.dll',
                 'USP10.DLL',

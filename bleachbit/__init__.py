@@ -61,18 +61,21 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(
+        sys.executable.decode(sys.getfilesystemencoding()))
 else:
     # __file__ is absolute path to __init__.py
-    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__.decode(sys.getfilesystemencoding())))
+    bleachbit_exe_path = os.path.dirname(os.path.dirname(
+        __file__.decode(sys.getfilesystemencoding())))
 
 # license
 license_filename = None
 license_filenames = ('/usr/share/common-licenses/GPL-3',  # Debian, Ubuntu
-                     os.path.join(bleachbit_exe_path, 'COPYING'),  # Microsoft Windows
+                     # Microsoft Windows
+                     os.path.join(bleachbit_exe_path, 'COPYING'),
                      '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING',  # CentOS, Fedora, RHEL
-                     '/usr/share/licenses/bleachbit/COPYING', # Fedora 21+, RHEL 7+
-                     '/usr/share/doc/packages/bleachbit/COPYING', # OpenSUSE 11.1
+                     '/usr/share/licenses/bleachbit/COPYING',  # Fedora 21+, RHEL 7+
+                     '/usr/share/doc/packages/bleachbit/COPYING',  # OpenSUSE 11.1
                      '/usr/pkg/share/doc/bleachbit/COPYING',  # NetBSD 5
                      '/usr/share/licenses/common/GPL3/license.txt')  # Arch Linux
 for lf in license_filenames:
@@ -118,7 +121,7 @@ def expandvars(var):
             # char and we return string instead of unicode.
             # This can happen on win7.
             pass
- 
+
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
@@ -187,8 +190,8 @@ if not portable_mode:
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
-if os.path.isdir(os.path.join(bleachbit_exe_path,'cleaners')):
-    system_cleaners_dir = os.path.join(bleachbit_exe_path,'cleaners')
+if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')):
+    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 elif sys.platform.startswith('linux') or sys.platform == 'darwin':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
@@ -199,7 +202,8 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
+    logger.warning(
+        'unknown system cleaners directory for platform %s ', sys.platform)
 
 # local cleaners directory for running without installation (Windows or Linux)
 local_cleaners_dir = None
@@ -211,10 +215,11 @@ __icons = (
     '/usr/share/pixmaps/bleachbit.png',  # Linux
     '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
     '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
-    os.path.normpath(os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')),  # Windows
+    os.path.normpath(os.path.join(bleachbit_exe_path,
+                                  'share\\bleachbit.png')),  # Windows
     # When running from source (i.e., not installed).
     os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
-   )
+)
 appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
@@ -226,7 +231,8 @@ for __icon in __icons:
 app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
 if not os.path.exists(app_menu_filename) and system_cleaners_dir:
     # This path works when installed on Linux.
-    app_menu_filename = os.path.abspath(os.path.join(system_cleaners_dir, '../app-menu.ui'))
+    app_menu_filename = os.path.abspath(
+        os.path.join(system_cleaners_dir, '../app-menu.ui'))
 if not os.path.exists(app_menu_filename):
     logger.error('unknown location for app-menu.ui')
 
@@ -360,6 +366,7 @@ def pgettext(msgctxt, msgid):
             return translation
     else:
         return _(msgid)
+
 
 # Map our pgettext() custom function to _p()
 _p = pgettext

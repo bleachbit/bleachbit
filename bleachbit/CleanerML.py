@@ -279,7 +279,7 @@ def list_cleanerml_files(local_only=False):
         yield pathname
 
 
-def load_cleaners(cb_progress = lambda x: None):
+def load_cleaners(cb_progress=lambda x: None):
     """Scan for CleanerML and load them"""
     cleanerml_files = list(list_cleanerml_files())
     cleanerml_files.sort()
@@ -300,18 +300,18 @@ def load_cleaners(cb_progress = lambda x: None):
             Cleaner.backends[cleaner.id] = cleaner
         else:
             logger.debug(
-# TRANSLATORS: An action is something like cleaning a specific file.
-# "Not usable" means the whole cleaner will be ignored.
-# The substituted variable is a pathname.
+                # TRANSLATORS: An action is something like cleaning a specific file.
+                # "Not usable" means the whole cleaner will be ignored.
+                # The substituted variable is a pathname.
                 _("Cleaner is not usable on this OS because it has no actions: %s"), pathname)
         files_done += 1
-        cb_progress(1.0* files_done / total_files)
+        cb_progress(1.0 * files_done / total_files)
         yield True
 
 
 def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
-    msgid = msgid.replace('"', '\\"') # escape quotation mark
+    msgid = msgid.replace('"', '\\"')  # escape quotation mark
     if translators:
         translators = "#. %s\n" % translators
     else:

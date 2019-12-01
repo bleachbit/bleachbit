@@ -54,7 +54,8 @@ def diagnostic_info():
         pass
     try:
         from gi.repository import Gtk
-        s += '\nGTK version {0}.{1}.{2}'.format(Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
+        s += '\nGTK version {0}.{1}.{2}'.format(
+            Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
     except:
         pass
     import sqlite3
@@ -88,7 +89,7 @@ def diagnostic_info():
                 platform.linux_distribution())
         else:
             s += "\nplatform.dist() = %s" % str(platform.dist())
-            
+
     # Mac Version Name - Dictionary
     macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
                    '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}

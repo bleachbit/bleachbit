@@ -78,7 +78,8 @@ def benchmark_filter(this_filter):
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
-    print('filter %s: elapsed: %.2f seconds, %.2f files/second' % (this_filter, elapsed_seconds, rate))
+    print('filter %s: elapsed: %.2f seconds, %.2f files/second' %
+          (this_filter, elapsed_seconds, rate))
 
     # clean up
     shutil.rmtree(dirname)
@@ -136,7 +137,8 @@ class ActionTestCase(common.BleachbitTestCase):
                 raise RuntimeError("Unknown command '%s'" % command)
         if 'walk.all' == search:
             if expect_exists:
-                self.assertTrue(dir_is_empty(filename), 'directory not empty after walk.all: %s' % filename)
+                self.assertTrue(dir_is_empty(
+                    filename), 'directory not empty after walk.all: %s' % filename)
 
     def test_delete(self):
         """Unit test for class Delete"""
@@ -152,7 +154,8 @@ class ActionTestCase(common.BleachbitTestCase):
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
                 expanded = expanduser(expandvars(path))
-                filename = self.mkstemp(dir=expanded, prefix='bleachbit-action-delete')
+                filename = self.mkstemp(
+                    dir=expanded, prefix='bleachbit-action-delete')
                 command = mode
                 if 'delete_forward' == mode:
                     # forward slash needs to be normalized on Windows
@@ -266,7 +269,8 @@ class ActionTestCase(common.BleachbitTestCase):
                  ]
 
         for test in tests:
-            self._test_action_str(test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+            self._test_action_str(
+                test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
 
     def test_process_unicode_stderr(self):
         """
@@ -280,9 +284,11 @@ class ActionTestCase(common.BleachbitTestCase):
                 try:
                     # When GtkLoggerHandler is used the exeptions are raised directly
                     # and handleError is not called
-                    self._test_action_str(ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+                    self._test_action_str(
+                        ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
                 except UnicodeDecodeError:
-                    self.fail("test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
+                    self.fail(
+                        "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
                 else:
                     MockHandleError.assert_not_called()
 
@@ -337,7 +343,8 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # should give an error
         action_str = u'<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
-        self.assertRaises(RuntimeError, lambda: _action_str_to_results(action_str))
+        self.assertRaises(
+            RuntimeError, lambda: _action_str_to_results(action_str))
 
         # clean up
         glob.iglob = _iglob
@@ -483,6 +490,7 @@ if __name__ == '__main__':
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis
-            print('rates for filter %s=%s' % (this_filter, ','.join([str(rate) for rate in rates])))
+            print('rates for filter %s=%s' %
+                  (this_filter, ','.join([str(rate) for rate in rates])))
         sys.exit()
     unittest.main()

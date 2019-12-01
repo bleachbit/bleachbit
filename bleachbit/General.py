@@ -129,7 +129,8 @@ def run_external(args, stdout=False, env=None, clean_env=True):
     kwargs = {}
     if subprocess.mswindows:
         # hide the 'DOS box' window
-        import win32process, win32con
+        import win32process
+        import win32con
         stui = subprocess.STARTUPINFO()
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
         stui.wShowWindow = win32con.SW_HIDE

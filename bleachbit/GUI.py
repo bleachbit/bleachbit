@@ -24,6 +24,16 @@ GTK graphical user interface
 
 from __future__ import absolute_import, print_function
 
+from bleachbit import GuiBasic
+from bleachbit import Cleaner, FileUtilities
+from bleachbit import _, APP_NAME, appicon_path, portable_mode
+from bleachbit.Options import options
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Cleaner import backends, register_cleaners
+import bleachbit
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+
+
 import logging
 import os
 import sys
@@ -33,15 +43,7 @@ import types
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-import bleachbit
-from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Options import options
-from bleachbit import _, APP_NAME, appicon_path, portable_mode
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import GuiBasic
 
 if os.name == 'nt':
     from bleachbit import Windows
@@ -209,18 +211,19 @@ class Bleachbit(Gtk.Application):
         operations = {'_gui': ['free_disk_space']}
         self._window.preview_or_run_operations(True, operations)
 
+    def get_preferences_dialog(self):
+        return PreferencesDialog(
+            self._window, self._window.cb_refresh_operations)
+
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = PreferencesDialog(
-            self._window, self._window.cb_refresh_operations)
+        pref = self.get_preferences_dialog()
         pref.run()
 
         # In case the user changed the log level...
         GUI.update_log_level(self._window)
 
-    def about(self, _action, _param):
-        """Create and show the about dialog"""
-
+    def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
                                  copyright='Copyright (C) 2008-2018 Andrew Ziem',
                                  program_name=APP_NAME,
@@ -242,8 +245,14 @@ class Bleachbit(Gtk.Application):
         if appicon_path and os.path.exists(appicon_path):
             icon = Gtk.Image.new_from_file(appicon_path)
             dialog.set_logo(icon.get_pixbuf())
+
+        return dialog
+
+    def about(self, _action, _param):
+        """Create and show the about dialog"""
+        dialog = self.get_about_dialog()
         dialog.run()
-        dialog.hide()
+        dialog.destroy()
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -252,7 +261,7 @@ class Bleachbit(Gtk.Application):
     def quit(self, _action=None, _param=None):
         self._window.destroy()
 
-    def diagnostic_dialog(self, _action, _param):
+    def get_diagnostics_dialog(self):
         """Show diagnostic information"""
         dialog = Gtk.Dialog(_("System information"), self._window)
         dialog.set_default_size(600, 400)
@@ -268,6 +277,10 @@ class Bleachbit(Gtk.Application):
         dialog.vbox.pack_start(swindow, True, True, 0)
         dialog.add_buttons(Gtk.STOCK_COPY, 100,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
+        return dialog
+
+    def diagnostic_dialog(self, _action, _param):
+        dialog = self.get_diagnostics_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
@@ -276,7 +289,7 @@ class Bleachbit(Gtk.Application):
                 clipboard.set_text(txt, -1)
             else:
                 break
-        dialog.hide()
+        dialog.destroy()
 
     def do_activate(self):
         if not self._window:
@@ -428,7 +441,7 @@ class TreeDisplayModel:
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
-        is_toggled_on = not model[path][1] # Is the new state enabled?
+        is_toggled_on = not model[path][1]  # Is the new state enabled?
         self.set_cleaner(path, model, parent_window, is_toggled_on)
         i = model.get_iter(path)
         parent = model.iter_parent(i)
@@ -451,6 +464,7 @@ class TreeDisplayModel:
             self.set_cleaner(child, model, parent_window, is_toggled_on)
             child = model.iter_next(child)
         return
+
 
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
@@ -847,7 +861,8 @@ class GUI(Gtk.ApplicationWindow):
         try:
             __iter = model.get_iter(treepath)
         except ValueError as e:
-            logger.warning('ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+            logger.warning(
+                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return
         while __iter:
             if model[__iter][2] == option:
@@ -878,46 +893,39 @@ class GUI(Gtk.ApplicationWindow):
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
-        def icon_and_label(name, label):
-            """Make a button image with both icon and label"""
-            icon = Gio.ThemedIcon(name=name)
-            grid = Gtk.Grid(column_spacing=5)
-            if os.name == 'nt':
-                icon_size = Gtk.IconSize.BUTTON
-            else:
-                icon_size = Gtk.IconSize.LARGE_TOOLBAR
-            img = Gtk.Image.new_from_gicon(icon, icon_size)
-            label = Gtk.Label(label)
-            grid.attach(img, 0, 0, 1, 1)
-            grid.attach(label, 1, 0, 1, 1)
-            grid.show_all()
-            return grid
+        if os.name == 'nt':
+            icon_size = Gtk.IconSize.BUTTON
+        else:
+            icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         # create the preview button
-        self.preview_button = Gtk.Button()
+        self.preview_button = Gtk.Button.new_from_icon_name('edit-find', icon_size)
+        self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
         self.preview_button.set_tooltip_text(
             _("Preview files in the selected operations (without deleting any files)"))
         # TRANSLATORS: This is the preview button on the main window.  It
         # previews changes.
-        self.preview_button.add(icon_and_label('edit-find', _('Preview')))
+        self.preview_button.set_label(_('Preview'))
         box.add(self.preview_button)
 
         # create the delete button
-        self.run_button = Gtk.Button()
+        self.run_button = Gtk.Button.new_from_icon_name('edit-clear-all', icon_size)
+        self.run_button.set_always_show_image(True)
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
         # altering them.
-        self.run_button.add(icon_and_label('edit-clear-all', _('Clean')))
+        self.run_button.set_label(_('Clean'))
         self.run_button.set_tooltip_text(
             _("Clean files in the selected operations"))
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
         # stop cleaning
-        self.stop_button = Gtk.Button()
-        self.stop_button.add(icon_and_label('process-stop', _('Abort')))
+        self.stop_button = Gtk.Button.new_from_icon_name('process-stop', icon_size)
+        self.stop_button.set_always_show_image(True)
+        self.stop_button.set_label(_('Abort'))
         self.stop_button.set_tooltip_text(
             _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
@@ -972,7 +980,8 @@ class GUI(Gtk.ApplicationWindow):
         if options.has_option("window_x") and options.has_option("window_y"):
             self.move(options.get("window_x"), options.get("window_y"))
         if options.has_option("window_width") and options.has_option("window_height"):
-            self.resize(options.get("window_width"), options.get("window_height"))
+            self.resize(options.get("window_width"),
+                        options.get("window_height"))
         if options.get("window_fullscreen"):
             self.fullscreen()
         elif options.get("window_maximized"):
@@ -981,7 +990,8 @@ class GUI(Gtk.ApplicationWindow):
     def populate_window(self):
         """Create the main application window"""
         screen = self.get_screen()
-        self.set_default_size(min(screen.width(), 800), min(screen.height(), 600))
+        self.set_default_size(min(screen.width(), 800),
+                              min(screen.height(), 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)

@@ -78,7 +78,8 @@ class BleachbitTestCase(unittest.TestCase):
         from bleachbit import expandvars
         path = expandvars(path)
         if not func(getTestPath(path)):
-            raise AssertionError('The file %s should exist, but it does not. %s' % (path, msg))
+            raise AssertionError(
+                'The file %s should exist, but it does not. %s' % (path, msg))
 
     def assertLExists(self, path, msg=''):
         self.assertExists(path, msg, os.path.lexists)
@@ -88,7 +89,8 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
         if func(getTestPath(path)):
-            raise AssertionError('The file %s should not exist, but it does. %s' % (path, msg))
+            raise AssertionError(
+                'The file %s should not exist, but it does. %s' % (path, msg))
 
     def assertCondExists(self, cond, path, msg=''):
         if cond:
@@ -186,18 +188,17 @@ def validate_result(self, result, really_delete=False):
     self.assertLessEqual(result['n_deleted'], 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assertIsInstance(result['size'], (int, long, type(None),), "size is %s" % str(result['size']))
+    self.assertIsInstance(result['size'], (int, long, type(
+        None),), "size is %s" % str(result['size']))
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
     self.assertIsInstance(filename, (str, unicode, type(None)),
-                 "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
+                          "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
     if isinstance(filename, (str, unicode)) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
-
-

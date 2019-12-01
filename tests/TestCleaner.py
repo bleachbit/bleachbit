@@ -92,7 +92,8 @@ class CleanerTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(False):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
-                    self.assertLExists(pathname, "Does not exist: '%s'" % pathname)
+                    self.assertLExists(
+                        pathname, "Does not exist: '%s'" % pathname)
                     count += 1
                     common.validate_result(self, result)
             self.assertGreater(count, 0, "No files found for %s" % action_str)
@@ -138,12 +139,14 @@ class CleanerTestCase(common.BleachbitTestCase):
             self.assertIsInstance(backends[key], Cleaner)
             desc = backends[key].get_description()
             if desc is not None:
-                self.assertIsString(desc, "description for '%s' is '%s'" % (key, desc))
+                self.assertIsString(
+                    desc, "description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
-                self.assertIsString(test_id, '%s.%s is not a string' % (key, test_id))
+                self.assertIsString(
+                    test_id, '%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
 
     def test_get_commands(self):
