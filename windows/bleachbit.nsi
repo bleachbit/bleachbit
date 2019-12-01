@@ -17,6 +17,8 @@
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;  @scriptdate 2019-12-01
+
 
 ;--------------------------------
 ;Pack header:
@@ -51,9 +53,10 @@
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
   OutFile "${prodname}-${VERSION}-setup.exe"
-  ; Unicode requires NSIS version 3 or later
-  Unicode true
 !endif
+
+; Unicode requires NSIS version 3 or later
+Unicode true
 
 
 ;--------------------------------
@@ -116,7 +119,6 @@ VIFileVersion ${File_VERSION}
 ;
 ; See https://github.com/Drizin/NsisMultiUser
 ;
-!addplugindir /x86-ansi ".\NsisPluginsAnsi\"
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
 !include UAC.nsh
