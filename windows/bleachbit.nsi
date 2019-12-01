@@ -305,13 +305,14 @@ Section Translations
 SectionEnd
 !endif
 
-;Section for making Shred Integration Optional
+; Section for making Shred Integration optional
 !ifndef NoSectionShred
-Section "Integrate Shred" SectionShred
-    # register file association verb
+  Section "Integrate Shred" SectionShred
+    ; register file association verb
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
-SectionEnd
+  SectionEnd
 !endif
 
 ; Keep this section last. It must be last because that is when the
@@ -374,7 +375,7 @@ Section "Uninstall"
     Delete "$DESKTOP\BleachBit.lnk"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
-    # remove file association
+    ; Remove Windows Explorer Shell Extension
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
