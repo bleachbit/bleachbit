@@ -33,6 +33,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+import mock
 from xml.dom.minidom import parseString
 
 
@@ -77,7 +78,8 @@ def benchmark_filter(this_filter):
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
-    print('filter %s: elapsed: %.2f seconds, %.2f files/second' % (this_filter, elapsed_seconds, rate))
+    print('filter %s: elapsed: %.2f seconds, %.2f files/second' %
+          (this_filter, elapsed_seconds, rate))
 
     # clean up
     shutil.rmtree(dirname)
@@ -94,7 +96,10 @@ class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 
-    def _test_action_str(self, action_str):
+    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+    _TEST_PROCESS_SIMPLE = u'<action command="process" cmd="%s" />'
+
+    def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
@@ -109,7 +114,7 @@ class ActionTestCase(common.BleachbitTestCase):
         for cmd in provider.get_commands():
             self.assertIsInstance(
                 cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function))
-            if 'process' != command and not has_glob(filename):
+            if 'process' != command and not has_glob(filename) and expect_exists:
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
@@ -131,7 +136,9 @@ class ActionTestCase(common.BleachbitTestCase):
             else:
                 raise RuntimeError("Unknown command '%s'" % command)
         if 'walk.all' == search:
-            self.assertTrue(dir_is_empty(filename), 'directory not empty after walk.all: %s' % filename)
+            if expect_exists:
+                self.assertTrue(dir_is_empty(
+                    filename), 'directory not empty after walk.all: %s' % filename)
 
     def test_delete(self):
         """Unit test for class Delete"""
@@ -147,7 +154,8 @@ class ActionTestCase(common.BleachbitTestCase):
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
                 expanded = expanduser(expandvars(path))
-                filename = self.mkstemp(dir=expanded, prefix='bleachbit-action-delete')
+                filename = self.mkstemp(
+                    dir=expanded, prefix='bleachbit-action-delete')
                 command = mode
                 if 'delete_forward' == mode:
                     # forward slash needs to be normalized on Windows
@@ -198,6 +206,13 @@ class ActionTestCase(common.BleachbitTestCase):
             (r'c:\temp\foo8_$$bar$$', {'bar': ('a',)}, (r'c:\temp\foo8_a',)),
             (r'$$basepath$$\file9.log', {'basepath': (
                 r'c:\temp',)}, (r'c:\temp\file9.log',)),
+            # two variables with one value each
+            ('/var/foo10_$$foo$$_$$bar$$',
+             {'foo': 'a', 'bar': 'b'}, ('/var/foo10_a_b',)),
+            # two variables with 1 and 2 values, respectively
+            ('/var/foo10_$$foo$$_$$bar$$',
+             {'foo': 'a', 'bar': ('b', 'c')}, ('/var/foo10_a_b', '/var/foo10_a_c')),
+
         )
 
         for test in tests:
@@ -246,8 +261,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_process(self):
         """Unit test for process action"""
-        cmds = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-        tests = [u'<action command="process" cmd="%s" />',
+        tests = [ActionTestCase._TEST_PROCESS_SIMPLE,
                  u'<action command="process" wait="false" cmd="%s" />',
                  u'<action command="process" wait="f" cmd="%s" />',
                  u'<action command="process" wait="no" cmd="%s" />',
@@ -255,7 +269,28 @@ class ActionTestCase(common.BleachbitTestCase):
                  ]
 
         for test in tests:
-            self._test_action_str(test % cmds[os.name])
+            self._test_action_str(
+                test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+
+    def test_process_unicode_stderr(self):
+        """
+        Test what happens when we have return code != 0 and unicode string in stderr.
+
+        In other words we test the case when we have an error and a non-ascii language setting.
+        """
+        with mock.patch('bleachbit.Action.General.run_external', return_value=(11, '', 'Уникод, който чупи кода!')):
+            # If exception occurs in logger `handleError` is called.
+            with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
+                try:
+                    # When GtkLoggerHandler is used the exeptions are raised directly
+                    # and handleError is not called
+                    self._test_action_str(
+                        ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+                except UnicodeDecodeError:
+                    self.fail(
+                        "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
+                else:
+                    MockHandleError.assert_not_called()
 
     def test_regex(self):
         """Unit test for regex option"""
@@ -308,7 +343,8 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # should give an error
         action_str = u'<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
-        self.assertRaises(RuntimeError, lambda: _action_str_to_results(action_str))
+        self.assertRaises(
+            RuntimeError, lambda: _action_str_to_results(action_str))
 
         # clean up
         glob.iglob = _iglob
@@ -394,24 +430,35 @@ class ActionTestCase(common.BleachbitTestCase):
         self._test_action_str(action_str)
         self.assertNotExists(dirname)
 
-    def test_walk_all(self):
-        """Unit test for walk.all"""
-        dirname = self.mkdtemp(prefix='bleachbit-walk-all')
+    def test_walk_all_top(self):
+        """Unit test for walk.all and walk.top"""
 
-        # this sub-directory should be deleted
-        subdir = os.path.join(dirname, 'sub')
-        os.mkdir(subdir)
-        self.assertExists(subdir)
+        variants = ('all', 'top')
+        for variant in variants:
+            dirname = self.mkdtemp(prefix='bleachbit-walk-%s' % variant)
 
-        # this file should be deleted too
-        filename = os.path.join(subdir, 'file')
-        common.touch_file(filename)
+            # this sub-directory should be deleted
+            subdir = os.path.join(dirname, 'sub')
+            os.mkdir(subdir)
+            self.assertExists(subdir)
 
-        action_str = u'<action command="delete" search="walk.all" path="%s" />' % dirname
-        self._test_action_str(action_str)
-        self.assertNotExists(subdir)
+            # this file should be deleted too
+            filename = os.path.join(subdir, 'file')
+            common.touch_file(filename)
 
-        os.rmdir(dirname)
+            action_str = u'<action command="delete" search="walk.%s" path="%s" />' % (
+                variant, dirname)
+            self._test_action_str(action_str)
+            self.assertNotExists(subdir)
+            if variant == 'all':
+                self.assertExists(dirname)
+                os.rmdir(dirname)
+            elif variant == 'top':
+                self.assertNotExists(dirname)
+
+            # If the path does not exist, it should be silently ignored.
+            # The top directory no long exists, so just replay it.
+            self._test_action_str(action_str, False)
 
     def test_walk_files(self):
         """Unit test for walk.files"""
@@ -443,6 +490,7 @@ if __name__ == '__main__':
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis
-            print('rates for filter %s=%s' % (this_filter, ','.join([str(rate) for rate in rates])))
+            print('rates for filter %s=%s' %
+                  (this_filter, ','.join([str(rate) for rate in rates])))
         sys.exit()
     unittest.main()

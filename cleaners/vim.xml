@@ -18,6 +18,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+FIXME: Because this uses deep scan, BleachBit assumes it exists, so
+it shows up for all users on Windows and Linux. Develop a way to
+hide VIM, unless it is really installed.
+
 -->
 <cleaner id="vim">
   <label>VIM</label>
@@ -27,5 +31,32 @@
     <description>Delete ~/.viminfo which includes file history, command history, and buffers</description>
     <action command="delete" search="file" path="~/.viminfo"/>
     <action command="delete" search="file" path="$USERPROFILE\_viminfo"/>
+  </option>
+  <option id="swap_user">
+    <label>Swap files under user profile</label>
+    <description>Delete the backup files</description>
+    <warning>This option is slow.</warning>
+    <!--
+Here is an example. When editing foo.txt, VIM makes a file called .foo.txt.swp
+that starts with a period.
+
+If the .swp file exists, it will cycle through the alphabet according to
+this post
+https://groups.google.com/forum/#!msg/vim_use/JBHSs3kPPJU/X9WeMsZcfWAJ
+
+The likeliness of VIM not being able to create a swap on the first three
+times is small.
+
+Be careful not to match files such as ~/.htpasswd
+https://github.com/bleachbit/bleachbit/issues/683
+
+-->
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$"/>
+  </option>
+  <option id="swap_root">
+    <label>Swap files across system</label>
+    <description>Delete the backup files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$" path="/" os="linux"/>
   </option>
 </cleaner>

@@ -23,7 +23,7 @@
 Wipe memory
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import FileUtilities
 from bleachbit import General
@@ -34,7 +34,6 @@ import os
 import re
 import subprocess
 import sys
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ def get_proc_swaps():
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, _) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _stderr) = General.run_external(['swapon', '-s'])
     if 0 == rc:
         return stdout
     logger.debug(
@@ -124,10 +123,10 @@ def make_self_oom_target_linux():
         uid = General.getrealuid()
         if uid > 0:
             logger.debug(
-                _("Dropping privileges of pid %d to uid %d."), os.getpid(), uid)
+                _("Dropping privileges of process ID {pid} to user ID {uid}.").format(pid=os.getpid(), uid=uid))
             os.seteuid(uid)
     except:
-        traceback.print_exc()
+        logger.exception('Error when dropping privileges')
 
 
 def fill_memory_linux():
@@ -137,14 +136,16 @@ def fill_memory_linux():
     if allocbytes < 1024:
         return
     bytes_str = FileUtilities.bytes_to_human(allocbytes)
-    logger.info(_("Allocating and wiping %s (%d B) of memory."),
-                bytes_str, allocbytes)
+    # TRANSLATORS: The variable is a quantity like 5kB
+    logger.info(_("Allocating and wiping %s of memory."),
+                bytes_str)
     try:
         buf = '\x00' * allocbytes
     except MemoryError:
         pass
     else:
         fill_memory_linux()
+        # TRANSLATORS: The variable is a quantity like 5kB
         logger.debug(_("Freeing %s of memory."), bytes_str)
         del buf
     report_free()
@@ -175,7 +176,8 @@ def get_swap_uuid(device):
         ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if ret is not None:
             uuid = ret.group(1)
-    logger.debug(_("Found UUID for swap file %s is %s."), device, uuid)
+    logger.debug(_("Found UUID for swap file {device} is {uuid}.").format(
+        device=device, uuid=uuid))
     return uuid
 
 
@@ -241,7 +243,6 @@ def physical_free_windows():
         return x
 
     z = GlobalMemoryStatusEx()
-    print(z)
     return z.ullAvailPhys
 
 
@@ -260,17 +261,22 @@ def report_free():
     """Report free memory"""
     bytes_free = physical_free()
     bytes_str = FileUtilities.bytes_to_human(bytes_free)
-    logger.debug(_("Physical free memory is %s (%d B)."),
-                 bytes_str, bytes_free)
+    # TRANSLATORS: The variable is a quantity like 5kB
+    logger.debug(_("Physical free memory is %s."),
+                 bytes_str)
 
 
 def wipe_swap_linux(devices, proc_swaps):
-    """Shred the Linux swap file and then reinitilize it"""
+    """Shred the Linux swap file and then reinitialize it"""
     if devices is None:
         return
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
+        # if '/cryptswap' in device:
+        #    logger.info('Skipping encrypted swap device %s.', device)
+        #    continue
+        # TRANSLATORS: The variable is a device like /dev/sda2
         logger.info(_("Wiping the swap device %s."), device)
         safety_limit_bytes = 29 * 1024 ** 3  # 29 gibibytes
         actual_size_bytes = get_swap_size_linux(device, proc_swaps)
@@ -282,12 +288,13 @@ def wipe_swap_linux(devices, proc_swaps):
         # wipe
         FileUtilities.wipe_contents(device, truncate=False)
         # reinitialize
+        # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)
         args = ['mkswap', device]
         if uuid:
             args.append("-U")
             args.append(uuid)
-        (rc, _, stderr) = General.run_external(args)
+        (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
 
@@ -298,6 +305,7 @@ def wipe_memory():
     proc_swaps = get_proc_swaps()
     devices = disable_swap_linux()
     yield True  # process GTK+ idle loop
+    # TRANSLATORS: The variable is a device like /dev/sda2
     logger.debug(_("Detected these swap devices: %s"), str(devices))
     wipe_swap_linux(devices, proc_swaps)
     yield True
@@ -305,12 +313,14 @@ def wipe_memory():
     if 0 == child_pid:
         make_self_oom_target_linux()
         fill_memory_linux()
-        sys.exit(0)
+        os._exit(0)
     else:
-        logger.debug(_("The function wipe_memory() with pid %d is waiting for child pid %d."),
-                     os.getpid(), child_pid)
+        # TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
+        logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
+                     pid=os.getpid(), cid=child_pid))
         rc = os.waitpid(child_pid, 0)[1]
         if 0 != rc:
-            logger.warning(_("The child memory-wiping process returned code %d."), rc)
+            logger.warning(
+                _("The child memory-wiping process returned code %d."), rc)
     enable_swap_linux()
     yield 0  # how much disk space was recovered

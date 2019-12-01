@@ -81,7 +81,8 @@ elif sys.platform[:6] == 'netbsd':
     data_files.append(('/usr/pkg/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
-    data_files.append(('/usr/local/share/applications', ['./bleachbit.desktop']))
+    data_files.append(
+        ('/usr/local/share/applications', ['./bleachbit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
 
 
@@ -97,12 +98,13 @@ if 'py2exe' in sys.argv:
     }]
     args['options'] = {
         'py2exe': {
-            'packages': 'encodings',
+            'packages': ['encodings', 'gi'],
             'optimize': 2,  # extra optimization (like python -OO)
-            'includes': ['atk', 'cairo', 'gobject', 'pango', 'pangocairo'],
+            'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
-                         'pickle', 'calendar', 'ftplib', 'bleachbit.Unix'],
+                         'pickle', 'ftplib', 'bleachbit.Unix'],
             'dll_excludes': [
+                'libgstreamer-1.0-0.dll',
                 'CRYPT32.DLL',  # required by ssl
                 'DNSAPI.DLL',
                 'IPHLPAPI.DLL',  # psutil
@@ -110,47 +112,61 @@ if 'py2exe' in sys.argv:
                 'MSIMG32.DLL',
                 'MSWSOCK.dll',
                 'NSI.dll',  # psutil
+                'PDH.DLL',  # psutil
                 'PSAPI.DLL',
                 'POWRPROF.dll',
                 'USP10.DLL',
+                'WINNSI.DLL',  # psutil
                 'WTSAPI32.DLL',  # psutil
                 'api-ms-win-core-apiquery-l1-1-0.dll',
                 'api-ms-win-core-crt-l1-1-0.dll',
                 'api-ms-win-core-crt-l2-1-0.dll',
                 'api-ms-win-core-debug-l1-1-1.dll',
                 'api-ms-win-core-delayload-l1-1-1.dll',
+                'api-ms-win-core-errorhandling-l1-1-0.dll',
                 'api-ms-win-core-errorhandling-l1-1-1.dll',
+                'api-ms-win-core-file-l1-1-0.dll',
                 'api-ms-win-core-file-l1-2-1.dll',
                 'api-ms-win-core-handle-l1-1-0.dll',
+                'api-ms-win-core-heap-l1-1-0.dll',
                 'api-ms-win-core-heap-l1-2-0.dll',
                 'api-ms-win-core-heap-obsolete-l1-1-0.dll',
                 'api-ms-win-core-io-l1-1-1.dll',
+                'api-ms-win-core-kernel32-legacy-l1-1-0.dll',
+                'api-ms-win-core-kernel32-legacy-l1-1-1.dll',
                 'api-ms-win-core-libraryloader-l1-2-0.dll',
+                'api-ms-win-core-libraryloader-l1-2-1.dll',
                 'api-ms-win-core-localization-l1-2-1.dll',
+                'api-ms-win-core-localization-obsolete-l1-2-0.dll',
+                'api-ms-win-core-memory-l1-1-0.dll',
                 'api-ms-win-core-memory-l1-1-2.dll',
+                'api-ms-win-core-perfstm-l1-1-0.dll',
                 'api-ms-win-core-processenvironment-l1-2-0.dll',
+                'api-ms-win-core-processthreads-l1-1-0.dll',
                 'api-ms-win-core-processthreads-l1-1-2.dll',
                 'api-ms-win-core-profile-l1-1-0.dll',
                 'api-ms-win-core-registry-l1-1-0.dll',
+                'api-ms-win-core-registry-l2-1-0.dll',
                 'api-ms-win-core-string-l1-1-0.dll',
                 'api-ms-win-core-string-obsolete-l1-1-0.dll',
+                'api-ms-win-core-synch-l1-1-0.dll',
                 'api-ms-win-core-synch-l1-2-0.dll',
+                'api-ms-win-core-sysinfo-l1-1-0.dll',
                 'api-ms-win-core-sysinfo-l1-2-1.dll',
                 'api-ms-win-core-threadpool-l1-2-0.dll',
                 'api-ms-win-core-timezone-l1-1-0.dll',
                 'api-ms-win-core-util-l1-1-0.dll',
+                'api-ms-win-eventing-classicprovider-l1-1-0.dll',
+                'api-ms-win-eventing-consumer-l1-1-0.dll',
+                'api-ms-win-eventing-controller-l1-1-0.dll',
+                'api-ms-win-eventlog-legacy-l1-1-0.dll',
+                'api-ms-win-perf-legacy-l1-1-0.dll',
                 'api-ms-win-security-base-l1-2-0.dll',
                 'w9xpopen.exe',  # not needed after Windows 9x
             ],
             'compressed': True  # create a compressed zipfile
         }
     }
-    import gtk
-    from distutils import version
-    gtkver = version.StrictVersion('.'.join([str(x) for x in gtk.gtk_version]))
-    gtkmin = version.StrictVersion('2.20.0')
-    if gtkver >= gtkmin:
-        args['options']['py2exe']['includes'].append('gio')
 
     # check for 32-bit
     import struct
@@ -229,15 +245,15 @@ def clean_dist_locale():
 def run_setup():
     setup(name='bleachbit',
           version=bleachbit.APP_VERSION,
-          description="Free space and maintain privacy",
+          description="BleachBit - Free space and maintain privacy",
           long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
           download_url="https://www.bleachbit.org/download",
           license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v2.12+',
-          packages=['bleachbit'],
+          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
+          packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 
 

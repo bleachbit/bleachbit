@@ -143,13 +143,15 @@ class LockedAction(ActionProvider):
         # Open the file with a non-exclusive lock, so the file should
         # be truncated and marked for deletion. This is checked just on
         # on Windows.
-        f = os.open(self.pathname, os.O_RDWR)
+        fd = os.open(self.pathname, os.O_RDWR)
+        from bleachbit.FileUtilities import getsize
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
-        from bleachbit.FileUtilities import getsize
-        assert(0 == getsize(self.pathname))
-        os.close(f)
+        fsize = getsize(self.pathname)
+        if not fsize == 3:  # Contents is "123"
+            raise RuntimeError('Locked file has size %dB (not 3B)' % fsize)
+        os.close(fd)
 
         # Now that the file is not locked, admin privileges
         # are not required to delete it.
@@ -197,7 +199,8 @@ class WorkerTestCase(common.BleachbitTestCase):
                            bytes_expected_posix, count_deleted_posix,
                            bytes_expected_nt, count_deleted_nt):
         ui = CLI.CliCallback()
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker', dir=self.tempdir)
+        (fd, filename) = tempfile.mkstemp(
+            prefix='bleachbit-test-worker', dir=self.tempdir)
         os.write(fd, '123')
         os.close(fd)
         self.assertExists(filename)
@@ -209,6 +212,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
+        del backends['test']
         self.assertNotExists(filename, "Path still exists '%s'" % filename)
         self.assertEqual(worker.total_special, special_expected,
                          'For command %s expecting %s special operations but observed %d'
@@ -233,7 +237,8 @@ class WorkerTestCase(common.BleachbitTestCase):
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
-        self.action_test_helper('function.generator', 1, 0, 4096 + 10, 1, 3 + 10, 1)
+        self.action_test_helper('function.generator', 1,
+                                0, 4096 + 10, 1, 3 + 10, 1)
 
     def test_FunctionPath(self):
         """Test Worker using Action.FunctionPathAction"""
@@ -247,17 +252,20 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.InvalidEncodingAction"""
         self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
 
-    @unittest.skipUnless('nt' == os.name, 'skipping on non-Windows')
+    @common.skipUnlessWindows
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
         from win32com.shell import shell
         if shell.IsUserAnAdmin():
+            # If an admin, the first attempt will mark for delete (3 bytes),
+            # and the second attempt will actually delete it (3 bytes).
             errors_expected = 0
-            bytes_expected = 3 + 0
+            bytes_expected = 3 + 3
             total_deleted = 2
         else:
+            # If not an admin, the first attempt will fail, and the second wil succeed.
             errors_expected = 1
-            bytes_expected = 0
+            bytes_expected = 3
             total_deleted = 1
         self.action_test_helper(
             'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
@@ -279,7 +287,7 @@ class WorkerTestCase(common.BleachbitTestCase):
 
         # load cleaners from XML
         import bleachbit.CleanerML
-        bleachbit.CleanerML.load_cleaners()
+        list(bleachbit.CleanerML.load_cleaners())
 
         # DeepScan itself is tested elsewhere, so replace it here
         import bleachbit.DeepScan
@@ -290,10 +298,11 @@ class WorkerTestCase(common.BleachbitTestCase):
         class MyDeepScan:
             def add_search(self, dirname, regex):
                 parent.assertEqual(dirname, expanduser('~'))
-                parent.assertIn(regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
+                parent.assertIn(
+                    regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
             def scan(self):
-                parent.scanned+=1
+                parent.scanned += 1
                 yield True
 
         bleachbit.DeepScan.DeepScan = MyDeepScan
@@ -324,6 +333,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         run = worker.run()
         while run.next():
             pass
+        del backends['test']
         self.assertNotExists(filename1)
         self.assertNotExists(filename2)
         self.assertEqual(worker.total_special, 0)

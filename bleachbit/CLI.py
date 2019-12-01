@@ -69,7 +69,7 @@ class CliCallback:
 
 def cleaners_list():
     """Yield each cleaner-option pair"""
-    register_cleaners()
+    list(register_cleaners())
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, o_name) in backends[key].get_options():
@@ -92,7 +92,7 @@ def preview_or_clean(operations, really_clean):
 
 def args_to_operations(args, preset):
     """Read arguments and return list of operations"""
-    register_cleaners()
+    list(register_cleaners())
     operations = {}
     if preset:
         # restore presets from the GUI
@@ -127,7 +127,8 @@ def args_to_operations(args, preset):
 def process_cmd_line():
     """Parse the command line and execute given commands."""
     # TRANSLATORS: This is the command line usage.  Don't translate
-    # %prog, but do translate usage, options, cleaner, and option.
+    # %prog, but do translate options, cleaner, and option.
+    # Don't translate and add "usage:" - it gets added by Python.
     # More information about the command line is here
     # https://www.bleachbit.org/documentation/command-line
     usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
@@ -139,6 +140,8 @@ def process_cmd_line():
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option(
+        '--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
@@ -179,9 +182,11 @@ def process_cmd_line():
         sys.exit(1)
 
     did_something = False
+    if options.debug:
+        # set in __init__ so it takes effect earlier
+        pass
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
-        logger.info('BleachBit version %s', APP_VERSION)
         logger.info(Diagnostic.diagnostic_info())
     if options.version:
         print("""
@@ -239,16 +244,10 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.gui:
-        import gtk
-        from bleachbit import GUI
-        shred_paths = args if options.shred else None
-        GUI.GUI(uac=not options.no_uac,
-                shred_paths=shred_paths, exit=options.exit)
-        gtk.main()
-        if options.exit:
-            # For automated testing of Windows build
-            print('Success')
-        sys.exit(0)
+        import bleachbit.GUI
+        app = bleachbit.GUI.Bleachbit(
+            uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
+        sys.exit(app.run())
     if options.shred:
         # delete arbitrary files without GUI
         # create a temporary cleaner object

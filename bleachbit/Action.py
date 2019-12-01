@@ -23,7 +23,7 @@
 Actions that perform cleaning
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import Command, FileUtilities, General, Special
 from bleachbit import _, expanduser, expandvars
@@ -50,7 +50,7 @@ def has_glob(s):
 
 
 def expand_multi_var(s, variables):
-    """Expand string s with potentially-multiple values.
+    """Expand strings with potentially-multiple values.
 
     The placeholder is written in the format $$foo$$.
 
@@ -59,17 +59,29 @@ def expand_multi_var(s, variables):
     if not variables or s.find('$$') == -1:
         # The input string is missing $$ or no variables are given.
         return (s,)
-    matched = False
+    var_keys_used = []
     ret = []
-    for var_key, var_values in variables.iteritems():
+    for var_key in variables.iterkeys():
         sub = '$$%s$$' % var_key
-        if s.find(sub) == -1:
-            continue
-        matched = True
-        for var_value in var_values:
-            modified = s.replace(sub, var_value)
-            ret.append(modified)
-    if matched:
+        if s.find(sub) > -1:
+            var_keys_used.append(var_key)
+    if not var_keys_used:
+        # No matching variables used, so return input string unmodified.
+        return (s,)
+    # filter the dictionary to the keys used
+    vars_used = {key: value for key,
+                 value in variables.iteritems() if key in var_keys_used}
+    # create a product of combinations
+    from itertools import product
+    vars_product = (dict(zip(vars_used, x))
+                    for x in product(*vars_used.values()))
+    for var_set in vars_product:
+        ms = s  # modified version of input string
+        for var_key, var_value in var_set.iteritems():
+            sub = '$$%s$$' % var_key
+            ms = ms.replace(sub, var_value)
+        ret.append(ms)
+    if ret:
         return ret
     else:
         # The string has $$, but it did not match anything
@@ -117,9 +129,13 @@ class FileActionProvider(ActionProvider):
 
     """Base class for providers which work on individual files"""
     action_key = '_file'
+    CACHEABLE_SEARCHERS = ('walk.files',)
+    # global cache <search_type, path, list_of_entries>
+    cache = ('nothing', '', tuple())
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
+        ActionProvider.__init__(self, action_element, path_vars)
         self.regex = action_element.getAttribute('regex')
         assert(isinstance(self.regex, (str, unicode, types.NoneType)))
         self.nregex = action_element.getAttribute('nregex')
@@ -135,12 +151,13 @@ class FileActionProvider(ActionProvider):
         if 'deep' == self.search:
             self.ds['regex'] = self.regex
             self.ds['nregex'] = self.nregex
-            self.ds['cache'] = General.boolstr_to_bool(
-                action_element.getAttribute('cache'))
             self.ds['command'] = action_element.getAttribute('command')
             self.ds['path'] = self.paths[0]
             if not len(self.paths) == 1:
                 logger.warning(
+                    # TRANSLATORS: Multi-value variables are explained in the online documentation.
+                    # Basically, they are like an environment variable, but each multi-value variable
+                    # can have multiple values. They're a way to make CleanerML files more concise.
                     _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
@@ -165,40 +182,60 @@ class FileActionProvider(ActionProvider):
             raise StopIteration
         yield self.ds
 
-    def path_filter(self, path):
+    def get_paths(self):
         """Process the filters: regex, nregex, type
 
         If a filter is defined and it fails to match, this function
         returns False. Otherwise, this function returns True."""
 
+        # optimize tight loop, avoid slow python "."
+        regex = self.regex
+        nregex = self.nregex
+        wholeregex = self.wholeregex
+        nwholeregex = self.nwholeregex
+        basename = os.path.basename
+        object_type = self.object_type
         if self.regex:
-            if not self.regex_c.search(os.path.basename(path)):
-                return False
+            regex_c_search = re.compile(self.regex, re_flags).search
+        else:
+            regex_c_search = None
 
         if self.nregex:
-            if self.nregex_c.search(os.path.basename(path)):
-                return False
+            nregex_c_search = re.compile(self.nregex, re_flags).search
+        else:
+            nregex_c_search = None
 
         if self.wholeregex:
-            if not self.wholeregex_c.search(path):
-                return False
+            wholeregex_c_search = re.compile(self.wholeregex, re_flags).search
+        else:
+            wholeregex_c_search = None
 
         if self.nwholeregex:
-            if self.nwholeregex_c.search(path):
-                return False
+            nwholeregex_c_search = re.compile(
+                self.nwholeregex, re_flags).search
+        else:
+            nwholeregex_c_search = None
 
-        if self.object_type:
-            if 'f' == self.object_type and not os.path.isfile(path):
-                return False
-            elif 'd' == self.object_type and not os.path.isdir(path):
-                return False
+        for path in self._get_paths():
+            if regex and not regex_c_search(basename(path)):
+                continue
 
-        return True
+            if nregex and nregex_c_search(basename(path)):
+                continue
 
-    def get_paths(self):
-        import itertools
-        for f in itertools.ifilter(self.path_filter, self._get_paths()):
-            yield f
+            if wholeregex and not wholeregex_c_search(path):
+                continue
+
+            if nwholeregex and nwholeregex_c_search(path):
+                continue
+
+            if object_type:
+                if 'f' == object_type and not os.path.isfile(path):
+                    continue
+                elif 'd' == object_type and not os.path.isdir(path):
+                    continue
+
+            yield path
 
     def _get_paths(self):
         """Return a filtered list of files"""
@@ -208,22 +245,37 @@ class FileActionProvider(ActionProvider):
                 yield path
 
         def get_walk_all(top):
+            """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
-                any_match = False
-                for path in FileUtilities.children_in_directory(
-                        expanded, True):
-                    any_match = True
+                path = None  # sentinel value
+                for path in FileUtilities.children_in_directory(expanded, True):
                     yield path
-                # This is a lint checker because this scenario may
-                # indicate the cleaner developer made a mistake.
-                if not any_match and os.path.isfile(expanded):
-                    logger.debug(
-                        _('search="walk.all" used with regular file path="%s"'), expanded)
+                # This condition executes when there are zero iterations
+                # in the loop above.
+                if path is None:
+                    # This is a lint checker because this scenario may
+                    # indicate the cleaner developer made a mistake.
+                    if os.path.isfile(expanded):
+                        logger.debug(
+                            # TRANSLATORS: This is a lint-style warning that there seems to be a
+                            # mild mistake in the CleanerML file because walk.all is expected to
+                            # be used with directories instead of with files.
+                            _('search="walk.all" used with regular file path="%s"'),
+                            expanded,
+                        )
 
         def get_walk_files(top):
+            """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
                 for path in FileUtilities.children_in_directory(expanded, False):
                     yield path
+
+        def get_top(top):
+            """Delete directory contents and the directory itself"""
+            for f in get_walk_all(top):
+                yield f
+            if os.path.exists(top):
+                yield top
 
         if 'deep' == self.search:
             raise StopIteration
@@ -235,27 +287,44 @@ class FileActionProvider(ActionProvider):
             func = get_walk_all
         elif 'walk.files' == self.search:
             func = get_walk_files
+        elif 'walk.top' == self.search:
+            func = get_top
         else:
             raise RuntimeError("invalid search='%s'" % self.search)
 
-        if self.regex:
-            self.regex_c = re.compile(self.regex, re_flags)
-
-        if self.nregex:
-            self.nregex_c = re.compile(self.nregex, re_flags)
-
-        if self.wholeregex:
-            self.wholeregex_c = re.compile(self.wholeregex, re_flags)
-
-        if self.nwholeregex:
-            self.nwholeregex_c = re.compile(self.nwholeregex, re_flags)
-
+        cache = self.__class__.cache
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
-                # lint for people who develop cleaners
+                # TRANSLATORS: This is a lint-style warning that the CleanerML file
+                # specified a search for glob, but the path specified didn't have any
+                # wildcard patterns. Therefore, maybe the developer either missed
+                # the wildcard or should search using path="file" which does not
+                # expect or support wildcards in the path.
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
-            for path in func(input_path):
-                yield path
+
+            # use cache
+            if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
+                #logger.debug(_('using cached walk for path %s'), input_path)
+                for x in cache[2]:
+                    yield x
+                return
+            else:
+                # if self.search in self.CACHEABLE_SEARCHERS:
+                #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
+                #                 cache[0], cache[1], self.search, input_path)
+                self.__class__.cache = ('cleared by', input_path, tuple())
+
+            # build new cache
+            #logger.debug('%s walking %s', id(self), input_path)
+
+            if self.search in self.CACHEABLE_SEARCHERS:
+                cache = self.__class__.cache = (self.search, input_path, [])
+                for path in func(input_path):
+                    cache[2].append(path)
+                    yield path
+            else:
+                for path in func(input_path):
+                    yield path
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
@@ -272,7 +341,7 @@ class AptAutoclean(ActionProvider):
     action_key = 'apt.autoclean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -288,7 +357,7 @@ class AptAutoremove(ActionProvider):
     action_key = 'apt.autoremove'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -304,7 +373,7 @@ class AptClean(ActionProvider):
     action_key = 'apt.clean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
@@ -411,7 +480,7 @@ class Journald(ActionProvider):
     action_key = 'journald.clean'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         if FileUtilities.exe_exists('journalctl'):
@@ -463,6 +532,7 @@ class Process(ActionProvider):
     action_key = 'process'
 
     def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
         self.cmd = expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
@@ -487,8 +557,16 @@ class Process(ActionProvider):
                     'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
             else:
                 if not 0 == rc:
-                    logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
-                                   self.cmd, rc, stdout, stderr)
+                    msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
+                    if isinstance(stdout, unicode):
+                        stdout = stdout.encode('utf-8')
+                    if isinstance(stderr, unicode):
+                        stderr = stderr.encode('utf-8')
+                    if isinstance(self.cmd, unicode):
+                        cmd = self.cmd.encode('utf-8')
+                    else:
+                        cmd = self.cmd
+                    logger.warning(msg, cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
@@ -549,6 +627,7 @@ class Winreg(ActionProvider):
     action_key = 'winreg'
 
     def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
         self.keyname = action_element.getAttribute('path')
         self.name = action_element.getAttribute('name')
 
@@ -562,7 +641,7 @@ class YumCleanAll(ActionProvider):
     action_key = 'yum.clean_all'
 
     def __init__(self, action_element, path_vars=None):
-        pass
+        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
@@ -573,3 +652,41 @@ class YumCleanAll(ActionProvider):
             None,
             Unix.yum_clean,
             'yum clean all')
+
+
+class DnfCleanAll(ActionProvider):
+
+    """Action to run 'dnf clean all'"""
+    action_key = 'dnf.clean_all'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        # Checking allows auto-hide to work for non-APT systems
+        if not FileUtilities.exe_exists('dnf'):
+            raise StopIteration
+
+        yield Command.Function(
+            None,
+            Unix.dnf_clean,
+            'dnf clean all')
+
+
+class DnfAutoremove(ActionProvider):
+
+    """Action to run 'dnf autoremove'"""
+    action_key = 'dnf.autoremove'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        # Checking allows auto-hide to work for non-APT systems
+        if not FileUtilities.exe_exists('dnf'):
+            raise StopIteration
+
+        yield Command.Function(
+            None,
+            Unix.dnf_autoremove,
+            'dnf autoremove')

@@ -30,6 +30,8 @@ from bleachbit.DeepScan import DeepScan, normalized_walk
 from bleachbit import expanduser
 
 import os
+import sys
+import unittest
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
@@ -85,11 +87,16 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ds.add_search(path, 'bak$')
         ds.add_search(path, '^Thumbs.db$')
         ds.add_search(path, '^Thumbs.db:encryptable$')
-        for ret in ds.scan():
-            if True == ret:
-                # it's yielding control to the GTK idle loop
-                continue
-            self.assertLExists(ret)
+        try:
+            for ret in ds.scan():
+                if True == ret:
+                    # it's yielding control to the GTK idle loop
+                    continue
+                self.assertLExists(ret)
+        except UnicodeDecodeError:
+            # Expectedly ds.scan() throws exception
+            # when we have unicode paths and LANG==C.
+            self.assertTrue(os.environ['LANG'] == 'C')
 
     def test_delete(self):
         """Delete files in a test environment"""
@@ -99,7 +106,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         f_keep = self.write_file('foo.txt')
         subdir = os.path.join(self.tempdir, 'sub')
         os.mkdir(subdir)
-        f_del2 = self.write_file(os.path.join(subdir,'bar.ini.bbtestbak'))
+        f_del2 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestbak'))
 
         # sanity check
         self.assertExists(f_del1)
@@ -117,12 +124,14 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ui = CLI.CliCallback()
         worker = Worker(ui, True, operations)
         list(worker.run())
+        del backends['test']
 
         # validate results
         self.assertFalse(os.path.exists(f_del1))
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
 
+    @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
     def test_normalized_walk_darwin(self):
         import mock
 

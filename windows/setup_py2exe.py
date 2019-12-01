@@ -21,7 +21,6 @@ import glob
 import imp
 import logging
 import os
-import shlex
 import shutil
 import subprocess
 import sys
@@ -46,7 +45,7 @@ logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
 BB_VER = None
-GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime'
+GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gnome\\'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
@@ -58,6 +57,7 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 # mpass=passes for deflate encoder
 # mfb=number of fast bytes
 # bso0 bsp0 quiet output
+# 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
 SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
@@ -182,8 +182,8 @@ def environment_check():
     logger.info('Checking for GTK')
     assert_exist(GTK_DIR)
 
-    logger.info('Checking PyGTK+ library')
-    assert_module('pygtk')
+    logger.info('Checking PyGI library')
+    assert_module('gi')
 
     logger.info('Checking Python win32 library')
     assert_module('win32file')
@@ -215,12 +215,23 @@ def build():
         os.makedirs('dist')
 
     logger.info('Copying GTK files and icon')
-    shutil.copyfile(GTK_DIR + '\\bin\\intl.dll',  'dist\\intl.dll')
-
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
-    copytree(GTK_DIR + '\\share', 'dist\\share')
+    for subpath in ['fontconfig', 'fonts', 'icons', 'themes']:
+        copytree(os.path.join(GTK_DIR, 'share', subpath), 'dist\\share\\' + subpath)
+    SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
+    os.makedirs(os.path.join('dist', SCHEMAS_DIR))
+    shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'), os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
+    for dll in glob.glob1(GTK_DIR, '*.dll'):
+        shutil.copyfile(os.path.join(GTK_DIR,dll), 'dist\\'+dll)
+
+    os.mkdir('dist\\data')
+    shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
+
+    logger.info('Copying CA bundle')
+    import requests
+    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH, os.path.join('dist', 'cacert.pem'))
 
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
@@ -237,6 +248,9 @@ def build():
     logger.info('Checking for CleanerML')
     assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
+    logger.info('Copying license')
+    shutil.copy('COPYING', 'dist')
+
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
 
@@ -251,31 +265,15 @@ def delete_unnecessary():
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
         r'_win32sysloader.pyd',
-        r'bz2.pyd',
-        r'etc\bash_completion.d',
-        r'lib\GNU.Gettext.dll',
         r'lib\gdk-pixbuf-2.0',
-        r'lib\glib-2.0',
-        r'lib\gtk-2.0\include',
-        r'lib\gtk-2.0\2.10.0\engines\libpixmap.dll',
-        r'lib\gtk-2.0\2.10.0\engines\libsvg.dll',
-        r'lib\gtk-2.0\modules\libgail.dll',
-        r'lib\pkgconfig',
+        r'lib\gdbus-2.0',
         r'perfmon.pyd',
-        r'select.pyd',
         r'servicemanager.pyd',
-        r'share\aclocal',
-        r'share\doc',
-        r'share\glib-2.0',
-        r'share\gtk-2.0',
-        r'share\gtk-doc',
-        r'share\icon-naming-utils',
-        r'share\icons\Tango\scalable',
-        r'share\man',
         r'share\themes\default',
         r'share\themes\emacs',
-        r'share\themes\raleigh',
-        r'share\xml',
+        r'share\fontconfig',
+        r'share\icons\highcontrast',
+        r'share\themes',
         r'win32evtlog.pyd',
         r'win32pipe.pyd',
         r'win32wnet.pyd',
@@ -294,42 +292,41 @@ def delete_unnecessary():
             logger.info('Deleting file {} saved {:,} B'.format(
                 path, os.path.getsize(path)))
             os.remove(path)
-    # by wildcard with recursive search
-    delete_wildcards = [
-        '*.a',
-        '*.def',
-        '*.lib',
-        'atk10.mo',
-        'gdk-pixbuf.mo',
-        'gettext-runtime.mo',
-        'glib20.mo',
-        'gtk20-properties.mo',
-        'libgsf.mo',
-    ]
-    for wc in delete_wildcards:
-        total_size = 0
-        for f in recursive_glob('dist', [wc]):
-            total_size += os.path.getsize(f)
-            os.remove(f)
-        logger.info('Deleting wildcard {} saved {:,}B'.format(wc, total_size))
 
 
 @count_size_improvement
 def delete_icons():
-    logger.info('Deleting unused PNG icons')
+    logger.info('Deleting unused PNG/SVG icons')
     # This whitelist comes from analyze_process_monitor_events.py
-    png_whitelist = [
-        'dialog-information.png',
-        'dialog-warning.png',
+    icon_whitelist = [
+        'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
-        'gtk-preferences.png',
+        'list-add-symbolic.svg', # spin box in chaff dialog
+        'list-remove-symbolic.svg', # spin box in chaff dialog
+        'pan-down-symbolic.svg', # there is no pan-down.png
+        'process-stop.png', # abort on toolbar
+        'window-close-symbolic.svg', # png does not get used
+        'window-maximize-symbolic.svg', # no png
+        'window-minimize-symbolic.svg', # no png
+        'window-restore-symbolic.svg' # no png
     ]
-    strip_list = recursive_glob(r'dist\share\icons', ['*.png'])
+    strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:
-        if os.path.basename(f) not in png_whitelist:
+        if os.path.basename(f) not in icon_whitelist:
             os.remove(f)
+        else:
+            logger.info('keeping whitelisted icon: %s', f)
 
+def remove_empty_dirs(root):
+    """Remove empty directories"""
+    import scandir
+    for entry in scandir.scandir(root):
+        if entry.is_dir():
+            remove_empty_dirs(entry.path)
+            if not os.listdir(entry.path):
+                logger.info('Deleting empty directory: %s' % entry.path)
+                os.rmdir(entry.path)
 
 @count_size_improvement
 def clean_translations():
@@ -351,7 +348,7 @@ def clean_translations():
 def strip():
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = []
+    strip_whitelist = ['_sqlite3']
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
@@ -409,7 +406,7 @@ def recompress_library():
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'email']
+    delete_paths = ['distutils']
     for p in delete_paths:
         shutil.rmtree(os.path.join('dist', 'library', p))
 
@@ -436,6 +433,7 @@ def shrink():
     delete_unnecessary()
     delete_icons()
     clean_translations()
+    remove_empty_dirs('dist')
 
     try:
         strip()
@@ -494,11 +492,17 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     logger.info('Building installer')
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    #Was:
+    #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    #Now: Done in NSIS file!
+    opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name, nsi_path)
 
     if not fast:
-        nsis('/DNoTranslations',
+        #Was:
+        #nsis('/DNoTranslations',
+        #Now: Compression gets now done in NSIS file!
+        nsis('/V3 /DNoTranslations /Dpackhdr /DCompressor',
              'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
              nsi_path)
 
@@ -517,6 +521,9 @@ if '__main__' == __name__:
     logger.info('Getting BleachBit version')
     import bleachbit
     BB_VER = bleachbit.APP_VERSION
+    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
+    if build_number:
+        BB_VER = '%s.%s' % (BB_VER, build_number)
     logger.info('BleachBit version ' + BB_VER)
 
     environment_check()

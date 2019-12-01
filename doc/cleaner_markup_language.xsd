@@ -119,7 +119,6 @@
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
                       <xs:attribute name="address" type="xs:string"/>
-                      <xs:attribute name="cache" type="xs:string"/>
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
@@ -132,6 +131,8 @@
                             <xs:enumeration value="chrome.history"/>
                             <xs:enumeration value="chrome.keywords"/>
                             <xs:enumeration value="delete"/>
+                            <xs:enumeration value="dnf.autoremove"/>
+                            <xs:enumeration value="dnf.clean_all"/>
                             <xs:enumeration value="ini"/>
                             <xs:enumeration value="journald.clean"/>
                             <xs:enumeration value="json"/>
@@ -165,6 +166,7 @@
                             <xs:enumeration value="glob"/>
                             <xs:enumeration value="walk.all"/>
                             <xs:enumeration value="walk.files"/>
+                            <xs:enumeration value="walk.top"/>
                           </xs:restriction>
                         </xs:simpleType>
                       </xs:attribute>

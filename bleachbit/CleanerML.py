@@ -22,7 +22,7 @@
 Create cleaners from CleanerML (markup language)
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit.Action import ActionProvider
@@ -37,6 +37,22 @@ import sys
 import xml.dom.minidom
 
 logger = logging.getLogger(__name__)
+
+
+def default_vars():
+    """Return default multi-value variables"""
+    ret = {}
+    if not os.name == 'nt':
+        return ret
+    # Expand ProgramFiles to also be ProgramW6432, etc.
+    wowvars = (('ProgramFiles', 'ProgramW6432'),
+               ('CommonProgramFiles', 'CommonProgramW6432'))
+    for v1, v2 in wowvars:
+        # Remove None, if variable is not found.
+        # Make list unique.
+        mylist = list(set([x for x in os.getenv(v1), os.getenv(v2) if x]))
+        ret[v1] = mylist
+    return ret
 
 
 class CleanerML:
@@ -56,7 +72,7 @@ class CleanerML:
         self.option_name = None
         self.option_description = None
         self.option_warning = None
-        self.vars = {}
+        self.vars = default_vars()
         self.xlate_cb = xlate_cb
         if self.xlate_cb is None:
             self.xlate_mode = False
@@ -263,9 +279,17 @@ def list_cleanerml_files(local_only=False):
         yield pathname
 
 
-def load_cleaners():
+def load_cleaners(cb_progress=lambda x: None):
     """Scan for CleanerML and load them"""
-    for pathname in list_cleanerml_files():
+    cleanerml_files = list(list_cleanerml_files())
+    cleanerml_files.sort()
+    if not cleanerml_files:
+        logger.debug('No CleanerML files to load.')
+        return
+    total_files = len(cleanerml_files)
+    cb_progress(0.0)
+    files_done = 0
+    for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(pathname)
         except:
@@ -276,12 +300,18 @@ def load_cleaners():
             Cleaner.backends[cleaner.id] = cleaner
         else:
             logger.debug(
+                # TRANSLATORS: An action is something like cleaning a specific file.
+                # "Not usable" means the whole cleaner will be ignored.
+                # The substituted variable is a pathname.
                 _("Cleaner is not usable on this OS because it has no actions: %s"), pathname)
+        files_done += 1
+        cb_progress(1.0 * files_done / total_files)
+        yield True
 
 
 def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
-    msgid = msgid.replace('"', '\\"') # escape quotation mark
+    msgid = msgid.replace('"', '\\"')  # escape quotation mark
     if translators:
         translators = "#. %s\n" % translators
     else:

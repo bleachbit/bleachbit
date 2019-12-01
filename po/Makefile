@@ -1,7 +1,7 @@
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
-SRC = $(wildcard ../bleachbit/*.py)
+SRC = $(wildcard ../bleachbit/*.py) ../data/app-menu.ui
 POTFILE = $(APP).pot
 
 

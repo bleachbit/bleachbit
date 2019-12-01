@@ -69,7 +69,6 @@ def get_winapp2():
     return fname
 
 
-@unittest.skipUnless(sys.platform == 'win32', 'not running on windows')
 class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
 
@@ -80,6 +79,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(really_delete):
                     common.validate_result(self, result, really_delete)
 
+    @common.skipUnlessWindows
     def test_remote(self):
         """Test with downloaded file"""
         winapps = Winapp(get_winapp2())
@@ -126,6 +126,7 @@ class WinappTestCase(common.BleachbitTestCase):
                              'detectos(%s, %s)==%s instead of %s' % (req, mock,
                                                                      actual_return, expected_return))
 
+    @common.skipUnlessWindows
     def test_detect_file(self):
         """Test detect_file function"""
         tests = [('%windir%\\system32\\kernel32.dll', True),
@@ -202,6 +203,7 @@ class WinappTestCase(common.BleachbitTestCase):
         else:
             return Winapp(self.ini_fn).get_cleaners()
 
+    @common.skipUnlessWindows
     def test_fake(self):
         """Test with fake file"""
 
@@ -264,7 +266,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft",
                 # Below checks Detect with DetectFile where one exists
                 "\nDetect=HKCU\\Software\\Microsoft\nDetectFile=%%APPDATA%%\\does_not_exist",
-                "\nDetect=HKCU\\Software\\does_not_exist\nDetectFile=%%APPDATA%%\\Microsoft"):
+                    "\nDetect=HKCU\\Software\\does_not_exist\nDetectFile=%%APPDATA%%\\Microsoft"):
                 new_ini = test[0] + detect
                 new_test = [new_ini, ] + [x for x in test[1:]]
                 new_tests.append(new_test)
@@ -323,6 +325,7 @@ class WinappTestCase(common.BleachbitTestCase):
         self.run_all(cleaner, True)
         shutil.rmtree(dirname, True)
 
+    @common.skipUnlessWindows
     def test_excludekey(self):
         """Test for ExcludeKey"""
 
@@ -418,3 +421,44 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_many_patterns(self):
+        """Test a cleaner like Steam Installers and related performance improvement
+
+        https://github.com/bleachbit/bleachbit/issues/325
+        """
+
+        # set up environment
+        file_count = 1000
+        dir_count = 10
+        print('Making %d files in each of %d directories.' %
+              (file_count, dir_count))
+        tmp_dir = tempfile.mkdtemp()
+        for i_d in range(1, dir_count+1):
+            sub_dir = os.path.join(tmp_dir, 'dir%d' % i_d)
+            for i_f in range(1, file_count+1):
+                tmp_fn = os.path.join(sub_dir, 'file%d' % i_f)
+                common.touch_file(tmp_fn)
+
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        import string
+        searches = ';'.join(
+            ['*.%s' % letter for letter in string.letters[0:26]])
+        cleaner = self.ini2cleaner(
+            'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
+
+        # preview
+        import time
+        t0 = time.time()
+        self.run_all(cleaner, False)
+        t1 = time.time()
+        print('Elapsed time in preview: %.4f seconds ' % (t1-t0))
+
+        # delete
+        self.run_all(cleaner, False)
+
+        # clean up
+        shutil.rmtree(tmp_dir)

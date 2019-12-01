@@ -22,16 +22,16 @@
 Store and retrieve user preferences
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit import General
 from bleachbit import _
+from bleachbit.Log import set_root_log_level
 
 import logging
 import os
 import re
-import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +39,21 @@ if 'nt' == os.name:
     from win32file import GetLongPathName
 
 
-boolean_keys = ['auto_hide', 'auto_start', 'check_beta',
-                'check_online_updates', 'first_start', 'shred', 'exit_done', 'delete_confirmation', 'units_iec']
+boolean_keys = ['auto_hide',
+                'check_beta',
+                'check_online_updates',
+                'dark_mode',
+                'delete_confirmation',
+                'debug',
+                'exit_done',
+                'first_start',
+                'shred',
+                'units_iec',
+                'window_maximized',
+                'window_fullscreen', ]
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
 def path_to_option(pathname):
@@ -56,6 +67,20 @@ def path_to_option(pathname):
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
+
+
+def init_configuration():
+    """Initialize an empty configuration, if necessary"""
+    if os.path.lexists(bleachbit.options_file):
+        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+        os.remove(bleachbit.options_file)
+    with open(bleachbit.options_file, 'w') as f_ini:
+        f_ini.write('[bleachbit]\n')
+        if os.name == 'nt' and bleachbit.portable_mode:
+            f_ini.write('[Portable]\n')
+    for section in options.config.sections():
+        options.config.remove_section(section)
+    options.restore()
 
 
 class Options:
@@ -81,7 +106,6 @@ class Options:
         try:
             self.config.write(_file)
         except IOError as e:
-            print(e)
             from errno import ENOSPC
             if e.errno == ENOSPC:
                 logger.error(
@@ -120,6 +144,10 @@ class Options:
         if not self.config.has_option('bleachbit', key):
             self.set(key, value)
 
+    def has_option(self, option, section='bleachbit'):
+        """Check if option is set"""
+        return self.config.has_option(section, option)
+
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
@@ -127,7 +155,13 @@ class Options:
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
+                # command line overrides store configuration
+                return True
             return self.config.getboolean(section, option)
+        elif option in int_keys:
+            return self.config.getint(section, option)
         return self.config.get(section, option.encode('utf-8'))
 
     def get_hashpath(self, pathname):
@@ -192,15 +226,33 @@ class Options:
             return self.config.getboolean('tree', option)
         except:
             # in case of corrupt configuration (Launchpad #799130)
-            traceback.print_exc()
+            logger.exception('Error in get_tree()')
             return False
+
+    def is_corrupt(self):
+        """Perform a self-check for corruption of the configuration"""
+        # no boolean key must raise an exception
+        for boolean_key in boolean_keys:
+            try:
+                if self.config.has_option('bleachbit', boolean_key):
+                    self.config.getboolean('bleachbit', boolean_key)
+            except ValueError:
+                return True
+        # no int key must raise an exception
+        for int_key in int_keys:
+            try:
+                if self.config.has_option('bleachbit', int_key):
+                    self.config.getint('bleachbit', int_key)
+            except ValueError:
+                return True
+        return False
 
     def restore(self):
         """Restore saved options from disk"""
         try:
             self.config.read(bleachbit.options_file)
         except:
-            traceback.print_exc()
+            logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):
@@ -215,13 +267,16 @@ class Options:
 
         # set defaults
         self.__set_default("auto_hide", True)
-        self.__set_default("auto_start", False)
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
-        self.__set_default("shred", False)
-        self.__set_default("exit_done", False)
+        self.__set_default("dark_mode", True)
         self.__set_default("delete_confirmation", True)
+        self.__set_default("debug", False)
+        self.__set_default("exit_done", False)
+        self.__set_default("shred", False)
         self.__set_default("units_iec", False)
+        self.__set_default("window_fullscreen", False)
+        self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
@@ -248,6 +303,9 @@ class Options:
         self.config.set(section, key.encode('utf-8'), str(value))
         if commit:
             self.__flush()
+
+    def commit(self):
+        self.__flush()
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
@@ -320,3 +378,6 @@ class Options:
 
 
 options = Options()
+
+# Now that the configuration is loaded, honor the debug preference there.
+set_root_log_level()

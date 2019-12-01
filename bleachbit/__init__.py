@@ -22,14 +22,15 @@
 Code that is commonly shared throughout BleachBit
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import gettext
 import locale
-import logging
 import os
 import re
 import sys
+
+from bleachbit import Log
 
 #
 # Config Parser got renamed in Python 3
@@ -40,25 +41,13 @@ else:
     from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
 
 
-APP_VERSION = "2.3"
+APP_VERSION = "3.0.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-logger = logging.getLogger('bleachbit')
-if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
-    # When frozen in py2exe, avoid bleachbit.exe.log
-    logger.setLevel(logging.ERROR)
-else:
-    # debug if command line asks for it or if this a non-final release
-    if any(arg.startswith('--debug-log') for arg in sys.argv) or \
-            int(APP_VERSION.split('.')[1]) % 2:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-logger_sh = logging.StreamHandler()
-logger.addHandler(logger_sh)
+logger = Log.init_log()
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).
@@ -72,22 +61,21 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(sys.executable.decode(sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(
+        sys.executable.decode(sys.getfilesystemencoding()))
 else:
-    # __file__ is absolute path to bleachbit/__init__.py
-    bleachbit_exe_path = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
+    # __file__ is absolute path to __init__.py
+    bleachbit_exe_path = os.path.dirname(os.path.dirname(
+        __file__.decode(sys.getfilesystemencoding())))
 
 # license
 license_filename = None
 license_filenames = ('/usr/share/common-licenses/GPL-3',  # Debian, Ubuntu
-                     os.path.join(
-                         bleachbit_exe_path, 'COPYING'),  # Microsoft Windows
-                     '/usr/share/doc/bleachbit-' + APP_VERSION +
-                     '/COPYING',  # CentOS, Fedora, RHEL
-                     '/usr/share/licenses/bleachbit/COPYING',
-                     # Fedora 21+, RHEL 7+
-                     '/usr/share/doc/packages/bleachbit/COPYING',
-                     # OpenSUSE 11.1
+                     # Microsoft Windows
+                     os.path.join(bleachbit_exe_path, 'COPYING'),
+                     '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING',  # CentOS, Fedora, RHEL
+                     '/usr/share/licenses/bleachbit/COPYING',  # Fedora 21+, RHEL 7+
+                     '/usr/share/doc/packages/bleachbit/COPYING',  # OpenSUSE 11.1
                      '/usr/pkg/share/doc/bleachbit/COPYING',  # NetBSD 5
                      '/usr/share/licenses/common/GPL3/license.txt')  # Arch Linux
 for lf in license_filenames:
@@ -98,6 +86,7 @@ for lf in license_filenames:
 
 # os.path.expandvars does not work well with non-ascii Windows paths.
 # This is a unicode-compatible reimplementation of that function.
+# Note that if there are errors in the encoding it returns just expanded str.
 def expandvars(var):
     """Expand environment variables.
 
@@ -105,7 +94,11 @@ def expandvars(var):
     form $name or ${name} or %name% are replaced by the value of environment
     variable name."""
     if isinstance(var, str):
-        final = var.decode('utf-8')
+        try:
+            final = var.decode('utf-8')
+        except UnicodeDecodeError:
+            # Keep a string which won't be expanded under Windows 7.
+            final = var
     else:
         final = var
 
@@ -121,7 +114,14 @@ def expandvars(var):
             final = re.sub(r'\$(.*?)(?=$|\\)',
                            lambda x: '%%%s%%' % x.group(1),
                            final)
-        final = _winreg.ExpandEnvironmentStrings(final)
+        try:
+            final = _winreg.ExpandEnvironmentStrings(final)
+        except TypeError:
+            # An error occurs when filename contains invalid
+            # char and we return string instead of unicode.
+            # This can happen on win7.
+            pass
+
     return final
 
 # Windows paths have to be unicode, but os.path.expanduser does not support it.
@@ -190,7 +190,9 @@ if not portable_mode:
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
-if sys.platform.startswith('linux') or sys.platform == 'darwin':
+if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')):
+    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+elif sys.platform.startswith('linux') or sys.platform == 'darwin':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
@@ -200,27 +202,39 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
-    logger.warning('unknown system cleaners directory for platform %s ', sys.platform)
+    logger.warning(
+        'unknown system cleaners directory for platform %s ', sys.platform)
 
 # local cleaners directory for running without installation (Windows or Linux)
 local_cleaners_dir = None
 if portable_mode:
-    local_cleaners_dir = os.path.normpath(
-        os.path.join(bleachbit_exe_path, '../cleaners'))
+    local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
 # application icon
 __icons = (
     '/usr/share/pixmaps/bleachbit.png',  # Linux
-    os.path.join(bleachbit_exe_path, 'share\\bleachbit.png'),  # Windows
     '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
     '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
-    os.path.normpath(os.path.join(bleachbit_exe_path, '../bleachbit.png')),  # local
+    os.path.normpath(os.path.join(bleachbit_exe_path,
+                                  'share\\bleachbit.png')),  # Windows
+    # When running from source (i.e., not installed).
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
 )
 appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
 
+# menu
+# This path works when running from source (cross platform) or when
+# installed on Windows.
+app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
+if not os.path.exists(app_menu_filename) and system_cleaners_dir:
+    # This path works when installed on Linux.
+    app_menu_filename = os.path.abspath(
+        os.path.join(system_cleaners_dir, '../app-menu.ui'))
+if not os.path.exists(app_menu_filename):
+    logger.error('unknown location for app-menu.ui')
 
 # locale directory
 if os.path.exists("./locale/"):
@@ -238,11 +252,8 @@ else:
           sys.platform.startswith('freebsd')):
         locale_dir = "/usr/local/share/locale/"
 
-
 # launcher
 launcher_path = '/usr/share/applications/bleachbit.desktop'
-if 'posix' == os.name:
-    autostart_path = expanduser('~/.config/autostart/bleachbit.desktop')
 
 
 #
@@ -272,6 +283,28 @@ except:
     def _(msg):
         """Dummy replacement for ugettext"""
         return msg
+
+try:
+    locale.bindtextdomain('bleachbit', locale_dir)
+except AttributeError:
+    if sys.platform.startswith('win'):
+        try:
+            # We're on Windows; try and use libintl-8.dll instead
+            import ctypes
+            libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
+        except OSError:
+            # libintl-8.dll isn't available; give up
+            pass
+        else:
+            # bindtextdomain can not handle Unicode
+            if isinstance(locale_dir, unicode):
+                path = locale_dir.encode('utf-8')
+            else:
+                path = locale_dir
+            libintl.bindtextdomain('bleachbit', path)
+            libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
+except:
+    logger.exception('error binding text domain')
 
 try:
     ungettext = t.ungettext
@@ -333,6 +366,7 @@ def pgettext(msgctxt, msgid):
             return translation
     else:
         return _(msgid)
+
 
 # Map our pgettext() custom function to _p()
 _p = pgettext

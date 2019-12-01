@@ -23,7 +23,7 @@
 Show diagnostic information
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 
@@ -39,18 +39,25 @@ if 'nt' == os.name:
 def diagnostic_info():
     """Return diagnostic information as a string"""
     # this section is for application and library versions
-    s = "BleachBit version %s" % bleachbit.APP_VERSION
+    s = u"BleachBit version %s" % bleachbit.APP_VERSION
 
     try:
+        # Linux tarball will have a revision but not build_number
         from bleachbit.Revision import revision
         s += '\nGit revision %s' % revision
     except:
         pass
     try:
-        import gtk
-        s += '\nGTK+ version %s' % '.'.join([str(x) for x in gtk.gtk_version])
-    except ImportError:
-        s += '\nGTK+ not detected'
+        from bleachbit.Revision import build_number
+        s += '\nBuild number %s' % build_number
+    except:
+        pass
+    try:
+        from gi.repository import Gtk
+        s += '\nGTK version {0}.{1}.{2}'.format(
+            Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
+    except:
+        pass
     import sqlite3
     s += "\nSQLite version %s" % sqlite3.sqlite_version
 
@@ -58,9 +65,8 @@ def diagnostic_info():
     s += "\nFSE = %s" % bleachbit.FSE
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
-    s += "\noptions_dir = %s" % bleachbit.options_dir.decode(bleachbit.FSE)
-    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir.decode(
-        bleachbit.FSE)
+    s += "\noptions_dir = %s" % bleachbit.options_dir
+    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir
     s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
 
     # this section is for information about the system environment
@@ -68,7 +74,7 @@ def diagnostic_info():
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     if 'nt' == os.name:
-        envs = ('APPDATA', 'LocalAppData', 'LocalAppDataLow', 'Music',
+        envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
         if os.getenv(env):
@@ -76,8 +82,7 @@ def diagnostic_info():
                                              os.getenv(env).decode(bleachbit.FSE))
         else:
             s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser(
-        '~').decode(bleachbit.FSE)
+    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser('~')
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(

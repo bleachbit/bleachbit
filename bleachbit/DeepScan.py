@@ -23,7 +23,7 @@
 Scan directory tree for files to delete
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import logging
 import os
@@ -50,8 +50,13 @@ def normalized_walk(top, **kwargs):
     is like `os.walk` but recomposes those decomposed filenames on
     macOS
     """
+    try:
+        from scandir import walk
+    except:
+        # there is a warning in FileUtilities, so don't warn again here
+        from os import walk
     if 'Darwin' == platform.system():
-        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
+        for dirpath, dirnames, filenames in walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', to_unicode(fn)).encode(UTF8)
                 for fn in filenames
@@ -66,7 +71,7 @@ def normalized_walk(top, **kwargs):
             # bytestrings to avoid potential UnicodeDecodeError in
             # posixpath.join()
             top2 = str(top)
-        for result in os.walk(top2, **kwargs):
+        for result in walk(top2, **kwargs):
             yield result
 
 
@@ -87,7 +92,8 @@ class DeepScan:
 
     def scan(self):
         """Perform requested searches and yield each match"""
-        logging.getLogger(__name__).debug('DeepScan.scan: searches=%s', str(self.searches))
+        logging.getLogger(__name__).debug(
+            'DeepScan.scan: searches=%s', str(self.searches))
         import time
         yield_time = time.time()
 

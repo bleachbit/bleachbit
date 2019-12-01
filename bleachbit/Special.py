@@ -22,7 +22,7 @@
 Cross-platform, special cleaning operations
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit.Options import options
 from bleachbit import FileUtilities

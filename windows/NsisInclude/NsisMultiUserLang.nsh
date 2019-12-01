@@ -1,11 +1,26 @@
+/*
+
+NsisMultiUser.nsh - NSIS plugin that allows "per-user" (no admin required) and "per-machine" (asks elevation *only when necessary*) installations
+
+Full source code, documentation and demos at https://github.com/Drizin/NsisMultiUser/
+
+Copyright 2016-2019 Ricardo Drizin, Alex Mitev
+
+File   : Include\NsisMultiUserLang.nsh
+Version: 2019-11-11
+
+*/
+
 !ifdef LANG_ENGLISH
 	LangString MULTIUSER_PAGE_TITLE ${LANG_ENGLISH} "Choose Users"
 	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to install $(^NameDA)."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ENGLISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ENGLISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ENGLISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ENGLISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ENGLISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ENGLISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ENGLISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ENGLISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ENGLISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ENGLISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ENGLISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -24,7 +39,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ENGLISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ENGLISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ENGLISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ENGLISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ENGLISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -33,8 +48,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_AFRIKAANS} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_AFRIKAANS} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_AFRIKAANS} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_AFRIKAANS} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_AFRIKAANS} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_AFRIKAANS} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_AFRIKAANS} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_AFRIKAANS} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_AFRIKAANS} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_AFRIKAANS} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_AFRIKAANS} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_AFRIKAANS} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -53,7 +70,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_AFRIKAANS} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_AFRIKAANS} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_AFRIKAANS} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_AFRIKAANS} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_AFRIKAANS} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ALBANIAN
@@ -62,8 +79,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ALBANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ALBANIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ALBANIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ALBANIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ALBANIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ALBANIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ALBANIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ALBANIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ALBANIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ALBANIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ALBANIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ALBANIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -82,7 +101,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ALBANIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ALBANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ALBANIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ALBANIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ALBANIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ARABIC
@@ -91,8 +110,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ARABIC} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ARABIC} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ARABIC} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ARABIC} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ARABIC} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ARABIC} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ARABIC} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ARABIC} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ARABIC} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ARABIC} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ARABIC} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ARABIC} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -111,7 +132,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ARABIC} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ARABIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ARABIC} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARABIC} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARABIC} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ARMENIAN
@@ -120,8 +141,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ARMENIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ARMENIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ARMENIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ARMENIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ARMENIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ARMENIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ARMENIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ARMENIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ARMENIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ARMENIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ARMENIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ARMENIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -140,7 +163,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ARMENIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ARMENIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ARMENIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARMENIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARMENIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -149,8 +172,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ASTURIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ASTURIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ASTURIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ASTURIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ASTURIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ASTURIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ASTURIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ASTURIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ASTURIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ASTURIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ASTURIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ASTURIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -169,7 +194,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ASTURIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ASTURIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ASTURIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ASTURIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ASTURIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_BASQUE
@@ -178,8 +203,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BASQUE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_BASQUE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BASQUE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_BASQUE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_BASQUE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_BASQUE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_BASQUE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_BASQUE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_BASQUE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BASQUE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BASQUE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_BASQUE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -198,7 +225,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_BASQUE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BASQUE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BASQUE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BASQUE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BASQUE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -207,8 +234,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BELARUSIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_BELARUSIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BELARUSIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_BELARUSIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_BELARUSIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_BELARUSIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_BELARUSIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_BELARUSIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_BELARUSIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BELARUSIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BELARUSIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_BELARUSIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -227,7 +256,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_BELARUSIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BELARUSIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BELARUSIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BELARUSIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BELARUSIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -236,8 +265,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BOSNIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_BOSNIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BOSNIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_BOSNIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_BOSNIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_BOSNIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_BOSNIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_BOSNIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_BOSNIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BOSNIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BOSNIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_BOSNIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -256,7 +287,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_BOSNIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BOSNIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BOSNIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BOSNIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BOSNIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_BRETON
@@ -265,8 +296,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BRETON} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_BRETON} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BRETON} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_BRETON} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_BRETON} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_BRETON} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_BRETON} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_BRETON} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_BRETON} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BRETON} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BRETON} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_BRETON} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -285,7 +318,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_BRETON} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BRETON} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BRETON} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BRETON} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BRETON} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -294,8 +327,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BULGARIAN} "Изберете за кои потребители да се премахне $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_BULGARIAN} "Изберете дали да инсталирате $(^NameDA) за всички потребители или за текущия потребител."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BULGARIAN} "$(^NameDA) е инсталиран едновременно за всички потребители и за текущия потребител.$\r$\nИзберете коя инсталация премахнете."
-	LangString MULTIUSER_ALL_USERS ${LANG_BULGARIAN} "За всеки, който използва този компютър (всички потребители)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_BULGARIAN} "За мен ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_BULGARIAN} "За &всеки, който използва този компютър (всички потребители)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_BULGARIAN} "За &мен ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_BULGARIAN} "За всеки, който използва този компютър (всички потребители)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_BULGARIAN} "За мен ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BULGARIAN} "Нова инсталация за всички потребители."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BULGARIAN} "Нова инсталация за текущия потребител."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_BULGARIAN} "Версия {VERSION} е инсталирана за всички потребители в $\"{FOLDER}$\"."
@@ -314,7 +349,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_BULGARIAN} "Трябва да влезете с профил, който е член на администраторската група, за да продължите."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BULGARIAN} "Операционната система не поддържа повишаване на привилегиите."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BULGARIAN} "Не е възможно повишаване на привилегиите, услугата Secondary Logon не е пусната."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BULGARIAN} "Не е възможно повишаване на привилегиите, грешка {ERROR}."		
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BULGARIAN} "Не е възможно повишаване на привилегиите, грешка {ERROR}."
 !endif
 
 !ifdef LANG_CATALAN
@@ -323,8 +358,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_CATALAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_CATALAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_CATALAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_CATALAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_CATALAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_CATALAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_CATALAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_CATALAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_CATALAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_CATALAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_CATALAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_CATALAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -343,7 +380,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_CATALAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CATALAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CATALAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CATALAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CATALAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_CORSICAN
@@ -352,8 +389,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_CORSICAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_CORSICAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_CORSICAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_CORSICAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_CORSICAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_CORSICAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_CORSICAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_CORSICAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_CORSICAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_CORSICAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_CORSICAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_CORSICAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -372,7 +411,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_CORSICAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CORSICAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CORSICAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CORSICAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CORSICAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_CROATIAN
@@ -381,8 +420,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_CROATIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_CROATIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_CROATIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_CROATIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_CROATIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_CROATIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_CROATIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_CROATIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_CROATIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_CROATIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_CROATIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_CROATIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -401,7 +442,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_CROATIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CROATIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CROATIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CROATIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CROATIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_CZECH
@@ -410,8 +451,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_CZECH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_CZECH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_CZECH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_CZECH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_CZECH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_CZECH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_CZECH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_CZECH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_CZECH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_CZECH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_CZECH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_CZECH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -430,7 +473,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_CZECH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CZECH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CZECH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CZECH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CZECH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_DANISH
@@ -439,8 +482,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_DANISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_DANISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_DANISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_DANISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_DANISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_DANISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_DANISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_DANISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_DANISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_DANISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_DANISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_DANISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -459,7 +504,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_DANISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_DANISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_DANISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DANISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DANISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_DUTCH
@@ -468,8 +513,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_DUTCH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_DUTCH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_DUTCH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_DUTCH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_DUTCH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_DUTCH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_DUTCH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_DUTCH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_DUTCH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_DUTCH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_DUTCH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_DUTCH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -488,7 +535,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_DUTCH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_DUTCH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_DUTCH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DUTCH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DUTCH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ESPERANTO
@@ -497,8 +544,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ESPERANTO} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ESPERANTO} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ESPERANTO} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ESPERANTO} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ESPERANTO} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ESPERANTO} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ESPERANTO} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ESPERANTO} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ESPERANTO} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ESPERANTO} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ESPERANTO} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ESPERANTO} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -517,7 +566,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ESPERANTO} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ESPERANTO} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ESPERANTO} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESPERANTO} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESPERANTO} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -526,8 +575,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ESTONIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ESTONIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ESTONIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ESTONIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ESTONIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ESTONIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ESTONIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ESTONIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ESTONIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ESTONIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ESTONIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ESTONIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -546,7 +597,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ESTONIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ESTONIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ESTONIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESTONIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESTONIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_FARSI
@@ -555,8 +606,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_FARSI} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_FARSI} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_FARSI} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_FARSI} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_FARSI} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_FARSI} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_FARSI} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_FARSI} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_FARSI} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_FARSI} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_FARSI} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_FARSI} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -575,7 +628,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_FARSI} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FARSI} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FARSI} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FARSI} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FARSI} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_FINNISH
@@ -584,8 +637,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_FINNISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_FINNISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_FINNISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_FINNISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_FINNISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_FINNISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_FINNISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_FINNISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_FINNISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_FINNISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_FINNISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_FINNISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -604,7 +659,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_FINNISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FINNISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FINNISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FINNISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FINNISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_FRENCH
@@ -613,8 +668,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_FRENCH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_FRENCH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_FRENCH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_FRENCH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_FRENCH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_FRENCH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_FRENCH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_FRENCH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_FRENCH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_FRENCH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_FRENCH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_FRENCH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -633,7 +690,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_FRENCH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FRENCH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FRENCH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FRENCH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FRENCH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_GALICIAN
@@ -642,8 +699,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GALICIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_GALICIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_GALICIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_GALICIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_GALICIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_GALICIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_GALICIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_GALICIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_GALICIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_GALICIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_GALICIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_GALICIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -662,7 +721,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_GALICIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GALICIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GALICIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GALICIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GALICIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_GEORGIAN
@@ -671,8 +730,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GEORGIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_GEORGIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_GEORGIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_GEORGIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_GEORGIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_GEORGIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_GEORGIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_GEORGIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_GEORGIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_GEORGIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_GEORGIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_GEORGIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -691,7 +752,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_GEORGIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GEORGIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GEORGIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GEORGIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GEORGIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_GERMAN
@@ -701,8 +762,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GERMAN} "Wähle für welche Benutzer $(^NameDA) entfernt werden soll."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_GERMAN} "Selektiere entweder $(^NameDA) zu installieren für alle Benutzer, oder für aktuellen Benutzer."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_GERMAN} "$(^NameDA) ist installiert für beides, für alle Benutzer und für aktuellen Benutzer.$\r$\nWähle, welche Installation entfernt werden soll."
-	LangString MULTIUSER_ALL_USERS ${LANG_GERMAN} "Für jeden, der diesen Computer benutzt (alle Benutzer)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_GERMAN} "Für mich ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_GERMAN} "Für &jeden, der diesen Computer benutzt (alle Benutzer)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_GERMAN} "Für &mich ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_GERMAN} "Für jeden, der diesen Computer benutzt (alle Benutzer)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_GERMAN} "Für mich ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_GERMAN} "Frische Installation für alle Benutzer."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_GERMAN} "Frische Installation für aktuellen Benutzer."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_GERMAN} "Version {VERSION} ist installiert für alle Benutzer in $\"{FOLDER}$\"."
@@ -721,7 +784,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_GERMAN} "Du musst Dich mit einem Konto, dass ein Mitglied der Administratoren Gruppe ist, anmelden um fortzufahren."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GERMAN} "Das Betriebssystem unterstützt nicht Hochstuffung."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GERMAN} "Hochstuffung nicht möglich, zweiter Anmelde-Service läuft nicht."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GERMAN} "Hochstuffung nicht möglich, Fehler {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GERMAN} "Hochstuffung nicht möglich, Fehler {ERROR}."
 !endif
 
 !ifdef LANG_GREEK
@@ -730,8 +793,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GREEK} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_GREEK} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_GREEK} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_GREEK} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_GREEK} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_GREEK} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_GREEK} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_GREEK} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_GREEK} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_GREEK} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_GREEK} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_GREEK} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -750,7 +815,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_GREEK} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GREEK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GREEK} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GREEK} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GREEK} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_HEBREW
@@ -759,8 +824,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_HEBREW} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_HEBREW} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_HEBREW} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_HEBREW} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_HEBREW} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_HEBREW} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_HEBREW} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_HEBREW} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_HEBREW} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_HEBREW} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_HEBREW} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_HEBREW} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -779,7 +846,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_HEBREW} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_HEBREW} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_HEBREW} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HEBREW} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HEBREW} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -788,8 +855,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_HUNGARIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_HUNGARIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_HUNGARIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_HUNGARIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_HUNGARIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_HUNGARIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_HUNGARIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_HUNGARIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_HUNGARIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_HUNGARIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_HUNGARIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_HUNGARIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -808,7 +877,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_HUNGARIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_HUNGARIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_HUNGARIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HUNGARIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HUNGARIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ICELANDIC
@@ -817,8 +886,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ICELANDIC} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ICELANDIC} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ICELANDIC} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ICELANDIC} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ICELANDIC} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ICELANDIC} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ICELANDIC} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ICELANDIC} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ICELANDIC} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ICELANDIC} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ICELANDIC} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ICELANDIC} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -837,7 +908,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ICELANDIC} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ICELANDIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ICELANDIC} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ICELANDIC} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ICELANDIC} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -846,8 +917,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_INDONESIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_INDONESIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_INDONESIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_INDONESIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_INDONESIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_INDONESIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_INDONESIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_INDONESIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_INDONESIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_INDONESIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_INDONESIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_INDONESIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -866,7 +939,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_INDONESIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_INDONESIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_INDONESIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_INDONESIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_INDONESIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_IRISH
@@ -875,8 +948,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_IRISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_IRISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_IRISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_IRISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_IRISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_IRISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_IRISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_IRISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_IRISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_IRISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_IRISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_IRISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -895,7 +970,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_IRISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_IRISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_IRISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_IRISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_IRISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ITALIAN
@@ -904,8 +979,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ITALIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ITALIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ITALIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ITALIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ITALIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ITALIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ITALIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ITALIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ITALIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ITALIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ITALIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ITALIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -924,7 +1001,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ITALIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ITALIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_JAPANESE
@@ -933,8 +1010,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_JAPANESE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_JAPANESE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_JAPANESE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_JAPANESE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_JAPANESE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_JAPANESE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_JAPANESE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_JAPANESE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_JAPANESE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_JAPANESE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_JAPANESE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_JAPANESE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -953,7 +1032,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_JAPANESE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_JAPANESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_JAPANESE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_JAPANESE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_JAPANESE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_KOREAN
@@ -962,8 +1041,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_KOREAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_KOREAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_KOREAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_KOREAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_KOREAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_KOREAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_KOREAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_KOREAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_KOREAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_KOREAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_KOREAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_KOREAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -982,7 +1063,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_KOREAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_KOREAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_KOREAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KOREAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KOREAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_KURDISH
@@ -991,8 +1072,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_KURDISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_KURDISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_KURDISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_KURDISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_KURDISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_KURDISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_KURDISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_KURDISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_KURDISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_KURDISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_KURDISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_KURDISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1011,7 +1094,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_KURDISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_KURDISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_KURDISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KURDISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KURDISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_LATVIAN
@@ -1020,8 +1103,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_LATVIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_LATVIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_LATVIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_LATVIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_LATVIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_LATVIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_LATVIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_LATVIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_LATVIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_LATVIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_LATVIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_LATVIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1040,7 +1125,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_LATVIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LATVIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LATVIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LATVIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LATVIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -1049,8 +1134,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_LITHUANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_LITHUANIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_LITHUANIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_LITHUANIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_LITHUANIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_LITHUANIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_LITHUANIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_LITHUANIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_LITHUANIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_LITHUANIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_LITHUANIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_LITHUANIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1069,7 +1156,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_LITHUANIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LITHUANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LITHUANIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LITHUANIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LITHUANIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_LUXEMBOURGISH
@@ -1078,8 +1165,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_LUXEMBOURGISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_LUXEMBOURGISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_LUXEMBOURGISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_LUXEMBOURGISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_LUXEMBOURGISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_LUXEMBOURGISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_LUXEMBOURGISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_LUXEMBOURGISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_LUXEMBOURGISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_LUXEMBOURGISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_LUXEMBOURGISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_LUXEMBOURGISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1098,7 +1187,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_LUXEMBOURGISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LUXEMBOURGISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LUXEMBOURGISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LUXEMBOURGISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LUXEMBOURGISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_MACEDONIAN
@@ -1107,8 +1196,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_MACEDONIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_MACEDONIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_MACEDONIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_MACEDONIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_MACEDONIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_MACEDONIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_MACEDONIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_MACEDONIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_MACEDONIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_MACEDONIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_MACEDONIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_MACEDONIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1127,7 +1218,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_MACEDONIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MACEDONIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MACEDONIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MACEDONIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MACEDONIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_MALAY
@@ -1136,8 +1227,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_MALAY} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_MALAY} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_MALAY} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_MALAY} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_MALAY} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_MALAY} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_MALAY} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_MALAY} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_MALAY} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_MALAY} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_MALAY} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_MALAY} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1156,7 +1249,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_MALAY} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MALAY} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MALAY} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MALAY} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MALAY} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_MONGOLIAN
@@ -1165,8 +1258,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_MONGOLIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_MONGOLIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_MONGOLIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_MONGOLIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_MONGOLIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_MONGOLIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_MONGOLIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_MONGOLIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_MONGOLIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_MONGOLIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_MONGOLIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_MONGOLIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1185,7 +1280,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_MONGOLIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MONGOLIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MONGOLIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MONGOLIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MONGOLIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -1194,8 +1289,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_NORWEGIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_NORWEGIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_NORWEGIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_NORWEGIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_NORWEGIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_NORWEGIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_NORWEGIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_NORWEGIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_NORWEGIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_NORWEGIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_NORWEGIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_NORWEGIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1214,7 +1311,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_NORWEGIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_NORWEGIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_NORWEGIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_NORWEGIANNYNORSK
@@ -1223,8 +1320,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_NORWEGIANNYNORSK} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_NORWEGIANNYNORSK} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_NORWEGIANNYNORSK} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_NORWEGIANNYNORSK} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_NORWEGIANNYNORSK} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_NORWEGIANNYNORSK} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_NORWEGIANNYNORSK} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_NORWEGIANNYNORSK} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_NORWEGIANNYNORSK} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_NORWEGIANNYNORSK} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_NORWEGIANNYNORSK} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_NORWEGIANNYNORSK} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1243,7 +1342,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_NORWEGIANNYNORSK} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_NORWEGIANNYNORSK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_NORWEGIANNYNORSK} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIANNYNORSK} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIANNYNORSK} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_PASHTO
@@ -1252,8 +1351,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_PASHTO} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_PASHTO} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_PASHTO} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_PASHTO} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_PASHTO} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_PASHTO} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_PASHTO} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_PASHTO} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_PASHTO} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_PASHTO} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_PASHTO} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_PASHTO} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1272,7 +1373,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_PASHTO} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PASHTO} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PASHTO} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PASHTO} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PASHTO} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_POLISH
@@ -1281,8 +1382,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_POLISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_POLISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_POLISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_POLISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_POLISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_POLISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_POLISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_POLISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_POLISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_POLISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_POLISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_POLISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1301,7 +1404,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_POLISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_POLISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_POLISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_POLISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_POLISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1310,8 +1413,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_PORTUGUESE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_PORTUGUESE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_PORTUGUESE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_PORTUGUESE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_PORTUGUESE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_PORTUGUESE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_PORTUGUESE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_PORTUGUESE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_PORTUGUESE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_PORTUGUESE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_PORTUGUESE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_PORTUGUESE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1330,7 +1435,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_PORTUGUESE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PORTUGUESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PORTUGUESE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -1339,8 +1444,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_PORTUGUESEBR} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_PORTUGUESEBR} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_PORTUGUESEBR} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_PORTUGUESEBR} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_PORTUGUESEBR} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_PORTUGUESEBR} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_PORTUGUESEBR} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_PORTUGUESEBR} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_PORTUGUESEBR} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_PORTUGUESEBR} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_PORTUGUESEBR} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_PORTUGUESEBR} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1359,7 +1466,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_PORTUGUESEBR} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PORTUGUESEBR} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PORTUGUESEBR} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESEBR} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESEBR} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -1368,8 +1475,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ROMANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_ROMANIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ROMANIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ROMANIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ROMANIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_ROMANIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ROMANIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ROMANIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ROMANIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ROMANIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ROMANIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ROMANIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1388,7 +1497,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ROMANIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ROMANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ROMANIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ROMANIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ROMANIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -1397,8 +1506,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_RUSSIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_RUSSIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_RUSSIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_RUSSIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_RUSSIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_RUSSIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_RUSSIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_RUSSIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_RUSSIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_RUSSIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_RUSSIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_RUSSIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1417,7 +1528,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_RUSSIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_RUSSIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_RUSSIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_RUSSIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_RUSSIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SCOTSGAELIC
@@ -1426,8 +1537,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SCOTSGAELIC} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SCOTSGAELIC} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SCOTSGAELIC} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SCOTSGAELIC} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SCOTSGAELIC} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SCOTSGAELIC} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SCOTSGAELIC} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SCOTSGAELIC} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SCOTSGAELIC} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SCOTSGAELIC} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SCOTSGAELIC} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SCOTSGAELIC} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1446,7 +1559,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SCOTSGAELIC} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SCOTSGAELIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SCOTSGAELIC} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SCOTSGAELIC} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SCOTSGAELIC} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SERBIAN
@@ -1455,8 +1568,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SERBIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SERBIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SERBIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SERBIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SERBIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SERBIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SERBIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SERBIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SERBIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SERBIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SERBIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SERBIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1475,7 +1590,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SERBIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SERBIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SERBIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SERBIANLATIN
@@ -1484,8 +1599,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SERBIANLATIN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SERBIANLATIN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SERBIANLATIN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SERBIANLATIN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SERBIANLATIN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SERBIANLATIN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SERBIANLATIN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SERBIANLATIN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SERBIANLATIN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SERBIANLATIN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SERBIANLATIN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SERBIANLATIN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1504,7 +1621,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SERBIANLATIN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SERBIANLATIN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SERBIANLATIN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIANLATIN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIANLATIN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -1513,8 +1630,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SIMPCHINESE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SIMPCHINESE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SIMPCHINESE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SIMPCHINESE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SIMPCHINESE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SIMPCHINESE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SIMPCHINESE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SIMPCHINESE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SIMPCHINESE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SIMPCHINESE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SIMPCHINESE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SIMPCHINESE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1533,7 +1652,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SIMPCHINESE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SIMPCHINESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SIMPCHINESE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SIMPCHINESE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SIMPCHINESE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SLOVAK
@@ -1542,8 +1661,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SLOVAK} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SLOVAK} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SLOVAK} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SLOVAK} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SLOVAK} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SLOVAK} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SLOVAK} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SLOVAK} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SLOVAK} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SLOVAK} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SLOVAK} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SLOVAK} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1562,7 +1683,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SLOVAK} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SLOVAK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SLOVAK} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVAK} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVAK} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -1571,8 +1692,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SLOVENIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SLOVENIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SLOVENIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SLOVENIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SLOVENIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SLOVENIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SLOVENIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SLOVENIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SLOVENIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SLOVENIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SLOVENIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SLOVENIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1591,7 +1714,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SLOVENIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SLOVENIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SLOVENIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVENIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVENIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SPANISH
@@ -1600,8 +1723,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SPANISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SPANISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SPANISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SPANISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SPANISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SPANISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SPANISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SPANISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SPANISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SPANISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SPANISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SPANISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1620,7 +1745,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SPANISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SPANISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SPANISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SPANISHINTERNATIONAL
@@ -1629,8 +1754,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SPANISHINTERNATIONAL} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SPANISHINTERNATIONAL} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SPANISHINTERNATIONAL} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SPANISHINTERNATIONAL} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SPANISHINTERNATIONAL} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SPANISHINTERNATIONAL} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SPANISHINTERNATIONAL} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SPANISHINTERNATIONAL} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SPANISHINTERNATIONAL} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SPANISHINTERNATIONAL} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SPANISHINTERNATIONAL} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SPANISHINTERNATIONAL} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1649,7 +1776,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SPANISHINTERNATIONAL} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SPANISHINTERNATIONAL} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SPANISHINTERNATIONAL} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISHINTERNATIONAL} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISHINTERNATIONAL} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_SWEDISH
@@ -1658,8 +1785,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SWEDISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_SWEDISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SWEDISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_SWEDISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_SWEDISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_SWEDISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_SWEDISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_SWEDISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_SWEDISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SWEDISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SWEDISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_SWEDISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1678,7 +1807,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SWEDISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SWEDISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SWEDISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SWEDISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SWEDISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_TATAR
@@ -1687,8 +1816,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_TATAR} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_TATAR} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_TATAR} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_TATAR} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_TATAR} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_TATAR} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_TATAR} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_TATAR} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_TATAR} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_TATAR} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_TATAR} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_TATAR} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1707,7 +1838,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_TATAR} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TATAR} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TATAR} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TATAR} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TATAR} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_THAI
@@ -1716,8 +1847,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_THAI} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_THAI} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_THAI} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_THAI} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_THAI} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_THAI} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_THAI} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_THAI} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_THAI} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_THAI} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_THAI} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_THAI} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1736,7 +1869,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_THAI} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_THAI} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_THAI} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_THAI} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_THAI} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -1745,8 +1878,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_TRADCHINESE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_TRADCHINESE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_TRADCHINESE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_TRADCHINESE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_TRADCHINESE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_TRADCHINESE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_TRADCHINESE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_TRADCHINESE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_TRADCHINESE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_TRADCHINESE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_TRADCHINESE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_TRADCHINESE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1765,7 +1900,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_TRADCHINESE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TRADCHINESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TRADCHINESE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TRADCHINESE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TRADCHINESE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_TURKISH
@@ -1774,8 +1909,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_TURKISH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_TURKISH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_TURKISH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_TURKISH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_TURKISH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_TURKISH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_TURKISH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_TURKISH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_TURKISH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_TURKISH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_TURKISH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_TURKISH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1794,7 +1931,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_TURKISH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TURKISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TURKISH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TURKISH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TURKISH} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -1803,8 +1940,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_UKRAINIAN} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_UKRAINIAN} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_UKRAINIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_UKRAINIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_UKRAINIAN} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_UKRAINIAN} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_UKRAINIAN} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_UKRAINIAN} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_UKRAINIAN} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_UKRAINIAN} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_UKRAINIAN} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_UKRAINIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1823,7 +1962,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_UKRAINIAN} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_UKRAINIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_UKRAINIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UKRAINIAN} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UKRAINIAN} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_UZBEK
@@ -1832,8 +1971,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_UZBEK} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_UZBEK} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_UZBEK} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_UZBEK} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_UZBEK} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_UZBEK} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_UZBEK} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_UZBEK} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_UZBEK} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_UZBEK} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_UZBEK} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_UZBEK} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1852,7 +1993,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_UZBEK} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_UZBEK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_UZBEK} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UZBEK} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UZBEK} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -1861,8 +2002,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_VIETNAMESE} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_VIETNAMESE} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_VIETNAMESE} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_VIETNAMESE} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_VIETNAMESE} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_VIETNAMESE} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_VIETNAMESE} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_VIETNAMESE} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_VIETNAMESE} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_VIETNAMESE} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_VIETNAMESE} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_VIETNAMESE} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1881,7 +2024,7 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_VIETNAMESE} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_VIETNAMESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_VIETNAMESE} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_VIETNAMESE} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_VIETNAMESE} "Unable to elevate, error {ERROR}."
 !endif
 
 !ifdef LANG_WELSH
@@ -1890,8 +2033,10 @@
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_WELSH} "Choose for which users to remove $(^NameDA)."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_WELSH} "Select whether to install $(^NameDA) for all users or for current user."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_WELSH} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_WELSH} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_WELSH} "For me ({USER})"
+	LangString MULTIUSER_ALL_USERS ${LANG_WELSH} "For &anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_WELSH} "For &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_WELSH} "For anyone who uses this computer (all users)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_WELSH} "For me ({USER})"
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_WELSH} "Fresh install for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_WELSH} "Fresh install for current user."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_WELSH} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
@@ -1910,5 +2055,5 @@
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_WELSH} "You need to login with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_WELSH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_WELSH} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_WELSH} "Unable to elevate, error {ERROR}."	
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_WELSH} "Unable to elevate, error {ERROR}."
 !endif

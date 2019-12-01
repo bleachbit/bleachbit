@@ -22,7 +22,7 @@
 Perform the preview or delete operations
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
@@ -62,8 +62,13 @@ class Worker:
         self.total_errors = 0
         self.total_special = 0  # special operations
         self.yield_time = None
+        self.is_aborted = False
         if 0 == len(self.operations):
             raise RuntimeError("No work to do")
+
+    def abort(self):
+        """Stop the preview/cleaning operation"""
+        self.is_aborted = True
 
     def print_exception(self, operation):
         """Display exception"""
@@ -86,6 +91,8 @@ class Worker:
                     # allow user to abort, and
                     # display progress (if applicable).
                     yield ret
+                if self.is_aborted:
+                    return
         except SystemExit:
             pass
         except Exception as e:
@@ -99,6 +106,9 @@ class Worker:
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
+                if isinstance(msg, str) and isinstance(operation_option, unicode):
+                    # if _ haven't found proper translation in locale dir it returns str
+                    msg = msg.decode(FSE)
                 data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
             self.total_errors += 1
@@ -115,8 +125,11 @@ class Worker:
             if ret['path']:
                 path = ret['path']
             else:
-                path = ''
-            path = path.decode('utf8', 'replace')  # for invalid encoding
+                path = u''
+
+            if isinstance(path, str):
+                path = path.decode('utf8', 'replace')  # for invalid encoding
+
             line = u"%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
@@ -157,6 +170,8 @@ class Worker:
                         # it responding allow the user to abort
                         self.yield_time = time.time()
                         yield True
+                if self.is_aborted:
+                    break
                 if time.time() - self.yield_time > 0.25:
                     if self.really_delete:
                         self.ui.update_total_size(self.total_bytes)
@@ -184,6 +199,8 @@ class Worker:
         if 'free_disk_space' == option_id:
             # TRANSLATORS: 'free' means 'unallocated'
             msg = _("Please wait.  Wiping free disk space.")
+            self.ui.append_text(
+                _('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")
         else:
@@ -193,16 +210,14 @@ class Worker:
             for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)
-                    phase = ret[
-                        0]  # 1=wipe free disk space, 2=wipe inodes, 3=clean up inodes files
+                    phase = ret[0]
+                    # A while ago there were other phase numbers. Currently it's just 1
+                    if phase != 1:
+                        raise RuntimeError(
+                            'While wiping free space, unexpected phase %d' % phase)
                     percent_done = ret[1]
                     eta_seconds = ret[2]
                     self.ui.update_progress_bar(percent_done)
-                    if phase == 2:
-                        msg = _('Please wait. Wiping file system metadata.')
-                    elif phase == 3:
-                        msg = _(
-                            'Please wait. Cleaning up after wiping file system metadata.')
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
                         msg2 = ungettext("About %d minute remaining.",
@@ -211,6 +226,8 @@ class Worker:
                         self.ui.update_progress_bar(msg + ' ' + msg2)
                     else:
                         self.ui.update_progress_bar(msg)
+                if self.is_aborted:
+                    break
                 if True == ret or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
@@ -293,6 +310,7 @@ class Worker:
         if self.total_errors > 0:
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
+        self.ui.append_text('\n')
 
         if self.really_delete:
             self.ui.update_total_size(self.total_bytes)

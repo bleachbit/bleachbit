@@ -25,12 +25,14 @@ Common code for unit tests
 from __future__ import absolute_import, print_function
 
 from bleachbit.FileUtilities import extended_path
+from bleachbit.General import sudo_mode
 
-import unittest
-import shutil
-import tempfile
+import functools
 import os
-import os.path
+import shutil
+import sys
+import tempfile
+import unittest
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -76,7 +78,8 @@ class BleachbitTestCase(unittest.TestCase):
         from bleachbit import expandvars
         path = expandvars(path)
         if not func(getTestPath(path)):
-            raise AssertionError('The file %s should exist, but it does not. %s' % (path, msg))
+            raise AssertionError(
+                'The file %s should exist, but it does not. %s' % (path, msg))
 
     def assertLExists(self, path, msg=''):
         self.assertExists(path, msg, os.path.lexists)
@@ -86,7 +89,8 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertNotExists(self, path, msg='', func=os.path.exists):
         if func(getTestPath(path)):
-            raise AssertionError('The file %s should not exist, but it does. %s' % (path, msg))
+            raise AssertionError(
+                'The file %s should not exist, but it does. %s' % (path, msg))
 
     def assertCondExists(self, cond, path, msg=''):
         if cond:
@@ -133,6 +137,34 @@ def destructive_tests(title):
     return False
 
 
+def have_root():
+    """Return true if we have root privileges on POSIX systems"""
+    return sudo_mode() or os.getuid() == 0
+
+
+def skipIfWindows(f):
+    """Skip unit test if running on Windows
+
+    Not compatible at the class level
+    """
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        if sys.platform == 'win32':
+            return unittest.skipIf('win32' == sys.platform, 'running on Windows')
+        return f(*args, **kwargs)
+    return wrapper
+
+
+def skipUnlessWindows(f):
+    """Skip unit test unless running on Windows
+
+    Not compatible at the class level"""
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
+    return wrapper
+
+
 def touch_file(filename):
     """Create an empty file"""
     dname = os.path.dirname(filename)
@@ -156,18 +188,17 @@ def validate_result(self, result, really_delete=False):
     self.assertLessEqual(result['n_deleted'], 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assertIsInstance(result['size'], (int, long, type(None),), "size is %s" % str(result['size']))
+    self.assertIsInstance(result['size'], (int, long, type(
+        None),), "size is %s" % str(result['size']))
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
     self.assertIsInstance(filename, (str, unicode, type(None)),
-                 "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
+                          "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
     if isinstance(filename, (str, unicode)) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
-
-

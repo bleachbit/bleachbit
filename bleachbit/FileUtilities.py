@@ -22,7 +22,7 @@
 """
 File-related utilities
 """
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit import expanduser, _
@@ -52,6 +52,13 @@ if 'nt' == os.name:
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
     pywinerror = WindowsError
+
+try:
+    from scandir import walk
+except ImportError:
+    logger.warning(
+        'scandir is not available, so falling back to slower os.walk()')
+    from os import walk
 
 
 def open_files_linux():
@@ -164,7 +171,7 @@ def children_in_directory(top, list_directories=False):
             for pathname in children_in_directory(top_, list_directories):
                 yield pathname
         return
-    for (dirpath, dirnames, filenames) in os.walk(top, topdown=False):
+    for (dirpath, dirnames, filenames) in walk(top, topdown=False):
         if list_directories:
             for dirname in dirnames:
                 yield os.path.join(dirpath, dirname)
@@ -175,9 +182,56 @@ def children_in_directory(top, list_directories=False):
 def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file"""
 
+    def write(parser, ini_file):
+        """
+        Reimplementation of the original RowConfigParser write function.
+
+        This function is 99% same as its origin. The only change is
+        removing a cast to str. This is needed to handle unicode chars.
+        """
+        if parser._defaults:
+            ini_file.write("[%s]\n" % "DEFAULT")
+            for (key, value) in parser._defaults.items():
+                ini_file.write("%s = %s\n" %
+                               (key, str(value).replace('\n', '\n\t')))
+            ini_file.write("\n")
+        for section in parser._sections:
+            ini_file.write("[%s]\n" % section)
+            for (key, value) in parser._sections[section].items():
+                if key == "__name__":
+                    continue
+                if (value is not None) or (parser._optcre == parser.OPTCRE):
+                    # The line bellow is the only changed line of the original function.
+                    # This is the orignal line for reference:
+                    # key = " = ".join((key, str(value).replace('\n', '\n\t')))
+                    key = " = ".join((key, value.replace('\n', '\n\t')))
+                ini_file.write("%s\n" % (key))
+            ini_file.write("\n")
+
+    try:
+        import chardet
+
+    except ImportError:
+        has_chardet = False
+        logger.warning(
+            'chardet is not available, so falling to utf-8 encoding')
+
+    else:
+        has_chardet = True
+        # detect .ini file encoding
+        with open(path) as file_:
+            detector = chardet.universaldetector.UniversalDetector()
+            for line in file_.readlines():
+                detector.feed(line)
+                if detector.done:
+                    break
+            detector.close()
+
     # read file to parser
     config = bleachbit.RawConfigParser()
-    fp = codecs.open(path, 'r', encoding='utf_8_sig')
+    config.write = write
+    fp = codecs.open(
+        path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig')
     config.readfp(fp)
 
     # change file
@@ -196,8 +250,9 @@ def clean_ini(path, section, parameter):
         fp.close()
         if options.get('shred'):
             delete(path, True)
-        fp = codecs.open(path, 'wb', encoding='utf_8')
-        config.write(fp)
+        fp = codecs.open(
+            path, 'wb', encoding=detector.result['encoding'] if has_chardet else 'utf_8')
+        config.write(config, fp)
 
 
 def clean_json(path, target):
@@ -268,6 +323,11 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+            elif errno.EBUSY == e.errno:
+                if os.name == 'posix' and os.path.ismount(path):
+                    logger.info(_("Skipping mount point: %s"), path)
+                else:
+                    logger.info(_("Device or resource is busy: %s"), path)
             else:
                 raise
         except WindowsError as e:
@@ -293,7 +353,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 # If a broken symlink, try os.remove() below.
             except IOError as e:
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'", e.errno, path, exc_info=True)
+                logger.debug("IOError #%s shredding '%s'",
+                             e.errno, path, exc_info=True)
             # wipe name
             os.remove(wipe_name(path))
         else:
@@ -342,9 +403,6 @@ def execute_sqlite3(path, cmds):
     for cmd in cmds.split(';'):
         try:
             cursor.execute(cmd)
-        except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (bleachbit.decode_str(exc), path))
         except sqlite3.OperationalError as exc:
             if exc.message.find('no such function: ') >= 0:
                 # fixme: determine why randomblob and zeroblob are not
@@ -353,6 +411,9 @@ def execute_sqlite3(path, cmds):
             else:
                 raise sqlite3.OperationalError(
                     '%s: %s' % (bleachbit.decode_str(exc), path))
+        except sqlite3.DatabaseError as exc:
+            raise sqlite3.DatabaseError(
+                '%s: %s' % (bleachbit.decode_str(exc), path))
     cursor.close()
     conn.commit()
     conn.close()
@@ -361,7 +422,8 @@ def execute_sqlite3(path, cmds):
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = expanduser(bleachbit.expandvars(os.path.join(pathname1, pathname2)))
+    pathname3 = expanduser(bleachbit.expandvars(
+        os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
@@ -403,8 +465,8 @@ def free_space(pathname):
         else:
             # This works better with Windows XP but not UTF-8.
             # Deprecated.
-            _, _, free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-            return free_bytes
+            _fb, _tb, total_free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
+            return total_free_bytes
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -502,7 +564,8 @@ def human_to_bytes(human, hformat='si'):
         raise ValueError("Invalid format: '%s'" % hformat)
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
     if matches is None:
-        raise ValueError("Invalid input for '%s' (hformat='%s')" % (human, hformat))
+        raise ValueError("Invalid input for '%s' (hformat='%s')" %
+                         (human, hformat))
     (amount, suffix) = matches.groups()
 
     if '' == suffix:
@@ -627,6 +690,7 @@ def whitelisted_windows(path):
                 return True
     return False
 
+
 if 'nt' == os.name:
     whitelisted = whitelisted_windows
 else:
@@ -704,7 +768,7 @@ def wipe_contents(path, truncate=True):
 
 def wipe_name(pathname1):
     """Wipe the original filename and return the new pathname"""
-    (head, _) = os.path.split(pathname1)
+    (head, _tail) = os.path.split(pathname1)
     # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
     maxlen = 226
     # first, rename to a long name
@@ -785,7 +849,7 @@ def wipe_path(pathname, idle=False):
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
         return 1, done_percent, remaining_seconds
 
-    logger.debug("wipe_path('%s')", pathname)
+    logger.debug(_("Wiping path: %s") % pathname)
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)
@@ -794,7 +858,8 @@ def wipe_path(pathname, idle=False):
     # this loop is sometimes necessary to create multiple files.
     while True:
         try:
-            logger.debug('creating new, temporary file to wipe path')
+            logger.debug(
+                _('Creating new, temporary file for wiping free space.'))
             f = temporaryfile()
         except OSError as e:
             # Linux gives errno 24
@@ -816,7 +881,9 @@ def wipe_path(pathname, idle=False):
                         blanks = blanks[0: (len(blanks) / 2)]
                     else:
                         break
-                elif e.errno != errno.EFBIG:
+                elif e.errno == errno.EFBIG:
+                    break
+                else:
                     raise
             if idle and (time.time() - last_idle) > 2:
                 # Keep the GUI responding, and allow the user to abort.
@@ -831,30 +898,32 @@ def wipe_path(pathname, idle=False):
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
             if not e.errno == errno.ENOSPC:
-                logger.error("info: exception on f.flush()")
+                logger.error(
+                    _("Error #%d when flushing the file buffer." % e.errno))
 
         os.fsync(f.fileno())  # write to disk
         # Remember to delete
         files.append(f)
         # For statistics
         total_bytes += f.tell()
-        # If no bytes were written, then quit
-        if f.tell() < 1:
+        # If no bytes were written, then quit.
+        # See https://github.com/bleachbit/bleachbit/issues/502
+        if f.tell() < 2:
             break
     # sync to disk
     sync()
     # statistics
     elapsed_sec = time.time() - start_time
     rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-    logger.info('wrote %d files and %d bytes in %d seconds at %.2f MB/s',
-                len(files), total_bytes, elapsed_sec, rate_mbs)
+    logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
+                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
     # how much free space is left (should be near zero)
     if 'posix' == os.name:
         stats = os.statvfs(pathname)
-        logger.info('%d bytes and %d inodes available to non-super-user',
-                    stats.f_bsize * stats.f_bavail, stats.f_favail)
-        logger.info('%d bytes and %d inodes available to super-user',
-                    stats.f_bsize * stats.f_bfree, stats.f_ffree)
+        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
+                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
+        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
+                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
     # truncate and close files
     for f in files:
         truncate_f(f)
@@ -868,7 +937,8 @@ def wipe_path(pathname, idle=False):
                 break
             except IOError as e:
                 if e.errno == 0:
-                    logger.debug('handled unknown error 0')
+                    logger.debug(
+                        _("Handled unknown error #0 while truncating file."))
                     time.sleep(0.1)
         # explicitly delete
         delete(f.name, ignore_missing=True)

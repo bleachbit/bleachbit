@@ -26,13 +26,14 @@ Test case for module Cleaner
 
 from __future__ import absolute_import, print_function
 
+import logging
+import unittest
+from xml.dom.minidom import parseString
+
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
 
 from tests import common
-
-import logging
-from xml.dom.minidom import parseString
 
 logger = logging.getLogger('bleachbit')
 
@@ -91,7 +92,8 @@ class CleanerTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(False):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
-                    self.assertLExists(pathname, "Does not exist: '%s'" % pathname)
+                    self.assertLExists(
+                        pathname, "Does not exist: '%s'" % pathname)
                     count += 1
                     common.validate_result(self, result)
             self.assertGreater(count, 0, "No files found for %s" % action_str)
@@ -137,12 +139,14 @@ class CleanerTestCase(common.BleachbitTestCase):
             self.assertIsInstance(backends[key], Cleaner)
             desc = backends[key].get_description()
             if desc is not None:
-                self.assertIsString(desc, "description for '%s' is '%s'" % (key, desc))
+                self.assertIsString(
+                    desc, "description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
-                self.assertIsString(test_id, '%s.%s is not a string' % (key, test_id))
+                self.assertIsString(
+                    test_id, '%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
 
     def test_get_commands(self):
@@ -160,7 +164,7 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         def get_files(option_id):
             ret = []
-            register_cleaners()
+            list(register_cleaners())
             for cmd in backends['system'].get_commands(option_id):
                 result = cmd.execute(False).next()
                 ret.append(result['path'])
@@ -197,9 +201,10 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
-        register_cleaners()
-        register_cleaners()
+        list(register_cleaners())
+        list(register_cleaners())
 
+    @common.skipIfWindows
     def test_whitelist(self):
         tests = [
             ('/tmp/.truecrypt_aux_mnt1/control', True),
@@ -216,9 +221,29 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
              True),
             ('/tmp/pulse-foo/pid', True),
-            ('/tmp/tmpsDOBFd', False)
+            ('/tmp/tmpsDOBFd', False),
+            (os.path.expanduser('~/.cache/obexd'), True),
+            (os.path.expanduser('~/.cache/obexd/'), True),
+            (os.path.expanduser('~/.cache/obexd/foo'), True),
+            (os.path.expanduser('~/.cache/obex'), False),
+            (os.path.expanduser('~/.cache/obexd-foo'), False)
         ]
-        register_cleaners()
+        list(register_cleaners())
         for test in tests:
             self.assertEqual(
                 backends['system'].whitelisted(test[0]), test[1], test[0])
+        # Make sure directory ~/.cache/obexd is ignored
+        # https://github.com/bleachbit/bleachbit/issues/572
+        from bleachbit import expanduser
+        obexd_dir = expanduser('~/.cache/obexd')
+        if not os.path.exists(obexd_dir):
+            os.makedirs(obexd_dir)
+        obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
+        common.touch_file(obexd_fn)
+        found_canary = False
+        for cmd in backends['system'].get_commands('cache'):
+            for result in cmd.execute(really_delete=False):
+                self.assertNotEqual(cmd.path, obexd_fn)
+                self.assertFalse('/.cache/obexd/' in cmd.path)
+        from bleachbit.FileUtilities import delete
+        delete(obexd_fn, ignore_missing=True)

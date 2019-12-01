@@ -92,7 +92,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         (rc, stdout, stderr) = run_external(args[os.name])
         self.assertNotEqual(0, rc)
 
-    @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
+    @common.skipIfWindows
     def test_run_external_clean_env(self):
         """Unit test for clean_env parameter to run_external()"""
 
@@ -141,7 +141,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         # Reset environment
         os.unsetenv('LC_ALL')
 
-    @unittest.skipUnless('posix' == os.name, 'skipping on platforms without sudo')
+    @common.skipIfWindows
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)

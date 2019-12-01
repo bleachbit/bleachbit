@@ -26,29 +26,29 @@
     <label>Backup files</label>
     <description>Delete the backup files</description>
     <warning>Inspect the preview for any files you want to keep.</warning>
-    <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$" cache="false"/>
-    <action command="delete" search="deep" regex="[a-zA-Z]{1,4}~$" cache="false"/>
+    <action command="delete" search="deep" regex="\.[Bb][Aa][Kk]$"/>
+    <action command="delete" search="deep" regex="[a-zA-Z]{1,4}~$"/>
   </option>
   <option id="ds_store">
     <label translate="false">.DS_Store</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" cache="false" regex="^\.DS_Store$"/>
+    <action command="delete" search="deep" regex="^\.DS_Store$"/>
   </option>
   <option id="thumbs_db">
     <label translate="false">Thumbs.db</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" regex="^Thumbs\.db$" cache="false"/>
-    <action command="delete" search="deep" regex="^Thumbs\.db:encryptable$" cache="false"/>
+    <action command="delete" search="deep" regex="^Thumbs\.db$"/>
+    <action command="delete" search="deep" regex="^Thumbs\.db:encryptable$"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <warning>This option is slow.</warning>
     <!-- http://support.microsoft.com/kb/211632 -->
-    <action command="delete" search="deep" cache="false" regex="^~wr[a-z][0-9]{4}\.tmp$"/>
+    <action command="delete" search="deep" regex="^~wr[a-z][0-9]{4}\.tmp$"/>
     <!-- http://support.microsoft.com/kb/826810 -->
-    <action command="delete" search="deep" cache="false" regex="^ppt[0-9]{4}\.tmp$"/>
+    <action command="delete" search="deep" regex="^ppt[0-9]{4}\.tmp$"/>
   </option>
 </cleaner>

@@ -12,7 +12,7 @@
 %endif
 
 Name:           bleachbit
-Version:        2.3
+Version:        3.0.1
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 
@@ -29,10 +29,14 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-Requires:       python >= 2.6
-Requires:       gnome-python2-gnomevfs
-Requires:       pygtk2 >= 2.6
+Requires:       python >= 2.7
+Requires:       gtk3
 Requires:       usermode
+# CentOS 7 does not have scandir, but BleachBit can fall back to the
+# slower mode.
+#Requires:       python-scandir
+Requires:       python-chardet
+Requires:       python2-gobject
 %endif
 
 %if 0%{?suse_version}
@@ -44,8 +48,11 @@ BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  update-desktop-files
 Requires:       python-gnome
-Requires:       python-gtk >= 2.6
+Requires:       gtk3
 Requires:       python-xml
+Requires:       python-scandir
+Requires:       python-chardet
+Requires:       python2-gobject
 %py_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils

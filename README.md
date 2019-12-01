@@ -25,6 +25,13 @@ page](https://www.bleachbit.org)
 * [Support](https://www.bleachbit.org/help)
 * [Documentation](https://docs.bleachbit.org)
 
+
+## Licenses
+
+BleachBit itself, including source code and cleaner definitions, is licensed under the [GNU General Public License version 3](COPYING), or at your option, any later version.
+
+markovify is licensed under the [MIT License](https://github.com/jsvine/markovify/blob/master/LICENSE.txt).
+
 ### Development
 * [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  [![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)](https://ci.appveyor.com/project/az0/bleachbit)
 * [BleachBit on Travis CI](https://travis-ci.org/bleachbit/bleachbit)  [![Build Status](https://travis-ci.org/bleachbit/bleachbit.svg?branch=master)](https://travis-ci.org/bleachbit/bleachbit)

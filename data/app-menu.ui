@@ -1,0 +1,50 @@
+<interface domain="bleachbit"><menu id="app-menu">
+  <section>
+      <item>
+        <attribute name="action">app.shredFiles</attribute>
+        <attribute name="label" translatable="yes">_Shred Files</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.shredFolders</attribute>
+        <attribute name="label" translatable="yes">Sh_red Folders</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.shredClipboard</attribute>
+        <attribute name="label" translatable="yes">Shred Paths from Clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.wipeFreeSpace</attribute>
+        <attribute name="label" translatable="yes">_Wipe Free Space</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.makeChaff</attribute>
+        <attribute name="label" translatable="yes">_Make Chaff</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.shredQuit</attribute>
+        <attribute name="label" translatable="yes">S_hred Settings and Quit</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Diagnostics</attribute>
+        <attribute name="action">app.diagnostics</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">_About BleachBit</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

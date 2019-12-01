@@ -37,7 +37,7 @@ These are the terms:
 
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import bleachbit
 from bleachbit import Command, FileUtilities, General
@@ -91,7 +91,7 @@ def browse_files(_, title):
     try:
         # The File parameter is a hack to increase the buffer length.
         ret = win32gui.GetOpenFileNameW(None,
-                                        File = '\x00' * 10240,
+                                        File='\x00' * 10240,
                                         Flags=win32con.OFN_ALLOWMULTISELECT
                                         | win32con.OFN_EXPLORER
                                         | win32con.OFN_FILEMUSTEXIST
@@ -114,9 +114,9 @@ def browse_files(_, title):
     return pathnames
 
 
-def browse_folder(hwnd, title):
+def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    pidl = shell.SHBrowseForFolder(hwnd, None, title)[0]
+    pidl = shell.SHBrowseForFolder(None, None, title)[0]
     if pidl is None:
         # user cancelled
         return None
@@ -129,7 +129,8 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except:
-        logger.info('exception when getting special folder path for %s', varname)
+        logger.info(
+            'exception when getting special folder path for %s', varname)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
@@ -170,7 +171,6 @@ def delete_registry_value(key, value_name, really_delete):
         raise
     else:
         return True
-    raise RuntimeError('Unknown error in delete_registry_value')
 
 
 def delete_registry_key(parent_key, really_delete):
@@ -237,7 +237,10 @@ def delete_updates():
 
 def detect_registry_key(parent_key):
     """Detect whether registry key exists"""
-    parent_key = str(parent_key)  # Unicode to byte string
+    try:
+        parent_key = str(parent_key)  # Unicode to byte string
+    except UnicodeEncodeError:
+        return False
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
@@ -276,14 +279,13 @@ def elevate_privileges():
         exe = sys.executable.decode(sys.getfilesystemencoding())
         parameters = "--gui --no-uac"
     else:
-        # __file__ is absolute path to bleachbit/Windows.py
-        pydir = os.path.dirname(__file__.decode(sys.getfilesystemencoding()))
-        pyfile = os.path.join(pydir, 'GUI.py')
+        pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
         if len(pyfile) > 0 and path_on_network(pyfile):
-            logger.debug("debug: skipping UAC because '%s' is on network", pyfile)
+            logger.debug(
+                "debug: skipping UAC because '%s' is on network", pyfile)
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
@@ -331,29 +333,6 @@ def empty_recycle_bin(path, really_delete):
     return bytes_used
 
 
-def get_autostart_path():
-    """Return the path of the BleachBit shortcut in the user's startup folder"""
-    try:
-        startupdir = shell.SHGetSpecialFolderPath(None, shellcon.CSIDL_STARTUP)
-    except:
-        # example of failure
-        # https://www.bleachbit.org/forum/error-windows-7-x64-bleachbit-091
-        logger.exception('exception in get_autostart_path()')
-        msg = 'Error finding user startup folder: %s ' % (
-            str(sys.exc_info()[1]))
-        from bleachbit import GuiBasic
-        GuiBasic.message_dialog(None, msg)
-        # as a fallback, guess
-        # Windows XP: C:\Documents and Settings\(username)\Start Menu\Programs\Startup
-        # Windows 7:
-        # C:\Users\(username)\AppData\Roaming\Microsoft\Windows\Start
-        # Menu\Programs\Startup
-        startupdir = bleachbit.expandvars('$USERPROFILE\\Start Menu\\Programs\\Startup')
-        if not os.path.exists(startupdir):
-            startupdir = bleachbit.expandvars('$APPDATA\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
-    return os.path.join(startupdir, 'bleachbit.lnk')
-
-
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     import win32clipboard
@@ -366,6 +345,7 @@ def get_clipboard_paths():
     finally:
         win32clipboard.CloseClipboard()
     return path_list
+
 
 def get_fixed_drives():
     """Yield each fixed drive"""
@@ -471,7 +451,10 @@ def is_link(path):
     so this is needed
     """
     FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-    attr = windll.kernel32.GetFileAttributesW(unicode(path))
+    if isinstance(path, unicode):
+        attr = windll.kernel32.GetFileAttributesW(path)
+    else:
+        attr = windll.kernel32.GetFileAttributesA(path)
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
@@ -583,6 +566,7 @@ def shell_change_notify():
                          None, None)
     return 0
 
+
 def set_environ(varname, path):
     """Define an environment variable for use in CleanerML and Winapp2.ini"""
     if not path:
@@ -590,16 +574,20 @@ def set_environ(varname, path):
     if varname in os.environ:
         #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
-            os.environ[varname] = bleachbit.expandvars(u'%%%s%%' % varname).encode('utf-8')
+            os.environ[varname] = bleachbit.expandvars(
+                u'%%%s%%' % varname).encode('utf-8')
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs
         return
     try:
         if not os.path.exists(path):
-            raise RuntimeError('Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path.encode('utf8')
+            raise RuntimeError(
+                'Variable %s points to a non-existent path %s' % (varname, path))
+        os.environ[varname] = path if isinstance(
+            path, str) else path.encode('utf8')
     except:
-        logger.exception('set_environ(%s, %s): exception when setting environment variable', varname, path)
+        logger.exception(
+            'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
 
 def setup_environment():
@@ -639,30 +627,3 @@ def split_registry_key(full_key):
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
-
-
-def start_with_computer(enabled):
-    """If enabled, create shortcut to start application with computer.
-    If disabled, then delete the shortcut."""
-    autostart_path = get_autostart_path()
-    if not enabled:
-        if os.path.lexists(autostart_path):
-            FileUtilities.delete(autostart_path)
-        return
-    if os.path.lexists(autostart_path):
-        return
-    import winshell
-    winshell.CreateShortcut(Path=autostart_path,
-                            Target=os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.exe'))
-
-    # import win32com.client
-    # wscript_shell = win32com.client.Dispatch('WScript.Shell')
-    # shortcut = wscript_shell.CreateShortCut(autostart_path)
-    # shortcut.TargetPath = os.path.join(
-    #     Common.bleachbit_exe_path, 'bleachbit.exe')
-    # shortcut.save()
-
-
-def start_with_computer_check():
-    """Return boolean whether BleachBit will start with the computer"""
-    return os.path.lexists(get_autostart_path())

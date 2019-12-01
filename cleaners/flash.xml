@@ -18,14 +18,27 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-Tested on Ubuntu 16.04 with package version 1:20180313.1-0ubuntu0.16.04.1
-
-Tested on Windows 7 with Flash version 29.0.0.140
+    @app Adobe Flash Player
+    @url https://adobe.com/products/flashplayer.html
+    @os Windows, Linux
+    @cleanerversion v1.5.0
+    @cleanerdate 2019-03-18
+    @cleanerby Andrew Ziem (2009-05-19 - 2018-10-15) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
+    @tested ok v1:20180313.1-0ubuntu0.16.04.1, Ubuntu 16.04
+    @testeddate ???
+    @testedby ???
+    @tested ok v29.0.0.140, Windows 7
+    @testeddate ???
+    @testedby ???
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-13
+    @testedby https://github.com/Tobias-B-Besemer
+    @note Application framework for writing and running rich Internet applications.
+    @note Adobe announced that it would end support for Flash Player in 2020.
 
 -->
 <cleaner id="flash">
-  <label>Flash</label>
+  <label>Flash Player</label>
   <description>Multimedia viewer</description>
   <var name="adobe">
     <value os="windows">%AppData%\Adobe\Flash Player</value>
@@ -38,11 +51,14 @@ Tested on Windows 7 with Flash version 29.0.0.140
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <!-- reference: http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
-    <!-- reference: http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
+    <!-- Reference: http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
+    <!-- Reference: http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
     <action command="delete" search="walk.all" path="$$adobe$$/AssetCache/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/APSPrivateData2/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/NativeCache/"/>
+    <!-- Reference: "Reverse Engineering" by Tobias ;-) -->
+    <action command="delete" search="walk.all" path="$$adobe$$\AFCache\"/>
+    <action command="delete" search="walk.all" path="$$adobe$$\Icon Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>

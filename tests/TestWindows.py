@@ -31,10 +31,13 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
 from bleachbit import logger
 
+import functools
+import os
+import platform
+import shutil
 import sys
 import tempfile
 import unittest
-import platform
 from decimal import Decimal
 
 if 'win32' == sys.platform:
@@ -62,6 +65,10 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""
 
+    def skipUnlessAdmin(self):
+        if not shell.IsUserAnAdmin():
+            self.skipTest('requires administrator privileges')
+
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
@@ -79,11 +86,23 @@ class WindowsTestCase(common.BleachbitTestCase):
         for f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
 
-    def test_link(self):
-        """Unit test for links with is_link() and get_recycle_bin()"""
-        if not common.destructive_tests('windows link'):
-            return
+    def _test_link_helper(self, mklink_option, clear_recycle_bin):
+        """Helper function for testing for links with is_link() and
+        get_recycle_bin()
 
+        It gets called four times for the combinations of the two
+        parameters. It's called by four unit tests four accounting
+        purposes. In other words, we don't want to count a test as
+        skipped if part of it succeeded.
+
+        mklink /j = directory junction
+        directory junction does not require administrator privileges
+
+        mklink /d=directory symbolic link
+        requires administrator privileges
+        """
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
         # make a normal directory with a file in it
         real_dir = os.path.join(self.tempdir, 'real_dir')
         os.mkdir(real_dir)
@@ -97,12 +116,20 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # link to the normal directory
         link_dir = os.path.join(self.tempdir, 'link_dir')
-        args = ('cmd', '/c', 'mklink', '/d', link_dir, real_dir)
+        args = ('cmd', '/c', 'mklink', mklink_option, link_dir, real_dir)
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_dir)
         self.assertEqual(True, is_link(link_dir))
+
+        if not clear_recycle_bin:
+            os.rmdir(link_dir)
+            self.assertNotExists(link_dir)
+            shutil.rmtree(real_dir, True)
+            if not common.destructive_tests('windows link'):
+                self.skipTest('destructive tests are disabled')
+            return
 
         # put the link in the recycle bin
         move_to_recycle_bin(link_dir)
@@ -114,6 +141,25 @@ class WindowsTestCase(common.BleachbitTestCase):
         # verify the canary is still there
         self.assertExists(canary_fn)
 
+        # clean up
+        shutil.rmtree(real_dir, True)
+
+    def test_link_junction_no_clear(self):
+        """Unit test for directory junctions without clearing recycle bin"""
+        self._test_link_helper('/j', False)
+
+    def test_link_junction_clear(self):
+        """Unit test for directory junctions with clearing recycle bin"""
+        self._test_link_helper('/j', True)
+
+    def test_link_symlink_no_clear(self):
+        """Unit test for directory symlink without clearing recycle bin"""
+        self._test_link_helper('/d', False)
+
+    def test_link_junction_clear(self):
+        """Unit test for directory junctions with clearing recycle bin"""
+        self._test_link_helper('/j', True)
+
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
         tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
@@ -124,7 +170,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             pathname = f.name
             f.close()
             import time
-            time.sleep(5) # avoid race condition
+            time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
             if not shell.IsUserAnAdmin():
@@ -134,7 +180,8 @@ class WindowsTestCase(common.BleachbitTestCase):
                 try:
                     delete_locked_file(pathname)
                 except WindowsError:
-                    logger.exception('delete_locked_file() threw an error, which may be a false positive')
+                    logger.exception(
+                        'delete_locked_file() threw an error, which may be a false positive')
             self.assertExists(pathname)
         logger.info('reboot Windows and check the three files are deleted')
 
@@ -218,12 +265,6 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assert_(detect_registry_key('HKCU\\Software\\Microsoft\\'))
         self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
 
-    def test_get_autostart_path(self):
-        """Unit test for get_autostart_path"""
-        pathname = get_autostart_path()
-        dirname = os.path.dirname(pathname)
-        self.assertExists(dirname)
-
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
         # The clipboard is an unknown state, so check the function does
@@ -252,7 +293,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         # Put files in the clipboard in supported format
         args = ('powershell.exe', 'Set-Clipboard',
                 '-Path', r'c:\windows\*.exe')
-        (ext_rc, _, _) = General.run_external(args)
+        (ext_rc, _stdout, _stderr) = General.run_external(args)
         self.assertEqual(ext_rc, 0)
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
@@ -357,13 +398,14 @@ class WindowsTestCase(common.BleachbitTestCase):
             # requires wiping of extents
             _test_wipe('secret' * 100000)
 
-        import shutil
         shutil.rmtree(dirname, True)
 
         if shell.IsUserAnAdmin():
-            logger.warning('You should also run test_file_wipe() without admin privileges.')
+            logger.warning(
+                'You should also run test_file_wipe() without admin privileges.')
         else:
-            logger.warning('You should also run test_file_wipe() with admin privileges.')
+            logger.warning(
+                'You should also run test_file_wipe() with admin privileges.')
 
     def test_is_process_running(self):
         # winlogon.exe runs on Windows XP and Windows 7
@@ -397,21 +439,6 @@ class WindowsTestCase(common.BleachbitTestCase):
             self.assertEqual(expected_hive, hive)
             self.assertEqual(expected_key, key)
 
-    def test_start_with_computer(self):
-        """Unit test for start_with_computer*"""
-        b = start_with_computer_check()
-        self.assertIsInstance(b, bool)
-        # opposite setting
-        start_with_computer(not b)
-        two_b = start_with_computer_check()
-        self.assertIsInstance(two_b, bool)
-        self.assertEqual(b, not two_b)
-        # original setting
-        start_with_computer(b)
-        three_b = start_with_computer_check()
-        self.assertIsInstance(b, bool)
-        self.assertEqual(b, three_b)
-
     def test_parse_windows_build(self):
         """Unit test for parse_windows_build"""
         tests = (('5.1.2600', Decimal('5.1')),
@@ -436,3 +463,14 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for shell_change_notify"""
         ret = shell_change_notify()
         self.assertEqual(ret, 0)
+
+    def test_set_environ(self):
+        for folder in [u'folderäö', 'folder']:
+            test_dir = os.path.join(self.tempdir, folder)
+            os.mkdir(test_dir)
+            self.assertExists(test_dir)
+            set_environ('cd_test', test_dir)
+            if isinstance(test_dir, unicode):
+                test_dir = test_dir.encode('utf-8')
+            self.assertEqual(os.environ['cd_test'], test_dir)
+            os.environ.pop('cd_test')

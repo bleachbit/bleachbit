@@ -17,41 +17,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """
 Perform (or assist with) cleaning operations.
 """
 
-from __future__ import absolute_import, print_function
-
-from bleachbit import _, expanduser, expandvars
-from bleachbit.FileUtilities import children_in_directory
-from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
+from __future__ import absolute_import  # keep at top
 
 import glob
 import logging
 import os.path
 import re
 import sys
+
+from bleachbit import _, expanduser, expandvars
+from bleachbit.FileUtilities import children_in_directory
+from bleachbit.Options import options
+from bleachbit import Command, FileUtilities, Memory, Special
+
+
+# Suppress GTK warning messages while running in CLI #34
 import warnings
+warnings.simplefilter("ignore", Warning)
+try:
+    from bleachbit.GuiBasic import Gtk, Gdk
+    HAVE_GTK = Gdk.get_default_root_window() is not None
+except (ImportError, RuntimeError, ValueError) as e:
+    # ImportError happens when GTK is not installed.
+    # RuntimeError can happen when X is not available (e.g., cron, ssh).
+    # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
+    HAVE_GTK = False
+
 
 if 'posix' == os.name:
     from bleachbit import Unix
 elif 'nt' == os.name:
     from bleachbit import Windows
 
-# Suppress GTK warning messages while running in CLI #34
-warnings.simplefilter("ignore", Warning)
-
-try:
-    import gtk
-    # Import was successful, but is a display available?
-    HAVE_GTK = gtk.gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError) as e:
-    # ImportError happens when GTK is not installed.
-    # RuntimeError can happen when X is not available (e.g., cron, ssh).
-    HAVE_GTK = False
 
 # a module-level variable for holding cleaners
 backends = {}
@@ -311,7 +312,7 @@ class System(Cleaner):
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
-                'memory_dump', _('Memory dump'), _('Delete the file memory.dmp'))
+                'memory_dump', _('Memory dump'), _('Delete the file'))
             self.add_option('muicache', 'MUICache', _('Delete the cache'))
             # TRANSLATORS: Prefetch is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
@@ -473,7 +474,7 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                gtk.RecentManager().purge_items()
+                Gtk.RecentManager().purge_items()
                 yield 0
 
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
@@ -549,10 +550,9 @@ class System(Cleaner):
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
-                gtk.gdk.threads_enter()
-                clipboard = gtk.clipboard_get()
-                clipboard.set_text("")
-                gtk.gdk.threads_leave()
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                clipboard.set_text(' ',1)
+                clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
 
@@ -609,7 +609,8 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except:
-                    logging.getLogger(__name__).info('error in empty_recycle_bin()', exc_info=True)
+                    logging.getLogger(__name__).info(
+                        'error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.
@@ -638,21 +639,29 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-',
             '^' + expanduser('~/.cache/wallpaper/'),
+            # Flatpak mount point
+            '^' + expanduser('~/.cache/doc($|/)'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + expanduser('~/.cache/mozilla'),
+            '^' + expanduser('~/.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + expanduser('~/.cache/google-chrome'),
+            '^' + expanduser('~/.cache/google-chrome/'),
             '^' + expanduser('~/.cache/gnome-control-center/'),
+            # Clean Evolution cache from Evolution cleaner (GitHub #249)
+            '^' + expanduser('~/.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
             '^' + expanduser('~/.cache/ibus/'),
-            # Linux Bluetooth daemon obexd
-            '^' + expanduser('~/.cache/obexd/')]
+            # Linux Bluetooth daemon obexd directory is typically empty, so be careful
+            # not to delete the empty directory.
+            '^' + expanduser('~/.cache/obexd($|/)')]
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 
     def whitelisted(self, pathname):
         """Return boolean whether file is whitelisted"""
+        if os.name == 'nt':
+            # Whitelist is specific to POSIX
+            return False
         if not self.regexes_compiled:
             self.init_whitelist()
         for regex in self.regexes_compiled:
@@ -661,7 +670,7 @@ class System(Cleaner):
         return False
 
 
-def register_cleaners():
+def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
     global backends
 
@@ -675,12 +684,20 @@ def register_cleaners():
 
     # register CleanerML cleaners
     from bleachbit import CleanerML
-    CleanerML.load_cleaners()
+    cb_progress(_('Loading native cleaners.'))
+    for ret in CleanerML.load_cleaners(cb_progress):
+        yield ret
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
+        cb_progress(_('Importing cleaners from Winapp2.ini.'))
         from bleachbit import Winapp
-        Winapp.load_cleaners()
+        for ret in Winapp.load_cleaners(cb_progress):
+            yield ret
+
+    cb_done()
+
+    yield False  # end the iteration
 
 
 def create_simple_cleaner(paths):
