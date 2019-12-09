@@ -33,7 +33,7 @@ import errno
 import glob
 import locale
 import logging
-import os
+import os, os.path
 import random
 import re
 import stat
@@ -48,6 +48,9 @@ logger = logging.getLogger(__name__)
 if 'nt' == os.name:
     from pywintypes import error as pywinerror
     import win32file
+    import bleachbit.Windows
+    os_path_islink = os.path.islink
+    os.path.islink = lambda path: os_path_islink(path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
@@ -55,6 +58,16 @@ if 'posix' == os.name:
 
 try:
     from scandir import walk
+    if 'nt' == os.name:
+        import scandir
+        import bleachbit.Windows
+
+        class _Win32DirEntryPython(scandir.Win32DirEntryPython):
+            def is_symlink(self):
+                return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
+
+        scandir.scandir = scandir.scandir_python
+        scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
 except ImportError:
     logger.warning(
         'scandir is not available, so falling back to slower os.walk()')
