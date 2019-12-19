@@ -2,22 +2,21 @@ Source: bleachbit
 Section: admin
 Priority: optional
 Maintainer: Andrew Ziem <andrew@bleachbit.org>
-Build-Depends: debhelper (>= 4.1.16), python, desktop-file-utils
+Build-Depends: debhelper (>= 4.1.16), python3, desktop-file-utils
 Homepage: https://www.bleachbit.org
 Standards-Version: 3.7.3
-XS-Python-Version: >= 2.6
 
 Package: bleachbit
 Architecture: all
 Depends:
  ${misc:Depends},
- ${python:Depends},
+ ${python3:Depends},
  gir1.2-gtk-3.0,
  libgtk-3-0,
- python (>= 2.7),
- python-chardet,
- python-gi
-Recommends: python-notify, python-scandir
+ python3,
+ python3-chardet,
+ python3-gi
+Recommends: python3-notify, python3-scandir
 Description: Removes unnecessary files
  Delete traces of your activities and other junk files to free disk
  space and maintain privacy.  BleachBit identifies and erases

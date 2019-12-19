@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import argparse
 import email.generator
 from email.mime.text import MIMEText
 import json
@@ -26,7 +25,7 @@ import logging
 import os
 import random
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir
@@ -55,8 +54,8 @@ def _load_model(model_path):
     _open = open
     if model_path.endswith('.bz2'):
         import bz2
-        _open = bz2.BZ2File
-    with _open(model_path, 'r') as model_file:
+        _open = bz2.open
+    with _open(model_path, 'rt', encoding='utf-8') as model_file:
         return markovify.Text.from_dict(json.load(model_file))
 
 
@@ -194,7 +193,7 @@ def generate_emails(number_of_emails,
     logger.debug('Generating {:,} emails'.format(number_of_emails))
     generated_file_names = []
     for i in range(1, number_of_emails + 1):
-        with tempfile.NamedTemporaryFile(prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
+        with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
             email_generator = email.generator.Generator(email_output_file)
             msg = _generate_email(
                 subject_model, content_model, number_of_sentences=number_of_sentences)
@@ -223,9 +222,9 @@ def generate_2600(file_count,
     logger.debug('Generating {:,} files'.format(file_count))
     generated_file_names = []
     for i in range(1, file_count + 1):
-        with tempfile.NamedTemporaryFile(prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+        with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
             txt = _generate_2600_file(model)
-            output_file.write(txt.encode('utf-8'))
+            output_file.write(txt)
             generated_file_names.append(output_file.name)
         if on_progress:
             on_progress(1.0*i/file_count)

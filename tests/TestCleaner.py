@@ -23,9 +23,6 @@
 Test case for module Cleaner
 """
 
-
-from __future__ import absolute_import, print_function
-
 import logging
 import unittest
 from xml.dom.minidom import parseString
@@ -103,7 +100,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             print(cmd)
             raise AssertionError('option2 should yield nothing')
         # should fail
-        self.assertRaises(RuntimeError, cleaner.get_commands('option3').next)
+        self.assertRaises(RuntimeError, cleaner.get_commands('option3').__next__)
 
     def test_auto_hide(self):
         for key in sorted(backends):
@@ -115,7 +112,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         filename1 = os.path.join(dirname, '1')
         common.touch_file(filename1)
         # test Cyrillic for https://bugs.launchpad.net/bleachbit/+bug/1541808
-        filename2 = os.path.join(dirname, u'чистый')
+        filename2 = os.path.join(dirname, 'чистый')
         common.touch_file(filename2)
         targets = [filename1, filename2, dirname]
         cleaner = create_simple_cleaner(targets)
@@ -166,7 +163,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             ret = []
             list(register_cleaners())
             for cmd in backends['system'].get_commands(option_id):
-                result = cmd.execute(False).next()
+                result = next(cmd.execute(False))
                 ret.append(result['path'])
             return ret
         trash_paths = get_files('trash')
@@ -183,7 +180,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         glob.iglob = lambda path: []
         os.path.exists = lambda path: False
         os.path.lexists = lambda path: False
-        os.walk = lambda top, topdown = False: []
+        os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
         for key in sorted(backends):
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
@@ -234,8 +231,7 @@ class CleanerTestCase(common.BleachbitTestCase):
                 backends['system'].whitelisted(test[0]), test[1], test[0])
         # Make sure directory ~/.cache/obexd is ignored
         # https://github.com/bleachbit/bleachbit/issues/572
-        from bleachbit import expanduser
-        obexd_dir = expanduser('~/.cache/obexd')
+        obexd_dir = os.path.expanduser('~/.cache/obexd')
         if not os.path.exists(obexd_dir):
             os.makedirs(obexd_dir)
         obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')

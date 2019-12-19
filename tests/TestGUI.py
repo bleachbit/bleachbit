@@ -23,8 +23,6 @@
 Test case for module GUI
 """
 
-from __future__ import absolute_import
-
 import os
 import time
 import types
@@ -41,10 +39,13 @@ try:
 except ImportError:
     HAVE_GTK = False
 
+import bleachbit
 from bleachbit import _
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Options import options, Options
 from tests import common
+
+bleachbit.online_update_notification_enabled = False
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
@@ -55,9 +56,9 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super(GUITestCase, GUITestCase).setUpClass()
-        options.set('first_start', False) # avoid pop-up window
+        options.set('first_start', False)
         options.set('check_online_updates', False) # avoid pop-up window
-        options.get_tree = types.MethodType(lambda self, parent, child: False, options, Options)
+        options.get_tree = types.MethodType(lambda self, parent, child: False, options)
         cls.app.register()
         cls.app.activate()
         cls.refresh_gui()

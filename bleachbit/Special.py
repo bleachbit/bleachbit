@@ -22,8 +22,6 @@
 Cross-platform, special cleaning operations
 """
 
-from __future__ import absolute_import
-
 from bleachbit.Options import options
 from bleachbit import FileUtilities
 
@@ -335,7 +333,8 @@ def get_chrome_bookmark_urls(path):
     import json
 
     # read file to parser
-    js = json.load(open(path, 'r'))
+    with open(path, 'r') as f:
+        js = json.load(f)
 
     # empty list
     urls = []

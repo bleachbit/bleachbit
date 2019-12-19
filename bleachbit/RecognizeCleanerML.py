@@ -22,8 +22,6 @@
 Check local CleanerML files as a security measure
 """
 
-from __future__ import absolute_import
-
 from bleachbit import _, _p
 import bleachbit
 from bleachbit.CleanerML import list_cleanerml_files
@@ -117,7 +115,7 @@ def cleaner_change_dialog(changes, parent):
         if 0 == len(delete):
             # no files selected to delete
             break
-        import GuiBasic
+        from . import GuiBasic
         if not GuiBasic.delete_confirmation_dialog(parent, mention_preview=False):
             # confirmation not accepted, so do not delete files
             continue
@@ -132,6 +130,8 @@ def hashdigest(string):
     """Return hex digest of hash for a string"""
 
     # hashlib requires Python 2.5
+    if isinstance(string, str):
+        string = string.encode()
     return hashlib.sha512(string).hexdigest()
 
 

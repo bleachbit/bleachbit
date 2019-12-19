@@ -2,7 +2,7 @@ build: off
 version: 3.1.0.{build}
 
 environment:
-    PYTHON_HOME: 'C:/Python27'
+    PYTHON_HOME: 'C:/Python34'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
@@ -12,16 +12,18 @@ init:
   - '%PYTHON_HOME%/Scripts/pip.exe --version'
 
 install:
-  - '%PYTHON_HOME%/Scripts/pip.exe install psutil'
+  - '%PYTHON_HOME%/Scripts/pip.exe install https://liquidtelecom.dl.sourceforge.net/project/bleachbit/dependencies/psutil-5.6.7-cp34-cp34m-win32.whl'
+  - '%PYTHON_HOME%/Scripts/pip.exe install https://liquidtelecom.dl.sourceforge.net/project/bleachbit/dependencies/pywin32-227-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
-  - '%PYTHON_HOME%/Scripts/pip.exe install py2exe_py2'
+  - '%PYTHON_HOME%/Scripts/pip.exe install py2exe'
   - '%PYTHON_HOME%/Scripts/pip.exe install scandir'
   - '%PYTHON_HOME%/Scripts/pip.exe install chardet'
   - '%PYTHON_HOME%/Scripts/pip.exe install requests'
+  - '%PYTHON_HOME%/Scripts/pip.exe install win-unicode-console'
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
   - ps: Get-FileHash pygi-aio.exe
-  - 'pygi-aio.exe C:\Python27 GTK Notify'
+  - 'pygi-aio.exe %PYTHON_HOME% GTK Notify'
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.94/upx394w.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
@@ -31,7 +33,8 @@ install:
   - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2019/sqlite-dll-win32-x86-3280000.zip" -FileName sqlite.zip }
   - ps: Get-FileHash sqlite.zip -Algorithm SHA1
   - '%SZ_EXE% x sqlite.zip'
-  - 'move /y sqlite3.dll c:\python27\DLLs\'
+  - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'
+#  - ps: if (-not (Test-Path vcredist_x86.exe)) { Start-FileDownload "https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe" -FileName vcredist_x86.exe }
 
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.

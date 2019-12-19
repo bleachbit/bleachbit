@@ -23,8 +23,6 @@
 Import Winapp2.ini files
 """
 
-from __future__ import absolute_import
-
 import logging
 import os
 import glob
@@ -34,7 +32,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, Windows
 from bleachbit.Action import Delete, Winreg
-from bleachbit import _, FSE, expandvars
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +79,7 @@ def detectos(required_ver, mock=False):
     current operating system, or the mock version, if given."""
     # Do not compare as string because Windows 10 (build 10.0) comes after
     # Windows 8.1 (build 6.3).
-    assert isinstance(required_ver, (str, unicode))
+    assert isinstance(required_ver, str)
     current_os = (mock if mock else Windows.parse_windows_build())
     required_ver = required_ver.strip()
     if '|' in required_ver:
@@ -101,7 +99,7 @@ def detectos(required_ver, mock=False):
 def winapp_expand_vars(pathname):
     """Expand environment variables using special Winapp2.ini rules"""
     # This is the regular expansion
-    expand1 = expandvars(pathname)
+    expand1 = os.path.expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
@@ -109,7 +107,7 @@ def winapp_expand_vars(pathname):
         pattern = re.compile('%{}%'.format(sub_orig), flags=re.IGNORECASE)
         if pattern.match(pathname):
             expand2 = pattern.sub('%{}%'.format(sub_repl), pathname)
-            return expand1, expandvars(expand2)
+            return expand1, os.path.expandvars(expand2)
     return expand1,
 
 
@@ -130,7 +128,7 @@ def special_detect(code):
                'DET_THUNDERBIRD': r'HKLM\SOFTWARE\Clients\Mail\Mozilla Thunderbird',
                'DET_WINDOWS': r'HKCU\Software\Microsoft',
                'DET_SPACE_QUEST': r'HKCU\Software\Sierra Games\Space Quest'}
-    if sd_keys.has_key(code):
+    if code in sd_keys:
         return Windows.detect_registry_key(sd_keys[code])
     else:
         logger.error('Unknown SpecialDetect=%s', code)
@@ -262,7 +260,7 @@ class Winapp:
         Otherwise, the section is inactive.
         """
         if self.parser.has_option(section, 'detectos'):
-            required_ver = self.parser.get(section, 'detectos').decode(FSE)
+            required_ver = self.parser.get(section, 'detectos')
             if not detectos(required_ver):
                 return False
         any_detect_option = False
@@ -275,13 +273,13 @@ class Winapp:
             if re.match(self.re_detect, option):
                 # Detect= checks for a registry key
                 any_detect_option = True
-                key = self.parser.get(section, option).decode(FSE)
+                key = self.parser.get(section, option)
                 if Windows.detect_registry_key(key):
                     return True
             elif re.match(self.re_detectfile, option):
                 # DetectFile= checks for a file
                 any_detect_option = True
-                key = self.parser.get(section, option).decode(FSE)
+                key = self.parser.get(section, option)
                 if detect_file(key):
                     return True
         return not any_detect_option
@@ -296,14 +294,14 @@ class Winapp:
         for option in self.parser.options(section):
             if re.match(self.re_excludekey, option):
                 excludekeys.append(
-                    self.excludekey_to_nwholeregex(self.parser.get(section, option).decode(FSE)))
+                    self.excludekey_to_nwholeregex(self.parser.get(section, option)))
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
             # langsecref_num is 3021, games, etc.
-            langsecref_num = self.parser.get(section, 'langsecref').decode(FSE)
+            langsecref_num = self.parser.get(section, 'langsecref')
         elif self.parser.has_option(section, 'section'):
-            langsecref_num = self.parser.get(section, 'section').decode(FSE)
+            langsecref_num = self.parser.get(section, 'section')
         else:
             logger.error(
                 'neither option LangSecRef nor Section found in section %s', section)
@@ -319,7 +317,7 @@ class Winapp:
                 self.handle_regkey(lid, section, option)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
-                    section2option(section), self.parser.get(section, 'warning').decode(FSE))
+                    section2option(section), self.parser.get(section, 'warning'))
             elif option in ('default', 'langsecref', 'section', 'detectos', 'specialdetect') \
                     or re.match(self.re_detect, option) \
                     or re.match(self.re_detectfile, option) \
@@ -358,11 +356,11 @@ class Winapp:
                 # just one
                 exclude_str = excludekeys[0]
             excludekeysxml = 'nwholeregex="%s"' % xml_escape(exclude_str)
-        action_str = u'<option command="delete" search="%s" path="%s" %s %s/>' % \
+        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            action_str = u'<option command="delete" search="file" path="%s"/>' % \
+            action_str = '<option command="delete" search="file" path="%s"/>' % \
                          (xml_escape(dirname))
             yield Delete(parseString(action_str).childNodes[0])
 
@@ -371,7 +369,7 @@ class Winapp:
 
         Section is [Application Name] and option is the FileKey#"""
         elements = self.parser.get(
-            ini_section, ini_option).decode(FSE).strip().split('|')
+            ini_section, ini_option).strip().split('|')
         dirnames = winapp_expand_vars(elements.pop(0))
         filenames = ""
         if elements:
@@ -397,7 +395,7 @@ class Winapp:
     def handle_regkey(self, lid, ini_section, ini_option):
         """Parse a RegKey# option"""
         elements = self.parser.get(
-            ini_section, ini_option).decode(FSE).strip().split('|')
+            ini_section, ini_option).strip().split('|')
         path = xml_escape(elements[0])
         name = ""
         if len(elements) == 2:

@@ -22,22 +22,29 @@
 Build BleachBit tarballs and exe
 """
 
-from __future__ import absolute_import, print_function
-
-import bleachbit
-import bleachbit.General
-import bleachbit.FileUtilities
 import glob
 import os
 import sys
 import tempfile
 from setuptools import setup
+
 if sys.platform == 'win32':
+    # workaround for
+    # Error: Namespace packages not yet supported: Skipping package 'pywintypes'
+    import importlib
+    for m in ('pywintypes', 'pythoncom'):
+        l = importlib.find_loader(m, None)
+        __import__(m)
+        sys.modules[m].__loader__ = l
+
     try:
         import py2exe
     except ImportError:
         print('warning: py2exe not available')
 
+import bleachbit
+import bleachbit.General
+import bleachbit.FileUtilities
 
 #
 # begin win32com.shell workaround for py2exe
