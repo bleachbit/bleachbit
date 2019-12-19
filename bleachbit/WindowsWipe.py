@@ -96,10 +96,9 @@ from win32file import (CreateFile, CreateFileW,
                        GetFileSize, GetFileAttributesW,
                        SetFileAttributesW,
                        DeviceIoControl, SetFilePointer,
-                       ReadFile, WriteFile,
+                       WriteFile,
                        LockFile, DeleteFile,
-                       SetEndOfFile, FlushFileBuffers,
-                       EncryptFile)
+                       SetEndOfFile, FlushFileBuffers)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
                          FSCTL_GET_NTFS_VOLUME_DATA,

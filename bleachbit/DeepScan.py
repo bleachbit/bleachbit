@@ -29,8 +29,6 @@ import platform
 import re
 import unicodedata
 
-import bleachbit
-
 def normalized_walk(top, **kwargs):
     """
     macOS uses decomposed UTF-8 to store filenames. This functions

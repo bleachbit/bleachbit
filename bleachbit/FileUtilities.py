@@ -27,7 +27,6 @@ import bleachbit
 from bleachbit import _
 
 import atexit
-import codecs
 import errno
 import glob
 import locale
@@ -553,7 +552,7 @@ def guess_overwrite_paths():
             else:
                 ret.append(drive)
     else:
-        NotImplementedError('Unsupported OS in guess_overwrite_paths')
+        raise NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
 
 

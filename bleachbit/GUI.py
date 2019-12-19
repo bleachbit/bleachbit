@@ -37,7 +37,6 @@ import os
 import sys
 import threading
 import time
-import types
 
 import gi
 gi.require_version('Gtk', '3.0')

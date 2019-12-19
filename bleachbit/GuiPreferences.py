@@ -31,7 +31,6 @@ from bleachbit import GuiBasic
 from gi.repository import Gtk
 import logging
 import os
-import sys
 
 if 'nt' == os.name:
     from bleachbit import Windows

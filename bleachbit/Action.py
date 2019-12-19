@@ -30,7 +30,6 @@ import glob
 import logging
 import os
 import re
-import types
 
 
 if 'posix' == os.name:

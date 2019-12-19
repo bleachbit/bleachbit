@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import argparse
 import email.generator
 from email.mime.text import MIMEText
 import json
@@ -26,7 +25,7 @@ import logging
 import os
 import random
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir

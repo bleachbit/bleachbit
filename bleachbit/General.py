@@ -21,8 +21,6 @@
 General code
 """
 
-import bleachbit
-
 import logging
 import os
 import sys
