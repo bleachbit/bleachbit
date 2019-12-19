@@ -23,8 +23,6 @@
 Test case for module CLI
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.CLI import *
 from bleachbit.General import run_external
 from bleachbit import FileUtilities
@@ -43,17 +41,14 @@ class CLITestCase(common.BleachbitTestCase):
     def setUp(self):
         super(CLITestCase, self).setUp()
 
-    def _test_preview(self, args, stdout=None, env=None):
+    def _test_preview(self, args, redirect_stdout=True, env=None):
         """Helper to test preview"""
         # Use devnull because in some cases the buffer will be too large,
         # and the other alternative, the screen, is not desirable.
-        if stdout:
-            stdout_ = None
-        else:
-            stdout_ = open(os.devnull, 'w')
-        output = run_external(args, stdout=stdout_, env=env)
-        if not stdout:
-            stdout_.close()
+        with open(os.devnull, 'w') as stdout:
+            if not redirect_stdout:
+                stdout = None
+            output = run_external(args, stdout=stdout, env=env)
         self.assertEqual(output[0], 0, "Return code = %d, stderr='%s'"
                          % (output[0], output[2]))
         pos = output[2].find('Traceback (most recent call last)')
@@ -66,8 +61,8 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for args_to_operations()"""
         tests = (
             (['adobe_reader.*'],
-             {'adobe_reader': [u'cache', u'mru', u'tmp']}),
-            (['adobe_reader.mru'], {'adobe_reader': [u'mru']}))
+             {'adobe_reader': ['cache', 'mru', 'tmp']}),
+            (['adobe_reader.mru'], {'adobe_reader': ['mru']}))
         for test in tests:
             o = args_to_operations(test[0], False)
             self.assertEqual(o, test[1])
@@ -91,7 +86,7 @@ class CLITestCase(common.BleachbitTestCase):
         args = [sys.executable, '-m', 'bleachbit.CLI', '-p', 'system.tmp']
         # If Python pipes stdout to file or devnull, the test may give
         # a false negative.  It must print stdout to terminal.
-        self._test_preview(args, stdout=True, env=env)
+        self._test_preview(args, redirect_stdout=False, env=env)
 
         os.remove(filename)
         self.assertNotExists(filename)

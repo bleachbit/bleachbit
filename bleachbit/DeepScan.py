@@ -23,8 +23,6 @@
 Scan directory tree for files to delete
 """
 
-from __future__ import absolute_import
-
 import logging
 import os
 import platform
@@ -32,17 +30,6 @@ import re
 import unicodedata
 
 import bleachbit
-
-UTF8 = 'utf-8'
-
-
-def to_unicode(s):
-    """
-    Converts non-unicode UTF-8 string to unicode obj. Does nothing if
-    string is already unicode.
-    """
-    return s if isinstance(s, unicode) else unicode(s, UTF8)
-
 
 def normalized_walk(top, **kwargs):
     """
@@ -58,20 +45,11 @@ def normalized_walk(top, **kwargs):
     if 'Darwin' == platform.system():
         for dirpath, dirnames, filenames in walk(top, **kwargs):
             yield dirpath, dirnames, [
-                unicodedata.normalize('NFC', to_unicode(fn)).encode(UTF8)
+                unicodedata.normalize('NFC', fn)
                 for fn in filenames
             ]
     else:
-        if os.name == 'nt':
-            # NTFS stores files as Unicode, and this makes os.walk() return
-            # Unicode.
-            top2 = unicode(top)
-        else:
-            # On Linux the file system encoding may be UTF-8, but deal with
-            # bytestrings to avoid potential UnicodeDecodeError in
-            # posixpath.join()
-            top2 = str(top)
-        for result in walk(top2, **kwargs):
+        for result in walk(top, **kwargs):
             yield result
 
 
@@ -105,9 +83,6 @@ class DeepScan:
                     for filename in filenames:
                         if r.search(filename):
                             full_path = os.path.join(dirpath, filename)
-                            if isinstance(full_path, str):
-                                # Convert path to Unicode.
-                                full_path = full_path.decode(bleachbit.FSE)
                             yield full_path
 
                 if time.time() - yield_time > 0.25:

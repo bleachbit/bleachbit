@@ -194,7 +194,7 @@ def generate_emails(number_of_emails,
     logger.debug('Generating {:,} emails'.format(number_of_emails))
     generated_file_names = []
     for i in range(1, number_of_emails + 1):
-        with tempfile.NamedTemporaryFile(prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
+        with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
             email_generator = email.generator.Generator(email_output_file)
             msg = _generate_email(
                 subject_model, content_model, number_of_sentences=number_of_sentences)
@@ -223,9 +223,9 @@ def generate_2600(file_count,
     logger.debug('Generating {:,} files'.format(file_count))
     generated_file_names = []
     for i in range(1, file_count + 1):
-        with tempfile.NamedTemporaryFile(prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+        with tempfile.NamedTemporaryFile(mode='w+', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
             txt = _generate_2600_file(model)
-            output_file.write(txt.encode('utf-8'))
+            output_file.write(txt)
             generated_file_names.append(output_file.name)
         if on_progress:
             on_progress(1.0*i/file_count)

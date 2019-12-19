@@ -23,8 +23,6 @@
 Integration specific to Unix-like operating systems
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 from bleachbit import FileUtilities, General
 from bleachbit import _

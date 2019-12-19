@@ -21,15 +21,13 @@
 Perform (or assist with) cleaning operations.
 """
 
-from __future__ import absolute_import  # keep at top
-
 import glob
 import logging
 import os.path
 import re
 import sys
 
-from bleachbit import _, expanduser, expandvars
+from bleachbit import _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special
@@ -167,7 +165,7 @@ class Cleaner:
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
-                expanded = expanduser(expandvars(pathname))
+                expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
                     if os.path.exists(globbed):
                         logger.debug(
@@ -353,7 +351,7 @@ class System(Cleaner):
     def get_commands(self, option_id):
         # cache
         if 'posix' == os.name and 'cache' == option_id:
-            dirname = expanduser("~/.cache/")
+            dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 if not self.whitelisted(filename):
                     yield Command.Delete(filename)
@@ -439,7 +437,7 @@ class System(Cleaner):
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
             for path in paths:
-                expanded = expandvars(path)
+                expanded = os.path.expandvars(path)
                 for globbed in glob.iglob(expanded):
                     yield Command.Delete(globbed)
 
@@ -451,15 +449,15 @@ class System(Cleaner):
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
         if 'nt' == os.name and 'memory_dump' == option_id:
-            fname = expandvars('$windir\\memory.dmp')
+            fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
                 yield Command.Delete(fname)
-            for fname in glob.iglob(expandvars('$windir\\Minidump\\*.dmp')):
+            for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
                 yield Command.Delete(fname)
 
         # most recently used documents list
         if 'posix' == os.name and 'recent_documents' == option_id:
-            ru_fn = expanduser("~/.recently-used")
+            ru_fn = os.path.expanduser("~/.recently-used")
             if os.path.lexists(ru_fn):
                 yield Command.Delete(ru_fn)
             # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
@@ -478,7 +476,7 @@ class System(Cleaner):
                 yield 0
 
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
-                pathname = expanduser(pathname)
+                pathname = os.path.expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
             if HAVE_GTK:
@@ -504,10 +502,10 @@ class System(Cleaner):
 
         # temporary files
         if 'nt' == os.name and 'tmp' == option_id:
-            dirname1 = expandvars(
+            dirname1 = os.path.expandvars(
                 "$USERPROFILE\\Local Settings\\Temp\\")
-            dirname2 = expandvars(r'%temp%')
-            dirname3 = expandvars("%windir%\\temp\\")
+            dirname2 = os.path.expandvars(r'%temp%')
+            dirname3 = os.path.expandvars("%windir%\\temp\\")
             dirnames = []
             if Windows.get_windows_version() >= 6.0:
                 # Windows Vista or later
@@ -526,7 +524,7 @@ class System(Cleaner):
 
         # trash
         if 'posix' == os.name and 'trash' == option_id:
-            dirname = expanduser("~/.Trash")
+            dirname = os.path.expanduser("~/.Trash")
             for filename in children_in_directory(dirname, False):
                 yield Command.Delete(filename)
             # fixme http://www.ramendik.ru/docs/trashspec.html
@@ -534,13 +532,13 @@ class System(Cleaner):
             # ~/.local/share/Trash
             # * GNOME 2.22, Fedora 9
             # * KDE 4.1.3, Ubuntu 8.10
-            dirname = expanduser("~/.local/share/Trash/files")
+            dirname = os.path.expanduser("~/.local/share/Trash/files")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
-            dirname = expanduser("~/.local/share/Trash/info")
+            dirname = os.path.expanduser("~/.local/share/Trash/info")
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
-            dirname = expanduser("~/.local/share/Trash/expunged")
+            dirname = os.path.expanduser("~/.local/share/Trash/expunged")
             # desrt@irc.gimpnet.org tells me that the trash
             # backend puts files in here temporary, but in some situations
             # the files are stuck.
@@ -582,7 +580,7 @@ class System(Cleaner):
 
         # prefetch
         if 'nt' == os.name and 'prefetch' == option_id:
-            for path in glob.iglob(expandvars('$windir\\Prefetch\\*.pf')):
+            for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
                 yield Command.Delete(path)
 
         # recycle bin
@@ -638,22 +636,22 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
             '^/var/tmp/kdecache-',
-            '^' + expanduser('~/.cache/wallpaper/'),
+            '^' + os.path.expanduser('~/.cache/wallpaper/'),
             # Flatpak mount point
-            '^' + expanduser('~/.cache/doc($|/)'),
+            '^' + os.path.expanduser('~/.cache/doc($|/)'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + expanduser('~/.cache/mozilla/'),
+            '^' + os.path.expanduser('~/.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + expanduser('~/.cache/google-chrome/'),
-            '^' + expanduser('~/.cache/gnome-control-center/'),
+            '^' + os.path.expanduser('~/.cache/google-chrome/'),
+            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + expanduser('~/.cache/evolution/'),
+            '^' + os.path.expanduser('~/.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + expanduser('~/.cache/ibus/'),
+            '^' + os.path.expanduser('~/.cache/ibus/'),
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + expanduser('~/.cache/obexd($|/)')]
+            '^' + os.path.expanduser('~/.cache/obexd($|/)')]
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 
@@ -713,7 +711,7 @@ def create_simple_cleaner(paths):
 
         def get_commands(self):
             for path in paths:
-                if not isinstance(path, (str, unicode)):
+                if not isinstance(path, (str)):
                     raise RuntimeError(
                         'expected path as string but got %s' % str(path))
                 if not os.path.isabs(path):

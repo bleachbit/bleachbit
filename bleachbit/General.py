@@ -21,8 +21,6 @@
 General code
 """
 
-from __future__ import absolute_import, print_function
-
 import bleachbit
 
 import logging
@@ -109,7 +107,7 @@ def getrealuid():
 def makedirs(path):
     """Make directory recursively considering sudo permissions.
     'Path' should not end in a delimiter."""
-    logger.debug('makedirs(%s)', path.encode(bleachbit.FSE))
+    logger.debug('makedirs(%s)', path)
     if os.path.lexists(path):
         return
     parentdir = os.path.split(path)[0]
@@ -120,14 +118,14 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout=False, env=None, clean_env=True):
+def run_external(args, stdout=None, env=None, clean_env=True):
     """Run external command and return (return code, stdout, stderr)"""
     logger.debug('running cmd ' + ' '.join(args))
     import subprocess
-    if not stdout:
+    if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
-    if subprocess.mswindows:
+    if sys.platform == 'win32':
         # hide the 'DOS box' window
         import win32process
         import win32con
@@ -143,7 +141,7 @@ def run_external(args, stdout=False, env=None, clean_env=True):
         # https://github.com/bleachbit/bleachbit/issues/168
         keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR')
         env = dict((key, value)
-                   for key, value in os.environ.iteritems() if key in keep_env)
+                   for key, value in os.environ.items() if key in keep_env)
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
     p = subprocess.Popen(args, stdout=stdout,
@@ -155,7 +153,10 @@ def run_external(args, stdout=False, env=None, clean_env=True):
         print(out[0])
         print(out[1])
         raise
-    return p.returncode, out[0], out[1]
+    encoding = sys.getdefaultencoding()
+    return (p.returncode,
+        str(out[0], encoding=encoding) if out[0] else '',
+        str(out[1], encoding=encoding) if out[1] else '')
 
 
 def sudo_mode():

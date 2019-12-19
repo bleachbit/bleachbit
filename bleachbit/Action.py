@@ -23,10 +23,8 @@
 Actions that perform cleaning
 """
 
-from __future__ import absolute_import
-
 from bleachbit import Command, FileUtilities, General, Special
-from bleachbit import _, expanduser, expandvars
+from bleachbit import _
 
 import glob
 import logging
@@ -61,7 +59,7 @@ def expand_multi_var(s, variables):
         return (s,)
     var_keys_used = []
     ret = []
-    for var_key in variables.iterkeys():
+    for var_key in variables.keys():
         sub = '$$%s$$' % var_key
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
@@ -70,14 +68,14 @@ def expand_multi_var(s, variables):
         return (s,)
     # filter the dictionary to the keys used
     vars_used = {key: value for key,
-                 value in variables.iteritems() if key in var_keys_used}
+                 value in variables.items() if key in var_keys_used}
     # create a product of combinations
     from itertools import product
     vars_product = (dict(zip(vars_used, x))
                     for x in product(*vars_used.values()))
     for var_set in vars_product:
         ms = s  # modified version of input string
-        for var_key, var_value in var_set.iteritems():
+        for var_key, var_value in var_set.items():
             sub = '$$%s$$' % var_key
             ms = ms.replace(sub, var_value)
         ret.append(ms)
@@ -104,10 +102,9 @@ class PluginMount(type):
             cls.plugins.append(cls)
 
 
-class ActionProvider:
+class ActionProvider(metaclass=PluginMount):
 
     """Abstract base class for performing individual cleaning actions"""
-    __metaclass__ = PluginMount
 
     def __init__(self, action_node, path_vars=None):
         """Create ActionProvider from CleanerML <action>"""
@@ -137,13 +134,13 @@ class FileActionProvider(ActionProvider):
         """Initialize file search"""
         ActionProvider.__init__(self, action_element, path_vars)
         self.regex = action_element.getAttribute('regex')
-        assert(isinstance(self.regex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.regex, (str, type(None))))
         self.nregex = action_element.getAttribute('nregex')
-        assert(isinstance(self.nregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.nregex, (str, type(None))))
         self.wholeregex = action_element.getAttribute('wholeregex')
-        assert(isinstance(self.wholeregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.wholeregex, (str, type(None))))
         self.nwholeregex = action_element.getAttribute('nwholeregex')
-        assert(isinstance(self.nwholeregex, (str, unicode, types.NoneType)))
+        assert(isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)
@@ -169,7 +166,7 @@ class FileActionProvider(ActionProvider):
         self.paths = []
         # expand special $$foo$$ which may give multiple values
         for path2 in expand_multi_var(raw_path, path_vars):
-            path3 = expanduser(expandvars(path2))
+            path3 = os.path.expanduser(os.path.expandvars(path2))
             if os.name == 'nt' and path3:
                 # convert forward slash to backslash for compatibility with getsize()
                 # and for display.  Do not convert an empty path, or it will become
@@ -179,7 +176,7 @@ class FileActionProvider(ActionProvider):
 
     def get_deep_scan(self):
         if 0 == len(self.ds):
-            raise StopIteration
+            return
         yield self.ds
 
     def get_paths(self):
@@ -278,7 +275,7 @@ class FileActionProvider(ActionProvider):
                 yield top
 
         if 'deep' == self.search:
-            raise StopIteration
+            return
         elif 'file' == self.search:
             func = get_file
         elif 'glob' == self.search:
@@ -533,7 +530,7 @@ class Process(ActionProvider):
 
     def __init__(self, action_element, path_vars=None):
         ActionProvider.__init__(self, action_element, path_vars)
-        self.cmd = expandvars(action_element.getAttribute('cmd'))
+        self.cmd = os.path.expandvars(action_element.getAttribute('cmd'))
         # by default, wait
         self.wait = True
         wait = action_element.getAttribute('wait')
@@ -558,15 +555,7 @@ class Process(ActionProvider):
             else:
                 if not 0 == rc:
                     msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                    if isinstance(stdout, unicode):
-                        stdout = stdout.encode('utf-8')
-                    if isinstance(stderr, unicode):
-                        stderr = stderr.encode('utf-8')
-                    if isinstance(self.cmd, unicode):
-                        cmd = self.cmd.encode('utf-8')
-                    else:
-                        cmd = self.cmd
-                    logger.warning(msg, cmd, rc, stdout, stderr)
+                    logger.warning(msg, self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
@@ -646,7 +635,7 @@ class YumCleanAll(ActionProvider):
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
         if not FileUtilities.exe_exists('yum'):
-            raise StopIteration
+            return
 
         yield Command.Function(
             None,
@@ -665,7 +654,7 @@ class DnfCleanAll(ActionProvider):
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
         if not FileUtilities.exe_exists('dnf'):
-            raise StopIteration
+            return
 
         yield Command.Function(
             None,
@@ -684,7 +673,7 @@ class DnfAutoremove(ActionProvider):
     def get_commands(self):
         # Checking allows auto-hide to work for non-APT systems
         if not FileUtilities.exe_exists('dnf'):
-            raise StopIteration
+            return
 
         yield Command.Function(
             None,

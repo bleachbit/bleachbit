@@ -24,8 +24,6 @@
 Preferences dialog
 """
 
-from __future__ import absolute_import
-
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
