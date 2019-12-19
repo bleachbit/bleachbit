@@ -24,7 +24,10 @@ import os
 import shutil
 import subprocess
 import sys
+import win_unicode_console
 
+setup_encoding = sys.stdout.encoding
+win_unicode_console.enable()
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
@@ -45,7 +48,7 @@ logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
 BB_VER = None
-GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gnome\\'
+GTK_DIR = sys.exec_prefix + '\\Lib\\site-packages\\gnome\\'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
@@ -112,7 +115,7 @@ def assert_module(module):
 
 def assert_execute(args, expected_output):
     """Run a command and check it returns the expected output"""
-    actual_output = subprocess.check_output(args)
+    actual_output = subprocess.check_output(args).decode(setup_encoding)
     if -1 == actual_output.find(expected_output):
         raise RuntimeError('When running command {} expected output {} but got {}'.format(
             args, expected_output, actual_output))
@@ -130,9 +133,9 @@ def run_cmd(cmd):
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    logger.info(stdout)
+    logger.info(stdout.decode(setup_encoding))
     if stderr:
-        logger.error(stderr)
+        logger.error(stderr.decode(setup_encoding))
 
 
 def sign_code(filename):
@@ -261,7 +264,7 @@ def build():
 def delete_unnecessary():
     logger.info('Deleting unnecessary files')
     # Remove SVG to reduce space and avoid this error
-    # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
+    # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
         r'_win32sysloader.pyd',
@@ -416,9 +419,9 @@ def recompress_library():
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, cwd='dist\\library')
     stdout, stderr = p.communicate()
-    logger.info(stdout)
+    logger.info(stdout.decode(setup_encoding))
     if stderr:
-        logger.error(stderr)
+        logger.error(stderr.decode(setup_encoding))
 
     file_size_new = os.path.getsize('dist\\library.zip')
     file_size_diff = file_size_old - file_size_new

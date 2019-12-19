@@ -23,8 +23,6 @@ Test case for module Update
 """
 
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 import bleachbit
 from bleachbit import logger
@@ -44,11 +42,11 @@ class UpdateTestCase(common.BleachbitTestCase):
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
         update_tests = [
             ('<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-             ((u'0.8.4', u'http://084'), (u'0.8.5beta', u'http://085beta'))),
+             (('0.8.4', 'http://084'), ('0.8.5beta', 'http://085beta'))),
             ('<updates><stable ver="0.8.4">http://084</stable>%s</updates>' % wa,
-             ((u'0.8.4', u'http://084'), )),
+             (('0.8.4', 'http://084'), )),
             ('<updates><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-             ((u'0.8.5beta', u'http://085beta'), )),
+             (('0.8.5beta', 'http://085beta'), )),
             ('<updates></updates>', ())]
 
         # fake network
@@ -81,8 +79,8 @@ class UpdateTestCase(common.BleachbitTestCase):
                 continue
             ver = update[0]
             url = update[1]
-            self.assertIsInstance(ver, (type(None), unicode))
-            self.assertIsInstance(url, (type(None), unicode))
+            self.assertIsInstance(ver, (type(None), str))
+            self.assertIsInstance(url, (type(None), str))
 
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
@@ -107,10 +105,10 @@ class UpdateTestCase(common.BleachbitTestCase):
         from bleachbit import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
-            logger.info('deleting %s', fn.encode(bleachbit.FSE))
+            logger.info('deleting %s', fn)
             os.unlink(fn)
 
-        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
+        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2019-11-15.ini'
 
         def expect_failure():
             raise AssertionError('Call should have failed')
@@ -139,7 +137,5 @@ class UpdateTestCase(common.BleachbitTestCase):
 
     def test_environment(self):
         """Check the sanity of the environment"""
-        import httplib
-        self.assertTrue(hasattr(httplib, 'HTTPS'))
-        import socket
-        self.assertTrue(hasattr(socket, 'ssl'))
+        import http.client
+        self.assertTrue(hasattr(http.client, 'HTTPSConnection'))

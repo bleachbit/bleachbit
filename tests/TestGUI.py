@@ -23,8 +23,6 @@
 Test case for module GUI
 """
 
-from __future__ import absolute_import
-
 import os
 import time
 import types
@@ -55,9 +53,9 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super(GUITestCase, GUITestCase).setUpClass()
-        options.set('first_start', False) # avoid pop-up window
+        options.set('first_start', False)
         options.set('check_online_updates', False) # avoid pop-up window
-        options.get_tree = types.MethodType(lambda self, parent, child: False, options, Options)
+        options.get_tree = types.MethodType(lambda self, parent, child: False, options)
         cls.app.register()
         cls.app.activate()
         cls.refresh_gui()

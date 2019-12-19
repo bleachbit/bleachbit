@@ -22,13 +22,11 @@
 """
 File-related utilities
 """
-from __future__ import absolute_import
 
 import bleachbit
-from bleachbit import expanduser, _
+from bleachbit import _
 
 import atexit
-import codecs
 import errno
 import glob
 import locale
@@ -155,7 +153,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert(isinstance(bytes_i, (int, long)))
+    assert(isinstance(bytes_i, int))
 
     if 0 == bytes_i:
         return "0"
@@ -232,7 +230,7 @@ def clean_ini(path, section, parameter):
     else:
         has_chardet = True
         # detect .ini file encoding
-        with open(path) as file_:
+        with open(path, 'rb') as file_:
             detector = chardet.universaldetector.UniversalDetector()
             for line in file_.readlines():
                 detector.feed(line)
@@ -243,9 +241,8 @@ def clean_ini(path, section, parameter):
     # read file to parser
     config = bleachbit.RawConfigParser()
     config.write = write
-    fp = codecs.open(
-        path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig')
-    config.readfp(fp)
+    with open(path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig') as fp:
+        config.read_file(fp)
 
     # change file
     changed = False
@@ -263,9 +260,8 @@ def clean_ini(path, section, parameter):
         fp.close()
         if options.get('shred'):
             delete(path, True)
-        fp = codecs.open(
-            path, 'wb', encoding=detector.result['encoding'] if has_chardet else 'utf_8')
-        config.write(config, fp)
+        with open(path, 'w', encoding=detector.result['encoding'] if has_chardet else 'utf_8', newline='') as fp:
+            config.write(config, fp)
 
 
 def clean_json(path, target):
@@ -275,7 +271,8 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    js = json.load(open(path, 'r'))
+    with open(path, 'r') as f:
+        js = json.load(f)
 
     # change file
     pos = js
@@ -302,7 +299,8 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        json.dump(js, open(path, 'w'))
+        with open(path, 'w') as f:
+            json.dump(js, f)
 
 
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
@@ -373,6 +371,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         else:
             # unlink
             os.remove(path)
+    elif os.path.islink(path):
+        os.remove(path)
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
 
@@ -404,46 +404,42 @@ def exe_exists(pathname):
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
-    conn = sqlite3.connect(path)
-    cursor = conn.cursor()
+    import contextlib
+    with contextlib.closing(sqlite3.connect(path)) as conn:
+        cursor = conn.cursor()
 
-    # overwrites deleted content with zeros
-    # https://www.sqlite.org/pragma.html#pragma_secure_delete
-    from bleachbit.Options import options
-    if options.get('shred'):
-        cursor.execute('PRAGMA secure_delete=ON')
+        # overwrites deleted content with zeros
+        # https://www.sqlite.org/pragma.html#pragma_secure_delete
+        from bleachbit.Options import options
+        if options.get('shred'):
+            cursor.execute('PRAGMA secure_delete=ON')
 
-    for cmd in cmds.split(';'):
-        try:
-            cursor.execute(cmd)
-        except sqlite3.OperationalError as exc:
-            if exc.message.find('no such function: ') >= 0:
-                # fixme: determine why randomblob and zeroblob are not
-                # available
-                logger.exception(exc.message)
-            else:
-                raise sqlite3.OperationalError(
-                    '%s: %s' % (bleachbit.decode_str(exc), path))
-        except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (bleachbit.decode_str(exc), path))
-    cursor.close()
-    conn.commit()
-    conn.close()
+        for cmd in cmds.split(';'):
+            try:
+                cursor.execute(cmd)
+            except sqlite3.OperationalError as exc:
+                if str(exc).find('no such function: ') >= 0:
+                    # fixme: determine why randomblob and zeroblob are not
+                    # available
+                    logger.exception(exc.message)
+                else:
+                    raise sqlite3.OperationalError(
+                        '%s: %s' % (exc, path))
+            except sqlite3.DatabaseError as exc:
+                raise sqlite3.DatabaseError(
+                    '%s: %s' % (exc, path))
+        cursor.close()
+        conn.commit()
 
 
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     ret = []
-    pathname3 = expanduser(bleachbit.expandvars(
+    pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
     for pathname4 in glob.iglob(pathname3):
         ret.append(pathname4)
     return ret
-
-
-def expandvars(path):
-    return bleachbit.expandvars(path)
 
 
 def extended_path(path):
@@ -540,14 +536,14 @@ def guess_overwrite_paths():
     # ~/.config makes it easy to find them and clean them.
     ret = []
     if 'posix' == os.name:
-        home = expanduser('~/.cache')
+        home = os.path.expanduser('~/.cache')
         if not os.path.exists(home):
-            home = expanduser("~")
+            home = os.path.expanduser("~")
         ret.append(home)
         if not same_partition(home, '/tmp/'):
             ret.append('/tmp')
     elif 'nt' == os.name:
-        localtmp = bleachbit.expandvars('$TMP')
+        localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):
             logger.warning(_("%TMP% does not exist: %s"), localtmp)
             localtmp = None
@@ -558,7 +554,7 @@ def guess_overwrite_paths():
             else:
                 ret.append(drive)
     else:
-        NotImplementedError('Unsupported OS in guess_overwrite_paths')
+        raise NotImplementedError('Unsupported OS in guess_overwrite_paths')
     return ret
 
 
@@ -598,7 +594,7 @@ def listdir(directory):
             for pathname in listdir(dirname):
                 yield pathname
         return
-    dirname = expanduser(directory)
+    dirname = os.path.expanduser(directory)
     if not os.path.lexists(dirname):
         return
     for filename in os.listdir(dirname):
@@ -645,22 +641,20 @@ def truncate_f(f):
 
 def uris_to_paths(file_uris):
     """Return a list of paths from text/uri-list"""
-    import urlparse
-    import urllib
+    import urllib.parse, urllib.request
     assert isinstance(file_uris, (tuple, list))
     file_paths = []
     for file_uri in file_uris:
         if not file_uri:
             # ignore blank
             continue
-        parsed_uri = urlparse.urlparse(file_uri)
+        parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
-            file_path = urllib.url2pathname(parsed_uri.path)
+            file_path = urllib.request.url2pathname(parsed_uri.path)
             if file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
-            file_path_unicode = file_path.decode("utf-8")
-            file_paths.append(file_path_unicode)
+            file_paths.append(file_path)
         else:
             logger.warning('Unsupported scheme: %s', file_uri)
     return file_paths
@@ -729,7 +723,7 @@ def wipe_contents(path, truncate=True):
                 f = open(path, 'wb')
             else:
                 raise
-        blanks = chr(0) * 4096
+        blanks = b'\0' * 4096
         while size > 0:
             f.write(blanks)
             size -= 4096
@@ -756,7 +750,7 @@ def wipe_contents(path, truncate=True):
             # Try to truncate the file. This makes the behavior consistent
             # with Linux and with Windows when IsUserAdmin=False.
             try:
-                with open(path, 'wb') as f:
+                with open(path, 'w') as f:
                     truncate_f(f)
             except IOError as e2:
                 if errno.EACCES == e2.errno:
@@ -771,7 +765,7 @@ def wipe_contents(path, truncate=True):
             f = wipe_write()
         else:
             # The wipe succeed, so prepare to truncate.
-            f = open(path, 'wb')
+            f = open(path, 'w')
     else:
         f = wipe_write()
     if truncate:
@@ -883,7 +877,7 @@ def wipe_path(pathname, idle=False):
                 raise
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
-        blanks = chr(0) * 65535
+        blanks = b'\0' * 65536
         while True:
             try:
                 f.write(blanks)
@@ -891,7 +885,7 @@ def wipe_path(pathname, idle=False):
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
-                        blanks = blanks[0: (len(blanks) / 2)]
+                        blanks = blanks[0:int(len(blanks) / 2)]
                     else:
                         break
                 elif e.errno == errno.EFBIG:

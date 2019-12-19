@@ -22,8 +22,6 @@
 Command design pattern implementation for cleaning
 """
 
-from __future__ import absolute_import
-
 from bleachbit import _
 from bleachbit import FileUtilities
 
@@ -84,7 +82,7 @@ class Delete:
                 FileUtilities.delete(self.path, self.shred)
             except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
-                # used by another process: u'C:\\Documents and
+                # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
                 if 32 != e.winerror and 5 != e.winerror:
                     raise
@@ -150,12 +148,12 @@ class Function:
                             # If tuple, then display progress.
                             yield func_ret
                 # either way, func_ret should be an integer
-                assert isinstance(func_ret, (int, long))
+                assert isinstance(func_ret, int)
                 ret['size'] = func_ret
             else:
                 if os.path.isdir(self.path):
                     raise RuntimeError('Attempting to run file function %s on directory %s' %
-                                       (self.func.func_name, self.path))
+                                       (self.func.__name__, self.path))
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
                 try:
@@ -284,8 +282,8 @@ class Truncate(Delete):
             'path': self.path,
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
-            f = open(self.path, 'wb')
-            f.truncate(0)
+            with open(self.path, 'w') as f:
+                f.truncate(0)
         yield ret
 
 
@@ -304,7 +302,7 @@ class Winreg:
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
         if 'nt' != os.name:
-            raise StopIteration
+            return
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
@@ -318,7 +316,7 @@ class Winreg:
         if not ret:
             # Nothing to delete or nothing was deleted.  This return
             # makes the auto-hide feature work nicely.
-            raise StopIteration
+            return
 
         ret = {
             'label': _('Delete registry key'),

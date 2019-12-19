@@ -21,7 +21,6 @@
 """
 Test case for Command
 """
-from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.Command import *
@@ -37,14 +36,14 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertExists(path)
 
         # preview
-        ret = cmd.execute(really_delete=False).next()
+        ret = next(cmd.execute(really_delete=False))
         s = str(cmd)
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertExists(path)
 
         # delete
-        ret = cmd.execute(really_delete=True).next()
+        ret = next(cmd.execute(really_delete=True))
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
@@ -57,12 +56,12 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertGreater(os.path.getsize(path), 0)
 
         # preview
-        ret = cmd.execute(False).next()
+        ret = next(cmd.execute(False))
         self.assertExists(path)
         self.assertGreater(os.path.getsize(path), 0)
 
         # delete
-        ret = cmd.execute(True).next()
+        ret = next(cmd.execute(True))
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)

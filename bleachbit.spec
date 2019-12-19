@@ -9,27 +9,12 @@
 %{!?fedora_version: %define fedora_version %fedora}
 %endif
 
-%if 0%{?rhel_version} || 0%{?centos_version} < 800
-%define python_bin %{__python}
-%endif
-
-%define python_pkg_pre python
-
-%if 0%{?fedora} || 0%{?centos_version} >= 800
-# Since Fedora 30, the variable __python refers to Python 3,
-# so explicitly use Python 2.
-%define python_bin %{__python2}
-# In Fedora 30 and CentOS 8, the package prefixes changed from "python" to "python2".
-%define python_pkg_pre python2
-%endif
-
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%{!?python_sitelib: %define python_sitelib %(%{python_bin} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python3_sitelib: %define python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
 %if 0%{?suse_version}
-%define python_sitelib %py_sitedir
-%define python_bin %{__python}
+%define python3_sitelib %py3_sitedir
 %endif
 
 Name:           bleachbit
@@ -48,20 +33,19 @@ BuildArch:      noarch
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  %{python_pkg_pre}
-BuildRequires:  %{python_pkg_pre}-devel
-BuildRequires:  %{python_pkg_pre}-setuptools
-Requires:       python >= 2.7
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+Requires:       python3
 Requires:       gtk3
 Requires:       usermode
-Requires:       %{python_pkg_pre}-chardet
-Requires:       %{python_pkg_pre}-gobject
+Requires:       python3-chardet
+Requires:       python3-gobject
 %endif
 
 # CentOS 7 does not have python-scandir, but BleachBit can fall back a
 # slower mode without the python-scandir package.
-%if 0%{?fedora_version}
-Requires:       %{python_pkg_pre}-scandir
+%if 0%{?fedora_version} || 0%{?centos_version} >= 800
+Requires:       python3-scandir
 %endif
 
 %if 0%{?centos_version} >= 800
@@ -73,16 +57,16 @@ BuildRequires:  hostname
 BuildRequires:  desktop-file-utils
 %endif
 BuildRequires:  make
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 BuildRequires:  update-desktop-files
-Requires:       python-gnome
+Requires:       python3-gnome
 Requires:       gtk3
-Requires:       python-xml
-Requires:       python-scandir
-Requires:       python-chardet
-Requires:       python2-gobject
-%py_requires
+Requires:       python3-xml
+Requires:       python3-scandir
+Requires:       python3-chardet
+Requires:       python3-gobject
+%py3_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
 %endif
@@ -105,7 +89,7 @@ hide previously deleted files.
 %setup -q
 
 %build
-%{python_bin} setup.py build
+%{__python3} setup.py build
 
 make downgrade_desktop
 

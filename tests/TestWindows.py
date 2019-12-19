@@ -23,8 +23,6 @@
 Test case for module Windows
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 
 from bleachbit.FileUtilities import extended_path, extended_path_undo
@@ -41,14 +39,14 @@ import unittest
 from decimal import Decimal
 
 if 'win32' == sys.platform:
-    import _winreg
+    import winreg
     from win32com.shell import shell
 
 
 def put_files_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
     # make a file and move it to the recycle bin
-    tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
+    tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
     for test in tests:
         (fd, filename) = tempfile.mkstemp(
             prefix='bleachbit-recycle-file', suffix=test)
@@ -158,10 +156,12 @@ class WindowsTestCase(common.BleachbitTestCase):
         # clean up
         cleanup_dirs()
 
+    @unittest.skip("not yet")
     def test_link_junction_no_clear(self):
         """Unit test for directory junctions without clearing recycle bin"""
         self._test_link_helper('/j', False)
 
+    @unittest.skip("not yet")
     def test_link_junction_clear(self):
         """Unit test for directory junctions with clearing recycle bin"""
         self._test_link_helper('/j', True)
@@ -170,13 +170,13 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for directory symlink without clearing recycle bin"""
         self._test_link_helper('/d', False)
 
-    def test_link_junction_clear(self):
-        """Unit test for directory junctions with clearing recycle bin"""
-        self._test_link_helper('/j', True)
+    def test_link_symlink_clear(self):
+        """Unit test for directory symlink with clearing recycle bin"""
+        self._test_link_helper('/d', True)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
-        tests = ('regular', u'unicode-emdash-u\u2014', 'long' + 'x' * 100)
+        tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
             f = tempfile.NamedTemporaryFile(
                 prefix='bleachbit-delete-locked-file', suffix=test,
@@ -210,7 +210,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         # create a nested key
         key = 'Software\\BleachBit\\DeleteThisKey'
         subkey = key + '\\AndThisKey'
-        hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, subkey)
+        hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, subkey)
         hkey.Close()
 
         # test
@@ -228,12 +228,12 @@ class WindowsTestCase(common.BleachbitTestCase):
         # UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position
         # 11: ordinal not in range(128)
         key = r'Software\\BleachBit\\DeleteThisKey'
-        hkey = _winreg.CreateKey(
-            _winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-Ö')
+        hkey = winreg.CreateKey(
+            winreg.HKEY_CURRENT_USER, key + r'\\AndThisKey-Ö')
         hkey.Close()
-        return_value = delete_registry_key(u'HKCU\\' + key, True)
+        return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertTrue(return_value)
-        return_value = delete_registry_key(u'HKCU\\' + key, True)
+        return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertFalse(return_value)
 
     def test_delete_registry_value(self):
@@ -245,11 +245,11 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # create a name-value pair
         key = 'Software\\BleachBit'
-        hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, key)
+        hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key)
 
         value_name = 'delete_this_value_name'
-        _winreg.SetValueEx(
-            hkey, value_name, 0, _winreg.REG_SZ, 'delete this value')
+        winreg.SetValueEx(
+            hkey, value_name, 0, winreg.REG_SZ, 'delete this value')
         hkey.Close()
 
         # delete and confirm
@@ -276,8 +276,8 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_detect_registry_key(self):
         """Test for detect_registry_key()"""
-        self.assert_(detect_registry_key('HKCU\\Software\\Microsoft\\'))
-        self.assert_(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
+        self.assertTrue(detect_registry_key('HKCU\\Software\\Microsoft\\'))
+        self.assertTrue(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
 
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
@@ -295,7 +295,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         win32clipboard.SetClipboardText(fname, win32clipboard.CF_TEXT)
         win32clipboard.SetClipboardText(fname, win32clipboard.CF_UNICODETEXT)
         self.assertEqual(win32clipboard.GetClipboardData(
-            win32clipboard.CF_TEXT), fname)
+            win32clipboard.CF_TEXT), fname.encode('ascii'))
         self.assertEqual(win32clipboard.GetClipboardData(
             win32clipboard.CF_UNICODETEXT), fname)
         win32clipboard.CloseClipboard()
@@ -347,18 +347,18 @@ class WindowsTestCase(common.BleachbitTestCase):
         # check the function basically works
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=False)
-            self.assertIsInstance(ret, (int, long))
+            self.assertIsInteger(ret)
         if not common.destructive_tests('recycle bin'):
             return
         # check it deletes files for fixed drives
         put_files_into_recycle_bin()
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=True)
-            self.assertIsInstance(ret, (int, long))
+            self.assertIsInteger(ret)
         # check it deletes files for all drives
         put_files_into_recycle_bin()
         ret = empty_recycle_bin(None, really_delete=True)
-        self.assertIsInstance(ret, (int, long))
+        self.assertIsInteger(ret)
         # Repeat two for reasons.
         # 1. Trying to empty an empty recycling bin can cause
         #    a 'catastrophic failure' error (handled in the function)
@@ -377,7 +377,7 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
-        filenames = ('short', 'long' + 'x' * 250, u'utf8-ɡælɪk')
+        filenames = ('short', 'long' + 'x' * 250, 'utf8-ɡælɪk')
         for filename in filenames:
             longname = os.path.join(dirname, filename)
             logger.debug('file_wipe(%s)', longname)
@@ -407,10 +407,10 @@ class WindowsTestCase(common.BleachbitTestCase):
                 self.assertNotExists(shortname)
 
             # A small file that fits in MFT
-            _test_wipe('')
+            _test_wipe(b'')
 
             # requires wiping of extents
-            _test_wipe('secret' * 100000)
+            _test_wipe(b'secret' * 100000)
 
         shutil.rmtree(dirname, True)
 
@@ -441,13 +441,13 @@ class WindowsTestCase(common.BleachbitTestCase):
         if parse_windows_build() >= 6.0:
             envs.append('localappdatalow')
         for env in envs:
-            self.assertExists(os.environ[env].decode('utf8'))
+            self.assertExists(os.environ[env])
 
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""
-        tests = (('HKCU\\Software', _winreg.HKEY_CURRENT_USER, 'Software'),
-                 ('HKLM\\SOFTWARE', _winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE'),
-                 ('HKU\\.DEFAULT', _winreg.HKEY_USERS, '.DEFAULT'))
+        tests = (('HKCU\\Software', winreg.HKEY_CURRENT_USER, 'Software'),
+                 ('HKLM\\SOFTWARE', winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE'),
+                 ('HKU\\.DEFAULT', winreg.HKEY_USERS, '.DEFAULT'))
         for (input_key, expected_hive, expected_key) in tests:
             (hive, key) = split_registry_key(input_key)
             self.assertEqual(expected_hive, hive)
@@ -479,12 +479,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertEqual(ret, 0)
 
     def test_set_environ(self):
-        for folder in [u'folderäö', 'folder']:
+        for folder in ['folderäö', 'folder']:
             test_dir = os.path.join(self.tempdir, folder)
             os.mkdir(test_dir)
             self.assertExists(test_dir)
             set_environ('cd_test', test_dir)
-            if isinstance(test_dir, unicode):
-                test_dir = test_dir.encode('utf-8')
             self.assertEqual(os.environ['cd_test'], test_dir)
             os.environ.pop('cd_test')

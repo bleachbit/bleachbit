@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
@@ -21,8 +21,6 @@
 """
 Launcher
 """
-
-from __future__ import absolute_import, print_function
 
 import os
 import sys

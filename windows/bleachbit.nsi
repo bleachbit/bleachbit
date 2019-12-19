@@ -108,7 +108,7 @@ Unicode true
 
 ;!define File_VERSION 2.3.0.0
 ; Later:
-!define File_VERSION ${VERSION}
+!define File_VERSION ${VERSION}.0
 
 !ifdef NoTranslations
   VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"

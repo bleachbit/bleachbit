@@ -19,7 +19,7 @@ INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
 
 # if not specified, do not check coverage
-COVERAGE ?= python
+COVERAGE ?= python3
 
 build:
 	echo Nothing to build
@@ -56,8 +56,8 @@ install:
 	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
 	#note: compileall is recursive
 	cd $(DESTDIR)$(datadir)/bleachbit && \
-	python2 -O -c "import compileall; compileall.compile_dir('.')" && \
-	python2 -c "import compileall; compileall.compile_dir('.')"
+	python3 -O -c "import compileall; compileall.compile_dir('.')" && \
+	python3 -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
