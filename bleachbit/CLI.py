@@ -22,10 +22,8 @@
 Command line interface
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION, encoding
+from bleachbit import _, APP_VERSION
 from bleachbit import Diagnostic, Options, Worker
 
 import logging
@@ -39,16 +37,9 @@ logger = logging.getLogger(__name__)
 class CliCallback:
     """Command line's callback passed to Worker"""
 
-    def __init__(self):
-        """Initialize CliCallback"""
-        self.encoding = encoding if encoding else 'UTF8'
-
     def append_text(self, msg, tag=None):
         """Write text to the terminal"""
-        # If the encoding is not explicitly handled on a non-UTF-8
-        # system, then special Latin-1 characters such as umlauts may
-        # raise an exception as an encoding error.
-        print(msg.strip('\n').encode(self.encoding, 'replace'))
+        print(msg.strip('\n'))
 
     def update_progress_bar(self, status):
         """Not used"""
@@ -86,7 +77,7 @@ def preview_or_clean(operations, really_clean):
     """Preview deletes and other changes"""
     cb = CliCallback()
     worker = Worker.Worker(cb, really_clean, operations).run()
-    while worker.next():
+    while next(worker):
         pass
 
 

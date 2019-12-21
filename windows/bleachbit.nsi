@@ -17,6 +17,7 @@
 ;  You should have received a copy of the GNU General Public License
 ;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;  @scriptversion v3.0.1.1429
 ;  @scriptdate 2019-12-01
 
 
@@ -57,6 +58,48 @@
 
 ; Unicode requires NSIS version 3 or later
 Unicode true
+
+
+;--------------------------------
+;MultiUser defines
+
+; https://github.com/Drizin/NsisMultiUser/wiki/Defines
+!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
+; !define VERSION "2.3"
+; "VERSION" already defined!
+!define PROGEXE "${prodname}.exe"
+; !define COMPANY_NAME "BleachBit"
+; "COMPANY_NAME" already defined!
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS) defines whether simultaneous per-user
+; and per-machine installations on the same machine are allowed. If set to disallow, the installer
+; always requires elevation when there's per-machine installation in order to remove it first.
+!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
+; Decision to don't ALLOW_BOTH_INSTALLATIONS was, because it's just to risky to have to versions
+; installed at the same time and BB maybe run into unknown issues.
+; This means now, that maybe a per-machine installation gets deinstalled and a per-user installation
+; gets preferenced!
+
+; An option (MULTIUSER_INSTALLMODE_ALLOW_ELEVATION) defines whether elevation if allowed.
+; If elevation is disabled, the per-machine option becomes available only if the (un)installer
+; is started elevated from Windows and is disabled otherwise.
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
+
+!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
+
+; MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS:
+; 0 or 1, (only available if MULTIUSER_INSTALLMODE_ALLOW_ELEVATION = 1 and there are 0 or 2 installations
+; on the system) when running as user and is set to 1, per-machine installation is pre-selected, otherwise
+; per-user installation.
+!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
+
+; MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER:
+; 0 or 1, (only available if there are 0 or 2 installations on the system) when running as admin and
+; is set to 1, per-user installation is pre-selected, otherwise per-machine installation.
+!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
+
+!define MULTIUSER_INSTALLMODE_64_BIT 0
+!define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
 ;--------------------------------
@@ -115,25 +158,14 @@ VIFileVersion ${File_VERSION}
 
 
 ;--------------------------------
-; multi-user
-;
-; See https://github.com/Drizin/NsisMultiUser
-;
+; Rest of old part "multi-user"
+
 !addplugindir /x86-unicode ".\NsisPluginsUnicode\"
 !addincludedir ".\NsisInclude"
 !include UAC.nsh
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
 !include StdUtils.nsh
-
-!define PRODUCT_NAME "${prodname}" ; exact copy to another name for multi-user script
-!define PROGEXE "${prodname}.exe"
-!define MULTIUSER_INSTALLMODE_ALLOW_BOTH_INSTALLATIONS 0
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION 1
-!define MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT 0
-!define MULTIUSER_INSTALLMODE_DEFAULT_ALLUSERS 1
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 1
-!define MULTIUSER_INSTALLMODE_64_BIT 0
 
 
 ;--------------------------------
@@ -154,23 +186,54 @@ VIFileVersion ${File_VERSION}
 ;--------------------------------
 ;Pages
 
-; installer
-  !insertmacro MUI_PAGE_LICENSE "..\COPYING"
-  !insertmacro MULTIUSER_PAGE_INSTALLMODE
-  !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_COMPONENTS
-  !insertmacro MUI_PAGE_INSTFILES
+; General:
+!define /IfNDef MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install-nsis.ico"
+!define /IfNDef MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall-nsis.ico"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_BITMAP "picture.MUI2\bleachbit_150x57.bmp"
+!define MUI_COMPONENTSPAGE_SMALLDESC
 
-  !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-  !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site"
-  !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
-  !insertmacro MUI_PAGE_FINISH
+; Installer:
+!define MUI_WELCOMEFINISHPAGE_BITMAP "picture.MUI2\bleachbit_164x314.bmp"
+!insertmacro MUI_PAGE_WELCOME
+!define MUI_LICENSEPAGE_RADIOBUTTONS
+!insertmacro MUI_PAGE_LICENSE "..\COPYING"
+;Later:
+;!insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
+;!define MUI_PAGE_CUSTOMFUNCTION_PRE "MULTIUSER_PAGE_INSTALLMODE_Pre"
+;!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "MULTIUSER_PAGE_INSTALLMODE_Leave"
+!insertmacro MULTIUSER_PAGE_INSTALLMODE
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
+;Later:
+;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+!define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
+;Later:
+;!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!insertmacro MUI_PAGE_FINISH
 
-; uninstaller
-  !insertmacro MULTIUSER_UNPAGE_INSTALLMODE
-  !insertmacro MUI_UNPAGE_CONFIRM
-  !insertmacro MUI_UNPAGE_INSTFILES
+; Uninstaller:
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "picture.MUI2\bleachbit_164x314.bmp"
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+;Later:
+;!define MUI_PAGE_CUSTOMFUNCTION_PRE "un.MULTIUSER_UnPAGE_INSTALLMODE_Pre"
+;!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "un.MULTIUSER_UnPAGE_INSTALLMODE_Leave"
+!insertmacro MULTIUSER_UNPAGE_INSTALLMODE
+; MUI_UNPAGE_DIRECTORY not needed, ATM.
+; !insertmacro MUI_UNPAGE_DIRECTORY
+!insertmacro MUI_UNPAGE_COMPONENTS
+UninstallText $(BLEACHBIT_UNINSTALL_TEXT)
+!insertmacro MUI_UNPAGE_INSTFILES
+!define MUI_UNFINISHPAGE_NOAUTOCLOSE
+!insertmacro MUI_UNPAGE_FINISH
+
+; MUI_LANGUAGE[EX] should be inserted after the MUI_[UN]PAGE_* macros!
 
 
 ;--------------------------------
@@ -310,7 +373,7 @@ SectionEnd
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
   Section "Integrate Shred" SectionShred
-    ; register file association verb
+    ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
@@ -377,7 +440,7 @@ Section "Uninstall"
     Delete "$DESKTOP\BleachBit.lnk"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
-    ; Remove Windows Explorer Shell Extension
+    # Remove Windows Explorer Shell Extension (Shredder)
     DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.

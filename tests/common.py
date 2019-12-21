@@ -22,8 +22,6 @@
 Common code for unit tests
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.FileUtilities import extended_path
 from bleachbit.General import sudo_mode
 
@@ -59,13 +57,10 @@ class BleachbitTestCase(unittest.TestCase):
     # type asserts
     #
     def assertIsInteger(self, obj, msg=''):
-        self.assertIsInstance(obj, (int, long), msg)
-
-    def assertIsUnicodeString(self, obj, msg=''):
-        self.assertIsInstance(obj, unicode, msg)
+        self.assertIsInstance(obj, int, msg)
 
     def assertIsString(self, obj, msg=''):
-        self.assertIsInstance(obj, (unicode, str), msg)
+        self.assertIsInstance(obj, str, msg)
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
@@ -75,8 +70,7 @@ class BleachbitTestCase(unittest.TestCase):
     #
     def assertExists(self, path, msg='', func=os.path.exists):
         """File, directory, or any path exists"""
-        from bleachbit import expandvars
-        path = expandvars(path)
+        path = os.path.expandvars(path)
         if not func(getTestPath(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
@@ -101,7 +95,7 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=''):
+    def write_file(self, filename, contents=b''):
         """Create a temporary file, optionally writing contents to it"""
         if not os.path.isabs(filename):
             filename = os.path.join(self.tempdir, filename)
@@ -188,16 +182,16 @@ def validate_result(self, result, really_delete=False):
     self.assertLessEqual(result['n_deleted'], 1)
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
-    self.assertIsInstance(result['size'], (int, long, type(
+    self.assertIsInstance(result['size'], (int, type(
         None),), "size is %s" % str(result['size']))
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
-    self.assertIsInstance(filename, (str, unicode, type(None)),
+    self.assertIsInstance(filename, (str, type(None)),
                           "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
-    if isinstance(filename, (str, unicode)) and not filename[0:2] == 'HK':
+    if isinstance(filename, str) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
         else:

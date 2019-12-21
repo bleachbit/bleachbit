@@ -22,8 +22,6 @@
 GTK graphical user interface
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit import GuiBasic
 from bleachbit import Cleaner, FileUtilities
 from bleachbit import _, APP_NAME, appicon_path, portable_mode
@@ -39,7 +37,6 @@ import os
 import sys
 import threading
 import time
-import types
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -407,7 +404,7 @@ class TreeDisplayModel:
 
     def set_cleaner(self, path, model, parent_window, value):
         """Activate or deactive option of cleaner."""
-        assert isinstance(value, types.BooleanType)
+        assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
         i = path
@@ -427,8 +424,8 @@ class TreeDisplayModel:
             # %(option) may be cache, logs, cookies, etc.
             # %(warning) may be 'This option is really slow'
             msg = _("Warning regarding %(cleaner)s - %(option)s:\n\n%(warning)s") % \
-                {'cleaner': model[parent][0].decode('utf-8'),
-                 'option': model[path][0].decode('utf-8'),
+                {'cleaner': model[parent][0],
+                 'option': model[path][0],
                  'warning': warning}
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
@@ -519,7 +516,7 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
-        if os.name == 'posix' and bleachbit.expanduser('~') == '/root':
+        if os.name == 'posix' and os.path.expanduser('~') == '/root':
             self.append_text(
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
         if os.name == 'nt' and options.get('shred'):
@@ -683,7 +680,7 @@ class GUI(Gtk.ApplicationWindow):
         else:
             self.start_time = time.time()
             worker = self.worker.run()
-            GLib.idle_add(worker.next)
+            GLib.idle_add(worker.__next__)
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
@@ -714,7 +711,7 @@ class GUI(Gtk.ApplicationWindow):
             if Notify.init(APP_NAME):
                 notify = Notify.Notification.new(
                     'BleachBit', _("Done."), 'bleachbit')
-                if os.name == 'posix' and bleachbit.expanduser('~') == '/root':
+                if os.name == 'posix' and os.path.expanduser('~') == '/root':
                     notify.set_hint("desktop-entry", "bleachbit-root")
                 else:
                     notify.set_hint("desktop-entry", "bleachbit")
@@ -747,7 +744,7 @@ class GUI(Gtk.ApplicationWindow):
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done)
-        GLib.idle_add(rc.next)
+        GLib.idle_add(rc.__next__)
         return False
 
     def cb_register_cleaners_done(self):
@@ -843,7 +840,7 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to update the progress bar with number or text"""
         if isinstance(status, float):
             self.progressbar.set_fraction(status)
-        elif isinstance(status, (str, unicode)):
+        elif isinstance(status, str):
             self.progressbar.set_show_text(True)
             self.progressbar.set_text(status)
         else:

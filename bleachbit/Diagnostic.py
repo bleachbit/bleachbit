@@ -23,8 +23,6 @@
 Show diagnostic information
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 
 import locale
@@ -39,7 +37,7 @@ if 'nt' == os.name:
 def diagnostic_info():
     """Return diagnostic information as a string"""
     # this section is for application and library versions
-    s = u"BleachBit version %s" % bleachbit.APP_VERSION
+    s = "BleachBit version %s" % bleachbit.APP_VERSION
 
     try:
         # Linux tarball will have a revision but not build_number
@@ -53,6 +51,7 @@ def diagnostic_info():
     except:
         pass
     try:
+        gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         s += '\nGTK version {0}.{1}.{2}'.format(
             Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
@@ -62,7 +61,6 @@ def diagnostic_info():
     s += "\nSQLite version %s" % sqlite3.sqlite_version
 
     # this section is for variables defined in __init__.py
-    s += "\nFSE = %s" % bleachbit.FSE
     s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
     s += "\nlocale_dir = %s" % bleachbit.locale_dir
     s += "\noptions_dir = %s" % bleachbit.options_dir
@@ -77,12 +75,8 @@ def diagnostic_info():
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:
-        if os.getenv(env):
-            s += "\nos.getenv('%s') = %s" % (env,
-                                             os.getenv(env).decode(bleachbit.FSE))
-        else:
-            s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % bleachbit.expanduser('~')
+        s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
+    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
     if sys.platform.startswith('linux'):
         if hasattr(platform, 'linux_distribution'):
             s += "\nplatform.linux_distribution() = %s" % str(

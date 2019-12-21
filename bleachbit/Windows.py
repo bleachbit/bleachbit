@@ -37,8 +37,6 @@ These are the terms:
 
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 from bleachbit import Command, FileUtilities, General
 
@@ -51,7 +49,7 @@ import sys
 from decimal import Decimal
 
 if 'win32' == sys.platform:
-    import _winreg
+    import winreg
     import pywintypes
     import win32api
     import win32con
@@ -153,8 +151,8 @@ def delete_registry_value(key, value_name, really_delete):
     (hive, sub_key) = split_registry_key(key)
     if really_delete:
         try:
-            hkey = _winreg.OpenKey(hive, sub_key, 0, _winreg.KEY_SET_VALUE)
-            _winreg.DeleteValue(hkey, value_name)
+            hkey = winreg.OpenKey(hive, sub_key, 0, winreg.KEY_SET_VALUE)
+            winreg.DeleteValue(hkey, value_name)
         except WindowsError as e:
             if e.winerror == 2:
                 # 2 = 'file not found' means value does not exist
@@ -163,8 +161,8 @@ def delete_registry_value(key, value_name, really_delete):
         else:
             return True
     try:
-        hkey = _winreg.OpenKey(hive, sub_key)
-        _winreg.QueryValueEx(hkey, value_name)
+        hkey = winreg.OpenKey(hive, sub_key)
+        winreg.QueryValueEx(hkey, value_name)
     except WindowsError as e:
         if e.winerror == 2:
             return False
@@ -182,7 +180,7 @@ def delete_registry_key(parent_key, really_delete):
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
-        hkey = _winreg.OpenKey(hive, parent_sub_key)
+        hkey = winreg.OpenKey(hive, parent_sub_key)
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
@@ -192,23 +190,23 @@ def delete_registry_key(parent_key, really_delete):
     if not hkey:
         # key not found
         return False
-    keys_size = _winreg.QueryInfoKey(hkey)[0]
+    keys_size = winreg.QueryInfoKey(hkey)[0]
     child_keys = []
     for i in range(keys_size):
-        child_keys.append(parent_key + '\\' + _winreg.EnumKey(hkey, i))
+        child_keys.append(parent_key + '\\' + winreg.EnumKey(hkey, i))
     for child_key in child_keys:
         delete_registry_key(child_key, True)
-    _winreg.DeleteKey(hive, parent_sub_key)
+    winreg.DeleteKey(hive, parent_sub_key)
     return True
 
 
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
-    windir = bleachbit.expandvars('$windir')
+    windir = os.path.expandvars('$windir')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
-    dirs += [bleachbit.expandvars('$windir\\SoftwareDistribution\\Download')]
-    dirs += [bleachbit.expandvars('$windir\\ie7updates')]
-    dirs += [bleachbit.expandvars('$windir\\ie8updates')]
+    dirs += [os.path.expandvars('$windir\\SoftwareDistribution\\Download')]
+    dirs += [os.path.expandvars('$windir\\ie7updates')]
+    dirs += [os.path.expandvars('$windir\\ie8updates')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
@@ -244,7 +242,7 @@ def detect_registry_key(parent_key):
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
-        hkey = _winreg.OpenKey(hive, parent_sub_key)
+        hkey = winreg.OpenKey(hive, parent_sub_key)
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
@@ -276,7 +274,7 @@ def elevate_privileges():
 
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
-        exe = sys.executable.decode(sys.getfilesystemencoding())
+        exe = sys.executable
         parameters = "--gui --no-uac"
     else:
         pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
@@ -356,7 +354,7 @@ def get_fixed_drives():
             # and free_space() returns access denied.
             # https://bugs.launchpad.net/bleachbit/+bug/1474848
             if os.path.isdir(drive):
-                yield unicode(drive)
+                yield drive
 
 
 def get_known_folder_path(folder_name):
@@ -429,11 +427,10 @@ def get_recycle_bin():
     for item in h:
         path = h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
         if os.path.isdir(path):
-            if not is_link(path):
-                # Return the contents of a normal directory, but do
-                # not recurse Windows symlinks in the Recycle Bin.
-                for child in FileUtilities.children_in_directory(path, True):
-                    yield child
+            # Return the contents of a normal directory, but do
+            # not recurse Windows symlinks in the Recycle Bin.
+            for child in FileUtilities.children_in_directory(path, True):
+                yield child
         yield path
 
 
@@ -444,17 +441,14 @@ def get_windows_version():
     return Decimal(vstr)
 
 
-def is_link(path):
+def is_junction(path):
     """Check whether the path is a link
 
     On Python 2.7 the function os.path.islink() always returns False,
     so this is needed
     """
     FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-    if isinstance(path, unicode):
-        attr = windll.kernel32.GetFileAttributesW(path)
-    else:
-        attr = windll.kernel32.GetFileAttributesA(path)
+    attr = windll.kernel32.GetFileAttributesW(path)
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
@@ -574,8 +568,7 @@ def set_environ(varname, path):
     if varname in os.environ:
         #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
-            os.environ[varname] = bleachbit.expandvars(
-                u'%%%s%%' % varname).encode('utf-8')
+            os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs
         return
@@ -583,8 +576,7 @@ def set_environ(varname, path):
         if not os.path.exists(path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
-        os.environ[varname] = path if isinstance(
-            path, str) else path.encode('utf8')
+        os.environ[varname] = path
     except:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
@@ -620,10 +612,10 @@ def split_registry_key(full_key):
     assert len(full_key) >= 6
     [k1, k2] = full_key.split("\\", 1)
     hive_map = {
-        'HKCR': _winreg.HKEY_CLASSES_ROOT,
-        'HKCU': _winreg.HKEY_CURRENT_USER,
-        'HKLM': _winreg.HKEY_LOCAL_MACHINE,
-        'HKU': _winreg.HKEY_USERS}
+        'HKCR': winreg.HKEY_CLASSES_ROOT,
+        'HKCU': winreg.HKEY_CURRENT_USER,
+        'HKLM': winreg.HKEY_LOCAL_MACHINE,
+        'HKU': winreg.HKEY_USERS}
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2

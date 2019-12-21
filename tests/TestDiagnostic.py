@@ -23,8 +23,6 @@
 Test case for module Diagnostic
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 from bleachbit.Diagnostic import diagnostic_info
 

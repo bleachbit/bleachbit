@@ -22,8 +22,6 @@
 Test case for RecognizeCleanerML
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 from bleachbit.RecognizeCleanerML import hashdigest
 

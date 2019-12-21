@@ -22,8 +22,6 @@
 Test FileUtilities.wipe_path
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
 from bleachbit.General import run_external
 from tests import common
