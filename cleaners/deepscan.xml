@@ -51,4 +51,31 @@
     <!-- http://support.microsoft.com/kb/826810 -->
     <action command="delete" search="deep" regex="^ppt[0-9]{4}\.tmp$"/>
   </option>
+  <option id="vim_swap_user">
+    <label>VIM swap files under user profile</label>
+    <description>Delete the backup files</description>
+    <warning>This option is slow.</warning>
+    <!--
+Here is an example. When editing foo.txt, VIM makes a file called .foo.txt.swp
+that starts with a period.
+
+If the .swp file exists, it will cycle through the alphabet according to
+this post
+https://groups.google.com/forum/#!msg/vim_use/JBHSs3kPPJU/X9WeMsZcfWAJ
+
+The likeliness of VIM not being able to create a swap on the first three
+times is small.
+
+Be careful not to match files such as ~/.htpasswd
+https://github.com/bleachbit/bleachbit/issues/683
+
+-->
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$"/>
+  </option>
+  <option id="vim_swap_root">
+    <label>VIM swap files across system</label>
+    <description>Delete the backup files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$" path="/" os="linux"/>
+  </option>
 </cleaner>
