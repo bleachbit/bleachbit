@@ -55,7 +55,8 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super(GUITestCase, GUITestCase).setUpClass()
-        options.set('first_start', False)
+        options.set('first_start', False) # avoid pop-up window
+        options.set('check_online_updates', False) # avoid pop-up window
         options.get_tree = types.MethodType(lambda self, parent, child: False, options, Options)
         cls.app.register()
         cls.app.activate()
