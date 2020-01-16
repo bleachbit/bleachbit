@@ -38,6 +38,11 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
+stdout_encoding = sys.stdout.encoding
+if 'win32' == sys.platform:
+    import win_unicode_console
+    win_unicode_console.enable()
+
 logger = Log.init_log()
 
 # Setting below value to false disables update notification (useful

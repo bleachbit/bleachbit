@@ -108,7 +108,7 @@ class UpdateTestCase(common.BleachbitTestCase):
             logger.info('deleting %s', fn)
             os.unlink(fn)
 
-        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2016-03-14.ini'
+        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2019-11-15.ini'
 
         def expect_failure():
             raise AssertionError('Call should have failed')

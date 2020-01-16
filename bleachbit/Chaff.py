@@ -54,8 +54,8 @@ def _load_model(model_path):
     _open = open
     if model_path.endswith('.bz2'):
         import bz2
-        _open = bz2.BZ2File
-    with _open(model_path, 'r') as model_file:
+        _open = bz2.open
+    with _open(model_path, 'rt', encoding='utf-8') as model_file:
         return markovify.Text.from_dict(json.load(model_file))
 
 
@@ -222,7 +222,7 @@ def generate_2600(file_count,
     logger.debug('Generating {:,} files'.format(file_count))
     generated_file_names = []
     for i in range(1, file_count + 1):
-        with tempfile.NamedTemporaryFile(mode='w+', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+        with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
             txt = _generate_2600_file(model)
             output_file.write(txt)
             generated_file_names.append(output_file.name)

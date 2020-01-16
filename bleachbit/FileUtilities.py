@@ -260,7 +260,7 @@ def clean_ini(path, section, parameter):
         fp.close()
         if options.get('shred'):
             delete(path, True)
-        with open(path, 'w', encoding=detector.result['encoding'] if has_chardet else 'utf_8') as fp:
+        with open(path, 'w', encoding=detector.result['encoding'] if has_chardet else 'utf_8', newline='') as fp:
             config.write(config, fp)
 
 
@@ -402,32 +402,32 @@ def exe_exists(pathname):
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
-    conn = sqlite3.connect(path)
-    cursor = conn.cursor()
+    import contextlib
+    with contextlib.closing(sqlite3.connect(path)) as conn:
+        cursor = conn.cursor()
 
-    # overwrites deleted content with zeros
-    # https://www.sqlite.org/pragma.html#pragma_secure_delete
-    from bleachbit.Options import options
-    if options.get('shred'):
-        cursor.execute('PRAGMA secure_delete=ON')
+        # overwrites deleted content with zeros
+        # https://www.sqlite.org/pragma.html#pragma_secure_delete
+        from bleachbit.Options import options
+        if options.get('shred'):
+            cursor.execute('PRAGMA secure_delete=ON')
 
-    for cmd in cmds.split(';'):
-        try:
-            cursor.execute(cmd)
-        except sqlite3.OperationalError as exc:
-            if str(exc).find('no such function: ') >= 0:
-                # fixme: determine why randomblob and zeroblob are not
-                # available
-                logger.exception(exc.message)
-            else:
-                raise sqlite3.OperationalError(
+        for cmd in cmds.split(';'):
+            try:
+                cursor.execute(cmd)
+            except sqlite3.OperationalError as exc:
+                if str(exc).find('no such function: ') >= 0:
+                    # fixme: determine why randomblob and zeroblob are not
+                    # available
+                    logger.exception(exc.message)
+                else:
+                    raise sqlite3.OperationalError(
+                        '%s: %s' % (exc, path))
+            except sqlite3.DatabaseError as exc:
+                raise sqlite3.DatabaseError(
                     '%s: %s' % (exc, path))
-        except sqlite3.DatabaseError as exc:
-            raise sqlite3.DatabaseError(
-                '%s: %s' % (exc, path))
-    cursor.close()
-    conn.commit()
-    conn.close()
+        cursor.close()
+        conn.commit()
 
 
 def expand_glob_join(pathname1, pathname2):
