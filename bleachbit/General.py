@@ -25,6 +25,8 @@ import logging
 import os
 import sys
 
+import bleachbit
+
 logger = logging.getLogger(__name__)
 
 
@@ -151,7 +153,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         print(out[0])
         print(out[1])
         raise
-    encoding = sys.getdefaultencoding()
+    encoding = bleachbit.stdout_encoding
     return (p.returncode,
         str(out[0], encoding=encoding) if out[0] else '',
         str(out[1], encoding=encoding) if out[1] else '')

@@ -106,6 +106,7 @@ class CLITestCase(common.BleachbitTestCase):
         env = copy.deepcopy(os.environ)
         # the language and encoding affect the test results
         env['LANG'] = 'en_US.UTF-8'
+        env['PYTHONIOENCODING'] = 'utf-8:backslashreplace'
         args_list = []
         module = 'bleachbit.CLI'
         big_args = [sys.executable, '-m', module, '--preview', ]

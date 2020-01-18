@@ -556,7 +556,7 @@ def get_extents(file_handle, translate_to_extents=True):
                                         retrieval_pointers_buf_size)
         except:
             err_info = sys.exc_info()[1]
-            err_code, err_module, err_desc = err_info
+            err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
                 # (38, 'DeviceIoControl', 'Reached the end of the file.')
                 return []
