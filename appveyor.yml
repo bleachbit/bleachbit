@@ -23,7 +23,7 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install win-unicode-console'
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
   - ps: Get-FileHash pygi-aio.exe
-  - 'pygi-aio.exe C:\Python27 GTK Notify'
+  - 'pygi-aio.exe %PYTHON_HOME% GTK Notify'
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.94/upx394w.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
@@ -33,7 +33,7 @@ install:
   - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2019/sqlite-dll-win32-x86-3280000.zip" -FileName sqlite.zip }
   - ps: Get-FileHash sqlite.zip -Algorithm SHA1
   - '%SZ_EXE% x sqlite.zip'
-  - 'move /y sqlite3.dll c:\python27\DLLs\'
+  - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'
 
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.

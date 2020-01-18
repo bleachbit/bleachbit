@@ -45,7 +45,7 @@ logger.info('ROOT_DIR ' + ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
 BB_VER = None
-GTK_DIR = 'C:\\Python27\\Lib\\site-packages\\gnome\\'
+GTK_DIR = sys.exec_prefix + '\\Lib\\site-packages\\gnome\\'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
@@ -261,7 +261,7 @@ def build():
 def delete_unnecessary():
     logger.info('Deleting unnecessary files')
     # Remove SVG to reduce space and avoid this error
-    # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/Python27/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
+    # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
         r'_win32sysloader.pyd',
