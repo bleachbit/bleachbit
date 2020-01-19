@@ -178,7 +178,8 @@ def delete_chrome_history(path):
         where = "where id not in (%s) " % ids_str
     cmds = __shred_sqlite_char_columns('urls', cols, where)
     cmds += __shred_sqlite_char_columns('visits')
-    cols = ('lower_term', 'term')
+    # Google Chrome 79 no longer has lower_term in keyword_search_terms
+    cols = ('term',)
     cmds += __shred_sqlite_char_columns('keyword_search_terms', cols)
     ver = __get_chrome_history(path)
     if ver >= 20:
