@@ -1,14 +1,35 @@
+# This rpmbuild.spec is designed in particular for OpenSUSE Build Service
+# to build packages for CentOS, Fedora, and OpenSUSE.
+
+# The minimum supported Fedora version is now Fedora 30.
+# CentOS 7 is supported but CentOS 8 is not because it lacks Python 2.
+
 %if 0%{?fedora}
-# FC9 doesn't define 'fedora_version' but apparently OpenSUSE Build Service's FC9 does
+# Example definition of variable "fedora" on Fedora 31 is "31"
 %{!?fedora_version: %define fedora_version %fedora}
 %endif
 
+%if 0%{?rhel_version} || 0%{?centos_version} < 800
+%define python_bin %{__python}
+%endif
+
+%define python_pkg_pre python
+
+%if 0%{?fedora} || 0%{?centos_version} >= 800
+# Since Fedora 30, the variable __python refers to Python 3,
+# so explicitly use Python 2.
+%define python_bin %{__python2}
+# In Fedora 30 and CentOS 8, the package prefixes changed from "python" to "python2".
+%define python_pkg_pre python2
+%endif
+
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitelib: %define python_sitelib %(%{python_bin} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %endif
 
 %if 0%{?suse_version}
 %define python_sitelib %py_sitedir
+%define python_bin %{__python}
 %endif
 
 Name:           bleachbit
@@ -20,23 +41,31 @@ Group:          Applications/System
 License:        GPLv3
 URL:            https://www.bleachbit.org
 Source0:        %{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+BuildRequires:  %{python_pkg_pre}
+BuildRequires:  %{python_pkg_pre}-devel
+BuildRequires:  %{python_pkg_pre}-setuptools
 Requires:       python >= 2.7
 Requires:       gtk3
 Requires:       usermode
-# CentOS 7 does not have scandir, but BleachBit can fall back to the
-# slower mode.
-#Requires:       python-scandir
-Requires:       python-chardet
-Requires:       python2-gobject
+Requires:       %{python_pkg_pre}-chardet
+Requires:       %{python_pkg_pre}-gobject
+%endif
+
+# CentOS 7 does not have python-scandir, but BleachBit can fall back a
+# slower mode without the python-scandir package.
+%if 0%{?fedora_version}
+Requires:       %{python_pkg_pre}-scandir
+%endif
+
+%if 0%{?centos_version} >= 800
+BuildRequires:  hostname
 %endif
 
 %if 0%{?suse_version}
@@ -75,9 +104,8 @@ hide previously deleted files.
 %prep
 %setup -q
 
-
 %build
-%{__python} setup.py build
+%{python_bin} setup.py build
 
 cp %{name}.desktop %{name}-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
