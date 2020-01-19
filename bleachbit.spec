@@ -129,12 +129,6 @@ EOF
 
 make delete_windows_files
 
-%if 0%{?rhel_version} || 0%{?centos_version}
-echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
-rm -f po/*.po
-%endif
-
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -175,13 +169,8 @@ desktop-file-install \
 %suse_update_desktop_file %{name} Utility Filesystem
 %endif
 
-%if 0%{?rhel_version} || 0%{?centos_version}
-echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
-echo > %{name}.lang
-%else
 make -C po install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
-%endif
 
 
 %clean
