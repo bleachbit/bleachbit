@@ -27,8 +27,10 @@ from __future__ import absolute_import
 from bleachbit.Options import options
 from bleachbit import FileUtilities
 
+import logging
 import os.path
 
+logger = logging.getLogger(__name__)
 
 def __get_chrome_history(path, fn='History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
@@ -42,6 +44,9 @@ def __get_chrome_history(path, fn='History'):
 def __shred_sqlite_char_columns(table, cols=None, where=""):
     """Create an SQL command to shred character columns"""
     cmd = ""
+    if not where:
+        # If None, set to empty string.
+        where = ""
     if cols and options.get('shred'):
         cmd += "update or ignore %s set %s %s;" % \
             (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
@@ -116,7 +121,11 @@ def delete_chrome_favicons(path):
     """Delete Google Chrome and Chromium favicons not use in in history for bookmarks"""
 
     path_history = os.path.join(os.path.dirname(path), 'History')
-    ver = __get_chrome_history(path)
+    if os.path.exists(path_history):
+        ver = __get_chrome_history(path)
+    else:
+        # assume it's the newer version
+        ver = 38
     cmds = ""
 
     if ver >= 4:
@@ -130,6 +139,7 @@ def delete_chrome_favicons(path):
         # Version 32 is Google Chrome 51
         # Version 36 is Google Chrome 60
         # Version 38 is Google Chrome 64
+        # Version 42 is Google Chrome 79
 
         # icon_mapping
         cols = ('page_url',)
@@ -170,6 +180,9 @@ def delete_chrome_favicons(path):
 
 def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
+    if not os.path.exists(path):
+        logger.debug('aborting delete_chrome_history() because history does not exist: %s' % path)
+        return
     cols = ('url', 'title')
     where = ""
     ids_int = get_chrome_bookmark_ids(path)
