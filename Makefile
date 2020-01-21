@@ -101,7 +101,7 @@ downgrade_desktop:
 #	This will downgrade the version of the .desktop file for older Linux distributions.
 #	See https://github.com/bleachbit/bleachbit/issues/750
 	desktop-file-validate org.bleachbit.BleachBit.desktop || \
-	 sed -E -i '/^(Keywords|Version)=/d' org.bleachbit.BleachBit.desktop
+	 sed --regexp-extended -i '/^(Keywords|Version)=/d' org.bleachbit.BleachBit.desktop
 
 tests:
 	make -C cleaners tests; cleaners_status=$$?; \
