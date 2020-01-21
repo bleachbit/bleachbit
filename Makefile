@@ -42,13 +42,13 @@ install:
 	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
 
-	# .desktop
+	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
-	$(INSTALL_DATA) bleachbit.desktop $(DESTDIR)$(datadir)/applications/
+	$(INSTALL_DATA) org.bleachbit.BleachBit.desktop $(DESTDIR)$(datadir)/applications/
 
-	# .desktop
-	mkdir -p $(DESTDIR)$(datadir)/appdata
-	$(INSTALL_DATA) bleachbit.appdata.xml $(DESTDIR)$(datadir)/appdata/
+	# AppStream metadata
+	mkdir -p $(DESTDIR)$(datadir)/metainfo
+	$(INSTALL_DATA) org.bleachbit.BleachBit.metainfo.xml $(DESTDIR)$(datadir)/metainfo/
 
 	# Python code
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/markovify

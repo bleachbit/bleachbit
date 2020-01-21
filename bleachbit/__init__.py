@@ -252,8 +252,6 @@ else:
           sys.platform.startswith('freebsd')):
         locale_dir = "/usr/local/share/locale/"
 
-# launcher
-launcher_path = '/usr/share/applications/bleachbit.desktop'
 
 
 #

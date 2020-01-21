@@ -75,14 +75,14 @@ except ImportError:
 
 data_files = []
 if sys.platform.startswith('linux'):
-    data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform[:6] == 'netbsd':
-    data_files.append(('/usr/pkg/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/pkg/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     data_files.append(
-        ('/usr/local/share/applications', ['./bleachbit.desktop']))
+        ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
 
 

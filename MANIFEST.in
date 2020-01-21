@@ -4,8 +4,6 @@ include MANIFEST
 include MANIFEST.in
 include Makefile
 include README.md
-include bleachbit.appdata.xml
-include bleachbit.desktop
 include bleachbit.png
 include bleachbit.py
 include bleachbit.spec
@@ -20,6 +18,8 @@ include debian/debian.control
 include debian/debian.rules
 include doc/cleaner_markup_language.xsd
 include doc/example_cleaner.xml
+include org.bleachbit.BleachBit.desktop
+include org.bleachbit.BleachBit.metainfo.xml
 include org.bleachbit.policy
 include po/*po
 include po/Makefile

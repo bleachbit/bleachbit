@@ -107,8 +107,8 @@ hide previously deleted files.
 %build
 %{python_bin} setup.py build
 
-cp %{name}.desktop %{name}-root.desktop
-sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
+cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
+sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 
@@ -135,13 +135,13 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 
-sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' %{name}-root.desktop
+sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" %{name}-root.desktop
+	--vendor="" org.bleachbit.BleachBit-root.desktop
 
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
@@ -156,11 +156,11 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 
 
 %if 0%{?suse_version} >= 1030
-sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
+sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" %{name}-root.desktop
+	--vendor="" org.bleachbit.BleachBit-root.desktop
 
 %suse_update_desktop_file -i %{name}-root Utility Filesystem
 %endif
@@ -196,11 +196,11 @@ update-desktop-database &> /dev/null ||:
 %{_sbindir}/%{name}-root
 %endif
 %{_bindir}/%{name}
-%{_datadir}/appdata
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo
+%{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
+%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?suse_version} >= 1030
-%{_datadir}/applications/%{name}-root.desktop
+%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 %endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png

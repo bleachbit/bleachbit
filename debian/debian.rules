@@ -25,10 +25,9 @@ configure-stamp:
 build: build-stamp
 	# Starting in Ubuntu 10.04 the System menu has disappeared. Also the new choice is more consistent
 	# on Ubuntu.
-	sed -i -e 's/Categories=GTK;System;$$/Categories=GTK;System;Settings;/g' bleachbit.desktop
-	cp bleachbit.desktop bleachbit-root.desktop
-	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' bleachbit-root.desktop
-	sed -i -e 's/^Exec=bleachbit$$/Exec=pkexec bleachbit/g' bleachbit-root.desktop
+	cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
+	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
+	sed -i -e 's/^Exec=bleachbit$$/Exec=pkexec bleachbit/g' org.bleachbit.BleachBit-root.desktop
 	make delete_windows_files
 
 
@@ -59,7 +58,7 @@ install: build
 
 	desktop-file-install \
 	--dir=$(CURDIR)/debian/bleachbit/usr/share/applications/ \
-	--vendor="" bleachbit-root.desktop
+	--vendor="" org.bleachbit.BleachBit-root.desktop
 
 
 # Build architecture-independent files here.
