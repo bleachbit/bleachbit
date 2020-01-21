@@ -25,6 +25,7 @@ configure-stamp:
 build: build-stamp
 	# Starting in Ubuntu 10.04 the System menu has disappeared. Also the new choice is more consistent
 	# on Ubuntu.
+	make downgrade_desktop
 	cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 	sed -i -e 's/Name=BleachBit$$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 	sed -i -e 's/^Exec=bleachbit$$/Exec=pkexec bleachbit/g' org.bleachbit.BleachBit-root.desktop

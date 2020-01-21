@@ -107,6 +107,8 @@ hide previously deleted files.
 %build
 %{python_bin} setup.py build
 
+make downgrade_desktop
+
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
