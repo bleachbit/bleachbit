@@ -164,11 +164,11 @@ desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
 	--vendor="" org.bleachbit.BleachBit-root.desktop
 
-%suse_update_desktop_file -i %{name}-root Utility Filesystem
+%suse_update_desktop_file -i org.bleachbit.BleachBit-root Utility Filesystem
 %endif
 
 %if 0%{?suse_version}
-%suse_update_desktop_file %{name} Utility Filesystem
+%suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
 %endif
 
 make -C po install DESTDIR=$RPM_BUILD_ROOT
