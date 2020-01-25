@@ -10,13 +10,13 @@ POTFILE = $(APP).pot
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
 	python ../bleachbit.py --pot
 
-desktop.pot: ../bleachbit.desktop
-	echo "#: ../bleachbit.desktop" > desktop.pot
-	echo "msgid \"`perl -n -e '/GenericName=(.*)$$/ && print "$$1\n"' ../bleachbit.desktop`\"" >> desktop.pot
+desktop.pot: ../org.bleachbit.BleachBit.desktop
+	echo "#: ../org.bleachbit.BleachBit.desktop" > desktop.pot
+	echo "msgid \"`perl -n -e '/GenericName=(.*)$$/ && print "$$1\n"' ../org.bleachbit.BleachBit.desktop`\"" >> desktop.pot
 	echo "msgstr \"\"" >> desktop.pot
 	echo >> desktop.pot
-	echo "#: ../bleachbit.desktop" >> desktop.pot
-	echo "msgid \"`perl -n -e '/Comment=(.*)$$/ && print "$$1\n"' ../bleachbit.desktop`\"" >> desktop.pot
+	echo "#: ../org.bleachbit.BleachBit.desktop" >> desktop.pot
+	echo "msgid \"`perl -n -e '/Comment=(.*)$$/ && print "$$1\n"' ../org.bleachbit.BleachBit.desktop`\"" >> desktop.pot
 	echo "msgstr \"\"" >> desktop.pot
 	echo >> desktop.pot
 
