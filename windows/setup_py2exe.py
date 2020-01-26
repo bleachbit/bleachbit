@@ -254,6 +254,9 @@ def build():
     logger.info('Copying license')
     shutil.copy('COPYING', 'dist')
 
+    logger.info('Copying msvcr100.dll')
+    shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
+
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
 

@@ -34,6 +34,7 @@ install:
   - ps: Get-FileHash sqlite.zip -Algorithm SHA1
   - '%SZ_EXE% x sqlite.zip'
   - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'
+#  - ps: if (-not (Test-Path vcredist_x86.exe)) { Start-FileDownload "https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe" -FileName vcredist_x86.exe }
 
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.

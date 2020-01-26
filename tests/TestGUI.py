@@ -39,10 +39,13 @@ try:
 except ImportError:
     HAVE_GTK = False
 
+import bleachbit
 from bleachbit import _
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Options import options, Options
 from tests import common
+
+bleachbit.online_update_notification_enabled = False
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
