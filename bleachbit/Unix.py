@@ -37,6 +37,10 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+try:
+    Pattern = re.Pattern
+except AttributeError:
+    Pattern = re._pattern_type
 
 class LocaleCleanerPath:
     """This represents a path with either a specific folder name or a folder name pattern.
@@ -68,7 +72,7 @@ class LocaleCleanerPath:
     def get_subpaths(self, basepath):
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
-        if isinstance(self.pattern, re._pattern_type):
+        if isinstance(self.pattern, Pattern):
             return (os.path.join(basepath, p) for p in os.listdir(basepath)
                     if self.pattern.match(p) and os.path.isdir(os.path.join(basepath, p)))
         else:
@@ -82,7 +86,7 @@ class LocaleCleanerPath:
                 if isinstance(child, LocaleCleanerPath):
                     for res in child.get_localizations(path):
                         yield res
-                elif isinstance(child, re._pattern_type):
+                elif isinstance(child, Pattern):
                     for element in os.listdir(path):
                         match = child.match(element)
                         if match is not None:
