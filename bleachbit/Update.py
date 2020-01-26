@@ -153,6 +153,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener = build_opener()
     socket.setdefaulttimeout(bleachbit.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
+    import encodings.idna # https://github.com/bleachbit/bleachbit/issues/760
     try:
         handle = opener.open(bleachbit.update_check_url)
     except URLError as e:
