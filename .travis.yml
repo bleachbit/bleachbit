@@ -1,6 +1,19 @@
 language: python
+os: linux
+jobs:
+  include:
+   # Ubuntu 16.04 LTS (Xenial)
+    - dist: xenial
+      python: 3.5
+   # Ubuntu 18.04 LTS (Bionic)
+    - dist: bionic
+      python: 3.6
+    - dist: bionic
+      python: 3.7
 cache: pip
 before_install:
+  - python --version # show Python version
+  - pip install -U pip # update pip itself
   - export VIRT_ROOT=/home/travis/virtualenv/python$TRAVIS_PYTHON_VERSION
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
