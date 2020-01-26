@@ -1,18 +1,24 @@
+# This rpmbuild.spec is designed in particular for OpenSUSE Build Service
+# to build packages for CentOS, Fedora, and OpenSUSE.
+
+# The minimum supported Fedora version is now Fedora 30.
+# CentOS 7 is supported but CentOS 8 is not because it lacks Python 2.
+
 %if 0%{?fedora}
-# FC9 doesn't define 'fedora_version' but apparently OpenSUSE Build Service's FC9 does
+# Example definition of variable "fedora" on Fedora 31 is "31"
 %{!?fedora_version: %define fedora_version %fedora}
 %endif
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python3_sitelib: %define python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
 %if 0%{?suse_version}
-%define python_sitelib %py_sitedir
+%define python3_sitelib %py3_sitedir
 %endif
 
 Name:           bleachbit
-Version:        3.0.1
+Version:        3.1.0
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 
@@ -20,23 +26,30 @@ Group:          Applications/System
 License:        GPLv3
 URL:            https://www.bleachbit.org
 Source0:        %{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
-Requires:       python >= 2.7
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+Requires:       python3
 Requires:       gtk3
 Requires:       usermode
-# CentOS 7 does not have scandir, but BleachBit can fall back to the
-# slower mode.
-#Requires:       python-scandir
-Requires:       python-chardet
-Requires:       python2-gobject
+Requires:       python3-chardet
+Requires:       python3-gobject
+%endif
+
+# CentOS 7 does not have python-scandir, but BleachBit can fall back a
+# slower mode without the python-scandir package.
+%if 0%{?fedora_version} || 0%{?centos_version} >= 800
+Requires:       python3-scandir
+%endif
+
+%if 0%{?centos_version} >= 800
+BuildRequires:  hostname
 %endif
 
 %if 0%{?suse_version}
@@ -44,16 +57,16 @@ Requires:       python2-gobject
 BuildRequires:  desktop-file-utils
 %endif
 BuildRequires:  make
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 BuildRequires:  update-desktop-files
-Requires:       python-gnome
+Requires:       python3-gnome
 Requires:       gtk3
-Requires:       python-xml
-Requires:       python-scandir
-Requires:       python-chardet
-Requires:       python2-gobject
-%py_requires
+Requires:       python3-xml
+Requires:       python3-scandir
+Requires:       python3-chardet
+Requires:       python3-gobject
+%py3_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
 %endif
@@ -75,12 +88,13 @@ hide previously deleted files.
 %prep
 %setup -q
 
-
 %build
-%{__python} setup.py build
+%{__python3} setup.py build
 
-cp %{name}.desktop %{name}-root.desktop
-sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' %{name}-root.desktop
+make downgrade_desktop
+
+cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
+sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 
@@ -101,25 +115,19 @@ EOF
 
 make delete_windows_files
 
-%if 0%{?rhel_version} || 0%{?centos_version}
-echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
-rm -f po/*.po
-%endif
-
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 
-sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' %{name}-root.desktop
+sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" %{name}-root.desktop
+	--vendor="" org.bleachbit.BleachBit-root.desktop
 
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
@@ -134,26 +142,21 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 
 
 %if 0%{?suse_version} >= 1030
-sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' %{name}-root.desktop
+sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
 	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" %{name}-root.desktop
+	--vendor="" org.bleachbit.BleachBit-root.desktop
 
-%suse_update_desktop_file -i %{name}-root Utility Filesystem
+%suse_update_desktop_file -i org.bleachbit.BleachBit-root Utility Filesystem
 %endif
 
 %if 0%{?suse_version}
-%suse_update_desktop_file %{name} Utility Filesystem
+%suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
 %endif
 
-%if 0%{?rhel_version} || 0%{?centos_version}
-echo WARNING: translations not supported on CentOS 5.0 and RHEL 5.0 because of old msgfmt
-echo > %{name}.lang
-%else
 make -C po install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
-%endif
 
 
 %clean
@@ -179,11 +182,11 @@ update-desktop-database &> /dev/null ||:
 %{_sbindir}/%{name}-root
 %endif
 %{_bindir}/%{name}
-%{_datadir}/appdata
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo
+%{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
+%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?suse_version} >= 1030
-%{_datadir}/applications/%{name}-root.desktop
+%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 %endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png

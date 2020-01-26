@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component>
+<component type="desktop-application">
   <id>org.bleachbit.BleachBit</id>
-  <launchable type="desktop">org.bleachbit.BleachBit.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>BleachBit</name>
+  <launchable type="desktop-id">org.bleachbit.BleachBit.desktop</launchable>
   <summary>Cleans files to free disk space and to maintain privacy</summary>
   <description>
     <p>
@@ -16,7 +16,8 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>https://lh5.ggpht.com/_1XYQfEGGEIw/SsN7hSH0IVI/AAAAAAAACfw/BltI_Fvhgzo/s800/BleachBit-065-Fedora-11-Google-Chrome.png</image>
+      <caption>BleachBit 3.0 in dark mode showing discovered Google Chrome files</caption>
+      <image>https://www.bleachbit.org/images/bleachbit30_windows10_preview.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bleachbit.org/</url>
@@ -25,4 +26,7 @@
   <url type="donation">https://www.bleachbit.org/contribute</url>
   <url type="translate">https://www.bleachbit.org/contribute/translate</url>
   <update_contact>andrew@bleachbit.org</update_contact>
+  <provides>
+    <binary>bleachbit</binary>
+  </provides>
 </component>

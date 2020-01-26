@@ -371,6 +371,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         else:
             # unlink
             os.remove(path)
+    elif os.path.islink(path):
+        os.remove(path)
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
 
@@ -875,7 +877,7 @@ def wipe_path(pathname, idle=False):
                 raise
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
-        blanks = chr(0) * 65535
+        blanks = b'\0' * 65536
         while True:
             try:
                 f.write(blanks)
@@ -883,7 +885,7 @@ def wipe_path(pathname, idle=False):
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
-                        blanks = blanks[0: (len(blanks) / 2)]
+                        blanks = blanks[0:int(len(blanks) / 2)]
                     else:
                         break
                 elif e.errno == errno.EFBIG:

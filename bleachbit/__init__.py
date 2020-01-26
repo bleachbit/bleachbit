@@ -31,17 +31,19 @@ import sys
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
-
-APP_VERSION = "3.0.1"
+APP_VERSION = "3.1.0"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-stdout_encoding = sys.stdout.encoding
-if 'win32' == sys.platform:
-    import win_unicode_console
-    win_unicode_console.enable()
+if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+    stdout_encoding = 'utf-8'
+else:
+    stdout_encoding = sys.stdout.encoding
+    if 'win32' == sys.platform:
+        import win_unicode_console
+        win_unicode_console.enable()
 
 logger = Log.init_log()
 
@@ -165,8 +167,6 @@ else:
           sys.platform.startswith('freebsd')):
         locale_dir = "/usr/local/share/locale/"
 
-# launcher
-launcher_path = '/usr/share/applications/bleachbit.desktop'
 
 
 #
@@ -190,10 +190,10 @@ try:
     if not os.path.exists(locale_dir):
         raise RuntimeError('translations not installed')
     t = gettext.translation('bleachbit', locale_dir)
-    _ = t.ugettext
+    _ = t.gettext
 except:
     def _(msg):
-        """Dummy replacement for ugettext"""
+        """Dummy replacement for gettext"""
         return msg
 
 try:
@@ -209,8 +209,8 @@ except AttributeError:
             pass
         else:
             # bindtextdomain can not handle Unicode
-            libintl.bindtextdomain('bleachbit', locale_dir)
-            libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
+            libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
+            libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
 except:
     logger.exception('error binding text domain')
 

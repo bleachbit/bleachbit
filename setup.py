@@ -22,22 +22,29 @@
 Build BleachBit tarballs and exe
 """
 
-from __future__ import absolute_import, print_function
-
-import bleachbit
-import bleachbit.General
-import bleachbit.FileUtilities
 import glob
 import os
 import sys
 import tempfile
 from setuptools import setup
+
 if sys.platform == 'win32':
+    # workaround for
+    # Error: Namespace packages not yet supported: Skipping package 'pywintypes'
+    import importlib
+    for m in ('pywintypes', 'pythoncom'):
+        l = importlib.find_loader(m, None)
+        __import__(m)
+        sys.modules[m].__loader__ = l
+
     try:
         import py2exe
     except ImportError:
         print('warning: py2exe not available')
 
+import bleachbit
+import bleachbit.General
+import bleachbit.FileUtilities
 
 #
 # begin win32com.shell workaround for py2exe
@@ -75,14 +82,14 @@ except ImportError:
 
 data_files = []
 if sys.platform.startswith('linux'):
-    data_files.append(('/usr/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform[:6] == 'netbsd':
-    data_files.append(('/usr/pkg/share/applications', ['./bleachbit.desktop']))
+    data_files.append(('/usr/pkg/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     data_files.append(
-        ('/usr/local/share/applications', ['./bleachbit.desktop']))
+        ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
 
 

@@ -42,13 +42,13 @@ install:
 	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
 
-	# .desktop
+	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
-	$(INSTALL_DATA) bleachbit.desktop $(DESTDIR)$(datadir)/applications/
+	$(INSTALL_DATA) org.bleachbit.BleachBit.desktop $(DESTDIR)$(datadir)/applications/
 
-	# .desktop
-	mkdir -p $(DESTDIR)$(datadir)/appdata
-	$(INSTALL_DATA) bleachbit.appdata.xml $(DESTDIR)$(datadir)/appdata/
+	# AppStream metadata
+	mkdir -p $(DESTDIR)$(datadir)/metainfo
+	$(INSTALL_DATA) org.bleachbit.BleachBit.metainfo.xml $(DESTDIR)$(datadir)/metainfo/
 
 	# Python code
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/markovify
@@ -96,6 +96,12 @@ delete_windows_files:
 	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
 	# Remove Windows-specific modules.
 	rm -f bleachbit/Windows*.py
+
+downgrade_desktop:
+#	This will downgrade the version of the .desktop file for older Linux distributions.
+#	See https://github.com/bleachbit/bleachbit/issues/750
+	desktop-file-validate org.bleachbit.BleachBit.desktop || \
+	 sed --regexp-extended -i '/^(Keywords|Version)=/d' org.bleachbit.BleachBit.desktop
 
 tests:
 	make -C cleaners tests; cleaners_status=$$?; \
