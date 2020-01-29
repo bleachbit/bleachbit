@@ -2,19 +2,10 @@
 # to build packages for CentOS, Fedora, and OpenSUSE.
 
 # The minimum supported Fedora version is now Fedora 30.
-# CentOS 7 is supported but CentOS 8 is not because it lacks Python 2.
 
 %if 0%{?fedora}
 # Example definition of variable "fedora" on Fedora 31 is "31"
 %{!?fedora_version: %define fedora_version %fedora}
-%endif
-
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-%{!?python3_sitelib: %define python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%endif
-
-%if 0%{?suse_version}
-%define python3_sitelib %py3_sitedir
 %endif
 
 Name:           bleachbit
@@ -33,7 +24,11 @@ BuildArch:      noarch
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  python3-devel
+%if 0%{?centos_version}
+%if 0%{?centos_version} < 800
+BuildRequires:  python3-rpm-macros
+%endif
+%endif
 BuildRequires:  python3-setuptools
 Requires:       python3
 Requires:       gtk3
@@ -57,6 +52,7 @@ BuildRequires:  hostname
 BuildRequires:  desktop-file-utils
 %endif
 BuildRequires:  make
+BuildRequires:  python-rpm-macros
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  update-desktop-files
@@ -66,7 +62,7 @@ Requires:       python3-xml
 Requires:       python3-scandir
 Requires:       python3-chardet
 Requires:       python3-gobject
-%py3_requires
+#%py3_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
 %endif
@@ -118,7 +114,7 @@ make delete_windows_files
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
+make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
