@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-01-24 06:14-0700\n"
-"PO-Revision-Date: 2020-01-23 21:12+0000\n"
+"PO-Revision-Date: 2020-01-28 05:01+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2020-01-24 13:24+0000\n"
+"X-Launchpad-Export-Date: 2020-01-28 16:20+0000\n"
 "X-Generator: Launchpad (build b8d1327fd820d6bf500589d6da587d5037c7d88e)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -538,7 +538,7 @@ msgstr "Historial dos ficheiros coñecidos"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Clientes e amigos coñecidos"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -566,6 +566,8 @@ msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Eliminar a base de datos, a cal contén información como o número de "
+"reproducións e o último ficheiro reproducido."
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -640,7 +642,7 @@ msgstr "Eliminar a sesión actual"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Software de control remoto"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -664,10 +666,11 @@ msgstr ""
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
+"Eliminar os datos de uso, posición da xanela e outros datos dos cartafoles"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr ""
+msgstr "Isto restabelecerá a posición das iconas do escritorio."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -773,7 +776,7 @@ msgstr "_Eliminar"
 
 #: ../bleachbit/GUI.py:171
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "Non se encontrou ningunha ruta no portapapeis."
 
 #: ../bleachbit/GUI.py:202 ../bleachbit/GuiPreferences.py:204
 #: ../bleachbit/GuiPreferences.py:333 ../bleachbit/GuiPreferences.py:376
@@ -848,6 +851,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:510
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr ""
+"Acceder ao menú da aplicación premendo no logotipo da barra do título."
 
 #: ../bleachbit/GUI.py:524
 msgid ""
@@ -906,7 +910,7 @@ msgstr "Interromper"
 
 #: ../bleachbit/GUI.py:930
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Interromper a previsualización ou o proceso de limpeza"
 
 #: ../bleachbit/GUI.py:1088
 msgid "Error when checking for updates: "
@@ -937,15 +941,15 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:79
 msgid "Hillary Clinton's emails"
-msgstr ""
+msgstr "Os correos de Hillary Clinton"
 
 #: ../bleachbit/GuiChaff.py:87
 msgid "Number of files"
-msgstr ""
+msgstr "Número de ficheiros"
 
 #: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
 msgid "Select destination folder"
-msgstr ""
+msgstr "Seleccionar cartafol de destino"
 
 #: ../bleachbit/GuiChaff.py:104
 msgid "When finished"
@@ -1432,7 +1436,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:343
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr ""
+msgstr "O dispositivo ou recurso está ocupado: %s"
 
 #: ../bleachbit/FileUtilities.py:377
 #, python-format
@@ -1594,6 +1598,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"Esta función elimina todos os axustes do BleachBit e pecha a aplicación. Use "
+"isto para agochar o seu uso do BleachBit ou para restabelecer os axustes. A "
+"próxima vez que inicie o programa, os axustes tomarán os valores "
+"predeterminados."
 
 #: ../bleachbit/GuiBasic.py:134
 msgid ""
@@ -1656,7 +1664,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:144
 msgid "set log level to verbose"
-msgstr ""
+msgstr "estabelecer o nivel de rexistro como detallado"
 
 #: ../bleachbit/CLI.py:145
 msgid "log debug messages to file"
@@ -1797,12 +1805,14 @@ msgstr "Estabelecendo o valor de «nice» %d para este proceso."
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"Retirando os privilexios do identificador de proceso {pid} ao identificador "
+"de usuario {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Asignando e borrando %s de memoria."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1813,13 +1823,13 @@ msgstr "Liberando %s de memoria."
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "Atopouse o UUID do ficheiro de intercambio {device} é {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "A memoria física libre é de %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
@@ -1878,7 +1888,7 @@ msgstr "Des_truír preferencias e saír"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
-msgstr ""
+msgstr "_Diagnóstico"
 
 #: ../data/app-menu.ui:40
 msgid "_Help"
@@ -1886,11 +1896,4 @@ msgstr "_Axuda"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
-
-#~ msgid ""
-#~ "Delete the database, which contain information such as play count and last "
-#~ "played"
-#~ msgstr ""
-#~ "Eliminar a base de datos. Esta contén o contador de reproducións e a última "
-#~ "reprodución"
+msgstr "Sobre o Ble_achBit"
