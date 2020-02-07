@@ -91,16 +91,57 @@ class Bleachbit(Gtk.Application):
             """
             Change Gtk+ Style on windows
             """
+            print("Test build")
             print("Apply windows 10 theme")
 
-            provider = Gtk.CssProvider()
-            provider.load_from_path('windows/Windows10Theme/gtk.css')
-            screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
-            Gtk.StyleContext.add_provider_for_screen(
-                screen, provider,
-                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
-            )
+            try:
+                bleachbit_exe_path
+            except NameError:
+                print("bleachbit_exe_path exe path is missing, set now paths");
+                exec_path = os.path.dirname(sys.executable)
+                print("sys.executable: " + exec_path);
+                windows_10_theme_exe_path = os.path.normpath(os.path.join(exec_path, 'themes/windows10/gtk.css'))
+                windows_10_theme_source_path = "themes/windows10/gtk.css"
+            else:                   
+                print("bleachbit exe path: " + bleachbit_exe_path);
+
+            try:
+                windows_10_theme_exe_path
+            except NameError:
+                print("exe path is missing");
+            else:
+                print("exe path: " + windows_10_theme_exe_path)
+                if os.path.exists(windows_10_theme_exe_path) :
+                    print("Exe theme found") 
+                    provider = Gtk.CssProvider()
+                    provider.load_from_path(windows_10_theme_exe_path)    
+                    screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
+                    Gtk.StyleContext.add_provider_for_screen(
+                        screen, provider,
+                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+                    )
+                else:
+                    print("Theme not found");
+
+            try:
+                windows_10_theme_source_path
+            except NameError:
+                print("source path is missing");
+            else:
+                print("source path: " + windows_10_theme_source_path)
+                if os.path.exists(windows_10_theme_source_path) : 
+                    print("Source theme found")    
+                    provider = Gtk.CssProvider()
+                    provider.load_from_path(windows_10_theme_source_path)    
+                    screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
+                    Gtk.StyleContext.add_provider_for_screen(
+                        screen, provider,
+                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+                    )
+                else:
+                    print("Theme not found");
         else:
             print("Running platform is not windows")
 
