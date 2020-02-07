@@ -1,0 +1,1257 @@
+@define-color documents_emblem_bg #3465a4;
+@define-color documents_collection_bg #d3d7cf;
+@define-color gedit_not_found_bg rgb (237, 54, 54);
+@define-color gedit_not_found_fg white;
+
+* {
+    -GtkIMHtml-hyperlink-color: @link_color;
+    -GtkHTML-link-color: @link_color;
+
+    -WnckTasklist-fade-overlay-rect: 0;
+}
+
+/****************
+ * Applications *
+ ****************/
+
+/*
+ * Evolution
+ */
+
+/* needed for webkit/GtkStyle/Evolution compatibility */
+GtkHTML:active,
+GtkHTML:active:backdrop {
+    color: @theme_unfocused_selected_fg_color;
+    background-color: @theme_unfocused_selected_bg_color;
+}
+
+/*
+ * Sushi
+ */
+
+/* used by gnome-font-viewer and sushi */
+SushiFontWidget {
+    padding: 6px 12px;
+}
+
+/*
+ * GNOME Terminal
+ */
+
+VteTerminal {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+}
+
+TerminalWindow GtkNotebook.notebook {
+    border-bottom-width: 0;
+    border-right-width: 0;
+    border-left-width: 0;
+}
+
+/*
+ * Nautilus
+ */
+
+.nautilus-canvas-item {
+    border-radius: 5px;
+}
+
+.nautilus-desktop.nautilus-canvas-item {
+    color: @theme_selected_fg_color;
+    text-shadow: 1px 1px black;
+}
+
+.nautilus-desktop.nautilus-canvas-item:active {
+    color: @theme_text_color;
+}
+
+.nautilus-desktop.nautilus-canvas-item:selected {
+    color: @theme_selected_fg_color;
+}
+
+.nautilus-desktop.nautilus-canvas-item:active,
+.nautilus-desktop.nautilus-canvas-item:prelight,
+.nautilus-desktop.nautilus-canvas-item:selected {
+    text-shadow: none;
+}
+
+.nautilus-desktop.nautilus-canvas-item:selected:backdrop {
+    color: @theme_unfocused_selected_fg_color;
+}
+
+NautilusWindow .sidebar .frame {
+    border-style: none;
+}
+
+NautilusWindow > GtkGrid > .pane-separator,
+NautilusWindow > GtkGrid > .pane-separator:hover {
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-color: @borders;
+    background-color: @sidebar_bg;
+    color: shade (@theme_bg_color, 0.9);
+}
+
+NautilusWindow > GtkGrid > .pane-separator:backdrop,
+NautilusWindow > GtkGrid > .pane-separator:hover:backdrop {
+    border-color: @unfocused_borders;
+    background-color: @sidebar_bg_unfocused;
+}
+
+NautilusNotebook.notebook {
+    border-right-width: 0;
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+NautilusNotebook .frame {
+    border-width: 0;
+}
+
+NautilusToolbar .button {
+    icon-shadow: 0 1px @button_text_shadow;
+}
+
+NautilusToolbar .button:active {
+    icon-shadow: 0 1px @button_active_text_shadow;
+}
+
+NautilusToolbar .button:insensitive,
+NautilusToolbar .button:active *:insensitive {
+    icon-shadow: none;
+}
+
+NautilusQueryEditor .search-bar.toolbar {
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+NautilusQueryEditor .toolbar {
+    padding-top: 3px;
+    padding-bottom: 2px;
+
+    border-width: 1px 0 0 0;
+    border-style: solid;
+}
+
+NautilusQueryEditor .toolbar:nth-child(2) {
+    border-color: @borders;
+}
+
+NautilusQueryEditor .toolbar:last-child,
+NautilusQueryEditor .search-bar.toolbar:only-child {
+    border-bottom-width: 1px;
+    border-bottom-color: @borders;
+}
+
+NautilusQueryEditor .toolbar:backdrop:nth-child(2) {
+    border-color: @unfocused_borders;
+}
+
+/*
+ * Gedit
+ */
+
+GeditWindow .pane-separator,
+GeditWindow .pane-separator:hover {
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: @borders;
+    background-color: shade(@theme_bg_color, 0.95);
+    color: @borders;
+}
+
+.gedit-document-panel {
+    background-color: @sidebar_bg;
+}
+
+.gedit-document-panel-group-row,
+.gedit-document-panel-group-row:hover {
+    border-top: 1px solid shade(@sidebar_bg, 0.90);
+    background-color: @sidebar_bg;
+}
+
+.gedit-document-panel-document-row:hover {
+    background-color: shade(@sidebar_bg, 0.95);
+}
+
+.gedit-document-panel-document-row:selected,
+.gedit-document-panel-document-row:selected:hover {
+    background-color: @theme_selected_bg_color;
+}
+
+/* sidepane close button styling (copied from the gtk tab close button) */
+.gedit-document-panel .list-row .button {
+    color: transparent;
+    border-image: none;
+    background-image: none;
+    background-color: transparent;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px;
+    padding: 1px;
+    icon-shadow: none;
+}
+
+.gedit-document-panel .prelight-row .button  {
+    color: mix(@theme_fg_color, @sidebar_bg, 0.6);
+    border-color: alpha(black, 0.1);
+    transition: all 200ms ease-in;
+}
+
+.gedit-document-panel .list-row .button:hover,
+.gedit-document-panel .prelight-row .button:hover {
+    color: @theme_fg_color;
+    border-color: alpha(black, 0.1);
+    transition: all 200ms ease-in;
+}
+
+.gedit-document-panel .prelight-row .button:active {
+    color:  @button_active_text;
+    background-color: alpha(black, 0.08);
+    box-shadow: inset 0 1px alpha(black, 0.05);
+    icon-shadow: 0 1px @button_active_text_shadow;
+
+    border-color: alpha(black, 0.27)
+                  alpha(black, 0.13)
+                  alpha(black, 0.13)
+                  alpha(black, 0.13);
+}
+
+.gedit-document-panel .prelight-row .button:backdrop {
+    color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.7);
+    icon-shadow: none;
+}
+
+.gedit-document-panel .prelight-row .button:backdrop:hover {
+    color: @theme_unfocused_fg_color;
+    transition: all 200ms ease-out;
+}
+
+.gedit-document-panel-dragged-row {
+    border: 1px solid @borders;
+    background-color: shade(@sidebar_bg, 0.90);
+    color: @theme_fg_color;
+}
+
+.gedit-document-panel-placeholder-row {
+    border: none;
+    background-color: mix(@sidebar_bg, @theme_selected_bg_color, 0.20);
+    transition: all 200ms ease-in;
+}
+
+GeditStatusbar {
+    border-top: 1px solid @borders;
+}
+
+GeditStatusbar GeditSmallButton,
+GeditStatusMenuButton {
+    text-shadow: none;
+}
+
+GeditStatusbar GeditSmallButton.button:backdrop,
+GeditStatusbar GeditSmallButton.button:backdrop:hover,
+GeditStatusbar GeditSmallButton.button,
+GeditStatusbar GeditSmallButton.button:hover,
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusbar GeditSmallButton.button:active:hover,
+GeditStatusMenuButton.button:backdrop,
+GeditStatusMenuButton.button:backdrop:hover,
+GeditStatusMenuButton.button,
+GeditStatusMenuButton.button:hover,
+GeditStatusMenuButton.button:active,
+GeditStatusMenuButton.button:active:hover {
+    border-image: none;
+    border-style: solid;
+    border-width: 0 1px;
+    border-radius: 0;
+    padding: 1px 8px 2px 4px;
+}
+
+GeditStatusbar GeditSmallButton.button:hover,
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusbar GeditSmallButton.button:active:hover,
+GeditStatusMenuButton.button:hover,
+GeditStatusMenuButton.button:active,
+GeditStatusMenuButton.button:active:hover {
+    border-color: @borders;
+}
+
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusMenuButton.button:active {
+    background-image: linear-gradient(to bottom,
+                                      @borders,
+                                      shade(@theme_bg_color, 0.95));
+    background-color: transparent;
+    color: @theme_selected_fg_color;
+    text-shadow: 0 1px @button_text_shadow;
+}
+
+GeditStatusbar GeditSmallButton.button:backdrop,
+GeditStatusbar GeditSmallButton.button:backdrop:hover,
+GeditStatusMenuButton.button:backdrop,
+GeditStatusMenuButton.button:backdrop:hover {
+    border-color: @unfocused_borders;
+}
+
+GeditViewFrame .gedit-search-slider {
+    background-color: @theme_base_color;
+    padding: 6px;
+    border-color: shade (@notebook_tab_gradient_b, 0.80);
+    border-radius: 0 0 3px 3px;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+}
+
+GeditViewFrame .gedit-search-slider .not-found {
+    color: @gedit_not_found_fg;
+    background-image: none;
+    background-color: @gedit_not_found_bg;
+}
+
+GeditViewFrame .gedit-search-slider .not-found:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+GeditFileBrowserWidget .toolbar {
+    padding: 3px;
+    border-bottom: 1px solid @borders;
+    box-shadow: inset 0 3px alpha(black, 0.03), inset 0 2px alpha(black, 0.03), inset 0 1px alpha(black, 0.03);
+    background-color: shade(@theme_bg_color, 0.95);
+}
+
+.gedit-search-entry-occurrences-tag {
+    color: shade (@theme_unfocused_fg_color, 0.8);
+    margin: 2px;
+    padding: 2px;
+}
+
+/*
+ * GNOME Documents
+ */
+
+.documents-dropdown,
+.documents-dropdown .view {
+    background-color: shade (@theme_bg_color, 1.02);
+}
+
+.documents-dropdown.frame {
+    padding: 6px;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-radius: 0 0 5px 5px;
+}
+
+.documents-dropdown .view.radio,
+.documents-dropdown .view.radio:focused,
+.documents-dropdown .view.radio:selected {
+    background-image: none;
+    background-color: alpha(@theme_base_color, 0.0);
+}
+
+.documents-dropdown .view.radio:active,
+.documents-dropdown .view.radio:active:focused,
+.documents-dropdown .view.radio:active:prelight {
+    background-image: url("assets/sidebar-radio-checked.svg");
+}
+
+.documents-dropdown .view.radio:prelight {
+    background-image: url("assets/sidebar-radio-prelight.svg");
+}
+
+.documents-dropdown .view.radio:active:selected,
+.documents-dropdown .view.radio:active:selected:focused {
+    background-image: url("assets/sidebar-radio-selected.svg");
+}
+
+.documents-dropdown .view.radio:selected:prelight,
+.documents-dropdown .view.radio:selected:focused {
+    background-image: url("assets/sidebar-radio-selected-prelight.svg");
+}
+
+.documents-load-more.button {
+    border-image: none;
+    border-color: @borders;
+    border-width: 1px 0 0;
+    border-radius: 0;
+}
+
+.documents-scrolledwin.frame {
+    border-width: 1px 0 0;
+    border-radius: 0;
+}
+
+.documents-icon-bg {
+    background-color: @documents_emblem_bg;
+    border-radius: 4px;
+
+    color: @theme_base_color;
+}
+
+.documents-collection-icon {
+    background-color: @documents_collection_bg;
+    border-radius: 8px;
+}
+
+.documents-counter {
+    background-image: url('assets/dnd-counter.svg');
+    background-size: contain;
+    background-color: transparent;
+    color: @theme_base_color;
+    font: bold;
+}
+
+.documents-favorite.button:active,
+.documents-favorite.button:active:hover {
+    color: shade(@theme_selected_bg_color, 1.20);
+}
+
+.documents-entry-tag {
+    background-color: @entry_tag_bg;
+    color: @entry_tag_fg;
+
+    border-radius: 4px;
+    border-width: 0;
+
+    margin: 2px;
+    padding: 4px;
+}
+
+.documents-entry-tag:hover {
+    background-color: shade(@entry_tag_bg, 1.10);
+    color: @entry_tag_fg;
+}
+
+.documents-entry-tag.button,
+.documents-entry-tag.button:hover,
+.documents-entry-tag.button:active,
+.documents-entry-tag.button:active:hover {
+    background-color: transparent;
+    background-image: none;
+    border-image: none;
+    border-width: 0;
+}
+
+.documents-entry-tag.button:hover {
+    color: shade(@entry_tag_bg, 2.10);
+}
+
+/*
+ * Baobab
+ */
+
+.cell.baobab-level-cell,
+.cell.baobab-level-cell:hover,
+.cell.baobab-level-cell:selected,
+.cell.baobab-level-cell:selected:hover {
+    border-color: darker(@borders);
+    border-width: 1px;
+    border-radius: 3px;
+    border-style: solid;
+    background-color: white;
+}
+
+.cell.baobab-level-cell.fill-block,
+.cell.baobab-level-cell.fill-block:selected,
+.cell.baobab-level-cell.fill-block:selected:hover {
+    background-color: #edd400;
+}
+
+.cell.baobab-level-cell.fill-block.level-low,
+.cell.baobab-level-cell.fill-block.level-low:hover {
+    background-color: #73d216;
+}
+
+.cell.baobab-level-cell.fill-block.level-high,
+.cell.baobab-level-cell.fill-block.level-high:hover {
+    background-color: #cc0000;
+}
+
+.cell.baobab-level-cell.fill-block:backdrop,
+.cell.baobab-level-cell.fill-block:hover:backdrop,
+.cell.baobab-level-cell.fill-block.level-low:backdrop,
+.cell.baobab-level-cell.fill-block.level-high:backdrop {
+    background-color: @theme_unfocused_text_color;
+}
+
+.cell.baobab-cell-error {
+    color: @error_color;
+}
+
+.cell.baobab-cell-warning {
+    color: @warning_color;
+}
+
+.cell.baobab-cell-warning:selected,
+.cell.baobab-cell-error:selected {
+    color: @theme_selected_fg_color;
+}
+
+.cell.baobab-cell-warning:backdrop,
+.cell.baobab-cell-error:backdrop,
+.cell.baobab-cell-warning:selected:backdrop,
+.cell.baobab-cell-error:selected:backdrop {
+    color: @theme_unfocused_text_color;
+}
+
+BaobabWindow.background GtkStack > GtkGrid > GtkScrolledWindow.frame {
+    border-radius: 0;
+    border-width: 0 1px 0 0;
+}
+
+BaobabWindow GtkInfoBar.warning,
+BaobabWindow GtkInfoBar.error { 
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: @borders;
+}
+
+BaobabRingschart {
+    background-color: @theme_bg_color;
+    padding: 13px 13px 13px 13px;
+}
+
+BaobabRingschart.subfolder-tip {
+    border-radius: 3px;
+    border-style: none;
+    padding: 3px 3px 3px 3px;
+
+    background-color: alpha(@theme_tooltip_bg_color, 0.90);
+    color: @theme_tooltip_fg_color;
+
+    text-shadow: 1px 1px black;
+}
+
+/*
+ * Epiphany
+ */
+
+EphyToolbar .entry:first-child,
+EphyToolbar .entry:focus:first-child,
+EphyToolbar .entry:backdrop:first-child {
+    border-image-width: 3px 0 4px 3px;
+    border-right-width: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+EphyToolbar .entry:last-child,
+EphyToolbar .entry:focus:last-child,
+EphyToolbar .entry:backdrop:last-child {
+    border-image-width: 3px 3px 4px 0;
+    border-left-width: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+EphyToolbar .entry:focus {
+    box-shadow: inset 1px 2px alpha(@theme_selected_bg_color, 0.1),
+                inset 1px 1px alpha(@theme_selected_bg_color, 0.1),
+                inset 0 -1px alpha(@theme_selected_bg_color, 0.2);
+}
+
+EphyToolbar .entry:focus:last-child {
+    box-shadow: inset 0 2px alpha(@theme_selected_bg_color, 0.1),
+                inset 0 1px alpha(@theme_selected_bg_color, 0.1),
+                inset -1px -1px alpha(@theme_selected_bg_color, 0.2);
+}
+
+EphyToolbar .location-entry .button {
+    color: @internal_element_color;
+    -GtkButton-child-displacement-y: 0;
+    border-image-source: -gtk-scaled(url("borders/generic-border.png"),url("borders/generic-border@2.png"));
+    border-image-slice: 3 3 4 3;
+    border-image-repeat: stretch;
+    border-width: 1px 1px 2px 1px;
+    border-radius: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+    box-shadow: inset 1px 0 @inset_dark_color,
+                inset 0 1px @entry_inset,
+                inset 0 2px alpha(@entry_inset, 0.4);
+}
+
+EphyToolbar .location-entry .button:backdrop,
+EphyToolbar .location-entry .button:backdrop:first-child,
+EphyToolbar .location-entry .button:backdrop:hover,
+EphyToolbar .location-entry .button:backdrop:hover:first-child {
+    border-image-source: -gtk-scaled (url("borders/generic-border-backdrop.png"),url("borders/generic-border-backdrop@2.png"));
+    box-shadow: none;
+    background-image: none;
+    background-color: @theme_unfocused_base_color;
+}
+
+EphyToolbar .location-entry .button:last-child {
+    border-image-width: 3px 3px 4px 0;
+    border-left-width: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+EphyToolbar .location-entry .button:first-child {
+    border-image-width: 3px 0 4px 3px;
+    border-right-width: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    /* flip the box-shadow division*/
+    box-shadow: inset -1px 0 @inset_dark_color,
+                inset 0 1px @entry_inset,
+                inset 0 2px alpha(@entry_inset, 0.4);
+}
+
+EphyToolbar .location-entry .button,
+EphyToolbar .location-entry .button:hover {
+    icon-shadow: none;
+    background-image: -gtk-gradient(linear,
+                                    left top, left bottom,
+                                    from(@entry_background_a),
+                                    to(@entry_background_b));
+}
+
+EphyToolbar .location-entry .button:active,
+EphyToolbar .location-entry .button:active:hover {
+    background-image: -gtk-gradient(linear,
+                                    left top, left bottom,
+                                    from(shade(@entry_background_a, 0.9)),
+                                    to(@entry_background_b));
+}
+
+EphyToolbar .location-entry .button:hover,
+EphyToolbar .location-entry .button:active {
+    color: @theme_text_color;
+}
+
+EphyNotebook.notebook {
+    border-width: 1px 0 1px 0;
+}
+
+EphyNotebook.notebook tab {
+    border-width: 0;
+}
+
+EphyToolbar.toolbar .button {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#ephy-page-menu-button.active-menu {
+    background-image: none;
+    background-color: @menu_bg_color;
+
+    border-image: none;
+    border-color: @menu_bg_color;
+    border-radius: 4px 4px 0 0;
+}
+
+EphyOverview GtkScrolledWindow {
+    background-color: @theme_base_color;
+}
+
+EphyOverview GtkScrolledWindow:backdrop {
+    background-color: @theme_unfocused_base_color;
+}
+
+/* sets top and bottom borders on the main scrolled window for toolbar visual
+ * division and search/downloadbar */
+EphyWindow.background EphyEmbed.vertical GtkScrolledWindow.frame {
+    border-color: @borders;
+    border-width: 1px 0;
+    border-radius: 0;
+}
+
+/* removes any border from the overview scrolled window, since it's overlaid */
+EphyWindow.background EphyEmbed.vertical EphyOverview .documents-scrolledwin {
+    border-style: none;
+}
+
+/* remove top and bottom borders from the main scrolled window when inside a notebook tab */
+EphyWindow.background EphyNotebook.notebook EphyEmbed.vertical GtkScrolledWindow {
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+/* remove bottom borders from the  main scrolled window when no bars at the bottom of the screen are shown */
+EphyWindow.background EphyEmbed.vertical GtkScrolledWindow,
+EphyWindow.background  {
+    border-bottom-width: 0;
+}
+
+/*
+ * GNOME Contacts
+ */
+
+/* Line at top in contacts pane, similar to .documents-scrolledwin.frame */
+.contacts-spinner.frame {
+ border-width: 0 1px 0 0;
+ border-style: solid;
+ border-color: @borders;
+ border-image: none;
+ border-radius: 0;
+ padding: 0;
+}
+
+/* Background color in contacts pane, similar to .documents-main-view.view */
+.contacts-main-view.view {
+ background-color: #f1f2f1;
+}
+
+.contacts-suggestion {
+ background-color: #D3D7CF;
+ border-radius: 4px;
+}
+
+/* Border on the right in the left menu toolbar */
+.contacts-left-header-bar:dir(ltr) {
+ border-right-width: 1px;
+}
+
+.contacts-left-header-bar:dir(rtl) {
+ border-left-width: 1px;
+}
+
+.contacts-left-header-bar:dir(ltr),
+.contacts-right-header-bar:dir(rtl) {
+  border-top-right-radius: 0;
+}
+
+.contacts-right-header-bar:dir(ltr),
+.contacts-left-header-bar:dir(rtl) {
+  border-top-left-radius: 0;
+}
+
+.contacts-avatar-frame.frame {
+ border-width: 1px 1px 0 1px;
+ border-style: solid;
+ border-color: @borders;
+ border-image: none;
+ border-radius: 0;
+ padding: 0;
+}
+
+.main-avatar-frame.frame {
+ border-width: 1px;
+ border-style: solid;
+ border-color: @borders;
+ border-radius: 6px;
+}
+
+/* Primary toolbar with no line at top to avoid conflicts with frame border */
+ContactsWindow .primary-toolbar.toolbar {
+ border-width: 0 0 1px 0;
+}
+
+.contacts-button:active {
+ border-color: #000000;
+ border-image: none;
+}
+
+.contacts-entry {
+ box-shadow: none;
+ border-image: none;
+ border-width: 1px;
+ border-radius: 4px;
+ border-style: solid;
+ border-color: #bbbeb7;
+ background-image: none;
+ background-color: #ffffff;
+}
+
+.contacts-entry:selected,
+.contacts-entry:selected:focus {
+ background-color: @theme_selected_bg_color;
+ color: @theme_selected_fg_color;
+}
+
+.contacts-entry.contacts-postal-entry {
+ border-radius: 0 0 0 0;
+ border-width: 1px 1px 0 1px;
+}
+
+.contacts-entry.contacts-postal-entry:nth-child(first) {
+ border-radius: 4px 4px 0 0;
+}
+
+.contacts-entry.contacts-postal-entry:nth-child(last) {
+ border-radius: 0 0 4px 4px;
+ border-width: 1px;
+}
+
+.button.contacts-square {
+ padding: 0px;
+}
+
+.contacts-combo .button {
+ border-image: none;
+ border-width: 1px;
+ border-style: solid;
+ border-color: #bbbeb7;
+ background-image: none;
+ background-color: #ffffff;
+}
+
+.toolbar.contacts-edit-toolbar {
+  padding: 6px;
+  background-color: #E2E4E2;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: @borders;
+  border-image: none;
+}
+
+.toolbar.contacts-edit-toolbar .button {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.toolbar.contacts-selection-toolbar {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: @borders;
+  border-image: none;
+}
+
+.contacts-watermark {
+  color: #bebebe;
+  text-shadow: 1px 1px alpha(white, 0.6);
+}
+
+/*
+ * GNOME Photos
+ */
+
+.photos-icon-bg {
+  icon-shadow: 0 1px #000000;
+}
+
+/*
+ * Gucharmap
+ */
+
+GucharmapChartable:active,
+GucharmapChartable:focus,
+GucharmapChartable:selected {
+ background-color: @theme_selected_bg_color;
+ color: @theme_selected_fg_color;
+}
+
+/*
+ * Evince
+ */
+
+EvWindow.background > GtkBox.vertical > GtkPaned.horizontal > GtkBox.vertical > GtkScrolledWindow.frame {
+    border-width: 0;
+    border-radius: 0;
+}
+
+EvWindow.background EvSidebar.vertical .frame {
+    border-width: 1px 0 0;
+    border-radius: 0;
+}
+
+EvWindow.background EvSidebar.vertical .notebook {
+    border-width: 1px 0 0;
+}
+
+EvWindow.background EvSidebarAnnotations.vertical GtkToolPalette > GtkToolItemGroup > .button { 
+    border-image: none;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 0 0 1px;
+    border-color: @borders;
+}
+
+EvWindow.background EvSidebar.vertical .notebook .frame {
+    border-width: 0;
+}
+
+EvWindow .pane-separator, 
+EvWindow .pane-separator:hover {
+    border-width: 0 1px;
+    border-style: solid;
+    border-color: @borders;
+    background-color: shade(@theme_bg_color, 0.95);
+    color: @borders;
+}
+
+EvWindow.background EggFindBar.toolbar {
+    border-width: 1px 0 0;
+    border-style: solid;
+    border-color: @borders;
+}
+
+/* gcalctool */
+
+MathWindow.background > GtkBox.vertical > GtkBox.vertical > GtkScrolledWindow {
+    padding: 4px;
+    background-color: @theme_base_color;
+    border-radius: 3px;
+}
+
+MathWindow.background > GtkBox.vertical > GtkBox.vertical > GtkScrolledWindow:backdrop {
+    padding: 4px;    
+    background-color:  @theme_unfocused_base_color;
+    border-radius: 3px;
+}
+
+/*
+ * GNOME Bluetooth
+ */
+
+GtkEntry.entry.pin-entry {
+	font: regular 50;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+GtkLabel.pin-label {
+	font: regular 50;
+}
+
+/*
+ * Fallback Mode Panel
+ */
+
+.gnome-panel-menu-bar,
+PanelApplet > GtkMenuBar.menubar,
+PanelToplevel,
+PanelWidget,
+PanelAppletFrame,
+PanelApplet {
+    background-color: @os_chrome_bg_color;
+    background-image: none;
+    color: @os_chrome_fg_color;
+}
+
+ClockBox,
+.gnome-panel-menu-bar.menubar,
+PanelApplet > GtkMenuBar.menubar {
+    font: bold;
+}
+
+.gnome-panel-menu-bar.menubar .menuitem:hover,
+PanelApplet > GtkMenuBar.menubar .menuitem:hover {
+    text-shadow: 0 1px @os_chrome_bg_color;
+}
+
+.gnome-panel-menu-bar.menubar .menu,
+PanelApplet > GtkMenuBar.menubar .menu {
+    font: regular;
+}
+
+.gnome-panel-menu-bar.menubar .menu:hover,
+PanelApplet > GtkMenuBar.menubar .menu:hover {
+    text-shadow: none;
+}
+
+.gnome-panel-menu-bar .menuitem:hover,
+PanelApplet > GtkMenuBar.menubar .menuitem:hover,
+.gnome-panel-menu-bar .menuitem:hover,
+PanelApplet > GtkMenuBar.menubar .menuitem:hover {
+    background-color: @os_chrome_selected_bg_color;
+    color: @os_chrome_selected_fg_color;
+}
+
+.gnome-panel-menu-bar .menuitem:hover,
+PanelApplet > GtkMenuBar.menubar .menuitem:hover {
+    color: @os_chrome_selected_fg_color;
+}
+
+PanelApplet .button,
+PanelApplet .button:hover {
+    padding: 4px;
+
+    border-image: none;
+    border-width: 0;
+    border-radius: 0;
+
+    background-image: none;
+    background-color: @os_chrome_bg_color;
+
+    color: @os_chrome_fg_color;
+    text-shadow: none;
+}
+
+PanelApplet .button:active:hover,
+PanelApplet .button:active {
+    border-image: none;
+    background-image: none;
+    background-color: @os_chrome_selected_bg_color;
+    border-width: 0;
+    border-radius: 0;
+}
+
+PanelApplet:hover {
+    color: @os_chrome_selected_fg_color;
+}
+
+PanelApplet:active,
+PanelApplet:hover:active {
+    color: @os_chrome_selected_fg_color;
+    text-shadow: 0 1px @os_chrome_bg_color;
+}
+
+WnckPager {
+    background-color: lighter(@os_chrome_selected_bg_color);
+}
+
+NaTrayApplet {
+    -NaTrayApplet-icon-padding: 12;
+    -NaTrayApplet-icon-size: 16;
+}
+
+/*
+ * Fail Whale
+ */
+
+GsmFailWhaleDialog {
+    background-color: @os_chrome_bg_color;
+    background-image: none;
+    color: @os_chrome_fg_color;
+}
+
+GsmFailWhaleDialog .button,
+GsmFailWhaleDialog .button:active {
+    border-image: none;
+    border-color: @borders;
+    border-width: 1px;
+}
+
+
+/****************
+ * Widgets      *
+ ****************/
+
+/*
+ * Floating Bar
+ */
+
+.floating-bar {
+    background-image: linear-gradient(to bottom, 
+                                      @theme_base_color 20%, 
+                                      shade(@theme_base_color, 0.9)
+                                      );
+    background-color: @theme_base_color;
+    border-color: @borders;
+
+    color: @theme_text_color;
+    text-shadow: 0 1px @button_text_shadow;
+
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: inset 1px 1px @inset_light_color, -1px -1px @inset_light_color;
+}
+
+.floating-bar.top {
+    border-top-width: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.floating-bar.right {
+    border-right-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.floating-bar.bottom {
+    border-bottom-width: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.floating-bar.left {
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.floating-bar.bottom.right {
+    box-shadow: inset 1px 1px @inset_light_color;
+}
+
+.floating-bar.bottom.left {
+    box-shadow: inset -1px 1px @inset_light_color;
+}
+
+.floating-bar:backdrop {
+    background-color: @theme_unfocused_base_color;
+    border-color: shade(@theme_unfocused_base_color, 0.9);
+    background-image: none;
+    box-shadow: none;
+}
+
+.floating-bar .button {
+    background-color: alpha (@theme_base_color, 0.0);
+    background-image: none;
+
+    border-style: none;
+    border-image: none;
+
+    -GtkButton-image-spacing: 0;
+    -GtkButton-inner-border: 0;
+}
+
+/* FIXME: why do we still need this? */
+GtkClutterOffscreen {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+/*
+ * Egg
+ */
+
+EggListBox {
+    background-color: @list_box_bg;
+}
+
+EggListBox:hover {
+    background-color: @content_view_bg;
+}
+
+EggListBox:selected {
+    background-color: @theme_selected_bg_color;
+}
+
+
+/*
+ * Content view
+ */
+
+.content-view.subtitle {
+    font: 9;
+    padding: 0px 12px 0px 12px;
+}
+
+.content-view.view.rubberband {
+    background-color: alpha (@theme_selected_bg_color, 0.35);
+
+    border-color: @theme_selected_bg_color;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
+}
+
+.content-view.view {
+    background-color: @content_view_bg;
+}
+
+.content-view.view:insensitive {
+    background-color: @theme_unfocused_base_color;
+    background-image: none;
+}
+
+.content-view.view:backdrop {
+    background-color: @sidebar_bg_unfocused;
+    background-image: none;
+}
+
+.content-view.view:selected {
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+}
+
+.content-view.view:selected:backdrop {
+    background-color: @theme_unfocused_selected_bg_color;
+    background-image: none;
+}
+
+/* FIXME: EggListBox should set the .cell style class on
+ * the background it renders for the children, like
+ * GtkIconView and GtkTreeView do */
+.content-view.cell {
+    background-color: transparent;
+    background-image: none;
+}
+
+EggListBox.content-view:hover,
+.content-view.cell:hover {
+    background-color: @theme_bg_color;
+}
+
+EggListBox.content-view:selected,
+EggListBox.content-view:active,
+.content-view.cell:selected,
+.content-view.cell:active {
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+}
+
+EggListBox.content-view:selected:backdrop,
+.content-view.cell:selected:backdrop {
+    background-color: @theme_unfocused_selected_bg_color;
+    background-image: none;
+}
+
+GdMainIconView.content-view {
+    -GdMainIconView-icon-size: 40;
+}
+
+GtkIconView.content-view.cell.check,
+GtkIconView.content-view.cell.check:backdrop {
+    background-image: url("assets/grid-selection-unchecked.svg");
+    background-color: transparent;
+}
+
+GtkIconView.content-view.cell.check:active {
+    background-image: url("assets/grid-selection-checked.svg");
+    background-color: transparent;
+}
+
+/* Make spinner visible on both dark and bright backgrounds w/o making
+ * it look ugly/weird.
+ */
+GdMainIconView.content-view.cell:active {
+    color: gray;
+}
+
+.content-view.view.check,
+.content-view.view.check:active {
+    background-color: transparent;
+}
+
+.content-view.view .separator:backdrop {
+    color: @theme_unfocused_bg_color;
+}
+
+GtkIconView.content-view.check:hover,
+GtkIconView.content-view.check:insensitive,
+GtkIconView.content-view.check:backdrop,
+GtkIconView.content-view.check:selected {
+    background-color: transparent;
+}
+
+/* used by Documents and Evince */
+.content-view.document-page {
+    border-style: solid;
+    border-width: 3px 3px 6px 4px;
+    border-image: url("assets/thumbnail-frame.png") 3 3 6 4;
+}
+
+/*
+ * App Notifications
+ */
+
+.app-notification {
+    border-style: solid;
+    border-color: @app_notification_border;
+    border-width: 0 1px 1px 1px;
+    border-radius: 0 0 5px 5px;
+    padding: 8px;
+
+    background-image: linear-gradient(to bottom,
+                                      @app_notification_a,
+                                      @app_notification_b 18%,
+                                      @app_notification_c);
+
+    color: @theme_text_color;
+    text-shadow: 0 1px @primary_toolbar_button_text_shadow;
+}

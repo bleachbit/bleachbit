@@ -86,6 +86,24 @@ class Bleachbit(Gtk.Application):
             self._auto_exit = True
 
     def build_app_menu(self):
+
+        if os.name == 'nt' :
+            """
+            Change Gtk+ Style on windows
+            """
+            print("Apply windows 10 theme")
+
+            provider = Gtk.CssProvider()
+            provider.load_from_path('windows/Windows10Theme/gtk.css')
+            screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
+            Gtk.StyleContext.add_provider_for_screen(
+                screen, provider,
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+            )
+        else:
+            print("Running platform is not windows")
+
         """Build the application menu
 
         On Linux with GTK 3.24, this code is necessary but not sufficient for

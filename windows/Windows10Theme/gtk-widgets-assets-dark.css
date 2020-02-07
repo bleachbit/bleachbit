@@ -1,0 +1,59 @@
+
+/*********************
+ * GtkScale's slider *
+ *********************/
+  scale trough { }
+  scale.horizontal slider {
+      background-image: url("assets/slider-horiz-dark.png"); }
+    scale.horizontal slider:hover {
+      background-image: url("assets/slider-horiz-over-dark.png"); }
+    scale slider:active { }
+    scale.horizontal slider:disabled {
+      background-image: url("assets/slider-horiz-insensitive-dark.png"); }
+  scale.vertical slider {
+      background-image: url("assets/slider-vert-dark.png"); }
+    scale.vertical slider:hover {
+      background-image: url("assets/slider-vert-over-dark.png"); }
+    scale slider:active { }
+    scale.vertical slider:disabled {
+      background-image: url("assets/slider-vert-insensitive-dark.png"); }
+
+/*
+ check {
+  color: @theme_fg_color;
+  -gtk-icon-source: none;
+  background-image: url("assets/checkbox-unchecked-dark.png"); }
+  check:hover {
+    background-image: url("assets/checkbox-unchecked-over-dark.png"); }
+  check:checked, check:active {
+    background-image: url("assets/checkbox-checked-dark.png"); }
+    check:checked:hover, check:active:hover {
+      background-image: url("assets/checkbox-checked-over-dark.png");  }
+    check:checked:disabled, check:active:disabled {
+      background-image: url("assets/checkbox-checked-insensitive-dark.png");  }
+  check:disabled {
+    background-image: url("assets/checkbox-unchecked-insensitive-dark.png");  }
+  check:indeterminate {
+    background-image: url("assets/checkbox-mixed-dark.png"); }
+  check:indeterminate:disabled {
+    background-image: url("assets/checkbox-mixed-insensitive-dark.png"); }
+
+radio {
+  color: @theme_fg_color;
+  -gtk-icon-source: none;
+  background-image: url("assets/radio-unselected-dark.png"); }
+  radio:hover {
+    background-image: url("assets/radio-unselected-over-dark.png"); }
+  radio:checked, radio:active {
+    background-image: url("assets/radio-selected-dark.png"); }
+    radio:checked:hover, radio:active:hover {
+      background-image: url("assets/radio-selected-over-dark.png");  }
+    radio:checked:disabled, radio:active:disabled {
+      background-image: url("assets/radio-selected-insensitive-dark.png"); }
+  radio:disabled {
+    background-image: url("assets/radio-unselected-insensitive-darkpng"); }
+  radio:indeterminate {
+    background-image: url("assets/radio-mixed-dark.png"); }
+  radio:indeterminate:disabled {
+    background-image: url("assets/radio-mixed-insensitive-dark.png"); }
+ */

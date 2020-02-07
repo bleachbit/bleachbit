@@ -1,0 +1,95 @@
+
+UnityDecoration {
+        /* Border properties (top, right, bottom, left) */
+    -UnityDecoration-extents: 31px 1px 1px 1px; /* the size of the decorations  */
+	-UnityDecoration-input-extents: 10px;
+	-UnityDecoration-title-alignment: 0.5;
+}
+
+/* This will theme the top decoration, so the whole space above the window */
+UnityDecoration.top {
+    border: 1px solid @wm_border_focused;
+    border-bottom-width: 0;
+	border-radius: 0;
+    /*border-radius: 8px 8px 0 0; Corner radius, only the top ones should be */
+    padding: 1px 1px 0 1px; /* This padding will be applied to the content of the top layout */
+	background-image: none;
+    background-color: @wm_bg_focused; /* Decoration background */
+    color: @wm_title_focused; /* The foreground color will be used to paint the text */
+    /*text-shadow: 1px 0 #333, -1px 0 #333, 0 1px #333, 0 -1px #333;*/
+	box-shadow: none;
+}
+
+/* Top decoration for inactive windows */
+UnityDecoration.top:backdrop {
+    border: 1px solid @wm_border_unfocused;
+    border-bottom-width: 0;
+    background-color: @wm_bg_unfocused;
+    color: @wm_title_unfocused;
+}
+
+/* Left decoration, it themes only the space at the left of the window */
+UnityDecoration.left,
+/* Right decoration, it themes only the space at the right of the window */
+UnityDecoration.right,
+/* Bottom decoration, it themes all the space below the window */
+UnityDecoration.bottom {
+	background-image: none;
+    background-color: @wm_bg_focused;
+}
+
+UnityDecoration.left {
+	border-left: 1px solid @wm_border_focused;
+}
+
+UnityDecoration.right {
+	border-right: 1px solid @wm_border_focused;
+}
+
+UnityDecoration.bottom {
+	border: 1px solid @wm_border_focused;
+	border-top: 0px;
+}
+
+
+/* Left, right and bottom decorations themes for inactive windows */
+UnityDecoration.left:backdrop,
+UnityDecoration.right:backdrop,
+UnityDecoration.bottom:backdrop {
+    background-color: @wm_bg_unfocused;
+	border-color: @wm_border_unfocused;
+}
+
+
+UnityPanelWidget,
+.unity-panel {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: shade(@panel_bg_color, 0.8);
+    background-image: -gtk-gradient(linear, left top, left bottom,
+                                     from (shade(@panel_bg_color, 1.1)),
+                                     to (shade(@panel_bg_color, 0.9)));
+
+    color: @panel_fg_color;
+}
+
+.unity-panel.menubar,
+.unity-panel .menubar {
+	background-color: @panel_bg_color;
+}
+
+.unity-panel.menuitem,
+.unity-panel .menuitem {
+    border-width: 0 1px;
+    color: @panel_fg_color;
+}
+
+.unity-panel.menubar.menuitem:hover,
+.unity-panel.menubar .menuitem *:hover {
+    border-color: shade(@panel_bg_color, 0.7);
+    background-image: -gtk-gradient(linear, left top, left bottom,
+                                     from (shade(@panel_bg_color, 0.97)),
+                                     to (shade(@panel_bg_color, 0.82)));
+
+    color: @panel_fg_color;
+}

@@ -1,0 +1,95 @@
+/*
+# name: Windows 10
+# author: Maxime Doyen
+*/
+
+
+/* dark expected windows 8 */
+@define-color theme_base_color #2C2E2F;
+@define-color theme_bg_color #383a3b;
+@define-color theme_fg_color #c0c0c0;
+@define-color theme_text_color @theme_fg_color;
+@define-color theme_selected_bg_color #0079cb;
+@define-color theme_selected_fg_color #e9e9e9; 
+
+/* dark visualstudio 2013
+ @define-color
+@define-color theme_base_color #252526;
+@define-color theme_bg_color #2d2d30;
+@define-color theme_fg_color #f0f0f0;
+@define-color theme_text_color @theme_fg_color;
+@define-color theme_selected_bg_color #0079cb;
+@define-color theme_selected_fg_color #fefefe; */
+
+@define-color borders shade(@theme_bg_color, 0.68);	/* #ACACAC; */
+
+@define-color insensitive_bg_color  shade (@theme_bg_color, 0.99);
+@define-color insensitive_fg_color  shade (@theme_bg_color, 0.72);
+@define-color insensitive_borders   shade (@theme_bg_color, 0.84);	/* #bbbbbb; */
+
+
+/*@define-color unfocused_borders #8b8b8b;*/
+@define-color sidebar_bg @theme_base_color;
+@define-color sidebar_bg_unfocused shade(@theme_bg_color, 0.67);
+
+@define-color warning_color #86501b;
+@define-color question_color #634270;
+@define-color error_color #6f1616;
+@define-color success_color #4c7523;
+
+/* windows 8 colors */
+@define-color gradient_default_s @theme_bg_color;
+@define-color gradient_default_e shade(@theme_bg_color, 0.90);
+
+@define-color border_hover #1484cf;
+@define-color gradient_hover_s #14537f;
+@define-color gradient_hover_e #144c74;
+
+@define-color border_active #0079cb;
+@define-color gradient_active_s #004474;
+@define-color gradient_active_e #003d68;
+
+@define-color progress_color #187918;
+@define-color progress_bg shade(@theme_bg_color, 0.906); /*#e6e6e6;*/
+
+@define-color tootip_border shade(@theme_bg_color, 0.47); /*#767676;*/
+@define-color gradient_tootip_s #ffffff;
+@define-color gradient_tootip_e #e4ecf7;
+
+/* menubaritem hover */
+@define-color menubaritem_border #007acc;
+@define-color menubaritem_bg_color #0079cb;
+
+/* menuitem hover */
+@define-color menuitem_border #007acc;
+@define-color menuitem_bg_color #0079cb;
+
+/* widget colors */
+@define-color menubar_bg_color #f5f6f7;
+@define-color menubar_fg_color @theme_fg_color;
+@define-color toolbar_bg_color @theme_bg_color;
+@define-color toolbar_fg_color @theme_fg_color;
+@define-color menu_border_color #979797;
+@define-color menu_bg_color @theme_bg_color;
+@define-color menu_fg_color @theme_fg_color;
+@define-color panel_bg_color @theme_bg_color;
+@define-color panel_fg_color @theme_fg_color;
+
+/* osd */
+@define-color osd_base #333;
+@define-color osd_fg #eee;
+@define-color osd_bg alpha(@osd_base, 0.8);
+
+/* window manager colors */
+@define-color wm_border_focused #007acc;
+@define-color wm_border_unfocused #2d2d30;
+@define-color wm_title_focused #9a9a9a;
+@define-color wm_title_unfocused #9a9a9a;
+@define-color wm_bg_focused #2d2d30;
+@define-color wm_bg_unfocused #2d2d30;
+
+/*# sourceMappingURL=gtk.css.map */
+@import url("gtk-contained.css");
+@import url("gtk-contained-dark.css");
+/*@import url("apps/gnome-applications.css");*/
+@import url("apps/unity.css");

@@ -1,0 +1,174 @@
+/*
+# name: Windows 10
+# author: Maxime Doyen
+*/
+
+/*******************
+ * check and radio *
+ *******************/
+/* draw regular check and radio items using our assets */
+check,
+check row:selected,
+check row:selected:focus {
+    background-image: url("assets/checkbox-unchecked.png");
+}
+
+check:insensitive,
+check row:selected:insensitive,
+check row:selected:focus:insensitive {
+    background-image: url("assets/checkbox-unchecked-insensitive.png");
+}
+
+check:hover,
+check row:selected:hover,
+check row:selected:focus:hover {
+    background-image: url("assets/checkbox-unchecked-over.png");
+}
+
+check:active,
+check row:selected:active,
+check row:selected:focus:active {
+    background-image: url("assets/checkbox-checked.png");
+}
+
+check:active:hover,
+check row:selected:active:hover,
+check row:selected:focus:active:hover {
+    background-image: url("assets/checkbox-checked-over.png");
+}
+
+check:active:insensitive,
+check row:selected:active:insensitive,
+check row:selected:focus:active:insensitive {
+    background-image: url("assets/checkbox-checked-insensitive.png");
+}
+
+check:inconsistent,
+check row:selected:inconsistent,
+check row:selected:focus:inconsistent {
+    background-image: url("assets/checkbox-mixed.png");
+}
+
+check:inconsistent:insensitive,
+check row:selected:inconsistent:insensitive,
+check row:selected:focus:inconsistent:insensitive {
+    background-image: url("assets/checkbox-mixed-insensitive.png");
+}
+
+
+radio,
+.view.cell.radio {
+    background-image: url("assets/radio-unselected.png");
+}
+
+radio:insensitive {
+    background-image: url("assets/radio-unselected-insensitive.png");
+}
+
+radio:hover {
+    background-image: url("assets/radio-unselected-over.png");
+}
+
+radio:active {
+    background-image: url("assets/radio-selected.png");
+}
+
+radio:active:hover {
+    background-image: url("assets/radio-selected-over.png");
+}
+
+radio:active:insensitive {
+    background-image: url("assets/radio-selected-insensitive.png");
+}
+
+radio:inconsistent {
+    background-image: url("assets/radio-mixed.png");
+}
+
+radio:inconsistent:insensitive {
+    background-image: url("assets/radio-mixed-insensitive.png");
+}
+
+/*********************
+ * GtkScale's slider *
+ *********************/
+.scale.slider.horizontal,
+.scale.scale-has-marks-above.slider,
+.scale.scale-has-marks-below.slider,
+.scale.scale-has-marks-above.slider.horizontal,
+.scale.scale-has-marks-below.slider.horizontal {
+	background-image: url("./assets/slider-horiz.png");
+}
+
+.scale.slider.horizontal:hover,
+.scale.scale-has-marks-above.slider:hover,
+.scale.scale-has-marks-below.slider:hover,
+.scale.scale-has-marks-above.slider.horizontal:hover,
+.scale.scale-has-marks-below.slider.horizontal:hover {
+	background-image: url("./assets/slider-horiz-over.png");
+}
+
+.scale.slider.horizontal:insensitive,
+.scale.scale-has-marks-above.slider:insensitive,
+.scale.scale-has-marks-below.slider:insensitive,
+.scale.scale-has-marks-above.slider.horizontal:insensitive,
+.scale.scale-has-marks-below.slider.horizontal:insensitive {
+	background-image: url("./assets/slider-horiz-insensitive.png");
+}
+
+.scale.slider.vertical,
+.scale.scale-has-marks-above.slider.vertical,
+.scale.scale-has-marks-below.slider.vertical {
+	background-image: url("assets/slider-vert.png");
+}
+
+.scale.slider.vertical:hover,
+.scale.slider.vertical:active,
+.scale.slider.vertical:active:hover {
+	background-image: url("assets/slider-vert-over.png");
+}
+
+.scale.slider.vertical:insensitive,
+.scale.slider.vertical:insensitive:hover {
+	background-image: url("assets/slider-vert-insensitive.png");
+}
+
+/********************************
+ * Touch text selection handles *
+ ********************************/
+.cursor-handle.bottom {
+	background-image: url("assets/slider-horiz.png");
+}
+
+.cursor-handle.top {
+	background-image: url("assets/slider-horiz.png");
+}
+
+/* menuitem */
+
+.menuitem.check:active {
+    background-image: url("assets/menuitem-checkbox-checked.png");
+}
+
+.menuitem.check:active:insensitive {
+    background-image: url("assets/menuitem-checkbox-checked-insensitive.png");
+}
+
+.menuitem.check:inconsistent,
+.menuitem.radio:inconsistent {
+    background-image: url("assets/menuitem-checkbox-mixed.png");
+}
+
+.menuitem.check:inconsistent:insensitive,
+.menuitem.radio:inconsistent:insensitive {
+    background-image: url("assets/menuitem-checkbox-mixed-insensitive.png");
+}
+
+.menuitem.radio:active {
+    background-image: url("assets/menuitem-radio-checked.png");
+}
+
+.menuitem.radio:active:insensitive {
+    background-image: url("assets/menuitem-radio-checked-insensitive.png");
+}
+

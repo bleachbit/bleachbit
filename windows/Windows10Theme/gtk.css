@@ -1,0 +1,87 @@
+/*
+# name: Windows 10
+# author: Maxime Doyen
+# date: Jun 1, 2016
+# version: 1.4
+# description: Windows 10 modern ui gtk theme
+*/
+
+/* GTK NAMED COLORS */
+/* @define-color */
+@define-color theme_base_color #fefefe;
+@define-color theme_bg_color #f0f0f0;
+@define-color theme_fg_color #222222;
+@define-color theme_text_color @theme_fg_color;
+@define-color theme_selected_bg_color #3399ff;
+@define-color theme_selected_fg_color #ffffff;
+@define-color borders shade(@theme_bg_color, 0.68);	/* #ACACAC; */
+
+@define-color insensitive_bg_color  shade (@theme_bg_color, 0.99);
+@define-color insensitive_fg_color  shade (@theme_bg_color, 0.72);
+@define-color insensitive_borders   shade (@theme_bg_color, 0.84);
+
+/*@define-color unfocused_borders #8b8b8b;*/
+@define-color sidebar_bg @theme_base_color;
+@define-color sidebar_bg_unfocused shade(@theme_bg_color, 0.67);
+
+@define-color warning_color #f57900;
+@define-color question_color #9b59b6;
+@define-color error_color #cc0000;
+@define-color success_color #73d216;
+
+/* windows 8 colors */
+@define-color gradient_default_s @theme_bg_color;
+@define-color gradient_default_e shade(@theme_bg_color, 0.90);
+
+@define-color border_hover #7eb4ea;
+@define-color gradient_hover_s #ecf4fc;
+@define-color gradient_hover_e #dcecfc;
+
+@define-color border_active #569DE5;
+@define-color gradient_active_s #DAECFC;
+@define-color gradient_active_e #C4E0FC;
+
+@define-color progress_color #06B025;
+@define-color progress_bg shade(@theme_bg_color, 0.906); /*#e6e6e6;*/
+
+@define-color tootip_border shade(@theme_bg_color, 0.47); /*#767676;*/
+@define-color gradient_tootip_s #ffffff;
+@define-color gradient_tootip_e #e4ecf7;
+
+/* menubaritem hover */
+@define-color menubaritem_border #62a3e5;
+@define-color menubaritem_bg_color #b8d8f9;
+
+/* menuitem hover */
+@define-color menuitem_border #78aee5;
+@define-color menuitem_bg_color #d1e2f2;
+
+/* widget colors */
+@define-color menubar_bg_color #f5f6f7;
+@define-color menubar_fg_color @theme_fg_color;
+@define-color toolbar_bg_color @theme_bg_color;
+@define-color toolbar_fg_color @theme_fg_color;
+@define-color menu_border_color #979797;
+@define-color menu_bg_color @theme_bg_color;
+@define-color menu_fg_color @theme_fg_color;
+@define-color panel_bg_color @theme_bg_color;
+@define-color panel_fg_color @theme_fg_color;
+
+/* osd */
+@define-color osd_base #333;
+@define-color osd_fg #eee;
+@define-color osd_bg alpha(@osd_base, 0.8);
+
+/* window manager colors */
+@define-color wm_border_focused #fbfbfb;
+@define-color wm_border_unfocused #999999;
+@define-color wm_title_focused #000000;
+@define-color wm_title_unfocused #999999;
+@define-color wm_bg_focused #ffffff;
+@define-color wm_bg_unfocused #ffffff;
+
+/*# sourceMappingURL=gtk.css.map */
+@import url("gtk-contained.css");
+/*@import url("gtk-widgets-assets.css");*/
+/*@import url("apps/gnome-applications.css");*/
+/*@import url("apps/unity.css");*/
