@@ -1,0 +1,255 @@
+/* wildcard for transparency */
+ * {
+	background-color: transparent;
+}
+
+/*********
+ * panel *
+ *********/
+#panel_window {
+    background-color: transparent;
+    background-image: none;
+    color: white;
+    font: bold;
+    text-shadow: 0 1px alpha(black, 0.5);
+    icon-shadow: 0 1px alpha(black, 0.5);
+}
+
+#panel_window .menubar,
+#panel_window .menubar > .menuitem {
+    background-color: transparent;
+    background-image: none;
+    color: white;
+    font: bold;
+    text-shadow: 0 1px alpha(black, 0.5);
+    icon-shadow: 0 1px alpha(black, 0.5);
+}
+
+#panel_window .menubar > .menuitem:hover {
+    border-style: none;
+    background-color: alpha(white, 0.2);
+    background-image: none;
+    color: white;
+}
+
+#panel_window .menubar > .menuitem *:hover {
+    color: white;
+}
+
+#panel_window .menubar > .menuitem:insensitive {
+    color: alpha(white, 0.7);
+}
+
+#panel_window .menubar .menu {
+    border-radius: 1px;
+}
+
+#panel_window .menubar .menu .menuitem {
+    font: normal;
+    text-shadow: none;
+}
+
+/****************
+ * login window *
+ ****************/
+#login_window,
+#shutdown_dialog,
+#restart_dialog {
+    border-style: none;
+    border-radius: 2px;
+    background-color: @lightdm_bg_color;
+    color: @lightdm_fg_color;
+
+    /* draw border using box-shadow */
+    box-shadow: inset 1px 0 mix(shade(@lightdm_bg_color, 0.7), @lightdm_fg_color, 0.21),
+                inset -1px 0 mix(shade(@lightdm_bg_color, 0.7), @lightdm_fg_color, 0.21),
+                inset 0 1px mix(shade(@lightdm_bg_color, 0.7), @lightdm_fg_color, 0.21),
+                inset 0 -1px mix(shade(@lightdm_bg_color, 0.7), @lightdm_fg_color, 0.21);
+}
+
+#content_frame {
+    padding-bottom: 14px;
+}
+
+#login_window .menu {
+    border-radius: 1px;
+}
+
+#login_window GtkComboBox .button,
+#login_window GtkComboBox .button:hover,
+#login_window GtkComboBox .button:active,
+#login_window GtkComboBox .button:active:hover,
+#login_window GtkComboBox .button:focus,
+#login_window GtkComboBox .button:hover:focus,
+#login_window GtkComboBox .button:active:focus,
+#login_window GtkComboBox .button:active:hover:focus {
+    padding: 0;
+    background: none;
+    border-style: none;
+    box-shadow: none;
+}
+
+#login_window GtkComboBox .button:focus,
+#login_window GtkComboBox .button:hover:focus,
+#login_window GtkComboBox .button:active:focus,
+#login_window GtkComboBox .button:active:hover:focus {
+    background: none;
+    border-style: none;
+}
+
+#login_window #user_combobox {
+    color: @lightdm_fg_color;
+    font: 18px;
+}
+
+#login_window #user_combobox .menu {
+    font: normal;
+}
+
+#login_window #user_combobox .arrow {
+    color: mix(@lightdm_fg_color, @lightdm_bg_color, 0.5);
+}
+
+#login_window .entry {
+    padding: 3px 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: shade(@lightdm_bg_color, 0.8);
+    border-radius: 2px;
+    background-color: shade(@lightdm_bg_color, 0.9);
+    background-image: none;
+    color: @lightdm_fg_color;
+
+    box-shadow: none;
+    transition: all 150ms ease-out;
+}
+
+#login_window .entry:focus,
+#login_window .entry:hover {
+    border-color: shade(@lightdm_bg_color, 0.7);
+
+    box-shadow: inset 1px 0 alpha(@dark_shadow, 0.10),
+                inset 0 1px alpha(@dark_shadow, 0.12),
+                inset -1px 0 alpha(@dark_shadow, 0.10),
+                inset 0 -1px alpha(@dark_shadow, 0.05);
+}
+
+#login_window .button,
+#shutdown_dialog .button,
+#restart_dialog .button {
+    padding: 3px 15px;
+    border-width: 1px;
+    border-radius: 2px;
+    border-style: solid;
+    border-color: shade(@lightdm_bg_color, 0.8);
+    background-color: shade(@lightdm_bg_color, 1.08);
+    background-image: none;
+    color: @lightdm_fg_color;
+
+    transition: all 150ms ease-out;
+}
+
+#user_image {
+    padding: 3px;
+    border-radius: 2px;
+
+    /* draw border using box-shadow */
+    box-shadow: inset 1px 0 shade(@lightdm_bg_color, 0.7),
+                inset -1px 0 shade(@lightdm_bg_color, 0.7),
+                inset 0 1px shade(@lightdm_bg_color, 0.7),
+                inset 0 -1px shade(@lightdm_bg_color, 0.7);
+}
+
+#user_image_border {
+    border-radius: 2px;
+    background-color: shade(@lightdm_bg_color, 0.9);
+    background-image: none;
+
+    box-shadow: inset 1px 0 alpha(@dark_shadow, 0.07),
+                inset 0 1px alpha(@dark_shadow, 0.08),
+                inset -1px 0 alpha(@dark_shadow, 0.07),
+                inset 0 -1px alpha(@dark_shadow, 0.05);
+}
+
+#buttonbox_frame {
+    padding-top: 10px;
+    padding-bottom: 0;
+    border-style: none;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+}
+
+/******************************
+ * default and focused button *
+ ******************************/
+#login_window .button.default,
+#shutdown_dialog .button.default,
+#restart_dialog .button.default,
+#login_window .button:focus,
+#login_window .button:active:focus,
+#shutdown_dialog .button:focus,
+#shutdown_dialog .button:active:focus,
+#restart_dialog .button:focus,
+#restart_dialog .button:active:focus {
+    border-color: shade(@theme_selected_bg_color, 0.8);
+    background-color: shade(@theme_selected_bg_color, 1.08);
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+#login_window .button.default:hover,
+#shutdown_dialog .button.default:hover,
+#restart_dialog .button.default:hover,
+#login_window .button:hover:focus,
+#login_window .button:active:hover:focus,
+#shutdown_dialog .button:hover:focus,
+#shutdown_dialog .button:active:hover:focus,
+#restart_dialog .button:hover:focus,
+#restart_dialog .button:active:hover:focus {
+    border-color: shade(@theme_selected_bg_color, 0.7);
+    background-color: @theme_selected_bg_color;
+}
+
+/*******************
+ * shutdown button *
+ *******************/
+#shutdown_button.button {
+    border-color: shade(@error_bg_color, 0.8);
+    background-color: shade(@error_bg_color, 1.08);
+    background-image: none;
+    color: @error_fg_color;
+}
+
+#shutdown_button.button:hover,
+#shutdown_button.button:active,
+#shutdown_button.button:active:hover {
+    border-color: shade(@error_bg_color, 0.7);
+    background-color: @error_bg_color;
+}
+
+/******************
+ * restart button *
+ ******************/
+#restart_button.button {
+    border-color: shade(@warning_bg_color, 0.8);
+    background-color: shade(@warning_bg_color, 1.08);
+    background-image: none;
+    color: @warning_fg_color;
+}
+
+#restart_button.button:hover,
+#restart_button.button:active,
+#restart_button.button:active:hover {
+    border-color: shade(@warning_bg_color, 0.7);
+    background-color: @warning_bg_color;
+}
+
+/********************
+ * password warning *
+ ********************/
+#greeter_infobar {
+    font: bold;
+}

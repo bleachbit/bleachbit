@@ -1,95 +1,107 @@
-/*
-# name: Windows 10
-# author: Maxime Doyen
-*/
+/*# name: B00merang Blackout
+  # author: Christian Medel (Elbullazul)
+  # date: July 6th, 2016
+  # description: Pitch black GTK simulating a console view*/
 
+/* default color scheme */
+@define-color bg_color #000000;
+@define-color fg_color #ffffff;
+@define-color base_color #000000;
+@define-color text_color #ffffff;
+@define-color selected_bg_color #0078d7;
+@define-color selected_fg_color #000000;
+@define-color tooltip_bg_color #000000;
+@define-color tooltip_fg_color #ffffff;
 
-/* dark expected windows 8 */
-@define-color theme_base_color #2C2E2F;
-@define-color theme_bg_color #383a3b;
-@define-color theme_fg_color #c0c0c0;
-@define-color theme_text_color @theme_fg_color;
-@define-color theme_selected_bg_color #0079cb;
-@define-color theme_selected_fg_color #e9e9e9; 
+/* dark color scheme */
+@define-color dark_bg_color #000000;
+@define-color dark_fg_color #ffffff;
 
-/* dark visualstudio 2013
- @define-color
-@define-color theme_base_color #252526;
-@define-color theme_bg_color #2d2d30;
-@define-color theme_fg_color #f0f0f0;
-@define-color theme_text_color @theme_fg_color;
-@define-color theme_selected_bg_color #0079cb;
-@define-color theme_selected_fg_color #fefefe; */
+/* colormap actually used by the theme, to be overridden in other css files */
+@define-color theme_bg_color @bg_color;
+@define-color theme_fg_color @fg_color;
+@define-color theme_base_color @base_color;
+@define-color theme_text_color @text_color;
+@define-color theme_selected_bg_color @selected_bg_color;
+@define-color theme_selected_fg_color @selected_fg_color;
+@define-color theme_tooltip_bg_color @tooltip_bg_color;
+@define-color theme_tooltip_fg_color @tooltip_fg_color;
 
-@define-color borders shade(@theme_bg_color, 0.68);	/* #ACACAC; */
+/*Nemo Desktop shadow fix*/
+ @define-color desktop_item_fg #ffffff;
+ @define-color desktop_item_selected_fg shade(@theme_selected_fg_color, 0.8);
+ @define-color desktop_item_text_shadow alpha(black, 0.8);
 
-@define-color insensitive_bg_color  shade (@theme_bg_color, 0.99);
-@define-color insensitive_fg_color  shade (@theme_bg_color, 0.72);
-@define-color insensitive_borders   shade (@theme_bg_color, 0.84);	/* #bbbbbb; */
+/* shadow effects */
+@define-color light_shadow #fff;
+@define-color dark_shadow #000;
 
-
-/*@define-color unfocused_borders #8b8b8b;*/
-@define-color sidebar_bg @theme_base_color;
-@define-color sidebar_bg_unfocused shade(@theme_bg_color, 0.67);
-
-@define-color warning_color #86501b;
-@define-color question_color #634270;
-@define-color error_color #6f1616;
-@define-color success_color #4c7523;
-
-/* windows 8 colors */
-@define-color gradient_default_s @theme_bg_color;
-@define-color gradient_default_e shade(@theme_bg_color, 0.90);
-
-@define-color border_hover #1484cf;
-@define-color gradient_hover_s #14537f;
-@define-color gradient_hover_e #144c74;
-
-@define-color border_active #0079cb;
-@define-color gradient_active_s #004474;
-@define-color gradient_active_e #003d68;
-
-@define-color progress_color #187918;
-@define-color progress_bg shade(@theme_bg_color, 0.906); /*#e6e6e6;*/
-
-@define-color tootip_border shade(@theme_bg_color, 0.47); /*#767676;*/
-@define-color gradient_tootip_s #ffffff;
-@define-color gradient_tootip_e #e4ecf7;
-
-/* menubaritem hover */
-@define-color menubaritem_border #007acc;
-@define-color menubaritem_bg_color #0079cb;
-
-/* menuitem hover */
-@define-color menuitem_border #007acc;
-@define-color menuitem_bg_color #0079cb;
+/* misc colors used by gtk+ */
+@define-color info_fg_color rgb (40, 40, 40);
+@define-color info_bg_color rgb (217, 237, 247);
+@define-color warning_fg_color rgb (77, 77, 77);
+@define-color warning_bg_color rgb (222, 109, 38);
+@define-color question_fg_color rgb (255, 255, 255);
+@define-color question_bg_color rgb (255, 156, 25);
+@define-color error_fg_color rgb (255, 255, 255);
+@define-color error_bg_color rgb (255, 25, 25);
+@define-color link_color #224ba0;
+@define-color success_color #53d013;
+@define-color warning_color #f57600;
+@define-color error_color #cc0000;
 
 /* widget colors */
-@define-color menubar_bg_color #f5f6f7;
-@define-color menubar_fg_color @theme_fg_color;
-@define-color toolbar_bg_color @theme_bg_color;
-@define-color toolbar_fg_color @theme_fg_color;
-@define-color menu_border_color #979797;
-@define-color menu_bg_color @theme_bg_color;
-@define-color menu_fg_color @theme_fg_color;
-@define-color panel_bg_color @theme_bg_color;
-@define-color panel_fg_color @theme_fg_color;
+@define-color titlebar_bg_color @dark_bg_color;
+@define-color titlebar_fg_color @dark_fg_color;
+@define-color menubar_bg_color @dark_bg_color;
+@define-color menubar_fg_color @dark_fg_color;
+@define-color toolbar_bg_color @dark_bg_color; /*@theme_bg_color;*/
+@define-color toolbar_fg_color @dark_fg_color; /*@theme_fg_color;*/
+@define-color menu_bg_color @bg_color;
+@define-color menu_fg_color @fg_color;
+@define-color panel_bg_color @dark_bg_color;
+@define-color panel_fg_color @dark_fg_color;
 
 /* osd */
-@define-color osd_base #333;
-@define-color osd_fg #eee;
+@define-color osd_base @dark_bg_color;
+@define-color osd_fg @dark_fg_color;
 @define-color osd_bg alpha(@osd_base, 0.8);
 
-/* window manager colors */
-@define-color wm_border_focused #007acc;
-@define-color wm_border_unfocused #2d2d30;
-@define-color wm_title_focused #9a9a9a;
-@define-color wm_title_unfocused #9a9a9a;
-@define-color wm_bg_focused #2d2d30;
-@define-color wm_bg_unfocused #2d2d30;
+/* lightdm greeter colors */
+@define-color lightdm_bg_color @dark_bg_color;
+@define-color lightdm_fg_color @dark_fg_color;
 
-/*# sourceMappingURL=gtk.css.map */
-@import url("gtk-contained.css");
-@import url("gtk-contained-dark.css");
-/*@import url("apps/gnome-applications.css");*/
+/* window manager colors */
+@define-color wm_bg @titlebar_bg_color;
+@define-color wm_border_focused mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.21);
+@define-color wm_border_unfocused mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.12);
+@define-color wm_title_focused mix(@titlebar_fg_color, @titlebar_bg_color, 0.1);
+@define-color wm_title_unfocused mix(@titlebar_fg_color, @titlebar_bg_color, 0.4);
+@define-color wm_icons_focused mix(@titlebar_fg_color, @titlebar_bg_color, 0.1);
+@define-color wm_icons_focused_prelight @selected_bg_color;
+@define-color wm_icons_focused_pressed shade(@selected_bg_color, 0.8);
+@define-color wm_icons_unfocused mix(@titlebar_fg_color, @titlebar_bg_color, 0.4);
+@define-color wm_icons_unfocused_prelight @selected_bg_color;
+@define-color wm_icons_unfocused_pressed shade(@selected_bg_color, 0.8);
+
+/*Terminal Text color*/
+@define-color terminal_text_color @fg_color;
+
+/*Scrollbar  colors*/
+@define-color scrollthrough_bg_color #e6e6e6;
+@define-color scrollpress_bg_color #808080;
+@define-color scrollhover_bg_color #cfcfcf;
+@define-color scrollnorm_bg_color #c6c6c6;
+
+/*Progressbar bg color*/
+@define-color progressbar_color @theme_selected_bg_color;
+
+@import url("gtk-widgets.css");
+@import url("gtk-widgets-assets.css");
+@import url("apps/gnome-applications.css");
+@import url("apps/granite-widgets.css");
 @import url("apps/unity.css");
+@import url("apps/xfce.css");
+@import url("apps/nemo.css");
+@import url("apps/synaptic.css");
+@import url("apps/lightdm-gtk-greeter.css");
