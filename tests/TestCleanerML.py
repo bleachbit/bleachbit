@@ -21,7 +21,6 @@
 """
 Test cases for module CleanerML
 """
-from __future__ import absolute_import, print_function
 
 from tests import common
 from bleachbit.CleanerML import *
@@ -85,7 +84,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         bleachbit.personal_cleaners_dir = self.mkdtemp(
             prefix='bleachbit-cleanerml-load')
         self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
-                        contents='<xml><broken>')
+                        contents=b'<xml><broken>')
         list(load_cleaners())
         import shutil
         shutil.rmtree(bleachbit.personal_cleaners_dir)
@@ -137,7 +136,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
 """.format(**{'tempdir': self.tempdir})
         # write XML cleaner
         cml_path = os.path.join(self.tempdir, 'test.xml')
-        self.write_file(cml_path, xml_str)
+        self.write_file(cml_path, xml_str.encode(sys.getdefaultencoding()))
 
         # create two canaries
         test_log_path_a = os.path.join(self.tempdir, 'a', 'test.log')

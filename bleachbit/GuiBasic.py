@@ -21,9 +21,7 @@
 Basic GUI code
 """
 
-from __future__ import absolute_import
-
-from bleachbit import _, expanduser
+from bleachbit import _
 
 import os
 
@@ -50,7 +48,7 @@ def browse_folder(parent, title, multiple, stock_button):
                         stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(multiple)
-    chooser.set_current_folder(expanduser('~'))
+    chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     if multiple:
         ret = chooser.get_filenames()
@@ -76,7 +74,7 @@ def browse_file(parent, title):
     chooser.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL,
                         _("_Open"), Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
-    chooser.set_current_folder(expanduser('~'))
+    chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     path = chooser.get_filename()
     chooser.destroy()
@@ -101,7 +99,7 @@ def browse_files(parent, title):
                         _("_Delete"), Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(True)
-    chooser.set_current_folder(expanduser('~'))
+    chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
     paths = chooser.get_filenames()
     chooser.destroy()

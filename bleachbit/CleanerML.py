@@ -22,8 +22,6 @@
 Create cleaners from CleanerML (markup language)
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 from bleachbit.Action import ActionProvider
 from bleachbit import _
@@ -50,7 +48,7 @@ def default_vars():
     for v1, v2 in wowvars:
         # Remove None, if variable is not found.
         # Make list unique.
-        mylist = list(set([x for x in os.getenv(v1), os.getenv(v2) if x]))
+        mylist = list(set([x for x in (os.getenv(v1), os.getenv(v2)) if x]))
         ret[v1] = mylist
     return ret
 
@@ -249,7 +247,7 @@ class CleanerML:
                 value_list = expand_glob_join(value_str, '')
             else:
                 value_list = [value_str, ]
-            if self.vars.has_key(var_name):
+            if var_name in self.vars:
                 # append
                 self.vars[var_name] = value_list + self.vars[var_name]
             else:

@@ -22,8 +22,6 @@
 Check for updates via the Internet
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 from bleachbit import _
 
@@ -35,11 +33,8 @@ import platform
 import socket
 import sys
 import xml.dom.minidom
-if sys.version >= (3, 0):
-    from urllib.request import build_opener
-    from urllib.error import URLError
-else:
-    from urllib2 import build_opener, URLError
+from urllib.request import build_opener
+from urllib.error import URLError
 
 
 logger = logging.getLogger(__name__)
@@ -52,12 +47,11 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
     delete_current = False
     if os.path.exists(fn):
-        f = open(fn, 'r')
-        hash_current = hashlib.sha512(f.read()).hexdigest()
-        if not hash_expected or hash_current == hash_expected:
-            # update is same as current
-            return
-        f.close()
+        with open(fn, 'rb') as f:
+            hash_current = hashlib.sha512(f.read()).hexdigest()
+            if not hash_expected or hash_current == hash_expected:
+                # update is same as current
+                return
         delete_current = True
     # download update
     opener = build_opener()
@@ -75,8 +69,8 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     # write file
     if not os.path.exists(personal_cleaners_dir):
         os.mkdir(personal_cleaners_dir)
-    f = open(fn, 'w')
-    f.write(doc)
+    with open(fn, 'wb') as f:
+        f.write(doc)
     append_text(_('New winapp2.ini was downloaded.'))
     cb_success()
 
@@ -108,6 +102,7 @@ def user_agent():
         logger.exception('Exception when getting default locale')
 
     try:
+        gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         gtkver = '; GTK %s' % '.'.join([str(x) for x in Gtk.gtk_version])
     except:
@@ -158,6 +153,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener = build_opener()
     socket.setdefaulttimeout(bleachbit.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
+    import encodings.idna # https://github.com/bleachbit/bleachbit/issues/760
     try:
         handle = opener.open(bleachbit.update_check_url)
     except URLError as e:

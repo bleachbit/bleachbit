@@ -22,8 +22,6 @@
 Store and retrieve user preferences
 """
 
-from __future__ import absolute_import
-
 import bleachbit
 from bleachbit import General
 from bleachbit import _
@@ -91,8 +89,8 @@ class Options:
         self.purged = False
         self.config = bleachbit.RawConfigParser()
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
-        self.config._boolean_states['t'] = True
-        self.config._boolean_states['f'] = False
+        self.config.BOOLEAN_STATES['t'] = True
+        self.config.BOOLEAN_STATES['f'] = False
         self.restore()
 
     def __flush(self):
@@ -102,16 +100,16 @@ class Options:
         if not os.path.exists(bleachbit.options_dir):
             General.makedirs(bleachbit.options_dir)
         mkfile = not os.path.exists(bleachbit.options_file)
-        _file = open(bleachbit.options_file, 'wb')
-        try:
-            self.config.write(_file)
-        except IOError as e:
-            from errno import ENOSPC
-            if e.errno == ENOSPC:
-                logger.error(
-                    _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
-            else:
-                raise
+        with open(bleachbit.options_file, 'w') as _file:
+            try:
+                self.config.write(_file)
+            except IOError as e:
+                from errno import ENOSPC
+                if e.errno == ENOSPC:
+                    logger.error(
+                        _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
+                else:
+                    raise
         if mkfile and General.sudo_mode():
             General.chownself(bleachbit.options_file)
 
@@ -126,7 +124,6 @@ class Options:
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
-                pathname = pathname.decode('utf-8')
             exists = False
             try:
                 exists = os.path.lexists(pathname)
@@ -162,7 +159,7 @@ class Options:
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
-        return self.config.get(section, option.encode('utf-8'))
+        return self.config.get(section, option)
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -300,7 +297,7 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key.encode('utf-8'), str(value))
+        self.config.set(section, key, str(value))
         if commit:
             self.__flush()
 

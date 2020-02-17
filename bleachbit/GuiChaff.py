@@ -24,8 +24,6 @@
 GUI for making chaff
 """
 
-from __future__ import absolute_import
-
 from bleachbit import _
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 

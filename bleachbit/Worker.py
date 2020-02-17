@@ -22,15 +22,14 @@
 Perform the preview or delete operations
 """
 
-from __future__ import absolute_import
-
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ungettext, expanduser, FSE
+from bleachbit import _, ungettext
 
 import logging
 import math
 import sys
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -101,21 +100,18 @@ class Worker:
             from errno import ENOENT, EACCES
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
-                exc_message = str(e).decode(FSE)
+                exc_message = str(e)
                 logger.error('%s: %s', exc_message, cmd)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
-                if isinstance(msg, str) and isinstance(operation_option, unicode):
-                    # if _ haven't found proper translation in locale dir it returns str
-                    msg = msg.decode(FSE)
                 data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
             self.total_errors += 1
         else:
             if ret is None:
                 return
-            if isinstance(ret['size'], (int, long)):
+            if isinstance(ret['size'], int):
                 size = FileUtilities.bytes_to_human(ret['size'])
                 self.size += ret['size']
                 self.total_bytes += ret['size']
@@ -125,12 +121,9 @@ class Worker:
             if ret['path']:
                 path = ret['path']
             else:
-                path = u''
+                path = ''
 
-            if isinstance(path, str):
-                path = path.decode('utf8', 'replace')  # for invalid encoding
-
-            line = u"%s %s %s\n" % (ret['label'], size, path)
+            line = "%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
             if ret['label']:
@@ -146,7 +139,7 @@ class Worker:
                      operation, operation_options)
 
         if not operation_options:
-            raise StopIteration
+            return
 
         if self.really_delete and backends[operation].is_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
@@ -161,7 +154,7 @@ class Worker:
         total_size = 0
         for option_id in operation_options:
             self.size = 0
-            assert(isinstance(option_id, (str, unicode)))
+            assert(isinstance(option_id, str))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
@@ -184,7 +177,7 @@ class Worker:
             # deep scan
             for ds in backends[operation].get_deep_scan(option_id):
                 if '' == ds['path']:
-                    ds['path'] = expanduser('~')
+                    ds['path'] = os.path.expanduser('~')
                 if 'delete' != ds['command']:
                     raise NotImplementedError(
                         'Deep scan only supports deleting now')
@@ -277,8 +270,8 @@ class Worker:
 
         # delayed operations
         for op in sorted(self.delayed_ops):
-            operation = op[1].keys()[0]
-            for option_id in op[1].values()[0]:
+            operation = list(op[1].keys())[0]
+            for option_id in list(op[1].values())[0]:
                 for ret in self.run_delayed_op(operation, option_id):
                     # yield to GTK+ idle loop
                     yield True

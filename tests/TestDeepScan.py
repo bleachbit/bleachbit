@@ -23,11 +23,8 @@
 Test case for module DeepScan
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 from bleachbit.DeepScan import DeepScan, normalized_walk
-from bleachbit import expanduser
 
 import os
 import sys
@@ -43,29 +40,25 @@ class DeepScanTestCase(common.BleachbitTestCase):
         fullpath = self.write_file(fn)
 
         # Add Unicode paths to encourage a crash.
-        subdir = os.path.join(self.tempdir, u'ɡælɪk.dir')
+        subdir = os.path.join(self.tempdir, 'ɡælɪk.dir')
         os.mkdir(subdir)
-        subfile = os.path.join(subdir, u'ɡælɪk.file')
+        subfile = os.path.join(subdir, 'ɡælɪk.file')
         common.touch_file(subfile)
 
         ds = DeepScan()
-        for use_unicode in (False, True):
-            if use_unicode:
-                search_dir = unicode(self.tempdir)
-            else:
-                search_dir = self.tempdir
-                self.assertIsInstance(search_dir, str)
-            ds.add_search(search_dir, '\.[Bb][Aa][Kk]$')
-            found = False
-            for ret in ds.scan():
-                if ret == True:
-                    # True is used to yield to GTK+, but it is not
-                    # needed in this test.
-                    continue
-                self.assertExists(ret)
-                if ret == fullpath:
-                    found = True
-            self.assertTrue(found, u"Did not find '%s'" % fullpath)
+        search_dir = self.tempdir
+        self.assertIsInstance(search_dir, str)
+        ds.add_search(search_dir, '\.[Bb][Aa][Kk]$')
+        found = False
+        for ret in ds.scan():
+            if ret == True:
+                # True is used to yield to GTK+, but it is not
+                # needed in this test.
+                continue
+            self.assertExists(ret)
+            if ret == fullpath:
+                found = True
+        self.assertTrue(found, "Did not find '%s'" % fullpath)
 
         os.unlink(fullpath)
         self.assertNotExists(fullpath)
@@ -75,28 +68,23 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
     def test_encoding(self):
         """Test encoding"""
-        for test in ('ascii.bak', u'äöüßÄÖÜ.bak', u"עִבְרִית.bak", u'ɡælɪk.bak'):
+        for test in ('ascii.bak', 'äöüßÄÖÜ.bak', "עִבְרִית.bak", 'ɡælɪk.bak'):
             self._test_encoding(test)
 
     def test_DeepScan(self):
         """Unit test for class DeepScan.  Preview real files."""
         ds = DeepScan()
-        path = expanduser('~')
+        path = os.path.expanduser('~')
         ds.add_search(path, '^Makefile$')
         ds.add_search(path, '~$')
         ds.add_search(path, 'bak$')
         ds.add_search(path, '^Thumbs.db$')
         ds.add_search(path, '^Thumbs.db:encryptable$')
-        try:
-            for ret in ds.scan():
-                if True == ret:
-                    # it's yielding control to the GTK idle loop
-                    continue
-                self.assertLExists(ret)
-        except UnicodeDecodeError:
-            # Expectedly ds.scan() throws exception
-            # when we have unicode paths and LANG==C.
-            self.assertTrue(os.environ['LANG'] == 'C')
+        for ret in ds.scan():
+            if True == ret:
+                # it's yielding control to the GTK idle loop
+                continue
+            self.assertLExists(ret)
 
     def test_delete(self):
         """Delete files in a test environment"""

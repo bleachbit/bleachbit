@@ -23,8 +23,6 @@
 Test case for module Chaff
 """
 
-from __future__ import absolute_import
-
 import os
 import unittest
 from tempfile import mkdtemp

@@ -21,7 +21,6 @@
 """
 Test case for module Options
 """
-from __future__ import absolute_import, print_function
 
 from tests import common
 import bleachbit.Options

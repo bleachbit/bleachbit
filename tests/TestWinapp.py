@@ -21,8 +21,6 @@
 Test cases for module Winapp
 """
 
-from __future__ import absolute_import, print_function
-
 import os
 import shutil
 import sys
@@ -37,8 +35,8 @@ from bleachbit import logger
 
 def create_sub_key(sub_key):
     """Create a registry key"""
-    import _winreg
-    hkey = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, sub_key)
+    import winreg
+    hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, sub_key)
     hkey.Close()
 
 
@@ -63,8 +61,8 @@ def get_winapp2():
             os.remove(fname)
     if not os.path.exists(fname):
         fobj = open(fname, 'w')
-        import urllib2
-        txt = urllib2.urlopen(url).read()
+        import urllib.request
+        txt = urllib.request.urlopen(url).read()
         fobj.write(txt)
     return fname
 
@@ -199,7 +197,7 @@ class WinappTestCase(common.BleachbitTestCase):
         ini.close()
         self.assertExists(self.ini_fn)
         if do_next:
-            return Winapp(self.ini_fn).get_cleaners().next()
+            return next(Winapp(self.ini_fn).get_cleaners())
         else:
             return Winapp(self.ini_fn).get_cleaners()
 
@@ -305,7 +303,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 # execute the test
                 (dirname, fname1, fname2, fbak) = self.setup_fake()
                 cleaner = self.ini2cleaner(test_full[0] % dirname, False)
-                self.assertRaises(StopIteration, cleaner.next)
+                self.assertRaises(StopIteration, cleaner.__next__)
                 shutil.rmtree(dirname, True)
 
         # registry key, basic
@@ -446,7 +444,7 @@ class WinappTestCase(common.BleachbitTestCase):
 
         import string
         searches = ';'.join(
-            ['*.%s' % letter for letter in string.letters[0:26]])
+            ['*.%s' % letter for letter in string.ascii_letters[0:26]])
         cleaner = self.ini2cleaner(
             'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
 

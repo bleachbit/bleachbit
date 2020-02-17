@@ -23,10 +23,7 @@
 Test cases for module Action
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.Action import *
-from bleachbit import FSE, expanduser, expandvars
 from tests import common
 
 import shutil
@@ -51,7 +48,7 @@ def _action_str_to_results(action_str):
 
     It lists the files, but it does not really delete them.
     """
-    return [cmd.execute(False).next() for cmd in _action_str_to_commands(action_str)]
+    return [next(cmd.execute(False)) for cmd in _action_str_to_commands(action_str)]
 
 
 def benchmark_filter(this_filter):
@@ -72,7 +69,7 @@ def benchmark_filter(this_filter):
         # This regex matches everything, so the "no filter" and regex
         # are comparable
         filter_code = 'regex="."'
-    action_str = u'<action command="delete" search="glob" path="%s/*" %s />' % \
+    action_str = '<action command="delete" search="glob" path="%s/*" %s />' % \
         (dirname, filter_code)
     results = _action_str_to_results(action_str)
     end = time.time()
@@ -97,7 +94,7 @@ class ActionTestCase(common.BleachbitTestCase):
     """Test cases for Action"""
 
     _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-    _TEST_PROCESS_SIMPLE = u'<action command="process" cmd="%s" />'
+    _TEST_PROCESS_SIMPLE = '<action command="process" cmd="%s" />'
 
     def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
@@ -118,11 +115,11 @@ class ActionTestCase(common.BleachbitTestCase):
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
-            result = cmd.execute(really_delete=False).next()
+            result = next(cmd.execute(really_delete=False))
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            ret = cmd.execute(really_delete=True).next()
+            ret = next(cmd.execute(really_delete=True))
             if 'delete' == command:
                 self.assertNotLExists(cmd.path)
             elif 'truncate' == command:
@@ -142,18 +139,18 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_delete(self):
         """Unit test for class Delete"""
-        paths = [u'~']
+        paths = ['~']
         if 'nt' == os.name:
             # Python 2.6 and later supports %foo%
-            paths.append(u'%USERPROFILE%')
+            paths.append('%USERPROFILE%')
             # Python 2.5 and later supports $foo
-            paths.append(u'${USERPROFILE}')
-            paths.append(u'$USERPROFILE')
+            paths.append('${USERPROFILE}')
+            paths.append('$USERPROFILE')
         if 'posix' == os.name:
-            paths.append(u'$HOME')
+            paths.append('$HOME')
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
-                expanded = expanduser(expandvars(path))
+                expanded = os.path.expanduser(os.path.expandvars(path))
                 filename = self.mkstemp(
                     dir=expanded, prefix='bleachbit-action-delete')
                 command = mode
@@ -166,7 +163,7 @@ class ActionTestCase(common.BleachbitTestCase):
                         # test not needed on this OS
                         os.remove(filename)
                         continue
-                action_str = u'<action command="%s" search="file" path="%s" />' % \
+                action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
                 self.assertNotExists(filename)
@@ -180,7 +177,7 @@ class ActionTestCase(common.BleachbitTestCase):
         ]
         for test in tests:
             pathname = self.write_file(test)
-            action_str = u'<action command="delete" search="file" path="%s" />' % pathname
+            action_str = '<action command="delete" search="file" path="%s" />' % pathname
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
 
@@ -242,7 +239,7 @@ class ActionTestCase(common.BleachbitTestCase):
             effective_parameter = ""
             if parameter is not None:
                 effective_parameter = 'parameter="%s"' % parameter
-            action_str = u'<action command="ini" search="file" path="%s" section="%s" %s />' \
+            action_str = '<action command="ini" search="file" path="%s" section="%s" %s />' \
                 % (path, section, effective_parameter)
             self._test_action_str(action_str)
 
@@ -253,7 +250,7 @@ class ActionTestCase(common.BleachbitTestCase):
         from tests.TestFileUtilities import test_json_helper
 
         def execute_json(path, address):
-            action_str = u'<action command="json" search="file" path="%s" address="%s" />' \
+            action_str = '<action command="json" search="file" path="%s" address="%s" />' \
                 % (path, address)
             self._test_action_str(action_str)
 
@@ -262,10 +259,10 @@ class ActionTestCase(common.BleachbitTestCase):
     def test_process(self):
         """Unit test for process action"""
         tests = [ActionTestCase._TEST_PROCESS_SIMPLE,
-                 u'<action command="process" wait="false" cmd="%s" />',
-                 u'<action command="process" wait="f" cmd="%s" />',
-                 u'<action command="process" wait="no" cmd="%s" />',
-                 u'<action command="process" wait="n" cmd="%s" />'
+                 '<action command="process" wait="false" cmd="%s" />',
+                 '<action command="process" wait="f" cmd="%s" />',
+                 '<action command="process" wait="no" cmd="%s" />',
+                 '<action command="process" wait="n" cmd="%s" />'
                  ]
 
         for test in tests:
@@ -300,18 +297,18 @@ class ActionTestCase(common.BleachbitTestCase):
         FileUtilities.getsize = lambda x: 1
 
         # should match three files using no regexes
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" />'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 3)
 
         # should match second file using positive regex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # On Windows should be case insensitive
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
         results = _action_str_to_results(action_str)
         if 'nt' == os.name:
             self.assertEqual(len(results), 1)
@@ -320,29 +317,29 @@ class ActionTestCase(common.BleachbitTestCase):
             self.assertEqual(len(results), 0)
 
         # should match second file using negative regex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match second file using both regexes
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^f" nregex="1$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^f" nregex="1$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match nothing using positive regex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" regex="^bar$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^bar$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 0)
 
         # should match nothing using negative regex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" nregex="."/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="."/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 0)
 
         # should give an error
-        action_str = u'<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
+        action_str = '<action command="delete" search="invalid" path="/tmp/foo*" regex="^bar$"/>'
         self.assertRaises(
             RuntimeError, lambda: _action_str_to_results(action_str))
 
@@ -366,7 +363,7 @@ class ActionTestCase(common.BleachbitTestCase):
             print('search="glob" test: %s' % test)
             pathname = self.write_file(fname)
             self.assertExists(pathname)
-            action_str = u'<action command="delete" search="glob" path="%s" />' % test
+            action_str = '<action command="delete" search="glob" path="%s" />' % test
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
 
@@ -378,18 +375,18 @@ class ActionTestCase(common.BleachbitTestCase):
         FileUtilities.getsize = lambda x: 1
 
         # should match three files using no regexes
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" />'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 3)
 
         # should match two files using wholeregex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 2)
         self.assertEqual(results[0]['path'], '/tmp/foo1')
 
         # should match third file using nwholeregex
-        action_str = u'<action command="delete" search="glob" path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
+        action_str = '<action command="delete" search="glob" path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
         results = _action_str_to_results(action_str)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['path'], '/tmp/bar1')
@@ -405,28 +402,28 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # this should not delete anything
         common.touch_file(filename)
-        action_str = u'<action command="delete" search="file" type="d" path="%s" />' % filename
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % filename
         self._test_action_str(action_str)
         self.assertExists(filename)
 
         # should delete file
-        action_str = u'<action command="delete" search="file" type="f" path="%s" />' % filename
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % filename
         self._test_action_str(action_str)
         self.assertNotExists(filename)
 
         # should delete file
         common.touch_file(filename)
-        action_str = u'<action command="delete" search="file" path="%s" />' % filename
+        action_str = '<action command="delete" search="file" path="%s" />' % filename
         self._test_action_str(action_str)
         self.assertNotExists(filename)
 
         # should not delete anything
-        action_str = u'<action command="delete" search="file" type="f" path="%s" />' % dirname
+        action_str = '<action command="delete" search="file" type="f" path="%s" />' % dirname
         self._test_action_str(action_str)
         self.assertExists(dirname)
 
         # should delete directory
-        action_str = u'<action command="delete" search="file" type="d" path="%s" />' % dirname
+        action_str = '<action command="delete" search="file" type="d" path="%s" />' % dirname
         self._test_action_str(action_str)
         self.assertNotExists(dirname)
 
@@ -446,7 +443,7 @@ class ActionTestCase(common.BleachbitTestCase):
             filename = os.path.join(subdir, 'file')
             common.touch_file(filename)
 
-            action_str = u'<action command="delete" search="walk.%s" path="%s" />' % (
+            action_str = '<action command="delete" search="walk.%s" path="%s" />' % (
                 variant, dirname)
             self._test_action_str(action_str)
             self.assertNotExists(subdir)
@@ -464,10 +461,10 @@ class ActionTestCase(common.BleachbitTestCase):
         """Unit test for walk.files"""
         paths = {'posix': '/var', 'nt': '$WINDIR\\system32'}
 
-        action_str = u'<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
+        action_str = '<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0
         for cmd in _action_str_to_commands(action_str):
-            result = cmd.execute(False).next()
+            result = next(cmd.execute(False))
             common.validate_result(self, result)
             path = result['path']
             self.assertFalse(os.path.isdir(path), "%s is a directory" % path)

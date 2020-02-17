@@ -23,13 +23,10 @@ Test case for module Worker
 """
 
 
-from __future__ import absolute_import, print_function
-
 from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Worker import *
-from bleachbit import expanduser
 
 import os
 import tempfile
@@ -201,7 +198,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         ui = CLI.CliCallback()
         (fd, filename) = tempfile.mkstemp(
             prefix='bleachbit-test-worker', dir=self.tempdir)
-        os.write(fd, '123')
+        os.write(fd, b'123')
         os.close(fd)
         self.assertExists(filename)
         astr = '<action command="%s" path="%s"/>' % (command, filename)
@@ -210,7 +207,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         operations = {'test': ['option1']}
         worker = Worker(ui, True, operations)
         run = worker.run()
-        while run.next():
+        while next(run):
             pass
         del backends['test']
         self.assertNotExists(filename, "Path still exists '%s'" % filename)
@@ -297,7 +294,7 @@ class WorkerTestCase(common.BleachbitTestCase):
 
         class MyDeepScan:
             def add_search(self, dirname, regex):
-                parent.assertEqual(dirname, expanduser('~'))
+                parent.assertEqual(dirname, os.path.expanduser('~'))
                 parent.assertIn(
                     regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
@@ -311,7 +308,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         operations = {'deepscan': ['thumbs_db']}
         ui = CLI.CliCallback()
         worker = Worker(ui, False, operations).run()
-        while worker.next():
+        while next(worker):
             pass
         self.assertEqual(1, self.scanned)
 
@@ -331,7 +328,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         operations = {'test': ['option1', 'option2']}
         worker = Worker(ui, True, operations)
         run = worker.run()
-        while run.next():
+        while next(run):
             pass
         del backends['test']
         self.assertNotExists(filename1)

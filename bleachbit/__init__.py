@@ -22,8 +22,6 @@
 Code that is commonly shared throughout BleachBit
 """
 
-from __future__ import absolute_import
-
 import gettext
 import locale
 import os
@@ -31,21 +29,21 @@ import re
 import sys
 
 from bleachbit import Log
-
-#
-# Config Parser got renamed in Python 3
-#
-if sys.version_info >= (3, 0):
-    from configparser import RawConfigParser, NoOptionError, SafeConfigParser
-else:
-    from ConfigParser import RawConfigParser, NoOptionError, SafeConfigParser
-
+from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
 APP_VERSION = "3.2.0"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
+
+if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+    stdout_encoding = 'utf-8'
+else:
+    stdout_encoding = sys.stdout.encoding
+    if 'win32' == sys.platform:
+        import win_unicode_console
+        win_unicode_console.enable()
 
 logger = Log.init_log()
 
@@ -61,12 +59,10 @@ online_update_notification_enabled = True
 bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(
-        sys.executable.decode(sys.getfilesystemencoding()))
+    bleachbit_exe_path = os.path.dirname(sys.executable)
 else:
     # __file__ is absolute path to __init__.py
-    bleachbit_exe_path = os.path.dirname(os.path.dirname(
-        __file__.decode(sys.getfilesystemencoding())))
+    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__))
 
 # license
 license_filename = None
@@ -83,92 +79,11 @@ for lf in license_filenames:
         license_filename = lf
         break
 
-
-# os.path.expandvars does not work well with non-ascii Windows paths.
-# This is a unicode-compatible reimplementation of that function.
-# Note that if there are errors in the encoding it returns just expanded str.
-def expandvars(var):
-    """Expand environment variables.
-
-    Return the argument with environment variables expanded. Substrings of the
-    form $name or ${name} or %name% are replaced by the value of environment
-    variable name."""
-    if isinstance(var, str):
-        try:
-            final = var.decode('utf-8')
-        except UnicodeDecodeError:
-            # Keep a string which won't be expanded under Windows 7.
-            final = var
-    else:
-        final = var
-
-    if 'posix' == os.name:
-        final = os.path.expandvars(final)
-    elif 'nt' == os.name:
-        import _winreg
-        if final.startswith('${'):
-            final = re.sub(r'\$\{(.*?)\}(?=$|\\)',
-                           lambda x: '%%%s%%' % x.group(1),
-                           final)
-        elif final.startswith('$'):
-            final = re.sub(r'\$(.*?)(?=$|\\)',
-                           lambda x: '%%%s%%' % x.group(1),
-                           final)
-        try:
-            final = _winreg.ExpandEnvironmentStrings(final)
-        except TypeError:
-            # An error occurs when filename contains invalid
-            # char and we return string instead of unicode.
-            # This can happen on win7.
-            pass
-
-    return final
-
-# Windows paths have to be unicode, but os.path.expanduser does not support it.
-# This is a unicode-compatible reimplementation of that function.
-
-
-def expanduser(path):
-    """Expand the path with the home directory.
-
-    Return the argument with an initial component of "~" replaced by
-    that user's home directory.
-    """
-    if isinstance(path, str):
-        final = path.decode('utf-8')
-    else:
-        final = path
-
-    # If does not begin with tilde, do not alter.
-    if len(path) == 0 or not '~' == path[0]:
-        return final
-
-    if 'posix' == os.name:
-        final = os.path.expanduser(final)
-    elif 'nt' == os.name:
-        found = False
-        for env in [u'%USERPROFILE%', u'%HOME%']:
-            if env in os.environ:
-                home = expandvars(env)
-                found = True
-                break
-        if not found:
-            h_drive = expandvars(u'%HOMEDRIVE%')
-            h_path = expandvars(u'%HOMEPATH%')
-            home = os.path.join(h_drive, h_path)
-        final = final.replace('~user/', '')
-        final = final.replace('~/', '')
-        final = final.replace('~\\', '')
-        final = final.replace('~', '')
-        final = os.path.join(home, final)
-    return final
-
-
 # configuration
 portable_mode = False
 options_dir = None
 if 'posix' == os.name:
-    options_dir = expanduser("~/.config/bleachbit")
+    options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
@@ -176,7 +91,7 @@ elif 'nt' == os.name:
         options_dir = bleachbit_exe_path
     else:
         # installed mode
-        options_dir = expandvars(r"${APPDATA}\BleachBit")
+        options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree
@@ -257,7 +172,6 @@ else:
 #
 # gettext
 #
-FSE = sys.getfilesystemencoding()
 try:
     (user_locale, encoding) = locale.getdefaultlocale()
 except:
@@ -276,10 +190,10 @@ try:
     if not os.path.exists(locale_dir):
         raise RuntimeError('translations not installed')
     t = gettext.translation('bleachbit', locale_dir)
-    _ = t.ugettext
+    _ = t.gettext
 except:
     def _(msg):
-        """Dummy replacement for ugettext"""
+        """Dummy replacement for gettext"""
         return msg
 
 try:
@@ -295,12 +209,8 @@ except AttributeError:
             pass
         else:
             # bindtextdomain can not handle Unicode
-            if isinstance(locale_dir, unicode):
-                path = locale_dir.encode('utf-8')
-            else:
-                path = locale_dir
-            libintl.bindtextdomain('bleachbit', path)
-            libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
+            libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
+            libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
 except:
     logger.exception('error binding text domain')
 
@@ -313,23 +223,6 @@ except:
             return singular
         return plural
 
-
-#
-# string decoding
-#
-# In Python 2, some strings such as Python exceptions may be localized
-# and byte encoded.  This decodes them into Unicode.
-# See <https://bugs.launchpad.net/bleachbit/+bug/1416640>.
-#
-def decode_str(s):
-    """Decode a string into Unicode using the default encoding"""
-    if isinstance(s, Exception):
-        # for convenience
-        return decode_str(s.message)
-    try:
-        return s.decode(encoding)
-    except:
-        return s.decode('ascii', 'replace')
 
 #
 # pgettext
@@ -392,6 +285,6 @@ if 'posix' == os.name:
         'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
         'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
     }
-    for varname, value in envs.iteritems():
+    for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value

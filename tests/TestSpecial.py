@@ -23,8 +23,6 @@
 Test case for module Special
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.Options import options
 from bleachbit import FileUtilities, Special
 from tests import common
@@ -35,7 +33,7 @@ import shutil
 import sqlite3
 
 
-chrome_bookmarks = """
+chrome_bookmarks = b"""
 {
    "checksum": "0313bd70dd6343134782af4b233016bf",
    "roots": {
@@ -202,9 +200,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         # google-chrome/Default/Bookmarks
         bookmark_path = os.path.join(
             self.dir_google_chrome_default, 'Bookmarks')
-        f = open(bookmark_path, 'w')
-        f.write(chrome_bookmarks)
-        f.close()
+        with open(bookmark_path, 'wb') as f:
+            f.write(chrome_bookmarks)
 
         # google-chrome/Default/Web Data
         FileUtilities.execute_sqlite3(os.path.join(
@@ -355,7 +352,7 @@ INSERT INTO "moz_places" VALUES(17251,'http://download.openoffice.org/2.3.1/inde
         self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)
         self.assertEqual(
-            set(urls), {u'https://www.bleachbit.org/', u'http://www.slashdot.org/'})
+            set(urls), {'https://www.bleachbit.org/', 'http://www.slashdot.org/'})
 
         os.unlink(path)
 

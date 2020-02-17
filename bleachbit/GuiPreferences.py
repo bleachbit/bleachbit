@@ -24,8 +24,6 @@
 Preferences dialog
 """
 
-from __future__ import absolute_import
-
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
@@ -33,7 +31,6 @@ from bleachbit import GuiBasic
 from gi.repository import Gtk
 import logging
 import os
-import sys
 
 if 'nt' == os.name:
     from bleachbit import Windows

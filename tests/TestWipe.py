@@ -22,8 +22,6 @@
 Test FileUtilities.wipe_path
 """
 
-from __future__ import absolute_import, print_function
-
 from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
 from bleachbit.General import run_external
 from tests import common
@@ -44,7 +42,7 @@ def create_disk_image(n_bytes):
     (fd, filename) = tempfile.mkstemp(
         suffix='disk-image', prefix='bleachbit-wipe-test')
     for x in range(1, int(n_bytes / 1e5)):
-        os.write(fd, '\x00' * 100000)
+        os.write(fd, b'\x00' * 100000)
     os.close(fd)
     return filename
 

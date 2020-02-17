@@ -23,8 +23,6 @@
 Wipe memory
 """
 
-from __future__ import absolute_import
-
 from bleachbit import FileUtilities
 from bleachbit import General
 from bleachbit import _
@@ -40,11 +38,11 @@ logger = logging.getLogger(__name__)
 
 def count_swap_linux():
     """Count the number of swap devices in use"""
-    f = open("/proc/swaps")
     count = 0
-    for line in f:
-        if line[0] == '/':
-            count += 1
+    with open("/proc/swaps") as f:
+        for line in f:
+            if line[0] == '/':
+                count += 1
     return count
 
 
@@ -111,11 +109,13 @@ def make_self_oom_target_linux():
     # In Linux 2.6.36 the system changed from oom_adj to oom_score_adj
     path = '/proc/%d/oom_score_adj' % os.getpid()
     if os.path.exists(path):
-        open(path, 'w').write('1000')
+        with open(path, 'w') as f:
+            f.write('1000')
     else:
         path = '/proc/%d/oomadj' % os.getpid()
         if os.path.exists(path):
-            open(path, 'w').write('15')
+            with open(path, 'w') as f:
+                f.write('15')
     # OOM likes nice processes
     logger.debug(_("Setting nice value %d for this process."), os.nice(19))
     # OOM prefers non-privileged processes
@@ -203,14 +203,14 @@ def physical_free_darwin(run_vmstat=None):
 
 def physical_free_linux():
     """Return the physical free memory on Linux"""
-    f = open("/proc/meminfo")
     free_bytes = 0
-    for line in f:
-        line = line.replace("\n", "")
-        ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
-        if ret is not None:
-            kb = int(ret.group(2))
-            free_bytes += kb * 1024
+    with open("/proc/meminfo") as f:
+        for line in f:
+            line = line.replace("\n", "")
+            ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
+            if ret is not None:
+                kb = int(ret.group(2))
+                free_bytes += kb * 1024
     if free_bytes > 0:
         return free_bytes
     else:

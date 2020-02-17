@@ -23,9 +23,6 @@
 Test cases for __init__
 """
 
-from __future__ import absolute_import
-
-from bleachbit import expanduser, expandvars
 from tests import common
 
 import os
@@ -39,12 +36,12 @@ class InitTestCase(common.BleachbitTestCase):
         """Unit test for function expanduser()"""
         # already absolute
         test_input = '/home/user/foo'
-        test_output = expanduser(test_input)
+        test_output = os.path.expanduser(test_input)
         self.assertEqual(test_input, test_output)
 
         # tilde not at beginning
         test_input = '/home/user/~'
-        test_output = expanduser(test_input)
+        test_output = os.path.expanduser(test_input)
         self.assertEqual(test_input, test_output)
 
         # should be expanded
@@ -53,11 +50,11 @@ class InitTestCase(common.BleachbitTestCase):
         if os.name == 'posix':
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:
-            test_output = expanduser(test_input)
+            test_output = os.path.expanduser(test_input)
             self.assertNotEqual(test_input, test_output)
             self.assertExists(test_output)
             if os.name == 'posix':
-                self.assert_(os.path.samefile(
+                self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))
 
 

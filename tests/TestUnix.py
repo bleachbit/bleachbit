@@ -23,8 +23,6 @@
 Test case for module Unix
 """
 
-from __future__ import absolute_import
-
 from tests import common
 from bleachbit.Unix import *
 
@@ -150,7 +148,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         counter = 0
         for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
             self.assertLExists(path)
-            # self.assert_(path.startswith('/usr/share/locale'))
+            # self.assertTrue(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
             self.assertEqual(path.find('/en_'), -1)
             counter += 1

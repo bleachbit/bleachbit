@@ -22,8 +22,6 @@
 Test case for Common
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 import bleachbit
 
@@ -35,8 +33,8 @@ class CommonTestCase(common.BleachbitTestCase):
 
     def test_expandvars(self):
         """Unit test for expandvars."""
-        var = bleachbit.expandvars('$HOME')
-        self.assertIsUnicodeString(var)
+        var = os.path.expandvars('$HOME')
+        self.assertIsString(var)
 
     def test_environment(self):
         """Test for important environment variables"""
@@ -51,23 +49,17 @@ class CommonTestCase(common.BleachbitTestCase):
 
     def test_expanduser(self):
         """Unit test for expanduser."""
-        # Return Unicode when given str.
-        self.assertIsUnicodeString(bleachbit.expanduser('~'))
-
         # Return Unicode when given Unicode.
-        self.assertIsUnicodeString(bleachbit.expanduser(u'~'))
+        self.assertIsString(os.path.expanduser('~'))
 
         # Blank input should give blank output.
-        self.assertEqual(bleachbit.expanduser(''), u'')
+        self.assertEqual(os.path.expanduser(''), '')
 
         # An absolute path should not be altered.
         abs_dirs = {'posix': '$HOME', 'nt': '%USERPROFILE%'}
         abs_dir = os.path.expandvars(abs_dirs[os.name])
         self.assertExists(abs_dir)
-        self.assertEqual(bleachbit.expanduser(abs_dir), abs_dir)
-        # Path with tilde should be expanded
-        self.assertEqual(os.path.normpath(bleachbit.expanduser('~')),
-                         os.path.normpath(os.path.expanduser('~')))
+        self.assertEqual(os.path.expanduser(abs_dir), abs_dir)
         # A relative path (without a reference to the home directory)
         # should not be expanded.
-        self.assertEqual(bleachbit.expanduser('common'), 'common')
+        self.assertEqual(os.path.expanduser('common'), 'common')

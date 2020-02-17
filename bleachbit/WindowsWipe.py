@@ -96,10 +96,9 @@ from win32file import (CreateFile, CreateFileW,
                        GetFileSize, GetFileAttributesW,
                        SetFileAttributesW,
                        DeviceIoControl, SetFilePointer,
-                       ReadFile, WriteFile,
+                       WriteFile,
                        LockFile, DeleteFile,
-                       SetEndOfFile, FlushFileBuffers,
-                       EncryptFile)
+                       SetEndOfFile, FlushFileBuffers)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
                          FSCTL_GET_NTFS_VOLUME_DATA,
@@ -315,7 +314,7 @@ def split_extent(lcn_start, lcn_end):
     while count > split_factor**(exponent + 1.3):
         exponent += 1
     extent_size = split_factor**exponent
-    for x in xrange(lcn_start, lcn_end + 1, extent_size):
+    for x in range(lcn_start, lcn_end + 1, extent_size):
         yield (x, min(x + extent_size - 1, lcn_end))
 
 
@@ -323,7 +322,7 @@ def split_extent(lcn_start, lcn_end):
 def check_extents(extents, volume_bitmap, allocated_extents=None):
     count_free, count_allocated = (0, 0)
     for lcn_start, lcn_end in extents:
-        for cluster in xrange(lcn_start, lcn_end + 1):
+        for cluster in range(lcn_start, lcn_end + 1):
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
@@ -348,7 +347,7 @@ def check_extents_concurrency(extents, volume_bitmap,
 
     count_free, count_allocated = (0, 0)
     for lcn_start, lcn_end in extents:
-        for cluster in xrange(lcn_start, lcn_end + 1):
+        for cluster in range(lcn_start, lcn_end + 1):
             # Every once in a while, occupy a particular cluster on disk.
             if randint(1, odds_to_allocate) == odds_to_allocate:
                 spike_cluster(volume_handle, cluster, tmp_file_path)
@@ -557,7 +556,7 @@ def get_extents(file_handle, translate_to_extents=True):
                                         retrieval_pointers_buf_size)
         except:
             err_info = sys.exc_info()[1]
-            err_code, err_module, err_desc = err_info
+            err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
                 # (38, 'DeviceIoControl', 'Reached the end of the file.')
                 return []
@@ -708,7 +707,7 @@ def poll_clusters_freed(volume_handle, total_clusters, orig_extents):
     if not orig_extents:
         return True
 
-    for _ in xrange(polling_duration_seconds * attempts_per_second):
+    for _ in range(polling_duration_seconds * attempts_per_second):
         volume_bitmap, bitmap_size = get_volume_bitmap(volume_handle,
                                                        total_clusters)
         count_free, count_allocated = check_extents(

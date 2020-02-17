@@ -23,13 +23,11 @@
 Test case for module FileUtilities
 """
 
-from __future__ import absolute_import, print_function
-
 from tests import common
 from bleachbit.FileUtilities import *
 from bleachbit.General import run_external, sudo_mode
 from bleachbit.Options import options
-from bleachbit import expanduser, expandvars, logger
+from bleachbit import logger
 
 import json
 import sys
@@ -41,8 +39,6 @@ def test_ini_helper(self, execute):
 
     teststrings = [
         b'#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n',
-        u'#Test\n[RecentsMRL]\nlist=C:\\Юзъри\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n'.encode(
-            'ISO-8859-5')
     ]
     for teststr in teststrings:
 
@@ -85,7 +81,7 @@ def test_json_helper(self, execute):
     # create test file
     (fd, filename) = tempfile.mkstemp(
         prefix='bleachbit-test-json', dir=self.tempdir)
-    os.write(fd, '{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
+    os.write(fd, b'{ "deleteme" : 1, "spareme" : { "deletemetoo" : 1 } }')
     os.close(fd)
     self.assertExists(filename)
     self.assertEqual(load_js(filename), expected)
@@ -181,7 +177,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for function children_in_directory()"""
 
         # test an existing directory that usually exists
-        dirname = expanduser("~/.config")
+        dirname = os.path.expanduser("~/.config")
         for filename in children_in_directory(dirname, True):
             self.assertTrue(os.path.isabs(filename))
         for filename in children_in_directory(dirname, False):
@@ -254,9 +250,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Called by test_delete() with shred = False and = True"""
 
         # test deleting with various kinds of filenames
-        hebrew = u"עִבְרִית"
-        katanana = u"アメリカ"
-        umlauts = u"ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
+        hebrew = "עִבְרִית"
+        katanana = "アメリカ"
+        umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
 
         tests = ['.prefixandsuffix',  # simple
                  "x".zfill(150),  # long
@@ -264,9 +260,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                  "''",  # quotation mark
                  "~`!@#$%^&()-_+=x",  # non-alphanumeric characters
                  "[]{};'.,x",  # non-alphanumeric characters
-                 u'abcdefgh',  # simple Unicode
-                 u'J\xf8rgen Scandinavian',
-                 u'\u2014em-dash',  # LP#1454030
+                 'abcdefgh',  # simple Unicode
+                 'J\xf8rgen Scandinavian',
+                 '\u2014em-dash',  # LP#1454030
                  hebrew,
                  katanana,
                  umlauts,
@@ -277,7 +273,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                       ' ', '.file.']  # Windows filenames cannot end with space or period
         for test in tests:
             # create the file
-            filename = self.write_file(test, "top secret")
+            filename = self.write_file(test, b"top secret")
             # delete the file
             delete(filename, shred)
             self.assertNotExists(filename)
@@ -346,10 +342,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
 
             def win_symlink(src, linkname):
-                rc = kern.CreateSymbolicLinkA(linkname, src, 0)
+                rc = kern.CreateSymbolicLinkW(linkname, src, 0)
                 if rc == 0:
-                    print('CreateSymbolicLinkA(%s, %s)' % (linkname, src))
-                    print('CreateSymolicLinkA() failed, error = %s' %
+                    print('CreateSymbolicLinkW(%s, %s)' % (linkname, src))
+                    print('CreateSymolicLinkW() failed, error = %s' %
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
@@ -506,8 +502,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_expandvars(self):
         """Unit test for expandvars()."""
-        expanded = expandvars('$HOME')
-        self.assertIsUnicodeString(expanded)
+        expanded = os.path.expandvars('$HOME')
+        self.assertIsString(expanded)
 
     def test_extended_path(self):
         """Unit test for extended_path() and extended_path_undo()"""
@@ -531,7 +527,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_free_space(self):
         """Unit test for free_space()"""
-        home = expanduser('~')
+        home = os.path.expanduser('~')
         result = free_space(home)
         self.assertNotEqual(result, None)
         self.assertGreater(result, -1)
@@ -553,7 +549,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             drive, bytes_free = re.split('\s+', line)
             print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
-            free = free_space(unicode(drive))
+            free = free_space(drive)
             self.assertEqual(bytes_free, free)
 
     def test_getsize(self):
@@ -562,7 +558,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         def test_getsize_helper(fname):
             filename = self.write_file(os.path.join(
-                dirname, fname), "abcdefghij" * 12345)
+                dirname, fname), b"abcdefghij" * 12345)
 
             if 'nt' == os.name:
                 self.assertEqual(getsize(filename), 10 * 12345)
@@ -579,8 +575,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                     counter += 1
                 self.assertEqual(counter, 1)
             if 'posix' == os.name:
-                output = subprocess.Popen(
-                    ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0]
+                encoding = sys.getdefaultencoding()
+                output = str(subprocess.Popen(
+                    ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
                 output = output.replace("\n", "")
                 du_size = output.split("\t")[0] + "B"
                 print("output = '%s', size='%s'" % (output, du_size))
@@ -594,13 +591,13 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         test_getsize_helper('bleachbit-test-regular')
 
         # special characters
-        test_getsize_helper(u'bleachbit-test-special-characters-∺ ∯')
+        test_getsize_helper('bleachbit-test-special-characters-∺ ∯')
 
         # em-dash (LP1454030)
-        test_getsize_helper(u'bleachbit-test-em-dash-\u2014')
+        test_getsize_helper('bleachbit-test-em-dash-\u2014')
 
         # long
-        test_getsize_helper(u'bleachbit-test-long' + 'x' * 200)
+        test_getsize_helper('bleachbit-test-long' + 'x' * 200)
 
         # delete the empty directory
         delete(dirname)
@@ -611,7 +608,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # create a symlink
         filename = self.write_file(
-            'bleachbit-test-symlink', 'abcdefghij' * 12345)
+            'bleachbit-test-symlink', b'abcdefghij' * 12345)
         linkname = os.path.join(self.tempdir, 'bleachbitsymlinktest')
         if os.path.lexists(linkname):
             delete(linkname)
@@ -671,10 +668,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for listdir()"""
         if 'posix' == os.name:
             dir1 = '/bin'
-            dir2 = expanduser('/sbin')
+            dir2 = os.path.expanduser('/sbin')
         if 'nt' == os.name:
-            dir1 = expandvars(r'%windir%\fonts')
-            dir2 = expandvars(r'%windir%\logs')
+            dir1 = os.path.expandvars(r'%windir%\fonts')
+            dir2 = os.path.expandvars(r'%windir%\logs')
         # If these directories do not exist, the test results are not valid.
         self.assertExists(dir1)
         self.assertExists(dir2)
@@ -697,7 +694,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_same_partition(self):
         """Unit test for same_partition()"""
-        home = expanduser('~')
+        home = os.path.expanduser('~')
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
             self.assertFalse(same_partition(home, '/dev'))
@@ -715,12 +712,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # Unix-style
         uri_u = ['file:///usr/bin/bleachbit']
-        path_u = [os.path.normpath(u'/usr/bin/bleachbit'), ]
+        path_u = [os.path.normpath('/usr/bin/bleachbit'), ]
         self.assertEqual(uris_to_paths(uri_u), path_u)
 
         # Windows
         uri_w = [r'file:///C:/program%20files/bleachbit.exe']
-        path_w = [os.path.normpath(ur'C:/program files/bleachbit.exe'), ]
+        path_w = [os.path.normpath(r'C:/program files/bleachbit.exe'), ]
         self.assertEqual(uris_to_paths(uri_w), path_w)
 
         # Multiple
@@ -821,7 +818,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         d = '/usr/bin'
         whitelist = [('file', '/home/foo'), ('folder', '/home/folder')]
         if 'nt' == os.name:
-            d = expandvars('%windir%\system32')
+            d = os.path.expandvars('%windir%\system32')
             whitelist = [('file', r'c:\\filename'), ('folder', r'c:\\folder')]
         reps = 20
         paths = [p for p in children_in_directory(d, True)]
@@ -831,7 +828,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         options.set_whitelist_paths(whitelist)
 
         t0 = time.time()
-        for i in xrange(0, reps):
+        for i in range(0, reps):
             for p in paths:
                 _ = whitelisted(p)
         t1 = time.time()
@@ -844,7 +841,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for wipe_delete()"""
 
         # create test file
-        filename = self.write_file('bleachbit-test-wipe', 'abcdefghij' * 12345)
+        filename = self.write_file('bleachbit-test-wipe', b'abcdefghij' * 12345)
 
         # wipe it
         wipe_contents(filename)
@@ -853,9 +850,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         f = open(filename, 'rb')
         while True:
             byte = f.read(1)
-            if "" == byte:
+            if b"" == byte:
                 break
-            self.assertEqual(byte, chr(0))
+            self.assertEqual(byte, 0)
         f.close()
 
         # clean up
