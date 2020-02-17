@@ -31,7 +31,7 @@ import sys
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
-APP_VERSION = "3.2.0"
+APP_VERSION = "3.9.0"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
