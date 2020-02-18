@@ -37,6 +37,10 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
+if sys.version_info < (3,0,0):
+    print('BleachBit no longer supports Python 2.x.')
+    sys.exit(1)
+
 if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     stdout_encoding = 'utf-8'
 else:
