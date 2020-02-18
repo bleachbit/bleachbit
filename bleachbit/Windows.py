@@ -452,65 +452,8 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
+
 def is_process_running(name):
-    """Return boolean whether process (like firefox.exe) is running"""
-
-    if parse_windows_build() >= 6:
-        return is_process_running_psutil(name)
-    else:
-        # psutil does not support XP, so fall back
-        # https://github.com/giampaolo/psutil/issues/348
-        return is_process_running_win32(name)
-
-
-def is_process_running_win32(name):
-    """Return boolean whether process (like firefox.exe) is running
-
-    Does not work on 64-bit Windows
-
-    Originally by Eric Koome
-    license GPL
-    http://code.activestate.com/recipes/305279/
-    """
-
-    hModule = c_ulong()
-    count = c_ulong()
-    modname = c_buffer(30)
-    PROCESS_QUERY_INFORMATION = 0x0400
-    PROCESS_VM_READ = 0x0010
-
-    for pid in win32process.EnumProcesses():
-
-        # Get handle to the process based on PID
-        hProcess = kernel.OpenProcess(
-            PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-            False, pid)
-        if hProcess:
-            psapi.EnumProcessModules(
-                hProcess, byref(hModule), sizeof(hModule), byref(count))
-            psapi.GetModuleBaseNameA(
-                hProcess, hModule.value, modname, sizeof(modname))
-            clean_modname = "".join(
-                [i for i in modname if i != '\x00']).lower()
-
-            # Clean up
-            for i in range(modname._length_):
-                modname[i] = '\x00'
-
-            kernel.CloseHandle(hProcess)
-
-            if len(clean_modname) > 0 and '?' != clean_modname:
-                # Filter out non-ASCII characters which we don't need
-                # and which may cause display warnings
-                clean_modname2 = re.sub(
-                    r'[^a-z.]', '_', clean_modname.lower())
-                if clean_modname2 == name.lower():
-                    return True
-
-    return False
-
-
-def is_process_running_psutil(name):
     """Return boolean whether process (like firefox.exe) is running
 
     Works on Windows Vista or later, but on Windows XP gives an ImportError
