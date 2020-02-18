@@ -258,16 +258,6 @@ def elevate_privileges():
     privileges.  If successful, return True (so original process
     can exit).  If failed or not applicable, return False."""
 
-    if parse_windows_build() < 6:
-        # Windows XP does not have the UAC.
-        # Vista is the first version Windows that has the UAC.
-        # 5.1 = Windows XP
-        # 6.0 = Vista
-        # 6.1 = 7
-        # 6.2 = 8
-        # 10 = 10
-        return False
-
     if shell.IsUserAnAdmin():
         logger.debug('already an admin (UAC not required)')
         return False
