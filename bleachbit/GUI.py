@@ -104,11 +104,7 @@ class Bleachbit(Gtk.Application):
                     screen, provider,
                     GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
                 )
-            else:
-                #theme not found, use default
-
-
-            if os.path.exists(windows_10_theme_source_path) :  
+            elif os.path.exists(windows_10_theme_source_path) :  
                 provider = Gtk.CssProvider()
                 provider.load_from_path(windows_10_theme_source_path)    
                 screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
@@ -117,11 +113,6 @@ class Bleachbit(Gtk.Application):
                     screen, provider,
                     GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
                 )
-            else:
-                #theme not found, use default
-
-        else:
-            #platform is not windows
 
         """Build the application menu
 
