@@ -1,0 +1,389 @@
+/************************
+ * Email Client sidebar *
+ ************************/
+EMailSidebar.view {
+    background-color: shade(@theme_bg_color, 0.9);
+    color: @theme_fg_color;
+}
+
+/***********************
+ * fallback mode panel *
+ ***********************/
+PanelWidget,
+PanelApplet,
+PanelToplevel {
+    padding: 0;
+    background-color: @panel_bg_color;
+    background-image: none;
+    color: @panel_fg_color;
+}
+
+PanelApplet {
+    border-width: 0;
+}
+
+PanelSeparator {
+    border-width: 0;
+    background-color: @panel_bg_color;
+    background-image: none;
+    color: @panel_fg_color;
+}
+
+.gnome-panel-menu-bar,
+PanelApplet > GtkMenuBar.menubar,
+PanelApplet > GtkMenuBar.menubar.menuitem,
+PanelMenuBar.menubar,
+PanelMenuBar.menubar.menuitem {
+    -PanelMenuBar-icon-visible: true;
+
+    border-width: 0;
+    background-color: @panel_bg_color;
+    background-image: none;
+}
+
+PanelAppletFrame {
+    border-width: 0;
+    background-color: @panel_bg_color;
+    background-image: none;
+}
+
+PanelApplet .button {
+    -GtkButton-inner-border: 2;
+
+    border-width: 0 1px;
+    border-radius: 0;
+    border-color: transparent;
+    background-color: @panel_bg_color;
+    background-image: none;
+    color: @panel_fg_color;
+}
+
+PanelApplet .button:active {
+    border-width: 0 1px;
+    border-radius: 0;
+    border-color: mix(@panel_bg_color, @panel_fg_color, 0.21);
+    background-color: mix(@panel_bg_color, @panel_fg_color, 0.21);
+    background-image: url('../panel/item-active.svg');
+    color: shade(@panel_fg_color, 1.08);
+}
+
+PanelApplet .button:prelight {
+    border-color: mix(@panel_bg_color, @panel_fg_color, 0.11);
+    background-color: mix(@panel_bg_color, @panel_fg_color, 0.11);
+    background-image: url('../panel/item-prelight.svg');
+    color: shade(@panel_fg_color, 1.08);
+}
+
+PanelApplet .button:active:prelight {
+    border-color: mix(@panel_bg_color, @panel_fg_color, 0.31);
+    background-color: mix(@panel_bg_color, @panel_fg_color, 0.31);
+    background-image: url('../panel/item-active-prelight.svg');
+    color: shade(@panel_fg_color, 1.08);
+}
+
+WnckPager, WnckTasklist {
+    background-color: @panel_bg_color;
+}
+
+/************
+ * nautilus *
+ ************/
+.nautilus-canvas-item {
+    border-radius: 0px;
+}
+
+.nautilus-desktop.nautilus-canvas-item {
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+.nautilus-desktop.nautilus-canvas-item:active {
+    color: @theme_fg_color;
+}
+
+.nautilus-desktop.nautilus-canvas-item:selected {
+    color: @theme_selected_fg_color;
+}
+
+.nautilus-desktop.nautilus-canvas-item:active,
+.nautilus-desktop.nautilus-canvas-item:prelight,
+.nautilus-desktop.nautilus-canvas-item:selected {
+    text-shadow: none;
+}
+
+NautilusWindow .toolbar {
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: shade(@toolbar_bg_color, 0.8);
+}
+
+NautilusWindow .sidebar .frame {
+    border-style: none;
+}
+
+NautilusWindow > GtkGrid > .pane-separator,
+NautilusWindow > GtkGrid > .pane-separator:hover {
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: @theme_bg_color;
+}
+
+NautilusNotebook.notebook {
+    border-right-width: 0;
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+NautilusNotebook .frame {
+    border-width: 0;
+}
+
+NautilusQueryEditor .search-bar.toolbar {
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+NautilusQueryEditor .toolbar {
+    padding-top: 3px;
+    padding-bottom: 2px;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: @toolbar_bg_color;
+    background-color: shade(@toolbar_bg_color, 0.9);
+}
+
+NautilusQueryEditor .toolbar:nth-child(2) {
+    border-color: shade(@toolbar_bg_color, 0.8);
+}
+
+NautilusQueryEditor .toolbar:last-child,
+NautilusQueryEditor .search-bar.toolbar:only-child {
+    border-bottom-width: 1px;
+    border-bottom-color: shade(@toolbar_bg_color, 0.8);
+}
+
+/******************
+ * gnome terminal *
+ ******************/
+VteTerminal {
+    background-color: #000000;
+    color: @terminal_text_color;
+}
+
+TerminalWindow GtkNotebook.notebook {
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+/*********
+ * gedit *
+ *********/
+GeditWindow .pane-separator,
+GeditWindow .pane-separator:hover {
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: @theme_bg_color;
+    color: shade(@theme_bg_color, 0.8);
+}
+
+.gedit-document-panel {
+    background-color: @theme_bg_color;
+    color: mix(@theme_fg_color, @theme_bg_color, 0.1);
+}
+
+.gedit-document-panel-group-row,
+.gedit-document-panel-group-row:hover {
+    border-top: 1px solid shade(@theme_bg_color, 0.9);
+    background-color: @theme_bg_color;
+}
+
+.gedit-document-panel-document-row:hover {
+    background-color: shade(@theme_bg_color, 1.05);
+}
+
+.gedit-document-panel-document-row:selected,
+.gedit-document-panel-document-row:selected:hover {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+.gedit-document-panel .list-row .button {
+    padding: 1px;
+    border-image: none;
+    border-radius: 0px;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px;
+    background-color: transparent;
+    background-image: none;
+    color: transparent;
+    icon-shadow: none;
+}
+
+.gedit-document-panel .prelight-row .button  {
+    border-color: alpha(black, 0.1);
+    color: mix(@theme_text_color, @theme_base_color, 0.5);
+}
+
+.gedit-document-panel .list-row .button:hover,
+.gedit-document-panel .prelight-row .button:hover {
+    color: @theme_text_color;
+    border-color: alpha(black, 0.1);
+}
+
+.gedit-document-panel .prelight-row .button:active {
+    color: @theme_text_color;
+    background-color: alpha(black, 0.08);
+    border-color: alpha(black, 0.2);
+}
+
+GeditStatusbar {
+    border-top: 1px solid shade(@theme_bg_color, 0.8);
+}
+
+GeditStatusbar GeditSmallButton,
+GeditStatusMenuButton {
+    text-shadow: none;
+}
+
+GeditStatusbar GeditSmallButton.button,
+GeditStatusbar GeditSmallButton.button:hover,
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusbar GeditSmallButton.button:active:hover,
+GeditStatusMenuButton.button,
+GeditStatusMenuButton.button:hover,
+GeditStatusMenuButton.button:active,
+GeditStatusMenuButton.button:active:hover {
+    border-image: none;
+    border-style: solid;
+    border-width: 0 1px;
+    border-radius: 0;
+    padding: 1px 6px 2px 4px;
+}
+
+GeditStatusbar GeditSmallButton.button:hover,
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusbar GeditSmallButton.button:active:hover,
+GeditStatusMenuButton.button:hover,
+GeditStatusMenuButton.button:active,
+GeditStatusMenuButton.button:active:hover {
+    border-color: shade(@theme_bg_color, 0.8);
+}
+
+GeditStatusbar GeditSmallButton.button:active,
+GeditStatusMenuButton.button:active {
+    background-color: shade(@theme_bg_color, 0.95);
+    color: @theme_fg_color;
+}
+
+GeditViewFrame .gedit-search-slider {
+    padding: 4px;
+    border-radius: 0 0 0px 0px;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: shade(@theme_base_color, 0.8);
+    background-color: @theme_base_color;
+}
+
+GeditViewFrame .gedit-search-slider .not-found {
+    background-color: @error_bg_color;
+    background-image: none;
+    color: @error_fg_color;
+}
+
+GeditViewFrame .gedit-search-slider .not-found:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+GeditFileBrowserWidget .toolbar {
+    padding: 2px;
+    border-top: none;
+    background-color: @theme_bg_color;
+    background-image: none;
+}
+
+.gedit-search-entry-occurrences-tag {
+    margin: 2px;
+    padding: 2px;
+    color: mix(@theme_text_color, @theme_base_color, 0.5);
+}
+
+/***************
+ * font-viewer *
+ ***************/
+SushiFontWidget {
+    padding: 6px 12px;
+}
+
+/*************
+ * gucharmap *
+ *************/
+GucharmapChartable {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+}
+
+GucharmapChartable:active,
+GucharmapChartable:focus,
+GucharmapChartable:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+/*************
+ * evolution *
+ *************/
+EPreviewPane .entry {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+}
+
+/******************
+ * gnome calendar *
+ ******************/
+.calendar-view {
+    background-color: shade(@theme_base_color, 0.95);
+    color: @theme_text_color;
+}
+
+/*******************
+ * gnome-bluetooth *
+ *******************/
+GtkEntry.entry.pin-entry {
+	font: regular 50;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+GtkLabel.pin-label {
+	font: regular 50;
+}
+
+/*********************
+ * Nemo File Manager *
+**********************/
+.nemo-canvas-item {
+    border-radius: 0px;
+}
+
+.nemo-desktop.nemo-canvas-item {
+    color: @desktop_item_fg;
+    text-shadow: 1px 1px @desktop_item_text_shadow;
+}
+
+.nautilus-desktop.nautilus-canvas-item:active {
+    background-color: @desktop_item_selected_fg;
+    background-image: none;
+    color: @theme_fg_color;
+}
+
+.nautilus-desktop.nautilus-canvas-item:selected {
+    background-color: alpha(@theme_selected_bg_color, 0.8);
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+

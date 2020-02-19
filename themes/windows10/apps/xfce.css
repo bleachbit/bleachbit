@@ -1,0 +1,42 @@
+XfceHeading {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: @theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.xfce4-panel {
+    background-color: @panel_bg_color;
+    color: @panel_fg_color;
+    font: normal;
+}
+
+.xfce4-panel .button {
+    background-image: linear-gradient(to bottom, @theme_bg_color);
+    background-color: transparent;
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: none;
+    padding: 0 1px;
+    color: @panel_fg_color;
+    text-shadow: 0px 1px alpha(@dark_shadow, 1.0);
+}
+
+.xfce4-panel .button:active {
+    background-color: shade(@panel_bg_color, 0.8);
+    background-image: none;
+    color: @panel_fg_color;
+}
+
+.xfce4-panel .button:hover,
+.xfce4-panel .button:active:hover {
+    background-color: mix(@panel_bg_color, @panel_fg_color, 0.21);
+    background-image: none;
+    color: shade(@panel_fg_color, 1.08);
+}
+
+.xfce4-panel .menu {
+    -gtk-image-effect: none;
+}

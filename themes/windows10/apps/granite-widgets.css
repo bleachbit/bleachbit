@@ -1,0 +1,670 @@
+/********************
+ * dynamic notebook *
+ ********************/
+.dynamic-notebook {
+    background-color: shade(@theme_bg_color, 1.08);
+    background-image: none;
+}
+
+.dynamic-notebook GtkLabel,
+.dynamic-notebook GtkImage {
+    color: alpha(@theme_fg_color, 0.5);
+}
+
+.dynamic-notebook .notebook {
+    -GtkNotebook-tab-overlap: 3px;
+    -GtkNotebook-initial-gap: 12px;
+
+    border-width: 1px 0 0 0;
+    border-color: shade(@theme_bg_color, 0.8);
+    border-radius: 0;
+    padding: 0;
+}
+
+.dynamic-notebook .notebook tab {
+    padding: 3px;
+    border-width: 0 1px;
+    border-color: shade(@theme_bg_color, 0.85);
+    border-radius: 0;
+    background-color: shade(@theme_bg_color, 0.9);
+    background-image: none;
+    color: @theme_fg_color;
+}
+
+.dynamic-notebook .notebook tab:nth-child(first) {
+}
+
+.dynamic-notebook .notebook tab:active {
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: shade(@theme_base_color, 0.85);
+    background-image: none;
+    color: @theme_fg_color;
+    box-shadow:inset 0 -2px @theme_selected_bg_color;
+}
+
+.dynamic-notebook .notebook tab .entry {
+    border-radius: 0px;
+    padding: 4px 3px;
+}
+
+.dynamic-notebook .button:hover,
+.dynamic-notebook .button:hover:active,
+.dynamic-notebook .notebook .button,
+.dynamic-notebook .notebook .button:hover,
+.dynamic-notebook .notebook .button:hover:active {
+    border-color: shade(@theme_bg_color, 0.7);
+    background-color: shade(@theme_bg_color, 1.10);
+    background-image: none;
+}
+
+.dynamic-notebook .button:hover:active,
+.dynamic-notebook .notebook .button:hover:active {
+    border-color: shade(@theme_bg_color, 0.7);
+    color: shade(@theme_fg_color, 0.7);
+}
+
+.dynamic-notebook .menu GtkLabel {
+    color: @menu_fg_color;
+}
+
+/****************
+ * content view *
+ ****************/
+.content-view-window {
+    border-width: 1px;
+    border-style: solid;
+    border-color: shade(@theme_base_color, 0.8);
+    border-radius: 0px;
+    background-color:@theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.content-view,
+.content-view GtkViewport {
+    background-color: @theme_base_color;
+    background-image: none;
+}
+
+.content-view * {
+    background-color: transparent;
+    background-image: none;
+}
+
+.content-view .entry {
+    background-color: @theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.content-view .button {
+    border-width: 1px;
+    border-style: solid;
+    border-color: shade(@theme_base_color, 0.8);
+    border-radius: 0px;
+    background-color: shade(@theme_base_color, 1.08);
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.content-view .button:hover {
+    border-color: shade(@theme_base_color, 0.7);
+    background-color: shade(@theme_base_color, 1.10);
+    background-image: none;
+}
+
+.content-view .button:active {
+    border-color: shade(@theme_base_color, 0.8);
+    background-color: shade(@theme_base_color, 0.95);
+    background-image: none;
+}
+
+.content-view .button:active:hover {
+    border-color: shade(@theme_base_color, 0.7);
+    color: shade(@theme_text_color, 0.7);
+}
+
+.content-view .button:insensitive {
+    background-color: shade(@theme_base_color, 0.9);
+    background-image: none;
+}
+
+.content-view .help_button * {
+    color: @theme_text_color;
+}
+
+.content-view .toolbar {
+    -GtkWidget-window-dragging: true;
+
+    padding: 1px;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: shade(@theme_base_color, 0.8);
+    background-color: @theme_base_color;
+    background-image: none;
+}
+
+.content-view .menu {
+    padding: 0;
+    border-radius: 0;
+    border-style: none;
+    background-color: @menu_bg_color;
+    background-image: none;
+    color: @menu_fg_color;
+}
+
+/**************
+ * sourcelist *
+ **************/
+.source-list,
+.source-list.view {
+    border-radius: 0;
+    background-color: @theme_bg_color;
+    background-image: none;
+    color: mix(@theme_fg_color, @theme_bg_color, 0.1);
+}
+
+.source-list {
+    -GtkTreeView-horizontal-separator: 1;
+    -GtkTreeView-vertical-separator: 1;
+}
+
+.source-list.view:selected,
+.source-list.view:prelight:selected {
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+.source-list.view:prelight {
+    background-color: shade(@theme_bg_color, 1.08);
+    background-image: none;
+}
+
+.source-list.badge,
+.source-list.badge:prelight,
+.source-list.badge:selected,
+.source-list.badge:prelight:selected {
+    margin: 0 3px;
+    padding: 0 6px;
+    border-width: 0;
+    border-radius: 0;
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+/******************
+ * no undo button *
+ ******************/
+.button.noundo,
+.content-view .button.noundo {
+    border-color: shade(@error_bg_color, 0.8);
+    background-color: shade(@error_bg_color, 1.08);
+    background-image: none;
+    color: @error_fg_color;
+}
+
+.button.noundo:hover,
+.content-view .button.noundo:hover {
+    border-color: shade(@error_bg_color, 0.7);
+    background-color: @error_bg_color;
+    background-image: none;
+}
+
+.button.noundo:active,
+.content-view .button.noundo:active {
+    border-color: shade(@error_bg_color, 0.8);
+    background-color: shade(@error_bg_color, 0.95);
+    background-image: none;
+}
+
+.button.noundo:active:hover,
+.content-view .button.noundo:active:hover {
+    border-color: shade(@error_bg_color, 0.7);
+    background-color: shade(@error_bg_color, 0.97);
+    background-image: none;
+}
+
+.button.noundo GtkLabel,
+.button.noundo Gtklabel:prelight {
+    color: @error_fg_color;
+}
+
+/**********************
+ * affirmative button *
+ **********************/
+.button.affirmative,
+.content-view .button.affirmative {
+    border-color: shade(@theme_selected_bg_color, 0.8);
+    background-color: shade(@theme_selected_bg_color, 1.08);
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+.button.affirmative:hover,
+.content-view .button.affirmative:hover {
+    border-color: shade(@theme_selected_bg_color, 0.7);
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+}
+
+.button.affirmative:active,
+.content-view .button.affirmative:active {
+    border-color: shade(@theme_selected_bg_color, 0.8);
+    background-color: shade(@theme_selected_bg_color, 0.95);
+    background-image: none;
+}
+
+.button.affirmative:active:hover,
+.content-view .button.affirmative:active:hover {
+    border-color: shade(@theme_selected_bg_color, 0.7);
+    background-color: shade(@theme_selected_bg_color, 0.97);
+    background-image: none;
+}
+
+.button.affirmative GtkLabel,
+.button.affirmative Gtklabel:prelight {
+    color: @theme_selected_fg_color;
+}
+
+/**********************
+ * secondary toolbars *
+ **********************/
+.secondary-toolbar.toolbar {
+    padding: 2px;
+    border-color: shade(@toolbar_bg_color, 0.8);
+    background-color: @toolbar_bg_color;
+    background-image: none;
+}
+
+.secondary-toolbar.toolbar .button {
+    border-color: shade(@toolbar_bg_color, 0.8);
+    background-color: shade(@toolbar_bg_color, 1.08);
+    background-image: none;
+    color: @toolbar_fg_color;
+}
+
+.secondary-toolbar.toolbar .button:hover {
+    border-color: shade(@toolbar_bg_color, 0.7);
+    background-color: shade(@toolbar_bg_color, 1.10);
+    background-image: none;
+}
+
+.secondary-toolbar.toolbar .button:active {
+    border-color: shade(@toolbar_bg_color, 0.8);
+    background-color: shade(@toolbar_bg_color, 0.95);
+    background-image: none;
+}
+
+.secondary-toolbar.toolbar .button:active:hover {
+    border-color: shade(@toolbar_bg_color, 0.7);
+}
+
+.secondary-toolbar.toolbar .button:focus,
+.secondary-toolbar.toolbar .button:hover:focus,
+.secondary-toolbar.toolbar .button:active:focus,
+.secondary-toolbar.toolbar .button:active:hover:focus {
+    border-color: shade(@toolbar_bg_color, 0.7);
+}
+
+.secondary-toolbar.toolbar .button:insensitive {
+    border-color: shade(@toolbar_bg_color, 0.85);
+    background-color: shade(@toolbar_bg_color, 0.9);
+    background-image: none;
+}
+
+.secondary-toolbar.toolbar .button:active *:insensitive {
+    border-color: shade(@toolbar_bg_color, 0.75);
+    background-color: shade(@toolbar_bg_color, 0.80);
+    background-image: none;
+}
+
+/*******************
+ * bottom toolbars *
+ *******************/
+.bottom-toolbar.toolbar {
+    padding: 6px;
+    border-width: 1px 0 0 0;
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: @theme_bg_color;
+    background-image: none;
+}
+
+.bottom-toolbar.toolbar .button {
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: shade(@theme_bg_color, 1.08);
+    background-image: none;
+    color: @theme_fg_color;
+}
+
+.bottom-toolbar.toolbar .button:hover {
+    border-color: shade(@theme_bg_color, 0.7);
+    background-color: shade(@theme_bg_color, 1.10);
+    background-image: none;
+}
+
+.bottom-toolbar.toolbar .button:active {
+    border-color: shade(@theme_bg_color, 0.8);
+    background-color: shade(@theme_bg_color, 0.95);
+    background-image: none;
+}
+
+.bottom-toolbar.toolbar .button:active:hover {
+    border-color: shade(@theme_bg_color, 0.7);
+}
+
+.bottom-toolbar.toolbar .button:focus,
+.bottom-toolbar.toolbar .button:hover:focus,
+.bottom-toolbar.toolbar .button:active:focus,
+.bottom-toolbar.toolbar .button:active:hover:focus {
+    border-color: shade(@theme_bg_color, 0.7);
+}
+
+.bottom-toolbar.toolbar .button:insensitive {
+    border-color: shade(@theme_bg_color, 0.85);
+    background-color: shade(@theme_bg_color, 0.9);
+    background-image: none;
+}
+
+.bottom-toolbar.toolbar .button:active *:insensitive {
+    border-color: shade(@theme_bg_color, 0.75);
+    background-color: shade(@theme_bg_color, 0.80);
+    background-image: none;
+}
+
+/*************
+ * statusbar *
+ *************/
+GraniteWidgetsStatusBar {
+    padding: 1px;
+    background-color: @theme_bg_color;
+    background-image: none;
+    box-shadow: inset 0 1px shade(@theme_bg_color, 0.8);
+}
+
+/***********
+ * popover *
+ ***********/
+GraniteWidgetsPopOver {
+    -GraniteWidgetsPopOver-arrow-width: 21;
+    -GraniteWidgetsPopOver-arrow-height: 12;
+    -GraniteWidgetsPopOver-border-radius: 0px;
+    -GraniteWidgetsPopOver-border-width: 1;
+    -GraniteWidgetsPopOver-shadow-size: 12;
+
+    margin: 0;
+    border-style: solid;
+    border-color: shade(@menu_bg_color, 0.8);
+    color: @menu_fg_color;
+}
+
+.popover_bg {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom,
+                                      @menu_bg_color,
+                                      @menu_bg_color
+                                      );
+}
+
+GraniteWidgetsPopOver .sidebar.view,
+GraniteWidgetsPopOver * {
+    background-color: transparent;
+    background-image: none;
+    color: @menu_fg_color;
+}
+
+GraniteWidgetsPopOver .sidebar.view:selected,
+GraniteWidgetsPopOver .sidebar.view:selected:focus,
+GraniteWidgetsPopOver *:selected,
+GraniteWidgetsPopOver *:selected:focus {
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+GraniteWidgetsPopOver .button {
+    border-color: shade(@menu_bg_color, 0.8);
+    background-color: shade(@menu_bg_color, 1.08);
+    background-image: none;
+    color: @menu_fg_color;
+
+}
+
+GraniteWidgetsPopOver .button:hover {
+    border-color: shade(@menu_bg_color, 0.7);
+    background-color: shade(@menu_bg_color, 1.10);
+    background-image: none;
+    color: shade(@menu_fg_color, 0.7);
+}
+
+GraniteWidgetsPopOver .button:active {
+    border-color: shade(@menu_bg_color, 0.8);
+    background-color: shade(@menu_bg_color, 0.95);
+    background-image: none;
+}
+
+GraniteWidgetsPopOver .button:active:hover {
+    border-color: shade(@menu_bg_color, 0.7);
+    color: shade(@menu_fg_color, 0.7);
+}
+
+/* linked buttons */
+GraniteWidgetsPopOver .linked .button {
+    box-shadow: inset -1px 0 shade(@menu_bg_color, 0.9);
+}
+
+GraniteWidgetsPopOver .linked .button:active {
+    box-shadow: inset -1px 0 shade(@menu_bg_color, 0.9),
+                inset 1px 0 alpha(@dark_shadow, 0.07),
+                inset 0 1px alpha(@dark_shadow, 0.08),
+                inset 0 -1px alpha(@dark_shadow, 0.05);
+}
+
+GraniteWidgetsPopOver .linked .button:insensitive {
+    box-shadow: inset -1px 0 shade(@menu_bg_color, 0.9);
+}
+
+/* remove box shadow from last-child and only-child */
+GraniteWidgetsPopOver .linked .button:last-child,
+GraniteWidgetsPopOver .linked .button:only-child,
+GraniteWidgetsPopOver .linked .button:insensitive:last-child,
+GraniteWidgetsPopOver .linked .button:insensitive:only-child,
+GraniteWidgetsPopOver .linked .button:active *:insensitive:last-child,
+GraniteWidgetsPopOver .linked .button:active *:insensitive:only-child {
+    box-shadow: none;
+}
+
+/* add back the inset shadow effect */
+GraniteWidgetsPopOver .linked .button:active:last-child,
+GraniteWidgetsPopOver .linked .button:active:only-child {
+    box-shadow: inset 1px 0 alpha(@dark_shadow, 0.07),
+                inset 0 1px alpha(@dark_shadow, 0.08),
+                inset -1px 0 alpha(@dark_shadow, 0.07);
+}
+
+GraniteWidgetsPopOver .entry {
+    border-color: shade(@menu_bg_color, 0.7);
+    background-color: @menu_bg_color;
+    background-image: none;
+    color: @menu_fg_color;
+}
+
+GraniteWidgetsPopOver .entry:active,
+GraniteWidgetsPopOver .entry:focus {
+    border-color: shade(@menu_bg_color, 0.7);
+}
+
+GraniteWidgetsPopOver *.separator {
+    border-color: shade(@menu_bg_color, 0.9);
+    color: transparent;
+}
+
+.button.app {
+    border-width: 0;
+    border-radius: 0px;
+    background-color: transparent;
+    background-image: none;
+}
+
+.button.app:hover {
+    border-color: shade(@theme_selected_bg_color, 0.9);
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+.button.app:focus {
+    border-color: shade(@theme_selected_bg_color, 0.9);
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+    color: @theme_selected_fg_color;
+}
+
+/********
+ * gala *
+ ********/
+.gala-workspaces-background {
+    border-width: 1px 0 0 0;
+    border-color: shade(@panel_bg_color, 0.8);
+    background-color: @panel_bg_color;
+    background-image: none;
+}
+
+.gala-workspace-selected {
+    border-width: 1px;
+    border-radius: 0px;
+    border-color: shade(@theme_selected_bg_color, 0.9);
+    background-color: @theme_selected_bg_color;
+    background-image: none;
+}
+
+/*********
+ * files *
+ *********/
+.files-overlay-bar {
+    margin: 3px;
+    padding: 3px 6px;
+    border-width: 1px;
+    border-color: shade(@theme_base_color, 0.7);
+    border-radius: 0px;
+    background-color: @theme_base_color;
+    background-image: none;
+}
+
+.files-overlay-bar GtkLabel {
+    color: @theme_text_color;
+}
+
+/*********
+ * noise *
+ *********/
+.album-list-view,
+.album-list-view * {
+    border-color: shade(@theme_base_color, 0.7);
+    border-radius: 0;
+    background-color: @theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.album-list-view GtkTreeView {
+    -GtkTreeView-vertical-separator: 1;
+    -GtkTreeView-grid-line-width: 0;
+
+    background-color: @theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.album-list-view GtkTreeView row:nth-child(even) {
+    border-width: 0;
+    border-style: none;
+    background-color: shade(@theme_base_color, 0.97);
+    background-image: none;
+}
+
+
+.album-list-view GtkTreeView row:nth-child(odd) {
+    border-width: 0;
+    border-style: none;
+    background-color: shade(@theme_base_color, 1.0);
+    background-image: none;
+}
+
+.album-list-view GtkTreeView row:selected {
+    background-color: @selected_bg_color;
+    background-image: none;
+    color: @selected_fg_color;
+}
+
+/**********
+ * birdie *
+ **********/
+BirdieWidgetsTweetList * {
+    background-color: transparent;
+    background-image: none;
+}
+
+/*********
+ * tweet *
+ *********/
+.tweet {
+    padding: 0;
+}
+
+/**********
+ * notify *
+ **********/
+.notify {
+    border-width: 1px;
+    border-style: solid;
+    border-color: shade(@theme_base_color, 0.7);
+    border-radius: 0px;
+    background-color: @theme_base_color;
+    background-image: none;
+    color: @theme_text_color;
+}
+
+.notify .low {
+}
+
+.notify .critical {
+}
+
+/*********
+ * panel *
+ *********/
+.panel {
+    background-color: @panel_bg_color;
+    background-image: none;
+    color: @panel_fg_color;
+    font: bold;
+}
+
+.panel .menubar .menuitem {
+    padding: 1px 3px;
+}
+
+.shadow {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom,
+                                      rgba(0, 0, 0, 0.3),
+                                      transparent
+                                      );
+}
+
+.composited-indicator,
+.wingpanel-app-button,
+.wingpanel-indicator-button {
+    padding: 0 2px;
+    background-color: transparent;
+    background-image: none;
+    color: @osd_fg;
+}
+
+.composited-indicator.menuitem:active,
+.composited-indicator.menuitem:prelight {
+    border-style: none;
+    background-image: none;
+}

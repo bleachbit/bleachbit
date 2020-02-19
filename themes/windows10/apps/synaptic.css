@@ -1,0 +1,11 @@
+/************
+ * synaptic *
+ ************/
+GtkWindow > GtkVBox > .dock,
+GtkWindow > GtkVBox > .dock > GtkHBox > GtkToolbar {
+    padding: 4px;
+    border-style: none;
+    background-color: @toolbar_bg_color;
+    background-image: none;
+    color: @toolbar_fg_color;
+}

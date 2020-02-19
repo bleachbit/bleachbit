@@ -1,0 +1,50 @@
+/***********************
+ * pathbar breadcrumbs *
+ ***********************/
+NemoPathbarButton {
+    border-color: shade(@toolbar_bg_color, 0.8);
+    background-color: shade(@toolbar_bg_color, 1.08);
+    background-image: none;
+    color: @toolbar_fg_color;
+
+    -NemoPathbarButton-border-radius: 0px;
+}
+
+NemoPathbarButton:active {
+    border-color: shade(@toolbar_bg_color, 0.8);
+    background-color: shade(@toolbar_bg_color, 0.95);
+    background-image: none;
+}
+
+NemoPathbarButton:hover {
+    border-color: shade(@toolbar_bg_color, 0.7);
+    background-color: shade(@toolbar_bg_color, 1.10);
+    background-image: none;
+}
+
+NemoPathbarButton:active:hover {
+    border-color: shade(@toolbar_bg_color, 0.7);
+}
+
+/*********************************
+ * sidebar disk space indicators *
+ *********************************/
+NemoPlacesTreeView {
+    -NemoPlacesTreeView-disk-full-bg-color: shade(@toolbar_bg_color, 0.8);
+    -NemoPlacesTreeView-disk-full-fg-color: @theme_selected_bg_color;
+    -NemoPlacesTreeView-disk-full-bar-width: 1px;
+    -NemoPlacesTreeView-disk-full-bar-radius: 0px;
+    -NemoPlacesTreeView-disk-full-bottom-padding: 2px;
+    -NemoPlacesTreeView-disk-full-max-length: 70px;
+}
+
+NemoPlacesTreeView:selected {
+    -NemoPlacesTreeView-disk-full-bg-color: @theme_selected_fg_color;
+    -NemoPlacesTreeView-disk-full-fg-color: shade(@theme_selected_bg_color, 1.4);
+}
+
+NemoPlacesTreeView:hover {
+}
+
+NemoPlacesTreeView:selected:hover {
+}

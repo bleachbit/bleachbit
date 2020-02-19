@@ -1,0 +1,117 @@
+UnityDecoration {
+    -UnityDecoration-extents: 28px 1px 1px 1px;
+    -UnityDecoration-input-extents: 10px;
+ 
+    -UnityDecoration-shadow-offset-x: 1px;
+    -UnityDecoration-shadow-offset-y: 1px;
+    -UnityDecoration-active-shadow-color: rgba(0,0,0,0.7);
+    -UnityDecoration-active-shadow-radius: 8px;
+    -UnityDecoration-inactive-shadow-color: rgba(0,0,0,0.5);
+    -UnityDecoration-inactive-shadow-radius: 5px;
+ 
+    -UnityDecoration-glow-size: 10px;
+    -UnityDecoration-glow-color: @theme_selected_bg_color;
+ 
+    -UnityDecoration-title-indent: 10px;
+    -UnityDecoration-title-fade: 35px;
+    -UnityDecoration-title-alignment: 0.0;
+}
+ 
+UnityDecoration.top {
+    border: 1px solid mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.21);
+    border-bottom-width: 0;
+    border-radius: 0px 0px 0 0;
+    padding: 1px 8px 0 8px;
+    background-color: @titlebar_bg_color;
+    color: mix(@titlebar_fg_color, @titlebar_bg_color, 0.1);
+    text-shadow: none;
+}
+ 
+UnityDecoration.top:backdrop {
+    border: 1px solid mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.12);
+    border-bottom-width: 0;
+    background-color: @titlebar_bg_color;
+    color: mix(@titlebar_fg_color, @titlebar_bg_color, 0.4);
+}
+ 
+UnityDecoration.left,
+UnityDecoration.right,
+UnityDecoration.bottom {
+    background-color: mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.21);
+}
+ 
+UnityDecoration.left:backdrop,
+UnityDecoration.right:backdrop,
+UnityDecoration.bottom:backdrop {
+    background-color: mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.12);
+}
+ 
+/* blx*/
+.gnome-panel-menu-bar,
+PanelApplet > GtkMenuBar.menubar,
+PanelMenuBar.menubar,
+UnityPanelWidget,
+.unity-panel {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: @panel_bg_color;
+    background-color: @panel_bg_color;
+    background-image: none;
+    color: @panel_fg_color;
+}
+/* blx*/
+ 
+.unity-panel.menubar,
+.unity-panel .menubar {
+}
+ 
+.unity-panel.menuitem,
+.unity-panel .menuitem {
+    border-width: 0 1px;
+    color: #fff /*@panel_fg_color*/;
+}
+ 
+.unity-panel.menubar.menuitem:hover,
+.unity-panel.menubar .menuitem *:hover {
+    border-color: #000 /*mix(@panel_bg_color, @panel_fg_color, 0.21)*/;
+    background-color: #000 /*mix(@panel_bg_color, @panel_fg_color, 0.21)*/;
+    background-image: none;
+    color: #fff /*shade(@panel_fg_color, 1.08)*/;
+}
+ 
+/* blx*/
+.menuitem GtkCalendar,
+.menuitem GtkCalendar.button,
+.menuitem GtkCalendar.header,
+.menuitem GtkCalendar.view {
+    background-color: #000;
+    color: #fff /*@fg_color*/;
+}
+
+UnityPanelWidget,
+.unity-panel {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #000 /*@panel_bg_color*/;
+    background-color: #000 /*@panel_bg_color*/;
+    background-image: none;
+    color: #fff /*@panel_fg_color*/;
+}
+
+.unity-panel.menubar,
+.unity-panel .menubar {
+}
+
+.unity-panel.menuitem,
+.unity-panel .menuitem {
+    border-width: 0 1px;
+    color: #fff /*@panel_fg_color*/;
+}
+
+.unity-panel.menubar.menuitem:hover,
+.unity-panel.menubar .menuitem *:hover {
+    border-color: #000 /*mix(@panel_bg_color, @panel_fg_color, 0.21)*/;
+    background-color: #000 /*mix(@panel_bg_color, @panel_fg_color, 0.21)*/;
+    background-image: none;
+    color: #fff /*shade(@panel_fg_color, 1.08)*/;
+}

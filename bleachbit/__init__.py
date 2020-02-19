@@ -125,6 +125,10 @@ local_cleaners_dir = None
 if portable_mode:
     local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
+#windows10 theme
+windows_10_theme_exe_path = os.path.normpath(os.path.join(bleachbit_exe_path, 'themes/windows10/gtk.css'))
+windows_10_theme_source_path = "themes/windows10/gtk.css"
+
 # application icon
 __icons = (
     '/usr/share/pixmaps/bleachbit.png',  # Linux
