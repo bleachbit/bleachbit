@@ -61,10 +61,12 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 # mfb=number of fast bytes
 # bso0 bsp0 quiet output
 # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
+SZ_OPTS_LIB = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
+SZ_OPTS_APP = '-m0=PPMd -mx9'  # best compression
 if fast:
     # fast compression
-    SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
+    SZ_OPTS_LIB = '-tzip -mx=1 -bso0 -bsp0'
+    SZ_OPTS_APP = '-m0=PPMd -mx=1'
 UPX_EXE = ROOT_DIR + '\\upx394w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
@@ -75,7 +77,7 @@ def archive(infile, outfile):
         logger.warning(
             'Deleting output archive that already exists: ' + outfile)
         os.remove(outfile)
-    cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS, outfile, infile)
+    cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS_APP, outfile, infile)
     run_cmd(cmd)
     assert_exist(outfile)
 
@@ -420,7 +422,7 @@ def recompress_library():
         shutil.rmtree(os.path.join('dist', 'library', p))
 
     # recompress library.zip
-    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
+    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS_LIB)
     logger.info(cmd)
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, cwd='dist\\library')
