@@ -65,7 +65,7 @@ SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
-UPX_EXE = ROOT_DIR + '\\upx394w\\upx.exe'
+UPX_EXE = ROOT_DIR + '\\upx396w\\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 

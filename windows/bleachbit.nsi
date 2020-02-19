@@ -32,7 +32,7 @@
 !ifdef packhdr
   ;!packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\UPX\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
   ;Using UPX path info from setup_py2exe.py ->
-  !packhdr "$%TEMP%\exehead.tmp" '"\upx394w\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
+  !packhdr "$%TEMP%\exehead.tmp" '"\upx396w\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
   ;!packhdr "$%TEMP%\exehead.tmp" '"C:\Program Files\Petite\petite.exe" -9 -b0 -r** -p0 -y "$%TEMP%\exehead.tmp"'
 !endif
 
