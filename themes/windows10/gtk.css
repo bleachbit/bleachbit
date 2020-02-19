@@ -1,0 +1,101 @@
+/*# name: Windows 10 Light
+  # author: Christian Medel (Elbullazul)
+  # date: April 7th, 2016
+  # description: Windows 10 Default White color*/
+
+/* default color scheme */
+@define-color bg_color #ffffff;
+@define-color fg_color #4c4c4c;
+@define-color base_color #ffffff;
+@define-color text_color #4c4c4c;
+@define-color selected_bg_color #cce8ff;
+@define-color selected_fg_color #262626;
+@define-color tooltip_bg_color #ffffff;
+@define-color tooltip_fg_color #4c4c4c;
+
+/* dark color scheme */
+@define-color dark_bg_color #ffffff;
+@define-color dark_fg_color #4c4c4c;
+
+/* colormap actually used by the theme, to be overridden in other css files */
+@define-color theme_bg_color @bg_color;
+@define-color theme_fg_color @fg_color;
+@define-color theme_base_color @base_color;
+@define-color theme_text_color @text_color;
+@define-color theme_selected_bg_color @selected_bg_color;
+@define-color theme_selected_fg_color @selected_fg_color;
+@define-color theme_tooltip_bg_color @tooltip_bg_color;
+@define-color theme_tooltip_fg_color @tooltip_fg_color;
+
+/*Nemo Desktop shadow fix*/
+ @define-color desktop_item_fg #ffffff;
+ @define-color desktop_item_selected_fg shade(@theme_selected_fg_color, 0.8);
+ @define-color desktop_item_text_shadow alpha(black, 0.8);
+
+/* shadow effects */
+@define-color light_shadow #fff;
+@define-color dark_shadow #000;
+
+/* misc colors used by gtk+ */
+@define-color info_fg_color rgb (40, 40, 40);
+@define-color info_bg_color rgb (217, 237, 247);
+@define-color warning_fg_color rgb (77, 77, 77);
+@define-color warning_bg_color rgb (222, 109, 38);
+@define-color question_fg_color rgb (255, 255, 255);
+@define-color question_bg_color rgb (255, 156, 25);
+@define-color error_fg_color rgb (255, 255, 255);
+@define-color error_bg_color rgb (255, 25, 25);
+@define-color link_color #224ba0;
+@define-color success_color #53d013;
+@define-color warning_color #f57600;
+@define-color error_color #cc0000;
+
+/* widget colors */
+@define-color titlebar_bg_color @dark_bg_color;
+@define-color titlebar_fg_color @dark_fg_color;
+@define-color menubar_bg_color @dark_bg_color;
+@define-color menubar_fg_color @dark_fg_color;
+@define-color toolbar_bg_color @dark_bg_color; /*@theme_bg_color;*/
+@define-color toolbar_fg_color @dark_fg_color; /*@theme_fg_color;*/
+@define-color menu_bg_color @bg_color;
+@define-color menu_fg_color @fg_color;
+@define-color panel_bg_color #1a1a1a;
+@define-color panel_fg_color @dark_fg_color;
+
+/* osd */
+@define-color osd_base @dark_bg_color;
+@define-color osd_fg @dark_fg_color;
+@define-color osd_bg alpha(@osd_base, 0.8);
+
+/* lightdm greeter colors */
+@define-color lightdm_bg_color @dark_bg_color;
+@define-color lightdm_fg_color @dark_fg_color;
+
+/* window manager colors */
+@define-color wm_bg @titlebar_bg_color;
+@define-color wm_border_focused mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.21);
+@define-color wm_border_unfocused mix(shade(@titlebar_bg_color, 0.7), @titlebar_fg_color, 0.12);
+@define-color wm_title_focused mix(@titlebar_fg_color, @titlebar_bg_color, 0.1);
+@define-color wm_title_unfocused mix(@titlebar_fg_color, @titlebar_bg_color, 0.4);
+@define-color wm_icons_focused mix(@titlebar_fg_color, @titlebar_bg_color, 0.1);
+@define-color wm_icons_focused_prelight @selected_bg_color;
+@define-color wm_icons_focused_pressed shade(@selected_bg_color, 0.8);
+@define-color wm_icons_unfocused mix(@titlebar_fg_color, @titlebar_bg_color, 0.4);
+@define-color wm_icons_unfocused_prelight @selected_bg_color;
+@define-color wm_icons_unfocused_pressed shade(@selected_bg_color, 0.8);
+
+/*Terminal Text color*/
+@define-color terminal_text_color @bg_color;
+
+/*Progressbar bg color*/
+@define-color progressbar_color #06B025;
+
+@import url("gtk-widgets.css");
+@import url("gtk-widgets-assets.css");
+@import url("apps/gnome-applications.css");
+@import url("apps/granite-widgets.css");
+@import url("apps/unity.css");
+@import url("apps/xfce.css");
+@import url("apps/nemo.css");
+@import url("apps/synaptic.css");
+@import url("apps/lightdm-gtk-greeter.css");

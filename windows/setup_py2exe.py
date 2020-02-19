@@ -232,6 +232,9 @@ def build():
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
+    logger.info('Copying themes')
+    copytree('themes', 'dist\\themes')    
+
     logger.info('Copying CA bundle')
     import requests
     shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH, os.path.join('dist', 'cacert.pem'))

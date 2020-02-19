@@ -86,6 +86,34 @@ class Bleachbit(Gtk.Application):
             self._auto_exit = True
 
     def build_app_menu(self):
+
+        if os.name == 'nt' :
+            """
+            Change Gtk+ Style on windows
+            """
+            exec_path = os.path.dirname(sys.executable)
+            windows_10_theme_exe_path = os.path.normpath(os.path.join(exec_path, 'themes/windows10/gtk.css'))
+            windows_10_theme_source_path = "themes/windows10/gtk.css"
+        
+            if os.path.exists(windows_10_theme_exe_path) :
+                provider = Gtk.CssProvider()
+                provider.load_from_path(windows_10_theme_exe_path)    
+                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
+                Gtk.StyleContext.add_provider_for_screen(
+                    screen, provider,
+                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+                )
+            elif os.path.exists(windows_10_theme_source_path) :  
+                provider = Gtk.CssProvider()
+                provider.load_from_path(windows_10_theme_source_path)    
+                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
+                Gtk.StyleContext.add_provider_for_screen(
+                    screen, provider,
+                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+                )
+
         """Build the application menu
 
         On Linux with GTK 3.24, this code is necessary but not sufficient for
