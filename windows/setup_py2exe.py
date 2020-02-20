@@ -65,7 +65,7 @@ SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
 if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
-UPX_EXE = ROOT_DIR + '\\upx396w\\upx.exe'
+UPX_EXE = r'c:\windows\system32\upx.exe'
 UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
 
 
@@ -372,7 +372,7 @@ def upx():
         return
 
     if not os.path.exists(UPX_EXE):
-        logger.warning('To compress executables, install UPX to: ' + UPX_EXE)
+        logger.warning('UPX not found. To compress executables, install UPX to: ' + UPX_EXE)
         return
 
     logger.info('Compressing executables')
