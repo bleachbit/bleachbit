@@ -27,7 +27,8 @@ install:
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
-  - cp upx-3.96-win64\upx.exe c:\windows\system32
+  - 'rename upx-3.96-win64 upx'
+  - 'dir .\upx\'
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.20.1-v1.16/gettext0.20.1-iconv1.16-static-32.zip" -FileName gettext.zip}
   - ps: Get-FileHash gettext.zip
   - '%SZ_EXE% x gettext.zip -ogettext'

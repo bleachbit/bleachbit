@@ -24,14 +24,14 @@
 ;--------------------------------
 ;Pack header:
 
-; Compress installer exehead with an executable compressor (such as UPX / Petite).
+; Compress installer exehead with an executable compressor.
 
 ; Paths should be absolute to allow building from any location.
 ; Note that your executable compressor should not compress the first icon.
 
 !ifdef packhdr
   ;Using UPX path info from setup_py2exe.py ->
-  !packhdr "$%TEMP%\exehead.tmp" 'upx.exe -9 -q "$%TEMP%\exehead.tmp"'
+  !packhdr "$%TEMP%\exehead.tmp" '"\upx\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
 !endif
 
 
