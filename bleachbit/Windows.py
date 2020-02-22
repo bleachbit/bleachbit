@@ -118,7 +118,7 @@ def browse_folder(_, title):
     if pidl is None:
         # user cancelled
         return None
-    fullpath = shell.SHGetPathFromIDList(pidl)
+    fullpath = shell.SHGetPathFromIDListW(pidl)
     return fullpath
 
 
