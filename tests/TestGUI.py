@@ -181,6 +181,7 @@ class GUITestCase(common.BleachbitTestCase):
         b = self.click_button(gui, _("Preview"))
         self.refresh_gui()
 
+    @unittest.skipIf(os.getenv('TRAVIS', 'f') == 'true', 'Not supported on Travis CI')
     def test_notify(self):
         """Test a pop-up notification"""
         from bleachbit.GUI import notify
