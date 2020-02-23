@@ -31,7 +31,8 @@ import errno
 import glob
 import locale
 import logging
-import os, os.path
+import os
+import os.path
 import random
 import re
 import stat
@@ -48,7 +49,8 @@ if 'nt' == os.name:
     import win32file
     import bleachbit.Windows
     os_path_islink = os.path.islink
-    os.path.islink = lambda path: os_path_islink(path) or bleachbit.Windows.is_junction(path)
+    os.path.islink = lambda path: os_path_islink(
+        path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
@@ -67,8 +69,10 @@ try:
         scandir.scandir = scandir.scandir_python
         scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
 except ImportError:
-    logger.warning(
-        'scandir is not available, so falling back to slower os.walk()')
+    if sys.version_info < (3, 5, 0):
+        # Python 3.5 incorporated scandir
+        logger.warning(
+            'scandir is not available, so falling back to slower os.walk()')
     from os import walk
 
 
@@ -641,7 +645,8 @@ def truncate_f(f):
 
 def uris_to_paths(file_uris):
     """Return a list of paths from text/uri-list"""
-    import urllib.parse, urllib.request
+    import urllib.parse
+    import urllib.request
     assert isinstance(file_uris, (tuple, list))
     file_paths = []
     for file_uri in file_uris:
