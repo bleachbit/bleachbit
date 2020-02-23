@@ -226,6 +226,7 @@ def build():
     os.makedirs(os.path.join('dist', SCHEMAS_DIR))
     shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'), os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
+    shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico') # for pop-up notification
     for dll in glob.glob1(GTK_DIR, '*.dll'):
         shutil.copyfile(os.path.join(GTK_DIR,dll), 'dist\\'+dll)
 

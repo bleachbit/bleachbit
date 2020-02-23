@@ -180,3 +180,10 @@ class GUITestCase(common.BleachbitTestCase):
 
         b = self.click_button(gui, _("Preview"))
         self.refresh_gui()
+
+    def test_notify(self):
+        """Test a pop-up notification"""
+        from bleachbit.GUI import notify
+        notify('This is a test notification')
+        import time
+        time.sleep(1)

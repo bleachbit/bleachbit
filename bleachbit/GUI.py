@@ -56,6 +56,60 @@ def threaded(func):
     return wrapper
 
 
+def notify_gi(msg):
+    """Show a pop-up notification.
+
+    The Windows pygy-aio installer does not include notify, so this is just for Linux.
+    """
+    gi.require_version('Notify', '0.7')
+    from gi.repository import Notify
+    if Notify.init(APP_NAME):
+        notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
+        notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
+        notify.show()
+        notify.set_timeout(10000)
+
+
+def notify_plyer(msg):
+    """Show a pop-up notification.
+
+    Linux distributions do not include plyer, so this is just for Windows.
+    """
+    from bleachbit import bleachbit_exe_path
+
+    # On Windows 10,  PNG does not work.
+    __icon_fns = (
+        os.path.normpath(os.path.join(bleachbit_exe_path,
+                                      'share\\bleachbit.ico')),
+        os.path.normpath(os.path.join(bleachbit_exe_path,
+                                      'windows\\bleachbit.ico')))
+
+    icon_fn = None
+    for __icon_fn in __icon_fns:
+        if os.path.exists(__icon_fn):
+            icon_fn = __icon_fn
+            break
+
+    from plyer import notification
+    notification.notify(
+        title=APP_NAME,
+        message=msg,
+        app_name=APP_NAME,  # not shown on Windows 10
+        app_icon=icon_fn,
+    )
+
+
+def notify(msg):
+    """Show a popup-notification"""
+    import importlib
+    if importlib.util.find_spec('plyer'):
+        # On Windows, use Plyer.
+        notify_plyer(msg)
+        return
+    # On Linux, use GTK Notify.
+    notify_gi(msg)
+
+
 class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
@@ -730,21 +784,7 @@ class GUI(Gtk.ApplicationWindow):
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
             return
-        try:
-            gi.require_version('Notify', '0.7')
-            from gi.repository import Notify
-        except:
-            logger.debug('Notify not available')
-        else:
-            if Notify.init(APP_NAME):
-                notify = Notify.Notification.new(
-                    'BleachBit', _("Done."), 'bleachbit')
-                if os.name == 'posix' and os.path.expanduser('~') == '/root':
-                    notify.set_hint("desktop-entry", "bleachbit-root")
-                else:
-                    notify.set_hint("desktop-entry", "bleachbit")
-                notify.show()
-                notify.set_timeout(10000)
+        notify(_("Done."))
 
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
