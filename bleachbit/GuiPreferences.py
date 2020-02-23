@@ -149,7 +149,7 @@ class PreferencesDialog:
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = Gtk.CheckButton(
+        cb_shred = Gtk.CheckButton(label=
             _("Overwrite contents of files to prevent recovery"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
@@ -172,21 +172,21 @@ class PreferencesDialog:
         vbox.pack_start(cb_popup, False, True, 0)
 
         # Use base 1000 over 1024?
-        cb_units_iec = Gtk.CheckButton(
+        cb_units_iec = Gtk.CheckButton(label=
             _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"))
         cb_units_iec.set_active(options.get("units_iec"))
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
 
         # Dark theme
-        cb_dark_mode = Gtk.CheckButton(
+        cb_dark_mode = Gtk.CheckButton(label=
             _("Dark mode"))
         cb_dark_mode.set_active(options.get("dark_mode"))
         cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
         vbox.pack_start(cb_dark_mode, False, True, 0)
 
         # Debug logging
-        cb_debug = Gtk.CheckButton(_("Show debug messages"))
+        cb_debug = Gtk.CheckButton(label=_("Show debug messages"))
         cb_debug.set_active(options.get("debug"))
         cb_debug.connect('toggled', self.__toggle_callback, 'debug')
         vbox.pack_start(cb_debug, False, True, 0)

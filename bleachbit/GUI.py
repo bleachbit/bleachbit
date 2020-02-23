@@ -352,7 +352,7 @@ class Bleachbit(Gtk.Application):
         textview.set_editable(False)
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        swindow.add_with_viewport(textview)
+        swindow.add(textview)
         dialog.vbox.pack_start(swindow, True, True, 0)
         dialog.add_buttons(Gtk.STOCK_COPY, 100,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
