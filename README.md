@@ -8,7 +8,7 @@ To run BleachBit without installation, unpack the tarball and then run these
 commands:
 
     make -C po local # build translations
-    python bleachbit.py
+    python3 bleachbit.py
 
 Then, review the preferences.
 
@@ -16,7 +16,7 @@ Then, select some options, and click Preview.  Review the files, toggle options 
 
 For information regarding the command line interface, run:
 
-     python bleachbit.py --help
+     python3 bleachbit.py --help
 
 ## Links
 
