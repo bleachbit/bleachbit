@@ -61,19 +61,6 @@ class OptionsTestCase(common.BleachbitTestCase):
         o.set_list("list_test", list_values)
         self.assertEqual(list_values, o.get_list("list_test"))
 
-        # whitelist
-        self.assertIsInstance(o.get_whitelist_paths(), list)
-        whitelist = [('file', '/home/foo'), ('folder', '/home')]
-        old_whitelist = o.get_whitelist_paths()
-        o.config.remove_section('whitelist/paths')
-        self.assertIsInstance(o.get_whitelist_paths(), list)
-        self.assertEqual(o.get_whitelist_paths(), [])
-        o.set_whitelist_paths(whitelist)
-        self.assertIsInstance(o.get_whitelist_paths(), list)
-        self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
-        o.set_whitelist_paths(old_whitelist)
-        self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
-
         # these should always be set
         for bkey in bleachbit.Options.boolean_keys:
             self.assertIsInstance(o.get(bkey), bool)
@@ -97,6 +84,22 @@ class OptionsTestCase(common.BleachbitTestCase):
 
         # clean up
         del o
+
+    def test_whitelist(self):
+        """Test for get_whitelist_paths() / set_whitelist_paths()"""
+        o = bleachbit.Options.options
+        self.assertIsInstance(o.get_whitelist_paths(), list)
+        whitelist = [('file', '/home/foo'), ('folder', '/home'),
+                     ('file', '/home/unicode/кодирование')]
+        old_whitelist = o.get_whitelist_paths()
+        o.config.remove_section('whitelist/paths')
+        self.assertIsInstance(o.get_whitelist_paths(), list)
+        self.assertEqual(o.get_whitelist_paths(), [])
+        o.set_whitelist_paths(whitelist)
+        self.assertIsInstance(o.get_whitelist_paths(), list)
+        self.assertEqual(set(whitelist), set(o.get_whitelist_paths()))
+        o.set_whitelist_paths(old_whitelist)
+        self.assertEqual(set(old_whitelist), set(o.get_whitelist_paths()))
 
     def test_init_configuration(self):
         """Test for init_configuration()"""

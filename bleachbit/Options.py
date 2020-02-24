@@ -72,7 +72,7 @@ def init_configuration():
     if os.path.lexists(bleachbit.options_file):
         logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
-    with open(bleachbit.options_file, 'w') as f_ini:
+    with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
         if os.name == 'nt' and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
@@ -100,7 +100,7 @@ class Options:
         if not os.path.exists(bleachbit.options_dir):
             General.makedirs(bleachbit.options_dir)
         mkfile = not os.path.exists(bleachbit.options_file)
-        with open(bleachbit.options_file, 'w') as _file:
+        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
             try:
                 self.config.write(_file)
             except IOError as e:
@@ -247,7 +247,7 @@ class Options:
     def restore(self):
         """Restore saved options from disk"""
         try:
-            self.config.read(bleachbit.options_file)
+            self.config.read(bleachbit.options_file, encoding='utf-8-sig')
         except:
             logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
