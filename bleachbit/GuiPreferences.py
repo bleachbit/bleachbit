@@ -97,7 +97,7 @@ class PreferencesDialog:
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            if options.get("win10_mode") == False:
+            if os.name != 'nt' or options.get("win10_mode") == False:
                 Gtk.Settings.get_default().set_property(
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'win10_mode' == path:
