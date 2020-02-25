@@ -99,7 +99,7 @@ class Bleachbit(Gtk.Application):
             Bleachbit._style_provider = Gtk.CssProvider()
 
             if os.path.exists(windows_10_theme_exe_path) :    
-                BBleachbit._style_provider.load_from_path(windows_10_theme_exe_path)    
+                Bleachbit._style_provider.load_from_path(windows_10_theme_exe_path)    
                 
             elif os.path.exists(windows_10_theme_source_path) : 
                 Bleachbit._style_provider.load_from_path(windows_10_theme_source_path)    
