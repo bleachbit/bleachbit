@@ -104,10 +104,10 @@ class PreferencesDialog:
         if 'win10_mode' == path:
             if options.get("win10_mode") :
                 screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                Gtk.StyleContext.add_provider_for_screen(screen, GUI.Bleachbit._style_provider, 600)
+                Gtk.StyleContext.add_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider, 600)
             else:    
                 screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                Gtk.StyleContext.remove_provider_for_screen(screen, GUI.Bleachbit._style_provider)
+                Gtk.StyleContext.remove_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider)
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
