@@ -51,6 +51,7 @@ def diagnostic_info():
     except:
         pass
     try:
+        import gi
         gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         s += '\nGTK version {0}.{1}.{2}'.format(
