@@ -56,6 +56,9 @@ def diagnostic_info():
         from gi.repository import Gtk
         s += '\nGTK version {0}.{1}.{2}'.format(
             Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
+        s += '\nGTK theme = %s' % Gtk.Settings.get_default().get_property('gtk-theme-name')
+        s += '\nGTK icon theme = %s' % Gtk.Settings.get_default().get_property('gtk-icon-theme-name')
+        s += '\nGTK prefer dark theme = %s' % Gtk.Settings.get_default().get_property('gtk-application-prefer-dark-theme')
     except:
         pass
     import sqlite3
