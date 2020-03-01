@@ -242,7 +242,8 @@ def delete_office_registrymodifications(path):
         node.unlink()
         modified = True
     if modified:
-        dom1.writexml(open(path, "w"))
+        with open(path, 'w') as xml_file:
+            dom1.writexml(xml_file)
 
 
 def delete_mozilla_url_history(path):
