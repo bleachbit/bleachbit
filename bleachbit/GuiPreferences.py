@@ -32,7 +32,6 @@ import bleachbit.GUI
 from gi.repository import Gtk, Gdk
 import logging
 import os
-import sys
 
 if 'nt' == os.name:
     from bleachbit import Windows
