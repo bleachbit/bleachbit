@@ -27,8 +27,9 @@ Preferences dialog
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
+import bleachbit.GUI
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import logging
 import os
 
@@ -42,6 +43,7 @@ logger = logging.getLogger(__name__)
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
 
+win10_provider = None
 
 class PreferencesDialog:
 
@@ -83,6 +85,8 @@ class PreferencesDialog:
             self.cb_refresh_operations()
 
     def __toggle_callback(self, cell, path):
+        global win10_provider
+
         """Callback function to toggle option"""
         options.toggle(path)
         if online_update_notification_enabled:
@@ -93,8 +97,16 @@ class PreferencesDialog:
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            Gtk.Settings.get_default().set_property(
-                'gtk-application-prefer-dark-theme', options.get('dark_mode'))
+            if os.name != 'nt' or options.get("win10_mode") == False:
+                Gtk.Settings.get_default().set_property(
+                    'gtk-application-prefer-dark-theme', options.get('dark_mode'))
+        if 'win10_mode' == path:
+            if options.get("win10_mode") :
+                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                Gtk.StyleContext.add_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider, 600)
+            else:    
+                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+                Gtk.StyleContext.remove_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider)
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
@@ -177,6 +189,13 @@ class PreferencesDialog:
         cb_units_iec.set_active(options.get("units_iec"))
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
+
+        if 'nt' == os.name:
+            # Dark theme
+            cb_win10_mode = Gtk.CheckButton(_("Windows 10 mode"))
+            cb_win10_mode.set_active(options.get("win10_mode"))
+            cb_win10_mode.connect('toggled', self.__toggle_callback, 'win10_mode')
+            vbox.pack_start(cb_win10_mode, False, True, 0)
 
         # Dark theme
         cb_dark_mode = Gtk.CheckButton(label=
