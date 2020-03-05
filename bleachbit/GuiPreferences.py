@@ -109,6 +109,7 @@ class PreferencesDialog:
             else:
                 Gtk.StyleContext.remove_provider_for_screen(
                     screen, bleachbit.GUI.Bleachbit._style_provider)
+            self.cb_dark_mode.set_sensitive(not options.get('win10_theme'))
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
@@ -201,10 +202,12 @@ class PreferencesDialog:
             vbox.pack_start(cb_win10_theme, False, True, 0)
 
         # Dark theme
-        cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
-        cb_dark_mode.set_active(options.get("dark_mode"))
-        cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
-        vbox.pack_start(cb_dark_mode, False, True, 0)
+        self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
+        self.cb_dark_mode.set_active(options.get("dark_mode"))
+        self.cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
+        if 'nt' == os.name:
+            self.cb_dark_mode.set_sensitive(not options.get('win10_theme'))
+        vbox.pack_start(self.cb_dark_mode, False, True, 0)
 
         # Debug logging
         cb_debug = Gtk.CheckButton(label=_("Show debug messages"))
