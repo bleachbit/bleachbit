@@ -278,7 +278,7 @@ class Options:
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
-            self.__set_default("win10_theme", True)
+            self.__set_default("win10_theme", False)
 
         if not self.config.has_section('preserve_languages'):
             lang = bleachbit.user_locale
