@@ -37,15 +37,10 @@ Requires:       python3-chardet
 Requires:       python3-gobject
 %endif
 
-# CentOS 7 does not have python-scandir, but BleachBit can fall back a
-# slower mode without the python-scandir package.
-%if 0%{?fedora_version} || 0%{?centos_version} >= 800
-Requires:       python3-scandir
-%endif
-
-%if 0%{?centos_version} >= 800
-BuildRequires:  hostname
-%endif
+# For CentOS and Fedora, do not require scandir.
+# CentOS 7 has python36-scandir, but it does not need it because it has Python 3.6.
+# CentOS 8 does not have a scandir package, but it does not need it because it has Python 3.6.
+# Fedora 31 has python3-scandir, but it is not needed because Fedora 31 has Python 3.7.
 
 %if 0%{?suse_version}
 %if 0%{?suse_version} > 910
