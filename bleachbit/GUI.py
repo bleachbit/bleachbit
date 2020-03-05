@@ -150,16 +150,17 @@ class Bleachbit(Gtk.Application):
             windows_10_theme_exe_path = os.path.normpath(
                 os.path.join(exec_path, 'themes/windows10/gtk.css'))
             windows_10_theme_source_path = "themes/windows10/gtk.css"
+            load_path = None
 
             Bleachbit._style_provider = Gtk.CssProvider()
 
             if os.path.exists(windows_10_theme_exe_path):
-                Bleachbit._style_provider.load_from_path(
-                    windows_10_theme_exe_path)
-
+                load_path = windows_10_theme_exe_path
             elif os.path.exists(windows_10_theme_source_path):
-                Bleachbit._style_provider.load_from_path(
-                    windows_10_theme_source_path)
+                load_path = windows_10_theme_source_path
+
+            if load_path:
+                Bleachbit._style_provider.load_from_path(load_path)
 
             if options.get("win10_theme"):
                 screen = Gdk.Display.get_default_screen(

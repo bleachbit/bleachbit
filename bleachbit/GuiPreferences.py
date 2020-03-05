@@ -102,14 +102,11 @@ class PreferencesDialog:
                 Gtk.Settings.get_default().set_property(
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'win10_theme' == path:
+            screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
             if options.get("win10_theme"):
-                screen = Gdk.Display.get_default_screen(
-                    Gdk.Display.get_default())
                 Gtk.StyleContext.add_provider_for_screen(
                     screen, bleachbit.GUI.Bleachbit._style_provider, 600)
             else:
-                screen = Gdk.Display.get_default_screen(
-                    Gdk.Display.get_default())
                 Gtk.StyleContext.remove_provider_for_screen(
                     screen, bleachbit.GUI.Bleachbit._style_provider)
         if 'debug' == path:
