@@ -98,11 +98,11 @@ class PreferencesDialog:
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            if os.name != 'nt' or options.get("win10_mode") == False:
+            if os.name != 'nt' or options.get("win10_theme") == False:
                 Gtk.Settings.get_default().set_property(
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
-        if 'win10_mode' == path:
-            if options.get("win10_mode"):
+        if 'win10_theme' == path:
+            if options.get("win10_theme"):
                 screen = Gdk.Display.get_default_screen(
                     Gdk.Display.get_default())
                 Gtk.StyleContext.add_provider_for_screen(
@@ -197,11 +197,11 @@ class PreferencesDialog:
 
         if 'nt' == os.name:
             # Dark theme
-            cb_win10_mode = Gtk.CheckButton(_("Windows 10 mode"))
-            cb_win10_mode.set_active(options.get("win10_mode"))
-            cb_win10_mode.connect(
-                'toggled', self.__toggle_callback, 'win10_mode')
-            vbox.pack_start(cb_win10_mode, False, True, 0)
+            cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
+            cb_win10_theme.set_active(options.get("win10_theme"))
+            cb_win10_theme.connect(
+                'toggled', self.__toggle_callback, 'win10_theme')
+            vbox.pack_start(cb_win10_theme, False, True, 0)
 
         # Dark theme
         cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))

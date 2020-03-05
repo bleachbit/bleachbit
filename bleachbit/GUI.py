@@ -161,7 +161,7 @@ class Bleachbit(Gtk.Application):
                 Bleachbit._style_provider.load_from_path(
                     windows_10_theme_source_path)
 
-            if options.get("win10_mode"):
+            if options.get("win10_theme"):
                 screen = Gdk.Display.get_default_screen(
                     Gdk.Display.get_default())
                 Gtk.StyleContext.add_provider_for_screen(

@@ -51,7 +51,7 @@ boolean_keys = ['auto_hide',
                 'window_fullscreen']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
-    boolean_keys.append('win10_mode')
+    boolean_keys.append('win10_theme')
 int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
@@ -278,7 +278,7 @@ class Options:
 
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
-            self.__set_default("win10_mode", True)
+            self.__set_default("win10_theme", True)
 
         if not self.config.has_section('preserve_languages'):
             lang = bleachbit.user_locale
