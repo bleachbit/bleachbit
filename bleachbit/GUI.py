@@ -114,6 +114,7 @@ class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
     _auto_exit = False
+    _style_provider = None
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
         if uac and os.name == 'nt' and Windows.elevate_privileges():
@@ -143,30 +144,24 @@ class Bleachbit(Gtk.Application):
 
         if os.name == 'nt' :
             """
-            Change Gtk+ Style on windows
+            Load windows 10 theme
             """
             exec_path = os.path.dirname(sys.executable)
             windows_10_theme_exe_path = os.path.normpath(os.path.join(exec_path, 'themes/windows10/gtk.css'))
             windows_10_theme_source_path = "themes/windows10/gtk.css"
         
-            if os.path.exists(windows_10_theme_exe_path) :
-                provider = Gtk.CssProvider()
-                provider.load_from_path(windows_10_theme_exe_path)    
+            Bleachbit._style_provider = Gtk.CssProvider()
+
+            if os.path.exists(windows_10_theme_exe_path) :    
+                Bleachbit._style_provider.load_from_path(windows_10_theme_exe_path)    
+                
+            elif os.path.exists(windows_10_theme_source_path) : 
+                Bleachbit._style_provider.load_from_path(windows_10_theme_source_path)    
+            
+            if options.get("win10_mode") :
                 screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
                 Gtk.StyleContext.add_provider_for_screen(
-                    screen, provider,
-                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
-                )
-            elif os.path.exists(windows_10_theme_source_path) :  
-                provider = Gtk.CssProvider()
-                provider.load_from_path(windows_10_theme_source_path)    
-                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600
-                Gtk.StyleContext.add_provider_for_screen(
-                    screen, provider,
-                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
-                )
+                    screen, Bleachbit._style_provider, 600)
 
         """Build the application menu
 
@@ -382,7 +377,6 @@ class Bleachbit(Gtk.Application):
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, False, True,
                           priority=GObject.PRIORITY_LOW)
-
 
 class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
