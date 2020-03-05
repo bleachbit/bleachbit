@@ -50,8 +50,9 @@ class PreferencesDialog:
 
     """Present the preferences dialog and save changes"""
 
-    def __init__(self, parent, cb_refresh_operations):
+    def __init__(self, parent, cb_refresh_operations, cb_set_windows10_theme):
         self.cb_refresh_operations = cb_refresh_operations
+        self.cb_set_windows10_theme = cb_set_windows10_theme
 
         self.parent = parent
         self.dialog = Gtk.Dialog(title=_("Preferences"),
@@ -102,13 +103,7 @@ class PreferencesDialog:
                 Gtk.Settings.get_default().set_property(
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'win10_theme' == path:
-            screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-            if options.get("win10_theme"):
-                Gtk.StyleContext.add_provider_for_screen(
-                    screen, bleachbit.GUI.Bleachbit._style_provider, 600)
-            else:
-                Gtk.StyleContext.remove_provider_for_screen(
-                    screen, bleachbit.GUI.Bleachbit._style_provider)
+            self.cb_set_windows10_theme()
             self.cb_dark_mode.set_sensitive(not options.get('win10_theme'))
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level

@@ -140,34 +140,39 @@ class Bleachbit(Gtk.Application):
             # This is used for automated testing of whether the GUI can start.
             self._auto_exit = True
 
+    def set_windows10_theme(self):
+        """Toggle the Windows 10 theme"""
+        if not 'nt' == os.name:
+            return
+        exec_path = os.path.dirname(sys.executable)
+        windows_10_theme_exe_path = os.path.normpath(
+            os.path.join(exec_path, 'themes/windows10/gtk.css'))
+        windows_10_theme_source_path = "themes/windows10/gtk.css"
+        load_path = None
+
+        if os.path.exists(windows_10_theme_exe_path):
+            load_path = windows_10_theme_exe_path
+        elif os.path.exists(windows_10_theme_source_path):
+            load_path = windows_10_theme_source_path
+
+        if not self._style_provider:
+            self._style_provider = Gtk.CssProvider()
+
+            if not load_path:
+                logger.warning('cannot find windows10/gtk.css')
+                return
+
+            self._style_provider.load_from_path(load_path)
+
+        screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+        if options.get("win10_theme"):
+            Gtk.StyleContext.add_provider_for_screen(
+                screen, self._style_provider, 600)
+        else:
+            Gtk.StyleContext.remove_provider_for_screen(
+                screen, self._style_provider)
+
     def build_app_menu(self):
-
-        if os.name == 'nt':
-            """
-            Load windows 10 theme
-            """
-            exec_path = os.path.dirname(sys.executable)
-            windows_10_theme_exe_path = os.path.normpath(
-                os.path.join(exec_path, 'themes/windows10/gtk.css'))
-            windows_10_theme_source_path = "themes/windows10/gtk.css"
-            load_path = None
-
-            Bleachbit._style_provider = Gtk.CssProvider()
-
-            if os.path.exists(windows_10_theme_exe_path):
-                load_path = windows_10_theme_exe_path
-            elif os.path.exists(windows_10_theme_source_path):
-                load_path = windows_10_theme_source_path
-
-            if load_path:
-                Bleachbit._style_provider.load_from_path(load_path)
-
-            if options.get("win10_theme"):
-                screen = Gdk.Display.get_default_screen(
-                    Gdk.Display.get_default())
-                Gtk.StyleContext.add_provider_for_screen(
-                    screen, Bleachbit._style_provider, 600)
-
         """Build the application menu
 
         On Linux with GTK 3.24, this code is necessary but not sufficient for
@@ -175,6 +180,8 @@ class Bleachbit(Gtk.Application):
 
         On Windows with GTK 3.18, this cde is sufficient for the menu to work.
         """
+        self.set_windows10_theme()
+
         builder = Gtk.Builder()
         builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
@@ -292,7 +299,9 @@ class Bleachbit(Gtk.Application):
 
     def get_preferences_dialog(self):
         return PreferencesDialog(
-            self._window, self._window.cb_refresh_operations)
+            self._window,
+            self._window.cb_refresh_operations,
+            self.set_windows10_theme)
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
