@@ -155,8 +155,8 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         raise
     encoding = bleachbit.stdout_encoding
     return (p.returncode,
-        str(out[0], encoding=encoding) if out[0] else '',
-        str(out[1], encoding=encoding) if out[1] else '')
+            str(out[0], encoding=encoding) if out[0] else '',
+            str(out[1], encoding=encoding) if out[1] else '')
 
 
 def sudo_mode():

@@ -142,24 +142,28 @@ class Bleachbit(Gtk.Application):
 
     def build_app_menu(self):
 
-        if os.name == 'nt' :
+        if os.name == 'nt':
             """
             Load windows 10 theme
             """
             exec_path = os.path.dirname(sys.executable)
-            windows_10_theme_exe_path = os.path.normpath(os.path.join(exec_path, 'themes/windows10/gtk.css'))
+            windows_10_theme_exe_path = os.path.normpath(
+                os.path.join(exec_path, 'themes/windows10/gtk.css'))
             windows_10_theme_source_path = "themes/windows10/gtk.css"
-        
+
             Bleachbit._style_provider = Gtk.CssProvider()
 
-            if os.path.exists(windows_10_theme_exe_path) :    
-                Bleachbit._style_provider.load_from_path(windows_10_theme_exe_path)    
-                
-            elif os.path.exists(windows_10_theme_source_path) : 
-                Bleachbit._style_provider.load_from_path(windows_10_theme_source_path)    
-            
-            if options.get("win10_mode") :
-                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+            if os.path.exists(windows_10_theme_exe_path):
+                Bleachbit._style_provider.load_from_path(
+                    windows_10_theme_exe_path)
+
+            elif os.path.exists(windows_10_theme_source_path):
+                Bleachbit._style_provider.load_from_path(
+                    windows_10_theme_source_path)
+
+            if options.get("win10_mode"):
+                screen = Gdk.Display.get_default_screen(
+                    Gdk.Display.get_default())
                 Gtk.StyleContext.add_provider_for_screen(
                     screen, Bleachbit._style_provider, 600)
 
@@ -377,6 +381,7 @@ class Bleachbit(Gtk.Application):
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, False, True,
                           priority=GObject.PRIORITY_LOW)
+
 
 class TreeInfoModel:
     """Model holds information to be displayed in the tree view"""
@@ -958,7 +963,8 @@ class GUI(Gtk.ApplicationWindow):
             icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         # create the preview button
-        self.preview_button = Gtk.Button.new_from_icon_name('edit-find', icon_size)
+        self.preview_button = Gtk.Button.new_from_icon_name(
+            'edit-find', icon_size)
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
@@ -970,7 +976,8 @@ class GUI(Gtk.ApplicationWindow):
         box.add(self.preview_button)
 
         # create the delete button
-        self.run_button = Gtk.Button.new_from_icon_name('edit-clear-all', icon_size)
+        self.run_button = Gtk.Button.new_from_icon_name(
+            'edit-clear-all', icon_size)
         self.run_button.set_always_show_image(True)
         # TRANSLATORS: This is the clean button on the main window.
         # It makes permanent changes: usually deleting files, sometimes
@@ -982,7 +989,8 @@ class GUI(Gtk.ApplicationWindow):
         box.add(self.run_button)
 
         # stop cleaning
-        self.stop_button = Gtk.Button.new_from_icon_name('process-stop', icon_size)
+        self.stop_button = Gtk.Button.new_from_icon_name(
+            'process-stop', icon_size)
         self.stop_button.set_always_show_image(True)
         self.stop_button.set_label(_('Abort'))
         self.stop_button.set_tooltip_text(

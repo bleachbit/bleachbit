@@ -45,6 +45,7 @@ LOCATIONS_CUSTOM = 2
 
 win10_provider = None
 
+
 class PreferencesDialog:
 
     """Present the preferences dialog and save changes"""
@@ -101,12 +102,16 @@ class PreferencesDialog:
                 Gtk.Settings.get_default().set_property(
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'win10_mode' == path:
-            if options.get("win10_mode") :
-                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                Gtk.StyleContext.add_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider, 600)
-            else:    
-                screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-                Gtk.StyleContext.remove_provider_for_screen(screen, bleachbit.GUI.Bleachbit._style_provider)
+            if options.get("win10_mode"):
+                screen = Gdk.Display.get_default_screen(
+                    Gdk.Display.get_default())
+                Gtk.StyleContext.add_provider_for_screen(
+                    screen, bleachbit.GUI.Bleachbit._style_provider, 600)
+            else:
+                screen = Gdk.Display.get_default_screen(
+                    Gdk.Display.get_default())
+                Gtk.StyleContext.remove_provider_for_screen(
+                    screen, bleachbit.GUI.Bleachbit._style_provider)
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
@@ -161,8 +166,8 @@ class PreferencesDialog:
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = Gtk.CheckButton(label=
-            _("Overwrite contents of files to prevent recovery"))
+        cb_shred = Gtk.CheckButton(
+            label=_("Overwrite contents of files to prevent recovery"))
         cb_shred.set_active(options.get('shred'))
         cb_shred.connect('toggled', self.__toggle_callback, 'shred')
         cb_shred.set_tooltip_text(
@@ -184,8 +189,8 @@ class PreferencesDialog:
         vbox.pack_start(cb_popup, False, True, 0)
 
         # Use base 1000 over 1024?
-        cb_units_iec = Gtk.CheckButton(label=
-            _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"))
+        cb_units_iec = Gtk.CheckButton(
+            label=_("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"))
         cb_units_iec.set_active(options.get("units_iec"))
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
@@ -194,12 +199,12 @@ class PreferencesDialog:
             # Dark theme
             cb_win10_mode = Gtk.CheckButton(_("Windows 10 mode"))
             cb_win10_mode.set_active(options.get("win10_mode"))
-            cb_win10_mode.connect('toggled', self.__toggle_callback, 'win10_mode')
+            cb_win10_mode.connect(
+                'toggled', self.__toggle_callback, 'win10_mode')
             vbox.pack_start(cb_win10_mode, False, True, 0)
 
         # Dark theme
-        cb_dark_mode = Gtk.CheckButton(label=
-            _("Dark mode"))
+        cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
         cb_dark_mode.set_active(options.get("dark_mode"))
         cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
         vbox.pack_start(cb_dark_mode, False, True, 0)
