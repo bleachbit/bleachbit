@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="discord_app">
+  <label>Discord</label>
+  <description>Chat client</description>
+  <running type="exe" os="windows">discord.exe</running>
+  <var name="base">
+    <value os="windows">%UserProfile%\AppData\Roaming\Discord</value>
+  </var>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.all" path="$$base$$/Cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
+  </option>
+  <option id="cookies">
+    <label>Cookies, session and preferences</label>
+    <description>Delete cookies and session info (preferences, authentication and tracking identification)</description>
+    <action command="delete" search="file" path="$$base$$/Cookies"/>
+    <action command="delete" search="file" path="$$base$$/Cookies-journal"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
+    <action command="delete" search="file" path="$$base$$/Origin Bound Certs"/>
+    <action command="delete" search="file" path="$$base$$/Origin Bound Certs-journal"/>
+    <action command="delete" search="file" path="$$base$$/Preferences"/>
+    <action command="delete" search="file" path="$$base$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$base$$/QuotaManager-journal"/>
+    <action command="delete" search="file" path="$$base$$/TransportSecurity"/>
+    <action command="delete" search="walk.all" path="$$base$$/databases/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$base$$/Session Storage"/>
+    <action command="delete" search="walk.all" path="$$base$$/VideoDecodeStats"/>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/Origin Bound Certs"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/databases/Databases.db"/>
+  </option>
+</cleaner>
