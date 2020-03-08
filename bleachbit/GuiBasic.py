@@ -27,7 +27,7 @@ import os
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk # keep after gi.require_version()
+from gi.repository import Gtk, Gdk  # keep after gi.require_version()
 
 if os.name == 'nt':
     from bleachbit import Windows
