@@ -42,6 +42,10 @@ Requires:       python3-gobject
 # CentOS 8 does not have a scandir package, but it does not need it because it has Python 3.6.
 # Fedora 31 has python3-scandir, but it is not needed because Fedora 31 has Python 3.7.
 
+# OpenSUSE Tumbleweed as of March 2019
+# - does not have package python3-gnome
+# - has package python3-scandir, but it does not need it because it has Python 3.7
+# - package typelib-1_0-Gtk-3_0 fixes "ValueError: Namespace Gtk not available"
 %if 0%{?suse_version}
 %if 0%{?suse_version} > 910
 BuildRequires:  desktop-file-utils
@@ -51,12 +55,11 @@ BuildRequires:  python-rpm-macros
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  update-desktop-files
-Requires:       python3-gnome
 Requires:       gtk3
-Requires:       python3-xml
-Requires:       python3-scandir
 Requires:       python3-chardet
-Requires:       python3-gobject
+Requires:       python3-gobject-Gdk
+Requires:       python3-xml
+Requires:       typelib-1_0-Gtk-3_0
 #%py3_requires
 %if 0%{?suse_version} >= 1030
 Requires:       xdg-utils
