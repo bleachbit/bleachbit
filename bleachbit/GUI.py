@@ -114,7 +114,6 @@ class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
     _auto_exit = False
-    _style_provider = None
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
         if uac and os.name == 'nt' and Windows.elevate_privileges():
@@ -140,38 +139,6 @@ class Bleachbit(Gtk.Application):
             # This is used for automated testing of whether the GUI can start.
             self._auto_exit = True
 
-    def set_windows10_theme(self):
-        """Toggle the Windows 10 theme"""
-        if not 'nt' == os.name:
-            return
-        exec_path = os.path.dirname(sys.executable)
-        windows_10_theme_exe_path = os.path.normpath(
-            os.path.join(exec_path, 'themes/windows10/gtk.css'))
-        windows_10_theme_source_path = "themes/windows10/gtk.css"
-        load_path = None
-
-        if os.path.exists(windows_10_theme_exe_path):
-            load_path = windows_10_theme_exe_path
-        elif os.path.exists(windows_10_theme_source_path):
-            load_path = windows_10_theme_source_path
-
-        if not self._style_provider:
-            self._style_provider = Gtk.CssProvider()
-
-            if not load_path:
-                logger.warning('cannot find windows10/gtk.css')
-                return
-
-            self._style_provider.load_from_path(load_path)
-
-        screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-        if options.get("win10_theme"):
-            Gtk.StyleContext.add_provider_for_screen(
-                screen, self._style_provider, 600)
-        else:
-            Gtk.StyleContext.remove_provider_for_screen(
-                screen, self._style_provider)
-
     def build_app_menu(self):
         """Build the application menu
 
@@ -180,7 +147,6 @@ class Bleachbit(Gtk.Application):
 
         On Windows with GTK 3.18, this cde is sufficient for the menu to work.
         """
-        self.set_windows10_theme()
 
         builder = Gtk.Builder()
         builder.add_from_file(bleachbit.app_menu_filename)
@@ -298,10 +264,7 @@ class Bleachbit(Gtk.Application):
         self._window.preview_or_run_operations(True, operations)
 
     def get_preferences_dialog(self):
-        return PreferencesDialog(
-            self._window,
-            self._window.cb_refresh_operations,
-            self.set_windows10_theme)
+        return self._window.get_preferences_dialog()
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
@@ -556,6 +519,7 @@ class TreeDisplayModel:
 
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
+    _style_provider = None
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -579,6 +543,7 @@ class GUI(Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
+        self.set_windows10_theme()
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
@@ -591,7 +556,7 @@ class GUI(Gtk.ApplicationWindow):
             if os.name == 'posix':
                 self.append_text(
                     _('Access the application menu by clicking the hamburger icon on the title bar.'))
-                pref = PreferencesDialog(self, self.cb_refresh_operations)
+                pref = self.get_preferences_dialog()
                 pref.run()
             if os.name == 'nt':
                 self.append_text(
@@ -618,6 +583,12 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text('\n')
 
         GLib.idle_add(self.cb_refresh_operations)
+
+    def get_preferences_dialog(self):
+        return PreferencesDialog(
+            self,
+            self.cb_refresh_operations,
+            self.set_windows10_theme)
 
     def shred_paths(self, paths, shred_settings=False, quit_when_done=False):
         """Shred file or folders
@@ -1071,6 +1042,38 @@ class GUI(Gtk.ApplicationWindow):
             self.fullscreen()
         elif options.get("window_maximized"):
             self.maximize()
+
+    def set_windows10_theme(self):
+        """Toggle the Windows 10 theme"""
+        if not 'nt' == os.name:
+            return
+        exec_path = os.path.dirname(sys.executable)
+        windows_10_theme_exe_path = os.path.normpath(
+            os.path.join(exec_path, 'themes/windows10/gtk.css'))
+        windows_10_theme_source_path = "themes/windows10/gtk.css"
+        load_path = None
+
+        if os.path.exists(windows_10_theme_exe_path):
+            load_path = windows_10_theme_exe_path
+        elif os.path.exists(windows_10_theme_source_path):
+            load_path = windows_10_theme_source_path
+
+        if not self._style_provider:
+            self._style_provider = Gtk.CssProvider()
+
+            if not load_path:
+                logger.warning('cannot find windows10/gtk.css')
+                return
+
+            self._style_provider.load_from_path(load_path)
+
+        screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
+        if options.get("win10_theme"):
+            Gtk.StyleContext.add_provider_for_screen(
+                screen, self._style_provider, 600)
+        else:
+            Gtk.StyleContext.remove_provider_for_screen(
+                screen, self._style_provider)
 
     def populate_window(self):
         """Create the main application window"""
