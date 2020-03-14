@@ -8,7 +8,7 @@ POTFILE = $(APP).pot
 .PHONY: refresh-po spelling local install clean all
 
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
-	python ../bleachbit.py --pot
+	python3 ../bleachbit.py --pot
 
 desktop.pot: ../org.bleachbit.BleachBit.desktop
 	echo "#: ../org.bleachbit.BleachBit.desktop" > desktop.pot
@@ -64,7 +64,7 @@ local: $(MOFILES)
 		mkdir -p ../locale/$$lang/LC_MESSAGES/; \
 		cp -lf $$mofile ../locale/$$lang/LC_MESSAGES/bleachbit.mo; \
 	done
-	@echo "Now you can run cd ..; python bleachbit/GUI.py"
+	@echo "Now you can run cd ..; python3 bleachbit/GUI.py"
 
 install: $(MOFILES)
 	echo "* Installing in $(DESTDIR)/usr/share/locale"
