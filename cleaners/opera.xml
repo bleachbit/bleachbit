@@ -37,19 +37,15 @@
   <running type="exe" os="linux">opera</running>
   <running type="exe" os="windows">opera.exe</running>
   <var name="base">
-    <!-- Lets make it "universal"... Was:
-    <value os="windows">%AppData%\Opera Software\Opera Stable</value>
-    Is now: -->
+    <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" directories.
+        The "Opera Next" is for Opera beta.
+        -->
     <value os="windows">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <!-- Lets make it "universal"... Was:
-    <value os="windows">%AppData%\Opera Software\Opera Stable</value>
-    Is now: -->
     <value os="windows">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
-    <!-- Shouldn't this line not also be in "base" when it's in "profile"? -->
     <value os="linux">~/snap/opera/current/.config/opera</value>
   </var>
   <option id="cache">
@@ -137,11 +133,7 @@
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
-<<<<<<< HEAD
-    <action command="delete" search="file" path="$appdata\Opera\Opera*\search_field_history.dat"/>
-=======
-    <action command="delete" search="glob" path="%AppData%\Opera\Opera*\search_field_history.dat"/>
->>>>>>> dcc69d62105a7d0647b067d94176a4fb172905d2
+    <action command="delete" search="file" path="%AppData%\Opera\Opera*\search_field_history.dat"/>
     <action command="delete" search="file" path="~/.opera/search_field_history.dat"/>
     <!-- global.dat is in Opera 9, global_history.dat is in Opera 10 -->
     <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\global.dat"/>
