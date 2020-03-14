@@ -223,29 +223,12 @@ def clean_ini(path, section, parameter):
                 ini_file.write("%s\n" % (key))
             ini_file.write("\n")
 
-    try:
-        import chardet
-
-    except ImportError:
-        has_chardet = False
-        logger.warning(
-            'chardet is not available, so falling to utf-8 encoding')
-
-    else:
-        has_chardet = True
-        # detect .ini file encoding
-        with open(path, 'rb') as file_:
-            detector = chardet.universaldetector.UniversalDetector()
-            for line in file_.readlines():
-                detector.feed(line)
-                if detector.done:
-                    break
-            detector.close()
+    encoding = detect_encoding(path) or 'utf_8_sig'
 
     # read file to parser
     config = bleachbit.RawConfigParser()
     config.write = write
-    with open(path, 'r', encoding=detector.result['encoding'] if has_chardet else 'utf_8_sig') as fp:
+    with open(path, 'r', encoding=encoding) as fp:
         config.read_file(fp)
 
     # change file
@@ -264,7 +247,7 @@ def clean_ini(path, section, parameter):
         fp.close()
         if options.get('shred'):
             delete(path, True)
-        with open(path, 'w', encoding=detector.result['encoding'] if has_chardet else 'utf_8', newline='') as fp:
+        with open(path, 'w', encoding=encoding, newline='') as fp:
             config.write(config, fp)
 
 
@@ -379,6 +362,34 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         os.remove(path)
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
+
+
+def detect_encoding(fn):
+    """Detect the encoding of the file"""
+    try:
+        import chardet
+    except ImportError:
+        logger.warning(
+            'chardet module is not available to detect character encoding')
+        return None
+
+    with open(fn, 'rb') as f:
+        if not hasattr(chardet, 'universaldetector'):
+            # This method works on Ubuntu 16.04 with an older version of the module.
+            rawdata = f.read()
+            det = chardet.detect(rawdata)
+            if det['confidence'] > 0.5:
+                return det['encoding']
+            return None
+
+        # This method is faster, but it requires a newer version of the module.
+        detector = chardet.universaldetector.UniversalDetector()
+        for line in f.readlines():
+            detector.feed(line)
+            if detector.done:
+                break
+        detector.close()
+    return detector.result['encoding']
 
 
 def ego_owner(filename):

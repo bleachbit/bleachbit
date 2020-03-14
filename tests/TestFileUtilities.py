@@ -467,6 +467,17 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         msg = 'error calling umount\nargs=%s\nstderr=%s' % (args, stderr)
         self.assertEqual(rc, 0, msg)
 
+    def test_detect_encoding(self):
+        """Unit test for detect_encoding"""
+        tests = (('This is just an ASCII file', 'ascii'),
+                 ('나는 유리를 먹을 수 있어요. 그래도 아프지 않아요', 'utf-8'))
+        for file_contents, expected_encoding in tests:
+            with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp:
+                temp.write(file_contents)
+                temp.flush()
+            det = detect_encoding(temp.name)
+            self.assertEqual(det, expected_encoding)
+
     @common.skipIfWindows
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
