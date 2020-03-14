@@ -34,20 +34,19 @@
     <action command="delete" search="walk.all" path="$$base$$/Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
   </option>
   <option id="cookies">
-    <label>Cookies, session and preferences</label>
-    <description>Delete cookies and session info (preferences, authentication and tracking identification)</description>
+    <label>Cookies</label>
+    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$$base$$/Cookies"/>
     <action command="delete" search="file" path="$$base$$/Cookies-journal"/>
-    <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
-    <action command="delete" search="file" path="$$base$$/Origin Bound Certs"/>
-    <action command="delete" search="file" path="$$base$$/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$$base$$/Preferences"/>
-    <action command="delete" search="file" path="$$base$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$base$$/QuotaManager-journal"/>
+  </option>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action command="delete" search="file" path="$$base$$/TransportSecurity"/>
-    <action command="delete" search="walk.all" path="$$base$$/databases/"/>
     <action command="delete" search="walk.all" path="$$base$$/Local Storage/leveldb"/>
     <action command="delete" search="walk.all" path="$$base$$/Session Storage"/>
     <action command="delete" search="walk.all" path="$$base$$/VideoDecodeStats"/>
