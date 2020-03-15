@@ -472,7 +472,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         tests = (('This is just an ASCII file', 'ascii'),
                  ('나는 유리를 먹을 수 있어요. 그래도 아프지 않아요', 'utf-8'))
         for file_contents, expected_encoding in tests:
-            with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp:
+            with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
                 temp.write(file_contents)
                 temp.flush()
             det = detect_encoding(temp.name)
