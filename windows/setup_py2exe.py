@@ -24,6 +24,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import win_unicode_console
 
 setup_encoding = sys.stdout.encoding
@@ -100,7 +101,6 @@ def check_exist(path, msg=None):
         logger.warning(path + ' not found')
         if msg:
             logger.warning(msg)
-        import time
         time.sleep(5)
 
 
@@ -358,12 +358,41 @@ def clean_translations():
 def strip():
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = ['_sqlite3']
+    strip_whitelist = ['_sqlite3.dll']
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
-    cmd = 'strip.exe --strip-debug --discard-all --preserve-dates ' + \
-        ' '.join(strip_files_str)
-    run_cmd(cmd)
+    # Process each file individually in case it is locked. See
+    # https://github.com/bleachbit/bleachbit/issues/690
+    for strip_file in strip_files_str:
+        if os.path.exists('strip.tmp'):
+            os.remove('strip.tmp')
+        if not os.path.exists(strip_file):
+            logger.error('%s does not exist before stripping', strip_file)
+            continue
+        cmd = 'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp %s' % strip_file
+        run_cmd(cmd)
+        if not os.path.exists(strip_file):
+            logger.error('%s does not exist after stripping', strip_file)
+            continue
+        if not os.path.exists('strip.tmp'):
+            logger.warning('strip.tmp missing while processing %s', strip_file)
+            continue
+        error_counter = 0
+        while error_counter < 100:
+            try:
+                os.remove(strip_file)
+            except PermissionError:
+                logger.warning(
+                    'permissions error while removing %s', strip_file)
+                time.sleep(.1)
+                error_counter += 1
+            else:
+                break
+        if error_counter > 1:
+            logger.warning('error counter %d while removing %s',
+                           error_counter, strip_file)
+        if not os.path.exists(strip_file):
+            os.rename('strip.tmp', strip_file)
 
 
 @count_size_improvement
