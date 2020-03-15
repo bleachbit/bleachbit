@@ -469,8 +469,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
+        eat_glass='나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         tests = (('This is just an ASCII file', 'ascii'),
-                 ('나는 유리를 먹을 수 있어요. 그래도 아프지 않아요', 'utf-8'))
+                 (eat_glass, 'utf-8'),
+                 (eat_glass, 'EUC-KR'))
         for file_contents, expected_encoding in tests:
             with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
                 temp.write(file_contents)
