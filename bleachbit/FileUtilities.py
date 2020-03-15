@@ -609,8 +609,13 @@ def is_dir_empty(dirname):
 
     It assumes the path exists and is a directory.
     """
-    if hasattr(os, 'scandir'):
-        # requires Python 3.5
+    if hasattr(os, 'scandir') and sys.version_info < (3,6,0):
+        # Python 3.5 added os.scandir() without context manager.
+        for entry in os.scandir(dirname):
+            return False
+        return True
+    elif hasattr(os, 'scandir'):
+        # Python 3.6 added the context manager.
         with os.scandir(dirname) as it:
             for entry in it:
                 return False
