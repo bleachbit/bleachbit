@@ -221,24 +221,28 @@ def build():
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
     for subpath in ['fontconfig', 'fonts', 'icons', 'themes']:
-        copytree(os.path.join(GTK_DIR, 'share', subpath), 'dist\\share\\' + subpath)
+        copytree(os.path.join(GTK_DIR, 'share', subpath),
+                 'dist\\share\\' + subpath)
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
     os.makedirs(os.path.join('dist', SCHEMAS_DIR))
-    shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'), os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
+    shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'),
+                    os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
-    shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico') # for pop-up notification
+    # for pop-up notification
+    shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
     for dll in glob.glob1(GTK_DIR, '*.dll'):
-        shutil.copyfile(os.path.join(GTK_DIR,dll), 'dist\\'+dll)
+        shutil.copyfile(os.path.join(GTK_DIR, dll), 'dist\\'+dll)
 
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
     logger.info('Copying themes')
-    copytree('themes', 'dist\\themes')    
+    copytree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
     import requests
-    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH, os.path.join('dist', 'cacert.pem'))
+    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH,
+                    os.path.join('dist', 'cacert.pem'))
 
     logger.info('Copying BleachBit localizations')
     shutil.rmtree('dist\\share\\locale', ignore_errors=True)
@@ -312,14 +316,14 @@ def delete_icons():
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
-        'list-add-symbolic.svg', # spin box in chaff dialog
-        'list-remove-symbolic.svg', # spin box in chaff dialog
-        'pan-down-symbolic.svg', # there is no pan-down.png
-        'process-stop.png', # abort on toolbar
-        'window-close-symbolic.svg', # png does not get used
-        'window-maximize-symbolic.svg', # no png
-        'window-minimize-symbolic.svg', # no png
-        'window-restore-symbolic.svg' # no png
+        'list-add-symbolic.svg',  # spin box in chaff dialog
+        'list-remove-symbolic.svg',  # spin box in chaff dialog
+        'pan-down-symbolic.svg',  # there is no pan-down.png
+        'process-stop.png',  # abort on toolbar
+        'window-close-symbolic.svg',  # png does not get used
+        'window-maximize-symbolic.svg',  # no png
+        'window-minimize-symbolic.svg',  # no png
+        'window-restore-symbolic.svg'  # no png
     ]
     strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:
@@ -327,6 +331,7 @@ def delete_icons():
             os.remove(f)
         else:
             logger.info('keeping whitelisted icon: %s', f)
+
 
 def remove_empty_dirs(root):
     """Remove empty directories"""
@@ -337,6 +342,7 @@ def remove_empty_dirs(root):
             if not os.listdir(entry.path):
                 logger.info('Deleting empty directory: %s' % entry.path)
                 os.rmdir(entry.path)
+
 
 @count_size_improvement
 def clean_translations():
@@ -402,7 +408,8 @@ def upx():
         return
 
     if not os.path.exists(UPX_EXE):
-        logger.warning('UPX not found. To compress executables, install UPX to: ' + UPX_EXE)
+        logger.warning(
+            'UPX not found. To compress executables, install UPX to: ' + UPX_EXE)
         return
 
     logger.info('Compressing executables')
@@ -531,16 +538,16 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     logger.info('Building installer')
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    #Was:
+    # Was:
     #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
-    #Now: Done in NSIS file!
+    # Now: Done in NSIS file!
     opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name, nsi_path)
 
     if not fast:
-        #Was:
-        #nsis('/DNoTranslations',
-        #Now: Compression gets now done in NSIS file!
+        # Was:
+        # nsis('/DNoTranslations',
+        # Now: Compression gets now done in NSIS file!
         nsis('/V3 /DNoTranslations /Dpackhdr /DCompressor',
              'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
              nsi_path)
