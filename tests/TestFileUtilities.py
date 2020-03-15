@@ -237,14 +237,22 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
-        print('hello')
-        fn = os.path.join(self.tempdir, 'make-directory-not-empty')
+        dirname = os.path.join(self.tempdir, 'a_dir')
+        os.mkdir(dirname)
+        self.assertTrue(is_dir_empty(dirname))
+        fn = os.path.join(dirname, 'a_file')
         common.touch_file(fn)
+        self.assertFalse(is_dir_empty(dirname))
         self.assertExists(fn)
+        self.assertExists(dirname)
         self.assertExists(self.tempdir)
-        delete(self.tempdir, allow_shred=False)
-        self.assertExists(fn)
-        self.assertExists(self.tempdir)
+
+        # Make sure shredding does not leave a renamed directory like
+        # in https://github.com/bleachbit/bleachbit/issues/783
+        for allow_shred in (False, True):
+            delete(dirname, allow_shred=allow_shred)
+            self.assertExists(fn)
+            self.assertExists(dirname)
 
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""

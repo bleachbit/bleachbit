@@ -299,6 +299,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     from bleachbit.Options import options
     is_special = False
     path = extended_path(path)
+    do_shred = allow_shred and (shred or options.get('shred'))
     if not os.path.lexists(path):
         if ignore_missing:
             return
@@ -312,7 +313,11 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         os.remove(path)
     elif os.path.isdir(path):
         delpath = path
-        if allow_shred and (shred or options.get('shred')):
+        if do_shred:
+            if not is_dir_empty(path):
+                # Avoid renaming non-empty directory like https://github.com/bleachbit/bleachbit/issues/783
+                logger.info(_("Directory is not empty: %s"), path)
+                return
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
@@ -339,7 +344,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 raise
     elif os.path.isfile(path):
         # wipe contents
-        if allow_shred and (shred or options.get('shred')):
+        if do_shred:
             try:
                 wipe_contents(path)
             except pywinerror as e:
@@ -597,6 +602,22 @@ def human_to_bytes(human, hformat='si'):
     else:
         exponent = suffixes.find(suffix) + 1
     return int(float(amount) * base**exponent)
+
+
+def is_dir_empty(dirname):
+    """Returns boolean whether directory is empty.
+
+    It assumes the path exists and is a directory.
+    """
+    if hasattr(os, 'scandir'):
+        # requires Python 3.5
+        with os.scandir(dirname) as it:
+            for entry in it:
+                return False
+        return True
+
+    # This method is slower, but it works with Python 3.4.
+    return len(os.listdir(dirname)) == 0
 
 
 def listdir(directory):
