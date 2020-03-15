@@ -365,9 +365,9 @@ class System(Cleaner):
                 if 'file' == c_type:
                     yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    yield Command.Delete(c_path)
                     for path in children_in_directory(c_path, True):
                         yield Command.Delete(path)
+                    yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
                         'custom folder has invalid type %s' % c_type)
