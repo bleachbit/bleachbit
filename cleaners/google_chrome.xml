@@ -65,6 +65,7 @@
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
   </option>
   <option id="dom">
