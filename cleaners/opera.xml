@@ -40,13 +40,20 @@
     <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" directories.
         The "Opera Next" is for Opera beta.
         -->
-    <value os="windows">%AppData%\Opera Software\Opera*</value>
+    <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
-    <value os="windows">%AppData%\Opera Software\Opera*</value>
+    <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
-    <value os="linux">~/snap/opera/current/.config/opera</value>
+    <!-- examples:
+        ~/snap/opera/current/.config/opera
+        ~/snap/opera-beta/60/.config/opera-beta
+        -->
+    <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
+  </var>
+  <var name="localapp">
+    <value os="windows" search="glob">%LocalAppData%\Opera Software\Opera*</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -65,9 +72,10 @@
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/"/>
     <!-- Opera will complain if you delete ~/snap/opera/common/.cache/gdk-pixbuf-loaders.cache -->
     <action command="delete" search="walk.files" path="~/snap/opera/common/.cache/opera"/>
+    <action command="delete" search="walk.files" path="~/snap/opera-beta/common/.cache/opera-beta"/>
     <!-- Windows-specific -->
-    <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Cache\"/>
-    <action command="delete" search="walk.files" path="%LocalAppData%\Opera Software\Opera Stable\Media Cache\"/>
+    <action command="delete" search="walk.files" path="$$localapp$$\Cache\"/>
+    <action command="delete" search="walk.files" path="$$localapp$$\Media Cache\"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\cache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\opcache\"/>
@@ -86,6 +94,7 @@
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
@@ -129,6 +138,9 @@
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
+    <!-- Opera 68 beta on Windows has "Jump List Icons" spelled with space -->
+    <action command="delete" search="walk.files" path="$$profile$$\Jump List Icons\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Jump List IconsOld\"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\download.dat"/>
@@ -169,9 +181,13 @@
     <label>Session</label>
     <description>Delete the current and last sessions</description>
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
+    <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <!-- Last Tabs was found on Opera 56 but not on Google Chrome 69 -->
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
+    <!-- Session Storage were found on Opera 68 but not on Google Chrome 80 -->
+    <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win.bak"/>
