@@ -125,6 +125,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
     if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
+    encoding = bleachbit.stdout_encoding
     if sys.platform == 'win32':
         # hide the 'DOS box' window
         import win32process
@@ -133,6 +134,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
+        encoding='mbcs'
     if not env and clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
@@ -153,7 +155,6 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         print(out[0])
         print(out[1])
         raise
-    encoding = bleachbit.stdout_encoding
     return (p.returncode,
             str(out[0], encoding=encoding) if out[0] else '',
             str(out[1], encoding=encoding) if out[1] else '')
