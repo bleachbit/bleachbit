@@ -84,7 +84,7 @@ def user_agent():
         __os = platform.uname()[3][
             0:3]  # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
     elif sys.platform.startswith('linux'):
-        dist = platform.dist()
+        dist = platform.linux_distribution()
         # example: ('fedora', '11', 'Leonidas')
         # example: ('', '', '') for Arch Linux
         if 0 < len(dist[0]):
