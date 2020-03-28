@@ -82,11 +82,7 @@ def diagnostic_info():
         s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
     s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
     if sys.platform.startswith('linux'):
-        if hasattr(platform, 'linux_distribution'):
-            s += "\nplatform.linux_distribution() = %s" % str(
-                platform.linux_distribution())
-        else:
-            s += "\nplatform.dist() = %s" % str(platform.dist())
+        s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
 
     # Mac Version Name - Dictionary
     macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
@@ -99,7 +95,7 @@ def diagnostic_info():
                     s += "\nplatform.mac_ver() = %s" % str(
                         platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
         else:
-            s += "\nplatform.dist() = %s" % str(platform.dist())
+            s += "\nplatform.dist() = %s" % str(platform.linux_distribution(full_distribution_name=0))
 
     if 'nt' == os.name:
         s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
