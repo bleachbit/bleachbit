@@ -35,6 +35,6 @@ markovify is licensed under the [MIT License](https://github.com/jsvine/markovif
 ### Development
 * [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  [![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)](https://ci.appveyor.com/project/az0/bleachbit)
 * [BleachBit on Travis CI](https://travis-ci.org/bleachbit/bleachbit)  [![Build Status](https://travis-ci.org/bleachbit/bleachbit.svg?branch=master)](https://travis-ci.org/bleachbit/bleachbit)
-* [CleanerML Repository](https://github.com/az0/cleanerml)
+* [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
