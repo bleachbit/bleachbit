@@ -27,6 +27,7 @@ import locale
 import os
 import re
 import sys
+import platform
 
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError, SafeConfigParser
@@ -48,6 +49,10 @@ else:
     if 'win32' == sys.platform:
         import win_unicode_console
         win_unicode_console.enable()
+
+if not hasattr(platform, 'linux_distribution'):
+    from ._platform import _linux_distribution
+    platform.linux_distribution = _linux_distribution
 
 logger = Log.init_log()
 
