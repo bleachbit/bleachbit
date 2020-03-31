@@ -675,9 +675,13 @@ def sync():
 
 def truncate_f(f):
     """Truncate the file object"""
-    f.truncate(0)
-    f.flush()
-    os.fsync(f.fileno())
+    try:
+        f.truncate(0)
+        f.flush()
+        os.fsync(f.fileno())
+    except OSError as e:
+        if e.errno != errno.ENOSPC:
+            raise
 
 
 def uris_to_paths(file_uris):
@@ -927,7 +931,7 @@ def wipe_path(pathname, idle=False):
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
-                        blanks = blanks[0:int(len(blanks) / 2)]
+                        blanks = blanks[0:len(blanks) // 2]
                     else:
                         break
                 elif e.errno == errno.EFBIG:
@@ -957,7 +961,7 @@ def wipe_path(pathname, idle=False):
         total_bytes += f.tell()
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if f.tell() < 2:
+        if len(blanks) < 2:
             break
     # sync to disk
     sync()
