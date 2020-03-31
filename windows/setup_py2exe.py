@@ -452,7 +452,7 @@ def recompress_library():
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils']
+    delete_paths = ['distutils', 'plyer\\platforms\\android', 'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     for p in delete_paths:
         shutil.rmtree(os.path.join('dist', 'library', p))
 
