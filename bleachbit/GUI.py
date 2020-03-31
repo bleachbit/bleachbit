@@ -1003,7 +1003,7 @@ class GUI(Gtk.ApplicationWindow):
         screen = self.get_screen()
         (screen_w, screen_h) = (screen.get_width(), screen.get_height())
         (x, y) = self.get_position()
-        if x >= screen_w or y >= screen_h:
+        if x < 0 or x >= screen_w or y < 0 or y >= screen_h:
             monitor = screen.get_monitor_at_window(self.get_window())
             g = screen.get_monitor_geometry(monitor)
             print("Fixup moving the window off the screen: window (x, y) = {}, screen (w, h) = {}, monitor (x, y) = {}, (w, h) = {}".format(
