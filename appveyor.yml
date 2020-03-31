@@ -24,7 +24,7 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install win-unicode-console'
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
   - ps: Get-FileHash pygi-aio.exe
-  - 'pygi-aio.exe %PYTHON_HOME% GTK Notify'
+  - 'pygi-aio.exe %PYTHON_HOME% GTK'
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
