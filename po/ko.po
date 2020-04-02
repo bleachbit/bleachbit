@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-03-21 08:20-0600\n"
-"PO-Revision-Date: 2020-03-31 07:28+0000\n"
+"PO-Revision-Date: 2020-04-01 08:39+0000\n"
 "Last-Translator: Yeongha Kim <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2020-03-31 14:12+0000\n"
+"X-Launchpad-Export-Date: 2020-04-02 02:28+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -713,7 +713,7 @@ msgstr "경로 존재 확인 중 에러 발생: %s"
 
 #: ../bleachbit/Options.py:264
 msgid "Error when setting the default drives to shred."
-msgstr "파기할 기본 드라이브 설정 중 에러 발생"
+msgstr "영구 삭제할 기본 드라이브 설정 중 에러 발생"
 
 #: ../bleachbit/Options.py:289
 #, python-format
@@ -741,11 +741,11 @@ msgstr "SQLite 모듈 불러오기 오류: 백신 프로그램이 차단했을 �
 
 #: ../bleachbit/GUI.py:187
 msgid "Choose files to shred"
-msgstr "파기할 파일 선택"
+msgstr "영구 삭제할 파일 선택"
 
 #: ../bleachbit/GUI.py:196
 msgid "Choose folder to shred"
-msgstr "파기할 폴더 선택"
+msgstr "영구 삭제할 폴더 선택"
 
 #: ../bleachbit/GUI.py:198 ../bleachbit/GuiBasic.py:99
 #: ../bleachbit/GuiBasic.py:143
@@ -958,7 +958,7 @@ msgstr "잠시만 기다려주십시오. 디스크 여유 공간을 청소하는
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
-msgstr "여유 공간 정리는 파기 되지 않고 삭제된 파일의 잔류 데이터를 지웁니다. 새로운 여유 공간을 만들지는 않습니다."
+msgstr "여유 공간 정리는 영구 삭제 되지 않은 파일의 잔류 데이터를 지웁니다. 새로운 여유 공간을 만들지는 않습니다."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:198 ../bleachbit/Worker.py:346
@@ -1455,7 +1455,7 @@ msgstr "파일에 디버그 메시지 기록"
 
 #: ../bleachbit/CLI.py:138
 msgid "shred specific files or folders"
-msgstr "특정 파일 혹은 폴더 파기"
+msgstr "특정 파일 혹은 폴더 영구 삭제"
 
 #: ../bleachbit/CLI.py:140
 msgid "show system information"
@@ -1566,7 +1566,7 @@ msgstr "완료 시점"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Delete without shredding"
-msgstr "파기하지 않고 삭제"
+msgstr "영구 삭제 과정 없이 삭제"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Do not delete"
@@ -1814,15 +1814,15 @@ msgstr "차일드 메모리-정리 프로세스가 %d 코드를 반환했습니�
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr "파일 파기(_S)"
+msgstr "파일 영구 삭제(_S)"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "폴더 파기(_H)"
+msgstr "폴더 영구 삭저(_H)"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "클립보드의 경로 파기"
+msgstr "클립보드 경로 영구 삭제"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1834,7 +1834,7 @@ msgstr "농담 만들기(_M)"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
-msgstr "설정 파기 및 종료(_H)"
+msgstr "설정 초기화 및 종료(_H)"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
