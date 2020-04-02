@@ -999,18 +999,21 @@ class GUI(Gtk.ApplicationWindow):
         return hbar
 
     def on_configure_event(self, widget, event):
-        # save window position and size
-        screen = self.get_screen()
-        (screen_w, screen_h) = (screen.get_width(), screen.get_height())
+        # fixup maximized window position:
+        # on Windows if a window is maximized on a secondary monitor it is moved off the screen
         (x, y) = self.get_position()
-        if x < 0 or x >= screen_w or y < 0 or y >= screen_h:
-            monitor = screen.get_monitor_at_window(self.get_window())
-            g = screen.get_monitor_geometry(monitor)
-            print("Fixup moving the window off the screen: window (x, y) = {}, screen (w, h) = {}, monitor (x, y) = {}, (w, h) = {}".format(
-                (x, y), (screen_w, screen_h),
-                (g.x, g.y), (g.width, g.height)))
-            self.move(g.x, g.y)
-            return True
+        window = self.get_window()
+        if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
+            screen = self.get_screen()
+            monitor_num = screen.get_monitor_at_window(window)
+            g = screen.get_monitor_geometry(monitor_num)
+            if g.x != x or g.y != y:
+                logger.info("Maximized window: monitor ({}) geometry = {}+{}".format(
+                    monitor_num, (g.x, g.y), (g.width, g.height)))
+                self.move(g.x, g.y)
+                return True
+
+        # save window position and size
         options.set("window_x", x, commit=False)
         options.set("window_y", y, commit=False)
         (width, height) = self.get_size()
@@ -1033,11 +1036,24 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_show(self, widget):
         # restore window position, size and state
-        if options.has_option("window_x") and options.has_option("window_y"):
-            self.move(options.get("window_x"), options.get("window_y"))
-        if options.has_option("window_width") and options.has_option("window_height"):
-            self.resize(options.get("window_width"),
-                        options.get("window_height"))
+        if options.has_option("window_x") and options.has_option("window_y") and \
+           options.has_option("window_width") and options.has_option("window_height"):
+            r = Gdk.Rectangle()
+            (r.x, r.y) = (options.get("window_x"), options.get("window_y"))
+            (r.width, r.height) = (options.get("window_width"), options.get("window_height"))
+
+            screen = self.get_screen()
+            monitor_num = screen.get_monitor_at_point(r.x, r.y)
+            g = screen.get_monitor_geometry(monitor_num)
+
+            # only restore position and size if window left corner
+            # is within the closest monitor
+            if r.x >= g.x and r.x < g.x + g.width and \
+               r.y >= g.y and r.y < g.y + g.height:
+                logger.info("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
+                    monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
+                self.move(r.x, r.y)
+                self.resize(r.width, r.height)
         if options.get("window_fullscreen"):
             self.fullscreen()
         elif options.get("window_maximized"):
