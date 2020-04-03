@@ -244,10 +244,22 @@ def build():
     shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH,
                     os.path.join('dist', 'cacert.pem'))
 
+    dist_locale_dir = r'dist\share\locale'
+    logger.info('Copying GTK localizations')
+    shutil.rmtree(dist_locale_dir, ignore_errors=True)
+    os.makedirs(dist_locale_dir)
+    locale_dir = os.path.join(GTK_DIR, 'share\\locale\\')
+    for f in recursive_glob(locale_dir, ['gtk30.mo']):
+        if not f.startswith(locale_dir):
+            continue
+        rel_f = f[len(locale_dir):]
+        os.makedirs(os.path.join(dist_locale_dir, os.path.dirname(rel_f)))
+        shutil.copyfile(f, os.path.join(dist_locale_dir, rel_f))
+    assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\gtk30.mo'))
+
     logger.info('Copying BleachBit localizations')
-    shutil.rmtree('dist\\share\\locale', ignore_errors=True)
-    copytree('locale', 'dist\\share\\locale')
-    assert_exist('dist\\share\\locale\\es\\LC_MESSAGES\\bleachbit.mo')
+    copytree('locale', dist_locale_dir)
+    assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\bleachbit.mo'))
 
     logger.info('Copying BleachBit cleaners')
     if not os.path.exists('dist\\share\\cleaners'):
