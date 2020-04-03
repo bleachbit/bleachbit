@@ -617,7 +617,8 @@ def apt_autoremove():
 
     args = ['--yes', 'autoremove']
     # After this operation, 74.7MB disk space will be freed.
-    freed_space_regex = r', ([\d.]+[a-zA-Z]{2}) disk space will be freed'
+    # After this operation, 44.0 kB disk space will be freed.
+    freed_space_regex = r'.*, ([\d.]+ ?[a-zA-Z]{2}) disk space will be freed.'
     try:
         return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
