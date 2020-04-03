@@ -1002,21 +1002,21 @@ class GUI(Gtk.ApplicationWindow):
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
         (x, y) = self.get_position()
+        (width, height) = self.get_size()
         window = self.get_window()
         if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
             screen = self.get_screen()
             monitor_num = screen.get_monitor_at_window(window)
             g = screen.get_monitor_geometry(monitor_num)
-            if g.x != x or g.y != y:
-                logger.info("Maximized window: monitor ({}) geometry = {}+{}".format(
-                    monitor_num, (g.x, g.y), (g.width, g.height)))
+            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                logger.info("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
+                    (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
                 self.move(g.x, g.y)
                 return True
 
         # save window position and size
         options.set("window_x", x, commit=False)
         options.set("window_y", y, commit=False)
-        (width, height) = self.get_size()
         options.set("window_width", width, commit=False)
         options.set("window_height", height, commit=False)
         return False
