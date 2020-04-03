@@ -227,6 +227,7 @@ def clean_ini(path, section, parameter):
 
     # read file to parser
     config = bleachbit.RawConfigParser()
+    config.optionxform = lambda option: option
     config.write = write
     with open(path, 'r', encoding=encoding) as fp:
         config.read_file(fp)
