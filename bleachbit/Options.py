@@ -286,7 +286,7 @@ class Options:
             if -1 != pos:
                 lang = lang[0: pos]
             for _lang in set([lang, 'en']):
-                logger.info(_("Automatically preserving language %s."), lang)
+                logger.info(_("Automatically preserving language %s."), _lang)
                 self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
