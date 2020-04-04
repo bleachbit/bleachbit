@@ -38,27 +38,25 @@ logger = logging.getLogger(__name__)
 
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-langsecref_map = {'3021': ('winapp2_applications', _('Applications')),
-                  # TRANSLATORS: This is cleaner name for cleaners imported
-                  # from winapp2.ini
-                  '3022': ('winapp2_internet', _('Internet')),
-                  # TRANSLATORS: This is cleaner name for cleaners imported
-                  # from winapp2.ini
-                  '3023': ('winapp2_multimedia', _('Multimedia')),
-                  # TRANSLATORS: This is cleaner name for cleaners imported
-                  # from winapp2.ini
-                  '3024': ('winapp2_utilities', _('Utilities')),
-                  # TRANSLATORS: This is cleaner name for cleaners imported
-                  # from winapp2.ini.
-                  '3025': ('winapp2_windows', 'Microsoft Windows'),
-                  '3026': ('winapp2_mozilla', 'Firefox/Mozilla'),
-                  '3027': ('winapp2_opera', 'Opera'),
-                  '3028': ('winapp2_safari', 'Safari'),
-                  '3029': ('winapp2_google_chrome', 'Google Chrome'),
-                  '3030': ('winapp2_thunderbird', 'Thunderbird'),
-                  '3031': ('winapp2_windows_store', 'Windows Store'),
-                  # Section=Games (technically not langsecref)
-                  'Games': ('winapp2_games', _('Games'))}
+langsecref_map = {
+    '3006': ('winapp2_edge', 'Microsoft Edge'),
+    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3021': ('winapp2_applications', _('Applications')),
+    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3022': ('winapp2_internet', _('Internet')),
+    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3023': ('winapp2_multimedia', _('Multimedia')),
+    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3024': ('winapp2_utilities', _('Utilities')),
+    '3025': ('winapp2_windows', 'Microsoft Windows'),
+    '3026': ('winapp2_mozilla', 'Firefox/Mozilla'),
+    '3027': ('winapp2_opera', 'Opera'),
+    '3028': ('winapp2_safari', 'Safari'),
+    '3029': ('winapp2_google_chrome', 'Google Chrome'),
+    '3030': ('winapp2_thunderbird', 'Thunderbird'),
+    '3031': ('winapp2_windows_store', 'Windows Store'),
+    # Section=Games (technically not langsecref)
+    'Games': ('winapp2_games', _('Games'))}
 
 
 def xml_escape(s):
