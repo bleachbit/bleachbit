@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-03-21 08:20-0600\n"
-"PO-Revision-Date: 2020-04-01 22:49+0000\n"
+"PO-Revision-Date: 2020-04-04 13:53+0000\n"
 "Last-Translator: bernard stafford <Unknown>\n"
 "Language-Team: Yiddish <yi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2020-04-02 02:28+0000\n"
+"X-Launchpad-Export-Date: 2020-04-04 15:36+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1009,8 +1009,8 @@ msgstr "זכּרון"
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "וועגן %d דקות רוען."
+msgstr[1] "וועגן %d הדקות רוען."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
@@ -1410,7 +1410,7 @@ msgstr "search=\"walk.all\" used with regular file path=\"%s\""
 #: ../bleachbit/Action.py:299
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" איז ניט אַ גלאָבוס מוסטער"
 
 #: ../bleachbit/Action.py:559
 #, python-format
@@ -1436,6 +1436,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"דעם פֿונקציע דיליץ אַלע בלעאַטשביט סעטטינגס און דעמאָלט קוויט די "
+"אַפּלאַקיישאַן. ניצן דעם צו באַהאַלטן דיין נוצן פון BleachBit אָדער צו "
+"באַשטעטיק די סעטטינגס. דער ווייַטער מאָל איר אָנהייב BleachBit, די סעטטינגס "
+"וועט ינישאַלייז צו די פעליקייַט וואַלועס."
 
 #: ../bleachbit/GuiBasic.py:132
 msgid ""
@@ -1443,10 +1447,13 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"זענט איר זיכער אַז איר ווילט פּערמאַנאַנטלי ויסמעקן טעקעס לויט די "
+"אויסגעקליבן אַפּעריישאַנז? די פאַקטיש טעקעס אַז וועט זיין אויסגעמעקט האָט "
+"זיך געביטן זינט איר געלאָפֿן די פאָרויסיקע ווייַזונג."
 
 #: ../bleachbit/GuiBasic.py:135
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "זענט איר זיכער אַז איר ווילט פּערמאַנאַנטלי ויסמעקן די טעקעס?"
 
 #: ../bleachbit/GuiBasic.py:173
 #, python-format
@@ -1455,17 +1462,20 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
+"ווייַל איר זענט פליסנדיק ווי וואָרצל, ביטע מאַניואַלי עפענען דעם לינק אין אַ "
+"וועב בלעטערער:\n"
+"%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py:185
 #, python-format
 msgid "Open web browser to %s?"
-msgstr ""
+msgstr "עפענען וועב בלעטערער צו %s?"
 
 #: ../bleachbit/CLI.py:97
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "נישט אַ גילטיק קלינער: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1474,50 +1484,50 @@ msgstr ""
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:125
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
+msgstr "באַניץ: %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:128
 msgid "list cleaners"
-msgstr ""
+msgstr "רשימה קלענזערז"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
 #: ../bleachbit/CLI.py:133
 msgid "run cleaners to delete files and make other permanent changes"
-msgstr ""
+msgstr "לויפן קלינערז צו ויסמעקן טעקעס און מאַכן אנדערע שטענדיק ענדערונגען"
 
 #: ../bleachbit/CLI.py:135
 msgid "set log level to verbose"
-msgstr ""
+msgstr "שטעלן קלאָץ הייך צו ווערבאָסע"
 
 #: ../bleachbit/CLI.py:136
 msgid "log debug messages to file"
-msgstr ""
+msgstr "קלאָץ דיבאַג אַרטיקלען צו טעקע"
 
 #: ../bleachbit/CLI.py:138
 msgid "shred specific files or folders"
-msgstr ""
+msgstr "פּיצל ספּעציפיש טעקעס אָדער פאָלדערס"
 
 #: ../bleachbit/CLI.py:140
 msgid "show system information"
-msgstr ""
+msgstr "ווייַזן סיסטעם אינפֿאָרמאַציע"
 
 #: ../bleachbit/CLI.py:142
 msgid "launch the graphical interface"
-msgstr ""
+msgstr "קאַטער די גראַפיקאַל צובינד"
 
 #: ../bleachbit/CLI.py:146
 msgid "do not prompt for administrator privileges"
-msgstr ""
+msgstr "דו זאלסט נישט פּינטלעך פֿאַר אַדמיניסטראַטאָר פּריווילאַדזשאַז"
 
 #: ../bleachbit/CLI.py:151
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "פאָרויסיקע ווייַזונג טעקעס צו ווערן אויסגעמעקט און אנדערע ענדערונגען"
 
 #: ../bleachbit/CLI.py:155
 msgid "use options set in the graphical interface"
-msgstr ""
+msgstr "נוצן אָפּציעס שטעלן אין די גראַפיקאַל צובינד"
 
 #: ../bleachbit/CLI.py:158
 msgid "update winapp2.ini, if a new version is available"
@@ -1560,7 +1570,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:224
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "קיין אַרבעט צו טאָן. ספּעציפיצירן אָפּציעס."
 
 #: ../bleachbit/CLI.py:232
 msgid "--overwrite is intended only for use with --clean"
@@ -1568,217 +1578,227 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
-msgstr ""
+msgstr "דיליטינג טעקעס"
 
 #. TRANSLATORS: BleachBit creates digital chaff like that is like the
 #. physical chaff airplanes use to protect themselves from radar-guided
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:65
 msgid "Make chaff"
-msgstr ""
+msgstr "מאַכן פּסוילעס"
 
 #: ../bleachbit/GuiChaff.py:70
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "מאַכן ראַנדאַמלי-דזשענערייטאַד אַרטיקלען ינספּייערד דורך דאָקומענטן."
 
 #: ../bleachbit/GuiChaff.py:74
 msgid "Inspiration"
-msgstr ""
+msgstr "ינספּיראַציע"
 
 #: ../bleachbit/GuiChaff.py:77
 msgid "2600 Magazine"
-msgstr ""
+msgstr "2600 זשורנאַל"
 
 #: ../bleachbit/GuiChaff.py:77
 msgid "Hillary Clinton's emails"
-msgstr ""
+msgstr "היללאַרי קלינטאן ס ימיילז"
 
 #: ../bleachbit/GuiChaff.py:85
 msgid "Number of files"
-msgstr ""
+msgstr "נומער פון טעקעס"
 
 #: ../bleachbit/GuiChaff.py:92 ../bleachbit/GuiChaff.py:152
 msgid "Select destination folder"
-msgstr ""
+msgstr "סעלעקט דעסטיניישאַן טעקע"
 
 #: ../bleachbit/GuiChaff.py:102
 msgid "When finished"
-msgstr ""
+msgstr "ווען פאַרטיק"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Delete without shredding"
-msgstr ""
+msgstr "ויסמעקן אָן שרעדינג"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Do not delete"
-msgstr ""
+msgstr "צי ניט ויסמעקן"
 
 #: ../bleachbit/GuiChaff.py:116
 msgid "Make files"
-msgstr ""
+msgstr "מאַכן טעקעס"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "אראפקאפיע דאַטן דארף פֿאַר מוץ גענעראַטאָר?"
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
-msgstr ""
+msgstr "גענעראַטינג טעקעס"
 
 #: ../bleachbit/GuiPreferences.py:58 ../data/app-menu.ui:31
 msgid "Preferences"
-msgstr ""
+msgstr "פּרעפֿערענצן"
 
 #: ../bleachbit/GuiPreferences.py:66
 msgid "General"
-msgstr ""
+msgstr "אַלגעמײן"
 
 #: ../bleachbit/GuiPreferences.py:70
 msgid "Drives"
-msgstr ""
+msgstr "דרייווז"
 
 #: ../bleachbit/GuiPreferences.py:73
 msgid "Languages"
-msgstr ""
+msgstr "שפראכן"
 
 #: ../bleachbit/GuiPreferences.py:75
 msgid "Whitelist"
-msgstr ""
+msgstr "ווהיטעליסט"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid "Check periodically for software updates via the Internet"
 msgstr ""
+"קאָנטראָלירן פּיריאַדיקלי פֿאַר ווייכווארג דערהייַנטיקונגען דורך די אינטערנעט"
 
 #: ../bleachbit/GuiPreferences.py:124
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"אויב אַ דערהייַנטיקן איז געפֿונען ווערן, איר וועט באַקומען די אָפּציע צו זען "
+"אינפֿאָרמאַציע וועגן אים. דערנאָך איר קען מאַנואַל אראפקאפיע און ינסטאַלירן "
+"די דערהייַנטיקן."
 
 #: ../bleachbit/GuiPreferences.py:131
 msgid "Check for new beta releases"
-msgstr ""
+msgstr "קוק פֿאַר נייַע ריליסיז פון ביתא"
 
 #: ../bleachbit/GuiPreferences.py:140
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
+msgstr "אראפקאפיע און דערהייַנטיקן קלינערז פון די קהל (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:154
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "באַהאַלטן ירעלאַוואַנט קלינערז"
 
 #: ../bleachbit/GuiPreferences.py:163
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "אָווועררייט אינהאַלט פון טעקעס צו פאַרמייַדן אָפּזוך"
 
 #: ../bleachbit/GuiPreferences.py:167
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"אָווועררייטינג איז יניפעקטיוו אויף עטלעכע טעקע סיסטעמען און מיט זיכער "
+"אָפּעראַטיאָנס פון BleachBit. אָווועררייטינג איז באטייטיק סלאָוער."
 
 #: ../bleachbit/GuiPreferences.py:172
 msgid "Exit after cleaning"
-msgstr ""
+msgstr "אַרויסגאַנג נאָך רייניקונג"
 
 #: ../bleachbit/GuiPreferences.py:178
 msgid "Confirm before delete"
-msgstr ""
+msgstr "באַשטעטיקן איידער ויסמעקן"
 
 #: ../bleachbit/GuiPreferences.py:186
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
+msgstr "ניצן יעק סיזעס (1 קב = 1024 בייט) אַנשטאָט פון SI (1 קב = 1000 בייט)"
 
 #: ../bleachbit/GuiPreferences.py:193
 msgid "Windows 10 theme"
-msgstr ""
+msgstr "Windows 10 טעמע"
 
 #: ../bleachbit/GuiPreferences.py:200
 msgid "Dark mode"
-msgstr ""
+msgstr "פינצטער מאָדע"
 
 #: ../bleachbit/GuiPreferences.py:208
 msgid "Show debug messages"
-msgstr ""
+msgstr "ווייַזן דעבוג אַרטיקלען"
 
 #: ../bleachbit/GuiPreferences.py:244
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
+"קלייַבן אַ ווריטאַבלע טעקע פֿאַר יעדער פאָר פֿאַר וואָס איר קענען "
+"אָווועררייט פריי פּלאַץ."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
 #: ../bleachbit/GuiPreferences.py:266
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "לייג צו"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
 #: ../bleachbit/GuiPreferences.py:270 ../bleachbit/GuiPreferences.py:487
 msgctxt "button"
 msgid "Remove"
-msgstr ""
+msgstr "אַראָפּנעמען"
 
 #: ../bleachbit/GuiPreferences.py:294
 msgid "All languages will be deleted except those checked."
-msgstr ""
+msgstr "אַלע שפראַכן וועט ווערן אויסגעמעקט חוץ די אָפּגעשטעלט."
 
 #: ../bleachbit/GuiPreferences.py:310
 msgid "Preserve"
-msgstr ""
+msgstr "ופהיטן"
 
 #: ../bleachbit/GuiPreferences.py:314
 msgid "Code"
-msgstr ""
+msgstr "קאָד"
 
 #: ../bleachbit/GuiPreferences.py:335 ../bleachbit/GuiPreferences.py:378
 msgid "Choose a file"
-msgstr ""
+msgstr "קלייַבן אַ טעקע"
 
 #: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
 #: ../bleachbit/GuiPreferences.py:431
 msgid "File"
-msgstr ""
+msgstr "טעקע"
 
 #: ../bleachbit/GuiPreferences.py:358 ../bleachbit/GuiPreferences.py:401
 #: ../bleachbit/GuiPreferences.py:433
 msgid "Folder"
-msgstr ""
+msgstr "פאָלדער"
 
 #: ../bleachbit/GuiPreferences.py:443
 msgid "Theses paths will not be deleted or modified."
-msgstr ""
+msgstr "טהעסעס פּאַטס וועט נישט ווערן אויסגעמעקט אָדער מאַדאַפייד."
 
 #: ../bleachbit/GuiPreferences.py:446
 msgid "These locations can be selected for deletion."
-msgstr ""
+msgstr "די לאָוקיישאַנז קענען ווערן אויסגעקליבן פֿאַר דילישאַן."
 
 #: ../bleachbit/GuiPreferences.py:454
 msgid "Type"
-msgstr ""
+msgstr "טיפּ"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
 #: ../bleachbit/GuiPreferences.py:460
 msgid "Path"
-msgstr ""
+msgstr "דרך"
 
 #: ../bleachbit/GuiPreferences.py:474
 msgctxt "button"
 msgid "Add file"
-msgstr ""
+msgstr "לייג טעקע"
 
 #: ../bleachbit/GuiPreferences.py:481
 msgctxt "button"
 msgid "Add folder"
-msgstr ""
+msgstr "לייג פאָלדער"
 
 #: ../bleachbit/Memory.py:58
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"די באַפֿעל 'swapoff -s' ניט אַנדערש, אַזוי פאַלינג צוריק צו /proc/swaps "
+"פֿאַר ויסבייַטן אינפֿאָרמאַציע."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
