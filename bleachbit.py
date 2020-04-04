@@ -26,10 +26,11 @@ import os
 import sys
 
 if 'posix' == os.name:
-    if os.path.isdir('/usr/share/bleachbit'):
-        # This path contains bleachbit/{C,G}LI.py .  This section is
-        # unnecessary if installing BleachBit in site-packages.
-        sys.path.append('/usr/share/')
+    for d in ('/usr/share', '/app/share'):
+        if os.path.isdir(os.path.join(d, 'bleachbit')):
+            # This path contains bleachbit/{C,G}LI.py .  This section is
+            # unnecessary if installing BleachBit in site-packages.
+            sys.path.append(d)
 
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3

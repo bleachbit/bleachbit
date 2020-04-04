@@ -78,6 +78,12 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
+flatpak:
+	flatpak-builder --force-clean build-dir org.bleachbit.BleachBit.json
+
+run-flatpak:
+	flatpak-builder --run build-dir org.flatpak.bleachbit.json bleachbit
+
 lint:
 	[ -x "$$(command -v pychecker)" ] ||  echo "WARNING: pychecker not found"
 	[ -x "$$(command -v pyflakes)" ] ||  echo "WARNING: pyflakes not found"

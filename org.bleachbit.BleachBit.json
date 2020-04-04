@@ -1,0 +1,63 @@
+{
+  "app-id": "org.bleachbit.BleachBit",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "1.6",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "bleachbit",
+  "finish-args": [
+    "--socket=fallback-x11",
+    "--socket=session-bus",
+    "--share=network",
+    "--filesystem=host"
+  ],
+  "modules": [
+    {
+      "name": "cpython",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz",
+          "sha256": "2646e7dc233362f59714c6193017bb2d6f7b38d6ab4a0cb5fbac5c36c4d845df"
+        }
+      ]
+    },
+    {
+      "name": "pip-install",
+      "buildsystem": "simple",
+      "build-options": {
+        "build-args": [
+          "--share=network"
+        ]
+      },
+      "build-commands": [
+        "pip3 install pip --upgrade"
+      ]
+    },
+    {
+      "name": "app-deps",
+      "buildsystem": "simple",
+      "build-options": {
+        "build-args": [
+          "--share=network"
+        ]
+      },
+      "build-commands": [
+        "pip3 install chardet PyGObject requests scandir"
+      ]
+    },
+    {
+      "name": "app-install",
+      "buildsystem": "simple",
+      "build-commands": [
+        "make install DESTDIR=/app prefix="
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": ".",
+          "dest": "."
+        }
+      ]
+    }
+  ]
+}

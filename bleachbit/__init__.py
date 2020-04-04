@@ -116,14 +116,10 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # system cleaners
 if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')):
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
-elif sys.platform.startswith('linux') or sys.platform == 'darwin':
-    system_cleaners_dir = '/usr/share/bleachbit/cleaners'
+elif os.path.isdir(os.path.join(bleachbit_exe_path, 'bleachbit', 'cleaners')):
+    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'bleachbit', 'cleaners')
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
-elif sys.platform[:6] == 'netbsd':
-    system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
-elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
-    system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
     logger.warning(
@@ -140,13 +136,9 @@ windows_10_theme_source_path = "themes/windows10/gtk.css"
 
 # application icon
 __icons = (
-    '/usr/share/pixmaps/bleachbit.png',  # Linux
-    '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-    '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
-    os.path.normpath(os.path.join(bleachbit_exe_path,
-                                  'share\\bleachbit.png')),  # Windows
-    # When running from source (i.e., not installed).
-    os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'pixmaps', 'bleachbit.png')), # Linux, BSD
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'share\\bleachbit.png')),  # Windows
+    os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')), # from source
 )
 appicon_path = None
 for __icon in __icons:
@@ -165,20 +157,10 @@ if not os.path.exists(app_menu_filename):
     logger.error('unknown location for app-menu.ui')
 
 # locale directory
-if os.path.exists("./locale/"):
-    # local locale (personal)
-    locale_dir = os.path.abspath("./locale/")
-else:
-    # system-wide installed locale
-    if sys.platform.startswith('linux') or sys.platform == 'darwin':
-        locale_dir = "/usr/share/locale/"
-    elif sys.platform == 'win32':
-        locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
-    elif sys.platform[:6] == 'netbsd':
-        locale_dir = "/usr/pkg/share/locale/"
-    elif (sys.platform.startswith('openbsd') or
-          sys.platform.startswith('freebsd')):
-        locale_dir = "/usr/local/share/locale/"
+if os.path.exists(os.path.join(bleachbit_exe_path, 'locale')):
+    locale_dir = os.path.abspath(os.path.join(bleachbit_exe_path, 'locale'))
+elif sys.platform == 'win32':
+    locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
 
 
 
@@ -262,7 +244,7 @@ GETTEXT_CONTEXT_GLUE = "\004"
 def pgettext(msgctxt, msgid):
     """A custom implementation of GNU pgettext().
     """
-    if msgctxt is not None and msgctxt is not "":
+    if msgctxt is not None and msgctxt != "":
         translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
         if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
             return msgid
