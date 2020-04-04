@@ -43,8 +43,6 @@ logger = logging.getLogger(__name__)
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
 
-win10_provider = None
-
 
 class PreferencesDialog:
 
@@ -87,8 +85,6 @@ class PreferencesDialog:
             self.cb_refresh_operations()
 
     def __toggle_callback(self, cell, path):
-        global win10_provider
-
         """Callback function to toggle option"""
         options.toggle(path)
         if online_update_notification_enabled:
@@ -99,12 +95,12 @@ class PreferencesDialog:
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            if os.name != 'nt' or options.get("win10_theme") == False:
-                Gtk.Settings.get_default().set_property(
-                    'gtk-application-prefer-dark-theme', options.get('dark_mode'))
+            if options.get('win10_theme'):
+                self.cb_set_windows10_theme()
+            Gtk.Settings.get_default().set_property(
+                'gtk-application-prefer-dark-theme', options.get('dark_mode'))
         if 'win10_theme' == path:
             self.cb_set_windows10_theme()
-            self.cb_dark_mode.set_sensitive(not options.get('win10_theme'))
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
@@ -200,8 +196,6 @@ class PreferencesDialog:
         self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
         self.cb_dark_mode.set_active(options.get("dark_mode"))
         self.cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
-        if 'nt' == os.name:
-            self.cb_dark_mode.set_sensitive(not options.get('win10_theme'))
         vbox.pack_start(self.cb_dark_mode, False, True, 0)
 
         # Debug logging
