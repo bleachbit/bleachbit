@@ -72,7 +72,7 @@ install:
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/
 
 	# translations
-	make -C po install DESTDIR=$(DESTDIR)
+	make -C po install DESTDIR=$(DESTDIR) prefix=$(prefix)
 
 	# PolicyKit
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions

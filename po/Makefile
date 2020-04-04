@@ -1,3 +1,4 @@
+prefix ?= /usr/local
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
@@ -67,10 +68,10 @@ local: $(MOFILES)
 	@echo "Now you can run cd ..; python3 bleachbit/GUI.py"
 
 install: $(MOFILES)
-	echo "* Installing in $(DESTDIR)/usr/share/locale"
+	echo "* Installing in $(DESTDIR)$(prefix)/share/locale"
 	for MO in $(MOFILES); do \
 		lang=`basename $$MO .mo`; \
-		DST=$(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
+		DST=$(DESTDIR)$(prefix)/share/locale/$$lang/LC_MESSAGES/; \
 		mkdir -p $$DST; \
 		cp $$MO $$DST/bleachbit.mo; \
 done
