@@ -10,6 +10,7 @@ init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - '%PYTHON_HOME%/python.exe -V'
   - '%PYTHON_HOME%/Scripts/pip.exe --version'
+  - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
   - '%PYTHON_HOME%/Scripts/pip.exe install https://liquidtelecom.dl.sourceforge.net/project/bleachbit/dependencies/psutil-5.6.7-cp34-cp34m-win32.whl'
