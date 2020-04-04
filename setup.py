@@ -240,7 +240,7 @@ def clean_dist_locale():
         langdir = os.path.join(basedir, langid)
         if langid in langs:
             # reduce the size of the .mo file
-            recompile_mo(langdir, 'gtk20', langid, tmpd)
+            recompile_mo(langdir, 'gtk30', langid, tmpd)
         else:
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
