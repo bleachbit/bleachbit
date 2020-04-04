@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-03-21 08:20-0600\n"
-"PO-Revision-Date: 2020-04-02 11:56+0000\n"
+"PO-Revision-Date: 2020-04-04 16:24+0000\n"
 "Last-Translator: Neelima Samaiya <Unknown>\n"
 "Language-Team: Hindi <hi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2020-04-02 14:08+0000\n"
+"X-Launchpad-Export-Date: 2020-04-04 16:32+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -122,7 +122,7 @@ msgstr ""
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
-msgstr ""
+msgstr "सर्च इंजिन"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
@@ -131,6 +131,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"सर्च इंजिन उपयोग हिस्ट्री रीसेट करें और नॉन-फैक्ट्री सर्च इंजिन डिलीट कर "
+"दें, कुछ नॉन-फैक्ट्री सर्च इंजिन अपने आप जुड़ गए थे।"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "Session"
@@ -560,7 +562,7 @@ msgstr "सिस्टम जर्नल"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "पुराने सिस्टम जर्नल साफे करें"
+msgstr "पुराने सिस्टम जर्नल साफ करें"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:316
 msgid "Memory dump"
