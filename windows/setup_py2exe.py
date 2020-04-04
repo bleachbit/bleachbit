@@ -425,7 +425,9 @@ def upx():
         return
 
     logger.info('Compressing executables')
-    upx_files = recursive_glob('dist', ['*.exe', '*.dll', '*.pyd'])
+    # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
+    # with antivirus software. Not much is space with gained with these small files, anyway.
+    upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
     cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
     run_cmd(cmd)
 
