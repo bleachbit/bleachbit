@@ -125,7 +125,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_diagnostics(self):
         """Opens the diagnostics dialog and closes it"""
-        dialog = self.app.get_diagnostics_dialog()
+        dialog, txt = self.app.get_diagnostics_dialog()
         dialog.show_all()
         self.refresh_gui()
 

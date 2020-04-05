@@ -328,10 +328,10 @@ class Bleachbit(Gtk.Application):
         dialog.vbox.pack_start(swindow, True, True, 0)
         dialog.add_buttons(Gtk.STOCK_COPY, 100,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
-        return dialog
+        return (dialog, txt)
 
     def diagnostic_dialog(self, _action, _param):
-        dialog = self.get_diagnostics_dialog()
+        dialog, txt = self.get_diagnostics_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
@@ -553,7 +553,6 @@ class GUI(Gtk.ApplicationWindow):
             logger.error(
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
-
 
         GLib.idle_add(self.cb_refresh_operations)
 
@@ -807,7 +806,6 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
-
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
             self.append_text(
@@ -1050,7 +1048,8 @@ class GUI(Gtk.ApplicationWindow):
            options.has_option("window_width") and options.has_option("window_height"):
             r = Gdk.Rectangle()
             (r.x, r.y) = (options.get("window_x"), options.get("window_y"))
-            (r.width, r.height) = (options.get("window_width"), options.get("window_height"))
+            (r.width, r.height) = (options.get(
+                "window_width"), options.get("window_height"))
 
             screen = self.get_screen()
             monitor_num = screen.get_monitor_at_point(r.x, r.y)
@@ -1076,10 +1075,12 @@ class GUI(Gtk.ApplicationWindow):
 
         if not self._style_provider_regular:
             self._style_provider_regular = Gtk.CssProvider()
-            self._style_provider_regular.load_from_path(os.path.join(windows10_theme_path, 'gtk.css'))
+            self._style_provider_regular.load_from_path(
+                os.path.join(windows10_theme_path, 'gtk.css'))
         if not self._style_provider_dark:
             self._style_provider_dark = Gtk.CssProvider()
-            self._style_provider_dark.load_from_path(os.path.join(windows10_theme_path, 'gtk-dark.css'))
+            self._style_provider_dark.load_from_path(
+                os.path.join(windows10_theme_path, 'gtk-dark.css'))
 
         screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
         if self._style_provider is not None:
