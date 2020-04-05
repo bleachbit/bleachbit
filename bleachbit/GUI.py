@@ -777,7 +777,9 @@ class GUI(Gtk.ApplicationWindow):
         self.view.expand_all()
 
         # Check for online updates.
-        if bleachbit.online_update_notification_enabled and options.get("check_online_updates") and \
+        if not self.auto_exit and \
+            bleachbit.online_update_notification_enabled and \
+            options.get("check_online_updates") and \
                 not hasattr(self, 'checked_for_updates'):
             self.checked_for_updates = True
             self.check_online_updates()
