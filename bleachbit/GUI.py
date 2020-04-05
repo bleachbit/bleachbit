@@ -554,35 +554,6 @@ class GUI(Gtk.ApplicationWindow):
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
-        if options.get("first_start") and not auto_exit:
-            if os.name == 'posix':
-                self.append_text(
-                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
-                pref = self.get_preferences_dialog()
-                pref.run()
-            if os.name == 'nt':
-                self.append_text(
-                    _('Access the application menu by clicking the logo on the title bar.'))
-            options.set('first_start', False)
-        if os.name == 'nt':
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://bleachbit.sourceforge.net/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError as e:
-                self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
-
-        if os.name == 'posix' and os.path.expanduser('~') == '/root':
-            self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.')+'\n')
-        if os.name == 'nt' and options.get('shred'):
-            from win32com.shell.shell import IsUserAnAdmin
-            if not IsUserAnAdmin():
-                self.append_text(
-                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
-                self.append_text('\n')
 
         GLib.idle_add(self.cb_refresh_operations)
 
@@ -810,6 +781,41 @@ class GUI(Gtk.ApplicationWindow):
                 not hasattr(self, 'checked_for_updates'):
             self.checked_for_updates = True
             self.check_online_updates()
+
+        # Show information for first start.
+        # (The first start flag is set also for each new version.)
+        if options.get("first_start") and not self.auto_exit:
+            if os.name == 'posix':
+                self.append_text(
+                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
+                pref = self.get_preferences_dialog()
+                pref.run()
+            if os.name == 'nt':
+                self.append_text(
+                    _('Access the application menu by clicking the logo on the title bar.'))
+            options.set('first_start', False)
+
+        if os.name == 'nt':
+            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+            # http://bleachbit.sourceforge.net/forum/074-fails-errors
+            try:
+                import sqlite3
+            except ImportError as e:
+                self.append_text(
+                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+
+
+        # Show notice about admin privileges.
+        if os.name == 'posix' and os.path.expanduser('~') == '/root':
+            self.append_text(
+                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.')+'\n')
+        if os.name == 'nt' and options.get('shred'):
+            from win32com.shell.shell import IsUserAnAdmin
+            if not IsUserAnAdmin():
+                self.append_text(
+                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
+                self.append_text('\n')
 
         # remove from idle loop (see GObject.idle_add)
         return False
