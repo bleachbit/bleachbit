@@ -236,12 +236,13 @@ def clean_dist_locale():
     langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
     for langid in sorted(os.listdir(basedir)):
-        print("debug: GTK language = '%s'", langid)
         langdir = os.path.join(basedir, langid)
         if langid in langs:
+            print("recompiling supported GTK language = %s" % langid)
             # reduce the size of the .mo file
             recompile_mo(langdir, 'gtk30', langid, tmpd)
         else:
+            print("removing unsupported GTK language = %s" % langid)
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
             print(cmd)
