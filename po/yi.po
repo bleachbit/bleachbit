@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-03-21 08:20-0600\n"
-"PO-Revision-Date: 2020-04-04 13:53+0000\n"
+"PO-Revision-Date: 2020-04-05 02:23+0000\n"
 "Last-Translator: bernard stafford <Unknown>\n"
 "Language-Team: Yiddish <yi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2020-04-04 15:36+0000\n"
+"X-Launchpad-Export-Date: 2020-04-05 14:20+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1531,42 +1531,44 @@ msgstr "נוצן אָפּציעס שטעלן אין די גראַפיקאַל צ
 
 #: ../bleachbit/CLI.py:158
 msgid "update winapp2.ini, if a new version is available"
-msgstr ""
+msgstr "דערהייַנטיקן winapp2.ini, אויב אַ נייַע ווערסיע איז בארעכטיגט"
 
 #: ../bleachbit/CLI.py:160
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "ווישן די פריי פּלאַץ אין די געגעבן פּאַטס"
 
 #: ../bleachbit/CLI.py:162
 msgid "output version information and exit"
-msgstr ""
+msgstr "רעזולטאַט ווערסיע אינפֿאָרמאַציע און אַרויסגאַנג"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "אָווועררייט טעקעס צו באַהאַלטן אינהאַלט"
 
 #: ../bleachbit/CLI.py:172
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"ספּעציפיצירן בלויז איין פון די קאַמאַנדז: --list-cleaners, --wipe-free-"
+"space, --preview, --clean"
 
 #: ../bleachbit/CLI.py:192
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "קאָנטראָלירונג אָנליין פֿאַר דערהייַנטיקונגען צו winapp2.ini"
 
 #: ../bleachbit/CLI.py:207
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "קיין דיירעקטעריז געגעבן פֿאַר --wipe-free-space"
 
 #: ../bleachbit/CLI.py:212
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "דרך צו ווישן מוזן זיין אַ יגזיסטינג וועגווייַזער: %s"
 
 #: ../bleachbit/CLI.py:214
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "ווייפּינג פּאָטער פּלאַץ קענען נעמען אַ לאַנג צייַט."
 
 #: ../bleachbit/CLI.py:224
 msgid "No work to do. Specify options."
@@ -1574,7 +1576,7 @@ msgstr "קיין אַרבעט צו טאָן. ספּעציפיצירן אָפּצ
 
 #: ../bleachbit/CLI.py:232
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite איז בלויז בדעה פֿאַר נוצן מיט --clean"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1802,62 +1804,63 @@ msgstr ""
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
-msgstr ""
+msgstr "דיסאַבלינג סוואַפּ."
 
 #: ../bleachbit/Memory.py:98
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "שייַעך-ענייבאַלינג ויסבייַטן."
 
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "באַשטעטיקן פייַן ווערט %d פֿאַר דעם פּראָצעס."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"דראַפּינג פּריווילאַדזשאַז פון פּראָצעס ID {pid} צו באַניצער ID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "אַלאַקייטינג און ווייפּינג %s פון זכּרון."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "פרעעינג %s פון זכּרון."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "געפֿונען UUID פֿאַר ויסבייַטן טעקע {device} איז {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "גשמיות פריי זיקאָרן איז %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "ווייפּינג די ויסבייַטן מיטל %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "רעיניטיאַליזינג די ויסבייַטן מיטל %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "דעטעקטעד די ויסבייַטן דיווייסאַז: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1866,44 +1869,46 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"די פונקציע wipe_memory () מיט פּראָצעס ID {pid} איז ווארטן פֿאַר די קינד "
+"פּראָצעס ID {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "דער קינד זיקאָרן-ווייפּינג פּראָצעס אומגעקערט קאָד  %d."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr ""
+msgstr "_פּיצל טעקעס"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "ש_רעד פאָלדערס"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "פּיצל פּאַטס פון קליפּבאָרד"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "_ווישן פריי פּלאַץ"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_ וויפּע פריי פּלאַץ"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "S_hred סעטטינגס און פאַרלאָזן"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
-msgstr ""
+msgstr "_דיאַגנאָסטיקס"
 
 #: ../data/app-menu.ui:40
 msgid "_Help"
-msgstr ""
+msgstr "_געהילף"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_ וועגן בליטשאַביט"
