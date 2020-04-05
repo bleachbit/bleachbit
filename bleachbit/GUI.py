@@ -24,7 +24,7 @@ GTK graphical user interface
 
 from bleachbit import GuiBasic
 from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode
+from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
 from bleachbit.Options import options
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
@@ -520,6 +520,8 @@ class TreeDisplayModel:
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
     _style_provider = None
+    _style_provider_regular = None
+    _style_provider_dark = None
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -1063,33 +1065,27 @@ class GUI(Gtk.ApplicationWindow):
         """Toggle the Windows 10 theme"""
         if not 'nt' == os.name:
             return
-        exec_path = os.path.dirname(sys.executable)
-        windows_10_theme_exe_path = os.path.normpath(
-            os.path.join(exec_path, 'themes/windows10/gtk.css'))
-        windows_10_theme_source_path = "themes/windows10/gtk.css"
-        load_path = None
 
-        if os.path.exists(windows_10_theme_exe_path):
-            load_path = windows_10_theme_exe_path
-        elif os.path.exists(windows_10_theme_source_path):
-            load_path = windows_10_theme_source_path
-
-        if not self._style_provider:
-            self._style_provider = Gtk.CssProvider()
-
-            if not load_path:
-                logger.warning('cannot find windows10/gtk.css')
-                return
-
-            self._style_provider.load_from_path(load_path)
+        if not self._style_provider_regular:
+            self._style_provider_regular = Gtk.CssProvider()
+            self._style_provider_regular.load_from_path(os.path.join(windows10_theme_path, 'gtk.css'))
+        if not self._style_provider_dark:
+            self._style_provider_dark = Gtk.CssProvider()
+            self._style_provider_dark.load_from_path(os.path.join(windows10_theme_path, 'gtk-dark.css'))
 
         screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-        if options.get("win10_theme"):
-            Gtk.StyleContext.add_provider_for_screen(
-                screen, self._style_provider, 600)
-        else:
+        if self._style_provider is not None:
             Gtk.StyleContext.remove_provider_for_screen(
                 screen, self._style_provider)
+        if options.get("win10_theme"):
+            if options.get("dark_mode"):
+                self._style_provider = self._style_provider_dark
+            else:
+                self._style_provider = self._style_provider_regular
+            Gtk.StyleContext.add_provider_for_screen(
+                screen, self._style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        else:
+            self._style_provider = None
 
     def populate_window(self):
         """Create the main application window"""
