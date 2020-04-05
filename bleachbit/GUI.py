@@ -576,7 +576,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
             self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.'))
+                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.')+'\n')
         if os.name == 'nt' and options.get('shred'):
             from win32com.shell.shell import IsUserAnAdmin
             if not IsUserAnAdmin():
