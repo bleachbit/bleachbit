@@ -114,7 +114,10 @@ if not portable_mode:
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 
 # system cleaners
-if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')):
+# On Windows in portable mode, the bleachbit_exe_path is equal to
+# options_dir, so be careful that system_cleaner_dir is not set to
+# personal_cleaners_dir.
+if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 elif sys.platform.startswith('linux') or sys.platform == 'darwin':
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
