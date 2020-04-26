@@ -399,7 +399,7 @@ def spike_cluster(volume_handle, cluster, tmp_file_path):
 # should look.
 def check_mapped_bit(volume_bitmap, lcn):
     assert isinstance(lcn, int)
-    mapped_bit = ord(volume_bitmap[lcn // 8])
+    mapped_bit = volume_bitmap[lcn // 8]
     bit_location = lcn % 8    # zero-based
     if bit_location > 0:
         mapped_bit = mapped_bit >> bit_location
@@ -434,6 +434,11 @@ def open_file(file_name, mode=GENERIC_READ):
     file_handle = CreateFileW(file_name, mode, 0, None,
                               OPEN_EXISTING, 0, None)
     return file_handle
+
+
+# Close file
+def close_file(file_handle):
+    CloseHandle(file_handle)
 
 
 # Get some basic information about a file.

@@ -373,7 +373,8 @@ class WindowsTestCase(common.BleachbitTestCase):
         There are more tests in testwipe.py
         """
 
-        from bleachbit.WindowsWipe import file_wipe
+        from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
+        from win32file import GENERIC_WRITE
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
@@ -390,10 +391,14 @@ class WindowsTestCase(common.BleachbitTestCase):
                 self.assertExists(shortname)
                 return shortname
 
-            def _test_wipe(contents):
+            def _test_wipe(contents, is_sparse=False):
                 shortname = _write_file(longname, contents)
-                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}'.format(
-                    len(longname), len(shortname), len(contents)))
+                if is_sparse:
+                    fh = open_file(extended_path(longname), mode=GENERIC_WRITE)
+                    file_make_sparse(fh)
+                    close_file(fh)
+                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
+                    len(longname), len(shortname), len(contents), is_sparse))
                 if shell.IsUserAnAdmin():
                     # wiping requires admin privileges
                     file_wipe(shortname)
@@ -411,6 +416,9 @@ class WindowsTestCase(common.BleachbitTestCase):
 
             # requires wiping of extents
             _test_wipe(b'secret' * 100000)
+
+            # requires wiping of extents: special file case
+            _test_wipe(b'secret' * 100000, is_sparse=True)
 
         shutil.rmtree(dirname, True)
 
