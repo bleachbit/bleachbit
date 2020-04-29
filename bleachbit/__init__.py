@@ -264,7 +264,7 @@ GETTEXT_CONTEXT_GLUE = "\004"
 def pgettext(msgctxt, msgid):
     """A custom implementation of GNU pgettext().
     """
-    if msgctxt is not None and msgctxt is not "":
+    if msgctxt is not None and msgctxt != "":
         translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
         if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
             return msgid
