@@ -31,7 +31,7 @@ install:
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-3.96-win64 upx'
   - 'dir .\upx\'
-  - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.20.1-v1.16/gettext0.20.1-iconv1.16-static-32.zip" -FileName gettext.zip}
+  - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.20.2-v1.16/gettext0.20.2-iconv1.16-static-32.zip" -FileName gettext.zip}
   - ps: Get-FileHash gettext.zip
   - '%SZ_EXE% x gettext.zip -ogettext'
   - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2020/sqlite-dll-win32-x86-3310100.zip" -FileName sqlite.zip }
