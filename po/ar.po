@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-04-19 08:11-0600\n"
-"PO-Revision-Date: 2020-04-29 21:26+0000\n"
+"PO-Revision-Date: 2020-04-30 16:25+0000\n"
 "Last-Translator: mohammed ait laarebi <gionmed025@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2020-04-29 21:28+0000\n"
+"X-Launchpad-Export-Date: 2020-04-30 23:08+0000\n"
 "X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -673,10 +673,11 @@ msgstr ""
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
+"حذف معلومات الإستخدام: إحداثيات نوافذ التصفح ومعلومات الملفات المتبقية"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr ""
+msgstr "سيُحَدِّثُ هذا الخيار تنظيم الأيقونات على سطح المكتب"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -773,7 +774,7 @@ msgstr "اختيار مجلدا لمحو محتواه"
 #: ../bleachbit/GUI.py:198 ../bleachbit/GuiBasic.py:99
 #: ../bleachbit/GuiBasic.py:143
 msgid "_Delete"
-msgstr ""
+msgstr "_احذف"
 
 #: ../bleachbit/GUI.py:223
 msgid "No paths found in clipboard."
