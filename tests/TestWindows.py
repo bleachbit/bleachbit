@@ -374,7 +374,8 @@ class WindowsTestCase(common.BleachbitTestCase):
         """
 
         from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from win32file import GENERIC_WRITE
+        from bleachbit.Windows import elevate_privileges
+        from win32con import GENERIC_WRITE, WRITE_DAC
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
@@ -391,11 +392,24 @@ class WindowsTestCase(common.BleachbitTestCase):
                 self.assertExists(shortname)
                 return shortname
 
-            def _test_wipe(contents, is_sparse=False):
+            def _deny_access(fh):
+                import win32security
+                import ntsecuritycon as con
+
+                user, _, _ = win32security.LookupAccountName("", win32api.GetUserName())
+                dacl = win32security.ACL()
+                dacl.AddAccessDeniedAce(win32security.ACL_REVISION, con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
+                win32security.SetSecurityInfo(fh, win32security.SE_FILE_OBJECT, win32security.DACL_SECURITY_INFORMATION,
+                    None, None, dacl, None)
+
+            def _test_wipe(contents, deny_access = False, is_sparse=False):
                 shortname = _write_file(longname, contents)
-                if is_sparse:
-                    fh = open_file(extended_path(longname), mode=GENERIC_WRITE)
-                    file_make_sparse(fh)
+                if deny_access or is_sparse:
+                    fh = open_file(extended_path(longname), mode=GENERIC_WRITE | WRITE_DAC)
+                    if is_sparse:
+                        file_make_sparse(fh)
+                    if deny_access:
+                        _deny_access(fh)
                     close_file(fh)
                 logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
                     len(longname), len(shortname), len(contents), is_sparse))
@@ -418,7 +432,8 @@ class WindowsTestCase(common.BleachbitTestCase):
             _test_wipe(b'secret' * 100000)
 
             # requires wiping of extents: special file case
-            _test_wipe(b'secret' * 100000, is_sparse=True)
+            elevate_privileges(False)
+            _test_wipe(b'secret' * 100000, deny_access = True, is_sparse=True)
 
         shutil.rmtree(dirname, True)
 
