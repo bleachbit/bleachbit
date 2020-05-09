@@ -56,6 +56,7 @@ if 'win32' == sys.platform:
     import win32file
     import win32gui
     import win32process
+    import win32security
 
     from ctypes import windll, c_ulong, c_buffer, byref, sizeof
     from win32com.shell import shell, shellcon
@@ -253,13 +254,23 @@ def detect_registry_key(parent_key):
     return True
 
 
-def elevate_privileges():
+def elevate_privileges(uac):
     """On Windows Vista and later, try to get administrator
     privileges.  If successful, return True (so original process
     can exit).  If failed or not applicable, return False."""
 
     if shell.IsUserAnAdmin():
         logger.debug('already an admin (UAC not required)')
+        htoken = win32security.OpenProcessToken(
+            win32api.GetCurrentProcess(), win32security.TOKEN_ADJUST_PRIVILEGES | win32security.TOKEN_QUERY)
+        newPrivileges = [
+            (win32security.LookupPrivilegeValue(None, "SeBackupPrivilege"), win32security.SE_PRIVILEGE_ENABLED),
+            (win32security.LookupPrivilegeValue(None, "SeRestorePrivilege"), win32security.SE_PRIVILEGE_ENABLED),
+        ]
+        win32security.AdjustTokenPrivileges(htoken, 0, newPrivileges)
+        win32file.CloseHandle(htoken)
+        return False
+    elif not uac:
         return False
 
     if hasattr(sys, 'frozen'):
