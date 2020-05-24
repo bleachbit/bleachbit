@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-19 08:11-0600\n"
-"PO-Revision-Date: 2020-04-20 10:32+0000\n"
+"PO-Revision-Date: 2020-05-21 21:22+0000\n"
 "Last-Translator: Tux 528 <Unknown>\n"
 "Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2020-04-20 14:00+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-05-22 16:12+0000\n"
+"X-Generator: Launchpad (build 1f7bc749b40714a4cc10f5e4d787118a78037035)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -99,7 +99,7 @@ msgstr "Historique des formulaires"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr "Un historique des formulaires saisis dans les sites web"
+msgstr "Un historique des formulaires saisis dans les sites Web"
 
 #: ../cleaners/chromium.xml ../cleaners/winrar.xml
 #: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
@@ -466,7 +466,7 @@ msgstr "Paramètres des différents sites Web visités"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/konqueror.xml
 msgid "URL history"
-msgstr "Historique des URLs"
+msgstr "Historique des URL"
 
 #: ../cleaners/waterfox.xml ../cleaners/firefox.xml ../cleaners/safari.xml
 #: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
@@ -504,7 +504,7 @@ msgstr "Widgets interactifs du bureau"
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr ""
-"Supprime les cookies, les URLs visitées et l’historique des recherches"
+"Supprime les cookies, les URL visitées et l’historique des recherches"
 
 #: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
@@ -542,7 +542,7 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"Une base de données des URLs comprenant des marque-pages, des favoris et un "
+"Une base de données des URL comprenant des marque-pages, des favoris et un "
 "historique des sites Web visités"
 
 #: ../cleaners/epiphany.xml
@@ -796,12 +796,12 @@ msgstr "_Supprimer"
 
 #: ../bleachbit/GUI.py:223
 msgid "No paths found in clipboard."
-msgstr "Aucun chemin d'accès n'a été trouvé dans le presse-papiers."
+msgstr "Aucun chemin d'accès n'a été trouvé dans le presse-papier."
 
 #: ../bleachbit/GUI.py:254 ../bleachbit/GuiPreferences.py:214
 #: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
 msgid "Choose a folder"
-msgstr "Choisissez un dossier"
+msgstr "Choisir un dossier"
 
 #: ../bleachbit/GUI.py:255
 msgid "_OK"
@@ -894,7 +894,7 @@ msgstr ""
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
-"Réinitialisez le fichier de configuration car celui-ci est corrompu : %s"
+"Réinitialisation du fichier de configuration car celui-ci est corrompu : %s"
 
 #: ../bleachbit/GUI.py:704
 msgid "You must select an operation"
@@ -1004,7 +1004,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:198 ../bleachbit/Worker.py:346
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Veuillez patienter. Nettoyage de %s en cours."
+msgstr "Veuillez patienter. Nettoyage de %s."
 
 #: ../bleachbit/Worker.py:198 ../bleachbit/Cleaner.py:304
 #: ../bleachbit/Cleaner.py:449
@@ -1061,13 +1061,13 @@ msgstr "Erreurs : %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Veuillez patienter. L’analyse approfondie est en cours."
+msgstr "Veuillez patienter. Exécution d'une analyse approfondie."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:349
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Veuillez patienter. Prévisualisation de %s en cours."
+msgstr "Veuillez patienter. Prévisualisation de %s."
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -1142,7 +1142,7 @@ msgstr "Corbeille"
 
 #: ../bleachbit/Cleaner.py:298
 msgid "Empty the trash"
-msgstr "Vider la Corbeille"
+msgstr "Vider la corbeille"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:306
@@ -1164,7 +1164,7 @@ msgstr "Corbeille"
 
 #: ../bleachbit/Cleaner.py:321 ../bleachbit/Cleaner.py:619
 msgid "Empty the recycle bin"
-msgstr "Vider la Corbeille"
+msgstr "Vider la corbeille"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
@@ -1183,14 +1183,14 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:332 ../bleachbit/Cleaner.py:558
 msgid "Clipboard"
-msgstr "Presse-papiers"
+msgstr "Presse-papier"
 
 #: ../bleachbit/Cleaner.py:333
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Le presse-papiers de l'environnement de bureau utilisé pour les opérations "
-"de copier-coller"
+"Le presse-papier de l'environnement de bureau utilisé pour les opérations de "
+"copier-coller"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:995
 msgid "Handled unknown error #0 while truncating file."
-msgstr "L’erreur inconnue n°0 a été gérée lors du tronquage du fichier."
+msgstr "L’erreur inconnue n° 0 a été gérée lors de la troncature du fichier."
 
 #: ../bleachbit/Update.py:74
 msgid "New winapp2.ini was downloaded."
@@ -1416,7 +1416,7 @@ msgstr ""
 #: ../bleachbit/Action.py:259
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "search=\"walk.all\" utilisé avec le chemin d'accès standard = \"%s\""
+msgstr "search=\"walk.all\" utilisé avec le chemin d'accès standard=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1640,7 +1640,7 @@ msgstr "Tronquer"
 
 #: ../bleachbit/Command.py:322
 msgid "Delete registry key"
-msgstr "Supprimer la clé de Registre"
+msgstr "Supprimer la clé de registre"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1747,7 +1747,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:150
 msgid "Hide irrelevant cleaners"
-msgstr "Masquer les nettoyants non pertinents"
+msgstr "Masquer les nettoyeurs non pertinents"
 
 #: ../bleachbit/GuiPreferences.py:159
 msgid "Overwrite contents of files to prevent recovery"
@@ -1887,8 +1887,8 @@ msgstr "Paramétrez une ingénieuse valeur %d pour ce processus."
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
-"Suppression des privilèges de l'ID du processus {pid} au profit de l'ID de "
-"l'utilisateur {uid}..."
+"Suppression des privilèges de l'identifiant du processus {pid} au profit de "
+"l'identifiant de l'utilisateur {uid}..."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1956,7 +1956,7 @@ msgstr "Dé_truire des dossiers"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Détruire des chemins d’accès depuis le presse-papiers"
+msgstr "Détruire des chemins d’accès depuis le presse-papier"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
