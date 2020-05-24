@@ -108,7 +108,7 @@ from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_SET_ZERO_DATA)
 from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
                        FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS,
+                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
                        DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_ATTRIBUTE_COMPRESSED,
@@ -432,7 +432,7 @@ def determine_win_version():
 # CreateFileW gives us Unicode support.
 def open_file(file_name, mode=GENERIC_READ):
     file_handle = CreateFileW(file_name, mode, 0, None,
-                              OPEN_EXISTING, 0, None)
+                              OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
     return file_handle
 
 

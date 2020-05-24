@@ -116,7 +116,7 @@ class Bleachbit(Gtk.Application):
     _auto_exit = False
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
-        if uac and os.name == 'nt' and Windows.elevate_privileges():
+        if os.name == 'nt' and Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)
         Gtk.Application.__init__(
