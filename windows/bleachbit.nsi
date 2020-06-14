@@ -336,12 +336,13 @@ SectionEnd
 SectionGroup /e Shortcuts
     Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
+            "" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
             "$INSTDIR\${prodname}.exe" \
-            "--no-uac --gui"
+            "--no-uac --gui" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
-            "$INSTDIR\${prodname}_console.exe"
+            "$INSTDIR\${prodname}_console.exe" "" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
         WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
