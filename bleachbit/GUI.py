@@ -1007,20 +1007,22 @@ class GUI(Gtk.ApplicationWindow):
         return hbar
 
     def on_configure_event(self, widget, event):
-        # fixup maximized window position:
-        # on Windows if a window is maximized on a secondary monitor it is moved off the screen
         (x, y) = self.get_position()
         (width, height) = self.get_size()
-        window = self.get_window()
-        if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-            screen = self.get_screen()
-            monitor_num = screen.get_monitor_at_window(window)
-            g = screen.get_monitor_geometry(monitor_num)
-            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                logger.info("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
-                    (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
-                self.move(g.x, g.y)
-                return True
+
+        # fixup maximized window position:
+        # on Windows if a window is maximized on a secondary monitor it is moved off the screen
+        if 'nt' == os.name:
+            window = self.get_window()
+            if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
+                screen = self.get_screen()
+                monitor_num = screen.get_monitor_at_window(window)
+                g = screen.get_monitor_geometry(monitor_num)
+                if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                    logger.debug("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
+                        (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
+                    self.move(g.x, g.y)
+                    return True
 
         # save window position and size
         options.set("window_x", x, commit=False)
@@ -1059,7 +1061,7 @@ class GUI(Gtk.ApplicationWindow):
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                logger.info("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
+                logger.debug("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
