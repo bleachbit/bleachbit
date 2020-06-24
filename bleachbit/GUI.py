@@ -239,14 +239,14 @@ class Bleachbit(Gtk.Application):
             # aborted
             return
 
-        # in portable mode, rebuild a minimal bleachbit.ini
-        bleachbit.Options.init_configuration()
-
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
         # uses the standard priority.  Otherwise, this will quit before
         # the files are deleted.
-        GLib.idle_add(self.quit, priority=GObject.PRIORITY_LOW)
+        #
+        # Rebuild a minimal bleachbit.ini when quitting
+        GLib.idle_add(self.quit, None, None, True,
+                      priority=GObject.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
@@ -309,7 +309,9 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.do_startup(self)
         self.build_app_menu()
 
-    def quit(self, _action=None, _param=None):
+    def quit(self, _action=None, _param=None, init_configuration=False):
+        if init_configuration:
+            bleachbit.Options.init_configuration()
         self._window.destroy()
 
     def get_diagnostics_dialog(self):
@@ -347,13 +349,13 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
+        if self._shred_paths:
+            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths)
+            self._auto_exit = True
         if self._auto_exit:
             GLib.idle_add(self.quit,
                           priority=GObject.PRIORITY_LOW)
             print('Success')
-        if self._shred_paths:
-            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, False, True,
-                          priority=GObject.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -562,7 +564,7 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations,
             self.set_windows10_theme)
 
-    def shred_paths(self, paths, shred_settings=False, quit_when_done=False):
+    def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
         When shredding_settings=True:
@@ -582,12 +584,7 @@ class GUI(Gtk.ApplicationWindow):
         if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
-            if shred_settings:
-                return True
-
-        if quit_when_done:
-            GLib.idle_add(self.close,
-                          priority=GObject.PRIORITY_LOW)
+            return True
 
         # user aborted
         return False
@@ -714,7 +711,7 @@ class GUI(Gtk.ApplicationWindow):
         else:
             self.start_time = time.time()
             worker = self.worker.run()
-            GLib.idle_add(worker.__next__, priority=GLib.PRIORITY_LOW)
+            GLib.idle_add(worker.__next__)
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""

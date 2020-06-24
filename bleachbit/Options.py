@@ -70,6 +70,8 @@ def path_to_option(pathname):
 
 def init_configuration():
     """Initialize an empty configuration, if necessary"""
+    if not os.path.exists(bleachbit.options_dir):
+        General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
         logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
