@@ -563,7 +563,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
-        nsis('/V3 /DNoTranslations /Dpackhdr /DCompressor',
+        nsis(opts + ' /DNoTranslations',
              'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
              nsi_path)
 
