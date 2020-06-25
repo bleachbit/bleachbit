@@ -242,7 +242,7 @@ def delete_office_registrymodifications(path):
         node.unlink()
         modified = True
     if modified:
-        with open(path, 'w') as xml_file:
+        with open(path, 'w', encoding='utf-8') as xml_file:
             dom1.writexml(xml_file)
 
 
@@ -312,7 +312,7 @@ def delete_ooo_history(path):
                 changed = True
                 break
     if changed:
-        dom1.writexml(open(path, "w"))
+        dom1.writexml(open(path, "w", encoding='utf-8'))
 
 
 def get_chrome_bookmark_ids(history_path):
@@ -334,7 +334,7 @@ def get_chrome_bookmark_urls(path):
     import json
 
     # read file to parser
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         js = json.load(f)
 
     # empty list
