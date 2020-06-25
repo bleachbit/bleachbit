@@ -31,7 +31,7 @@ from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-
+import glob
 import logging
 import os
 import sys
@@ -230,6 +230,10 @@ class Bleachbit(Gtk.Application):
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
+            if os.path.isdir(bleachbit.personal_cleaners_dir):
+                paths.append(bleachbit.personal_cleaners_dir)
+            for f in glob.glob(os.path.join(bleachbit.options_dir, "*.bz2")):
+                paths.append(f)
         else:
             paths.append(bleachbit.options_dir)
 
