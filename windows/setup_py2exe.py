@@ -217,6 +217,12 @@ def build():
     if not os.path.exists('dist'):
         os.makedirs('dist')
 
+    logger.info('Copying GTK helpers')
+    shutil.copyfile(os.path.join(GTK_DIR, 'gspawn-win32-helper.exe'),
+                    os.path.join('dist', 'gspawn-win32-helper.exe'))
+    shutil.copyfile(os.path.join(GTK_DIR, 'gspawn-win32-helper-console.exe'),
+                    os.path.join('dist', 'gspawn-win32-helper-console.exe'))
+
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
