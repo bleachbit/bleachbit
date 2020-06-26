@@ -308,7 +308,7 @@ Section Core (Required)
     SectionIn RO
 
     SetOutPath $INSTDIR
-    File /r "..\dist\*.*"
+    File /r /x "locale" "..\dist\*.*"
     File "..\COPYING"
 
     SetOutPath "$INSTDIR\share\"
