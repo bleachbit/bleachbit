@@ -90,7 +90,7 @@ deploy:
     secret_access_key:
       secure: VoAH5pVyhmTK3/KRuV5WcgfkTR3k/M9QDt7UD6ewcwNfkUvMynwjAHnKCG4vR0Rx
     bucket: bleachbitci
-    folder: dl/$(APPVEYOR_BUILD_VERSION)
+    folder: dl/$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)
     artifact:
     set-public: true
     reduced_redundancy: true
