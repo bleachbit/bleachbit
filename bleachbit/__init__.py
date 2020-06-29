@@ -303,3 +303,8 @@ if 'posix' == os.name:
     for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value
+
+if 'posix' == os.name:
+    fs_scan_re_flags = 0 # should be re.IGNORECASE on macOS
+else:
+    fs_scan_re_flags = re.IGNORECASE

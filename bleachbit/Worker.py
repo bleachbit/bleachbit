@@ -175,15 +175,15 @@ class Worker:
             total_size += self.size
 
             # deep scan
-            for ds in backends[operation].get_deep_scan(option_id):
-                if '' == ds['path']:
-                    ds['path'] = os.path.expanduser('~')
-                if 'delete' != ds['command']:
+            for (path, search) in backends[operation].get_deep_scan(option_id):
+                if '' == path:
+                    path = os.path.expanduser('~')
+                if search.command not in ('delete', 'shred'):
                     raise NotImplementedError(
-                        'Deep scan only supports deleting now')
-                if ds['path'] not in self.deepscans:
-                    self.deepscans[ds['path']] = []
-                self.deepscans[ds['path']].append(ds)
+                        'Deep scan only supports deleting or shredding now')
+                if path not in self.deepscans:
+                    self.deepscans[path] = []
+                self.deepscans[path].append(search)
         self.ui.update_item_size(operation, -1, total_size)
 
     def run_delayed_op(self, operation, option_id):
@@ -319,19 +319,12 @@ class Worker:
         # or all the system executables.
         self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
         yield True  # allow GTK to update the screen
-        ds = DeepScan.DeepScan()
-        for (path, dsdict) in self.deepscans.items():
-            logger.debug('deepscan path=%s, dict=%s' % (path, dsdict))
-            for dsdict2 in dsdict:
-                ds.add_search(path, dsdict2['regex'])
+        ds = DeepScan.DeepScan(self.deepscans)
 
-        for path in ds.scan():
-            if True == path:
+        for cmd in ds.scan():
+            if True == cmd:
                 yield True
                 continue
-            # fixme: support non-delete commands
-            from bleachbit import Command
-            cmd = Command.Delete(path)
             for ret in self.execute(cmd, 'deepscan'):
                 yield True
 
