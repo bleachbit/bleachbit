@@ -94,6 +94,7 @@ options_dir = None
 if 'posix' == os.name:
     options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
+    os.environ.pop('FONTCONFIG_FILE', None)
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
         portable_mode = True
