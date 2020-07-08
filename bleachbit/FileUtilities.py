@@ -863,7 +863,7 @@ def wipe_path(pathname, idle=False):
     def temporaryfile():
         # reference
         # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-        maxlen = 245
+        maxlen = 185
         f = None
         while True:
             try:
@@ -875,11 +875,12 @@ def wipe_path(pathname, idle=False):
                     delete, f.name, allow_shred=False, ignore_missing=True)
                 break
             except OSError as e:
-                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT):
+                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
                     # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
                     # Shrinking the size helps.
 
                     # Microsoft Windows returns ENOENT "No such file or directory"
+                    # or EINVAL "Invalid argument"
                     # when the path is too long such as %TEMP% but not in C:\
                     if maxlen > 5:
                         maxlen -= 5

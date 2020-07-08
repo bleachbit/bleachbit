@@ -943,6 +943,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             # no idle handler
             pass
 
+    def test_wipe_path_fast(self):
+        next(wipe_path(self.tempdir, True))
+
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
         import sqlite3
