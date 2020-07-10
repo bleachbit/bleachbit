@@ -211,6 +211,9 @@ class CleanerML:
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node, self.vars)
+        # for actplug in ActionProvider.plugins:
+        #     if actplug.action_key == command:
+        #         provider = actplug(action_node, self.vars)
         if provider is None:
             raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)

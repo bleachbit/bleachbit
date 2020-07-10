@@ -398,6 +398,14 @@ class ChromeDatabases(FileActionProvider):
     action_key = 'chrome.databases_db'
 
     def get_commands(self):
+        '''
+            It work in windows 10 as no change required  
+            1. I use Google Chrome dialog box to save an image file to disk.
+            2. I quit out of Google Chrome.
+            3. I run Bleachbit and clean.
+            4. I launch Google Chrome again and save an image to disk. 
+        '''
+        #TODO : testing in lower version required
         for path in self.get_paths():
             yield Command.Function(
                 path,

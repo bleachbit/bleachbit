@@ -82,6 +82,7 @@ class Cleaner:
 
     def add_running(self, detection_type, pathname):
         """Add a way to detect this program is currently running"""
+        # print('pathname')
         self.running += ((detection_type, pathname), )
 
     def auto_hide(self):
