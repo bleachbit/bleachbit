@@ -30,6 +30,7 @@ import glob
 import logging
 import os
 import re
+import shlex
 
 
 if 'posix' == os.name:
@@ -542,7 +543,7 @@ class Process(ActionProvider):
         def run_process():
             try:
                 if self.wait:
-                    args = self.cmd.split(' ')
+                    args = shlex.split(self.cmd)
                     (rc, stdout, stderr) = General.run_external(args)
                 else:
                     rc = 0  # unknown because we don't wait
