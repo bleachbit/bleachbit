@@ -28,6 +28,9 @@ import os
 import platform
 import re
 import unicodedata
+from collections import namedtuple
+from bleachbit import fs_scan_re_flags
+from . import Command
 
 def normalized_walk(top, **kwargs):
     """
@@ -51,20 +54,46 @@ def normalized_walk(top, **kwargs):
             yield result
 
 
+Search = namedtuple('Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])
+Search.__new__.__defaults__ = (None,) * len(Search._fields)
+
+class CompiledSearch:
+    """Compiled search condition"""
+    def __init__(self, search):
+        self.command = search.command
+
+        def re_compile(regex):
+            return re.compile(regex, fs_scan_re_flags) if regex else None
+
+        self.regex = re_compile(search.regex)
+        self.nregex = re_compile(search.nregex)
+        self.wholeregex = re_compile(search.wholeregex)
+        self.nwholeregex = re_compile(search.nwholeregex)
+
+    def match(self, dirpath, filename):
+        full_path = os.path.join(dirpath, filename)
+
+        if self.regex and not self.regex.search(filename):
+            return None
+
+        if self.nregex and self.nregex.search(filename):
+            return None
+
+        if self.wholeregex and not self.wholeregex.search(full_path):
+            return None
+
+        if self.nwholeregex and self.nwholeregex.search(full_path):
+            return None
+
+        return full_path
+
 class DeepScan:
 
     """Advanced directory tree scan"""
 
-    def __init__(self):
+    def __init__(self, searches):
         self.roots = []
-        self.searches = {}
-
-    def add_search(self, dirname, regex):
-        """Starting in dirname, look for files matching regex"""
-        if dirname not in self.searches:
-            self.searches[dirname] = [regex]
-        else:
-            self.searches[dirname].append(regex)
+        self.searches = searches
 
     def scan(self):
         """Perform requested searches and yield each match"""
@@ -73,15 +102,22 @@ class DeepScan:
         import time
         yield_time = time.time()
 
-        for (top, regexes) in self.searches.items():
+        for (top, searches) in self.searches.items():
+            compiled_searches = []
+            for s in searches:
+                compiled_searches.append(CompiledSearch(s))
+
             for (dirpath, dirnames, filenames) in normalized_walk(top):
-                for regex in regexes:
+                for c in compiled_searches:
                     # fixme, don't match filename twice
-                    r = re.compile(regex)
                     for filename in filenames:
-                        if r.search(filename):
-                            full_path = os.path.join(dirpath, filename)
-                            yield full_path
+                        full_name = c.match(dirpath, filename)
+                        if full_name is not None:
+                            # fixme: support other commands
+                            if c.command == 'delete':
+                                yield Command.Delete(full_name)
+                            elif c.command == 'shred':
+                                yield Command.Shred(full_name)
 
                 if time.time() - yield_time > 0.25:
                     # allow GTK+ to process the idle loop

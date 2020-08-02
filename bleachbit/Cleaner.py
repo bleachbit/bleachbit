@@ -93,8 +93,7 @@ class Cleaner:
                     for dummy in cmd.execute(False):
                         return False
                 for ds in self.get_deep_scan(option_id):
-                    if isinstance(ds, dict):
-                        return False
+                    return False
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
