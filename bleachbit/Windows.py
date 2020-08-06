@@ -123,6 +123,13 @@ def browse_folder(_, title):
     return fullpath
 
 
+def cleanup_nonce():
+    """On exit, clean up GTK junk files"""
+    for fn in glob.glob(os.path.expandvars('%TEMP%\gdbus-nonce-file-*')):
+        logger.debug('cleaning GTK nonce file: %s', fn)
+        FileUtilities.delete(fn)
+
+
 def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
     try:

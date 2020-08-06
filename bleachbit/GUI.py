@@ -127,6 +127,10 @@ class Bleachbit(Gtk.Application):
             self._shred_paths = shred_paths
             return
         if os.name == 'nt':
+            # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
+            import atexit
+            atexit.register(Windows.cleanup_nonce)
+
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
             # https://www.bleachbit.org/forum/074-fails-errors
