@@ -226,7 +226,8 @@ def build():
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
-    for subpath in ['fontconfig', 'fonts', 'icons', 'themes']:
+    # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
+    for subpath in ['fontconfig', 'icons', 'themes']:
         copytree(os.path.join(GTK_DIR, 'share', subpath),
                  'dist\\share\\' + subpath)
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
