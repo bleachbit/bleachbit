@@ -96,7 +96,7 @@ delete_windows_files:
 	# Remove Windows-specific cleaners.
 	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
 	# Remove Windows-specific modules.
-	rm -f bleachbit/Windows*.py
+	rm -f bleachbit/{Winapp,Windows*}.py 
 
 downgrade_desktop:
 #	This will downgrade the version of the .desktop file for older Linux distributions.
