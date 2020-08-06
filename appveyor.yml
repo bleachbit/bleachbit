@@ -13,8 +13,8 @@ init:
   - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://liquidtelecom.dl.sourceforge.net/project/bleachbit/dependencies/psutil-5.6.7-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://liquidtelecom.dl.sourceforge.net/project/bleachbit/dependencies/pywin32-227-cp34-cp34m-win32.whl'
+  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/psutil-5.6.7-cp34-cp34m-win32.whl'
+  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/pywin32-227-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe'
