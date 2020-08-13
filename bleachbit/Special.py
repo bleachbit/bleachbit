@@ -260,6 +260,9 @@ def delete_mozilla_url_history(path):
     cols = ('url', 'rev_host', 'title')
     cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
+    # For any bookmarks that remain in moz_places, reset the non-character values.
+    cmds += "update moz_places set visit_count=0, frecency=-1, last_visit_date=null;"
+
     # delete any orphaned annotations in moz_annos
     annos_suffix = "where id in (select moz_annos.id " \
         "from moz_annos " \
@@ -279,8 +282,7 @@ def delete_mozilla_url_history(path):
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     # delete any orphaned history visits
-    cmds += "delete from moz_historyvisits where place_id not " \
-        "in (select id from moz_places where id is not null); "
+    cmds += "delete from moz_historyvisits;"
 
     # delete any orphaned input history
     input_suffix = "where place_id not in (select distinct id from moz_places)"
