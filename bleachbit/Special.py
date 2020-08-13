@@ -281,7 +281,16 @@ def delete_mozilla_url_history(path):
         cols = ('url', 'data')
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
-    # delete any orphaned history visits
+    # Delete orphaned origins.
+    origins_where = 'where id not in (select distinct origin_id from moz_places)'
+    cmds += __shred_sqlite_char_columns('moz_origins',
+                                        ('host',), origins_where)
+
+    # For any remaining origins, reset the statistic.
+    cmds += "update moz_origins set frecency=-1;"
+    cmds += "delete from moz_meta where key like 'origin_frecency_%';"
+
+    # Delete all history visits.
     cmds += "delete from moz_historyvisits;"
 
     # delete any orphaned input history
