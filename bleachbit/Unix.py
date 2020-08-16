@@ -42,6 +42,7 @@ try:
 except AttributeError:
     Pattern = re._pattern_type
 
+
 class LocaleCleanerPath:
     """This represents a path with either a specific folder name or a folder name pattern.
     It also may contain several compiled regex patterns for localization items (folders or files)
@@ -714,7 +715,8 @@ def dnf_autoremove():
         cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
     freed_bytes = 0
     while True:
-        line = process.stdout.readline().replace("\n", "")
+        line = process.stdout.readline().decode(
+            bleachbit.stdout_encoding).replace("\n", "")
         if 'Error: This command has to be run under the root user.' == line:
             raise RuntimeError('dnf autoremove >> requires root permissions')
         if 'Nothing to do.' == line:

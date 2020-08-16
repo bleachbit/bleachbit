@@ -26,6 +26,8 @@ Test case for module Unix
 from tests import common
 from bleachbit.Unix import *
 
+import io
+import mock
 import os
 import sys
 import unittest
@@ -270,3 +272,24 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
+
+    @common.skipIfWindows
+    @mock.patch('bleachbit.Unix.os.path')
+    @mock.patch('bleachbit.Unix.subprocess.Popen')
+    def test_dnf_autoremove_mock(self, mock_popen, mock_path):
+        """Unit test for dnf_autoremove() with mock"""
+        mock_path.exists.return_value = True
+        self.assertRaises(RuntimeError, dnf_autoremove)
+
+        mock_path.exists.return_value = False
+        mock_popen.return_value.stdout = io.BytesIO(
+            b'Error: This command has to be run under the root user.')
+        self.assertRaises(RuntimeError, dnf_autoremove)
+
+        mock_popen.return_value.stdout = io.BytesIO(
+            b'Remove  112 Packages\nFreed space: 299 M\n')
+        bytes_freed = dnf_autoremove()
+        self.assertEqual(bytes_freed, 299000000)
+
+        mock_popen.return_value.stdout = io.BytesIO(b'Nothing to do.')
+        self.assertEqual(dnf_autoremove(), 0)
