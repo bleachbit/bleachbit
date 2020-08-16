@@ -273,11 +273,12 @@ def delete_mozilla_url_history(path):
     cmds += __shred_sqlite_char_columns(
         'moz_annos', ('content', ), annos_suffix)
 
-    # delete any orphaned favicons
-    fav_suffix = "where id not in (select favicon_id " \
-        "from moz_places where favicon_id is not null ); "
-
+    # Delete any orphaned favicons.
+    # Firefox 78 no longer has a table named moz_favicons, and it no longer has
+    # a column favicon_id in the table moz_places. (This change probably happened before version 78.)
     if __sqlite_table_exists(path, 'moz_favicons'):
+        fav_suffix = "where id not in (select favicon_id " \
+            "from moz_places where favicon_id is not null ); "
         cols = ('url', 'data')
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
