@@ -112,7 +112,9 @@ sessionstore.bak
 sessionstore.bak-20140715214327
 sessionstore-1.js
 upgrade.jsonlz4-20180905220717
+sessionCheckpoints.json
 -->
+    <action command="delete" search="file" path="$$profile$$/sessionCheckpoints.json"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore*.js*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore.bak*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/previous.js*"/>
