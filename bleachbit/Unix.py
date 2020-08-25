@@ -657,9 +657,9 @@ def get_apt_size():
 
 def get_globs_size(paths):
     """Get the cumulative size (in bytes) of a list of globs"""
+    from glob import iglob
     total_size = 0
     for path in paths:
-        from glob import iglob
         for p in iglob(path):
             total_size += FileUtilities.getsize(p)
     return total_size
