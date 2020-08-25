@@ -71,7 +71,10 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite-shm"/>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite-wal"/>
+    <!-- this deletes contents of the http directories -->
+    <!-- this deletes the http directories -->
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
+    <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
