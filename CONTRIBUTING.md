@@ -29,9 +29,7 @@ See also [prioritization of issues](https://www.bleachbit.org/contribute/priorit
 
 ## Development environment
 
-BleachBit runs on Python 2.7 with PyGTK 2. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
-
-The modernization branch supports GTK+ 3, but it is not yet ready. See the GitHub issues.
+BleachBit 4.x runs on Python 3 with GTK 3. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
 
 
 ## Procedure for creating and submitting patch
