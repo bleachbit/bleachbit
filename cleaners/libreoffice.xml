@@ -18,6 +18,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+Note:
+Deleting $XDG_CONFIG_HOME/libreoffice/4/user/uno_packages (or equivalent)
+will uninstall all extensions.
+
 -->
 <cleaner id="libreoffice">
   <label>LibreOffice</label>
@@ -25,16 +29,7 @@
   <running type="exe" os="linux">soffice.bin</running>
   <running type="exe" os="freebsd">soffice.bin</running>
   <running type="exe" os="windows">soffice.exe</running>
-  <option id="cache">
-    <label>Cache</label>
-    <description>Delete the cache</description>
-    <action command="delete" search="walk.all" path="$APPDATA\.libreoffice\3\user\uno_packages\cache\"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/libreoffice/3/user/uno_packages/cache/"/>
-    <action command="delete" search="walk.all" path="$XDG_CONFIG_HOME/libreoffice/4/user/uno_packages/cache/"/>
-    <action command="delete" search="walk.all" path="~/.libreoffice/3/user/uno_packages/cache/"/>
-    <action command="delete" search="walk.all" path="~/.libreoffice/3-suse/user/config/uno_packages/cache/"/>
-  </option>
-  <option id="history">
+ <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
     <!-- LibreOffice 3 on OpenSUSE from OpenSUSE repo uses ~/.libreoffice/3-suse/user// -->
