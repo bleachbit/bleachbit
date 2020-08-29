@@ -106,38 +106,46 @@ class GeneralTestCase(common.BleachbitTestCase):
         # clean_env parameter should not alter the PATH, and the PATH
         # should not be empty
         path_clean = run(['bash', '-c', 'echo $PATH'], clean_env=True)
-        self.assertEqual(os.getenv('PATH'), path_clean)
+        self.assertEqual(common.get_env('PATH'), path_clean)
         self.assertGreater(len(path_clean), 10)
 
         path_unclean = run(['bash', '-c', 'echo $PATH'], clean_env=False)
         self.assertEqual(path_clean, path_unclean)
 
         # With parent environment set to English and parameter clean_env=False,
-        # expect English.
-        os.putenv('LC_ALL', 'C')
+        # expect English
+        import copy
+        old_environ = copy.deepcopy(os.environ)
+
+        lc_all_old = common.get_env('LC_ALL')
+        lang_old = common.get_env('LANG')
+        common.put_env('LC_ALL', 'C')
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
-        self.assertTrue('No such file' in stderr)
+        self.assertIn('No such file', stderr)
 
         # Set parent environment to Spanish.
-        os.putenv('LC_ALL', 'es_MX.UTF-8')
+        common.put_env('LC_ALL', 'es_MX.UTF-8')
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
         if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
             # Spanish language pack is installed.
-            self.assertTrue('No existe el archivo' in stderr)
+            self.assertIn('No existe el archivo', stderr)
 
         # Here the parent environment has Spanish, but the child process
         # should use English.
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=True)
         self.assertEqual(rc, 2)
-        self.assertTrue('No such file' in stderr)
+        self.assertIn('No such file', stderr)
 
         # Reset environment
-        os.unsetenv('LC_ALL')
+        self.assertNotEqual(old_environ, copy.deepcopy(os.environ))
+        common.put_env('LC_ALL', lc_all_old)
+        common.put_env('LANG', lang_old)
+        self.assertEqual(old_environ, copy.deepcopy(os.environ))
 
     @common.skipIfWindows
     def test_sudo_mode(self):

@@ -143,9 +143,24 @@ def destructive_tests(title):
     return False
 
 
+def get_env(key):
+    """Get an environment variable. If not set, returns None instead of KeyError."""
+    if not key in os.environ:
+        return None
+    return os.environ[key]
+
+
 def have_root():
     """Return true if we have root privileges on POSIX systems"""
     return sudo_mode() or os.getuid() == 0
+
+
+def put_env(key, val):
+    """Put an environment variable. None removes the key"""
+    if not val:
+        del os.environ[key]
+    else:
+        os.environ[key] = val
 
 
 def skipIfWindows(f):

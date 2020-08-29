@@ -28,7 +28,6 @@ import time
 import types
 import unittest
 
-os.environ['LANGUAGE'] = 'en'
 
 try:
     import gi
@@ -47,6 +46,7 @@ from tests import common
 
 bleachbit.online_update_notification_enabled = False
 
+
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
     app = Bleachbit(auto_exit=False, uac=False)
@@ -55,10 +55,13 @@ class GUITestCase(common.BleachbitTestCase):
     """Test case for module GUI"""
     @classmethod
     def setUpClass(cls):
+        cls.old_language = common.get_env('LANGUAGE')
+        common.put_env('LANGUAGE', 'en')
         super(GUITestCase, GUITestCase).setUpClass()
         options.set('first_start', False)
-        options.set('check_online_updates', False) # avoid pop-up window
-        options.get_tree = types.MethodType(lambda self, parent, child: False, options)
+        options.set('check_online_updates', False)  # avoid pop-up window
+        options.get_tree = types.MethodType(
+            lambda self, parent, child: False, options)
         cls.app.register()
         cls.app.activate()
         cls.refresh_gui()
@@ -67,6 +70,7 @@ class GUITestCase(common.BleachbitTestCase):
     def tearDownClass(cls):
         super(GUITestCase, GUITestCase).tearDownClass()
         options.get_tree = cls.options_get_tree
+        common.put_env('LANGUAGE', cls.old_language)
 
     @classmethod
     def refresh_gui(cls, delay=0):

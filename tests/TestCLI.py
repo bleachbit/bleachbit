@@ -92,13 +92,13 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
-        lang = os.environ['LANG']
-        os.environ['LANG'] = 'blahfoo'
+        old_lang = common.get_env('LANG')
+        common.put_env('LANG', 'blahfoo')
         # tests are run from the parent directory
         args = [sys.executable, '-m', 'bleachbit.CLI', '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
-        os.environ['LANG'] = lang
+        common.put_env('LANG', old_lang)
 
     def test_preview(self):
         """Unit test for --preview option"""
