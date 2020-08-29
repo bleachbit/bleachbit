@@ -20,7 +20,7 @@ install:
   - sudo apt-get install gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils
   - pip install PyGObject
 # coveralls.io
-  - pip install python-coveralls requests[security]
+  - pip install coveralls requests[security]
 # install mock
   - pip install mock
 script:
