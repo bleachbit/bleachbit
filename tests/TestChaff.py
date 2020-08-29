@@ -94,6 +94,13 @@ class ChaffTestCase(common.BleachbitTestCase):
         for fn in generated_file_names:
             self.assertExists(fn)
             self.assertGreater(getsize(fn), 100)
+            with open(fn) as f:
+                contents = f.read()
+                self.assertIn('To: ', contents)
+                self.assertIn('From: ', contents)
+                self.assertIn('Sent: ', contents)
+                self.assertIn('Subject: ', contents)
+                self.assertNotIn('base64', contents)
 
         generated_file_names = generate_2600(5, tmp_dir, models_dir)
 

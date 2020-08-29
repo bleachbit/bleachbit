@@ -87,7 +87,7 @@ def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SEN
         content.append(content_model.make_sentence())
         content.append(random.choice([' ', ' ', '\n\n']))
     try:
-        return MIMEText(''.join(content))
+        return MIMEText(''.join(content), _charset='iso-8859-1')
     except UnicodeEncodeError:
         return _get_random_content(content_model, number_of_sentences=number_of_sentences)
 
