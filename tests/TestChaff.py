@@ -23,6 +23,7 @@
 Test case for module Chaff
 """
 
+import mock
 import os
 import unittest
 from tempfile import mkdtemp
@@ -95,6 +96,33 @@ class ChaffTestCase(common.BleachbitTestCase):
             self.assertGreater(getsize(fn), 100)
 
         generated_file_names = generate_2600(5, tmp_dir, models_dir)
+
+        rmtree(tmp_dir)
+
+    @mock.patch('bleachbit.Chaff.download_url_to_fn')
+    def test_download_models_fallback(self, mock_download):
+        """Test the fallback mechanism in download_models()"""
+        tmp_dir = mkdtemp(prefix='bleachbit-chaff')
+
+        # Test when primary download mirror fails but secondary succeeds.
+        def succeed_on_second(*args):
+            url = args[0]
+            if 'sourceforge' in url:
+                return False
+            if 'bleachbit.org' in url:
+                return True
+        mock_download.side_effect = succeed_on_second
+        ret = download_models(models_dir=tmp_dir)
+        self.assertTrue(ret)
+        self.assertEqual(mock_download.call_count, 6)
+
+        # Test when both primary and secondary download mirrors will fail.
+        mock_download.reset_mock()
+        mock_download.side_effect = None
+        mock_download.return_value = False
+        ret = download_models(models_dir=tmp_dir)
+        self.assertFalse(ret)
+        self.assertEqual(mock_download.call_count, 2)
 
         rmtree(tmp_dir)
 
