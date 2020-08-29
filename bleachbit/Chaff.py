@@ -39,15 +39,14 @@ RECIPIENTS = ['0emillscd@state.gov', '1ilotylc@state.gov', 'abdinh@state.gov', '
 DEFAULT_SUBJECT_LENGTH = 64
 DEFAULT_NUMBER_OF_SENTENCES_CLINTON = 50
 DEFAULT_NUMBER_OF_SENTENCES_2600 = 50
-URL_CLINTON_SUBJECT = 'https://sourceforge.net/projects/bleachbit/files/chaff/clinton_subject_model.json.bz2/download'
-URL_CLINTON_CONTENT = 'https://sourceforge.net/projects/bleachbit/files/chaff/clinton_content_model.json.bz2/download'
-URL_2600 = 'https://sourceforge.net/projects/bleachbit/files/chaff/2600_model.json.bz2/download'
-DEFAULT_CONTENT_MODEL_PATH = os.path.join(
-    options_dir, 'clinton_content_model.json.bz2')
-DEFAULT_SUBJECT_MODEL_PATH = os.path.join(
-    options_dir, 'clinton_subject_model.json.bz2')
-DEFAULT_2600_MODEL_PATH = os.path.join(
-    options_dir, '2600_model.json.bz2')
+MODEL_BASENAMES = (
+    '2600_model.json.bz2',
+    'clinton_content_model.json.bz2',
+    'clinton_subject_model.json.bz2')
+URL_TEMPLATES = (
+    'https://sourceforge.net/projects/bleachbit/files/chaff/%s/download',
+    'https://download.bleachbit.org/chaff/%s')
+DEFAULT_MODELS_DIR = options_dir
 
 
 def _load_model(model_path):
@@ -159,9 +158,7 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     return True
 
 
-def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
-                    subject_model_path=DEFAULT_SUBJECT_MODEL_PATH,
-                    twentysixhundred_model_path=DEFAULT_2600_MODEL_PATH,
+def download_models(models_dir=DEFAULT_MODELS_DIR,
                     on_error=None):
     """Download models
 
@@ -169,25 +166,33 @@ def download_models(content_model_path=DEFAULT_CONTENT_MODEL_PATH,
 
     Returns success as boolean value
     """
-    for (url, fn) in ((URL_CLINTON_SUBJECT, subject_model_path),
-                      (URL_CLINTON_CONTENT, content_model_path),
-                      (URL_2600, twentysixhundred_model_path)):
+    for basename in (MODEL_BASENAMES):
+        fn = os.path.join(models_dir, basename)
         if os.path.exists(fn):
             logger.debug('File %s already exists', fn)
             continue
-        if not download_url_to_fn(url, fn):
+        this_file_success = False
+        for url_template in URL_TEMPLATES:
+            url = url_template % basename
+            if download_url_to_fn(url, fn, on_error):
+                this_file_success = True
+                break
+        if not this_file_success:
             return False
     return True
 
 
 def generate_emails(number_of_emails,
                     email_output_dir,
-                    content_model_path=DEFAULT_CONTENT_MODEL_PATH,
-                    subject_model_path=DEFAULT_SUBJECT_MODEL_PATH,
+                    models_dir=DEFAULT_MODELS_DIR,
                     number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
                     on_progress=None,
                     *kwargs):
     logger.debug('Loading two email models')
+    subject_model_path = os.path.join(
+        models_dir, 'clinton_subject_model.json.bz2')
+    content_model_path = os.path.join(
+        models_dir, 'clinton_content_model.json.bz2')
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
     logger.debug('Generating {:,} emails'.format(number_of_emails))
@@ -215,9 +220,10 @@ def _generate_2600_file(model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_2
 
 def generate_2600(file_count,
                   output_dir,
-                  model_path=DEFAULT_2600_MODEL_PATH,
+                  model_dir=DEFAULT_MODELS_DIR,
                   on_progress=None):
     logger.debug('Loading 2600 model')
+    model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
     logger.debug('Generating {:,} files'.format(file_count))
     generated_file_names = []
@@ -235,7 +241,8 @@ def have_models():
     """Check whether the models exist in the default location.
 
     Used to check whether download is needed."""
-    for fn in (DEFAULT_CONTENT_MODEL_PATH, DEFAULT_SUBJECT_MODEL_PATH, DEFAULT_2600_MODEL_PATH):
+    for basename in (MODEL_BASENAMES):
+        fn = os.path.join(DEFAULT_MODELS_DIR, basename)
         if not os.path.exists(fn):
             return False
     return True

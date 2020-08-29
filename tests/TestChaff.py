@@ -68,16 +68,17 @@ class ChaffTestCase(common.BleachbitTestCase):
     def test_Chaff(self):
         """Unit test for class Chaff"""
         tmp_dir = mkdtemp(prefix='bleachbit-chaff')
+        models_dir = os.path.join(tmp_dir, 'model')
+        os.mkdir(models_dir)
         # con=Clinton content
-        con_path = os.path.join(tmp_dir, 'content.json.bz2')
+        con_path = os.path.join(models_dir, 'clinton_content_model.json.bz2')
         # sub=Clinton subject
-        sub_path = os.path.join(tmp_dir, 'subject.json.bz2')
-        ts_path = os.path.join(tmp_dir, 'ts.json.bz2')  # ts = 2600 Magazine
+        sub_path = os.path.join(models_dir, 'clinton_subject_model.json.bz2')
+        # ts = 2600 Magazine
+        ts_path = os.path.join(models_dir, '2600_model.json.bz2')
 
         for i in ('download', 'already downloaded'):
-            ret = download_models(
-                content_model_path=con_path, subject_model_path=sub_path,
-                twentysixhundred_model_path=ts_path)
+            ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
             self.assertTrue(ret)
 
@@ -85,7 +86,7 @@ class ChaffTestCase(common.BleachbitTestCase):
         self.assertExists(sub_path)
         self.assertExists(ts_path)
 
-        generated_file_names = generate_emails(5, tmp_dir, con_path, sub_path)
+        generated_file_names = generate_emails(5, tmp_dir, models_dir)
 
         self.assertEqual(len(generated_file_names), 5)
 
@@ -93,7 +94,7 @@ class ChaffTestCase(common.BleachbitTestCase):
             self.assertExists(fn)
             self.assertGreater(getsize(fn), 100)
 
-        generated_file_names = generate_2600(5, tmp_dir, ts_path)
+        generated_file_names = generate_2600(5, tmp_dir, models_dir)
 
         rmtree(tmp_dir)
 
