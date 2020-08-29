@@ -58,8 +58,11 @@
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite-shm"/>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite-wal"/>
+    <!-- this deletes contents of the http directories -->
+    <!-- this deletes the http directories -->
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="walk.all" path="$$profile$$/storage/temporary/http*"/>
+    <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
@@ -96,7 +99,9 @@ sessionstore.bak
 sessionstore.bak-20140715214327
 sessionstore-1.js
 upgrade.jsonlz4-20180905220717
+sessionCheckpoints.json
 -->
+    <action command="delete" search="file" path="$$profile$$/sessionCheckpoints.json"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore*.js*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore.bak*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/previous.js*"/>
