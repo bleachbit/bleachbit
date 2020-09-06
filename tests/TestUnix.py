@@ -263,8 +263,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
-    def test_dnf_autoremove(self):
-        """Unit test for dnf_autoremove()"""
+    def test_dnf_autoremove_real(self):
+        """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
                 or not FileUtilities.exe_exists('dnf'):
             self.assertRaises(RuntimeError, dnf_clean)
@@ -275,21 +275,21 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Unix.os.path')
-    @mock.patch('bleachbit.Unix.subprocess.Popen')
-    def test_dnf_autoremove_mock(self, mock_popen, mock_path):
+    @mock.patch('bleachbit.General.run_external')
+    def test_dnf_autoremove_mock(self, mock_run, mock_path):
         """Unit test for dnf_autoremove() with mock"""
         mock_path.exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 
         mock_path.exists.return_value = False
-        mock_popen.return_value.stdout = io.BytesIO(
-            b'Error: This command has to be run under the root user.')
+        mock_run.return_value = (1, 'stdout', 'stderr')
         self.assertRaises(RuntimeError, dnf_autoremove)
 
-        mock_popen.return_value.stdout = io.BytesIO(
-            b'Remove  112 Packages\nFreed space: 299 M\n')
+        mock_run.return_value = (0, 'Nothing to do.', 'stderr')
+        bytes_freed = dnf_autoremove()
+        self.assertEqual(bytes_freed, 0)
+
+        mock_run.return_value = (
+            0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 299000000)
-
-        mock_popen.return_value.stdout = io.BytesIO(b'Nothing to do.')
-        self.assertEqual(dnf_autoremove(), 0)
