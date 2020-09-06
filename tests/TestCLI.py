@@ -109,7 +109,16 @@ class CLITestCase(common.BleachbitTestCase):
         args_list = []
         module = 'bleachbit.CLI'
         big_args = [sys.executable, '-m', module, '--preview', ]
-        for cleaner in cleaners_list():
+        # The full list can take a long time and generally does not improve the testing,
+        # so test a subset.
+        full_cleaners_list = list(cleaners_list())
+        system_cleaners = [
+            c for c in full_cleaners_list if c.startswith('system.')]
+        non_system_cleaners = [
+            c for c in full_cleaners_list if not c.startswith('system.')]
+        import random
+        sample_cleaners = random.sample(non_system_cleaners, 5)
+        for cleaner in (system_cleaners + sample_cleaners):
             args_list.append(
                 [sys.executable, '-m', module, '--preview', cleaner])
             big_args.append(cleaner)
