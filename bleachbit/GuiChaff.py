@@ -153,7 +153,7 @@ class ChaffDialog(Gtk.Dialog):
             dialog.run()
             dialog.destroy()
             return
-        from bleachbit import options_dir
+
         if not have_models():
             if not self.download_models_dialog():
                 return
