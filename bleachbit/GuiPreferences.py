@@ -27,9 +27,8 @@ Preferences dialog
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
-import bleachbit.GUI
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 import logging
 import os
 

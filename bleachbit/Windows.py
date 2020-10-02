@@ -43,7 +43,6 @@ from bleachbit import Command, FileUtilities, General
 import glob
 import logging
 import os
-import re
 import sys
 
 from decimal import Decimal
@@ -55,7 +54,6 @@ if 'win32' == sys.platform:
     import win32con
     import win32file
     import win32gui
-    import win32process
     import win32security
 
     from ctypes import windll, c_ulong, c_buffer, byref, sizeof
