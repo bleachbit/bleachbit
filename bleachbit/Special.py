@@ -30,6 +30,7 @@ import os.path
 
 logger = logging.getLogger(__name__)
 
+
 def __get_chrome_history(path, fn='History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
@@ -179,7 +180,8 @@ def delete_chrome_favicons(path):
 def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
     if not os.path.exists(path):
-        logger.debug('aborting delete_chrome_history() because history does not exist: %s' % path)
+        logger.debug(
+            'aborting delete_chrome_history() because history does not exist: %s' % path)
         return
     cols = ('url', 'title')
     where = ""
@@ -283,13 +285,15 @@ def delete_mozilla_url_history(path):
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     # Delete orphaned origins.
-    origins_where = 'where id not in (select distinct origin_id from moz_places)'
-    cmds += __shred_sqlite_char_columns('moz_origins',
-                                        ('host',), origins_where)
+    if __sqlite_table_exists(path, 'moz_origins'):
+        origins_where = 'where id not in (select distinct origin_id from moz_places)'
+        cmds += __shred_sqlite_char_columns('moz_origins',
+                                            ('host',), origins_where)
+        # For any remaining origins, reset the statistic.
+        cmds += "update moz_origins set frecency=-1;"
 
-    # For any remaining origins, reset the statistic.
-    cmds += "update moz_origins set frecency=-1;"
-    cmds += "delete from moz_meta where key like 'origin_frecency_%';"
+    if __sqlite_table_exists(path, 'moz_meta'):
+        cmds += "delete from moz_meta where key like 'origin_frecency_%';"
 
     # Delete all history visits.
     cmds += "delete from moz_historyvisits;"

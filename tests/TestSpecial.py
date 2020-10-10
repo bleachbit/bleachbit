@@ -345,6 +345,14 @@ INSERT INTO moz_places VALUES(1,'https://support.mozilla.org/en-US/products/fire
         self.sqlite_clean_helper(
             sql_firefox78, None, Special.delete_mozilla_url_history)
 
+        # Pale Moon 28 comes from an older Firefox, and it does not have moz_origins or moz_meta in places.sqlite.
+        import re
+        re_palemoon = '(CREATE TABLE|INSERT INTO) moz_(meta|origins)'
+        sql_palemoon = '\n'.join([line for line in sql_firefox78.split(
+            '\n') if not re.search(re_palemoon, line)])
+        self.sqlite_clean_helper(
+            sql_palemoon, None, Special.delete_mozilla_url_history)
+
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
         # does not exist
