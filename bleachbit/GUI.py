@@ -768,6 +768,9 @@ class GUI(Gtk.ApplicationWindow):
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             self.recognized_cleanerml = True
+
+        if self.auto_exit:
+            return False
         # reload cleaners from disk
         self.view.expand_all()
         self.progressbar.show()
@@ -923,8 +926,9 @@ class GUI(Gtk.ApplicationWindow):
         try:
             __iter = model.get_iter(treepath)
         except ValueError as e:
-            logger.warning(
-                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+            if not self.auto_exit:
+                logger.warning(
+                   'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return
         while __iter:
             if model[__iter][2] == option:
