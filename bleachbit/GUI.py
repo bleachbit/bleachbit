@@ -355,11 +355,11 @@ class Bleachbit(Gtk.Application):
     def do_activate(self):
         if not self._window:
             self._window = GUI(
-                application=self, title=APP_NAME, auto_exit=self._auto_exit)
+                application=self, title=APP_NAME,
+                auto_exit=self._auto_exit or self._shred_paths)
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths)
-            self._auto_exit = True
         if self._auto_exit:
             GLib.idle_add(self.quit,
                           priority=GObject.PRIORITY_LOW)
@@ -594,6 +594,10 @@ class GUI(Gtk.ApplicationWindow):
             self.preview_or_run_operations(True, operations)
             return True
 
+        if self.auto_exit:
+            # exit if was started from cli
+            sys.exit()
+
         # user aborted
         return False
 
@@ -733,7 +737,7 @@ class GUI(Gtk.ApplicationWindow):
         # if the option is selected under preference.
 
         if really_delete:
-            if options.get("exit_done"):
+            if options.get("exit_done") or self.auto_exit:
                 sys.exit()
 
         # notification for long-running process
