@@ -609,9 +609,12 @@ class GUI(Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda:
-                          self.textview.scroll_mark_onscreen(
-                              self.textbuffer.get_insert()))
+            GLib.idle_add(self.scroll_textview_to_end)
+
+    def scroll_textview_to_end(self):
+        """Scroll the text view to end of page."""
+        adjustment = self.textview.get_parent().get_vadjustment()
+        adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size())
 
     def update_log_level(self):
         """This gets called when the log level might have changed via the preferences."""
