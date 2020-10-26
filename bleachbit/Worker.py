@@ -333,7 +333,11 @@ class Worker:
         count = 0
         for operation in my_operations:
             self.ui.update_progress_bar(1.0 * count / len(my_operations))
-            name = backends[operation].get_name()
+            operation_backend = backends.get(operation, None)
+            if not operation_backend:
+                self.print_exception(operation)
+                continue
+            name = operation_backend.get_name()
             if self.really_delete:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
                 msg = _("Please wait.  Cleaning %s.") % name
