@@ -142,7 +142,7 @@ sessionCheckpoints.json
     <action command="delete" search="file" path="$$profile$$/downloads.sqlite"/>
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
     <!-- Firefox 78 (or probably some previous version) moved icons from places.sqlite to favicons.sqlite -->
-    <action command="delete" search="file" path="$$profile$$/favicons.sqlite"/>
+    <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>

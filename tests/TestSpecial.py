@@ -168,6 +168,29 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
 """
 
 
+firefox78_places = """
+CREATE TABLE moz_annos (  id INTEGER PRIMARY KEY, place_id INTEGER NOT NULL, anno_attribute_id INTEGER, content LONGVARCHAR, flags INTEGER DEFAULT 0, expiration INTEGER DEFAULT 0, type INTEGER DEFAULT 0, dateAdded INTEGER DEFAULT 0, lastModified INTEGER DEFAULT 0);
+CREATE TABLE moz_bookmarks (  id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
+INSERT INTO moz_bookmarks VALUES(1,2,NULL,0,0,'',NULL,NULL,1576347134982000,1597289924328000,'root________',1,1);
+INSERT INTO moz_bookmarks VALUES(2,2,NULL,1,0,'menu',NULL,NULL,1576347134982000,1576347136057000,'menu________',1,3);
+CREATE TABLE moz_historyvisits (  id INTEGER PRIMARY KEY, from_visit INTEGER, place_id INTEGER, visit_date INTEGER, visit_type INTEGER, session INTEGER);
+INSERT INTO moz_historyvisits VALUES(1,0,13,1597441943359769,2,0);
+CREATE TABLE moz_inputhistory (  place_id INTEGER NOT NULL, input LONGVARCHAR NOT NULL, use_count INTEGER, PRIMARY KEY (place_id, input));
+INSERT INTO moz_inputhistory VALUES(12,'bleachbit.org',1);
+CREATE TABLE moz_meta (key TEXT PRIMARY KEY, value NOT NULL) WITHOUT ROWID ;
+INSERT INTO moz_meta VALUES('origin_frecency_count',3);
+INSERT INTO moz_meta VALUES('origin_frecency_sum',52148);
+INSERT INTO moz_meta VALUES('origin_frecency_sum_of_squares',2312614202);
+CREATE TABLE moz_origins ( id INTEGER PRIMARY KEY, prefix TEXT NOT NULL, host TEXT NOT NULL, frecency INTEGER NOT NULL, UNIQUE (prefix, host) );
+INSERT INTO moz_origins VALUES(1,'https://','support.mozilla.org',-1);
+INSERT INTO moz_origins VALUES(2,'https://','www.mozilla.org',2149);
+INSERT INTO moz_origins VALUES(3,'http://','www.ubuntu.com',-1);
+INSERT INTO moz_origins VALUES(4,'http://','wiki.ubuntu.com',-1);
+CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
+INSERT INTO moz_places VALUES(1,'https://support.mozilla.org/en-US/products/firefox',NULL,'gro.allizom.troppus.',0,0,0,-1,NULL,'abc123',1,47357795150914,NULL,NULL,1);
+"""
+
+
 class SpecialAssertions:
 
     def assertTablesAreEmpty(self, path, tables):
@@ -321,6 +344,20 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
+
+        self.sqlite_clean_helper(
+            firefox78, None, Special.delete_mozilla_url_history)
+
+        # Pale Moon 28 comes from an older Firefox, and it does not have moz_origins or moz_meta in places.sqlite.
+        import re
+        re_palemoon = '(CREATE TABLE|INSERT INTO) moz_(meta|origins)'
+        sql_palemoon = '\n'.join([line for line in sql_firefox78.split(
+            '\n') if not re.search(re_palemoon, line)])
+        self.sqlite_clean_helper(
+            sql_palemoon, None, Special.delete_mozilla_url_history)
+
+    def test_delete_mozilla_favicons(self):
+        """Test for delete_mozilla_url_history"""
         sql_firefox78 = """
 CREATE TABLE moz_annos (  id INTEGER PRIMARY KEY, place_id INTEGER NOT NULL, anno_attribute_id INTEGER, content LONGVARCHAR, flags INTEGER DEFAULT 0, expiration INTEGER DEFAULT 0, type INTEGER DEFAULT 0, dateAdded INTEGER DEFAULT 0, lastModified INTEGER DEFAULT 0);
 CREATE TABLE moz_bookmarks (  id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
@@ -343,7 +380,7 @@ CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARC
 INSERT INTO moz_places VALUES(1,'https://support.mozilla.org/en-US/products/firefox',NULL,'gro.allizom.troppus.',0,0,0,-1,NULL,'abc123',1,47357795150914,NULL,NULL,1);
 """
         self.sqlite_clean_helper(
-            sql_firefox78, None, Special.delete_mozilla_url_history)
+            sql_firefox78, None, Special.delete_mozilla_favicons)
 
         # Pale Moon 28 comes from an older Firefox, and it does not have moz_origins or moz_meta in places.sqlite.
         import re
@@ -351,7 +388,8 @@ INSERT INTO moz_places VALUES(1,'https://support.mozilla.org/en-US/products/fire
         sql_palemoon = '\n'.join([line for line in sql_firefox78.split(
             '\n') if not re.search(re_palemoon, line)])
         self.sqlite_clean_helper(
-            sql_palemoon, None, Special.delete_mozilla_url_history)
+            sql_palemoon, None, Special.delete_mozilla_favicons)
+
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""

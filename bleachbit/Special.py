@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 def __get_chrome_history(path, fn='History'):
     """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
-    ver = get_sqlite_int(
+    ver = get_sqlite(
         path_history, 'select value from meta where key="version"')[0]
     assert ver > 1
     return ver
@@ -73,8 +73,8 @@ def __sqlite_table_exists(pathname, table):
     return ret
 
 
-def get_sqlite_int(path, sql, parameters=None):
-    """Run SQL on database in 'path' and return the integers"""
+def get_sqlite(path, sql, parameters=None, element_type=int):
+    """Run SQL on database in 'path' and return the elements"""
     ids = []
     import sqlite3
     conn = sqlite3.connect(path)
@@ -84,7 +84,7 @@ def get_sqlite_int(path, sql, parameters=None):
     else:
         cursor.execute(sql)
     for row in cursor:
-        ids.append(int(row[0]))
+        ids.append(element_type(row[0]))
     cursor.close()
     conn.close()
     return ids
@@ -315,6 +315,35 @@ def delete_mozilla_url_history(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def delete_mozilla_favicons(path):
+    """Delete favorites icon in Mozilla places.favicons only if they are not bookmarks (Firefox 3 and family)"""
+
+    cmds = ""
+
+    # collect bookmarked urls
+    places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
+    bookmark_urls_cmd = (
+        "select url from moz_places where id in (select distinct fk from moz_bookmarks where fk is not null)"
+    )
+    bookmark_urls = get_sqlite(places_path, bookmark_urls_cmd, element_type=str)
+    bookmark_urls = ",".join(["'{}'".format(url) for url in bookmark_urls])
+
+    # delete all not bookmarked icon urls
+    urls_where = "where (page_url not in ({}))".format(bookmark_urls)
+    cmds += __shred_sqlite_char_columns('moz_pages_w_icons', ('page_url',), urls_where)
+
+    # delete all not bookmarked icons to pages mapping
+    mapping_where = "where (page_id not in (select id from moz_pages_w_icons))"
+    cmds += __shred_sqlite_char_columns('moz_icons_to_pages', where=mapping_where)
+
+    # delete all not bookmarked icons
+    icons_where = "where (id not in (select icon_id from moz_icons_to_pages))"
+    cols = ('icon_url','data')
+    cmds += __shred_sqlite_char_columns('moz_icons', cols, where=icons_where)
+
+    FileUtilities.execute_sqlite3(path, cmds)
+
+
 def delete_ooo_history(path):
     """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
     import xml.dom.minidom
@@ -340,7 +369,7 @@ def get_chrome_bookmark_ids(history_path):
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
     for url in urls:
-        ids += get_sqlite_int(
+        ids += get_sqlite(
             history_path, 'select id from urls where url=?', (url,))
     return ids
 
