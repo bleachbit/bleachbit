@@ -3,7 +3,7 @@ version: 4.1.0.{build}
 image: Visual Studio 2013
 
 environment:
-    PYTHON_HOME: 'C:/Python34'
+    PYTHON_HOME: 'C:/Python38'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
@@ -15,8 +15,8 @@ init:
   - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/psutil-5.6.7-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/pywin32-227-cp34-cp34m-win32.whl'
+  - '%PYTHON_HOME%/Scripts/pip.exe install psutil'
+  - '%PYTHON_HOME%/Scripts/pip.exe install pywin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   - '%PYTHON_HOME%/Scripts/pip.exe install pefile cachetools' # for py2exe
