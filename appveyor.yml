@@ -1,5 +1,6 @@
 build: off
 version: 4.1.0.{build}
+image: Visual Studio 2013
 
 environment:
     PYTHON_HOME: 'C:/Python34'
@@ -17,6 +18,7 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/pywin32-227-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
+  - '%PYTHON_HOME%/Scripts/pip.exe install pefile cachetools' # for py2exe
   - '%PYTHON_HOME%/Scripts/pip.exe install py2exe'
   - '%PYTHON_HOME%/Scripts/pip.exe install scandir'
   - '%PYTHON_HOME%/Scripts/pip.exe install chardet'
