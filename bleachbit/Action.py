@@ -505,6 +505,18 @@ class MozillaUrlHistory(FileActionProvider):
                                    _('Clean file'))
 
 
+class MozillaFavicons(FileActionProvider):
+
+    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    action_key = 'mozilla.favicons'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function(path,
+                                   Special.delete_mozilla_favicons,
+                                   _('Clean file'))
+
+
 class OfficeRegistryModifications(FileActionProvider):
 
     """Action to delete LibreOffice history"""
