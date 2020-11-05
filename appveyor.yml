@@ -26,8 +26,8 @@ install:
   - '%PYTHON_HOME%/Scripts/pip.exe install requests'
   - '%PYTHON_HOME%/Scripts/pip.exe install plyer'
   - '%PYTHON_HOME%/Scripts/pip.exe install win-unicode-console'
-  - pacman -Suy
-  - pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject
+  - C:\msys64\usr\bin\pacman -Suy
+  - C:\msys64\usr\bin\pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
@@ -59,7 +59,6 @@ build_script:
   - ps: Get-FileHash BleachBit-*
 
 cache:
-  - pygi-aio.exe -> appveyor.yml
   - upx.zip -> appveyor.yml
   - gettext.zip -> appveyor.yml
   - sqlite.zip -> appveyor.yml
