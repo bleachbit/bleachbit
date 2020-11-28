@@ -17,7 +17,9 @@ login is required).
 `osc` command is used to checkout send files to OBS server,
 which automatically starts a build on new commits.
 
+Checkout files from OBS and compare to files in this directory.
 ```
-osc checkout home:andrew_z
-cd home:andrew_z
+osc checkout home:andrew_z bleachbit -o /tmp/obsfiles
+diff -u3 /tmp/obsfiles .
 ```
+The syntax is `osc co <project> <package> --outdir <path>`.
