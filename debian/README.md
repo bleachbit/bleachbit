@@ -17,9 +17,35 @@ login is required).
 `osc` command is used to checkout send files to OBS server,
 which automatically starts a build on new commits.
 
-Checkout files from OBS and compare to files in this directory.
+**Checkout files from OBS** and **compare** to this directory.
 ```
 osc checkout home:andrew_z bleachbit -o /tmp/obsfiles
 diff -u3 /tmp/obsfiles .
 ```
 The syntax is `osc co <project> <package> --outdir <path>`.
+
+**Branch/fork OBS package** to build on OBS service from
+your project.
+```
+$ osc branch home:andrew_z bleachbit
+A working copy of the branched package can be checked out with:
+
+osc co home:abitrolly:branches:home:andrew_z/bleachbit
+```
+
+**Inspect build status** with `osc results` and `osc buildlog`.
+```
+$ osc results
+xUbuntu_20.10        x86_64     failed
+xUbuntu_20.04        x86_64     succeeded*
+xUbuntu_18.04        x86_64     succeeded*
+...
+$ osc buildlod xUbuntu_20.10
+...
+
+[   97s] [   83.277694] reboot: Power down
+[   97s] ### VM INTERACTION END ###
+[   97s]
+[   97s] cloud132 failed "build bleachbit.dsc" at Sat Nov 28 17:44:06 UTC 2020.
+[   97s]
+```
