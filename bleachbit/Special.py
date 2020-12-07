@@ -318,7 +318,9 @@ def delete_mozilla_url_history(path):
 def delete_mozilla_favicons(path):
     """Delete favorites icon in Mozilla places.favicons only if they are not bookmarks (Firefox 3 and family)"""
 
-    cmds = ""
+    # Use list here because some urls contain semicolon and this
+    # way we aviod wrongly splitting by semicolon in execute_sqlite3.
+    cmds = []
 
     # collect bookmarked urls
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
@@ -330,18 +332,18 @@ def delete_mozilla_favicons(path):
 
     # delete all not bookmarked icon urls
     urls_where = "where (page_url not in ({}))".format(bookmark_urls)
-    cmds += __shred_sqlite_char_columns('moz_pages_w_icons', ('page_url',), urls_where)
+    cmds.append(__shred_sqlite_char_columns('moz_pages_w_icons', ('page_url',), urls_where))
 
     # delete all not bookmarked icons to pages mapping
     mapping_where = "where (page_id not in (select id from moz_pages_w_icons))"
-    cmds += __shred_sqlite_char_columns('moz_icons_to_pages', where=mapping_where)
+    cmds.append(__shred_sqlite_char_columns('moz_icons_to_pages', where=mapping_where))
 
     # delete all not bookmarked icons
     icons_where = "where (id not in (select icon_id from moz_icons_to_pages))"
     cols = ('icon_url','data')
-    cmds += __shred_sqlite_char_columns('moz_icons', cols, where=icons_where)
+    cmds.append(__shred_sqlite_char_columns('moz_icons', cols, where=icons_where))
 
-    FileUtilities.execute_sqlite3(path, cmds)
+    FileUtilities.execute_sqlite3(path, None, cmds_as_list=cmds)
 
 
 def delete_ooo_history(path):
