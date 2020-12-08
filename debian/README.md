@@ -14,27 +14,26 @@ Then create account on https://build.opensuse.org/ (see
 https://github.com/openSUSE/osc/issues/812 for discussion why
 login is required).
 
-`osc` command is used to checkout send files to OBS server,
-which automatically starts a build on new commits.
+`osc` command is used to checkout and send files to OBS server,
+which automatically starts a build on new commit.
 
-**Checkout files from OBS** and **compare** to this directory.
-```
+##### Checkout files from OBS and compare to this directory
+```bash
 osc checkout home:andrew_z bleachbit -o /tmp/obsfiles
 diff -u3 /tmp/obsfiles .
 ```
-The syntax is `osc co <project> <package> --outdir <path>`.
+Checkout syntax is `osc co <project> <package> --outdir <path>`.
 
-**Branch/fork OBS package** to build on OBS service from
-your project.
-```
+##### Branch/fork OBS package for testing builds on OBS
+```bash
 $ osc branch home:andrew_z bleachbit
 A working copy of the branched package can be checked out with:
 
 osc co home:abitrolly:branches:home:andrew_z/bleachbit
 ```
 
-**Inspect build status** with `osc results` and `osc buildlog`.
-```
+##### Inspect build status with `osc results` and `osc buildlog`
+```bash
 $ osc results
 xUbuntu_20.10        x86_64     failed
 xUbuntu_20.04        x86_64     succeeded*
@@ -49,3 +48,6 @@ $ osc buildlod xUbuntu_20.10
 [   97s] cloud132 failed "build bleachbit.dsc" at Sat Nov 28 17:44:06 UTC 2020.
 [   97s]
 ```
+
+More commands in
+[`osc` cheatsheet](https://en.opensuse.org/images/d/df/Obs-cheat-sheet.pdf)
