@@ -24,6 +24,14 @@ diff -u3 /tmp/obsfiles .
 ```
 Checkout syntax is `osc co <project> <package> --outdir <path>`.
 
+###### Make a local build
+From the `osc` checkout execute
+```bash
+osc build xUbuntu_20.10
+```
+where `xUbuntu_20.10` is a custom name for one of the configured
+repositories.
+
 ##### Branch/fork OBS package for testing builds on OBS
 ```bash
 $ osc branch home:andrew_z bleachbit
