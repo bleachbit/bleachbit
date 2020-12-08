@@ -2,7 +2,7 @@ Format: 1.0
 Source: bleachbit
 Binary: bleachbit
 Architecture: all
-Version: 4.1.1
+Version: 4.1.1-0
 Maintainer: Andrew Ziem <andrew@bleachbit.org>
 Homepage: https://www.bleachbit.org
 Standards-Version: 3.7.3
