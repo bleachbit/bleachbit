@@ -923,6 +923,7 @@ def wipe_path(pathname, idle=False):
                 break
             else:
                 raise
+        # print(f.name) # Added by Marvin for debugging #issue 1051
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
@@ -930,6 +931,7 @@ def wipe_path(pathname, idle=False):
             try:
                 f.write(blanks)
             except IOError as e:
+                # print('Error Code. #%d' % e.errno)  # Added by Marvin for debugging #issue 1051 [12/06/2020]
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
                         # Try writing smaller blocks
@@ -937,6 +939,7 @@ def wipe_path(pathname, idle=False):
                     else:
                         break
                 elif e.errno == errno.EFBIG:
+                    # print('File too large. #%d' % len(blanks)) # Added by Marvin for debugging #issue 1051 [12/06/2020]
                     break
                 else:
                     raise
@@ -961,9 +964,10 @@ def wipe_path(pathname, idle=False):
         files.append(f)
         # For statistics
         total_bytes += f.tell()
+        # print('total bytes#%d' % total_bytes) Added by Marvin for debugging of issues 1051 [12/06/2020]
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if len(blanks) < 2:
+        if start_free_bytes - total_bytes < 2: # Modified by Marvin [12/06/2020]
             break
     # sync to disk
     sync()
