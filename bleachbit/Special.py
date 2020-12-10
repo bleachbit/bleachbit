@@ -328,7 +328,7 @@ def delete_mozilla_favicons(path):
         "select url from moz_places where id in (select distinct fk from moz_bookmarks where fk is not null)"
     )
     bookmark_urls = get_sqlite(places_path, bookmark_urls_cmd, element_type=str)
-    bookmark_urls = ",".join(["'{}'".format(url) for url in bookmark_urls])
+    bookmark_urls = ",".join(["'{}'".format(url.replace("'", "''")) for url in bookmark_urls])
 
     # delete all not bookmarked icon urls
     urls_where = "where (page_url not in ({}))".format(bookmark_urls)
