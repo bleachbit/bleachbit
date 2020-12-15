@@ -422,7 +422,7 @@ def exe_exists(pathname):
         return exists_in_path(pathname)
 
 
-def execute_sqlite3(path, cmds):
+def execute_sqlite3(path, cmds, cmds_as_list=None):
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
     import contextlib
@@ -435,7 +435,10 @@ def execute_sqlite3(path, cmds):
         if options.get('shred'):
             cursor.execute('PRAGMA secure_delete=ON')
 
-        for cmd in cmds.split(';'):
+        if cmds_as_list is None:
+            cmds_as_list = cmds.split(';')
+
+        for cmd in cmds_as_list:
             try:
                 cursor.execute(cmd)
             except sqlite3.OperationalError as exc:
@@ -449,6 +452,7 @@ def execute_sqlite3(path, cmds):
             except sqlite3.DatabaseError as exc:
                 raise sqlite3.DatabaseError(
                     '%s: %s' % (exc, path))
+
         cursor.close()
         conn.commit()
 
