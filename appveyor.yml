@@ -88,8 +88,10 @@ artifacts:
 
 deploy:
   - provider: S3
-    access_key_id: AKIA4R6AOO5T6QQT4BWI
-    secret_access_key: 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
+    access_key_id:
+      secure: CrPvjz7Jvg4gwOHKxUsL0PPR4mqAjB2p15/pvFw3fCk=
+    secret_access_key:
+      secure: VoAH5pVyhmTK3/KRuV5WcgfkTR3k/M9QDt7UD6ewcwNfkUvMynwjAHnKCG4vR0Rx
     bucket: bleachbitci
     folder: dl/$(APPVEYOR_BUILD_VERSION)-$(APPVEYOR_REPO_BRANCH)
     artifact:
