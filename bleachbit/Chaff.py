@@ -26,6 +26,7 @@ import os
 import random
 import tempfile
 from datetime import datetime
+import queue as _unused_module_Queue
 
 from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir
