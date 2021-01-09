@@ -4,6 +4,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>BleachBit</name>
+  <!-- Empty content_rating element indicates BleachBit is free of potentially offensive content (like most software tools). -->
+  <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.bleachbit.BleachBit.desktop</launchable>
   <summary>Cleans files to free disk space and to maintain privacy</summary>
   <description>
@@ -16,8 +18,8 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <caption>BleachBit 3.0 in dark mode showing discovered Google Chrome files</caption>
-      <image>https://www.bleachbit.org/images/bleachbit30_windows10_preview.png</image>
+      <caption>Default dark mode, showing found junk files</caption>
+      <image>https://www.bleachbit.org/images/bleachbit320_windows10_preview.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bleachbit.org/</url>
