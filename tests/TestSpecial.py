@@ -307,8 +307,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         clean_func(filename)
         options.set('shred', True, commit=False)
         self.assertTrue(options.get('shred'))
-        options.set('shred', old_shred, commit=False)
         clean_func(filename)
+        options.set('shred', old_shred, commit=False)
         self.assertExists(filename)
 
         # check
@@ -386,7 +386,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             sql_palemoon, None, Special.delete_mozilla_url_history)
 
     def test_delete_mozilla_favicons(self):
-        """Test for delete_mozilla_url_history"""
+        """Test for delete_mozilla_favicons"""
         self.sqlite_clean_helper(
             None, "firefox/default-release/favicons.sqlite", Special.delete_mozilla_favicons)
 
@@ -409,21 +409,15 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         os.unlink(path)
 
-    def test_get_sqlite(self):
-        """Unit test for get_sqlite()"""
+    def test_get_sqlite_int(self):
+        """Unit test for get_sqlite_int()"""
         sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
-INSERT INTO "meta" VALUES('version','20');
-INSERT INTO "meta" VALUES('version_str','aaa');
-"""
+INSERT INTO "meta" VALUES('version','20');"""
         # create test file
         filename = self.mkstemp(prefix='bleachbit-test-sqlite')
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
         # run the test
-        ver = Special.get_sqlite(
+        ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
-
-        ver = Special.get_sqlite(
-            filename, 'select value from meta where key="version_str"', None, str)
-        self.assertEqual(ver, ["aaa"])
