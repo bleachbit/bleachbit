@@ -80,6 +80,36 @@ def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
 
+def get_filesystem_type(path):
+    """
+    * Get file system type from the given path
+    """
+    try:
+        import psutil
+        
+        partitions = {}
+        for partition in psutil.disk_partitions():
+            partitions[partition.mountpoint] = (partition.fstype, partition.device)
+        
+        if path in partitions:
+            return partitions[path]
+
+        splitpath = path.split(os.sep)
+        for i in range(0, len(splitpath)-1):
+            path = os.sep.join(splitpath[:i]) + os.sep
+            if path in partitions:
+                return partitions[path]
+            
+            path = os.sep.join(splitpath[:i])
+            if path in partitions:
+                return partitions[path]
+
+        return ("unknown", "none")
+    except ImportError:
+        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        return ("unknown", "none")
+
+
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
         def run_lsof():
@@ -422,7 +452,7 @@ def exe_exists(pathname):
         return exists_in_path(pathname)
 
 
-def execute_sqlite3(path, cmds, cmds_as_list=None):
+def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
     import sqlite3
     import contextlib
@@ -435,10 +465,7 @@ def execute_sqlite3(path, cmds, cmds_as_list=None):
         if options.get('shred'):
             cursor.execute('PRAGMA secure_delete=ON')
 
-        if cmds_as_list is None:
-            cmds_as_list = cmds.split(';')
-
-        for cmd in cmds_as_list:
+        for cmd in cmds.split(';'):
             try:
                 cursor.execute(cmd)
             except sqlite3.OperationalError as exc:
@@ -927,13 +954,26 @@ def wipe_path(pathname, idle=False):
                 break
             else:
                 raise
+
+        # Get the file system type from the given path
+        fstype = get_filesystem_type(pathname)
+        fstype = fstype[0]
+        print('File System:' + fstype)
         # print(f.name) # Added by Marvin for debugging #issue 1051
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
+        writtensize = 0
+        
         while True:
             try:
-                f.write(blanks)
+                if fstype != 'vfat':
+                    f.write(blanks)
+                elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
+                    writtensize += f.write(blanks)
+                else:
+                    break
+            
             except IOError as e:
                 # print('Error Code. #%d' % e.errno)  # Added by Marvin for debugging #issue 1051 [12/06/2020]
                 if e.errno == errno.ENOSPC:
@@ -952,6 +992,7 @@ def wipe_path(pathname, idle=False):
                 # Also display the ETA.
                 yield estimate_completion()
                 last_idle = time.time()
+        
         # Write to OS buffer
         try:
             f.flush()

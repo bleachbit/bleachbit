@@ -26,6 +26,7 @@ import os
 import random
 import tempfile
 from datetime import datetime
+import queue as _unused_module_Queue
 
 from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir
@@ -198,7 +199,6 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
     from urllib3.util.retry import Retry
     from requests.adapters import HTTPAdapter
-    session = requests.Session()
     # 408: request timeout
     # 429: too many requests
     # 500: internal server error
@@ -209,7 +209,6 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     # sourceforge.net directories to download mirror
     retries = Retry(total=max_retries, backoff_factor=backoff_factor,
                     status_forcelist=status_forcelist, redirect=5)
-    session.mount('http://', HTTPAdapter(max_retries=retries))
     msg = _('Downloading url failed: %s') % url
 
     from bleachbit.Update import user_agent
@@ -220,20 +219,22 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
             on_error(msg, msg2)
         from bleachbit.FileUtilities import delete
         delete(fn, ignore_missing=True)  # delete any partial download
-    try:
-        response = session.get(url, headers=headers)
-        content = response.content
-    except requests.exceptions.RequestException as exc:
-        msg2 = '{}: {}'.format(type(exc).__name__, exc)
-        logger.exception(msg)
-        do_error(msg2)
-        return False
-    else:
-        if not response.status_code == 200:
-            logger.error(msg)
-            msg2 = 'Status code: %s' % response.status_code
+    with requests.Session() as session:
+        session.mount('http://', HTTPAdapter(max_retries=retries))
+        try:
+            response = session.get(url, headers=headers)
+            content = response.content
+        except requests.exceptions.RequestException as exc:
+            msg2 = '{}: {}'.format(type(exc).__name__, exc)
+            logger.exception(msg)
             do_error(msg2)
             return False
+        else:
+            if not response.status_code == 200:
+                logger.error(msg)
+                msg2 = 'Status code: %s' % response.status_code
+                do_error(msg2)
+                return False
 
     with open(fn, 'wb') as f:
         f.write(content)
