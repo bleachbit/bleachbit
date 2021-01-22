@@ -672,36 +672,11 @@ class System(Cleaner):
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
-#    yield False
     global backends
 
     # wipe out any registrations
     # Because this is a global variable, cannot use backends = {}
     backends.clear()
-
-    # import tempfile
-    #
-    # cleaner_content = ('<?xml version="1.0" encoding="UTF-8"?>'
-    #                    '<cleaner id="atest_run_operations">'
-    #                    '<label>aTest run_operations</label>'
-    #                    '<option id="atest1">'
-    #                    '<label>aTest1</label>'
-    #                    '<description>Delete files in a test directory</description>'
-    #                    '<action command="delete" search="walk.all" path="./"/>'
-    #                    '</option>'
-    #                    '</cleaner>')
-    #
-    # cleaner_filename = 'test_run_operations_cleaner.xml'
-    # from bleachbit.FileUtilities import extended_path
-    # from bleachbit import Cleaner, CleanerML
-    # with open(extended_path(cleaner_filename), 'w') as f:
-    #     f.write(cleaner_content)
-    # #self.assertExists(cleaner_filename)
-    # xmlcleaner = CleanerML.CleanerML(cleaner_filename)
-    # cleaner = xmlcleaner.get_cleaner()
-    # #self.assertTrue(cleaner.is_usable())
-    # #backends = {}
-    # backends[cleaner.id] = cleaner
 
     # initialize "hard coded" (non-CleanerML) backends
     backends["openofficeorg"] = OpenOfficeOrg()
