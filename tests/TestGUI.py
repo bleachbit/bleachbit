@@ -198,6 +198,17 @@ class GUITestCase(common.BleachbitTestCase):
         import time
         time.sleep
 
+    @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
+    def test_confirm_delete(self, mock_delete_confirmation_dialog):
+        gui = self.app._window
+        for new_delete_confirmation in [True, False]:
+            options.set('delete_confirmation', new_delete_confirmation, commit=False)
+            gui._confirm_delete(False, False)
+
+        # We should have a single call to delete_confirmation_dialog
+        # only when delete_confirmation option is True.
+        mock_delete_confirmation_dialog.assert_called_once()
+
     def test_shred_paths(self):
         dirname = self.mkdtemp(prefix='bleachbit-test-shred_paths')
         test_files_dirs = [
