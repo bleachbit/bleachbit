@@ -56,7 +56,7 @@
   </option>
   <!--
   The same action shouldn't be repeated in the same cleaner file (either within the same option or in a different option).
-  First, if there are options labeled "log" and "temporary files," it implies chosing one doesn't do the other.
+  First, if there are options labeled "log" and "temporary files," it implies choosing one doesn't do the other.
   So we remove "Temporary files", again.
   <option id="temp">
     <label>Temporary files</label>
