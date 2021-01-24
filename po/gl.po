@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2021-01-02 00:35+0000\n"
+"PO-Revision-Date: 2021-01-09 20:17+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-01-02 20:32+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
+"X-Launchpad-Export-Date: 2021-01-24 19:56+0000\n"
+"X-Generator: Launchpad (build 2d1d5e352f0d063d660df2300e31f66bed027fa5)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -1089,7 +1089,7 @@ msgstr "O cartafol non está baleiro: %s"
 #: ../bleachbit/FileUtilities.py:332
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr ""
+msgstr "Saltando o punto de montaxe %s"
 
 #: ../bleachbit/FileUtilities.py:334
 #, python-format
@@ -1396,6 +1396,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Produciuse un erro abrindo a conexión de rede para buscar actualizacións. "
+"Verifique se a rede funciona e se a devasa non está bloqueando esta "
+"aplicacióin. Mensaxe de erro: {}"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
@@ -1606,7 +1609,7 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:70
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "Crear mensaxes aleatorias inspiradas en documentos."
 
 #: ../bleachbit/GuiChaff.py:74
 msgid "Inspiration"
@@ -1634,7 +1637,7 @@ msgstr "Ao rematar"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Delete without shredding"
-msgstr ""
+msgstr "Crear mensaxes aleatorias inspiradas en documentos."
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Do not delete"
@@ -1723,7 +1726,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:188
 msgid "Windows 10 theme"
-msgstr ""
+msgstr "Tema do Windows 10"
 
 #: ../bleachbit/GuiPreferences.py:195
 msgid "Dark mode"
@@ -1908,7 +1911,7 @@ msgstr "_Limpar espazo libre"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "Tema do Windows 10"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
