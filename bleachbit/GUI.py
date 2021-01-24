@@ -467,7 +467,7 @@ class TreeDisplayModel:
         return self.view
 
     def set_cleaner(self, path, model, parent_window, value):
-        """Activate or deactive option of cleaner."""
+        """Activate or deactivate option of cleaner."""
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
@@ -856,7 +856,7 @@ class GUI(Gtk.ApplicationWindow):
         # context menu applies only to children, not parents
         if len(path) != 2:
             return False
-        # find the seleted option
+        # find the selected option
         model = treeview.get_model()
         option_id = model[path][2]
         cleaner_id = model[path[0]][2]

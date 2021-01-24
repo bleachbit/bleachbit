@@ -279,7 +279,7 @@ class ActionTestCase(common.BleachbitTestCase):
             # If exception occurs in logger `handleError` is called.
             with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
                 try:
-                    # When GtkLoggerHandler is used the exeptions are raised directly
+                    # When GtkLoggerHandler is used the exceptions are raised directly
                     # and handleError is not called
                     self._test_action_str(
                         ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
