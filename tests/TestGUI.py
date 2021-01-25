@@ -245,7 +245,7 @@ class GUITestCase(common.BleachbitTestCase):
                                '<action command="delete" search="walk.all" path="{}"/>'
                                '</option>'
                                '</cleaner>'.format(self._NEW_CLEANER_ID, self._NEW_OPTION_ID, dirname))
-            cleaner_filename = '{}/test_run_operations_cleaner.xml'.format(dirname)
+            cleaner_filename = os.path.join(dirname, 'test_run_operations_cleaner.xml')
             self.write_file(cleaner_filename, cleaner_content, 'w')
             return cleaner_filename
 
