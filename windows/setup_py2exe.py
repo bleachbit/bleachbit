@@ -26,6 +26,7 @@ import subprocess
 import sys
 import time
 import win_unicode_console
+import xml.dom.minidom
 
 setup_encoding = sys.stdout.encoding
 win_unicode_console.enable()
@@ -197,6 +198,19 @@ def environment_check():
     logger.info('Checking for NSIS')
     check_exist(
         NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
+    
+    
+def remove_windir_from_fonts_conf():
+    filepath = 'dist\\etc\\fonts\\fonts.conf'
+    dom = xml.dom.minidom.parse(filepath)
+    fc_element = dom.getElementsByTagName('fontconfig')[0]
+    for dir_element in fc_element.getElementsByTagName('dir'):
+        if dir_element.firstChild.nodeValue == 'WINDOWSFONTDIR':
+            fc_element.removeChild(dir_element)
+            break
+        
+    with open(filepath, 'w', encoding='utf-8') as xml_file:
+        dom.writexml(xml_file)
 
 
 def build():
@@ -226,6 +240,11 @@ def build():
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
+    
+    logger.info('Remove windows fonts dir from fonts.conf file')
+    # We don't want fontconfig to caches the Windows Fonts dir
+    remove_windir_from_fonts_conf()
+    
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for subpath in ['fontconfig', 'icons', 'themes']:
         copytree(os.path.join(GTK_DIR, 'share', subpath),
@@ -283,6 +302,11 @@ def build():
 
     logger.info('Copying msvcr100.dll')
     shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
+    
+    logger.info('Copying segueui.ttf and tahoma.ttf')
+    os.makedirs('dist\\share\\fonts')
+    shutil.copy('C:\\Windows\\Fonts\\segoeui.ttf', 'dist\\share\\fonts\\segoeui.ttf')
+    shutil.copy('C:\\Windows\\Fonts\\tahoma.ttf', 'dist\\share\\fonts\\tahoma.ttf')
 
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
