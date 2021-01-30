@@ -168,7 +168,7 @@ update-desktop-database &> /dev/null ||:
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc COPYING README.md doc/CONTRIBUTING.md
+%doc COPYING README.md
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
