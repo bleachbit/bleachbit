@@ -566,6 +566,11 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
+    def _confirm_delete(self, mention_preview, shred_settings=False):
+        if options.get("delete_confirmation"):
+            return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
+        return True
+
     def get_preferences_dialog(self):
         return PreferencesDialog(
             self,
@@ -589,7 +594,7 @@ class GUI(Gtk.ApplicationWindow):
         operations = {'_gui': ['files']}
         self.preview_or_run_operations(False, operations)
 
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
+        if self._confirm_delete(False, shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
             return True
@@ -688,10 +693,8 @@ class GUI(Gtk.ApplicationWindow):
         # Disable delete confirmation message.
         # if the option is selected under preference.
 
-        if options.get("delete_confirmation"):
-            if not GuiBasic.delete_confirmation_dialog(self, True):
-                return
-        self.preview_or_run_operations(True)
+        if self._confirm_delete(True):
+            self.preview_or_run_operations(True)
 
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
@@ -835,7 +838,7 @@ class GUI(Gtk.ApplicationWindow):
             return
 
         # delete
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+        if self._confirm_delete(False):
             self.preview_or_run_operations(True, operations)
             return
 
