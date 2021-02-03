@@ -23,7 +23,7 @@
   <label>Thunderbird</label>
   <description>Email client</description>
   <running type="exe" os="windows">thunderbird.exe</running>
-  <running type="exe" os="linux">thunderbird-bin</running>
+  <running type="exe" os="linux">thunderbird</running>
   <running type="exe" os="freebsd">thunderbird</running>
   <var name="profile">
     <!-- Fedora 11 Thunderbird 3.0 has ~/.thunderbird/default/????????.slt/ -->
