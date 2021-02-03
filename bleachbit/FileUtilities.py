@@ -964,7 +964,7 @@ def wipe_path(pathname, idle=False):
         total_bytes += f.tell()
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if len(blanks) < 2:
+        if start_free_bytes - total_bytes < 2: # Modified by Marvin to fix the issue #1051 [12/06/2020]
             break
     # sync to disk
     sync()
