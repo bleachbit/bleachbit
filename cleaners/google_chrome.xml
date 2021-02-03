@@ -56,6 +56,8 @@
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
+    <!-- Linux stores the Code Cache under ~/.cache/ , so it doesn't need an extra rule -->
+    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">

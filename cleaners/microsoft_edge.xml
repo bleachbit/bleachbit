@@ -22,7 +22,7 @@
 <cleaner id="microsoft_edge" os="windows">
   <label>Microsoft Edge</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">edge.exe</running>
+  <running type="exe" os="windows">msedge.exe</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data</value>
   </var>

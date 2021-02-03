@@ -246,8 +246,8 @@ def clean_ini(path, section, parameter):
                 if key == "__name__":
                     continue
                 if (value is not None) or (parser._optcre == parser.OPTCRE):
-                    # The line bellow is the only changed line of the original function.
-                    # This is the orignal line for reference:
+                    # The line below is the only changed line of the original function.
+                    # This is the original line for reference:
                     # key = " = ".join((key, str(value).replace('\n', '\n\t')))
                     key = " = ".join((key, value.replace('\n', '\n\t')))
                 ini_file.write("%s\n" % (key))

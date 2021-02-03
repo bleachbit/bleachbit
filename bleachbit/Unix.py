@@ -406,7 +406,7 @@ class Locales:
 
 
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
-    """Returns boolean whether application deskop entry file is broken"""
+    """Returns boolean whether application desktop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
