@@ -83,31 +83,35 @@ def open_files_linux():
 def get_filesystem_type(path):
     """
     * Get file system type from the given path
+    * return value: The tuple of (file_system_type, device_name)
+    *               @ file_system_type: vfat, ntfs, etc
+    *               @ device_name:      C://, D://, etc
     """
     try:
         import psutil
-        
-        partitions = {}
-        for partition in psutil.disk_partitions():
-            partitions[partition.mountpoint] = (partition.fstype, partition.device)
-        
-        if path in partitions:
-            return partitions[path]
-
-        splitpath = path.split(os.sep)
-        for i in range(0, len(splitpath)-1):
-            path = os.sep.join(splitpath[:i]) + os.sep
-            if path in partitions:
-                return partitions[path]
-            
-            path = os.sep.join(splitpath[:i])
-            if path in partitions:
-                return partitions[path]
-
-        return ("unknown", "none")
     except ImportError:
         logger.warning('To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
+
+    partitions = {}
+    for partition in psutil.disk_partitions():
+        partitions[partition.mountpoint] = (partition.fstype, partition.device)
+        
+    if path in partitions:
+        return partitions[path]
+
+    splitpath = path.split(os.sep)
+    for i in range(0, len(splitpath)-1):
+        path = os.sep.join(splitpath[:i]) + os.sep
+        if path in partitions:
+            return partitions[path]
+            
+        path = os.sep.join(splitpath[:i])
+        if path in partitions:
+            return partitions[path]
+
+    return ("unknown", "none")
+
 
 
 def open_files_lsof(run_lsof=None):
@@ -958,7 +962,7 @@ def wipe_path(pathname, idle=False):
         # Get the file system type from the given path
         fstype = get_filesystem_type(pathname)
         fstype = fstype[0]
-        print('File System:' + fstype)
+        logging.debug('File System:' + fstype)
         # print(f.name) # Added by Marvin for debugging #issue 1051
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
@@ -969,6 +973,8 @@ def wipe_path(pathname, idle=False):
             try:
                 if fstype != 'vfat':
                     f.write(blanks)
+                # In the ubuntu system, the size of file should be less then 4GB. If not, there should be EFBIG error.
+                # So the maximum file size should be less than or equal to "4GB - 65536byte".
                 elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
                     writtensize += f.write(blanks)
                 else:
