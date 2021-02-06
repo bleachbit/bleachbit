@@ -56,6 +56,12 @@
     <description>Delete the files</description>
     <action command="delete" search="walk.files" path="$$profile$$" regex="\.msf$"/>
   </option>
+  <option id="sessionjson">
+  <!-- delete the session, i.e. open windows and tabs  -->
+    <label>Session restore</label>
+    <description>Loads the initial session after the browser closes or crashes</description>
+    <action command="delete" search="file" path="$$profile$$/session.json"/>
+  </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
