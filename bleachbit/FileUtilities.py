@@ -80,6 +80,40 @@ def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
 
+def get_filesystem_type(path):
+    """
+    * Get file system type from the given path
+    * return value: The tuple of (file_system_type, device_name)
+    *               @ file_system_type: vfat, ntfs, etc
+    *               @ device_name:      C://, D://, etc
+    """
+    try:
+        import psutil
+    except ImportError:
+        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        return ("unknown", "none")
+
+    partitions = {}
+    for partition in psutil.disk_partitions():
+        partitions[partition.mountpoint] = (partition.fstype, partition.device)
+        
+    if path in partitions:
+        return partitions[path]
+
+    splitpath = path.split(os.sep)
+    for i in range(0, len(splitpath)-1):
+        path = os.sep.join(splitpath[:i]) + os.sep
+        if path in partitions:
+            return partitions[path]
+            
+        path = os.sep.join(splitpath[:i])
+        if path in partitions:
+            return partitions[path]
+
+    return ("unknown", "none")
+
+
+
 def open_files_lsof(run_lsof=None):
     if run_lsof is None:
         def run_lsof():
@@ -924,12 +958,28 @@ def wipe_path(pathname, idle=False):
                 break
             else:
                 raise
+
+        # Get the file system type from the given path
+        fstype = get_filesystem_type(pathname)
+        fstype = fstype[0]
+        logging.debug('File System:' + fstype)
+        # print(f.name) # Added by Marvin for debugging #issue 1051
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
+        writtensize = 0
+        
         while True:
             try:
-                f.write(blanks)
+                if fstype != 'vfat':
+                    f.write(blanks)
+                # In the ubuntu system, the size of file should be less then 4GB. If not, there should be EFBIG error.
+                # So the maximum file size should be less than or equal to "4GB - 65536byte".
+                elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
+                    writtensize += f.write(blanks)
+                else:
+                    break
+            
             except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
@@ -964,7 +1014,7 @@ def wipe_path(pathname, idle=False):
         total_bytes += f.tell()
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if len(blanks) < 2:
+        if start_free_bytes - total_bytes < 2: # Modified by Marvin to fix the issue #1051 [12/06/2020]
             break
     # sync to disk
     sync()
