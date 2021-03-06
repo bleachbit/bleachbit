@@ -164,26 +164,13 @@ def put_env(key, val):
 
 
 def skipIfWindows(f):
-    """Skip unit test if running on Windows
-
-    Not compatible at the class level
-    """
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        if sys.platform == 'win32':
-            return unittest.skipIf('win32' == sys.platform, 'running on Windows')
-        return f(*args, **kwargs)
-    return wrapper
+    """Skip unit test if running on Windows"""
+    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
 
 
 def skipUnlessWindows(f):
-    """Skip unit test unless running on Windows
-
-    Not compatible at the class level"""
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
-    return wrapper
+    """Skip unit test unless running on Windows"""
+    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
 def touch_file(filename):
