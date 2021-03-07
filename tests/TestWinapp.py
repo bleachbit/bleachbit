@@ -60,10 +60,10 @@ def get_winapp2():
             logger.info('deleting stale file %s ', fname)
             os.remove(fname)
     if not os.path.exists(fname):
-        fobj = open(fname, 'w')
-        import urllib.request
-        txt = urllib.request.urlopen(url).read()
-        fobj.write(txt)
+        with open(fname, 'w', encoding='utf-8') as fobj:
+            import urllib.request
+            txt = urllib.request.urlopen(url).read()
+            fobj.write(txt.decode('utf-8'))
     return fname
 
 
@@ -258,7 +258,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft",
                 "\nDetect=HKCU\\Software\\Microsoft",
                 # Below checks that a space is OK in the registry key
-                "\nDetect=HKCU\\Software\\Microsoft\\Command Processor",
+                "\nDetect=HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
                 # Below checks Detect# where one of two keys exist.
                 "\nDetect1=HKCU\\Software\\Microsoft\nDetect2=HKCU\\Software\\does_not_exist",
                 "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft",

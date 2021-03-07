@@ -58,7 +58,7 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
-@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
+@common.skipUnlessWindows
 class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""
@@ -89,7 +89,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         get_recycle_bin()
 
         It gets called four times for the combinations of the two
-        parameters. It's called by four unit tests four accounting
+        parameters. It's called by four unit tests for accounting
         purposes. In other words, we don't want to count a test as
         skipped if part of it succeeded.
 
@@ -130,10 +130,6 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # put the link in the recycle bin
         move_to_recycle_bin(container_dir)
-
-        # preview the recycle bin
-        for f in get_recycle_bin():
-            print(f)
 
         def cleanup_dirs():
             shutil.rmtree(container_dir, True)
