@@ -52,6 +52,7 @@ BB_VER = None
 GTK_DIR = sys.exec_prefix + '\\Lib\\site-packages\\gnome\\'
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
+SHRED_REGEX_KEY = 'AllFilesystemObjects\\shell\\shred.bleachbit'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
     logger.info('NSIS found in alternate location: ' + NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
@@ -545,7 +546,7 @@ def nsis(opts, exe_name, nsi_path):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
     cmd = NSIS_EXE + \
-        ' {} /DVERSION={} {}'.format(opts, BB_VER, nsi_path)
+        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
     sign_code(exe_name)
