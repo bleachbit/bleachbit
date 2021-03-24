@@ -226,7 +226,6 @@ VIFileVersion ${File_VERSION}
 ; MUI_UNPAGE_DIRECTORY not needed, ATM.
 ; !insertmacro MUI_UNPAGE_DIRECTORY
 !insertmacro MUI_UNPAGE_COMPONENTS
-UninstallText $(BLEACHBIT_UNINSTALL_TEXT)
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -309,14 +308,9 @@ Section Core (Required)
 
     SetOutPath $INSTDIR
     File /r /x "locale" "..\dist\*.*"
-    File "..\COPYING"
-
-    SetOutPath "$INSTDIR\share\"
-    File "..\bleachbit.png"
 
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
-
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
@@ -420,6 +414,8 @@ Function .onInit
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
+  CopyFiles $WINDIR\Fonts\segoeui.tt? $INSTDIR\share\fonts
+  CopyFiles $WINDIR\Fonts\tahoma.tt? $INSTDIR\share\fonts
 
 
 FunctionEnd

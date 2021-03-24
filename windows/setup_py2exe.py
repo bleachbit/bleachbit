@@ -302,11 +302,6 @@ def build():
 
     logger.info('Copying msvcr100.dll')
     shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
-    
-    logger.info('Copying segueui.ttf and tahoma.ttf')
-    os.makedirs('dist\\share\\fonts')
-    shutil.copy('C:\\Windows\\Fonts\\segoeui.ttf', 'dist\\share\\fonts\\segoeui.ttf')
-    shutil.copy('C:\\Windows\\Fonts\\tahoma.ttf', 'dist\\share\\fonts\\tahoma.ttf')
 
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
