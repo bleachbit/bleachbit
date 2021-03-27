@@ -208,25 +208,36 @@ def delete_registry_key(parent_key, really_delete):
 
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
-    windir = os.path.expandvars('$windir')
+    windir = os.path.expandvars('%windir%')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
-    dirs += [os.path.expandvars('$windir\\SoftwareDistribution\\Download')]
-    dirs += [os.path.expandvars('$windir\\ie7updates')]
-    dirs += [os.path.expandvars('$windir\\ie8updates')]
+    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution')]
+    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution.old')]
+    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution.bak')]
+    dirs += [os.path.expandvars(r'%windir%\ie7updates')]
+    dirs += [os.path.expandvars(r'%windir%\ie8updates')]
+    dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
 
-    import win32serviceutil
-    wu_running = win32serviceutil.QueryServiceStatus('wuauserv')[1] == 4
+    args = []
 
-    args = ['net', 'stop', 'wuauserv']
-
-    def wu_service():
+    def run_wu_service():
         General.run_external(args)
         return 0
-    if wu_running:
-        yield Command.Function(None, wu_service, " ".join(args))
+
+    services = {}
+    all_services = ('wuauserv', 'cryptsvc', 'bits', 'msiserver')
+    for service in all_services:
+        import win32serviceutil
+        services[service] = win32serviceutil.QueryServiceStatus(service)[
+            1] == 4
+        logger.debug('Windows service {} has current state: {}'.format(
+            service, services[service]))
+
+        if services[service]:
+            args = ['net', 'stop', service]
+            yield Command.Function(None, run_wu_service, " ".join(args))
 
     for path1 in dirs:
         for path2 in FileUtilities.children_in_directory(path1, True):
@@ -234,9 +245,10 @@ def delete_updates():
         if os.path.exists(path1):
             yield Command.Delete(path1)
 
-    args = ['net', 'start', 'wuauserv']
-    if wu_running:
-        yield Command.Function(None, wu_service, " ".join(args))
+    for this_service in all_services:
+        if services[this_service]:
+            args = ['net', 'start', this_service]
+            yield Command.Function(None, run_wu_service, " ".join(args))
 
 
 def detect_registry_key(parent_key):
