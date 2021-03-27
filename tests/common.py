@@ -216,7 +216,7 @@ def validate_result(self, result, really_delete=False):
 
 
 def get_winregistry_value(key, subkey):
-    try:        
+    try:
         with winreg.OpenKey(key,  subkey) as hkey:
             return winreg.QueryValue(hkey, None)
     except FileNotFoundError:
@@ -225,9 +225,10 @@ def get_winregistry_value(key, subkey):
 
 def get_opened_windows_titles():
     opened_windows_titles = []
+
     def enumerate_opened_windows_titles(hwnd, ctx):
         if win32gui.IsWindowVisible(hwnd):
-            opened_windows_titles.append(win32gui.GetWindowText(hwnd))        
+            opened_windows_titles.append(win32gui.GetWindowText(hwnd))
 
     win32gui.EnumWindows(enumerate_opened_windows_titles, None)
     return opened_windows_titles

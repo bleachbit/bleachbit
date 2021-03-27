@@ -45,8 +45,9 @@ class DeepScanTestCase(common.BleachbitTestCase):
         subfile = os.path.join(subdir, 'ɡælɪk.file')
         common.touch_file(subfile)
 
-        searches = { self.tempdir: [] }
-        searches[self.tempdir].append(Search(command='delete', regex='\.[Bb][Aa][Kk]$'))
+        searches = {self.tempdir: []}
+        searches[self.tempdir].append(
+            Search(command='delete', regex='\.[Bb][Aa][Kk]$'))
         ds = DeepScan(searches)
         found = False
         for cmd in ds.scan():
@@ -73,7 +74,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
     def test_DeepScan(self):
         """Unit test for class DeepScan.  Preview real files."""
         path = os.path.expanduser('~')
-        searches = { path: [] }
+        searches = {path: []}
         for regex in ('^Makefile$', '~$', 'bak$', '^Thumbs.db$', '^Thumbs.db:encryptable$'):
             searches[path].append(Search(command='delete', regex=regex))
         ds = DeepScan(searches)
@@ -101,7 +102,8 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         # run deep scan
         def run_deep_scan(regex):
-            astr = '<action command="{}" search="deep" cache="false" path="{}" {}/>'.format(command, self.tempdir, regex)
+            astr = '<action command="{}" search="deep" cache="false" path="{}" {}/>'.format(
+                command, self.tempdir, regex)
             from tests import TestCleaner
             cleaner = TestCleaner.action_to_cleaner(astr)
             from bleachbit.Worker import backends, Worker

@@ -189,8 +189,8 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
         # verify cleaning process freed all space it allocated
         actual_free_space = free_space(mountpoint)
         if not expected_free_space == actual_free_space:
-            print ('expecting %d free space but got %d' %
-                   (expected_free_space, actual_free_space))
+            print('expecting %d free space but got %d' %
+                  (expected_free_space, actual_free_space))
             import pdb
             pdb.set_trace()
 

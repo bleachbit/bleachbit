@@ -297,7 +297,8 @@ class WorkerTestCase(common.BleachbitTestCase):
                 for (path, searches) in searches.items():
                     parent.assertEqual(path, os.path.expanduser('~'))
                     for s in searches:
-                        parent.assertIn(s.regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
+                        parent.assertIn(
+                            s.regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
             def scan(self):
                 parent.scanned += 1

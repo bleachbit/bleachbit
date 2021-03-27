@@ -119,7 +119,8 @@ class UpdateTestCase(common.BleachbitTestCase):
         succeeded = {'r': False}  # scope
 
         # bad hash
-        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", print, expect_failure)
+        self.assertRaises(RuntimeError, update_winapp2, url,
+                          "notahash", print, expect_failure)
 
         # blank hash, download file
         update_winapp2(url, None, print, on_success)

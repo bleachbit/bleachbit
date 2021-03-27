@@ -108,7 +108,8 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertFalse(is_junction(target_dir))
 
         from random import randint
-        canary_fn = os.path.join(target_dir, 'do_not_delete%d' % randint(1000,9999))
+        canary_fn = os.path.join(
+            target_dir, 'do_not_delete%d' % randint(1000, 9999))
         common.touch_file(canary_fn)
         self.assertExists(canary_fn)
         self.assertFalse(is_junction(canary_fn))
@@ -121,7 +122,8 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # create the link
         link_pathname = os.path.join(container_dir, 'link')
-        args = ('cmd', '/c', 'mklink', mklink_option, link_pathname, target_dir)
+        args = ('cmd', '/c', 'mklink', mklink_option,
+                link_pathname, target_dir)
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
@@ -273,7 +275,8 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_detect_registry_key(self):
         """Test for detect_registry_key()"""
         self.assertTrue(detect_registry_key('HKCU\\Software\\Microsoft\\'))
-        self.assertTrue(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
+        self.assertTrue(not detect_registry_key(
+            'HKCU\\Software\\DoesNotExist'))
 
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
@@ -392,16 +395,19 @@ class WindowsTestCase(common.BleachbitTestCase):
                 import win32security
                 import ntsecuritycon as con
 
-                user, _, _ = win32security.LookupAccountName("", win32api.GetUserName())
+                user, _, _ = win32security.LookupAccountName(
+                    "", win32api.GetUserName())
                 dacl = win32security.ACL()
-                dacl.AddAccessDeniedAce(win32security.ACL_REVISION, con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
+                dacl.AddAccessDeniedAce(
+                    win32security.ACL_REVISION, con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
                 win32security.SetSecurityInfo(fh, win32security.SE_FILE_OBJECT, win32security.DACL_SECURITY_INFORMATION,
-                    None, None, dacl, None)
+                                              None, None, dacl, None)
 
-            def _test_wipe(contents, deny_access = False, is_sparse=False):
+            def _test_wipe(contents, deny_access=False, is_sparse=False):
                 shortname = _write_file(longname, contents)
                 if deny_access or is_sparse:
-                    fh = open_file(extended_path(longname), mode=GENERIC_WRITE | WRITE_DAC)
+                    fh = open_file(extended_path(longname),
+                                   mode=GENERIC_WRITE | WRITE_DAC)
                     if is_sparse:
                         file_make_sparse(fh)
                     if deny_access:
@@ -429,7 +435,7 @@ class WindowsTestCase(common.BleachbitTestCase):
 
             # requires wiping of extents: special file case
             elevate_privileges(False)
-            _test_wipe(b'secret' * 100000, deny_access = True, is_sparse=True)
+            _test_wipe(b'secret' * 100000, deny_access=True, is_sparse=True)
 
         shutil.rmtree(dirname, True)
 

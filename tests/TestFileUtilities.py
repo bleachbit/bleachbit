@@ -477,7 +477,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
-        eat_glass='나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         tests = (('This is just an ASCII file', 'ascii'),
                  (eat_glass, 'utf-8'),
                  (eat_glass, 'EUC-KR'))
@@ -862,7 +862,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for wipe_delete()"""
 
         # create test file
-        filename = self.write_file('bleachbit-test-wipe', b'abcdefghij' * 12345)
+        filename = self.write_file(
+            'bleachbit-test-wipe', b'abcdefghij' * 12345)
 
         # wipe it
         wipe_contents(filename)

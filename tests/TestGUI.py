@@ -202,7 +202,8 @@ class GUITestCase(common.BleachbitTestCase):
     def test_confirm_delete(self, mock_delete_confirmation_dialog):
         gui = self.app._window
         for new_delete_confirmation in [True, False]:
-            options.set('delete_confirmation', new_delete_confirmation, commit=False)
+            options.set('delete_confirmation',
+                        new_delete_confirmation, commit=False)
             gui._confirm_delete(False, False)
 
         # We should have a single call to delete_confirmation_dialog
@@ -245,7 +246,8 @@ class GUITestCase(common.BleachbitTestCase):
                                '<action command="delete" search="walk.all" path="{}"/>'
                                '</option>'
                                '</cleaner>'.format(self._NEW_CLEANER_ID, self._NEW_OPTION_ID, dirname))
-            cleaner_filename = os.path.join(dirname, 'test_run_operations_cleaner.xml')
+            cleaner_filename = os.path.join(
+                dirname, 'test_run_operations_cleaner.xml')
             self.write_file(cleaner_filename, cleaner_content, 'w')
             return cleaner_filename
 
@@ -254,13 +256,15 @@ class GUITestCase(common.BleachbitTestCase):
             mock_cleaner_change_dialog.return_value = None
 
         def _load_new_cleaner_in_gui(gui):
-            gui.cb_refresh_operations()  # to load the new test cleaner with id 'test_run_operations'
+            # to load the new test cleaner with id 'test_run_operations'
+            gui.cb_refresh_operations()
             self.refresh_gui()
 
         dirname = self.mkdtemp(prefix='bleachbit-test-run_operations')
         cleaner_filename = _create_cleaner_file_in_directory(dirname)
         self.assertExists(cleaner_filename)
-        _set_mocks_return_values(cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files)
+        _set_mocks_return_values(
+            cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files)
         _load_new_cleaner_in_gui(gui)
         file_to_clean = self.mkstemp(prefix="somefile", dir=dirname)
         self.assertExists(file_to_clean)
@@ -269,11 +273,13 @@ class GUITestCase(common.BleachbitTestCase):
     def test_run_operations(self):
         gui = self.app._window
         file_to_clean = self._setup_new_cleaner(gui)
-        self._put_checkmark_on_cleaner(gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
+        self._put_checkmark_on_cleaner(
+            gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
 
         with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
             self.assertTrue(gui._confirm_delete(False, False))
-            gui.run_operations(None) # same as b = self.click_button(gui, _("Clean"))
+            # same as b = self.click_button(gui, _("Clean"))
+            gui.run_operations(None)
 
         self.refresh_gui()
         self.assertNotExists(file_to_clean)
@@ -287,7 +293,7 @@ class GUITestCase(common.BleachbitTestCase):
                 self.assertTrue(gui._confirm_delete(False, False))
                 gui.cb_run_option(
                     None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID
-                ) # activated from context menu
+                )  # activated from context menu
 
             self.refresh_gui()
             assert_method(file_to_clean)

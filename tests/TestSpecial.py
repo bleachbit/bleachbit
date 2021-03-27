@@ -268,7 +268,6 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         FileUtilities.execute_sqlite3(
             os.path.join(dir_firefox_default, 'favicons.sqlite'), firefox78_favicons_sql)
 
-
     def tearDown(self):
         """Remove test browser files."""
         shutil.rmtree(self.dir_base)
