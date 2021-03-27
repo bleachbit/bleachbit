@@ -125,6 +125,7 @@ class Bleachbit(Gtk.Application):
         
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
+            # It is called from assert_execute_console() in windows/setup_py2exe.py
             self._auto_exit = True        
 
         if shred_paths:
