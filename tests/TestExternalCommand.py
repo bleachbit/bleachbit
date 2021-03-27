@@ -71,11 +71,10 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
         common.put_env('LANGUAGE', cls.old_language)
 
-    @common.skipUnlessWindows
-    def test_windows_explorer_context_menu_command(self):
+    def _context_helper(self, fn_prefix):
         """Unit test for 'Shred with BleachBit' Windows Explorer context menu command"""
 
-        # This test is more likely an integration test as it imitates use behavior.
+        # This test is more likely an integration test as it imitates user behavior.
         # It could be interpreted as TestCLI->test_gui_no-uac_shred_exit
         # but it is more explicit to have it here as a separate case.
         # It covers a single case where one file is shred without delete confirmation dialog.
@@ -84,9 +83,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             os.curdir = os.path.split(__file__)[0]
             os.curdir = os.path.split(os.curdir)[0]
 
-        file_to_shred = self.mkstemp(
-            prefix="file_to_shred_with_context_menu_command")
-        print('file to shred', file_to_shred)
+        file_to_shred = self.mkstemp(prefix=fn_prefix)
+        print('file_to_shred = {}'.format(file_to_shred))
         self.assertExists(file_to_shred)
         shred_command_key = '{}\\command'.format(SHRED_REGEX_KEY)
         shred_command_string = common.get_winregistry_value(
@@ -95,8 +93,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         if shred_command_string is None:
             # Use main .py file when the application is not installed and there is no .exe file
             # and corresponding registry entry.
-            shred_command_string = r'{} bleachbit.py --gui --no-uac --shred --exit {}'.format(sys.executable,
-                                                                                              file_to_shred)
+            shred_command_string = r'{} bleachbit.py --gui --no-uac --shred --exit "{}"'.format(sys.executable,
+                                                                                                file_to_shred)
             set_curdir_to_bleachbit()
         else:
             self.assertTrue('"%1"' in shred_command_string)
@@ -114,3 +112,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # Assert that the Bleachbit window has been closed after the context menu operation had finished.
         self.assertFalse(
             any(['BleachBit' == window_title for window_title in opened_windows_titles]))
+
+    @common.skipUnlessWindows
+    def test_windows_explorer_context_menu_command(self):
+        for fn_prefix in ('file_to_shred_with_context_menu_command', 'embedded space'):
+            self._context_helper(fn_prefix)
