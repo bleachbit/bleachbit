@@ -122,6 +122,10 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.__init__(
             self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
         GObject.threads_init()
+        
+        if auto_exit:
+            # This is used for automated testing of whether the GUI can start.
+            self._auto_exit = True        
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -139,9 +143,6 @@ class Bleachbit(Gtk.Application):
             except ImportError:
                 logger.exception(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if auto_exit:
-            # This is used for automated testing of whether the GUI can start.
-            self._auto_exit = True
 
     def build_app_menu(self):
         """Build the application menu
@@ -249,7 +250,7 @@ class Bleachbit(Gtk.Application):
 
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
-        # uses the standard priority.  Otherwise, this will quit before
+        # uses the standard priority. Otherwise, this will quit before
         # the files are deleted.
         #
         # Rebuild a minimal bleachbit.ini when quitting
@@ -358,9 +359,11 @@ class Bleachbit(Gtk.Application):
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
         if self._shred_paths:
-            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths)
-            self._auto_exit = True
-        if self._auto_exit:
+            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
+            # When we shred paths and auto exit with the Windows Explorer context menu command we close the
+            # application in GUI.shred_paths, because if it is closed from here there are problems.
+            # Most probably this is something related with how GTK handles idle quit calls.
+        elif self._auto_exit:
             GLib.idle_add(self.quit,
                           priority=GObject.PRIORITY_LOW)
             print('Success')
@@ -536,7 +539,7 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
-        self.auto_exit = auto_exit
+        self._auto_exit = auto_exit
 
         self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
@@ -583,9 +586,6 @@ class GUI(Gtk.ApplicationWindow):
         When shredding_settings=True:
         If user confirms to delete, then returns True.  If user aborts, returns
         False.
-
-        When quit_when_done=True:
-        Always returns False to remove function from the idle queue.
         """
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
@@ -597,7 +597,12 @@ class GUI(Gtk.ApplicationWindow):
         if self._confirm_delete(False, shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
-            return True
+            if shred_settings:
+                return True
+
+        if self._auto_exit:
+            GLib.idle_add(self.close,
+                              priority=GObject.PRIORITY_LOW)
 
         # user aborted
         return False
@@ -763,7 +768,7 @@ class GUI(Gtk.ApplicationWindow):
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners"""
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml') and not self.auto_exit:
+        if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             self.recognized_cleanerml = True
@@ -784,7 +789,7 @@ class GUI(Gtk.ApplicationWindow):
         self.view.expand_all()
 
         # Check for online updates.
-        if not self.auto_exit and \
+        if not self._auto_exit and \
             bleachbit.online_update_notification_enabled and \
             options.get("check_online_updates") and \
                 not hasattr(self, 'checked_for_updates'):
@@ -793,7 +798,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # Show information for first start.
         # (The first start flag is set also for each new version.)
-        if options.get("first_start") and not self.auto_exit:
+        if options.get("first_start") and not self._auto_exit:
             if os.name == 'posix':
                 self.append_text(
                     _('Access the application menu by clicking the hamburger icon on the title bar.'))
