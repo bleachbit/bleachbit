@@ -13,6 +13,8 @@ jobs:
    # Ubuntu 20.04 LTS (Focal)
     - dist: focal
       python: 3.8
+    - dist: focal
+      python: 3.9
 cache: pip
 before_install:
   - python --version # show Python version
