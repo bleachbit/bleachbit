@@ -13,7 +13,7 @@ goto shorthelp
 
 :help
 echo.
-echo Copyright (C) 2020 by Andrew Ziem and Tobias B. Besemer.  All rights reserved.
+echo Copyright (C) 2008-2021 Andrew Ziem and Tobias B. Besemer.  All rights reserved.
 echo License is GNU GPL version 3 or later - http://gnu.org/licenses/gpl.html.
 echo This is free software: You are free to change and redistribute it.
 echo There is NO WARRANTY, to the extent permitted by law.
