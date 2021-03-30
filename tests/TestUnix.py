@@ -121,6 +121,22 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 if common.have_root():
                     raise rte
 
+    def test_journald_regex(self):
+        """Test the regex for journald_clean()"""
+        positive_cases = ('Vacuuming done, freed 0B of archived journals on disk.',
+                          'Vacuuming done, freed 1K of archived journals on disk.',
+                          'Vacuuming done, freed 100.0M of archived journals on disk.',
+                          'Vacuuming done, freed 1G of archived journals on disk.',
+                          'Vacuuming done, freed 0B of archived journals from /run/log/journal.',
+                          'Vacuuming done, freed 1.0G of archived journals from /var/log/journal/123abc.')
+        regex = re.compile(JOURNALD_REGEX)
+        for pos in positive_cases:
+            self.assertTrue(regex.match(pos))
+        negative_cases = ('Deleted archived journal /var/log/journal/123/system@123-123.journal~ (56.0M).',
+                          'Archived and active journals take up 100.0M on disk.')
+        for neg in negative_cases:
+            self.assertFalse(regex.match(neg))
+
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
         tests = {'en': 'en',

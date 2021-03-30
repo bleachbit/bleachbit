@@ -43,6 +43,9 @@ except AttributeError:
     Pattern = re._pattern_type
 
 
+JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
+
+
 class LocaleCleanerPath:
     """This represents a path with either a specific folder name or a folder name pattern.
     It also may contain several compiled regex patterns for localization items (folders or files)
@@ -605,9 +608,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 
 def journald_clean():
     """Clean the system journals"""
-    freed_space_regex = '^Vacuuming done, freed ([\d.]+[KMGT]?) of archived journals on disk.$'
     try:
-        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
+        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("Error calling '%s':\n%s" %
                            (' '.join(e.cmd), e.output))
