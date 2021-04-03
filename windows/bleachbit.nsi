@@ -308,6 +308,9 @@ Section Core (Required)
 
     SetOutPath $INSTDIR
     File /r /x "locale" "..\dist\*.*"
+    
+    CopyFiles $WINDIR\Fonts\segoeui.tt? $INSTDIR\share\fonts
+    CopyFiles $WINDIR\Fonts\tahoma.tt? $INSTDIR\share\fonts
 
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -414,8 +417,6 @@ Function .onInit
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
-  CopyFiles $WINDIR\Fonts\segoeui.tt? $INSTDIR\share\fonts
-  CopyFiles $WINDIR\Fonts\tahoma.tt? $INSTDIR\share\fonts
 
 
 FunctionEnd
