@@ -301,6 +301,14 @@ Function RefreshShellIcons
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
 FunctionEnd
 
+Function .onVerifyInstDir
+  ; This callback belongs to MUI_PAGE_DIRECTORY and is called every time the user presses Browse button and selects install directory
+  ${GetFileName} $INSTDIR $R0 ; get the last part of the path
+  StrCmp $R0 ${prodname} no_append
+  StrCpy $INSTDIR "$INSTDIR\${prodname}"
+  no_append:  
+FunctionEnd
+
 ;--------------------------------
 ;Default section
 Section Core (Required)
