@@ -302,11 +302,16 @@ Function RefreshShellIcons
 FunctionEnd
 
 Function .onVerifyInstDir
-  ; This callback belongs to MUI_PAGE_DIRECTORY and is called every time the user presses Browse button and selects install directory
+  ; This callback belongs to MUI_PAGE_DIRECTORY and is called every time the user presses Browse
+  ; button and selects install directory. It does not affect typing in the input field.
+
+  ; The purpose is to prevent installation in a shared folder such as %ProgramFiles%
+  ; by adding the product name to the end.
+
   ${GetFileName} $INSTDIR $R0 ; get the last part of the path
   StrCmp $R0 ${prodname} no_append
   StrCpy $INSTDIR "$INSTDIR\${prodname}"
-  no_append:  
+  no_append:
 FunctionEnd
 
 ;--------------------------------
