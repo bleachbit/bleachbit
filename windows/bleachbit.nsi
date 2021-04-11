@@ -319,8 +319,7 @@ FunctionEnd
 Section Core (Required)
     SectionIn RO
 
-    SetOutPath $INSTDIR
-    File /r /x "locale" "..\dist\*.*"
+    !include FilesToInstall.nsh
     
     CopyFiles $WINDIR\Fonts\segoeui.tt? $INSTDIR\share\fonts
     CopyFiles $WINDIR\Fonts\tahoma.tt? $INSTDIR\share\fonts
@@ -441,7 +440,14 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
-    RMDir /r "$INSTDIR"
+    Delete $INSTDIR\share\fonts\segoeui.ttf 
+    Delete $INSTDIR\share\fonts\tahoma.ttf
+    RMDir $INSTDIR\share\fonts
+    
+    Delete "$INSTDIR\uninstall.exe"
+    
+   !include FilesToUninstall.nsh
+ 
     DeleteRegKey HKCU "Software\${prodname}"
     # delete normal shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}"
@@ -450,7 +456,7 @@ Section "Uninstall"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # Remove Windows Explorer Shell Extension (Shredder)
-    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+    DeleteRegKey HKCR "${SHRED_REGEX_KEY}"
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
