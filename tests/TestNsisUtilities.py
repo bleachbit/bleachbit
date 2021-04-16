@@ -1,7 +1,9 @@
 import os
 import mock
 
-from windows.NsisUtilities import _generate_add_remove_nsis_expressions, _walk_with_filepaths, generate_files_with_nsis_expressions
+from windows.NsisUtilities import (_generate_add_remove_nsis_expressions, 
+                                   _walk_with_filepaths, 
+                                   generate_files_with_nsis_expressions)
 from tests import common
 
 
@@ -71,11 +73,14 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         nsis_include_path = self.mkdtemp(prefix='NSIS_include')
         nsis_files_to_install_path = os.path.join(nsis_include_path, 'FilesToInstall.nsh')
         nsis_files_to_uninstall_path = os.path.join(nsis_include_path, 'FilesToUninstall.nsh')
-        with mock.patch("windows.NsisUtilities._DIRECTORY_TO_WALK", folder0):
-            with mock.patch("windows.NsisUtilities._DIRECTORY_PREFIX_FOR_NSIS", ''):
-                with mock.patch("windows.NsisUtilities._FILES_TO_INSTALL_PATH", nsis_files_to_install_path):
-                    with mock.patch("windows.NsisUtilities._FILES_TO_UNINSTALL_PATH", nsis_files_to_uninstall_path):
-                        generate_files_with_nsis_expressions()
+        with mock.patch.multiple(
+            "windows.NsisUtilities",
+            _DIRECTORY_TO_WALK=folder0,
+            _DIRECTORY_PREFIX_FOR_NSIS='',
+            _FILES_TO_INSTALL_PATH=nsis_files_to_install_path,
+            _FILES_TO_UNINSTALL_PATH=nsis_files_to_uninstall_path
+            ):
+                generate_files_with_nsis_expressions()
                         
         self.assertExists(nsis_include_path)
         self.assertExists(nsis_files_to_install_path)
