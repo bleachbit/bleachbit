@@ -32,6 +32,7 @@
     <value os="windows">%LocalAppData%\Google\Chrome\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -52,6 +53,7 @@
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-unstable/"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
