@@ -23,16 +23,11 @@
 Test case for application level functions
 """
 
-import unittest.mock as mock
+
 import os
 import sys
-import unittest
-import time
-import types
-#import psutil
 if 'win32' == sys.platform:
     import winreg
-    import win32gui
     from windows.setup_py2exe import SHRED_REGEX_KEY
 
 try:
@@ -86,6 +81,19 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         print('file_to_shred = {}'.format(file_to_shred))
         self.assertExists(file_to_shred)
+        shred_command_string = self._get_shred_command_string(file_to_shred, set_curdir_to_bleachbit)
+        
+        self._run_shred_command(shred_command_string)
+        self.assertNotExists(file_to_shred)
+
+        opened_windows_titles = common.get_opened_windows_titles()
+        # Assert that the Bleachbit window has been closed after the context menu operation had finished.
+        # If any windows is titled BleachBit the test will fail. 
+        # This could happen with Windows Explorer opened with folder BleachBit for example.
+        self.assertFalse(
+            any(['BleachBit' == window_title for window_title in opened_windows_titles]))
+
+    def _get_shred_command_string(self, file_to_shred, set_curdir_to_bleachbit):
         shred_command_key = '{}\\command'.format(SHRED_REGEX_KEY)
         shred_command_string = common.get_winregistry_value(
             winreg.HKEY_CLASSES_ROOT,  shred_command_key)
@@ -99,19 +107,20 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         else:
             self.assertTrue('"%1"' in shred_command_string)
             shred_command_string = shred_command_string.replace(
-                '"%1"', file_to_shred)
+                '""%1""', file_to_shred)
+        return shred_command_string
 
-        delete_confirmation_saved_state = options.get('delete_confirmation')
+    def _run_shred_command(self, shred_command_string):
+        environment_changed = False
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            # We need to set env var because of the new process that executes the context menu command string
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', self.tempdir)
+            environment_changed = True
         options.set('delete_confirmation', False)
         os.system(shred_command_string)
-        options.set('delete_confirmation', delete_confirmation_saved_state)
-
-        self.assertNotExists(file_to_shred)
-
-        opened_windows_titles = common.get_opened_windows_titles()
-        # Assert that the Bleachbit window has been closed after the context menu operation had finished.
-        self.assertFalse(
-            any(['BleachBit' == window_title for window_title in opened_windows_titles]))
+        if environment_changed:
+            # We don't want to affect other tests, executed after this one.
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
 
     @common.skipUnlessWindows
     def test_windows_explorer_context_menu_command(self):

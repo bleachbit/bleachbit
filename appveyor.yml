@@ -74,7 +74,7 @@ test_script:
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
   - '%PYTHON_HOME%/Scripts/pip.exe install mock'
   - 'SET DESTRUCTIVE_TESTS=T'
-  - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" -m unittest discover -v -p Test*.py'
+  - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" tests/TestAll.py'
 
 artifacts:
   - path: BleachBit-*-setup.exe

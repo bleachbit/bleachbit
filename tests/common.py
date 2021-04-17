@@ -22,34 +22,60 @@
 Common code for unit tests
 """
 
-from bleachbit.FileUtilities import extended_path
-from bleachbit.General import sudo_mode
-
 import functools
 import os
 import shutil
 import sys
 import tempfile
 import unittest
+import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui
 
 
+import bleachbit
+import bleachbit.Options
+from bleachbit.FileUtilities import extended_path
+from bleachbit.General import sudo_mode
+
+
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
+    _patchers = []
 
     @classmethod
     def setUpClass(cls):
         """Create a temporary directory for the testcase"""
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         print(cls.tempdir)
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._patch_options_paths()
+
+    @classmethod
+    def _patch_options_paths(cls):
+        to_patch = [('bleachbit.options_dir', cls.tempdir), 
+                    ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
+                    ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
+        for target, source in to_patch:
+            patcher = mock.patch(target, source)
+            patcher.start()
+            cls._patchers.append(patcher)
+
+        bleachbit.Options.options.restore()
 
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
         if os.path.exists(cls.tempdir):
             shutil.rmtree(cls.tempdir)
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._stop_patch_options_paths()
+    
+    @classmethod
+    def _stop_patch_options_paths(cls):
+        for patcher in cls._patchers:
+            patcher.stop()        
 
     def setUp(cls):
         """Call before each test method"""

@@ -103,6 +103,9 @@ class OptionsTestCase(common.BleachbitTestCase):
 
     def test_init_configuration(self):
         """Test for init_configuration()"""
+        if os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
