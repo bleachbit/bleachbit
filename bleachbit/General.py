@@ -141,7 +141,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         # strings in the output.
         # https://github.com/bleachbit/bleachbit/issues/167
         # https://github.com/bleachbit/bleachbit/issues/168
-        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR')
+        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR', 'BLEACHBIT_TEST_OPTIONS_DIR')
         env = dict((key, value)
                    for key, value in os.environ.items() if key in keep_env)
         env['LANG'] = 'C'
