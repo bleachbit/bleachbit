@@ -29,6 +29,7 @@ from bleachbit.Options import options
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
+from bleachbit.Windows import copy_fonts_in_portable_app
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import glob
@@ -116,6 +117,9 @@ class Bleachbit(Gtk.Application):
     _auto_exit = False
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
+
+        copy_fonts_in_portable_app(auto_exit)
+
         if os.name == 'nt' and Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)

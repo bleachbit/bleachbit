@@ -44,6 +44,7 @@ import glob
 import logging
 import os
 import sys
+import shutil
 
 from decimal import Decimal
 
@@ -63,6 +64,11 @@ if 'win32' == sys.platform:
     kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
+
+
+_GTK_FONTS_FOLDER = r'share\fonts'
+_SEGOEUI = 'segoeui.ttf'
+_TAHOMA = 'tahoma.ttf'
 
 
 def browse_file(_, title):
@@ -405,6 +411,7 @@ def get_known_folder_path(folder_name):
     class FOLDERID:
         LocalAppDataLow = UUID(
             '{A520A1A4-1780-4FF6-BD18-167343C5AF16}')
+        Fonts = UUID('{FD228CB7-AE11-4AE3-864C-16F3910AB8FE}')
 
     class UserHandle:
         current = wintypes.HANDLE(0)
@@ -580,3 +587,20 @@ def split_registry_key(full_key):
     if k1 not in hive_map:
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
+
+
+def copy_fonts_in_portable_app(auto_exit):
+    # Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
+    # We do this here only for portable app as for the installed app we do it through the installer.
+    
+    windows_fonts_folder = get_known_folder_path('Fonts')
+    if (
+        hasattr(sys, 'frozen') and
+        bleachbit.portable_mode  and
+        not auto_exit
+    ):
+        os.makedirs(_GTK_FONTS_FOLDER, exist_ok=True)
+        for font in [_SEGOEUI, _TAHOMA]:
+            gtk_font_path = os.path.join(_GTK_FONTS_FOLDER, font)
+            if not os.path.exists(gtk_font_path):
+                shutil.copy(os.path.join(windows_fonts_folder, font), gtk_font_path)
