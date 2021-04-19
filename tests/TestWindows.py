@@ -29,13 +29,13 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
 from bleachbit import logger
 
-import functools
 import os
 import platform
 import shutil
 import sys
 import tempfile
 import unittest
+import mock
 from decimal import Decimal
 
 if 'win32' == sys.platform:
@@ -511,3 +511,24 @@ class WindowsTestCase(common.BleachbitTestCase):
             set_environ('cd_test', test_dir)
             self.assertEqual(os.environ['cd_test'], test_dir)
             os.environ.pop('cd_test')
+
+    def test_copy_fonts_for_portable_app(self):
+        to_patch = [
+            ('bleachbit.Windows._GTK_FONTS_FOLDER', self.tempdir), 
+            ('bleachbit.portable_mode', True),
+        ]
+        patchers = []
+        for variable, value in to_patch:
+            patcher = mock.patch(variable, value)
+            patcher.start()
+            patchers.append
+        
+        with mock.patch('bleachbit.Windows.sys') as patched_sys:
+            setattr(patched_sys, 'frozen', True)
+            for auto_exit, assert_function in [(True, self.assertNotExists), (False, self.assertExists)]:
+                copy_fonts_in_portable_app(auto_exit)
+                for font in ['segoeui.ttf', 'tahoma.ttf']:
+                    assert_function(os.path.join(self.tempdir, font))
+                
+        for patcher in patchers:
+            patcher.stop()
