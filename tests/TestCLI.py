@@ -56,14 +56,36 @@ class CLITestCase(common.BleachbitTestCase):
                   (args, output[2]))
         self.assertEqual(pos, -1)
 
+    def test_args_to_operations_list(self):
+        """Unit test for args_to_operations_list()"""
+        # --preset
+        import bleachbit.Options
+        bleachbit.Options.init_configuration()
+        o = args_to_operations_list(True, False)
+        self.assertEqual(o, [])
+        bleachbit.Options.options.set_tree('system', 'tmp', True)
+        o = args_to_operations_list(True, False)
+        self.assertEqual(o, ['system.tmp'])
+
+        # --all-but-warning
+        o = args_to_operations_list(False, True)
+        self.assertIsInstance(o, list)
+        self.assertTrue('google_chrome.cache' in o)
+        self.assertTrue('system.tmp' in o)
+        self.assertTrue('system.clipboard' in o)
+        self.assertFalse('system.free_disk_space' in o)
+        self.assertFalse('system.memory' in o)
+
     def test_args_to_operations(self):
         """Unit test for args_to_operations()"""
+        # test explicit cleaners (without --preset or --all-but-warning)
         tests = (
             (['adobe_reader.*'],
              {'adobe_reader': ['cache', 'mru', 'tmp']}),
             (['adobe_reader.mru'], {'adobe_reader': ['mru']}))
         for test in tests:
-            o = args_to_operations(test[0], False)
+            o = args_to_operations(test[0], False, False)
+            self.assertIsInstance(o, dict)
             self.assertEqual(o, test[1])
 
     def test_cleaners_list(self):
@@ -154,7 +176,7 @@ class CLITestCase(common.BleachbitTestCase):
             FileUtilities.delete = dummy_delete
             FileUtilities.delete(filename)
             self.assertExists(filename)
-            operations = args_to_operations(['system.tmp'], False)
+            operations = args_to_operations(['system.tmp'], False, False)
             preview_or_clean(operations, True)
             FileUtilities.delete = save_delete
             self.assertIn(filename, deleted_paths,

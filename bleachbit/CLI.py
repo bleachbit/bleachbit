@@ -81,17 +81,33 @@ def preview_or_clean(operations, really_clean):
         pass
 
 
-def args_to_operations(args, preset):
-    """Read arguments and return list of operations"""
+def args_to_operations_list(preset, all_but_warning):
+    """For --preset and --all-but-warning return list of operations as list
+
+    Example return: ['google_chrome.cache', 'system.tmp']
+    """
+    args = []
+    if not backends:
+        list(register_cleaners())
+    assert(len(backends) > 1)
+    for key in sorted(backends):
+        c_id = backends[key].get_id()
+        for (o_id, o_name) in backends[key].get_options():
+            # restore presets from the GUI
+            if preset and Options.options.get_tree(c_id, o_id):
+                args.append('.'.join([c_id, o_id]))
+            elif all_but_warning and not backends[c_id].get_warning(o_id):
+                args.append('.'.join([c_id, o_id]))
+    return args
+
+
+def args_to_operations(args, preset, all_but_warning):
+    """Read arguments and return list of operations as dictionary"""
     list(register_cleaners())
     operations = {}
-    if preset:
-        # restore presets from the GUI
-        for key in sorted(backends):
-            c_id = backends[key].get_id()
-            for (o_id, o_name) in backends[key].get_options():
-                if Options.options.get_tree(c_id, o_id):
-                    args.append('.'.join([c_id, o_id]))
+    if not args:
+        args = []
+    args = set(args + args_to_operations_list(preset, all_but_warning))
     for arg in args:
         if 2 != len(arg.split('.')):
             logger.warning(_("not a valid cleaner: %s"), arg)
@@ -153,6 +169,8 @@ def process_cmd_line():
                       help=optparse.SUPPRESS_HELP)
     parser.add_option("--preset", action="store_true",
                       help=_("use options set in the graphical interface"))
+    parser.add_option("--all-but-warning", action="store_true",
+                      help=_("enable all options that do not have a warning"))
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
@@ -219,7 +237,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
                 pass
         sys.exit(0)
     if options.preview or options.clean:
-        operations = args_to_operations(args, options.preset)
+        operations = args_to_operations(
+            args, options.preset, options.all_but_warning)
         if not operations:
             logger.error(_("No work to do. Specify options."))
             sys.exit(1)
