@@ -592,13 +592,13 @@ def split_registry_key(full_key):
 def copy_fonts_in_portable_app(auto_exit):
     # Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
     # We do this here only for portable app as for the installed app we do it through the installer.
-    
-    windows_fonts_folder = get_known_folder_path('Fonts')
+
     if (
         hasattr(sys, 'frozen') and
         bleachbit.portable_mode  and
         not auto_exit
     ):
+        windows_fonts_folder = get_known_folder_path('Fonts')
         os.makedirs(_GTK_FONTS_FOLDER, exist_ok=True)
         for font in [_SEGOEUI, _TAHOMA]:
             gtk_font_path = os.path.join(_GTK_FONTS_FOLDER, font)
