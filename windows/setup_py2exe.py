@@ -28,7 +28,7 @@ import time
 import win_unicode_console
 import xml.dom.minidom
 
-from windows.NsisUtilities import generate_files_with_nsis_expressions
+from windows.NsisUtilities import write_nsis_expressions_to_files
 
 setup_encoding = sys.stdout.encoding
 win_unicode_console.enable()
@@ -582,7 +582,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     logger.info('Building installer')
     
-    generate_files_with_nsis_expressions()
+    write_nsis_expressions_to_files()
     
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     # Was:

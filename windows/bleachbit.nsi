@@ -373,8 +373,7 @@ SectionGroupEnd
 
 !ifndef NoTranslations
 Section Translations
-    SetOutPath $INSTDIR\share\locale
-    File /r "..\dist\share\locale\*.*"
+  !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
@@ -443,11 +442,15 @@ Section "Uninstall"
     Delete $INSTDIR\share\fonts\segoeui.ttf 
     Delete $INSTDIR\share\fonts\tahoma.ttf
     RMDir $INSTDIR\share\fonts
-    
-    Delete "$INSTDIR\uninstall.exe"
-    
-   !include FilesToUninstall.nsh
- 
+
+    Delete $INSTDIR\bleachbit.exe.log
+
+    !ifndef NoTranslations
+      !include LocaleToUninstall.nsh
+    !endif
+
+    !include FilesToUninstall.nsh
+
     DeleteRegKey HKCU "Software\${prodname}"
     # delete normal shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}"
@@ -457,6 +460,12 @@ Section "Uninstall"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # Remove Windows Explorer Shell Extension (Shredder)
     DeleteRegKey HKCR "${SHRED_REGEX_KEY}"
+
+    # Remove the uninstaller as the very last step.
+    # If something goes wrong, let the user run it again.
+    Delete $INSTDIR\uninstall.exe
+    RMDir /REBOOTOK "$INSTDIR\."
+
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
