@@ -54,10 +54,11 @@
   <option id="index">
     <label>Index</label>
     <description>Delete the files</description>
+    <warning>Deleting the index will reset the configuration of columns in the message list.</warning>
     <action command="delete" search="walk.files" path="$$profile$$" regex="\.msf$"/>
   </option>
   <option id="sessionjson">
-  <!-- delete the session, i.e. open windows and tabs  -->
+    <!-- delete the session, i.e. open windows and tabs  -->
     <label>Session restore</label>
     <description>Loads the initial session after the browser closes or crashes</description>
     <action command="delete" search="file" path="$$profile$$/session.json"/>
