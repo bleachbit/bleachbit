@@ -71,8 +71,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assertExists(extended_path(f))
-        if not common.destructive_tests('get_recycle_bin'):
-            return
+
+    @common.skipUnlessDestructive
+    def test_get_recycle_bin_destructive(self):
+        """Unit test the destructive part of get_recycle_bin"""
         put_files_into_recycle_bin()
         # clear recycle bin
         counter = 0
@@ -347,8 +349,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
-        if not common.destructive_tests('recycle bin'):
-            return
+
+    @common.skipUnlessDestructive
+    def test_empty_recycle_bin_destructive(self):
+        """Unit test the destructive part of empty_recycle_bin()"""
         # check it deletes files for fixed drives
         put_files_into_recycle_bin()
         for drive in get_fixed_drives():

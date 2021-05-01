@@ -47,9 +47,11 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         # preview
         self.run_all(xmlcleaner, False)
 
-        # really delete if user allows
-        if common.destructive_tests('example_cleaner.xml'):
-            self.run_all(xmlcleaner, True)
+    @common.skipUnlessDestructive
+    def test_CleanerML_destructive(self):
+        """Unit test the destructive parts of class CleanerML"""
+        # really delete
+        self.run_all(xmlcleaner, True)
 
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""

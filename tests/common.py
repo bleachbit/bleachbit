@@ -197,6 +197,11 @@ def skipIfWindows(f):
     return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
 
 
+def skipUnlessDestructive(f):
+    """Skip unless destructive tests are allowed"""
+    return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
+
+
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
     return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
