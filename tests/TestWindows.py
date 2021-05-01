@@ -142,8 +142,6 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         if not clear_recycle_bin:
             cleanup_dirs()
-            if not common.destructive_tests('windows link'):
-                self.skipTest('destructive tests are disabled')
             return
 
         # clear the recycle bin

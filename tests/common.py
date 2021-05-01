@@ -164,14 +164,6 @@ def getTestPath(path):
     return path
 
 
-def destructive_tests(title):
-    """Return true if allowed to run destructive tests.  If false print notice."""
-    if os.getenv('DESTRUCTIVE_TESTS') == 'T':
-        return True
-    print('warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title)
-    return False
-
-
 def get_env(key):
     """Get an environment variable. If not set, returns None instead of KeyError."""
     if not key in os.environ:
