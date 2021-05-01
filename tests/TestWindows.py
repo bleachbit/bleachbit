@@ -156,12 +156,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         # clean up
         cleanup_dirs()
 
-    @unittest.skip("not yet")
     def test_link_junction_no_clear(self):
         """Unit test for directory junctions without clearing recycle bin"""
         self._test_link_helper('/j', False)
 
-    @unittest.skip("not yet")
     def test_link_junction_clear(self):
         """Unit test for directory junctions with clearing recycle bin"""
         self._test_link_helper('/j', True)
@@ -518,7 +516,7 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_copy_fonts_for_portable_app(self):
         to_patch = [
-            ('bleachbit.Windows._GTK_FONTS_FOLDER', self.tempdir), 
+            ('bleachbit.Windows._GTK_FONTS_FOLDER', self.tempdir),
             ('bleachbit.portable_mode', True),
         ]
         patchers = []
@@ -526,13 +524,13 @@ class WindowsTestCase(common.BleachbitTestCase):
             patcher = mock.patch(variable, value)
             patcher.start()
             patchers.append
-        
+
         with mock.patch('bleachbit.Windows.sys') as patched_sys:
             setattr(patched_sys, 'frozen', True)
             for auto_exit, assert_function in [(True, self.assertNotExists), (False, self.assertExists)]:
                 copy_fonts_in_portable_app(auto_exit)
                 for font in ['segoeui.ttf', 'tahoma.ttf']:
                     assert_function(os.path.join(self.tempdir, font))
-                
+
         for patcher in patchers:
             patcher.stop()
