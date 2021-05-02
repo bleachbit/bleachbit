@@ -205,8 +205,8 @@ def touch_file(filename):
     if not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
-    with open(filename, "w") as f:
-        pass
+    import pathlib
+    pathlib.Path(filename).touch()
     assert(os.path.exists(filename))
 
 
