@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2021-01-16 18:53+0000\n"
+"PO-Revision-Date: 2021-04-05 22:03+0000\n"
 "Last-Translator: Michal L <Unknown>\n"
 "Language-Team: s120801-translate\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2021-01-24 19:56+0000\n"
-"X-Generator: Launchpad (build 2d1d5e352f0d063d660df2300e31f66bed027fa5)\n"
+"X-Launchpad-Export-Date: 2021-05-02 20:26+0000\n"
+"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 "X-Poedit-Country: POLAND\n"
 "Language: pl\n"
 "X-Poedit-Language: Polish\n"
@@ -713,6 +713,8 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Ostrożnie przejrzyj listę pakietów, które zostaną usunięte po uruchomieniu "
+"\"dnf list autoremove\"."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -757,7 +759,7 @@ msgstr "Błąd sprawdzania, czy ścieżka istnieje: %s"
 
 #: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Błąd podczas ustawiania domyślnych dysków do niszczenia danych."
 
 #: ../bleachbit/Options.py:291
 #, python-format
@@ -890,7 +892,7 @@ msgstr "Zakończono."
 #: ../bleachbit/GUI.py:796
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
-msgstr ""
+msgstr "Wejdź do menu aplikacji, klikając ikonę hamburgera na pasku tytułu."
 
 #: ../bleachbit/GUI.py:801
 msgid "Access the application menu by clicking the logo on the title bar."
@@ -1112,7 +1114,7 @@ msgstr "Nie można usunąć specjalnego typu pliku: %s"
 
 #: ../bleachbit/FileUtilities.py:573
 msgid "%TMP% does not exist: %s"
-msgstr ""
+msgstr "%TMP% nie istnieje: %s"
 
 #: ../bleachbit/FileUtilities.py:815
 msgid ""
@@ -1125,22 +1127,26 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:911
 #, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "Czyszczenie ścieżki: %s"
 
 #: ../bleachbit/FileUtilities.py:921
 msgid "Creating new, temporary file for wiping free space."
 msgstr ""
+"Tworzenie nowego, tymczasowego pliku w celu wyczyszenia wolnej przestrzeni "
+"dyskowej."
 
 #: ../bleachbit/FileUtilities.py:961
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Błąd #%d podczas opróżniania bufora pliku."
 
 #: ../bleachbit/FileUtilities.py:977
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"Zapisano {files:,} plików i {bytes:,} bajtów w {seconds:,} sekund przy "
+"{rate:.2f} MB/s"
 
 #: ../bleachbit/FileUtilities.py:982
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
@@ -1148,7 +1154,7 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:984
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
+msgstr "{bytes:,} bajtów i {inodes:,} i-węzłów dostępnych dla super-usera"
 
 #: ../bleachbit/FileUtilities.py:1000
 msgid "Handled unknown error #0 while truncating file."
@@ -1398,6 +1404,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Wystąpił błąd podczas otwierania połączenia w celu sprawdzenia aktualizacji. "
+"Sprawdź, czy połączenie internetowe działa poprawnie oraz czy zapora "
+"sieciowa nie blokuje tej aplikacji. Komunikat błędu: {}"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
@@ -1448,6 +1457,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"Funkcja usuwa wszystkie ustawienia programu BleachBit, a następnie go "
+"zamyka. Użyj jej, aby ukryć swoje korzystanie z programu BleachBit lub do "
+"zresetowania jego ustawień. Przy następnym uruchomieniu programu BleachBit, "
+"ustawienia zostaną zainicjowane do wartości domyślnych."
 
 #: ../bleachbit/GuiBasic.py:132
 msgid ""
@@ -1544,7 +1557,7 @@ msgstr "aktualizuj winapp2.ini, jeśli dostępna jest nowa wersja"
 
 #: ../bleachbit/CLI.py:160
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "wyczyść wolną przestrzeń w podanych ścieżkach"
 
 #: ../bleachbit/CLI.py:162
 msgid "output version information and exit"
@@ -1559,19 +1572,21 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Określ tylko jedno z tych poleceń: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:192
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Sprawdzanie online dostępności aktualizacji bazy winapp2.ini"
 
 #: ../bleachbit/CLI.py:207
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Nie podano katalogów dla --wipe-free-space"
 
 #: ../bleachbit/CLI.py:212
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Ścieżka do wyczyszczenia musi być istniejącym katalogiem: %s"
 
 #: ../bleachbit/CLI.py:214
 msgid "Wiping free space can take a long time."
@@ -1583,7 +1598,7 @@ msgstr "Brak pracy do wykonania. Określ opcje."
 
 #: ../bleachbit/CLI.py:232
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite jest przeznaczony wyłącznie do użytku z  --clean"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1638,7 +1653,7 @@ msgstr "Stwórz pliki"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Pobrać potrzebne dane dla generatora chaff?"
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
@@ -1811,11 +1826,11 @@ msgstr ""
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
-msgstr ""
+msgstr "Wyłączanie partycji wymiany."
 
 #: ../bleachbit/Memory.py:98
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "Ponowne włączanie partycji wymiany."
 
 #: ../bleachbit/Memory.py:120
 #, python-format
@@ -1837,7 +1852,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Zwalnianie %s pamięci."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
