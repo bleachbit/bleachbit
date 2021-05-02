@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2021-01-05 04:09+0000\n"
+"PO-Revision-Date: 2021-01-29 09:15+0000\n"
 "Last-Translator: Silvara <Unknown>\n"
 "Language-Team: Interlingue <ie@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-01-09 16:56+0000\n"
-"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
+"X-Launchpad-Export-Date: 2021-05-02 20:25+0000\n"
+"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -204,7 +204,7 @@ msgstr "Archivator de files"
 #: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:250
 #: ../bleachbit/Cleaner.py:259
 msgid "Delete the usage history"
-msgstr ""
+msgstr "Remover li diarium de usage"
 
 #: ../cleaners/winrar.xml ../cleaners/silverlight.xml
 #: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
@@ -314,7 +314,7 @@ msgstr "Descargat podcastes"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Remover descargates podcastes"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -348,7 +348,7 @@ msgstr "Li liste de recent documentes"
 #: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/kde.xml ../bleachbit/Cleaner.py:199 ../bleachbit/Cleaner.py:296
 msgid "Delete the list of recently used documents"
-msgstr ""
+msgstr "Remover li liste de recent documentes"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
@@ -388,13 +388,13 @@ msgstr "Sistema de fenestres"
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Diariums de debug"
 
 #: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml ../cleaners/easytag.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Remover li diariums de debug"
 
 #: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
 msgid "File manager"
@@ -402,7 +402,7 @@ msgstr "Gerente de files"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr ""
+msgstr "Personalisat fólderes va esser revertet."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -419,7 +419,7 @@ msgstr "Torrentes"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr ""
+msgstr "Remover li torrentes (solmen li metadata, ma ne li descrit files)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Session restore"
-msgstr ""
+msgstr "Restitution de session"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
@@ -448,7 +448,7 @@ msgstr ""
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Site preferences"
-msgstr ""
+msgstr "Preferenties de sites"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Settings for individual sites"
@@ -463,7 +463,7 @@ msgstr "Diarium de URLs"
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml
 msgid "List of visited web pages"
-msgstr ""
+msgstr "Liste de visitat web-págines"
 
 #: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
@@ -471,11 +471,11 @@ msgstr "Diarium de descargas"
 
 #: ../cleaners/seamonkey.xml
 msgid "List of files downloaded"
-msgstr ""
+msgstr "Liste de descargat files"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr ""
+msgstr "Remover li liste de descargat web-págines"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -502,7 +502,7 @@ msgstr ""
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Remover li liste de recentmen usat elementes"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -522,7 +522,7 @@ msgstr "Diarium de sercha"
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
-msgstr ""
+msgstr "Remover li diarium de sercha"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -545,11 +545,11 @@ msgstr ""
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Conosset files"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Conosset clientes e amícs"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -562,7 +562,7 @@ msgstr "Diariums del sistema"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Vacuar old diariums del sistema"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Memory dump"
@@ -580,7 +580,7 @@ msgstr ""
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Un strate de compatibilitá por programmas Windows"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -589,7 +589,7 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Profund analise"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
@@ -637,11 +637,11 @@ msgstr "Li actual session"
 
 #: ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Remover li actual session"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Programma de telecomanda"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -682,7 +682,7 @@ msgstr "To va relansar Windows Explorer."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Remover paccages installat quam dependenties"
 
 #: ../cleaners/dnf.xml
 msgid ""
@@ -706,11 +706,11 @@ msgstr "Redactor de grafica"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Redactor de audiotags"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "Cliente IRC antey nominat XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -718,7 +718,7 @@ msgstr "Nettator de ínnecessi files"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
-msgstr ""
+msgstr "Liberar spacie e mantener confidentie"
 
 #: ../bleachbit/Options.py:113
 #, python-format
@@ -737,12 +737,12 @@ msgstr ""
 #: ../bleachbit/Options.py:291
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "Automaticmen gardante li lingue %s."
 
 #: ../bleachbit/Unix.py:586
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "Executibile ne esset trovat: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:671 ../bleachbit/Unix.py:686 ../bleachbit/Unix.py:711
@@ -828,6 +828,9 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
+"Avise concernent %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 
 #: ../bleachbit/GUI.py:564
 #, python-format
@@ -882,10 +885,11 @@ msgstr "Nettar"
 #: ../bleachbit/GUI.py:966
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"Previder files por li selectet operationes (sin remover quelcunc file)"
 
 #: ../bleachbit/GUI.py:981
 msgid "Clean files in the selected operations"
-msgstr ""
+msgstr "Remover files por li selectet operationes"
 
 #: ../bleachbit/GUI.py:989
 msgid "Abort"
@@ -893,11 +897,11 @@ msgstr "Interrupter"
 
 #: ../bleachbit/GUI.py:991
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Interrupter li processu de prevision o remotion"
 
 #: ../bleachbit/GUI.py:1196
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Un errore evenit controlante actualisamentes: "
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -921,7 +925,7 @@ msgstr ""
 #. system reboots
 #: ../bleachbit/Command.py:100
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Marcar por remotion"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Command.py:203 ../bleachbit/Command.py:237
@@ -930,7 +934,7 @@ msgstr ""
 #: ../bleachbit/Action.py:440 ../bleachbit/Action.py:505
 #: ../bleachbit/Action.py:517
 msgid "Clean file"
-msgstr ""
+msgstr "Nettar li file"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:279
@@ -953,7 +957,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Errore: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
@@ -1015,7 +1019,7 @@ msgstr "Files a remover: %d"
 #: ../bleachbit/Worker.py:301
 #, python-format
 msgid "Special operations: %d"
-msgstr ""
+msgstr "Special operationes: %d"
 
 #: ../bleachbit/Worker.py:304
 #, python-format
@@ -1039,7 +1043,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:343
 #, python-format
 msgid "Directory is not empty: %s"
-msgstr ""
+msgstr "Fólder ne es vacui: %s"
 
 #: ../bleachbit/FileUtilities.py:332
 #, python-format
@@ -1085,6 +1089,8 @@ msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"Scrit {files:,} files e {bytes:,} octetes in {seconds:,} secondes ye "
+"{rate:.2f} Mo/s"
 
 #: ../bleachbit/FileUtilities.py:982
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
@@ -1236,7 +1242,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:345
 msgid "This option is very slow."
-msgstr ""
+msgstr "Ti option es tre lent."
 
 #: ../bleachbit/Cleaner.py:349
 msgid "The system in general"
@@ -1472,7 +1478,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:158
 msgid "update winapp2.ini, if a new version is available"
-msgstr ""
+msgstr "actualisar winapp2.ini, si un nov version es disponibil"
 
 #: ../bleachbit/CLI.py:160
 msgid "wipe free space in the given paths"
@@ -1554,7 +1560,7 @@ msgstr "Selecter li fólder de destination"
 
 #: ../bleachbit/GuiChaff.py:102
 msgid "When finished"
-msgstr ""
+msgstr "Pos completion"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Delete without shredding"
@@ -1566,7 +1572,7 @@ msgstr "Ne remover"
 
 #: ../bleachbit/GuiChaff.py:116
 msgid "Make files"
-msgstr ""
+msgstr "Crear files"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
@@ -1594,11 +1600,11 @@ msgstr "Lingues"
 
 #: ../bleachbit/GuiPreferences.py:72
 msgid "Whitelist"
-msgstr ""
+msgstr "Blanc-liste"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
+msgstr "Periodicmen controlar actualisamentes del programma med Internet"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
@@ -1742,7 +1748,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Assignante valor nice %d por ti processu."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
@@ -1770,7 +1776,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Fisic líber memorie es %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
