@@ -36,20 +36,23 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(really_delete):
                     common.validate_result(self, result, really_delete)
 
-    def test_CleanerML(self):
-        """Unit test for class CleanerML"""
-
+    def _get_xmlcleaner(self):
+        """Helper for CleanerML*()"""
         xmlcleaner = CleanerML("doc/example_cleaner.xml")
-
         self.assertIsInstance(xmlcleaner, CleanerML)
         self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
+        return xmlcleaner
 
+    def test_CleanerML(self):
+        """Unit test for class CleanerML"""
+        xmlcleaner = self._get_xmlcleaner()
         # preview
         self.run_all(xmlcleaner, False)
 
     @common.skipUnlessDestructive
     def test_CleanerML_destructive(self):
         """Unit test the destructive parts of class CleanerML"""
+        xmlcleaner = self._get_xmlcleaner()
         # really delete
         self.run_all(xmlcleaner, True)
 
