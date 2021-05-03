@@ -33,8 +33,9 @@ BleachBit itself, including source code and cleaner definitions, is licensed und
 markovify is licensed under the [MIT License](https://github.com/jsvine/markovify/blob/master/LICENSE.txt).
 
 ### Development
-* [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  [![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)](https://ci.appveyor.com/project/az0/bleachbit)
-* [BleachBit on Travis CI](https://travis-ci.org/bleachbit/bleachbit)  [![Build Status](https://travis-ci.org/bleachbit/bleachbit.svg?branch=master)](https://travis-ci.org/bleachbit/bleachbit)
+* [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  ![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)
+* [BleachBit on Travis CI](https://travis-ci.com/github/bleachbit/bleachbit)  ![Build Status](https://travis-ci.com/bleachbit/bleachbit.svg?branch=master)
+* [LGTM](https://lgtm.com/projects/g/bleachbit/bleachbit/): code analysis
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
