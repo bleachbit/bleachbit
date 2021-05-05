@@ -9,35 +9,49 @@ from windows.NsisUtilities import (_generate_add_remove_nsis_expressions,
 from tests import common
 
 
+@common.skipUnlessWindows
 class NsisUtilitiesTestCase(common.BleachbitTestCase):
     """Test case for module NsisUtilities"""
 
+    _os_walk_original = os.walk
+
+    def setUp(self):
+        # We need to sort the files in order to compare them correctly
+        self._patcher = mock.patch('os.walk')
+        self._patcher.start()
+        os.walk.side_effect = self._walk_with_sorted_files
+
     def test_generate_add_remove_nsis_expressions(self):
         folder0, tree = self._generate_folder_tree()
-        (expected_install_expression, expected_uninstall_expression, 
-         expected_install_separate_folder_expression, expected_uninstall_separate_folder_expression) = self._generate_nsis_expressions(tree)
+        (expected_install_expression, expected_uninstall_expression,
+         expected_install_separate_folder_expression,
+         expected_uninstall_separate_folder_expression) = self._generate_nsis_expressions(tree)
 
         import windows
         with mock.patch.multiple(
-            'windows.NsisUtilities', 
-            _DIRECTORY_TO_WALK=folder0, 
-            _DIRECTORY_PREFIX_FOR_NSIS='',
-            _DIRECTORY_TO_SEPARATE=r'{}\{}'.format(folder0, tree[-2][0])):
-            (actual_install_expression, 
+                'windows.NsisUtilities',
+                _DIRECTORY_TO_WALK=folder0,
+                _DIRECTORY_PREFIX_FOR_NSIS='',
+                _DIRECTORY_TO_SEPARATE=os.path.join(folder0, tree[-2][0])
+        ):
+            (actual_install_expression,
              actual_uninstall_expression) = _generate_add_remove_nsis_expressions(
-                 windows.NsisUtilities._DIRECTORY_TO_WALK,
-                 None,
-                 windows.NsisUtilities._DIRECTORY_TO_SEPARATE)
-            (actual_install_separate_folder_expression, 
+                windows.NsisUtilities._DIRECTORY_TO_WALK,
+                None,
+                windows.NsisUtilities._DIRECTORY_TO_SEPARATE)
+            (actual_install_separate_folder_expression,
              actual_uninstall_separate_folder_expression) = _generate_add_remove_nsis_expressions(
                 windows.NsisUtilities._DIRECTORY_TO_SEPARATE,
                 os.path.relpath(windows.NsisUtilities._DIRECTORY_TO_SEPARATE, windows.NsisUtilities._DIRECTORY_TO_WALK))
 
-        sorted_lines = lambda x: sorted(x.split('\n'))
-        self.assertEqual(sorted_lines(expected_install_expression), sorted_lines(actual_install_expression))
-        self.assertEqual(sorted_lines(expected_uninstall_expression), sorted_lines(actual_uninstall_expression))
-        self.assertEqual(sorted_lines(expected_install_separate_folder_expression), sorted_lines(actual_install_separate_folder_expression))
-        self.assertEqual(sorted_lines(expected_uninstall_separate_folder_expression), sorted_lines(actual_uninstall_separate_folder_expression))        
+        self.assertEqual(self._sort_string_by_lines(expected_install_expression),
+                         self._sort_string_by_lines(actual_install_expression))
+        self.assertEqual(self._sort_string_by_lines(expected_uninstall_expression),
+                         self._sort_string_by_lines(actual_uninstall_expression))
+        self.assertEqual(self._sort_string_by_lines(expected_install_separate_folder_expression),
+                         self._sort_string_by_lines(actual_install_separate_folder_expression))
+        self.assertEqual(self._sort_string_by_lines(expected_uninstall_separate_folder_expression),
+                         self._sort_string_by_lines(actual_uninstall_separate_folder_expression))
 
     def _generate_nsis_expressions(self, tree):
         expected_install_expression = '{}\n'.format(self._generate_setoutpath_expression('$INSTDIR', '.'))
@@ -59,14 +73,17 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         expected_uninstall_separate_folder_expression = ''
         (expected_install_separate_folder_expression,
          expected_uninstall_separate_folder_expression) = self._generate_nsis_expressions_helper(
-            '$INSTDIR', tree[-2:], expected_install_separate_folder_expression, expected_uninstall_separate_folder_expression)
+            '$INSTDIR', tree[-2:], expected_install_separate_folder_expression,
+            expected_uninstall_separate_folder_expression)
 
-        return (expected_install_expression, expected_uninstall_expression, 
+        return (expected_install_expression, expected_uninstall_expression,
                 expected_install_separate_folder_expression, expected_uninstall_separate_folder_expression)
 
-    def _generate_nsis_expressions_helper(self, target_dir, tree, expected_install_expression, expected_uninstall_expression):
-        for relpath_folder, folder_files, file_names in tree:           
-            expected_install_expression += '{}\n'.format(self._generate_setoutpath_expression(target_dir, relpath_folder))
+    def _generate_nsis_expressions_helper(self, target_dir, tree, expected_install_expression,
+                                          expected_uninstall_expression):
+        for relpath_folder, folder_files, file_names in tree:
+            expected_install_expression += '{}\n'.format(
+                self._generate_setoutpath_expression(target_dir, relpath_folder))
             if expected_uninstall_expression:
                 expected_uninstall_expression = '{}\n{}'.format(
                     self._generate_rmdir_expression(target_dir, relpath_folder),
@@ -76,7 +93,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 expected_uninstall_expression = self._generate_rmdir_expression(target_dir, relpath_folder)
             if folder_files:
                 expected_install_expression += '{}\n'.format(self._generate_install_file_expression(folder_files))
-                
+
                 folder_path = r'{}\{}'.format(target_dir, relpath_folder)
                 expected_uninstall_expression = '{}\n{}'.format(
                     self._generate_delete_expressions(folder_path, file_names),
@@ -86,43 +103,49 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_walk_with_parent_directory_and_filepaths(self):
         folder0, tree = self._generate_folder_tree()
-        self.assertEqual(tree, list(_walk_with_parent_directory_and_filepaths(folder0)))
-    
+        self.assertEqual(sorted(tree), sorted(list(_walk_with_parent_directory_and_filepaths(folder0))))
+
     def test_write_nsis_expressions_to_files(self):
         folder0, tree = self._generate_folder_tree()
-        (expected_install_expression, expected_uninstall_expression,
-        expected_install_separate_folder_expression, expected_uninstall_separate_folder_expression) = self._generate_nsis_expressions(tree)
-        
+        (expected_install_expression,
+         expected_uninstall_expression,
+         expected_install_separate_folder_expression,
+         expected_uninstall_separate_folder_expression) = self._generate_nsis_expressions(tree)
+
         nsis_include_path = self.mkdtemp(prefix='NSIS_include')
+
         class NSISFilePathAndExpressions:
             def __init__(self, filename, nsis_expressions):
                 self.filepath = os.path.join(nsis_include_path, filename)
                 self.nsis_expressions = nsis_expressions
-            
+
         files_to_install = NSISFilePathAndExpressions('FilesToInstall.nsh', expected_install_expression)
         files_to_uninstall = NSISFilePathAndExpressions('FilesToUninstall.nsh', expected_uninstall_expression)
-        separate_folder_to_install = NSISFilePathAndExpressions('LocaleToInstall.nsh', expected_install_separate_folder_expression)
-        separate_folder_to_uninstall = NSISFilePathAndExpressions('LocaleToUninstall.nsh', expected_uninstall_separate_folder_expression)
-        
+        separate_folder_to_install = NSISFilePathAndExpressions(
+            'LocaleToInstall.nsh', expected_install_separate_folder_expression)
+        separate_folder_to_uninstall = NSISFilePathAndExpressions(
+            'LocaleToUninstall.nsh', expected_uninstall_separate_folder_expression)
+
         nsis_files = [files_to_install, files_to_uninstall, separate_folder_to_install, separate_folder_to_uninstall]
-        
+
         with mock.patch.multiple(
-            "windows.NsisUtilities",
-            _DIRECTORY_TO_WALK=folder0,
-            _DIRECTORY_PREFIX_FOR_NSIS='',
-            _DIRECTORY_TO_SEPARATE=r'{}\{}'.format(folder0, tree[-2][0]),
-            _FILES_TO_INSTALL_PATH=files_to_install.filepath,
-            _FILES_TO_UNINSTALL_PATH=files_to_uninstall.filepath,
-            _LOCALE_TO_INSTALL_PATH=separate_folder_to_install.filepath,
-            _LOCALE_TO_UNINSTALL_PATH=separate_folder_to_uninstall.filepath
-            ):
-                write_nsis_expressions_to_files()                       
+                "windows.NsisUtilities",
+                _DIRECTORY_TO_WALK=folder0,
+                _DIRECTORY_PREFIX_FOR_NSIS='',
+                _DIRECTORY_TO_SEPARATE=os.path.join(folder0, tree[-2][0]),
+                _FILES_TO_INSTALL_PATH=files_to_install.filepath,
+                _FILES_TO_UNINSTALL_PATH=files_to_uninstall.filepath,
+                _LOCALE_TO_INSTALL_PATH=separate_folder_to_install.filepath,
+                _LOCALE_TO_UNINSTALL_PATH=separate_folder_to_uninstall.filepath
+        ):
+            write_nsis_expressions_to_files()
 
         for nsis_file in nsis_files:
             self.assertExists(nsis_file.filepath)
             with open(nsis_file.filepath) as f:
                 file_content = f.read()
-                self.assertEqual(file_content, nsis_file.nsis_expressions)
+                self.assertEqual(self._sort_string_by_lines(file_content),
+                                 self._sort_string_by_lines(nsis_file.nsis_expressions))
 
     def test_generate_delete_expressions(self):
         file_names = ['aaa']
@@ -139,6 +162,11 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         ]
         actual_delete_expressions = _generate_delete_expressions(file_names, folder_path)
         self.assertEqual(exprected_delete_expressions, actual_delete_expressions)
+
+    @classmethod
+    def _walk_with_sorted_files(cls, top, topdown=True, onerror=None, followlinks=False):
+        for root, dirs, files in cls._os_walk_original(top):
+            yield root, dirs, sorted(files)
 
     def _generate_folder_tree(self):
         def create_files(number_of_files, in_folder, filename_prefix='', filename_suffixes=None):
@@ -180,8 +208,12 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         folder = self.mkdtemp(dir=folder, prefix='200')
         folder_files, file_names = create_files(3, folder, '200')
         tree.append((os.path.relpath(folder, folder0), folder_files, file_names))
-        
+
         return folder0, tree
+
+    @classmethod
+    def _sort_string_by_lines(cls, string):
+        return sorted(string.split('\n'))
 
     @classmethod
     def _generate_install_file_expression(cls, files):
@@ -210,3 +242,6 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
     @classmethod
     def _generate_dir_subdir_expression(cls, command, dir, subdir):
         return r'{} "{}\{}"'.format(command, dir, subdir)
+
+    def tearDown(self):
+        self._patcher.stop()
