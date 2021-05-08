@@ -768,7 +768,12 @@ class GUI(Gtk.ApplicationWindow):
         self.view = display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
-        scrolled_window.add(self.view)
+        padding_box = Gtk.Box()
+        padding_box.add(self.view)
+        # FIXME later: dynamically set margin based on width of toolbar
+        # See https://github.com/bleachbit/bleachbit/issues/1034
+        padding_box.set_margin_right(10) # avoid conflict with scrollbar
+        scrolled_window.add(padding_box)
         return scrolled_window
 
     def cb_refresh_operations(self):
