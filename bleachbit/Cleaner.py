@@ -477,7 +477,10 @@ class System(Cleaner):
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
-            for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
+            xbel_pathnames = ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"] + \
+                glob.glob(os.path.expanduser(
+                    '~/snap/*/*/.local/share/recently-used.xbel'))
+            for pathname in xbel_pathnames:
                 pathname = os.path.expanduser(pathname)
                 if os.path.lexists(pathname):
                     yield Command.Shred(pathname)
@@ -551,7 +554,7 @@ class System(Cleaner):
         if HAVE_GTK and 'clipboard' == option_id:
             def clear_clipboard():
                 clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-                clipboard.set_text(' ',1)
+                clipboard.set_text(' ', 1)
                 clipboard.clear()
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
