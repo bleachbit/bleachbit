@@ -29,7 +29,6 @@ from bleachbit.Options import options
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
-from bleachbit.Windows import copy_fonts_in_portable_app
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import glob
@@ -118,11 +117,13 @@ class Bleachbit(Gtk.Application):
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
 
-        copy_fonts_in_portable_app(auto_exit)
+        if os.name == 'nt':
+            if Windows.elevate_privileges(uac):
+                # privileges escalated in other process
+                sys.exit(0)
+            if portable_mode:
+                Windows.copy_fonts_in_portable_app(auto_exit)
 
-        if os.name == 'nt' and Windows.elevate_privileges(uac):
-            # privileges escalated in other process
-            sys.exit(0)
         Gtk.Application.__init__(
             self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
         GObject.threads_init()
@@ -134,7 +135,7 @@ class Bleachbit(Gtk.Application):
 
         if shred_paths:
             self._shred_paths = shred_paths
-            return
+
         if os.name == 'nt':
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
