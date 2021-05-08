@@ -201,8 +201,8 @@ def environment_check():
     logger.info('Checking for NSIS')
     check_exist(
         NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
-    
-    
+
+
 def remove_windir_from_fonts_conf():
     filepath = 'dist\\etc\\fonts\\fonts.conf'
     dom = xml.dom.minidom.parse(filepath)
@@ -211,7 +211,7 @@ def remove_windir_from_fonts_conf():
         if dir_element.firstChild.nodeValue == 'WINDOWSFONTDIR':
             fc_element.removeChild(dir_element)
             break
-        
+
     with open(filepath, 'w', encoding='utf-8') as xml_file:
         dom.writexml(xml_file)
 
@@ -243,11 +243,11 @@ def build():
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
     copytree(GTK_DIR + '\\lib', 'dist\\lib')
-    
+
     logger.info('Remove windows fonts dir from fonts.conf file')
     # We don't want fontconfig to caches the Windows Fonts dir
     remove_windir_from_fonts_conf()
-    
+
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for subpath in ['fontconfig', 'icons', 'themes']:
         copytree(os.path.join(GTK_DIR, 'share', subpath),
@@ -496,7 +496,8 @@ def recompress_library():
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'plyer\\platforms\\android', 'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
+    delete_paths = ['distutils', 'plyer\\platforms\\android',
+                    'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     for p in delete_paths:
         shutil.rmtree(os.path.join('dist', 'library', p))
 
@@ -567,7 +568,8 @@ def nsis(opts, exe_name, nsi_path):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
     cmd = NSIS_EXE + \
-        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
+        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
+            opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
     sign_code(exe_name)
@@ -581,9 +583,9 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         return
 
     logger.info('Building installer')
-    
+
     write_nsis_expressions_to_files()
-    
+
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     # Was:
     #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
