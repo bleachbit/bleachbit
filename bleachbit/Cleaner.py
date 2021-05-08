@@ -474,7 +474,7 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                Gtk.RecentManager().purge_items()
+                Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
             for pathname in ["~/.recently-used.xbel", "~/.local/share/recently-used.xbel"]:
