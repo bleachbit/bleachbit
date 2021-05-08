@@ -1070,6 +1070,8 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_show(self, widget):
         # restore window position, size and state
+        if not options.get('remember_geometry'):
+            return
         if options.has_option("window_x") and options.has_option("window_y") and \
            options.has_option("window_width") and options.has_option("window_height"):
             r = Gdk.Rectangle()

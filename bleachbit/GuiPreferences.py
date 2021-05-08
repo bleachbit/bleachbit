@@ -197,6 +197,12 @@ class PreferencesDialog:
         self.cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
         vbox.pack_start(self.cb_dark_mode, False, True, 0)
 
+        # Remember window geometry (position and size)
+        self.cb_geom = Gtk.CheckButton(label=_("Remember window geometry"))
+        self.cb_geom.set_active(options.get("remember_geometry"))
+        self.cb_geom.connect('toggled', self.__toggle_callback, 'remember_geometry')
+        vbox.pack_start(self.cb_geom, False, True, 0)
+
         # Debug logging
         cb_debug = Gtk.CheckButton(label=_("Show debug messages"))
         cb_debug.set_active(options.get("debug"))

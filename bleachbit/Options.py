@@ -41,10 +41,11 @@ boolean_keys = ['auto_hide',
                 'check_beta',
                 'check_online_updates',
                 'dark_mode',
-                'delete_confirmation',
                 'debug',
+                'delete_confirmation',
                 'exit_done',
                 'first_start',
+                'remember_geometry',
                 'shred',
                 'units_iec',
                 'window_maximized',
@@ -270,9 +271,10 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
-        self.__set_default("delete_confirmation", True)
         self.__set_default("debug", False)
+        self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)
         self.__set_default("window_fullscreen", False)
