@@ -28,6 +28,8 @@ import time
 import win_unicode_console
 import xml.dom.minidom
 
+from windows.NsisUtilities import write_nsis_expressions_to_files
+
 setup_encoding = sys.stdout.encoding
 win_unicode_console.enable()
 logger = logging.getLogger('setup_py2exe')
@@ -579,6 +581,9 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         return
 
     logger.info('Building installer')
+    
+    write_nsis_expressions_to_files()
+    
     exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
     # Was:
     #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
