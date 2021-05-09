@@ -482,8 +482,7 @@ class System(Cleaner):
                     '~/.local/share/recently-used.xbel*',
                     '~/snap/*/*/.local/share/recently-used.xbel']
             for path1 in xbel_pathnames:
-                path1 = os.path.expanduser(path1)
-                for path2 in glob.glob(path1):
+                for path2 in glob.iglob(os.path.expanduser(path1)):
                     if os.path.lexists(path2):
                         yield Command.Shred(path2)
             if HAVE_GTK:
