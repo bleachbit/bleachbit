@@ -770,9 +770,8 @@ class GUI(Gtk.ApplicationWindow):
         self.view.get_selection().connect("changed", self.on_selection_changed)
         padding_box = Gtk.Box()
         padding_box.add(self.view)
-        # FIXME later: dynamically set margin based on width of toolbar
-        # See https://github.com/bleachbit/bleachbit/issues/1034
-        padding_box.set_margin_right(10) # avoid conflict with scrollbar
+        scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
+        padding_box.set_margin_right(scrollbar_width) # avoid conflict with scrollbar
         scrolled_window.add(padding_box)
         return scrolled_window
 
