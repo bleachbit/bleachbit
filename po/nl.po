@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2020-12-22 22:54+0000\n"
-"Last-Translator: Bernard Stafford <Unknown>\n"
+"PO-Revision-Date: 2021-05-09 17:02+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
+"X-Generator: Poedit 2.4.2\n"
 "Language: nl\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -52,8 +52,7 @@ msgstr "Cache"
 #: ../cleaners/epiphany.xml ../cleaners/discord.xml ../cleaners/safari.xml
 #: ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Leeg de cache, dat de laadtijd verkort als u websites opnieuw bezoekt"
+msgstr "Leeg de cache, dat de laadtijd verkort als u websites opnieuw bezoekt"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -169,8 +168,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Een databank met gebruikersnamen en wachtwoorden net zoals een lijst met "
-"sites die zouden moeten geen wachtwoorden opslaan"
+"Een databank met gebruikersnamen en wachtwoorden, evenals een lijst met "
+"sites die geen wachtwoorden zouden moeten opslaan"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -525,7 +524,7 @@ msgstr "Werkomgeving"
 #. In Windows 'Run' is the dialog in the Start menu
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 msgid "Run"
-msgstr "Rennen"
+msgstr "Uitvoeren"
 
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
@@ -687,7 +686,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr "Shell-tassen"
+msgstr "Shell-bestanden"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -718,8 +717,7 @@ msgid "Search tool"
 msgstr "Zoekprogramma"
 
 #: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
+msgid "Delete the search index, a database of words and the files they contain"
 msgstr "Verwijder de zoekindex (een databank met woorden en bestanden)"
 
 #: ../cleaners/gimp.xml
@@ -752,7 +750,7 @@ msgstr ""
 #: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr "Fout bij controleren of pad bestaat: %s"
+msgstr "Foutmelding tijdens locatiecontrole: %s"
 
 #: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
@@ -801,7 +799,7 @@ msgstr "Verwij_deren"
 
 #: ../bleachbit/GUI.py:227
 msgid "No paths found in clipboard."
-msgstr "Geen paden aanwezig op het klembord."
+msgstr "Geen locaties aanwezig op het klembord."
 
 #: ../bleachbit/GUI.py:262 ../bleachbit/GuiPreferences.py:213
 #: ../bleachbit/GuiPreferences.py:342 ../bleachbit/GuiPreferences.py:385
@@ -886,7 +884,7 @@ msgstr "U dient een optie te kiezen"
 
 #: ../bleachbit/GUI.py:728 ../bleachbit/GUI.py:744
 msgid "Done."
-msgstr "Gedaan."
+msgstr "Voltooid."
 
 #: ../bleachbit/GUI.py:796
 msgid ""
@@ -905,7 +903,7 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"U gebruikt BleachBit met een beheerderswachtwoord voor het opschonen van "
+"U gebruikt BleachBit met een beheerderswachtwoord voor het opruimen van "
 "gedeelde gedeelten van het systeem. Verwijzingen naar de "
 "gebruikersprofielmap zijn alleen van toepassing het rootaccount."
 
@@ -922,7 +920,7 @@ msgstr ""
 #. previews changes.
 #: ../bleachbit/GUI.py:867 ../bleachbit/GUI.py:969
 msgid "Preview"
-msgstr "Voorvertoning"
+msgstr "Voorvertonen"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -930,7 +928,7 @@ msgstr "Voorvertoning"
 #. altering them.
 #: ../bleachbit/GUI.py:872 ../bleachbit/GUI.py:979 ../bleachbit/Action.py:530
 msgid "Clean"
-msgstr "Opschonen"
+msgstr "Opruimen"
 
 #: ../bleachbit/GUI.py:966
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -989,7 +987,7 @@ msgstr "Markeren voor verwijdering"
 #: ../bleachbit/Action.py:440 ../bleachbit/Action.py:505
 #: ../bleachbit/Action.py:517
 msgid "Clean file"
-msgstr "Bestand opschonen"
+msgstr "Bestand opruimen"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:279
@@ -1017,7 +1015,7 @@ msgstr "Fout: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Bezig met wissen van de vrije schijfruimte..."
+msgstr "Bezig met wissen van de vrije schijfruimte…"
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1032,7 +1030,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:198 ../bleachbit/Worker.py:339
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Bezig met opschonen van %s..."
+msgstr "Bezig met opruimen van %s…"
 
 #: ../bleachbit/Worker.py:198 ../bleachbit/Cleaner.py:303
 #: ../bleachbit/Cleaner.py:448
@@ -1089,13 +1087,13 @@ msgstr "Fouten: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Bezig met uitvoeren van grondige scan..."
+msgstr "Bezig met uitvoeren van grondige scan…"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:342
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Bezig met voorvertonen van %s..."
+msgstr "Bezig met voorvertonen van %s…"
 
 #: ../bleachbit/FileUtilities.py:320 ../bleachbit/FileUtilities.py:329
 #: ../bleachbit/FileUtilities.py:343
@@ -1133,7 +1131,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:911
 #, python-format
 msgid "Wiping path: %s"
-msgstr "Bezig met opschonen van pad '%s'"
+msgstr "Bezig met opruimen van locatie '%s'"
 
 #: ../bleachbit/FileUtilities.py:921
 msgid "Creating new, temporary file for wiping free space."
@@ -1160,8 +1158,7 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:984
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
-"{bytes :,} bytes en {inodes :,} inodes beschikbaar voor admingebruiker"
+msgstr "{bytes :,} bytes en {inodes :,} inodes beschikbaar voor admingebruiker"
 
 #: ../bleachbit/FileUtilities.py:1000
 msgid "Handled unknown error #0 while truncating file."
@@ -1222,7 +1219,7 @@ msgstr "Verwijder bestanden voor ongewenste talen"
 
 #: ../bleachbit/Cleaner.py:288
 msgid "Configure this option in the preferences."
-msgstr "Stel deze optie in in de voorkeuren."
+msgstr "Stel deze optie in in de instellingen."
 
 #: ../bleachbit/Cleaner.py:294
 msgid "Rotated logs"
@@ -1281,8 +1278,7 @@ msgid "Clipboard"
 msgstr "Klembord"
 
 #: ../bleachbit/Cleaner.py:332
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
+msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "Het klembord van de werkomgeving dat wordt gebruikt voor kopiëren en plakken"
 
@@ -1328,7 +1324,7 @@ msgstr "Overschrijf de vrije schijfruimte op %s"
 
 #: ../bleachbit/Cleaner.py:687
 msgid "Loading native cleaners."
-msgstr "Bezig met laden van meegeleverde schoonmakers..."
+msgstr "Bezig met laden van meegeleverde schoonmakers…"
 
 #: ../bleachbit/Cleaner.py:693
 msgid "Importing cleaners from Winapp2.ini."
@@ -1435,7 +1431,7 @@ msgstr "Grondige scan ondersteunt geen variabele met meerdere waarden."
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "zoek=\"walk.all\" gebruikt met normaal bestandspad=\"%s\""
+msgstr "zoek=“walk.all” gebruikt met normaal bestandslocatie=“%s”"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1445,7 +1441,7 @@ msgstr "zoek=\"walk.all\" gebruikt met normaal bestandspad=\"%s\""
 #: ../bleachbit/Action.py:295
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr "pad=\"%s\" is geen globaal patroon"
+msgstr "locatie=“%s” is geen globaal patroon"
 
 #: ../bleachbit/Action.py:567
 #, python-format
@@ -1572,7 +1568,7 @@ msgstr "werk winapp2.ini bij als er een nieuwe versie beschikbaar is"
 
 #: ../bleachbit/CLI.py:160
 msgid "wipe free space in the given paths"
-msgstr "schoon vrije ruimte op op de gegeven paden"
+msgstr "schoon vrije ruimte op op de opgegeven locaties"
 
 #: ../bleachbit/CLI.py:162
 msgid "output version information and exit"
@@ -1601,7 +1597,7 @@ msgstr "Geen mappen opgegeven bij --wipe-free-space"
 #: ../bleachbit/CLI.py:212
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Het te wissen pad dient een bestaande map te zijn: %s"
+msgstr "De te wissen locatie dient een bestaande map te zijn: %s"
 
 #: ../bleachbit/CLI.py:214
 msgid "Wiping free space can take a long time."
@@ -1668,8 +1664,7 @@ msgstr "Bestanden maken"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
-msgstr ""
-"Wilt u de gegevens downloaden die benodigd zijn voor de kaf-generator?"
+msgstr "Wilt u de gegevens downloaden die benodigd zijn voor de kaf-generator?"
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
@@ -1677,7 +1672,7 @@ msgstr "Bezig met genereren"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:31
 msgid "Preferences"
-msgstr "Voorkeuren"
+msgstr "Instellingen"
 
 #: ../bleachbit/GuiPreferences.py:63
 msgid "General"
@@ -1697,8 +1692,7 @@ msgstr "Witte lijst"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
-"Periodiek controleren op software-updates (internetverbinding vereist)"
+msgstr "Periodiek controleren op software-updates (internetverbinding vereist)"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
@@ -1715,8 +1709,7 @@ msgstr "Controleren op bètaversies"
 
 #: ../bleachbit/GuiPreferences.py:135
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
-"Download en werk schoonmakers vanuit de gemeenschap (winapp2.ini) bij"
+msgstr "Download en werk schoonmakers vanuit de gemeenschap (winapp2.ini) bij"
 
 #: ../bleachbit/GuiPreferences.py:149
 msgid "Hide irrelevant cleaners"
@@ -1736,7 +1729,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:167
 msgid "Exit after cleaning"
-msgstr "Afsluiten na opschonen"
+msgstr "Afsluiten na opruimen"
 
 #: ../bleachbit/GuiPreferences.py:173
 msgid "Confirm before delete"
@@ -1840,8 +1833,8 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"De opdracht 'swapoff -s' is mislukt, dus wordt er teruggevallen op "
-"/proc/swaps voor wisselgeheugeninformatie."
+"De opdracht 'swapoff -s' is mislukt, dus wordt er teruggevallen op /proc/"
+"swaps voor wisselgeheugeninformatie."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
@@ -1929,7 +1922,7 @@ msgstr "Mappen ve_rnietigen"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Paden van klembord vernietigen"
+msgstr "Locaties van klembord vernietigen"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
