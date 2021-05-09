@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2021-04-30 23:40+0000\n"
+"PO-Revision-Date: 2021-05-08 21:58+0000\n"
 "Last-Translator: Jonatan Nyberg <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-05-02 20:26+0000\n"
-"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
+"X-Launchpad-Export-Date: 2021-05-09 17:04+0000\n"
+"X-Generator: Launchpad (build dccd804998035922efb3da0a725ecc923e2255f3)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -145,7 +145,7 @@ msgstr "Session"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "Delete the current and last sessions"
-msgstr "Ta bort de aktuella och senaste sessionerna"
+msgstr "Ta bort den aktuella och de senaste sessionerna"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Sync"
@@ -201,8 +201,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Städa upp databasfragmentering för att minska utrymmesanvändning och öka "
-"hastighet utan att ta bort någon data"
+"Rensa databasfragmentering för att minska utrymmesanvändning och öka "
+"hastigheten utan att ta bort någon data"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -606,11 +606,11 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Djupsökning"
+msgstr "Djupskanning"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Rensa bort filer som är utspridda över disken"
+msgstr "Rensa filer som är utspridda över disken"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -622,11 +622,11 @@ msgstr "Detta alternativ är långsamt."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "VIM-swap-filer under användarprofil"
+msgstr "VIM swap-filer under användarprofil"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr "VIM-swap-filer över system"
+msgstr "VIM swap-filer över system"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -735,7 +735,7 @@ msgstr "IRC-klient tidigare känd som XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Städare av onödiga filer"
+msgstr "Onödig filrensare"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
@@ -773,8 +773,8 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s kan inte rensas eftersom att den körs för närvarande.  Stäng den och "
-"försök igen."
+"%s kan inte rensas eftersom den körs för närvarande. Stäng den och försök "
+"igen."
 
 #: ../bleachbit/GUI.py:141 ../bleachbit/GUI.py:812
 msgid ""
@@ -899,8 +899,8 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Du kör BleachBit med administratörsbehörighet för rensning av delade delar "
-"av systemet, och referenser till användarprofilmappen rengör endast root-"
+"Du kör BleachBit med administratörsbehörigheter för rensning av delade delar "
+"av systemet, och referenser till användarprofilmappen rensar endast root-"
 "kontot."
 
 #: ../bleachbit/GUI.py:822
@@ -941,7 +941,7 @@ msgstr "Avbryt"
 
 #: ../bleachbit/GUI.py:991
 msgid "Abort the preview or cleaning process"
-msgstr "Avbryt förhandsgranskning eller rensningsprocess"
+msgstr "Avbryt förhandsgranskningen eller rensningsprocessen"
 
 #: ../bleachbit/GUI.py:1196
 msgid "Error when checking for updates: "
@@ -1079,7 +1079,7 @@ msgstr "Fel: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Vänligen vänta.  Djupsökning körs."
+msgstr "Vänligen vänta. Djupskanning körs."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:342
@@ -1132,7 +1132,7 @@ msgstr "Skapar ny, tillfällig fil för att rensa ledigt utrymme."
 #: ../bleachbit/FileUtilities.py:961
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr "Fel #%d vid spolning av filbufferten."
+msgstr "Fel #%d vid rensning av filbufferten."
 
 #: ../bleachbit/FileUtilities.py:977
 msgid ""
@@ -1327,18 +1327,18 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Fel i handle_cleaner_option() för renare id = {cleaner_id}, alternativ "
+"Fel i handle_cleaner_option() för rensar-id = {cleaner_id}, alternativ "
 "XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Ignorera rensaren eftersom den är världs skrivbar: %s"
+msgstr "Ignorera rensaren eftersom den är skrivbar i världen: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr "Fel vid läsning av renare: %s"
+msgstr "Fel vid läsning av rensare: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -1413,7 +1413,7 @@ msgstr ""
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr "Djupsökning stöder inte flervärdiga variabler."
+msgstr "Djupskanning stöder inte flervärdiga variabler."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1496,7 +1496,7 @@ msgstr "Öppna webbläsaren för %s?"
 #: ../bleachbit/CLI.py:97
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "ogiltig städare: %s"
+msgstr "ogiltig rensare: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1505,7 +1505,7 @@ msgstr "ogiltig städare: %s"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:125
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "användning: %prog [alternativ] städare.alt1 städare.alt2"
+msgstr "användning: %prog [alternativ] rensare.alt1 rensare.alt2"
 
 #: ../bleachbit/CLI.py:128
 msgid "list cleaners"
