@@ -202,20 +202,21 @@ class CleanerTestCase(common.BleachbitTestCase):
         list(register_cleaners())
         list(register_cleaners())
 
+    @common.skipIfWindows # FIXME later: reevaluate
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""
         mgr = Gtk.RecentManager().get_default()
         fn = self.mkstemp(suffix='.txt')
         self.assertExists(fn)
-        uri = 'file:///' + fn
-        print(uri)
+        from gi.repository import Gio, GLib
+        uri = Gio.File.new_for_path(fn).get_uri()
         self.assertTrue(mgr.add_item(uri))
-        from gi.repository import GLib
         GLib.idle_add(Gtk.main_quit)
         Gtk.main()  # process the addition
-        self.assertTrue(mgr.has_item(uri))
+        GLib.idle_add(Gtk.main_quit)
         self.assertGreater(len(mgr.get_items()), 0)
+        self.assertTrue(mgr.has_item(uri))
 
         list(register_cleaners())
         for cmd in backends['system'].get_commands('recent_documents'):
