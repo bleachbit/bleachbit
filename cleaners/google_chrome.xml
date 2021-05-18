@@ -93,38 +93,8 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
-    <action command="chrome.history" search="file" path="$$profile$$/History"/>
-    <action command="chrome.favicons" search="file" path="$$profile$$/Favicons"/>
-    <action command="delete" search="file" path="$$base$$/chrome_shutdown_ms.txt"/>
-    <action command="delete" search="file" path="$$base$$/Safe Browsing Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Archived History"/>
-    <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
-    <action command="delete" search="file" path="$$profile$$/DownloadMetadata"/>
-    <action command="delete" search="file" path="$$profile$$/History-journal"/>
-    <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
-    <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
-    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
-    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
-    <action command="delete" search="file" path="$$profile$$/Network Action Predictor-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
-    <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
-    <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
-    <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
-    <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Visited Links"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
-    <!-- Windows-specific -->
-    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsRecentClosed\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
   </option>
   <option id="search_engines">
     <label>Search engines</label>
