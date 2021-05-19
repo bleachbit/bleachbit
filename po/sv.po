@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-05-09 18:25-0600\n"
-"PO-Revision-Date: 2021-05-16 14:22+0000\n"
+"PO-Revision-Date: 2021-05-19 19:10+0000\n"
 "Last-Translator: Reporter <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-05-16 23:20+0000\n"
-"X-Generator: Launchpad (build 5321c3f40fa4d4b847f4e47fb766e7b95ed5036c)\n"
+"X-Launchpad-Export-Date: 2021-05-19 23:16+0000\n"
+"X-Generator: Launchpad (build 716e08a550b901207b3abbeb098dd682f9ecb267)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -532,7 +532,8 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
-"Ta bort indexet återställer konfigurationen av kolumner i meddelandelistan."
+"Borttagning av indexet återställer konfigurationen av kolumner i "
+"meddelandelistan."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -768,7 +769,7 @@ msgstr "IRC-klient tidigare känd som XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Rensare av onödiga filer"
+msgstr "Städare av onödiga filer"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
@@ -838,12 +839,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Ignorera rensaren eftersom den är värld-skrivbar: %s"
+msgstr "Ignorera städare eftersom den är värld-skrivbar: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr "Fel vid läsning av rensare: %s"
+msgstr "Fel vid läsning av städare: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -852,7 +853,7 @@ msgstr "Fel vid läsning av rensare: %s"
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
-"Rensaren kan inte användas på det här operativsystemet eftersom den inte har "
+"Städaren kan inte användas på det här operativsystemet eftersom den inte har "
 "några åtgärder: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
@@ -992,16 +993,16 @@ msgstr "Skriv över ledigt diskutrymme %s"
 
 #: ../bleachbit/Cleaner.py:691
 msgid "Loading native cleaners."
-msgstr "Läser in inbyggda rensare."
+msgstr "Läser in inbyggda städare."
 
 #: ../bleachbit/Cleaner.py:697
 msgid "Importing cleaners from Winapp2.ini."
-msgstr "Importerar rensare från Winapp2.ini."
+msgstr "Importerar städare från Winapp2.ini."
 
 #: ../bleachbit/CLI.py:113
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "ogiltig rensare: %s"
+msgstr "ogiltig städare: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1010,11 +1011,11 @@ msgstr "ogiltig rensare: %s"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:141
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "användning: %prog [alternativ] rensare.alt1 rensare.alt2"
+msgstr "användning: %prog [flagga] städare.alt1 städare.alt2"
 
 #: ../bleachbit/CLI.py:144
 msgid "list cleaners"
-msgstr "lista över rensare"
+msgstr "lista över städare"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
@@ -1022,7 +1023,7 @@ msgstr "lista över rensare"
 #: ../bleachbit/CLI.py:149
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
-"kör rensare för att ta bort filer och göra andra permanenta ändringar"
+"kör städare för att ta bort filer och göra andra permanenta ändringar"
 
 #: ../bleachbit/CLI.py:151
 msgid "set log level to verbose"
@@ -1095,7 +1096,7 @@ msgstr "Inga mappar givna för -- wipe-free-space"
 #: ../bleachbit/CLI.py:230
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Sökvägen att rensa måste vara en befintlig mapp: %s"
+msgstr "Sökvägen som ska rensas måste vara en befintlig mapp: %s"
 
 #: ../bleachbit/CLI.py:232
 msgid "Wiping free space can take a long time."
@@ -1369,11 +1370,11 @@ msgstr "Sök efter nya beta-utgåvor"
 
 #: ../bleachbit/GuiPreferences.py:135
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr "Hämta och uppdatera rensare från gemenskapen (winapp2.ini)"
+msgstr "Hämta och uppdatera städare från gemenskapen (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:149
 msgid "Hide irrelevant cleaners"
-msgstr "Dölj irrelevanta rensare"
+msgstr "Dölj irrelevanta städare"
 
 #: ../bleachbit/GuiPreferences.py:158
 msgid "Overwrite contents of files to prevent recovery"
@@ -1547,7 +1548,6 @@ msgstr ""
 "  Peter Almer https://launchpad.net/~remla\n"
 "  Reporter https://launchpad.net/~bugreporter41\n"
 "  Rikard Edgren https://launchpad.net/~rikard-edgren\n"
-"  ghost1543 https://launchpad.net/~ghost1543-deactivatedaccount-merged\n"
 "  sweidre https://launchpad.net/~info-idre\n"
 "  Åke Engelbrektson https://launchpad.net/~eson"
 
@@ -1760,9 +1760,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Dessa rensningsdefinitioner är nya eller har förändrats. Skadliga "
-"definitioner kan skada ditt system. Om du inte litar på dessa ändringar, ta "
-"bort filerna eller avsluta."
+"Dessa städardefinitioner är nya eller har förändrats. Skadliga definitioner "
+"kan skada ditt system. Om du inte litar på dessa ändringar, ta bort filerna "
+"eller avsluta."
 
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
@@ -1913,7 +1913,7 @@ msgstr "Borttagna filer: %d"
 #: ../bleachbit/Worker.py:298
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "Filer att ta bort: %d"
+msgstr "Filer som kommer att tas bort: %d"
 
 #: ../bleachbit/Worker.py:301
 #, python-format
