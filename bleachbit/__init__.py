@@ -237,10 +237,10 @@ except:
     logger.exception('error binding text domain')
 
 try:
-    ungettext = t.ungettext
+    ngettext = t.ngettext
 except:
-    def ungettext(singular, plural, n):
-        """Dummy replacement for Unicode, plural gettext"""
+    def ngettext(singular, plural, n):
+        """Dummy replacement for plural gettext"""
         if 1 == n:
             return singular
         return plural
@@ -258,6 +258,7 @@ except:
 
 # pgettext(msgctxt, msgid) from gettext is not supported in Python as of January 2017
 # http://bugs.python.org/issue2504
+# This issue was fixed in Python 3.8, but we need to support older versions.
 # Meanwhile we get official support, we have to simulate it.
 # See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
 # more information about pgettext.

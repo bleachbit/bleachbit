@@ -24,7 +24,7 @@ Perform the preview or delete operations
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ungettext
+from bleachbit import _, ngettext
 
 import logging
 import math
@@ -214,7 +214,7 @@ class Worker:
                     self.ui.update_progress_bar(percent_done)
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
-                        msg2 = ungettext("About %d minute remaining.",
+                        msg2 = ngettext("About %d minute remaining.",
                                          "About %d minutes remaining.", eta_mins) \
                             % eta_mins
                         self.ui.update_progress_bar(msg + ' ' + msg2)
