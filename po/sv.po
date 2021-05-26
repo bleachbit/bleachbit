@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-05-09 18:25-0600\n"
-"PO-Revision-Date: 2021-05-19 19:10+0000\n"
-"Last-Translator: Reporter <Unknown>\n"
+"PO-Revision-Date: 2021-05-22 13:50+0000\n"
+"Last-Translator: sweidre <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-05-19 23:16+0000\n"
-"X-Generator: Launchpad (build 716e08a550b901207b3abbeb098dd682f9ecb267)\n"
+"X-Launchpad-Export-Date: 2021-05-26 01:56+0000\n"
+"X-Generator: Launchpad (build 30919b71da718d7d3f6b69e715e9fe95f7c3c5de)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -225,7 +225,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Rensa databasfragmentering för att minska utrymmesanvändning och öka "
+"Städa upp databasfragmentering för att minska utrymmesanvändning och öka "
 "hastigheten utan att ta bort någon data"
 
 #: ../cleaners/winrar.xml
@@ -807,7 +807,7 @@ msgstr "path=\"%s\" är inte ett globmönster"
 #: ../bleachbit/Action.py:517 ../bleachbit/Command.py:203
 #: ../bleachbit/Command.py:237
 msgid "Clean file"
-msgstr "Rensa fil"
+msgstr "Städa upp fil"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -815,7 +815,7 @@ msgstr "Rensa fil"
 #. altering them.
 #: ../bleachbit/Action.py:530 ../bleachbit/GUI.py:891 ../bleachbit/GUI.py:998
 msgid "Clean"
-msgstr "Rensa"
+msgstr "Städa"
 
 #: ../bleachbit/Action.py:567
 #, python-format
@@ -839,12 +839,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Ignorera städare eftersom den är värld-skrivbar: %s"
+msgstr "Ignorera städaren eftersom den är värld-skrivbar: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr "Fel vid läsning av städare: %s"
+msgstr "Fel vid läsning av städaren: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -909,7 +909,7 @@ msgstr "Minne"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:305
 msgid "Wipe the swap and free memory"
-msgstr "Rensa swappen och frigör minne"
+msgstr "Städa upp swappen och ofördelat minne"
 
 #: ../bleachbit/Cleaner.py:307
 msgid "This option is experimental and may cause system problems."
@@ -965,12 +965,12 @@ msgstr "Ta bort användarspecifika filer och mappar"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:342
 msgid "Free disk space"
-msgstr "Ledigt diskutrymme"
+msgstr "Ofördelat diskutrymme"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:344
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "Skriv över ledigt diskutrymme för att dölja borttagna filer"
+msgstr "Skriv över ofördelat diskutrymme för att dölja borttagna filer"
 
 #: ../bleachbit/Cleaner.py:345
 msgid "This option is very slow."
@@ -989,7 +989,7 @@ msgstr "System"
 #: ../bleachbit/Cleaner.py:569 ../bleachbit/Cleaner.py:744
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr "Skriv över ledigt diskutrymme %s"
+msgstr "Skriv över ofördelat diskutrymme %s"
 
 #: ../bleachbit/Cleaner.py:691
 msgid "Loading native cleaners."
@@ -1609,9 +1609,9 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Du kör BleachBit med administratörsbehörigheter för rensning av delade delar "
-"av systemet, och referenser till användarprofilmappen rensar endast root-"
-"kontot."
+"Du kör BleachBit med administratörsbehörigheter för städning av delade delar "
+"av systemet, och referenser till användarprofilmappen kommer endast att "
+"städa root-kontot."
 
 #: ../bleachbit/GUI.py:841
 msgid ""
@@ -1864,7 +1864,7 @@ msgstr "Fel: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Vänligen vänta.  Raderar ledigt diskutrymme."
+msgstr "Vänligen vänta. Rensar ledigt diskutrymme."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1918,7 +1918,7 @@ msgstr "Filer som kommer att tas bort: %d"
 #: ../bleachbit/Worker.py:301
 #, python-format
 msgid "Special operations: %d"
-msgstr "Särskilda åtgärder: %d"
+msgstr "Speciella åtgärder: %d"
 
 #: ../bleachbit/Worker.py:304
 #, python-format
