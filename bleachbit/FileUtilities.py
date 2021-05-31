@@ -601,7 +601,7 @@ def guess_overwrite_paths():
     elif 'nt' == os.name:
         localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):
-            logger.warning(_("TMP does not exist: %s"), localtmp)
+            logger.warning(_("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
             localtmp = None
         from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
