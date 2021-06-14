@@ -358,7 +358,7 @@ SectionGroup /e Shortcuts
 
     Section "Desktop" SectionDesktop
         ${GetParameters} $R0
-        ${GetOptions} $R0 "/NoDesktopShortcut" $R0
+        ${GetOptions} $R0 "/S /NoDesktopShortcut" $R0
         IfErrors optionNotfound optionFound
         optionNotfound:
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
