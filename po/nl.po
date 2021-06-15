@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-05-31 11:30-0600\n"
-"PO-Revision-Date: 2021-05-31 17:59+0000\n"
+"POT-Creation-Date: 2021-06-01 18:22-0600\n"
+"PO-Revision-Date: 2021-06-14 15:59+0000\n"
 "Last-Translator: Bernard Stafford <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-05-31 21:56+0000\n"
-"X-Generator: Launchpad (build 925b661396f90467a0d31fdfb13d4990b7239925)\n"
+"X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
+"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
 "Language: nl\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1174,8 +1174,10 @@ msgstr "Speciaal bestandstype kan niet worden verwijderd: %s"
 
 #: ../bleachbit/FileUtilities.py:604
 #, python-format
-msgid "TMP does not exist: %s"
+msgid ""
+"The environment variable TMP refers to a directory that does not exist: %s"
 msgstr ""
+"De omgevingsvariabele TMP verwijst naar een directory dat niet bestaat: %s"
 
 #: ../bleachbit/FileUtilities.py:846
 msgid ""
@@ -1998,6 +2000,3 @@ msgstr "_Hulp"
 #: ../data/app-menu.ui:47
 msgid "_About BleachBit"
 msgstr "_Over BleachBit"
-
-#~ msgid "%TMP% does not exist: %s"
-#~ msgstr "%TMP% bestaat niet: %s"
