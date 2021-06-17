@@ -23,9 +23,7 @@ Test cases for module Winapp
 
 import os
 import shutil
-import sys
 import tempfile
-import unittest
 
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
@@ -348,8 +346,26 @@ class WinappTestCase(common.BleachbitTestCase):
             # delete everything in parent and child directories without
             # exclusions
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
+            # don't delete files containing the described file name
+            ('FileKey1=%(d)s|eteme.*|RECURSE', True, True, True),
+            # delete a pattern sub folder included
+            ('FileKey1=%(d)s|*eteme.*|RECURSE', False, False, False),
+            # delete a pattern sub folder not included
+            ('FileKey1=%(d)s|*eteme.*', False, False, True),
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
+             True, False, True),
+            # delete / exclude patterns with different complexity
+            ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|*ete*.*\nExcludeKey1=PATH|%(d)s|*ete*.lo?',
+             True, False, True),
+            ('FileKey1=%(d)s|*eteme*\nExcludeKey1=PATH|%(d)s|*notexist.*',
+             False, False, True),
+            ('FileKey1=%(d)s|*eteme.log\nExcludeKey1=PATH|%(d)s|do*.log',
+             False, True, True),
+            # semicolon separates different file types
+            ('FileKey1=%(d)s|*.log;*.bak|RECURSE\nExcludeKey1=PATH|%(d)s|*.log',
              True, False, True),
             # exclude log without pipe delimiter
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
@@ -358,6 +374,8 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
+             True, True, True),
+            ('FileKey1=%(d)s|*.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
              True, True, True),
@@ -388,8 +406,6 @@ class WinappTestCase(common.BleachbitTestCase):
             # glob should exclude the directory called 'sub'
             ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\s*',
              False, False, True),
-
-
         )
 
         for test in tests:
@@ -410,6 +426,7 @@ class WinappTestCase(common.BleachbitTestCase):
             self.assertCondExists(test[2], r'%s\deleteme.bak' % dirname, msg)
             self.assertCondExists(
                 test[3], r'%s\sub\deleteme.log' % dirname, msg)
+
             # cleanup
             shutil.rmtree(dirname, True)
 
