@@ -126,7 +126,7 @@ class Bleachbit(Gtk.Application):
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
-            self._auto_exit = True        
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -186,7 +186,8 @@ class Bleachbit(Gtk.Application):
                    'preferences': self.cb_preferences_dialog,
                    'diagnostics': self.diagnostic_dialog,
                    'help': self.cb_help,
-                   'about': self.about}
+                   'about': self.about,
+                   'quit': self.quit}
 
         for action_name, callback in actions.items():
             action = Gio.SimpleAction.new(action_name, None)
@@ -1041,6 +1042,47 @@ class GUI(Gtk.ApplicationWindow):
 
         return hbar
 
+    def create_toolbar(self):
+        """Create the toolbar"""
+        tbar = Gtk.Toolbar()
+        tbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR)
+
+        # create the preview button
+        self.preview_button = Gtk.ToolButton.new_from_stock(
+            Gtk.STOCK_FIND)
+        self.preview_button.connect(
+            'clicked', lambda *dummy: self.preview_or_run_operations(False))
+        self.preview_button.set_tooltip_text(
+            _("Preview files in the selected operations (without deleting any files)"))
+        # TRANSLATORS: This is the preview button on the main window.  It
+        # previews changes.
+        self.preview_button.set_label(_('Preview'))
+        tbar.insert(self.preview_button, 0)
+
+        # create the delete button
+        self.run_button = Gtk.ToolButton.new_from_stock(
+            Gtk.STOCK_CLEAR)
+        # TRANSLATORS: This is the clean button on the main window.
+        # It makes permanent changes: usually deleting files, sometimes
+        # altering them.
+        self.run_button.set_label(_('Clean'))
+        self.run_button.set_tooltip_text(
+            _("Clean files in the selected operations"))
+        self.run_button.connect("clicked", self.run_operations)
+        tbar.insert(self.run_button, 1)
+
+        # stop cleaning
+        self.stop_button = Gtk.ToolButton.new_from_stock(
+            Gtk.STOCK_STOP)
+        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_tooltip_text(
+            _('Abort the preview or cleaning process'))
+        self.stop_button.set_sensitive(False)
+        self.stop_button.connect('clicked', self.cb_stop_operations)
+        tbar.insert(self.stop_button, 2)
+
+        return tbar
+
     def on_configure_event(self, widget, event):
         (x, y) = self.get_position()
         (width, height) = self.get_size()
@@ -1149,14 +1191,21 @@ class GUI(Gtk.ApplicationWindow):
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
 
-        # add headerbar
-        self.headerbar = self.create_headerbar()
-        self.set_titlebar(self.headerbar)
-
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
+
+        if os.environ.get('GTK_CSD') != '0':
+            # add headerbar
+            self.headerbar = self.create_headerbar()
+            self.set_titlebar(self.headerbar)
+        else:
+            # add toolbar
+            self.headerbar = self.create_toolbar()
+            self.headerbar.set_hexpand(True)
+            vbox.add(self.headerbar)
+
         vbox.add(hbox)
 
         # add operations to left
