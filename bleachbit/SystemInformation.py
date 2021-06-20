@@ -20,7 +20,7 @@
 
 
 """
-Show diagnostic information
+Show system information
 """
 
 import bleachbit
@@ -34,8 +34,8 @@ if 'nt' == os.name:
     from win32com.shell import shell
 
 
-def diagnostic_info():
-    """Return diagnostic information as a string"""
+def get_system_information():
+    """Return system information as a string"""
     # this section is for application and library versions
     s = "BleachBit version %s" % bleachbit.APP_VERSION
 

@@ -184,7 +184,7 @@ class Bleachbit(Gtk.Application):
                    'makeChaff': self.cb_make_chaff,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
-                   'diagnostics': self.diagnostic_dialog,
+                   'systemInformation': self.system_information_dialog,
                    'help': self.cb_help,
                    'about': self.about}
 
@@ -341,13 +341,13 @@ class Bleachbit(Gtk.Application):
             bleachbit.Options.init_configuration()
         self._window.destroy()
 
-    def get_diagnostics_dialog(self):
-        """Show diagnostic information"""
+    def get_system_information_dialog(self):
+        """Show system information dialog"""
         dialog = Gtk.Dialog(_("System information"), self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
-        from bleachbit import Diagnostic
-        txt = Diagnostic.diagnostic_info()
+        from bleachbit import SystemInformation
+        txt = SystemInformation.get_system_information()
         txtbuffer.set_text(txt)
         textview = Gtk.TextView.new_with_buffer(txtbuffer)
         textview.set_editable(False)
@@ -359,8 +359,8 @@ class Bleachbit(Gtk.Application):
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
         return (dialog, txt)
 
-    def diagnostic_dialog(self, _action, _param):
-        dialog, txt = self.get_diagnostics_dialog()
+    def system_information_dialog(self, _action, _param):
+        dialog, txt = self.get_system_information_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()

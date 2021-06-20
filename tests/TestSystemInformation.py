@@ -20,18 +20,18 @@
 
 
 """
-Test case for module Diagnostic
+Test case for module SystemInformation
 """
 
 from tests import common
-from bleachbit.Diagnostic import diagnostic_info
+from bleachbit.SystemInformation import get_system_information
 
 
-class DiagnosticTestCase(common.BleachbitTestCase):
-    """Test Case for module Diagnostic"""
+class SystemInformationTestCase(common.BleachbitTestCase):
+    """Test Case for module SystemInformation"""
 
-    def test_diagnostic_info(self):
-        """Test diagnostic_info"""
+    def test_get_system_information(self):
+        """Test get_system_information"""
         # at least it does not crash
-        ret = diagnostic_info()
+        ret = get_system_information()
         self.assertIsString(ret)

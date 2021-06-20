@@ -160,9 +160,9 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         pref.dialog.destroy()
 
-    def test_diagnostics(self):
-        """Opens the diagnostics dialog and closes it"""
-        dialog, txt = self.app.get_diagnostics_dialog()
+    def test_system_information(self):
+        """Opens the system information dialog and closes it"""
+        dialog, txt = self.app.get_system_information_dialog()
         dialog.show_all()
         self.refresh_gui()
 

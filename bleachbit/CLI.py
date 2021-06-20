@@ -24,7 +24,7 @@ Command line interface
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit import _, APP_VERSION
-from bleachbit import Diagnostic, Options, Worker
+from bleachbit import SystemInformation, Options, Worker
 
 import logging
 import optparse
@@ -196,7 +196,7 @@ def process_cmd_line():
         pass
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
-        logger.info(Diagnostic.diagnostic_info())
+        logger.info(SystemInformation.get_system_information())
     if options.version:
         print("""
 BleachBit version %s
@@ -266,7 +266,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         preview_or_clean(operations, True)
         sys.exit(0)
     if options.sysinfo:
-        print(Diagnostic.diagnostic_info())
+        print(SystemInformation.get_system_information())
         sys.exit(0)
     if not did_something:
         parser.print_help()
