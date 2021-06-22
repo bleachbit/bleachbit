@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-12 05:45+0000\n"
+"PO-Revision-Date: 2021-06-21 07:04+0000\n"
 "Last-Translator: karm <melo@carmu.com>\n"
 "Language-Team: Interlingua <ia@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-13 15:28+0000\n"
-"X-Generator: Launchpad (build ddeaac87a34b6ea67d70ca539d5ee736a1205d45)\n"
+"X-Launchpad-Export-Date: 2021-06-22 03:32+0000\n"
+"X-Generator: Launchpad (build 3619498b5524a71696f3dd612f4d11bd63449bb1)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -462,7 +462,7 @@ msgstr "Statistica"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Delete the file"
-msgstr ""
+msgstr "Deler le file"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Crash reports"
@@ -591,11 +591,11 @@ msgstr "Suite de applicationes de officio"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Saper le chronologia del file"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Cognoscer clientes e amicos"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -604,11 +604,11 @@ msgstr "Reproductor de medios"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Jornales de systema"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Cancellar vetule jornales de systema"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Memory dump"
@@ -690,7 +690,7 @@ msgstr "Cancellar le session actual"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Software  de controloremote"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -727,7 +727,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr ""
+msgstr "Isto reinitiara Windows Explorer."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
@@ -776,7 +776,7 @@ msgstr "Liberar spatio e mantener le confidentialitate"
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Le scansion profunde non supporta variabile multi-valor"
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -794,7 +794,7 @@ msgstr ""
 #: ../bleachbit/Action.py:295
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "route=\"%s\" non es un modello global"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:388 ../bleachbit/Action.py:401
@@ -816,12 +816,12 @@ msgstr "Nettar"
 #: ../bleachbit/Action.py:567
 #, python-format
 msgid "Run external command: %s"
-msgstr ""
+msgstr "Exequer le commando externe: %s"
 
 #: ../bleachbit/Chaff.py:212
 #, python-format
 msgid "Downloading url failed: %s"
-msgstr ""
+msgstr "Discargamento fallite del url: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:151
 msgid "set log level to verbose"
-msgstr ""
+msgstr "Disponer a verbose le nivello de registro"
 
 #: ../bleachbit/CLI.py:152
 msgid "log debug messages to file"
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:243
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Nulle labor a facer. Specifica optiones."
 
 #: ../bleachbit/CLI.py:251
 msgid "--overwrite is intended only for use with --clean"
@@ -1207,16 +1207,16 @@ msgstr ""
 #: ../bleachbit/GuiBasic.py:47 ../bleachbit/GuiBasic.py:74
 #: ../bleachbit/GuiBasic.py:98 ../bleachbit/GuiBasic.py:144
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancellar"
 
 #: ../bleachbit/GuiBasic.py:75
 msgid "_Open"
-msgstr ""
+msgstr "Aperir (_Open)"
 
 #: ../bleachbit/GuiBasic.py:99 ../bleachbit/GuiBasic.py:143
 #: ../bleachbit/GUI.py:221
 msgid "_Delete"
-msgstr ""
+msgstr "_Deler"
 
 #: ../bleachbit/GuiBasic.py:116
 msgid "Delete confirmation"
@@ -1293,7 +1293,7 @@ msgstr "Numero de files"
 
 #: ../bleachbit/GuiChaff.py:92 ../bleachbit/GuiChaff.py:152
 msgid "Select destination folder"
-msgstr ""
+msgstr "Seliger plica de destino"
 
 #: ../bleachbit/GuiChaff.py:102
 msgid "When finished"
@@ -1317,7 +1317,7 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
-msgstr ""
+msgstr "Generante files"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:32
 msgid "Preferences"
@@ -1391,7 +1391,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:188
 msgid "Windows 10 theme"
-msgstr ""
+msgstr "Thema de Windows 10"
 
 #: ../bleachbit/GuiPreferences.py:195
 msgid "Dark mode"
@@ -1658,7 +1658,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Liberante %s de memoria."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
@@ -1669,7 +1669,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Le memoria libere physic es: %s"
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
