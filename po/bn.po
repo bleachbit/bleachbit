@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-23 17:17+0000\n"
+"PO-Revision-Date: 2021-06-24 17:23+0000\n"
 "Last-Translator: Firefly <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-24 03:04+0000\n"
+"X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 "X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -767,22 +767,22 @@ msgstr "অডিও ফাইলস ট্যাগার"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "IRC ক্লায়েন্ট যা পূর্বে XChat নামে পরিচিত ছিল"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "অপ্রয়োজনীয় ফাইল ক্লিনার"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
-msgstr ""
+msgstr "স্পেস খালি করুন এবং গোপনীয়তা রক্ষা করুন"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "ডিপ স্ক্যান মাল্টি-ভ্যালু ভ্যারিয়েবল সাপোর্ট করেনা।"
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -790,7 +790,7 @@ msgstr ""
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" ব্যবহার করা হয়েছে নিয়মিত ফাইল পাথ=\"%s\" এর সাথে"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -800,7 +800,7 @@ msgstr ""
 #: ../bleachbit/Action.py:295
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" কোন গ্লব প্যাটার্ন নয়"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:388 ../bleachbit/Action.py:401
@@ -809,7 +809,7 @@ msgstr ""
 #: ../bleachbit/Action.py:517 ../bleachbit/Command.py:203
 #: ../bleachbit/Command.py:237
 msgid "Clean file"
-msgstr ""
+msgstr "ফাইল ক্লিন করুন"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -817,7 +817,7 @@ msgstr ""
 #. altering them.
 #: ../bleachbit/Action.py:530 ../bleachbit/GUI.py:902 ../bleachbit/GUI.py:1009
 msgid "Clean"
-msgstr ""
+msgstr "ক্লিন করুন"
 
 #: ../bleachbit/Action.py:567
 #, python-format
@@ -1072,42 +1072,45 @@ msgstr "প্রদত্ত পাথগুলোয় ফাঁকা স্প
 
 #: ../bleachbit/CLI.py:180
 msgid "output version information and exit"
-msgstr ""
+msgstr "ভার্সন বিষয়ক তথ্যের আউটপুট দিন এবং এক্সিট করুন"
 
 #: ../bleachbit/CLI.py:182
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "কনটেন্ট গোপন রাখার জন্য ফাইলগুলো ওভাররাইট করুন"
 
 #: ../bleachbit/CLI.py:190
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"এই কমান্ডগুলো থেকে কেবল একটিকে বাছাই করুন: --list-cleaners, --wipe-free-"
+"space, --preview, --clean"
 
 #: ../bleachbit/CLI.py:210
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "winapp2.ini এর আপডেটের জন্য অনলাইনে চেক করা হচ্ছে"
 
 #: ../bleachbit/CLI.py:225
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "--wipe-free-space এর জন্য কোন ডিরেক্টরি দেয়া হয়নি"
 
 #: ../bleachbit/CLI.py:230
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr ""
+"ওয়াইপ করার জন্য পাথটিকে অবশ্যই অস্তিত্ব আছে এমন একটি ডিরেক্টরি হতে হবে: %s"
 
 #: ../bleachbit/CLI.py:232
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "ফাঁকা স্পেস ওয়াইপ করতে অনেক সময় লাগতে পারে।"
 
 #: ../bleachbit/CLI.py:243
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "কোন কাজ নেই। অপশন বাছাই করুন।"
 
 #: ../bleachbit/CLI.py:251
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite শুধুমাত্র --clean এর সাথে ব্যবহারের জন্য রাখা হয়েছে"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1126,6 +1129,9 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
+"অন্তত একটি ফাইল অন্য একটি প্রসেসের মাধ্যমে লক করা আছে, যার কারণে এর "
+"কনটেন্টগুলো ওভাররাইট করা যায়নি। সিস্টেম রিবুট করার সময় এটি ডিলিট করার জন্য "
+"চিহ্নিত করে দেয়া হবে।"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1168,12 +1174,16 @@ msgstr "নির্দিষ্ট ধরনের ফাইল ডিলিট
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr ""
+"এনভায়রনমেন্ট ভ্যারিয়েবল TMP এমন একটি ডিরেক্টরিকে নির্দেশ করে যার কোন "
+"অস্তিত্ব নেই: %s"
 
 #: ../bleachbit/FileUtilities.py:846
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"একটি ফাইল সিস্টেমে অন্তত একটি ফাইল আছে যা এডভান্সড ওভাররাইটিংকে সাপোর্ট "
+"করেনা।"
 
 #: ../bleachbit/FileUtilities.py:942
 #, python-format
@@ -1182,30 +1192,33 @@ msgstr "ওয়াইপিং পাথ: %s"
 
 #: ../bleachbit/FileUtilities.py:952
 msgid "Creating new, temporary file for wiping free space."
-msgstr ""
+msgstr "ফাঁকা স্পেস ওয়াইপ করার জন্য নতুন টেম্পোরারি ফাইল তৈরি করা হচ্ছে।"
 
 #: ../bleachbit/FileUtilities.py:1008
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "ফাইল বাফার ফ্লাশ করার সময় ইরোর #%d দেখা দিয়েছে।"
 
 #: ../bleachbit/FileUtilities.py:1024
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"লিখেছে {files:,} ফাইলস এবং {bytes:,} বাইটস {seconds:,} সেকেন্ডে {rate:.2f} "
+"MB/s গতিতে"
 
 #: ../bleachbit/FileUtilities.py:1029
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} বাইটস এবং {inodes:,} ইনোডস নন-সুপার-ইউজারের জন্য এভেইলেবল আছে"
 
 #: ../bleachbit/FileUtilities.py:1031
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
+msgstr "{bytes:,} বাইটস এবং {inodes:,} ইনোডস সুপার-ইউজারের জন্য এভেইলেবল আছে"
 
 #: ../bleachbit/FileUtilities.py:1047
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "ফাইল ট্রাঙ্কেট করার সময় অজানা ইরোর error #0 এর সম্মুখীন হতে হয়েছে।"
 
 #: ../bleachbit/GuiBasic.py:47 ../bleachbit/GuiBasic.py:74
 #: ../bleachbit/GuiBasic.py:98 ../bleachbit/GuiBasic.py:144
@@ -1231,6 +1244,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"এই ফাংশনটি সকল BleachBit সেটিংস ডিলিট করে দেয় এবং এরপর এপ্লিকেশনটিকে বন্ধ "
+"করে দেয়। আপনার BleachBit এর ব্যবহার গোপন রাখতে কিংবা এর সেটিংস রিসেট করতে "
+"এটি ব্যবহার করুন। এরপরে আপনি যখন BleachBit চালু করবেন, সেটিংসগুলো তখন ডিফল্ট "
+"ভ্যালু নিয়ে কাজ শুরু করবে।"
 
 #: ../bleachbit/GuiBasic.py:132
 msgid ""
@@ -1238,6 +1255,9 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"আপনি কি নিশ্চিত যে, বাছাই করা অপারেশনগুলো অনুসারে আপনি স্থায়ীভাবে ফাইলগুলো "
+"ডিলিট করতে চান? আসলে যে ফাইলগুলো ডিলিট করা হবে, সেগুলো আপনি প্রিভিউ রান করার "
+"পরে পরিবর্তিত হয়ে থাকতে পারে।"
 
 #: ../bleachbit/GuiBasic.py:135
 msgid "Are you sure you want to permanently delete these files?"
@@ -1250,12 +1270,15 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
+"যেহেতু আপনি রুট হিসেবে রান করছেন, অনুগ্রহ করে এই লিংকটি ওয়েব ব্রাউজারে "
+"ম্যানুয়ালি ওপেন করুন:\n"
+"%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py:185
 #, python-format
 msgid "Open web browser to %s?"
-msgstr ""
+msgstr "%s এর জন্য ওয়েব ব্রাউজার ওপেন করবেন?"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1310,11 +1333,11 @@ msgstr "ফাইল তৈরি করুন"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "শাফ জেনারেটরের জন্য প্রয়োজনীয় ডাটা ডাউনলোড করতে চান?"
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
-msgstr ""
+msgstr "ফাইল সমূহ জেনারেট করা হচ্ছে"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:32
 msgid "Preferences"
@@ -1338,13 +1361,15 @@ msgstr "হোয়াইটলিস্ট"
 
 #: ../bleachbit/GuiPreferences.py:114
 msgid "Check periodically for software updates via the Internet"
-msgstr ""
+msgstr "ইন্টারনেটের মাধ্যমে নিয়মিত বিরতিতে সফটওয়্যার আপডেট চেক করুন"
 
 #: ../bleachbit/GuiPreferences.py:119
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
+"যদি কোন আপডেট পাওয়া যায়, তাহলে সে বিষয়ে তথ্য দেখার জন্য আপনাকে অপশন দেয়া "
+"হবে। তারপরে আপনি আপডেটটি ম্যানুয়ালি ডাউনলোড এবং ইন্সটল করতে পারবেন।"
 
 #: ../bleachbit/GuiPreferences.py:126
 msgid "Check for new beta releases"
@@ -1352,15 +1377,15 @@ msgstr "নতুন বেটা রিলিজ সমূহের জন্�
 
 #: ../bleachbit/GuiPreferences.py:135
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
+msgstr "কমিউনিটি থেকে ক্লিনার ডাউনলোড এবং আপডেট করুন (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:149
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "অপ্রাসঙ্গিক ক্লিনার আড়াল করে রাখুন"
 
 #: ../bleachbit/GuiPreferences.py:158
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "রিকভারি প্রতিরোধের জন্য ফাইল সমূহের কনটেন্টগুলো ওভাররাইট করুন"
 
 #: ../bleachbit/GuiPreferences.py:162
 msgid ""
@@ -1390,7 +1415,7 @@ msgstr "ডার্ক মোড"
 
 #: ../bleachbit/GuiPreferences.py:201
 msgid "Remember window geometry"
-msgstr ""
+msgstr "উইন্ডো জিওমেট্রি মনে রাখুন"
 
 #: ../bleachbit/GuiPreferences.py:207
 msgid "Show debug messages"
@@ -1405,6 +1430,8 @@ msgstr "একটি ফোল্ডার নির্বাচন করুন
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
+"প্রতিটি ড্রাইভের জন্য একটি রাইট করা যায় এমন ফোল্ডার নির্বাচন করুন যাতে করে "
+"ফাঁকা স্পেস ওভাররাইট করা যায়।"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1452,11 +1479,11 @@ msgstr "ফোল্ডার"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "Theses paths will not be deleted or modified."
-msgstr ""
+msgstr "এই পাঠগুলো ডিলিট করা অথবা পরিবর্তন করা হবেনা।"
 
 #: ../bleachbit/GuiPreferences.py:445
 msgid "These locations can be selected for deletion."
-msgstr ""
+msgstr "ডিলিট করার জন্য এই লোকেশনগুলো বাছাই করা যাবে।"
 
 #: ../bleachbit/GuiPreferences.py:453
 msgid "Type"
@@ -1482,18 +1509,20 @@ msgstr "ফোল্ডার যোগ করুন"
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"SQLite মডিউল লোড করতে ইরোর দেখা দিয়েছে: সম্ভবত এন্টিভাইরাস সফটওয়্যার এটিকে "
+"ব্লক করে দিচ্ছে।"
 
 #: ../bleachbit/GUI.py:210
 msgid "Choose files to shred"
-msgstr ""
+msgstr "শ্রেড করার জন্য ফাইল বাছাই করুন"
 
 #: ../bleachbit/GUI.py:219
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "শ্রেড করার জন্য ফোল্ডার বাছাই করুন"
 
 #: ../bleachbit/GUI.py:246
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "ক্লিপবোর্ডে কোন পাথ পাওয়া যাচ্ছেনা।"
 
 #: ../bleachbit/GUI.py:282
 msgid "_OK"
@@ -1551,7 +1580,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:735
 msgid "You must select an operation"
-msgstr ""
+msgstr "আপনাকে অবশ্যই একটি অপারেশন বাছাই করতে হবে"
 
 #: ../bleachbit/GUI.py:754 ../bleachbit/GUI.py:770
 msgid "Done."
@@ -1561,10 +1590,11 @@ msgstr "শেষ।"
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
+"টাইটেল বারের হ্যামবার্গার লোগোতে ক্লিক করে এপ্লিকেশন মেনুতে প্রবেশ করুন।"
 
 #: ../bleachbit/GUI.py:831
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr ""
+msgstr "টাইটেল বারের লোগোতে ক্লিক করে এপ্লিকেশন মেনুতে প্রবেশ করুন।"
 
 #: ../bleachbit/GUI.py:847
 msgid ""
@@ -1589,10 +1619,11 @@ msgstr "প্রিভিউ"
 #: ../bleachbit/GUI.py:996
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"বাছাই করা অপারেশনগুলোর ফাইল সমূহ প্রিভিউ করুন (কোন ফাইল ডিলিট না করে)"
 
 #: ../bleachbit/GUI.py:1011
 msgid "Clean files in the selected operations"
-msgstr ""
+msgstr "বাছাই করা অপারেশনগুলোর ফাইল সমূহ ক্লিন করুন"
 
 #: ../bleachbit/GUI.py:1019
 msgid "Abort"
@@ -1600,11 +1631,11 @@ msgstr "বাতিল করুন"
 
 #: ../bleachbit/GUI.py:1021
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "প্রিভিউ অথবা ক্লিনিং প্রসেস বাতিল করুন"
 
 #: ../bleachbit/GUI.py:1228
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "আপডেটের জন্য চেক করার সময় ইরোর দেখা দিয়েছে: "
 
 #: ../bleachbit/Memory.py:58
 msgid ""
