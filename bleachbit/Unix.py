@@ -204,6 +204,7 @@ class Locales:
          'hz': 'Otjiherero',
          'ia': 'Interlingua',
          'id': 'Indonesian',
+         'ie': 'Interlingue',
          'ig': 'Asụsụ Igbo',
          'ii': 'ꆈꌠ꒿',
          'ik': 'Iñupiaq',
