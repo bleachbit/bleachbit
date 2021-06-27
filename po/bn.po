@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-24 17:23+0000\n"
+"PO-Revision-Date: 2021-06-26 16:00+0000\n"
 "Last-Translator: Firefly <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
+"X-Launchpad-Export-Date: 2021-06-27 14:32+0000\n"
 "X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -80,8 +80,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"কুকি মুছুন, যা তথ্য ধারণ করে যেমন ওয়েবসাইটের পছন্দসমূহ, প্রমাণীকরণ এবং "
-"ট্র্যাকিং শনাক্তকরণ"
+"কুকিগুলো ডিলিট করুন, যাতে আছে ওয়েব সাইট বিষয়ক পছন্দসমূহ, অথেনটিকেশন এবং "
+"ট্র্যাকিং আইডেন্টিফিকেশন তথ্য"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -1293,7 +1293,7 @@ msgstr "শাফ তৈরি করুন"
 
 #: ../bleachbit/GuiChaff.py:70
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "ডকুমেন্ট অনুসারে র‍্যান্ডমলি বানানো মেসেজ তৈরি করুন।"
 
 #: ../bleachbit/GuiChaff.py:74
 msgid "Inspiration"
@@ -1392,6 +1392,8 @@ msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"কিছু ফাইল সিস্টেমে এবং নির্দিষ্ট কিছু  BleachBit অপারেশনে ওভাররাইটিং করা "
+"কার্যকরী নয়। ওভাররাইটিং অত্যন্ত ধীর গতির।"
 
 #: ../bleachbit/GuiPreferences.py:167
 msgid "Exit after cleaning"
@@ -1404,6 +1406,7 @@ msgstr "ডিলিট করার পূর্বে নিশ্চিত �
 #: ../bleachbit/GuiPreferences.py:181
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
+"SI (1 kB = 1000 bytes) এর পরিবর্তে IEC সাইজ (1 KiB = 1024 bytes) ব্যবহার করুন"
 
 #: ../bleachbit/GuiPreferences.py:188
 msgid "Windows 10 theme"
@@ -1533,6 +1536,8 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU জেনারেল পাবলিক লাইসেন্স ভার্সন ৩ অথবা তার পরবর্তী।\n"
+"দেখুন https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1572,11 +1577,14 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
+"এই বিষয়ে সতর্কতা %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 
 #: ../bleachbit/GUI.py:585
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr ""
+msgstr "কনফিগারেশন ফাইল রিসেট করা হচ্ছে, কেননা এটি করাপ্ট: %s"
 
 #: ../bleachbit/GUI.py:735
 msgid "You must select an operation"
@@ -1602,12 +1610,17 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
+"আপনি সিস্টেমের শেয়ার করা অংশগুলো ক্লিন করার এডমিনিস্ট্রেটিভ প্রিভিলেজ নিয়ে "
+"BleachBit রান করছেন এবং ইউজার প্রোফাইল ফোল্ডারের রেফারেন্স শুধু রুট "
+"একাউন্টকে ক্লিন করবে।"
 
 #: ../bleachbit/GUI.py:852
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
+"ফাইলগুলোর কনটেন্ট ওভাররাইট করার একুরেসি ভালো করার জন্য এডমিনিস্ট্রেটর "
+"প্রিভিলেজ সহকারে BleachBit রান করুন।"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1642,65 +1655,68 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"'swapoff -s' এর কমান্ড ফেইল করেছে, তাই সোয়াপ বিষয়ক তথ্যের জন্য /proc/swaps এ "
+"ফিরে যাওয়া হচ্ছে।"
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
-msgstr ""
+msgstr "সোয়াপ বিকল করা হচ্ছে।"
 
 #: ../bleachbit/Memory.py:98
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "সোয়াপ পুনরায় সক্ষম করা হচ্ছে।"
 
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "এই প্রসেসের জন্য নাইস ভ্যালু %d সেট করা হচ্ছে।"
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"প্রসেস আইডি {pid} থেকে ইউজার আইডিতে {uid} প্রিভিলেজ নিয়ে যাওয়া হচ্ছে।"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "মেমরির %s বরাদ্দ করা হচ্ছে এবং পরিষ্কার করা হচ্ছে।"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "মেমরির %s ফাঁকা করা হচ্ছে।"
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "সোয়াপ ফাইলের জন্য পাওয়া UUID {device} হচ্ছে {uuid}।"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "ফিজিক্যাল ফাঁকা মেমরি হচ্ছে %s।"
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "সোয়াপ ডিভাইস %s পরিষ্কার করা হচ্ছে।"
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "সোয়াপ ডিভাইস %s নতুনভাবে চালু করা হচ্ছে।"
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "এই সোয়াপ ডিভাইসগুলো পাওয়া গেছে: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1709,34 +1725,36 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"ফাংশন wipe_memory() সাথে প্রসেস আইডি {pid} চাইল্ড প্রসেস আইডি {cid} এর জন্য "
+"অপেক্ষা করছে।"
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "চাইল্ড মেমরি-ওয়াইপিং প্রসেস কোড %d দেখাচ্ছে।"
 
 #: ../bleachbit/Options.py:114
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr ""
+msgstr "ফাইল %s তে কনফিগারেশন রাইট করার সময় ডিস্ক ফুল ছিল"
 
 #: ../bleachbit/Options.py:138
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "পাথ আছে কিনা সেটি দেখতে ইরোর চেক করা হচ্ছে: %s"
 
 #: ../bleachbit/Options.py:267
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "ডিফল্ট ড্রাইভগুলো শ্রেড করার জন্য সেটিং দেয়ার সময় ইরোর দেখা দিয়েছে।"
 
 #: ../bleachbit/Options.py:293
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "ভাষা %s স্বয়ংক্রিয়ভাবে সংরক্ষণ করা হচ্ছে।"
 
 #: ../bleachbit/RecognizeCleanerML.py:56
 msgid "Security warning"
-msgstr ""
+msgstr "নিরাপত্তা বিষয়ক সতর্কতা"
 
 #: ../bleachbit/RecognizeCleanerML.py:70
 msgid ""
@@ -1744,6 +1762,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
+"এই ক্লিনার ডেফিনিশনগুলো নতুন অথবা পরিবর্তিত। ম্যালিশাস ডেফিনিশন আপনার "
+"সিস্টেমের ক্ষতি করতে পারে। যদি আপনি এই পরিবর্তনগুলোকে বিশ্বাস না করেন, তাহলে "
+"ফাইলগুলো ডিলিট করুন অথবা কুইট করুন।"
 
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
@@ -1758,7 +1779,7 @@ msgstr "ফাইলের নাম"
 #: ../bleachbit/Unix.py:589
 #, python-format
 msgid "Executable not found: %s"
-msgstr ""
+msgstr "এক্সিকিউটেবল কিছু পাওয়া যায়নি: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py:673 ../bleachbit/Unix.py:688 ../bleachbit/Unix.py:713
@@ -1768,18 +1789,20 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
+"%s ক্লিন করা যায়নি কেননা এটি বর্তমানে রান করছে। এটি বন্ধ করুন এবং আবার "
+"চেষ্টা করুন।"
 
 #: ../bleachbit/Update.py:74
 msgid "New winapp2.ini was downloaded."
-msgstr ""
+msgstr "নতুন winapp2.ini ডাউনলোড করা হয়েছিল।"
 
 #: ../bleachbit/Update.py:120
 msgid "Update BleachBit"
-msgstr ""
+msgstr "BleachBit আপডেট করুন"
 
 #: ../bleachbit/Update.py:126
 msgid "A new version is available."
-msgstr ""
+msgstr "একটি নতুন ভার্সন পাওয়া গেছে।"
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
@@ -1794,6 +1817,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"আপডেট চেক করার জন্য নেটওয়ার্ক কানেকশন খোলার সময় ইরোর দেখা দিয়েছে। অনুগ্রহ "
+"করে যাচাই করে দেখুন যে নেটওয়ার্ক চলছে কিনা এবং কোন ফায়ারওয়াল এই "
+"এপ্লিকেশনটিকে ব্লক করছেনা। ইরোর মেসেজ: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -1821,7 +1847,7 @@ msgstr "গেমস"
 
 #: ../bleachbit/Winapp.py:183
 msgid "Imported from winapp2.ini"
-msgstr ""
+msgstr "winapp2.ini থেকে ইমপোর্ট করা হয়েছে"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1830,115 +1856,117 @@ msgstr ""
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "অপারেশন রান করার সময় এক্সেপশন '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "ইরোর: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr ""
+msgstr "অনুগ্রহ করে অপেক্ষা করুন। ফাঁকা ডিস্ক স্পেস পরিষ্কার করা হচ্ছে।"
 
 #: ../bleachbit/Worker.py:196
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"ফাঁকা ডিস্ক স্পেস পরিষ্কার করতে গেলে যেসব ফাইল শ্রেডিং না করেই ডিলিট করা "
+"হয়েছিল সেগুলোর অবশিষ্টাংশ মুছে যায়। এটি কোন স্পেস ফাঁকা করেনা।"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:340
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr ""
+msgstr "অনুগ্রহ করে অপেক্ষা করুন। %s ক্লিন করা হচ্ছে।"
 
 #: ../bleachbit/Worker.py:217
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "প্রায় %d মিনিট বাকি আছে।"
+msgstr[1] "প্রায় %d মিনিট বাকি আছে।"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py:286
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr ""
+msgstr "রিকভার করা ডিস্ক স্পেস: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:290
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr ""
+msgstr "রিকভার করতে হবে এমন ডিস্ক স্পেস: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py:295
 #, python-format
 msgid "Files deleted: %d"
-msgstr ""
+msgstr "ডিলিট করা ফাইল সমূহ: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py:299
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr ""
+msgstr "ডিলিট করতে হবে এমন ফাইল সমূহ: %d"
 
 #: ../bleachbit/Worker.py:302
 #, python-format
 msgid "Special operations: %d"
-msgstr ""
+msgstr "স্পেশাল অপারেশন্স: %d"
 
 #: ../bleachbit/Worker.py:305
 #, python-format
 msgid "Errors: %d"
-msgstr ""
+msgstr "ইরোর সমূহ: %d"
 
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
 #: ../bleachbit/Worker.py:321
 msgid "Please wait.  Running deep scan."
-msgstr ""
+msgstr "অনুগ্রহ করে অপেক্ষা করুন। ডিপ স্ক্যান রান চলছে।"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:343
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "অনুগ্রহ করে অপেক্ষা করুন। %s প্রিভিউ করা হচ্ছে।"
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr ""
+msgstr "_শ্রেড ফাইল সমূহ"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "শ্রে_ড ফোল্ডার সমূহ"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "ক্লিপবোর্ড থেকে শ্রেড পাথ সমূহ"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "_ফাঁকা স্পেস পরিষ্কার করুন"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_শাফ তৈরি করুন"
 
 #: ../data/app-menu.ui:26
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "শ্রে_ড সেটিংস এবং কুইট করুন"
 
 #: ../data/app-menu.ui:37
 msgid "_Diagnostics"
-msgstr ""
+msgstr "_ডায়গনস্টিকস"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
