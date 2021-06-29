@@ -731,4 +731,19 @@ def dnf_autoremove():
     return freed_bytes
 
 
+def is_linux_display_protocol_wayland():
+    assert(sys.platform.startswith('linux'))
+    result = General.run_external(['loginctl'])
+    session = result[1].split('\n')[1].strip().split(' ')[0]
+    result = General.run_external(['loginctl', 'show-session', session, '-p', 'Type'])
+    return 'wayland' in result[1].lower()
+
+
+def root_is_not_allowed_to_X_session():
+    assert (sys.platform.startswith('linux'))
+    result = General.run_external(['xhost'], clean_env=False)
+    xhost_returned_error = result[0] == 1
+    return xhost_returned_error
+
+
 locales = Locales()

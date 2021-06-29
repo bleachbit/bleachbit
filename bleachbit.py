@@ -25,11 +25,36 @@ Launcher
 import os
 import sys
 
+import bleachbit.Unix
+
+
 if 'posix' == os.name:
     if os.path.isdir('/usr/share/bleachbit'):
         # This path contains bleachbit/{C,G}LI.py .  This section is
         # unnecessary if installing BleachBit in site-packages.
         sys.path.append('/usr/share/')
+
+        if (
+                bleachbit.Unix.is_linux_display_protocol_wayland() and
+                os.environ['USER'] == 'root' and
+                bleachbit.Unix.root_is_not_allowed_to_X_session()
+            
+        ):
+            print('To run any GUI application on Wayland with root you need to allow the root to connect with '
+                  'the user\'s X session. For example like this:\n'
+                  'xhost si:localuser:root\n'
+                  'After finishing with the application you can remove the connection like this:\n'
+                  'xhost -si:localuser:root\n'
+                  'Please keep in mind that this solution presents a security risk '
+                  'as put by Emmanuele Bassi, a GNOME developer: "there are no real, substantiated, technological '
+                  'reasons why anybody should run a GUI application as root. By running GUI applications as an admin '
+                  'user you are literally running millions of lines of code that have not been audited properly to run '
+                  'under elevated privileges; you are also running code that will touch files inside your $HOME and may '
+                  'change their ownership on the file system; connect, via IPC, to even more running code, etc. You are '
+                  'opening up a massive, gaping security hole. Source:\n'
+                  'https://wiki.archlinux.org/title/Running_GUI_applications_as_root'
+                  )
+            sys.exit(1)
 
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3
