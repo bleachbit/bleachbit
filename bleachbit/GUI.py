@@ -780,11 +780,9 @@ class GUI(Gtk.ApplicationWindow):
         self.view = display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
-        padding_box = Gtk.Box()
-        padding_box.add(self.view)
         scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
-        padding_box.set_margin_right(scrollbar_width) # avoid conflict with scrollbar
-        scrolled_window.add(padding_box)
+        self.view.set_margin_right(scrollbar_width) # avoid conflict with scrollbar
+        scrolled_window.add(self.view)
         return scrolled_window
 
     def cb_refresh_operations(self):
