@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-14 09:19+0000\n"
-"Last-Translator: JL <Unknown>\n"
+"PO-Revision-Date: 2021-07-05 21:58+0000\n"
+"Last-Translator: Sérgio Marques <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
-"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
+"X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
+"X-Generator: Launchpad (build fe01712f453e3d8fdd7cfee725621d71a8ae3628)\n"
 "Language: pt\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -529,8 +529,7 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
-"Eliminar o índice redefinirá a configuração das colunas da lista de "
-"mensagens."
+"A remoção do índice restaura a configuração de colunas da lista de mensagens."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -1058,7 +1057,7 @@ msgstr "utilizar conjunto de opções na interface gráfica"
 
 #: ../bleachbit/CLI.py:173
 msgid "enable all options that do not have a warning"
-msgstr "ligar todas as opções que não têm aviso"
+msgstr "ativar todas as opções que não têm um aviso"
 
 #: ../bleachbit/CLI.py:176
 msgid "update winapp2.ini, if a new version is available"
@@ -1169,7 +1168,8 @@ msgstr "Tipo de ficheiro especial, não pode ser removido: %s"
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
-msgstr "O variável de ambiente TMP refere-se ao diretório que não existe: %s"
+msgstr ""
+"A variável de ambiente TMP refere-se a um diretório que não existe: %s"
 
 #: ../bleachbit/FileUtilities.py:846
 msgid ""
@@ -1414,7 +1414,7 @@ msgstr "Modo escuro"
 
 #: ../bleachbit/GuiPreferences.py:201
 msgid "Remember window geometry"
-msgstr "Lembrar-se da geometria da janela"
+msgstr "Memorizar geometria da janela"
 
 #: ../bleachbit/GuiPreferences.py:207
 msgid "Show debug messages"
