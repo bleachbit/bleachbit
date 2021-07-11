@@ -19,7 +19,7 @@ def get_model_dict(thing):
     raise ValueError("`models` should be instances of list, dict, markovify.Chain, or markovify.Text")
 
 def combine(models, weights=None):
-    if weights == None:
+    if weights is None:
         weights = [ 1 for _ in range(len(models)) ]
 
     if len(models) != len(weights):
