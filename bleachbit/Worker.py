@@ -331,8 +331,7 @@ class Worker:
 
     def run_operations(self, my_operations):
         """Run a set of operations (general, memory, free disk space)"""
-        count = 0
-        for operation in my_operations:
+        for count, operation in enumerate(my_operations):
             self.ui.update_progress_bar(1.0 * count / len(my_operations))
             name = backends[operation].get_name()
             if self.really_delete:
@@ -348,5 +347,3 @@ class Worker:
                     yield True
             except:
                 self.print_exception(operation)
-
-            count += 1

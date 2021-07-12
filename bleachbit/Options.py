@@ -320,10 +320,8 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter), value)
-            counter += 1
         self.__flush()
 
     def set_whitelist_paths(self, values):
@@ -332,11 +330,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_custom_paths(self, values):
@@ -345,11 +341,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_language(self, langid, value):
