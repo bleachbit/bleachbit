@@ -357,9 +357,16 @@ SectionGroup /e Shortcuts
     SectionEnd
 
     Section "Desktop" SectionDesktop
+        ${GetParameters} $R0
+        ${GetOptions} $R0 "/S /NoDesktopShortcut" $R0
+        IfErrors optionNotfound optionFound
+        optionNotfound:
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
+
+        optionFound:
+
     SectionEnd
 
     Section /o "Quick launch" SectionQuickLaunch
