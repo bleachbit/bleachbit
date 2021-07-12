@@ -240,7 +240,7 @@ class Winapp:
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
-                regex = '%s.*%s' % (
+                regex = '%s\\\\%s' % (
                     fnmatch_translate(expanded), files_regex)
             regexes.append(regex)
 
@@ -333,14 +333,12 @@ class Winapp:
         if recurse:
             search = 'walk.files'
             path = dirname
-            if filename.startswith('*.'):
-                filename = filename.replace('*.', '.')
-            if filename == '.*':
+            if filename == '*.*':
                 if removeself:
                     search = 'walk.all'
             else:
                 import fnmatch
-                regex = ' regex="%s" ' % (fnmatch.translate(filename))
+                regex = ' regex="^%s$" ' % (fnmatch.translate(filename))
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
