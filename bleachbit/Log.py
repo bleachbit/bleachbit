@@ -37,8 +37,7 @@ class DelayLog(object):
         self.msg = ''
 
     def read(self):
-        for msg in self.queue:
-            yield msg
+        yield from self.queue
         self.queue = []
 
     def write(self, msg):

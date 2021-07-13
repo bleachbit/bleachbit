@@ -217,8 +217,7 @@ def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory"""
     if type(top) is tuple:
         for top_ in top:
-            for pathname in children_in_directory(top_, list_directories):
-                yield pathname
+            yield from children_in_directory(top_, list_directories)
         return
     for (dirpath, dirnames, filenames) in walk(top, topdown=False):
         if list_directories:
@@ -578,8 +577,7 @@ def globex(pathname, regex):
     """Yield a list of files with pathname and filter by regex"""
     if type(pathname) is tuple:
         for singleglob in pathname:
-            for path in globex(singleglob, regex):
-                yield path
+            yield from globex(singleglob, regex)
     else:
         for path in glob.iglob(pathname):
             if re.search(regex, path):
@@ -668,8 +666,7 @@ def listdir(directory):
 
     if type(directory) is tuple:
         for dirname in directory:
-            for pathname in listdir(dirname):
-                yield pathname
+            yield from listdir(dirname)
         return
     dirname = os.path.expanduser(directory)
     if not os.path.lexists(dirname):

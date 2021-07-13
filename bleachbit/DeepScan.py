@@ -50,8 +50,7 @@ def normalized_walk(top, **kwargs):
                 for fn in filenames
             ]
     else:
-        for result in walk(top, **kwargs):
-            yield result
+        yield from walk(top, **kwargs)
 
 
 Search = namedtuple('Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])

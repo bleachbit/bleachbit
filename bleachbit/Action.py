@@ -240,8 +240,7 @@ class FileActionProvider(ActionProvider):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
                 path = None  # sentinel value
-                for path in FileUtilities.children_in_directory(expanded, True):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, True)
                 # This condition executes when there are zero iterations
                 # in the loop above.
                 if path is None:
@@ -259,13 +258,11 @@ class FileActionProvider(ActionProvider):
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(expanded, False):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, False)
 
         def get_top(top):
             """Delete directory contents and the directory itself"""
-            for f in get_walk_all(top):
-                yield f
+            yield from get_walk_all(top)
             if os.path.exists(top):
                 yield top
 
