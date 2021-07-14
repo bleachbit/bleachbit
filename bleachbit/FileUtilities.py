@@ -645,18 +645,17 @@ def is_dir_empty(dirname):
 
     It assumes the path exists and is a directory.
     """
-    if hasattr(os, 'scandir') and sys.version_info < (3,6,0):
-        # Python 3.5 added os.scandir() without context manager.
-        for entry in os.scandir(dirname):
-            return False
-        return True
-    elif hasattr(os, 'scandir'):
-        # Python 3.6 added the context manager.
-        with os.scandir(dirname) as it:
-            for entry in it:
+    if hasattr(os, 'scandir'):
+        if sys.version_info < (3, 6, 0):
+                    # Python 3.5 added os.scandir() without context manager.
+            for _ in os.scandir(dirname):
                 return False
+        else:
+            # Python 3.6 added the context manager.
+            with os.scandir(dirname) as it:
+                for entry in it:
+                    return False
         return True
-
     # This method is slower, but it works with Python 3.4.
     return len(os.listdir(dirname)) == 0
 
@@ -704,7 +703,7 @@ def sync():
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
-    if 'nt' == os.name:
+    elif 'nt' == os.name:
         import ctypes
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 

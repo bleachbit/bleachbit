@@ -79,9 +79,8 @@ class LocaleCleanerPath:
         if isinstance(self.pattern, Pattern):
             return (os.path.join(basepath, p) for p in os.listdir(basepath)
                     if self.pattern.match(p) and os.path.isdir(os.path.join(basepath, p)))
-        else:
-            path = os.path.join(basepath, self.pattern)
-            return [path] if os.path.isdir(path) else []
+        path = os.path.join(basepath, self.pattern)
+        return [path] if os.path.isdir(path) else []
 
     def get_localizations(self, basepath):
         """Returns all localization items for this object and all descendant objects"""
@@ -428,13 +427,12 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
         wineprefix = None
         del execs[0]
         while True:
-            if 0 <= execs[0].find("="):
-                (name, value) = execs[0].split("=")
-                if 'WINEPREFIX' == name:
-                    wineprefix = value
-                del execs[0]
-            else:
+            if execs[0].find("=") < 0:
                 break
+            (name, value) = execs[0].split("=")
+            if name == 'WINEPREFIX':
+                wineprefix = value
+            del execs[0]
         if not FileUtilities.exe_exists(execs[0]):
             logger.info(
                 "is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)

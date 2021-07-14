@@ -169,7 +169,7 @@ class RecognizeCleanerML:
             (status, myhash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
                 changes.append([pathname, status, myhash])
-        if len(changes) > 0:
+        if changes:
             cleaner_change_dialog(changes, self.parent_window)
             for change in changes:
                 pathname = change[0]

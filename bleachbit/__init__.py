@@ -177,17 +177,15 @@ if not os.path.exists(app_menu_filename):
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
-else:
-    # system-wide installed locale
-    if sys.platform.startswith('linux') or sys.platform == 'darwin':
-        locale_dir = "/usr/share/locale/"
-    elif sys.platform == 'win32':
-        locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
-    elif sys.platform[:6] == 'netbsd':
-        locale_dir = "/usr/pkg/share/locale/"
-    elif (sys.platform.startswith('openbsd') or
-          sys.platform.startswith('freebsd')):
-        locale_dir = "/usr/local/share/locale/"
+# system-wide installed locale
+elif sys.platform.startswith("linux") or sys.platform == "darwin":
+    locale_dir = "/usr/share/locale/"
+elif sys.platform == "win32":
+    locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
+elif sys.platform[:6] == "netbsd":
+    locale_dir = "/usr/pkg/share/locale/"
+elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
+    locale_dir = "/usr/local/share/locale/"
 
 
 
@@ -272,14 +270,13 @@ GETTEXT_CONTEXT_GLUE = "\004"
 def pgettext(msgctxt, msgid):
     """A custom implementation of GNU pgettext().
     """
-    if msgctxt is not None and msgctxt != "":
-        translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
-        if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
-            return msgid
-        else:
-            return translation
-    else:
+    if msgctxt is None or msgctxt == "":
         return _(msgid)
+    translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
+    if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
+        return msgid
+    else:
+        return translation
 
 
 # Map our pgettext() custom function to _p()
@@ -312,7 +309,5 @@ if 'posix' == os.name:
         if not os.getenv(varname):
             os.environ[varname] = value
 
-if 'posix' == os.name:
-    fs_scan_re_flags = 0 # should be re.IGNORECASE on macOS
-else:
-    fs_scan_re_flags = re.IGNORECASE
+# should be re.IGNORECASE on macOS
+fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE

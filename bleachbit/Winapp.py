@@ -79,20 +79,19 @@ def detectos(required_ver, mock=False):
     # Do not compare as string because Windows 10 (build 10.0) comes after
     # Windows 8.1 (build 6.3).
     assert isinstance(required_ver, str)
-    current_os = (mock if mock else Windows.parse_windows_build())
+    current_os = mock or Windows.parse_windows_build()
     required_ver = required_ver.strip()
-    if '|' in required_ver:
-        # Format of min|max
-        req_min = required_ver.split('|')[0]
-        req_max = required_ver.split('|')[1]
-        if req_min and current_os < Windows.parse_windows_build(req_min):
-            return False
-        if req_max and current_os > Windows.parse_windows_build(req_max):
-            return False
-        return True
-    else:
+    if '|' not in required_ver:
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
+    # Format of min|max
+    req_min = required_ver.split('|')[0]
+    req_max = required_ver.split('|')[1]
+    if req_min and current_os < Windows.parse_windows_build(req_min):
+        return False
+    if req_max and current_os > Windows.parse_windows_build(req_max):
+        return False
+    return True
 
 
 def winapp_expand_vars(pathname):
@@ -310,6 +309,20 @@ class Winapp:
         self.cleaners[lid].add_option(
             section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
+            if (
+                option
+                in {
+                    "default",
+                    "langsecref",
+                    "section",
+                    "detectos",
+                    "specialdetect",
+                }
+                or re.match(self.re_detect, option)
+                or re.match(self.re_detectfile, option)
+                or re.match(self.re_excludekey, option)
+            ):
+                continue
             if option.startswith('filekey'):
                 self.handle_filekey(lid, section, option, excludekeys)
             elif option.startswith('regkey'):
@@ -317,11 +330,6 @@ class Winapp:
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
                     section2option(section), self.parser.get(section, 'warning'))
-            elif option in ('default', 'langsecref', 'section', 'detectos', 'specialdetect') \
-                    or re.match(self.re_detect, option) \
-                    or re.match(self.re_detectfile, option) \
-                    or re.match(self.re_excludekey, option):
-                pass
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)

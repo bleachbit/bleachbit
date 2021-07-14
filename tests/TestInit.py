@@ -47,7 +47,7 @@ class InitTestCase(common.BleachbitTestCase):
         # should be expanded
         if os.name == 'nt':
             test_inputs = ('~', r'~\ntuser.dat')
-        if os.name == 'posix':
+        elif os.name == 'posix':
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:
             test_output = os.path.expanduser(test_input)
