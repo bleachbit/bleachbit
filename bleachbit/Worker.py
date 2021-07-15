@@ -266,8 +266,7 @@ class Worker:
 
         # run deep scan
         if self.deepscans:
-            for dummy in self.run_deep_scan():
-                yield dummy
+            yield from self.run_deep_scan()
 
         # delayed operations
         for op in sorted(self.delayed_ops):

@@ -455,8 +455,7 @@ def get_recycle_bin():
         if os.path.isdir(path):
             # Return the contents of a normal directory, but do
             # not recurse Windows symlinks in the Recycle Bin.
-            for child in FileUtilities.children_in_directory(path, True):
-                yield child
+            yield from FileUtilities.children_in_directory(path, True)
         yield path
 
 

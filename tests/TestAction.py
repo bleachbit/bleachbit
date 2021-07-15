@@ -39,8 +39,7 @@ def _action_str_to_commands(action_str):
     dom = parseString(action_str)
     action_node = dom.childNodes[0]
     delete = Delete(action_node)
-    for cmd in delete.get_commands():
-        yield cmd
+    yield from delete.get_commands()
 
 
 def _action_str_to_results(action_str):

@@ -104,8 +104,7 @@ class Cleaner:
         """Get list of Command instances for option 'option_id'"""
         for action in self.actions:
             if option_id == action[0]:
-                for cmd in action[1].get_commands():
-                    yield cmd
+                yield from action[1].get_commands()
         if option_id not in self.options:
             raise RuntimeError("Unknown option '%s'" % option_id)
 
@@ -114,8 +113,7 @@ class Cleaner:
         for action in self.actions:
             if option_id == action[0]:
                 try:
-                    for ds in action[1].get_deep_scan():
-                        yield ds
+                    yield from action[1].get_deep_scan()
                 except StopIteration:
                     return
         if option_id not in self.options:
@@ -569,10 +567,9 @@ class System(Cleaner):
                 display = _("Overwrite free disk space %s") % pathname
 
                 def wipe_path_func():
-                    for ret in FileUtilities.wipe_path(pathname, idle=True):
-                        # Yield control to GTK idle because this process
-                        # is very slow.  Also display progress.
-                        yield ret
+                    # Yield control to GTK idle because this process
+                    # is very slow.  Also display progress.
+                    yield from FileUtilities.wipe_path(pathname, idle=True)
                     yield 0
                 yield Command.Function(None, wipe_path_func, display)
 
@@ -689,15 +686,13 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     # register CleanerML cleaners
     from bleachbit import CleanerML
     cb_progress(_('Loading native cleaners.'))
-    for ret in CleanerML.load_cleaners(cb_progress):
-        yield ret
+    yield from CleanerML.load_cleaners(cb_progress)
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
         cb_progress(_('Importing cleaners from Winapp2.ini.'))
         from bleachbit import Winapp
-        for ret in Winapp.load_cleaners(cb_progress):
-            yield ret
+        yield from Winapp.load_cleaners(cb_progress)
 
     cb_done()
 
@@ -742,8 +737,7 @@ def create_wipe_cleaner(path):
     display = _("Overwrite free disk space %s") % path
 
     def wipe_path_func():
-        for ret in FileUtilities.wipe_path(path, idle=True):
-            yield ret
+        yield from FileUtilities.wipe_path(path, idle=True)
         yield 0
 
     from bleachbit import Action

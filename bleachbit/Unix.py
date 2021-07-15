@@ -87,8 +87,7 @@ class LocaleCleanerPath:
         for path in self.get_subpaths(basepath):
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
-                    for res in child.get_localizations(path):
-                        yield res
+                    yield from child.get_localizations(path)
                 elif isinstance(child, Pattern):
                     for element in os.listdir(path):
                         match = child.match(element)
@@ -559,8 +558,7 @@ def rotated_logs():
                  '/var/log/*/*.old',
                  '/var/log/*.old')
     for globpath in globpaths:
-        for path in glob.iglob(globpath):
-            yield path
+        yield from glob.iglob(globpath)
     regex = '-[0-9]{8}$'
     globpaths = ('/var/log/*-*', '/var/log/*/*-*')
     for path in FileUtilities.globex(globpaths, regex):
