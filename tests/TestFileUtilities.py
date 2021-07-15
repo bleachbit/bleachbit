@@ -690,7 +690,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if 'posix' == os.name:
             dir1 = '/bin'
             dir2 = os.path.expanduser('/sbin')
-        if 'nt' == os.name:
+        elif 'nt' == os.name:
             dir1 = os.path.expandvars(r'%windir%\fonts')
             dir2 = os.path.expandvars(r'%windir%\logs')
         # If these directories do not exist, the test results are not valid.
@@ -719,7 +719,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
             self.assertFalse(same_partition(home, '/dev'))
-        if 'nt' == os.name:
+        elif 'nt' == os.name:
             home_drive = os.path.splitdrive(home)[0]
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():

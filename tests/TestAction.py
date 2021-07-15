@@ -146,7 +146,7 @@ class ActionTestCase(common.BleachbitTestCase):
             # Python 2.5 and later supports $foo
             paths.append('${USERPROFILE}')
             paths.append('$USERPROFILE')
-        if 'posix' == os.name:
+        elif 'posix' == os.name:
             paths.append('$HOME')
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):

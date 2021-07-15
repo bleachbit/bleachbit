@@ -364,11 +364,10 @@ class Bleachbit(Gtk.Application):
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if rc == 100:
-                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-                clipboard.set_text(txt, -1)
-            else:
+            if rc != 100:
                 break
+            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(txt, -1)
         dialog.destroy()
 
     def do_activate(self):
@@ -824,7 +823,7 @@ class GUI(Gtk.ApplicationWindow):
                     _('Access the application menu by clicking the hamburger icon on the title bar.'))
                 pref = self.get_preferences_dialog()
                 pref.run()
-            if os.name == 'nt':
+            elif os.name == 'nt':
                 self.append_text(
                     _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)

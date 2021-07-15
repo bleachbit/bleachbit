@@ -831,15 +831,14 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     if count_allocated > 0 and count_free == 0:
         return False
     if count_allocated > 0 or write_length > write_buf_size * 4:
-        if lcn_start < lcn_end:
-            for split_s, split_e in split_extent(lcn_start, lcn_end):
-                wipe_extent_by_defrag(volume_handle, split_s, split_e,
-                                      cluster_size, total_clusters,
-                                      tmp_file_path)
-            return True
-        else:
+        if lcn_start >= lcn_end:
             return False
 
+        for split_s, split_e in split_extent(lcn_start, lcn_end):
+            wipe_extent_by_defrag(volume_handle, split_s, split_e,
+                                  cluster_size, total_clusters,
+                                  tmp_file_path)
+        return True
     # Put the zero-fill file in place.
     file_handle = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE,
                              0, None, CREATE_ALWAYS,
@@ -869,14 +868,13 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                 # Break into smaller pieces and do what we can.
                 logger.debug("!! Move encountered an error !!")
                 CloseHandle(file_handle)
-                if lcn_start < lcn_end:
-                    for split_s, split_e in split_extent(lcn_start, lcn_end):
-                        wipe_extent_by_defrag(volume_handle, split_s, split_e,
-                                              cluster_size, total_clusters,
-                                              tmp_file_path)
-                    return True
-                else:
+                if lcn_start >= lcn_end:
                     return False
+                for split_s, split_e in split_extent(lcn_start, lcn_end):
+                    wipe_extent_by_defrag(volume_handle, split_s, split_e,
+                                          cluster_size, total_clusters,
+                                          tmp_file_path)
+                return True
         else:
             # If Windows put the zero-fill extent on the exact clusters we
             # intended to place it, no need to attempt a move.
