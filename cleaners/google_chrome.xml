@@ -119,7 +119,6 @@
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
@@ -183,5 +182,10 @@
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
+  </option>
+  <option id="site_preferences">
+    <label>Site preferences</label>
+    <description>Settings for individual sites</description>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
 </cleaner>
