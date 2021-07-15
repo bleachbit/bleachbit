@@ -176,7 +176,7 @@
   </option>
   <option id="site_preferences">
    <label>Site preferences</label>
-   <description>Shield settings and site permissions</description>
+   <description>Settings for individual sites</description>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
 </cleaner>
