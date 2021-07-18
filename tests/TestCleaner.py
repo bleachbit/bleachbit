@@ -44,8 +44,7 @@ def actions_to_cleaner(action_strs):
     """Given multiple action XML fragments, return one cleaner"""
 
     cleaner = Cleaner()
-    count = 1
-    for action_str in action_strs:
+    for count, action_str in enumerate(action_strs, start=1):
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
@@ -56,7 +55,6 @@ def actions_to_cleaner(action_strs):
         cleaner.add_action('option%d' % count, provider)
         cleaner.add_option('option%d' % count, 'name%d' %
                            count, 'description%d' % count)
-        count += 1
     return cleaner
 
 
