@@ -600,7 +600,21 @@ def copy_fonts_in_portable_app(auto_exit):
     ):
         windows_fonts_folder = get_known_folder_path('Fonts')
         os.makedirs(_GTK_FONTS_FOLDER, exist_ok=True)
-        for font in [_SEGOEUI, _TAHOMA]:
+        fonts_needed = [_SEGOEUI, _TAHOMA]
+        try:
+            import locale
+            lang_id = locale.getdefaultlocale()[0].split('_')
+        except Exeption as e:
+            logger.exception('cannot find lang_id')
+        else:
+            lang_id='??'
+        if lang_id == 'zh':
+            fonts_needed.append('msyh.ttc')
+            fonts_needed.append('msyhbd.ttc')
+        elif lang_id == 'ja':
+            fonts_needed.append('meiryo.ttc')
+            fonts_needed.append('meiryob.ttc')
+        for font in fonts_needed:
             gtk_font_path = os.path.join(_GTK_FONTS_FOLDER, font)
             if not os.path.exists(gtk_font_path):
                 shutil.copy(os.path.join(windows_fonts_folder, font), gtk_font_path)
