@@ -446,9 +446,9 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
-    Delete $INSTDIR\share\fonts\segoeui.ttf 
-    Delete $INSTDIR\share\fonts\tahoma.ttf
-    RMDir $INSTDIR\share\fonts
+    Delete /REBOOTOK $INSTDIR\share\fonts\segoeui.tt?
+    Delete /REBOOTOK $INSTDIR\share\fonts\tahoma.tt?
+    RMDir /REBOOTOK $INSTDIR\share\fonts
 
     Delete $INSTDIR\bleachbit.exe.log
 
