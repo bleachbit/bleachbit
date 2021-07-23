@@ -391,7 +391,7 @@ Section Translations
   NoChineseFont:
 
   ; Install Japanese fonts only if NSIS is in Chinese.
-  StrCmp $LANGUAGE ${LANG_TRADCHINESE} CopyJapaneseFont NoJapaneseFont
+  StrCmp $LANGUAGE ${LANG_JAPANESE} CopyJapaneseFont NoJapaneseFont
   CopyJapaneseFont:
   CopyFiles $WINDIR\Fonts\meiryo.tt? $INSTDIR\share\fonts
   CopyFiles $WINDIR\Fonts\meiryob.tt? $INSTDIR\share\fonts
