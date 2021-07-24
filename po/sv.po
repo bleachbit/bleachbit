@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-14 08:56+0000\n"
-"Last-Translator: JL <Unknown>\n"
+"PO-Revision-Date: 2021-07-21 17:32+0000\n"
+"Last-Translator: Reporter <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
-"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
+"X-Launchpad-Export-Date: 2021-07-24 03:48+0000\n"
+"X-Generator: Launchpad (build 20124175fa98fcb4b43973265a1561174418f4bd)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -225,7 +225,7 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Städa upp databasfragmentering för att minska utrymmesanvändning och öka "
+"Städa databasfragmentering för att minska utrymmesanvändning och öka "
 "hastigheten utan att ta bort någon data"
 
 #: ../cleaners/winrar.xml
@@ -610,7 +610,7 @@ msgstr "Systemjournaler"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "Rensa gamla systemjournaler"
+msgstr "Städa gamla systemjournaler"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Memory dump"
@@ -644,7 +644,7 @@ msgstr "Djupskanning"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Rensa filer som är utspridda över disken"
+msgstr "Städa filer som är utspridda över disken"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -807,7 +807,7 @@ msgstr "path=\"%s\" är inte ett globmönster"
 #: ../bleachbit/Action.py:517 ../bleachbit/Command.py:203
 #: ../bleachbit/Command.py:237
 msgid "Clean file"
-msgstr "Städa upp fil"
+msgstr "Städa fil"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -833,7 +833,7 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Fel i handle_cleaner_option() för rensar-id = {cleaner_id}, alternativ "
+"Fel i handle_cleaner_option() för städar-id = {cleaner_id}, alternativ "
 "XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
@@ -909,7 +909,7 @@ msgstr "Minne"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:305
 msgid "Wipe the swap and free memory"
-msgstr "Städa upp swappen och ofördelat minne"
+msgstr "Städa swappen och ofördelat minne"
 
 #: ../bleachbit/Cleaner.py:307
 msgid "This option is experimental and may cause system problems."
@@ -1067,7 +1067,7 @@ msgstr "uppdatera winapp2.ini om en ny version är tillgänglig"
 
 #: ../bleachbit/CLI.py:178
 msgid "wipe free space in the given paths"
-msgstr "rensa ledigt utrymme i de givna sökvägarna"
+msgstr "städa ledigt utrymme i de givna sökvägarna"
 
 #: ../bleachbit/CLI.py:180
 msgid "output version information and exit"
@@ -1096,11 +1096,11 @@ msgstr "Inga mappar givna för -- wipe-free-space"
 #: ../bleachbit/CLI.py:230
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Sökvägen som ska rensas måste vara en befintlig mapp: %s"
+msgstr "Sökvägen som ska städas måste vara en befintlig mapp: %s"
 
 #: ../bleachbit/CLI.py:232
 msgid "Wiping free space can take a long time."
-msgstr "Rensning av ledigt utrymme kan ta lång tid."
+msgstr "Städning av ledigt utrymme kan ta lång tid."
 
 #: ../bleachbit/CLI.py:243
 msgid "No work to do. Specify options."
@@ -1183,16 +1183,16 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:942
 #, python-format
 msgid "Wiping path: %s"
-msgstr "Rensar sökväg: %s"
+msgstr "Städar sökväg: %s"
 
 #: ../bleachbit/FileUtilities.py:952
 msgid "Creating new, temporary file for wiping free space."
-msgstr "Skapar ny, tillfällig fil för att rensa ledigt utrymme."
+msgstr "Skapar ny, tillfällig fil för att städa ledigt utrymme."
 
 #: ../bleachbit/FileUtilities.py:1008
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr "Fel #%d vid rensning av filbufferten."
+msgstr "Fel #%d vid städning av filbufferten."
 
 #: ../bleachbit/FileUtilities.py:1024
 msgid ""
@@ -1392,7 +1392,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:167
 msgid "Exit after cleaning"
-msgstr "Avsluta efter rensning"
+msgstr "Avsluta efter städning"
 
 #: ../bleachbit/GuiPreferences.py:173
 msgid "Confirm before delete"
@@ -1638,7 +1638,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:1011
 msgid "Clean files in the selected operations"
-msgstr "Rensa filer i de valda åtgärderna"
+msgstr "Städa filer i de valda åtgärderna"
 
 #: ../bleachbit/GUI.py:1019
 msgid "Abort"
@@ -1646,7 +1646,7 @@ msgstr "Avbryt"
 
 #: ../bleachbit/GUI.py:1021
 msgid "Abort the preview or cleaning process"
-msgstr "Avbryt förhandsgranskningen eller rensningsprocessen"
+msgstr "Avbryt förhandsgranskningen eller städningsprocessen"
 
 #: ../bleachbit/GUI.py:1228
 msgid "Error when checking for updates: "
@@ -1682,7 +1682,7 @@ msgstr "Släppa behörigheter för process-ID {pid} till användar-ID {uid}."
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr "Fördelar och rensar %s av minnet."
+msgstr "Fördelar och städar %s av minnet."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1705,7 +1705,7 @@ msgstr "Fysiskt ledigt minne är %s."
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr "Rensar swap-enheten %s."
+msgstr "Städar swap-enheten %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
@@ -1732,7 +1732,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr "Processen för att rensa underminnet returnerade koden %d."
+msgstr "Processen för att städa underminnet returnerade koden %d."
 
 #: ../bleachbit/Options.py:114
 #, python-format
@@ -1790,7 +1790,7 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s kan inte rensas eftersom den körs för närvarande. Stäng den och försök "
+"%s kan inte städas eftersom den körs för närvarande. Stäng den och försök "
 "igen."
 
 #: ../bleachbit/Update.py:74
@@ -1867,21 +1867,21 @@ msgstr "Fel: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Vänligen vänta. Rensar ledigt diskutrymme."
+msgstr "Vänligen vänta. Städar ledigt diskutrymme."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"Rensa ledigt utrymme på hårddisken tar bort rester av filer som tagits bort "
+"Städa ledigt utrymme på hårddisken tar bort rester av filer som tagits bort "
 "utan att de förstörts. Det frigör inte utrymme."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:340
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Vänligen vänta. Rensar %s."
+msgstr "Vänligen vänta. Städar %s."
 
 #: ../bleachbit/Worker.py:217
 #, python-format
@@ -1955,7 +1955,7 @@ msgstr "Förstör sökvägar från urklipp"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
-msgstr "_Rensa ledigt utrymme"
+msgstr "_Städa ledigt utrymme"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
