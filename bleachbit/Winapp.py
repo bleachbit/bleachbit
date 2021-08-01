@@ -39,8 +39,13 @@ logger = logging.getLogger(__name__)
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = {
+    '3001': ('winapp2_internet_explorer', 'Internet Explorer'),
+    '3002': ('winapp2_windows_explorer', 'Windows Explorer'),
+    '3003': ('winapp2_system', 'System'),
+    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+    '3004': ('winapp2_advanced', _('Advanced')),
     '3005': ('winapp2_edge_classic', 'Microsoft Edge'),
-    '3006': ('winapp2_edge_chromium', 'Microsoft Edge'),
+    '3006': ('winapp2_edge_chromium', 'Edge Chromium'),
     # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
     '3021': ('winapp2_applications', _('Applications')),
     # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -56,6 +61,13 @@ langsecref_map = {
     '3029': ('winapp2_google_chrome', 'Google Chrome'),
     '3030': ('winapp2_thunderbird', 'Thunderbird'),
     '3031': ('winapp2_windows_store', 'Windows Store'),
+    '3032': ('winapp2_ccleaner_browser', 'CCleaner Browser'),
+    '3033': ('winapp2_vivaldi', 'Vivaldi'),
+    '3034': ('winapp2_brave', 'Brave'),
+    '3035': ('winapp2_opera_gx', 'Opera GX'),
+    '3036': ('winapp2_spotify', 'Spotify'),
+    '3037': ('winapp2_avast_browser', 'Avast Secure Browser'),
+    '3038': ('winapp2_avg_browser', 'AVG Secure Browser'),
     # Section=Games (technically not langsecref)
     'Games': ('winapp2_games', _('Games'))}
 
