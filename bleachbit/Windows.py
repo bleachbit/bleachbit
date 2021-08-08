@@ -609,12 +609,12 @@ def copy_fonts_in_portable_app(auto_exit):
             logger.exception('cannot find lang_id')
         else:
             lang_id='??'
-        if lang_id == 'zh':
-            fonts_needed.append('msyh.ttc')
-            fonts_needed.append('msyhbd.ttc')
-        elif lang_id == 'ja':
-            fonts_needed.append('meiryo.ttc')
-            fonts_needed.append('meiryob.ttc')
+        extra_fonts={}
+        extra_fonts['kr'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
+        extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc']
+        extra_fonts['zh'] = ['msyh.ttc', 'msyhbd.ttc']
+        if lang_id in extra_fonts:
+            fonts_needed.extend(extra_fonts[lang_id])
         for font in fonts_needed:
             gtk_font_path = os.path.join(_GTK_FONTS_FOLDER, font)
             if not os.path.exists(gtk_font_path):
