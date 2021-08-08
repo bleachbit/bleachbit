@@ -608,14 +608,18 @@ def copy_fonts_in_portable_app(auto_exit):
         except Exeption as e:
             logger.exception('cannot find lang_id')
         else:
-            lang_id='??'
-        extra_fonts={}
+            lang_id = '??'
+        extra_fonts = {}
         extra_fonts['kr'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
         extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc']
         extra_fonts['zh'] = ['msyh.ttc', 'msyhbd.ttc']
         if lang_id in extra_fonts:
             fonts_needed.extend(extra_fonts[lang_id])
         for font in fonts_needed:
-            gtk_font_path = os.path.join(_GTK_FONTS_FOLDER, font)
-            if not os.path.exists(gtk_font_path):
-                shutil.copy(os.path.join(windows_fonts_folder, font), gtk_font_path)
+            target_font_fn = os.path.join(_GTK_FONTS_FOLDER, font)
+            src_font_fn = os.path.join(windows_fonts_folder, font)
+            if not os.path.exists(src_font_fn):
+                logger.error('the font file does not exist: %s', src_font_fn)
+            elif not os.path.exists(target_font_fn):
+                logger.debug('copying font file: %s', src_font_fn)
+                shutil.copy(src_font_fn, target_font_fn)
