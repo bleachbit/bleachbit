@@ -603,7 +603,8 @@ def copy_fonts_in_portable_app(auto_exit):
         fonts_needed = [_SEGOEUI, _TAHOMA]
         try:
             import locale
-            lang_id = locale.getdefaultlocale()[0].split('_')
+            lang_id = locale.getdefaultlocale()[0].split('_')[0]
+            logger.debug('detected lang_id=%s', lang_id)
         except Exeption as e:
             logger.exception('cannot find lang_id')
         else:
