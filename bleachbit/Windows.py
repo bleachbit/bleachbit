@@ -605,9 +605,13 @@ def symlink_or_copy(src, dst):
 
 
 def copy_fonts_in_portable_app(auto_exit):
-    # Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
-    # We do this here only for portable app as for the installed app we do it through the installer.
+    """
+    Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
+    We do this here only for portable app as for the installed app we do it through the installer.
 
+    This lists fonts that Microsoft provides:
+    https://docs.microsoft.com/en-us/typography/fonts/windows_10_font_list
+    """
     if (
         hasattr(sys, 'frozen') and
         bleachbit.portable_mode and
@@ -624,8 +628,9 @@ def copy_fonts_in_portable_app(auto_exit):
             lang_id = '??'
         logger.debug('detected lang_id=%s', lang_id)
         extra_fonts = {}
-        extra_fonts['kr'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
-        extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc']
+        extra_fonts['ko'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
+        extra_fonts['hi'] = ['mangal.ttf', 'mangalb.ttf']
+        extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc', 'msgothic.ttc']
         extra_fonts['zh'] = ['msyh.ttc', 'msyhbd.ttc']
         if lang_id in extra_fonts:
             fonts_needed.extend(extra_fonts[lang_id])
