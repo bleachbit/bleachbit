@@ -604,11 +604,10 @@ def copy_fonts_in_portable_app(auto_exit):
         try:
             import locale
             lang_id = locale.getdefaultlocale()[0].split('_')[0]
-            logger.debug('detected lang_id=%s', lang_id)
         except Exeption as e:
             logger.exception('cannot find lang_id')
-        else:
             lang_id = '??'
+        logger.debug('detected lang_id=%s', lang_id)
         extra_fonts = {}
         extra_fonts['kr'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
         extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc']
