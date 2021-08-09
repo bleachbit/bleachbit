@@ -477,7 +477,6 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running
 
@@ -600,7 +599,7 @@ def symlink_or_copy(src, dst):
     try:
         os.symlink(src, dst)
         logger.debug('linked %s to %s', src, dst)
-    except PermissionError as e:
+    except (PermissionError, OSError) as e:
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 
