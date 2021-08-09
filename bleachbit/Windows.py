@@ -589,13 +589,29 @@ def split_registry_key(full_key):
     return hive_map[k1], k2
 
 
+def symlink_or_copy(src, dst):
+    """Symlink with fallback to copy
+
+    Symlink is faster and uses virtually no storage, but it it requires administrator
+    privileges or Windows developer mode.
+
+    If symlink is not available, just copy the file.
+    """
+    try:
+        os.symlink(src, dst)
+        logger.debug('linked %s to %s', src, dst)
+    except PermissionError as e:
+        shutil.copy(src, dst)
+        logger.debug('copied %s to %s', src, dst)
+
+
 def copy_fonts_in_portable_app(auto_exit):
     # Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
     # We do this here only for portable app as for the installed app we do it through the installer.
 
     if (
         hasattr(sys, 'frozen') and
-        bleachbit.portable_mode  and
+        bleachbit.portable_mode and
         not auto_exit
     ):
         windows_fonts_folder = get_known_folder_path('Fonts')
@@ -615,10 +631,9 @@ def copy_fonts_in_portable_app(auto_exit):
         if lang_id in extra_fonts:
             fonts_needed.extend(extra_fonts[lang_id])
         for font in fonts_needed:
-            target_font_fn = os.path.join(_GTK_FONTS_FOLDER, font)
+            dst_font_fn = os.path.join(_GTK_FONTS_FOLDER, font)
             src_font_fn = os.path.join(windows_fonts_folder, font)
             if not os.path.exists(src_font_fn):
                 logger.error('the font file does not exist: %s', src_font_fn)
-            elif not os.path.exists(target_font_fn):
-                logger.debug('copying font file: %s', src_font_fn)
-                shutil.copy(src_font_fn, target_font_fn)
+            elif not os.path.exists(dst_font_fn):
+                symlink_or_copy(src_font_fn, dst_font_fn)
