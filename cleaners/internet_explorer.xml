@@ -138,6 +138,6 @@
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.bak"/>
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.txt"/>
     <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
-    <action command="delete" search="file" path="%WinDir%\system32\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
+    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
   </option>
 </cleaner>
