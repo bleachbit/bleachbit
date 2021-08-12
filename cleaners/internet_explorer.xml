@@ -110,13 +110,13 @@
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Temp\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\Cache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\TempState\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\History\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCookies\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\WebCache\"/>   
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\Cookies\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\History\"/>
-    <action command="delete" search="walk.all" path=$$System32$$\config\Systemprofile\Local Settings\Temporary Internet Files\"/> 
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\History\"/>
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCookies\"/>
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\AppData\Local\Microsoft\Windows\WebCache\"/>   
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\Cookies\"/>
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\History\"/>
+    <action command="delete" search="walk.all" path="$$System32$$\config\Systemprofile\Local Settings\Temporary Internet Files\"/> 
     <action command="winreg" path="HKCR\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\windows_ie_ac_001\Internet Explorer\DOMStorage"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\DOMStorage"/>
     <!-- Deletes Feeds Cache: -->
