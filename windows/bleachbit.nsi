@@ -386,16 +386,20 @@ Section Translations
   StrCmp $LANGUAGE ${LANG_TRADCHINESE} CopyChineseFont 0
   StrCmp $LANGUAGE ${LANG_SIMPCHINESE} CopyChineseFont NoChineseFont
   CopyChineseFont:
-  CopyFiles $WINDIR\Fonts\msyh.tt? $INSTDIR\share\fonts
-  CopyFiles $WINDIR\Fonts\msyhbd.tt? $INSTDIR\share\fonts
+  CopyFiles $WINDIR\Fonts\msyh*.ttc $INSTDIR\share\fonts
   NoChineseFont:
 
   ; Install Japanese fonts only if NSIS is in Chinese.
   StrCmp $LANGUAGE ${LANG_JAPANESE} CopyJapaneseFont NoJapaneseFont
   CopyJapaneseFont:
-  CopyFiles $WINDIR\Fonts\meiryo.tt? $INSTDIR\share\fonts
-  CopyFiles $WINDIR\Fonts\meiryob.tt? $INSTDIR\share\fonts
+  CopyFiles $WINDIR\Fonts\meiryo*.ttc $INSTDIR\share\fonts
   NoJapaneseFont:
+
+  ; Install Korean font only if NSIS is in Korean.
+  StrCmp $LANGUAGE ${LANG_KOREAN} CopyKoreanFont NoKoreanFont
+  CopyKoreanFont:
+  CopyFiles $WINDIR\Fonts\malgun*.ttf $INSTDIR\share\fonts
+  NoKoreanFont:
 
 SectionEnd
 !endif
