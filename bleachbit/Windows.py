@@ -223,6 +223,8 @@ def delete_updates():
     dirs += [os.path.expandvars(r'%windir%\ie7updates')]
     dirs += [os.path.expandvars(r'%windir%\ie8updates')]
     dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
+    # Windows 64-bit
+    dirs += [os.path.expandvars(r'%windir%\sysnative\catroot2')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
