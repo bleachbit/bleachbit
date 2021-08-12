@@ -434,7 +434,18 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
                 '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
-                '$windir\\system32\\wbem\\Logs\\*.log', )
+                '$windir\\system32\\wbem\\Logs\\*.log',
+                # Windows 64-bit
+                '$windir\\sysnative\\TZLog.log',
+                '$windir\\sysnative\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak',
+                '$windir\\sysnative\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt',
+                '$windir\\sysnative\\LogFiles\\AIT\\AitEventLog.etl.???',
+                '$windir\\sysnative\\LogFiles\\Firewall\\pfirewall.log*',
+                '$windir\\sysnative\\LogFiles\\Scm\\SCM.EVM*',
+                '$windir\\sysnative\\LogFiles\\WMI\\Terminal*.etl',
+                '$windir\\sysnative\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
+                '$windir\\sysnative\\wbem\\Logs\\*.lo_',
+                '$windir\\sysnative\\wbem\\Logs\\*.log', )
 
             for path in paths:
                 expanded = os.path.expandvars(path)
