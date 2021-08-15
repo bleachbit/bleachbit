@@ -243,8 +243,7 @@ class Winapp:
                 sep = '\\\\'
                 if path.endswith(sep):
                     sep = ''
-                regex = '%s%s%s' % (
-                    path, sep, files_regex)
+                regex = path + sep + files_regex
             regexes.append(regex)
 
         if len(regexes) == 1:
