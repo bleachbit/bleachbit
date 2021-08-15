@@ -239,8 +239,12 @@ class Winapp:
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
-                regex = os.path.join('%s', '%s') % (
-                    fnmatch_translate(expanded), files_regex)
+                path = fnmatch_translate(expanded)
+                sep = '\\\\'
+                if path.endswith(sep):
+                    sep = ''
+                regex = '%s%s%s' % (
+                    path, sep, files_regex)
             regexes.append(regex)
 
         if len(regexes) == 1:
