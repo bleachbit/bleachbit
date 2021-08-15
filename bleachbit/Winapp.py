@@ -365,8 +365,13 @@ class Winapp:
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            action_str = '<option command="delete" search="file" path="%s"/>' % \
-                         (xml_escape(dirname))
+            search = 'file'
+            type_str = ''
+            if dirname.find('*') > -1:
+                search = 'glob'
+                type_str = ' type="d"'
+            action_str = '<option command="delete" search="%s" path="%s"%s/>' % \
+                         (search, xml_escape(dirname), type_str)
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
