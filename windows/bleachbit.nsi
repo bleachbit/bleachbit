@@ -329,7 +329,6 @@ Section Core (Required)
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
-    CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
     # register uninstaller in Add/Remove Programs
     !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
