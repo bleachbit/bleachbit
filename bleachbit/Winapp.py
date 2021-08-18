@@ -133,10 +133,15 @@ def special_detect(code):
     return False
 
 
+def escape(matchobj):
+    return '[%s]' % matchobj.group(0)
+
+
 def fnmatch_translate(pattern):
-    """Same as the original without the end"""
-    import fnmatch
-    ret = fnmatch.translate(pattern)
+    """Same as the original without the end and escaping square brackets"""
+    import fnmatch, re
+    ret = re.sub('[][]', escape, pattern)
+    ret = fnmatch.translate(ret)
     if ret.endswith('$'):
         return ret[:-1]
     if ret.endswith(r'\Z(?ms)'):
@@ -365,11 +370,8 @@ class Winapp:
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            search = 'file'
-            if dirname.find('*') > -1:
-                search = 'glob'
-            action_str = '<option command="delete" search="%s" path="%s" type="d"/>' % \
-                         (search, xml_escape(dirname))
+            action_str = '<option command="delete" search="file" path="%s"/>' % \
+                         (xml_escape(dirname))
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
