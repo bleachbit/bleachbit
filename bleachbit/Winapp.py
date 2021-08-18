@@ -139,7 +139,7 @@ def escape(matchobj):
 
 def fnmatch_translate(pattern):
     """Same as the original without the end and escaping square brackets"""
-    import fnmatch, re
+    import fnmatch
     ret = re.sub('[][]', escape, pattern)
     ret = fnmatch.translate(ret)
     if ret.endswith('$'):
