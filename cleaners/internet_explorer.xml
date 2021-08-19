@@ -91,8 +91,10 @@
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatUACache\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompat*Cache\"/>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\INetCache\"/>
+    <action command="process" cmd="schtasks /end /tn \Microsoft\Windows\Wininet\CacheTask"/>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache\"/>
     <action command="delete" search="walk.top" path="$$IELocalAppData$$\WebCache.old\"/>
+    <action command="process" cmd="schtasks /run /tn \Microsoft\Windows\Wininet\CacheTask"/>
     <!-- Empty folder on the demo machine: (Tobias) -->
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Internet Explorer\iconcache\"/>
     <!-- Extras - making WinApp2.ini obsolete: -->
