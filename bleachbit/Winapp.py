@@ -240,7 +240,7 @@ class Winapp:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = '%s\\\\%s' % (
-                    fnmatch_translate(expanded), files_regex)
+                    fnmatch_translate(expanded).rstrip('\\\\'), files_regex)
             regexes.append(regex)
 
         if len(regexes) == 1:

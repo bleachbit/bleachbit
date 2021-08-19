@@ -355,8 +355,12 @@ class WinappTestCase(common.BleachbitTestCase):
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
              True, False, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
+             True, False, True),
             # delete / exclude patterns with different complexity
             ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
              True, False, True),
             ('FileKey1=%(d)s|*ete*.*\nExcludeKey1=PATH|%(d)s|*ete*.lo?',
              True, False, True),
@@ -372,6 +376,8 @@ class WinappTestCase(common.BleachbitTestCase):
              True, False, True),
             # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
+             True, True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
