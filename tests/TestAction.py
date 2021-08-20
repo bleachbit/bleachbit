@@ -482,7 +482,7 @@ if __name__ == '__main__':
             iterations = 1
             if 3 == len(sys.argv):
                 iterations = int(sys.argv[2])
-            for x in range(0, iterations):
+            for _x in range(0, iterations):
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis

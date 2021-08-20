@@ -83,7 +83,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             FileUtilities.delete(f)
         self.assertGreaterEqual(counter, 3, 'deleted %d' % counter)
         # now it should be empty
-        for f in get_recycle_bin():
+        for _f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
 
     def _test_link_helper(self, mklink_option, clear_recycle_bin):

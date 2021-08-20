@@ -258,7 +258,7 @@ class Worker:
             # the log.
 
             warnings.simplefilter('once')
-            for dummy in self.run_operations(self.operations):
+            for _dummy in self.run_operations(self.operations):
                 # yield to GTK+ idle loop
                 yield True
             for w in ws:
@@ -272,7 +272,7 @@ class Worker:
         for op in sorted(self.delayed_ops):
             operation = list(op[1].keys())[0]
             for option_id in list(op[1].values())[0]:
-                for ret in self.run_delayed_op(operation, option_id):
+                for _ret in self.run_delayed_op(operation, option_id):
                     # yield to GTK+ idle loop
                     yield True
 
@@ -325,7 +325,7 @@ class Worker:
             if True == cmd:
                 yield True
                 continue
-            for ret in self.execute(cmd, 'deepscan'):
+            for _ret in self.execute(cmd, 'deepscan'):
                 yield True
 
     def run_operations(self, my_operations):
@@ -342,7 +342,7 @@ class Worker:
             self.ui.update_progress_bar(msg)
             yield True  # show the progress bar message now
             try:
-                for dummy in self.clean_operation(operation):
+                for _dummy in self.clean_operation(operation):
                     yield True
             except:
                 self.print_exception(operation)

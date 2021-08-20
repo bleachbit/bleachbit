@@ -651,7 +651,7 @@ def is_dir_empty(dirname):
         else:
             # Python 3.6 added the context manager.
             with os.scandir(dirname) as it:
-                for entry in it:
+                for _entry in it:
                     return False
         return True
     # This method is slower, but it works with Python 3.4.
