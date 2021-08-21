@@ -133,14 +133,10 @@ def special_detect(code):
     return False
 
 
-def escape(matchobj):
-    return '[%s]' % matchobj.group(0)
-
-
 def fnmatch_translate(pattern):
     """Same as the original without the end and escaping square brackets"""
     import fnmatch
-    ret = re.sub('[][]', escape, pattern)
+    ret = re.sub('[][]', lambda m : '[%s]' % m.group(0), pattern)
     ret = fnmatch.translate(ret)
     if ret.endswith('$'):
         return ret[:-1]
