@@ -78,7 +78,7 @@ class ChaffTestCase(common.BleachbitTestCase):
         # ts = 2600 Magazine
         ts_path = os.path.join(models_dir, '2600_model.json.bz2')
 
-        for i in ('download', 'already downloaded'):
+        for _i in ('download', 'already downloaded'):
             ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
             self.assertTrue(ret)

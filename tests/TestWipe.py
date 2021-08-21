@@ -40,7 +40,7 @@ def create_disk_image(n_bytes):
     """Make blank file and return filename"""
     (fd, filename) = tempfile.mkstemp(
         suffix='disk-image', prefix='bleachbit-wipe-test')
-    for x in range(1, int(n_bytes / 1e5)):
+    for _x in range(1, int(n_bytes / 1e5)):
         os.write(fd, b'\x00' * 100000)
     os.close(fd)
     return filename
@@ -183,7 +183,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
 
         # really wipe
         print('wiping %s' % mountpoint)
-        for w in wipe_path(mountpoint):
+        for _w in wipe_path(mountpoint):
             pass
 
         # verify cleaning process freed all space it allocated
