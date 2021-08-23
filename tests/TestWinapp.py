@@ -456,7 +456,7 @@ class WinappTestCase(common.BleachbitTestCase):
              self.tempdir, True, ''),
             # Refer by glob to both a file and directory (which both start with `sub`).
             # This should affect only the directory.
-            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, '%s\\dir_c\\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' % self.tempdir, True, '%s\\dir_a\\subdir' % self.tempdir),
             # glob in middle of directory path with whole directory entry
             (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' % self.tempdir, False, '%s\\dir_c\\subdir' % self.tempdir),
             (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
