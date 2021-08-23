@@ -436,6 +436,65 @@ class WinappTestCase(common.BleachbitTestCase):
             # cleanup
             shutil.rmtree(dirname, True)
 
+    @common.skipUnlessWindows
+    def test_removeself(self):
+        """Test for the removeself option"""
+
+        # indexes for test
+        # position 0: FileKey statement
+        # position 1: whether the file `dir_c\subdir\foo.log` should exist after operation is complete
+        # position 2: path of top-folder which should have been deleted
+        tests = (
+            # Refer to directory directly (i.e., without a glob).
+            (r'FileKey1=%s\dir_c|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c' % self.tempdir),
+            # Refer to file that exists. This is invalid, so nothing happens.
+            (r'FileKey1=%s\dir_c\submarine_sandwich.log|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
+            (r'FileKey1=%s\dir_c\submarine*|*.*|REMOVESELF' % self.tempdir, True, ''),
+            # Refer to path that does not exist, so nothing happens.
+            (r'FileKey1=%s\dir_c\doesnotexist.log|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
+            # Refer by glob to both a file and directory (which both start with `sub`).
+            # This should affect only the directory.
+            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            # glob in middle of directory path with whole directory entry
+            (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
+            # glob at end of path
+            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' % self.tempdir, True, '')
+        )
+
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        for filekey, c_log_expected, top_log_expected in tests:
+            for letter in ('a', 'b', 'c'):
+                # Make three directories, each with a `foo.log` file.
+                fn = os.path.join(self.tempdir, 'dir_' +
+                                  letter, 'subdir', 'foo.log')
+                common.touch_file(fn)
+
+            # In dir_a, place a file one level up from `foo.log`.
+            # Notice the glob `dir_a\sub*` will match both a directory and file.
+            fn2 = os.path.join(self.tempdir, 'dir_a', 'submarine_sandwich.log')
+            common.touch_file(fn2)
+
+            cleaner = self.ini2cleaner(filekey)
+            self.assertExists(fn, filekey)
+            self.assertExists(fn2, filekey)
+            if top_log_expected != '':
+                self.assertExists(top_log_expected, filekey)
+            self.run_all(cleaner, True)
+            if c_log_expected:
+                self.assertExists(fn, filekey)
+            else:
+                self.assertNotExists(fn, filekey)
+            self.assertExists(fn2, filekey)
+            if top_log_expected != '':
+                self.assertNotExists(top_log_expected, filekey)
+
     def test_section2option(self):
         """Test for section2option()"""
         tests = (('  FOO2  ', 'foo2'),
