@@ -484,7 +484,7 @@ class WinappTestCase(common.BleachbitTestCase):
             cleaner = self.ini2cleaner(filekey)
             self.assertExists(fn, filekey)
             self.assertExists(fn2, filekey)
-            if top_log_expected != '':
+            if top_log_expected:
                 self.assertExists(top_log_expected, filekey)
             self.run_all(cleaner, True)
             if c_log_expected:
@@ -492,7 +492,7 @@ class WinappTestCase(common.BleachbitTestCase):
             else:
                 self.assertNotExists(fn, filekey)
             self.assertExists(fn2, filekey)
-            if top_log_expected != '':
+            if top_log_expected:
                 self.assertNotExists(top_log_expected, filekey)
 
     def test_section2option(self):
