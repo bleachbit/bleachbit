@@ -434,22 +434,31 @@ class WinappTestCase(common.BleachbitTestCase):
         # position 0: FileKey statement
         # position 1: whether the file `sub\foo.log` should exist after operation is complete
         # position 2: whether the file `sub\foo[1].log` should exist after operation is complete
+        # position 3: whether the file `sub[1]\foo.log` should exist after operation is complete
+        # position 4: whether the file `sub[1]\foo[1].log` should exist after operation is complete
 
         tests = (
             # delete files directly without exclusions
-            ('FileKey1=%(d)s\sub|foo.log', False, True),
-            ('FileKey1=%(d)s\sub|foo[1].log', True, False),
-            ('FileKey1=%(d)s\sub|foo*.log', False, False),
+            ('FileKey1=%(d)s\sub|foo.log', False, True, True, True),
+            ('FileKey1=%(d)s\sub|foo[1].log', True, False, True, True),
+            ('FileKey1=%(d)s\sub[1]|foo.log', True, True, False, True),
+            ('FileKey1=%(d)s\sub[1]|foo[1].log', True, True, True, False),
+            ('FileKey1=%(d)s\sub|foo*.log', False, False, True, True),
+            ('FileKey1=%(d)s\sub*|foo*.log', False, False, False, False),
             # delete files recursively without exclusions
-            ('FileKey1=%(d)s|*.log|RECURSE', False, False),
-            ('FileKey1=%(d)s|*.*|RECURSE', False, False),
+            ('FileKey1=%(d)s|*.log|RECURSE', False, False, False, False),
+            ('FileKey1=%(d)s|*.*|RECURSE', False, False, False, False),
             # exclude specific file
-            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub|foo.log', True, False),
-            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub|foo[1].log', False, True),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub|foo.log', True, False, False, False),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub|foo[1].log', False, True, False, False),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub[1]|foo.log', False, False, True, False),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=FILE|%(d)s\sub[1]|foo[1].log', False, False, False, True),
             # exclude everything in folder
-            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub|*.*', True, True),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub|*.*', True, True, False, False),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub[1]|*.*', False, False, True, True),
             # exclude sub-folder
-            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub', True, True),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub', True, True, False, False),
+            ('FileKey1=%(d)s|*.log|RECURSE\nExcludeKey1=PATH|%(d)s\sub[1]', False, False, True, True),
         )
 
         for test in tests:
@@ -457,16 +466,24 @@ class WinappTestCase(common.BleachbitTestCase):
             # setup
             fn1 = os.path.join(dirname, 'sub', 'foo.log')
             fn2 = os.path.join(dirname, 'sub', 'foo[1].log')
+            fn3 = os.path.join(dirname, 'sub[1]', 'foo.log')
+            fn4 = os.path.join(dirname, 'sub[1]', 'foo[1].log')
             common.touch_file(fn1)
             common.touch_file(fn2)
+            common.touch_file(fn3)
+            common.touch_file(fn4)
             self.assertExists(r'%s\sub\foo.log' % dirname, msg)
             self.assertExists(r'%s\sub\foo[1].log' % dirname, msg)
+            self.assertExists(r'%s\sub[1]\foo.log' % dirname, msg)
+            self.assertExists(r'%s\sub[1]\foo[1].log' % dirname, msg)
             # delete files
             cleaner = self.ini2cleaner(test[0] % {'d': dirname})
             self.run_all(cleaner, True)
             # tests
             self.assertCondExists(test[1], r'%s\sub\foo.log' % dirname, msg)
             self.assertCondExists(test[2], r'%s\sub\foo[1].log' % dirname, msg)
+            self.assertCondExists(test[3], r'%s\sub[1]\foo.log' % dirname, msg)
+            self.assertCondExists(test[4], r'%s\sub[1]\foo[1].log' % dirname, msg)
             # cleanup
             shutil.rmtree(dirname, True)
 
