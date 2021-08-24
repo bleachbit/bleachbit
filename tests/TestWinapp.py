@@ -430,7 +430,7 @@ class WinappTestCase(common.BleachbitTestCase):
             # cleanup
             shutil.rmtree(dirname, True)
             
-        # indices for ExcludeKey tests when filename (*not* the path) includes square brackets
+        # indices for tests when the ExcludeKey includes square brackets
         # position 0: FileKey statement
         # position 1: whether the file `sub\foo.log` should exist after operation is complete
         # position 2: whether the file `sub\foo[1].log` should exist after operation is complete
