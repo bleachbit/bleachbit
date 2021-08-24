@@ -435,7 +435,7 @@ class WinappTestCase(common.BleachbitTestCase):
 
             # cleanup
             shutil.rmtree(dirname, True)
-            
+
     @common.skipUnlessWindows
     def test_removeself(self):
         """Test for the removeself option"""
