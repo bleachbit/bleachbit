@@ -456,7 +456,7 @@ class WinappTestCase(common.BleachbitTestCase):
              self.tempdir, True, ''),
             # Refer by glob to both a file and directory (which both start with `sub`).
             # This should affect only the directory.
-            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_a\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' % self.tempdir, True, r'%s\dir_a\subdir' % self.tempdir),
             # glob in middle of directory path with whole directory entry
             (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
             (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
@@ -484,6 +484,8 @@ class WinappTestCase(common.BleachbitTestCase):
             cleaner = self.ini2cleaner(filekey)
             self.assertExists(fn, filekey)
             self.assertExists(fn2, filekey)
+            if top_log_expected:
+                self.assertExists(top_log_expected, filekey)
             self.run_all(cleaner, True)
             if c_log_expected:
                 self.assertExists(fn, filekey)
@@ -492,6 +494,8 @@ class WinappTestCase(common.BleachbitTestCase):
             if top_log_expected != '':
                 self.assertNotExists(top_log_expected, filekey)
             self.assertExists(fn2, filekey)
+            if top_log_expected:
+                self.assertNotExists(top_log_expected, filekey)
 
     def test_section2option(self):
         """Test for section2option()"""
