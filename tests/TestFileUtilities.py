@@ -123,7 +123,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # test one-way conversion for predefined values
         # each test is a tuple in the format: (bytes, SI, EIC)
         tests = ((-1, '-1B', '-1B'),
-                 (0, '0', '0B'),
+                 (0, '0B', '0B'),
                  (1, '1B', '1B'),
                  (1000, '1kB', '1000B'),
                  (1024, '1kB', '1KiB'),
