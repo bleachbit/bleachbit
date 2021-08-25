@@ -464,6 +464,7 @@ class WinappTestCase(common.BleachbitTestCase):
         for test in tests:
             msg = '\nTest:\n%s' % test[0]
             # setup
+            dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp')
             fn1 = os.path.join(dirname, 'sub', 'foo.log')
             fn2 = os.path.join(dirname, 'sub', 'foo[1].log')
             common.touch_file(fn1)
