@@ -491,6 +491,8 @@ class WinappTestCase(common.BleachbitTestCase):
                 self.assertExists(fn, filekey)
             else:
                 self.assertNotExists(fn, filekey)
+            if top_log_expected != '':
+                self.assertNotExists(top_log_expected, filekey)
             self.assertExists(fn2, filekey)
             if top_log_expected:
                 self.assertNotExists(top_log_expected, filekey)

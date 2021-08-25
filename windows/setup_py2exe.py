@@ -154,7 +154,7 @@ def sign_code(filename):
 def get_dir_size(start_path='.'):
     # http://stackoverflow.com/questions/1392413/calculating-a-directory-size-using-python
     total_size = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):
+    for dirpath, _dirnames, filenames in os.walk(start_path):
         for f in filenames:
             fp = os.path.join(dirpath, f)
             total_size += os.path.getsize(fp)
