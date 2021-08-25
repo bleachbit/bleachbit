@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-08-16 00:21+0000\n"
+"PO-Revision-Date: 2021-08-21 10:59+0000\n"
 "Last-Translator: Toni Estevez <toni.estevez@gmail.com>\n"
 "Language-Team: Spanish <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-08-17 03:40+0000\n"
-"X-Generator: Launchpad (build b08a7ac7ee9dae6cca70a44dbdbee2a2b52e9053)\n"
+"X-Launchpad-Export-Date: 2021-08-25 01:52+0000\n"
+"X-Generator: Launchpad (build 7edb2d45353e030166106ae05838b77ab406edcd)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -81,7 +81,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Eliminar las cookies, que contienen información como las preferencias del "
+"Eliminar las cookies, que contienen información como las preferencias de los "
 "sitio web, la autenticación y la identificación de rastreo"
 
 #. DOM=Document Object Model
@@ -133,7 +133,7 @@ msgstr "Historial"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Eliminar el historial que incluye los sitios visitados, las descargas y las "
+"Eliminar el historial, que incluye los sitios visitados, las descargas y las "
 "miniaturas"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -476,7 +476,7 @@ msgstr "Informes de error"
 #: ../cleaners/internet_explorer.xml
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
-"Historial de los formularios completados en sitios web y en la barra de "
+"Historial de los formularios completados en los sitios web y en la barra de "
 "búsqueda"
 
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -488,7 +488,7 @@ msgstr "Restaurar la sesión"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr ""
-"Cargar la sesión inicial después de que el navegador se cierre o termine "
+"Cargar la sesión inicial después de que se cierre el navegador o termine "
 "inesperadamente"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -613,11 +613,11 @@ msgstr "Reproductor multimedia"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr "Registros de transacciones"
+msgstr "Registros del sistema"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "Limpiar los registros  de transacciones antiguos"
+msgstr "Limpiar los registros  del sistema antiguos"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Memory dump"
@@ -1146,8 +1146,8 @@ msgid ""
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
 "Al menos un archivo ha sido bloqueado por otro proceso, por lo que su "
-"contenido no se puede sobrescribir. Se marcará para su eliminación al "
-"reiniciar el sistema."
+"contenido no se puede sobrescribir. Se marcará eliminarlo al reiniciar el "
+"sistema."
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1728,7 +1728,8 @@ msgstr "Configurando el valor de prioridad %d para este proceso."
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
-"Eliminando privilegios del proceso con ID {pid} para el usuario con ID {uid}."
+"Eliminando los privilegios del proceso con ID {pid} para el usuario con ID "
+"{uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1912,7 +1913,7 @@ msgstr "Importado de winapp2.ini"
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Error al ejecutar la operación de «%(operation)s»: «%(msg)s»"
+msgstr "Error al ejecutar la operación «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
@@ -1930,7 +1931,7 @@ msgid ""
 "shredding. It does not free up space."
 msgstr ""
 "La limpieza del espacio libre en el disco borra los restos de los archivos "
-"que se eliminaron sin destruirlos. No libera espacio de disco."
+"que se han eliminado sin destruirlos. No libera espacio de disco."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:340
