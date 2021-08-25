@@ -194,7 +194,7 @@ def bytes_to_human(bytes_i):
     assert(isinstance(bytes_i, int))
 
     if 0 == bytes_i:
-        return "0"
+        return '0B'
 
     if bytes_i >= base ** 3:
         decimals = 2
