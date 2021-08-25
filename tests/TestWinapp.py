@@ -430,6 +430,15 @@ class WinappTestCase(common.BleachbitTestCase):
             # cleanup
             shutil.rmtree(dirname, True)
             
+    @common.skipUnlessWindows
+    def test_excludekey_square_brackets(self):
+        """Test for ExcludeKey with square brackets"""
+
+        # reuse this path to store a winapp2.ini file in
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)           
+            
         # indices for tests when the ExcludeKey includes square brackets
         # position 0: FileKey statement
         # position 1: whether the file `sub\foo.log` should exist after operation is complete
