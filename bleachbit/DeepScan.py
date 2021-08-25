@@ -106,7 +106,7 @@ class DeepScan:
             for s in searches:
                 compiled_searches.append(CompiledSearch(s))
 
-            for (dirpath, dirnames, filenames) in normalized_walk(top):
+            for (dirpath, _dirnames, filenames) in normalized_walk(top):
                 for c in compiled_searches:
                     # fixme, don't match filename twice
                     for filename in filenames:

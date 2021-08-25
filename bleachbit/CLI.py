@@ -63,7 +63,7 @@ def cleaners_list():
     list(register_cleaners())
     for key in sorted(backends):
         c_id = backends[key].get_id()
-        for (o_id, o_name) in backends[key].get_options():
+        for (o_id, _o_name) in backends[key].get_options():
             yield "%s.%s" % (c_id, o_id)
 
 
@@ -92,7 +92,7 @@ def args_to_operations_list(preset, all_but_warning):
     assert(len(backends) > 1)
     for key in sorted(backends):
         c_id = backends[key].get_id()
-        for (o_id, o_name) in backends[key].get_options():
+        for (o_id, _o_name) in backends[key].get_options():
             # restore presets from the GUI
             if preset and Options.options.get_tree(c_id, o_id):
                 args.append('.'.join([c_id, o_id]))
@@ -118,7 +118,7 @@ def args_to_operations(args, preset, all_but_warning):
             if cleaner_id in operations:
                 del operations[cleaner_id]
             operations[cleaner_id] = []
-            for (option_id2, o_name) in backends[cleaner_id].get_options():
+            for (option_id2, _o_name) in backends[cleaner_id].get_options():
                 operations[cleaner_id].append(option_id2)
             continue
         # add the specified option
@@ -233,7 +233,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         for wipe_path in args:
             logger.info('Wiping free space in path: %s', wipe_path)
             import bleachbit.FileUtilities
-            for ret in bleachbit.FileUtilities.wipe_path(wipe_path):
+            for _ret in bleachbit.FileUtilities.wipe_path(wipe_path):
                 pass
         sys.exit(0)
     if options.preview or options.clean:

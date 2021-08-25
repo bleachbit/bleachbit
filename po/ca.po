@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-08-16 00:23+0000\n"
+"PO-Revision-Date: 2021-08-21 10:56+0000\n"
 "Last-Translator: Toni Estevez <toni.estevez@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-08-17 03:04+0000\n"
-"X-Generator: Launchpad (build b08a7ac7ee9dae6cca70a44dbdbee2a2b52e9053)\n"
+"X-Launchpad-Export-Date: 2021-08-25 01:52+0000\n"
+"X-Generator: Launchpad (build 7edb2d45353e030166106ae05838b77ab406edcd)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -475,7 +475,7 @@ msgstr "Informes de fallades inesperades"
 #: ../cleaners/internet_explorer.xml
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
-"Historial dels formularis emplenats a llocs web i a la barra de cerca"
+"Historial dels formularis emplenats als llocs web i a la barra de cerca"
 
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -486,7 +486,7 @@ msgstr "Restaura la sessió"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr ""
-"Carrega la sessió inicial després que el navegador es tanqui o finalitzi "
+"Carrega la sessió inicial després que es tanqui el navegador o finalitzi "
 "inesperadament"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -749,7 +749,7 @@ msgid ""
 "list autoremove\"."
 msgstr ""
 "Comproveu amb cura la llista de paquets que se suprimiran executant «dnf "
-"list autoremove»"
+"list autoremove»."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -1086,7 +1086,7 @@ msgstr "mostra la informació de la versió i surt"
 
 #: ../bleachbit/CLI.py:182
 msgid "overwrite files to hide contents"
-msgstr "sobreescriu els fitxers per amagar-ne el contengut"
+msgstr "sobreescriu els fitxers per amagar-ne el contingut"
 
 #: ../bleachbit/CLI.py:190
 msgid ""
@@ -1492,11 +1492,11 @@ msgstr "Carpeta"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "Theses paths will not be deleted or modified."
-msgstr "No es modificaran ni se suprimiran aquests camins."
+msgstr "Aquests camins no es modificaran ni se suprimiran."
 
 #: ../bleachbit/GuiPreferences.py:445
 msgid "These locations can be selected for deletion."
-msgstr "Aquestes ubicacions es poden seleccionar per eliminar-les."
+msgstr "Es poden seleccionar aquestes ubicacions per eliminar-les."
 
 #: ../bleachbit/GuiPreferences.py:453
 msgid "Type"
@@ -1874,7 +1874,7 @@ msgstr "Importats des del winapp2.ini"
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Error en executar l'operació del «%(operation)s»: «%(msg)s»"
+msgstr "Error en executar l'operació «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
@@ -1891,8 +1891,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"La neteja de l'espai lliure al disc esborra les restes dels fitxers que es "
-"van suprimir sense triturar-los. No allibera espai del disc."
+"La neteja de l'espai lliure al disc esborra les restes dels fitxers que "
+"s'han suprimit sense triturar-los. No allibera espai del disc."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:340

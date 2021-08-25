@@ -260,7 +260,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         common.touch_file(obexd_fn)
         found_canary = False
         for cmd in backends['system'].get_commands('cache'):
-            for result in cmd.execute(really_delete=False):
+            for _result in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)
                 self.assertFalse('/.cache/obexd/' in cmd.path)
         from bleachbit.FileUtilities import delete

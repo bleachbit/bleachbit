@@ -194,7 +194,7 @@ def bytes_to_human(bytes_i):
     assert(isinstance(bytes_i, int))
 
     if 0 == bytes_i:
-        return "0"
+        return '0B'
 
     if bytes_i >= base ** 3:
         decimals = 2
@@ -651,7 +651,7 @@ def is_dir_empty(dirname):
         else:
             # Python 3.6 added the context manager.
             with os.scandir(dirname) as it:
-                for entry in it:
+                for _entry in it:
                     return False
         return True
     # This method is slower, but it works with Python 3.4.

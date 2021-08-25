@@ -94,7 +94,7 @@ def _generate_delete_expressions(file_names, folder_path):
 
 
 def _walk_with_parent_directory_and_filepaths(directory_to_walk, directory_to_separate=None, parent_directory=None):
-    for root, dirs, files in os.walk(directory_to_walk):
+    for root, _dirs, files in os.walk(directory_to_walk):
         if directory_to_separate is not None and root.startswith(directory_to_separate):
             continue
         filepaths = [os.path.join(root, file) for file in files]

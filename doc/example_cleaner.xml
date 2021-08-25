@@ -87,7 +87,7 @@
 
          The following action truncates any file that ends with log.
          -->
-    <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="d"/>
+    <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="f"/>
     <!-- command=sqlite.vacuum defragments an SQLite 3 database -->
     <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
     <!-- command="winreg" without the attribute 'name' deletes

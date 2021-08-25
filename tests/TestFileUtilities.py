@@ -123,7 +123,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # test one-way conversion for predefined values
         # each test is a tuple in the format: (bytes, SI, EIC)
         tests = ((-1, '-1B', '-1B'),
-                 (0, '0', '0'),
+                 (0, '0B', '0B'),
                  (1, '1B', '1B'),
                  (1000, '1kB', '1000B'),
                  (1024, '1kB', '1KiB'),
@@ -153,7 +153,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # test roundtrip conversion for random values
         import random
-        for n in range(0, 1000):
+        for _n in range(0, 1000):
             bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
@@ -849,7 +849,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         options.set_whitelist_paths(whitelist)
 
         t0 = time.time()
-        for i in range(0, reps):
+        for _i in range(0, reps):
             for p in paths:
                 _ = whitelisted(p)
         t1 = time.time()
@@ -940,7 +940,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
 
-        for ret in wipe_path(self.tempdir):
+        for _ret in wipe_path(self.tempdir):
             # no idle handler
             pass
 
