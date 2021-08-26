@@ -100,9 +100,8 @@ def winapp_expand_vars(pathname):
     expand1 = os.path.expandvars(pathname)
     # Translates System32 to Sysnative on 64-bit OS    
     if os.getenv('ProgramW6432'):
-        pattern = re.compile(r'\\Windows\\System32', flags=re.IGNORECASE)
-        if pattern.match(expand1):
-            return pattern.sub(r'\Windows\Sysnative', expand1),
+        if re.match(r'[A-Z]:\\Windows\\System32', expand1, flags=re.IGNORECASE):
+            return re.sub(r':\\Windows\\System32', r':\\Windows\\Sysnative', expand1, flags=re.IGNORECASE),
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
