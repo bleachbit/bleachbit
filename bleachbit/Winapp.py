@@ -99,7 +99,7 @@ def winapp_expand_vars(pathname):
     # This is the regular expansion
     expand1 = os.path.expandvars(pathname)
     # Translates System32 to Sysnative on 64-bit OS    
-    if true:
+    if True:
         pattern = re.compile(r':\\Windows\\System32', flags=re.IGNORECASE)
         if pattern.match(expand1):
             return pattern.sub(r':\Windows\Sysnative', expand1),
