@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = {
+    '3001': ('winapp2_internet_explorer', 'Internet Explorer'),
     '3005': ('winapp2_edge_classic', 'Microsoft Edge'),
     '3006': ('winapp2_edge_chromium', 'Microsoft Edge'),
     # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -56,6 +57,8 @@ langsecref_map = {
     '3029': ('winapp2_google_chrome', 'Google Chrome'),
     '3030': ('winapp2_thunderbird', 'Thunderbird'),
     '3031': ('winapp2_windows_store', 'Windows Store'),
+    '3033': ('winapp2_vivaldi', 'Vivaldi'),
+    '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
     'Games': ('winapp2_games', _('Games'))}
 
