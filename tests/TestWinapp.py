@@ -65,6 +65,20 @@ def get_winapp2():
     return fname
 
 
+def wow64_helper(path1, path2, testpath):
+    """test_detect_file helper function"""
+    dir1 = os.listdir(os.path.expandvars(path1))
+    dir2 = os.listdir(os.path.expandvars(path2))
+    dir_unique = set(dir2) - set(dir1)
+    if dir2 and not dir_unique:
+        raise RuntimeError(
+            'Test expects objects in {} not in {}'.format(path2, path1))
+    tests = []
+    for pathname in dir_unique:
+        tests.append(('{}\\{}'.format(testpath, pathname), True))
+    return tests 
+
+
 class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
 
@@ -122,19 +136,6 @@ class WinappTestCase(common.BleachbitTestCase):
                              'detectos(%s, %s)==%s instead of %s' % (req, mock,
                                                                      actual_return, expected_return))
 
-    def wow64_helper(path1, path2, testpath):
-        """test_detect_file helper function"""
-        dir1 = os.listdir(os.path.expandvars(path1))
-        dir2 = os.listdir(os.path.expandvars(path2))
-        dir_unique = set(dir2) - set(dir1)
-        if dir2 and not dir_unique:
-            raise RuntimeError(
-                'Test expects objects in {} not in {}'.format(path2, path1))
-        tests = []
-        for pathname in dir_unique:
-            tests.append(('{}\\{}'.format(testpath, pathname), True))
-        return tests 
-            
     @common.skipUnlessWindows
     def test_detect_file(self):
         """Test detect_file function"""
@@ -153,10 +154,10 @@ class WinappTestCase(common.BleachbitTestCase):
             # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
             # variable to also %ProgramW6432%, so test unique entries in
             # %ProgramW6432%.
-            tests.extend(wow64_helper('%ProgramFiles%', '%ProgramW6432%', '%%ProgramFiles%%'))
+            tests += wow64_helper('%ProgramFiles%', '%ProgramW6432%', '%%ProgramFiles%%')
             # On 64-bit Windows BleachBit translates %WinDir%\System32 to %WindDir%\Sysnative,
             # so that 64-bit system files can be cleaned.
-            tests.extend(wow64_helper('%WinDir%\\SysWOW64', '%WinDir%\\Sysnative', '%WinDir%\\System32'))
+            tests += wow64_helper('%WinDir%\\SysWOW64', '%WinDir%\\Sysnative', '%WinDir%\\System32')
         else:
             logger.info(
                 'skipping %ProgramW6432% and %WinDir%\Sysnative tests because WoW64 not detected')
