@@ -122,6 +122,19 @@ class WinappTestCase(common.BleachbitTestCase):
                              'detectos(%s, %s)==%s instead of %s' % (req, mock,
                                                                      actual_return, expected_return))
 
+    def wow64_helper(path1, path2, testpath):
+        """test_detect_file helper function"""
+        dir1 = os.listdir(os.path.expandvars(path1))
+        dir2 = os.listdir(os.path.expandvars(path2))
+        dir_unique = set(dir2) - set(dir1)
+        if dir2 and not dir_unique:
+            raise RuntimeError(
+                'Test expects objects in {} not in {}'.format(path2, path1))
+        tests = []
+        for pathname in dir_unique:
+            tests.append(('{}\\{}'.format(testpath, pathname), True))
+        return tests 
+            
     @common.skipUnlessWindows
     def test_detect_file(self):
         """Test detect_file function"""
@@ -133,24 +146,20 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('%windir%\\system*', True),
                  ('%windir%\\*ystem32', True),
                  ('%windir%\\*ystem3*', True)]
-        # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
-        # variable to also %ProgramW6432%, so test unique entries in
-        # %ProgramW6432%.
         import struct
         if 8 * struct.calcsize('P') != 32:
             raise NotImplementedError('expecting 32-bit Python')
         if os.getenv('ProgramW6432'):
-            dir_64 = os.listdir(os.getenv('ProgramFiles'))
-            dir_32 = os.listdir(os.getenv('ProgramW6432'))
-            dir_32_unique = set(dir_32) - set(dir_64)
-            if dir_32 and not dir_32_unique:
-                raise RuntimeError(
-                    'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
-            for pathname in dir_32_unique:
-                tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
+            # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
+            # variable to also %ProgramW6432%, so test unique entries in
+            # %ProgramW6432%.
+            tests = tests + wow64_helper('%ProgramFiles%', '%ProgramW6432%', '%%ProgramFiles%%')
+            # On 64-bit Windows BleachBit translates %WinDir%\System32 to %WindDir%\Sysnative,
+            # so that 64-bit system files can be cleaned.
+            tests = tests + wow64_helper('%WinDir%\\SysWOW64', '%WinDir%\\Sysnative', '%WinDir%\\System32')
         else:
             logger.info(
-                'skipping %ProgramW6432% tests because WoW64 not detected')
+                'skipping %ProgramW6432% and %WinDir%\Sysnative tests because WoW64 not detected')
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
             msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
