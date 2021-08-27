@@ -154,7 +154,7 @@ class WinappTestCase(common.BleachbitTestCase):
             # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
             # variable to also %ProgramW6432%, so test unique entries in
             # %ProgramW6432%.
-            tests += wow64_helper('%ProgramFiles%', '%ProgramW6432%', '%%ProgramFiles%%')
+            tests += wow64_helper('%ProgramFiles%', '%ProgramW6432%', '%ProgramFiles%')
             # On 64-bit Windows BleachBit translates %WinDir%\System32 to %WindDir%\Sysnative,
             # so that 64-bit system files can be cleaned.
             tests += wow64_helper('%WinDir%\\SysWOW64', '%WinDir%\\Sysnative', '%WinDir%\\System32')
