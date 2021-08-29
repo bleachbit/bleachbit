@@ -556,6 +556,10 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
+        if os.name == 'nt' and options.get('first_start'):
+            self._splash_thread = Windows.SplashThread(target=Windows.show_splash_screen)
+            self._splash_thread.start()
+
         self._auto_exit = auto_exit
 
         self.set_wmclass(APP_NAME, APP_NAME)
@@ -1077,6 +1081,9 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_show(self, widget):
+        if os.name == 'nt' and options.get('first_start'):
+            self._splash_thread.join(0)
+
         # restore window position, size and state
         if not options.get('remember_geometry'):
             return
