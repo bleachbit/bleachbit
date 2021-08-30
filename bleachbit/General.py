@@ -45,10 +45,9 @@ def boolstr_to_bool(value):
 def getText(nodelist):
     """Return the text data in an XML node
     http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = ""
-    for node in nodelist:
-        if node.nodeType == node.TEXT_NODE:
-            rc = rc + node.data
+    rc = "".join(
+        node.data for node in nodelist if node.nodeType == node.TEXT_NODE
+    )
     return rc
 
 
@@ -142,8 +141,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         # https://github.com/bleachbit/bleachbit/issues/167
         # https://github.com/bleachbit/bleachbit/issues/168
         keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR', 'BLEACHBIT_TEST_OPTIONS_DIR')
-        env = dict((key, value)
-                   for key, value in os.environ.items() if key in keep_env)
+        env = {key: value for key, value in os.environ.items() if key in keep_env}
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
     p = subprocess.Popen(args, stdout=stdout,

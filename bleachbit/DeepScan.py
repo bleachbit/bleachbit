@@ -102,10 +102,7 @@ class DeepScan:
         yield_time = time.time()
 
         for (top, searches) in self.searches.items():
-            compiled_searches = []
-            for s in searches:
-                compiled_searches.append(CompiledSearch(s))
-
+            compiled_searches = [CompiledSearch(s) for s in searches]
             for (dirpath, _dirnames, filenames) in normalized_walk(top):
                 for c in compiled_searches:
                     # fixme, don't match filename twice

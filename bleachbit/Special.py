@@ -75,7 +75,6 @@ def __sqlite_table_exists(pathname, table):
 
 def get_sqlite_int(path, sql, parameters=None):
     """Run SQL on database in 'path' and return the integers"""
-    ids = []
     import sqlite3
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
@@ -83,8 +82,7 @@ def get_sqlite_int(path, sql, parameters=None):
         cursor.execute(sql, parameters)
     else:
         cursor.execute(sql)
-    for row in cursor:
-        ids.append(int(row[0]))
+    ids = [int(row[0]) for row in cursor]
     cursor.close()
     conn.close()
     return ids

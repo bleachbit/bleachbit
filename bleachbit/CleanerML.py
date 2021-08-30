@@ -48,7 +48,7 @@ def default_vars():
     for v1, v2 in wowvars:
         # Remove None, if variable is not found.
         # Make list unique.
-        mylist = list(set([x for x in (os.getenv(v1), os.getenv(v2)) if x]))
+        mylist = list({x for x in (os.getenv(v1), os.getenv(v2)) if x})
         ret[v1] = mylist
     return ret
 
