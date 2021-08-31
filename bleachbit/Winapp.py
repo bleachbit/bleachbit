@@ -351,7 +351,7 @@ class Winapp:
             search = 'glob'
             files_only = 'type="f"'
             pattern = filename
-            if pattern == '*.*'
+            if pattern == '*.*':
                 pattern = '*'
             path = os.path.join(dirname, pattern)
             if path.find('*') == -1:
