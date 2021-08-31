@@ -337,19 +337,23 @@ class Winapp:
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
+        files_only = ''
         regex = ''
         if recurse:
             search = 'walk.files'
             path = dirname
             if filename == '*.*':
-                if removeself:
-                    search = 'walk.all'
+                search = 'walk.all'
             else:
                 import fnmatch
                 regex = ' regex="^%s$" ' % (fnmatch.translate(filename))
         else:
             search = 'glob'
-            path = os.path.join(dirname, filename)
+            files_only = 'type="f"'
+            pattern = filename
+            if pattern == '*.*'
+                pattern = '*'
+            path = os.path.join(dirname, pattern)
             if path.find('*') == -1:
                 search = 'file'
         excludekeysxml = ''
@@ -361,8 +365,8 @@ class Winapp:
                 # just one
                 exclude_str = excludekeys[0]
             excludekeysxml = 'nwholeregex="%s"' % xml_escape(exclude_str)
-        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
-                     (search, xml_escape(path), regex, excludekeysxml)
+        action_str = '<option command="delete" search="%s" path="%s" %s %s %s/>' % \
+                     (search, xml_escape(path), files_only, regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
             search = 'file'
