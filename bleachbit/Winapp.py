@@ -349,7 +349,7 @@ class Winapp:
                 regex = ' regex="^%s$" ' % (fnmatch.translate(filename))
         else:
             search = 'glob'
-            files_only = 'type="f"'
+            files_only = ' type="f" '
             pattern = filename
             if pattern == '*.*':
                 pattern = '*'
@@ -370,7 +370,7 @@ class Winapp:
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
             search = 'file'
-            if dirname.find('*') > -1:
+            if dirname.find('*') != -1:
                 search = 'glob'
             action_str = '<option command="delete" search="%s" path="%s" type="d"/>' % \
                          (search, xml_escape(dirname))
