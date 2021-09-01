@@ -348,8 +348,8 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
             # don't delete files containing the described file name
             ('FileKey1=%(d)s|eteme.*|RECURSE', True, True, True),
-            # delete a pattern sub folder not included
-            ('FileKey1=%(d)s|*eteme.*|RECURSE', False, False, True),
+            # delete a pattern sub folder included
+            ('FileKey1=%(d)s|*eteme.*|RECURSE', False, False, False),
             # delete a pattern sub folder not included
             ('FileKey1=%(d)s|*eteme.*', False, False, True),
             # exclude log delimited by pipe
