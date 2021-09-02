@@ -47,7 +47,7 @@ import bleachbit.General
 import bleachbit.FileUtilities
 
 APP_NAME = "BleachBit - Free space and maintain privacy"
-APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Opera, Safari, Java, GNOME, and many others."
+APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."
 
 #
 # begin win32com.shell workaround for py2exe
