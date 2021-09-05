@@ -147,6 +147,7 @@ class Bleachbit(Gtk.Application):
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
+        is_context_menu_executed = auto_exit and shred_paths
         if os.name == 'nt':
             if Windows.elevate_privileges(uac):
                 # privileges escalated in other process
@@ -154,7 +155,7 @@ class Bleachbit(Gtk.Application):
             if portable_mode:
                 Windows.copy_fonts_in_portable_app(auto_exit)
 
-            if auto_exit and shred_paths:
+            if is_context_menu_executed:
                 # When we have a running application and executing the Windows
                 # context menu command we start a new process with new application_id.
                 # That is because the command line arguments of the context menu command

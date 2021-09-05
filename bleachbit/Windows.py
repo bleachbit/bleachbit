@@ -313,8 +313,8 @@ def elevate_privileges(uac):
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
 
-    # add any command line parameters such as --debug-log
-    parameters = "%s %s" % (parameters, ' '.join(sys.argv[1:]))
+
+    parameters = _add_command_line_parameters(parameters)
 
     logger.debug('elevate_privileges() exe=%s, parameters=%s', exe, parameters)
 
@@ -336,6 +336,16 @@ def elevate_privileges(uac):
         return True
 
     return False
+
+
+def _add_command_line_parameters(parameters):
+    """
+    Add any command line parameters such as --debug-log.
+    """
+    if '--context-menu' in sys.argv:
+        return '{} {} "{}"'.format(parameters, ' '.join(sys.argv[1:-1]), sys.argv[-1])
+
+    return '{} {}'.format(parameters, ' '.join(sys.argv[1:]))
 
 
 def empty_recycle_bin(path, really_delete):

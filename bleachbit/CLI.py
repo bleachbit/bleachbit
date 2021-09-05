@@ -158,6 +158,7 @@ def process_cmd_line():
                       help=_("launch the graphical interface"))
     parser.add_option('--exit', action='store_true',
                       help=optparse.SUPPRESS_HELP)
+
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
@@ -180,6 +181,13 @@ def process_cmd_line():
                       help=_("output version information and exit"))
     parser.add_option('-o', '--overwrite', action='store_true',
                       help=_('overwrite files to hide contents'))
+
+    def expand_context_menu_option(option, opt, value, parser):
+        setattr(parser.values, 'gui', True)
+        setattr(parser.values, 'exit', True)
+
+    parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option)
+
     (options, args) = parser.parse_args()
 
     cmd_list = (options.list_cleaners, options.wipe_free_space,
