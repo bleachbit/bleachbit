@@ -206,6 +206,7 @@ VIFileVersion ${File_VERSION}
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_RUN_PARAMETERS "--gui --run-from-installer"
 !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
 ;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
@@ -321,9 +322,6 @@ Section Core (Required)
 
     !include FilesToInstall.nsh
     
-    CopyFiles $WINDIR\Fonts\segoeui.tt? $INSTDIR\share\fonts
-    CopyFiles $WINDIR\Fonts\tahoma.tt? $INSTDIR\share\fonts
-
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
@@ -379,26 +377,6 @@ SectionGroupEnd
 !ifndef NoTranslations
 Section Translations
   !include LocaleToInstall.nsh
-
-  ; Install Chinese fonts only if NSIS is in Chinese.
-  StrCmp $LANGUAGE ${LANG_TRADCHINESE} CopyChineseFont 0
-  StrCmp $LANGUAGE ${LANG_SIMPCHINESE} CopyChineseFont NoChineseFont
-  CopyChineseFont:
-  CopyFiles $WINDIR\Fonts\msyh*.ttc $INSTDIR\share\fonts
-  NoChineseFont:
-
-  ; Install Japanese fonts only if NSIS is in Chinese.
-  StrCmp $LANGUAGE ${LANG_JAPANESE} CopyJapaneseFont NoJapaneseFont
-  CopyJapaneseFont:
-  CopyFiles $WINDIR\Fonts\meiryo*.ttc $INSTDIR\share\fonts
-  NoJapaneseFont:
-
-  ; Install Korean font only if NSIS is in Korean.
-  StrCmp $LANGUAGE ${LANG_KOREAN} CopyKoreanFont NoKoreanFont
-  CopyKoreanFont:
-  CopyFiles $WINDIR\Fonts\malgun*.ttf $INSTDIR\share\fonts
-  NoKoreanFont:
-
 SectionEnd
 !endif
 
@@ -464,14 +442,6 @@ FunctionEnd
 UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 
 Section "Uninstall"
-    Delete /REBOOTOK $INSTDIR\share\fonts\meiryo.tt? ; Japanese
-    Delete /REBOOTOK $INSTDIR\share\fonts\meiryob.tt? ; Japanese
-    Delete /REBOOTOK $INSTDIR\share\fonts\msyh.ttc ; Chinese
-    Delete /REBOOTOK $INSTDIR\share\fonts\msyhbd.ttc ; Chinese
-    Delete /REBOOTOK $INSTDIR\share\fonts\segoeui.tt?
-    Delete /REBOOTOK $INSTDIR\share\fonts\tahoma.tt?
-    RMDir /REBOOTOK $INSTDIR\share\fonts
-
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations

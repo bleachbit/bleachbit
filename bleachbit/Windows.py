@@ -45,6 +45,7 @@ import logging
 import os
 import sys
 import shutil
+from threading import Thread
 
 from decimal import Decimal
 
@@ -604,54 +605,13 @@ def symlink_or_copy(src, dst):
         logger.debug('copied %s to %s', src, dst)
 
 
-def copy_fonts_in_portable_app(auto_exit):
-    """
-    Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
-    We do this here only for portable app as for the installed app we do it through the installer.
-
-    This lists fonts that Microsoft provides:
-    https://docs.microsoft.com/en-us/typography/fonts/windows_10_font_list
-    """
-    if (
-        hasattr(sys, 'frozen') and
-        bleachbit.portable_mode and
-        not auto_exit
-    ):
-        windows_fonts_folder = get_known_folder_path('Fonts')
-        os.makedirs(_GTK_FONTS_FOLDER, exist_ok=True)
-        fonts_needed = [_SEGOEUI, _TAHOMA]
-        try:
-            import locale
-            lang_id = locale.getdefaultlocale()[0].split('_')[0]
-        except Exeption as e:
-            logger.exception('cannot find lang_id')
-            lang_id = '??'
-        logger.debug('detected lang_id=%s', lang_id)
-        extra_fonts = {}
-        extra_fonts['ko'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
-        extra_fonts['hi'] = ['mangal.ttf', 'mangalb.ttf']
-        extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc', 'msgothic.ttc']
-        extra_fonts['zh'] = ['msyh.ttc', 'msyhbd.ttc']
-        if lang_id in extra_fonts:
-            fonts_needed.extend(extra_fonts[lang_id])
-        for font in fonts_needed:
-            dst_font_fn = os.path.join(_GTK_FONTS_FOLDER, font)
-            src_font_fn = os.path.join(windows_fonts_folder, font)
-            if not os.path.exists(src_font_fn):
-                logger.error('the font file does not exist: %s', src_font_fn)
-            elif not os.path.exists(dst_font_fn):
-                symlink_or_copy(src_font_fn, dst_font_fn)
-
-
-from threading import  Thread
 class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
-        super().__init__(group, target, name, args, kwargs)
+        super().__init__(group, self._show_splash_screen, name, args, kwargs)
         self._splash_screen_handle = None
 
     def run(self):
-        print('run -> starts')
         self._splash_screen_handle = self._target()
         # Dispatch messages
         win32gui.PumpMessages()
@@ -663,82 +623,87 @@ class SplashThread(Thread):
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
+    @classmethod
+    def _show_splash_screen(cls):
+        #get instance handle
+        hInstance = win32api.GetModuleHandle()
 
-def show_splash_screen():
-    #get instance handle
-    hInstance = win32api.GetModuleHandle()
+        # the class name
+        className = 'SimpleWin32'
 
-    # the class name
-    className = 'SimpleWin32'
+        # create and initialize window class
+        wndClass                = win32gui.WNDCLASS()
+        wndClass.style          = win32con.CS_HREDRAW | win32con.CS_VREDRAW
+        wndClass.lpfnWndProc    = cls.wndProc
+        wndClass.hInstance      = hInstance
+        wndClass.hIcon          = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
+        wndClass.hCursor        = win32gui.LoadCursor(0, win32con.IDC_ARROW)
+        wndClass.hbrBackground  = win32gui.GetStockObject(win32con.WHITE_BRUSH)
+        wndClass.lpszClassName  = className
 
-    # create and initialize window class
-    wndClass                = win32gui.WNDCLASS()
-    wndClass.style          = win32con.CS_HREDRAW | win32con.CS_VREDRAW
-    wndClass.lpfnWndProc    = wndProc
-    wndClass.hInstance      = hInstance
-    wndClass.hIcon          = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
-    wndClass.hCursor        = win32gui.LoadCursor(0, win32con.IDC_ARROW)
-    wndClass.hbrBackground  = win32gui.GetStockObject(win32con.WHITE_BRUSH)
-    wndClass.lpszClassName  = className
+        # register window class
+        wndClassAtom = None
+        try:
+            wndClassAtom = win32gui.RegisterClass(wndClass)
+        except Exception as e:
+            print(e)
+            raise e
 
-    # register window class
-    wndClassAtom = None
-    try:
-        wndClassAtom = win32gui.RegisterClass(wndClass)
-    except Exception as e:
-        print(e)
-        raise e
+        displayWidth = win32api.GetSystemMetrics(0)
+        displayHeigh = win32api.GetSystemMetrics(1)
+        windowWidth = displayWidth // 4
+        windowHeight = displayHeigh // 4
+        windowPosX = (displayWidth - windowWidth) // 2
+        windowPosY = (displayHeigh - windowHeight) // 2
 
-    displayWidth = win32api.GetSystemMetrics(0)
-    displayHeigh = win32api.GetSystemMetrics(1)
-    windowWidth = displayWidth // 4
-    windowHeight = displayHeigh // 4
-    windowPosX = (displayWidth - windowWidth) // 2
-    windowPosY = (displayHeigh - windowHeight) // 2
+        hWindow = win32gui.CreateWindow(
+            wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
+            'Bleachbit splash screen',
+            win32con.WS_POPUPWINDOW | win32con.WS_VISIBLE,
+            windowPosX,
+            windowPosY,
+            windowWidth,
+            windowHeight,
+            0,
+            0,
+            hInstance,
+            None)
 
-    hWindow = win32gui.CreateWindow(
-        wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
-        'Bleachbit splash screen',
-        win32con.WS_POPUPWINDOW | win32con.WS_VISIBLE,
-        windowPosX,
-        windowPosY,
-        windowWidth,
-        windowHeight,
-        0,
-        0,
-        hInstance,
-        None)
+        # Show & update the window
+        win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+        # win32gui.UpdateWindow(hWindow)
+        win32gui.SetActiveWindow(hWindow)
+        win32gui.BringWindowToTop(hWindow)
 
-    # Show & update the window
-    win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
-    win32gui.UpdateWindow(hWindow)
+        return hWindow
 
-    return hWindow
+    @staticmethod
+    def wndProc(hWnd, message, wParam, lParam):
 
+        if message == win32con.WM_PAINT:
+            hDC, paintStruct = win32gui.BeginPaint(hWnd)
 
-def wndProc(hWnd, message, wParam, lParam):
+            rect = win32gui.GetClientRect(hWnd)
+            vcenter_rect = (0, rect[3] // 2 - 50, rect[2], rect[3])
+            win32gui.DrawText(
+                hDC,
+                ("Welcome to Bleachbit, it is loading fonts.\n"
+                 "Depending on the size of the system's Fonts folder\n"
+                 "and configuration it might take up to several minutes.\n\n"
+                 "This is going to happen when the fontconfig cache is empty.\n"
+                 "Usually on the first run of the application."),
+                -1,
+                vcenter_rect,
+                win32con.DT_CENTER | win32con.DT_VCENTER | win32con.DT_WORDBREAK)
+            win32gui.EndPaint(hWnd, paintStruct)
+            return 0
 
-    if message == win32con.WM_PAINT:
-        hDC, paintStruct = win32gui.BeginPaint(hWnd)
+        elif message == win32con.WM_DESTROY:
+            print('Being destroyed')
+            win32gui.PostQuitMessage(0)
+            return 0
 
-        rect = win32gui.GetClientRect(hWnd)
-        vcenter_rect = (0, rect[3] // 2 - 50, rect[2], rect[3])
-        win32gui.DrawText(
-            hDC,
-            ("Welcome to Bleachbit! It is loading fonts.\n"
-             "Depending on the size of the system's Fonts folder it might take up to several minutes..."),
-            -1,
-            vcenter_rect,
-            win32con.DT_CENTER | win32con.DT_VCENTER | win32con.DT_WORDBREAK)
-        win32gui.EndPaint(hWnd, paintStruct)
-        return 0
+        else:
+            return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
-    elif message == win32con.WM_DESTROY:
-        print('Being destroyed')
-        win32gui.PostQuitMessage(0)
-        return 0
-
-    else:
-        return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
-
-
+splash_thread = SplashThread()

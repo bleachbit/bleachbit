@@ -151,8 +151,6 @@ class Bleachbit(Gtk.Application):
             if Windows.elevate_privileges(uac):
                 # privileges escalated in other process
                 sys.exit(0)
-            if portable_mode:
-                Windows.copy_fonts_in_portable_app(auto_exit)
 
             if auto_exit and shred_paths:
                 # When we have a running application and executing the Windows
@@ -556,9 +554,7 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
-        if os.name == 'nt' and options.get('first_start'):
-            self._splash_thread = Windows.SplashThread(target=Windows.show_splash_screen)
-            self._splash_thread.start()
+        self._show_splash_screen()
 
         self._auto_exit = auto_exit
 
@@ -589,6 +585,15 @@ class GUI(Gtk.ApplicationWindow):
             bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
+
+    def _show_splash_screen(self):
+        if os.name != 'nt':
+            return
+
+        path = os.path.expandvars(r'%LOCALAPPDATA%\fontconfig\cache')
+        is_cache_empty = not os.path.isdir(path) or not os.listdir(path)
+        if '--run-from-installer' in sys.argv or options.get('first_start') or is_cache_empty:
+            Windows.splash_thread.start()
 
     def _confirm_delete(self, mention_preview, shred_settings=False):
         if options.get("delete_confirmation"):
@@ -1081,8 +1086,9 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_show(self, widget):
-        if os.name == 'nt' and options.get('first_start'):
-            self._splash_thread.join(0)
+
+        if Windows.splash_thread.is_alive():
+            Windows.splash_thread.join(0)
 
         # restore window position, size and state
         if not options.get('remember_geometry'):
