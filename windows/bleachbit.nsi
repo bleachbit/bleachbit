@@ -408,7 +408,7 @@ SectionEnd
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --gui --shred --exit """%1"""'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
 !endif
 
