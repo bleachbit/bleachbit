@@ -93,10 +93,11 @@ def get_filesystem_type(path):
         logger.warning('To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
 
-    partitions = {}
-    for partition in psutil.disk_partitions():
-        partitions[partition.mountpoint] = (partition.fstype, partition.device)
-        
+    partitions = {
+        partition.mountpoint: (partition.fstype, partition.device)
+        for partition in psutil.disk_partitions()
+    }
+
     if path in partitions:
         return partitions[path]
 
@@ -489,11 +490,9 @@ def execute_sqlite3(path, cmds):
 
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
-    ret = []
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    for pathname4 in glob.iglob(pathname3):
-        ret.append(pathname4)
+    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
     return ret
 
 
@@ -567,9 +566,10 @@ def getsize(path):
 
 def getsizedir(path):
     """Return the size of the contents of a directory"""
-    total_bytes = 0
-    for node in children_in_directory(path, list_directories=False):
-        total_bytes += getsize(node)
+    total_bytes = sum(
+        getsize(node)
+        for node in children_in_directory(path, list_directories=False)
+    )
     return total_bytes
 
 

@@ -110,10 +110,8 @@ def browse_files(_, title):
     if 1 == len(_split):
         # only one filename
         return _split
-    pathnames = []
     dirname = _split[0]
-    for fname in _split[1:]:
-        pathnames.append(os.path.join(dirname, fname))
+    pathnames = [os.path.join(dirname, fname) for fname in _split[1:]]
     return pathnames
 
 
@@ -204,9 +202,9 @@ def delete_registry_key(parent_key, really_delete):
         # key not found
         return False
     keys_size = winreg.QueryInfoKey(hkey)[0]
-    child_keys = []
-    for i in range(keys_size):
-        child_keys.append(parent_key + '\\' + winreg.EnumKey(hkey, i))
+    child_keys = [
+        parent_key + '\\' + winreg.EnumKey(hkey, i) for i in range(keys_size)
+    ]
     for child_key in child_keys:
         delete_registry_key(child_key, True)
     winreg.DeleteKey(hive, parent_sub_key)

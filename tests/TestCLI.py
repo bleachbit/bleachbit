@@ -210,5 +210,4 @@ class CLITestCase(common.BleachbitTestCase):
                 'bleachbit.CLI', '--gui --exit']
         output = run_external(args)
         opened_windows_titles = common.get_opened_windows_titles()
-        self.assertFalse(
-            any(['BleachBit' == window_title for window_title in opened_windows_titles]))
+        self.assertFalse('BleachBit' in opened_windows_titles)

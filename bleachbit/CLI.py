@@ -117,9 +117,10 @@ def args_to_operations(args, preset, all_but_warning):
         if '*' == option_id:
             if cleaner_id in operations:
                 del operations[cleaner_id]
-            operations[cleaner_id] = []
-            for (option_id2, _o_name) in backends[cleaner_id].get_options():
-                operations[cleaner_id].append(option_id2)
+            operations[cleaner_id] = [
+                option_id2
+                for (option_id2, _o_name) in backends[cleaner_id].get_options()
+            ]
             continue
         # add the specified option
         if cleaner_id not in operations:

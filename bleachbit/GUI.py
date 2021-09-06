@@ -725,9 +725,10 @@ class GUI(Gtk.ApplicationWindow):
         from bleachbit import Worker
         self.start_time = None
         if not operations:
-            operations = {}
-            for operation in self.get_selected_operations():
-                operations[operation] = self.get_operation_options(operation)
+            operations = {
+                operation: self.get_operation_options(operation)
+                for operation in self.get_selected_operations()
+            }
         assert isinstance(operations, dict)
         if not operations:  # empty
             GuiBasic.message_dialog(self,

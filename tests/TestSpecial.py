@@ -199,7 +199,7 @@ INSERT INTO moz_icons VALUES(3,'fake-favicon-uri:https://support.mozilla.org/en-
 CREATE TABLE moz_icons_to_pages ( page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id), FOREIGN KEY (page_id) REFERENCES moz_pages_w_icons ON DELETE CASCADE, FOREIGN KEY (icon_id) REFERENCES moz_icons ON DELETE CASCADE ) WITHOUT ROWID;
 INSERT INTO moz_icons_to_pages VALUES(1,1,1603222567764);
 INSERT INTO moz_icons_to_pages VALUES(2,2,1603222567764);
-INSERT INTO moz_icons_to_pages VALUES(3,3,1603222567764); 
+INSERT INTO moz_icons_to_pages VALUES(3,3,1603222567764);
 CREATE TABLE moz_pages_w_icons ( id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL );
 INSERT INTO moz_pages_w_icons VALUES(1,'https://support.mozilla.org/en-US/products/firefox',47357795150914);
 INSERT INTO moz_pages_w_icons VALUES(2,'https://support.mozilla.org/en-US/products/firefox2',473577951509142);
@@ -341,9 +341,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             conn = sqlite3.connect(filename)
             c = conn.cursor()
             c.execute('select id from urls')
-            ids = []
-            for row in c:
-                ids.append(row[0])
+            ids = [row[0] for row in c]
             # id 1 is sqlite.org which is not a bookmark and should be cleaned
             # id 2 is www.bleachbit.org which is a bookmark and should
             # be cleaned
@@ -363,9 +361,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             conn = sqlite3.connect(filename)
             c = conn.cursor()
             c.execute('select id from keywords')
-            ids = []
-            for row in c:
-                ids.append(row[0])
+            ids = [row[0] for row in c]
             self.assertEqual(ids, [2, 3, 4, 5, 6])
 
         self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
