@@ -590,9 +590,13 @@ class GUI(Gtk.ApplicationWindow):
         if os.name != 'nt':
             return
 
-        path = os.path.expandvars(r'%LOCALAPPDATA%\fontconfig\cache')
-        is_cache_empty = not os.path.isdir(path) or not os.listdir(path)
-        if '--run-from-installer' in sys.argv or options.get('first_start') or is_cache_empty:
+        font_conf_file = os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
+        if not os.path.exists(font_conf_file):
+            logger.error('No fonts.conf file')
+            return
+
+        has_cache = Windows.has_fontconfig_cache(font_conf_file)
+        if not has_cache:
             Windows.splash_thread.start()
 
     def _confirm_delete(self, mention_preview, shred_settings=False):

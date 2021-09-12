@@ -174,7 +174,6 @@ def process_cmd_line():
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
-        parser.add_option("--run-from-installer", action="store_true")
     parser.add_option("-w", "--wipe-free-space", action="store_true",
                       help=_("wipe free space in the given paths"))
     parser.add_option("-v", "--version", action="store_true",

@@ -206,7 +206,6 @@ VIFileVersion ${File_VERSION}
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-!define MUI_FINISHPAGE_RUN_PARAMETERS "--gui --run-from-installer"
 !define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
 ;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"

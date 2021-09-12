@@ -46,6 +46,7 @@ import os
 import sys
 import shutil
 from threading import Thread
+import xml.dom.minidom
 
 from decimal import Decimal
 
@@ -56,6 +57,7 @@ if 'win32' == sys.platform:
     import win32con
     import win32file
     import win32gui
+    import win32process
     import win32security
 
     from ctypes import windll, c_ulong, c_buffer, byref, sizeof
@@ -65,11 +67,6 @@ if 'win32' == sys.platform:
     kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
-
-
-_GTK_FONTS_FOLDER = r'share\fonts'
-_SEGOEUI = 'segoeui.ttf'
-_TAHOMA = 'tahoma.ttf'
 
 
 def browse_file(_, title):
@@ -604,6 +601,28 @@ def symlink_or_copy(src, dst):
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 
+def has_fontconfig_cache(font_conf_file):
+    dom = xml.dom.minidom.parse(font_conf_file)
+    fc_element = dom.getElementsByTagName('fontconfig')[0]
+    cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
+    expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
+    expanded_homepath = os.path.join(os.path.expandvars('%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
+    for dir_element in fc_element.getElementsByTagName('cachedir'):
+
+        if dir_element.firstChild.nodeValue == 'LOCAL_APPDATA_FONTCONFIG_CACHE':
+            dirpath = os.path.join(expanded_localdata, 'fontconfig', 'cache')
+        elif dir_element.firstChild.nodeValue == 'fontconfig' and dir_element.getAttribute('prefix') == 'xdg':
+            dirpath = os.path.join(expanded_homepath, '.cache', 'fontconfig')
+        elif dir_element.firstChild.nodeValue == '~/.fontconfig':
+            dirpath = os.path.join(expanded_homepath, '.fontconfig')
+        else:
+            # user has entered a custom directory
+            dirpath = dir_element.firstChild.nodeValue
+
+        if dirpath and os.path.exists(os.path.join(dirpath, cachefile)):
+            return True
+
+    return False
 
 class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
@@ -612,13 +631,12 @@ class SplashThread(Thread):
         self._splash_screen_handle = None
 
     def run(self):
+        logger.debug('SplashThread started')
         self._splash_screen_handle = self._target()
         # Dispatch messages
         win32gui.PumpMessages()
-        print('run -> self._splash_screen_handle = ', self._splash_screen_handle)
 
     def join(self, *args):
-        print('join -> self._splash_screen_handle = ', self._splash_screen_handle)
         import win32con, win32gui
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
@@ -646,7 +664,6 @@ class SplashThread(Thread):
         try:
             wndClassAtom = win32gui.RegisterClass(wndClass)
         except Exception as e:
-            print(e)
             raise e
 
         displayWidth = win32api.GetSystemMetrics(0)
@@ -659,7 +676,8 @@ class SplashThread(Thread):
         hWindow = win32gui.CreateWindow(
             wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
             'Bleachbit splash screen',
-            win32con.WS_POPUPWINDOW | win32con.WS_VISIBLE,
+            win32con.WS_POPUPWINDOW |
+            win32con.WS_VISIBLE,
             windowPosX,
             windowPosY,
             windowWidth,
@@ -669,13 +687,84 @@ class SplashThread(Thread):
             hInstance,
             None)
 
-        # Show & update the window
-        win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
-        # win32gui.UpdateWindow(hWindow)
-        win32gui.SetActiveWindow(hWindow)
-        win32gui.BringWindowToTop(hWindow)
+        is_splash_screen_on_top = cls._force_set_foreground_window(cls, hWindow)
+        logger.debug(
+            'Is splash screen on top: {}'.format(is_splash_screen_on_top)
+        )
 
         return hWindow
+
+    def _force_set_foreground_window(self, hWindow):
+        # As there are some restrictions about which processes can call SetForegroundWindow as described here:
+        # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
+        # we try consecutively three different ways to show the splash screen on top of all other windows.
+
+        # Solution 1: Pressing alt key unlocks SetForegroundWindow
+        # https://stackoverflow.com/questions/14295337/win32gui-setactivewindow-error-the-specified-procedure-could-not-be-found
+        # Not using win32com.client.Dispatch like in the link because there are problems when building with py2exe.
+        ALT_KEY = win32con.VK_MENU
+        RIGHT_ALT = 0xb8
+        win32api.keybd_event(ALT_KEY, RIGHT_ALT, 0, 0)
+        win32api.keybd_event(ALT_KEY, RIGHT_ALT, win32con.KEYEVENTF_KEYUP, 0)
+        win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+        try:
+            win32gui.SetForegroundWindow(hWindow)
+        except Exception as e:
+            exc_message = str(e)
+            logger.debug(
+                'Failed attempt to show splash screen with keybd_event: {}'.format(exc_message)
+            )
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 2: Attaching current thread to the foreground thread in order to use BringWindowToTop
+        # https://shlomio.wordpress.com/2012/09/04/solved-setforegroundwindow-win32-api-not-always-works/
+        foreground_thread_id, foreground_process_id = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        appThread = win32api.GetCurrentThreadId()
+
+        if foreground_thread_id != appThread:
+
+            try:
+                win32process.AttachThreadInput(foreground_thread_id, appThread, True)
+                win32gui.BringWindowToTop(hWindow)
+                win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+                win32process.AttachThreadInput(foreground_thread_id, appThread, False)
+            except Exception as e:
+                exc_message = str(e)
+                logger.debug(
+                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(exc_message)
+                )
+
+        else:
+            win32gui.BringWindowToTop(hWindow)
+            win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 3: Working with timers that lock/unlock SetForegroundWindow
+        #https://gist.github.com/EBNull/1419093
+        try:
+            timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
+            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)
+            win32gui.BringWindowToTop(hWindow)
+            win32gui.SetForegroundWindow(hWindow)
+            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, timeout, win32con.SPIF_SENDCHANGE)
+        except Exception as e:
+            exc_message = str(e)
+            logger.debug(
+                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(exc_message)
+            )
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 4: If on some machines the splash screen still doesn't come on top, we can try
+        # the following solution that combines attaching to a thread and timers:
+        # https://www.codeproject.com/Tips/76427/How-to-Bring-Window-to-Top-with-SetForegroundWindo
+
+        return False
 
     @staticmethod
     def wndProc(hWnd, message, wParam, lParam):
@@ -687,11 +776,7 @@ class SplashThread(Thread):
             vcenter_rect = (0, rect[3] // 2 - 50, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
-                ("Welcome to Bleachbit, it is loading fonts.\n"
-                 "Depending on the size of the system's Fonts folder\n"
-                 "and configuration it might take up to several minutes.\n\n"
-                 "This is going to happen when the fontconfig cache is empty.\n"
-                 "Usually on the first run of the application."),
+                ("Bleachbit is starting...\n"),
                 -1,
                 vcenter_rect,
                 win32con.DT_CENTER | win32con.DT_VCENTER | win32con.DT_WORDBREAK)
@@ -699,7 +784,6 @@ class SplashThread(Thread):
             return 0
 
         elif message == win32con.WM_DESTROY:
-            print('Being destroyed')
             win32gui.PostQuitMessage(0)
             return 0
 
