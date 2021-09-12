@@ -461,7 +461,7 @@ def get_recycle_bin():
 
 def get_windows_version():
     """Get the Windows major and minor version in a decimal like 10.0"""
-    v = win32api.GetVersionEx(0)
+    v = sys.getwindowsversion().platform_version
     vstr = '%d.%d' % (v[0], v[1])
     return Decimal(vstr)
 
