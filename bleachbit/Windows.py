@@ -462,7 +462,7 @@ def get_recycle_bin():
 def get_windows_version():
     """Get the Windows major and minor version in a decimal like 10.0"""
     import platform
-    return Decimal('.'.join(platform.version().split('.')[0:2]))
+    return Decimal('.'.join(platform.win32_ver()[1].split('.')[0:2]))
 
 
 def is_junction(path):
