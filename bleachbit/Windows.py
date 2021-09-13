@@ -459,12 +459,6 @@ def get_recycle_bin():
         yield path
 
 
-def get_windows_version():
-    """Get the Windows major and minor version in a decimal like 10.0"""
-    import platform
-    return Decimal('.'.join(platform.win32_ver()[1].split('.')[0:2]))
-
-
 def is_junction(path):
     """Check whether the path is a link
 
@@ -504,9 +498,10 @@ def parse_windows_build(build=None):
     Parse build string like 1.2.3 or 1.2 to numeric,
     ignoring the third part, if present.
     """
+    import platform
     if not build:
         # If not given, default to current system's version
-        return get_windows_version()
+        build = platform.win32_ver()[1]
     return Decimal('.'.join(build.split('.')[0:2]))
 
 
