@@ -332,13 +332,6 @@ class WindowsTestCase(common.BleachbitTestCase):
             self.assertEqual(drive, drive.upper())
         self.assertIn("C:\\", drives)
 
-    def test_get_windows_version(self):
-        """Unit test for get_windows_version"""
-        v = get_windows_version()
-        self.assertGreaterEqual(v, 5.1)
-        self.assertGreater(v, 5)
-        self.assertIsInstance(v, Decimal)
-
     def test_empty_recycle_bin(self):
         """Unit test for empty_recycle_bin"""
         # check the function basically works
