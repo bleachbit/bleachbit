@@ -271,7 +271,15 @@ def detect_registry_key(parent_key):
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
-            return False
+            hkey = None
+    # on 64-bit Windows check the 64-bit registry, too
+    if not hkey and os.getenv('ProgramW6432'):
+        try:
+            hkey = winreg.OpenKey(hive, parent_sub_key, 0, winreg.KEY_WOW64_64KEY)
+        except WindowsError as e:
+            if e.winerror == 2:
+                # 2 = 'file not found' happens when key does not exist
+                return False
     if not hkey:
         # key not found
         return False
