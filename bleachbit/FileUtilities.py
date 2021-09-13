@@ -520,16 +520,8 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        from bleachbit import Windows
-        if Windows.parse_windows_build() >= 6:
-            # This works better with UTF-8 paths.
-            import psutil
-            return psutil.disk_usage(pathname).free
-        else:
-            # This works better with Windows XP but not UTF-8.
-            # Deprecated.
-            _fb, _tb, total_free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-            return total_free_bytes
+        import psutil
+        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 

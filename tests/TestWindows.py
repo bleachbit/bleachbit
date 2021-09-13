@@ -316,11 +316,6 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for get_known_folder_path"""
         ret = get_known_folder_path('LocalAppDataLow')
         self.assertNotEqual(ret, '')
-        if parse_windows_build() <= 6.0:
-            # Before Vista
-            self.assertEqual(ret, None)
-            return
-        # Vista or later
         self.assertNotEqual(ret, None)
         self.assertExists(ret)
 
@@ -462,9 +457,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for setup_environment"""
         setup_environment()
         envs = ['commonappdata', 'documents', 'music', 'pictures', 'video',
-                'localappdata']
-        if parse_windows_build() >= 6.0:
-            envs.append('localappdatalow')
+                'localappdata', 'localappdatalow']
         for env in envs:
             self.assertExists(os.environ[env])
 
