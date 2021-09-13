@@ -338,6 +338,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
+        if 'nt' == os.name:
             logger.debug('testing symbolic link')
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
@@ -350,10 +351,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
+            
+            return
 
         # below this point, only posix
-        if 'nt' == os.name:
-            return
 
         # test file with mode 0444/-r--r--r--
         filename = self.write_file('bleachbit-test-0444')
