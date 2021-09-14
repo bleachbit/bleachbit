@@ -93,10 +93,11 @@ def get_filesystem_type(path):
         logger.warning('To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
 
-    partitions = {}
-    for partition in psutil.disk_partitions():
-        partitions[partition.mountpoint] = (partition.fstype, partition.device)
-        
+    partitions = {
+        partition.mountpoint: (partition.fstype, partition.device)
+        for partition in psutil.disk_partitions()
+    }
+
     if path in partitions:
         return partitions[path]
 
@@ -489,11 +490,9 @@ def execute_sqlite3(path, cmds):
 
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
-    ret = []
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    for pathname4 in glob.iglob(pathname3):
-        ret.append(pathname4)
+    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
     return ret
 
 
@@ -521,16 +520,8 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        from bleachbit import Windows
-        if Windows.parse_windows_build() >= 6:
-            # This works better with UTF-8 paths.
-            import psutil
-            return psutil.disk_usage(pathname).free
-        else:
-            # This works better with Windows XP but not UTF-8.
-            # Deprecated.
-            _fb, _tb, total_free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-            return total_free_bytes
+        import psutil
+        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -567,9 +558,10 @@ def getsize(path):
 
 def getsizedir(path):
     """Return the size of the contents of a directory"""
-    total_bytes = 0
-    for node in children_in_directory(path, list_directories=False):
-        total_bytes += getsize(node)
+    total_bytes = sum(
+        getsize(node)
+        for node in children_in_directory(path, list_directories=False)
+    )
     return total_bytes
 
 

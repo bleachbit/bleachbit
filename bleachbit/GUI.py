@@ -147,12 +147,13 @@ class Bleachbit(Gtk.Application):
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
+        is_context_menu_executed = auto_exit and shred_paths
         if os.name == 'nt':
             if Windows.elevate_privileges(uac):
                 # privileges escalated in other process
                 sys.exit(0)
 
-            if auto_exit and shred_paths:
+            if is_context_menu_executed:
                 # When we have a running application and executing the Windows
                 # context menu command we start a new process with new application_id.
                 # That is because the command line arguments of the context menu command
@@ -738,9 +739,10 @@ class GUI(Gtk.ApplicationWindow):
         from bleachbit import Worker
         self.start_time = None
         if not operations:
-            operations = {}
-            for operation in self.get_selected_operations():
-                operations[operation] = self.get_operation_options(operation)
+            operations = {
+                operation: self.get_operation_options(operation)
+                for operation in self.get_selected_operations()
+            }
         assert isinstance(operations, dict)
         if not operations:  # empty
             GuiBasic.message_dialog(self,

@@ -40,10 +40,8 @@ except ImportError:
 
 import bleachbit
 from bleachbit import _
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Options import options, Options
-from bleachbit import Cleaner, CleanerML
-from bleachbit.Cleaner import backends
+from bleachbit.Options import options
+
 from tests import common
 
 bleachbit.online_update_notification_enabled = False

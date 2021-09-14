@@ -27,6 +27,7 @@ Test case for application level functions
 import os
 import sys
 import subprocess
+from unittest import mock, SkipTest
 
 try:
     import gi
@@ -41,8 +42,6 @@ import bleachbit
 from bleachbit.Options import options
 from tests import common
 
-bleachbit.online_update_notification_enabled = False
-
 
 @common.skipUnlessWindows
 class ExternalCommandTestCase(common.BleachbitTestCase):
@@ -50,6 +49,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
+        bleachbit.online_update_notification_enabled = False
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
         super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
@@ -90,7 +90,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                 any(['BleachBit' == window_title for window_title in opened_windows_titles]))
 
     def _get_shred_command_string(self, file_to_shred):
-        shred_command_string = r'{} bleachbit.py --gui --no-uac --shred --exit "{}"'.format(sys.executable,
+        shred_command_string = r'{} bleachbit.py --context-menu "{}"'.format(sys.executable,
                                                                                             file_to_shred)
         return shred_command_string
 
@@ -111,9 +111,48 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
     def test_windows_explorer_context_menu_command(self):
         for fn_prefix in ('file_to_shred_with_context_menu_command', 'embedded space'):
             self._context_helper(fn_prefix)
+            self._test_as_non_admin_with_context_menu_path(fn_prefix)
 
     def test_context_menu_command_while_the_app_is_running(self):
         p = subprocess.Popen([sys.executable, 'bleachbit.py'], shell=False)
         self._context_helper('while_app_is_running', allow_opened_window=True)
         subprocess.Popen.kill(p)
 
+    def _test_as_non_admin_with_context_menu_path(self, fn_prefix):
+        """
+        This tests covers elevate_privileges in the case where we pretend that we are not admin.
+        """
+        from bleachbit.Options import options
+
+        file_to_shred = self.mkstemp(prefix=fn_prefix)
+        self.assertExists(file_to_shred)
+
+        original = bleachbit.Windows.shell.ShellExecuteEx
+        def shell_execute_synchronous(lpVerb='', lpFile='', lpParameters='', nShow=''):
+            """
+            We need a synchronous call the ShellExecuteEx so we can assert after it finishes.
+            """
+            from win32com.shell import shell, shellcon
+            import win32event
+
+            bleachbit.Windows.shell.ShellExecuteEx = original
+            rc = shell.ShellExecuteEx(lpVerb=lpVerb,
+                                      lpFile=lpFile,
+                                      lpParameters=lpParameters,
+                                      nShow=nShow,
+                                      fMask=shellcon.SEE_MASK_NOCLOSEPROCESS,
+                                      )
+            hproc = rc['hProcess']
+            win32event.WaitForSingleObject(hproc, win32event.INFINITE)
+            return rc
+
+        options.set('delete_confirmation', False)
+        # We redirect the ShellExecuteEx call like this because if we do it in a mock we enter recursion
+        # because we call ShellExecuteEx in shell_execute_synchronous
+        bleachbit.Windows.shell.ShellExecuteEx = shell_execute_synchronous
+        with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
+            with mock.patch('bleachbit.GUI.sys.exit'):
+                with mock.patch('bleachbit.Windows.sys.argv', ['dummy-arg', '--context-menu', file_to_shred]):
+                    Bleachbit(auto_exit=True, shred_paths=[file_to_shred], uac=True)
+
+        self.assertNotExists(file_to_shred)

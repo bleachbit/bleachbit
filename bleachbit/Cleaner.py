@@ -506,18 +506,7 @@ class System(Cleaner):
 
         # temporary files
         if 'nt' == os.name and 'tmp' == option_id:
-            dirname1 = os.path.expandvars(
-                "$USERPROFILE\\Local Settings\\Temp\\")
-            dirname2 = os.path.expandvars(r'%temp%')
-            dirname3 = os.path.expandvars("%windir%\\temp\\")
-            dirnames = []
-            if Windows.get_windows_version() >= 6.0:
-                # Windows Vista or later
-                dirnames.append(dirname2)
-            else:
-                # Windows XP
-                dirnames.append(dirname1)
-            dirnames.append(dirname3)
+            dirnames = [os.path.expandvars(r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
             for dirname in dirnames:
@@ -593,11 +582,6 @@ class System(Cleaner):
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)
-            # If there were any files deleted, Windows XP will show the
-            # wrong icon for the recycle bin indicating it is not empty.
-            # The icon will be incorrect until logging in to Windows again
-            # or until it is emptied using the Windows API call for emptying
-            # the recycle bin.
 
             # Windows 10 refreshes the recycle bin icon when the user
             # opens the recycle bin folder.
