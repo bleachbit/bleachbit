@@ -291,11 +291,11 @@ class Winapp:
         if not self.detect(section):
             return
         # excludekeys ignores a file, path, or registry key
-        excludekeys = []
-        for option in self.parser.options(section):
-            if re.match(self.re_excludekey, option):
-                excludekeys.append(
-                    self.excludekey_to_nwholeregex(self.parser.get(section, option)))
+        excludekeys = [
+            self.excludekey_to_nwholeregex(self.parser.get(section, option))
+            for option in self.parser.options(section)
+            if re.match(self.re_excludekey, option)
+        ]
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known

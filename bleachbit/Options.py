@@ -186,9 +186,10 @@ class Options:
         section = "list/%s" % option
         if not self.config.has_section(section):
             return None
-        values = []
-        for option in sorted(self.config.options(section)):
-            values.append(self.config.get(section, option))
+        values = [
+            self.config.get(section, option)
+            for option in sorted(self.config.options(section))
+        ]
         return values
 
     def get_paths(self, section):
