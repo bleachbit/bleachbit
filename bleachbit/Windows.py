@@ -609,6 +609,7 @@ def symlink_or_copy(src, dst):
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 
+
 def has_fontconfig_cache(font_conf_file):
     dom = xml.dom.minidom.parse(font_conf_file)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
@@ -632,11 +633,25 @@ def has_fontconfig_cache(font_conf_file):
 
     return False
 
+
+def get_font_conf_file():
+    if hasattr(sys, 'frozen'):
+        return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
+
+    import gi
+    return os.path.join(
+            os.path.dirname(os.path.dirname(gi.__file__)),
+            'gnome', 'etc', 'fonts', 'fonts.conf'
+        )
+
+
 class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
         self._splash_screen_handle = None
+        self._splash_screen_height = None
+        self._splash_screen_width = None
 
     def run(self):
         logger.debug('SplashThread started')
@@ -649,8 +664,7 @@ class SplashThread(Thread):
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
-    @classmethod
-    def _show_splash_screen(cls):
+    def _show_splash_screen(self):
         #get instance handle
         hInstance = win32api.GetModuleHandle()
 
@@ -660,7 +674,7 @@ class SplashThread(Thread):
         # create and initialize window class
         wndClass                = win32gui.WNDCLASS()
         wndClass.style          = win32con.CS_HREDRAW | win32con.CS_VREDRAW
-        wndClass.lpfnWndProc    = cls.wndProc
+        wndClass.lpfnWndProc    = self.wndProc
         wndClass.hInstance      = hInstance
         wndClass.hIcon          = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
         wndClass.hCursor        = win32gui.LoadCursor(0, win32con.IDC_ARROW)
@@ -676,10 +690,10 @@ class SplashThread(Thread):
 
         displayWidth = win32api.GetSystemMetrics(0)
         displayHeigh = win32api.GetSystemMetrics(1)
-        windowWidth = displayWidth // 4
-        windowHeight = displayHeigh // 4
-        windowPosX = (displayWidth - windowWidth) // 2
-        windowPosY = (displayHeigh - windowHeight) // 2
+        self._splash_screen_height = 100
+        self._splash_screen_width = displayWidth // 4
+        windowPosX = (displayWidth - self._splash_screen_width) // 2
+        windowPosY = (displayHeigh - self._splash_screen_height) // 2
 
         hWindow = win32gui.CreateWindow(
             wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
@@ -688,14 +702,14 @@ class SplashThread(Thread):
             win32con.WS_VISIBLE,
             windowPosX,
             windowPosY,
-            windowWidth,
-            windowHeight,
+            self._splash_screen_width,
+            self._splash_screen_height,
             0,
             0,
             hInstance,
             None)
 
-        is_splash_screen_on_top = cls._force_set_foreground_window(cls, hWindow)
+        is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
         logger.debug(
             'Is splash screen on top: {}'.format(is_splash_screen_on_top)
         )
@@ -774,20 +788,33 @@ class SplashThread(Thread):
 
         return False
 
-    @staticmethod
-    def wndProc(hWnd, message, wParam, lParam):
+    def wndProc(self, hWnd, message, wParam, lParam):
 
         if message == win32con.WM_PAINT:
             hDC, paintStruct = win32gui.BeginPaint(hWnd)
+            folder_with_ico_file = 'share' if hasattr(sys, 'frozen') else 'windows'
+            filename = os.path.join(os.path.dirname(sys.argv[0]), folder_with_ico_file, 'bleachbit.ico')
+            flags = win32con.LR_LOADFROMFILE
+            hIcon = win32gui.LoadImage(
+                0, filename, win32con.IMAGE_ICON,
+                0, 0, flags)
+
+            # Default icon size seems to be 32 pixels so we center the icon vertically.
+            default_icon_size = 32
+            icon_top_margin = self._splash_screen_height - 2 * (default_icon_size + 2)
+            win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
+            # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
 
             rect = win32gui.GetClientRect(hWnd)
-            vcenter_rect = (0, rect[3] // 2 - 50, rect[2], rect[3])
+            textmetrics = win32gui.GetTextMetrics(hDC)
+            text_left_margin = 2 * default_icon_size
+            text_rect = (text_left_margin, (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
                 ("Bleachbit is starting...\n"),
                 -1,
-                vcenter_rect,
-                win32con.DT_CENTER | win32con.DT_VCENTER | win32con.DT_WORDBREAK)
+                text_rect,
+                win32con.DT_WORDBREAK)
             win32gui.EndPaint(hWnd, paintStruct)
             return 0
 

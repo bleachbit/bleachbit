@@ -591,7 +591,7 @@ class GUI(Gtk.ApplicationWindow):
         if os.name != 'nt':
             return
 
-        font_conf_file = os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
+        font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
             logger.error('No fonts.conf file')
             return
