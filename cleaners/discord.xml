@@ -30,7 +30,7 @@
   </var>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <description>Delete the web cache, which reduces time to display revisited pages. This also clears favorited GIFs.</description>
     <action command="delete" search="walk.all" path="$$base$$/Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
