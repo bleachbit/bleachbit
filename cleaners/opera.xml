@@ -24,9 +24,9 @@
     @cleanerversion v1.6.1
     @cleanerdate 2019-03-29
     @cleanerby Andrew Ziem (2009-10-04 - 2018-11-20) & theatre-x (2014-11-04) & Tobias B. Besemer (2019-03-13 - 2019-03-29)
-    @tested ok 
-    @testeddate 
-    @testedby 
+    @tested ok
+    @testeddate
+    @testedby
     @note Opera version 15 switched layout engine to Blink like Chromium
     @note Unlike Chromium, Opera does not support multiple profiles
 
@@ -134,7 +134,6 @@
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
@@ -212,5 +211,10 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+  </option>
+  <option id="site_preferences">
+    <label>Site preferences</label>
+    <description>Settings for individual sites</description>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
 </cleaner>
