@@ -96,7 +96,13 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Check connection to the update URL"""
         from bleachbit.Update import build_opener
         opener = build_opener()
-        handle = opener.open(bleachbit.update_check_url)
+        opener.addheaders = [('accept','text/*')]
+        import urllib
+        try:
+            handle = opener.open(bleachbit.update_check_url)
+        except urllib.error.HTTPError as e:
+            logger.exception('HTTP error, url: %s\nheaders:\n%s', bleachbit.update_check_url, e.headers)
+            raise e
         doc = handle.read()
         import xml
         xml.dom.minidom.parseString(doc)
