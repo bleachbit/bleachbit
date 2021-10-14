@@ -291,6 +291,10 @@ VIFileVersion ${File_VERSION}
 
 !include NsisMultiUserLang.nsh
 
+!include "StrFunc.nsh"
+# Declare used functions
+${StrCase}
+
 ;--------------------------------
 ;Function
 
@@ -355,15 +359,17 @@ SectionGroup /e Shortcuts
     SectionEnd
 
     Section "Desktop" SectionDesktop
+        IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
-        ${GetOptions} $R0 "/S /NoDesktopShortcut" $R0
-        IfErrors optionNotfound optionFound
-        optionNotfound:
+        ${StrCase} $R0 $R0 "L" # "L" means lowercase
+        ${GetOptions} $R0 "/nodesktopshortcut" $R1
+        IfErrors addDesktopShortcut doNotAddDesktopShortcut
+        addDesktopShortcut:
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
 
-        optionFound:
+        doNotAddDesktopShortcut:
 
     SectionEnd
 
