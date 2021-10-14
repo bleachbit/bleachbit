@@ -359,12 +359,12 @@ SectionGroup /e Shortcuts
     SectionEnd
 
     Section "Desktop" SectionDesktop
-        IfSilent 0 addDestkopShortcut
+        IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
         ${GetOptions} $R0 "/nodesktopshortcut" $R1
-        IfErrors addDestkopShortcut doNotAddDesktopShortcut
-        addDestkopShortcut:
+        IfErrors addDesktopShortcut doNotAddDesktopShortcut
+        addDesktopShortcut:
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
