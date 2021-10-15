@@ -811,7 +811,7 @@ class SplashThread(Thread):
             text_rect = (text_left_margin, (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
-                ("Bleachbit is starting...\n"),
+                _("BleachBit is starting...\n"),
                 -1,
                 text_rect,
                 win32con.DT_WORDBREAK)
