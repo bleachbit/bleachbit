@@ -45,6 +45,8 @@ import logging
 import os
 import sys
 import shutil
+from threading import Thread
+import xml.dom.minidom
 
 from decimal import Decimal
 
@@ -55,6 +57,7 @@ if 'win32' == sys.platform:
     import win32con
     import win32file
     import win32gui
+    import win32process
     import win32security
 
     from ctypes import windll, c_ulong, c_buffer, byref, sizeof
@@ -64,11 +67,6 @@ if 'win32' == sys.platform:
     kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
-
-
-_GTK_FONTS_FOLDER = r'share\fonts'
-_SEGOEUI = 'segoeui.ttf'
-_TAHOMA = 'tahoma.ttf'
 
 
 def browse_file(_, title):
@@ -612,40 +610,219 @@ def symlink_or_copy(src, dst):
         logger.debug('copied %s to %s', src, dst)
 
 
-def copy_fonts_in_portable_app(auto_exit):
-    """
-    Fix #1040: copy only two fonts in order to escape huge default fontconfig caching.
-    We do this here only for portable app as for the installed app we do it through the installer.
+def has_fontconfig_cache(font_conf_file):
+    dom = xml.dom.minidom.parse(font_conf_file)
+    fc_element = dom.getElementsByTagName('fontconfig')[0]
+    cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
+    expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
+    expanded_homepath = os.path.join(os.path.expandvars('%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
+    for dir_element in fc_element.getElementsByTagName('cachedir'):
 
-    This lists fonts that Microsoft provides:
-    https://docs.microsoft.com/en-us/typography/fonts/windows_10_font_list
-    """
-    if (
-        hasattr(sys, 'frozen') and
-        bleachbit.portable_mode and
-        not auto_exit
-    ):
-        windows_fonts_folder = get_known_folder_path('Fonts')
-        os.makedirs(_GTK_FONTS_FOLDER, exist_ok=True)
-        fonts_needed = [_SEGOEUI, _TAHOMA]
+        if dir_element.firstChild.nodeValue == 'LOCAL_APPDATA_FONTCONFIG_CACHE':
+            dirpath = os.path.join(expanded_localdata, 'fontconfig', 'cache')
+        elif dir_element.firstChild.nodeValue == 'fontconfig' and dir_element.getAttribute('prefix') == 'xdg':
+            dirpath = os.path.join(expanded_homepath, '.cache', 'fontconfig')
+        elif dir_element.firstChild.nodeValue == '~/.fontconfig':
+            dirpath = os.path.join(expanded_homepath, '.fontconfig')
+        else:
+            # user has entered a custom directory
+            dirpath = dir_element.firstChild.nodeValue
+
+        if dirpath and os.path.exists(os.path.join(dirpath, cachefile)):
+            return True
+
+    return False
+
+
+def get_font_conf_file():
+    if hasattr(sys, 'frozen'):
+        return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
+
+    import gi
+    return os.path.join(
+            os.path.dirname(os.path.dirname(gi.__file__)),
+            'gnome', 'etc', 'fonts', 'fonts.conf'
+        )
+
+
+class SplashThread(Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self._splash_screen_handle = None
+        self._splash_screen_height = None
+        self._splash_screen_width = None
+
+    def run(self):
+        logger.debug('SplashThread started')
+        self._splash_screen_handle = self._target()
+        # Dispatch messages
+        win32gui.PumpMessages()
+
+    def join(self, *args):
+        import win32con, win32gui
+        win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
+        Thread.join(self, *args)
+
+    def _show_splash_screen(self):
+        #get instance handle
+        hInstance = win32api.GetModuleHandle()
+
+        # the class name
+        className = 'SimpleWin32'
+
+        # create and initialize window class
+        wndClass                = win32gui.WNDCLASS()
+        wndClass.style          = win32con.CS_HREDRAW | win32con.CS_VREDRAW
+        wndClass.lpfnWndProc    = self.wndProc
+        wndClass.hInstance      = hInstance
+        wndClass.hIcon          = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
+        wndClass.hCursor        = win32gui.LoadCursor(0, win32con.IDC_ARROW)
+        wndClass.hbrBackground  = win32gui.GetStockObject(win32con.WHITE_BRUSH)
+        wndClass.lpszClassName  = className
+
+        # register window class
+        wndClassAtom = None
         try:
-            import locale
-            lang_id = locale.getdefaultlocale()[0].split('_')[0]
-        except Exeption as e:
-            logger.exception('cannot find lang_id')
-            lang_id = '??'
-        logger.debug('detected lang_id=%s', lang_id)
-        extra_fonts = {}
-        extra_fonts['ko'] = ['malgun.ttf', 'malgunbd.ttf', 'malgunsl.ttf']
-        extra_fonts['hi'] = ['mangal.ttf', 'mangalb.ttf']
-        extra_fonts['ja'] = ['meiryo.ttc', 'meiryob.ttc', 'msgothic.ttc']
-        extra_fonts['zh'] = ['msyh.ttc', 'msyhbd.ttc']
-        if lang_id in extra_fonts:
-            fonts_needed.extend(extra_fonts[lang_id])
-        for font in fonts_needed:
-            dst_font_fn = os.path.join(_GTK_FONTS_FOLDER, font)
-            src_font_fn = os.path.join(windows_fonts_folder, font)
-            if not os.path.exists(src_font_fn):
-                logger.error('the font file does not exist: %s', src_font_fn)
-            elif not os.path.exists(dst_font_fn):
-                symlink_or_copy(src_font_fn, dst_font_fn)
+            wndClassAtom = win32gui.RegisterClass(wndClass)
+        except Exception as e:
+            raise e
+
+        displayWidth = win32api.GetSystemMetrics(0)
+        displayHeigh = win32api.GetSystemMetrics(1)
+        self._splash_screen_height = 100
+        self._splash_screen_width = displayWidth // 4
+        windowPosX = (displayWidth - self._splash_screen_width) // 2
+        windowPosY = (displayHeigh - self._splash_screen_height) // 2
+
+        hWindow = win32gui.CreateWindow(
+            wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
+            'Bleachbit splash screen',
+            win32con.WS_POPUPWINDOW |
+            win32con.WS_VISIBLE,
+            windowPosX,
+            windowPosY,
+            self._splash_screen_width,
+            self._splash_screen_height,
+            0,
+            0,
+            hInstance,
+            None)
+
+        is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
+        logger.debug(
+            'Is splash screen on top: {}'.format(is_splash_screen_on_top)
+        )
+
+        return hWindow
+
+    def _force_set_foreground_window(self, hWindow):
+        # As there are some restrictions about which processes can call SetForegroundWindow as described here:
+        # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
+        # we try consecutively three different ways to show the splash screen on top of all other windows.
+
+        # Solution 1: Pressing alt key unlocks SetForegroundWindow
+        # https://stackoverflow.com/questions/14295337/win32gui-setactivewindow-error-the-specified-procedure-could-not-be-found
+        # Not using win32com.client.Dispatch like in the link because there are problems when building with py2exe.
+        ALT_KEY = win32con.VK_MENU
+        RIGHT_ALT = 0xb8
+        win32api.keybd_event(ALT_KEY, RIGHT_ALT, 0, 0)
+        win32api.keybd_event(ALT_KEY, RIGHT_ALT, win32con.KEYEVENTF_KEYUP, 0)
+        win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+        try:
+            win32gui.SetForegroundWindow(hWindow)
+        except Exception as e:
+            exc_message = str(e)
+            logger.debug(
+                'Failed attempt to show splash screen with keybd_event: {}'.format(exc_message)
+            )
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 2: Attaching current thread to the foreground thread in order to use BringWindowToTop
+        # https://shlomio.wordpress.com/2012/09/04/solved-setforegroundwindow-win32-api-not-always-works/
+        foreground_thread_id, foreground_process_id = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        appThread = win32api.GetCurrentThreadId()
+
+        if foreground_thread_id != appThread:
+
+            try:
+                win32process.AttachThreadInput(foreground_thread_id, appThread, True)
+                win32gui.BringWindowToTop(hWindow)
+                win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+                win32process.AttachThreadInput(foreground_thread_id, appThread, False)
+            except Exception as e:
+                exc_message = str(e)
+                logger.debug(
+                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(exc_message)
+                )
+
+        else:
+            win32gui.BringWindowToTop(hWindow)
+            win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 3: Working with timers that lock/unlock SetForegroundWindow
+        #https://gist.github.com/EBNull/1419093
+        try:
+            timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
+            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)
+            win32gui.BringWindowToTop(hWindow)
+            win32gui.SetForegroundWindow(hWindow)
+            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, timeout, win32con.SPIF_SENDCHANGE)
+        except Exception as e:
+            exc_message = str(e)
+            logger.debug(
+                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(exc_message)
+            )
+
+        if win32gui.GetForegroundWindow() == hWindow:
+            return True
+
+        # Solution 4: If on some machines the splash screen still doesn't come on top, we can try
+        # the following solution that combines attaching to a thread and timers:
+        # https://www.codeproject.com/Tips/76427/How-to-Bring-Window-to-Top-with-SetForegroundWindo
+
+        return False
+
+    def wndProc(self, hWnd, message, wParam, lParam):
+
+        if message == win32con.WM_PAINT:
+            hDC, paintStruct = win32gui.BeginPaint(hWnd)
+            folder_with_ico_file = 'share' if hasattr(sys, 'frozen') else 'windows'
+            filename = os.path.join(os.path.dirname(sys.argv[0]), folder_with_ico_file, 'bleachbit.ico')
+            flags = win32con.LR_LOADFROMFILE
+            hIcon = win32gui.LoadImage(
+                0, filename, win32con.IMAGE_ICON,
+                0, 0, flags)
+
+            # Default icon size seems to be 32 pixels so we center the icon vertically.
+            default_icon_size = 32
+            icon_top_margin = self._splash_screen_height - 2 * (default_icon_size + 2)
+            win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
+            # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
+
+            rect = win32gui.GetClientRect(hWnd)
+            textmetrics = win32gui.GetTextMetrics(hDC)
+            text_left_margin = 2 * default_icon_size
+            text_rect = (text_left_margin, (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
+            win32gui.DrawText(
+                hDC,
+                ("Bleachbit is starting...\n"),
+                -1,
+                text_rect,
+                win32con.DT_WORDBREAK)
+            win32gui.EndPaint(hWnd, paintStruct)
+            return 0
+
+        elif message == win32con.WM_DESTROY:
+            win32gui.PostQuitMessage(0)
+            return 0
+
+        else:
+            return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+
+splash_thread = SplashThread()

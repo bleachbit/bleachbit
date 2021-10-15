@@ -152,8 +152,6 @@ class Bleachbit(Gtk.Application):
             if Windows.elevate_privileges(uac):
                 # privileges escalated in other process
                 sys.exit(0)
-            if portable_mode:
-                Windows.copy_fonts_in_portable_app(auto_exit)
 
             if is_context_menu_executed:
                 # When we have a running application and executing the Windows
@@ -557,6 +555,8 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
+        self._show_splash_screen()
+
         self._auto_exit = auto_exit
 
         self.set_wmclass(APP_NAME, APP_NAME)
@@ -586,6 +586,19 @@ class GUI(Gtk.ApplicationWindow):
             bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
+
+    def _show_splash_screen(self):
+        if os.name != 'nt':
+            return
+
+        font_conf_file = Windows.get_font_conf_file()
+        if not os.path.exists(font_conf_file):
+            logger.error('No fonts.conf file')
+            return
+
+        has_cache = Windows.has_fontconfig_cache(font_conf_file)
+        if not has_cache:
+            Windows.splash_thread.start()
 
     def _confirm_delete(self, mention_preview, shred_settings=False):
         if options.get("delete_confirmation"):
@@ -1079,6 +1092,10 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_show(self, widget):
+
+        if Windows.splash_thread.is_alive():
+            Windows.splash_thread.join(0)
+
         # restore window position, size and state
         if not options.get('remember_geometry'):
             return
