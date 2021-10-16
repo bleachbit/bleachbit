@@ -339,6 +339,9 @@ Section Core (Required)
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
+
+    # Build cache now while there is a GUI progress bar.
+    ExecWait '"$instdir\fc-cache.exe"'
 SectionEnd
 
 

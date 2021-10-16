@@ -222,10 +222,8 @@ def build():
         os.makedirs('dist')
 
     logger.info('Copying GTK helpers')
-    shutil.copyfile(os.path.join(GTK_DIR, 'gspawn-win32-helper.exe'),
-                    os.path.join('dist', 'gspawn-win32-helper.exe'))
-    shutil.copyfile(os.path.join(GTK_DIR, 'gspawn-win32-helper-console.exe'),
-                    os.path.join('dist', 'gspawn-win32-helper-console.exe'))
+    for exe in ('gspawn-win32-helper.exe', 'gspawn-win32-helper-console.exe', 'fc-cache.exe'):
+        shutil.copyfile(os.path.join(GTK_DIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
     copytree(GTK_DIR + '\\etc', 'dist\\etc')
