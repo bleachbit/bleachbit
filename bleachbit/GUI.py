@@ -1093,7 +1093,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_show(self, widget):
 
-        if Windows.splash_thread.is_alive():
+        if 'nt' == os.name and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
