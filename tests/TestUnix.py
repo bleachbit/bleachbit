@@ -78,9 +78,9 @@ class UnixTestCase(common.BleachbitTestCase):
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
     @common.skipIfWindows
-    def test_is_running_darwin(self):
-        def run_ps():
-            return """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+    @mock.patch('subprocess.check_output')
+    def test_is_running_darwin(self, mock_check_output):
+        mock_check_output.return_value = """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
 alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
@@ -94,10 +94,11 @@ alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
-        self.assertTrue(is_running_darwin('USBAgent', run_ps))
-        self.assertFalse(is_running_darwin('does-not-exist', run_ps))
-        self.assertRaises(RuntimeError, is_running_darwin,
-                          'foo', lambda: 'invalid-input')
+        self.assertTrue(is_running_darwin('USBAgent'))
+        self.assertFalse(is_running_darwin('does-not-exist'))
+
+        mock_check_output.return_value = 'invalid-input'
+        self.assertRaises(RuntimeError, is_running_darwin, 'foo')
 
     @common.skipIfWindows
     def test_is_running(self):

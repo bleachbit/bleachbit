@@ -499,13 +499,11 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
-def is_running_darwin(exename, run_ps=None):
-    if run_ps is None:
-        def run_ps():
-            return subprocess.check_output(["ps", "aux", "-c"])
+def is_running_darwin(exename):
     try:
+        ps_out = subprocess.check_output(["ps", "aux", "-c"])
         processess = (re.split(r"\s+", p, 10)[10]
-                      for p in run_ps().split("\n") if p != "")
+                      for p in ps_out.split("\n") if p != "")
         next(processess)  # drop the header
         return exename in processess
     except IndexError:
