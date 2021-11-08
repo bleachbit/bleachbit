@@ -320,6 +320,7 @@ class PreferencesDialog:
 
         # finish
         swindow = Gtk.ScrolledWindow()
+        swindow.set_overlay_scrolling(False)
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
@@ -462,6 +463,7 @@ class PreferencesDialog:
 
         # finish tree view
         swindow = Gtk.ScrolledWindow()
+        swindow.set_overlay_scrolling(False)
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)

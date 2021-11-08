@@ -788,6 +788,7 @@ class GUI(Gtk.ApplicationWindow):
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_policy(
             Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.set_overlay_scrolling(False)
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
