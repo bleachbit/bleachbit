@@ -250,7 +250,8 @@ class FileActionProvider(ActionProvider):
                         logger.debug(
                             # TRANSLATORS: This is a lint-style warning that there seems to be a
                             # mild mistake in the CleanerML file because walk.all is expected to
-                            # be used with directories instead of with files.
+                            # be used with directories instead of with files. Do not translate
+                            # search="walk.all" and path="%s"
                             _('search="walk.all" used with regular file path="%s"'),
                             expanded,
                         )

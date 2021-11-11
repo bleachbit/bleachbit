@@ -71,6 +71,9 @@ class ChaffDialog(Gtk.Dialog):
         box.add(label)
 
         inspiration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+
+        # TRANSLATORS: Inspiration is a choice of documents from which random
+        # text will be generated.
         inspiration_box.add(Gtk.Label(_("Inspiration")))
         self.inspiration_combo = Gtk.ComboBoxText()
         self.inspiration_combo_options = (
