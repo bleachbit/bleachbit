@@ -23,7 +23,7 @@ before_install:
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
   - sudo apt-get install gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils
-  - pip install PyGObject
+  - pip install PyGObject chardet
 # coveralls.io
   - pip install coveralls requests[security]
 # install mock
