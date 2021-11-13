@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-11-11 08:53-0700\n"
-"PO-Revision-Date: 2021-11-11 05:17+0000\n"
+"PO-Revision-Date: 2021-11-12 03:58+0000\n"
 "Last-Translator: Thiraporn U <Unknown>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2021-11-12 01:08+0000\n"
+"X-Launchpad-Export-Date: 2021-11-12 15:52+0000\n"
 "X-Generator: Launchpad (build 57dd9ea1b48fdf744e285d99fb34fa0c21646cd0)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -721,7 +721,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbags"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -771,7 +771,7 @@ msgstr "ไคลเอนท์ (IRC Client) เดิมชื่อ XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "เครื่องมือทำความสะอาดแฟ้มที่ไม่จำเป็น"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
@@ -791,7 +791,7 @@ msgstr "การสแกนละเอียดไม่รองรับต
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" ใช้กับแฟ้มปกติ path=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1030,7 +1030,7 @@ msgstr "เรียกใช้เครื่องมือทำความ
 
 #: ../bleachbit/CLI.py:152
 msgid "set log level to verbose"
-msgstr ""
+msgstr "ตั้งค่าระดับบันทึกเป็น verbose"
 
 #: ../bleachbit/CLI.py:153
 msgid "log debug messages to file"
@@ -1208,10 +1208,13 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:1017
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่ไม่ใช่ super "
+"user"
 
 #: ../bleachbit/FileUtilities.py:1019
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr ""
+"{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่เป็น super user"
 
 #: ../bleachbit/FileUtilities.py:1035
 msgid "Handled unknown error #0 while truncating file."
@@ -1294,7 +1297,7 @@ msgstr "สร้างข้อความที่สร้างแบบส
 #. text will be generated.
 #: ../bleachbit/GuiChaff.py:77
 msgid "Inspiration"
-msgstr ""
+msgstr "แรงบันดาลใจ"
 
 #: ../bleachbit/GuiChaff.py:80
 msgid "2600 Magazine"
@@ -1631,7 +1634,7 @@ msgstr "ล้างแฟ้มโดยทำตามคำสั่งที
 
 #: ../bleachbit/GUI.py:1032
 msgid "Abort"
-msgstr ""
+msgstr "ยกเลิก"
 
 #: ../bleachbit/GUI.py:1034
 msgid "Abort the preview or cleaning process"
