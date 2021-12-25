@@ -3,53 +3,45 @@ version: 4.6.0.{build}
 image: Visual Studio 2013
 
 environment:
-    PYTHON_HOME: 'C:/Python34'
+    PYTHON_HOME: 'x86-windows\tools\python3'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
 init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
-  - '%PYTHON_HOME%/python.exe -V' # show Python version
-  - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
-  - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
-  - '%PYTHON_HOME%/python.exe -m pip install --upgrade pip'
-  - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/psutil-5.6.7-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/pywin32-227-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
-  - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
-  # pefile 2021.5.13 uses a f-string that fails with Python 3.4
-  - '%PYTHON_HOME%/Scripts/pip.exe install pefile==2019.4.18 cachetools' # for py2exe
-  - '%PYTHON_HOME%/Scripts/pip.exe install py2exe'
-  - '%PYTHON_HOME%/Scripts/pip.exe install scandir'
-  - '%PYTHON_HOME%/Scripts/pip.exe install chardet'
-  - '%PYTHON_HOME%/Scripts/pip.exe install requests'
-  - '%PYTHON_HOME%/Scripts/pip.exe install plyer==2.0.0' # Python 3.4 support dropped https://github.com/kivy/plyer/pull/720/files
-  - '%PYTHON_HOME%/Scripts/pip.exe install win-unicode-console'
-  - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
-  - ps: Get-FileHash pygi-aio.exe
-  - 'pygi-aio.exe %PYTHON_HOME% GTK'
-  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.1.0/upx-4.1.0-win64.zip" -FileName upx.zip}
+  - ps: if (-not (Test-Path gtk.zip)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/gtk3.24-x86-windows.zip" -FileName gtk3-x86-windows.zip}
+  - ps: Get-FileHash gtk3-x86-windows.zip
+  - '%SZ_EXE% x gtk3-x86-windows.zip'
+  - '%PYTHON_HOME%\python.exe -V' # show Python version
+  - '%PYTHON_HOME%\python.exe -m ensurepip'
+  - '%PYTHON_HOME%\Scripts\pip3.exe --version' # show pip version
+  - ps: if (-not (Test-Path x86-add.zip )) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/x86-add.zip" }
+  - '%SZ_EXE% x x86-add.zip'
+  - 'XCOPY /E x86-add\*.* %PYTHON_HOME%'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install psutil'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install pypiwin32'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install winshell'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install py2exe'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install scandir'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install chardet'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install requests'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install plyer'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install win-unicode-console'
+  - ps: if (-not (Test-Path PyGObject-3.42.0-cp310-cp310-win32.whl)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/PyGObject-3.42.0-cp310-cp310-win32.whl" }
+  - '%PYTHON_HOME%\Scripts\pip3.exe install PyGObject-3.42.0-cp310-cp310-win32.whl'
+  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
+>>>>>>> ef5ef7e6 (Python 3.10 build)
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.1.0-win64 upx'
   - 'dir .\upx\'
-  - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip" -FileName gettext.zip}
-  - ps: Get-FileHash gettext.zip
-  - '%SZ_EXE% x gettext.zip -ogettext'
-  - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2023/sqlite-dll-win32-x86-3430200.zip" -FileName sqlite.zip }
-  - ps: Get-FileHash sqlite.zip -Algorithm SHA1
-  - '%SZ_EXE% x sqlite.zip'
-  - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'
-#  - ps: if (-not (Test-Path vcredist_x86.exe)) { Start-FileDownload "https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe" -FileName vcredist_x86.exe }
-
-  - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
+  - set PATH=%PATH%;%PYTHON_HOME%\..\gettext\bin
 # Show version numbers of installed software.
   - 'msgunfmt -V'
-  - 'strip.exe -V'
+#  - 'strip.exe -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
 
 build_script:
@@ -57,12 +49,15 @@ build_script:
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" > bleachbit\Revision.py'
   - '%make% -C po local'
-  - '%PYTHON_HOME%/python.exe -m windows.setup_py2exe'
+  - '%PYTHON_HOME%\python.exe -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
   - ps: Get-FileHash BleachBit-*
 
 cache:
+  - gtk.zip -> appveyor.yml
+  - PyGObject-3.42.0-cp310-cp310-win32.whl -> appveyor.yml
+  - x86-add.zip -> appveyor.yml
   - pygi-aio.exe -> appveyor.yml
   - upx.zip -> appveyor.yml
   - gettext.zip -> appveyor.yml
@@ -70,12 +65,12 @@ cache:
 
 test_script:
 # coveralls.io
-  - '%PYTHON_HOME%/Scripts/pip.exe install python-coveralls requests[security]'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
-  - '%PYTHON_HOME%/Scripts/pip.exe install mock'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install mock'
   - 'SET DESTRUCTIVE_TESTS=T'
-  - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" tests/TestAll.py'
+  - '%PYTHON_HOME%\Scripts\coverage.exe run --include="bleachbit/*" tests/TestAll.py'
 
 artifacts:
   - path: BleachBit-*-setup.exe
