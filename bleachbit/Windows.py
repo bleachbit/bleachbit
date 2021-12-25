@@ -45,7 +45,7 @@ import logging
 import os
 import sys
 import shutil
-from threading import Thread
+from threading import Thread, Event
 import xml.dom.minidom
 
 from decimal import Decimal
@@ -649,13 +649,20 @@ class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self._splash_screen_started = Event()
         self._splash_screen_handle = None
         self._splash_screen_height = None
         self._splash_screen_width = None
 
-    def run(self):
+    def start(self):
+        Thread.start(self)
+        self._splash_screen_started.wait()
         logger.debug('SplashThread started')
+
+    def run(self):
         self._splash_screen_handle = self._target()
+        self._splash_screen_started.set()
+
         # Dispatch messages
         win32gui.PumpMessages()
 
