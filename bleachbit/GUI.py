@@ -593,7 +593,7 @@ class GUI(Gtk.ApplicationWindow):
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file')
+            logger.error('No fonts.conf file {}'.format(font_conf_file))
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)

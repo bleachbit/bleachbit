@@ -639,10 +639,10 @@ def get_font_conf_file():
         return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
 
     import gi
-    return os.path.join(
-            os.path.dirname(os.path.dirname(gi.__file__)),
-            'gnome', 'etc', 'fonts', 'fonts.conf'
-        )
+    gnome_dir = os.path.join(os.path.dirname(os.path.dirname(gi.__file__)), 'gnome')
+    if not os.path.isdir(gnome_dir):
+        gnome_dir = os.path.join(sys.exec_prefix, '..', '..')
+    return os.path.join(gnome_dir, 'etc', 'fonts', 'fonts.conf')
 
 
 class SplashThread(Thread):
