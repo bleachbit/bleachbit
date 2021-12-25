@@ -238,6 +238,12 @@ def build():
         path = os.path.join(GTK_DIR, 'lib', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'lib', d))
+    gtk_share = os.path.join(GTK_LIBDIR, 'share')
+    if os.path.exists(gtk_share):
+        for d in ('icons', 'themes'):
+            path = os.path.join(gtk_share, d)
+            if os.path.exists(path):
+                copytree(path, os.path.join('dist', 'share', d))
 
     logger.info('Remove windows fonts dir from fonts.conf file')
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
@@ -523,7 +529,7 @@ def shrink():
             'Error when running strip. Does your PATH have MINGW with binutils?')
 
     if not fast:
-        upx()
+        # upx()
         assert_execute_console()
 
     logger.info('Purging unnecessary GTK+ files')
