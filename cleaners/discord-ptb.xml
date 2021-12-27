@@ -19,14 +19,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="discord">
-  <label>Discord</label>
-  <description>Chat client</description>
-  <running type="exe" os="windows">Discord.exe</running>
-  <running type="exe" os="linux">Discord</running>
+<cleaner id="discord-ptb">
+  <label>Discord PTB</label>
+  <description>Chat client - PTB version</description>
+  <running type="exe" os="windows">DiscordPTB.exe</running>
+  <running type="exe" os="linux">DiscordPTB</running>
   <var name="base">
-    <value os="windows">%UserProfile%\AppData\Roaming\discord</value>
-    <value os="linux">~/.config/discord</value>
+    <value os="windows">%UserProfile%\AppData\Roaming\discordptb</value>
+    <value os="linux">~/.config/discordptb</value>
   </var>
   <option id="cache">
     <label>Cache</label>

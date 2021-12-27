@@ -19,14 +19,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="discord">
-  <label>Discord</label>
-  <description>Chat client</description>
-  <running type="exe" os="windows">Discord.exe</running>
-  <running type="exe" os="linux">Discord</running>
+<cleaner id="discord-canary">
+  <label>Discord Canary</label>
+  <description>Chat client - Canary version</description>
+  <running type="exe" os="windows">DiscordCanary.exe</running>
+  <running type="exe" os="linux">DiscordCanary</running>
   <var name="base">
-    <value os="windows">%UserProfile%\AppData\Roaming\discord</value>
-    <value os="linux">~/.config/discord</value>
+    <value os="windows">%UserProfile%\AppData\Roaming\discordcanary</value>
+    <value os="linux">~/.config/discordcanary</value>
   </var>
   <option id="cache">
     <label>Cache</label>
