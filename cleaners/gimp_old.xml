@@ -22,6 +22,12 @@
 <cleaner id="gimp_old">
   <label>GIMP 2.4/2.6/2.8</label>
   <description>Graphics editor</description>
+  <running type="exe" os="windows">gimp-2.4.exe</running>
+  <running type="exe" os="windows">gimp-2.6.exe</running>
+  <running type="exe" os="windows">gimp-2.8.exe</running>
+  <running type="exe" os="linux">gimp-2.4</running>
+  <running type="exe" os="linux">gimp-2.6</running>
+  <running type="exe" os="linux">gimp-2.8</running>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>

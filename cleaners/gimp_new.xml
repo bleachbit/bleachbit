@@ -22,6 +22,8 @@
 <cleaner id="gimp_new">
   <label>GIMP 2.10</label>
   <description>Graphics editor</description>
+  <running type="exe" os="windows">gimp-2.10.exe</running>
+  <running type="exe" os="linux">gimp-2.10</running>
   <var name="gimp">
     <value os="windows">%AppData%\GIMP\2.10</value>
     <value os="linux">~/.config/GIMP/2.10</value>
