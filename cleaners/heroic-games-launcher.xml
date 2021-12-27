@@ -47,7 +47,7 @@
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
-    <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Crashpad/"/>
   </option>
   <option id="history">
     <label>History</label>
