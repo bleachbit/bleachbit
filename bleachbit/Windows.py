@@ -519,9 +519,9 @@ def parse_windows_build(build=None):
 
 def path_on_network(path):
     """Check whether 'path' is on a network drive"""
-    if len(os.path.splitunc(path)[0]) > 0:
+    drive = os.path.splitdrive(path)[0]
+    if drive.startswith(r'\\'):
         return True
-    drive = os.path.splitdrive(path)[0] + '\\'
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
 
