@@ -146,7 +146,13 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             win32event.WaitForSingleObject(hproc, win32event.INFINITE)
             return rc
 
+        environment_changed = False
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            # We need to set env var because of the new process that executes the context menu command string
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', self.tempdir)
+            environment_changed = True
         options.set('delete_confirmation', False)
+
         # We redirect the ShellExecuteEx call like this because if we do it in a mock we enter recursion
         # because we call ShellExecuteEx in shell_execute_synchronous
         bleachbit.Windows.shell.ShellExecuteEx = shell_execute_synchronous
@@ -156,3 +162,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                     Bleachbit(auto_exit=True, shred_paths=[file_to_shred], uac=True)
 
         self.assertNotExists(file_to_shred)
+
+        if environment_changed:
+            # We don't want to affect other tests, executed after this one.
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
