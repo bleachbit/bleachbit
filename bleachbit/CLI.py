@@ -37,9 +37,13 @@ logger = logging.getLogger(__name__)
 class CliCallback:
     """Command line's callback passed to Worker"""
 
+    def __init__(self, quiet=False):
+        self.quiet = quiet
+
     def append_text(self, msg, tag=None):
         """Write text to the terminal"""
-        print(msg.strip('\n'))
+        if not self.quiet:
+            print(msg.strip('\n'))
 
     def update_progress_bar(self, status):
         """Not used"""
@@ -73,9 +77,9 @@ def list_cleaners():
         print (cleaner)
 
 
-def preview_or_clean(operations, really_clean):
+def preview_or_clean(operations, really_clean, quiet=False):
     """Preview deletes and other changes"""
-    cb = CliCallback()
+    cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     while next(worker):
         pass

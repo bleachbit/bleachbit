@@ -177,7 +177,7 @@ class CLITestCase(common.BleachbitTestCase):
             FileUtilities.delete(filename)
             self.assertExists(filename)
             operations = args_to_operations(['system.tmp'], False, False)
-            preview_or_clean(operations, True)
+            preview_or_clean(operations, True, quiet=True)
             FileUtilities.delete = save_delete
             self.assertIn(filename, deleted_paths,
                           "%s not found deleted" % filename)
