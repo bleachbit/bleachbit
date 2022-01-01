@@ -251,7 +251,7 @@ def build():
         os.makedirs(os.path.join('dist', SCHEMAS_DIR))
         shutil.copyfile(gschemas_compiled,
                         os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
-    os.makedirs(os.path.join('dist', 'share'))
+    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
     # for pop-up notification
     shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
