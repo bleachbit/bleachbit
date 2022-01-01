@@ -605,6 +605,11 @@ class GUI(Gtk.ApplicationWindow):
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
+    def destroy(self):
+        """Prevent textbuffer usage during UI destruction"""
+        self.textbuffer = None
+        super(GUI, self).destroy()
+
     def get_preferences_dialog(self):
         return PreferencesDialog(
             self,
@@ -640,6 +645,8 @@ class GUI(Gtk.ApplicationWindow):
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if self.textbuffer is None:
+            return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
         if tag:
@@ -650,7 +657,7 @@ class GUI(Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda:
+            GLib.idle_add(lambda: self.textbuffer is not None and
                           self.textview.scroll_mark_onscreen(
                               self.textbuffer.get_insert()))
 

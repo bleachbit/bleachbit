@@ -397,6 +397,9 @@ class Winapp:
                     'unknown file option %s in section %s', element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
+                # If dirname is a drive letter it needs a special treatment on Windows:
+                # https://www.reddit.com/r/learnpython/comments/gawqne/why_cant_i_ospathjoin_on_a_drive_letterc/
+                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[0] == dirname else dirname
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)
