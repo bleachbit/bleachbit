@@ -7,16 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2021-10-16 04:08+0000\n"
+"POT-Creation-Date: 2021-11-11 08:53-0700\n"
+"PO-Revision-Date: 2022-01-30 03:13+0000\n"
 "Last-Translator: Eric Xu <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
-"X-Generator: Launchpad (build 5208e7f8f75eb1d093d03c455dcca20a57934b38)\n"
+"X-Launchpad-Export-Date: 2022-01-30 16:24+0000\n"
+"X-Generator: Launchpad (build 464e4acf6ea83683a507f3bcaee75fe55e2a617c)\n"
+
+#: ../bleachbit/CLI.py:173
+msgid "use options set in the graphical interface"
+msgstr "使用图形界面中设置的选项"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -200,7 +204,7 @@ msgstr "这个选项将会删除您已保存的密码"
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../bleachbit/Action.py:591
+#: ../cleaners/opera.xml ../bleachbit/Action.py:592
 msgid "Vacuum"
 msgstr "整理数据库"
 
@@ -584,6 +588,7 @@ msgstr "办公套件"
 msgid "Known files history"
 msgstr "已知文件历史"
 
+#. http://wiki.amule.org/wiki/Friend
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
 msgstr "已知的客户端和好友"
@@ -772,8 +777,9 @@ msgstr "深度扫描不支持多个值的变量"
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
-#. be used with directories instead of with files.
-#: ../bleachbit/Action.py:254
+#. be used with directories instead of with files. Do not translate
+#. search="walk.all" and path="%s"
+#: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr "search=\"walk.all\"不应与常规文件路径=\"%s\"并用"
@@ -783,16 +789,16 @@ msgstr "search=\"walk.all\"不应与常规文件路径=\"%s\"并用"
 #. wildcard patterns. Therefore, maybe the developer either missed
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
-#: ../bleachbit/Action.py:292
+#: ../bleachbit/Action.py:293
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
 msgstr "路径 =\"%s\"不是一个glob pattern"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:385 ../bleachbit/Action.py:398
-#: ../bleachbit/Action.py:411 ../bleachbit/Action.py:424
-#: ../bleachbit/Action.py:437 ../bleachbit/Action.py:502
-#: ../bleachbit/Action.py:514 ../bleachbit/Command.py:203
+#: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
+#: ../bleachbit/Action.py:412 ../bleachbit/Action.py:425
+#: ../bleachbit/Action.py:438 ../bleachbit/Action.py:503
+#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:203
 #: ../bleachbit/Command.py:237
 msgid "Clean file"
 msgstr "清理文件"
@@ -801,11 +807,11 @@ msgstr "清理文件"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:527 ../bleachbit/GUI.py:914 ../bleachbit/GUI.py:1021
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:915 ../bleachbit/GUI.py:1022
 msgid "Clean"
 msgstr "清空"
 
-#: ../bleachbit/Action.py:564
+#: ../bleachbit/Action.py:565
 #, python-format
 msgid "Run external command: %s"
 msgstr "运行其他程序：%s"
@@ -1033,10 +1039,6 @@ msgstr "不要弹出要求管理员权限的对话框"
 msgid "preview files to be deleted and other changes"
 msgstr "预览要删除的文件和进行的修改"
 
-#: ../bleachbit/CLI.py:173
-msgid "use options set in the graphical interface"
-msgstr "在图形界面中使用选项组"
-
 #: ../bleachbit/CLI.py:175
 msgid "enable all options that do not have a warning"
 msgstr "启用所有无警告的选项"
@@ -1255,47 +1257,49 @@ msgstr "制作chaff"
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "制作受文档启发的随机生成的消息"
 
-#: ../bleachbit/GuiChaff.py:74
+#. TRANSLATORS: Inspiration is a choice of documents from which random
+#. text will be generated.
+#: ../bleachbit/GuiChaff.py:77
 msgid "Inspiration"
 msgstr "灵感"
 
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:80
 msgid "2600 Magazine"
 msgstr "2600杂志"
 
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:80
 msgid "Hillary Clinton's emails"
 msgstr "希拉里·克林顿的电子邮件"
 
-#: ../bleachbit/GuiChaff.py:85
+#: ../bleachbit/GuiChaff.py:88
 msgid "Number of files"
 msgstr "文件数"
 
-#: ../bleachbit/GuiChaff.py:92 ../bleachbit/GuiChaff.py:152
+#: ../bleachbit/GuiChaff.py:95 ../bleachbit/GuiChaff.py:155
 msgid "Select destination folder"
 msgstr "选择目标文件夹"
 
-#: ../bleachbit/GuiChaff.py:102
+#: ../bleachbit/GuiChaff.py:105
 msgid "When finished"
 msgstr "完成时"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:108
 msgid "Delete without shredding"
 msgstr "删除而不切碎"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:108
 msgid "Do not delete"
 msgstr "不删除"
 
-#: ../bleachbit/GuiChaff.py:116
+#: ../bleachbit/GuiChaff.py:119
 msgid "Make files"
 msgstr "制作文件"
 
-#: ../bleachbit/GuiChaff.py:133
+#: ../bleachbit/GuiChaff.py:136
 msgid "Download data needed for chaff generator?"
 msgstr "下载chaff生成器所需的数据？"
 
-#: ../bleachbit/GuiChaff.py:175
+#: ../bleachbit/GuiChaff.py:178
 msgid "Generating files"
 msgstr "正在生成文件"
 
@@ -1379,8 +1383,8 @@ msgstr "记住窗口大小"
 msgid "Show debug messages"
 msgstr "显示调试信息"
 
-#: ../bleachbit/GuiPreferences.py:219 ../bleachbit/GuiPreferences.py:348
-#: ../bleachbit/GuiPreferences.py:391 ../bleachbit/GUI.py:280
+#: ../bleachbit/GuiPreferences.py:219 ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:392 ../bleachbit/GUI.py:280
 msgid "Choose a folder"
 msgstr "选择一个文件夹"
 
@@ -1398,7 +1402,7 @@ msgstr "添加"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:269 ../bleachbit/GuiPreferences.py:486
+#: ../bleachbit/GuiPreferences.py:269 ../bleachbit/GuiPreferences.py:488
 msgctxt "button"
 msgid "Remove"
 msgstr "移除"
@@ -1419,49 +1423,49 @@ msgstr "代码"
 msgid "Name"
 msgstr "名称"
 
-#: ../bleachbit/GuiPreferences.py:334 ../bleachbit/GuiPreferences.py:377
+#: ../bleachbit/GuiPreferences.py:335 ../bleachbit/GuiPreferences.py:378
 msgid "Choose a file"
 msgstr "选择一个文件"
 
-#: ../bleachbit/GuiPreferences.py:342 ../bleachbit/GuiPreferences.py:385
-#: ../bleachbit/GuiPreferences.py:430
+#: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
+#: ../bleachbit/GuiPreferences.py:431
 msgid "File"
 msgstr "文件"
 
-#: ../bleachbit/GuiPreferences.py:357 ../bleachbit/GuiPreferences.py:400
-#: ../bleachbit/GuiPreferences.py:432
+#: ../bleachbit/GuiPreferences.py:358 ../bleachbit/GuiPreferences.py:401
+#: ../bleachbit/GuiPreferences.py:433
 msgid "Folder"
 msgstr "文件夹"
 
-#: ../bleachbit/GuiPreferences.py:442
+#: ../bleachbit/GuiPreferences.py:443
 msgid "Theses paths will not be deleted or modified."
 msgstr "将不会删除或修改这些位置"
 
-#: ../bleachbit/GuiPreferences.py:445
+#: ../bleachbit/GuiPreferences.py:446
 msgid "These locations can be selected for deletion."
 msgstr "这些被选中的位置将会被删除。"
 
-#: ../bleachbit/GuiPreferences.py:453
+#: ../bleachbit/GuiPreferences.py:454
 msgid "Type"
 msgstr "类型"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:459
+#: ../bleachbit/GuiPreferences.py:460
 msgid "Path"
 msgstr "路径"
 
-#: ../bleachbit/GuiPreferences.py:473
+#: ../bleachbit/GuiPreferences.py:475
 msgctxt "button"
 msgid "Add file"
 msgstr "添加文件"
 
-#: ../bleachbit/GuiPreferences.py:480
+#: ../bleachbit/GuiPreferences.py:482
 msgctxt "button"
 msgid "Add folder"
 msgstr "添加文件夹"
 
-#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:854
+#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:855
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "启动 SQLite 模块错误：可能是杀毒软件把它拦截了。"
@@ -1552,23 +1556,23 @@ msgstr "你必须选择一项操作"
 msgid "Done."
 msgstr "完成。"
 
-#: ../bleachbit/GUI.py:838
+#: ../bleachbit/GUI.py:839
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "通过单击标题栏上的汉堡包图标访问应用程序菜单"
 
-#: ../bleachbit/GUI.py:843
+#: ../bleachbit/GUI.py:844
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "单击标题栏上的徽标来访问应用程序菜单"
 
-#: ../bleachbit/GUI.py:859
+#: ../bleachbit/GUI.py:860
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr "您正以管理员权限运行BleachBit以清理系统的共享部分，对用户配置文件文件夹的引用将仅清除根帐户"
 
-#: ../bleachbit/GUI.py:864
+#: ../bleachbit/GUI.py:865
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1577,27 +1581,27 @@ msgstr "以管理员权限运行 BleachBit来改善覆盖文件内容的准确�
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:909 ../bleachbit/GUI.py:1011
+#: ../bleachbit/GUI.py:910 ../bleachbit/GUI.py:1012
 msgid "Preview"
 msgstr "预览"
 
-#: ../bleachbit/GUI.py:1008
+#: ../bleachbit/GUI.py:1009
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "预览设置操作中的文件(不删除任何文件)"
 
-#: ../bleachbit/GUI.py:1023
+#: ../bleachbit/GUI.py:1024
 msgid "Clean files in the selected operations"
 msgstr "在选中的操作中清理文件"
 
-#: ../bleachbit/GUI.py:1031
+#: ../bleachbit/GUI.py:1032
 msgid "Abort"
 msgstr "中止"
 
-#: ../bleachbit/GUI.py:1033
+#: ../bleachbit/GUI.py:1034
 msgid "Abort the preview or cleaning process"
 msgstr "中止预览清理过程"
 
-#: ../bleachbit/GUI.py:1244
+#: ../bleachbit/GUI.py:1245
 msgid "Error when checking for updates: "
 msgstr "检查更新时出错： "
 
@@ -1719,13 +1723,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "文件名"
 
-#: ../bleachbit/Unix.py:586
+#: ../bleachbit/Unix.py:585
 #, python-format
 msgid "Executable not found: %s"
 msgstr "未发现可执行文件： %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:670 ../bleachbit/Unix.py:685 ../bleachbit/Unix.py:710
+#: ../bleachbit/Unix.py:669 ../bleachbit/Unix.py:684 ../bleachbit/Unix.py:709
 #: ../bleachbit/Worker.py:146
 #, python-format
 msgid ""
