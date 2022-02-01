@@ -319,7 +319,7 @@ def wipe_memory():
         logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
                      pid=os.getpid(), cid=child_pid))
         rc = os.waitpid(child_pid, 0)[1]
-        if 0 != rc:
+        if rc not in [0, 9]:
             logger.warning(
                 _("The child memory-wiping process returned code %d."), rc)
     enable_swap_linux()
