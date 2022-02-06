@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2021-10-26 05:10+0000\n"
-"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <he@li.org>\n"
+"PO-Revision-Date: 2022-02-07 12:54+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
+">\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
-"X-Generator: Launchpad (build 0d8de2bfee2024772b3040d4d19f42f47395ac0d)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -77,8 +79,7 @@ msgstr "עוגיות"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
-"מחיקת עוגיות, המכילות מידע כגון העדפות, אימות ונתוני מעקב לאתרי אינטרנט."
+msgstr "מחיקת עוגיות, המכילות מידע כגון העדפות, אימות ונתוני מעקב לאתרי אינטרנט"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -128,7 +129,7 @@ msgstr "היסטוריה"
 #: ../cleaners/opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "מחיקת ההיסטוריה הכוללת את האתרים בהם ביקרת, הורדות ותמונות ממוזערות."
+msgstr "מחיקת ההיסטוריה הכוללת את האתרים בהם ביקרת, הורדות ותמונות ממוזערות"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -999,7 +1000,7 @@ msgstr "מיובאים מנקים מ־Winapp2.ini."
 #: ../bleachbit/CLI.py:113
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "not a valid cleaner: %s"
+msgstr "אינו מנקה תקף: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1008,11 +1009,11 @@ msgstr "not a valid cleaner: %s"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:142
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "יש להשתמש ב־: ‎%prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py:145
 msgid "list cleaners"
-msgstr "list cleaners"
+msgstr "הצגת המנקים"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
@@ -1023,7 +1024,7 @@ msgstr "הרצת מנגנוני ניקוי למחיקת קבצים ולביצו�
 
 #: ../bleachbit/CLI.py:152
 msgid "set log level to verbose"
-msgstr "set log level to verbose"
+msgstr "הגדרת רמת התיעוד למפורטת"
 
 #: ../bleachbit/CLI.py:153
 msgid "log debug messages to file"
@@ -1039,19 +1040,19 @@ msgstr "הצגת נתוני המערכת"
 
 #: ../bleachbit/CLI.py:159
 msgid "launch the graphical interface"
-msgstr "launch the graphical interface"
+msgstr "הפעלת מנשק המשתמש החזותי"
 
 #: ../bleachbit/CLI.py:164
 msgid "do not prompt for administrator privileges"
-msgstr "do not prompt for administrator privileges"
+msgstr "לא לבקש הרשאות ניהול"
 
 #: ../bleachbit/CLI.py:169
 msgid "preview files to be deleted and other changes"
-msgstr "preview files to be deleted and other changes"
+msgstr "להציג את הקבצים שמועמדים למחיקה ואת שאר השינויים"
 
 #: ../bleachbit/CLI.py:173
 msgid "use options set in the graphical interface"
-msgstr "use options set in the graphical interface"
+msgstr "להשתמש בערכת אפשרויות במנשק החזותי"
 
 #: ../bleachbit/CLI.py:175
 msgid "enable all options that do not have a warning"
@@ -1063,11 +1064,11 @@ msgstr "עדכון winapp2.ini, אם גרסה חדשה זמינה"
 
 #: ../bleachbit/CLI.py:180
 msgid "wipe free space in the given paths"
-msgstr "wipe free space in the given paths"
+msgstr "למחוק באופן מוחלט בנתיבים שסופקו"
 
 #: ../bleachbit/CLI.py:182
 msgid "output version information and exit"
-msgstr "output version information and exit"
+msgstr "להציג את פרטי הגרסה ולצאת"
 
 #: ../bleachbit/CLI.py:184
 msgid "overwrite files to hide contents"
@@ -1078,21 +1079,21 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
-"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-"preview, --clean"
+"לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-free-space,‏ "
+"‎--preview,‏ ‎--clean"
 
 #: ../bleachbit/CLI.py:219
 msgid "Checking online for updates to winapp2.ini"
-msgstr "Checking online for updates to winapp2.ini"
+msgstr "מתבצע איתור מקוון אחר עדכונים ל־winapp2.ini"
 
 #: ../bleachbit/CLI.py:234
 msgid "No directories given for --wipe-free-space"
-msgstr "No directories given for --wipe-free-space"
+msgstr "לא סופקו תיקיות לטובת ‎--wipe-free-space"
 
 #: ../bleachbit/CLI.py:239
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Path to wipe must be an existing directory: %s"
+msgstr "הנתיב למחיקה מוחלטת חייב להפנות לתיקייה קיימת: %s"
 
 #: ../bleachbit/CLI.py:241
 msgid "Wiping free space can take a long time."
@@ -1104,7 +1105,7 @@ msgstr "אין עבודה לבצע. נא לציין אפשרויות."
 
 #: ../bleachbit/CLI.py:260
 msgid "--overwrite is intended only for use with --clean"
-msgstr "--overwrite is intended only for use with --clean"
+msgstr "‎--overwrite מיועד לשימוש עם ‎--clean בלבד"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1663,7 +1664,7 @@ msgstr "מוקצים ומאופסים %s של זיכרון."
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr "מתפנים %s של זיכרון"
+msgstr "מתפנים %s של זיכרון."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
@@ -1701,7 +1702,7 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
-"הפונקציה wipe_memory()‎ עם מזהה התהליך {pid} ממתין למזהה תהליך צאצא {cid}."
+"הפונקציה wipe_memory()‎ עם מזהה התהליך {pid} ממתינה למזהה תהליך צאצא {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
@@ -1768,7 +1769,7 @@ msgstr ""
 
 #: ../bleachbit/Update.py:74
 msgid "New winapp2.ini was downloaded."
-msgstr "קובץ winapp2.ini חדש התקבל"
+msgstr "קובץ winapp2.ini חדש התקבל."
 
 #: ../bleachbit/Update.py:120
 msgid "Update BleachBit"
@@ -1931,7 +1932,7 @@ msgstr "השמדת נתיבים מלוח הגזירים"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
-msgstr "_ניקוי השטח הפנוי"
+msgstr "מ_חיקה מוחלטת של השטח הפנוי"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
