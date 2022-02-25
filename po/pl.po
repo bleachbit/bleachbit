@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 22:01-0700\n"
-"PO-Revision-Date: 2022-02-20 16:53+0000\n"
+"PO-Revision-Date: 2022-02-26 17:54+0000\n"
 "Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -175,7 +175,7 @@ msgstr "Synchronizacja"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr "Usuwa synchronizowane dane i wyloguj przeglądarkę"
+msgstr "Usuwa dane synchronizacji i wylogowuje sesje z przeglądarki"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -228,8 +228,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Porządkuje bazę danych redukując zajmowane przez nią miejsce oraz "
-"przyspieszając dostęp do niej bez usuwania żadnych danych"
+"Porządkuje bazę danych redukując zajmowane przez nią miejsce, przyspieszając "
+"dostęp do niej bez usuwania żadnych danych"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -559,7 +559,7 @@ msgstr "Usuwa ciasteczka, historię przeglądania i wyszukiwania"
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Usuwa listę najczęściej używanych"
+msgstr "Usuwa listę ostatnio używanych"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -1665,7 +1665,7 @@ msgstr "Podejrzyj efekty działania wybranych opcji (bez usuwania niczego)"
 
 #: ../bleachbit/GUI.py:1024
 msgid "Clean files in the selected operations"
-msgstr "Usuwa pliki przy obecnych opcjach"
+msgstr "Usuwa pliki w wybranych opcjach"
 
 #: ../bleachbit/GUI.py:1032
 msgid "Abort"
