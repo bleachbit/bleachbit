@@ -65,7 +65,7 @@ langsecref_map = {
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
-    return s.replace('&', '&amp;').replace('"', '&quot;')
+    return s.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def section2option(s):
@@ -142,9 +142,7 @@ def fnmatch_translate(pattern):
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
-    if ret.endswith(r'\Z(?ms)'):
-        return ret[:-7]
-    return ret
+    return re.sub(r'\\Z(\(\?ms\))?$', '', ret)
 
 
 class Winapp:
@@ -242,8 +240,8 @@ class Winapp:
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
-                regex = '%s\\\\%s' % (
-                    fnmatch_translate(expanded).rstrip('\\\\'), files_regex)
+                regex = r'%s\\%s' % (
+                    re.sub(r'\\\\((?:\))?)$', r'\1', fnmatch_translate(expanded)), files_regex)
             regexes.append(regex)
 
         if len(regexes) == 1:
@@ -349,7 +347,7 @@ class Winapp:
                     search = 'walk.all'
             else:
                 import fnmatch
-                regex = ' regex="^%s$" ' % (fnmatch.translate(filename))
+                regex = ' regex="^%s$" ' % xml_escape(fnmatch.translate(filename))
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)

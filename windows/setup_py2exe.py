@@ -53,6 +53,11 @@ sys.path.append(ROOT_DIR)
 
 BB_VER = None
 GTK_DIR = sys.exec_prefix + '\\Lib\\site-packages\\gnome\\'
+if os.path.exists(GTK_DIR):
+    GTK_LIBDIR = GTK_DIR
+else:
+    GTK_LIBDIR = sys.exec_prefix
+    GTK_DIR = os.path.join(GTK_LIBDIR, '..', '..')
 NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 SHRED_REGEX_KEY = 'AllFilesystemObjects\\shell\\shred.bleachbit'
@@ -186,9 +191,6 @@ def environment_check():
     logger.info('Checking for translations')
     assert_exist('locale', 'run "make -C po local" to build translations')
 
-    logger.info('Checking for GTK')
-    assert_exist(GTK_DIR)
-
     logger.info('Checking PyGI library')
     assert_module('gi')
 
@@ -222,28 +224,39 @@ def build():
         os.makedirs('dist')
 
     logger.info('Copying GTK helpers')
-    for exe in ('gspawn-win32-helper.exe', 'gspawn-win32-helper-console.exe', 'fc-cache.exe'):
-        shutil.copyfile(os.path.join(GTK_DIR, exe), os.path.join('dist', exe))
+    for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
+        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+    for exe in ('fc-cache.exe',):
+        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
-    copytree(GTK_DIR + '\\etc', 'dist\\etc')
-    copytree(GTK_DIR + '\\lib', 'dist\\lib')
+    for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
+        path = os.path.join(GTK_DIR, 'etc', d)
+        if os.path.exists(path):
+            copytree(path, os.path.join('dist', 'etc', d))
+    for d in ('girepository-1.0', 'glade', 'gtk-3.0'):
+        path = os.path.join(GTK_DIR, 'lib', d)
+        if os.path.exists(path):
+            copytree(path, os.path.join('dist', 'lib', d))
 
     logger.info('Remove windows fonts dir from fonts.conf file')
-
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
-    for subpath in ['fontconfig', 'icons', 'themes']:
-        copytree(os.path.join(GTK_DIR, 'share', subpath),
-                 'dist\\share\\' + subpath)
+    for d in ('icons',):
+        path = os.path.join(GTK_DIR, 'share', d)
+        if os.path.exists(path):
+            copytree(path, os.path.join('dist', 'share', d))
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
-    os.makedirs(os.path.join('dist', SCHEMAS_DIR))
-    shutil.copyfile(os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled'),
-                    os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
+    gschemas_compiled = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+    if os.path.exists(gschemas_compiled):
+        os.makedirs(os.path.join('dist', SCHEMAS_DIR))
+        shutil.copyfile(gschemas_compiled,
+                        os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
+    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
     shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
     # for pop-up notification
     shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
-    for dll in glob.glob1(GTK_DIR, '*.dll'):
-        shutil.copyfile(os.path.join(GTK_DIR, dll), 'dist\\'+dll)
+    for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
+        shutil.copyfile(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
 
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
@@ -257,9 +270,10 @@ def build():
                     os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
-    logger.info('Copying GTK localizations')
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
     os.makedirs(dist_locale_dir)
+
+    logger.info('Copying GTK localizations')
     locale_dir = os.path.join(GTK_DIR, 'share\\locale\\')
     for f in recursive_glob(locale_dir, ['gtk30.mo']):
         if not f.startswith(locale_dir):
@@ -286,9 +300,6 @@ def build():
     logger.info('Copying license')
     shutil.copy('COPYING', 'dist')
 
-    logger.info('Copying msvcr100.dll')
-    shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
-
     sign_code('dist\\bleachbit.exe')
     sign_code('dist\\bleachbit_console.exe')
 
@@ -303,15 +314,9 @@ def delete_unnecessary():
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
         r'_win32sysloader.pyd',
-        r'lib\gdk-pixbuf-2.0',
-        r'lib\gdbus-2.0',
         r'perfmon.pyd',
         r'servicemanager.pyd',
-        r'share\themes\default',
-        r'share\themes\emacs',
-        r'share\fontconfig',
         r'share\icons\highcontrast',
-        r'share\themes',
         r'win32evtlog.pyd',
         r'win32pipe.pyd',
         r'win32wnet.pyd',
@@ -482,7 +487,9 @@ def recompress_library():
     delete_paths = ['distutils', 'plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     for p in delete_paths:
-        shutil.rmtree(os.path.join('dist', 'library', p))
+        path = os.path.join('dist', 'library', p)
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     # recompress library.zip
     cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)

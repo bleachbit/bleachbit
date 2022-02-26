@@ -138,13 +138,11 @@ class WinappTestCase(common.BleachbitTestCase):
         # variable to also %ProgramW6432%, so test unique entries in
         # %ProgramW6432%.
         import struct
-        if 8 * struct.calcsize('P') != 32:
-            raise NotImplementedError('expecting 32-bit Python')
         if os.getenv('ProgramW6432'):
             dir_64 = os.listdir(os.getenv('ProgramFiles'))
             dir_32 = os.listdir(os.getenv('ProgramW6432'))
             dir_32_unique = set(dir_32) - set(dir_64)
-            if dir_32 and not dir_32_unique:
+            if dir_32 and not dir_32_unique and 8 * struct.calcsize('P') == 32:
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:

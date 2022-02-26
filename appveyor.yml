@@ -40,7 +40,7 @@ install:
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip" -FileName gettext.zip}
   - ps: Get-FileHash gettext.zip
   - '%SZ_EXE% x gettext.zip -ogettext'
-  - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2021/sqlite-dll-win32-x86-3360000.zip" -FileName sqlite.zip }
+  - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://www.sqlite.org/2022/sqlite-dll-win32-x86-3370200.zip" -FileName sqlite.zip }
   - ps: Get-FileHash sqlite.zip -Algorithm SHA1
   - '%SZ_EXE% x sqlite.zip'
   - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'

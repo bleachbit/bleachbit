@@ -45,7 +45,7 @@ import logging
 import os
 import sys
 import shutil
-from threading import Thread
+from threading import Thread, Event
 import xml.dom.minidom
 
 from decimal import Decimal
@@ -519,9 +519,9 @@ def parse_windows_build(build=None):
 
 def path_on_network(path):
     """Check whether 'path' is on a network drive"""
-    if len(os.path.splitunc(path)[0]) > 0:
+    drive = os.path.splitdrive(path)[0]
+    if drive.startswith(r'\\'):
         return True
-    drive = os.path.splitdrive(path)[0] + '\\'
     return win32file.GetDriveType(drive) == win32file.DRIVE_REMOTE
 
 
@@ -639,23 +639,30 @@ def get_font_conf_file():
         return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
 
     import gi
-    return os.path.join(
-            os.path.dirname(os.path.dirname(gi.__file__)),
-            'gnome', 'etc', 'fonts', 'fonts.conf'
-        )
+    gnome_dir = os.path.join(os.path.dirname(os.path.dirname(gi.__file__)), 'gnome')
+    if not os.path.isdir(gnome_dir):
+        gnome_dir = os.path.join(sys.exec_prefix, '..', '..')
+    return os.path.join(gnome_dir, 'etc', 'fonts', 'fonts.conf')
 
 
 class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self._splash_screen_started = Event()
         self._splash_screen_handle = None
         self._splash_screen_height = None
         self._splash_screen_width = None
 
-    def run(self):
+    def start(self):
+        Thread.start(self)
+        self._splash_screen_started.wait()
         logger.debug('SplashThread started')
+
+    def run(self):
         self._splash_screen_handle = self._target()
+        self._splash_screen_started.set()
+
         # Dispatch messages
         win32gui.PumpMessages()
 
