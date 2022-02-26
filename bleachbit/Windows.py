@@ -635,12 +635,15 @@ def has_fontconfig_cache(font_conf_file):
 
 
 def get_font_conf_file():
+    """Return the full path to fonts.conf"""
     if hasattr(sys, 'frozen'):
+        # running inside py2exe
         return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
 
     import gi
     gnome_dir = os.path.join(os.path.dirname(os.path.dirname(gi.__file__)), 'gnome')
     if not os.path.isdir(gnome_dir):
+        # BleachBit is running from a stand-alone Python installation.
         gnome_dir = os.path.join(sys.exec_prefix, '..', '..')
     return os.path.join(gnome_dir, 'etc', 'fonts', 'fonts.conf')
 
