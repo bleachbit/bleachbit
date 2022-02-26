@@ -646,6 +646,7 @@ class GUI(Gtk.ApplicationWindow):
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
         if self.textbuffer is None:
+            # textbuffer was destroyed.
             return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
