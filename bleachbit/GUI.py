@@ -873,6 +873,10 @@ class GUI(Gtk.ApplicationWindow):
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
 
+        if 'windowsapps' in sys.executable.lower():
+            self.append_text(
+                _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
+
         # remove from idle loop (see GObject.idle_add)
         return False
 
