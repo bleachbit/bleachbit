@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-05 09:53-0700\n"
+"POT-Creation-Date: 2022-03-08 19:27-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -802,7 +802,7 @@ msgstr ""
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:922 ../bleachbit/GUI.py:1029
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:927 ../bleachbit/GUI.py:1034
 msgid "Clean"
 msgstr ""
 
@@ -1459,7 +1459,7 @@ msgctxt "button"
 msgid "Add folder"
 msgstr ""
 
-#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:862
+#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:863
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -1524,60 +1524,67 @@ msgstr ""
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
 
-#: ../bleachbit/GUI.py:756
+#: ../bleachbit/GUI.py:757
 msgid "You must select an operation"
 msgstr ""
 
-#: ../bleachbit/GUI.py:775 ../bleachbit/GUI.py:791
+#: ../bleachbit/GUI.py:776 ../bleachbit/GUI.py:792
 msgid "Done."
 msgstr ""
 
-#: ../bleachbit/GUI.py:846
+#: ../bleachbit/GUI.py:847
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 
-#: ../bleachbit/GUI.py:851
+#: ../bleachbit/GUI.py:852
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr ""
 
-#: ../bleachbit/GUI.py:867
+#: ../bleachbit/GUI.py:868
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
 
-#: ../bleachbit/GUI.py:872
+#: ../bleachbit/GUI.py:873
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
 
+#: ../bleachbit/GUI.py:878
+msgid ""
+"There is no official version of BleachBit on the Microsoft Store. Get the "
+"genuine version at https://www.bleachbit.org where it is always free of "
+"charge."
+msgstr ""
+
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:917 ../bleachbit/GUI.py:1019
+#: ../bleachbit/GUI.py:922 ../bleachbit/GUI.py:1024
 msgid "Preview"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1016
+#: ../bleachbit/GUI.py:1021
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1031
+#: ../bleachbit/GUI.py:1036
 msgid "Clean files in the selected operations"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1039
+#: ../bleachbit/GUI.py:1044
 msgid "Abort"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1041
+#: ../bleachbit/GUI.py:1046
 msgid "Abort the preview or cleaning process"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1252
+#: ../bleachbit/GUI.py:1257
 msgid "Error when checking for updates: "
 msgstr ""
 
@@ -1732,7 +1739,7 @@ msgstr ""
 msgid "Update to version %s"
 msgstr ""
 
-#: ../bleachbit/Update.py:161
+#: ../bleachbit/Update.py:164
 msgid ""
 "Error when opening a network connection to check for updates. Please verify "
 "the network is working and that a firewall is not blocking this application. "
@@ -1767,7 +1774,7 @@ msgstr ""
 msgid "Imported from winapp2.ini"
 msgstr ""
 
-#: ../bleachbit/Windows.py:821
+#: ../bleachbit/Windows.py:824
 msgid "BleachBit is starting...\n"
 msgstr ""
 
