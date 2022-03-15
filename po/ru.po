@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2022-02-18 13:56+0000\n"
-"Last-Translator: S3aBreeze <paperwork@evilcorp.ltd>\n"
+"PO-Revision-Date: 2022-03-16 14:58+0000\n"
+"Last-Translator: Viktor <xasertop@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -28,7 +28,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Web browser"
-msgstr "Веб-обозреватель"
+msgstr "Веб-браузер"
 
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
@@ -57,7 +57,7 @@ msgstr "Кэш"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Удалить временные файлы интернета, которые уменьшают время загрузки ранее "
+"Удалить временные файлы интернета, которые ускоряют загрузку ранее "
 "посещённых страниц"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
@@ -151,8 +151,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
-"Очистить журнал использования поисковых систем и удалить поисковые системы, "
-"которые были добавлены автоматически или самостоятельно"
+"Очистить журнал использования поисковых систем и удалить не заводские "
+"поисковые системы, которые могли добавиться автоматически"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
@@ -496,9 +496,7 @@ msgstr "Восстановление сеанса"
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr ""
-"Загружает исходный сеанс после закрытия или аварийного закрытия веб-"
-"обозревателя"
+msgstr "Загружает исходный сеанс после закрытия или сбоя браузера"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/konqueror.xml
@@ -525,7 +523,7 @@ msgstr "Удалить список посещённых веб-страниц"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Удалить временные файлы значков и эмотиконов"
+msgstr "Удалить временные файлы аватаров и смайликов"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -569,7 +567,7 @@ msgstr "Выполнить (Alt+F2)"
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Search history"
-msgstr "Журнал результатов поиска"
+msgstr "Журнал поиска"
 
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
@@ -643,9 +641,9 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Удаление кэша посещенных веб-страниц, который сокращает время, необходимое "
-"для отображения повторно посещаемых страниц. Это действие также удаляет "
-"изображения GIF, добавленные в избранные."
+"Удалить кэш посещенных веб-страниц, который сокращает время, необходимое для "
+"отображения повторно посещаемых страниц. Это действие также удаляет "
+"избранные GIF-изображения."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -656,7 +654,7 @@ msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Подробное сканирование"
+msgstr "Глубокий анализ"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
@@ -759,7 +757,7 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"Внимательно проверьте список пакетов, которые будут удалены, с помощью "
+"Внимательно проверьте список пакетов, которые будут удалены с помощью "
 "команды \"dnf list autoremove\"."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
@@ -791,15 +789,14 @@ msgstr "Очистка от ненужных файлов"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
-msgstr ""
-"Освобождение дискового пространства и обслуживание конфиденциальности"
+msgstr "Освобождение дискового пространства и поддержание конфиденциальности"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr "Глубокое сканирование не поддерживает многозначных переменых."
+msgstr "Глубокое сканирование не поддерживает многозначные переменные."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -957,7 +954,7 @@ msgid ""
 "and Internet Explorer updates"
 msgstr ""
 "Удалить деинсталляторы обновлений Microsoft, включая исправления, пакеты "
-"обновлений, и обновления Internet Explorer"
+"обновлений и обновления Internet Explorer"
 
 #: ../bleachbit/Cleaner.py:329 ../bleachbit/Cleaner.py:548
 msgid "Clipboard"
