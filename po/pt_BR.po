@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2020-12-24 19:34+0000\n"
-"Last-Translator: JL <Unknown>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2022-03-20 23:58+0000\n"
+"Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"bleachbit/main/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -51,8 +53,7 @@ msgstr "Cache"
 #: ../cleaners/epiphany.xml ../cleaners/discord.xml ../cleaners/safari.xml
 #: ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Exclua o cache da web, reduzirá o tempo para exibir páginas revisitadas."
+msgstr "Exclua o cache da web, reduzirá o tempo para exibir páginas revisitadas"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -76,7 +77,7 @@ msgid ""
 "authentication, and tracking identification"
 msgstr ""
 "Apagar cookies, que contêm informações como preferências do site, "
-"autenticação e identificação de rastreamento."
+"autenticação e identificação de rastreamento"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -120,8 +121,7 @@ msgstr "Histórico"
 #: ../cleaners/discord.xml ../cleaners/opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
-"Apagar o histórico que inclui sites visitados, downloads e miniaturas."
+msgstr "Apagar o histórico que inclui sites visitados, downloads e miniaturas"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
@@ -421,7 +421,7 @@ msgstr "Listas de bloqueios"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Listas de bloqueios necessitarão ser atualizadas para funcionarem"
+msgstr "Listas de bloqueios necessitarão ser atualizadas para funcionarem."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -1026,7 +1026,7 @@ msgstr "Erro: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Limpando o espaço livre do disco. Por favor, aguarde!"
+msgstr "Por favor, aguarde.  Limpando o espaço livre do disco."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1040,7 +1040,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:198 ../bleachbit/Worker.py:339
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Limpando %s. Por favor, aguarde!"
+msgstr "Limpando %s. Por favor, aguarde."
 
 #: ../bleachbit/Worker.py:198 ../bleachbit/Cleaner.py:303
 #: ../bleachbit/Cleaner.py:448
@@ -1051,8 +1051,8 @@ msgstr "Memória"
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] "Cerca de %d minuto(s) para concluir"
-msgstr[1] "Cerca de %d minuto(s) para concluir"
+msgstr[0] "Cerca de %d minuto para concluir."
+msgstr[1] "Cerca de %d minuto(s) para concluir."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
@@ -1097,13 +1097,13 @@ msgstr "Erros: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Executando varredura profunda. Por favor, aguarde!"
+msgstr "Executando varredura profunda. Por favor, aguarde."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:342
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Pré-visualizando %s. Por favor, aguarde!"
+msgstr "Pré-visualizando %s. Por favor, aguarde."
 
 #: ../bleachbit/FileUtilities.py:320 ../bleachbit/FileUtilities.py:329
 #: ../bleachbit/FileUtilities.py:343
@@ -1171,7 +1171,7 @@ msgstr "{bytes:,} bytes e {inodes:,} inodes disponíveis para o superusuário"
 
 #: ../bleachbit/FileUtilities.py:1000
 msgid "Handled unknown error #0 while truncating file."
-msgstr "Erro desconhecido, enquanto truncava o arquivo: #0"
+msgstr "Erro desconhecido, enquanto truncava o arquivo: #0."
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -1229,7 +1229,7 @@ msgstr "Apagar arquivos de idiomas não desejados"
 
 #: ../bleachbit/Cleaner.py:288
 msgid "Configure this option in the preferences."
-msgstr "Configure esta opção nas preferências"
+msgstr "Configure esta opção nas preferências."
 
 #: ../bleachbit/Cleaner.py:294
 msgid "Rotated logs"
@@ -1335,7 +1335,7 @@ msgstr "Sobrescrever o espaço livre no disco em %s"
 
 #: ../bleachbit/Cleaner.py:687
 msgid "Loading native cleaners."
-msgstr "Carregando programas nativos de limpeza"
+msgstr "Carregando programas nativos de limpeza."
 
 #: ../bleachbit/Cleaner.py:693
 msgid "Importing cleaners from Winapp2.ini."
@@ -1503,8 +1503,9 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"O BleachBit está executando como root. Por favor, abra manualmente o link %s "
-"em um navegador web"
+"O BleachBit está executando como root. Por favor, abra manualmente este link "
+"em um navegador web:\n"
+"%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py:185
@@ -1900,7 +1901,7 @@ msgstr "Reinicializando o dispositivo swap %s."
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Detectou estes dispositivos swap: %s."
+msgstr "Detectou estes dispositivos swap: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
