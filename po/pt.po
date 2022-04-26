@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-07-05 21:58+0000\n"
-"Last-Translator: Sérgio Marques <Unknown>\n"
-"Language-Team: Portuguese <pt@li.org>\n"
+"PO-Revision-Date: 2022-04-26 15:10+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
+"main/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
-"X-Generator: Launchpad (build fe01712f453e3d8fdd7cfee725621d71a8ae3628)\n"
-"Language: pt\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -837,7 +838,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "A ignorar ferramenta porque é mundialmente gravável:% s"
+msgstr "A ignorar ferramenta porque é mundialmente gravável: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -1157,7 +1158,7 @@ msgstr "A ignorar ponto de montagem: %s"
 #: ../bleachbit/FileUtilities.py:368
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr "Dispositivo ou recurso ocupado:  %s"
+msgstr "Dispositivo ou recurso ocupado: %s"
 
 #: ../bleachbit/FileUtilities.py:404
 #, python-format
@@ -1540,25 +1541,7 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py:322
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Alexandre Fidalgo https://launchpad.net/~alexandremagnos15\n"
-"  Almufadado https://launchpad.net/~almufadado\n"
-"  Carlos Geadas https://launchpad.net/~carlosgeadas\n"
-"  DarkVenger https://launchpad.net/~darkvenger\n"
-"  Formatado https://launchpad.net/~form-atado\n"
-"  Gmood https://launchpad.net/~jaleixo70\n"
-"  Ivo Xavier https://launchpad.net/~ivoxavier\n"
-"  JL https://launchpad.net/~jl2414\n"
-"  Jon Amil https://launchpad.net/~amilgz\n"
-"  Nuno Machado https://launchpad.net/~nunomsmachado\n"
-"  Pedro Folha https://launchpad.net/~pedrovi\n"
-"  Pedro Silva https://launchpad.net/~pedrof-silva\n"
-"  Raphael de Paula Horta https://launchpad.net/~raphaelhorta\n"
-"  Sérgio Marques https://launchpad.net/~sergio+marques\n"
-"  asensio https://launchpad.net/~asensio\n"
-"  nglnx https://launchpad.net/~nglnx\n"
-"  paulo caldeira https://launchpad.net/~paulocaldeira"
+msgstr "Hugo Carvalho <hugokarvalho@hotmail.com>"
 
 #: ../bleachbit/GUI.py:346
 msgid "System information"
@@ -1730,7 +1713,7 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
-"A função wipe_memory() com a ID  de processo {pid} és a aguardar pelo "
+"A função wipe_memory() com a ID de processo {pid} és a aguardar pelo "
 "processo com a ID {cid}."
 
 #: ../bleachbit/Memory.py:324
@@ -1954,7 +1937,7 @@ msgstr "Dest_ruir pastas"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Destruir caminhos da área de transferência."
+msgstr "Destruir caminhos da área de transferência"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
