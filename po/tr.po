@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2022-04-01 20:12+0000\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"PO-Revision-Date: 2022-05-06 16:13+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -957,7 +957,7 @@ msgstr "Özel"
 
 #: ../bleachbit/Cleaner.py:340
 msgid "Delete user-specified files and folders"
-msgstr "Kullanıcıca belirtilen dosya ve klasörleri sil"
+msgstr "Kullanıcı tarafından belirtilen dosya ve klasörleri sil"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:342
@@ -1469,7 +1469,7 @@ msgstr "Dosya"
 #: ../bleachbit/GuiPreferences.py:357 ../bleachbit/GuiPreferences.py:400
 #: ../bleachbit/GuiPreferences.py:432
 msgid "Folder"
-msgstr "Dizin"
+msgstr "Klasör"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "Theses paths will not be deleted or modified."
@@ -1497,7 +1497,7 @@ msgstr "Dosya ekle"
 #: ../bleachbit/GuiPreferences.py:480
 msgctxt "button"
 msgid "Add folder"
-msgstr "Dizin ekle"
+msgstr "Klasör ekle"
 
 #: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:842
 msgid ""
@@ -1511,7 +1511,7 @@ msgstr "Parçalanacak dosyaları seç"
 
 #: ../bleachbit/GUI.py:219
 msgid "Choose folder to shred"
-msgstr "Parçalanacak dizini seç"
+msgstr "Parçalanacak klasörü seç"
 
 #: ../bleachbit/GUI.py:246
 msgid "No paths found in clipboard."
@@ -1949,7 +1949,7 @@ msgstr "Dosyaları Parça_la"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "Dizinleri Pa_rçala"
+msgstr "Klasörleri Pa_rçala"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
