@@ -43,5 +43,6 @@
     <description>Delete the list of recently used documents</description>
     <action command="delete" search="glob" path="~/.kde/share/apps/RecentDocuments/*.desktop"/>
     <action command="delete" search="glob" path="~/.kde4/share/apps/RecentDocuments/*.desktop"/>
+    <action command="delete" search="glob" path="~/.local/share/RecentDocuments/*.desktop"/>
   </option>
 </cleaner>
