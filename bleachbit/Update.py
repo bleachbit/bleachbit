@@ -153,9 +153,12 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     opener = build_opener()
     socket.setdefaulttimeout(bleachbit.socket_timeout)
     opener.addheaders = [('User-Agent', user_agent())]
-    import encodings.idna # https://github.com/bleachbit/bleachbit/issues/760
+    import encodings.idna  # https://github.com/bleachbit/bleachbit/issues/760
+    url = bleachbit.update_check_url
+    if 'windowsapp' in sys.executable.lower():
+        url += '?windowsapp=1'
     try:
-        handle = opener.open(bleachbit.update_check_url)
+        handle = opener.open(url)
     except URLError as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))

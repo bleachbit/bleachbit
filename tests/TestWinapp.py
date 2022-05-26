@@ -24,6 +24,7 @@ Test cases for module Winapp
 import os
 import shutil
 import tempfile
+from unittest import mock
 
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
@@ -137,13 +138,11 @@ class WinappTestCase(common.BleachbitTestCase):
         # variable to also %ProgramW6432%, so test unique entries in
         # %ProgramW6432%.
         import struct
-        if 8 * struct.calcsize('P') != 32:
-            raise NotImplementedError('expecting 32-bit Python')
         if os.getenv('ProgramW6432'):
             dir_64 = os.listdir(os.getenv('ProgramFiles'))
             dir_32 = os.listdir(os.getenv('ProgramW6432'))
             dir_32_unique = set(dir_32) - set(dir_64)
-            if dir_32 and not dir_32_unique:
+            if dir_32 and not dir_32_unique and 8 * struct.calcsize('P') == 32:
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
@@ -435,6 +434,33 @@ class WinappTestCase(common.BleachbitTestCase):
 
             # cleanup
             shutil.rmtree(dirname, True)
+
+    @common.skipUnlessWindows
+    def test_filekey_with_path_including_systemdrive(self):
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+        # lexists(r'C:filename') returns False
+        # FindFilesW(r'C:filename') throws an exception
+        # So assert that we use r'C:\filename'.
+        # We need this test because winapp2.ini supports such paths and
+        # giving r'C:filename' as argument to lexists or FindFilesW
+        # causes a hard to detect issue, which has been detected because
+        # lexists('C:filename') returns True when called through PyCharm.
+        # Also test_remote is supposed to run cleaners that contain
+        # such paths but it doesn't assert if those cleaners actually
+        # clean their targets.
+
+        filename = os.path.join('C:\\', 'deleteme.txt')
+        open(filename, 'w').close()
+        self.assertExists(filename)
+
+        with mock.patch('os.path.lexists') as mock_lexists:
+            cleaner = self.ini2cleaner('FileKey1=%SystemDrive%|deleteme.txt')
+            self.run_all(cleaner, True)
+            mock_lexists.assert_any_call(r'C:\deleteme.txt')
+
+        self.assertNotExists(filename)
 
     @common.skipUnlessWindows
     def test_removeself(self):

@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-23 06:03+0000\n"
-"Last-Translator: Buckethead <Unknown>\n"
-"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"PO-Revision-Date: 2022-05-06 16:13+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
+"tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
-"X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -25,7 +27,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Web browser"
-msgstr "Web tarayıcı"
+msgstr "Web tarayıcısı"
 
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
@@ -131,8 +133,8 @@ msgstr "Geçmiş"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Ziyaret edilen internet siteleri, indirmeler ve önizleme resimleri geçmişini "
-"sil"
+"Ziyaret edilen internet siteleri, indirmeleri ve ön izleme resimleri "
+"geçmişini sil"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -189,8 +191,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Kullanıcı adları ve  şifreleri bunun yanında şifreleri depolanmaması gereken "
-"sitelerin listesini içeren bir veritabanı."
+"Kullanıcı adları ve parolaları ile bunun yanında parolaları depolanmaması "
+"gereken sitelerin listesini içeren bir veri tabanı"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -534,7 +536,7 @@ msgstr ""
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "Masaüstü pencere öğeleri"
+msgstr "Masaüstü pencere ögeleri"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -749,7 +751,7 @@ msgstr "Arama aracı"
 #: ../cleaners/recoll.xml
 msgid ""
 "Delete the search index, a database of words and the files they contain"
-msgstr "Arama indeksini sil. Bu, dosya ve sözcükler içeren veri tabanıdır."
+msgstr "Arama indeksini sil. Bu, dosya ve sözcükler içeren veri tabanıdır"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -785,7 +787,7 @@ msgstr "Derin tarama çoklu değer değişkenini desteklemez."
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "search=\"walk.all\" ile path=\"%s\" sıradan dosyası kullanıldı."
+msgstr "search=\"walk.all\" ile path=\"%s\" sıradan dosyası kullanıldı"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -955,7 +957,7 @@ msgstr "Özel"
 
 #: ../bleachbit/Cleaner.py:340
 msgid "Delete user-specified files and folders"
-msgstr "Kullanıcıca berlitilen dosya ve klasörleri sil"
+msgstr "Kullanıcı tarafından belirtilen dosya ve klasörleri sil"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:342
@@ -1214,7 +1216,7 @@ msgstr "Dosya kesme işlemi sırasında bilinmeyen hata #0 elde edildi."
 #: ../bleachbit/GuiBasic.py:47 ../bleachbit/GuiBasic.py:74
 #: ../bleachbit/GuiBasic.py:98 ../bleachbit/GuiBasic.py:144
 msgid "_Cancel"
-msgstr "İptal Et"
+msgstr "İptal _Et"
 
 #: ../bleachbit/GuiBasic.py:75
 msgid "_Open"
@@ -1268,7 +1270,7 @@ msgstr ""
 #: ../bleachbit/GuiBasic.py:185
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "%s için web tarayıcısını aç"
+msgstr "%s için web tarayıcısı açılsın mı?"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1375,7 +1377,7 @@ msgstr "İlgisiz temizleyicileri gizle"
 
 #: ../bleachbit/GuiPreferences.py:158
 msgid "Overwrite contents of files to prevent recovery"
-msgstr "Veri kurtarmaya karşı dosya içeriklerinin üzerine yaz."
+msgstr "Veri kurtarmaya karşı dosya içeriklerinin üzerine yaz"
 
 #: ../bleachbit/GuiPreferences.py:162
 msgid ""
@@ -1441,7 +1443,7 @@ msgstr "Kaldır"
 
 #: ../bleachbit/GuiPreferences.py:293
 msgid "All languages will be deleted except those checked."
-msgstr "Seçilen dillerin dışındaki tüm dilleri sil"
+msgstr "Seçilenler dışındaki tüm diller silinecektir."
 
 #: ../bleachbit/GuiPreferences.py:309
 msgid "Preserve"
@@ -1467,7 +1469,7 @@ msgstr "Dosya"
 #: ../bleachbit/GuiPreferences.py:357 ../bleachbit/GuiPreferences.py:400
 #: ../bleachbit/GuiPreferences.py:432
 msgid "Folder"
-msgstr "Dizin"
+msgstr "Klasör"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "Theses paths will not be deleted or modified."
@@ -1495,7 +1497,7 @@ msgstr "Dosya ekle"
 #: ../bleachbit/GuiPreferences.py:480
 msgctxt "button"
 msgid "Add folder"
-msgstr "Dizin ekle"
+msgstr "Klasör ekle"
 
 #: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:842
 msgid ""
@@ -1509,11 +1511,11 @@ msgstr "Parçalanacak dosyaları seç"
 
 #: ../bleachbit/GUI.py:219
 msgid "Choose folder to shred"
-msgstr "Parçalanacak dizini seç"
+msgstr "Parçalanacak klasörü seç"
 
 #: ../bleachbit/GUI.py:246
 msgid "No paths found in clipboard."
-msgstr "Panoda yol bulunamadı"
+msgstr "Panoda yol bulunamadı."
 
 #: ../bleachbit/GUI.py:282
 msgid "_OK"
@@ -1947,7 +1949,7 @@ msgstr "Dosyaları Parça_la"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "Dizinleri Pa_rçala"
+msgstr "Klasörleri Pa_rçala"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"

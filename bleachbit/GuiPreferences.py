@@ -440,7 +440,7 @@ class PreferencesDialog:
             # TRANSLATORS: "Paths" is used generically to refer to both files
             # and folders
             notice = Gtk.Label(
-                label=_("Theses paths will not be deleted or modified."))
+                label=_("These paths will not be deleted or modified."))
         elif LOCATIONS_CUSTOM == page_type:
             notice = Gtk.Label(
                 label=_("These locations can be selected for deletion."))
