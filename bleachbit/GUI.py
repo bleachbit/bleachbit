@@ -593,7 +593,7 @@ class GUI(Gtk.ApplicationWindow):
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file')
+            logger.error('No fonts.conf file {}'.format(font_conf_file))
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)
@@ -604,6 +604,11 @@ class GUI(Gtk.ApplicationWindow):
         if options.get("delete_confirmation"):
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
+
+    def destroy(self):
+        """Prevent textbuffer usage during UI destruction"""
+        self.textbuffer = None
+        super(GUI, self).destroy()
 
     def get_preferences_dialog(self):
         return PreferencesDialog(
@@ -640,6 +645,9 @@ class GUI(Gtk.ApplicationWindow):
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if self.textbuffer is None:
+            # textbuffer was destroyed.
+            return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
         if tag:
@@ -650,7 +658,7 @@ class GUI(Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda:
+            GLib.idle_add(lambda: self.textbuffer is not None and
                           self.textview.scroll_mark_onscreen(
                               self.textbuffer.get_insert()))
 
@@ -864,6 +872,10 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+
+        if 'windowsapps' in sys.executable.lower():
+            self.append_text(
+                _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
 
         # remove from idle loop (see GObject.idle_add)
         return False

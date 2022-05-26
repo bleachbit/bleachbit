@@ -648,7 +648,7 @@ def get_volume_bitmap(volume_handle, total_clusters):
     input_struct = struct.pack('q', 0)
 
     # Figure out the buffer size. Add small fudge factor to ensure success.
-    buf_size = (total_clusters / 8) + 16 + 64
+    buf_size = int(total_clusters / 8) + 16 + 64
 
     vb_struct = DeviceIoControl(volume_handle, FSCTL_GET_VOLUME_BITMAP,
                                 input_struct, buf_size)

@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2021-10-17 13:38+0000\n"
-"Last-Translator: Reporter <Unknown>\n"
+"POT-Creation-Date: 2021-11-11 08:53-0700\n"
+"PO-Revision-Date: 2022-01-17 23:21+0000\n"
+"Last-Translator: Anders Jonsson <Unknown>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
-"X-Generator: Launchpad (build 5208e7f8f75eb1d093d03c455dcca20a57934b38)\n"
+"X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
+"X-Generator: Launchpad (build f3013409c2c85e163eed04d2ad6b0c4075353eab)\n"
 "Language: sv\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -210,7 +210,7 @@ msgstr "Det här alternativet tar bort dina sparade lösenord."
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../bleachbit/Action.py:591
+#: ../cleaners/opera.xml ../bleachbit/Action.py:592
 msgid "Vacuum"
 msgstr "Komprimera databas"
 
@@ -427,7 +427,7 @@ msgstr "Installationsprogram"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr "Ta bort cache för korrigeringar och avinstallationsprogram"
+msgstr "Ta bort cache för korrigeringar och installationsprogram"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
@@ -600,6 +600,7 @@ msgstr "Kontorspaket"
 msgid "Known files history"
 msgstr "Historik av kända filer"
 
+#. http://wiki.amule.org/wiki/Friend
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
 msgstr "Kända klienter och vänner"
@@ -705,7 +706,7 @@ msgstr "Ta bort den aktuella sessionen"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr "Fjärrkontroll programvara"
+msgstr "Fjärrkontrollsprogramvara"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -727,7 +728,7 @@ msgstr "Ta bort ljud- och videoinspelningarna"
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"Det här valet återställer de pinnade platserna i Snabbåtkomst till deras "
+"Det här valet återställer de nålade platserna i Snabbåtkomst till deras "
 "standardvärden."
 
 #: ../cleaners/windows_explorer.xml
@@ -797,8 +798,9 @@ msgstr "Djupskanning stöder inte flervärdiga variabler."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
-#. be used with directories instead of with files.
-#: ../bleachbit/Action.py:254
+#. be used with directories instead of with files. Do not translate
+#. search="walk.all" and path="%s"
+#: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr "search=\"walk.all\" används med vanlig filsökväg=\"%s\""
@@ -808,16 +810,16 @@ msgstr "search=\"walk.all\" används med vanlig filsökväg=\"%s\""
 #. wildcard patterns. Therefore, maybe the developer either missed
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
-#: ../bleachbit/Action.py:292
+#: ../bleachbit/Action.py:293
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
 msgstr "path=\"%s\" är inte ett globmönster"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:385 ../bleachbit/Action.py:398
-#: ../bleachbit/Action.py:411 ../bleachbit/Action.py:424
-#: ../bleachbit/Action.py:437 ../bleachbit/Action.py:502
-#: ../bleachbit/Action.py:514 ../bleachbit/Command.py:203
+#: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
+#: ../bleachbit/Action.py:412 ../bleachbit/Action.py:425
+#: ../bleachbit/Action.py:438 ../bleachbit/Action.py:503
+#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:203
 #: ../bleachbit/Command.py:237
 msgid "Clean file"
 msgstr "Städa fil"
@@ -826,11 +828,11 @@ msgstr "Städa fil"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:527 ../bleachbit/GUI.py:914 ../bleachbit/GUI.py:1021
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:915 ../bleachbit/GUI.py:1022
 msgid "Clean"
 msgstr "Städa"
 
-#: ../bleachbit/Action.py:564
+#: ../bleachbit/Action.py:565
 #, python-format
 msgid "Run external command: %s"
 msgstr "Kör externt kommando: %s"
@@ -852,7 +854,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Ignorera städaren eftersom den är värld-skrivbar: %s"
+msgstr "Ignorera städaren eftersom den är skrivbar för alla: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -1140,7 +1142,7 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"Minst en fil låstes av en annan åtgärd, så dess innehåll kunde inte skrivas "
+"Minst en fil låstes av en annan process, så dess innehåll kunde inte skrivas "
 "över. Den kommer att markeras för borttagning vid omstart av systemet."
 
 #. TRANSLATORS: The file will be deleted when the
@@ -1183,7 +1185,7 @@ msgstr "Särskild filtyp kan inte tas bort: %s"
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
-msgstr "Miljövariabeln TMP hänvisar till en katalog som inte finns: % s"
+msgstr "Miljövariabeln TMP hänvisar till en katalog som inte finns: %s"
 
 #: ../bleachbit/FileUtilities.py:834
 msgid ""
@@ -1255,7 +1257,7 @@ msgstr ""
 "Den här funktionen tar bort alla BleachBit-inställningar och avslutar sedan "
 "programmet. Använd det här för att dölja din användning av BleachBit eller "
 "för att återställa inställningarna. Nästa gång du startar BleachBit "
-"initialiseras inställningarna till standardvärden."
+"initieras inställningarna till standardvärden."
 
 #: ../bleachbit/GuiBasic.py:139
 msgid ""
@@ -1303,47 +1305,49 @@ msgstr "Skapa chaff"
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "Gör slumpmässigt genererade meddelanden inspirerade av dokument."
 
-#: ../bleachbit/GuiChaff.py:74
+#. TRANSLATORS: Inspiration is a choice of documents from which random
+#. text will be generated.
+#: ../bleachbit/GuiChaff.py:77
 msgid "Inspiration"
 msgstr "Inspiration"
 
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:80
 msgid "2600 Magazine"
 msgstr "2600 Magazine"
 
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:80
 msgid "Hillary Clinton's emails"
 msgstr "Hillary Clintons e-postmeddelanden"
 
-#: ../bleachbit/GuiChaff.py:85
+#: ../bleachbit/GuiChaff.py:88
 msgid "Number of files"
 msgstr "Antal filer"
 
-#: ../bleachbit/GuiChaff.py:92 ../bleachbit/GuiChaff.py:152
+#: ../bleachbit/GuiChaff.py:95 ../bleachbit/GuiChaff.py:155
 msgid "Select destination folder"
 msgstr "Välj destinationsmapp"
 
-#: ../bleachbit/GuiChaff.py:102
+#: ../bleachbit/GuiChaff.py:105
 msgid "When finished"
 msgstr "När det är klart"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:108
 msgid "Delete without shredding"
 msgstr "Ta bort utan att förstöra"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:108
 msgid "Do not delete"
 msgstr "Ta inte bort"
 
-#: ../bleachbit/GuiChaff.py:116
+#: ../bleachbit/GuiChaff.py:119
 msgid "Make files"
 msgstr "Skapa filer"
 
-#: ../bleachbit/GuiChaff.py:133
+#: ../bleachbit/GuiChaff.py:136
 msgid "Download data needed for chaff generator?"
-msgstr "Hämtar data som behövs för skapande av chaff?"
+msgstr "Hämta data som behövs för skapande av chaff?"
 
-#: ../bleachbit/GuiChaff.py:175
+#: ../bleachbit/GuiChaff.py:178
 msgid "Generating files"
 msgstr "Genererar filer"
 
@@ -1414,7 +1418,7 @@ msgstr "Bekräfta innan borttagning"
 #: ../bleachbit/GuiPreferences.py:181
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
-"Använd IEC-storlekar (1 KiB = 1024 bytes) istället för SI (1 kB = 1000 bytes)"
+"Använd IEC-storlekar (1 KiB = 1024 byte) istället för SI (1 kB = 1000 byte)"
 
 #: ../bleachbit/GuiPreferences.py:188
 msgid "Windows 10 theme"
@@ -1432,8 +1436,8 @@ msgstr "Kom ihåg fönstergeometri"
 msgid "Show debug messages"
 msgstr "Visa felsökningsmeddelanden"
 
-#: ../bleachbit/GuiPreferences.py:219 ../bleachbit/GuiPreferences.py:348
-#: ../bleachbit/GuiPreferences.py:391 ../bleachbit/GUI.py:280
+#: ../bleachbit/GuiPreferences.py:219 ../bleachbit/GuiPreferences.py:349
+#: ../bleachbit/GuiPreferences.py:392 ../bleachbit/GUI.py:280
 msgid "Choose a folder"
 msgstr "Välj en mapp"
 
@@ -1452,7 +1456,7 @@ msgstr "Lägg till"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:269 ../bleachbit/GuiPreferences.py:486
+#: ../bleachbit/GuiPreferences.py:269 ../bleachbit/GuiPreferences.py:488
 msgctxt "button"
 msgid "Remove"
 msgstr "Ta bort"
@@ -1473,49 +1477,49 @@ msgstr "Kod"
 msgid "Name"
 msgstr "Namn"
 
-#: ../bleachbit/GuiPreferences.py:334 ../bleachbit/GuiPreferences.py:377
+#: ../bleachbit/GuiPreferences.py:335 ../bleachbit/GuiPreferences.py:378
 msgid "Choose a file"
 msgstr "Välj en fil"
 
-#: ../bleachbit/GuiPreferences.py:342 ../bleachbit/GuiPreferences.py:385
-#: ../bleachbit/GuiPreferences.py:430
+#: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
+#: ../bleachbit/GuiPreferences.py:431
 msgid "File"
 msgstr "Fil"
 
-#: ../bleachbit/GuiPreferences.py:357 ../bleachbit/GuiPreferences.py:400
-#: ../bleachbit/GuiPreferences.py:432
+#: ../bleachbit/GuiPreferences.py:358 ../bleachbit/GuiPreferences.py:401
+#: ../bleachbit/GuiPreferences.py:433
 msgid "Folder"
 msgstr "Mapp"
 
-#: ../bleachbit/GuiPreferences.py:442
+#: ../bleachbit/GuiPreferences.py:443
 msgid "Theses paths will not be deleted or modified."
 msgstr "De här sökvägarna kommer inte att tas bort eller ändras."
 
-#: ../bleachbit/GuiPreferences.py:445
+#: ../bleachbit/GuiPreferences.py:446
 msgid "These locations can be selected for deletion."
 msgstr "De här platserna kan markeras för borttagning."
 
-#: ../bleachbit/GuiPreferences.py:453
+#: ../bleachbit/GuiPreferences.py:454
 msgid "Type"
 msgstr "Typ"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:459
+#: ../bleachbit/GuiPreferences.py:460
 msgid "Path"
 msgstr "Sökväg"
 
-#: ../bleachbit/GuiPreferences.py:473
+#: ../bleachbit/GuiPreferences.py:475
 msgctxt "button"
 msgid "Add file"
 msgstr "Lägg till fil"
 
-#: ../bleachbit/GuiPreferences.py:480
+#: ../bleachbit/GuiPreferences.py:482
 msgctxt "button"
 msgid "Add folder"
 msgstr "Lägg till mapp"
 
-#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:854
+#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:855
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
@@ -1554,15 +1558,16 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Anders Jonsson https://launchpad.net/~anders-jonsson\n"
 "  Daniel Nylander https://launchpad.net/~yeager\n"
 "  Göran Malmberg https://launchpad.net/~sweidre\n"
 "  JL https://launchpad.net/~jl2414\n"
 "  Jens Stääf https://launchpad.net/~jens-staaf\n"
+"  Jonatan Nyberg https://launchpad.net/~bugreporter41\n"
 "  Josef Andersson https://launchpad.net/~northar\n"
 "  Kristoffer Grundström https://launchpad.net/~umeaboy\n"
 "  Mikael Hiort af Ornäs https://launchpad.net/~lakritslemmel\n"
 "  Peter Almer https://launchpad.net/~remla\n"
-"  Reporter https://launchpad.net/~bugreporter41\n"
 "  Rikard Edgren https://launchpad.net/~rikard-edgren\n"
 "  sweidre https://launchpad.net/~info-idre\n"
 "  Åke Engelbrektson https://launchpad.net/~eson"
@@ -1598,7 +1603,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:585
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "Återställa konfigurationsfilen eftersom den är skadad: %s"
+msgstr "Återställer konfigurationsfilen eftersom den är skadad: %s"
 
 #: ../bleachbit/GUI.py:749
 msgid "You must select an operation"
@@ -1608,18 +1613,18 @@ msgstr "Du måste välja en åtgärd"
 msgid "Done."
 msgstr "Klart."
 
-#: ../bleachbit/GUI.py:838
+#: ../bleachbit/GUI.py:839
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 "Tillgång till programmenyn genom att klicka på hamburger-ikonen på menyraden."
 
-#: ../bleachbit/GUI.py:843
+#: ../bleachbit/GUI.py:844
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr ""
 "Tillgång till programmenyn genom att klicka på logotypen på menyraden."
 
-#: ../bleachbit/GUI.py:859
+#: ../bleachbit/GUI.py:860
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -1629,7 +1634,7 @@ msgstr ""
 "av systemet, och referenser till användarprofilmappen kommer endast att "
 "städa root-kontot."
 
-#: ../bleachbit/GUI.py:864
+#: ../bleachbit/GUI.py:865
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1640,28 +1645,28 @@ msgstr ""
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:909 ../bleachbit/GUI.py:1011
+#: ../bleachbit/GUI.py:910 ../bleachbit/GUI.py:1012
 msgid "Preview"
 msgstr "Förhandvisning"
 
-#: ../bleachbit/GUI.py:1008
+#: ../bleachbit/GUI.py:1009
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "Förhandsvisa filer i de valda åtgärderna (utan att ta bort några filer)"
 
-#: ../bleachbit/GUI.py:1023
+#: ../bleachbit/GUI.py:1024
 msgid "Clean files in the selected operations"
 msgstr "Städa filer i de valda åtgärderna"
 
-#: ../bleachbit/GUI.py:1031
+#: ../bleachbit/GUI.py:1032
 msgid "Abort"
 msgstr "Avbryt"
 
-#: ../bleachbit/GUI.py:1033
+#: ../bleachbit/GUI.py:1034
 msgid "Abort the preview or cleaning process"
 msgstr "Avbryt förhandsgranskningen eller städningsprocessen"
 
-#: ../bleachbit/GUI.py:1244
+#: ../bleachbit/GUI.py:1245
 msgid "Error when checking for updates: "
 msgstr "Fel vid uppdateringssökning: "
 
@@ -1670,7 +1675,7 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Kommandot \"swapoff -s\" misslyckades, så faller tillbaka till /proc/swappar "
+"Kommandot \"swapoff -s\" misslyckades, så faller tillbaka till /proc/swaps "
 "för swap-information."
 
 #: ../bleachbit/Memory.py:78
@@ -1684,12 +1689,12 @@ msgstr "Återaktiverar swap."
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr "Ställ in schysst värde %d för den här processen."
+msgstr "Ställer in nice-värde %d för den här processen."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr "Släppa behörigheter för process-ID {pid} till användar-ID {uid}."
+msgstr "Släpper behörigheter för process-ID {pid} till användar-ID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1790,13 +1795,13 @@ msgctxt "column_label"
 msgid "Filename"
 msgstr "Filnamn"
 
-#: ../bleachbit/Unix.py:586
+#: ../bleachbit/Unix.py:585
 #, python-format
 msgid "Executable not found: %s"
 msgstr "Körbar fil hittades inte: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:670 ../bleachbit/Unix.py:685 ../bleachbit/Unix.py:710
+#: ../bleachbit/Unix.py:669 ../bleachbit/Unix.py:684 ../bleachbit/Unix.py:709
 #: ../bleachbit/Worker.py:146
 #, python-format
 msgid ""
@@ -1884,7 +1889,7 @@ msgstr "Fel: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Vänligen vänta. Städar ledigt diskutrymme."
+msgstr "Vänta. Städar ledigt diskutrymme."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1898,7 +1903,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Vänligen vänta. Städar %s."
+msgstr "Vänta. Städar %s."
 
 #: ../bleachbit/Worker.py:217
 #, python-format
@@ -1950,13 +1955,13 @@ msgstr "Fel: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Vänligen vänta. Djupskanning körs."
+msgstr "Vänta. Djupskanning körs."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:341
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Vänligen vänta.  Förhandsgranskar %s."
+msgstr "Vänta.  Förhandsgranskar %s."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"

@@ -341,7 +341,8 @@ Section Core (Required)
         "URLUpdateInfo" "https://www.bleachbit.org/download"
 
     # Build cache now while there is a GUI progress bar.
-    DetailPrint "The next step is building font cache, during which you may see a black window for one minute."
+    DetailPrint "The next step is building font cache, during which you may see a black window."
+    DetailPrint "It usually finishes in one minute, but sometimes it takes ten minutes."
     ExecWait '"$instdir\fc-cache.exe"'
 SectionEnd
 

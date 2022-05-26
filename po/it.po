@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-06-14 06:44+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <it@li.org>\n"
+"PO-Revision-Date: 2022-02-11 19:56+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
+"it/>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
-"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -448,7 +450,8 @@ msgstr "Lista di indirizzi IP da bloccare"
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
 msgstr ""
-"La lista degli indirizzi IP da bloccare deve essere aggiornata per funzionare"
+"La lista degli indirizzi IP da bloccare deve essere aggiornata per "
+"funzionare."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -523,7 +526,7 @@ msgstr "Elimina la cache degli avatar e degli emoticon"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
-msgstr "Client Email"
+msgstr "Client di posta elettronica"
 
 #: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Index"
@@ -586,7 +589,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "Questa opzione elimina tutti i segnalibri"
+msgstr "Questa opzione elimina tutti i segnalibri."
 
 #: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
 #: ../bleachbit/Cleaner.py:202
@@ -651,7 +654,7 @@ msgstr "Riduce la frammentazione del disco rigido"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Esamina l'anteprima per qualsiasi file si voglia mantenere"
+msgstr "Esamina l'anteprima per qualsiasi file si voglia mantenere."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -726,7 +729,7 @@ msgstr "Shellbag"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Cancella date uso, posizioni finestre e altri dati dalle cartelle"
+msgstr "Elimina date uso, posizioni finestre e altri dati dalle cartelle"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -745,8 +748,8 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"Esamina attentamente l'elenco dei pacchetti che verranno rimossi eseguendo "
-"\"dnf list autoremove\"."
+"Esamina attentamente l'elenco dei pacchetti che verranno rimossi eseguendo «"
+"dnf list autoremove»."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -919,7 +922,7 @@ msgstr "Pulisce lo swap e libera memoria"
 
 #: ../bleachbit/Cleaner.py:307
 msgid "This option is experimental and may cause system problems."
-msgstr "Questa opzione è sperimentale e potrebbe causare problemi al sistema"
+msgstr "Questa opzione è sperimentale e potrebbe causare problemi al sistema."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:318
@@ -1116,7 +1119,7 @@ msgstr "Nessun lavoro da effettuare. Specificare delle opzioni."
 
 #: ../bleachbit/CLI.py:251
 msgid "--overwrite is intended only for use with --clean"
-msgstr "--overwrite va usato solo con  --clean"
+msgstr "--overwrite va usato solo con --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1310,7 +1313,7 @@ msgstr "Rivista 2600"
 
 #: ../bleachbit/GuiChaff.py:77
 msgid "Hillary Clinton's emails"
-msgstr "Email di Hillary Clinton"
+msgstr "E-mail di Hillary Clinton"
 
 #: ../bleachbit/GuiChaff.py:85
 msgid "Number of files"
@@ -1404,7 +1407,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:167
 msgid "Exit after cleaning"
-msgstr "Chiudere dopo la pulizia."
+msgstr "Chiudere dopo la pulizia"
 
 #: ../bleachbit/GuiPreferences.py:173
 msgid "Confirm before delete"
@@ -1534,7 +1537,7 @@ msgstr "Scegli la cartella da sovrascrivere"
 
 #: ../bleachbit/GUI.py:246
 msgid "No paths found in clipboard."
-msgstr "Nessun percorso negli appunti"
+msgstr "Nessun percorso negli appunti."
 
 #: ../bleachbit/GUI.py:282
 msgid "_OK"
@@ -1637,7 +1640,7 @@ msgid ""
 msgstr ""
 "Si sta eseguendo BleachBit con privilegi da amministratore per pulire parti "
 "condivise del sistema e riferimenti alla directory del profilo utente. In "
-"questo modo verrà verrà pulito solo l'account amministratore."
+"questo modo verrà pulito solo l'account amministratore."
 
 #: ../bleachbit/GUI.py:852
 msgid ""

@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2021-07-05 21:58+0000\n"
-"Last-Translator: Sérgio Marques <Unknown>\n"
-"Language-Team: Portuguese <pt@li.org>\n"
+"PO-Revision-Date: 2022-04-27 16:08+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
+"main/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
-"X-Generator: Launchpad (build fe01712f453e3d8fdd7cfee725621d71a8ae3628)\n"
-"Language: pt\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -837,7 +838,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "A ignorar ferramenta porque é mundialmente gravável:% s"
+msgstr "A ignorar ferramenta porque é mundialmente gravável: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -1157,7 +1158,7 @@ msgstr "A ignorar ponto de montagem: %s"
 #: ../bleachbit/FileUtilities.py:368
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr "Dispositivo ou recurso ocupado:  %s"
+msgstr "Dispositivo ou recurso ocupado: %s"
 
 #: ../bleachbit/FileUtilities.py:404
 #, python-format
@@ -1541,24 +1542,8 @@ msgstr ""
 #: ../bleachbit/GUI.py:322
 msgid "translator-credits"
 msgstr ""
-"Launchpad Contributions:\n"
-"  Alexandre Fidalgo https://launchpad.net/~alexandremagnos15\n"
-"  Almufadado https://launchpad.net/~almufadado\n"
-"  Carlos Geadas https://launchpad.net/~carlosgeadas\n"
-"  DarkVenger https://launchpad.net/~darkvenger\n"
-"  Formatado https://launchpad.net/~form-atado\n"
-"  Gmood https://launchpad.net/~jaleixo70\n"
-"  Ivo Xavier https://launchpad.net/~ivoxavier\n"
-"  JL https://launchpad.net/~jl2414\n"
-"  Jon Amil https://launchpad.net/~amilgz\n"
-"  Nuno Machado https://launchpad.net/~nunomsmachado\n"
-"  Pedro Folha https://launchpad.net/~pedrovi\n"
-"  Pedro Silva https://launchpad.net/~pedrof-silva\n"
-"  Raphael de Paula Horta https://launchpad.net/~raphaelhorta\n"
-"  Sérgio Marques https://launchpad.net/~sergio+marques\n"
-"  asensio https://launchpad.net/~asensio\n"
-"  nglnx https://launchpad.net/~nglnx\n"
-"  paulo caldeira https://launchpad.net/~paulocaldeira"
+"Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Sérgio Marques <smarquespt@gmail.com>"
 
 #: ../bleachbit/GUI.py:346
 msgid "System information"
@@ -1730,7 +1715,7 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
-"A função wipe_memory() com a ID  de processo {pid} és a aguardar pelo "
+"A função wipe_memory() com a ID de processo {pid} és a aguardar pelo "
 "processo com a ID {cid}."
 
 #: ../bleachbit/Memory.py:324
@@ -1821,9 +1806,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
-"Erro ao abrir uma ligação de rede para procurar as atualizações. Por favor, "
-"verifique se a rede está a funcionar e se a firewall não está a bloquear a "
-"aplicação. Mensagem de erro: {}"
+"Erro ao abrir uma ligação de rede para procurar as atualizações. Verifique "
+"se a rede está a funcionar e se a firewall não está a bloquear a aplicação. "
+"Mensagem de erro: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -1870,7 +1855,7 @@ msgstr "Erro: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Por favor aguarde. Estamos a limpar o espaço livre."
+msgstr "Aguarde. Estamos a limpar o espaço livre."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1884,7 +1869,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:340
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Por favor aguarde. A limpar %s."
+msgstr "Aguarde. A limpar %s."
 
 #: ../bleachbit/Worker.py:217
 #, python-format
@@ -1936,13 +1921,13 @@ msgstr "Erros: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:321
 msgid "Please wait.  Running deep scan."
-msgstr "Por favor aguarde. Estamos a executar a análise profunda."
+msgstr "Aguarde. Estamos a executar a análise profunda."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:343
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Por favor aguarde. A pré-visualizar %s."
+msgstr "Aguarde. A pré-visualizar %s."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
@@ -1954,7 +1939,7 @@ msgstr "Dest_ruir pastas"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Destruir caminhos da área de transferência."
+msgstr "Destruir caminhos da área de transferência"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
@@ -1978,4 +1963,4 @@ msgstr "Aj_uda"
 
 #: ../data/app-menu.ui:47
 msgid "_About BleachBit"
-msgstr "_Acerca de BleachBit"
+msgstr "_Acerca do BleachBit"

@@ -312,6 +312,12 @@ class WindowsTestCase(common.BleachbitTestCase):
         for path in paths:
             self.assertExists(path)
 
+    def test_get_font_conf_file(self):
+        """Unit test for get_font_conf_file"""
+        # This tests only one of three situations.
+        font_fn = get_font_conf_file()
+        self.assertExists(font_fn)
+
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
         ret = get_known_folder_path('LocalAppDataLow')
