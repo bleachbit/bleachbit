@@ -176,24 +176,26 @@ class CleanerTestCase(common.BleachbitTestCase):
         _iglob = glob.iglob
         _lexists = os.path.lexists
         _oswalk = os.walk
-        glob.iglob = lambda path: []
-        os.path.exists = lambda path: False
-        os.path.lexists = lambda path: False
-        os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
-        for key in sorted(backends):
-            for (option_id, __name) in backends[key].get_options():
-                for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete=False):
-                        if result != True:
-                            break
-                        msg = "Expected no files to be deleted but got '%s'" % str(
-                            result)
-                        self.assertNotIsInstance(cmd, Command.Delete, msg)
-                        common.validate_result(self, result)
-        glob.iglob = _iglob
-        os.path.exists = _exists
-        os.path.lexists = _lexists
-        os.walk = _oswalk
+        try:
+            glob.iglob = lambda path, root_dir=None, dir_fd=None, recursive=False: []
+            os.path.exists = lambda path: False
+            os.path.lexists = lambda path: False
+            os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
+            for key in sorted(backends):
+                for (option_id, __name) in backends[key].get_options():
+                    for cmd in backends[key].get_commands(option_id):
+                        for result in cmd.execute(really_delete=False):
+                            if result != True:
+                                break
+                            msg = "Expected no files to be deleted but got '%s'" % str(
+                                result)
+                            self.assertNotIsInstance(cmd, Command.Delete, msg)
+                            common.validate_result(self, result)
+        finally:
+            glob.iglob = _iglob
+            os.path.exists = _exists
+            os.path.lexists = _lexists
+            os.walk = _oswalk
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""

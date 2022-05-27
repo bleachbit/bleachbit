@@ -24,6 +24,7 @@ For information regarding the command line interface, run:
 page](https://www.bleachbit.org)
 * [Support](https://www.bleachbit.org/help)
 * [Documentation](https://docs.bleachbit.org)
+* [Translate in Weblate](https://hosted.weblate.org/projects/bleachbit/): under evaluation
 
 
 ## Licenses

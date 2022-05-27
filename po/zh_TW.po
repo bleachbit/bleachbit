@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2021-10-26 16:27+0000\n"
-"Last-Translator: Pin-hsien Lee <pspeter9931@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
+"PO-Revision-Date: 2022-04-22 08:07+0000\n"
+"Last-Translator: Pin-Hsien Lee <gxzripple@mail.fogtab.com>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
+"bleachbit/main/zh_Hant/>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
-"X-Generator: Launchpad (build 0d8de2bfee2024772b3040d4d19f42f47395ac0d)\n"
-"Language: zh_TW\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -977,11 +978,11 @@ msgstr "覆寫可用硬碟空間 %s"
 
 #: ../bleachbit/Cleaner.py:672
 msgid "Loading native cleaners."
-msgstr "正在載入原生清理器…"
+msgstr "正在載入原生清理器。"
 
 #: ../bleachbit/Cleaner.py:677
 msgid "Importing cleaners from Winapp2.ini."
-msgstr "正在從 Winapp2.ini 匯入清理器…"
+msgstr "正在從 Winapp2.ini 匯入清理器。"
 
 #: ../bleachbit/CLI.py:113
 #, python-format
@@ -1618,7 +1619,7 @@ msgstr "設定本程序的 nice 值為 %d。"
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr "將程序 (PID {pid}) 的權限授予使用者 (UID {uid})"
+msgstr "將程序 (PID {pid}) 的權限授予使用者 (UID {uid})。"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140

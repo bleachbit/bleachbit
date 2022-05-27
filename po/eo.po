@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-12-29 17:07-0700\n"
-"PO-Revision-Date: 2013-04-01 17:49+0000\n"
-"Last-Translator: Anthony <cguru@nerdshack.com>\n"
-"Language-Team: Esperanto <eo@li.org>\n"
+"PO-Revision-Date: 2022-03-08 23:01+0000\n"
+"Last-Translator: Lagash <hendursaga@yahoo.com>\n"
+"Language-Team: Esperanto <https://hosted.weblate.org/projects/bleachbit/main/"
+"eo/>\n"
+"Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Launchpad-Export-Date: 2013-04-09 14:56+0000\n"
-"X-Generator: Launchpad (build 16550)\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
 #: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
@@ -596,7 +598,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:627
 msgid "Clipboard"
-msgstr ""
+msgstr "Poŝo"
 
 #: ../bleachbit/Cleaner.py:418
 msgid ""
@@ -661,8 +663,9 @@ msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr ""
 
 #: ../bleachbit/CLI.py:153
+#, fuzzy
 msgid "list cleaners"
-msgstr ""
+msgstr "Listigi polurilojn"
 
 #: ../bleachbit/CLI.py:155
 msgid "delete files and make other permanent changes"
@@ -674,12 +677,13 @@ msgid "depreciated alias for --clean"
 msgstr ""
 
 #: ../bleachbit/CLI.py:160
+#, fuzzy
 msgid "show system information"
-msgstr ""
+msgstr "Montru sistemajn informojn"
 
 #: ../bleachbit/CLI.py:161
 msgid "launch the graphical interface"
-msgstr ""
+msgstr "Lanĉu la grafikan fasadon"
 
 #: ../bleachbit/CLI.py:163
 msgid "do not prompt for administrator privileges"
@@ -694,8 +698,9 @@ msgid "use options set in the graphical interface"
 msgstr ""
 
 #: ../bleachbit/CLI.py:172
+#, fuzzy
 msgid "output version information and exit"
-msgstr ""
+msgstr "Montru versian informon kaj ĉesu"
 
 #: ../bleachbit/CLI.py:174
 msgid "overwrite files to hide contents"
@@ -795,7 +800,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:120
 msgid "Check for new beta releases"
-msgstr ""
+msgstr "Kontrolu por novajn betajn versiojn"
 
 #: ../bleachbit/GuiPreferences.py:127
 msgid "Download and update cleaners from community (winapp2.ini)"
@@ -823,8 +828,9 @@ msgid ""
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:153
+#, fuzzy
 msgid "Start BleachBit with computer"
-msgstr ""
+msgstr "Startu BleachBit-on kune kun komputilo"
 
 #: ../bleachbit/GuiPreferences.py:164 ../bleachbit/GuiPreferences.py:295
 #: ../bleachbit/GuiPreferences.py:341 ../bleachbit/GUI.py:545
@@ -990,7 +996,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py:635
 msgid "_Quit"
-msgstr ""
+msgstr "Forlasu"
 
 #: ../bleachbit/GUI.py:636
 msgid "_File"
@@ -1001,12 +1007,13 @@ msgid "_Edit"
 msgstr "_Redakti"
 
 #: ../bleachbit/GUI.py:639
+#, fuzzy
 msgid "Help Contents"
-msgstr ""
+msgstr "Helpa Enhavo"
 
 #: ../bleachbit/GUI.py:641
 msgid "_Release Notes"
-msgstr ""
+msgstr "_Versiaj Notoj"
 
 #: ../bleachbit/GUI.py:643
 msgid "_System Information"
@@ -1097,7 +1104,7 @@ msgstr "Nova winapp2.ini estis elŝutita"
 
 #: ../bleachbit/Update.py:111
 msgid "Update BleachBit"
-msgstr ""
+msgstr "Aktualigu BleachBit-on"
 
 #: ../bleachbit/Update.py:116
 msgid "A new version is available."

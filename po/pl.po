@@ -8,18 +8,19 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 22:01-0700\n"
-"PO-Revision-Date: 2021-11-10 21:27+0000\n"
-"Last-Translator: Michal L <Unknown>\n"
-"Language-Team: s120801-translate\n"
+"PO-Revision-Date: 2022-02-26 17:54+0000\n"
+"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
+">\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
-"X-Generator: Launchpad (build 57dd9ea1b48fdf744e285d99fb34fa0c21646cd0)\n"
 "X-Poedit-Language: Polish\n"
-"Language: pl\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -59,7 +60,7 @@ msgstr "Pamięć podręczna"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Usuń pamięć podręczną przeglądarki przyspieszającą ponowne odwiedziny na "
+"Usuwa pamięć podręczną przeglądarki przyspieszającą ponowne odwiedziny na "
 "stronach"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
@@ -85,7 +86,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Usuń ciasteczka zawierające między innymi informacje o ustawieniach stron "
+"Usuwa ciasteczka zawierające między innymi informacje o ustawieniach stron "
 "internetowych, aktywnych logowaniach czy używane do śledzenia aktywności"
 
 #. DOM=Document Object Model
@@ -103,7 +104,7 @@ msgstr "Magazyn DOM"
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
-msgstr "Usuń ciasteczka HTML5"
+msgstr "Usuwa ciasteczka HTML5"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -174,7 +175,7 @@ msgstr "Synchronizacja"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr "Usuń synchronizowane dane i wyloguj przeglądarkę"
+msgstr "Usuwa dane synchronizacji i wylogowuje sesje z przeglądarki"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -227,8 +228,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Uporządkuj bazę danych redukując zajmowane przez nią miejsce oraz "
-"przyspieszając dostęp do niej bez usuwania żadnych danych"
+"Porządkuje bazę danych redukując zajmowane przez nią miejsce, przyspieszając "
+"dostęp do niej bez usuwania żadnych danych"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -256,7 +257,7 @@ msgstr "Archiwizator plików"
 #: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:248
 #: ../bleachbit/Cleaner.py:257
 msgid "Delete the usage history"
-msgstr "Usuń historię użycia"
+msgstr "Usuwa historię użycia"
 
 #: ../cleaners/winrar.xml ../cleaners/silverlight.xml
 #: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
@@ -272,7 +273,7 @@ msgstr "Pliki tymczasowe"
 #: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:345
 msgid "Delete the temporary files"
-msgstr "Usuń pliki tymczasowe"
+msgstr "Usuwa pliki tymczasowe"
 
 #: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
 #: ../cleaners/xine.xml
@@ -306,7 +307,7 @@ msgstr "Kwarantanna"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/beagle.xml
 msgid "Delete the files"
-msgstr "Usuń pliki"
+msgstr "Usuwa pliki"
 
 #: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
 #: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
@@ -318,7 +319,7 @@ msgstr "Kopie zapasowe"
 #: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
-msgstr "Usuń pliki kopii zapasowej"
+msgstr "Usuwa pliki kopii zapasowej"
 
 #: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
 #: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
@@ -340,7 +341,7 @@ msgstr "Logi"
 #: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../bleachbit/Cleaner.py:311
 msgid "Delete the logs"
-msgstr "Usuń pliki logów"
+msgstr "Usuwa pliki logów"
 
 #: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/gftp.xml
@@ -358,7 +359,7 @@ msgstr "Usuń pliki logów"
 #: ../bleachbit/Cleaner.py:280 ../bleachbit/Cleaner.py:314
 #: ../bleachbit/Cleaner.py:316
 msgid "Delete the cache"
-msgstr "Usuń pamięć podręczną"
+msgstr "Usuwa pamięć podręczną"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -366,11 +367,11 @@ msgstr "Pobrane podkasty"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "Usuń pobrane podkasty"
+msgstr "Usuwa pobrane podkasty"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
-msgstr "Usuń historię poleceń"
+msgstr "Usuwa historię poleceń"
 
 #: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
@@ -380,7 +381,7 @@ msgstr "Gra"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Usuń listę serwerów gier"
+msgstr "Usuwa listę serwerów gier"
 
 #: ../cleaners/yum.xml ../cleaners/apt.xml ../cleaners/dnf.xml
 msgid "Package manager"
@@ -400,7 +401,7 @@ msgstr "Lista ostatnich dokumentów"
 #: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/kde.xml ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:294
 msgid "Delete the list of recently used documents"
-msgstr "Usuń listę ostatnio używanych dokumentów"
+msgstr "Usuwa listę ostatnio używanych dokumentów"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
@@ -422,7 +423,7 @@ msgstr "Dzienniki rozmów"
 #: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
 #: ../cleaners/hexchat.xml
 msgid "Delete the chat logs"
-msgstr "Usuń dzienniki rozmów"
+msgstr "Usuwa dzienniki rozmów"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -446,7 +447,7 @@ msgstr "Dzienniki debugowania"
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml ../cleaners/easytag.xml
 msgid "Delete the debug logs"
-msgstr "Usuń dzienniki debugowania"
+msgstr "Usuwa dzienniki debugowania"
 
 #: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
 msgid "File manager"
@@ -463,7 +464,7 @@ msgstr "Listy blokowanych"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Czarne listy muszą zostać zaktualizowane aby zacząć działać"
+msgstr "Czarne listy muszą zostać zaktualizowane, aby zacząć działać."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -471,7 +472,7 @@ msgstr "Torrenty"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Usuń torrenty (same metadane, bez przesyłanych plików)"
+msgstr "Usuwa torrenty (same metadane, bez przesyłanych plików)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
@@ -479,7 +480,7 @@ msgstr "Statystyki"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:313
 msgid "Delete the file"
-msgstr "Usuń plik"
+msgstr "Usuwa plik"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Crash reports"
@@ -523,11 +524,11 @@ msgstr "Lista pobranych plików"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Usuń listę odwiedzonych stron"
+msgstr "Usuwa listę odwiedzonych stron"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Usuń pamięć podręczną awatarów i emotikon"
+msgstr "Usuwa pamięć podręczną awatarów i emotikon"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -558,7 +559,7 @@ msgstr "Usuwa ciasteczka, historię przeglądania i wyszukiwania"
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Usuń listę najczęściej używanych"
+msgstr "Usuwa listę ostatnio używanych"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -578,7 +579,7 @@ msgstr "Historia wyszukiwania"
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
-msgstr "Usuń historię wyszukiwania"
+msgstr "Usuwa historię wyszukiwania"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -593,7 +594,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "Usunięcie wszystkich zakładek"
+msgstr "Usunięcie wszystkich zakładek."
 
 #: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
 #: ../bleachbit/Cleaner.py:200
@@ -634,7 +635,7 @@ msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
-"Usuń bazę danych, która zawiera takie informacje, jak liczba odtworzeń i "
+"Usuwa bazę danych, która zawiera takie informacje, jak liczba odtworzeń i "
 "ostatnio odtwarzane"
 
 #: ../cleaners/wine.xml
@@ -646,14 +647,14 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Usuń internetową pamięć podręczną, co skraca czas wyświetlania ponownie "
+"Usuwa internetową pamięć podręczną, co skraca czas wyświetlania ponownie "
 "odwiedzanych stron. Spowoduje to również wyczyszczenie ulubionych GIF-ów."
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Usuń plik ~/.viminfo zawierający historię otwartych plików, poleceń oraz "
+"Usuwa plik ~/.viminfo zawierający historię otwartych plików, poleceń oraz "
 "buforowane dane"
 
 #: ../cleaners/deepscan.xml
@@ -687,7 +688,7 @@ msgstr "Przeglądarka dokumentów"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr "Usuń przestarzałe pliki"
+msgstr "Usuwa przestarzałe pliki"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
@@ -707,7 +708,7 @@ msgstr "Bieżąca sesja"
 
 #: ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr "Usuń bieżącą sesję"
+msgstr "Usuwa bieżącą sesję"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -727,7 +728,7 @@ msgstr "Nagrania"
 
 #: ../cleaners/zoom.xml
 msgid "Delete the audio and video recordings"
-msgstr "Usuń nagrania audio i wideo"
+msgstr "Usuwa nagrania audio i wideo"
 
 #: ../cleaners/windows_explorer.xml
 msgid ""
@@ -741,7 +742,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Usuń datę użytkowania, pozycję okna i inne dane dla katalogów"
+msgstr "Usuwa datę użytkowania, pozycję okna i inne dane dla katalogów"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -753,7 +754,7 @@ msgstr "Spowoduje to ponowne uruchomienie Eksploratora Windows."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr "Usuń pakiety, które wcześniej były zależnościami"
+msgstr "Usuwa pakiety, które wcześniej były zależnościami"
 
 #: ../cleaners/dnf.xml
 msgid ""
@@ -771,7 +772,7 @@ msgstr "Narzędzie wyszukiwania"
 msgid ""
 "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Usuń indeks wyszukiwania, bazę słów kluczowych i zawierających je plików"
+"Usuwa indeks wyszukiwania, bazę słów kluczowych i zawierających je plików"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -852,11 +853,15 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Błąd w handle_cleaner_option() dla identyfikatora instrukcji czyszczenia = "
+"{cleaner_id}, opcja XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr ""
+"Ignorowanie instrukcji czyszczenia, ponieważ jest to katalog world writable: "
+"%s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -870,6 +875,8 @@ msgstr "Błąd podczas odczytu instrukcji sprzątania: %s"
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"Instrukcje czyszczenia nie zadziałają w tym systemie operacyjnym, ponieważ "
+"nie mają żadnych zastosowań: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -894,7 +901,7 @@ msgstr "Tłumaczenia"
 
 #: ../bleachbit/Cleaner.py:284
 msgid "Delete files for unwanted languages"
-msgstr "Usuń pliki dla niechcianych języków"
+msgstr "Usuwa pliki dla niechcianych języków"
 
 #: ../bleachbit/Cleaner.py:286
 msgid "Configure this option in the preferences."
@@ -906,7 +913,7 @@ msgstr "Zrotowane dzienniki"
 
 #: ../bleachbit/Cleaner.py:292
 msgid "Delete old system logs"
-msgstr "Usuń stare logi systemowe"
+msgstr "Usuwa stare logi systemowe"
 
 #: ../bleachbit/Cleaner.py:295
 msgid "Trash"
@@ -941,7 +948,7 @@ msgstr "Kosz"
 
 #: ../bleachbit/Cleaner.py:318 ../bleachbit/Cleaner.py:603
 msgid "Empty the recycle bin"
-msgstr "Opróżnij kosz"
+msgstr "Opróżnia kosz"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
@@ -1007,11 +1014,11 @@ msgstr "Nadpisanie wolnej przestrzeni dysku %s"
 
 #: ../bleachbit/Cleaner.py:672
 msgid "Loading native cleaners."
-msgstr "Wczytywanie natywnych mechanizmów czyszczących."
+msgstr "Wczytywanie natywnych instrukcji czyszczących."
 
 #: ../bleachbit/Cleaner.py:677
 msgid "Importing cleaners from Winapp2.ini."
-msgstr "Importowanie mechanizmów czyszczących z Winapp2.ini."
+msgstr "Importowanie instrukcji czyszczących z Winapp2.ini."
 
 #: ../bleachbit/CLI.py:113
 #, python-format
@@ -1122,7 +1129,7 @@ msgstr "Brak pracy do wykonania. Określ opcje."
 
 #: ../bleachbit/CLI.py:260
 msgid "--overwrite is intended only for use with --clean"
-msgstr "--overwrite jest przeznaczony wyłącznie do użytku z  --clean"
+msgstr "--overwrite jest przeznaczony wyłącznie do użytku z --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1658,7 +1665,7 @@ msgstr "Podejrzyj efekty działania wybranych opcji (bez usuwania niczego)"
 
 #: ../bleachbit/GUI.py:1024
 msgid "Clean files in the selected operations"
-msgstr "Usuwa pliki przy obecnych opcjach"
+msgstr "Usuwa pliki w wybranych opcjach"
 
 #: ../bleachbit/GUI.py:1032
 msgid "Abort"
@@ -1677,6 +1684,8 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Polecenie 'swapoff -s' nie powiodło się, powrót do /proc/swaps w celu "
+"uzyskania informacji o pliku wymiany."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."

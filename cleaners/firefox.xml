@@ -27,15 +27,18 @@
   <running type="exe" os="unix">firefox-bin</running>
   <running type="exe" os="windows">firefox.exe</running>
   <running type="pathname">~/.mozilla/firefox/*.default/lock</running>
+  <running type="pathname">~/snap/firefox/common/.mozilla/firefox/*.default/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Mozilla\Firefox</value>
     <value os="linux">~/.mozilla/firefox</value>
+    <value os="linux">~/snap/firefox/common/.mozilla/firefox</value>
     <value os="freebsd">~/.mozilla/firefox</value>
     <value os="openbsd">~/.mozilla/firefox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
     <value search="glob" os="linux">~/.mozilla/firefox/*</value>
+    <value search="glob" os="linux">~/snap/firefox/common/.mozilla/firefox/*</value>
     <value search="glob" os="freebsd">~/.mozilla/firefox/*</value>
     <value search="glob" os="openbsd">~/.mozilla/firefox/*</value>
   </var>
@@ -48,11 +51,12 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <!-- 
+    <!--
 This Linux path is whitelisted under the System - Cache cleaner, so it is not
 redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/mozilla/"/>
+    <action command="delete" search="walk.all" path="~/snap/firefox/common/.cache/mozilla/"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\OfflineCache"/>

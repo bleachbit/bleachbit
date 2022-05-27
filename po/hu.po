@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-11-12 19:55-0700\n"
-"PO-Revision-Date: 2019-12-24 13:52+0000\n"
-"Last-Translator: zoli <Unknown>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"PO-Revision-Date: 2022-05-02 06:15+0000\n"
+"Last-Translator: Ács Zoltán <acszoltan111@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
+"hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
-"X-Generator: Launchpad (build bceb5ef013b87ef7aafe0755545ceb689ca7ac60)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -195,7 +197,7 @@ msgstr ""
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
-msgstr ""
+msgstr "Fájl archiváló"
 
 #: ../cleaners/winrar.xml ../cleaners/filezilla.xml
 #: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
@@ -533,11 +535,11 @@ msgstr "Irodai programcsomak"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Ismert fájlok előzményei"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Ismert kliensek és barátok"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -662,11 +664,11 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Használati adatok, ablakpozíció, és egyéb adatmappák törlése"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr ""
+msgstr "Ez visszaállítja az asztali ikonok pozícióját."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -704,9 +706,9 @@ msgid "Free space and maintain privacy"
 msgstr "Hely felszabadítása és magánszférájának fenntartása"
 
 #: ../bleachbit/Options.py:112
-#, python-format
+#, fuzzy, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr ""
+msgstr "A lemez tele volt a konfiguráció fájlba írásakor: %s"
 
 #: ../bleachbit/Options.py:137
 #, python-format
@@ -720,7 +722,7 @@ msgstr ""
 #: ../bleachbit/Options.py:290
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "Nyelv automatikus megőrzése: %s."
 
 #: ../bleachbit/Unix.py:570
 #, python-format
@@ -754,11 +756,11 @@ msgstr "Válasszon mappát a megsemmisítéshez"
 #: ../bleachbit/GUI.py:144 ../bleachbit/GuiBasic.py:100
 #: ../bleachbit/GuiBasic.py:144
 msgid "_Delete"
-msgstr ""
+msgstr "_Törlés"
 
 #: ../bleachbit/GUI.py:169
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "Nem találhatók útvonalak a vágólapon."
 
 #: ../bleachbit/GUI.py:200 ../bleachbit/GuiPreferences.py:194
 #: ../bleachbit/GuiPreferences.py:319 ../bleachbit/GuiPreferences.py:360
@@ -767,13 +769,15 @@ msgstr "Mappa kiválasztása"
 
 #: ../bleachbit/GUI.py:201
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ../bleachbit/GUI.py:235
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License 3. verzió, vagy későbbi.\n"
+"Lásd: https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -893,11 +897,11 @@ msgstr "Fájlok tisztítása a kijelölt műveletek során"
 
 #: ../bleachbit/GUI.py:920
 msgid "Abort"
-msgstr ""
+msgstr "Megszakítás"
 
 #: ../bleachbit/GUI.py:922
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Előnézet vagy tisztítási folyamat megszakítása"
 
 #: ../bleachbit/GUI.py:1070
 msgid "Error when checking for updates: "
@@ -915,7 +919,7 @@ msgstr "%(operation)s futás közben hibát okozott: %(msg)s"
 #: ../bleachbit/Worker.py:108
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Hiba: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:201
@@ -1139,7 +1143,7 @@ msgstr "Szabad lemezterület"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:344
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "Szabad lemezterület felülírása a törölt fájlok álcázására"
+msgstr "Szabad lemezterület felülírása a törölt fájlok elrejtésére"
 
 #: ../bleachbit/Cleaner.py:345
 msgid "This option is very slow."
@@ -1162,16 +1166,16 @@ msgstr "Szabad lemezterület felülírása: %s"
 
 #: ../bleachbit/Cleaner.py:685
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "Natív tisztítók betöltése."
 
 #: ../bleachbit/Cleaner.py:691
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "Tisztítók importálása a Winapp2.ini-ből."
 
 #: ../bleachbit/Chaff.py:133
 #, python-format
 msgid "Downloading url failed: %s"
-msgstr ""
+msgstr "Url letöltése sikertelen: %s"
 
 #: ../bleachbit/RecognizeCleanerML.py:58
 msgid "Security warning"
@@ -1183,9 +1187,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Ezek a törlési szabályok ujjak vagy módosítva lettek. A hibás szabályok "
-"tönkre tehetik a rendszerét. Ha nem bízik a módosításokban, törölje a "
-"fájlokat vagy lépjen ki."
+"Ezek a törlési szabályok újak vagy módosítva lettek. A rosszindulatú "
+"szabályok tönkre tehetik a rendszerét. Ha nem bízik a módosításokban, "
+"törölje a fájlokat vagy lépjen ki."
 
 #: ../bleachbit/RecognizeCleanerML.py:87
 msgctxt "column_label"
@@ -1200,17 +1204,17 @@ msgstr "Fájlnév"
 #: ../bleachbit/FileUtilities.py:319 ../bleachbit/FileUtilities.py:333
 #, python-format
 msgid "Directory is not empty: %s"
-msgstr ""
+msgstr "A könyvtár nem üres: %s"
 
 #: ../bleachbit/FileUtilities.py:322
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr ""
+msgstr "Csatolási pont átugrása: %s"
 
 #: ../bleachbit/FileUtilities.py:324
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr ""
+msgstr "Az eszköz vagy erőforrás elfoglalt: %s"
 
 #: ../bleachbit/FileUtilities.py:357
 #, python-format
@@ -1396,7 +1400,7 @@ msgstr ""
 #: ../bleachbit/GuiBasic.py:186
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "Megnyissam a %s-t a böngészőben?"
+msgstr "%s meg legyen nyitva a böngészőben?"
 
 #: ../bleachbit/CLI.py:106
 #, python-format
@@ -1431,7 +1435,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
-msgstr ""
+msgstr "hibakeresési üzenetek naplózása fájlba"
 
 #: ../bleachbit/CLI.py:146
 msgid "shred specific files or folders"
@@ -1546,7 +1550,7 @@ msgstr ""
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:67
 msgid "Make chaff"
-msgstr ""
+msgstr "Áladatok létrehozása"
 
 #: ../bleachbit/GuiChaff.py:72
 msgid "Make randomly-generated messages inspired by documents."
@@ -1554,27 +1558,27 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:76
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiráció"
 
 #: ../bleachbit/GuiChaff.py:79
 msgid "2600 Magazine"
-msgstr ""
+msgstr "2600 Magazin"
 
 #: ../bleachbit/GuiChaff.py:79
 msgid "Hillary Clinton's emails"
-msgstr ""
+msgstr "Hillary Clinton emailei"
 
 #: ../bleachbit/GuiChaff.py:87
 msgid "Number of files"
-msgstr ""
+msgstr "Fájlok száma"
 
 #: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
 msgid "Select destination folder"
-msgstr ""
+msgstr "Célmappa kiválasztása"
 
 #: ../bleachbit/GuiChaff.py:104
 msgid "When finished"
-msgstr ""
+msgstr "Amikor kész"
 
 #: ../bleachbit/GuiChaff.py:107
 msgid "Delete without shredding"
@@ -1586,11 +1590,11 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:118
 msgid "Make files"
-msgstr ""
+msgstr "Fájlok létrehozása"
 
 #: ../bleachbit/GuiChaff.py:135
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Letölti az áladatgenerátorhoz szükséges adatokat?"
 
 #: ../bleachbit/GuiChaff.py:177
 msgid "Generating files"
@@ -1649,7 +1653,7 @@ msgstr "Lényegtelen tisztítók elrejtése"
 #. 'Shred files to prevent recovery.'
 #: ../bleachbit/GuiPreferences.py:147
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "Fájlok tartalmának felülírása a visszaállítás megakadályozásához"
 
 #: ../bleachbit/GuiPreferences.py:151
 msgid ""
@@ -1670,14 +1674,15 @@ msgstr "Megerősítés törlés előtt"
 #: ../bleachbit/GuiPreferences.py:169
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
+"IEC méretek használata (1 KiB = 1024 bájt) az SI helyett (1 kB = 1000 byte)"
 
 #: ../bleachbit/GuiPreferences.py:176
 msgid "Dark mode"
-msgstr ""
+msgstr "Sötét mód"
 
 #: ../bleachbit/GuiPreferences.py:182
 msgid "Show debug messages"
-msgstr ""
+msgstr "Hibakeresési üzenetek megjelenítése"
 
 #: ../bleachbit/GuiPreferences.py:217
 msgid ""
@@ -1844,7 +1849,7 @@ msgstr "M_egsemmisítendő mappák"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Útvonalak törlése a vágólapról"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1852,11 +1857,11 @@ msgstr "_Szabadterület törlése"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "Á_ladatok létrehozása"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
-msgstr "_Beállítások törlése és Kilépés"
+msgstr "_Beállítások törlése és kilépés"
 
 #: ../data/app-menu.ui:36
 msgid "_Diagnostics"
@@ -1868,4 +1873,4 @@ msgstr "_Súgó"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_A BleachBit névjegye"

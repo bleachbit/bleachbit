@@ -20,6 +20,10 @@
 
 """
 Command design pattern implementation for cleaning
+
+Standard clean up commands are Delete, Truncate and Shred. Everything
+else is counted as special commands: run any external process, edit
+JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
 from bleachbit import _
