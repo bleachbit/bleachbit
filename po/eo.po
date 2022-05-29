@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-12-29 17:07-0700\n"
-"PO-Revision-Date: 2022-03-08 23:01+0000\n"
-"Last-Translator: Lagash <hendursaga@yahoo.com>\n"
+"PO-Revision-Date: 2022-05-31 02:17+0000\n"
+"Last-Translator: phlostically <phlostically@mailinator.com>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/bleachbit/main/"
 "eo/>\n"
 "Language: eo\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Launchpad-Export-Date: 2013-04-09 14:56+0000\n"
 
 #: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
@@ -129,7 +129,7 @@ msgstr "Redaktilo"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Forigi~/.viminfo, kiu enhavas folikronologion, komandkronologion kaj bufrojn."
+"Forigi ~/.viminfo, kiu enhavas folikronologion, komandkronologion kaj bufrojn"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 #: ../cleaners/amule.xml ../cleaners/gftp.xml
@@ -458,7 +458,7 @@ msgstr "Inspeki la antaŭrigardon por ĉiuj dosieroj, kiujn vi volas manteni."
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr "Ĉi tiu opcio estas malrapida"
+msgstr "Ĉi tiu opcio estas malrapida."
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -483,7 +483,7 @@ msgstr "Purigi"
 
 #: ../bleachbit/Cleaner.py:188
 msgid "Crash reports"
-msgstr ""
+msgstr "Raportoj pri misfinoj"
 
 #: ../bleachbit/Cleaner.py:193
 msgid "Session restore"
@@ -557,15 +557,15 @@ msgstr "Memoro"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:396
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "Forviŝi permutaĵon kaj liberan memoron"
 
 #: ../bleachbit/Cleaner.py:397
 msgid "This option is experimental and may cause system problems."
-msgstr "Ĉi tiu opcio estas eksperimenta kaj eblas kaŭzi sistemproblemojn"
+msgstr "Ĉi tiu opcio estas eksperimenta kaj eblas kaŭzi sistemajn problemojn."
 
 #: ../bleachbit/Cleaner.py:404
 msgid "Memory dump"
-msgstr ""
+msgstr "Memornekropsio"
 
 #: ../bleachbit/Cleaner.py:404
 msgid "Delete the file memory.dmp"
@@ -574,7 +574,7 @@ msgstr "Forigi la dosieron \"memory.dmp\""
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:407
 msgid "Prefetch"
-msgstr ""
+msgstr "Antaŭŝargi"
 
 #: ../bleachbit/Cleaner.py:408
 msgid "Recycle bin"
@@ -588,13 +588,15 @@ msgstr "Malplenigi la rubujon"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:411
 msgid "Update uninstallers"
-msgstr ""
+msgstr "Malinstalilo de ĝisdatigoj"
 
 #: ../bleachbit/Cleaner.py:411
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
+"Forviŝi malinstalilojn por ĝisdatigoj de Microsoft inkluzive de flikaĵoj, "
+"servopakoj kaj ĝisdatigoj de Internet Explorer"
 
 #: ../bleachbit/Cleaner.py:418 ../bleachbit/Cleaner.py:627
 msgid "Clipboard"
@@ -603,16 +605,16 @@ msgstr "Poŝo"
 #: ../bleachbit/Cleaner.py:418
 msgid ""
 "The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
+msgstr "La tondujo de la mastruma sistemo uzata por kopiado kaj algluado"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which files and folders will be erased.
 #: ../bleachbit/Cleaner.py:424 ../bleachbit/GuiPreferences.py:62
 msgid "Custom"
-msgstr ""
+msgstr "Propre"
 
 #: ../bleachbit/Cleaner.py:424
 msgid "Delete user-specified files and folders"
-msgstr ""
+msgstr "Forigi dosierojn kaj dosierujojn specifitajn de la uzanto"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:426
@@ -622,11 +624,11 @@ msgstr "Neatribuita diskospaco"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:428
 msgid "Overwrite free disk space to hide deleted files"
-msgstr ""
+msgstr "Superskribi liberan diskospacon por kaŝi forigitajn dosierojn"
 
 #: ../bleachbit/Cleaner.py:429
 msgid "This option is very slow."
-msgstr "Ĉi tiu opcio estas tre malrapida"
+msgstr "Ĉi tiu opcio estas malrapidega."
 
 #: ../bleachbit/Cleaner.py:433
 msgid "The system in general"
@@ -641,7 +643,7 @@ msgstr "Sistemo"
 #: ../bleachbit/Cleaner.py:636 ../bleachbit/Cleaner.py:739
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr ""
+msgstr "Superskribi liberan diskspacon %s"
 
 #. TRANSLATORS: %s expands to a drive letter such as C:\ or D:\
 #: ../bleachbit/Cleaner.py:664
@@ -652,7 +654,7 @@ msgstr "Rubujo %s"
 #: ../bleachbit/CLI.py:123
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "ne valida purigilo: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate usage, options, cleaner, and option.
@@ -660,12 +662,11 @@ msgstr ""
 #. http://bleachbit.sourceforge.net/documentation/command-line
 #: ../bleachbit/CLI.py:150
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
+msgstr "uzado: %prog [opcioj] purigilo.opcio1 purigilo.opcio2"
 
 #: ../bleachbit/CLI.py:153
-#, fuzzy
 msgid "list cleaners"
-msgstr "Listigi polurilojn"
+msgstr "listigi purigilojn"
 
 #: ../bleachbit/CLI.py:155
 msgid "delete files and make other permanent changes"
@@ -677,9 +678,8 @@ msgid "depreciated alias for --clean"
 msgstr ""
 
 #: ../bleachbit/CLI.py:160
-#, fuzzy
 msgid "show system information"
-msgstr "Montru sistemajn informojn"
+msgstr "montri sistemajn informojn"
 
 #: ../bleachbit/CLI.py:161
 msgid "launch the graphical interface"
@@ -687,24 +687,23 @@ msgstr "Lanĉu la grafikan fasadon"
 
 #: ../bleachbit/CLI.py:163
 msgid "do not prompt for administrator privileges"
-msgstr ""
+msgstr "ne peti administrantan privilegion"
 
 #: ../bleachbit/CLI.py:168
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "antaŭrigardi forigotajn dosierojn kaj aliajn ŝanĝojn"
 
 #: ../bleachbit/CLI.py:170
 msgid "use options set in the graphical interface"
-msgstr ""
+msgstr "uzi opciojn agorditajn per la grafika fasado"
 
 #: ../bleachbit/CLI.py:172
-#, fuzzy
 msgid "output version information and exit"
-msgstr "Montru versian informon kaj ĉesu"
+msgstr "montri versian informon kaj ĉesi"
 
 #: ../bleachbit/CLI.py:174
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "superskribi dosierojn por kaŝi enhavon"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -804,7 +803,7 @@ msgstr "Kontrolu por novajn betajn versiojn"
 
 #: ../bleachbit/GuiPreferences.py:127
 msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr ""
+msgstr "Elŝuti kaj ĝisdatigi purigilojn de la komunumo (winapp2.ini)"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing.  For example, if Firefox were never used on
@@ -812,7 +811,7 @@ msgstr ""
 #. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py:139
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Kaŝi neaplikeblajn purigilojn"
 
 #. TRANSLATORS: Overwriting is the same as shredding.  It is a way
 #. to prevent recovery of the data. You could also translate
@@ -826,6 +825,8 @@ msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
+"Superskribado estas neefika en iuj dosiersistemoj kaj kun certaj BleachBit-"
+"operacioj.  Superskribado estas multe pli malrapida."
 
 #: ../bleachbit/GuiPreferences.py:153
 #, fuzzy
@@ -835,13 +836,13 @@ msgstr "Startu BleachBit-on kune kun komputilo"
 #: ../bleachbit/GuiPreferences.py:164 ../bleachbit/GuiPreferences.py:295
 #: ../bleachbit/GuiPreferences.py:341 ../bleachbit/GUI.py:545
 msgid "Choose a folder"
-msgstr "Elektu dosierujon"
+msgstr "Elekti dosierujon"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/GuiPreferences.py:189
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
-msgstr ""
+msgstr "Elekti skribeblan dosierujon por ĉiu superskribotan disko."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to the list of paths
 #: ../bleachbit/GuiPreferences.py:210
@@ -892,7 +893,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:393
 msgid "These locations can be selected for deletion."
-msgstr ""
+msgstr "Tiuj lokoj estas forviŝotigeblaj."
 
 #: ../bleachbit/GuiPreferences.py:401
 msgid "Type"
@@ -902,7 +903,7 @@ msgstr "Tipo"
 #. file, a folder, or a pattern describing either
 #: ../bleachbit/GuiPreferences.py:407
 msgid "Path"
-msgstr ""
+msgstr "Dosierindiko"
 
 #: ../bleachbit/GuiPreferences.py:419
 msgctxt "button"
@@ -928,6 +929,9 @@ msgid ""
 "\n"
 "%(warning)s"
 msgstr ""
+"Averto pri %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
 
 #: ../bleachbit/GUI.py:346
 msgid "You must select an operation"
@@ -967,11 +971,11 @@ msgstr "Sistema informo"
 
 #: ../bleachbit/GUI.py:492
 msgid "Choose files to shred"
-msgstr ""
+msgstr "Elekti forviŝotajn dosierojn"
 
 #: ../bleachbit/GUI.py:495
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "Elekti forviŝotan dosierujon"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py:580
@@ -980,19 +984,19 @@ msgstr "Antaŭrigardo"
 
 #: ../bleachbit/GUI.py:631
 msgid "_Shred Files"
-msgstr ""
+msgstr "_Forviŝi dosierojn"
 
 #: ../bleachbit/GUI.py:632
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "Forviŝi dosier_ujojn"
 
 #: ../bleachbit/GUI.py:633
 msgid "_Wipe Free Space"
-msgstr ""
+msgstr "_Forviŝi liberan diskospacon"
 
 #: ../bleachbit/GUI.py:634
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "_Forviŝi agordojn kaj ĉesi"
 
 #: ../bleachbit/GUI.py:635
 msgid "_Quit"
@@ -1047,16 +1051,18 @@ msgstr "Purigi"
 
 #: ../bleachbit/GUI.py:683
 msgid "Clean files in the selected operations"
-msgstr ""
+msgstr "Purigi dosierojn per la elektitaj operacioj"
 
 #: ../bleachbit/GUI.py:769
 msgid "Error when checking for updates: "
-msgstr ""
+msgstr "Eraro dum kontrolado pri ĝisdatigoj: "
 
 #: ../bleachbit/GUI.py:800
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
+"Eraro dum ŝargado de la SQLite-modulo: kontraŭvirusa programo eble blokas "
+"ĝin."
 
 #: ../bleachbit/RecognizeCleanerML.py:62
 msgid "Security warning"
@@ -1070,6 +1076,8 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
+"Jen novaj aŭ ŝanĝitaj purigilaj difinoj. Malicaj difinoj povas damaĝi vian "
+"sistemon. Se vi ne fidas ĉi tiujn ŝanĝojn, forigu la dosierojn aŭ ĉesu."
 
 #. TRANSLATORS: This is the column label (header) in the tree view for the security dialog
 #: ../bleachbit/RecognizeCleanerML.py:87
@@ -1100,7 +1108,7 @@ msgstr ""
 
 #: ../bleachbit/Update.py:73
 msgid "New winapp2.ini was downloaded."
-msgstr "Nova winapp2.ini estis elŝutita"
+msgstr "Nova winapp2.ini estis elŝutita."
 
 #: ../bleachbit/Update.py:111
 msgid "Update BleachBit"
@@ -1151,39 +1159,39 @@ msgstr "Enportita el winapp2.ini"
 #: ../bleachbit/Worker.py:76
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "Eraro dum operacio «%(operation)s»: «%(msg)s»"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:210
 msgid "Please wait.  Wiping free disk space."
-msgstr ""
+msgstr "Bonvolu atendi. Forviŝante liberan diskospacon."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:212 ../bleachbit/Worker.py:299
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr ""
+msgstr "Bonvolu atendi. Purigante %s."
 
 #: ../bleachbit/Worker.py:222
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Restas proksimume %d minuto."
+msgstr[1] "Restas proksimume %d minutoj."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py:237
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr ""
+msgstr "Diskospaco reakirita: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:241
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr ""
+msgstr "Diskospaco reakirota: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
@@ -1214,10 +1222,10 @@ msgstr "Eraroj: %d"
 #. or all the system executables.
 #: ../bleachbit/Worker.py:272
 msgid "Please wait.  Running deep scan."
-msgstr ""
+msgstr "Bonvolu atendi. Skanante profunde."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:302
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "Bonvolu atendi.  Antaŭrigardante %s."
