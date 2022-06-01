@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-11-11 08:53-0700\n"
-"PO-Revision-Date: 2022-02-11 19:56+0000\n"
-"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2022-06-02 12:20+0000\n"
+"Last-Translator: Astro Hops <astrohops@tutanota.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Launchpad-Export-Date: 2021-11-19 21:00+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1375,7 +1375,7 @@ msgstr "Dateien erstellen"
 
 #: ../bleachbit/GuiChaff.py:136
 msgid "Download data needed for chaff generator?"
-msgstr "Daten herunterladen benötigt für Spreu-Generator!"
+msgstr "Downloaddaten für Spreugenerator benötigt?"
 
 #: ../bleachbit/GuiChaff.py:178
 msgid "Generating files"
@@ -1571,7 +1571,7 @@ msgstr "Ordner zum Schreddern auswählen"
 
 #: ../bleachbit/GUI.py:245
 msgid "No paths found in clipboard."
-msgstr "Keine Pfade in Zwischenablage gefunden"
+msgstr "Keine Pfade in Zwischenablage gefunden."
 
 #: ../bleachbit/GUI.py:281
 msgid "_OK"
@@ -1591,35 +1591,7 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py:321
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Aljosha Papsch https://launchpad.net/~joschi-papsch-deactivatedaccount\n"
-"  Andrew Ziem https://launchpad.net/~ahziem1\n"
-"  Dan Cooper https://launchpad.net/~pcfan1234\n"
-"  Daniel Winzen https://launchpad.net/~q-d-deactivatedaccount\n"
-"  Georg Engelmann https://launchpad.net/~georg-engelmann\n"
-"  Gerjet Kleine-Weischede https://launchpad.net/~gerjet-deactivatedaccount-"
-"deactivatedaccount\n"
-"  Heinrich Ulbricht https://launchpad.net/~heinrich-ulbricht\n"
-"  Jakob Kramer https://launchpad.net/~jakobk\n"
-"  Jens Maucher https://launchpad.net/~jensmaucher\n"
-"  Johannes Jülg https://launchpad.net/~timse201\n"
-"  Mario Blättermann https://launchpad.net/~mario.blaettermann\n"
-"  Paulo Guzmán https://launchpad.net/~white-hat\n"
-"  Phillip Sz https://launchpad.net/~phillip-sz\n"
-"  Samuel Mehrbrodt https://launchpad.net/~sam92\n"
-"  SpaceCafe https://launchpad.net/~spacecafe\n"
-"  Stefan https://launchpad.net/~drezil\n"
-"  Stephan Woidowski https://launchpad.net/~swoidowski\n"
-"  Tee Zocker https://launchpad.net/~teezocker\n"
-"  Tobias B. Besemer https://launchpad.net/~tobias-besemer\n"
-"  Tobias Bannert https://launchpad.net/~toba\n"
-"  Torsten Franz https://launchpad.net/~torsten.franz\n"
-"  Ubert Shok https://launchpad.net/~ushok\n"
-"  cmdrhenner https://launchpad.net/~cmdrhenner\n"
-"  jus https://launchpad.net/~jus\n"
-"  pitfd https://launchpad.net/~pitfd\n"
-"  snd https://launchpad.net/~dns"
+msgstr "Übersetzer"
 
 #: ../bleachbit/GUI.py:345
 msgid "System information"
@@ -1789,7 +1761,7 @@ msgstr "Das Auslagerungsgerät %s wird reinitialisiert."
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Die Auslagerungsgeräte %s werden ermittelt."
+msgstr "Diese Wechselgeräte erkannt: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
