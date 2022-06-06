@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-11-12 19:55-0700\n"
-"PO-Revision-Date: 2022-06-04 13:14+0000\n"
+"PO-Revision-Date: 2022-06-07 12:15+0000\n"
 "Last-Translator: Ács Zoltán <acszoltan111@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -100,7 +100,7 @@ msgstr "Űrlapok előzményei"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr "Weboldalakon kitöltött Űrlap előzmények"
+msgstr "Weboldalakon kitöltött űrlap előzmények"
 
 #: ../cleaners/chromium.xml ../cleaners/winrar.xml
 #: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
@@ -233,7 +233,7 @@ msgstr "Multimédia néző"
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
 #: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
 msgid "File transfer client"
-msgstr "Fájl letöltő, feltöltő kliens"
+msgstr "Fájlcserélő kliens"
 
 #: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
@@ -401,7 +401,7 @@ msgstr "Tiltólisták"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "A tiltólistákat frissíteni kell a működéshez"
+msgstr "A tiltólistákat frissíteni kell a működéshez."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -464,7 +464,7 @@ msgstr "A letöltött fájlok listája"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Böngészési előzmények törlése"
+msgstr "Megtekintett weboldalak listájának törlése"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -576,7 +576,6 @@ msgstr "Kompatibilitási réteg Windows szoftverhez"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"~/.viminfo fájl törlése, mely a Vim munkamenetet, előzményeket tárolja."
 
 #: ../cleaners/vim.xml
 msgid "Swap files under user profile"
@@ -605,7 +604,7 @@ msgstr ""
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr "Dokumentumnéző"
+msgstr "Dokumentumnézegető"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -660,11 +659,11 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Mappaadatok"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Használati adatok, ablakpozíció, és egyéb adatmappák törlése"
+msgstr "Használati adatok, ablakpozíció, és a mappák egyéb adatainak törlése"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -713,7 +712,7 @@ msgstr "A lemez tele volt a konfiguráció fájlba írásakor: %s"
 #: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "Hiba az útvonal létezésének ellenőrzésekor: %s"
 
 #: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
@@ -835,7 +834,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:485
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr ""
+msgstr "Konfigurációs fájl visszaállítása, mert sérült: %s"
 
 #: ../bleachbit/GUI.py:491
 msgid ""
@@ -924,7 +923,7 @@ msgstr "Hiba: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:201
 msgid "Please wait.  Wiping free disk space."
-msgstr "Kérem várjon.  Üres lemezterület törlése"
+msgstr "Kérem várjon.  Szabad lemezterület törlése."
 
 #: ../bleachbit/Worker.py:202
 msgid ""
@@ -1046,7 +1045,7 @@ msgstr "Hibás asztali fájlok"
 #: ../bleachbit/Cleaner.py:281
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
-"Törli az Alkalmazások menü hibás bejegyzéseit és a hibás fájltársításokat"
+"Törli az alkalmazások menü hibás bejegyzéseit és a hibás fájltársításokat"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -1060,7 +1059,7 @@ msgstr "Szükségtelen nyelvek fájljainak törlése"
 
 #: ../bleachbit/Cleaner.py:288
 msgid "Configure this option in the preferences."
-msgstr "Konfigurálj ezt az opciót a Beállítások menüben."
+msgstr "Konfigurálja ezt az opciót a beállításokban."
 
 #: ../bleachbit/Cleaner.py:294
 msgid "Rotated logs"
@@ -1104,7 +1103,7 @@ msgstr "Kuka ürítése"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:323
 msgid "Update uninstallers"
-msgstr "Frissítések eltávolítói"
+msgstr "Eltávolítók frissítése"
 
 #: ../bleachbit/Cleaner.py:324
 msgid ""
@@ -1194,7 +1193,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:87
 msgctxt "column_label"
 msgid "Delete"
-msgstr "Törölve"
+msgstr "Törlés"
 
 #: ../bleachbit/RecognizeCleanerML.py:92
 msgctxt "column_label"
@@ -1219,26 +1218,29 @@ msgstr "Az eszköz vagy erőforrás elfoglalt: %s"
 #: ../bleachbit/FileUtilities.py:357
 #, python-format
 msgid "Special file type cannot be deleted: %s"
-msgstr ""
+msgstr "A különleges fájltípust nem lehet törölni: %s"
 
 #: ../bleachbit/FileUtilities.py:531
 msgid "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr ""
+"A TMP környezeti változó olyan könyvtárra hivatkozik, amely nem létezik: %s"
 
 #: ../bleachbit/FileUtilities.py:747
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"Legalább egy olyan fájl volt egy fájlrendszeren, amely nem támogatja a "
+"fejlett fülírást."
 
 #: ../bleachbit/FileUtilities.py:842
 #, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "Útvonal törlése: %s"
 
 #: ../bleachbit/FileUtilities.py:851
 msgid "Creating new, temporary file for wiping free space."
-msgstr ""
+msgstr "Új, ideiglenes fájl létrehozása a szabad terület törléséhez."
 
 #: ../bleachbit/FileUtilities.py:890
 #, python-format
@@ -1273,12 +1275,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:277
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Tisztító figyelmen kívül hagyása, mert mindenki számára írható: %s"
 
 #: ../bleachbit/CleanerML.py:296 ../bleachbit/CleanerML.py:341
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Hiba a tisztító olvasásakor: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -1287,10 +1289,12 @@ msgstr ""
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"A tisztító nem használható ezen az operációs rendszeren, mert nincsenek "
+"műveletei: %s"
 
 #: ../bleachbit/Update.py:80
 msgid "New winapp2.ini was downloaded."
-msgstr "Az új winapp2.ini letöltve"
+msgstr "Az új winapp2.ini le lett töltve."
 
 #: ../bleachbit/Update.py:125
 msgid "Update BleachBit"
@@ -1318,8 +1322,9 @@ msgstr ""
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:157
+#, fuzzy
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Az alapos vizsgálat nem támogatja a többértékű változót."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1366,11 +1371,16 @@ msgid "Delete confirmation"
 msgstr "Törlés megerősítése"
 
 #: ../bleachbit/GuiBasic.py:126
+#, fuzzy
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"Ez a művelet törli a BleachBit összes beállítását és bezárja az alkalmazást. "
+"Használja ezt, ha el szeretné rejteni, hogy használta a BleachBitet, vagy ha "
+"vissza akarja állítani a beállításait. A következő alkalommal, amikor "
+"elindítja a BleachBitet, a beállítások alaphelyzetben lesznek."
 
 #: ../bleachbit/GuiBasic.py:133
 msgid ""
@@ -1431,7 +1441,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:143
 msgid "set log level to verbose"
-msgstr ""
+msgstr "naplózási szint bőbeszédűre állítása"
 
 #: ../bleachbit/CLI.py:144
 msgid "log debug messages to file"
@@ -1467,7 +1477,7 @@ msgstr "winapp2.ini frissítése ha új verzió érhető el"
 
 #: ../bleachbit/CLI.py:168
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "szabad terület törlése az adott útvonalakon"
 
 #: ../bleachbit/CLI.py:170
 msgid "output version information and exit"
@@ -1498,7 +1508,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:222
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "A szabad terület törlése sok időt vehet igénybe."
 
 #: ../bleachbit/CLI.py:232
 msgid "No work to do. Specify options."
@@ -1557,7 +1567,7 @@ msgstr "Áladatok létrehozása"
 
 #: ../bleachbit/GuiChaff.py:72
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "Véletlenszerűen generált üzenetek készítése dokumentumok alapján."
 
 #: ../bleachbit/GuiChaff.py:76
 msgid "Inspiration"
@@ -1569,7 +1579,7 @@ msgstr "2600 Magazin"
 
 #: ../bleachbit/GuiChaff.py:79
 msgid "Hillary Clinton's emails"
-msgstr "Hillary Clinton emailei"
+msgstr "Hillary Clinton emailjei"
 
 #: ../bleachbit/GuiChaff.py:87
 msgid "Number of files"
@@ -1585,7 +1595,7 @@ msgstr "Amikor kész"
 
 #: ../bleachbit/GuiChaff.py:107
 msgid "Delete without shredding"
-msgstr ""
+msgstr "Törlés megsemmisítés nélkül"
 
 #: ../bleachbit/GuiChaff.py:107
 msgid "Do not delete"
@@ -1691,8 +1701,8 @@ msgstr "Hibakeresési üzenetek megjelenítése"
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
-"Válasszon egy írható mappát minden egyes meghatónak amely felülírja a szabad "
-"lemezterületet."
+"Válasszon egy írható mappát minden egyes meghajtónak, a szabad terület "
+"felülírásához."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1809,7 +1819,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "A fizikai szabad memória %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
@@ -1852,11 +1862,11 @@ msgstr "M_egsemmisítendő mappák"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Útvonalak törlése a vágólapról"
+msgstr "Útvonalak megsemmisítése a vágólapról"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
-msgstr "_Szabadterület törlése"
+msgstr "_Szabad terület törlése"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
