@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-10-15 18:56-0600\n"
-"PO-Revision-Date: 2022-06-08 15:19+0000\n"
+"PO-Revision-Date: 2022-06-09 16:18+0000\n"
 "Last-Translator: Henri <contact@hen.ee>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -539,6 +539,7 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
+"Kustutades indeksi lähtestab veergude konfiguratsiooni sõnumite loetelus."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -557,7 +558,7 @@ msgstr "Kustuta hiljuti kasutatud failide nimekiri"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr ""
+msgstr "Töölauakeskkond"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -598,11 +599,11 @@ msgstr "Kontoritöö komplekt"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Teatud failide ajalugu"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Teatud kliendid ja sõbrad"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -611,11 +612,11 @@ msgstr "Meediaesitaja"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Süsteemi teated"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Kustuta vanad süsteemi teated"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:313
 msgid "Memory dump"
@@ -623,17 +624,19 @@ msgstr "Mälutõmmis"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "Andmebaas"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Kustuta andmebaas, mis sisaldab informatsiooni näiteks mängude arv ja "
+"viimati mängitud"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Ühilduvuskiht Windows'i tarkvarale"
 
 #: ../cleaners/discord.xml
 msgid ""
@@ -645,7 +648,7 @@ msgstr ""
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Kustuta ~/.viminfo,  mis sisaldab faili ajalugu, käskude ajalugu ja puhvreid"
+"Kustuta ~/.viminfo, mis sisaldab faili ajalugu, käskude ajalugu ja puhvreid"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -673,7 +676,7 @@ msgstr ""
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr ""
+msgstr "Dokumendi vaatleja"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -685,11 +688,11 @@ msgstr "Paketinimekirjad"
 
 #: ../cleaners/audacious.xml
 msgid "Audio player"
-msgstr ""
+msgstr "Audiomängija"
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Tekstiprotsessor"
 
 #: ../cleaners/konqueror.xml
 msgid "Current session"
@@ -713,11 +716,11 @@ msgstr ""
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Salvestused"
 
 #: ../cleaners/zoom.xml
 msgid "Delete the audio and video recordings"
-msgstr ""
+msgstr "Kustuta audio ja video salvestusi"
 
 #: ../cleaners/windows_explorer.xml
 msgid ""
