@@ -31,7 +31,7 @@ import os
 import os.path
 import shutil
 import sqlite3
-
+import contextlib
 
 chrome_bookmarks = b"""
 {
@@ -170,9 +170,6 @@ INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercooki
 
 firefox78_places_sql = """
 CREATE TABLE moz_annos (  id INTEGER PRIMARY KEY, place_id INTEGER NOT NULL, anno_attribute_id INTEGER, content LONGVARCHAR, flags INTEGER DEFAULT 0, expiration INTEGER DEFAULT 0, type INTEGER DEFAULT 0, dateAdded INTEGER DEFAULT 0, lastModified INTEGER DEFAULT 0);
-CREATE TABLE moz_bookmarks (  id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
-INSERT INTO moz_bookmarks VALUES(1,2,NULL,0,0,'',NULL,NULL,1576347134982000,1597289924328000,'root________',1,1);
-INSERT INTO moz_bookmarks VALUES(2,2,NULL,1,0,'menu',NULL,NULL,1576347134982000,1576347136057000,'menu________',1,3);
 CREATE TABLE moz_historyvisits (  id INTEGER PRIMARY KEY, from_visit INTEGER, place_id INTEGER, visit_date INTEGER, visit_type INTEGER, session INTEGER);
 INSERT INTO moz_historyvisits VALUES(1,0,13,1597441943359769,2,0);
 CREATE TABLE moz_inputhistory (  place_id INTEGER NOT NULL, input LONGVARCHAR NOT NULL, use_count INTEGER, PRIMARY KEY (place_id, input));
@@ -183,27 +180,78 @@ INSERT INTO moz_meta VALUES('origin_frecency_sum',52148);
 INSERT INTO moz_meta VALUES('origin_frecency_sum_of_squares',2312614202);
 CREATE TABLE moz_origins ( id INTEGER PRIMARY KEY, prefix TEXT NOT NULL, host TEXT NOT NULL, frecency INTEGER NOT NULL, UNIQUE (prefix, host) );
 INSERT INTO moz_origins VALUES(1,'https://','support.mozilla.org',-1);
-INSERT INTO moz_origins VALUES(2,'https://','www.mozilla.org',2149);
-INSERT INTO moz_origins VALUES(3,'http://','www.ubuntu.com',-1);
-INSERT INTO moz_origins VALUES(4,'http://','wiki.ubuntu.com',-1);
+CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
+INSERT INTO moz_bookmarks VALUES(1,2,NULL,2,0,'Mozilla Firefox',NULL,NULL,1604681523951000,1604681523951000,'I3rvZbIM7HUh',0,1);
+INSERT INTO moz_bookmarks VALUES(5,1,4,7,3,'About Us',NULL,NULL,1604681523951000,1604681523951000,'kz-2zgrxtHgA',0,1);
+INSERT INTO moz_bookmarks VALUES(6,1,5,3,0,'Getting Started',NULL,NULL,1604681524006000,1604681524006000,'cLugSkZM_O0C',0,1);
+INSERT INTO moz_bookmarks VALUES(7,1,10,5,0,'tubecast',NULL,NULL,1606684638623000,1606684669335000,'pTngoES7vS4t',1,4);
+INSERT INTO moz_bookmarks VALUES(8,1,1048,5,1,'reddit: the front page of the internet',NULL,NULL,1625670902669000,1625670902669000,'HboIUJAnNSQq',1,1);
+INSERT INTO moz_bookmarks VALUES(9,1,1049,5,2,'Wikipedia',NULL,NULL,1625678442192000,1625678442192000,'kLNboN4LnQyQ',1,1);
+INSERT INTO moz_bookmarks VALUES(10,1,1047,5,3,'Base64 Image Encoder',NULL,NULL,1625678511003000,1625678511003000,'mJswt5mUpX6V',1,1);
+INSERT INTO moz_bookmarks VALUES(11,1,1052,5,4,'Lebab Modernizing Javascript Code',NULL,NULL,1625678570164000,1625678570164000,'KnR8OLEDutKj',1,1);
+INSERT INTO moz_bookmarks VALUES(12,1,1055,5,5,'Epoch Times | Truth and Tradition',NULL,NULL,1634407905800000,1634407905800000,'xiNkiy3pRnRM',1,1);
+INSERT INTO moz_bookmarks VALUES(13,1,1074,5,3,'javascript_bookmark',NULL,NULL,1634541546301000,1634541578237000,'5zn7HFpTz9Zk',1,3);
 CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
-INSERT INTO moz_places VALUES(1,'https://support.mozilla.org/en-US/products/firefox',NULL,'gro.allizom.troppus.',0,0,0,-1,NULL,'abc123',1,47357795150914,NULL,NULL,1);
+INSERT INTO moz_places VALUES(4,'https://www.mozilla.org/en-US/about/',NULL,'gro.allizom.www.',0,0,0,-1,NULL,'qku4XnVuwKXz',1,47358774953055,NULL,NULL,2);
+INSERT INTO moz_places VALUES(5,'https://www.mozilla.org/en-US/firefox/central/',NULL,'gro.allizom.www.',0,0,1,-1,NULL,'zEH44cXgEbiW',1,47356370932282,NULL,NULL,2);
+INSERT INTO moz_places VALUES(10,'javascript:location.href="tubecast:link="+location.href%3B',NULL,'.',0,0,0,-1,NULL,'CVfq8S1yN9ob',1,61195540700963,NULL,NULL,4);
+INSERT INTO moz_places VALUES(1047,'https://www.base64-image.de/',NULL,'ed.egami-46esab.www.',0,0,1,-1,NULL,'CdMLr4ivquym',1,47357677431233,NULL,NULL,52);
+INSERT INTO moz_places VALUES(1048,'https://www.reddit.com/',NULL,'moc.tidder.www.',2,0,1,2250,1634421287533000,'Wm14AXzccAt2',1,47359719085711,NULL,NULL,53);
+INSERT INTO moz_places VALUES(1049,'https://www.wikipedia.org/',NULL,'gro.aidepikiw.www.',0,0,1,-1,NULL,'S1IyTeEofltl',1,47356939545358,NULL,NULL,54);
+INSERT INTO moz_places VALUES(1052,'https://lebab.unibtc.me/editor/',NULL,'em.ctbinu.babel.',0,0,1,-1,NULL,'y4p_ByrC9qLQ',1,47358502989035,NULL,NULL,56);
+INSERT INTO moz_places VALUES(1055,'https://theepochtimes.com/',NULL,'gro.afadnulaf.',0,0,1,-1,NULL,'oLhJTCaTzP2H',1,47357288143104,NULL,NULL,59);
+INSERT INTO moz_places VALUES(1056,'https://www.youtube.com/',NULL,'moc.ebutuoy.www.',1,0,1,2000,1634421071354000,'nqpzAbgRUY_X',0,47360296250519,NULL,NULL,60);
+INSERT INTO moz_places VALUES(1057,'https://duckduckgo.com/?t=ffab&q=duck',NULL,'moc.ogkcudkcud.',1,0,1,2000,1634421160833000,'R1rB2oXM7G1w',0,47357908794703,NULL,NULL,61);
+INSERT INTO moz_places VALUES(1058,'https://duckduckgo.com/?t=ffab&q=duck&ia=web',NULL,'moc.ogkcudkcud.',1,0,0,100,1634421161955000,'LfiihU6H8JTJ',0,47357725238190,NULL,NULL,61);
+INSERT INTO moz_places VALUES(1059,'https://duckduckgo.com/',NULL,'moc.ogkcudkcud.',1,0,0,100,1634421168747000,'3_aU-W5GQtVY',0,47357557756924,NULL,NULL,61);
+INSERT INTO moz_places VALUES(1060,'https://www.reddit.com/r/bulgaria/?f=flair_name%3A%22IMAGE%22',NULL,'moc.tidder.www.',1,0,0,100,1634421202542000,'91A-gGXCdGJo',0,47358238683930,NULL,NULL,53);
+INSERT INTO moz_places VALUES(1074,'javascript:(function(d){d.PwnBkmkVer=3%3Bd.body.appendChild(d.createElement(''script'')).src=''https://deturl.com/ld.php?''+1*new Date%3B})(document)%3B',NULL,'.',0,0,0,140,NULL,'MHLDGrz54C06',1,61196492657957,NULL,NULL,69);
 """
 
 
 firefox78_favicons_sql = """
-CREATE TABLE moz_icons ( id INTEGER PRIMARY KEY, icon_url TEXT NOT NULL, fixed_icon_url_hash INTEGER NOT NULL, width INTEGER NOT NULL DEFAULT 0, root INTEGER NOT NULL DEFAULT 0, color INTEGER, expire_ms INTEGER NOT NULL DEFAULT 0, data BLOB);
-INSERT INTO moz_icons VALUES(1,'fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox',136572340459075,32,0,NULL,1603222567764,NULL);
-INSERT INTO moz_icons VALUES(2,'fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox2',1365723404590752,32,0,NULL,1603222567764,NULL);
-INSERT INTO moz_icons VALUES(3,'fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox3',1365723404590753,32,0,NULL,1603222567764,NULL);
+CREATE TABLE moz_icons (id INTEGER PRIMARY KEY, icon_url TEXT NOT NULL, fixed_icon_url_hash INTEGER NOT NULL, width INTEGER NOT NULL DEFAULT 0, root INTEGER NOT NULL DEFAULT 0, color INTEGER, expire_ms INTEGER NOT NULL DEFAULT 0, data BLOB);
+INSERT INTO moz_icons VALUES(1,'fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox',136572340459075,32,0,NULL,1605286324005,NULL);
+INSERT INTO moz_icons VALUES(2,'fake-favicon-uri:https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize',136571753046205,32,0,NULL,1605286324005,NULL);
+INSERT INTO moz_icons VALUES(3,'fake-favicon-uri:https://www.mozilla.org/en-US/contribute/',136575540959674,65535,0,NULL,1605286324005,NULL);
+INSERT INTO moz_icons VALUES(4,'fake-favicon-uri:https://www.mozilla.org/en-US/about/',136574776814270,65535,0,NULL,1605286324005,NULL);
+INSERT INTO moz_icons VALUES(5,'fake-favicon-uri:https://www.mozilla.org/en-US/firefox/central/',136572730577725,32,0,NULL,1605286324059,NULL);
+INSERT INTO moz_icons VALUES(6,'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',292525218,192,0,NULL,1635025978652,NULL);
+INSERT INTO moz_icons VALUES(7,'https://www.redditstatic.com/desktop2x/img/favicon/favicon-16x16.png',2364888881,16,0,NULL,1635025978655,NULL);
+INSERT INTO moz_icons VALUES(13,'https://lebab.unibtc.me/favicon.ico',2265932027,32,1,NULL,1635027449609,NULL);
+INSERT INTO moz_icons VALUES(14,'https://theepochtimes.com/favicon.ico',4178624107,16,1,NULL,1634917808089,NULL);
+INSERT INTO moz_icons VALUES(23,'https://duckduckgo.com/assets/icons/meta/DDG-iOS-icon_152x152.png?v=2',2781351171,144,0,NULL,1635025961392,NULL);
+INSERT INTO moz_icons VALUES(24,'https://duckduckgo.com/favicon.ico',4139558766,16,1,NULL,1635025969003,NULL);
+INSERT INTO moz_icons VALUES(25,'https://duckduckgo.com/favicon.ico',4139558766,32,1,NULL,1635025969003,NULL);
+INSERT INTO moz_icons VALUES(29,'https://www.mozilla.org/media/img/favicons/firefox/browser/favicon-196x196.59e3822720be.png',3142301241,192,0,NULL,1634993957394,NULL);
+INSERT INTO moz_icons VALUES(33,'https://www.youtube.com/s/desktop/89d6cbd0/img/favicon_144x144.png',2213531744,144,0,NULL,1635025873106,NULL);
+INSERT INTO moz_icons VALUES(34,'https://www.youtube.com/s/desktop/89d6cbd0/img/favicon.ico',2155043602,16,0,NULL,1635025873107,NULL);
+INSERT INTO moz_icons VALUES(42,'https://www.base64-image.de/favicon.ico',834103348,16,1,NULL,1635088213227,NULL);
 CREATE TABLE moz_icons_to_pages ( page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id), FOREIGN KEY (page_id) REFERENCES moz_pages_w_icons ON DELETE CASCADE, FOREIGN KEY (icon_id) REFERENCES moz_icons ON DELETE CASCADE ) WITHOUT ROWID;
-INSERT INTO moz_icons_to_pages VALUES(1,1,1603222567764);
-INSERT INTO moz_icons_to_pages VALUES(2,2,1603222567764);
-INSERT INTO moz_icons_to_pages VALUES(3,3,1603222567764);
+INSERT INTO moz_icons_to_pages VALUES(1,1,1605286324005);
+INSERT INTO moz_icons_to_pages VALUES(2,2,1605286324005);
+INSERT INTO moz_icons_to_pages VALUES(3,3,1605286324005);
+INSERT INTO moz_icons_to_pages VALUES(4,4,1605286324005);
+INSERT INTO moz_icons_to_pages VALUES(5,5,1605286324059);
+INSERT INTO moz_icons_to_pages VALUES(6,6,1635025978652);
+INSERT INTO moz_icons_to_pages VALUES(6,7,1635025978655);
+INSERT INTO moz_icons_to_pages VALUES(14,23,1634993919592);
+INSERT INTO moz_icons_to_pages VALUES(16,29,1634993957394);
+INSERT INTO moz_icons_to_pages VALUES(17,33,1635025873106);
+INSERT INTO moz_icons_to_pages VALUES(17,34,1635025873107);
+INSERT INTO moz_icons_to_pages VALUES(21,6,1635025978652);
+INSERT INTO moz_icons_to_pages VALUES(21,7,1635025978655);
 CREATE TABLE moz_pages_w_icons ( id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL );
 INSERT INTO moz_pages_w_icons VALUES(1,'https://support.mozilla.org/en-US/products/firefox',47357795150914);
-INSERT INTO moz_pages_w_icons VALUES(2,'https://support.mozilla.org/en-US/products/firefox2',473577951509142);
-INSERT INTO moz_pages_w_icons VALUES(3,'https://support.mozilla.org/en-US/products/firefox3',473577951509143);
+INSERT INTO moz_pages_w_icons VALUES(2,'https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize',47359532431620);
+INSERT INTO moz_pages_w_icons VALUES(3,'https://www.mozilla.org/en-US/contribute/',47358034485371);
+INSERT INTO moz_pages_w_icons VALUES(4,'https://www.mozilla.org/en-US/about/',47358774953055);
+INSERT INTO moz_pages_w_icons VALUES(5,'https://www.mozilla.org/en-US/firefox/central/',47356370932282);
+INSERT INTO moz_pages_w_icons VALUES(6,'https://www.reddit.com/',47359719085711);
+INSERT INTO moz_pages_w_icons VALUES(14,'https://duckduckgo.com/?t=ffab&q=firefox+version+history&ia=web',47359570459686);
+INSERT INTO moz_pages_w_icons VALUES(16,'https://www.mozilla.org/en-US/firefox/78.0/releasenotes/',47357311834713);
+INSERT INTO moz_pages_w_icons VALUES(17,'https://www.youtube.com/',47360296250519);
+INSERT INTO moz_pages_w_icons VALUES(21,'https://www.reddit.com/r/bulgaria/?f=flair_name%3A%22IMAGE%22',47358238683930);
 """
 
 
@@ -315,8 +363,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             check_func(self, filename)
 
         # tear down
-        FileUtilities.delete(filename)
-        self.assertNotExists(filename)
+        # FileUtilities.delete(filename)
+        # self.assertNotExists(filename)
 
     def test_delete_chrome_autofill(self):
         """Unit test for delete_chrome_autofill"""
@@ -382,8 +430,25 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def test_delete_mozilla_favicons(self):
         """Test for delete_mozilla_favicons"""
+
+        # Firefox favicons for domains are kept differently than those for specific pages:
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=1468968
+        # so we need a more detailed unit test.
+
+        fn = "firefox/default-release/favicons.sqlite"
         self.sqlite_clean_helper(
-            None, "firefox/default-release/favicons.sqlite", Special.delete_mozilla_favicons)
+            None, fn, Special.delete_mozilla_favicons)
+
+        filename = os.path.normpath(os.path.join(self.dir_base, fn))
+        with contextlib.closing(sqlite3.connect(filename)) as conn:
+            cursor = conn.cursor()
+            icon_entries = cursor.execute('SELECT * FROM moz_icons').fetchall()
+            icon_ids = map(lambda x: x[0], icon_entries)
+            cursor.close()
+
+        expected_icon_ids = [4, 5, 6, 7, 13, 14, 42]  # not removed ids from moz_icons table
+        assert sorted(expected_icon_ids) == sorted(icon_ids)
+
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
