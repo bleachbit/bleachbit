@@ -45,6 +45,7 @@ boolean_keys = ['auto_hide',
                 'delete_confirmation',
                 'exit_done',
                 'first_start',
+                'kde_shred_menu_option',
                 'remember_geometry',
                 'shred',
                 'units_iec',
@@ -275,6 +276,7 @@ class Options:
         self.__set_default("debug", False)
         self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("kde_shred_menu_option", False)
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)

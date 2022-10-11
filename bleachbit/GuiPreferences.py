@@ -103,6 +103,9 @@ class PreferencesDialog:
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level()
+        if 'kde_shred_menu_option' == path:
+            from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
+            install_kde_service_menu_file()
 
     def __general_page(self):
         """Return a widget containing the general page"""
@@ -208,6 +211,12 @@ class PreferencesDialog:
         cb_debug.set_active(options.get("debug"))
         cb_debug.connect('toggled', self.__toggle_callback, 'debug')
         vbox.pack_start(cb_debug, False, True, 0)
+
+        # KDE context menu shred option
+        cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add shred context menu option (KDE Plasma specific)"))
+        cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
+        cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
+        vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
 
         return vbox
 
