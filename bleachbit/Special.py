@@ -48,13 +48,13 @@ def __shred_sqlite_char_columns(table, cols=None, where=""):
         # If None, set to empty string.
         where = ""
     if cols and options.get('shred'):
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-    cmd += "delete from %s %s;" % (table, where)
+        randomblobs = ",".join("{} = randomblob(length({}))".format(col, col) for col in cols)
+        zeroblobs = ",".join("{} = zeroblob(length({}))".format(col, col) for col in cols)
+        cmd = "".join((
+            cmd,
+            "update or ignore {} set {} {};".format(table, randomblobs, where),
+            "update or ignore {} set {} {};".format(table, zeroblobs, where)))
+    cmd = "{} delete from {} {};".format(cmd, table, where)
     return cmd
 
 

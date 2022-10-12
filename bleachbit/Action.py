@@ -49,15 +49,15 @@ def expand_multi_var(s, variables):
 
     The function always returns a list of one or more strings.
     """
-    if not variables or s.find('$$') == -1:
-        # The input string is missing $$ or no variables are given.
+    var_format = '$$'
+    if not variables or s.find(var_format) == -1:
+        # The input string is missing `var_format` or no variables are given.
         return (s,)
-    var_keys_used = []
+    var_keys_used = [
+        var_key
+        for var_key in variables.keys()
+        if s.find('{}{}{}'.format(var_format, var_key, var_format)) > -1]
     ret = []
-    for var_key in variables.keys():
-        sub = '$$%s$$' % var_key
-        if s.find(sub) > -1:
-            var_keys_used.append(var_key)
     if not var_keys_used:
         # No matching variables used, so return input string unmodified.
         return (s,)
@@ -71,7 +71,7 @@ def expand_multi_var(s, variables):
     for var_set in vars_product:
         ms = s  # modified version of input string
         for var_key, var_value in var_set.items():
-            sub = '$$%s$$' % var_key
+            sub = '{}{}{}'.format(var_format, var_key, var_format)
             ms = ms.replace(sub, var_value)
         ret.append(ms)
     if ret:
@@ -209,24 +209,14 @@ class FileActionProvider(ActionProvider):
             nwholeregex_c_search = None
 
         for path in self._get_paths():
-            if regex and not regex_c_search(basename(path)):
+            if (regex and not regex_c_search(basename(path))) or \
+               (nregex and nregex_c_search(basename(path))) or \
+               (wholeregex and not wholeregex_c_search(path)) or \
+               (nwholeregex and nwholeregex_c_search(path)) or \
+               (object_type and \
+                   ('f' == object_type and not os.path.isfile(path)) or \
+                   ('d' == object_type and not os.path.isdir(path))):
                 continue
-
-            if nregex and nregex_c_search(basename(path)):
-                continue
-
-            if wholeregex and not wholeregex_c_search(path):
-                continue
-
-            if nwholeregex and nwholeregex_c_search(path):
-                continue
-
-            if object_type:
-                if 'f' == object_type and not os.path.isfile(path):
-                    continue
-                elif 'd' == object_type and not os.path.isdir(path):
-                    continue
-
             yield path
 
     def _get_paths(self):

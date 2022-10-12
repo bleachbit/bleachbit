@@ -31,6 +31,7 @@ import errno
 import glob
 import locale
 import logging
+import itertools
 import os
 import os.path
 import random
@@ -239,11 +240,11 @@ def clean_ini(path, section, parameter):
         removing a cast to str. This is needed to handle unicode chars.
         """
         if parser._defaults:
-            ini_file.write("[%s]\n" % "DEFAULT")
-            for (key, value) in parser._defaults.items():
-                ini_file.write("%s = %s\n" %
-                               (key, str(value).replace('\n', '\n\t')))
-            ini_file.write("\n")
+            ini_lines = (
+                "{} = {}\n".format(key, str(value).replace('\n', '\n\t'))
+                for key, value in parser._defaults.items())
+            ini_buffer = "".join(itertools.chain(("[DEFAULT]\n"), ini_lines))
+            ini_file.write(ini_buffer)
         for section in parser._sections:
             ini_file.write("[%s]\n" % section)
             for (key, value) in parser._sections[section].items():

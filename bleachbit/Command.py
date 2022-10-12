@@ -122,10 +122,10 @@ class Function:
             raise AssertionError('Expected MethodType but got %s' % type(func))
 
     def __str__(self):
+        path = ''
         if self.path:
-            return 'Function: %s: %s' % (self.label, self.path)
-        else:
-            return 'Function: %s' % (self.label)
+            path = ": {}".format(self.path)
+        return "Function: {}{}".format(self.label, path)
 
     def execute(self, really_delete):
 

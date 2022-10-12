@@ -324,8 +324,7 @@ def have_models():
     """Check whether the models exist in the default location.
 
     Used to check whether download is needed."""
-    for basename in (MODEL_BASENAMES):
-        fn = os.path.join(DEFAULT_MODELS_DIR, basename)
-        if not os.path.exists(fn):
-            return False
-    return True
+    existing = (
+        os.path.exists(os.path.join(DEFAULT_MODELS_DIR, basename))
+        for basename in MODEL_BASENAMES)
+    return all(existing)

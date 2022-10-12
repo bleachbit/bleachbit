@@ -397,8 +397,8 @@ class Locales:
         """Returns all localization items matching the previously added xml configuration"""
         if not locales_to_keep:
             raise RuntimeError('Found no locales to keep')
-        purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
-                                       if locale not in locales_to_keep))
+        purgeable_locales = frozenset(locale for locale in Locales.native_locale_names.keys()
+                                      if locale not in locales_to_keep)
 
         for (locale, specifier, path) in self._paths.get_localizations('/'):
             specific = locale + (specifier or '')

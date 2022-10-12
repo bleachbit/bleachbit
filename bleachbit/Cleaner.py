@@ -22,6 +22,7 @@ Perform (or assist with) cleaning operations.
 """
 
 import glob
+import itertools
 import logging
 import os.path
 import re
@@ -74,7 +75,7 @@ class Cleaner:
         """Register 'action' (instance of class Action) to be executed
         for ''option_id'.  The actions must implement list_files and
         other_cleanup()"""
-        self.actions += ((option_id, action), )
+        self.actions.append((option_id, action))
 
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
@@ -82,7 +83,7 @@ class Cleaner:
 
     def add_running(self, detection_type, pathname):
         """Add a way to detect this program is currently running"""
-        self.running += ((detection_type, pathname), )
+        self.running.append((detection_type, pathname))
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -156,12 +157,9 @@ class Cleaner:
         for running in self.running:
             test = running[0]
             pathname = running[1]
-            if 'exe' == test and 'posix' == os.name:
-                if Unix.is_running(pathname):
-                    logger.debug("process '%s' is running", pathname)
-                    return True
-            elif 'exe' == test and 'nt' == os.name:
-                if Windows.is_process_running(pathname):
+            if 'exe' == test:
+                if ('posix' == os.name and Unix.is_running(pathname)) or \
+                   ('nt' == os.name and Windows.is_process_running(pathname)):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -202,38 +200,39 @@ class OpenOfficeOrg(Cleaner):
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if 'posix' == os.name:
             self.prefixes = ["~/.ooo-2.0", "~/.openoffice.org2",
-                             "~/.openoffice.org2.0", "~/.openoffice.org/3"]
-            self.prefixes += ["~/.ooo-dev3"]
+                             "~/.openoffice.org2.0", "~/.openoffice.org/3",
+                             "~/.ooo-dev3"]
         if 'nt' == os.name:
             self.prefixes = [
                 "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
 
     def get_commands(self, option_id):
         # paths for which to run expand_glob_join
-        egj = []
+        egj = ()  # Place holder for generator chaining
         if 'recent_documents' == option_id:
-            egj.append(
-                "user/registry/data/org/openoffice/Office/Histories.xcu")
-            egj.append(
-                "user/registry/cache/org.openoffice.Office.Histories.dat")
+            egj = itertools.chain(egj, (
+                "user/registry/data/org/openoffice/Office/Histories.xcu",
+                "user/registry/cache/org.openoffice.Office.Histories.dat"))
+            if 'cache' != option_id:
+                egj = itertools.chain(egj, ("user/registry/cache/org.openoffice.Office.Common.dat",))
 
-        if 'recent_documents' == option_id and not 'cache' == option_id:
-            egj.append("user/registry/cache/org.openoffice.Office.Common.dat")
-
-        for egj_ in egj:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, egj_):
-                    if 'nt' == os.name:
-                        path = os.path.normpath(path)
-                    if os.path.lexists(path):
-                        yield Command.Delete(path)
+        paths = (
+            path
+            for egj_ in egj
+            for prefix in self.prefixes
+            for path in FileUtilities.expand_glob_join(prefix, egj_))
+        for path in paths:
+            if 'nt' == os.name:
+                path = os.path.normpath(path)
+            if os.path.lexists(path):
+                yield Command.Delete(path)
 
         if 'cache' == option_id:
-            dirs = []
-            for prefix in self.prefixes:
-                dirs += FileUtilities.expand_glob_join(
-                    prefix, "user/registry/cache/")
-            for dirname in dirs:
+            dirnames = (
+                dirname
+                for prefix in self.prefixes
+                for dirname in FileUtilities.expand_glob_join(prefix, "user/registry/cache/"))
+            for dirname in dirnames:
                 if 'nt' == os.name:
                     dirname = os.path.normpath(dirname)
                 for filename in children_in_directory(dirname, False):
@@ -479,10 +478,14 @@ class System(Cleaner):
                     '~/.recently-used.xbel',
                     '~/.local/share/recently-used.xbel*',
                     '~/snap/*/*/.local/share/recently-used.xbel']
-            for path1 in xbel_pathnames:
-                for path2 in glob.iglob(os.path.expanduser(path1)):
-                    if os.path.lexists(path2):
-                        yield Command.Shred(path2)
+            shred_paths = (
+                path2
+                for path1 in xbel_pathnames
+                for path2 in glob.iglob(os.path.expanduser(path1))
+                if os.path.lexists(path2))
+            for path in shred_paths:
+                yield Command.Shred(path)
+
             if HAVE_GTK:
                 # Use the Function to skip when in preview mode
                 yield Command.Function(None, gtk_purge_items, _('Recent documents list'))
@@ -525,17 +528,20 @@ class System(Cleaner):
             # ~/.local/share/Trash
             # * GNOME 2.22, Fedora 9
             # * KDE 4.1.3, Ubuntu 8.10
-            dirname = os.path.expanduser("~/.local/share/Trash/files")
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/info")
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/expunged")
-            # desrt@irc.gimpnet.org tells me that the trash
-            # backend puts files in here temporary, but in some situations
-            # the files are stuck.
-            for filename in children_in_directory(dirname, True):
+            trash_dirnames = [
+                "files",
+                "info",
+                # desrt@irc.gimpnet.org tells me that the trash
+                # backend puts files in here temporary, but in some situations
+                # the files are stuck.
+                "expunged"]
+            filenames = (
+                filename
+                for dirname in trash_dirnames
+                for filename in children_in_directory(
+                    os.path.expanduser("~/.local/share/Trash/{}".format(dirname)),
+                    True))
+            for filename in filenames:
                 yield Command.Delete(filename)
 
         # clipboard
@@ -622,24 +628,28 @@ class System(Cleaner):
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
-            '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser('~/.cache/wallpaper/'),
+            '^/var/tmp/kdecache-']
+        cache_dirnames = [
+            "wallpaper",
             # Flatpak mount point
-            '^' + os.path.expanduser('~/.cache/doc($|/)'),
+            "doc($|/)",
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser('~/.cache/mozilla/'),
+            "mozilla",
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser('~/.cache/google-chrome/'),
-            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
+            "google-chrome",
+            "gnome-control-center",
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser('~/.cache/evolution/'),
+            "evolution",
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser('~/.cache/ibus/'),
+            "ibus",
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser('~/.cache/obexd($|/)')]
-        for regex in regexes:
+            "obexd($|/)"]
+        cache_regexes = (
+            '^{}'.format(os.path.expanduser('~/.cache/{}/'.format(dirname)))
+            for dirname in cache_dirnames)
+        for regex in itertools.chain(regexes, cache_regexes):
             self.regexes_compiled.append(re.compile(regex))
 
     def whitelisted(self, pathname):
