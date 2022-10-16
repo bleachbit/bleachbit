@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    BleachBit
+    Copyright (C) 2008-2021 Andrew Ziem
+    https://www.bleachbit.org
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<cleaner id="grid9">
+  <label>Grid9</label>
+  <description>Esoteric interpreted language</description>
+  <running type="exe" os="windows">Grid9.exe</running>
+  <running type="exe" os="linux">Grid9</running>
+  <var name="base">
+    <value os="windows">C:\ProgramData\Grid9</value>
+    <value os="linux">/usr/share/Grid9</value>
+  </var>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Clean uneeded logs that are left behind from scripts.</description>
+    <action command="delete" search="walk.all" path="$$base$$/logs"/>
+  </option>
+  <option id="parser_cache">
+    <label>ParserCache</label>
+    <description>Clean uneeded parsed code which is used to speed up scripts, they are regenerated as needed.</description>
+    <action command="delete" search="walk.all" path="$$base$$/parser_cache"/>
+  </option>
+</cleaner>
