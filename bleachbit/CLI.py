@@ -174,10 +174,6 @@ def process_cmd_line():
     parser.add_option("-v", "--version", action="store_true",
                       help=_("output version information and exit"))
 
-    # option for testing py2exe build
-    # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
-    parser.add_option('--exit', action='store_true',
-                      help=optparse.SUPPRESS_HELP)
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
@@ -188,6 +184,11 @@ def process_cmd_line():
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
+
+    # added for testing py2exe build
+    # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
+    parser.add_option('--exit', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
 
     # some workaround for context menu added here
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
