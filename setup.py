@@ -101,14 +101,14 @@ if 'py2exe' in sys.argv:
     args['windows'] = [{
         'script': 'bleachbit.py',
         'product_name': APP_NAME,
-        'description': APP_DESCRIPTION,
+        'description': '[windows] ' + APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
     args['console'] = [{
         'script': 'bleachbit_console.py',
         'product_name': APP_NAME,
-        'description': APP_DESCRIPTION,
+        'description': '[console] ' + APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
@@ -263,7 +263,7 @@ def run_setup():
     setup(name='bleachbit',
           version=bleachbit.APP_VERSION,
           description=APP_NAME,
-          long_description=APP_DESCRIPTION,
+          long_description='[setup.py] ' + APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
           download_url="https://www.bleachbit.org/download",
