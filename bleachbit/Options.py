@@ -378,4 +378,4 @@ class Options:
 options = Options()
 
 # Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level()
+set_root_log_level(options.get('debug'))

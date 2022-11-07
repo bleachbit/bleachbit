@@ -102,7 +102,7 @@ class PreferencesDialog:
             self.cb_set_windows10_theme()
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
-            set_root_log_level()
+            set_root_log_level(options.get('debug'))
 
     def __general_page(self):
         """Return a widget containing the general page"""
