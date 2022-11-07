@@ -25,7 +25,6 @@ Store and retrieve user preferences
 import bleachbit
 from bleachbit import General
 from bleachbit import _
-from bleachbit.Log import set_root_log_level
 
 import logging
 import os
@@ -376,6 +375,3 @@ class Options:
 
 
 options = Options()
-
-# Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level(options.get('debug'))
