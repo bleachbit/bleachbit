@@ -25,6 +25,7 @@ Command line interface
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit import _, APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Log import set_root_log_level
 
 import logging
 import optparse
@@ -212,6 +213,11 @@ def process_cmd_line():
     if options.debug:
         # set in __init__ so it takes effect earlier
         pass
+    elif options.preset:
+        # but if --preset is given, check if GUI option sets debug
+        if Options.options.get('debug'):
+            set_root_log_level(Options.options.get('debug'))
+            logger.debug("Debugging is enabled in GUI settings.")
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
         logger.info(SystemInformation.get_system_information())
