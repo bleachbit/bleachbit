@@ -124,7 +124,7 @@ VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 
 # Constants.
 simulate_concurrency = False     # remove this test function when QA complete
-# drive_letter_safety = "E"       # protection to only use removeable drives
+# drive_letter_safety = "E"       # protection to only use removable drives
 # don't use C: or D:, but E: and beyond OK.
 tmp_file_name = "bbtemp.dat"
 spike_file_name = "bbspike"     # cluster number will be appended
