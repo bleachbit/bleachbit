@@ -260,7 +260,7 @@ class WorkerTestCase(common.BleachbitTestCase):
             bytes_expected = 3 + 3
             total_deleted = 2
         else:
-            # If not an admin, the first attempt will fail, and the second wil succeed.
+            # If not an admin, the first attempt will fail, and the second will succeed.
             errors_expected = 1
             bytes_expected = 3
             total_deleted = 1
