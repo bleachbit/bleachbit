@@ -19,6 +19,7 @@ install:
   - '%PYTHON_HOME%\python.exe -m ensurepip'
   - '%PYTHON_HOME%\Scripts\pip3.exe --version' # show pip version
   - ps: if (-not (Test-Path x86-add.zip )) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/x86-add.zip" }
+  - ps: Get-FileHash x86-add.zip
   - '%SZ_EXE% x x86-add.zip'
   - 'XCOPY /E x86-add\*.* %PYTHON_HOME%'
   - '%PYTHON_HOME%\Scripts\pip3.exe install psutil'
@@ -57,10 +58,7 @@ cache:
   - gtk.zip -> appveyor.yml
   - PyGObject-3.42.0-cp310-cp310-win32.whl -> appveyor.yml
   - x86-add.zip -> appveyor.yml
-  - pygi-aio.exe -> appveyor.yml
   - upx.zip -> appveyor.yml
-  - gettext.zip -> appveyor.yml
-  - sqlite.zip -> appveyor.yml
 
 test_script:
 # coveralls.io
