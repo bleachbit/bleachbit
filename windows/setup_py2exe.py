@@ -593,9 +593,14 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
-        nsis(opts + ' /DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
-             nsi_path)
+
+        # As of 2022-11-20, there is not a big size difference for
+        # the English-only build, and Google Search flags the Python 3.10
+        # version as malware.
+
+        #nsis(opts + ' /DNoTranslations',
+        #     'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
+        #     nsi_path)
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
