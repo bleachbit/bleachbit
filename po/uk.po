@@ -8,16 +8,18 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-02-04 21:51-0700\n"
-"PO-Revision-Date: 2020-02-18 16:05+0000\n"
-"Last-Translator: Jon900 <Stuartlittle1970@gmail.com>\n"
-"Language-Team: Ukrainian <uk@li.org>\n"
+"PO-Revision-Date: 2022-06-22 18:19+0000\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
+"uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
-"X-Generator: Launchpad (build 19413b719a8df7423ab1390528edadce9e0e4aca)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -116,7 +118,7 @@ msgstr "Історія"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Вилучення журналу, який включає відвідані сайти, завантаження та мініатюри"
+"Вилучення журналу, який містить відвідані сайти, завантаження та мініатюри"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
@@ -519,7 +521,7 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"База даних посилань, яка включає закладки, значки та історію відвідування "
+"База даних посилань, що містить закладки, значки та історію відвідування "
 "веб-сайтів"
 
 #: ../cleaners/epiphany.xml
@@ -576,7 +578,7 @@ msgstr "Надлаштування сумісності для Windows прог�
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Вилучити ~/.viminfo, включаючи історію файлів, історію команд та буфери"
+"Вилучити ~/.viminfo, включно з історією файлів, історією команд та буферами"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -1067,7 +1069,7 @@ msgstr "Кількість файлів"
 
 #: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
 msgid "Select destination folder"
-msgstr "Виберіть папку збереження"
+msgstr "Виберіть теку збереження"
 
 #: ../bleachbit/GuiChaff.py:104
 msgid "When finished"
@@ -1301,8 +1303,8 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Вилучити деінсталятори оновлень Microsoft, включаючи виправлення, пакунки "
-"оновлень та оновлення Internet Explorer"
+"Вилучити деінсталятори оновлень Microsoft, включно з виправленнями, "
+"пакунками оновлень та оновленнями Internet Explorer"
 
 #: ../bleachbit/Cleaner.py:331 ../bleachbit/Cleaner.py:557
 msgid "Clipboard"
@@ -1809,7 +1811,7 @@ msgstr "Відключення підкачки."
 
 #: ../bleachbit/Memory.py:100
 msgid "Re-enabling swap."
-msgstr "Повторне включення підкачки."
+msgstr "Повторне ввімкнення підкачування."
 
 #: ../bleachbit/Memory.py:120
 #, python-format

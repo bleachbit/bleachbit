@@ -382,10 +382,10 @@ class System(Cleaner):
                      '~/.kde2/share/applnk']
 
         if 'posix' == os.name and 'desktop_entry' == option_id:
-            for dirname in menu_dirs:
-                for filename in [fn for fn in children_in_directory(dirname, False)
-                                 if fn.endswith('.desktop')]:
-                    if Unix.is_broken_xdg_desktop(filename):
+            for path in menu_dirs:
+                dirname = os.path.expanduser(path)
+                for filename in children_in_directory(dirname, False):
+                    if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
         # unwanted locales

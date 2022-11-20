@@ -25,6 +25,7 @@ Command line interface
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit import _, APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Log import set_root_log_level
 
 import logging
 import optparse
@@ -147,51 +148,56 @@ def process_cmd_line():
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action="store_true",
                       help=_("list cleaners"))
+    parser.add_option("-p", "--preview", action="store_true",
+                      help=_("preview files to be deleted and other changes"))
     parser.add_option("-c", "--clean", action="store_true",
                       # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option("-s", "--shred", action="store_true",
+                      help=_("shred specific files or folders"))
+    parser.add_option("-w", "--wipe-free-space", action="store_true",
+                      help=_("wipe free space in the given paths"))
+    parser.add_option('-o', '--overwrite', action='store_true',
+                      help=_('overwrite files to hide contents'))
+    parser.add_option("--gui", action="store_true",
+                      help=_("launch the graphical interface"))
+    parser.add_option("--preset", action="store_true",
+                      help=_("use options set in the graphical interface"))
+    parser.add_option("--all-but-warning", action="store_true",
+                      help=_("enable all options that do not have a warning"))
     parser.add_option(
         '--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
-    parser.add_option("-s", "--shred", action="store_true",
-                      help=_("shred specific files or folders"))
     parser.add_option("--sysinfo", action="store_true",
                       help=_("show system information"))
-    parser.add_option("--gui", action="store_true",
-                      help=_("launch the graphical interface"))
-    parser.add_option('--exit', action='store_true',
-                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("-v", "--version", action="store_true",
+                      help=_("output version information and exit"))
 
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
         uac_help = optparse.SUPPRESS_HELP
     parser.add_option("--no-uac", action="store_true", help=uac_help)
-    parser.add_option("-p", "--preview", action="store_true",
-                      help=_("preview files to be deleted and other changes"))
     parser.add_option('--pot', action='store_true',
                       help=optparse.SUPPRESS_HELP)
-    parser.add_option("--preset", action="store_true",
-                      help=_("use options set in the graphical interface"))
-    parser.add_option("--all-but-warning", action="store_true",
-                      help=_("enable all options that do not have a warning"))
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
-    parser.add_option("-w", "--wipe-free-space", action="store_true",
-                      help=_("wipe free space in the given paths"))
-    parser.add_option("-v", "--version", action="store_true",
-                      help=_("output version information and exit"))
-    parser.add_option('-o', '--overwrite', action='store_true',
-                      help=_('overwrite files to hide contents'))
 
+    # added for testing py2exe build
+    # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
+    parser.add_option('--exit', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
+
+    # some workaround for context menu added here
+    # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
     def expand_context_menu_option(option, opt, value, parser):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
-
-    parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option)
+    parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
+                      help=optparse.SUPPRESS_HELP)
 
     (options, args) = parser.parse_args()
 
@@ -207,6 +213,11 @@ def process_cmd_line():
     if options.debug:
         # set in __init__ so it takes effect earlier
         pass
+    elif options.preset:
+        # but if --preset is given, check if GUI option sets debug
+        if Options.options.get('debug'):
+            set_root_log_level(Options.options.get('debug'))
+            logger.debug("Debugging is enabled in GUI settings.")
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
         logger.info(SystemInformation.get_system_information())
