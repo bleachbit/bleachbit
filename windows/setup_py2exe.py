@@ -589,7 +589,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
     opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name, nsi_path)
 
-    if not fast:
+    #if not fast:
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
