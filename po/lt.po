@@ -9,16 +9,19 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-12-22 14:57-0700\n"
-"PO-Revision-Date: 2020-12-15 13:32+0000\n"
-"Last-Translator: Valentinas Pavlovskis <Unknown>\n"
-"Language-Team: Lietuvių <>\n"
+"PO-Revision-Date: 2022-11-27 21:48+0000\n"
+"Last-Translator: Gediminas Murauskas <muziejusinfo@gmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/bleachbit/"
+"main/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"(n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
+"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
+"1 : 2);\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -154,7 +157,7 @@ msgstr "Sinchronizacija"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+msgstr "Ištrinti sinchronizavimo duomenis ir atsijungti naršyklėje"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -260,7 +263,7 @@ msgstr "Antivirusinė programa"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Karantinas"
 
 #: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -420,11 +423,11 @@ msgstr "Pasirinktiniai aplankai bus atstatyti."
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr ""
+msgstr "Blokavimo sąrašai"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "Norint, kad blokavimo sąrašai veiktų, juos reikės atnaujinti."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -436,7 +439,7 @@ msgstr "Ištrinti torrentus (tik metaduomenis, o ne aprašytus failus)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Statistika"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Delete the file"
@@ -559,11 +562,11 @@ msgstr "Biuro paketas"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Žinomų failų istorija"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Žinomi klientai ir draugai"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -572,11 +575,11 @@ msgstr "Medija grotuvas"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Sistemos žurnalai"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Išvalyti senus sistemos žurnalus"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:315
 msgid "Memory dump"
@@ -584,13 +587,15 @@ msgstr "Atminties išklotinė"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "Duomenų bazė"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Ištrinti duomenų bazę, kurioje yra tokia informacija kaip grojimų skaičius "
+"ir paskutinis grojimas"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -608,7 +613,7 @@ msgstr "Išplėstinis skanavimas"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr ""
+msgstr "Išvalyti failus, plačiai išsibarsčiusius po visą diską"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -620,11 +625,11 @@ msgstr "Ši parinktis lėta."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr ""
+msgstr "VIM sukeitimo failai vartotojo profilyje"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr ""
+msgstr "VIM sukeitimo failai visoje sistemoje"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -656,7 +661,7 @@ msgstr "Išvalyti dabartinę sesiją"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Nuotolinio valdymo programinė įranga"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -668,42 +673,46 @@ msgstr "Sistemoje esančių failų piktogramos"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Įrašai"
 
 #: ../cleaners/zoom.xml
 msgid "Delete the audio and video recordings"
-msgstr ""
+msgstr "Ištrinti garso ir vaizdo įrašus"
 
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
+"Ši parinktis iš naujo nustatys greitojoje prieigoje prisegtas vietas į "
+"numatytus nustatymus."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shellbags"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Ištrinti aplankų naudojimo datą, lango padėtį ir kitus duomenis"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr ""
+msgstr "Tai iš naujo nustatys darbalaukio piktogramų padėtį."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr ""
+msgstr "Tai iš naujo paleis „Windows Explorer“."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Pašalinti paketus, kurie anksčiau buvo priklausomybės"
 
 #: ../cleaners/dnf.xml
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Atidžiai peržiūrėkite paketų, kurie bus pašalinti, sąrašą, paleidę „dnf list "
+"autoremove“."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
@@ -722,11 +731,11 @@ msgstr "Grafikos redaktorius"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Garso failų žymeklis"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "IRC klientas, anksčiau žinomas kaip „XChat”"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -741,21 +750,21 @@ msgstr ""
 #: ../bleachbit/Options.py:113
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr ""
+msgstr "Įrašant konfigūraciją į failą %s, diskas buvo pilnas"
 
 #: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "Klaida tikrinant, ar egzistuoja kelias: %s"
 
 #: ../bleachbit/Options.py:266
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Klaida nustatant numatytus diskus naikinimui."
 
 #: ../bleachbit/Options.py:291
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "Automatiškai išsaugoma kalba %s."
 
 #: ../bleachbit/Unix.py:586
 #, python-format
@@ -790,11 +799,11 @@ msgstr "Pasirinkite aplanką naikinimui"
 #: ../bleachbit/GUI.py:202 ../bleachbit/GuiBasic.py:99
 #: ../bleachbit/GuiBasic.py:143
 msgid "_Delete"
-msgstr ""
+msgstr "_Ištrinti"
 
 #: ../bleachbit/GUI.py:227
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "Iškarpinėje kelių nerasta."
 
 #: ../bleachbit/GUI.py:262 ../bleachbit/GuiPreferences.py:213
 #: ../bleachbit/GuiPreferences.py:342 ../bleachbit/GuiPreferences.py:385
@@ -803,13 +812,15 @@ msgstr "Pasirinkite aplanką"
 
 #: ../bleachbit/GUI.py:263
 msgid "_OK"
-msgstr ""
+msgstr "_Gerai"
 
 #: ../bleachbit/GUI.py:297
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License, versija 3 arba vėlesnė.\n"
+"Žr. https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -818,7 +829,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:303
 msgid "translator-credits"
 msgstr ""
-"Launchpad Contributions:\n"
+"Gediminas Murauskas ir vertėjai Launchpad:\n"
 "  Algimantas Margevičius https://launchpad.net/~gymka\n"
 "  Liudas Ališauskas https://launchpad.net/~liudas-alisauskas\n"
 "  Mantas Kriaučiūnas https://launchpad.net/~mantas\n"
@@ -841,7 +852,7 @@ msgstr "Įjungta"
 #. much space an option would clean or did clean
 #: ../bleachbit/GUI.py:461
 msgid "Size"
-msgstr ""
+msgstr "Dydis"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
@@ -860,7 +871,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:564
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr ""
+msgstr "Iš naujo nustatomas konfigūracijos failas, nes jis sugadintas: %s"
 
 #: ../bleachbit/GUI.py:709
 msgid "You must select an operation"
@@ -874,10 +885,12 @@ msgstr "Atlikta."
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
+"Pasiekite programos meniu spustelėdami mėsainio piktogramą pavadinimo "
+"juostoje."
 
 #: ../bleachbit/GUI.py:801
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr ""
+msgstr "Pasiekite programos meniu spustelėdami logotipą pavadinimo juostoje."
 
 #: ../bleachbit/GUI.py:817
 msgid ""
@@ -885,12 +898,17 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
+"Jūs naudojate BleachBit su administratoriaus teisėmis, kad išvalytumėte "
+"bendrai naudojamas sistemos dalis, o nuorodos į vartotojo profilio aplanką "
+"išvalys tik pagrindinę paskyrą."
 
 #: ../bleachbit/GUI.py:822
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
+"Paleiskite BleachBit su administratoriaus teisėmis, kad pagerintumėte failų "
+"turinio perrašymo tikslumą."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -917,11 +935,11 @@ msgstr "Išvalyti failus pasirinktose operacijose"
 
 #: ../bleachbit/GUI.py:989
 msgid "Abort"
-msgstr ""
+msgstr "Nutraukti"
 
 #: ../bleachbit/GUI.py:991
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Nutraukti peržiūros arba valymo procesą"
 
 #: ../bleachbit/GUI.py:1196
 msgid "Error when checking for updates: "
@@ -944,6 +962,9 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
+"Bent vienas failas buvo užrakintas kito proceso metu, todėl jo turinio "
+"nebuvo galima perrašyti. Jis bus pažymėtas ištrinti, kai sistema bus "
+"paleista iš naujo."
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -981,7 +1002,7 @@ msgstr "Išimtis vykdant operaciją '%(operation)s': '%(msg)s'"
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Klaida: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
@@ -993,6 +1014,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"Išvalius laisvą vietą diske, ištrinami failų likučiai, kurie buvo ištrinti "
+"nesunaikinus. Tai neatlaisvina vietos."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:198 ../bleachbit/Worker.py:339
@@ -1068,64 +1091,70 @@ msgstr "Palaukite. Peržiūrima %s."
 #: ../bleachbit/FileUtilities.py:343
 #, python-format
 msgid "Directory is not empty: %s"
-msgstr ""
+msgstr "Direktorija nėra tuščia: %s"
 
 #: ../bleachbit/FileUtilities.py:332
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr ""
+msgstr "Praleidžiamas prijungimo taškas: %s"
 
 #: ../bleachbit/FileUtilities.py:334
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr ""
+msgstr "Įrenginys arba išteklius yra užimtas: %s"
 
 #: ../bleachbit/FileUtilities.py:370
 #, python-format
 msgid "Special file type cannot be deleted: %s"
-msgstr ""
+msgstr "Specialaus tipo failo negalima ištrinti: %s"
 
 #: ../bleachbit/FileUtilities.py:573
 msgid "The environment variable TMP refers to a directory that does not exist: %s"
-msgstr ""
+msgstr "Aplinkos kintamasis TMP nurodo į direktoriją, kurios nėra: %s"
 
 #: ../bleachbit/FileUtilities.py:815
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"Failų sistemoje buvo bent vienas failas, kuris nepalaiko išplėstinio "
+"perrašymo."
 
 #: ../bleachbit/FileUtilities.py:911
 #, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "Išvalomas kelias: %s"
 
 #: ../bleachbit/FileUtilities.py:921
 msgid "Creating new, temporary file for wiping free space."
-msgstr ""
+msgstr "Kuriamas naujas, laikinas failas, skirtas laisvos vietos išvalymui."
 
 #: ../bleachbit/FileUtilities.py:961
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Klaida #%d išvalant failo buferį."
 
 #: ../bleachbit/FileUtilities.py:977
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"Įrašė {files:,} failus ir {baites:,} baitus per {seconds:,} sekundes {rate:."
+"2f} MB/s"
 
 #: ../bleachbit/FileUtilities.py:982
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} baitai ir {inodes:,} inodai, kuriais gali naudotis ne "
+"supervartotojas"
 
 #: ../bleachbit/FileUtilities.py:984
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
+msgstr "{baitai:,} baitai ir {inodes:,} inodai, prieinami supervartotojui"
 
 #: ../bleachbit/FileUtilities.py:1000
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "Tvarkyta nežinoma klaida #0 sutrumpinant failą."
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:45
@@ -1203,7 +1232,7 @@ msgstr "Ištuštinti šiukšliadėžę"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:305
 msgid "Wipe the swap and free memory"
-msgstr "Išvalyti mainų srity ir laisvą vietą"
+msgstr "Išvalyti sukeitimo ir laisvą vietą"
 
 #: ../bleachbit/Cleaner.py:307
 msgid "This option is experimental and may cause system problems."
@@ -1268,7 +1297,7 @@ msgstr "Perrašyti laisvą disko vietą, taip paslepiant ištrintus failus"
 
 #: ../bleachbit/Cleaner.py:345
 msgid "This option is very slow."
-msgstr "Ši parinktis labai lėta"
+msgstr "Ši parinktis labai lėta."
 
 #: ../bleachbit/Cleaner.py:349
 msgid "The system in general"
@@ -1287,11 +1316,11 @@ msgstr "Perrašyti laisvą disko vietą %s"
 
 #: ../bleachbit/Cleaner.py:687
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "Įkeliami vietiniai valikliai."
 
 #: ../bleachbit/Cleaner.py:693
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "Įkeliami valikliai iš Winapp2.ini."
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1299,16 +1328,18 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Klaida handle_cleaner_option() valiklio id = {cleaner_id}, parinktis "
+"XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Valiklis ignoruojamas dėl nesaugių prieigos prie failo teisių: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Klaidos nuskaitant valiklį: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -1316,12 +1347,12 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:304
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
+msgstr "Valiklis šioje OS nenaudojamas, nes ji neturi veiksmų: %s"
 
 #: ../bleachbit/Chaff.py:213
 #, python-format
 msgid "Downloading url failed: %s"
-msgstr ""
+msgstr "Atsisiųsti url nepavyko: %s"
 
 #: ../bleachbit/RecognizeCleanerML.py:56
 msgid "Security warning"
@@ -1372,13 +1403,16 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Klaida atidarant tinklo ryšį, kad būtų galima patikrinti, ar nėra "
+"atnaujinimų. Patikrinkite, ar tinklas veikia ir ar ugniasienė neblokuoja "
+"šios programos. Klaidos pranešimas: {}"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr ""
+msgstr "Gilusis nuskaitymas nepalaiko kelių reikšmių kintamojo."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1386,7 +1420,7 @@ msgstr ""
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" naudojamas su įprastu failo path=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1396,21 +1430,21 @@ msgstr ""
 #: ../bleachbit/Action.py:295
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" nėra pakaitinis šablonas"
 
 #: ../bleachbit/Action.py:567
 #, python-format
 msgid "Run external command: %s"
-msgstr ""
+msgstr "Vykdyti išorinę komandą: %s"
 
 #: ../bleachbit/GuiBasic.py:47 ../bleachbit/GuiBasic.py:74
 #: ../bleachbit/GuiBasic.py:98 ../bleachbit/GuiBasic.py:144
 msgid "_Cancel"
-msgstr ""
+msgstr "_Atšaukti"
 
 #: ../bleachbit/GuiBasic.py:75
 msgid "_Open"
-msgstr ""
+msgstr "_Atidaryti"
 
 #: ../bleachbit/GuiBasic.py:116
 msgid "Delete confirmation"
@@ -1422,6 +1456,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"Ši funkcija ištrina visus BleachBit nustatymus ir uždaro programą. Naudokite "
+"tai norėdami paslėpti BleachBit naudojimą arba iš naujo nustatyti jo "
+"nustatymus. Kai kitą kartą paleisite BleachBit, nustatymai inicijuos "
+"numatytas reikšmes."
 
 #: ../bleachbit/GuiBasic.py:132
 msgid ""
@@ -1483,11 +1521,11 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:135
 msgid "set log level to verbose"
-msgstr ""
+msgstr "nustatyti žurnalo lygį į išsamų"
 
 #: ../bleachbit/CLI.py:136
 msgid "log debug messages to file"
-msgstr ""
+msgstr "registruoti derinimo pranešimus į failą"
 
 #: ../bleachbit/CLI.py:138
 msgid "shred specific files or folders"
@@ -1519,7 +1557,7 @@ msgstr "atnaujinti winapp2.ini, jei yra prieinama nauja versija"
 
 #: ../bleachbit/CLI.py:160
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "Perrašyti laisvą vietą nurodytuose keliuose"
 
 #: ../bleachbit/CLI.py:162
 msgid "output version information and exit"
@@ -1534,90 +1572,94 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"Nurodykite tik vieną iš šių komandų: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py:192
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Tikrinama, ar nėra winapp2.ini atnaujinimų internete"
 
 #: ../bleachbit/CLI.py:207
 msgid "No directories given for --wipe-free-space"
 msgstr ""
+"Nepateiktos jokios direktorijos, kurioms būtų galima naudoti --wipe-free-"
+"space"
 
 #: ../bleachbit/CLI.py:212
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Kelias išvalyti turi būti egzistuojanti direktorija: %s"
 
 #: ../bleachbit/CLI.py:214
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "Laisvos vietos perrašymas gali trukti ilgai."
 
 #: ../bleachbit/CLI.py:224
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Nėra ką vykdyti. Nurodykite parinktis."
 
 #: ../bleachbit/CLI.py:232
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite skirta naudoti tik kartu su --clean"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
-msgstr ""
+msgstr "Trinami failai"
 
 #. TRANSLATORS: BleachBit creates digital chaff like that is like the
 #. physical chaff airplanes use to protect themselves from radar-guided
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:65
 msgid "Make chaff"
-msgstr ""
+msgstr "Sumėtyti pėdas"
 
 #: ../bleachbit/GuiChaff.py:70
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "Kurkite atsitiktinai sugeneruotus pranešimus, įkvėptus dokumentų."
 
 #: ../bleachbit/GuiChaff.py:74
 msgid "Inspiration"
-msgstr ""
+msgstr "Įkvėpimas"
 
 #: ../bleachbit/GuiChaff.py:77
 msgid "2600 Magazine"
-msgstr ""
+msgstr "Žurnalas „2600”"
 
 #: ../bleachbit/GuiChaff.py:77
 msgid "Hillary Clinton's emails"
-msgstr ""
+msgstr "Hillary Clinton el. laiškai"
 
 #: ../bleachbit/GuiChaff.py:85
 msgid "Number of files"
-msgstr ""
+msgstr "Failų skaičius"
 
 #: ../bleachbit/GuiChaff.py:92 ../bleachbit/GuiChaff.py:152
 msgid "Select destination folder"
-msgstr ""
+msgstr "Pasirinkite paskirties aplanką"
 
 #: ../bleachbit/GuiChaff.py:102
 msgid "When finished"
-msgstr ""
+msgstr "Pabaigus"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Delete without shredding"
-msgstr ""
+msgstr "Ištrinti be naikinimo"
 
 #: ../bleachbit/GuiChaff.py:105
 msgid "Do not delete"
-msgstr ""
+msgstr "Neištrinti"
 
 #: ../bleachbit/GuiChaff.py:116
 msgid "Make files"
-msgstr ""
+msgstr "Sukurti failus"
 
 #: ../bleachbit/GuiChaff.py:133
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Atsisiųsti duomenis, reikalingus generatoriui sumėtyti pėdas?"
 
 #: ../bleachbit/GuiChaff.py:175
 msgid "Generating files"
-msgstr ""
+msgstr "Generuojami failai"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:31
 msgid "Preferences"
@@ -1665,7 +1707,7 @@ msgstr "Slėpti netinkamus valytojus"
 
 #: ../bleachbit/GuiPreferences.py:158
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "Perrašyti failų turinį, kad būtų išvengta atkūrimo"
 
 #: ../bleachbit/GuiPreferences.py:162
 msgid ""
@@ -1685,19 +1727,19 @@ msgstr "Patvirtinti, prieš ištrinant"
 
 #: ../bleachbit/GuiPreferences.py:181
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
+msgstr "Naudoti IEC dydžius (1 KiB = 1024 baitai), o ne SI (1 kB = 1000 baitų)"
 
 #: ../bleachbit/GuiPreferences.py:188
 msgid "Windows 10 theme"
-msgstr ""
+msgstr "„Windows 10” tema"
 
 #: ../bleachbit/GuiPreferences.py:195
 msgid "Dark mode"
-msgstr ""
+msgstr "Tamsusis režimas"
 
 #: ../bleachbit/GuiPreferences.py:201
 msgid "Show debug messages"
-msgstr ""
+msgstr "Rodyti derinimo žinutes"
 
 #: ../bleachbit/GuiPreferences.py:237
 msgid ""
@@ -1752,7 +1794,7 @@ msgstr "Šie keliai nebus išvalyti ar pakeisti."
 
 #: ../bleachbit/GuiPreferences.py:439
 msgid "These locations can be selected for deletion."
-msgstr "Šios vietos gali būti pasirinktos šalinimui"
+msgstr "Šios vietos gali būti pasirinktos šalinimui."
 
 #: ../bleachbit/GuiPreferences.py:447
 msgid "Type"
@@ -1779,65 +1821,67 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"Komanda 'swapoff -s' nepavyko, todėl grįžtama prie /proc/swaps, kad būtų "
+"gauta informacija apie sukeitimą."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
-msgstr ""
+msgstr "Išjungiama sukeitimo vieta."
 
 #: ../bleachbit/Memory.py:98
 msgid "Re-enabling swap."
-msgstr ""
+msgstr "Iš naujo įjungiama sukeitimo vieta."
 
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Nustatoma šio proceso prioritetinė reikšmė %d."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "Panaikinamos proceso ID {pid} privilegijų naudotojo ID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Priskiriama ir išvaloma %s atminties."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Atlaisvinama %s atminties."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "Rastas UUID, skirtas sukeitimo failui {device} yra {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Laisva fizinė atmintis yra %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "Išvalomas sukeitimo įrenginys %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "Iš naujo inicijuojamas sukeitimo įrenginys %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "Aptikti šie sukeitimo įrenginiai: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1846,11 +1890,12 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"Funkcija wipe_memory() su proceso ID {pid} laukia antrinio proceso ID {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Antrinės atminties valymo procesas grąžino kodą %d."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
@@ -1862,7 +1907,7 @@ msgstr "S_unaikinti aplankus"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Naikinti kalius iš iškarpinės"
 
 #: ../data/app-menu.ui:17
 msgid "_Wipe Free Space"
@@ -1870,7 +1915,7 @@ msgstr "_Išvalyti laisvą vietą"
 
 #: ../data/app-menu.ui:21
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_Sumėtyti pėdas"
 
 #: ../data/app-menu.ui:25
 msgid "S_hred Settings and Quit"
@@ -1886,4 +1931,4 @@ msgstr "_Žinynas"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_Apie BleachBit"
