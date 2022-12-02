@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2022-12-02 06:51+0000\n"
+"PO-Revision-Date: 2022-12-03 07:47+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "bleachbit/main/nb_NO/>\n"
@@ -641,7 +641,7 @@ msgstr "Slett den gjeldende økten"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Programvare for fjernkontroll"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -662,7 +662,7 @@ msgstr "Skallposer"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Slett bruksdato, vindusposisjon, og annen data for mappene"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -688,7 +688,7 @@ msgstr "Lydfil-taggeprogram"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "IRC-klient tidligere kjent som XChat"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -701,7 +701,7 @@ msgstr "Frigjør plass og beskytt personvernet"
 #: ../bleachbit/Options.py:112
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr "Disken var full da konfigurasjonen ble skrevet til filen %s"
+msgstr "Disken var full da oppsettet ble skrevet til filen %s"
 
 #: ../bleachbit/Options.py:137
 #, python-format
@@ -832,8 +832,9 @@ msgid ""
 msgstr ""
 
 #: ../bleachbit/GUI.py:498
+#, fuzzy
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr ""
+msgstr "Få tilgang til programmenyen ved å klikke på logoen i tittellinjen."
 
 #: ../bleachbit/GUI.py:512
 msgid ""
@@ -900,7 +901,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:108
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Feil: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:201
@@ -1151,7 +1152,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:690
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "Importerer rensere fra Winapp2.ini …"
 
 #: ../bleachbit/CleanerML.py:136
 #, python-brace-format
@@ -1487,7 +1488,7 @@ msgstr "Ingenting å gjøre. Angi alternativer."
 
 #: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite er kun tiltenkt bruk med --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1787,7 +1788,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Fysisk ledig minne er %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
