@@ -12,16 +12,16 @@ init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
 
 install:
-  - ps: if (-not (Test-Path gtk.zip)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/gtk3.24-x86-windows.zip" -FileName gtk3-x86-windows.zip}
-  - ps: Get-FileHash gtk3-x86-windows.zip
-  - '%SZ_EXE% x gtk3-x86-windows.zip'
+  - ps: if (-not (Test-Path gtk.zip)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk3.24-x86-windows.zip" -FileName gtk3.24-x86-windows.zip}
+  - ps: Get-FileHash gtk3.24-x86-windows.zip
+  - '%SZ_EXE% x gtk3.24-x86-windows.zip'
   - '%PYTHON_HOME%\python.exe -V' # show Python version
   - '%PYTHON_HOME%\python.exe -m ensurepip'
   - '%PYTHON_HOME%\Scripts\pip3.exe --version' # show pip version
-  - ps: if (-not (Test-Path x86-add.zip )) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/x86-add.zip" }
-  - ps: Get-FileHash x86-add.zip
-  - '%SZ_EXE% x x86-add.zip'
-  - 'XCOPY /E x86-add\*.* %PYTHON_HOME%'
+  - ps: if (-not (Test-Path gtk-themes.zip )) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk-themes.zip" }
+  - ps: Get-FileHash gtk-themes.zip
+  - '%SZ_EXE% x gtk-themes.zip'
+  - 'XCOPY /E gtk-themes\*.* %PYTHON_HOME%'
   - '%PYTHON_HOME%\Scripts\pip3.exe install psutil'
   - '%PYTHON_HOME%\Scripts\pip3.exe install pypiwin32'
   - '%PYTHON_HOME%\Scripts\pip3.exe install winshell'
@@ -31,8 +31,9 @@ install:
   - '%PYTHON_HOME%\Scripts\pip3.exe install requests'
   - '%PYTHON_HOME%\Scripts\pip3.exe install plyer'
   - '%PYTHON_HOME%\Scripts\pip3.exe install win-unicode-console'
-  - ps: if (-not (Test-Path PyGObject-3.42.0-cp310-cp310-win32.whl)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v0/PyGObject-3.42.0-cp310-cp310-win32.whl" }
+  - ps: if (-not (Test-Path PyGObject-3.42.0-cp310-cp310-win32.whl)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/PyGObject-3.42.0-cp310-cp310-win32.whl" }
   - '%PYTHON_HOME%\Scripts\pip3.exe install PyGObject-3.42.0-cp310-cp310-win32.whl'
+  - 'windows\python-gtk3-fixup.bat %PYTHON_HOME%\..\..'
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
@@ -55,9 +56,9 @@ build_script:
   - ps: Get-FileHash BleachBit-*
 
 cache:
-  - gtk.zip -> appveyor.yml
+  - gtk3.24-x86-windows.zip -> appveyor.yml
   - PyGObject-3.42.0-cp310-cp310-win32.whl -> appveyor.yml
-  - x86-add.zip -> appveyor.yml
+  - gtk-themes.zip -> appveyor.yml
   - upx.zip -> appveyor.yml
 
 test_script:
