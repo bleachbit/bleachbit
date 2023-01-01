@@ -147,6 +147,8 @@ sessionCheckpoints.json
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
     <!-- Firefox 78 (or probably some previous version) moved icons from places.sqlite to favicons.sqlite -->
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
+    <!-- Firefox 108 has alternative services with visited domains -->
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
