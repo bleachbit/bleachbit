@@ -311,3 +311,12 @@ if 'posix' == os.name:
 
 # should be re.IGNORECASE on macOS
 fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
+
+if 'win32' == sys.platform:
+    import win32process
+
+    for process in win32process.EnumProcessModules(-1):
+        name = win32process.GetModuleFileNameEx(-1, process)
+        if re.search(r'python\d+.dll$', name, re.IGNORECASE):
+            bindir = os.path.dirname(name)
+            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')

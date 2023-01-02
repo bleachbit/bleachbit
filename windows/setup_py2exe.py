@@ -27,6 +27,7 @@ import sys
 import time
 import win_unicode_console
 import xml.dom.minidom
+import re
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -234,7 +235,7 @@ def build():
         path = os.path.join(GTK_DIR, 'etc', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'etc', d))
-    for d in ('girepository-1.0', 'glade', 'gtk-3.0'):
+    for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'lib', d))
@@ -244,6 +245,14 @@ def build():
             path = os.path.join(gtk_share, d)
             if os.path.exists(path):
                 copytree(path, os.path.join('dist', 'share', d))
+
+    logger.info('Fixing paths in loaders.cache file')
+    with open(os.path.join('dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache'), 'r+') as f:
+        data = f.read()
+        data = re.sub(r'^".*[/\\](.*\.dll)"$', r'"\1"', data, flags=re.I|re.M)
+        f.seek(0)
+        f.write(data)
+        f.truncate()
 
     logger.info('Remove windows fonts dir from fonts.conf file')
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
