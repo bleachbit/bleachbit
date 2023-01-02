@@ -437,6 +437,15 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         self.sqlite_clean_helper(
             sql_palemoon, None, Special.delete_mozilla_url_history)
 
+    def test_delete_mozilla_no_places(self):
+        """Test for delete_mozilla_url_history without places.sqlite
+
+        See https://github.com/bleachbit/bleachbit/issues/1423
+        """
+        sql_no_places = firefox78_places_sql + ";\ndrop table moz_places;"
+        self.sqlite_clean_helper(
+            sql_no_places, None, Special.delete_mozilla_url_history)
+
     def test_delete_mozilla_favicons(self):
         """Test for delete_mozilla_favicons"""
 
