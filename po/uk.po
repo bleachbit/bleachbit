@@ -8,16 +8,18 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-02-04 21:51-0700\n"
-"PO-Revision-Date: 2020-02-18 16:05+0000\n"
-"Last-Translator: Jon900 <Stuartlittle1970@gmail.com>\n"
-"Language-Team: Ukrainian <uk@li.org>\n"
+"PO-Revision-Date: 2022-12-17 08:48+0000\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
+"uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.15\n"
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
-"X-Generator: Launchpad (build 19413b719a8df7423ab1390528edadce9e0e4aca)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -116,7 +118,7 @@ msgstr "Історія"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Вилучення журналу, який включає відвідані сайти, завантаження та мініатюри"
+"Вилучення журналу, який містить відвідані сайти, завантаження та мініатюри"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Search engines"
@@ -168,7 +170,7 @@ msgstr ""
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
-msgstr "Цей засіб видалить збережені паролі"
+msgstr "Цей засіб видалить ваші збережені паролі."
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -366,7 +368,7 @@ msgstr "Встановлювачі"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr "Видалити кешовані патчі та встановлювачі"
+msgstr "Видалити кешовані латки та встановлювачі"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
@@ -390,7 +392,7 @@ msgstr "Файловий менеджер"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "Власні теки будуть скинуті"
+msgstr "Власні теки будуть скинуті."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -399,7 +401,7 @@ msgstr "Список блокування"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Для роботи потрібно оновлення списків блокування"
+msgstr "Для роботи потрібно оновлення списків блокування."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -519,7 +521,7 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"База даних посилань, яка включає закладки, значки та історію відвідування "
+"База даних посилань, що містить закладки, значки та історію відвідування "
 "веб-сайтів"
 
 #: ../cleaners/epiphany.xml
@@ -576,7 +578,7 @@ msgstr "Надлаштування сумісності для Windows прог�
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Вилучити ~/.viminfo, включаючи історію файлів, історію команд та буфери"
+"Вилучити ~/.viminfo, включно з історією файлів, історією команд та буферами"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -592,7 +594,7 @@ msgstr "Перевірте перегляд будь-яких файлів, як
 
 #: ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr "Це дуже повільна опція"
+msgstr "Це дуже повільна опція."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -663,7 +665,7 @@ msgstr "Shellbag-записи реєстру"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Видаліть дату використання, положення вікна та інші дані для папок"
+msgstr "Видаліть дату використання, положення вікна та інші дані для тек"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -800,7 +802,7 @@ msgstr "Помилка при оберанні дисків за замовчу�
 #: ../bleachbit/Options.py:290
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr "Автоматичне збереження мови: %s"
+msgstr "Автоматичне збереження мови %s."
 
 #: ../bleachbit/Unix.py:583
 #, python-format
@@ -1067,7 +1069,7 @@ msgstr "Кількість файлів"
 
 #: ../bleachbit/GuiChaff.py:94 ../bleachbit/GuiChaff.py:154
 msgid "Select destination folder"
-msgstr "Виберіть папку збереження"
+msgstr "Виберіть теку збереження"
 
 #: ../bleachbit/GuiChaff.py:104
 msgid "When finished"
@@ -1248,7 +1250,7 @@ msgstr "Вилучити файли для непотрібних мов"
 
 #: ../bleachbit/Cleaner.py:288
 msgid "Configure this option in the preferences."
-msgstr "Відкоригувати цю опцію у налаштуваннях"
+msgstr "Відкоригувати цю опцію у налаштуваннях."
 
 #: ../bleachbit/Cleaner.py:294
 msgid "Rotated logs"
@@ -1275,7 +1277,7 @@ msgstr "Витерти простір довантаження та нерозп
 msgid "This option is experimental and may cause system problems."
 msgstr ""
 "Це налаштування є експериментальним та може викликати певні проблеми з "
-"роботою системи"
+"роботою системи."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:318
@@ -1301,8 +1303,8 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Вилучити деінсталятори оновлень Microsoft, включаючи виправлення, пакунки "
-"оновлень та оновлення Internet Explorer"
+"Вилучити деінсталятори оновлень Microsoft, включно з виправленнями, "
+"пакунками оновлень та оновленнями Internet Explorer"
 
 #: ../bleachbit/Cleaner.py:331 ../bleachbit/Cleaner.py:557
 msgid "Clipboard"
@@ -1405,7 +1407,7 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Дані налаштувань очищувача  є новими або вони змінені. Шкідливі налаштування "
+"Дані налаштувань очищувача є новими або вони змінені. Шкідливі налаштування "
 "можуть пошкодити вашу систему. Якщо ви не довіряєте цим змінам, вилучіть "
 "файли або вийдіть з програми."
 
@@ -1632,7 +1634,7 @@ msgstr "Шляхом для очищення повинна бути існую�
 
 #: ../bleachbit/CLI.py:223
 msgid "Wiping free space can take a long time."
-msgstr "Очищення вільного простору може тривати довгий час"
+msgstr "Очищення вільного простору може тривати довгий час."
 
 #: ../bleachbit/CLI.py:233
 msgid "No work to do. Specify options."
@@ -1664,7 +1666,7 @@ msgstr "Білий список"
 
 #: ../bleachbit/GuiPreferences.py:112
 msgid "Check periodically for software updates via the Internet"
-msgstr "Періодично перевіряти оновлення програми через Інтернет."
+msgstr "Періодично перевіряти оновлення програми через Інтернет"
 
 #: ../bleachbit/GuiPreferences.py:117
 msgid ""
@@ -1773,7 +1775,7 @@ msgstr "Ці шляхи не будуть вилучені або змінені
 
 #: ../bleachbit/GuiPreferences.py:430
 msgid "These locations can be selected for deletion."
-msgstr "Ці розташування можуть бути обрані для вилучення"
+msgstr "Ці розташування можуть бути обрані для вилучення."
 
 #: ../bleachbit/GuiPreferences.py:438
 msgid "Type"
@@ -1809,7 +1811,7 @@ msgstr "Відключення підкачки."
 
 #: ../bleachbit/Memory.py:100
 msgid "Re-enabling swap."
-msgstr "Повторне включення підкачки."
+msgstr "Повторне ввімкнення підкачування."
 
 #: ../bleachbit/Memory.py:120
 #, python-format

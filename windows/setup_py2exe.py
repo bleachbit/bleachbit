@@ -76,7 +76,7 @@ if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
 UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
-UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
+UPX_OPTS = '--best --nrv2e'
 
 
 def archive(infile, outfile):

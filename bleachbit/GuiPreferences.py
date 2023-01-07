@@ -102,7 +102,7 @@ class PreferencesDialog:
             self.cb_set_windows10_theme()
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
-            set_root_log_level()
+            set_root_log_level(options.get('debug'))
         if 'kde_shred_menu_option' == path:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()

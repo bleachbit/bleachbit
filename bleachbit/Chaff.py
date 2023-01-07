@@ -209,7 +209,7 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     # sourceforge.net directories to download mirror
     retries = Retry(total=max_retries, backoff_factor=backoff_factor,
                     status_forcelist=status_forcelist, redirect=5)
-    msg = _('Downloading url failed: %s') % url
+    msg = _('Downloading URL failed: %s') % url
 
     from bleachbit.Update import user_agent
     headers = {'user_agent': user_agent()}
