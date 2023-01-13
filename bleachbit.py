@@ -25,11 +25,11 @@ Launcher
 import os
 import sys
 
-import bleachbit.Unix
 from bleachbit import _
 
 
 if 'posix' == os.name:
+    import bleachbit.Unix
     if os.path.isdir('/usr/share/bleachbit'):
         # This path contains bleachbit/{C,G}LI.py .  This section is
         # unnecessary if installing BleachBit in site-packages.
