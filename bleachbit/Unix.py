@@ -746,4 +746,12 @@ def root_is_not_allowed_to_X_session():
     return xhost_returned_error
 
 
+def is_display_protocol_wayland_and_root_not_allowed():
+    return (
+            bleachbit.Unix.is_linux_display_protocol_wayland() and
+            os.environ['USER'] == 'root' and
+            bleachbit.Unix.root_is_not_allowed_to_X_session()
+    )
+
+
 locales = Locales()

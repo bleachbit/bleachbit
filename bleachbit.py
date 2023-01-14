@@ -36,10 +36,7 @@ if 'posix' == os.name:
         sys.path.append('/usr/share/')
 
     if (
-            bleachbit.Unix.is_linux_display_protocol_wayland() and
-            os.environ['USER'] == 'root' and
-            bleachbit.Unix.root_is_not_allowed_to_X_session()
-
+        bleachbit.Unix.is_display_protocol_wayland_and_root_not_allowed()
     ):
         print(_('To run any GUI application on Wayland with root you need to allow the root to connect with '
               'the user\'s X session. For example like this:\n'
