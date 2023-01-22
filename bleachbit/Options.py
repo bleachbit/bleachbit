@@ -48,7 +48,8 @@ boolean_keys = ['auto_hide',
                 'remember_geometry',
                 'shred',
                 'units_iec',
-                'window_maximized']
+                'window_maximized',
+                'window_fullscreen']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
     boolean_keys.append('win10_theme')
@@ -278,7 +279,8 @@ class Options:
         self.__set_default("kde_shred_menu_option", False)
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
-        self.__set_default("units_iec", False)        
+        self.__set_default("units_iec", False)
+        self.__set_default("window_fullscreen", False)
         self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:
