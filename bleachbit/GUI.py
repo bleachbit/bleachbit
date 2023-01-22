@@ -1098,6 +1098,8 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_window_state_event(self, widget, event):
         # save window state
+        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        options.set("window_fullscreen", fullscreen, commit=False)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
         return False
@@ -1134,7 +1136,9 @@ class GUI(Gtk.ApplicationWindow):
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
-        if options.get("window_maximized"):
+        if options.get("window_fullscreen"):
+            self.fullscreen()
+        elif options.get("window_maximized"):
             self.maximize()
 
     def set_windows10_theme(self):
