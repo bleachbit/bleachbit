@@ -63,6 +63,7 @@ class ChaffDialog(Gtk.Dialog):
 # physical chaff airplanes use to protect themselves from radar-guided
 # missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, _("Make chaff"), parent)
+        Gtk.Dialog.set_modal(self,True)
         self.set_border_width(5)
         box = self.get_content_area()
 
