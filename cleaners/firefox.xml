@@ -120,12 +120,17 @@ sessionstore.bak-20140715214327
 sessionstore-1.js
 upgrade.jsonlz4-20180905220717
 sessionCheckpoints.json
+sessionstore-backups/recovery.bak
+sessionstore-backups/recovery.baklz4
+sessionstore-backups/recovery.js
+sessionstore-backups/recovery.jsonlz4
 -->
     <action command="delete" search="file" path="$$profile$$/sessionCheckpoints.json"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore*.js*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore.bak*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/previous.js*"/>
-    <action command="delete" search="file" path="$$profile$$/sessionstore-backups/recovery.js"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/recovery.js*"/>
+    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/recovery.bak*"/>
     <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
   </option>
@@ -147,6 +152,8 @@ sessionCheckpoints.json
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
     <!-- Firefox 78 (or probably some previous version) moved icons from places.sqlite to favicons.sqlite -->
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
+    <!-- Firefox 108 has alternative services with visited domains -->
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>

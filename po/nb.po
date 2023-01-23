@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-09-14 19:36-0600\n"
-"PO-Revision-Date: 2019-10-25 08:51+0000\n"
-"Last-Translator: FreewareTips <Unknown>\n"
-"Language-Team: Norwegian Bokmal <nb@li.org>\n"
+"PO-Revision-Date: 2022-12-03 07:47+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"bleachbit/main/nb_NO/>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Launchpad-Export-Date: 2019-10-26 13:12+0000\n"
-"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
@@ -147,7 +149,7 @@ msgstr "Synkronisering"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+msgstr "Slett synkroniseringsdataene og logg ut av nettleseren"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -195,7 +197,7 @@ msgstr ""
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
-msgstr ""
+msgstr "Filarkiver"
 
 #: ../cleaners/winrar.xml ../cleaners/filezilla.xml
 #: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
@@ -248,7 +250,7 @@ msgstr "Antivirus"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Karantene"
 
 #: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml ../cleaners/firefox.xml
@@ -538,7 +540,7 @@ msgstr "Historikk for kjente filer"
 
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Kjente kunder og venner"
 
 #: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
 #: ../cleaners/windows_media_player.xml
@@ -547,11 +549,11 @@ msgstr "Medieavspiller"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Systemjournaler"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Rengjør gamle systemjournaler"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:314
 msgid "Memory dump"
@@ -639,7 +641,7 @@ msgstr "Slett den gjeldende økten"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Programvare for fjernkontroll"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -656,11 +658,11 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Skallposer"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Slett bruksdato, vindusposisjon, og annen data for mappene"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -686,7 +688,7 @@ msgstr "Lydfil-taggeprogram"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr ""
+msgstr "IRC-klient tidligere kjent som XChat"
 
 #: ../bleachbit.desktop
 msgid "Unnecessary file cleaner"
@@ -699,7 +701,7 @@ msgstr "Frigjør plass og beskytt personvernet"
 #: ../bleachbit/Options.py:112
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr ""
+msgstr "Disken var full da oppsettet ble skrevet til filen %s"
 
 #: ../bleachbit/Options.py:137
 #, python-format
@@ -751,7 +753,7 @@ msgstr "_Slett"
 
 #: ../bleachbit/GUI.py:169
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "Ingen baner funnet i utklippstavlen."
 
 #: ../bleachbit/GUI.py:200 ../bleachbit/GuiPreferences.py:194
 #: ../bleachbit/GuiPreferences.py:319 ../bleachbit/GuiPreferences.py:360
@@ -767,6 +769,8 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"GNU General Public License versjon 3 eller nyere.\n"
+"Se https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -776,14 +780,14 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Alexander Mackinnon Jansen https://launchpad.net/~alexander-jansen\n"
-"  FreewareTips https://launchpad.net/~freewaretips002\n"
-"  Harald H. https://launchpad.net/~haarektrans\n"
-"  Jon Arne Westgaard https://launchpad.net/~westgaard\n"
-"  Simen Heggestøyl https://launchpad.net/~simen-simenh\n"
-"  airesacha https://launchpad.net/~danielwd-lavabit\n"
-"  christian https://launchpad.net/~zenono\n"
-"  Åka Sikrom https://launchpad.net/~akrosikam"
+"Alexander Mackinnon Jansen https://launchpad.net/~alexander-jansen\n"
+"FreewareTips https://launchpad.net/~freewaretips002\n"
+"Harald H. https://launchpad.net/~haarektrans\n"
+"Jon Arne Westgaard https://launchpad.net/~westgaard\n"
+"Simen Heggestøyl https://launchpad.net/~simen-simenh\n"
+"airesacha https://launchpad.net/~danielwd-lavabit\n"
+"christian https://launchpad.net/~zenono\n"
+"Åka Sikrom https://launchpad.net/~akrosikam"
 
 #: ../bleachbit/GUI.py:257
 msgid "System information"
@@ -828,8 +832,9 @@ msgid ""
 msgstr ""
 
 #: ../bleachbit/GUI.py:498
+#, fuzzy
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr ""
+msgstr "Få tilgang til programmenyen ved å klikke på logoen i tittellinjen."
 
 #: ../bleachbit/GUI.py:512
 msgid ""
@@ -896,7 +901,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:108
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Feil: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:201
@@ -1147,7 +1152,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py:690
 msgid "Importing cleaners from Winapp2.ini."
-msgstr ""
+msgstr "Importerer rensere fra Winapp2.ini …"
 
 #: ../bleachbit/CleanerML.py:136
 #, python-brace-format
@@ -1483,7 +1488,7 @@ msgstr "Ingenting å gjøre. Angi alternativer."
 
 #: ../bleachbit/CLI.py:240
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite er kun tiltenkt bruk med --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1783,7 +1788,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Fysisk ledig minne er %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
@@ -1850,4 +1855,4 @@ msgstr "_Hjelp"
 
 #: ../data/app-menu.ui:46
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_Om"

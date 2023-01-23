@@ -321,15 +321,24 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         shutil.rmtree(self.dir_base)
 
     def sqlite_clean_helper(self, sql, fn, clean_func, check_func=None, setup_func=None):
-        """Helper for cleaning special SQLite cleaning"""
+        """Helper for cleaning special SQLite cleaning
+
+        sql: string with SQL code to initialize an SQLite database
+        fn: filename of an existing SQLite database
+        clean_func: a function to clean the SQLite database
+        check_func (optional): a function to perform extra checks on the database
+        setup_func (optional): a function to initialize the database before executing the SQL
+        """
 
         self.assertFalse(
             sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
-        if fn:
+        if fn and sql:
+            raise RuntimError(
+                'sqlite_clean_helper: supply either fn or sql but not both')
+        elif fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
             self.assertExists(filename)
-
         # create sqlite file
         elif sql:
             # create test file

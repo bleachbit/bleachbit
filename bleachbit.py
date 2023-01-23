@@ -25,11 +25,23 @@ Launcher
 import os
 import sys
 
+from bleachbit import _
+
+
 if 'posix' == os.name:
+    import bleachbit.Unix
     if os.path.isdir('/usr/share/bleachbit'):
         # This path contains bleachbit/{C,G}LI.py .  This section is
         # unnecessary if installing BleachBit in site-packages.
         sys.path.append('/usr/share/')
+
+    if (
+        bleachbit.Unix.is_display_protocol_wayland_and_root_not_allowed()
+    ):
+        print(_('To run a GUI application on Wayland with root, allow access with this command:\n'
+              'xhost si:localuser:root\n'
+              'See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-questions.html'))
+        sys.exit(1)
 
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3

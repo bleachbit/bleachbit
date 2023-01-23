@@ -74,7 +74,7 @@ class Cleaner:
         """Register 'action' (instance of class Action) to be executed
         for ''option_id'.  The actions must implement list_files and
         other_cleanup()"""
-        self.actions += ((option_id, action), )
+        self.actions.append((option_id, action))
 
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
@@ -82,7 +82,7 @@ class Cleaner:
 
     def add_running(self, detection_type, pathname):
         """Add a way to detect this program is currently running"""
-        self.running += ((detection_type, pathname), )
+        self.running.append((detection_type, pathname))
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -156,12 +156,9 @@ class Cleaner:
         for running in self.running:
             test = running[0]
             pathname = running[1]
-            if 'exe' == test and 'posix' == os.name:
-                if Unix.is_running(pathname):
-                    logger.debug("process '%s' is running", pathname)
-                    return True
-            elif 'exe' == test and 'nt' == os.name:
-                if Windows.is_process_running(pathname):
+            if 'exe' == test:
+                if ('posix' == os.name and Unix.is_running(pathname)) or \
+                   ('nt' == os.name and Windows.is_process_running(pathname)):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -202,8 +199,8 @@ class OpenOfficeOrg(Cleaner):
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if 'posix' == os.name:
             self.prefixes = ["~/.ooo-2.0", "~/.openoffice.org2",
-                             "~/.openoffice.org2.0", "~/.openoffice.org/3"]
-            self.prefixes += ["~/.ooo-dev3"]
+                             "~/.openoffice.org2.0", "~/.openoffice.org/3",
+                             "~/.ooo-dev3"]
         if 'nt' == os.name:
             self.prefixes = [
                 "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]

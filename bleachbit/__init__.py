@@ -112,10 +112,14 @@ options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree
 if not portable_mode:
-    e1 = os.path.exists(os.path.join(bleachbit_exe_path, '../cleaners'))
-    e2 = os.path.exists(os.path.join(bleachbit_exe_path, '../Makefile'))
-    e3 = os.path.exists(os.path.join(bleachbit_exe_path, '../COPYING'))
-    portable_mode = all((e1, e2, e3))
+    paths = (
+        '../cleaners',
+        '../Makefile',
+        '../COPYING')
+    existing = (
+        os.path.exists(os.path.join(bleachbit_exe_path, path))
+        for path in paths)
+    portable_mode = all(existing)
 
 # personal cleaners
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
