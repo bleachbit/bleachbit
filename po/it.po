@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-06-01 18:22-0600\n"
-"PO-Revision-Date: 2023-01-25 13:28+0000\n"
+"PO-Revision-Date: 2023-01-25 17:00+0000\n"
 "Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
@@ -1687,11 +1687,11 @@ msgstr ""
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
-msgstr "Disabilitazione swap."
+msgstr "Disabilitazione scambio."
 
 #: ../bleachbit/Memory.py:98
 msgid "Re-enabling swap."
-msgstr "Riabilitazione swap."
+msgstr "Riabilitazione dello scambio."
 
 #: ../bleachbit/Memory.py:120
 #, python-format
@@ -1883,7 +1883,7 @@ msgstr "Importati da winapp2.ini"
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Errore durante l'operazione «%(operation)s»: «%(msg)s»"
+msgstr "Errore durante l'operazione '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
@@ -1915,7 +1915,7 @@ msgstr "Attendi. Pulizia di %s."
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
 msgstr[0] "Rimane circa %d minuto."
-msgstr[1] "Rimangono circa %d minuti"
+msgstr[1] "Rimangono circa %d minuti."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
