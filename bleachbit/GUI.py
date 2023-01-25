@@ -306,7 +306,7 @@ class Bleachbit(Gtk.Application):
         GUI.update_log_level(self._window)
 
     def get_about_dialog(self):
-        dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
+        dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
                                  copyright='Copyright (C) 2008-2021 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
