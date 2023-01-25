@@ -34,8 +34,7 @@ install:
   - ps: if (-not (Test-Path PyGObject-3.42.0-cp310-cp310-win32.whl)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/PyGObject-3.42.0-cp310-cp310-win32.whl" }
   - '%PYTHON_HOME%\Scripts\pip3.exe install PyGObject-3.42.0-cp310-cp310-win32.whl'
   - 'windows\python-gtk3-fixup.bat %PYTHON_HOME%\..\..'
-  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip" -FileName upx.zip}
->>>>>>> ef5ef7e6 (Python 3.10 build)
+  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.1.0-win64 upx'
