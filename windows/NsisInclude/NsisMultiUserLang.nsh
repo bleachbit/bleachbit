@@ -51,6 +51,15 @@ Version: 2023-01-26
 	LangString SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall"
 	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "The main file of the program."
+	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creation of shortucts."
+	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creation of shortcut in Start menu."
+	LangString DESC_SECTION_DESKTOP ${LANG_ENGLISH} "Creation of shortcut on desktop."
+	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creation of shortcut on Quick Launch."
+	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Install language files."
+	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Install integrate shredder."
+	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall program."
+!endif
 
 !ifdef LANG_AFRIKAANS
 	LangString MULTIUSER_PAGE_TITLE ${LANG_AFRIKAANS} "Choose Users"
@@ -1027,6 +1036,14 @@ Version: 2023-01-26
 	LangString SECTION_UNINSTALL ${LANG_ITALIAN} "Disinstalla"
 	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "BleachBit verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
 	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai click su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
+	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "I file principali del programma."
+	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creazione dei collegamenti."
+	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creazione del collegamento nel menu Start."
+	LangString DESC_SECTION_DESKTOP ${LANG_ENGLISH} "Creazione del collegamento sul desktop."
+	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creazione del collegamento nell'Avvio rapido."
+	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Installa file lingua interfaccia."
+	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Installa sovrascrittura file integrato."
+	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Disinstalla programma."
 !endif
 
 !ifdef LANG_JAPANESE
