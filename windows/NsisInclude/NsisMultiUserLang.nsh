@@ -7,7 +7,7 @@ Full source code, documentation and demos at https://github.com/Drizin/NsisMulti
 Copyright 2016-2019 Ricardo Drizin, Alex Mitev
 
 File   : Include\NsisMultiUserLang.nsh
-Version: 2019-11-11
+Version: 2023-01-26
 
 */
 
@@ -40,7 +40,17 @@ Version: 2019-11-11
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ENGLISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ENGLISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ENGLISH} "Unable to elevate, error {ERROR}."
-!endif
+	; text string for installer section
+	LangString SECTION_CORE ${LANG_ENGLISH} "Core (Required)"
+	LangString SECTION_SHORTCUTS ${LANG_ENGLISH} "Shortcuts"
+	LangString SECTION_START_MENU ${LANG_ENGLISH} "Start menu"
+	LangString SECTION_DESKTOP ${LANG_ENGLISH} "Dsktop"
+	LangString SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Quick launch"
+	LangString SECTION_TRANSLATIONS ${LANG_ENGLISH} "Translations"
+	LangString SECTION_INTEGRATE_SHRED ${LANG_ENGLISH} "Integrate Shred"
+	LangString SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall"
+	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 
 !ifdef LANG_AFRIKAANS
 	LangString MULTIUSER_PAGE_TITLE ${LANG_AFRIKAANS} "Choose Users"
@@ -1002,6 +1012,21 @@ Version: 2019-11-11
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ITALIAN} "Il sistema operativo non supporta l'elevazione."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Impossibile eseguire l'elevazione, il servizio di accesso secondario non è in esecuzione."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
+	; change default text string
+	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
+	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
+	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
+	; text string for installer section
+	LangString SECTION_CORE ${LANG_ITALIAN} "Programma (richiesto)"
+	LangString SECTION_SHORTCUTS ${LANG_ITALIAN} "Collegamenti"
+	LangString SECTION_START_MENU ${LANG_ITALIAN} "Menu Start"
+	LangString SECTION_DESKTOP ${LANG_ITALIAN} "Dsktop"
+	LangString SECTION_QUICK_LAUNCH ${LANG_ITALIAN} "Avvio rapido"
+	LangString SECTION_TRANSLATIONS ${LANG_ITALIAN} "Traduzioni"
+	LangString SECTION_INTEGRATE_SHRED ${LANG_ITALIAN} "Distruttore integrato"
+	LangString SECTION_UNINSTALL ${LANG_ITALIAN} "Disinstalla"
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "BleachBit verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
+	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai click su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
 !endif
 
 !ifdef LANG_JAPANESE
