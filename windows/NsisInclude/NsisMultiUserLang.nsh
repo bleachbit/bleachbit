@@ -1013,7 +1013,9 @@ Version: 2023-01-26
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Impossibile eseguire l'elevazione, il servizio di accesso secondario non è in esecuzione."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
 	; change default text string
+	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
+	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini 
 	; text string for installer section
 	LangString SECTION_CORE ${LANG_ITALIAN} "Programma (richiesto)"
 	LangString SECTION_SHORTCUTS ${LANG_ITALIAN} "Collegamenti"
