@@ -7,7 +7,7 @@ Full source code, documentation and demos at https://github.com/Drizin/NsisMulti
 Copyright 2016-2019 Ricardo Drizin, Alex Mitev
 
 File   : Include\NsisMultiUserLang.nsh
-Version: 2019-11-11
+Version: 2023-01-26
 
 */
 
@@ -40,6 +40,25 @@ Version: 2019-11-11
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ENGLISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ENGLISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ENGLISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE ${LANG_ENGLISH} "Core (Required)"
+	LangString SECTION_SHORTCUTS ${LANG_ENGLISH} "Shortcuts"
+	LangString SECTION_START_MENU ${LANG_ENGLISH} "Start menu"
+	LangString SECTION_DESKTOP ${LANG_ENGLISH} "Dsktop"
+	LangString SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Quick launch"
+	LangString SECTION_TRANSLATIONS ${LANG_ENGLISH} "Translations"
+	LangString SECTION_INTEGRATE_SHRED ${LANG_ENGLISH} "Integrate Shred"
+	LangString SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall"
+	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "The main file of the program."
+	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creation of shortucts."
+	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creation of shortcut in Start menu."
+	LangString DESC_SECTION_DESKTOP ${LANG_ENGLISH} "Creation of shortcut on desktop."
+	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creation of shortcut on Quick Launch."
+	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Install language files."
+	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Install integrate shredder."
+	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall program."
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -974,34 +993,57 @@ Version: 2019-11-11
 !endif
 
 !ifdef LANG_ITALIAN
-	LangString MULTIUSER_PAGE_TITLE ${LANG_ITALIAN} "Choose Users"
-	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_ITALIAN} "Choose for which users to install $(^NameDA)."
-	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ITALIAN} "Choose for which users to remove $(^NameDA)."
-	LangString MULTIUSER_INSTALL_HEADER ${LANG_ITALIAN} "Select whether to install $(^NameDA) for all users or for current user."
-	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ITALIAN} "$(^NameDA) is installed both for all users and for current user.$\r$\nSelect which installation to remove."
-	LangString MULTIUSER_ALL_USERS ${LANG_ITALIAN} "For &anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER ${LANG_ITALIAN} "For &me ({USER})"
-	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ITALIAN} "For anyone who uses this computer (all users)"
-	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ITALIAN} "For me ({USER})"
-	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ITALIAN} "Fresh install for all users."
-	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ITALIAN} "Fresh install for current user."
-	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ITALIAN} "Version {VERSION} is installed for all users in $\"{FOLDER}$\"."
-	LangString MULTIUSER_INSTALLED_CURRENT_USER ${LANG_ITALIAN} "Version {VERSION} is installed for current user in $\"{FOLDER}$\"."
-	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_ITALIAN} "Reinstall version {VERSION} for all users."
-	LangString MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER ${LANG_ITALIAN} "Reinstall version {VERSION} for current user."
-	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_ITALIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
-	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_ITALIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for current user."
-	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_ITALIAN} "You need to run this program as administrator."
-	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_ITALIAN} "Administrator credentials required."
-	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_ITALIAN} "Administrator credentials required for uninstall."
+	LangString MULTIUSER_PAGE_TITLE ${LANG_ITALIAN} "Secgli utente"
+	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_ITALIAN} "Scegli per quali utenti installare $(^NameDA)."
+	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ITALIAN} "Scegli per quali utenti rimuovere $(^NameDA)."
+	LangString MULTIUSER_INSTALL_HEADER ${LANG_ITALIAN} "Seleziona se installare $(^NameDA) per tutti gli utenti o per l'utente attuale."
+	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_ITALIAN} "$(^NameDA) è installato sia per tutti gli utenti che per l'utente attuale.$\r$\nSeleziona quale installazione rimuovere."
+	LangString MULTIUSER_ALL_USERS ${LANG_ITALIAN} "Per &chiunque usa questo computer (tutti gli utenti)"
+	LangString MULTIUSER_CURRENT_USER ${LANG_ITALIAN} "Per &me ({USER})"
+	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_ITALIAN} "Per chiunque usa questo computer (tutti gli utenti)"
+	LangString MULTIUSER_CURRENT_USER_UMUI ${LANG_ITALIAN} "Per me ({USER})"
+	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ITALIAN} "Nuova installazione per tutti gli utenti."
+	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ITALIAN} "Nuova installazione per l'utente attuale."
+	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_ITALIAN} "La versione {VERSION} è installato per tutti gli utenti in $\"{FOLDER}$\"."
+	LangString MULTIUSER_INSTALLED_CURRENT_USER ${LANG_ITALIAN} "La versione {VERSION} è installato per l'utente attuale in $\"{FOLDER}$\"."
+	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_ITALIAN} "Reinstalla la versione {VERSION} per tutti gli utenti."
+	LangString MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER ${LANG_ITALIAN} "Reinstalla la versione {VERSION} per l'utente attuale."
+	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_ITALIAN} "Disinstallare la versione {OLD_VERSION} e installa la versione {VERSION} per tutti gli utenti."
+	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_ITALIAN} "Disinstallare la versione {OLD_VERSION} e installa la versione {VERSION} per l'utente attuale."
+	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_ITALIAN} "Devi eseguire questo programma come amministratore."
+	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_ITALIAN} "Credenziali di amministratore richieste."
+	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_ITALIAN} "Credenziali di amministratore richieste per la disinstallazione."
 	; error messages - not so important
-	LangString MULTIUSER_INVALID_PARAMS ${LANG_ITALIAN} "Invalid combination of paramaters."
-	LangString MULTIUSER_NOT_INSTALLED ${LANG_ITALIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED ${LANG_ITALIAN} "The operating system doesn't support current user installations."
-	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ITALIAN} "You need to login with an account that is a member of the administrators group to continue."
-	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ITALIAN} "The operating system doesn't support elevation."
-	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Unable to elevate, Secondary Logon service not running."
-	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Unable to elevate, error {ERROR}."
+	LangString MULTIUSER_INVALID_PARAMS ${LANG_ITALIAN} "Combinazione di parametri non valida."
+	LangString MULTIUSER_NOT_INSTALLED ${LANG_ITALIAN} "Non è prevista l'installazione di $(^NameDA)."
+	LangString MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED ${LANG_ITALIAN} "Il sistema operativo non supporta le installazioni degli utenti attuali."
+	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_ITALIAN} "Per continuare devi accedere con un account che è un membro del gruppo amministratori."
+	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ITALIAN} "Il sistema operativo non supporta l'elevazione."
+	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Impossibile eseguire l'elevazione, il servizio di accesso secondario non è in esecuzione."
+	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
+	; change default text string
+	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
+	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
+	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
+	; text string for installer section
+	LangString SECTION_CORE ${LANG_ITALIAN} "Programma (richiesto)"
+	LangString SECTION_SHORTCUTS ${LANG_ITALIAN} "Collegamenti"
+	LangString SECTION_START_MENU ${LANG_ITALIAN} "Menu Start"
+	LangString SECTION_DESKTOP ${LANG_ITALIAN} "Dsktop"
+	LangString SECTION_QUICK_LAUNCH ${LANG_ITALIAN} "Avvio rapido"
+	LangString SECTION_TRANSLATIONS ${LANG_ITALIAN} "Traduzioni"
+	LangString SECTION_INTEGRATE_SHRED ${LANG_ITALIAN} "Distruttore integrato"
+	LangString SECTION_UNINSTALL ${LANG_ITALIAN} "Disinstalla"
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "BleachBit verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
+	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai click su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
+	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "I file principali del programma."
+	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creazione dei collegamenti."
+	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creazione del collegamento nel menu Start."
+	LangString DESC_SECTION_DESKTOP ${LANG_ENGLISH} "Creazione del collegamento sul desktop."
+	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creazione del collegamento nell'Avvio rapido."
+	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Installa file lingua interfaccia."
+	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Installa sovrascrittura file integrato."
+	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Disinstalla programma."
 !endif
 
 !ifdef LANG_JAPANESE

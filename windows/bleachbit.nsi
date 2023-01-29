@@ -320,7 +320,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "$(SECTION_CORE)" SECTION_CORE
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -347,8 +347,8 @@ Section Core (Required)
 SectionEnd
 
 
-SectionGroup /e Shortcuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(SECTION_SHORTCUTS)" SECTION_SHORTCUTS
+    Section "$(SECTION_START_MENU)" SECTION_START_MENU
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
@@ -360,7 +360,7 @@ SectionGroup /e Shortcuts
         Call RefreshShellIcons
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(SECTION_DESKTOP)" SECTION_DESKTOP
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -375,7 +375,7 @@ SectionGroup /e Shortcuts
 
     SectionEnd
 
-    Section /o "Quick launch" SectionQuickLaunch
+    Section /o "$(SECTION_QUICK_LAUNCH)" SECTION_QUICK_LAUNCH
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -385,14 +385,14 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
+Section "$(SECTION_TRANSLATIONS)" SECTION_TRANSLATIONS
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "Integrate Shred" SectionShred
+  Section "$(SECTION_INTEGRATE_SHRED)" SECTION_SHRED
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
@@ -425,8 +425,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
-    upgrading, or click 'Cancel' to abort the upgrade." \
+    "$(ALREADY_INSTALLED)" \
     /SD IDOK \
     IDOK uninstall_old
 
@@ -449,9 +448,9 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall"
+Section "$(SECTION_UNINSTALL)" SECTION_UNINSTALL
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
