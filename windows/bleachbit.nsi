@@ -331,7 +331,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section "$(SECTION_CORE)" DESC_SECTION_CORE
+Section "$(SECTION_CORE)" SECTION_CORE
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -358,8 +358,8 @@ Section "$(SECTION_CORE)" DESC_SECTION_CORE
 SectionEnd
 
 
-SectionGroup /e "$(NAME_SECTION_SHORTCUTS)" DESC_SECTION_SHORTCUTS
-    Section "$(NAME_SECTION_START_MENU)" DESC_SECTION_START_MENU
+SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SECTION_SHORTCUTS
+    Section "$(NAME_SECTION_START_MENU)" SECTION_START_MENU
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
@@ -371,7 +371,7 @@ SectionGroup /e "$(NAME_SECTION_SHORTCUTS)" DESC_SECTION_SHORTCUTS
         Call RefreshShellIcons
     SectionEnd
 
-    Section "$(NAME_SECTION_DESKTOP)" DESC_SECTION_DESKTOP
+    Section "$(SECTION_DESKTOP_NAME)" SECTION_DESKTOP
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -386,7 +386,7 @@ SectionGroup /e "$(NAME_SECTION_SHORTCUTS)" DESC_SECTION_SHORTCUTS
 
     SectionEnd
 
-    Section /o "$(NAME_SECTION_QUICK_LAUNCH)" DESC_SECTION_QUICK_LAUNCH
+    Section /o "$(SECTION_QUICK_LAUNCH_NAME)" SECTION_QUICK_LAUNCH
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -396,14 +396,14 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section "$(NAME_SECTION_TRANSLATIONS)" DESC_SECTION_TRANSLATIONS
+Section "$(SECTION_TRANSLATIONS_NAME)" SECTION_TRANSLATIONS
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "$(NAME_SECTION_INTEGRATE_SHRED)" DESC_SECTION_INTEGRATE_SHRED
+  Section "$(SECTION_INTEGRATE_SHRED_NAME)" SECTION_INTEGRATE_SHRED
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
@@ -461,7 +461,7 @@ FunctionEnd
 
 UninstallText "$(UNINSTALL_TEXT)"
 
-Section "$(NAME_SECTION_UNINSTALL)" DESC_SECTION_UNINSTALL
+Section "$(SECTION_UNINSTALL_NAME)" SECTION_UNINSTALL
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
@@ -507,13 +507,13 @@ Function un.onInit
 FunctionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_CORE}            $(LONG_DESC_SECTION_CORE)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_SHORTCUTS}       $(LONG_DESC_SECTION_SHORTCUTS)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_START_MENU}      $(LONG_DESC_SECTION_START_MENU)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_DESKTOP}         $(LONG_DESC_SECTION_DESKTOP)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_QUICK_LAUNCH}    $(LONG_DESC_SECTION_QUICK_LAUNCH)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_TRANSLATIONS}    $(LONG_DESC_SECTION_TRANSLATIONS)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_INTEGRATE_SHRED} $(LONG_DESC_SECTION_SHRED)
-  !insertmacro MUI_DESCRIPTION_TEXT ${DESC_SECTION_UNINSTALL}       $(LONG_DESC_SECTION_UNINSTALL)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_CORE}            $(SECTION_CORE_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHORTCUTS}       $(SECTION_SHORTCUTS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_START_MENU}      $(SECTION_START_MENU_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_DESKTOP}         $(SECTION_DESKTOP_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_QUICK_LAUNCH}    $(SECTION_QUICK_LAUNCH_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_TRANSLATIONS}    $(SECTION_TRANSLATIONS_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_INTEGRATE_SHRED} $(SECTION_SHRED_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_UNINSTALL}       $(SECTION_UNINSTALL_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
