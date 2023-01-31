@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-02-07 12:54+0000\n"
+"PO-Revision-Date: 2023-01-31 19:51+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -826,8 +826,7 @@ msgid "Run external command: %s"
 msgstr "הפעלת פקודה חיצונית: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "הורדת הכתובת נכשלה: %s"
 
@@ -1418,7 +1417,7 @@ msgstr "הצגת הודעות ניפוי שגיאות"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "הוספת אפשרות השמדה לתפריט הקשר (ייעודי ל־KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1475,8 +1474,6 @@ msgid "Folder"
 msgstr "תיקייה"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "נתיבים אלו לא ימחקו או ישתנו."
 
@@ -1527,7 +1524,7 @@ msgstr "_אישור"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "תוכנית לניקוי קבצים לא חיוניים"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1621,6 +1618,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"אין גרסה רשמית של BleachBit ב־Microsoft Store. אפשר להוריד את הגרסה המקורית "
+"בכתובת https://www.bleachbit.org בה תמיד תהיה גרסה חופשית מתשלום."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
