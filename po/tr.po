@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-05-06 16:13+0000\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"PO-Revision-Date: 2023-01-31 19:51+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -637,12 +637,12 @@ msgid "Compatibility layer for Windows software"
 msgstr "Windows yazılımı için uyumluluk katmanı"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "Web önbelleğini sil, bu işlem sonrasında yeni sayfalar geç açılır"
+msgstr ""
+"Web önbelleğini sil, bu işlem sonrasında yeni sayfalar geç açılır. Bu, sık "
+"kullanılan GIF'leri de temizler."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -836,8 +836,7 @@ msgid "Run external command: %s"
 msgstr "Dış komut çalıştır: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "URL indirilemedi: %s"
 
@@ -1432,7 +1431,7 @@ msgstr "Hata ayıklama iletilerini göster"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Parçalama bağlam menüsü seçeneği ekle (KDE Plasma'ya özel)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1489,8 +1488,6 @@ msgid "Folder"
 msgstr "Klasör"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Bu konumlar silinmeyecek ve değiştirilmeyecek."
 
@@ -1542,7 +1539,7 @@ msgstr "_Tamam"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Gereksiz dosyaları temizleme programı"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1653,6 +1650,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Microsoft Mağazası'nda BleachBit'in resmi bir sürümü yoktur. Orijinal sürümü "
+"her zaman ücretsiz olan https://www.bleachbit.org adresinden edinin."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1884,7 +1883,7 @@ msgstr "winapp2.ini dosyasından içe aktarıldı"
 
 #: ../bleachbit/Windows.py:824
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "BleachBit başlıyor...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -2002,10 +2001,8 @@ msgid "S_hred Settings and Quit"
 msgstr "Ayarları Sı_fırla ve Çık"
 
 #: ../data/app-menu.ui:37
-#, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
-msgstr "Sistem bilgisi"
+msgstr "Sistem _Bilgisi"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
