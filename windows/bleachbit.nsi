@@ -49,7 +49,12 @@
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
   !define PROG_AUTHOR "Andrew Ziem"
   Name "${prodname} ${VERSION}"
+
+  ; ------------------------------------ disable warning overwrite default language strings
+  !pragma warning disable 6000
+  ; ------------------------------------ disable warning missing strings in some not english section
   !pragma warning disable 6040
+
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
@@ -297,17 +302,6 @@ VIFileVersion ${File_VERSION}
 
 !include NsisMultiUserLang.nsh
 
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_CORE}         $(DESC_SECTION_CORE)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHORTCUTS}    $(DESC_SECTION_SHORTCUTS)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_START_MENU}   $(DESC_SECTION_START_MENU)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_DESKTOP}      $(DESC_SECTION_DESKTOP)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_QUICK_LAUNCH} $(DESC_SECTION_QUICK_LAUNCH)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_TRANSLATION}  $(DESC_SECTION_TRANSLATION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHRED}        $(DESC_SECTION_SHRED)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_UNINSTALL}    $(DESC_SECTION_UNINSTALL)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
 !include "StrFunc.nsh"
 # Declare used functions
 ${StrCase}
@@ -499,6 +493,19 @@ SectionEnd
 
 ;--------------------------------
 ;Uninstaller Functions
+
+; ---------------------------------------------- define section name - should be after section declaration
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_CORE}         $(DESC_SECTION_CORE)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHORTCUTS}    $(DESC_SECTION_SHORTCUTS)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_START_MENU}   $(DESC_SECTION_START_MENU)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_DESKTOP}      $(DESC_SECTION_DESKTOP)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_QUICK_LAUNCH} $(DESC_SECTION_QUICK_LAUNCH)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_TRANSLATION}  $(DESC_SECTION_TRANSLATION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHRED}        $(DESC_SECTION_SHRED)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_UNINSTALL}    $(DESC_SECTION_UNINSTALL)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onInit
 
