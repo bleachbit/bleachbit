@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-01-06 12:47+0000\n"
-"Last-Translator: Piotr Strebski <strebski@gmail.com>\n"
+"PO-Revision-Date: 2023-01-31 19:51+0000\n"
+"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -843,8 +843,7 @@ msgid "Run external command: %s"
 msgstr "Uruchom komendę zewnętrzną: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "Pobieranie adresu URL nie powiodło się: %s"
 
@@ -1451,7 +1450,7 @@ msgstr "Wyświetl informacje o błędach"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Dodaj opcję menu kontekstowego niszczenia (specyficzne dla KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1510,8 +1509,6 @@ msgid "Folder"
 msgstr "Folder"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Te ścieżki nie będą usuwane lub modyfikowane."
 
@@ -1563,7 +1560,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program do czyszczenia zbędnych plików"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1655,6 +1652,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"W Microsoft Store nie ma oficjalnej wersji BleachBit. Pobierz oryginalną "
+"wersję na stronie https://www.bleachbit.org, gdzie jest zawsze bezpłatna."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
