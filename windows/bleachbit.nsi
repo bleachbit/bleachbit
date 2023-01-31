@@ -331,7 +331,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section "$(SECTION_CORE)" SECTION_CORE
+Section "$(SECTION_CORE_NAME)" SECTION_CORE
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -515,7 +515,7 @@ FunctionEnd
    !ifndef NoTranslations
       !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_TRANSLATIONS}    $(SECTION_TRANSLATIONS_DESCRIPTION)
    !endif
-   !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_INTEGRATE_SHRED} $(SECTION_SHRED_DESCRIPTION)
+   !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_INTEGRATE_SHRED} $(SECTION_INTEGRATE_SHRED_DESCRIPTION)
    !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_UNINSTALL}       $(SECTION_UNINSTALL_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 

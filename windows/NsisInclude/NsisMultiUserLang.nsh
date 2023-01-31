@@ -1025,12 +1025,13 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ITALIAN} "Il sistema operativo non supporta l'elevazione."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Impossibile eseguire l'elevazione, il servizio di accesso secondario non è in esecuzione."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
-	; change default text string
+	; overwrite default text string
 	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
 	LangString MUI_TEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
-	; text string for installer section
+	LangString MUI_TEXT_WELCOME_INFO_TEXT "Questo programma installerà $(^NameDA) nel computer.$\r$\n$\r$\nPrima di iniziare l'installazione ti consigliamo di chiudere tutte le altre applicazioni.$\r$\nQuesto permetterà al programma di installazione di aggiornare i file di sistema senza dover riavviare il computer.$\r$\n$\r$\n$_CLICK"
+  ; text string for installer section
 	LangString SECTION_CORE_NAME ${LANG_ITALIAN} "Programma (richiesto)"
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ITALIAN} "File principali del programma."
 	LangString SECTION_SHORTCUTS_NAME ${LANG_ITALIAN} "Collegamenti"
