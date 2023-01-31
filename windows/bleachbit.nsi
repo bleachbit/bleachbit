@@ -47,7 +47,15 @@
   ;Name and file
   !define prodname "BleachBit"
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
-  Name "${prodname}"
+  !define PROG_AUTHOR "Andrew Ziem"
+  !define PROG_COPYRIGHT "Andrew Ziem"
+  Name "${prodname} ${VERSION}"
+
+  ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
+  ;!pragma warning disable 6030
+  ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
+  !pragma warning disable 6040
+
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
@@ -109,21 +117,25 @@ Unicode true
 !define File_VERSION ${VERSION}.0
 
 !ifdef NoTranslations
-  VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=1033 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=1033 "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "Comments"        ""
+  VIAddVersionKey /LANG=1033 "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=1033 "LegalCopyright"  "${PROG_COPYRIGHT}"
+  VIAddVersionKey /LANG=1033 "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "FileDescription" "${prodname} Setup"
 !endif
 
 !ifndef NoTranslations
-  VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=0 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=0    "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "Comments"        ""
+  VIAddVersionKey /LANG=0    "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=0    "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=0    "LegalCopyright"  "${PROG_COPYRIGHT}"
+  VIAddVersionKey /LANG=0    "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "FileDescription" "${prodname} Setup"
 !endif
 
 VIProductVersion ${File_VERSION}
