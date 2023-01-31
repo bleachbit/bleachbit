@@ -218,9 +218,9 @@ VIFileVersion ${File_VERSION}
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
+;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
-;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
 !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
 ;Later:
 ;!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
@@ -406,7 +406,7 @@ SectionEnd
 !ifndef NoSectionShred
   Section "Integrate Shred" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
@@ -437,8 +437,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
-    upgrading, or click 'Cancel' to abort the upgrade." \
+    "$(ALREADY_INSTALLED)" \
     /SD IDOK \
     IDOK uninstall_old
 
@@ -461,7 +460,7 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+UninstallText "$(UNINSTALL_TEXT)"
 
 Section "Uninstall"
     Delete $INSTDIR\bleachbit.exe.log
