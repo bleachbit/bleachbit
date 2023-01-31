@@ -49,6 +49,7 @@
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
   !define PROG_AUTHOR "Andrew Ziem"
   Name "${prodname} ${VERSION}"
+  !pragma warning disable 6040
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
