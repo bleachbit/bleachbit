@@ -1030,8 +1030,8 @@ Version: 2023-01-30
 	LangString MUI_TEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
-	LangString MUI_TEXT_WELCOME_INFO_TEXT "Questo programma installerà $(^NameDA) nel computer.$\r$\n$\r$\nPrima di iniziare l'installazione ti consigliamo di chiudere tutte le altre applicazioni.$\r$\nQuesto permetterà al programma di installazione di aggiornare i file di sistema senza dover riavviare il computer.$\r$\n$\r$\n$_CLICK"
-  ; text string for installer section
+	LangString MUI_TEXT_WELCOME_INFO_TEXT ${LANG_ITALIAN} "Questo programma installerà $(^NameDA) nel computer.$\r$\n$\r$\nPrima di iniziare l'installazione ti consigliamo di chiudere tutte le altre applicazioni.$\r$\nQuesto permetterà al programma di installazione di aggiornare i file di sistema senza dover riavviare il computer.$\r$\n$\r$\n$_CLICK"
+	; text string for installer section
 	LangString SECTION_CORE_NAME ${LANG_ITALIAN} "Programma (richiesto)"
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ITALIAN} "File principali del programma."
 	LangString SECTION_SHORTCUTS_NAME ${LANG_ITALIAN} "Collegamenti"

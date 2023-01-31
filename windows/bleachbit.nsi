@@ -51,7 +51,7 @@
   Name "${prodname} ${VERSION}"
 
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
-  !pragma warning disable 6030
+  ;!pragma warning disable 6030
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
   !pragma warning disable 6040
 
@@ -494,8 +494,6 @@ SectionEnd
 ;--------------------------------
 ;Uninstaller Functions
 
-; ---------------------------------------------- define section name - should be after section declaration
-
 
 Function un.onInit
 
@@ -505,6 +503,8 @@ Function un.onInit
 
 
 FunctionEnd
+
+; ---------------------------------------------- define section name - should be after section declaration
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
    !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_CORE}            $(SECTION_CORE_DESCRIPTION)
