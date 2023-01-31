@@ -49,6 +49,7 @@
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
   !define PROG_AUTHOR "Andrew Ziem"
   !define PROG_COPYRIGHT "Andrew Ziem"
+  BrandingText "${PROD_COPYRIGHT}"
   Name "${prodname} ${VERSION}"
 
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
@@ -137,6 +138,9 @@ Unicode true
   VIAddVersionKey /LANG=0    "FileVersion"     "${File_VERSION}"
   VIAddVersionKey /LANG=0    "FileDescription" "${prodname} Setup"
 !endif
+
+; VIAddVersionKey "InternalName"       ""
+; VIAddVersionKey "OriginalFilename"   ""
 
 VIProductVersion ${File_VERSION}
 VIFileVersion ${File_VERSION}
