@@ -47,7 +47,8 @@
   ;Name and file
   !define prodname "BleachBit"
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
-  Name "${prodname}"
+  !define PROG_AUTHOR "Andrew Ziem"
+  Name "${prodname} ${VERSION}"
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
@@ -109,21 +110,25 @@ Unicode true
 !define File_VERSION ${VERSION}.0
 
 !ifdef NoTranslations
-  VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=1033 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=1033 "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "Comments"        ""
+  VIAddVersionKey /LANG=1033 "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=1033 "LegalCopyright"  "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=1033 "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "FileDescription" "${prodname} Setup"
 !endif
 
 !ifndef NoTranslations
-  VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=0 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=0    "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "Comments"        ""
+  VIAddVersionKey /LANG=0    "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=0    "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=0    "LegalCopyright"  "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=0    "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "FileDescription" "${prodname} Setup"
 !endif
 
 VIProductVersion ${File_VERSION}
@@ -206,9 +211,9 @@ VIFileVersion ${File_VERSION}
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
+;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
-;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
 !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
 ;Later:
 ;!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
@@ -290,6 +295,17 @@ VIFileVersion ${File_VERSION}
 
 
 !include NsisMultiUserLang.nsh
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_CORE}         $(DESC_SECTION_CORE)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHORTCUTS}    $(DESC_SECTION_SHORTCUTS)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_START_MENU}   $(DESC_SECTION_START_MENU)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_DESKTOP}      $(DESC_SECTION_DESKTOP)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_QUICK_LAUNCH} $(DESC_SECTION_QUICK_LAUNCH)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_TRANSLATION}  $(DESC_SECTION_TRANSLATION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_SHRED}        $(DESC_SECTION_SHRED)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECTION_UNINSTALL}    $(DESC_SECTION_UNINSTALL)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 !include "StrFunc.nsh"
 # Declare used functions
@@ -394,7 +410,7 @@ SectionEnd
 !ifndef NoSectionShred
   Section "$(SECTION_INTEGRATE_SHRED)" SECTION_SHRED
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '${SHRED_SHELL_MENU}'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
