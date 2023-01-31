@@ -49,7 +49,7 @@
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
   !define PROG_AUTHOR "Andrew Ziem"
   !define PROG_COPYRIGHT "Andrew Ziem"
-  BrandingText "${PROD_COPYRIGHT}"
+  BrandingText "${PROG_COPYRIGHT}"
   Name "${prodname} ${VERSION}"
 
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
