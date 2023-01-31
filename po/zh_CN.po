@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-02-13 03:54+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2023-01-31 19:51+0000\n"
+"Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -815,8 +815,7 @@ msgid "Run external command: %s"
 msgstr "运行其他程序：%s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "URL下载失败：%s"
 
@@ -1394,7 +1393,7 @@ msgstr "显示调试信息"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "添加“彻底删除”右键菜单选项（特定于 KDE Plasma）"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1451,10 +1450,8 @@ msgid "Folder"
 msgstr "文件夹"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "将不会删除或修改这些路径。"
+msgstr "不会删除或修改这些路径。"
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1503,7 +1500,7 @@ msgstr "确定(_O)"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "清除不必要文件的程序"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1592,6 +1589,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Microsoft 商店上没有官方版本的 BleachBit。要获取货真价实的版本，请访问 "
+"https://www.bleachbit.org。本程序始终免费。"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
