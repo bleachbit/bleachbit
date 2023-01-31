@@ -63,6 +63,8 @@ Version: 2023-01-30
 	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with Beachblit"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} web site."
+	LangString MULTIPRINT1 ${LANG_ENGLISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -1054,6 +1056,8 @@ Version: 2023-01-30
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con Beachblit"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito di ${prodname}."
+	LangString MULTIPRINT1 ${LANG_ITALIAN} "Il passaggio successivo è la creazione della cache delle font, durante la quale potresti vedere una finestra nera."
+	LangString MULTIPRINT2 ${ITALIAN} "Di solito finisce in un minuto, ma a volte ci vogliono dieci minuti."
 !endif
 
 !ifdef LANG_JAPANESE
