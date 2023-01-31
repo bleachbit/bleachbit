@@ -4,10 +4,10 @@ NsisMultiUser.nsh - NSIS plugin that allows "per-user" (no admin required) and "
 
 Full source code, documentation and demos at https://github.com/Drizin/NsisMultiUser/
 
-Copyright 2016-2019 Ricardo Drizin, Alex Mitev
+Copyright 2016-2023 Ricardo Drizin, Alex Mitev
 
 File   : Include\NsisMultiUserLang.nsh
-Version: 2023-01-26
+Version: 2023-01-30
 
 */
 
@@ -49,8 +49,6 @@ Version: 2023-01-26
 	LangString SECTION_TRANSLATIONS ${LANG_ENGLISH} "Translations"
 	LangString SECTION_INTEGRATE_SHRED ${LANG_ENGLISH} "Integrate Shred"
 	LangString SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall"
-	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
-	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "The main file of the program."
 	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creation of shortucts."
 	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creation of shortcut in Start menu."
@@ -58,7 +56,13 @@ Version: 2023-01-26
 	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creation of shortcut on Quick Launch."
 	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Install language files."
 	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Install integrate shredder."
-	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall program."
+	LangString DESC_SECTION_UNINSTALL ${LANG_ENGLISH} "Uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with Beachblit"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} web site."
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -1023,6 +1027,7 @@ Version: 2023-01-26
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
 	; change default text string
 	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
+	LangString MUI_TEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
 	; text string for installer section
@@ -1031,19 +1036,23 @@ Version: 2023-01-26
 	LangString SECTION_START_MENU ${LANG_ITALIAN} "Menu Start"
 	LangString SECTION_DESKTOP ${LANG_ITALIAN} "Dsktop"
 	LangString SECTION_QUICK_LAUNCH ${LANG_ITALIAN} "Avvio rapido"
-	LangString SECTION_TRANSLATIONS ${LANG_ITALIAN} "Traduzioni"
-	LangString SECTION_INTEGRATE_SHRED ${LANG_ITALIAN} "Distruttore integrato"
-	LangString SECTION_UNINSTALL ${LANG_ITALIAN} "Disinstalla"
+	LangString SECTION_TRANSLATIONS ${LANG_ITALIAN} "File lingua interfaccia"
+	LangString SECTION_INTEGRATE_SHRED ${LANG_ITALIAN} "Modulo sovrascrittura"
+	LangString SECTION_UNINSTALL ${LANG_ITALIAN} "Modulo disinstallazione"
 	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "BleachBit verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
+	LangString DESC_SECTION_CORE ${LANG_ITALIAN} "File principali del programma."
+	LangString DESC_SECTION_SHORTCUTS ${LANG_ITALIAN} "Crea collegamenti."
+	LangString DESC_SECTION_START_MENU ${LANG_ITALIAN} "Crea un collegamento nel menu Start."
+	LangString DESC_SECTION_DESKTOP ${LANG_ITALIAN} "Crea un collegamento sul desktop."
+	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ITALIAN} "Crea un collegamento in Avvio rapido."
+	LangString DESC_SECTION_TRANSLATION ${LANG_ITALIAN} "Installa i file lingua interfaccia."
+	LangString DESC_SECTION_SHRED ${LANG_ITALIAN} "Installa il modulo sovrascrittura file integrato."
+	LangString DESC_SECTION_UNINSTALL ${LANG_ITALIAN} "Include il programma per la disinstallazione."
 	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai click su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
-	LangString DESC_SECTION_CORE ${LANG_ENGLISH} "I file principali del programma."
-	LangString DESC_SECTION_SHORTCUTS ${LANG_ENGLISH} "Creazione dei collegamenti."
-	LangString DESC_SECTION_START_MENU ${LANG_ENGLISH} "Creazione del collegamento nel menu Start."
-	LangString DESC_SECTION_DESKTOP ${LANG_ENGLISH} "Creazione del collegamento sul desktop."
-	LangString DESC_SECTION_QUICK_LAUNCH ${LANG_ENGLISH} "Creazione del collegamento nell'Avvio rapido."
-	LangString DESC_SECTION_TRANSLATION ${LANG_ENGLISH} "Installa file lingua interfaccia."
-	LangString DESC_SECTION_SHRED ${LANG_ENGLISH} "Installa sovrascrittura file integrato."
-	LangString DESC_SECTION_SECTION_UNINSTALL ${LANG_ENGLISH} "Disinstalla programma."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con Beachblit"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito di ${prodname}."
 !endif
 
 !ifdef LANG_JAPANESE
