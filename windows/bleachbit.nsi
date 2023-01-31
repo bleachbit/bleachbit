@@ -453,6 +453,8 @@ Function .onInit
 
   new_install:
 
+FunctionEnd
+
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${NAME_SECTION_CORE}            $(DESC_SECTION_CORE)
   !insertmacro MUI_DESCRIPTION_TEXT ${NAME_SECTION_SHORTCUTS}       $(DESC_SECTION_SHORTCUTS)
@@ -462,8 +464,6 @@ Function .onInit
   !insertmacro MUI_DESCRIPTION_TEXT ${NAME_SECTION_TRANSLATIONS}    $(DESC_SECTION_TRANSLATIONS)
   !insertmacro MUI_DESCRIPTION_TEXT ${NAME_SECTION_INTEGRATE_SHRED} $(DESC_SECTION_SHRED)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-FunctionEnd
 
 
 ;--------------------------------
@@ -513,9 +513,10 @@ Function un.onInit
 
   !insertmacro MUI_UNGETLANGUAGE
 
+
+FunctionEnd
+
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${NAME_SECTION_UNINSTALL}     $(DESC_SECTION_UNINSTALL)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-FunctionEnd
 
