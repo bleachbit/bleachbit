@@ -9,16 +9,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-01-17 23:21+0000\n"
-"Last-Translator: Anders Jonsson <Unknown>\n"
-"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"PO-Revision-Date: 2023-02-02 18:37+0000\n"
+"Last-Translator: Jonatan Nyberg <jonatan@autistici.org>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
+"sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
-"X-Generator: Launchpad (build f3013409c2c85e163eed04d2ad6b0c4075353eab)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -837,8 +838,7 @@ msgid "Run external command: %s"
 msgstr "Kör externt kommando: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "Hämtning av webbadress misslyckades: %s"
 
@@ -1436,6 +1436,7 @@ msgstr "Visa felsökningsmeddelanden"
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
+"Lägg till alternativ för att förstöra i snabbmeny (KDE Plasma-specifikt)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1493,10 +1494,8 @@ msgid "Folder"
 msgstr "Mapp"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "De här sökvägarna kommer inte att tas bort eller ändras."
+msgstr "Dessa sökvägarna kommer inte att tas bort eller ändras."
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1547,7 +1546,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program för att rensa onödiga filer"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1654,6 +1653,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Det finns ingen officiell version av BleachBit på Microsoft Store. Skaffa "
+"den äkta versionen på https://www.bleachbit.org där den alltid är gratis."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
