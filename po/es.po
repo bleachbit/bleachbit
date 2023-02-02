@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-05-07 15:45+0000\n"
-"Last-Translator: Cow <javier.fserrador@gmail.com>\n"
+"PO-Revision-Date: 2023-02-02 18:37+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -851,10 +851,9 @@ msgid "Run external command: %s"
 msgstr "Ejecutar la orden externa: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Ha fallado la descarga del URL: %s"
+msgstr "Error en la descarga de la URL: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1460,7 +1459,7 @@ msgstr "Mostrar los mensajes de depuración"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Añadir la opción del menú contextual shred (específico de KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1519,10 +1518,8 @@ msgid "Folder"
 msgstr "Carpeta"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "No se eliminarán ni se modificarán estas rutas."
+msgstr "Estas rutas no se borrarán ni se modificarán."
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1572,7 +1569,7 @@ msgstr "_Aceptar"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Programa para limpiar archivos innecesarios"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1705,6 +1702,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"No hay versión oficial de BleachBit en Microsoft Store. Consigue la versión "
+"original en https://www.bleachbit.org, donde siempre es gratuita."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
