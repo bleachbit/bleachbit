@@ -264,39 +264,42 @@ def delete_mozilla_url_history(path):
 
     cmds = ""
 
-    # delete the URLs in moz_places
-    places_suffix = "where id in (select " \
-        "moz_places.id from moz_places " \
-        "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
-        "where moz_bookmarks.id is null); "
+    have_places = __sqlite_table_exists(path, 'moz_places')
 
-    cols = ('url', 'rev_host', 'title')
-    cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
+    if have_places:
+        # delete the URLs in moz_places
+        places_suffix = "where id in (select " \
+            "moz_places.id from moz_places " \
+            "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
+            "where moz_bookmarks.id is null); "
 
-    # For any bookmarks that remain in moz_places, reset the non-character values.
-    cmds += "update moz_places set visit_count=0, frecency=-1, last_visit_date=null;"
+        cols = ('url', 'rev_host', 'title')
+        cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
 
-    # delete any orphaned annotations in moz_annos
-    annos_suffix = "where id in (select moz_annos.id " \
-        "from moz_annos " \
-        "left join moz_places " \
-        "on moz_annos.place_id = moz_places.id " \
-        "where moz_places.id is null); "
+        # For any bookmarks that remain in moz_places, reset the non-character values.
+        cmds += "update moz_places set visit_count=0, frecency=-1, last_visit_date=null;"
 
-    cmds += __shred_sqlite_char_columns(
-        'moz_annos', ('content', ), annos_suffix)
+        # delete any orphaned annotations in moz_annos
+        annos_suffix = "where id in (select moz_annos.id " \
+            "from moz_annos " \
+            "left join moz_places " \
+            "on moz_annos.place_id = moz_places.id " \
+            "where moz_places.id is null); "
+
+        cmds += __shred_sqlite_char_columns(
+            'moz_annos', ('content', ), annos_suffix)
 
     # Delete any orphaned favicons.
     # Firefox 78 no longer has a table named moz_favicons, and it no longer has
     # a column favicon_id in the table moz_places. (This change probably happened before version 78.)
-    if __sqlite_table_exists(path, 'moz_favicons'):
+    if have_places and __sqlite_table_exists(path, 'moz_favicons'):
         fav_suffix = "where id not in (select favicon_id " \
             "from moz_places where favicon_id is not null ); "
         cols = ('url', 'data')
         cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
 
     # Delete orphaned origins.
-    if __sqlite_table_exists(path, 'moz_origins'):
+    if have_places and __sqlite_table_exists(path, 'moz_origins'):
         origins_where = 'where id not in (select distinct origin_id from moz_places)'
         cmds += __shred_sqlite_char_columns('moz_origins',
                                             ('host',), origins_where)
@@ -310,9 +313,10 @@ def delete_mozilla_url_history(path):
     cmds += "delete from moz_historyvisits;"
 
     # delete any orphaned input history
-    input_suffix = "where place_id not in (select distinct id from moz_places)"
-    cols = ('input',)
-    cmds += __shred_sqlite_char_columns('moz_inputhistory', cols, input_suffix)
+    if have_places:
+        input_suffix = "where place_id not in (select distinct id from moz_places)"
+        cols = ('input',)
+        cmds += __shred_sqlite_char_columns('moz_inputhistory', cols, input_suffix)
 
     # delete the whole moz_hosts table
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
