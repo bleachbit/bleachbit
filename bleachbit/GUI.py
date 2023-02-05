@@ -43,6 +43,8 @@ import sys
 import threading
 import time
 
+app_indicator_found = True
+
 if sys.platform.startswith('linux'):
     try:
         from gi.repository import AyatanaAppIndicator3 as AppIndicator
@@ -50,7 +52,10 @@ if sys.platform.startswith('linux'):
         try:
             from gi.repository import AppIndicator3 as AppIndicator
         except ImportError:
-            from gi.repository import AppIndicator
+            try:
+                from gi.repository import AppIndicator
+            except ImportError:
+                app_indicator_found = False
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import gi
@@ -605,7 +610,7 @@ class GUI(Gtk.ApplicationWindow):
         GLib.idle_add(self.cb_refresh_operations)
 
     def _set_appindicator(self):
-        if os.name != 'nt':
+        if sys.platform.startswith('linux') and app_indicator_found:
             APPINDICATOR_ID = 'BLEACHBIT'
             current_path = Path().cwd()
             menu_icon_path = Path(current_path, 'bleachbit-icon.svg')
