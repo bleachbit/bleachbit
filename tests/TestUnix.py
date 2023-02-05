@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@ Test case for module Unix
 from tests import common
 from bleachbit.Unix import *
 
+import mock
 import os
 import sys
 import unittest
@@ -76,9 +77,9 @@ class UnixTestCase(common.BleachbitTestCase):
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
     @common.skipIfWindows
-    def test_is_running_darwin(self):
-        def run_ps():
-            return """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+    @mock.patch('subprocess.check_output')
+    def test_is_running_darwin(self, mock_check_output):
+        mock_check_output.return_value = """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
 alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
@@ -92,10 +93,11 @@ alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
-        self.assertTrue(is_running_darwin('USBAgent', run_ps))
-        self.assertFalse(is_running_darwin('does-not-exist', run_ps))
-        self.assertRaises(RuntimeError, is_running_darwin,
-                          'foo', lambda: 'invalid-input')
+        self.assertTrue(is_running_darwin('USBAgent'))
+        self.assertFalse(is_running_darwin('does-not-exist'))
+
+        mock_check_output.return_value = 'invalid-input'
+        self.assertRaises(RuntimeError, is_running_darwin, 'foo')
 
     @common.skipIfWindows
     def test_is_running(self):
@@ -118,6 +120,22 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 # On Travis running Xenial, there is a permissions error.
                 if common.have_root():
                     raise rte
+
+    def test_journald_regex(self):
+        """Test the regex for journald_clean()"""
+        positive_cases = ('Vacuuming done, freed 0B of archived journals on disk.',
+                          'Vacuuming done, freed 1K of archived journals on disk.',
+                          'Vacuuming done, freed 100.0M of archived journals on disk.',
+                          'Vacuuming done, freed 1G of archived journals on disk.',
+                          'Vacuuming done, freed 0B of archived journals from /run/log/journal.',
+                          'Vacuuming done, freed 1.0G of archived journals from /var/log/journal/123abc.')
+        regex = re.compile(JOURNALD_REGEX)
+        for pos in positive_cases:
+            self.assertTrue(regex.match(pos))
+        negative_cases = ('Deleted archived journal /var/log/journal/123/system@123-123.journal~ (56.0M).',
+                          'Archived and active journals take up 100.0M on disk.')
+        for neg in negative_cases:
+            self.assertFalse(regex.match(neg))
 
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
@@ -261,8 +279,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
-    def test_dnf_autoremove(self):
-        """Unit test for dnf_autoremove()"""
+    def test_dnf_autoremove_real(self):
+        """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
                 or not FileUtilities.exe_exists('dnf'):
             self.assertRaises(RuntimeError, dnf_clean)
@@ -270,3 +288,57 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
+
+    @common.skipIfWindows
+    @mock.patch('bleachbit.Unix.os.path')
+    @mock.patch('bleachbit.General.run_external')
+    def test_dnf_autoremove_mock(self, mock_run, mock_path):
+        """Unit test for dnf_autoremove() with mock"""
+        mock_path.exists.return_value = True
+        self.assertRaises(RuntimeError, dnf_autoremove)
+
+        mock_path.exists.return_value = False
+        mock_run.return_value = (1, 'stdout', 'stderr')
+        self.assertRaises(RuntimeError, dnf_autoremove)
+
+        mock_run.return_value = (0, 'Nothing to do.', 'stderr')
+        bytes_freed = dnf_autoremove()
+        self.assertEqual(bytes_freed, 0)
+
+        mock_run.return_value = (
+            0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
+        bytes_freed = dnf_autoremove()
+        self.assertEqual(bytes_freed, 299000000)
+
+    @common.skipIfWindows
+    def test_is_linux_display_protocol_wayland(self):
+        display_protocol = None
+        def side_effect_func(value):
+            if len(value) == 1:
+                return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
+            elif len(value) > 1:
+                return (0, 'Type={}\n'.format(display_protocol), '')
+            assert(False) # should never reach here
+
+        for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
+            with mock.patch('bleachbit.General.run_external') as mock_run_external:
+                mock_run_external.side_effect = side_effect_func
+                is_wayland = is_linux_display_protocol_wayland()
+            self.assertIsInstance(is_wayland, bool)
+            assert_method(is_wayland)
+
+    @common.skipIfWindows
+    def test_xhost_autorized_root(self):
+        error_code = None
+        def side_effect_func(*args, **kwargs):
+            self.assertEqual(args[0][0], 'xhost')
+            return (error_code,
+                    '',
+                    '')
+
+        for error_code, expected_root_autorized in [[1, True], [0, False]]:
+            with mock.patch('bleachbit.General.run_external') as mock_run_external:
+                mock_run_external.side_effect = side_effect_func
+                root_autorized = root_is_not_allowed_to_X_session()
+            self.assertIsInstance(root_autorized, bool)
+            self.assertEqual(expected_root_autorized, root_autorized)

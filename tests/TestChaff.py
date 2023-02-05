@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 Test case for module Chaff
 """
 
+import mock
 import os
 import unittest
 from tempfile import mkdtemp
@@ -68,16 +69,17 @@ class ChaffTestCase(common.BleachbitTestCase):
     def test_Chaff(self):
         """Unit test for class Chaff"""
         tmp_dir = mkdtemp(prefix='bleachbit-chaff')
+        models_dir = os.path.join(tmp_dir, 'model')
+        os.mkdir(models_dir)
         # con=Clinton content
-        con_path = os.path.join(tmp_dir, 'content.json.bz2')
+        con_path = os.path.join(models_dir, 'clinton_content_model.json.bz2')
         # sub=Clinton subject
-        sub_path = os.path.join(tmp_dir, 'subject.json.bz2')
-        ts_path = os.path.join(tmp_dir, 'ts.json.bz2')  # ts = 2600 Magazine
+        sub_path = os.path.join(models_dir, 'clinton_subject_model.json.bz2')
+        # ts = 2600 Magazine
+        ts_path = os.path.join(models_dir, '2600_model.json.bz2')
 
-        for i in ('download', 'already downloaded'):
-            ret = download_models(
-                content_model_path=con_path, subject_model_path=sub_path,
-                twentysixhundred_model_path=ts_path)
+        for _i in ('download', 'already downloaded'):
+            ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
             self.assertTrue(ret)
 
@@ -85,15 +87,49 @@ class ChaffTestCase(common.BleachbitTestCase):
         self.assertExists(sub_path)
         self.assertExists(ts_path)
 
-        generated_file_names = generate_emails(5, tmp_dir, con_path, sub_path)
+        generated_file_names = generate_emails(5, tmp_dir, models_dir)
 
         self.assertEqual(len(generated_file_names), 5)
 
         for fn in generated_file_names:
             self.assertExists(fn)
             self.assertGreater(getsize(fn), 100)
+            with open(fn) as f:
+                contents = f.read()
+                self.assertIn('To: ', contents)
+                self.assertIn('From: ', contents)
+                self.assertIn('Sent: ', contents)
+                self.assertIn('Subject: ', contents)
+                self.assertNotIn('base64', contents)
 
-        generated_file_names = generate_2600(5, tmp_dir, ts_path)
+        generated_file_names = generate_2600(5, tmp_dir, models_dir)
+
+        rmtree(tmp_dir)
+
+    @mock.patch('bleachbit.Chaff.download_url_to_fn')
+    def test_download_models_fallback(self, mock_download):
+        """Test the fallback mechanism in download_models()"""
+        tmp_dir = mkdtemp(prefix='bleachbit-chaff')
+
+        # Test when primary download mirror fails but secondary succeeds.
+        def succeed_on_second(*args):
+            url = args[0]
+            if 'sourceforge' in url:
+                return False
+            if 'bleachbit.org' in url:
+                return True
+        mock_download.side_effect = succeed_on_second
+        ret = download_models(models_dir=tmp_dir)
+        self.assertTrue(ret)
+        self.assertEqual(mock_download.call_count, 6)
+
+        # Test when both primary and secondary download mirrors will fail.
+        mock_download.reset_mock()
+        mock_download.side_effect = None
+        mock_download.return_value = False
+        ret = download_models(models_dir=tmp_dir)
+        self.assertFalse(ret)
+        self.assertEqual(mock_download.call_count, 2)
 
         rmtree(tmp_dir)
 

@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ Store and retrieve user preferences
 import bleachbit
 from bleachbit import General
 from bleachbit import _
-from bleachbit.Log import set_root_log_level
 
 import logging
 import os
@@ -41,14 +40,15 @@ boolean_keys = ['auto_hide',
                 'check_beta',
                 'check_online_updates',
                 'dark_mode',
-                'delete_confirmation',
                 'debug',
+                'delete_confirmation',
                 'exit_done',
                 'first_start',
+                'kde_shred_menu_option',
+                'remember_geometry',
                 'shred',
                 'units_iec',
-                'window_maximized',
-                'window_fullscreen']
+                'window_maximized']
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
     boolean_keys.append('win10_theme')
@@ -70,6 +70,8 @@ def path_to_option(pathname):
 
 def init_configuration():
     """Initialize an empty configuration, if necessary"""
+    if not os.path.exists(bleachbit.options_dir):
+        General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
         logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
@@ -183,9 +185,10 @@ class Options:
         section = "list/%s" % option
         if not self.config.has_section(section):
             return None
-        values = []
-        for option in sorted(self.config.options(section)):
-            values.append(self.config.get(section, option))
+        values = [
+            self.config.get(section, option)
+            for option in sorted(self.config.options(section))
+        ]
         return values
 
     def get_paths(self, section):
@@ -268,12 +271,13 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
-        self.__set_default("delete_confirmation", True)
         self.__set_default("debug", False)
+        self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("kde_shred_menu_option", False)
+        self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
-        self.__set_default("units_iec", False)
-        self.__set_default("window_fullscreen", False)
+        self.__set_default("units_iec", False)        
         self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:
@@ -316,10 +320,8 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter), value)
-            counter += 1
         self.__flush()
 
     def set_whitelist_paths(self, values):
@@ -328,11 +330,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_custom_paths(self, values):
@@ -341,11 +341,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_language(self, langid, value):
@@ -377,6 +375,3 @@ class Options:
 
 
 options = Options()
-
-# Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level()

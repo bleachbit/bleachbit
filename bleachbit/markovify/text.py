@@ -4,10 +4,9 @@
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
 import re
-import json
 import random
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN, END
+from .chain import Chain, BEGIN
 # BleachBit does not use unidecode
 #from unidecode import unidecode
 

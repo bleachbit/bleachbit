@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2022 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -18,24 +18,29 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    @app Filezilla
+    @app FileZilla
     @url https://filezilla-project.org/
     @os Windows, Linux
-    @cleanerversion v1.5.0
-    @cleanerdate 2019-03-21
-    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-21)
-    @tested ok v???, Windows 7
-    @testeddate 2019-03-10 (... with an old version of the cleaner!)
-    @testedby https://github.com/Tobias-B-Besemer
+    @cleanerversion v4.4.2
+    @cleanerdate 2021-11-13
+    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04), Tobias B. Besemer (2019-03-13 - 2019-03-21) & fbruand (2022-12-28)
+    @tested ok debian 11 (FileZilla 3.52.2), debian 11 with flatpak (FileZilla 3.62.2), fedora 37 (FileZilla 3.60.2), debian 11 with snap (FileZilla 3.41.2) & windows 11 (FileZilla 3.62.2)
+    @testeddate 2022-12-29
+    @testedby https://github.com/fbruand
     @note As long we have no command="xml", we need to delete the complete file!
 
 -->
 <cleaner id="filezilla">
-  <label>Filezilla</label>
+  <label>FileZilla</label>
   <description>File transfer client</description>
+  <running type="exe" os="windows">filezilla.exe</running>
+  <running type="exe" os="linux">filezilla</running>
   <var name="profile">
     <value os="windows">%AppData%\FileZilla</value>
     <value os="linux">~/.filezilla</value>
+    <value os="linux">~/.config/filezilla</value>
+    <value os="linux">~/.var/app/org.filezillaproject.Filezilla/config/filezilla</value>  <!-- Flatpak -->
+    <value os="linux">~/snap/filezilla/22/.config/filezilla</value>  <!-- snap -->
   </var>
   <option id="mru">
     <label>Most recently used</label>

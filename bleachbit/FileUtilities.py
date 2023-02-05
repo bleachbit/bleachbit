@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -78,6 +78,41 @@ except ImportError:
 
 def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
+
+
+def get_filesystem_type(path):
+    """
+    * Get file system type from the given path
+    * return value: The tuple of (file_system_type, device_name)
+    *               @ file_system_type: vfat, ntfs, etc
+    *               @ device_name:      C://, D://, etc
+    """
+    try:
+        import psutil
+    except ImportError:
+        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        return ("unknown", "none")
+
+    partitions = {
+        partition.mountpoint: (partition.fstype, partition.device)
+        for partition in psutil.disk_partitions()
+    }
+
+    if path in partitions:
+        return partitions[path]
+
+    splitpath = path.split(os.sep)
+    for i in range(0, len(splitpath)-1):
+        path = os.sep.join(splitpath[:i]) + os.sep
+        if path in partitions:
+            return partitions[path]
+            
+        path = os.sep.join(splitpath[:i])
+        if path in partitions:
+            return partitions[path]
+
+    return ("unknown", "none")
+
 
 
 def open_files_lsof(run_lsof=None):
@@ -160,7 +195,7 @@ def bytes_to_human(bytes_i):
     assert(isinstance(bytes_i, int))
 
     if 0 == bytes_i:
-        return "0"
+        return '0B'
 
     if bytes_i >= base ** 3:
         decimals = 2
@@ -183,8 +218,7 @@ def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory"""
     if type(top) is tuple:
         for top_ in top:
-            for pathname in children_in_directory(top_, list_directories):
-                yield pathname
+            yield from children_in_directory(top_, list_directories)
         return
     for (dirpath, dirnames, filenames) in walk(top, topdown=False):
         if list_directories:
@@ -216,8 +250,8 @@ def clean_ini(path, section, parameter):
                 if key == "__name__":
                     continue
                 if (value is not None) or (parser._optcre == parser.OPTCRE):
-                    # The line bellow is the only changed line of the original function.
-                    # This is the orignal line for reference:
+                    # The line below is the only changed line of the original function.
+                    # This is the original line for reference:
                     # key = " = ".join((key, str(value).replace('\n', '\n\t')))
                     key = " = ".join((key, value.replace('\n', '\n\t')))
                 ini_file.write("%s\n" % (key))
@@ -259,7 +293,7 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         js = json.load(f)
 
     # change file
@@ -287,7 +321,7 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='utf-8') as f:
             json.dump(js, f)
 
 
@@ -449,17 +483,16 @@ def execute_sqlite3(path, cmds):
             except sqlite3.DatabaseError as exc:
                 raise sqlite3.DatabaseError(
                     '%s: %s' % (exc, path))
+
         cursor.close()
         conn.commit()
 
 
 def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
-    ret = []
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    for pathname4 in glob.iglob(pathname3):
-        ret.append(pathname4)
+    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
     return ret
 
 
@@ -487,16 +520,8 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
-        from bleachbit import Windows
-        if Windows.parse_windows_build() >= 6:
-            # This works better with UTF-8 paths.
-            import psutil
-            return psutil.disk_usage(pathname).free
-        else:
-            # This works better with Windows XP but not UTF-8.
-            # Deprecated.
-            _fb, _tb, total_free_bytes = win32file.GetDiskFreeSpaceEx(pathname)
-            return total_free_bytes
+        import psutil
+        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -533,9 +558,10 @@ def getsize(path):
 
 def getsizedir(path):
     """Return the size of the contents of a directory"""
-    total_bytes = 0
-    for node in children_in_directory(path, list_directories=False):
-        total_bytes += getsize(node)
+    total_bytes = sum(
+        getsize(node)
+        for node in children_in_directory(path, list_directories=False)
+    )
     return total_bytes
 
 
@@ -543,8 +569,7 @@ def globex(pathname, regex):
     """Yield a list of files with pathname and filter by regex"""
     if type(pathname) is tuple:
         for singleglob in pathname:
-            for path in globex(singleglob, regex):
-                yield path
+            yield from globex(singleglob, regex)
     else:
         for path in glob.iglob(pathname):
             if re.search(regex, path):
@@ -566,7 +591,7 @@ def guess_overwrite_paths():
     elif 'nt' == os.name:
         localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):
-            logger.warning(_("%TMP% does not exist: %s"), localtmp)
+            logger.warning(_("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
             localtmp = None
         from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
@@ -610,18 +635,17 @@ def is_dir_empty(dirname):
 
     It assumes the path exists and is a directory.
     """
-    if hasattr(os, 'scandir') and sys.version_info < (3,6,0):
-        # Python 3.5 added os.scandir() without context manager.
-        for entry in os.scandir(dirname):
-            return False
-        return True
-    elif hasattr(os, 'scandir'):
-        # Python 3.6 added the context manager.
-        with os.scandir(dirname) as it:
-            for entry in it:
+    if hasattr(os, 'scandir'):
+        if sys.version_info < (3, 6, 0):
+                    # Python 3.5 added os.scandir() without context manager.
+            for _ in os.scandir(dirname):
                 return False
+        else:
+            # Python 3.6 added the context manager.
+            with os.scandir(dirname) as it:
+                for _entry in it:
+                    return False
         return True
-
     # This method is slower, but it works with Python 3.4.
     return len(os.listdir(dirname)) == 0
 
@@ -633,8 +657,7 @@ def listdir(directory):
 
     if type(directory) is tuple:
         for dirname in directory:
-            for pathname in listdir(dirname):
-                yield pathname
+            yield from listdir(dirname)
         return
     dirname = os.path.expanduser(directory)
     if not os.path.lexists(dirname):
@@ -669,7 +692,7 @@ def sync():
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
-    if 'nt' == os.name:
+    elif 'nt' == os.name:
         import ctypes
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
@@ -863,7 +886,7 @@ def wipe_path(pathname, idle=False):
     def temporaryfile():
         # reference
         # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-        maxlen = 245
+        maxlen = 185
         f = None
         while True:
             try:
@@ -875,11 +898,12 @@ def wipe_path(pathname, idle=False):
                     delete, f.name, allow_shred=False, ignore_missing=True)
                 break
             except OSError as e:
-                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT):
+                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
                     # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
                     # Shrinking the size helps.
 
                     # Microsoft Windows returns ENOENT "No such file or directory"
+                    # or EINVAL "Invalid argument"
                     # when the path is too long such as %TEMP% but not in C:\
                     if maxlen > 5:
                         maxlen -= 5
@@ -922,12 +946,28 @@ def wipe_path(pathname, idle=False):
                 break
             else:
                 raise
+
+        # Get the file system type from the given path
+        fstype = get_filesystem_type(pathname)
+        fstype = fstype[0]
+        logging.debug('File System:' + fstype)
+        # print(f.name) # Added by Marvin for debugging #issue 1051
         last_idle = time.time()
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
+        writtensize = 0
+        
         while True:
             try:
-                f.write(blanks)
+                if fstype != 'vfat':
+                    f.write(blanks)
+                # In the ubuntu system, the size of file should be less then 4GB. If not, there should be EFBIG error.
+                # So the maximum file size should be less than or equal to "4GB - 65536byte".
+                elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
+                    writtensize += f.write(blanks)
+                else:
+                    break
+            
             except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
@@ -962,7 +1002,7 @@ def wipe_path(pathname, idle=False):
         total_bytes += f.tell()
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if len(blanks) < 2:
+        if start_free_bytes - total_bytes < 2: # Modified by Marvin to fix the issue #1051 [12/06/2020]
             break
     # sync to disk
     sync()

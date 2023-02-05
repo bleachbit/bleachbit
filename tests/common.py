@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,31 +22,60 @@
 Common code for unit tests
 """
 
-from bleachbit.FileUtilities import extended_path
-from bleachbit.General import sudo_mode
-
 import functools
 import os
 import shutil
 import sys
 import tempfile
 import unittest
+import mock
+if 'win32' == sys.platform:
+    import winreg
+    import win32gui
+
+
+import bleachbit
+import bleachbit.Options
+from bleachbit.FileUtilities import extended_path
+from bleachbit.General import sudo_mode
 
 
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
+    _patchers = []
 
     @classmethod
     def setUpClass(cls):
         """Create a temporary directory for the testcase"""
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         print(cls.tempdir)
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._patch_options_paths()
+
+    @classmethod
+    def _patch_options_paths(cls):
+        to_patch = [('bleachbit.options_dir', cls.tempdir), 
+                    ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
+                    ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
+        for target, source in to_patch:
+            patcher = mock.patch(target, source)
+            patcher.start()
+            cls._patchers.append(patcher)
+
+        bleachbit.Options.options.restore()
 
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
         if os.path.exists(cls.tempdir):
             shutil.rmtree(cls.tempdir)
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._stop_patch_options_paths()
+    
+    @classmethod
+    def _stop_patch_options_paths(cls):
+        for patcher in cls._patchers:
+            patcher.stop()        
 
     def setUp(cls):
         """Call before each test method"""
@@ -107,11 +136,11 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=b''):
+    def write_file(self, filename, contents=b'', mode='wb'):
         """Create a temporary file, optionally writing contents to it"""
         if not os.path.isabs(filename):
             filename = os.path.join(self.tempdir, filename)
-        with open(extended_path(filename), 'wb') as f:
+        with open(extended_path(filename), mode) as f:
             f.write(contents)
         assert (os.path.exists(extended_path(filename)))
         return filename
@@ -135,12 +164,11 @@ def getTestPath(path):
     return path
 
 
-def destructive_tests(title):
-    """Return true if allowed to run destructive tests.  If false print notice."""
-    if os.getenv('DESTRUCTIVE_TESTS') == 'T':
-        return True
-    print('warning: skipping test(s) for %s because not getenv(DESTRUCTIVE_TESTS)=T' % title)
-    return False
+def get_env(key):
+    """Get an environment variable. If not set, returns None instead of KeyError."""
+    if not key in os.environ:
+        return None
+    return os.environ[key]
 
 
 def have_root():
@@ -148,27 +176,27 @@ def have_root():
     return sudo_mode() or os.getuid() == 0
 
 
-def skipIfWindows(f):
-    """Skip unit test if running on Windows
+def put_env(key, val):
+    """Put an environment variable. None removes the key"""
+    if not val:
+        del os.environ[key]
+    else:
+        os.environ[key] = val
 
-    Not compatible at the class level
-    """
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        if sys.platform == 'win32':
-            return unittest.skipIf('win32' == sys.platform, 'running on Windows')
-        return f(*args, **kwargs)
-    return wrapper
+
+def skipIfWindows(f):
+    """Skip unit test if running on Windows"""
+    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
+
+
+def skipUnlessDestructive(f):
+    """Skip unless destructive tests are allowed"""
+    return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
 
 
 def skipUnlessWindows(f):
-    """Skip unit test unless running on Windows
-
-    Not compatible at the class level"""
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')
-    return wrapper
+    """Skip unit test unless running on Windows"""
+    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
 def touch_file(filename):
@@ -177,8 +205,8 @@ def touch_file(filename):
     if not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
-    with open(filename, "w") as f:
-        pass
+    import pathlib
+    pathlib.Path(filename).touch()
     assert(os.path.exists(filename))
 
 
@@ -208,3 +236,22 @@ def validate_result(self, result, really_delete=False):
             self.assertNotLExists(filename)
         else:
             self.assertLExists(filename)
+
+
+def get_winregistry_value(key, subkey):
+    try:
+        with winreg.OpenKey(key,  subkey) as hkey:
+            return winreg.QueryValue(hkey, None)
+    except FileNotFoundError:
+        return None
+
+
+def get_opened_windows_titles():
+    opened_windows_titles = []
+
+    def enumerate_opened_windows_titles(hwnd, ctx):
+        if win32gui.IsWindowVisible(hwnd):
+            opened_windows_titles.append(win32gui.GetWindowText(hwnd))
+
+    win32gui.EnumWindows(enumerate_opened_windows_titles, None)
+    return opened_windows_titles

@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -39,8 +39,7 @@ def _action_str_to_commands(action_str):
     dom = parseString(action_str)
     action_node = dom.childNodes[0]
     delete = Delete(action_node)
-    for cmd in delete.get_commands():
-        yield cmd
+    yield from delete.get_commands()
 
 
 def _action_str_to_results(action_str):
@@ -146,7 +145,7 @@ class ActionTestCase(common.BleachbitTestCase):
             # Python 2.5 and later supports $foo
             paths.append('${USERPROFILE}')
             paths.append('$USERPROFILE')
-        if 'posix' == os.name:
+        elif 'posix' == os.name:
             paths.append('$HOME')
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
@@ -279,7 +278,7 @@ class ActionTestCase(common.BleachbitTestCase):
             # If exception occurs in logger `handleError` is called.
             with mock.patch.object(logging.Handler, 'handleError') as MockHandleError:
                 try:
-                    # When GtkLoggerHandler is used the exeptions are raised directly
+                    # When GtkLoggerHandler is used the exceptions are raised directly
                     # and handleError is not called
                     self._test_action_str(
                         ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
@@ -483,7 +482,7 @@ if __name__ == '__main__':
             iterations = 1
             if 3 == len(sys.argv):
                 iterations = int(sys.argv[2])
-            for x in range(0, iterations):
+            for _x in range(0, iterations):
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis

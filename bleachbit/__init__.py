@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ import platform
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
-APP_VERSION = "4.0.1"
+APP_VERSION = "4.4.2"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
@@ -94,6 +94,7 @@ options_dir = None
 if 'posix' == os.name:
     options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
+    os.environ.pop('FONTCONFIG_FILE', None)
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
         portable_mode = True
@@ -101,14 +102,24 @@ elif 'nt' == os.name:
     else:
         # installed mode
         options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
+
+try:
+    options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
+except KeyError:
+    pass
+        
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree
 if not portable_mode:
-    e1 = os.path.exists(os.path.join(bleachbit_exe_path, '../cleaners'))
-    e2 = os.path.exists(os.path.join(bleachbit_exe_path, '../Makefile'))
-    e3 = os.path.exists(os.path.join(bleachbit_exe_path, '../COPYING'))
-    portable_mode = all((e1, e2, e3))
+    paths = (
+        '../cleaners',
+        '../Makefile',
+        '../COPYING')
+    existing = (
+        os.path.exists(os.path.join(bleachbit_exe_path, path))
+        for path in paths)
+    portable_mode = all(existing)
 
 # personal cleaners
 personal_cleaners_dir = os.path.join(options_dir, "cleaners")
@@ -170,17 +181,15 @@ if not os.path.exists(app_menu_filename):
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
-else:
-    # system-wide installed locale
-    if sys.platform.startswith('linux') or sys.platform == 'darwin':
-        locale_dir = "/usr/share/locale/"
-    elif sys.platform == 'win32':
-        locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
-    elif sys.platform[:6] == 'netbsd':
-        locale_dir = "/usr/pkg/share/locale/"
-    elif (sys.platform.startswith('openbsd') or
-          sys.platform.startswith('freebsd')):
-        locale_dir = "/usr/local/share/locale/"
+# system-wide installed locale
+elif sys.platform.startswith("linux") or sys.platform == "darwin":
+    locale_dir = "/usr/share/locale/"
+elif sys.platform == "win32":
+    locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
+elif sys.platform[:6] == "netbsd":
+    locale_dir = "/usr/pkg/share/locale/"
+elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
+    locale_dir = "/usr/local/share/locale/"
 
 
 
@@ -230,10 +239,10 @@ except:
     logger.exception('error binding text domain')
 
 try:
-    ungettext = t.ungettext
+    ngettext = t.ngettext
 except:
-    def ungettext(singular, plural, n):
-        """Dummy replacement for Unicode, plural gettext"""
+    def ngettext(singular, plural, n):
+        """Dummy replacement for plural gettext"""
         if 1 == n:
             return singular
         return plural
@@ -251,6 +260,7 @@ except:
 
 # pgettext(msgctxt, msgid) from gettext is not supported in Python as of January 2017
 # http://bugs.python.org/issue2504
+# This issue was fixed in Python 3.8, but we need to support older versions.
 # Meanwhile we get official support, we have to simulate it.
 # See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
 # more information about pgettext.
@@ -264,14 +274,13 @@ GETTEXT_CONTEXT_GLUE = "\004"
 def pgettext(msgctxt, msgid):
     """A custom implementation of GNU pgettext().
     """
-    if msgctxt is not None and msgctxt != "":
-        translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
-        if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
-            return msgid
-        else:
-            return translation
-    else:
+    if msgctxt is None or msgctxt == "":
         return _(msgid)
+    translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
+    if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
+        return msgid
+    else:
+        return translation
 
 
 # Map our pgettext() custom function to _p()
@@ -303,3 +312,6 @@ if 'posix' == os.name:
     for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value
+
+# should be re.IGNORECASE on macOS
+fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE

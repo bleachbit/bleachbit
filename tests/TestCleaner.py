@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -44,8 +44,7 @@ def actions_to_cleaner(action_strs):
     """Given multiple action XML fragments, return one cleaner"""
 
     cleaner = Cleaner()
-    count = 1
-    for action_str in action_strs:
+    for count, action_str in enumerate(action_strs, start=1):
         dom = parseString(action_str)
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
@@ -56,7 +55,6 @@ def actions_to_cleaner(action_strs):
         cleaner.add_action('option%d' % count, provider)
         cleaner.add_option('option%d' % count, 'name%d' %
                            count, 'description%d' % count)
-        count += 1
     return cleaner
 
 
@@ -100,7 +98,8 @@ class CleanerTestCase(common.BleachbitTestCase):
             print(cmd)
             raise AssertionError('option2 should yield nothing')
         # should fail
-        self.assertRaises(RuntimeError, cleaner.get_commands('option3').__next__)
+        self.assertRaises(
+            RuntimeError, cleaner.get_commands('option3').__next__)
 
     def test_auto_hide(self):
         for key in sorted(backends):
@@ -177,29 +176,54 @@ class CleanerTestCase(common.BleachbitTestCase):
         _iglob = glob.iglob
         _lexists = os.path.lexists
         _oswalk = os.walk
-        glob.iglob = lambda path: []
-        os.path.exists = lambda path: False
-        os.path.lexists = lambda path: False
-        os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
-        for key in sorted(backends):
-            for (option_id, __name) in backends[key].get_options():
-                for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete=False):
-                        if result != True:
-                            break
-                        msg = "Expected no files to be deleted but got '%s'" % str(
-                            result)
-                        self.assertNotIsInstance(cmd, Command.Delete, msg)
-                        common.validate_result(self, result)
-        glob.iglob = _iglob
-        os.path.exists = _exists
-        os.path.lexists = _lexists
-        os.walk = _oswalk
+        try:
+            glob.iglob = lambda path, root_dir=None, dir_fd=None, recursive=False: []
+            os.path.exists = lambda path: False
+            os.path.lexists = lambda path: False
+            os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
+            for key in sorted(backends):
+                for (option_id, __name) in backends[key].get_options():
+                    for cmd in backends[key].get_commands(option_id):
+                        for result in cmd.execute(really_delete=False):
+                            if result != True:
+                                break
+                            msg = "Expected no files to be deleted but got '%s'" % str(
+                                result)
+                            self.assertNotIsInstance(cmd, Command.Delete, msg)
+                            common.validate_result(self, result)
+        finally:
+            glob.iglob = _iglob
+            os.path.exists = _exists
+            os.path.lexists = _lexists
+            os.walk = _oswalk
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
         list(register_cleaners())
         list(register_cleaners())
+
+    @common.skipIfWindows # FIXME later: reevaluate
+    @common.skipUnlessDestructive
+    def test_system_recent_documents(self):
+        """Clean recent documents in GTK"""
+        mgr = Gtk.RecentManager().get_default()
+        fn = self.mkstemp(suffix='.txt')
+        self.assertExists(fn)
+        from gi.repository import Gio, GLib
+        uri = Gio.File.new_for_path(fn).get_uri()
+        self.assertTrue(mgr.add_item(uri))
+        GLib.idle_add(Gtk.main_quit)
+        Gtk.main()  # process the addition
+        GLib.idle_add(Gtk.main_quit)
+        self.assertGreater(len(mgr.get_items()), 0)
+        self.assertTrue(mgr.has_item(uri))
+
+        list(register_cleaners())
+        for cmd in backends['system'].get_commands('recent_documents'):
+            for result in cmd.execute(really_delete=True):
+                common.validate_result(self, result, True)
+
+        self.assertEqual(len(mgr.get_items()), 0)
 
     @common.skipIfWindows
     def test_whitelist(self):
@@ -238,7 +262,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         common.touch_file(obexd_fn)
         found_canary = False
         for cmd in backends['system'].get_commands('cache'):
-            for result in cmd.execute(really_delete=False):
+            for _result in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)
                 self.assertFalse('/.cache/obexd/' in cmd.path)
         from bleachbit.FileUtilities import delete

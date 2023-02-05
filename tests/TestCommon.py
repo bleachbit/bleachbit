@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -63,3 +63,25 @@ class CommonTestCase(common.BleachbitTestCase):
         # A relative path (without a reference to the home directory)
         # should not be expanded.
         self.assertEqual(os.path.expanduser('common'), 'common')
+
+    def test_touch_file(self):
+        """Unit test for touch_file"""
+        fn = os.path.join(self.tempdir, 'test_touch_file')
+        self.assertNotExists(fn)
+
+        # Create empty file.
+        common.touch_file(fn)
+        from bleachbit.FileUtilities import getsize
+        self.assertExists(fn)
+        self.assertEqual(0, getsize(fn))
+
+        # Increase size of file.
+        fsize = 2**13
+        with open(fn, "w") as f:
+            f.write(' '*fsize)
+        self.assertEqual(fsize, getsize(fn))
+
+        # Do not truncate.
+        common.touch_file(fn)
+        self.assertExists(fn)
+        self.assertEqual(fsize, getsize(fn))

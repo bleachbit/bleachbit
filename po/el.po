@@ -6,169 +6,77 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-15 17:17-0600\n"
-"PO-Revision-Date: 2018-12-23 19:52+0000\n"
-"Last-Translator: mara sdr <Unknown>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-25 09:59-0700\n"
+"PO-Revision-Date: 2021-06-06 19:11+0000\n"
+"Last-Translator: Vasilis Kosmidis <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2018-12-31 22:24+0000\n"
-"X-Generator: Launchpad (build 18847)\n"
+"X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
+"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
 
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/vim.xml
-#: ../cleaners/safari.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/realplayer.xml ../cleaners/windows_defender.xml
-#: ../cleaners/d4x.xml ../cleaners/sqlite3.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/bash.xml ../cleaners/opera.xml
-#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/elinks.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "History"
-msgstr "Ιστορικό"
-
-#: ../cleaners/mc.xml ../cleaners/tortoisesvn.xml ../cleaners/links2.xml
-#: ../cleaners/realplayer.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/easytag.xml ../cleaners/nautilus.xml ../cleaners/gnome.xml
-#: ../bleachbit/Cleaner.py:246 ../bleachbit/Cleaner.py:255
-msgid "Delete the usage history"
-msgstr "Διαγραφή ιστορικού χρήσης"
-
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/thumbnails.xml ../cleaners/firefox.xml ../cleaners/safari.xml
-#: ../cleaners/emesene.xml ../cleaners/liferea.xml ../cleaners/seamonkey.xml
-#: ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/evolution.xml
-#: ../cleaners/tremulous.xml ../cleaners/libreoffice.xml ../cleaners/xine.xml
-#: ../cleaners/nexuiz.xml ../cleaners/exaile.xml ../cleaners/opera.xml
-#: ../cleaners/amsn.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/beagle.xml ../cleaners/kde.xml ../cleaners/epiphany.xml
-#: ../cleaners/flash.xml ../cleaners/secondlife_viewer.xml ../cleaners/java.xml
-#: ../cleaners/smartftp.xml ../cleaners/chromium.xml ../cleaners/audacious.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Cleaner.py:193
-#: ../bleachbit/Cleaner.py:278
-msgid "Cache"
-msgstr "Προσωρινή μνήμη"
-
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/thumbnails.xml
-#: ../cleaners/firefox.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/liferea.xml ../cleaners/vuze.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/evolution.xml ../cleaners/libreoffice.xml ../cleaners/apt.xml
-#: ../cleaners/xine.xml ../cleaners/nexuiz.xml ../cleaners/exaile.xml
-#: ../cleaners/amsn.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/beagle.xml ../cleaners/kde.xml ../cleaners/flash.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/java.xml
-#: ../cleaners/smartftp.xml ../cleaners/audacious.xml ../cleaners/rhythmbox.xml
-#: ../bleachbit/Cleaner.py:193 ../bleachbit/Cleaner.py:278
-#: ../bleachbit/Cleaner.py:312 ../bleachbit/Cleaner.py:314
-msgid "Delete the cache"
-msgstr "Διαγραφή προσωρινής μνήμης"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/firefox.xml
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/opera.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml ../bleachbit/Action.py:505
-msgid "Vacuum"
-msgstr "Καθαρισμός βάσης δεδομένων"
-
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/firefox.xml
-#: ../cleaners/safari.xml ../cleaners/liferea.xml ../cleaners/opera.xml
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"Καθαρισμός κατακερματισμένων κομματιών βάσης δεδομένων για απελευθέρωση "
-"χώρου και βελτίωση ταχύτητας χωρίς την αφαίρεση δεδομένων"
-
-#: ../cleaners/yum.xml ../cleaners/apt.xml
-msgid "Package manager"
-msgstr "Διαχειριστής πακέτων"
-
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml ../cleaners/nexuiz.xml
-#: ../cleaners/secondlife_viewer.xml
-msgid "Game"
-msgstr "Παιχνίδι"
-
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/miro.xml ../cleaners/smartftp.xml
-#: ../cleaners/audacious.xml ../bleachbit/Cleaner.py:309
-msgid "Logs"
-msgstr "Αρχεία καταγραφής"
-
-#: ../cleaners/warzone2100.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/realplayer.xml ../cleaners/vuze.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/amule.xml ../cleaners/exaile.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/miro.xml
-#: ../cleaners/smartftp.xml ../cleaners/audacious.xml
-#: ../bleachbit/Cleaner.py:309
-msgid "Delete the logs"
-msgstr "Διαγραφή αρχείων καταγραφής"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Εικόνες επισκόπησης"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "Εικονίδια για αρχεία σχετικά με το σύστημα"
-
-#: ../cleaners/vim.xml ../cleaners/gedit.xml
-msgid "Editor"
-msgstr "Επεξεργαστής"
-
-#: ../cleaners/vim.xml
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr ""
-"Διαγραφή ~/.viminfo που περιλαμβάνει ιστορικό αρχείων, ιστορικό εντολών, και "
-"buffers"
-
-#: ../cleaners/firefox.xml ../cleaners/safari.xml ../cleaners/links2.xml
-#: ../cleaners/seamonkey.xml ../cleaners/konqueror.xml
+#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
+#: ../cleaners/elinks.xml ../cleaners/epiphany.xml ../cleaners/links2.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/elinks.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml
 msgid "Web browser"
 msgstr "Περιηγητής διαδικτύου"
 
-#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Backup files"
-msgstr "Αντίγραφα ασφαλείας"
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
+#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/vuze.xml
+#: ../cleaners/evolution.xml ../cleaners/rhythmbox.xml ../cleaners/miro.xml
+#: ../cleaners/java.xml ../cleaners/discord.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/pidgin.xml
+#: ../cleaners/safari.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/thumbnails.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/zoom.xml ../cleaners/amsn.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/beagle.xml ../cleaners/xine.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
+#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:277
+msgid "Cache"
+msgstr "Προσωρινή μνήμη"
 
-#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Delete the backup files"
-msgstr "Διαγραφή των αντιγράφων ασφαλείας"
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Διαγραφή της προσωρινής μνήμης του ιστού, η οποία μειώνει τον χρόνο "
+"εμφάνισης ήδη προβεβλημένων σελίδων"
 
-#: ../cleaners/firefox.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
-#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/flash.xml
-#: ../cleaners/silverlight.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
+#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Cookies"
 msgstr "Cookies"
 
-#: ../cleaners/firefox.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/seamonkey.xml ../cleaners/realplayer.xml
-#: ../cleaners/konqueror.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/epiphany.xml ../cleaners/flash.xml
-#: ../cleaners/silverlight.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
+#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
+#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
+#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -176,46 +84,110 @@ msgstr ""
 "Διαγραφή των cookies, που περιέχουν πληροφορίες όπως προτιμήσεις "
 "ιστοσελίδων, πιστοποίηση και καταγραφή αναγνώρισης"
 
-#: ../cleaners/firefox.xml
-msgid "Crash reports"
-msgstr "Αναφορές κατάρρευσης"
-
-#: ../cleaners/firefox.xml ../cleaners/transmission.xml
-#: ../cleaners/windows_defender.xml ../cleaners/beagle.xml
-#: ../cleaners/thunderbird.xml ../cleaners/deepscan.xml
-msgid "Delete the files"
-msgstr "Διαγραφή αρχείων"
-
 #. DOM=Document Object Model
-#: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
+#. DOM=Document Object Model
+#. DOM=Document Object Model
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "DOM Storage"
 msgstr "Αποθήκη δεδομένων DOM"
 
-#: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
 msgstr "Διαγραφή HTML5 cookies"
 
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Form history"
 msgstr "Ιστορικό Φορμών"
 
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr ""
-"Ιστορικό φορμών που καταχωρήθηκαν σε ιστοσελίδες και στη μπάρα Αναζήτησης"
-
-#: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+msgid "A history of forms entered in web sites"
+msgstr "Ιστορικό φορμών που καταχωρήθηκαν σε ιστοσελίδες"
+
+#: ../cleaners/chromium.xml ../cleaners/winrar.xml
+#: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
+#: ../cleaners/bash.xml ../cleaners/nautilus.xml ../cleaners/octave.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/google_chrome.xml
+#: ../cleaners/slack.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
+#: ../cleaners/links2.xml ../cleaners/libreoffice.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/realplayer.xml
+#: ../cleaners/brave.xml ../cleaners/discord.xml ../cleaners/vim.xml
+#: ../cleaners/d4x.xml ../cleaners/safari.xml ../cleaners/mc.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/easytag.xml
+msgid "History"
+msgstr "Ιστορικό"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/discord.xml
+#: ../cleaners/opera.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr ""
+"Διαγραφή του ιστορικού που περιλαμβάνει τις τοποθεσίες που επισκεφθήκατε, "
+"λήψεις και μικρογραφίες"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+msgid "Search engines"
+msgstr "Μηχανές αναζήτησης"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"Επαναφορά ιστορικού χρήσης των μηχανών αναζήτησης και διαγραφή μη "
+"προεπιλεγμένων (non-factory) μηχανών αναζήτησης, κάποιες από τις οποίες "
+"προστίθενται αυτόματα"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "Συνεδρία"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+msgid "Delete the current and last sessions"
+msgstr "Διαγραφή της παρούσας και των τελευταίων συνεδριών"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+msgid "Sync"
+msgstr "Συγχρονισμός"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+msgid "Delete the sync data and sign out of the browser"
+msgstr "Διαγραφή δεδομένων συγχρονισμού και αποσύνδεση από τον φυλλομετρητή"
+
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "Κωδικοί πρόσβασης"
 
-#: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -223,75 +195,231 @@ msgstr ""
 "Μια βάση δεδομένων με ονόματα χρηστών και κωδικών πρόσβασης όπως και μια "
 "λίστα με τις ιστοσελίδες που δεν θα έπρεπε να αποθηκεύουν κωδικούς"
 
-#: ../cleaners/firefox.xml ../cleaners/opera.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/thunderbird.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "Αυτή η επιλογή θα διαγράψει τους αποθηκευμένους κωδικούς πρόσβασης."
 
-#: ../cleaners/firefox.xml
-msgid "Session restore"
-msgstr "Επαναφορά συνεδρίας"
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
+#: ../cleaners/opera.xml ../bleachbit/Action.py:592
+msgid "Vacuum"
+msgstr "Καθαρισμός βάσης δεδομένων"
 
-#: ../cleaners/firefox.xml
-msgid "Loads the initial session after the browser closes or crashes"
+#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
+#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
+#: ../cleaners/opera.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
 msgstr ""
-"Φορτώνει την αρχική συνεδρία μετά από κλείσιμο ή κόλλημα του προγράμματος "
-"περιήγησης"
+"Καθαρισμός κατακερματισμένων κομματιών βάσης δεδομένων για απελευθέρωση "
+"χώρου και βελτίωση ταχύτητας χωρίς την αφαίρεση δεδομένων"
 
-#: ../cleaners/firefox.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "Site preferences"
 msgstr "Προτιμήσεις ιστοσελίδων"
 
-#: ../cleaners/firefox.xml
+#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/opera.xml
 msgid "Settings for individual sites"
 msgstr "Ρυθμίσεις για μεμονωμένες ιστοσελίδες"
 
-#: ../cleaners/firefox.xml ../cleaners/konqueror.xml
-msgid "URL history"
-msgstr "Ιστορικό URL"
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "Aρχειοθήκη"
 
-#: ../cleaners/firefox.xml ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "Λίστα ανοιγμένων ιστοσελίδων"
+#: ../cleaners/winrar.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
+#: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
+#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:245
+#: ../bleachbit/Cleaner.py:254
+msgid "Delete the usage history"
+msgstr "Διαγραφή ιστορικού χρήσης"
 
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-#: ../cleaners/amule.xml ../cleaners/gftp.xml ../cleaners/smartftp.xml
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
+msgid "Temporary files"
+msgstr "Προσωρινά αρχεία"
+
+#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
+#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
+#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
+msgid "Delete the temporary files"
+msgstr "Διαγραφή προσωρινών αρχείων"
+
+#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "Προβολέας πολυμέσων"
+
+#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
+#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
 msgid "File transfer client"
 msgstr "Μεταφορα αρχείων χρήστη"
 
-#: ../cleaners/filezilla.xml ../cleaners/paint.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/teamviewer.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/smartftp.xml
-#: ../cleaners/audacious.xml ../cleaners/wordpad.xml
-#: ../bleachbit/Cleaner.py:194
+#: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
+#: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:193
 msgid "Most recently used"
 msgstr "Τα πιο πρόσφατα χρησιμοποιημένα"
 
-#: ../cleaners/filezilla.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../cleaners/audacious.xml ../bleachbit/Cleaner.py:195
-#: ../bleachbit/Cleaner.py:292
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "Αντιικό"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "Καραντίνα"
+
+#: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
+#: ../cleaners/deepscan.xml ../cleaners/beagle.xml
+msgid "Delete the files"
+msgstr "Διαγραφή αρχείων"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Backup files"
+msgstr "Αντίγραφα ασφαλείας"
+
+#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
+#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
+#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+msgid "Delete the backup files"
+msgstr "Διαγραφή των αντιγράφων ασφαλείας"
+
+#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
+#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
+#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:308
+msgid "Logs"
+msgstr "Αρχεία καταγραφής"
+
+#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
+#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
+#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
+#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
+#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../bleachbit/Cleaner.py:308
+msgid "Delete the logs"
+msgstr "Διαγραφή αρχείων καταγραφής"
+
+#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/gftp.xml
+#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/evolution.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/miro.xml ../cleaners/java.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/pidgin.xml ../cleaners/apt.xml ../cleaners/audacious.xml
+#: ../cleaners/smartftp.xml ../cleaners/exaile.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
+#: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/dnf.xml ../cleaners/beagle.xml
+#: ../cleaners/xine.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:277 ../bleachbit/Cleaner.py:311
+#: ../bleachbit/Cleaner.py:313
+msgid "Delete the cache"
+msgstr "Διαγραφή προσωρινής μνήμης"
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "Κατεβασμένα αρχεία ψηφιακού ραδιοφώνου (podcast)"
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "Διαγραφή κατεβασμένων αρχείων ψηφιακού ραδιοφώνου (podcast)"
+
+#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Διαγραφή ιστορικού εντολών"
+
+#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/nexuiz.xml
+msgid "Game"
+msgstr "Παιχνίδι"
+
+#: ../cleaners/tremulous.xml
+msgid "Delete the list of game servers"
+msgstr "Διαγραφή της λίστας εξυπηρετητών των παιχνιδιών"
+
+#: ../cleaners/yum.xml ../cleaners/apt.xml ../cleaners/dnf.xml
+msgid "Package manager"
+msgstr "Διαχειριστής πακέτων"
+
+#: ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Επεξεργαστής"
+
+#: ../cleaners/gedit.xml ../cleaners/gwenview.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:485
+msgid "Recent documents list"
+msgstr "Λίστα πρόσφατων εγγράφων"
+
+#: ../cleaners/gedit.xml ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
+#: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:291
 msgid "Delete the list of recently used documents"
 msgstr "Διαγραφή λίστας των πρόσφατα χρησιμοποιημένων εγγράφων"
 
-#: ../cleaners/skype.xml ../cleaners/emesene.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml ../cleaners/amsn.xml
+#: ../cleaners/bash.xml
+msgid "Shell"
+msgstr "Κέλυφος"
+
+#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/emesene.xml
+#: ../cleaners/discord.xml ../cleaners/pidgin.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
 msgid "Chat client"
 msgstr "Εφαρμογή συνομιλίας (chat client)"
 
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
+#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
+#: ../cleaners/hexchat.xml
 msgid "Chat logs"
 msgstr "Αρχεία καταγραφής συνομιλίας"
 
-#: ../cleaners/skype.xml ../cleaners/hexchat.xml ../cleaners/emesene.xml
-#: ../cleaners/seamonkey.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/amsn.xml
+#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
+#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
+#: ../cleaners/hexchat.xml
 msgid "Delete the chat logs"
 msgstr "Διαγραφή αρχείων καταγραφής συνομιλιών"
 
@@ -303,17 +431,29 @@ msgstr "Εγκαταστάτες"
 msgid "Delete cached patches and installers"
 msgstr "Διαγραφή προσωρινών ενημερώσεων και εγκαταστατών"
 
-#: ../cleaners/hexchat.xml
-msgid "IRC client formerly known as XChat"
-msgstr ""
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "Σύστημα παραθύρων"
 
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml ../cleaners/opera.xml
-#: ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/google_chrome.xml ../cleaners/thunderbird.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Διαγραφή της προσωρινής μνήμης του ιστού, η οποία μειώνει τον χρόνο "
-"εμφάνισης ήδη προβεβλημένων σελίδων"
+#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/beagle.xml
+msgid "Debug logs"
+msgstr "Αρχεία καταγραφής αποσφαλματώσεων"
+
+#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
+#: ../cleaners/beagle.xml ../cleaners/easytag.xml
+msgid "Delete the debug logs"
+msgstr "Διαγραφή αρχείων καταγραφής  αποσφαλματώσεων"
+
+#: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "Διαχειριστής αρχείων"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Οι τροποποιημένοι φάκελοι θα επαναφερθούν στην αρχική τους μορφή."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -334,92 +474,48 @@ msgstr ""
 "Διαγράψτε τα torrents (μόνο τα μεταδεδομένα, αλλά όχι τα αρχεία που "
 "περιγράφονται)"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
 msgstr "Στατιστικά"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
 msgid "Delete the file"
 msgstr "Διαγράψτε το αρχείο"
 
-#: ../cleaners/paint.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/teamviewer.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/winzip.xml ../cleaners/winrar.xml ../cleaners/smartftp.xml
-#: ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "Διαγραφή λίστας των πρόσφατα χρησιμοποιημένων αρχείων"
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "Crash reports"
+msgstr "Αναφορές κατάρρευσης"
 
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Διαγραφή της προσωρινής μνήμης για τα avatar και τα emoticon"
-
-#: ../cleaners/windows_media_player.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-msgid "Media player"
-msgstr "Αναπαραγωγέας πολυμέσων"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml
-msgid "File manager"
-msgstr "Διαχειριστής αρχείων"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:291
-#: ../bleachbit/Cleaner.py:482
-msgid "Recent documents list"
-msgstr "Λίστα πρόσφατων εγγράφων"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
+"Ιστορικό φορμών που καταχωρήθηκαν σε ιστοσελίδες και στη μπάρα Αναζήτησης"
 
-#. In Windows 'Run' is the dialog in the Start menu
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
-msgid "Run"
-msgstr "Εκτέλεση"
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "Session restore"
+msgstr "Επαναφορά συνεδρίας"
 
-#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "Ιστορικό αναζήτησης"
+#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr ""
+"Φορτώνει την αρχική συνεδρία μετά από κλείσιμο ή κόλλημα του προγράμματος "
+"περιήγησης"
 
-#: ../cleaners/windows_explorer.xml ../cleaners/gnome.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "Διαγραφή ιστορικού αναζήτησης"
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/konqueror.xml
+msgid "URL history"
+msgstr "Ιστορικό URL"
 
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "Αυτο θα επανεκκινήσει τον εξερευνητή των Windows."
+#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/safari.xml ../cleaners/konqueror.xml
+#: ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "Λίστα ανοιγμένων ιστοσελίδων"
 
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/beagle.xml ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "Αρχεία καταγραφής  αποσφαλματώσεων"
-
-#: ../cleaners/gl-117.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/easytag.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "Διαγραφή αρχείων καταγραφής  αποσφαλματώσεων"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:343
-msgid "Temporary files"
-msgstr "Προσωρινά αρχεία"
-
-#: ../cleaners/google_earth.xml ../cleaners/winetricks.xml ../cleaners/vuze.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/wine.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/gimp.xml ../cleaners/kde.xml
-#: ../cleaners/deepscan.xml ../bleachbit/Cleaner.py:343
-msgid "Delete the temporary files"
-msgstr "Διαγραφή προσωρινών αρχείων"
-
-#: ../cleaners/seamonkey.xml
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
 msgstr "Ιστορικό λήψεων"
 
@@ -431,145 +527,60 @@ msgstr "Λίστα ληφθέντων αρχείων"
 msgid "Delete the list of visited web pages"
 msgstr "Διαγραφής λίστας ανοιγμένων ιστοσελίδων"
 
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "Τρέχουσα συνεδρία"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Διαγραφή της προσωρινής μνήμης για τα avatar και τα emoticon"
 
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "Διαγραφή τρέχουσας συνεδρίας"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:198
-msgid "Office suite"
-msgstr "Σουίτα γραφείου (Office)"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "Αντιικό"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr ""
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr ""
-
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "Προβολέας εγγράφων"
-
-#: ../cleaners/evolution.xml ../cleaners/thunderbird.xml
+#: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
 msgstr "Ηλεκτρονικό ταχυδρομείο"
 
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "Διαγραφή της λίστας εξυπηρετητών των παιχνιδιών"
-
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Διαγραφή ιστορικού εντολών"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr ""
-
-#: ../cleaners/amule.xml
-msgid "Delete history of known and cancelled files"
-msgstr ""
-
-#: ../cleaners/amule.xml
-msgid "Known clients"
-msgstr ""
-
-#: ../cleaners/amule.xml
-msgid "Delete known clients and friends"
-msgstr ""
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "Στρώμα συμβατότητας για λογισμικό των Windows"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "Εφαρμογή προσθήκης ετικετών σε μουσικά αρχεία"
-
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "Διαγραφή παλαιών αρχείων"
-
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "Λίστες πακέτων"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "Προβολέας πολυμέσων"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml
-msgid "Search tool"
-msgstr "Εργαλείο αναζήτησης"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml ../cleaners/thunderbird.xml
+#: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Index"
 msgstr "Ευρετήριο"
 
-#: ../cleaners/recoll.xml
+#: ../cleaners/thunderbird.xml
 msgid ""
-"Delete the search index, a database of words and the files they contain"
+"Deleting the index will reset the configuration of columns in the message "
+"list."
 msgstr ""
-"Διαγραφή ευρετηρίου αναζήτησης, μιας βάσης δεδομένων λέξεων και των αρχείων "
-"που περιέχουν"
+"Η διαγραφή του ευρετηρίου θα επαναφέρει στην αρχική της μορφή, τη διαμόρφωση "
+"των στηλών στη λίστα μηνυμάτων."
 
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "Επεξεργαστής γραφικών"
+#: ../cleaners/screenlets.xml
+msgid "Widgets for the desktop"
+msgstr "Widgets για την επιφάνεια εργασίας"
 
-#: ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "Κατεβασμένα αρχεία ψηφιακού ραδιοφώνου (podcast)"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Διαγραφή cookies, ήδη ανοιγμένων URLs και ιστορικού αναζήτησης"
 
-#: ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "Διαγραφή κατεβασμένων αρχείων ψηφιακού ραδιοφώνου (podcast)"
-
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Κέλυφος"
-
-#: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "A history of forms entered in web sites"
-msgstr "Ιστορικό φορμών που καταχωρήθηκαν σε ιστοσελίδες"
-
-#: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
-"Διαγραφή του ιστορικού που περιλαμβάνει τις τοποθεσίες που επισκεφθήκατε, "
-"λήψεις και μικρογραφίες"
-
-#: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Session"
-msgstr "Συνεδρία"
-
-#: ../cleaners/opera.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Delete the current and last sessions"
-msgstr "Διαγραφή της παρούσας και των τελευταίων συνεδριών"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Οι τροποποιημένοι φάκελοι θα επαναφερθούν στην αρχική τους μορφή."
+#: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
+#: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
+msgid "Delete the most recently used list"
+msgstr "Διαγραφή λίστας των πρόσφατα χρησιμοποιημένων αρχείων"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
 msgstr "Περιβάλλον επιφάνειας εργασίας"
 
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "Widgets για την επιφάνεια εργασίας"
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "Εκτέλεση"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Ιστορικό αναζήτησης"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Διαγραφή ιστορικού αναζήτησης"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -587,40 +598,36 @@ msgstr ""
 msgid "This option deletes all bookmarks."
 msgstr "Αυτή η επιλογή διαγράφει όλους τους σελιδοδείκτες."
 
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "Aρχειοθήκη"
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../bleachbit/Cleaner.py:197
+msgid "Office suite"
+msgstr "Σουίτα γραφείου (Office)"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Διαγραφή cookies, ήδη ανοιγμένων URLs και ιστορικού αναζήτησης"
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "Ιστορικό γνωστών αρχείων"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Search engines"
-msgstr "Μηχανές αναζήτησης"
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "Γνωστοί πελάτες και φίλοι"
 
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"Επαναφορά ιστορικού χρήσης των μηχανών αναζήτησης και διαγραφή μη "
-"προεπιλεγμένων (non-factory) μηχανών αναζήτησης, κάποιες από τις οποίες "
-"προστίθενται αυτόματα"
+#: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "Αναπαραγωγέας πολυμέσων"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Sync"
-msgstr "Συγχρονισμός"
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "Αρχεία καταγραφής συστήματος"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "Διαγραφή παλαιών αρχείων καταγραφής"
 
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Αναπαραγωγέας ήχου"
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
+msgid "Memory dump"
+msgstr "Αποτύπωση μνήμης"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
@@ -628,23 +635,36 @@ msgstr "Βάση δεδομένων"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
-"Delete the database, which contain information such as play count and last "
+"Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
-"Διαγραφή της βάσης δεδομένων, που περιέχει πληροφορίες όπως αριθμό "
-"αναπαραγωγών και τελευταίας αναπαραγωγής"
+"Διαγραφή της βάσης δεδομένων που περιέχει πληροφορίες, όπως αριθμό "
+"αναπαραγωγών και τελευταία αναπαραγωγή"
 
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "Σύστημα παραθύρων"
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "Στρώμα συμβατότητας για λογισμικό των Windows"
 
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "Eπεξεργαστής κειμένου"
+#: ../cleaners/discord.xml
+#, fuzzy
+#| msgid "Delete the web cache, which reduces time to display revisited pages"
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
+msgstr ""
+"Διαγραφή της προσωρινής μνήμης του ιστού, η οποία μειώνει τον χρόνο "
+"εμφάνισης ήδη προβεβλημένων σελίδων"
+
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr ""
+"Διαγραφή ~/.viminfo που περιλαμβάνει ιστορικό αρχείων, ιστορικό εντολών, και "
+"buffers"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Βαθύ σκανάρισμα"
+msgstr "Βαθιά σάρωση"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
@@ -658,40 +678,607 @@ msgstr "Ελέγξτε την προεπισκόπηση για τυχόν αρ�
 msgid "This option is slow."
 msgstr "Αυτή η επιλογή είναι αργή."
 
-#: ../bleachbit.desktop
+#: ../cleaners/deepscan.xml
+msgid "VIM swap files under user profile"
+msgstr "Αρχεία VIM swap στο προφίλ χρήστη"
+
+#: ../cleaners/deepscan.xml
+msgid "VIM swap files across system"
+msgstr "Αρχεία VIM swap στο σύστημα"
+
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "Προβολέας εγγράφων"
+
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "Διαγραφή παλαιών αρχείων"
+
+#: ../cleaners/apt.xml
+msgid "Package lists"
+msgstr "Λίστες πακέτων"
+
+#: ../cleaners/audacious.xml
+msgid "Audio player"
+msgstr "Αναπαραγωγέας ήχου"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "Eπεξεργαστής κειμένου"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Τρέχουσα συνεδρία"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "Διαγραφή τρέχουσας συνεδρίας"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "Λογισμικό απομακρυσμένου ελέγχου"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Εικόνες επισκόπησης"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "Εικονίδια για αρχεία σχετικά με το σύστημα"
+
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr "Εγγραφές"
+
+#: ../cleaners/zoom.xml
+msgid "Delete the audio and video recordings"
+msgstr "Διαγραφή εγγραφών ήχου και εικόνας"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+"Αυτή η επιλογή θα επαναφέρει τις προκαθορισμένες τοποθεσίες στη Γρήγορη "
+"Πρόσβαση."
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr ""
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr ""
+"Διαγραφή ημερομηνίας χρήσης, θέσης παραθύρου και άλλων δεδομένων για φακέλους"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "Επαναφορά των θέσεων των εικονιδίων της επιφάνειας εργασίας"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "Αυτο θα επανεκκινήσει τον εξερευνητή των Windows."
+
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "Απομάκρυνση πακέτων που ήταν παλαιότερα εξαρτήσεις"
+
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+"Εξετάστε προσεκτικά τη λίστα των πακέτων που θα απομακρυνθούν, εκτελώντας "
+"\"dnf list autoremove\"."
+
+#: ../cleaners/recoll.xml ../cleaners/beagle.xml
+msgid "Search tool"
+msgstr "Εργαλείο αναζήτησης"
+
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Διαγραφή ευρετηρίου αναζήτησης, μιας βάσης δεδομένων λέξεων και των αρχείων "
+"που περιέχουν"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "Επεξεργαστής γραφικών"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "Εφαρμογή προσθήκης ετικετών σε μουσικά αρχεία"
+
+#: ../cleaners/hexchat.xml
+msgid "IRC client formerly known as XChat"
+msgstr "Πελάτης IRC, παλαιότερα γνωστός ως XChat"
+
+#: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
 msgstr "Καθαριστής περιττών αρχείων"
 
-#: ../bleachbit.desktop
+#: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
 msgstr "Ελευθερώστε χώρο και διατηρήστε το ιδιωτικό σας απόρρητο"
 
-#: ../bleachbit/FileUtilities.py:694
+#. TRANSLATORS: Multi-value variables are explained in the online documentation.
+#. Basically, they are like an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML files more concise.
+#: ../bleachbit/Action.py:153
+msgid "Deep scan does not support multi-value variable."
+msgstr "Η βαθιά σάρωση δεν υποστηρίζει μεταβλητή πολλαπλών τιμών."
+
+#. TRANSLATORS: This is a lint-style warning that there seems to be a
+#. mild mistake in the CleanerML file because walk.all is expected to
+#. be used with directories instead of with files. Do not translate
+#. search="walk.all" and path="%s"
+#: ../bleachbit/Action.py:255
+#, python-format
+msgid "search=\"walk.all\" used with regular file path=\"%s\""
+msgstr ""
+
+#. TRANSLATORS: This is a lint-style warning that the CleanerML file
+#. specified a search for glob, but the path specified didn't have any
+#. wildcard patterns. Therefore, maybe the developer either missed
+#. the wildcard or should search using path="file" which does not
+#. expect or support wildcards in the path.
+#: ../bleachbit/Action.py:293
+#, python-format
+msgid "path=\"%s\" is not a glob pattern"
+msgstr ""
+
+#. TRANSLATORS: Parts of this file will be deleted
+#: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
+#: ../bleachbit/Action.py:412 ../bleachbit/Action.py:425
+#: ../bleachbit/Action.py:438 ../bleachbit/Action.py:503
+#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:207
+#: ../bleachbit/Command.py:241
+msgid "Clean file"
+msgstr "Καθαρισμός αρχείου"
+
+#. TRANSLATORS: this is the context menu
+#. TRANSLATORS: This is the clean button on the main window.
+#. It makes permanent changes: usually deleting files, sometimes
+#. altering them.
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:932 ../bleachbit/GUI.py:1039
+msgid "Clean"
+msgstr "Εκκαθάριση"
+
+#: ../bleachbit/Action.py:565
+#, python-format
+msgid "Run external command: %s"
+msgstr "Εκτελέστε εξωτερική εντολή: %s"
+
+#: ../bleachbit/Chaff.py:212
+#, fuzzy, python-format
+#| msgid "Downloading url failed: %s"
+msgid "Downloading URL failed: %s"
+msgstr "Αποτυχία λήψης url: %s"
+
+#: ../bleachbit/CleanerML.py:134
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"Σφάλμα στο handle_cleaner_option() για cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+
+#: ../bleachbit/CleanerML.py:275
+#, python-format
+msgid "Ignoring cleaner because it is world writable: %s"
+msgstr ""
+
+#: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "Σφάλμα ανάγνωσης εκκαθαριστή: %s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py:304
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr ""
+"Ο εκκαθαριστής δεν είναι χρησιμοποιήσιμος σε αυτό το λειτουργικό, γιατί δεν "
+"έχει ενέργειες: %s"
+
+#. TRANSLATORS: desktop entries are .desktop files in Linux that
+#. make up the application menu (the menu that shows BleachBit,
+#. Firefox, and others.  The .desktop files also associate file
+#. types, so clicking on an .html file in Nautilus brings up
+#. Firefox.
+#. More information:
+#. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+#: ../bleachbit/Cleaner.py:275
+msgid "Broken desktop files"
+msgstr "Κατεστραμμένα αρχεία επιφάνειας εργασίας"
+
+#: ../bleachbit/Cleaner.py:276
+msgid "Delete broken application menu entries and file associations"
+msgstr ""
+"Διαγραφή κατεστραμένων καταχωρήσεων μενού εφαρμογών και συσχετίσεων αρχείων"
+
+#. TRANSLATORS: Localizations are files supporting specific
+#. languages, so applications appear in Spanish, etc.
+#: ../bleachbit/Cleaner.py:280
+msgid "Localizations"
+msgstr "Αρχεία γλωσσικής υποστήριξης (localizations)"
+
+#: ../bleachbit/Cleaner.py:281
+msgid "Delete files for unwanted languages"
+msgstr "Διαγραφή αρχείων για ανεπιθύμητες γλώσσες"
+
+#: ../bleachbit/Cleaner.py:283
+msgid "Configure this option in the preferences."
+msgstr "Επεξεργαστείτε αυτή την επιλογή στις προτιμήσεις."
+
+#: ../bleachbit/Cleaner.py:289
+msgid "Rotated logs"
+msgstr "Παλαιά αρχεία καταγραφής"
+
+#: ../bleachbit/Cleaner.py:289
+msgid "Delete old system logs"
+msgstr "Διαγραφή παλαιών αρχείων καταγραφής συστήματος"
+
+#: ../bleachbit/Cleaner.py:292
+msgid "Trash"
+msgstr "Κάδος απορριμάτων"
+
+#: ../bleachbit/Cleaner.py:292
+msgid "Empty the trash"
+msgstr "Άδειασμα κάδου απορριμάτων"
+
+#: ../bleachbit/Cleaner.py:298 ../bleachbit/Cleaner.py:443
+#: ../bleachbit/Worker.py:199
+msgid "Memory"
+msgstr "Μνήμη"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:300
+msgid "Wipe the swap and free memory"
+msgstr "Καθαρισμός swap και απελευθέρωση μνήμης"
+
+#: ../bleachbit/Cleaner.py:302
+msgid "This option is experimental and may cause system problems."
+msgstr ""
+"Αυτή η επιλογή είναι πειραματική και μπορεί να δημιουργήσει προβλήματα στο "
+"σύστημα."
+
+#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
+#: ../bleachbit/Cleaner.py:313
+msgid "Prefetch"
+msgstr "Προανάκτηση"
+
+#: ../bleachbit/Cleaner.py:315
+msgid "Recycle bin"
+msgstr "Κάδος ανακύκλωσης"
+
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:600
+msgid "Empty the recycle bin"
+msgstr "Άδειασμα του κάδου ανακύκλωσης"
+
+#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
+#. the uninstallers for software updates.
+#: ../bleachbit/Cleaner.py:318
+msgid "Update uninstallers"
+msgstr "Εφαρμογές απεγκατάστασης ενημερώσεων"
+
+#: ../bleachbit/Cleaner.py:319
+msgid ""
+"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
+"and Internet Explorer updates"
+msgstr ""
+"Διαγραφή των εφαρμογών απεγκατάστασης για ενημερώσεις της Microsoft που "
+"περιλαμβάνουν αναγκαίες επιδιορθώσεις, service packs και ενημερώσεις του "
+"Internet Explorer"
+
+#: ../bleachbit/Cleaner.py:326 ../bleachbit/Cleaner.py:545
+msgid "Clipboard"
+msgstr "Πρόχειρο"
+
+#: ../bleachbit/Cleaner.py:327
+msgid "The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+"Το πρόχειρο της επιφάνειας εργασίας που χρησιμοποιείται για ενέργειες "
+"αντιγραφής και επικόλλησης"
+
+#. TRANSLATORS: "Custom" is an option allowing the user to specify which
+#. files and folders will be erased.
+#: ../bleachbit/Cleaner.py:334 ../bleachbit/GuiPreferences.py:65
+msgid "Custom"
+msgstr "Προσαρμοσμένο"
+
+#: ../bleachbit/Cleaner.py:335
+msgid "Delete user-specified files and folders"
+msgstr "Διαγραφή αρχείων και φακέλων που έχουν καθοριστεί από τον χρήστη"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:337
+msgid "Free disk space"
+msgstr "Ελεύθερος χώρος δίσκου"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py:339
+msgid "Overwrite free disk space to hide deleted files"
+msgstr "Διαγραφή ελεύθερου χώρου για απόκρυψη διαγραμμένων αρχείων"
+
+#: ../bleachbit/Cleaner.py:340
+msgid "This option is very slow."
+msgstr "Αυτή η επιλογή είναι πολύ αργή."
+
+#: ../bleachbit/Cleaner.py:344
+msgid "The system in general"
+msgstr "Το σύστημα γενικά"
+
+#: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:687
+msgid "System"
+msgstr "Σύστημα"
+
+#. TRANSLATORS: 'Free' means 'unallocated.'
+#. %s expands to a path such as C:\ or /tmp/
+#: ../bleachbit/Cleaner.py:553 ../bleachbit/Cleaner.py:718
+#, python-format
+msgid "Overwrite free disk space %s"
+msgstr "Διαγραφή ελεύθερου χώρου στο %s"
+
+#: ../bleachbit/Cleaner.py:669
+msgid "Loading native cleaners."
+msgstr "Φόρτωση τοπικών εκκαθαριστών."
+
+#: ../bleachbit/Cleaner.py:674
+msgid "Importing cleaners from Winapp2.ini."
+msgstr "Εισαγωγή εκκαθαριστών από το Winapp2.ini."
+
+#: ../bleachbit/CLI.py:118
+#, python-format
+msgid "not a valid cleaner: %s"
+msgstr "μη έγκυρος καθαριστής: %s"
+
+#. TRANSLATORS: This is the command line usage.  Don't translate
+#. %prog, but do translate options, cleaner, and option.
+#. Don't translate and add "usage:" - it gets added by Python.
+#. More information about the command line is here
+#. https://www.bleachbit.org/documentation/command-line
+#: ../bleachbit/CLI.py:147
+msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
+msgstr "χρήση: %prog [επιλογές] καθαριστής.επιλογή1 καθαριστής.επιλογή2"
+
+#: ../bleachbit/CLI.py:150
+msgid "list cleaners"
+msgstr "Εμφάνιση καθαριστών"
+
+#: ../bleachbit/CLI.py:152
+msgid "preview files to be deleted and other changes"
+msgstr "προεπισκόπηση αρχείων που θα διαγραφούν και άλλων αλλαγών"
+
+#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
+#. This is different than cleaning an arbitrary file, such as a
+#. spreadsheet on the desktop.
+#: ../bleachbit/CLI.py:157
+msgid "run cleaners to delete files and make other permanent changes"
+msgstr ""
+"εκτέλεση των καθαριστών για διαγραφή αρχείων και πραγματοποίηση άλλων "
+"μόνιμων αλλαγών"
+
+#: ../bleachbit/CLI.py:159
+msgid "shred specific files or folders"
+msgstr "τεμαχισμός συγκεκριμένων αρχείων ή φακέλων"
+
+#: ../bleachbit/CLI.py:161
+msgid "wipe free space in the given paths"
+msgstr "εκκαθάριση ελεύθερου χώρου στις δεδομένες διαδρομές"
+
+#: ../bleachbit/CLI.py:163
+msgid "overwrite files to hide contents"
+msgstr "αντικατάσταση αρχείων για απόκρυψη των περιεχομένων τους"
+
+#: ../bleachbit/CLI.py:165
+msgid "launch the graphical interface"
+msgstr "εκτέλεση του γραφικού περιβάλλοντος"
+
+#: ../bleachbit/CLI.py:167
+msgid "use options set in the graphical interface"
+msgstr "χρήση των επιλογών που ρυθμίστηκαν από το γραφικό περιβάλλον"
+
+#: ../bleachbit/CLI.py:169
+msgid "enable all options that do not have a warning"
+msgstr "ενεργοποίηση όλων των επιλογών που δεν έχουν προειδοποιήσεις"
+
+#: ../bleachbit/CLI.py:171
+msgid "set log level to verbose"
+msgstr "ορισμός του επιπέδου καταγραφής σε λεπτομερές"
+
+#: ../bleachbit/CLI.py:172
+msgid "log debug messages to file"
+msgstr "καταγραφή των μηνυμάτων καταγραφής σφαλμάτων σε αρχείο"
+
+#: ../bleachbit/CLI.py:174
+msgid "show system information"
+msgstr "εμφάνιση πληροφοριών συστήματος"
+
+#: ../bleachbit/CLI.py:176
+msgid "output version information and exit"
+msgstr "προβολή πληροφοριών έκδοσης και έξοδος"
+
+#: ../bleachbit/CLI.py:179
+msgid "do not prompt for administrator privileges"
+msgstr "να μη γίνεται ερώτηση για δικαιώματα διαχειριστή"
+
+#: ../bleachbit/CLI.py:187
+msgid "update winapp2.ini, if a new version is available"
+msgstr "ενημέρωση του winapp2.ini, αν υπάρχει νέα έκδοση διαθέσιμη"
+
+#: ../bleachbit/CLI.py:209
+msgid ""
+"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
+"preview, --clean"
+msgstr ""
+"Καθορίστε μόνο μια από αυτές τις εντολές: --list-cleaners, --wipe-free-"
+"space, --preview, --clean"
+
+#: ../bleachbit/CLI.py:234
+msgid "Checking online for updates to winapp2.ini"
+msgstr "Έλεγχος για αναβαθμίσεις του winapp2.ini"
+
+#: ../bleachbit/CLI.py:249
+msgid "No directories given for --wipe-free-space"
+msgstr "Δε ορίστηκαν κατάλογοι για την --wipe-free-space"
+
+#: ../bleachbit/CLI.py:254
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr "Η διαδρομή προς εκκαθάριση πρέπει να είναι ένας υπαρκτός κατάλογος: %s"
+
+#: ../bleachbit/CLI.py:256
+msgid "Wiping free space can take a long time."
+msgstr "Η εκκαθάριση του ελεύθερου χώρου μπορεί να πάρει πολύ χρόνο."
+
+#: ../bleachbit/CLI.py:267
+msgid "No work to do. Specify options."
+msgstr "Δεν εκκρεμεί εργασία. Καθορίστε επιλογές."
+
+#: ../bleachbit/CLI.py:275
+msgid "--overwrite is intended only for use with --clean"
+msgstr "Η --overwrite προορίζεται μόνο για χρήση με την --clean"
+
+#. TRANSLATORS: This is the label in the log indicating was
+#. skipped because it matches the whitelist
+#: ../bleachbit/Command.py:49
+msgid "Skip"
+msgstr "Παράκαμψη"
+
+#. TRANSLATORS: This is the label in the log indicating will be
+#. deleted (for previews) or was actually deleted
+#: ../bleachbit/Command.py:79
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: ../bleachbit/Command.py:101
+msgid ""
+"At least one file was locked by another process, so its contents could not "
+"be overwritten. It will be marked for deletion upon system reboot."
+msgstr ""
+"Επειδή κάποιο αρχείο ήταν κλειδωμένο από άλλη διεργασία, το περιεχόμενό του "
+"δεν κατέστη δυνατό να αναγραφεί. Θα σημειωθεί για διαγραφή με την "
+"επανεκκίνηση του συστήματος."
+
+#. TRANSLATORS: The file will be deleted when the
+#. system reboots
+#: ../bleachbit/Command.py:104
+msgid "Mark for deletion"
+msgstr "Μαρκάρισμα για διαγραφή"
+
+#. TRANSLATORS: The file will be truncated to 0 bytes in length
+#: ../bleachbit/Command.py:283
+msgid "Truncate"
+msgstr "Εκκαθάριση περιεχομένου"
+
+#: ../bleachbit/Command.py:326
+msgid "Delete registry key"
+msgstr "Διαγραφή κλειδιού μητρώου (registry key)"
+
+#: ../bleachbit/FileUtilities.py:354 ../bleachbit/FileUtilities.py:363
+#: ../bleachbit/FileUtilities.py:377
+#, python-format
+msgid "Directory is not empty: %s"
+msgstr "Ο φάκελος δεν είναι κενός: %s"
+
+#: ../bleachbit/FileUtilities.py:366
+#, python-format
+msgid "Skipping mount point: %s"
+msgstr "Παράλειψη σημείου προσάρτησης: %s"
+
+#: ../bleachbit/FileUtilities.py:368
+#, python-format
+msgid "Device or resource is busy: %s"
+msgstr "Η συσκευή ή ο πόρος είναι απασχολημένα: %s"
+
+#: ../bleachbit/FileUtilities.py:404
+#, python-format
+msgid "Special file type cannot be deleted: %s"
+msgstr "Δεν μπορεί να διαγραφεί ειδικός τύπος αρχείου: %s"
+
+#: ../bleachbit/FileUtilities.py:594
+#, python-format
+msgid ""
+"The environment variable TMP refers to a directory that does not exist: %s"
+msgstr ""
+"Η μεταβλητή περιβάλλοντος TMP αναφέρεται σε έναν κατάλογο που δεν υπάρχει: %s"
+
+#: ../bleachbit/FileUtilities.py:834
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"Υπήρχε τουλάχιστον ένα αρχείο σε ένα σύστημα αρχείων που δεν υποστηρίζει "
+"προχωρημένη αντικατάσταση."
 
-#: ../bleachbit/Unix.py:578
+#: ../bleachbit/FileUtilities.py:930
 #, python-format
-msgid "Executable not found: %s"
-msgstr "Το εκτελέσιμο δεν βρέθηκε: %s"
+msgid "Wiping path: %s"
+msgstr "Διαγραφή διαδρομής: %s"
 
-#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:656 ../bleachbit/Worker.py:140
+#: ../bleachbit/FileUtilities.py:940
+msgid "Creating new, temporary file for wiping free space."
+msgstr "Δημιουργία νέου, προσωρινού αρχείου, για την εκκαθάριση κενού χώρου."
+
+#: ../bleachbit/FileUtilities.py:996
 #, python-format
-msgid ""
-"%s cannot be cleaned because it is currently running.  Close it, and try "
-"again."
+msgid "Error #%d when flushing the file buffer."
 msgstr ""
-"Το %s δεν μπόρεσε να καθαριστεί διότι ήδη τρέχει. Κλείστε το και δοκιμάστε "
-"ξανά."
 
-#: ../bleachbit/GuiBasic.py:112
+#: ../bleachbit/FileUtilities.py:1012
+msgid ""
+"Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
+"{rate:.2f} MB/s"
+msgstr ""
+"Εγγράφηκαν {files:,} αρχεία και {bytes:,} bytes σε {seconds:,} δευτερόλεπτα, "
+"σε {rate:.2f} MB/s"
+
+#: ../bleachbit/FileUtilities.py:1017
+msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+msgstr "{bytes:,} bytes και {inodes:,} inodes διαθέσιμα σε μη super χρήστη"
+
+#: ../bleachbit/FileUtilities.py:1019
+msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+msgstr "{bytes:,} bytes και {inodes:,} inodes διαθέσιμα σε super χρήστη"
+
+#: ../bleachbit/FileUtilities.py:1035
+msgid "Handled unknown error #0 while truncating file."
+msgstr "Χειρισμός αγνώστου σφάλματος #0 κατά την περικοπή αρχείου."
+
+#: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
+#: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
+msgid "_Cancel"
+msgstr "_Ακύρωση"
+
+#: ../bleachbit/GuiBasic.py:82
+msgid "_Open"
+msgstr "Ά_νοιγμα"
+
+#: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
+#: ../bleachbit/GUI.py:225
+msgid "_Delete"
+msgstr "_Διαγραφή"
+
+#: ../bleachbit/GuiBasic.py:123
 msgid "Delete confirmation"
 msgstr "Επιβεβαίωση διαγραφής"
 
-#: ../bleachbit/GuiBasic.py:122
+#: ../bleachbit/GuiBasic.py:132
+msgid ""
+"This function deletes all BleachBit settings and then quits the application. "
+"Use this to hide your use of BleachBit or to reset its settings. The next "
+"time you start BleachBit, the settings will initialize to default values."
+msgstr ""
+"Η λειτουργία αυτή διαγράφει όλες τις ρυθμίσεις του BleachBit και μετά "
+"κλείνει την εφαρμογή. Χρησιμοποιήστε την για να αποκρύψετε τη χρήση της "
+"εφαρμογής ή να επαναφέρετε τις ρυθμίσεις της. Την επόμενη φορά που θα "
+"ανοίξετε την εφαρμογή, οι ρυθμίσεις θα επανέλθουν στις προεπιλεγμένες."
+
+#: ../bleachbit/GuiBasic.py:139
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -701,11 +1288,11 @@ msgstr ""
 "επιλεγμένες ενέργειες; Τα συγκεκριμένα αρχεία μπορεί να έχουν τροποποιηθεί "
 "από την τελευταία φορά που εκτελέσατε την προεπισκόπηση."
 
-#: ../bleachbit/GuiBasic.py:125
+#: ../bleachbit/GuiBasic.py:142
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά αυτά τα αρχεία;"
 
-#: ../bleachbit/GuiBasic.py:162
+#: ../bleachbit/GuiBasic.py:180
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -717,644 +1304,77 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:174
+#: ../bleachbit/GuiBasic.py:192
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "Άνοιγμα περιηγητή ιστού στο %s;"
 
-#. TRANSLATORS: This is the label in the log indicating was
-#. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:47
-msgid "Skip"
-msgstr "Παράκαμψη"
+#: ../bleachbit/GuiChaff.py:46
+msgid "Deleting files"
+msgstr "Διαγραφή αρχείων"
 
-#. TRANSLATORS: This is the label in the log indicating will be
-#. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:77
-msgid "Delete"
-msgstr "Διαγραφή"
-
-#: ../bleachbit/Command.py:99
-msgid ""
-"At least one file was locked by another process, so its contents could not "
-"be overwritten. It will be marked for deletion upon system reboot."
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py:65
+msgid "Make chaff"
 msgstr ""
 
-#. TRANSLATORS: The file will be deleted when the
-#. system reboots
-#: ../bleachbit/Command.py:102
-msgid "Mark for deletion"
-msgstr "Μαρκάρισμα για διαγραφή"
-
-#. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Command.py:205 ../bleachbit/Command.py:239
-#: ../bleachbit/Action.py:312 ../bleachbit/Action.py:325
-#: ../bleachbit/Action.py:338 ../bleachbit/Action.py:351
-#: ../bleachbit/Action.py:364 ../bleachbit/Action.py:429
-msgid "Clean file"
-msgstr "Καθαρισμός αρχείου"
-
-#. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:281
-msgid "Truncate"
-msgstr "Εκκαθάριση περιεχομένου"
-
-#: ../bleachbit/Command.py:323
-msgid "Delete registry key"
-msgstr "Διαγραφή κλειδιού μητρώου (registry key)"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:43
-msgid "Applications"
-msgstr "Εφαρμογές"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:46
-msgid "Internet"
-msgstr "Διαδίκτυο"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:49
-msgid "Multimedia"
-msgstr "Πολυμέσα"
-
-#. TRANSLATORS: This is cleaner name for cleaners imported
-#. from winapp2.ini
-#: ../bleachbit/Winapp.py:52
-msgid "Utilities"
-msgstr "Εργαλεία"
-
-#: ../bleachbit/Winapp.py:63
-msgid "Games"
-msgstr "Παιχνίδια"
-
-#: ../bleachbit/Winapp.py:181
-msgid "Imported from winapp2.ini"
-msgstr "Εισήχθει από το winapp2.ini"
-
-#. TRANSLATORS: desktop entries are .desktop files in Linux that
-#. make up the application menu (the menu that shows BleachBit,
-#. Firefox, and others.  The .desktop files also associate file
-#. types, so clicking on an .html file in Nautilus brings up
-#. Firefox.
-#. More information:
-#. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:276
-msgid "Broken desktop files"
-msgstr "Κατεστραμμένα αρχεία επιφάνειας εργασίας"
-
-#: ../bleachbit/Cleaner.py:277
-msgid "Delete broken application menu entries and file associations"
-msgstr ""
-"Διαγραφή κατεστραμένων καταχωρήσεων μενού εφαρμογών και συσχετίσεων αρχείων"
-
-#. TRANSLATORS: Localizations are files supporting specific
-#. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:281
-msgid "Localizations"
-msgstr "Αρχεία γλωσσικής υποστήριξης (localizations)"
-
-#: ../bleachbit/Cleaner.py:282
-msgid "Delete files for unwanted languages"
-msgstr "Διαγραφή αρχείων για ανεπιθύμητες γλώσσες"
-
-#: ../bleachbit/Cleaner.py:284
-msgid "Configure this option in the preferences."
-msgstr "Επεξεργαστείτε αυτή την επιλογή στις προτιμήσεις."
-
-#: ../bleachbit/Cleaner.py:290
-msgid "Rotated logs"
-msgstr "Παλαιά αρχεία καταγραφής"
-
-#: ../bleachbit/Cleaner.py:290
-msgid "Delete old system logs"
-msgstr "Διαγραφή παλαιών αρχείων καταγραφής συστήματος"
-
-#: ../bleachbit/Cleaner.py:293
-msgid "Trash"
-msgstr "Κάδος απορριμάτων"
-
-#: ../bleachbit/Cleaner.py:293
-msgid "Empty the trash"
-msgstr "Άδειασμα κάδου απορριμάτων"
-
-#: ../bleachbit/Cleaner.py:299 ../bleachbit/Cleaner.py:444
-#: ../bleachbit/Worker.py:188
-msgid "Memory"
-msgstr "Μνήμη"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:301
-msgid "Wipe the swap and free memory"
-msgstr "Καθαρισμός swap και απελευθέρωση μνήμης"
-
-#: ../bleachbit/Cleaner.py:303
-msgid "This option is experimental and may cause system problems."
-msgstr ""
-"Αυτή η επιλογή είναι πειραματική και μπορεί να δημιουργήσει προβλήματα στο "
-"σύστημα."
-
-#: ../bleachbit/Cleaner.py:311
-msgid "Memory dump"
-msgstr "Αποτύπωση μνήμης"
-
-#: ../bleachbit/Cleaner.py:311
-msgid "Delete the file memory.dmp"
-msgstr "Διαγραφή του αρχείου memory.dmp"
-
-#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:314
-msgid "Prefetch"
-msgstr "Προανάκτηση"
-
-#: ../bleachbit/Cleaner.py:316
-msgid "Recycle bin"
-msgstr "Κάδος ανακύκλωσης"
-
-#: ../bleachbit/Cleaner.py:316 ../bleachbit/Cleaner.py:614
-msgid "Empty the recycle bin"
-msgstr "Άδειασμα του κάδου ανακύκλωσης"
-
-#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
-#. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:319
-msgid "Update uninstallers"
-msgstr "Εφαρμογές απεγκατάστασης ενημερώσεων"
-
-#: ../bleachbit/Cleaner.py:320
-msgid ""
-"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
-"and Internet Explorer updates"
-msgstr ""
-"Διαγραφή των εφαρμογών απεγκατάστασης για ενημερώσεις της Microsoft που "
-"περιλαμβάνουν αναγκαίες επιδιορθώσεις, service packs και ενημερώσεις του "
-"Internet Explorer"
-
-#: ../bleachbit/Cleaner.py:327 ../bleachbit/Cleaner.py:554
-msgid "Clipboard"
-msgstr "Πρόχειρο"
-
-#: ../bleachbit/Cleaner.py:328
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-"Το πρόχειρο της επιφάνειας εργασίας που χρησιμοποιείται για ενέργειες "
-"αντιγραφής και επικόλλησης"
-
-#. TRANSLATORS: "Custom" is an option allowing the user to specify which
-#. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:335 ../bleachbit/GuiPreferences.py:66
-msgid "Custom"
-msgstr "Προσαρμοσμένο"
-
-#: ../bleachbit/Cleaner.py:336
-msgid "Delete user-specified files and folders"
-msgstr "Διαγραφή αρχείων και φακέλων που έχουν καθοριστεί από τον χρήστη"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:338
-msgid "Free disk space"
-msgstr "Ελεύθερος χώρος δίσκου"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:340
-msgid "Overwrite free disk space to hide deleted files"
-msgstr "Διαγραφή ελεύθερου χώρου για απόκρυψη διαγραμμένων αρχείων"
-
-#: ../bleachbit/Cleaner.py:341
-msgid "This option is very slow."
-msgstr "Αυτή η επιλογή είναι πολύ αργή."
-
-#: ../bleachbit/Cleaner.py:345
-msgid "The system in general"
-msgstr "Το σύστημα γενικά"
-
-#: ../bleachbit/Cleaner.py:347 ../bleachbit/Cleaner.py:687
-msgid "System"
-msgstr "Σύστημα"
-
-#. TRANSLATORS: 'Free' means 'unallocated.'
-#. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:562 ../bleachbit/Cleaner.py:720
-#, python-format
-msgid "Overwrite free disk space %s"
-msgstr "Διαγραφή ελεύθερου χώρου στο %s"
-
-#: ../bleachbit/RecognizeCleanerML.py:58
-msgid "Security warning"
-msgstr "Προειδοποίηση ασφαλείας"
-
-#: ../bleachbit/RecognizeCleanerML.py:71
-msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
-"quit."
-msgstr ""
-"Αυτοί οι ορισμοί για τους καθαριστές είναι καινούριοι ή έχουν τροποποιηθεί. "
-"Λάθος ορισμοί μπορούν να βλάψουν το σύστημά σας. Αν δεν εμπιστεύεστε αυτές "
-"τις αλλαγές, διαγράψτε τα αρχεία ή κλείστε το πρόγραμμα."
-
-#: ../bleachbit/RecognizeCleanerML.py:87
-msgctxt "column_label"
-msgid "Delete"
-msgstr "Διαγραφή"
-
-#: ../bleachbit/RecognizeCleanerML.py:92
-msgctxt "column_label"
-msgid "Filename"
-msgstr "Όνομα αρχείου"
-
-#. TRANSLATORS: This indicates an error.  The special keyword
-#. %(operation)s will be replaced by 'firefox' or 'opera' or
-#. some other cleaner ID.  The special keyword %(msg)s will be
-#. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:74
-#, python-format
-msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Σφάλμα κατά την εκτέλεση της ενέργειας '%(operation)s': '%(msg)s'"
-
-#: ../bleachbit/Worker.py:101
-#, python-brace-format
-msgid "Error: {operation_option}: {command}"
-msgstr ""
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:186
-msgid "Please wait.  Wiping free disk space."
-msgstr "Παρακαλώ περιμένετε. Καθαρισμός ελεύθερου χώρου στο δίσκο."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:188 ../bleachbit/Worker.py:335
-#, python-format
-msgid "Please wait.  Cleaning %s."
-msgstr "Παρακαλώ περιμένετε. Γίνεται καθαρισμός από %s."
-
-#: ../bleachbit/Worker.py:202
-msgid "Please wait. Wiping file system metadata."
-msgstr "Παρακαλώ περιμένετε. Διαγραφή μεταδεδομένων του συστήματος αρχείων."
-
-#: ../bleachbit/Worker.py:205
-msgid "Please wait. Cleaning up after wiping file system metadata."
-msgstr ""
-"Παρακαλώ περιμένετε. Καθαρισμός έπειτα από τη διαγραφή μεταδεδομένων του "
-"συστήματος αρχείων."
-
-#: ../bleachbit/Worker.py:208
-#, python-format
-msgid "About %d minute remaining."
-msgid_plural "About %d minutes remaining."
-msgstr[0] "Απομένει περίπου %d λεπτό."
-msgstr[1] "Απομένουν περίπου %d λεπτά."
-
-#. TRANSLATORS: This refers to disk space that was
-#. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:275
-#, python-format
-msgid "Disk space recovered: %s"
-msgstr "Χώρος που ανακτήθηκε στο δίσκο: %s"
-
-#. TRANSLATORS: This refers to a preview (no real
-#. changes were made yet)
-#: ../bleachbit/Worker.py:279
-#, python-format
-msgid "Disk space to be recovered: %s"
-msgstr "Χώρος στο δίσκο που θα ανακτηθεί: %s"
-
-#. TRANSLATORS: This refers to the number of files really
-#. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:284
-#, python-format
-msgid "Files deleted: %d"
-msgstr "Αρχεία που διαγράφηκαν: %d"
-
-#. TRANSLATORS: This refers to the number of files that
-#. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:288
-#, python-format
-msgid "Files to be deleted: %d"
-msgstr "Αρχεία που θα διαγραφούν: %d"
-
-#: ../bleachbit/Worker.py:291
-#, python-format
-msgid "Special operations: %d"
-msgstr "Ειδικές ενέργειες: %d"
-
-#: ../bleachbit/Worker.py:294
-#, python-format
-msgid "Errors: %d"
-msgstr "Σφάλματα: %d"
-
-#. TRANSLATORS: The "deep scan" feature searches over broad
-#. areas of the file system such as the user's whole home directory
-#. or all the system executables.
-#: ../bleachbit/Worker.py:309
-msgid "Please wait.  Running deep scan."
-msgstr "Παρακαλώ περιμένετε. Εκτελείται βαθιά σάρωση."
-
-#. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:338
-#, python-format
-msgid "Please wait.  Previewing %s."
-msgstr "Παρακαλώ περιμένετε. Προεπισκόπηση %s."
-
-#: ../bleachbit/Update.py:80
-msgid "New winapp2.ini was downloaded."
-msgstr "Κατέβηκε νέο winapp2.ini"
-
-#: ../bleachbit/Update.py:125
-msgid "Update BleachBit"
-msgstr "Ενημέρωση του BleachBit"
-
-#: ../bleachbit/Update.py:130
-msgid "A new version is available."
-msgstr "Μια νέα έκδοση είναι διαθέσιμη."
-
-#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
-#. similar
-#: ../bleachbit/Update.py:139
-#, python-format
-msgid "Update to version %s"
-msgstr "Αναβάθμιση στην έκδοση %s"
-
-#: ../bleachbit/Update.py:164
-#, python-format
-msgid ""
-"Error when opening a network connection to %s to check for updates. Please "
-"verify the network is working."
-msgstr ""
-"Σφάλμα κατά το άνοιγμα μιας σύνδεσης δικτύου για το %s για να ελέγξετε για "
-"ενημερώσεις. Παρακαλώ βεβαιωθείτε ότι το δίκτυο λειτουργεί."
-
-#: ../bleachbit/CLI.py:106
-#, python-format
-msgid "not a valid cleaner: %s"
-msgstr "μη έγκυρος καθαριστής: %s"
-
-#. TRANSLATORS: This is the command line usage.  Don't translate
-#. %prog, but do translate usage, options, cleaner, and option.
-#. More information about the command line is here
-#. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:133
-msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "χρήση: %prog [επιλογές] καθαριστής.επιλογή1 καθαριστής.επιλογή2"
-
-#: ../bleachbit/CLI.py:136
-msgid "list cleaners"
-msgstr "Εμφάνιση καθαριστών"
-
-#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
-#. This is different than cleaning an arbitrary file, such as a
-#. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:141
-msgid "run cleaners to delete files and make other permanent changes"
-msgstr ""
-"εκτέλεση των καθαριστών για διαγραφή αρχείων και πραγματοποίηση άλλων "
-"μόνιμων αλλαγών"
-
-#: ../bleachbit/CLI.py:144
-msgid "shred specific files or folders"
-msgstr "τεμαχισμός συγκεκριμένων αρχείων ή φακέλων"
-
-#: ../bleachbit/CLI.py:146
-msgid "show system information"
-msgstr "εμφάνιση πληροφοριών συστήματος"
-
-#: ../bleachbit/CLI.py:148
-msgid "launch the graphical interface"
-msgstr "εκτέλεση του γραφικού περιβάλλοντος"
-
-#: ../bleachbit/CLI.py:152
-msgid "do not prompt for administrator privileges"
-msgstr "να μη γίνεται ερώτηση για δικαιώματα διαχειριστή"
-
-#: ../bleachbit/CLI.py:157
-msgid "preview files to be deleted and other changes"
-msgstr "προεπισκόπηση αρχείων που θα διαγραφούν και άλλων αλλαγών"
-
-#: ../bleachbit/CLI.py:161
-msgid "use options set in the graphical interface"
-msgstr "χρήση των επιλογών που ρυθμίστηκαν από το γραφικό περιβάλλον"
-
-#: ../bleachbit/CLI.py:164
-msgid "update winapp2.ini, if a new version is available"
-msgstr "ενημέρωση του winapp2.ini, αν υπάρχει νέα έκδοση διαθέσιμη"
-
-#: ../bleachbit/CLI.py:166
-msgid "output version information and exit"
-msgstr "προβολή πληροφοριών έκδοσης και έξοδος"
-
-#: ../bleachbit/CLI.py:168
-msgid "overwrite files to hide contents"
-msgstr "αντικατάσταση αρχείων για απόκρυψη των περιεχομένων τους"
-
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/Action.py:442 ../bleachbit/GUI.py:659
-msgid "Clean"
-msgstr "Εκκαθάριση"
-
-#: ../bleachbit/Action.py:478
-#, python-format
-msgid "Run external command: %s"
-msgstr "Εκτελέστε εξωτερική εντολή: %s"
-
-#: ../bleachbit/GUI.py:135 ../bleachbit/GuiPreferences.py:296
-msgid "Name"
-msgstr "Όνομα"
-
-#: ../bleachbit/GUI.py:143
-msgid "Active"
-msgstr "Ενεργό"
-
-#. TRANSLATORS: Size is the label for the column that shows how
-#. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:155
-msgid "Size"
-msgstr "Μέγεθος"
-
-#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
-#. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:186
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
-msgstr ""
-"Προειδοποίηση σχετικά με %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
-
-#: ../bleachbit/GUI.py:373
-msgid "You must select an operation"
-msgstr "Πρέπει να επιλέξετε μια ενέργεια"
-
-#: ../bleachbit/GUI.py:392 ../bleachbit/GUI.py:414
-msgid "Done."
-msgstr "Ολοκληρώθηκε."
-
-#: ../bleachbit/GUI.py:431
-msgid "Program to clean unnecessary files"
-msgstr "Πρόγραμμα για τον καθαρισμό των άχρηστων αρχείων"
-
-#: ../bleachbit/GUI.py:441
-msgid ""
-"GNU General Public License version 3 or later.\n"
-"See http://www.gnu.org/licenses/gpl-3.0.txt"
-msgstr ""
-"GNU General Public License έκδοση 3 ή πιο πρόσφατη.\n"
-"Δείτε http://www.gnu.org/licenses/gpl-3.0.txt"
-
-#. TRANSLATORS: Maintain the names of translators here.
-#. Launchpad does this automatically for translations
-#. typed in Launchpad. This is a special string shown
-#. in the 'About' box.
-#: ../bleachbit/GUI.py:447
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Dimitris Mytilinaios https://launchpad.net/~webdev-hotmail\n"
-"  DimitrisT https://launchpad.net/~dimitris.t\n"
-"  Matsek Ratkievits https://launchpad.net/~matsaki95\n"
-"  Stefanos Kariotidis https://launchpad.net/~iccode\n"
-"  Valantis Kamayiannis https://launchpad.net/~kamayiannis\n"
-"  mara sdr https://launchpad.net/~paren8esis\n"
-"  nask00s https://launchpad.net/~nask00s\n"
-"  sarantis https://launchpad.net/~ubu-roi\n"
-"  tzem https://launchpad.net/~athmakrigiannis\n"
-"  Χρήστος https://launchpad.net/~maguss"
-
-#: ../bleachbit/GUI.py:459
-msgid "System information"
-msgstr "Πληροφορίες συστήματος"
-
-#: ../bleachbit/GUI.py:521
-msgid "No paths found in clipboard."
-msgstr ""
-
-#: ../bleachbit/GUI.py:555
-msgid "Choose files to shred"
-msgstr "Επιλογή αρχείων για τεμαχισμό"
-
-#: ../bleachbit/GUI.py:558
-msgid "Choose folder to shred"
-msgstr "Επιλογή φακέλου για τεμαχισμό"
-
-#: ../bleachbit/GUI.py:622 ../bleachbit/GuiPreferences.py:197
-#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GuiPreferences.py:367
-msgid "Choose a folder"
-msgstr "Επιλογή φακέλου"
-
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/GUI.py:654
-msgid "Preview"
-msgstr "Προεπισκόπηση"
-
-#: ../bleachbit/GUI.py:749
-msgid "_Shred Files"
-msgstr "_Τεμαχισμός αρχείων"
-
-#: ../bleachbit/GUI.py:751
-msgid "Sh_red Folders"
-msgstr "Τε_μαχισμός φακέλων"
-
-#: ../bleachbit/GUI.py:753
-msgid "_Wipe Free Space"
-msgstr "Ε_κκαθάριση ελεύθερου χώρου"
-
-#: ../bleachbit/GUI.py:755
-msgid "S_hred Settings and Quit"
-msgstr "Επιλογές τεμα_χισμού και Έξοδος"
-
-#: ../bleachbit/GUI.py:757
-msgid "_Quit"
-msgstr "_Έξοδος"
-
-#: ../bleachbit/GUI.py:759
-msgid "_File"
-msgstr "_Αρχείο"
-
-#: ../bleachbit/GUI.py:761 ../bleachbit/GuiPreferences.py:58
+#: ../bleachbit/GuiChaff.py:70
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "Δημιουργία τυχαίων μηνυμάτων εμπνευσμένων από έγγραφα."
+
+#. TRANSLATORS: Inspiration is a choice of documents from which random
+#. text will be generated.
+#: ../bleachbit/GuiChaff.py:77
+msgid "Inspiration"
+msgstr "Έμπνευση"
+
+#: ../bleachbit/GuiChaff.py:80
+msgid "2600 Magazine"
+msgstr "Περιοδικό 2600"
+
+#: ../bleachbit/GuiChaff.py:80
+msgid "Hillary Clinton's emails"
+msgstr "Ηλεκτρονικό ταχυδρομείο της Χίλαρι Κλίντον"
+
+#: ../bleachbit/GuiChaff.py:88
+msgid "Number of files"
+msgstr "Αριθμός αρχείων"
+
+#: ../bleachbit/GuiChaff.py:95 ../bleachbit/GuiChaff.py:155
+msgid "Select destination folder"
+msgstr "Επιλογή φακέλου προορισμού"
+
+#: ../bleachbit/GuiChaff.py:105
+msgid "When finished"
+msgstr "Όταν ολοκληρωθεί"
+
+#: ../bleachbit/GuiChaff.py:108
+msgid "Delete without shredding"
+msgstr "Μη ασφαλής διαγραφή"
+
+#: ../bleachbit/GuiChaff.py:108
+msgid "Do not delete"
+msgstr "Να μη γίνει διαγραφή"
+
+#: ../bleachbit/GuiChaff.py:119
+msgid "Make files"
+msgstr "Δημιουργία αρχείων"
+
+#: ../bleachbit/GuiChaff.py:136
+msgid "Download data needed for chaff generator?"
+msgstr "Λήψη αναγκαίων δεδομένων για τη δημιουργία αρχείων;"
+
+#: ../bleachbit/GuiChaff.py:178
+msgid "Generating files"
+msgstr "Δημιουργία αρχείων"
+
+#: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:32
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: ../bleachbit/GUI.py:762
-msgid "Shred Paths from Clipboard"
-msgstr ""
-
-#: ../bleachbit/GUI.py:764
-msgid "_Edit"
-msgstr "Ε_πεξεργασία"
-
-#: ../bleachbit/GUI.py:765
-msgid "Help Contents"
-msgstr "Περιεχόμενα Βοήθειας"
-
-#: ../bleachbit/GUI.py:768
-msgid "_Release Notes"
-msgstr "_Σημειώσεις Έκδοσης"
-
-#: ../bleachbit/GUI.py:771
-msgid "_System Information"
-msgstr "Π_ληροφορίες Συστήματος"
-
-#: ../bleachbit/GUI.py:774
-msgid "_About"
-msgstr "Πε_ρί"
-
-#: ../bleachbit/GUI.py:775
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: ../bleachbit/GUI.py:800
-msgctxt "button"
-msgid "Preview"
-msgstr "Προεπισκόπηση"
-
-#: ../bleachbit/GUI.py:805
-msgid "Preview files in the selected operations (without deleting any files)"
-msgstr ""
-"Προεπισκόπηση αρχείων στις επιλεγμένες ενέργειες (χωρίς τη διαγραφή τους)"
-
-#: ../bleachbit/GUI.py:815
-msgctxt "button"
-msgid "Clean"
-msgstr "Εκκαθάριση"
-
-#: ../bleachbit/GUI.py:819
-msgid "Clean files in the selected operations"
-msgstr "Εκκαθάριση αρχείων στις επιλεγμένες ενέργειες"
-
-#: ../bleachbit/GUI.py:910
-msgid "Error when checking for updates: "
-msgstr "Σφάλμα κατά τον έλεγχο ενημερώσεων: "
-
-#: ../bleachbit/GUI.py:949
-msgid ""
-"Error loading the SQLite module: the antivirus software may be blocking it."
-msgstr ""
-"Σφάλμα κατά τη φόρτωση του SQLite module: το αντιικό πρόγραμμα (antivirus) "
-"μπορεί να το μπλοκάρει."
-
-#: ../bleachbit/GUI.py:952
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"Αυτή τη στιγμή εκτελείτε το BleachBit με δικαιώματα διαχειριστή για την "
-"εκκαθάριση διαμοιραζόμενων τμημάτων του συστήματος, άρα οι αναφορές σε "
-"φάκελο του προφίλ χρήστη θα καθαρίσουν μόνο το λογαριασμό υπερχρήστη (root)."
-
-#: ../bleachbit/GUI.py:957
-msgid ""
-"Run BleachBit with administrator privileges to improve the accuracy of "
-"overwriting the contents of files."
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:64
+#: ../bleachbit/GuiPreferences.py:63
 msgid "General"
 msgstr "Γενικά"
 
@@ -1383,31 +1403,24 @@ msgstr ""
 "πληροφορίες γι' αυτήν. Έπειτα, μπορείτε χειροκίνητα να την κατεβάσετε και "
 "εγκαταστήσετε."
 
-#: ../bleachbit/GuiPreferences.py:128
+#: ../bleachbit/GuiPreferences.py:129
 msgid "Check for new beta releases"
 msgstr "Έλεγχος για νέες δοκιμαστικές κυκλοφορίες"
 
-#: ../bleachbit/GuiPreferences.py:137
+#: ../bleachbit/GuiPreferences.py:138
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr ""
 "Κατεβάστε και ενημερώστε τους καθαριστές από την κοινότητα (winapp2.ini)"
 
-#. TRANSLATORS: This means to hide cleaners which would do
-#. nothing.  For example, if Firefox were never used on
-#. this system, this option would hide Firefox to simplify
-#. the list of cleaners.
-#: ../bleachbit/GuiPreferences.py:151
+#: ../bleachbit/GuiPreferences.py:152
 msgid "Hide irrelevant cleaners"
 msgstr "Απόκρυψη μη χρηστικών καθαριστών"
 
-#. TRANSLATORS: Overwriting is the same as shredding.  It is a way
-#. to prevent recovery of the data. You could also translate
-#. 'Shred files to prevent recovery.'
-#: ../bleachbit/GuiPreferences.py:159
+#: ../bleachbit/GuiPreferences.py:161
 msgid "Overwrite contents of files to prevent recovery"
 msgstr "Αναγραφή περιεχομένων των αρχείων για αποτροπή επαναφοράς"
 
-#: ../bleachbit/GuiPreferences.py:163
+#: ../bleachbit/GuiPreferences.py:165
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -1416,25 +1429,46 @@ msgstr ""
 "συγκεκριμένες ενέργειες του BleachBit. Είναι επίσης ιδιαίτερα χρονοβόρα "
 "διαδικασία."
 
-#: ../bleachbit/GuiPreferences.py:166
-msgid "Start BleachBit with computer"
-msgstr "Εκκίνηση του BleachBit με το άνοιγμα του υπολογιστή"
-
-#: ../bleachbit/GuiPreferences.py:172
+#: ../bleachbit/GuiPreferences.py:170
 msgid "Exit after cleaning"
 msgstr "Έξοδος μετά τον καθαρισμό"
 
-#: ../bleachbit/GuiPreferences.py:178
+#: ../bleachbit/GuiPreferences.py:176
 msgid "Confirm before delete"
 msgstr "Επιβεβαίωση πριν τη διαγραφή"
 
-#: ../bleachbit/GuiPreferences.py:186
+#: ../bleachbit/GuiPreferences.py:184
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
 "Χρησιμοποιήστε τα μεγέθη IEC (1 KiB = 1024 bytes) αντί της SI (1 kB = 1000 "
 "bytes)"
 
-#: ../bleachbit/GuiPreferences.py:221
+#: ../bleachbit/GuiPreferences.py:191
+msgid "Windows 10 theme"
+msgstr "Θέμα Windows 10"
+
+#: ../bleachbit/GuiPreferences.py:198
+msgid "Dark mode"
+msgstr "Σκοτεινό θέμα"
+
+#: ../bleachbit/GuiPreferences.py:204
+msgid "Remember window geometry"
+msgstr "Απομνημόνευση γεωμετρίας παραθύρου"
+
+#: ../bleachbit/GuiPreferences.py:210
+msgid "Show debug messages"
+msgstr "Εμφάνιση μηνυμάτων αποσφαλμάτωσης"
+
+#: ../bleachbit/GuiPreferences.py:216
+msgid "Add shred context menu option (KDE Plasma specific)"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
+#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
+msgid "Choose a folder"
+msgstr "Επιλογή φακέλου"
+
+#: ../bleachbit/GuiPreferences.py:252
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
@@ -1443,68 +1477,568 @@ msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
-#: ../bleachbit/GuiPreferences.py:243
+#: ../bleachbit/GuiPreferences.py:274
 msgctxt "button"
 msgid "Add"
 msgstr "Προσθήκη"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:247 ../bleachbit/GuiPreferences.py:458
+#: ../bleachbit/GuiPreferences.py:278 ../bleachbit/GuiPreferences.py:497
 msgctxt "button"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: ../bleachbit/GuiPreferences.py:272
+#: ../bleachbit/GuiPreferences.py:302
 msgid "All languages will be deleted except those checked."
 msgstr "Όλες οι γλώσσες θα διαγραφούν εκτός από αυτές που έχουν επιλεγεί."
 
-#: ../bleachbit/GuiPreferences.py:288
+#: ../bleachbit/GuiPreferences.py:318
 msgid "Preserve"
 msgstr "Διατήρηση"
 
-#: ../bleachbit/GuiPreferences.py:292
+#: ../bleachbit/GuiPreferences.py:322
 msgid "Code"
 msgstr "Κώδικας"
 
-#: ../bleachbit/GuiPreferences.py:313 ../bleachbit/GuiPreferences.py:354
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:468
+msgid "Name"
+msgstr "Όνομα"
+
+#: ../bleachbit/GuiPreferences.py:344 ../bleachbit/GuiPreferences.py:387
 msgid "Choose a file"
 msgstr "Επιλογή αρχείου"
 
-#: ../bleachbit/GuiPreferences.py:320 ../bleachbit/GuiPreferences.py:361
-#: ../bleachbit/GuiPreferences.py:405
+#: ../bleachbit/GuiPreferences.py:352 ../bleachbit/GuiPreferences.py:395
+#: ../bleachbit/GuiPreferences.py:440
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../bleachbit/GuiPreferences.py:334 ../bleachbit/GuiPreferences.py:375
-#: ../bleachbit/GuiPreferences.py:407
+#: ../bleachbit/GuiPreferences.py:367 ../bleachbit/GuiPreferences.py:410
+#: ../bleachbit/GuiPreferences.py:442
 msgid "Folder"
 msgstr "Φάκελος"
 
-#: ../bleachbit/GuiPreferences.py:417
-msgid "Theses paths will not be deleted or modified."
+#: ../bleachbit/GuiPreferences.py:452
+#, fuzzy
+#| msgid "Theses paths will not be deleted or modified."
+msgid "These paths will not be deleted or modified."
 msgstr "Αυτές οι τοποθεσίες δε θα διαγραφούν ούτε θα τροποποιηθούν."
 
-#: ../bleachbit/GuiPreferences.py:420
+#: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
 msgstr "Αυτές οι τοποθεσίες μπορούν να επιλεγούν για διαγραφή."
 
-#: ../bleachbit/GuiPreferences.py:428
+#: ../bleachbit/GuiPreferences.py:463
 msgid "Type"
 msgstr "Τύπος"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:434
+#: ../bleachbit/GuiPreferences.py:469
 msgid "Path"
 msgstr "Τοποθεσία"
 
-#: ../bleachbit/GuiPreferences.py:446
+#: ../bleachbit/GuiPreferences.py:484
 msgctxt "button"
 msgid "Add file"
 msgstr "Προσθήκη αρχείου"
 
-#: ../bleachbit/GuiPreferences.py:452
+#: ../bleachbit/GuiPreferences.py:491
 msgctxt "button"
 msgid "Add folder"
 msgstr "Προσθήκη φακέλου"
+
+#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:868
+msgid ""
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr ""
+"Σφάλμα κατά τη φόρτωση του SQLite module: το αντιικό πρόγραμμα (antivirus) "
+"μπορεί να το μπλοκάρει."
+
+#: ../bleachbit/GUI.py:214
+msgid "Choose files to shred"
+msgstr "Επιλογή αρχείων για τεμαχισμό"
+
+#: ../bleachbit/GUI.py:223
+msgid "Choose folder to shred"
+msgstr "Επιλογή φακέλου για τεμαχισμό"
+
+#: ../bleachbit/GUI.py:250
+msgid "No paths found in clipboard."
+msgstr "Δε βρέθηκαν διαδρομές στο πρόχειρο."
+
+#: ../bleachbit/GUI.py:286
+msgid "_OK"
+msgstr "_Εντάξει"
+
+#: ../bleachbit/GUI.py:309
+msgid "Program to clean unnecessary files"
+msgstr ""
+
+#: ../bleachbit/GUI.py:320
+msgid ""
+"GNU General Public License version 3 or later.\n"
+"See https://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+"Γενική Άδεια Δημόσιας Χρήσης GNU έκδοση 3 ή μεταγενέστερη\n"
+"https://www.gnu.org/licenses/gpl-3.0.txt"
+
+#. TRANSLATORS: Maintain the names of translators here.
+#. Launchpad does this automatically for translations
+#. typed in Launchpad. This is a special string shown
+#. in the 'About' box.
+#: ../bleachbit/GUI.py:326
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Dimitris Mytilinaios https://launchpad.net/~webdev-hotmail\n"
+"  DimitrisT https://launchpad.net/~dimitris.t\n"
+"  Matsek Ratkievits https://launchpad.net/~matsaki95\n"
+"  Nikos P. https://launchpad.net/~pougounias\n"
+"  Stefanos Kariotidis https://launchpad.net/~iccode\n"
+"  Valantis Kamayiannis https://launchpad.net/~kamayiannis\n"
+"  Vasilis Kosmidis https://launchpad.net/~vasiliskos\n"
+"  mara sdr https://launchpad.net/~paren8esis\n"
+"  nask00s https://launchpad.net/~nask00s\n"
+"  sarantis https://launchpad.net/~ubu-roi\n"
+"  tzem https://launchpad.net/~athmakrigiannis\n"
+"  Χρήστος https://launchpad.net/~maguss"
+
+#: ../bleachbit/GUI.py:350
+msgid "System information"
+msgstr "Πληροφορίες συστήματος"
+
+#: ../bleachbit/GUI.py:476
+msgid "Active"
+msgstr "Ενεργό"
+
+#. TRANSLATORS: Size is the label for the column that shows how
+#. much space an option would clean or did clean
+#: ../bleachbit/GUI.py:485
+msgid "Size"
+msgstr "Μέγεθος"
+
+#. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+#. %(option) may be cache, logs, cookies, etc.
+#. %(warning) may be 'This option is really slow'
+#: ../bleachbit/GUI.py:514
+#, python-format
+msgid ""
+"Warning regarding %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+msgstr ""
+"Προειδοποίηση σχετικά με %(cleaner)s - %(option)s:\n"
+"\n"
+"%(warning)s"
+
+#: ../bleachbit/GUI.py:590
+#, python-format
+msgid "Resetting the configuration file because it is corrupt: %s"
+msgstr "Επαναφορά του αρχείου διαμόρφωσης γιατί είναι φθαρμένο: %s"
+
+#: ../bleachbit/GUI.py:762
+msgid "You must select an operation"
+msgstr "Πρέπει να επιλέξετε μια ενέργεια"
+
+#: ../bleachbit/GUI.py:781 ../bleachbit/GUI.py:797
+msgid "Done."
+msgstr "Ολοκληρώθηκε."
+
+#: ../bleachbit/GUI.py:852
+msgid ""
+"Access the application menu by clicking the hamburger icon on the title bar."
+msgstr ""
+"Πρόσβαση στο μενού της εφαρμογής πατώντας το κουμπί \"χάμπουργκερ\" στη "
+"γραμμή τίτλου."
+
+#: ../bleachbit/GUI.py:857
+msgid "Access the application menu by clicking the logo on the title bar."
+msgstr ""
+"Πρόσβαση στο μενού της εφαρμογής πατώντας το λογότυπο στη γραμμή τίτλου."
+
+#: ../bleachbit/GUI.py:873
+msgid ""
+"You are running BleachBit with administrative privileges for cleaning shared "
+"parts of the system, and references to the user profile folder will clean "
+"only the root account."
+msgstr ""
+"Αυτή τη στιγμή εκτελείτε το BleachBit με δικαιώματα διαχειριστή για την "
+"εκκαθάριση διαμοιραζόμενων τμημάτων του συστήματος, άρα οι αναφορές σε "
+"φάκελο του προφίλ χρήστη θα καθαρίσουν μόνο το λογαριασμό υπερχρήστη (root)."
+
+#: ../bleachbit/GUI.py:878
+msgid ""
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
+msgstr ""
+"Τρέξτε το BleachBit με δικαιώματα διαχειριστή για βελτίωση της ακρίβειας "
+"αντικατάστασης των περιεχομένων των αρχείων."
+
+#: ../bleachbit/GUI.py:883
+msgid ""
+"There is no official version of BleachBit on the Microsoft Store. Get the "
+"genuine version at https://www.bleachbit.org where it is always free of "
+"charge."
+msgstr ""
+
+#. TRANSLATORS: this is the context menu
+#. TRANSLATORS: This is the preview button on the main window.  It
+#. previews changes.
+#: ../bleachbit/GUI.py:927 ../bleachbit/GUI.py:1029
+msgid "Preview"
+msgstr "Προεπισκόπηση"
+
+#: ../bleachbit/GUI.py:1026
+msgid "Preview files in the selected operations (without deleting any files)"
+msgstr ""
+"Προεπισκόπηση αρχείων στις επιλεγμένες ενέργειες (χωρίς τη διαγραφή τους)"
+
+#: ../bleachbit/GUI.py:1041
+msgid "Clean files in the selected operations"
+msgstr "Εκκαθάριση αρχείων στις επιλεγμένες ενέργειες"
+
+#: ../bleachbit/GUI.py:1049
+msgid "Abort"
+msgstr "Ακύρωση"
+
+#: ../bleachbit/GUI.py:1051
+msgid "Abort the preview or cleaning process"
+msgstr "Ματαίωση της προεπισκόπησης ή της εκκαθάρισης"
+
+#: ../bleachbit/GUI.py:1258
+msgid "Error when checking for updates: "
+msgstr "Σφάλμα κατά τον έλεγχο ενημερώσεων: "
+
+#: ../bleachbit/Memory.py:58
+msgid ""
+"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"information."
+msgstr ""
+"Η εντολή 'swapoff -s' απέτυχε. Επιστροφή στο /proc/swaps για πληροφορίες "
+"swap."
+
+#: ../bleachbit/Memory.py:78
+msgid "Disabling swap."
+msgstr "Απενεργοποίηση του swap."
+
+#: ../bleachbit/Memory.py:98
+msgid "Re-enabling swap."
+msgstr "Επανενεργοποίηση του swap."
+
+#: ../bleachbit/Memory.py:120
+#, python-format
+msgid "Setting nice value %d for this process."
+msgstr "Ορισμός καλής τιμής %d για αυτή τη διεργασία."
+
+#: ../bleachbit/Memory.py:126
+#, python-brace-format
+msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+msgstr "Απόρριψη προνομίων του process ID {pid} σε user ID {uid}."
+
+#. TRANSLATORS: The variable is a quantity like 5kB
+#: ../bleachbit/Memory.py:140
+#, python-format
+msgid "Allocating and wiping %s of memory."
+msgstr "Κατανομή και εκκαθάριση %s της μνήμης."
+
+#. TRANSLATORS: The variable is a quantity like 5kB
+#: ../bleachbit/Memory.py:149
+#, python-format
+msgid "Freeing %s of memory."
+msgstr "Απελευθέρωση %s της μνήμης."
+
+#: ../bleachbit/Memory.py:179
+#, python-brace-format
+msgid "Found UUID for swap file {device} is {uuid}."
+msgstr "Η ευρεθείσα UUID για το αρχείο swap {device} είναι {uuid}."
+
+#. TRANSLATORS: The variable is a quantity like 5kB
+#: ../bleachbit/Memory.py:265
+#, python-format
+msgid "Physical free memory is %s."
+msgstr "Η φυσική ελεύθερη μνήμη είναι %s."
+
+#. TRANSLATORS: The variable is a device like /dev/sda2
+#: ../bleachbit/Memory.py:280
+#, python-format
+msgid "Wiping the swap device %s."
+msgstr "Εκκαθάριση της συσκευής swap %s."
+
+#. TRANSLATORS: The variable is a device like /dev/sda2
+#: ../bleachbit/Memory.py:292
+#, python-format
+msgid "Reinitializing the swap device %s."
+msgstr "Επαναρχικοποίηση της συσκευής swap %s."
+
+#. TRANSLATORS: The variable is a device like /dev/sda2
+#: ../bleachbit/Memory.py:309
+#, python-format
+msgid "Detected these swap devices: %s"
+msgstr "Εντοπίστηκαν αυτές οι συσκευές swap: %s."
+
+#. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
+#: ../bleachbit/Memory.py:319
+#, python-brace-format
+msgid ""
+"The function wipe_memory() with process ID {pid} is waiting for child "
+"process ID {cid}."
+msgstr ""
+
+#: ../bleachbit/Memory.py:324
+#, python-format
+msgid "The child memory-wiping process returned code %d."
+msgstr ""
+
+#: ../bleachbit/Options.py:113
+#, python-format
+msgid "Disk was full when writing configuration to file %s"
+msgstr "Ο δίσκος γέμισε κατά την εγγραφή της διαμόρφωσης στο αρχείο %s"
+
+#: ../bleachbit/Options.py:137
+#, python-format
+msgid "Error checking whether path exists: %s"
+msgstr "Σφάλμα εξέτασης ύπαρξης της διαδρομής: %s"
+
+#: ../bleachbit/Options.py:267
+msgid "Error when setting the default drives to shred."
+msgstr "Σφάλμα κατά τον ορισμό των προεπιλεγμένων οδηγών προς ασφαλή διαγραφή"
+
+#: ../bleachbit/Options.py:293
+#, python-format
+msgid "Automatically preserving language %s."
+msgstr "Αυτόματη διατήρηση της γλώσσας %s"
+
+#: ../bleachbit/RecognizeCleanerML.py:56
+msgid "Security warning"
+msgstr "Προειδοποίηση ασφαλείας"
+
+#: ../bleachbit/RecognizeCleanerML.py:70
+msgid ""
+"These cleaner definitions are new or have changed. Malicious definitions can "
+"damage your system. If you do not trust these changes, delete the files or "
+"quit."
+msgstr ""
+"Αυτοί οι ορισμοί για τους καθαριστές είναι καινούριοι ή έχουν τροποποιηθεί. "
+"Λάθος ορισμοί μπορούν να βλάψουν το σύστημά σας. Αν δεν εμπιστεύεστε αυτές "
+"τις αλλαγές, διαγράψτε τα αρχεία ή κλείστε το πρόγραμμα."
+
+#: ../bleachbit/RecognizeCleanerML.py:85
+msgctxt "column_label"
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: ../bleachbit/RecognizeCleanerML.py:90
+msgctxt "column_label"
+msgid "Filename"
+msgstr "Όνομα αρχείου"
+
+#: ../bleachbit/Unix.py:585
+#, python-format
+msgid "Executable not found: %s"
+msgstr "Το εκτελέσιμο δεν βρέθηκε: %s"
+
+#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+#: ../bleachbit/Unix.py:669 ../bleachbit/Unix.py:684 ../bleachbit/Unix.py:709
+#: ../bleachbit/Worker.py:146
+#, python-format
+msgid ""
+"%s cannot be cleaned because it is currently running.  Close it, and try "
+"again."
+msgstr ""
+"Το %s δεν μπόρεσε να καθαριστεί διότι ήδη τρέχει. Κλείστε το και δοκιμάστε "
+"ξανά."
+
+#: ../bleachbit/Update.py:74
+msgid "New winapp2.ini was downloaded."
+msgstr "Κατέβηκε νέο winapp2.ini"
+
+#: ../bleachbit/Update.py:120
+msgid "Update BleachBit"
+msgstr "Ενημέρωση του BleachBit"
+
+#: ../bleachbit/Update.py:126
+msgid "A new version is available."
+msgstr "Μια νέα έκδοση είναι διαθέσιμη."
+
+#. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
+#. similar
+#: ../bleachbit/Update.py:135
+#, python-format
+msgid "Update to version %s"
+msgstr "Αναβάθμιση στην έκδοση %s"
+
+#: ../bleachbit/Update.py:164
+msgid ""
+"Error when opening a network connection to check for updates. Please verify "
+"the network is working and that a firewall is not blocking this application. "
+"Error message: {}"
+msgstr ""
+"Σφάλμα κατά το άνοιγμα σύνδεσης δικτύου για έλεγχο αναβαθμίσεων. Ελέγξτε ότι "
+"το δίκτυο λειτουργεί και ότι δεν εμποδίζει την εφαρμογή κάποιο τείχος "
+"προστασίας. Μήνυμα σφάλματος: {}"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:46
+msgid "Applications"
+msgstr "Εφαρμογές"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:48
+msgid "Internet"
+msgstr "Διαδίκτυο"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:50
+msgid "Multimedia"
+msgstr "Πολυμέσα"
+
+#. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+#: ../bleachbit/Winapp.py:52
+msgid "Utilities"
+msgstr "Εργαλεία"
+
+#: ../bleachbit/Winapp.py:63
+msgid "Games"
+msgstr "Παιχνίδια"
+
+#: ../bleachbit/Winapp.py:183
+msgid "Imported from winapp2.ini"
+msgstr "Εισήχθει από το winapp2.ini"
+
+#: ../bleachbit/Windows.py:824
+msgid "BleachBit is starting...\n"
+msgstr ""
+
+#. TRANSLATORS: This indicates an error.  The special keyword
+#. %(operation)s will be replaced by 'firefox' or 'opera' or
+#. some other cleaner ID.  The special keyword %(msg)s will be
+#. replaced by a message such as 'Permission denied.'
+#: ../bleachbit/Worker.py:78
+#, python-format
+msgid "Exception while running operation '%(operation)s': '%(msg)s'"
+msgstr "Σφάλμα κατά την εκτέλεση της ενέργειας '%(operation)s': '%(msg)s'"
+
+#: ../bleachbit/Worker.py:107
+#, python-brace-format
+msgid "Error: {operation_option}: {command}"
+msgstr "Σφάλμα: {operation_option}: {command}"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Worker.py:194
+msgid "Please wait.  Wiping free disk space."
+msgstr "Παρακαλώ περιμένετε. Καθαρισμός ελεύθερου χώρου στο δίσκο."
+
+#: ../bleachbit/Worker.py:196
+msgid ""
+"Wiping free disk space erases remnants of files that were deleted without "
+"shredding. It does not free up space."
+msgstr ""
+"Η εκκαθάριση του ελεύθερου χώρου του δίσκου διαγράφει τα απομεινάρια των "
+"αρχείων που διαγράφηκαν χωρίς ασφαλή διαγραφή. Δεν εξοικονομεί χώρο."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
+#, python-format
+msgid "Please wait.  Cleaning %s."
+msgstr "Παρακαλώ περιμένετε. Γίνεται καθαρισμός από %s."
+
+#: ../bleachbit/Worker.py:217
+#, python-format
+msgid "About %d minute remaining."
+msgid_plural "About %d minutes remaining."
+msgstr[0] "Απομένει περίπου %d λεπτό."
+msgstr[1] "Απομένουν περίπου %d λεπτά."
+
+#. TRANSLATORS: This refers to disk space that was
+#. really recovered (in other words, not a preview)
+#: ../bleachbit/Worker.py:285
+#, python-format
+msgid "Disk space recovered: %s"
+msgstr "Χώρος που ανακτήθηκε στο δίσκο: %s"
+
+#. TRANSLATORS: This refers to a preview (no real
+#. changes were made yet)
+#: ../bleachbit/Worker.py:289
+#, python-format
+msgid "Disk space to be recovered: %s"
+msgstr "Χώρος στο δίσκο που θα ανακτηθεί: %s"
+
+#. TRANSLATORS: This refers to the number of files really
+#. deleted (in other words, not a preview).
+#: ../bleachbit/Worker.py:294
+#, python-format
+msgid "Files deleted: %d"
+msgstr "Αρχεία που διαγράφηκαν: %d"
+
+#. TRANSLATORS: This refers to the number of files that
+#. would be deleted (in other words, simply a preview).
+#: ../bleachbit/Worker.py:298
+#, python-format
+msgid "Files to be deleted: %d"
+msgstr "Αρχεία που θα διαγραφούν: %d"
+
+#: ../bleachbit/Worker.py:301
+#, python-format
+msgid "Special operations: %d"
+msgstr "Ειδικές ενέργειες: %d"
+
+#: ../bleachbit/Worker.py:304
+#, python-format
+msgid "Errors: %d"
+msgstr "Σφάλματα: %d"
+
+#. TRANSLATORS: The "deep scan" feature searches over broad
+#. areas of the file system such as the user's whole home directory
+#. or all the system executables.
+#: ../bleachbit/Worker.py:320
+msgid "Please wait.  Running deep scan."
+msgstr "Παρακαλώ περιμένετε. Εκτελείται βαθιά σάρωση."
+
+#. TRANSLATORS: %s is replaced with Firefox, System, etc.
+#: ../bleachbit/Worker.py:341
+#, python-format
+msgid "Please wait.  Previewing %s."
+msgstr "Παρακαλώ περιμένετε. Προεπισκόπηση %s."
+
+#: ../data/app-menu.ui:5
+msgid "_Shred Files"
+msgstr "_Τεμαχισμός αρχείων"
+
+#: ../data/app-menu.ui:9
+msgid "Sh_red Folders"
+msgstr "Τε_μαχισμός φακέλων"
+
+#: ../data/app-menu.ui:13
+msgid "Shred Paths from Clipboard"
+msgstr "Εκκαθάριση διαδρομών από το πρόχειρο"
+
+#: ../data/app-menu.ui:18
+msgid "_Wipe Free Space"
+msgstr "Ε_κκαθάριση ελεύθερου χώρου"
+
+#: ../data/app-menu.ui:22
+msgid "_Make Chaff"
+msgstr "Παραγωγή _σκουπιδιών"
+
+#: ../data/app-menu.ui:26
+msgid "S_hred Settings and Quit"
+msgstr "Επιλογές τεμα_χισμού και Έξοδος"
+
+#: ../data/app-menu.ui:37
+#, fuzzy
+#| msgid "System information"
+msgid "S_ystem Information"
+msgstr "Πληροφορίες συστήματος"
+
+#: ../data/app-menu.ui:41
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../data/app-menu.ui:47
+msgid "_About BleachBit"
+msgstr "_Περί του BleachBit"
+
+#~ msgid "_Diagnostics"
+#~ msgstr "_Διαγνωστικά"

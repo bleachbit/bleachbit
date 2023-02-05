@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -123,7 +123,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # test one-way conversion for predefined values
         # each test is a tuple in the format: (bytes, SI, EIC)
         tests = ((-1, '-1B', '-1B'),
-                 (0, '0', '0'),
+                 (0, '0B', '0B'),
                  (1, '1B', '1B'),
                  (1000, '1kB', '1000B'),
                  (1024, '1kB', '1KiB'),
@@ -153,7 +153,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # test roundtrip conversion for random values
         import random
-        for n in range(0, 1000):
+        for _n in range(0, 1000):
             bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
@@ -338,13 +338,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
-        windows_vista_or_newer = False
         if 'nt' == os.name:
-            from bleachbit.Windows import parse_windows_build
-            # Windows Vista = 6.0
-            windows_vista_or_newer = parse_windows_build() >= 6.0
-
-        if windows_vista_or_newer:
             logger.debug('testing symbolic link')
             import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
@@ -357,10 +351,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
+            
+            return
 
         # below this point, only posix
-        if 'nt' == os.name:
-            return
 
         # test file with mode 0444/-r--r--r--
         filename = self.write_file('bleachbit-test-0444')
@@ -415,7 +409,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # set up
         def test_delete_locked_setup():
             (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
-            os.write(fd, '123')
+            os.write(fd, b'123')
             os.close(fd)
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
@@ -477,7 +471,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
-        eat_glass='나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         tests = (('This is just an ASCII file', 'ascii'),
                  (eat_glass, 'utf-8'),
                  (eat_glass, 'EUC-KR'))
@@ -690,7 +684,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if 'posix' == os.name:
             dir1 = '/bin'
             dir2 = os.path.expanduser('/sbin')
-        if 'nt' == os.name:
+        elif 'nt' == os.name:
             dir1 = os.path.expandvars(r'%windir%\fonts')
             dir2 = os.path.expandvars(r'%windir%\logs')
         # If these directories do not exist, the test results are not valid.
@@ -719,7 +713,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertTrue(same_partition(home, home))
         if 'posix' == os.name:
             self.assertFalse(same_partition(home, '/dev'))
-        if 'nt' == os.name:
+        elif 'nt' == os.name:
             home_drive = os.path.splitdrive(home)[0]
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
@@ -849,7 +843,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         options.set_whitelist_paths(whitelist)
 
         t0 = time.time()
-        for i in range(0, reps):
+        for _i in range(0, reps):
             for p in paths:
                 _ = whitelisted(p)
         t1 = time.time()
@@ -862,7 +856,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for wipe_delete()"""
 
         # create test file
-        filename = self.write_file('bleachbit-test-wipe', b'abcdefghij' * 12345)
+        filename = self.write_file(
+            'bleachbit-test-wipe', b'abcdefghij' * 12345)
 
         # wipe it
         wipe_contents(filename)
@@ -939,9 +934,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
 
-        for ret in wipe_path(self.tempdir):
+        for _ret in wipe_path(self.tempdir):
             # no idle handler
             pass
+
+    def test_wipe_path_fast(self):
+        next(wipe_path(self.tempdir, True))
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

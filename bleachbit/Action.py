@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,20 +23,16 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special
-from bleachbit import _
+from bleachbit import Command, FileUtilities, General, Special, DeepScan
+from bleachbit import _, fs_scan_re_flags
 
 import glob
 import logging
 import os
 import re
-
-
 if 'posix' == os.name:
-    re_flags = 0
     from bleachbit import Unix
-else:
-    re_flags = re.IGNORECASE
+
 
 logger = logging.getLogger(__name__)
 
@@ -143,12 +139,12 @@ class FileActionProvider(ActionProvider):
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)
-        self.ds = {}
+        self.ds = None
         if 'deep' == self.search:
-            self.ds['regex'] = self.regex
-            self.ds['nregex'] = self.nregex
-            self.ds['command'] = action_element.getAttribute('command')
-            self.ds['path'] = self.paths[0]
+            self.ds = (self.paths[0], DeepScan.Search(
+                command=action_element.getAttribute('command'),
+                regex=self.regex, nregex=self.nregex,
+                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
             if not len(self.paths) == 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained in the online documentation.
@@ -174,7 +170,7 @@ class FileActionProvider(ActionProvider):
             self.paths.append(path3)
 
     def get_deep_scan(self):
-        if 0 == len(self.ds):
+        if self.ds is None:
             return
         yield self.ds
 
@@ -192,23 +188,23 @@ class FileActionProvider(ActionProvider):
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
-            regex_c_search = re.compile(self.regex, re_flags).search
+            regex_c_search = re.compile(self.regex, fs_scan_re_flags).search
         else:
             regex_c_search = None
 
         if self.nregex:
-            nregex_c_search = re.compile(self.nregex, re_flags).search
+            nregex_c_search = re.compile(self.nregex, fs_scan_re_flags).search
         else:
             nregex_c_search = None
 
         if self.wholeregex:
-            wholeregex_c_search = re.compile(self.wholeregex, re_flags).search
+            wholeregex_c_search = re.compile(self.wholeregex, fs_scan_re_flags).search
         else:
             wholeregex_c_search = None
 
         if self.nwholeregex:
             nwholeregex_c_search = re.compile(
-                self.nwholeregex, re_flags).search
+                self.nwholeregex, fs_scan_re_flags).search
         else:
             nwholeregex_c_search = None
 
@@ -244,8 +240,7 @@ class FileActionProvider(ActionProvider):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
                 path = None  # sentinel value
-                for path in FileUtilities.children_in_directory(expanded, True):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, True)
                 # This condition executes when there are zero iterations
                 # in the loop above.
                 if path is None:
@@ -255,7 +250,8 @@ class FileActionProvider(ActionProvider):
                         logger.debug(
                             # TRANSLATORS: This is a lint-style warning that there seems to be a
                             # mild mistake in the CleanerML file because walk.all is expected to
-                            # be used with directories instead of with files.
+                            # be used with directories instead of with files. Do not translate
+                            # search="walk.all" and path="%s"
                             _('search="walk.all" used with regular file path="%s"'),
                             expanded,
                         )
@@ -263,13 +259,11 @@ class FileActionProvider(ActionProvider):
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(expanded, False):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, False)
 
         def get_top(top):
             """Delete directory contents and the directory itself"""
-            for f in get_walk_all(top):
-                yield f
+            yield from get_walk_all(top)
             if os.path.exists(top):
                 yield top
 
@@ -506,6 +500,18 @@ class MozillaUrlHistory(FileActionProvider):
         for path in self.get_paths():
             yield Command.Function(path,
                                    Special.delete_mozilla_url_history,
+                                   _('Clean file'))
+
+
+class MozillaFavicons(FileActionProvider):
+
+    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    action_key = 'mozilla.favicons'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function(path,
+                                   Special.delete_mozilla_favicons,
                                    _('Clean file'))
 
 

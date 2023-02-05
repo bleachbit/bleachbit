@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -48,7 +48,7 @@ def default_vars():
     for v1, v2 in wowvars:
         # Remove None, if variable is not found.
         # Make list unique.
-        mylist = list(set([x for x in (os.getenv(v1), os.getenv(v2)) if x]))
+        mylist = list({x for x in (os.getenv(v1), os.getenv(v2)) if x})
         ret[v1] = mylist
     return ret
 

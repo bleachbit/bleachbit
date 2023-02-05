@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -47,7 +47,7 @@ class InitTestCase(common.BleachbitTestCase):
         # should be expanded
         if os.name == 'nt':
             test_inputs = ('~', r'~\ntuser.dat')
-        if os.name == 'posix':
+        elif os.name == 'posix':
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:
             test_output = os.path.expanduser(test_input)

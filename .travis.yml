@@ -10,6 +10,11 @@ jobs:
       python: 3.6
     - dist: bionic
       python: 3.7
+   # Ubuntu 20.04 LTS (Focal)
+    - dist: focal
+      python: 3.8
+    - dist: focal
+      python: 3.9
 cache: pip
 before_install:
   - python --version # show Python version
@@ -18,15 +23,15 @@ before_install:
   - export PKG_CONFIG_PATH=$VIRT_ROOT/lib/pkgconfig
 install:
   - sudo apt-get install gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils
-  - pip install PyGObject
+  - pip install PyGObject chardet
 # coveralls.io
-  - pip install python-coveralls requests[security]
+  - pip install coveralls requests[security]
 # install mock
   - pip install mock
 script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
-   - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >bleachbit/Revision.py
+   - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >>bleachbit/Revision.py
 # Run tests.
    - xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:

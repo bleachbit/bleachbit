@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2020 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2021 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -96,7 +96,7 @@ delete_windows_files:
 	# Remove Windows-specific cleaners.
 	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
 	# Remove Windows-specific modules.
-	rm -f bleachbit/Windows*.py
+	rm -f bleachbit/{Winapp,Windows*}.py 
 
 downgrade_desktop:
 #	This will downgrade the version of the .desktop file for older Linux distributions.

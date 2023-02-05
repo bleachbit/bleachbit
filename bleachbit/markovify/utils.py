@@ -19,7 +19,7 @@ def get_model_dict(thing):
     raise ValueError("`models` should be instances of list, dict, markovify.Chain, or markovify.Text")
 
 def combine(models, weights=None):
-    if weights == None:
+    if weights is None:
         weights = [ 1 for _ in range(len(models)) ]
 
     if len(models) != len(weights):
@@ -50,14 +50,13 @@ def combine(models, weights=None):
     if isinstance(ret_inst, Chain):
         return Chain.from_json(c)
     if isinstance(ret_inst, Text):
-        if any(m.retain_original for m in models):
-            combined_sentences = []
-            for m in models:
-                if m.retain_original:
-                    combined_sentences += m.parsed_sentences
-            return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
-        else:
+        if not any(m.retain_original for m in models):
             return ret_inst.from_chain(c)
+        combined_sentences = []
+        for m in models:
+            if m.retain_original:
+                combined_sentences += m.parsed_sentences
+        return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
     if isinstance(ret_inst, list):
         return list(c.items())
     if isinstance(ret_inst, dict):

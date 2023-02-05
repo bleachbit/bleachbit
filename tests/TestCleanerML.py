@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -36,20 +36,25 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(really_delete):
                     common.validate_result(self, result, really_delete)
 
-    def test_CleanerML(self):
-        """Unit test for class CleanerML"""
-
+    def _get_xmlcleaner(self):
+        """Helper for CleanerML*()"""
         xmlcleaner = CleanerML("doc/example_cleaner.xml")
-
         self.assertIsInstance(xmlcleaner, CleanerML)
         self.assertIsInstance(xmlcleaner.cleaner, Cleaner.Cleaner)
+        return xmlcleaner
 
+    def test_CleanerML(self):
+        """Unit test for class CleanerML"""
+        xmlcleaner = self._get_xmlcleaner()
         # preview
         self.run_all(xmlcleaner, False)
 
-        # really delete if user allows
-        if common.destructive_tests('example_cleaner.xml'):
-            self.run_all(xmlcleaner, True)
+    @common.skipUnlessDestructive
+    def test_CleanerML_destructive(self):
+        """Unit test the destructive parts of class CleanerML"""
+        xmlcleaner = self._get_xmlcleaner()
+        # really delete
+        self.run_all(xmlcleaner, True)
 
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""

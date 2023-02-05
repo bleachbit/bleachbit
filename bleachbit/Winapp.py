@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 
 # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = {
+    '3001': ('winapp2_internet_explorer', 'Internet Explorer'),
     '3005': ('winapp2_edge_classic', 'Microsoft Edge'),
     '3006': ('winapp2_edge_chromium', 'Microsoft Edge'),
     # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -56,13 +57,15 @@ langsecref_map = {
     '3029': ('winapp2_google_chrome', 'Google Chrome'),
     '3030': ('winapp2_thunderbird', 'Thunderbird'),
     '3031': ('winapp2_windows_store', 'Windows Store'),
+    '3033': ('winapp2_vivaldi', 'Vivaldi'),
+    '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
     'Games': ('winapp2_games', _('Games'))}
 
 
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
-    return s.replace('&', '&amp;').replace('"', '&quot;')
+    return s.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def section2option(s):
@@ -79,20 +82,19 @@ def detectos(required_ver, mock=False):
     # Do not compare as string because Windows 10 (build 10.0) comes after
     # Windows 8.1 (build 6.3).
     assert isinstance(required_ver, str)
-    current_os = (mock if mock else Windows.parse_windows_build())
+    current_os = mock or Windows.parse_windows_build()
     required_ver = required_ver.strip()
-    if '|' in required_ver:
-        # Format of min|max
-        req_min = required_ver.split('|')[0]
-        req_max = required_ver.split('|')[1]
-        if req_min and current_os < Windows.parse_windows_build(req_min):
-            return False
-        if req_max and current_os > Windows.parse_windows_build(req_max):
-            return False
-        return True
-    else:
+    if '|' not in required_ver:
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
+    # Format of min|max
+    req_min = required_ver.split('|')[0]
+    req_max = required_ver.split('|')[1]
+    if req_min and current_os < Windows.parse_windows_build(req_min):
+        return False
+    if req_max and current_os > Windows.parse_windows_build(req_max):
+        return False
+    return True
 
 
 def winapp_expand_vars(pathname):
@@ -140,9 +142,7 @@ def fnmatch_translate(pattern):
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
-    if ret.endswith(r'\Z(?ms)'):
-        return ret[:-7]
-    return ret
+    return re.sub(r'\\Z(\(\?ms\))?$', '', ret)
 
 
 class Winapp:
@@ -240,8 +240,8 @@ class Winapp:
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
-                regex = '%s.*%s' % (
-                    fnmatch_translate(expanded), files_regex)
+                regex = r'%s\\%s' % (
+                    re.sub(r'\\\\((?:\))?)$', r'\1', fnmatch_translate(expanded)), files_regex)
             regexes.append(regex)
 
         if len(regexes) == 1:
@@ -289,11 +289,11 @@ class Winapp:
         if not self.detect(section):
             return
         # excludekeys ignores a file, path, or registry key
-        excludekeys = []
-        for option in self.parser.options(section):
-            if re.match(self.re_excludekey, option):
-                excludekeys.append(
-                    self.excludekey_to_nwholeregex(self.parser.get(section, option)))
+        excludekeys = [
+            self.excludekey_to_nwholeregex(self.parser.get(section, option))
+            for option in self.parser.options(section)
+            if re.match(self.re_excludekey, option)
+        ]
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
@@ -310,6 +310,20 @@ class Winapp:
         self.cleaners[lid].add_option(
             section2option(section), section.replace('*', ''), '')
         for option in self.parser.options(section):
+            if (
+                option
+                in {
+                    "default",
+                    "langsecref",
+                    "section",
+                    "detectos",
+                    "specialdetect",
+                }
+                or re.match(self.re_detect, option)
+                or re.match(self.re_detectfile, option)
+                or re.match(self.re_excludekey, option)
+            ):
+                continue
             if option.startswith('filekey'):
                 self.handle_filekey(lid, section, option, excludekeys)
             elif option.startswith('regkey'):
@@ -317,11 +331,6 @@ class Winapp:
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
                     section2option(section), self.parser.get(section, 'warning'))
-            elif option in ('default', 'langsecref', 'section', 'detectos', 'specialdetect') \
-                    or re.match(self.re_detect, option) \
-                    or re.match(self.re_detectfile, option) \
-                    or re.match(self.re_excludekey, option):
-                pass
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
@@ -333,14 +342,12 @@ class Winapp:
         if recurse:
             search = 'walk.files'
             path = dirname
-            if filename.startswith('*.'):
-                filename = filename.replace('*.', '.')
-            if filename == '.*':
+            if filename == '*.*':
                 if removeself:
                     search = 'walk.all'
             else:
                 import fnmatch
-                regex = ' regex="%s" ' % (fnmatch.translate(filename))
+                regex = ' regex="^%s$" ' % xml_escape(fnmatch.translate(filename))
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
@@ -359,8 +366,11 @@ class Winapp:
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
-            action_str = '<option command="delete" search="file" path="%s"/>' % \
-                         (xml_escape(dirname))
+            search = 'file'
+            if dirname.find('*') > -1:
+                search = 'glob'
+            action_str = '<option command="delete" search="%s" path="%s" type="d"/>' % \
+                         (search, xml_escape(dirname))
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
@@ -387,6 +397,9 @@ class Winapp:
                     'unknown file option %s in section %s', element, ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
+                # If dirname is a drive letter it needs a special treatment on Windows:
+                # https://www.reddit.com/r/learnpython/comments/gawqne/why_cant_i_ospathjoin_on_a_drive_letterc/
+                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[0] == dirname else dirname
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)

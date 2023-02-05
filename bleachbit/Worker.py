@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ Perform the preview or delete operations
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ungettext
+from bleachbit import _, ngettext
 
 import logging
 import math
@@ -175,15 +175,15 @@ class Worker:
             total_size += self.size
 
             # deep scan
-            for ds in backends[operation].get_deep_scan(option_id):
-                if '' == ds['path']:
-                    ds['path'] = os.path.expanduser('~')
-                if 'delete' != ds['command']:
+            for (path, search) in backends[operation].get_deep_scan(option_id):
+                if '' == path:
+                    path = os.path.expanduser('~')
+                if search.command not in ('delete', 'shred'):
                     raise NotImplementedError(
-                        'Deep scan only supports deleting now')
-                if ds['path'] not in self.deepscans:
-                    self.deepscans[ds['path']] = []
-                self.deepscans[ds['path']].append(ds)
+                        'Deep scan only supports deleting or shredding now')
+                if path not in self.deepscans:
+                    self.deepscans[path] = []
+                self.deepscans[path].append(search)
         self.ui.update_item_size(operation, -1, total_size)
 
     def run_delayed_op(self, operation, option_id):
@@ -194,6 +194,7 @@ class Worker:
             msg = _("Please wait.  Wiping free disk space.")
             self.ui.append_text(
                 _('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
+            self.ui.append_text('\n')
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")
         else:
@@ -213,7 +214,7 @@ class Worker:
                     self.ui.update_progress_bar(percent_done)
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
-                        msg2 = ungettext("About %d minute remaining.",
+                        msg2 = ngettext("About %d minute remaining.",
                                          "About %d minutes remaining.", eta_mins) \
                             % eta_mins
                         self.ui.update_progress_bar(msg + ' ' + msg2)
@@ -257,7 +258,7 @@ class Worker:
             # the log.
 
             warnings.simplefilter('once')
-            for dummy in self.run_operations(self.operations):
+            for _dummy in self.run_operations(self.operations):
                 # yield to GTK+ idle loop
                 yield True
             for w in ws:
@@ -265,14 +266,13 @@ class Worker:
 
         # run deep scan
         if self.deepscans:
-            for dummy in self.run_deep_scan():
-                yield dummy
+            yield from self.run_deep_scan()
 
         # delayed operations
         for op in sorted(self.delayed_ops):
             operation = list(op[1].keys())[0]
             for option_id in list(op[1].values())[0]:
-                for ret in self.run_delayed_op(operation, option_id):
+                for _ret in self.run_delayed_op(operation, option_id):
                     # yield to GTK+ idle loop
                     yield True
 
@@ -319,26 +319,18 @@ class Worker:
         # or all the system executables.
         self.ui.update_progress_bar(_("Please wait.  Running deep scan."))
         yield True  # allow GTK to update the screen
-        ds = DeepScan.DeepScan()
-        for (path, dsdict) in self.deepscans.items():
-            logger.debug('deepscan path=%s, dict=%s' % (path, dsdict))
-            for dsdict2 in dsdict:
-                ds.add_search(path, dsdict2['regex'])
+        ds = DeepScan.DeepScan(self.deepscans)
 
-        for path in ds.scan():
-            if True == path:
+        for cmd in ds.scan():
+            if True == cmd:
                 yield True
                 continue
-            # fixme: support non-delete commands
-            from bleachbit import Command
-            cmd = Command.Delete(path)
-            for ret in self.execute(cmd, 'deepscan'):
+            for _ret in self.execute(cmd, 'deepscan'):
                 yield True
 
     def run_operations(self, my_operations):
         """Run a set of operations (general, memory, free disk space)"""
-        count = 0
-        for operation in my_operations:
+        for count, operation in enumerate(my_operations):
             self.ui.update_progress_bar(1.0 * count / len(my_operations))
             name = backends[operation].get_name()
             if self.really_delete:
@@ -350,9 +342,7 @@ class Worker:
             self.ui.update_progress_bar(msg)
             yield True  # show the progress bar message now
             try:
-                for dummy in self.clean_operation(operation):
+                for _dummy in self.clean_operation(operation):
                     yield True
             except:
                 self.print_exception(operation)
-
-            count += 1

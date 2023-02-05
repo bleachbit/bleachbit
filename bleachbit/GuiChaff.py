@@ -3,7 +3,7 @@
 
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -63,6 +63,7 @@ class ChaffDialog(Gtk.Dialog):
 # physical chaff airplanes use to protect themselves from radar-guided
 # missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, _("Make chaff"), parent)
+        Gtk.Dialog.set_modal(self,True)
         self.set_border_width(5)
         box = self.get_content_area()
 
@@ -71,6 +72,9 @@ class ChaffDialog(Gtk.Dialog):
         box.add(label)
 
         inspiration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+
+        # TRANSLATORS: Inspiration is a choice of documents from which random
+        # text will be generated.
         inspiration_box.add(Gtk.Label(_("Inspiration")))
         self.inspiration_combo = Gtk.ComboBoxText()
         self.inspiration_combo_options = (
@@ -153,7 +157,7 @@ class ChaffDialog(Gtk.Dialog):
             dialog.run()
             dialog.destroy()
             return
-        from bleachbit import options_dir
+
         if not have_models():
             if not self.download_models_dialog():
                 return

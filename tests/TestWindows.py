@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,13 +29,13 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import *
 from bleachbit import logger
 
-import functools
 import os
 import platform
 import shutil
 import sys
 import tempfile
 import unittest
+import mock
 from decimal import Decimal
 
 if 'win32' == sys.platform:
@@ -58,7 +58,7 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
-@unittest.skipUnless('win32' == sys.platform, 'not running on windows')
+@common.skipUnlessWindows
 class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""
@@ -71,8 +71,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assertExists(extended_path(f))
-        if not common.destructive_tests('get_recycle_bin'):
-            return
+
+    @common.skipUnlessDestructive
+    def test_get_recycle_bin_destructive(self):
+        """Unit test the destructive part of get_recycle_bin"""
         put_files_into_recycle_bin()
         # clear recycle bin
         counter = 0
@@ -81,7 +83,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             FileUtilities.delete(f)
         self.assertGreaterEqual(counter, 3, 'deleted %d' % counter)
         # now it should be empty
-        for f in get_recycle_bin():
+        for _f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
 
     def _test_link_helper(self, mklink_option, clear_recycle_bin):
@@ -89,7 +91,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         get_recycle_bin()
 
         It gets called four times for the combinations of the two
-        parameters. It's called by four unit tests four accounting
+        parameters. It's called by four unit tests for accounting
         purposes. In other words, we don't want to count a test as
         skipped if part of it succeeded.
 
@@ -108,7 +110,8 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertFalse(is_junction(target_dir))
 
         from random import randint
-        canary_fn = os.path.join(target_dir, 'do_not_delete%d' % randint(1000,9999))
+        canary_fn = os.path.join(
+            target_dir, 'do_not_delete%d' % randint(1000, 9999))
         common.touch_file(canary_fn)
         self.assertExists(canary_fn)
         self.assertFalse(is_junction(canary_fn))
@@ -121,7 +124,8 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # create the link
         link_pathname = os.path.join(container_dir, 'link')
-        args = ('cmd', '/c', 'mklink', mklink_option, link_pathname, target_dir)
+        args = ('cmd', '/c', 'mklink', mklink_option,
+                link_pathname, target_dir)
         from bleachbit.General import run_external
         (rc, stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
@@ -131,10 +135,6 @@ class WindowsTestCase(common.BleachbitTestCase):
         # put the link in the recycle bin
         move_to_recycle_bin(container_dir)
 
-        # preview the recycle bin
-        for f in get_recycle_bin():
-            print(f)
-
         def cleanup_dirs():
             shutil.rmtree(container_dir, True)
             self.assertNotExists(container_dir)
@@ -142,8 +142,6 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         if not clear_recycle_bin:
             cleanup_dirs()
-            if not common.destructive_tests('windows link'):
-                self.skipTest('destructive tests are disabled')
             return
 
         # clear the recycle bin
@@ -156,12 +154,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         # clean up
         cleanup_dirs()
 
-    @unittest.skip("not yet")
     def test_link_junction_no_clear(self):
         """Unit test for directory junctions without clearing recycle bin"""
         self._test_link_helper('/j', False)
 
-    @unittest.skip("not yet")
     def test_link_junction_clear(self):
         """Unit test for directory junctions with clearing recycle bin"""
         self._test_link_helper('/j', True)
@@ -277,7 +273,8 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_detect_registry_key(self):
         """Test for detect_registry_key()"""
         self.assertTrue(detect_registry_key('HKCU\\Software\\Microsoft\\'))
-        self.assertTrue(not detect_registry_key('HKCU\\Software\\DoesNotExist'))
+        self.assertTrue(not detect_registry_key(
+            'HKCU\\Software\\DoesNotExist'))
 
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
@@ -315,15 +312,16 @@ class WindowsTestCase(common.BleachbitTestCase):
         for path in paths:
             self.assertExists(path)
 
+    def test_get_font_conf_file(self):
+        """Unit test for get_font_conf_file"""
+        # This tests only one of three situations.
+        font_fn = get_font_conf_file()
+        self.assertExists(font_fn)
+
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
         ret = get_known_folder_path('LocalAppDataLow')
         self.assertNotEqual(ret, '')
-        if parse_windows_build() <= 6.0:
-            # Before Vista
-            self.assertEqual(ret, None)
-            return
-        # Vista or later
         self.assertNotEqual(ret, None)
         self.assertExists(ret)
 
@@ -348,8 +346,10 @@ class WindowsTestCase(common.BleachbitTestCase):
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
-        if not common.destructive_tests('recycle bin'):
-            return
+
+    @common.skipUnlessDestructive
+    def test_empty_recycle_bin_destructive(self):
+        """Unit test the destructive part of empty_recycle_bin()"""
         # check it deletes files for fixed drives
         put_files_into_recycle_bin()
         for drive in get_fixed_drives():
@@ -374,7 +374,8 @@ class WindowsTestCase(common.BleachbitTestCase):
         """
 
         from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from win32file import GENERIC_WRITE
+        from bleachbit.Windows import elevate_privileges
+        from win32con import GENERIC_WRITE, WRITE_DAC
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
@@ -391,11 +392,27 @@ class WindowsTestCase(common.BleachbitTestCase):
                 self.assertExists(shortname)
                 return shortname
 
-            def _test_wipe(contents, is_sparse=False):
+            def _deny_access(fh):
+                import win32security
+                import ntsecuritycon as con
+
+                user, _, _ = win32security.LookupAccountName(
+                    "", win32api.GetUserName())
+                dacl = win32security.ACL()
+                dacl.AddAccessDeniedAce(
+                    win32security.ACL_REVISION, con.FILE_GENERIC_READ | con.FILE_GENERIC_WRITE, user)
+                win32security.SetSecurityInfo(fh, win32security.SE_FILE_OBJECT, win32security.DACL_SECURITY_INFORMATION,
+                                              None, None, dacl, None)
+
+            def _test_wipe(contents, deny_access=False, is_sparse=False):
                 shortname = _write_file(longname, contents)
-                if is_sparse:
-                    fh = open_file(extended_path(longname), mode=GENERIC_WRITE)
-                    file_make_sparse(fh)
+                if deny_access or is_sparse:
+                    fh = open_file(extended_path(longname),
+                                   mode=GENERIC_WRITE | WRITE_DAC)
+                    if is_sparse:
+                        file_make_sparse(fh)
+                    if deny_access:
+                        _deny_access(fh)
                     close_file(fh)
                 logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
                     len(longname), len(shortname), len(contents), is_sparse))
@@ -418,7 +435,8 @@ class WindowsTestCase(common.BleachbitTestCase):
             _test_wipe(b'secret' * 100000)
 
             # requires wiping of extents: special file case
-            _test_wipe(b'secret' * 100000, is_sparse=True)
+            elevate_privileges(False)
+            _test_wipe(b'secret' * 100000, deny_access=True, is_sparse=True)
 
         shutil.rmtree(dirname, True)
 
@@ -445,9 +463,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for setup_environment"""
         setup_environment()
         envs = ['commonappdata', 'documents', 'music', 'pictures', 'video',
-                'localappdata']
-        if parse_windows_build() >= 6.0:
-            envs.append('localappdatalow')
+                'localappdata', 'localappdatalow']
         for env in envs:
             self.assertExists(os.environ[env])
 

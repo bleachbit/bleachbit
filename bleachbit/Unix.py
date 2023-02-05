@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,10 @@ try:
 except AttributeError:
     Pattern = re._pattern_type
 
+
+JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
+
+
 class LocaleCleanerPath:
     """This represents a path with either a specific folder name or a folder name pattern.
     It also may contain several compiled regex patterns for localization items (folders or files)
@@ -75,17 +79,15 @@ class LocaleCleanerPath:
         if isinstance(self.pattern, Pattern):
             return (os.path.join(basepath, p) for p in os.listdir(basepath)
                     if self.pattern.match(p) and os.path.isdir(os.path.join(basepath, p)))
-        else:
-            path = os.path.join(basepath, self.pattern)
-            return [path] if os.path.isdir(path) else []
+        path = os.path.join(basepath, self.pattern)
+        return [path] if os.path.isdir(path) else []
 
     def get_localizations(self, basepath):
         """Returns all localization items for this object and all descendant objects"""
         for path in self.get_subpaths(basepath):
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
-                    for res in child.get_localizations(path):
-                        yield res
+                    yield from child.get_localizations(path)
                 elif isinstance(child, Pattern):
                     for element in os.listdir(path):
                         match = child.match(element)
@@ -200,6 +202,7 @@ class Locales:
          'hz': 'Otjiherero',
          'ia': 'Interlingua',
          'id': 'Indonesian',
+         'ie': 'Interlingue',
          'ig': 'Asụsụ Igbo',
          'ii': 'ꆈꌠ꒿',
          'ik': 'Iñupiaq',
@@ -405,7 +408,7 @@ class Locales:
 
 
 def __is_broken_xdg_desktop_application(config, desktop_pathname):
-    """Returns boolean whether application deskop entry file is broken"""
+    """Returns boolean whether application desktop entry file is broken"""
     if not config.has_option('Desktop Entry', 'Exec'):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
@@ -423,13 +426,12 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
         wineprefix = None
         del execs[0]
         while True:
-            if 0 <= execs[0].find("="):
-                (name, value) = execs[0].split("=")
-                if 'WINEPREFIX' == name:
-                    wineprefix = value
-                del execs[0]
-            else:
+            if execs[0].find("=") < 0:
                 break
+            (name, value) = execs[0].split("=")
+            if name == 'WINEPREFIX':
+                wineprefix = value
+            del execs[0]
         if not FileUtilities.exe_exists(execs[0]):
             logger.info(
                 "is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
@@ -497,15 +499,14 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
-def is_running_darwin(exename, run_ps=None):
-    if run_ps is None:
-        def run_ps():
-            return subprocess.check_output(["ps", "aux", "-c"])
+def is_running_darwin(exename):
     try:
-        processess = (re.split(r"\s+", p, 10)[10]
-                      for p in run_ps().split("\n") if p != "")
-        next(processess)  # drop the header
-        return exename in processess
+        ps_out = subprocess.check_output(["ps", "aux", "-c"],
+                                         universal_newlines=True)
+        processes = (re.split(r"\s+", p, 10)[10]
+                      for p in ps_out.split("\n") if p != "")
+        next(processes)  # drop the header
+        return exename in processes
     except IndexError:
         raise RuntimeError("Unexpected output from ps")
 
@@ -556,8 +557,7 @@ def rotated_logs():
                  '/var/log/*/*.old',
                  '/var/log/*.old')
     for globpath in globpaths:
-        for path in glob.iglob(globpath):
-            yield path
+        yield from glob.iglob(globpath)
     regex = '-[0-9]{8}$'
     globpaths = ('/var/log/*-*', '/var/log/*/*-*')
     for path in FileUtilities.globex(globpaths, regex):
@@ -604,9 +604,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 
 def journald_clean():
     """Clean the system journals"""
-    freed_space_regex = '^Vacuuming done, freed ([\d.]+[KMGT]?) of archived journals on disk.$'
     try:
-        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], freed_space_regex)
+        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("Error calling '%s':\n%s" %
                            (' '.join(e.cmd), e.output))
@@ -658,8 +657,7 @@ def get_globs_size(paths):
     """Get the cumulative size (in bytes) of a list of globs"""
     total_size = 0
     for path in paths:
-        from glob import iglob
-        for p in iglob(path):
+        for p in glob.iglob(path):
             total_size += FileUtilities.getsize(p)
     return total_size
 
@@ -699,36 +697,56 @@ units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
 
 
 def parseSize(size):
+    """Parse the size returned by dnf"""
     number, unit = [string.strip() for string in size.split()]
     return int(float(number)*units[unit])
 
 
 def dnf_autoremove():
-    """Run 'dnf autoremove' and return size in bytes recovered"""
+    """Run 'dnf autoremove' and return size in bytes recovered."""
     if os.path.exists('/var/run/dnf.pid'):
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
     cmd = ['dnf', '-y', 'autoremove']
-    process = subprocess.Popen(
-        cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
-    while True:
-        line = process.stdout.readline().replace("\n", "")
-        if 'Error: This command has to be run under the root user.' == line:
-            raise RuntimeError('dnf autoremove >> requires root permissions')
-        if 'Nothing to do.' == line:
-            break
-        cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
-        match = cregex.search(line)
-        if match:
-            freed_bytes = parseSize(match.group(1))
-            break
-        if "" == line and process.poll() != None:
-            break
+    allout = stdout + stderr
+    if 'Error: This command has to be run under the root user.' in allout:
+        raise RuntimeError('dnf autoremove >> requires root permissions')
+    if rc > 0:
+        raise RuntimeError('dnf raised error %s: %s' % (rc, stderr))
+
+    cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
+    match = cregex.search(allout)
+    if match:
+        freed_bytes = parseSize(match.group(1))
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
+
+
+def is_linux_display_protocol_wayland():
+    assert(sys.platform.startswith('linux'))
+    result = General.run_external(['loginctl'])
+    session = result[1].split('\n')[1].strip().split(' ')[0]
+    result = General.run_external(['loginctl', 'show-session', session, '-p', 'Type'])
+    return 'wayland' in result[1].lower()
+
+
+def root_is_not_allowed_to_X_session():
+    assert (sys.platform.startswith('linux'))
+    result = General.run_external(['xhost'], clean_env=False)
+    xhost_returned_error = result[0] == 1
+    return xhost_returned_error
+
+
+def is_display_protocol_wayland_and_root_not_allowed():
+    return (
+            bleachbit.Unix.is_linux_display_protocol_wayland() and
+            os.environ['USER'] == 'root' and
+            bleachbit.Unix.root_is_not_allowed_to_X_session()
+    )
 
 
 locales = Locales()

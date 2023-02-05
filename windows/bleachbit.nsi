@@ -1,7 +1,7 @@
 ;  vim: ts=4:sw=4:expandtab
 ;
 ;  BleachBit
-;  Copyright (C) 2008-2020 Andrew Ziem
+;  Copyright (C) 2008-2021 Andrew Ziem
 ;  https://www.bleachbit.org
 ;
 ;  This program is free software: you can redistribute it and/or modify
@@ -226,7 +226,6 @@ VIFileVersion ${File_VERSION}
 ; MUI_UNPAGE_DIRECTORY not needed, ATM.
 ; !insertmacro MUI_UNPAGE_DIRECTORY
 !insertmacro MUI_UNPAGE_COMPONENTS
-UninstallText $(BLEACHBIT_UNINSTALL_TEXT)
 !insertmacro MUI_UNPAGE_INSTFILES
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
@@ -292,6 +291,10 @@ UninstallText $(BLEACHBIT_UNINSTALL_TEXT)
 
 !include NsisMultiUserLang.nsh
 
+!include "StrFunc.nsh"
+# Declare used functions
+${StrCase}
+
 ;--------------------------------
 ;Function
 
@@ -302,25 +305,31 @@ Function RefreshShellIcons
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
 FunctionEnd
 
+Function .onVerifyInstDir
+  ; This callback belongs to MUI_PAGE_DIRECTORY and is called every time the user presses Browse
+  ; button and selects install directory. It does not affect typing in the input field.
+
+  ; The purpose is to prevent installation in a shared folder such as %ProgramFiles%
+  ; by adding the product name to the end.
+
+  ${GetFileName} $INSTDIR $R0 ; get the last part of the path
+  StrCmp $R0 ${prodname} no_append
+  StrCpy $INSTDIR "$INSTDIR\${prodname}"
+  no_append:
+FunctionEnd
+
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "$(SECTION_CORE)" SECTION_CORE
     SectionIn RO
 
-    SetOutPath $INSTDIR
-    File /r "..\dist\*.*"
-    File "..\COPYING"
-
-    SetOutPath "$INSTDIR\share\"
-    File "..\bleachbit.png"
-
+    !include FilesToInstall.nsh
+    
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
-
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
-    CreateShortCut "$SMPROGRAMS\${prodname}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
     # register uninstaller in Add/Remove Programs
     !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
@@ -330,29 +339,43 @@ Section Core (Required)
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
+
+    # Build cache now while there is a GUI progress bar.
+    DetailPrint "The next step is building font cache, during which you may see a black window."
+    DetailPrint "It usually finishes in one minute, but sometimes it takes ten minutes."
+    ExecWait '"$instdir\fc-cache.exe"'
 SectionEnd
 
 
-SectionGroup /e Shortcuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(SECTION_SHORTCUTS)" SECTION_SHORTCUTS
+    Section "$(SECTION_START_MENU)" SECTION_START_MENU
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe"
+        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
+            "" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
             "$INSTDIR\${prodname}.exe" \
-            "--no-uac --gui"
+            "--no-uac --gui" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
-            "$INSTDIR\${prodname}_console.exe"
+            "$INSTDIR\${prodname}_console.exe" "" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
-        WriteINIStr "$SMPROGRAMS\${prodname}\${prodname} Home Page.url" "InternetShortcut" "URL" "https://www.bleachbit.org/"
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(SECTION_DESKTOP)" SECTION_DESKTOP
+        IfSilent 0 addDesktopShortcut
+        ${GetParameters} $R0
+        ${StrCase} $R0 $R0 "L" # "L" means lowercase
+        ${GetOptions} $R0 "/nodesktopshortcut" $R1
+        IfErrors addDesktopShortcut doNotAddDesktopShortcut
+        addDesktopShortcut:
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
+
+        doNotAddDesktopShortcut:
+
     SectionEnd
 
-    Section /o "Quick launch" SectionQuickLaunch
+    Section /o "$(SECTION_QUICK_LAUNCH)" SECTION_QUICK_LAUNCH
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -362,19 +385,18 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
-    SetOutPath $INSTDIR\share\locale
-    File /r "..\dist\share\locale\*.*"
+Section "$(SECTION_TRANSLATIONS)" SECTION_TRANSLATIONS
+  !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "Integrate Shred" SectionShred
+  Section "$(SECTION_INTEGRATE_SHRED)" SECTION_SHRED
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "" 'Shred with BleachBit'
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit" "Icon" "$INSTDIR\bleachbit.exe,0"
-    WriteRegStr HKCR "AllFileSystemObjects\shell\shred.bleachbit\command" "" '"$INSTDIR\bleachbit.exe" --gui --no-uac --shred "%1"'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
 !endif
 
@@ -403,8 +425,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
-    upgrading, or click 'Cancel' to abort the upgrade." \
+    "$(ALREADY_INSTALLED)" \
     /SD IDOK \
     IDOK uninstall_old
 
@@ -427,10 +448,17 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall"
-    RMDir /r "$INSTDIR"
+Section "$(SECTION_UNINSTALL)" SECTION_UNINSTALL
+    Delete $INSTDIR\bleachbit.exe.log
+
+    !ifndef NoTranslations
+      !include LocaleToUninstall.nsh
+    !endif
+
+    !include FilesToUninstall.nsh
+
     DeleteRegKey HKCU "Software\${prodname}"
     # delete normal shortcuts
     RMDir /r "$SMPROGRAMS\${prodname}"
@@ -439,7 +467,13 @@ Section "Uninstall"
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # Remove Windows Explorer Shell Extension (Shredder)
-    DeleteRegKey HKCR "AllFileSystemObjects\shell\shred.bleachbit"
+    DeleteRegKey HKCR "${SHRED_REGEX_KEY}"
+
+    # Remove the uninstaller as the very last step.
+    # If something goes wrong, let the user run it again.
+    Delete $INSTDIR\uninstall.exe
+    RMDir /REBOOTOK "$INSTDIR\."
+
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo

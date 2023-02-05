@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,10 @@
 
 """
 Command design pattern implementation for cleaning
+
+Standard clean up commands are Delete, Truncate and Shred. Everything
+else is counted as special commands: run any external process, edit
+JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
 from bleachbit import _

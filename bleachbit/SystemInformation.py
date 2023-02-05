@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 
 
 """
-Show diagnostic information
+Show system information
 """
 
 import bleachbit
@@ -34,8 +34,8 @@ if 'nt' == os.name:
     from win32com.shell import shell
 
 
-def diagnostic_info():
-    """Return diagnostic information as a string"""
+def get_system_information():
+    """Return system information as a string"""
     # this section is for application and library versions
     s = "BleachBit version %s" % bleachbit.APP_VERSION
 
@@ -75,7 +75,7 @@ def diagnostic_info():
     s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
-    if 'nt' == os.name:
+    elif 'nt' == os.name:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     for env in envs:

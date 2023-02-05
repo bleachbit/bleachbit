@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -96,7 +96,13 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Check connection to the update URL"""
         from bleachbit.Update import build_opener
         opener = build_opener()
-        handle = opener.open(bleachbit.update_check_url)
+        opener.addheaders = [('accept','text/*')]
+        import urllib
+        try:
+            handle = opener.open(bleachbit.update_check_url)
+        except urllib.error.HTTPError as e:
+            logger.exception('HTTP error, url: %s\nheaders:\n%s', bleachbit.update_check_url, e.headers)
+            raise e
         doc = handle.read()
         import xml
         xml.dom.minidom.parseString(doc)
@@ -108,7 +114,7 @@ class UpdateTestCase(common.BleachbitTestCase):
             logger.info('deleting %s', fn)
             os.unlink(fn)
 
-        url = 'http://katana.oooninja.com/bleachbit/winapp2/winapp2-2019-11-15.ini'
+        url = 'https://download.bleachbit.org/winapp2/winapp2-2021-11-22.ini'
 
         def expect_failure():
             raise AssertionError('Call should have failed')
@@ -119,7 +125,8 @@ class UpdateTestCase(common.BleachbitTestCase):
         succeeded = {'r': False}  # scope
 
         # bad hash
-        self.assertRaises(RuntimeError, update_winapp2, url, "notahash", print, expect_failure)
+        self.assertRaises(RuntimeError, update_winapp2, url,
+                          "notahash", print, expect_failure)
 
         # blank hash, download file
         update_winapp2(url, None, print, on_success)

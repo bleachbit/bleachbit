@@ -16,11 +16,7 @@ Bug reports were managed in [Launchpad](https://bugs.launchpad.net/bleachbit/) b
 
 ## Information to include with bug reports
 
-When filing a bug report, please include:
-* The version of BleachBit
-* The type and version of the operating system (for example, Windows 10 or Ubuntu 16.04)
-* The exact error message
-* Which exact steps you took before the error happened
+When filing a [bug report](https://github.com/bleachbit/bleachbit/issues/new), the issue template will guide you on which information to include.
 
 If you are reporting an error that happens while cleaning ([example screenshot](https://user-images.githubusercontent.com/22394276/31048383-42d469d8-a61c-11e7-9a7d-d149887ce2f3.jpg)), please try to narrow it down a single cleaning option (in other words, a single checkbox).
 
@@ -29,9 +25,7 @@ See also [prioritization of issues](https://www.bleachbit.org/contribute/priorit
 
 ## Development environment
 
-BleachBit runs on Python 2.7 with PyGTK 2. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
-
-The modernization branch supports GTK+ 3, but it is not yet ready. See the GitHub issues.
+BleachBit 4.x runs on Python 3 with GTK 3. See also [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html) regarding dependencies.
 
 
 ## Procedure for creating and submitting patch

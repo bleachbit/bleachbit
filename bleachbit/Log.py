@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -37,8 +37,7 @@ class DelayLog(object):
         self.msg = ''
 
     def read(self):
-        for msg in self.queue:
-            yield msg
+        yield from self.queue
         self.queue = []
 
     def write(self, msg):
@@ -74,14 +73,12 @@ def init_log():
     return logger
 
 
-def set_root_log_level():
+def set_root_log_level(is_debug=False):
     """Adjust the root log level
 
     This runs later in the application's startup process when the
     configuration is loaded or after a change via the GUI.
     """
-    from bleachbit.Options import options
-    is_debug = options.get('debug')
     root_logger = logging.getLogger('bleachbit')
     root_logger.setLevel(logging.DEBUG if is_debug else logging.INFO)
 

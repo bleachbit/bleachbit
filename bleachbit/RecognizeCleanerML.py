@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -169,7 +169,7 @@ class RecognizeCleanerML:
             (status, myhash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
                 changes.append([pathname, status, myhash])
-        if len(changes) > 0:
+        if changes:
             cleaner_change_dialog(changes, self.parent_window)
             for change in changes:
                 pathname = change[0]

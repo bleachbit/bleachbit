@@ -3,7 +3,7 @@
 
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,9 +27,8 @@ Preferences dialog
 from bleachbit import _, _p, online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
-import bleachbit.GUI
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 import logging
 import os
 
@@ -103,7 +102,10 @@ class PreferencesDialog:
             self.cb_set_windows10_theme()
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
-            set_root_log_level()
+            set_root_log_level(options.get('debug'))
+        if 'kde_shred_menu_option' == path:
+            from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
+            install_kde_service_menu_file()
 
     def __general_page(self):
         """Return a widget containing the general page"""
@@ -198,11 +200,23 @@ class PreferencesDialog:
         self.cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
         vbox.pack_start(self.cb_dark_mode, False, True, 0)
 
+        # Remember window geometry (position and size)
+        self.cb_geom = Gtk.CheckButton(label=_("Remember window geometry"))
+        self.cb_geom.set_active(options.get("remember_geometry"))
+        self.cb_geom.connect('toggled', self.__toggle_callback, 'remember_geometry')
+        vbox.pack_start(self.cb_geom, False, True, 0)
+
         # Debug logging
         cb_debug = Gtk.CheckButton(label=_("Show debug messages"))
         cb_debug.set_active(options.get("debug"))
         cb_debug.connect('toggled', self.__toggle_callback, 'debug')
         vbox.pack_start(cb_debug, False, True, 0)
+
+        # KDE context menu shred option
+        cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add shred context menu option (KDE Plasma specific)"))
+        cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
+        cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
+        vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
 
         return vbox
 
@@ -315,6 +329,7 @@ class PreferencesDialog:
 
         # finish
         swindow = Gtk.ScrolledWindow()
+        swindow.set_overlay_scrolling(False)
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
@@ -434,7 +449,7 @@ class PreferencesDialog:
             # TRANSLATORS: "Paths" is used generically to refer to both files
             # and folders
             notice = Gtk.Label(
-                label=_("Theses paths will not be deleted or modified."))
+                label=_("These paths will not be deleted or modified."))
         elif LOCATIONS_CUSTOM == page_type:
             notice = Gtk.Label(
                 label=_("These locations can be selected for deletion."))
@@ -457,6 +472,7 @@ class PreferencesDialog:
 
         # finish tree view
         swindow = Gtk.ScrolledWindow()
+        swindow.set_overlay_scrolling(False)
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)

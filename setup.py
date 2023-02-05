@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2021 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -45,6 +45,9 @@ if sys.platform == 'win32':
 import bleachbit
 import bleachbit.General
 import bleachbit.FileUtilities
+
+APP_NAME = "BleachBit - Free space and maintain privacy"
+APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."
 
 #
 # begin win32com.shell workaround for py2exe
@@ -97,15 +100,21 @@ args = {}
 if 'py2exe' in sys.argv:
     args['windows'] = [{
         'script': 'bleachbit.py',
+        'product_name': APP_NAME,
+        'description': APP_DESCRIPTION,
+        'version': bleachbit.APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
     args['console'] = [{
         'script': 'bleachbit_console.py',
+        'product_name': APP_NAME,
+        'description': APP_DESCRIPTION,
+        'version': bleachbit.APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
     args['options'] = {
         'py2exe': {
-            'packages': ['encodings', 'gi', 'plyer'],
+            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
@@ -253,8 +262,8 @@ def clean_dist_locale():
 def run_setup():
     setup(name='bleachbit',
           version=bleachbit.APP_VERSION,
-          description="BleachBit - Free space and maintain privacy",
-          long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
+          description=APP_NAME,
+          long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
           download_url="https://www.bleachbit.org/download",
