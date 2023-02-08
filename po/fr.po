@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-02-11 19:56+0000\n"
+"PO-Revision-Date: 2023-02-08 14:22+0000\n"
 "Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -854,8 +854,7 @@ msgid "Run external command: %s"
 msgstr "Lancer la commande externe : %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "Échec du téléchargement de l'URL : %s"
 
@@ -1474,6 +1473,8 @@ msgstr "Afficher les messages de débogage"
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
+"Ajout d'une option de menu contextuel « déchiqueter » (spécifique à KDE "
+"Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1532,8 +1533,6 @@ msgid "Folder"
 msgstr "Dossier"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Ces chemins d'accès ne seront ni modifiés ni supprimés."
 
@@ -1586,7 +1585,7 @@ msgstr "_Valider"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Programme pour nettoyer les fichiers inutiles"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1611,11 +1610,11 @@ msgstr ""
 "  Christophe CATARINA https://launchpad.net/~christophe.catarina\n"
 "  Célestin Taramarcaz https://launchpad.net/~ctaramarcaz\n"
 "  Edouard Marquez https://launchpad.net/~animatrix\n"
-"  Etienne Savard https://launchpad.net/~esavard\n"
+"  Étienne Savard https://launchpad.net/~esavard\n"
 "  Gabriel U. https://launchpad.net/~gabriel-ull\n"
 "  Jean-Luc Aufranc https://launchpad.net/~jean-luc-aufranc\n"
 "  Jean-Marc https://launchpad.net/~m-balthazar\n"
-"  Jean-Paul GERST https://launchpad.net/~jp-gerst\n"
+"  Jean-Paul Gerst https://launchpad.net/~jp-gerst\n"
 "  Julien Valroff https://launchpad.net/~julienv\n"
 "  Mathieu Pasquet https://launchpad.net/~mathieui\n"
 "  Matthias Loste https://launchpad.net/~evoluty\n"
@@ -1719,6 +1718,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Il n'y a pas de version officielle de BleachBit sur le Microsoft Store. "
+"Obtenez la version authentique sur https://www.bleachbit.org où elle est "
+"toujours gratuite."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
