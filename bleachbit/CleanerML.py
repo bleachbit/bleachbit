@@ -32,7 +32,11 @@ from bleachbit import Cleaner
 import logging
 import os
 import sys
+import stat
 import xml.dom.minidom
+
+from os import listdir
+from os.path import isfile, join, splitext
 
 logger = logging.getLogger(__name__)
 
@@ -40,16 +44,14 @@ logger = logging.getLogger(__name__)
 def default_vars():
     """Return default multi-value variables"""
     ret = {}
-    if not os.name == 'nt':
+    if os.name != 'nt':
         return ret
     # Expand ProgramFiles to also be ProgramW6432, etc.
-    wowvars = (('ProgramFiles', 'ProgramW6432'),
-               ('CommonProgramFiles', 'CommonProgramW6432'))
+    wowvars = [('ProgramFiles', 'ProgramW6432'), ('CommonProgramFiles', 'CommonProgramW6432')]
     for v1, v2 in wowvars:
-        # Remove None, if variable is not found.
-        # Make list unique.
-        mylist = list({x for x in (os.getenv(v1), os.getenv(v2)) if x})
-        ret[v1] = mylist
+        values = [os.getenv(var) for var in (v1, v2) if os.getenv(var)]
+        if values:
+            ret[v1] = values
     return ret
 
 
@@ -257,24 +259,23 @@ class CleanerML:
 
 def list_cleanerml_files(local_only=False):
     """List CleanerML files"""
-    cleanerdirs = (bleachbit.personal_cleaners_dir, )
+    cleanerdirs = [bleachbit.personal_cleaners_dir]
     if bleachbit.local_cleaners_dir:
         # If the application is installed, locale_cleaners_dir is None
-        cleanerdirs = (bleachbit.local_cleaners_dir, )
+        cleanerdirs.append(bleachbit.local_cleaners_dir)
     if not local_only and bleachbit.system_cleaners_dir:
-        cleanerdirs += (bleachbit.system_cleaners_dir, )
-    for pathname in listdir(cleanerdirs):
-        if not pathname.lower().endswith('.xml'):
-            continue
-        import stat
-        st = os.stat(pathname)
-        if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
-            # TRANSLATORS: When BleachBit detects the file permissions are
-            # insecure, it will not load the cleaner as if it did not exist.
-            logger.warning(
-                _("Ignoring cleaner because it is world writable: %s"), pathname)
-            continue
-        yield pathname
+        cleanerdirs.append(bleachbit.system_cleaners_dir)
+    for cleanerdir in cleanerdirs:
+        for pathname in (join(cleanerdir, f) for f in listdir(cleanerdir) if isfile(join(cleanerdir, f))):
+            if splitext(pathname.lower())[1] != '.xml':
+                continue
+            st = os.stat(pathname)
+            if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
+                # TRANSLATORS: When BleachBit detects the file permissions are
+                # insecure, it will not load the cleaner as if it did not exist.
+                logger.warning(_("Ignoring cleaner because it is world writable: %s"), pathname)
+                continue
+            yield pathname
 
 
 def load_cleaners(cb_progress=lambda x: None):
