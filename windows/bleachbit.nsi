@@ -55,7 +55,7 @@
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
   ;!pragma warning disable 6030
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
-  !pragma warning disable 6040
+  ;!pragma warning disable 6040
 
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
