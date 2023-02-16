@@ -60,7 +60,7 @@ Version: 2023-01-30
 	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.  Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with Beachblit"
+	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} web site."
 	LangString MULTIPRINT1 ${LANG_ENGLISH} "The next step is building font cache, during which you may see a black window."
@@ -1050,10 +1050,10 @@ Version: 2023-01-30
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ITALIAN} "Installa il modulo sovrascrittura file integrato."
 	LangString SECTION_UNINSTALL_NAME ${LANG_ITALIAN} "Modulo disinstallazione"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ITALIAN} "Include il programma per la disinstallazione."
-	LangString NAME_UNINSTALL_TEXT ${LANG_ITALIAN} "BleachBit verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
-	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai click su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
+	LangString NAME_UNINSTALL_TEXT ${LANG_ITALIAN} " ${prodname} verrà disinstallato dalla seguente cartella.$\r$\nFai clic su 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
+	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nFai clic su 'OK' per disinstallare prima la vecchia versione, o fai clic su 'Annulla' per interrompere l'aggiornamento."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con Beachblit"
+	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito di ${prodname}."
 	LangString MULTIPRINT1 ${LANG_ITALIAN} "Il passaggio successivo è la creazione della cache delle font, durante la quale potresti vedere una finestra nera."
