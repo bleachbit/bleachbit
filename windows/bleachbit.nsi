@@ -336,7 +336,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section "Core (Required)" SectionCore
+Section "$(SECTION_TRANSLATIONS_NAME)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -403,7 +403,7 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
+Section "Translations" SectionTranslations
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
@@ -501,13 +501,16 @@ SectionEnd
 
   ;Assign descriptions to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}        "$(SECTION_CORE_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}   "$(SECTION_SHORTCUTS_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}       "$(SECTION_START_MENU_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}     "$(SECTION_DESKTOP_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}       "$(SECTION_INTEGRATE_SHRED_NAME)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}          "$(SECTION_UNINSTALL_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}         "$(SECTION_CORE_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}    "$(SECTION_SHORTCUTS_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}        "$(SECTION_START_MENU_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}      "$(SECTION_DESKTOP_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch}  "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
+    !ifndef NoTranslations
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)" 
+    !endif
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_NAME)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}           "$(SECTION_UNINSTALL_DESCRIPTION)" 
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
