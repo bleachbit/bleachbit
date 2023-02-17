@@ -355,7 +355,9 @@ Section "Core (Required)" SectionCore
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-
+    WriteRegStr HKLM "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+                 "DisplayName" "${prodname}"
+  
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
@@ -495,6 +497,18 @@ Section "Uninstall" SectionUninstall
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
+;-------------------------------- Set SectionDescription
+
+  ;Assign descriptions to sections
+  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}        "Core (main) files" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}   "Create teh shortcuts" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}       "Create shortcut in Start menu" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}     "Crete shortcut oon teh desktop" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} "Create shortcut in quicklunch menu" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}       "Integrate the Shreeder function" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}          "Add function to uninstall the program" 
+  !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Uninstaller Functions
