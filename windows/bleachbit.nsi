@@ -403,14 +403,14 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section "Translations" SectionTranslations
+Section "$(SECTION_TRANSLATIONS_NAME)" SectionTranslations
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "Integrate Shred" SectionShred
+  Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
