@@ -501,13 +501,13 @@ SectionEnd
 
   ;Assign descriptions to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}        "Core (main) files" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}   "Create teh shortcuts" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}       "Create shortcut in Start menu" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}     "Crete shortcut oon teh desktop" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} "Create shortcut in quicklunch menu" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}       "Integrate the Shreeder function" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}          "Add function to uninstall the program" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}        "$(SECTION_CORE_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}   "$(SECTION_SHORTCUTS_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}       "$(SECTION_START_MENU_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}     "$(SECTION_DESKTOP_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch} "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}       "$(SECTION_INTEGRATE_SHRED_NAME)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}          "$(SECTION_UNINSTALL_DESCRIPTION)" 
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
