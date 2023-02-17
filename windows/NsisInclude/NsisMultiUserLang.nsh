@@ -1030,7 +1030,7 @@ Version: 2023-01-30
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ITALIAN} "Impossibile eseguire l'elevazione, il servizio di accesso secondario non è in esecuzione."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore {ERROR}."
 	; overwrite default text string
-	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\nVuoi riavviarlo ora?"
+	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
 	LangString MUI_TEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
@@ -1053,7 +1053,7 @@ Version: 2023-01-30
 	LangString SECTION_UNINSTALL_NAME ${LANG_ITALIAN} "Modulo disinstallazione"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ITALIAN} "Installa il modulo per la disinstallazione del programma."
 	LangString NAME_UNINSTALL_TEXT ${LANG_ITALIAN} " ${prodname} verrà disinstallato dalla seguente cartella.$\r$\nSeleziona 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
-	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nSeleziona 'OK' per disinstallare prima la versione installed, o 'Annulla' per interrompere l'aggiornamento."
+	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nSeleziona 'OK' per disinstallare prima la versione installata, o 'Annulla' per interrompere l'aggiornamento."
 	; shred shell integration menu name
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
 	; Finish message
