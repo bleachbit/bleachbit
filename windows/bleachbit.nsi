@@ -365,8 +365,8 @@ Section "$(SECTION_CORE_NAME)" SectionCore
 SectionEnd
 
 
-SectionGroup /e "Shortcuts" SectionShortCuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
+    Section "$(SECTION_START_MENU_NAME)" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
@@ -378,7 +378,7 @@ SectionGroup /e "Shortcuts" SectionShortCuts
         Call RefreshShellIcons
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(SECTION_DESKTOP_NAME)" SectionDesktop
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -393,7 +393,7 @@ SectionGroup /e "Shortcuts" SectionShortCuts
 
     SectionEnd
 
-    Section /o "Quick lunch" SectionQuickLaunch
+    Section /o "$(SECTION_QUICK_LAUNCH_NAME)" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
