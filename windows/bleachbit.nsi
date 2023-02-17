@@ -365,8 +365,8 @@ Section "$(SECTION_CORE_NAME)" SectionCore
 SectionEnd
 
 
-SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
-    Section "$(SECTION_START_MENU_NAME)" SectionStart
+SectionGroup /e "Shortcuts" SectionShortCuts
+    Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
@@ -378,7 +378,7 @@ SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
         Call RefreshShellIcons
     SectionEnd
 
-    Section "$(SECTION_DESKTOP_NAME)" SectionDesktop
+    Section "Desktop" SectionDesktop
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -393,7 +393,7 @@ SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
 
     SectionEnd
 
-    Section /o "$(SECTION_QUICK_LAUNCH_NAME)" SectionQuickLaunch
+    Section /o "Quick lunch" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -403,14 +403,14 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section "$(SECTION_TRANSLATIONS_NAME)" SectionTranslations
+Section "Translations" SectionTranslations
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
+  Section "Integrate Shred" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
@@ -468,7 +468,7 @@ FunctionEnd
 
 UninstallText "$(UNINSTALL_TEXT)"
 
-Section "$(SECTION_UNINSTALL_NAME)" SectionUninstall
+Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
