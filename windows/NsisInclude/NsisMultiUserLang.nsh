@@ -65,6 +65,8 @@ Version: 2023-01-30
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ENGLISH} "The next step is building font cache, during which you may see a black window."
 	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "{prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ENGLISH} "{prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -1058,6 +1060,8 @@ Version: 2023-01-30
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito di ${prodname}"
 	LangString MULTIPRINT1 ${LANG_ITALIAN} "Il passaggio successivo è la creazione della cache delle font, durante la quale potresti vedere una finestra nera."
 	LangString MULTIPRINT2 ${LANG_ITALIAN} "Di solito richiede un minuto, ma a volte ci possono volere dieci minuti."
+	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "{prodname} senza UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "{prodname} con terminale debug"
 !endif
 
 !ifdef LANG_JAPANESE
