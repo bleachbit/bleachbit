@@ -1040,7 +1040,7 @@ Version: 2023-01-30
 	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ITALIAN} "Opzioni creazione creazione collegamenti."
 	LangString SECTION_START_MENU_NAME ${LANG_ITALIAN} "Menu Start"
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ITALIAN} "Crea un collegamento nel menu Start."
-	LangString SECTION_DESKTOP_NAME ${LANG_ITALIAN} "Dsktop"
+	LangString SECTION_DESKTOP_NAME ${LANG_ITALIAN} "Desktop"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ITALIAN} "Crea un collegamento sul desktop."
 	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ITALIAN} "Avvio rapido"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ITALIAN} "Crea un collegamento in Avvio rapido."
