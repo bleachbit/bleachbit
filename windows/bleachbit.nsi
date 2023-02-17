@@ -370,7 +370,7 @@ SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
-        CreateShortCut ""$SMPROGRAMS\${prodname}\$(SHORTCUT_NO_UAC).lnk" \
+        CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_NO_UAC).lnk" \
             "$INSTDIR\${prodname}.exe" \
             "--no-uac --gui" "$INSTDIR\${prodname}.exe"
         CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_DEBUGGING_TERMINAL).lnk" \
