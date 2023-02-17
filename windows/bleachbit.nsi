@@ -336,7 +336,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "Core (Required)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -363,7 +363,7 @@ Section Core (Required)
 SectionEnd
 
 
-SectionGroup /e Shortcuts
+SectionGroup /e "Shortcuts" SectionShortCuts
     Section "Start menu" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
@@ -466,7 +466,7 @@ FunctionEnd
 
 UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall"
+Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
