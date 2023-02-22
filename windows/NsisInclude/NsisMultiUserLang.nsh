@@ -7,10 +7,11 @@ Full source code, documentation and demos at https://github.com/Drizin/NsisMulti
 Copyright 2016-2023 Ricardo Drizin, Alex Mitev
 
 File   : Include\NsisMultiUserLang.nsh
-Version: 2023-01-30
+Version: 2023-02-223
 
 */
 
+!ifdef LANG_ENGLISH
 	LangString MULTIUSER_PAGE_TITLE ${LANG_ENGLISH} "Choose Users"
 	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to install $(^NameDA)."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to remove $(^NameDA)."
@@ -66,6 +67,7 @@ Version: 2023-01-30
 	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ENGLISH} "${prodname} Debugging Terminal"
+!endif
 
 !ifdef LANG_AFRIKAANS
 	LangString MULTIUSER_PAGE_TITLE ${LANG_AFRIKAANS} "Choose Users"
@@ -96,6 +98,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_AFRIKAANS} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_AFRIKAANS} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_AFRIKAANS} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_AFRIKAANS} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_AFRIKAANS} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_AFRIKAANS} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_AFRIKAANS} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_AFRIKAANS} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_AFRIKAANS} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_AFRIKAANS} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_AFRIKAANS} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_AFRIKAANS} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_AFRIKAANS} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_AFRIKAANS} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_AFRIKAANS} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_AFRIKAANS} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_AFRIKAANS} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_AFRIKAANS} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_AFRIKAANS} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_AFRIKAANS} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_AFRIKAANS} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_AFRIKAANS} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_AFRIKAANS} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_AFRIKAANS} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_AFRIKAANS} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_AFRIKAANS} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_AFRIKAANS} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ALBANIAN
@@ -127,6 +156,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ALBANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ALBANIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ALBANIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ALBANIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ALBANIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ALBANIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ALBANIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ALBANIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ALBANIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ALBANIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ALBANIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ALBANIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ALBANIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ALBANIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ALBANIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ALBANIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ALBANIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ALBANIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ALBANIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ALBANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ALBANIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ALBANIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ALBANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ALBANIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ALBANIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ARABIC
@@ -158,6 +214,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ARABIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ARABIC} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARABIC} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ARABIC} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ARABIC} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ARABIC} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ARABIC} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ARABIC} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ARABIC} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ARABIC} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ARABIC} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ARABIC} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ARABIC} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ARABIC} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ARABIC} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ARABIC} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ARABIC} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ARABIC} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ARABIC} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ARABIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ARABIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ARABIC} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ARABIC} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ARABIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ARABIC} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARABIC} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ARMENIAN
@@ -189,6 +272,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ARMENIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ARMENIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ARMENIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ARMENIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ARMENIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ARMENIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ARMENIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ARMENIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ARMENIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ARMENIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ARMENIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ARMENIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ARMENIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ARMENIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ARMENIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ARMENIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ARMENIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ARMENIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ARMENIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ARMENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ARMENIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ARMENIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ARMENIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ARMENIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ARMENIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ARMENIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARMENIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -220,6 +330,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ASTURIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ASTURIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ASTURIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ASTURIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ASTURIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ASTURIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ASTURIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ASTURIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ASTURIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ASTURIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ASTURIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ASTURIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ASTURIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ASTURIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ASTURIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ASTURIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ASTURIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ASTURIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ASTURIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ASTURIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ASTURIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ASTURIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ASTURIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ASTURIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ASTURIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_BASQUE
@@ -251,6 +388,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BASQUE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BASQUE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BASQUE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_BASQUE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_BASQUE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_BASQUE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_BASQUE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_BASQUE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BASQUE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_BASQUE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BASQUE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_BASQUE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BASQUE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BASQUE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BASQUE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BASQUE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BASQUE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_BASQUE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BASQUE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_BASQUE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BASQUE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_BASQUE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_BASQUE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_BASQUE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BASQUE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -282,6 +446,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BELARUSIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BELARUSIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BELARUSIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_BELARUSIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_BELARUSIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_BELARUSIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_BELARUSIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_BELARUSIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BELARUSIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_BELARUSIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BELARUSIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_BELARUSIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BELARUSIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BELARUSIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BELARUSIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BELARUSIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BELARUSIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_BELARUSIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BELARUSIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_BELARUSIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BELARUSIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_BELARUSIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_BELARUSIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_BELARUSIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BELARUSIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -313,6 +504,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BOSNIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BOSNIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BOSNIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_BOSNIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_BOSNIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_BOSNIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_BOSNIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_BOSNIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BOSNIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_BOSNIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BOSNIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_BOSNIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BOSNIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BOSNIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BOSNIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BOSNIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BOSNIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_BOSNIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BOSNIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_BOSNIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BOSNIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_BOSNIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_BOSNIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_BOSNIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BOSNIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_BRETON
@@ -344,6 +562,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BRETON} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BRETON} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BRETON} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_BRETON} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_BRETON} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_BRETON} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_BRETON} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_BRETON} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BRETON} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_BRETON} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BRETON} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_BRETON} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BRETON} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BRETON} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BRETON} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BRETON} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BRETON} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_BRETON} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BRETON} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_BRETON} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_BRETON} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_BRETON} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BRETON} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_BRETON} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_BRETON} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_BRETON} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BRETON} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -375,6 +620,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_BULGARIAN} "Операционната система не поддържа повишаване на привилегиите."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_BULGARIAN} "Не е възможно повишаване на привилегиите, услугата Secondary Logon не е пусната."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_BULGARIAN} "Не е възможно повишаване на привилегиите, грешка {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_BULGARIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_BULGARIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_BULGARIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_BULGARIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_BULGARIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BULGARIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_BULGARIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BULGARIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_BULGARIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BULGARIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BULGARIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BULGARIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BULGARIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BULGARIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_BULGARIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BULGARIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_BULGARIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BULGARIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_BULGARIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_BULGARIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_BULGARIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BULGARIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_CATALAN
@@ -406,6 +678,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CATALAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CATALAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CATALAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_CATALAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_CATALAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_CATALAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_CATALAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_CATALAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_CATALAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_CATALAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_CATALAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_CATALAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_CATALAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_CATALAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_CATALAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_CATALAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_CATALAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_CATALAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_CATALAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_CATALAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_CATALAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CATALAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_CATALAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_CATALAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_CATALAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CATALAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_CORSICAN
@@ -437,6 +736,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CORSICAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CORSICAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CORSICAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_CORSICAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_CORSICAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_CORSICAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_CORSICAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_CORSICAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_CORSICAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_CORSICAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_CORSICAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_CORSICAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_CORSICAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_CORSICAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_CORSICAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_CORSICAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_CORSICAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_CORSICAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_CORSICAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_CORSICAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_CORSICAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_CORSICAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CORSICAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_CORSICAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_CORSICAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_CORSICAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CORSICAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_CROATIAN
@@ -468,6 +794,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CROATIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CROATIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CROATIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_CROATIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_CROATIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_CROATIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_CROATIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_CROATIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_CROATIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_CROATIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_CROATIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_CROATIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_CROATIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_CROATIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_CROATIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_CROATIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_CROATIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_CROATIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_CROATIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_CROATIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CROATIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_CROATIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_CROATIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_CROATIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CROATIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_CZECH
@@ -499,6 +852,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_CZECH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_CZECH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_CZECH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_CZECH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_CZECH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_CZECH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_CZECH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_CZECH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_CZECH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_CZECH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_CZECH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_CZECH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_CZECH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_CZECH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_CZECH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_CZECH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_CZECH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_CZECH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_CZECH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_CZECH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CZECH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_CZECH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_CZECH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_CZECH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CZECH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_DANISH
@@ -530,6 +910,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_DANISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_DANISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DANISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_DANISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_DANISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_DANISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_DANISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_DANISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_DANISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_DANISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_DANISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_DANISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_DANISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_DANISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_DANISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_DANISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_DANISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_DANISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_DANISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_DANISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DANISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_DANISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_DANISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_DANISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DANISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_DUTCH
@@ -561,6 +968,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_DUTCH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_DUTCH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_DUTCH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_DUTCH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_DUTCH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_DUTCH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_DUTCH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_DUTCH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_DUTCH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_DUTCH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_DUTCH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_DUTCH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_DUTCH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_DUTCH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_DUTCH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_DUTCH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_DUTCH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_DUTCH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_DUTCH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_DUTCH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DUTCH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_DUTCH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_DUTCH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DUTCH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ESPERANTO
@@ -592,6 +1026,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ESPERANTO} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ESPERANTO} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESPERANTO} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ESPERANTO} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ESPERANTO} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ESPERANTO} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ESPERANTO} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ESPERANTO} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ESPERANTO} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ESPERANTO} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ESPERANTO} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ESPERANTO} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ESPERANTO} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ESPERANTO} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ESPERANTO} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ESPERANTO} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ESPERANTO} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ESPERANTO} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ESPERANTO} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ESPERANTO} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ESPERANTO} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ESPERANTO} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESPERANTO} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ESPERANTO} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ESPERANTO} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ESPERANTO} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESPERANTO} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -623,6 +1084,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ESTONIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ESTONIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ESTONIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ESTONIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ESTONIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ESTONIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ESTONIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ESTONIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ESTONIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ESTONIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ESTONIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ESTONIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ESTONIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ESTONIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ESTONIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ESTONIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ESTONIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ESTONIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ESTONIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ESTONIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESTONIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ESTONIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ESTONIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_FARSI
@@ -654,6 +1142,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FARSI} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FARSI} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FARSI} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_FARSI} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_FARSI} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_FARSI} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_FARSI} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_FARSI} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_FARSI} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_FARSI} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_FARSI} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_FARSI} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_FARSI} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_FARSI} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_FARSI} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_FARSI} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_FARSI} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_FARSI} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_FARSI} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_FARSI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_FARSI} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_FARSI} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FARSI} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_FARSI} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_FARSI} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_FARSI} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FARSI} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_FINNISH
@@ -685,6 +1200,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FINNISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FINNISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FINNISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_FINNISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_FINNISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_FINNISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_FINNISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_FINNISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_FINNISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_FINNISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_FINNISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_FINNISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_FINNISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_FINNISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_FINNISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_FINNISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_FINNISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_FINNISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_FINNISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_FINNISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FINNISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_FINNISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_FINNISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_FRENCH
@@ -716,6 +1258,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_FRENCH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_FRENCH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_FRENCH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_FRENCH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_FRENCH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_FRENCH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_FRENCH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_FRENCH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_FRENCH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_FRENCH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_FRENCH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_FRENCH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_FRENCH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_FRENCH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_FRENCH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_FRENCH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_FRENCH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_FRENCH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_FRENCH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_FRENCH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FRENCH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_FRENCH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_FRENCH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FRENCH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_GALICIAN
@@ -747,6 +1316,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GALICIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GALICIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GALICIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_GALICIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_GALICIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_GALICIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_GALICIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_GALICIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_GALICIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_GALICIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GALICIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_GALICIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_GALICIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_GALICIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_GALICIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_GALICIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_GALICIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_GALICIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_GALICIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_GALICIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GALICIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_GALICIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_GALICIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_GALICIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GALICIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_GEORGIAN
@@ -778,6 +1374,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GEORGIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GEORGIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GEORGIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_GEORGIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_GEORGIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_GEORGIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_GEORGIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_GEORGIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_GEORGIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_GEORGIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GEORGIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_GEORGIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_GEORGIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_GEORGIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_GEORGIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_GEORGIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_GEORGIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_GEORGIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_GEORGIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_GEORGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_GEORGIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_GEORGIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GEORGIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_GEORGIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_GEORGIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_GEORGIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GEORGIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_GERMAN
@@ -810,6 +1433,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GERMAN} "Das Betriebssystem unterstützt nicht Hochstuffung."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GERMAN} "Hochstuffung nicht möglich, zweiter Anmelde-Service läuft nicht."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GERMAN} "Hochstuffung nicht möglich, Fehler {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_GERMAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_GERMAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_GERMAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_GERMAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_GERMAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_GERMAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_GERMAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GERMAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_GERMAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_GERMAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_GERMAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_GERMAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_GERMAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_GERMAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_GERMAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_GERMAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_GERMAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GERMAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_GERMAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_GERMAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_GREEK
@@ -841,6 +1491,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_GREEK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_GREEK} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_GREEK} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_GREEK} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_GREEK} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_GREEK} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_GREEK} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_GREEK} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_GREEK} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_GREEK} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GREEK} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_GREEK} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_GREEK} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_GREEK} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_GREEK} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_GREEK} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_GREEK} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_GREEK} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_GREEK} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_GREEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_GREEK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GREEK} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_GREEK} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_GREEK} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_GREEK} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GREEK} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_HEBREW
@@ -872,6 +1549,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_HEBREW} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_HEBREW} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HEBREW} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_HEBREW} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_HEBREW} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_HEBREW} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_HEBREW} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_HEBREW} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_HEBREW} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_HEBREW} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_HEBREW} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_HEBREW} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_HEBREW} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_HEBREW} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_HEBREW} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_HEBREW} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_HEBREW} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_HEBREW} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_HEBREW} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_HEBREW} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HEBREW} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_HEBREW} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_HEBREW} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_HEBREW} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HEBREW} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -903,6 +1607,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_HUNGARIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_HUNGARIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_HUNGARIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_HUNGARIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_HUNGARIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_HUNGARIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_HUNGARIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_HUNGARIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_HUNGARIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_HUNGARIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_HUNGARIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_HUNGARIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_HUNGARIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_HUNGARIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_HUNGARIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_HUNGARIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_HUNGARIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_HUNGARIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_HUNGARIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_HUNGARIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HUNGARIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_HUNGARIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_HUNGARIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ICELANDIC
@@ -934,6 +1665,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ICELANDIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ICELANDIC} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ICELANDIC} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ICELANDIC} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ICELANDIC} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ICELANDIC} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ICELANDIC} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ICELANDIC} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ICELANDIC} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ICELANDIC} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ICELANDIC} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ICELANDIC} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ICELANDIC} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ICELANDIC} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ICELANDIC} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ICELANDIC} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ICELANDIC} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ICELANDIC} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ICELANDIC} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ICELANDIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ICELANDIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ICELANDIC} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ICELANDIC} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ICELANDIC} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ICELANDIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ICELANDIC} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ICELANDIC} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -965,6 +1723,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_INDONESIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_INDONESIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_INDONESIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_INDONESIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_INDONESIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_INDONESIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_INDONESIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_INDONESIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_INDONESIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_INDONESIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_INDONESIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_INDONESIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_INDONESIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_INDONESIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_INDONESIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_INDONESIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_INDONESIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_INDONESIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_INDONESIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_INDONESIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_INDONESIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_INDONESIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_INDONESIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_IRISH
@@ -996,6 +1781,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_IRISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_IRISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_IRISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_IRISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_IRISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_IRISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_IRISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_IRISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_IRISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_IRISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_IRISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_IRISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_IRISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_IRISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_IRISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_IRISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_IRISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_IRISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_IRISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_IRISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_IRISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_IRISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_IRISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_IRISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_IRISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_IRISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_IRISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ITALIAN
@@ -1092,6 +1904,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_JAPANESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_JAPANESE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_JAPANESE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_JAPANESE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_JAPANESE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_JAPANESE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_JAPANESE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_JAPANESE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_JAPANESE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_JAPANESE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_JAPANESE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_JAPANESE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_JAPANESE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_JAPANESE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_JAPANESE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_JAPANESE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_JAPANESE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_JAPANESE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_JAPANESE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_JAPANESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_JAPANESE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_JAPANESE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_JAPANESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_JAPANESE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_JAPANESE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_KOREAN
@@ -1123,6 +1962,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_KOREAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_KOREAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KOREAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_KOREAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_KOREAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_KOREAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_KOREAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_KOREAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_KOREAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_KOREAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_KOREAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_KOREAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_KOREAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_KOREAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_KOREAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_KOREAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_KOREAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_KOREAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_KOREAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_KOREAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_KOREAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_KOREAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_KOREAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_KOREAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KOREAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_KURDISH
@@ -1154,6 +2020,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_KURDISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_KURDISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_KURDISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_KURDISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_KURDISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_KURDISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_KURDISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_KURDISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_KURDISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_KURDISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_KURDISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_KURDISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_KURDISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_KURDISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_KURDISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_KURDISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_KURDISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_KURDISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_KURDISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_KURDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_KURDISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_KURDISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_KURDISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_KURDISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_KURDISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_KURDISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KURDISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_LATVIAN
@@ -1185,6 +2078,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LATVIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LATVIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LATVIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_LATVIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_LATVIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_LATVIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_LATVIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_LATVIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_LATVIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_LATVIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_LATVIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_LATVIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_LATVIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_LATVIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_LATVIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_LATVIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_LATVIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_LATVIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_LATVIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_LATVIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LATVIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_LATVIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_LATVIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_LATVIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LATVIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -1216,6 +2136,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LITHUANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LITHUANIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LITHUANIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_LITHUANIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_LITHUANIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_LITHUANIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_LITHUANIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_LITHUANIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_LITHUANIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_LITHUANIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_LITHUANIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_LITHUANIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_LITHUANIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_LITHUANIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_LITHUANIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_LITHUANIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_LITHUANIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_LITHUANIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_LITHUANIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_LITHUANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LITHUANIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_LITHUANIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_LITHUANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_LITHUANIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LITHUANIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_LUXEMBOURGISH
@@ -1247,6 +2194,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_LUXEMBOURGISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_LUXEMBOURGISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_LUXEMBOURGISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_LUXEMBOURGISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_LUXEMBOURGISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_LUXEMBOURGISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_LUXEMBOURGISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_LUXEMBOURGISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_LUXEMBOURGISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_LUXEMBOURGISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_LUXEMBOURGISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_LUXEMBOURGISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_LUXEMBOURGISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_LUXEMBOURGISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_LUXEMBOURGISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_LUXEMBOURGISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_LUXEMBOURGISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_LUXEMBOURGISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_LUXEMBOURGISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_LUXEMBOURGISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_LUXEMBOURGISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_LUXEMBOURGISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LUXEMBOURGISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_LUXEMBOURGISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_LUXEMBOURGISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_LUXEMBOURGISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LUXEMBOURGISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_MACEDONIAN
@@ -1278,6 +2252,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MACEDONIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MACEDONIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MACEDONIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_MACEDONIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_MACEDONIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_MACEDONIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_MACEDONIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_MACEDONIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_MACEDONIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_MACEDONIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_MACEDONIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_MACEDONIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_MACEDONIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_MACEDONIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_MACEDONIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_MACEDONIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_MACEDONIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_MACEDONIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_MACEDONIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_MACEDONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_MACEDONIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_MACEDONIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MACEDONIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_MACEDONIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_MACEDONIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_MACEDONIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MACEDONIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_MALAY
@@ -1309,6 +2310,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MALAY} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MALAY} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MALAY} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_MALAY} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_MALAY} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_MALAY} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_MALAY} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_MALAY} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_MALAY} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_MALAY} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_MALAY} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_MALAY} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_MALAY} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_MALAY} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_MALAY} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_MALAY} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_MALAY} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_MALAY} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_MALAY} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_MALAY} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MALAY} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_MALAY} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_MALAY} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_MALAY} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MALAY} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_MONGOLIAN
@@ -1340,6 +2368,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_MONGOLIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_MONGOLIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_MONGOLIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_MONGOLIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_MONGOLIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_MONGOLIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_MONGOLIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_MONGOLIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_MONGOLIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_MONGOLIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_MONGOLIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_MONGOLIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_MONGOLIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_MONGOLIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_MONGOLIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_MONGOLIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_MONGOLIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_MONGOLIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_MONGOLIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_MONGOLIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_MONGOLIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_MONGOLIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MONGOLIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_MONGOLIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_MONGOLIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_MONGOLIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MONGOLIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -1371,6 +2426,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_NORWEGIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_NORWEGIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_NORWEGIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_NORWEGIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_NORWEGIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_NORWEGIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_NORWEGIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_NORWEGIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_NORWEGIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_NORWEGIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_NORWEGIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_NORWEGIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_NORWEGIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_NORWEGIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_NORWEGIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_NORWEGIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_NORWEGIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_NORWEGIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_NORWEGIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_NORWEGIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_NORWEGIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_NORWEGIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_NORWEGIANNYNORSK
@@ -1402,6 +2484,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_NORWEGIANNYNORSK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_NORWEGIANNYNORSK} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_NORWEGIANNYNORSK} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_NORWEGIANNYNORSK} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_NORWEGIANNYNORSK} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_NORWEGIANNYNORSK} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_NORWEGIANNYNORSK} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_NORWEGIANNYNORSK} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_NORWEGIANNYNORSK} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_NORWEGIANNYNORSK} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_NORWEGIANNYNORSK} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_NORWEGIANNYNORSK} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_NORWEGIANNYNORSK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_NORWEGIANNYNORSK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_NORWEGIANNYNORSK} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_NORWEGIANNYNORSK} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_NORWEGIANNYNORSK} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_NORWEGIANNYNORSK} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIANNYNORSK} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIANNYNORSK} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_PASHTO
@@ -1433,6 +2542,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PASHTO} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PASHTO} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PASHTO} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_PASHTO} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_PASHTO} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_PASHTO} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_PASHTO} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_PASHTO} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_PASHTO} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_PASHTO} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_PASHTO} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_PASHTO} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_PASHTO} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_PASHTO} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_PASHTO} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_PASHTO} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_PASHTO} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_PASHTO} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_PASHTO} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_PASHTO} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_PASHTO} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_PASHTO} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PASHTO} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_PASHTO} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_PASHTO} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_PASHTO} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PASHTO} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_POLISH
@@ -1464,6 +2600,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_POLISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_POLISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_POLISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_POLISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_POLISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_POLISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_POLISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_POLISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_POLISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_POLISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_POLISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_POLISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_POLISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_POLISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_POLISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_POLISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_POLISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_POLISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_POLISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_POLISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_POLISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_POLISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_POLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1495,6 +2658,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PORTUGUESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PORTUGUESE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_PORTUGUESE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_PORTUGUESE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_PORTUGUESE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_PORTUGUESE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_PORTUGUESE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_PORTUGUESE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_PORTUGUESE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_PORTUGUESE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_PORTUGUESE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_PORTUGUESE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_PORTUGUESE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_PORTUGUESE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_PORTUGUESE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_PORTUGUESE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_PORTUGUESE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_PORTUGUESE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_PORTUGUESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_PORTUGUESE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_PORTUGUESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -1526,6 +2716,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_PORTUGUESEBR} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_PORTUGUESEBR} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_PORTUGUESEBR} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_PORTUGUESEBR} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_PORTUGUESEBR} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_PORTUGUESEBR} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_PORTUGUESEBR} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_PORTUGUESEBR} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_PORTUGUESEBR} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_PORTUGUESEBR} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_PORTUGUESEBR} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_PORTUGUESEBR} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_PORTUGUESEBR} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_PORTUGUESEBR} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_PORTUGUESEBR} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_PORTUGUESEBR} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_PORTUGUESEBR} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_PORTUGUESEBR} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_PORTUGUESEBR} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_PORTUGUESEBR} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESEBR} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_PORTUGUESEBR} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_PORTUGUESEBR} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -1557,6 +2774,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_ROMANIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_ROMANIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ROMANIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_ROMANIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_ROMANIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_ROMANIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ROMANIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_ROMANIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ROMANIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_ROMANIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ROMANIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_ROMANIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ROMANIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ROMANIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ROMANIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ROMANIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ROMANIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_ROMANIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ROMANIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_ROMANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ROMANIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_ROMANIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_ROMANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_ROMANIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ROMANIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -1588,6 +2832,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_RUSSIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_RUSSIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_RUSSIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_RUSSIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_RUSSIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_RUSSIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_RUSSIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_RUSSIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_RUSSIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_RUSSIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_RUSSIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_RUSSIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_RUSSIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_RUSSIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_RUSSIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_RUSSIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_RUSSIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_RUSSIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_RUSSIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_RUSSIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_RUSSIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SCOTSGAELIC
@@ -1619,6 +2890,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SCOTSGAELIC} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SCOTSGAELIC} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SCOTSGAELIC} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SCOTSGAELIC} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SCOTSGAELIC} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SCOTSGAELIC} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SCOTSGAELIC} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SCOTSGAELIC} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SCOTSGAELIC} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SCOTSGAELIC} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SCOTSGAELIC} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SCOTSGAELIC} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SCOTSGAELIC} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SCOTSGAELIC} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SCOTSGAELIC} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SCOTSGAELIC} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SCOTSGAELIC} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SCOTSGAELIC} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SCOTSGAELIC} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SCOTSGAELIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SCOTSGAELIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SCOTSGAELIC} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SCOTSGAELIC} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SCOTSGAELIC} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SCOTSGAELIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SCOTSGAELIC} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SCOTSGAELIC} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SERBIAN
@@ -1650,6 +2948,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SERBIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SERBIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SERBIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SERBIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SERBIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SERBIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SERBIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SERBIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SERBIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SERBIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SERBIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SERBIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SERBIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SERBIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SERBIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SERBIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SERBIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SERBIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SERBIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SERBIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SERBIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SERBIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SERBIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SERBIANLATIN
@@ -1681,6 +3006,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SERBIANLATIN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SERBIANLATIN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SERBIANLATIN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SERBIANLATIN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SERBIANLATIN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SERBIANLATIN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SERBIANLATIN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SERBIANLATIN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SERBIANLATIN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SERBIANLATIN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SERBIANLATIN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SERBIANLATIN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SERBIANLATIN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SERBIANLATIN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SERBIANLATIN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SERBIANLATIN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SERBIANLATIN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SERBIANLATIN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SERBIANLATIN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SERBIANLATIN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SERBIANLATIN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SERBIANLATIN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SERBIANLATIN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SERBIANLATIN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SERBIANLATIN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SERBIANLATIN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIANLATIN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -1712,6 +3064,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SIMPCHINESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SIMPCHINESE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SIMPCHINESE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SIMPCHINESE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SIMPCHINESE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SIMPCHINESE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SIMPCHINESE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SIMPCHINESE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SIMPCHINESE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SIMPCHINESE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SIMPCHINESE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SIMPCHINESE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SIMPCHINESE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SIMPCHINESE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SIMPCHINESE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SIMPCHINESE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SIMPCHINESE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SIMPCHINESE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SIMPCHINESE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SIMPCHINESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SIMPCHINESE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SIMPCHINESE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SIMPCHINESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SLOVAK
@@ -1743,6 +3122,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SLOVAK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SLOVAK} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVAK} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SLOVAK} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SLOVAK} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SLOVAK} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SLOVAK} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SLOVAK} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SLOVAK} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SLOVAK} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVAK} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SLOVAK} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SLOVAK} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVAK} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SLOVAK} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SLOVAK} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SLOVAK} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SLOVAK} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SLOVAK} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SLOVAK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVAK} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SLOVAK} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SLOVAK} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SLOVAK} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVAK} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -1774,6 +3180,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SLOVENIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SLOVENIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SLOVENIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SLOVENIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SLOVENIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SLOVENIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SLOVENIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SLOVENIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SLOVENIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SLOVENIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVENIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SLOVENIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SLOVENIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVENIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SLOVENIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SLOVENIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SLOVENIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SLOVENIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SLOVENIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SLOVENIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVENIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SLOVENIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SLOVENIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SLOVENIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVENIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SPANISH
@@ -1805,6 +3238,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SPANISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SPANISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SPANISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SPANISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SPANISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SPANISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SPANISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SPANISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SPANISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SPANISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SPANISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SPANISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SPANISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SPANISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SPANISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SPANISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SPANISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SPANISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SPANISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SPANISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SPANISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SPANISHINTERNATIONAL
@@ -1836,6 +3296,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SPANISHINTERNATIONAL} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SPANISHINTERNATIONAL} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SPANISHINTERNATIONAL} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SPANISHINTERNATIONAL} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SPANISHINTERNATIONAL} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SPANISHINTERNATIONAL} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SPANISHINTERNATIONAL} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SPANISHINTERNATIONAL} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SPANISHINTERNATIONAL} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SPANISHINTERNATIONAL} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SPANISHINTERNATIONAL} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SPANISHINTERNATIONAL} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SPANISHINTERNATIONAL} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SPANISHINTERNATIONAL} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SPANISHINTERNATIONAL} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISHINTERNATIONAL} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SPANISHINTERNATIONAL} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SPANISHINTERNATIONAL} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SPANISHINTERNATIONAL} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISHINTERNATIONAL} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_SWEDISH
@@ -1867,6 +3354,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_SWEDISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SWEDISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_SWEDISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_SWEDISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_SWEDISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_SWEDISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SWEDISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_SWEDISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SWEDISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_SWEDISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SWEDISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SWEDISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SWEDISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SWEDISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SWEDISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SWEDISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SWEDISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_SWEDISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SWEDISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_SWEDISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SWEDISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_SWEDISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_SWEDISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_TATAR
@@ -1898,6 +3412,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TATAR} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TATAR} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TATAR} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_TATAR} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_TATAR} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_TATAR} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_TATAR} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_TATAR} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_TATAR} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_TATAR} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_TATAR} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_TATAR} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_TATAR} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_TATAR} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_TATAR} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_TATAR} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_TATAR} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_TATAR} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_TATAR} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_TATAR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_TATAR} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_TATAR} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TATAR} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_TATAR} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_TATAR} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_TATAR} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TATAR} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_THAI
@@ -1929,6 +3470,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_THAI} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_THAI} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_THAI} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_THAI} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_THAI} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_THAI} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_THAI} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_THAI} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_THAI} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_THAI} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_THAI} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_THAI} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_THAI} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_THAI} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_THAI} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_THAI} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_THAI} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_THAI} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_THAI} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_THAI} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_THAI} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_THAI} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_THAI} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_THAI} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_THAI} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -1960,6 +3528,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TRADCHINESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TRADCHINESE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TRADCHINESE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_TRADCHINESE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_TRADCHINESE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_TRADCHINESE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_TRADCHINESE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_TRADCHINESE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_TRADCHINESE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_TRADCHINESE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_TRADCHINESE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_TRADCHINESE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_TRADCHINESE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_TRADCHINESE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_TRADCHINESE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_TRADCHINESE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_TRADCHINESE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_TRADCHINESE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_TRADCHINESE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_TRADCHINESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TRADCHINESE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_TRADCHINESE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_TRADCHINESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_TURKISH
@@ -1991,6 +3586,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_TURKISH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_TURKISH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_TURKISH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_TURKISH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_TURKISH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_TURKISH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_TURKISH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_TURKISH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_TURKISH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_TURKISH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_TURKISH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_TURKISH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_TURKISH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_TURKISH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_TURKISH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_TURKISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_TURKISH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_TURKISH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_TURKISH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_TURKISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TURKISH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_TURKISH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_TURKISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TURKISH} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -2022,6 +3644,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_UKRAINIAN} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_UKRAINIAN} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UKRAINIAN} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_UKRAINIAN} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_UKRAINIAN} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_UKRAINIAN} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_UKRAINIAN} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_UKRAINIAN} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_UKRAINIAN} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_UKRAINIAN} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_UKRAINIAN} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_UKRAINIAN} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_UKRAINIAN} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_UKRAINIAN} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_UKRAINIAN} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_UKRAINIAN} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_UKRAINIAN} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_UKRAINIAN} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_UKRAINIAN} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_UKRAINIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UKRAINIAN} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_UKRAINIAN} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_UKRAINIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_UZBEK
@@ -2053,6 +3702,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_UZBEK} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_UZBEK} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_UZBEK} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_UZBEK} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_UZBEK} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_UZBEK} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_UZBEK} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_UZBEK} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_UZBEK} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_UZBEK} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_UZBEK} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_UZBEK} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_UZBEK} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_UZBEK} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_UZBEK} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_UZBEK} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_UZBEK} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_UZBEK} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_UZBEK} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_UZBEK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UZBEK} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_UZBEK} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_UZBEK} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_UZBEK} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UZBEK} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -2084,6 +3760,33 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_VIETNAMESE} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_VIETNAMESE} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_VIETNAMESE} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_VIETNAMESE} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_VIETNAMESE} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_VIETNAMESE} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_VIETNAMESE} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_VIETNAMESE} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_VIETNAMESE} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_VIETNAMESE} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_VIETNAMESE} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_VIETNAMESE} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_VIETNAMESE} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_VIETNAMESE} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_VIETNAMESE} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_VIETNAMESE} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_VIETNAMESE} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_VIETNAMESE} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_VIETNAMESE} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_VIETNAMESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_VIETNAMESE} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_VIETNAMESE} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_VIETNAMESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_VIETNAMESE} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_VIETNAMESE} "${prodname} Debugging Terminal"
 !endif
 
 !ifdef LANG_WELSH
@@ -2115,4 +3818,31 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_WELSH} "The operating system doesn't support elevation."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_WELSH} "Unable to elevate, Secondary Logon service not running."
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_WELSH} "Unable to elevate, error {ERROR}."
+	; text string for installer section
+	LangString SECTION_CORE_NAME ${LANG_WELSH} "Core files (required)"
+	LangString SECTION_CORE_DESCRIPTION ${LANG_WELSH} "Install the main file of the program (required)."
+	LangString SECTION_SHORTCUTS_NAME ${LANG_WELSH} "Shortcuts"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_WELSH} "Set the options to create shortcuts."
+	LangString SECTION_START_MENU_NAME ${LANG_WELSH} "Start menu"
+	LangString SECTION_START_MENU_DESCRIPTION ${LANG_WELSH} "Create the shortcuts in Start menu."
+	LangString SECTION_DESKTOP_NAME ${LANG_WELSH} "Desktop"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_WELSH} "Create the shortcut on desktop."
+	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_WELSH} "Quick launch"
+	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_WELSH} "Create the shortcut on Quick Launch."
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_WELSH} "Translations"
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_WELSH} "Install all translation files."
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_WELSH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_WELSH} "Install integrate shredder."
+	LangString SECTION_UNINSTALL_NAME ${LANG_WELSH} "Uninstall"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_WELSH} "Add uninstall program."
+	LangString UNINSTALL_TEXT ${LANG_WELSH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+	LangString ALREADY_INSTALLED ${LANG_WELSH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
+	; shred shell integration menu name
+	LangString SHRED_SHELL_MENU ${LANG_WELSH} "Shred with${prodname}"
+	; Finish message
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_WELSH} "Visit the ${prodname} web site"
+	LangString MULTIPRINT1 ${LANG_WELSH} "The next step is building font cache, during which you may see a black window."
+	LangString MULTIPRINT2 ${LANG_WELSH} "It usually finishes in one minute, but sometimes it takes ten minutes."
+	LangString SHORTCUT_NO_UAC ${LANG_WELSH} "${prodname} No UAC."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_WELSH} "${prodname} Debugging Terminal"
 !endif
