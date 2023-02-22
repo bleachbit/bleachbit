@@ -11,7 +11,6 @@ Version: 2023-01-30
 
 */
 
-!ifdef LANG_ENGLISH
 	LangString MULTIUSER_PAGE_TITLE ${LANG_ENGLISH} "Choose Users"
 	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to install $(^NameDA)."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ENGLISH} "Choose for which users to remove $(^NameDA)."
@@ -67,7 +66,6 @@ Version: 2023-01-30
 	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ENGLISH} "${prodname} Debugging Terminal"
-!endif
 
 !ifdef LANG_AFRIKAANS
 	LangString MULTIUSER_PAGE_TITLE ${LANG_AFRIKAANS} "Choose Users"
@@ -1031,7 +1029,7 @@ Version: 2023-01-30
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_ITALIAN} "Impossibile elevare, errore '{ERROR}'."
 	; overwrite default text string
 	LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
-        LangString MUI_UNTEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare la disinstallazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
+        LangString MUI_UNTEXT_FINISH_INFO_REBOOT "Per completare la disinstallazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
 	LangString MUI_TEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_UNTEXT_LICENSE_SUBTITLE ${LANG_ITALIAN} "Prima di installare $(^NameDA) leggi le condizioni dell'accordo di licenza."
 	LangString MUI_INNERTEXT_LICENSE_BOTTOM_RADIOBUTTONS ${LANG_ITALIAN} "Se accetti i termini dell'accordo di licenza, seleziona la prima opzione sottostante.$\r$\nPer installare $(^NameDA) è necessario accettare i termini della licenza d'uso.$\r$\n$_CLICK"
