@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-02-22 20:39+0000\n"
+"PO-Revision-Date: 2023-02-23 21:38+0000\n"
 "Last-Translator: Gabriel Camargo <g.camargo@proton.me>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
@@ -643,8 +643,8 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Apagar o cache da web, reduzirá o tempo para exibir páginas revisitadas.  "
-"Isso também limpa os GIFs favoritos."
+"Apagar o cache da web, o que reduzirá o tempo para exibir páginas "
+"revisitadas. Isso também limpa os GIFs favoritos."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -1441,6 +1441,7 @@ msgstr "Exibir mensagens de depuração"
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
+"Adicionar triturar como opção no menu de contexto (específico do KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -2022,10 +2023,8 @@ msgid "S_hred Settings and Quit"
 msgstr "Configurar Triturador e Sair"
 
 #: ../data/app-menu.ui:37
-#, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
-msgstr "Informações do sistema"
+msgstr "Informações do s_istema"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
