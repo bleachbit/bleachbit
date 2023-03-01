@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-02-22 08:35+0000\n"
+"PO-Revision-Date: 2023-03-02 17:35+0000\n"
 "Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -645,14 +645,12 @@ msgid "Compatibility layer for Windows software"
 msgstr "Livello compatibilità programmi Windows"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
 "Elimina la cache web, la quale riduce il tempo di visualizzazione di pagine "
-"già visitate"
+"già visitate."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -848,10 +846,9 @@ msgid "Run external command: %s"
 msgstr "Esegui comando esterno: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Download dell'URL fallito: %s"
+msgstr "Download URL fallito: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1455,6 +1452,8 @@ msgstr "Visualizza messaggi debug"
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
+"Aggiunta l'opzione del menu contestuale sovrascrittura file (specifico per "
+"KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1513,8 +1512,6 @@ msgid "Folder"
 msgstr "Cartella"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Questi percorsi non saranno eliminati o modificati."
 
@@ -1567,7 +1564,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Programma per pulire i file non necessari"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1682,6 +1679,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Non esiste una versione ufficiale di BleachBit in Microsoft Store.\n"
+"Ottieni la versione originale su https://www.bleachbit.org dove è sempre "
+"gratuita."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1912,7 +1912,7 @@ msgstr "Importati da winapp2.ini"
 
 #: ../bleachbit/Windows.py:824
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "Avvio BleachBit…\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -2031,10 +2031,8 @@ msgid "S_hred Settings and Quit"
 msgstr "So_vrascrivi impostazioni ed esci"
 
 #: ../data/app-menu.ui:37
-#, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
-msgstr "Informazioni sistema"
+msgstr "Informazioni _sistema"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
