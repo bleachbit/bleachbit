@@ -466,7 +466,7 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "$(NAME_UNINSTALL_TEXT)" SectionUninstall
+UninstallText "$(SECTION_UNINSTALL_NAME)"
 
 Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
