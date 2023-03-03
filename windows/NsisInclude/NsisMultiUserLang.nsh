@@ -1484,7 +1484,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_GERMAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging Terminal"
-	LangString INSTALLER_CAPTION ${LANG_GERMAN "${prodname} ${VERSION} Setup"
+	LangString INSTALLER_CAPTION ${LANG_GERMAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_GREEK
