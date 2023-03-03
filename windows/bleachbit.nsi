@@ -468,7 +468,7 @@ FunctionEnd
 
 UninstallText "$(UNINSTALL_TEXT)"
 
-Section "$(SECTION_UNINSTALL_NAME)" SectionUninstall
+Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
