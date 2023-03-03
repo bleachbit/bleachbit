@@ -1894,7 +1894,7 @@ Version: 2023-02-223
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ITALIAN} "Aggiunge un'opzione per eliminare i file dal menu di scelta rapida dei file in Esplora risorse."
 	LangString SECTION_UNINSTALL_NAME ${LANG_ITALIAN} "Modulo disinstallazione"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ITALIAN} "Installa il modulo per la disinstallazione del programma."
-	LangString NAME_UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} verrà disinstallato dalla seguente cartella.$\r$\nSeleziona 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} verrà disinstallato dalla seguente cartella.$\r$\nSeleziona 'Disinstalla' per avviare la disinstallazione.$\r$\nAVVISO: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi tutti i file (come i programmi di pulizia personalizzati) eventualmente aggiunti o modificati."
 	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato.$\r$\nSeleziona 'OK' per disinstallare prima la versione installata, o 'Annulla' per interrompere l'aggiornamento."
 	; shred shell integration menu name
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
