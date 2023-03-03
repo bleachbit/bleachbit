@@ -67,6 +67,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ENGLISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ENGLISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_AFRIKAANS
@@ -125,6 +126,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_AFRIKAANS} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_AFRIKAANS} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_AFRIKAANS} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_AFRIKAANS} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ALBANIAN
@@ -183,6 +185,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ALBANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ALBANIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ALBANIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ALBANIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ARABIC
@@ -241,6 +244,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ARABIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ARABIC} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARABIC} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ARABIC} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ARMENIAN
@@ -299,6 +303,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ARMENIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ARMENIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARMENIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ARMENIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -357,6 +362,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ASTURIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ASTURIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ASTURIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ASTURIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_BASQUE
@@ -415,6 +421,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_BASQUE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_BASQUE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BASQUE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_BASQUE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -473,6 +480,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_BELARUSIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_BELARUSIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BELARUSIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_BELARUSIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -531,6 +539,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_BOSNIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_BOSNIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BOSNIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_BOSNIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_BRETON
@@ -589,6 +598,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_BRETON} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_BRETON} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BRETON} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_BRETON} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -647,6 +657,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_BULGARIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_BULGARIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BULGARIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_BULGARIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_CATALAN
@@ -705,6 +716,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_CATALAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_CATALAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CATALAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_CATALAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_CORSICAN
@@ -763,6 +775,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_CORSICAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_CORSICAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CORSICAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_CORSICAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_CROATIAN
@@ -821,6 +834,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_CROATIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_CROATIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CROATIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_CROATIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_CZECH
@@ -879,6 +893,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_CZECH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_CZECH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CZECH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_CZECH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_DANISH
@@ -937,6 +952,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_DANISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_DANISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DANISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_DANISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_DUTCH
@@ -995,6 +1011,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_DUTCH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DUTCH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_DUTCH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ESPERANTO
@@ -1053,6 +1070,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ESPERANTO} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ESPERANTO} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESPERANTO} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ESPERANTO} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -1111,6 +1129,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ESTONIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ESTONIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_FARSI
@@ -1169,6 +1188,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_FARSI} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_FARSI} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FARSI} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_FARSI} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_FINNISH
@@ -1227,6 +1247,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_FINNISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_FINNISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_FRENCH
@@ -1285,6 +1306,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_FRENCH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FRENCH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_FRENCH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_GALICIAN
@@ -1343,6 +1365,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_GALICIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_GALICIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GALICIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_GALICIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_GEORGIAN
@@ -1401,6 +1424,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_GEORGIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_GEORGIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GEORGIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_GEORGIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_GERMAN
@@ -1460,6 +1484,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_GERMAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_GERMAN "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_GREEK
@@ -1518,6 +1543,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_GREEK} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_GREEK} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GREEK} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_GREEK} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_HEBREW
@@ -1576,6 +1602,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_HEBREW} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_HEBREW} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HEBREW} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_HEBREW} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -1634,6 +1661,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_HUNGARIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_HUNGARIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ICELANDIC
@@ -1692,6 +1720,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ICELANDIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ICELANDIC} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ICELANDIC} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ICELANDIC} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -1750,6 +1779,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_INDONESIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_INDONESIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_IRISH
@@ -1808,6 +1838,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_IRISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_IRISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_IRISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_IRISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ITALIAN
@@ -1872,6 +1903,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ITALIAN} "Di solito questo passaggio richiede un minuto, ma a volte ci possono volere dieci minuti."
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} senza UAC"
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "${prodname} con terminale debug"
+	LangString INSTALLER_CAPTION ${LANG_ITALIAN} "Installazione di ${prodname} ${VERSION}"
 !endif
 
 !ifdef LANG_JAPANESE
@@ -1930,6 +1962,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_JAPANESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_JAPANESE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_JAPANESE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_JAPANESE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_KOREAN
@@ -1988,6 +2021,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_KOREAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_KOREAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KOREAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_KOREAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_KURDISH
@@ -2046,6 +2080,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_KURDISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_KURDISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KURDISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_KURDISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_LATVIAN
@@ -2104,6 +2139,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_LATVIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_LATVIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LATVIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_LATVIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -2162,6 +2198,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_LITHUANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_LITHUANIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LITHUANIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_LITHUANIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_LUXEMBOURGISH
@@ -2220,6 +2257,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_LUXEMBOURGISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_LUXEMBOURGISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LUXEMBOURGISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_LUXEMBOURGISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_MACEDONIAN
@@ -2278,6 +2316,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_MACEDONIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_MACEDONIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MACEDONIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_MACEDONIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_MALAY
@@ -2336,6 +2375,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_MALAY} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_MALAY} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MALAY} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_MALAY} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_MONGOLIAN
@@ -2394,6 +2434,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_MONGOLIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_MONGOLIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MONGOLIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_MONGOLIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -2452,6 +2493,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_NORWEGIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_NORWEGIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_NORWEGIANNYNORSK
@@ -2510,6 +2552,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_NORWEGIANNYNORSK} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIANNYNORSK} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIANNYNORSK} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_NORWEGIANNYNORSK} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_PASHTO
@@ -2568,6 +2611,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_PASHTO} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_PASHTO} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PASHTO} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_PASHTO} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_POLISH
@@ -2626,6 +2670,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_POLISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_POLISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -2684,6 +2729,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_PORTUGUESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_PORTUGUESE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -2742,6 +2788,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_PORTUGUESEBR} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_PORTUGUESEBR} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -2800,6 +2847,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_ROMANIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_ROMANIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ROMANIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_ROMANIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -2858,6 +2906,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_RUSSIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SCOTSGAELIC
@@ -2916,6 +2965,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SCOTSGAELIC} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SCOTSGAELIC} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SCOTSGAELIC} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SCOTSGAELIC} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SERBIAN
@@ -2974,6 +3024,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SERBIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SERBIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SERBIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SERBIANLATIN
@@ -3032,6 +3083,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SERBIANLATIN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SERBIANLATIN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIANLATIN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SERBIANLATIN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -3090,6 +3142,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SIMPCHINESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SIMPCHINESE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SLOVAK
@@ -3148,6 +3201,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SLOVAK} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVAK} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVAK} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SLOVAK} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -3206,6 +3260,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SLOVENIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVENIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVENIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SLOVENIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SPANISH
@@ -3264,6 +3319,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SPANISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SPANISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SPANISHINTERNATIONAL
@@ -3322,6 +3378,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SPANISHINTERNATIONAL} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISHINTERNATIONAL} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISHINTERNATIONAL} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SPANISHINTERNATIONAL} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_SWEDISH
@@ -3380,6 +3437,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_SWEDISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_SWEDISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_TATAR
@@ -3438,6 +3496,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_TATAR} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_TATAR} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TATAR} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_TATAR} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_THAI
@@ -3496,6 +3555,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_THAI} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_THAI} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_THAI} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_THAI} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -3554,6 +3614,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_TRADCHINESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_TRADCHINESE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_TURKISH
@@ -3612,6 +3673,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_TURKISH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TURKISH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_TURKISH} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -3670,6 +3732,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_UKRAINIAN} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_UKRAINIAN} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_UZBEK
@@ -3728,6 +3791,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_UZBEK} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_UZBEK} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UZBEK} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_UZBEK} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -3786,6 +3850,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_VIETNAMESE} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_VIETNAMESE} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_VIETNAMESE} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_VIETNAMESE} "${prodname} ${VERSION} Setup"
 !endif
 
 !ifdef LANG_WELSH
@@ -3844,4 +3909,5 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_WELSH} "It usually finishes in one minute, but sometimes it takes ten minutes."
 	LangString SHORTCUT_NO_UAC ${LANG_WELSH} "${prodname} No UAC."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_WELSH} "${prodname} Debugging Terminal"
+	LangString INSTALLER_CAPTION ${LANG_WELSH} "${prodname} ${VERSION} Setup"
 !endif

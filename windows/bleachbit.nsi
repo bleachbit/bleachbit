@@ -51,7 +51,7 @@
   !define PROG_COPYRIGHT "Andrew Ziem"
   BrandingText "${PROG_COPYRIGHT}"
   Name "${prodname}"
-  Caption "${prodname} ${VERSION}"
+  Caption "${INSTALLER_CAPTION}"
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
   ;!pragma warning disable 6030
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
@@ -466,9 +466,9 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "$(SECTION_UNINSTALL_NAME)"
+UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall" SectionUninstall
+Section "$(SECTION_UNINSTALL_NAME)" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
@@ -510,7 +510,7 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)" 
     !endif
     !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_NAME)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${Uninstall}           "$(SECTION_UNINSTALL_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUninstall}    "$(SECTION_UNINSTALL_DESCRIPTION)" 
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
