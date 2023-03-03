@@ -51,7 +51,7 @@
   !define PROG_COPYRIGHT "Andrew Ziem"
   BrandingText "${PROG_COPYRIGHT}"
   Name "${prodname}"
-  Caption "${INSTALLER_CAPTION}"
+  Caption "$(INSTALLER_CAPTION)"
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
   ;!pragma warning disable 6030
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
