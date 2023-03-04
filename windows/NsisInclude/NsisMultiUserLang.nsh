@@ -1881,7 +1881,7 @@ Version: 2023-02-223
 	LangString SECTION_CORE_NAME ${LANG_ITALIAN} "File programma (richiesti)"
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ITALIAN} "Questi sono i file di base necessari per il funzionamento di ${prodname} (richiesti)."
 	LangString SECTION_SHORTCUTS_NAME ${LANG_ITALIAN} "Collegamenti"
-	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ITALIAN} "Crea collegamenti a ${prodname} -"
+	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_ITALIAN} "Crea i collegamenti a ${prodname}"
 	LangString SECTION_START_MENU_NAME ${LANG_ITALIAN} "Menu Start"
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ITALIAN} "Crea un collegamento nel menu Start."
 	LangString SECTION_DESKTOP_NAME ${LANG_ITALIAN} "Desktop"
