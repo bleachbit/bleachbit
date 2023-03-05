@@ -355,7 +355,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegStr HKLM "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
                  "DisplayName" "${prodname}"
   
     # Build cache now while there is a GUI progress bar.
