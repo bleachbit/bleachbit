@@ -50,8 +50,7 @@
   !define PROG_AUTHOR "Andrew Ziem"
   !define PROG_COPYRIGHT "Andrew Ziem"
   BrandingText "${PROG_COPYRIGHT}"
-  Name "${prodname} ${VERSION}"
-
+  Name "${prodname}"
   ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
   ;!pragma warning disable 6030
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
@@ -181,6 +180,7 @@ VIFileVersion ${File_VERSION}
 !include LogicLib.nsh
 !include StdUtils.nsh
 
+Caption "$(INSTALLER_CAPTION)"
 
 ;--------------------------------
 ;Interface Settings
@@ -336,7 +336,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "$(SECTION_CORE_NAME)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -355,7 +355,9 @@ Section Core (Required)
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+                 "DisplayName" "${prodname}"
+  
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
@@ -363,20 +365,20 @@ Section Core (Required)
 SectionEnd
 
 
-SectionGroup /e Shortcuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
+    Section "$(SECTION_START_MENU_NAME)" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
+        CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_NO_UAC).lnk" \
             "$INSTDIR\${prodname}.exe" \
             "--no-uac --gui" "$INSTDIR\${prodname}.exe"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
+        CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_DEBUGGING_TERMINAL).lnk" \
             "$INSTDIR\${prodname}_console.exe" "" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(SECTION_DESKTOP_NAME)" SectionDesktop
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -391,7 +393,7 @@ SectionGroup /e Shortcuts
 
     SectionEnd
 
-    Section /o "Quick launch" SectionQuickLaunch
+    Section /o "$(SECTION_QUICK_LAUNCH_NAME)" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -401,14 +403,14 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
+Section "$(SECTION_TRANSLATIONS_NAME)" SectionTranslations
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "Integrate Shred" SectionShred
+  Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
@@ -466,7 +468,7 @@ FunctionEnd
 
 UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall"
+Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
@@ -495,6 +497,21 @@ Section "Uninstall"
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
+;-------------------------------- Set SectionDescription
+
+  ;Assign descriptions to sections
+  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}         "$(SECTION_CORE_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}    "$(SECTION_SHORTCUTS_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}        "$(SECTION_START_MENU_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}      "$(SECTION_DESKTOP_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch}  "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
+    !ifndef NoTranslations
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)" 
+    !endif
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUninstall}    "$(SECTION_UNINSTALL_DESCRIPTION)" 
+  !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Uninstaller Functions
