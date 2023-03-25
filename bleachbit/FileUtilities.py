@@ -517,13 +517,16 @@ def extended_path_undo(path):
     return path
 
 
-def free_space(pathname):
+def free_space_posix(pathname):
     """Return free space in bytes"""
-    if 'nt' == os.name:
-        import psutil
-        return psutil.disk_usage(pathname).free
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
+
+
+def free_space_nt(pathname):
+    """Return free space in bytes"""
+    import psutil
+    return psutil.disk_usage(pathname).free
 
 
 def getsize(path):
@@ -670,7 +673,7 @@ def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
     if 'nt' == os.name:
         try:
-            return free_space(dir1) == free_space(dir2)
+            return free_space_nt(dir1) == free_space_nt(dir2)
         except pywinerror as e:
             if 5 == e.winerror:
                 # Microsoft Office 2010 Starter Edition has a virtual
@@ -882,6 +885,14 @@ def wipe_name(pathname1):
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
+
+    if "posix" == os.name:
+        free_space = free_space_posix
+    elif "nt" == os.name:
+        free_space = free_space_nt
+    else:
+        raise OSError
+
 
     def temporaryfile():
         # reference
