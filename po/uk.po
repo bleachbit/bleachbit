@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-12-17 08:48+0000\n"
-"Last-Translator: Artem <artem@molotov.work>\n"
+"PO-Revision-Date: 2023-03-29 20:26+0000\n"
+"Last-Translator: CakesTwix <cakestwix1@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -538,6 +538,8 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
+"Видалення індексу призведе до скидання конфігурації стовпців у списку "
+"повідомлень."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -638,13 +640,12 @@ msgid "Compatibility layer for Windows software"
 msgstr "Надлаштування сумісності для Windows програм"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Видалити кеш браузера, який зменшує час завантаження вже відвіданих сторінок"
+"Видалення веб-кешу, що зменшує час відображення сторінок, які ви "
+"переглядали. Це також очистить вибрані GIF-файли."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -718,13 +719,11 @@ msgstr "Значки для файлів в системі"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Записи"
 
 #: ../cleaners/zoom.xml
-#, fuzzy
-#| msgid "Delete the list of game servers"
 msgid "Delete the audio and video recordings"
-msgstr "Вилучити список ігрових серверів"
+msgstr "Видаліть аудіо та відеозаписи"
 
 #: ../cleaners/windows_explorer.xml
 msgid ""
@@ -839,8 +838,7 @@ msgid "Run external command: %s"
 msgstr "Виконати наступну команду: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "Помилка завантаження URL: %s"
 
@@ -1050,7 +1048,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:159
 msgid "shred specific files or folders"
-msgstr "скорочення спеціфічних файлів або папок"
+msgstr "видалення окремих файлів або тек"
 
 #: ../bleachbit/CLI.py:161
 msgid "wipe free space in the given paths"
@@ -1070,7 +1068,7 @@ msgstr "використовувати набір опцій у графічно
 
 #: ../bleachbit/CLI.py:169
 msgid "enable all options that do not have a warning"
-msgstr ""
+msgstr "увімкнути всі опції, які не мають попередження"
 
 #: ../bleachbit/CLI.py:171
 msgid "set log level to verbose"
@@ -1428,10 +1426,8 @@ msgstr ""
 "байт)"
 
 #: ../bleachbit/GuiPreferences.py:191
-#, fuzzy
-#| msgid "Windowing system"
 msgid "Windows 10 theme"
-msgstr "Система управління вікнами"
+msgstr "Тема Windows 10"
 
 #: ../bleachbit/GuiPreferences.py:198
 msgid "Dark mode"
@@ -1439,7 +1435,7 @@ msgstr "Темний режим"
 
 #: ../bleachbit/GuiPreferences.py:204
 msgid "Remember window geometry"
-msgstr ""
+msgstr "Запам'ятати геометрію вікна"
 
 #: ../bleachbit/GuiPreferences.py:210
 msgid "Show debug messages"
@@ -1447,7 +1443,7 @@ msgstr "Показувати діагностичні повідомлення"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Додати пункт контекстного меню про видалення (тільки KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1506,10 +1502,8 @@ msgid "Folder"
 msgstr "Тека"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "Ці шляхи не будуть вилучені або змінені."
+msgstr "Вказані об'єкти не будуть змінені або видалені."
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1559,7 +1553,7 @@ msgstr "_ОК"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Програма для очищення непотрібних файлів"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1666,6 +1660,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Офіційної версії BleachBit в Microsoft Store немає. Отримайте справжню "
+"версію в https://www.bleachbit.org, де вона завжди безкоштовна."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1896,7 +1892,7 @@ msgstr "Імпортовано з winapp2.ini"
 
 #: ../bleachbit/Windows.py:824
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "BleachBit запускається...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -2015,8 +2011,6 @@ msgid "S_hred Settings and Quit"
 msgstr "В_итерти налаштування та вийти"
 
 #: ../data/app-menu.ui:37
-#, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
 msgstr "Інформація про систему"
 
