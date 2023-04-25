@@ -129,7 +129,7 @@ class Function:
         Parameters:
             path (str or None): Path to file or None if function doesn't operate on a file
             func (function): Function to execute that takes path or returns size
-            label (str): Label for display in the UI
+            label (str): Label for log output (for UI label see cleaner XML file)
             preview_func (function, optional): Function to call in preview mode
 
         func and preview_func take no arguments and return an integer.
