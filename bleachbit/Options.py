@@ -152,13 +152,14 @@ class Options:
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
+        if section == 'bleachit' and option == 'debug':
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if is_debugging_enabled_via_cli():
+                # command line overrides stored configuration
+                return True
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
-            from bleachbit.Log import is_debugging_enabled_via_cli
-            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
-                # command line overrides store configuration
-                return True
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
