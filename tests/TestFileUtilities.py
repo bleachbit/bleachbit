@@ -540,17 +540,22 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             # unextended paths shouldn't be shortened any more
             self.assertEqual(extended_path_undo(short), short)
 
-    def test_free_space(self):
-        """Unit test for free_space()"""
+    @common.skipIfWindows
+    def test_free_space_posix(self):
         home = os.path.expanduser('~')
-        result = free_space(home)
+        result = free_space_posix(home)
         self.assertNotEqual(result, None)
         self.assertGreater(result, -1)
         self.assertIsInteger(result)
 
-        # compare to WMIC
-        if 'nt' != os.name:
-            return
+    @common.skipUnlessWindows
+    def test_free_space_nt(self):
+        """Unit test for free_space()"""
+        home = os.path.expanduser('~')
+        result = free_space_nt(home)
+        self.assertNotEqual(result, None)
+        self.assertGreater(result, -1)
+        self.assertIsInteger(result)
         args = ['wmic',  'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
         (rc, stdout, stderr) = run_external(args)
         if rc:
@@ -564,7 +569,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             drive, bytes_free = re.split('\s+', line)
             print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
-            free = free_space(drive)
+            free = free_space_nt(drive)
             self.assertEqual(bytes_free, free)
 
     def test_getsize(self):

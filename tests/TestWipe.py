@@ -21,7 +21,7 @@
 Test FileUtilities.wipe_path
 """
 
-from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
+from bleachbit.FileUtilities import delete, free_space_posix, listdir, wipe_path
 from bleachbit.General import run_external
 from tests import common
 
@@ -127,6 +127,7 @@ def verify_cleanliness(filename):
 @common.skipIfWindows
 def test_wipe_sub(n_bytes, mkfs_cmd):
     """Test FileUtilities.wipe_path"""
+    free_space = free_space_posix
 
     filename = create_disk_image(n_bytes)
     print('created disk image %s' % filename)
