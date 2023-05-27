@@ -19,15 +19,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="microsoft_edge" os="windows">
+<cleaner id="microsoft_edge">
   <label>Microsoft Edge</label>
   <description>Web browser</description>
   <running type="exe" os="windows">msedge.exe</running>
+  <running type="exe" os="linux">msedge</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta</value>
   </var>
-  <var name="profile">
+  <var name="profile">a
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data\Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>
