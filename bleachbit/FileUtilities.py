@@ -993,7 +993,7 @@ def wipe_path(pathname, idle=False):
             # IOError: [Errno 28] No space left on device
             # seen on Microsoft Windows XP SP3 with ~30GB free space but
             # not on another XP SP3 with 64MB free space
-            if not e.errno == errno.ENOSPC:
+            if e.errno != errno.ENOSPC:
                 logger.error(
                     _("Error #%d when flushing the file buffer." % e.errno))
 

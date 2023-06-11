@@ -146,7 +146,7 @@ class FileActionProvider(ActionProvider):
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
                 wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
-            if not len(self.paths) == 1:
+            if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained in the online documentation.
                     # Basically, they are like an environment variable, but each multi-value variable
