@@ -26,14 +26,12 @@ exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
 
 def is_abbreviation(dotted_word):
     clipped = dotted_word[:-1]
-    if clipped[0] in ascii_uppercase:
-        if clipped.lower() in abbr_capped:
-            return True
-        else: return False
-    else:
-        if clipped in abbr_lowercase:
-            return True
-        else: return False
+    return (
+        clipped[0] in ascii_uppercase
+        and clipped.lower() in abbr_capped
+        or clipped[0] not in ascii_uppercase
+        and clipped in abbr_lowercase
+    )
 
 def is_sentence_ender(word):
     if word in exceptions:
