@@ -110,7 +110,8 @@ class Chain(object):
         state = init_state or (BEGIN,) * self.state_size
         while True:
             next_word = self.move(state)
-            if next_word == END: break
+            if next_word == END:
+                break
             yield next_word
             state = tuple(state[1:]) + (next_word,)
 

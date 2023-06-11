@@ -66,7 +66,7 @@ try:
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
             def is_symlink(self):
-                return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
+                return super().is_symlink() or bleachbit.Windows.is_junction(self.path)
 
         scandir.scandir = scandir.scandir_python
         scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
