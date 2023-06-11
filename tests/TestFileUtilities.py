@@ -351,7 +351,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
-            
+
             return
 
         # below this point, only posix
