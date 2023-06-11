@@ -268,8 +268,9 @@ def choose_if_bridged(volume_handle, total_clusters,
         bridged_extents,
         volume_bitmap,
         allocated_extents)
-    bridged_extents = [x for x in extents_a_minus_b(bridged_extents,
-                                                    allocated_extents)]
+    bridged_extents = list(
+        extents_a_minus_b(bridged_extents, allocated_extents)
+    )
 
     extra_allocated_clusters = count_ballocated - count_oallocated
     saving_in_extents = len(orig_extents) - len(bridged_extents)
@@ -600,7 +601,7 @@ def get_extents(file_handle, translate_to_extents=True):
     if not translate_to_extents:
         return ranges
     else:
-        return [x for x in logical_ranges_to_extents(ranges)]
+        return list(logical_ranges_to_extents(ranges))
 
 
 # Tell Windows to make this file compressed on disk.
@@ -907,8 +908,9 @@ def file_wipe(file_name):
     file_size, is_special = get_file_basic_info(file_name, file_handle)
     orig_extents = get_extents(file_handle)
     if is_special:
-        bridged_extents = [x for x in logical_ranges_to_extents(
-            get_extents(file_handle, False), True)]
+        bridged_extents = list(
+            logical_ranges_to_extents(get_extents(file_handle, False), True)
+        )
     CloseHandle(file_handle)
     #logger.debug('Original extents: {}'.format(orig_extents))
 

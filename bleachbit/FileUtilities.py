@@ -494,8 +494,7 @@ def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
-    return ret
+    return list(glob.iglob(pathname3))
 
 
 def extended_path(path):

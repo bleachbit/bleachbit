@@ -263,7 +263,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect=HKCU\\Software\\Microsoft\nDetectFile=%%APPDATA%%\\does_not_exist",
                     "\nDetect=HKCU\\Software\\does_not_exist\nDetectFile=%%APPDATA%%\\Microsoft"):
                 new_ini = test[0] + detect
-                new_test = [new_ini, ] + [x for x in test[1:]]
+                new_test = [new_ini] + list(test[1:])
                 new_tests.append(new_test)
         positive_tests = tests + new_tests
 
@@ -295,7 +295,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect=HKCU\\Software\\does_not_exist_&'",
                     "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
-                test_full = [new_ini, ] + [x for x in test[1:]]
+                test_full = [new_ini] + list(test[1:])
                 print('negative test', test_full)
                 # execute the test
                 (dirname, fname1, fname2, fbak) = self.setup_fake()

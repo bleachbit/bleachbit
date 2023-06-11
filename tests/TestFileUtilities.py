@@ -836,7 +836,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             d = os.path.expandvars('%windir%\system32')
             whitelist = [('file', r'c:\\filename'), ('folder', r'c:\\folder')]
         reps = 20
-        paths = [p for p in children_in_directory(d, True)]
+        paths = list(children_in_directory(d, True))
         paths = paths[:1000]  # truncate
         self.assertGreater(len(paths), 10)
         old_whitelist = options.get_whitelist_paths()
