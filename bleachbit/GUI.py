@@ -797,7 +797,7 @@ class GUI(Gtk.ApplicationWindow):
                 sys.exit()
 
         # notification for long-running process
-        elapsed = (time.time() - self.start_time)
+        elapsed = time.time() - self.start_time
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
             return

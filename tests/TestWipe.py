@@ -54,7 +54,7 @@ def format_filesystem(filename, mkfs_cmd):
         else:
             args.append(arg)
     (rc, stdout, stderr) = run_external(args)
-    assert(rc == 0)
+    assert rc == 0
 
 
 def make_dirty(mountpoint):
@@ -91,7 +91,7 @@ def mount_filesystem(filename, mountpoint):
     (rc, stdout, stderr) = run_external(args)
     if stderr:
         print(stderr)
-    assert(rc == 0)
+    assert rc == 0
     print('mounted %s at %s', filename, mountpoint)
 
 
@@ -147,7 +147,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
 
     # verify dirtiness
     unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == 11)
+    assert verify_cleanliness(filename) == 11
     mount_filesystem(filename, mountpoint)
 
     # standard delete
@@ -167,7 +167,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
 
     # verify dirtiness
     unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == 11)
+    assert verify_cleanliness(filename) == 11
     mount_filesystem(filename, mountpoint)
     expected_free_space = free_space(mountpoint)
 
@@ -200,7 +200,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
         # verify cleanliness
         cleanliness = verify_cleanliness(filename)
 
-    assert(cleanliness < 2)
+    assert cleanliness < 2
 
     # remove temporary
     delete(filename)

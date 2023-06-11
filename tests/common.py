@@ -208,7 +208,7 @@ def touch_file(filename):
         os.makedirs(dname)
     import pathlib
     pathlib.Path(filename).touch()
-    assert(os.path.exists(filename))
+    assert os.path.exists(filename)
 
 
 def validate_result(self, result, really_delete=False):

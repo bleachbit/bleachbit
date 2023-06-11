@@ -108,7 +108,7 @@ class CleanerML:
         elif platform.startswith('freebsd'):
             current_os = ('bsd', 'freebsd', 'unix')
         elif platform == 'win32':
-            current_os = ('windows')
+            current_os = 'windows'
         else:
             raise RuntimeError(f'Unknown operating system: {sys.platform} ')
         # Compare current OS against required OS.

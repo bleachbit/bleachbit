@@ -194,7 +194,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert(isinstance(bytes_i, int))
+    assert isinstance(bytes_i, int)
 
     if 0 == bytes_i:
         return '0B'
@@ -310,7 +310,7 @@ def clean_json(path, target):
         elif new_target in pos:
             # delete terminal target
             changed = True
-            del(pos[new_target])
+            del pos[new_target]
         else:
             # target not found
             break
