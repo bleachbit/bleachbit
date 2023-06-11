@@ -224,7 +224,7 @@ def validate_result(self, result, really_delete=False):
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
     self.assertIsInstance(result['size'], (int, type(
-        None),), f"size is {str(result['size'])}")
+        None)), f"size is {str(result['size'])}")
     # path
     filename = result['path']
     if not filename:

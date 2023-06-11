@@ -48,7 +48,7 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 ***   we will truncate the file and treat it all as missed clusters.
 ***
 ***   --Phase 2
-*** - (*) Get volume bitmap of free/allocated clusters using defrag API. 
+*** - (*) Get volume bitmap of free/allocated clusters using defrag API.
 ***   Figure out if checkpoint has made our missed clusters available
 ***   for use again (this is potentially delayed by a few seconds in NTFS).
 *** - If they have not yet been made available, wait 0.1s then repeat
@@ -269,7 +269,7 @@ def choose_if_bridged(volume_handle, total_clusters,
         volume_bitmap,
         allocated_extents)
     bridged_extents = list(
-        extents_a_minus_b(bridged_extents, allocated_extents)
+        extents_a_minus_b(bridged_extents, allocated_extents),
     )
 
     extra_allocated_clusters = count_ballocated - count_oallocated
@@ -909,7 +909,7 @@ def file_wipe(file_name):
     orig_extents = get_extents(file_handle)
     if is_special:
         bridged_extents = list(
-            logical_ranges_to_extents(get_extents(file_handle, False), True)
+            logical_ranges_to_extents(get_extents(file_handle, False), True),
         )
     CloseHandle(file_handle)
     #logger.debug('Original extents: {}'.format(orig_extents))

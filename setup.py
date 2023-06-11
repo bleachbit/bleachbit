@@ -104,14 +104,14 @@ if 'py2exe' in sys.argv:
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
     }]
     args['console'] = [{
         'script': 'bleachbit_console.py',
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
     }]
     args['options'] = {
         'py2exe': {
@@ -181,8 +181,8 @@ if 'py2exe' in sys.argv:
                 'api-ms-win-security-base-l1-2-0.dll',
                 'w9xpopen.exe',  # not needed after Windows 9x
             ],
-            'compressed': True  # create a compressed zipfile
-        }
+            'compressed': True,  # create a compressed zipfile
+        },
     }
 
     # check for 32-bit

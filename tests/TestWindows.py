@@ -199,10 +199,10 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_delete_registry_key(self):
         """Unit test for delete_registry_key"""
         # (return value, key, really_delete)
-        tests = ((False, 'HKCU\\Software\\BleachBit\\DoesNotExist', False, ),
-                 (False, 'HKCU\\Software\\BleachBit\\DoesNotExist', True, ),
-                 (True, 'HKCU\\Software\\BleachBit\\DeleteThisKey', False, ),
-                 (True, 'HKCU\\Software\\BleachBit\\DeleteThisKey', True, ), )
+        tests = ((False, 'HKCU\\Software\\BleachBit\\DoesNotExist', False),
+                 (False, 'HKCU\\Software\\BleachBit\\DoesNotExist', True),
+                 (True, 'HKCU\\Software\\BleachBit\\DeleteThisKey', False),
+                 (True, 'HKCU\\Software\\BleachBit\\DeleteThisKey', True))
 
         # create a nested key
         key = 'Software\\BleachBit\\DeleteThisKey'

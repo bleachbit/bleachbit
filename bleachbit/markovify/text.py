@@ -65,7 +65,7 @@ class Text():
             None,
             state_size=obj["state_size"],
             chain=Chain.from_json(obj["chain"]),
-            parsed_sentences=obj.get("parsed_sentences")
+            parsed_sentences=obj.get("parsed_sentences"),
         )
 
     @classmethod
@@ -190,7 +190,7 @@ class Text():
         Tries making a sentence that begins with `beginning` string,
         which should be a string of one to `self.state` words known
         to exist in the corpus.
-        
+
         If strict == True, then markovify will draw its initial inspiration
         only from sentences that start with the specified word/phrase.
 

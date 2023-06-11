@@ -262,7 +262,7 @@ class ActionTestCase(common.BleachbitTestCase):
                  '<action command="process" wait="false" cmd="%s" />',
                  '<action command="process" wait="f" cmd="%s" />',
                  '<action command="process" wait="no" cmd="%s" />',
-                 '<action command="process" wait="n" cmd="%s" />'
+                 '<action command="process" wait="n" cmd="%s" />',
                  ]
 
         for test in tests:

@@ -429,7 +429,7 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
                 '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
-                '$windir\\system32\\wbem\\Logs\\*.log', )
+                '$windir\\system32\\wbem\\Logs\\*.log')
 
             for path in paths:
                 expanded = os.path.expandvars(path)

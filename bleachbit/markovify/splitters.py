@@ -17,7 +17,7 @@ abbr_capped = "|".join([
     "mr|ms|mrs|msr|dr|gov|pres|sen|sens|rep|reps|prof|gen|messrs|col|sr|jf|sgt|mgr|fr|rev|jr|snr|atty|supt", # Titles
     "ave|blvd|st|rd|hwy", # Streets
     "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec", # Months
-    "|".join(ascii_lowercase) # Initials
+    "|".join(ascii_lowercase), # Initials
 ]).split("|")
 
 abbr_lowercase = "etc|v|vs|viz|al|pct"

@@ -246,7 +246,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             (os.path.expanduser('~/.cache/obexd/'), True),
             (os.path.expanduser('~/.cache/obexd/foo'), True),
             (os.path.expanduser('~/.cache/obex'), False),
-            (os.path.expanduser('~/.cache/obexd-foo'), False)
+            (os.path.expanduser('~/.cache/obexd-foo'), False),
         ]
         list(register_cleaners())
         for test in tests:

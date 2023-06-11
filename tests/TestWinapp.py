@@ -488,7 +488,7 @@ class WinappTestCase(common.BleachbitTestCase):
             (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
             # glob at end of path
             (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
-            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' % self.tempdir, True, '')
+            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' % self.tempdir, True, ''),
         )
 
         (ini_h, self.ini_fn) = tempfile.mkstemp(

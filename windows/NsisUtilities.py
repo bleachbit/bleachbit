@@ -36,12 +36,12 @@ def write_nsis_expressions_to_files():
     """Generates files containing NSIS expressions for add and remove files."""
     (install_expressions,
      uninstall_expressions) = _generate_add_remove_nsis_expressions(
-         _DIRECTORY_TO_WALK, directory_to_separate=_DIRECTORY_TO_SEPARATE
+         _DIRECTORY_TO_WALK, directory_to_separate=_DIRECTORY_TO_SEPARATE,
     )
     (install_locale_expressions,
      uninstall_locale_expressions) = _generate_add_remove_nsis_expressions(
          _DIRECTORY_TO_SEPARATE, parent_directory=os.path.relpath(
-             _DIRECTORY_TO_SEPARATE, _DIRECTORY_TO_WALK)
+             _DIRECTORY_TO_SEPARATE, _DIRECTORY_TO_WALK),
     )
     nsisexpressions_filename = [
         (install_expressions, _FILES_TO_INSTALL_PATH),
@@ -67,7 +67,7 @@ def _generate_add_remove_nsis_expressions(directory_to_walk, parent_directory=No
             install_expressions += 'File '
             install_expressions += ' '.join(
                 [f'"{_DIRECTORY_PREFIX_FOR_NSIS}{filepath}"'
-                 for filepath in full_filepaths]
+                 for filepath in full_filepaths],
             )
             install_expressions += '\n'
 
@@ -103,9 +103,9 @@ def _walk_with_parent_directory_and_filepaths(directory_to_walk, directory_to_se
             else:
                 yield (
                     os.path.join(parent_directory,
-                                 rel_directory_path), filepaths, files
+                                 rel_directory_path), filepaths, files,
                 )
         else:
             yield (
-                os.path.relpath(root, directory_to_walk), filepaths, files
+                os.path.relpath(root, directory_to_walk), filepaths, files,
             )

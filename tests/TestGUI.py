@@ -214,7 +214,7 @@ class GUITestCase(common.BleachbitTestCase):
         test_files_dirs = [
             self.mkstemp(prefix="somefile", dir=dirname),
             dirname,
-            self.mkstemp(prefix="somefile")
+            self.mkstemp(prefix="somefile"),
         ]
 
         for obj in test_files_dirs:
@@ -291,7 +291,7 @@ class GUITestCase(common.BleachbitTestCase):
             with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
                 self.assertTrue(gui._confirm_delete(False, False))
                 gui.cb_run_option(
-                    None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID
+                    None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID,
                 )  # activated from context menu
 
             self.refresh_gui()

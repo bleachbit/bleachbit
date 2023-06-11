@@ -305,7 +305,7 @@ if 'posix' == os.name:
     envs = {
         'XDG_DATA_HOME': os.path.expanduser('~/.local/share'),
         'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
-        'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
+        'XDG_CACHE_HOME': os.path.expanduser('~/.cache'),
     }
     for varname, value in envs.items():
         if not os.getenv(varname):

@@ -54,7 +54,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 'windows.NsisUtilities',
                 _DIRECTORY_TO_WALK=folder0,
                 _DIRECTORY_PREFIX_FOR_NSIS='',
-                _DIRECTORY_TO_SEPARATE=os.path.join(folder0, tree[-2][0])
+                _DIRECTORY_TO_SEPARATE=os.path.join(folder0, tree[-2][0]),
         ):
             (actual_install_expression,
              actual_uninstall_expression) = _generate_add_remove_nsis_expressions(
@@ -89,7 +89,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         expected_install_expression += '\n'
         expected_uninstall_expression = '{}\n{}'.format(
             self._generate_delete_expressions('$INSTDIR', file_names),
-            expected_uninstall_expression
+            expected_uninstall_expression,
         )
         expected_install_expression, expected_uninstall_expression = self._generate_nsis_expressions_helper(
             '$INSTDIR', tree[1:-2], expected_install_expression, expected_uninstall_expression)
@@ -113,7 +113,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 expected_uninstall_expression = '{}\n{}'.format(
                     self._generate_rmdir_expression(
                         target_dir, relpath_folder),
-                    expected_uninstall_expression
+                    expected_uninstall_expression,
                 )
             else:
                 expected_uninstall_expression = self._generate_rmdir_expression(
@@ -125,7 +125,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 folder_path = r'{}\{}'.format(target_dir, relpath_folder)
                 expected_uninstall_expression = '{}\n{}'.format(
                     self._generate_delete_expressions(folder_path, file_names),
-                    expected_uninstall_expression
+                    expected_uninstall_expression,
                 )
         return expected_install_expression, expected_uninstall_expression
 
@@ -168,7 +168,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 _FILES_TO_INSTALL_PATH=files_to_install.filepath,
                 _FILES_TO_UNINSTALL_PATH=files_to_uninstall.filepath,
                 _LOCALE_TO_INSTALL_PATH=separate_folder_to_install.filepath,
-                _LOCALE_TO_UNINSTALL_PATH=separate_folder_to_uninstall.filepath
+                _LOCALE_TO_UNINSTALL_PATH=separate_folder_to_uninstall.filepath,
         ):
             write_nsis_expressions_to_files()
 
@@ -218,7 +218,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                 file_ = self.mkstemp(
                     dir=in_folder,
                     suffix=suffix,
-                    prefix=f'{filename_prefix}{i}'
+                    prefix=f'{filename_prefix}{i}',
                 )
                 folder_files.append(file_)
                 file_names.append(os.path.basename(file_))
@@ -230,7 +230,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         folder_files, file_names = create_files(
             len(_REBOOTOK_FILE_EXTENSIONS),
             folder0,
-            filename_suffixes=_REBOOTOK_FILE_EXTENSIONS
+            filename_suffixes=_REBOOTOK_FILE_EXTENSIONS,
         )
         tree.append(('.', folder_files, file_names))
 

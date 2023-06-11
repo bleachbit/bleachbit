@@ -352,7 +352,7 @@ def delete_icons():
         'window-close-symbolic.svg',  # png does not get used
         'window-maximize-symbolic.svg',  # no png
         'window-minimize-symbolic.svg',  # no png
-        'window-restore-symbolic.svg'  # no png
+        'window-restore-symbolic.svg',  # no png
     ]
     strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:

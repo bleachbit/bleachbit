@@ -51,7 +51,7 @@ boolean_keys = ['auto_hide',
 if 'nt' == os.name:
     boolean_keys.append('update_winapp2')
     boolean_keys.append('win10_theme')
-int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height']
 
 
 def path_to_option(pathname):

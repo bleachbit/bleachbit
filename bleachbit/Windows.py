@@ -404,7 +404,7 @@ def get_known_folder_path(folder_name):
             ("Data1", wintypes.DWORD),
             ("Data2", wintypes.WORD),
             ("Data3", wintypes.WORD),
-            ("Data4", wintypes.BYTE * 8)
+            ("Data4", wintypes.BYTE * 8),
         ]
 
         def __init__(self, uuid_):
@@ -433,7 +433,7 @@ def get_known_folder_path(folder_name):
         return None
     _SHGetKnownFolderPath.argtypes = [
         ctypes.POINTER(GUID), wintypes.DWORD, wintypes.HANDLE, ctypes.POINTER(
-            ctypes.c_wchar_p)
+            ctypes.c_wchar_p),
     ]
 
     class PathNotFoundException(Exception):
@@ -721,7 +721,7 @@ class SplashThread(Thread):
 
         is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
         logger.debug(
-            f'Is splash screen on top: {is_splash_screen_on_top}'
+            f'Is splash screen on top: {is_splash_screen_on_top}',
         )
 
         return hWindow
@@ -744,7 +744,7 @@ class SplashThread(Thread):
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                f'Failed attempt to show splash screen with keybd_event: {exc_message}'
+                f'Failed attempt to show splash screen with keybd_event: {exc_message}',
             )
 
         if win32gui.GetForegroundWindow() == hWindow:
@@ -765,7 +765,7 @@ class SplashThread(Thread):
             except Exception as e:
                 exc_message = str(e)
                 logger.debug(
-                    f'Failed attempt to show splash screen with AttachThreadInput: {exc_message}'
+                    f'Failed attempt to show splash screen with AttachThreadInput: {exc_message}',
                 )
 
         else:
@@ -786,7 +786,7 @@ class SplashThread(Thread):
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                f'Failed attempt to show splash screen with SystemParametersInfo: {exc_message}'
+                f'Failed attempt to show splash screen with SystemParametersInfo: {exc_message}',
             )
 
         if win32gui.GetForegroundWindow() == hWindow:

@@ -129,7 +129,7 @@ class CLITestCase(common.BleachbitTestCase):
         env['PYTHONIOENCODING'] = 'utf-8:backslashreplace'
         args_list = []
         module = 'bleachbit.CLI'
-        big_args = [sys.executable, '-m', module, '--preview', ]
+        big_args = [sys.executable, '-m', module, '--preview']
         # The full list can take a long time and generally does not improve the testing,
         # so test a subset.
         full_cleaners_list = list(cleaners_list())
@@ -151,7 +151,7 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for --delete option"""
         prefixes = [
             'bleachbit-test-cli-delete',
-            '\x8b\x8b-bad-encoding'
+            '\x8b\x8b-bad-encoding',
         ]
         for i in range(len(prefixes)):
 

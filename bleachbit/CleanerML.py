@@ -245,7 +245,7 @@ class CleanerML:
             if is_glob:
                 value_list = expand_glob_join(value_str, '')
             else:
-                value_list = [value_str, ]
+                value_list = [value_str]
             if var_name in self.vars:
                 # append
                 self.vars[var_name] = value_list + self.vars[var_name]

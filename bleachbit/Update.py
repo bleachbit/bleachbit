@@ -191,7 +191,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     if stable and beta and check_beta:
         return stable, beta
     if stable:
-        return stable,
+        return stable
     if beta and check_beta:
-        return beta,
+        return beta
     return ()
