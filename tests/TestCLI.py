@@ -38,7 +38,7 @@ class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
 
     def setUp(self):
-        super(CLITestCase, self).setUp()
+        super().setUp()
 
     def _test_preview(self, args, redirect_stdout=True, env=None):
         """Helper to test preview"""

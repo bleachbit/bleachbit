@@ -40,7 +40,7 @@ class UnixTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
-        super(UnixTestCase, self).setUp()
+        super().setUp()
 
     @common.skipIfWindows
     def test_apt(self):
