@@ -23,10 +23,6 @@
 Integration specific to Unix-like operating systems
 """
 
-import bleachbit
-from bleachbit import FileUtilities, General
-from bleachbit import _
-
 import glob
 import logging
 import os
@@ -34,6 +30,9 @@ import re
 import shlex
 import subprocess
 import sys
+
+import bleachbit
+from bleachbit import FileUtilities, General, _
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +69,7 @@ class LocaleCleanerPath:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')
         except Exception as errormsg:
             raise RuntimeError(
-                "Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
+                f"Malformed regex '{pre}' or '{post}': {errormsg}")
         self.add_child(regex)
 
     def get_subpaths(self, basepath):
@@ -379,7 +378,7 @@ class Locales:
                     userfilter = xml_node.getAttribute('filter')
                     if 1 != userfilter.count('*'):
                         raise RuntimeError(
-                            "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
+                            f"Filter string '{userfilter}' must contain the placeholder * exactly once")
 
                     # we can't use re.escape, because it escapes too much
                     (pre, post) = (re.sub(r'([\[\]()^$.])', r'\\\1', p)
@@ -387,7 +386,7 @@ class Locales:
                     parent.add_path_filter(pre, post)
         else:
             raise RuntimeError(
-                "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xml_node.nodeName)
+                f"Invalid node '{xml_node.nodeName}', expected '<path>' or '<regexfilter>'")
 
         # handle child nodes
         for child_xml in xml_node.childNodes:
@@ -597,7 +596,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
             freed_space += FileUtilities.human_to_bytes(m.group(1))
         for error_re in error_line_regexes:
             if error_re.search(line):
-                raise RuntimeError('Invalid output from %s: %s' % (cmd, line))
+                raise RuntimeError(f'Invalid output from {cmd}: {line}')
 
     return freed_space
 
@@ -607,8 +606,7 @@ def journald_clean():
     try:
         return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(f"Error calling '{' '.join(e.cmd)}':\n{e.output}")
 
 
 def apt_autoremove():
@@ -621,8 +619,7 @@ def apt_autoremove():
     try:
         return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(f"Error calling '{' '.join(e.cmd)}':\n{e.output}")
 
 
 def apt_autoclean():
@@ -630,8 +627,7 @@ def apt_autoclean():
     try:
         return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(f"Error calling '{' '.join(e.cmd)}':\n{e.output}")
 
 
 def apt_clean():
@@ -640,8 +636,7 @@ def apt_clean():
     try:
         run_cleaner_cmd('apt-get', ['clean'], '^unused regex$', ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(f"Error calling '{' '.join(e.cmd)}':\n{e.output}")
     new_size = get_apt_size()
     return old_size - new_size
 
@@ -715,7 +710,7 @@ def dnf_autoremove():
     if 'Error: This command has to be run under the root user.' in allout:
         raise RuntimeError('dnf autoremove >> requires root permissions')
     if rc > 0:
-        raise RuntimeError('dnf raised error %s: %s' % (rc, stderr))
+        raise RuntimeError(f'dnf raised error {rc}: {stderr}')
 
     cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
     match = cregex.search(allout)

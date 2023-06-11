@@ -22,13 +22,12 @@
 Store and retrieve user preferences
 """
 
-import bleachbit
-from bleachbit import General
-from bleachbit import _
-
 import logging
 import os
 import re
+
+import bleachbit
+from bleachbit import General, _
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +72,7 @@ def init_configuration():
     if not os.path.exists(bleachbit.options_dir):
         General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
-        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+        logger.debug(f'Deleting configuration: {bleachbit.options_file} ')
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
@@ -183,7 +182,7 @@ class Options:
 
     def get_list(self, option):
         """Return an option which is a list data type"""
-        section = "list/%s" % option
+        section = f"list/{option}"
         if not self.config.has_section(section):
             return None
         values = [
@@ -317,7 +316,7 @@ class Options:
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""
-        section = "list/%s" % key
+        section = f"list/{key}"
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)

@@ -22,8 +22,8 @@
 Test cases for module CleanerML
 """
 
-from tests import common
 from bleachbit.CleanerML import *
+from tests import common
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):

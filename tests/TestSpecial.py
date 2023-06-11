@@ -23,15 +23,15 @@
 Test case for module Special
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities, Special
-from tests import common
-
+import contextlib
 import os
 import os.path
 import shutil
 import sqlite3
-import contextlib
+
+from bleachbit import FileUtilities, Special
+from bleachbit.Options import options
+from tests import common
 
 chrome_bookmarks = b"""
 {
@@ -260,14 +260,14 @@ class SpecialAssertions:
     def assertTablesAreEmpty(self, path, tables):
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
-            raise AssertionError('Path does not exist: %s' % path)
+            raise AssertionError(f'Path does not exist: {path}')
         conn = sqlite3.connect(path)
         cursor = conn.cursor()
         for table in tables:
-            cursor.execute('select 1 from %s limit 1' % table)
+            cursor.execute(f'select 1 from {table} limit 1')
             row = cursor.fetchone()
             if row:
-                raise AssertionError('Table is not empty: %s ' % table)
+                raise AssertionError(f'Table is not empty: {table} ')
 
 
 class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):

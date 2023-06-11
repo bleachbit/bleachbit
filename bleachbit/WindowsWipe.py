@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from bleachbit.FileUtilities import extended_path, extended_path_undo
+
 """
 ***
 *** Owner: Andrew Ziem
@@ -80,45 +81,35 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 """
 
 
-# Imports.
-import sys
+import logging
 import os
 import struct
-import logging
+# Imports.
+import sys
+from collections import namedtuple
 from operator import itemgetter
 from random import randint
-from collections import namedtuple
 
-from win32api import (GetVolumeInformation, GetDiskFreeSpace,
-                      GetVersionEx, Sleep)
-from win32file import (CreateFile, CreateFileW,
-                       CloseHandle, GetDriveType,
-                       GetFileSize, GetFileAttributesW,
-                       SetFileAttributesW,
-                       DeviceIoControl, SetFilePointer,
-                       WriteFile,
-                       LockFile, DeleteFile,
-                       SetEndOfFile, FlushFileBuffers)
-from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
-                         FSCTL_GET_VOLUME_BITMAP,
-                         FSCTL_GET_NTFS_VOLUME_DATA,
-                         FSCTL_MOVE_FILE,
-                         FSCTL_SET_COMPRESSION,
-                         FSCTL_SET_SPARSE,
-                         FSCTL_SET_ZERO_DATA)
-from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
-                       FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
-                       DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
-from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
-                      FILE_ATTRIBUTE_COMPRESSED,
-                      FILE_ATTRIBUTE_SPARSE_FILE,
-                      FILE_ATTRIBUTE_HIDDEN,
-                      FILE_ATTRIBUTE_READONLY,
-                      FILE_FLAG_RANDOM_ACCESS,
-                      FILE_FLAG_NO_BUFFERING,
-                      FILE_FLAG_WRITE_THROUGH,
-                      COMPRESSION_FORMAT_DEFAULT)
+from win32api import (GetDiskFreeSpace, GetVersionEx, GetVolumeInformation,
+                      Sleep)
+from win32con import (COMPRESSION_FORMAT_DEFAULT, FILE_ATTRIBUTE_COMPRESSED,
+                      FILE_ATTRIBUTE_ENCRYPTED, FILE_ATTRIBUTE_HIDDEN,
+                      FILE_ATTRIBUTE_READONLY, FILE_ATTRIBUTE_SPARSE_FILE,
+                      FILE_FLAG_NO_BUFFERING, FILE_FLAG_RANDOM_ACCESS,
+                      FILE_FLAG_WRITE_THROUGH)
+from win32file import (CREATE_ALWAYS, DRIVE_CDROM, DRIVE_REMOTE, DRIVE_UNKNOWN,
+                       FILE_BEGIN, FILE_FLAG_BACKUP_SEMANTICS, FILE_SHARE_READ,
+                       FILE_SHARE_WRITE, GENERIC_READ, GENERIC_WRITE,
+                       OPEN_EXISTING, CloseHandle, CreateFile, CreateFileW,
+                       DeleteFile, DeviceIoControl, FlushFileBuffers,
+                       GetDriveType, GetFileAttributesW, GetFileSize, LockFile,
+                       SetEndOfFile, SetFileAttributesW, SetFilePointer,
+                       WriteFile)
+from winioctlcon import (FSCTL_GET_NTFS_VOLUME_DATA,
+                         FSCTL_GET_RETRIEVAL_POINTERS, FSCTL_GET_VOLUME_BITMAP,
+                         FSCTL_MOVE_FILE, FSCTL_SET_COMPRESSION,
+                         FSCTL_SET_SPARSE, FSCTL_SET_ZERO_DATA)
+
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 
 
@@ -267,7 +258,7 @@ def extents_a_minus_b(a, b):
 # a higher number of total clusters written.
 def choose_if_bridged(volume_handle, total_clusters,
                       orig_extents, bridged_extents):
-    logger.debug('bridged extents: {}'.format(bridged_extents))
+    logger.debug(f'bridged extents: {bridged_extents}')
     allocated_extents = []
     volume_bitmap, bitmap_size = get_volume_bitmap(volume_handle,
                                                    total_clusters)
@@ -501,7 +492,7 @@ def get_volume_information(volume):
             (DRIVE_UNKNOWN, "an unknown drive type")]:
         if result3 == drive_enum:
             raise UnsupportedFileSystemError(
-                "This file is on %s and can't be wiped." % error_reason)
+                f"This file is on {error_reason} and can't be wiped.")
 
     # Only NTFS and FAT variations are supported.
     # UDF (file system for CD-RW etc) is not supported.

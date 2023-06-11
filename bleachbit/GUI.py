@@ -22,19 +22,13 @@
 GTK graphical user interface
 """
 
-from bleachbit import GuiBasic
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
-from bleachbit.Options import options
-
+from bleachbit import (APP_NAME, Cleaner, FileUtilities, GuiBasic, _,
+                       appicon_path, portable_mode, windows10_theme_path)
 # Now that the configuration is loaded, honor the debug preference there.
 from bleachbit.Log import set_root_log_level
-set_root_log_level(options.get('debug'))
+from bleachbit.Options import options
 
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Cleaner import backends, register_cleaners
-import bleachbit
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+set_root_log_level(options.get('debug'))
 
 import glob
 import logging
@@ -44,6 +38,12 @@ import threading
 import time
 
 import gi
+from gi.repository import Gdk, Gio, GLib, GObject, Gtk
+
+import bleachbit
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+
 gi.require_version('Gtk', '3.0')
 
 
@@ -123,7 +123,7 @@ class Bleachbit(Gtk.Application):
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
 
         application_id_suffix = self._init_windows_misc(auto_exit, shred_paths, uac)
-        application_id = '{}{}'.format('org.gnome.Bleachbit', application_id_suffix)
+        application_id = f"org.gnome.Bleachbit{application_id_suffix}"
         Gtk.Application.__init__(
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GObject.threads_init()
@@ -605,7 +605,7 @@ class GUI(Gtk.ApplicationWindow):
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file {}'.format(font_conf_file))
+            logger.error(f'No fonts.conf file {font_conf_file}')
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)
@@ -987,7 +987,7 @@ class GUI(Gtk.ApplicationWindow):
             __iter = model.get_iter(treepath)
         except ValueError as e:
             logger.warning(
-                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+                f'ValueError in get_iter() when updating file size for tree path={treepath}')
             return
         while __iter:
             if model[__iter][2] == option:

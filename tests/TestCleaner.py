@@ -29,7 +29,6 @@ from xml.dom.minidom import parseString
 
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
-
 from tests import common
 
 logger = logging.getLogger('bleachbit')
@@ -72,7 +71,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         elif 'posix' == os.name:
             print(__file__)
             self.actions += [
-                '<action command="delete" search="file" path="%s"/>' % __file__,
+                f'<action command="delete" search="file" path="{__file__}"/>',
                 '<action command="delete" search="glob" path="/bin/*sh"/>',
                 '<action command="delete" search="walk.files" path="/bin/"/>',
                 '<action command="delete" search="walk.all" path="/var/log/"/>']
@@ -88,10 +87,10 @@ class CleanerTestCase(common.BleachbitTestCase):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
                     self.assertLExists(
-                        pathname, "Does not exist: '%s'" % pathname)
+                        pathname, f"Does not exist: '{pathname}'")
                     count += 1
                     common.validate_result(self, result)
-            self.assertGreater(count, 0, "No files found for %s" % action_str)
+            self.assertGreater(count, 0, f"No files found for {action_str}")
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
         for cmd in cleaner.get_commands('option2'):
@@ -136,13 +135,13 @@ class CleanerTestCase(common.BleachbitTestCase):
             desc = backends[key].get_description()
             if desc is not None:
                 self.assertIsString(
-                    desc, "description for '%s' is '%s'" % (key, desc))
+                    desc, f"description for '{key}' is '{desc}'")
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
-                    test_id, '%s.%s is not a string' % (key, test_id))
+                    test_id, f'{key}.{test_id} is not a string')
                 self.assertIsString(name)
 
     def test_get_commands(self):

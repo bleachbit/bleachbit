@@ -26,18 +26,16 @@ import logging
 import os.path
 import re
 import sys
-
-from bleachbit import _
-from bleachbit.FileUtilities import children_in_directory
-from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
-
-
 # Suppress GTK warning messages while running in CLI #34
 import warnings
+
+from bleachbit import Command, FileUtilities, Memory, Special, _
+from bleachbit.FileUtilities import children_in_directory
+from bleachbit.Options import options
+
 warnings.simplefilter("ignore", Warning)
 try:
-    from bleachbit.GuiBasic import Gtk, Gdk
+    from bleachbit.GuiBasic import Gdk, Gtk
     HAVE_GTK = Gdk.get_default_root_window() is not None
 except (ImportError, RuntimeError, ValueError) as e:
     # ImportError happens when GTK is not installed.
@@ -106,7 +104,7 @@ class Cleaner:
             if option_id == action[0]:
                 yield from action[1].get_commands()
         if option_id not in self.options:
-            raise RuntimeError("Unknown option '%s'" % option_id)
+            raise RuntimeError(f"Unknown option '{option_id}'")
 
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
@@ -117,7 +115,7 @@ class Cleaner:
                 except StopIteration:
                     return
         if option_id not in self.options:
-            raise RuntimeError("Unknown option '%s'" % option_id)
+            raise RuntimeError(f"Unknown option '{option_id}'")
 
     def get_description(self):
         """Brief description of the cleaner"""
@@ -170,7 +168,7 @@ class Cleaner:
                         return True
             else:
                 raise RuntimeError(
-                    "Unknown running-detection test '%s'" % test)
+                    f"Unknown running-detection test '{test}'")
         return False
 
     def is_usable(self):
@@ -364,7 +362,7 @@ class System(Cleaner):
                     yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
-                        'custom folder has invalid type %s' % c_type)
+                        f'custom folder has invalid type {c_type}')
 
         # menu
         menu_dirs = ['~/.local/share/applications',
@@ -695,7 +693,7 @@ def create_simple_cleaner(paths):
             for path in paths:
                 if not isinstance(path, (str)):
                     raise RuntimeError(
-                        'expected path as string but got %s' % str(path))
+                        f'expected path as string but got {str(path)}')
                 if not os.path.isabs(path):
                     path = os.path.abspath(path)
                 if os.path.isdir(path):

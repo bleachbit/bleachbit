@@ -23,16 +23,15 @@
 Import Winapp2.ini files
 """
 
+import glob
 import logging
 import os
-import glob
 import re
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit import Cleaner, Windows
+from bleachbit import Cleaner, Windows, _
 from bleachbit.Action import Delete, Winreg
-from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
@@ -105,9 +104,9 @@ def winapp_expand_vars(pathname):
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
     for (sub_orig, sub_repl) in subs:
-        pattern = re.compile('%{}%'.format(sub_orig), flags=re.IGNORECASE)
+        pattern = re.compile(f'%{sub_orig}%', flags=re.IGNORECASE)
         if pattern.match(pathname):
-            expand2 = pattern.sub('%{}%'.format(sub_repl), pathname)
+            expand2 = pattern.sub(f'%{sub_repl}%', pathname)
             return expand1, os.path.expandvars(expand2)
     return expand1,
 
@@ -226,8 +225,7 @@ class Winapp:
                     files = None
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
-                files_regex = '(%s)' % '|'.join(
-                    [fnmatch_translate(f) for f in files])
+                files_regex = f"({'|'.join([fnmatch_translate(f) for f in files])})"
 
         # the middle part contains the file
         regexes = []
@@ -247,7 +245,7 @@ class Winapp:
         if len(regexes) == 1:
             return regexes[0]
         else:
-            return '(%s)' % '|'.join(regexes)
+            return f"({'|'.join(regexes)})"
 
     def detect(self, section):
         """Check whether to show the section
@@ -347,7 +345,7 @@ class Winapp:
                     search = 'walk.all'
             else:
                 import fnmatch
-                regex = ' regex="^%s$" ' % xml_escape(fnmatch.translate(filename))
+                regex = f' regex="^{xml_escape(fnmatch.translate(filename))}$" '
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
@@ -357,11 +355,11 @@ class Winapp:
         if excludekeys:
             if len(excludekeys) > 1:
                 # multiple
-                exclude_str = '(%s)' % '|'.join(excludekeys)
+                exclude_str = f"({'|'.join(excludekeys)})"
             else:
                 # just one
                 exclude_str = excludekeys[0]
-            excludekeysxml = 'nwholeregex="%s"' % xml_escape(exclude_str)
+            excludekeysxml = f'nwholeregex="{xml_escape(exclude_str)}"'
         action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
                      (search, xml_escape(path), regex, excludekeysxml)
         yield Delete(parseString(action_str).childNodes[0])
@@ -399,7 +397,7 @@ class Winapp:
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
                 # https://www.reddit.com/r/learnpython/comments/gawqne/why_cant_i_ospathjoin_on_a_drive_letterc/
-                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[0] == dirname else dirname
+                dirname = f'{dirname}{os.path.sep}' if os.path.splitdrive(dirname)[0] == dirname else dirname
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)
@@ -411,8 +409,8 @@ class Winapp:
         path = xml_escape(elements[0])
         name = ""
         if len(elements) == 2:
-            name = 'name="%s"' % xml_escape(elements[1])
-        action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
+            name = f'name="{xml_escape(elements[1])}"'
+        action_str = f'<option command="winreg" path="{path}" {name}/>'
         provider = Winreg(parseString(action_str).childNodes[0])
         self.cleaners[lid].add_action(section2option(ini_section), provider)
 

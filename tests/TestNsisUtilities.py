@@ -20,14 +20,15 @@
 
 
 import os
+
 import mock
 
-from windows.NsisUtilities import (_generate_add_remove_nsis_expressions,
-                                   _walk_with_parent_directory_and_filepaths,
-                                   write_nsis_expressions_to_files,
-                                   _REBOOTOK_FILE_EXTENSIONS,
-                                   _generate_delete_expressions)
 from tests import common
+from windows.NsisUtilities import (_REBOOTOK_FILE_EXTENSIONS,
+                                   _generate_add_remove_nsis_expressions,
+                                   _generate_delete_expressions,
+                                   _walk_with_parent_directory_and_filepaths,
+                                   write_nsis_expressions_to_files)
 
 
 @common.skipUnlessWindows
@@ -180,7 +181,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_generate_delete_expressions(self):
         file_names = ['aaa']
-        file_names.extend(['{}.{}'.format('ddd', ext)
+        file_names.extend([f"ddd.{ext}"
                            for ext in _REBOOTOK_FILE_EXTENSIONS])
         file_names.extend(['bbb', 'ccc'])
         folder_path = r'rrr\rr'
@@ -211,13 +212,13 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
             file_names = []
             for i in range(number_of_files):
                 try:
-                    suffix = '.{}'.format(filename_suffixes[i])
+                    suffix = f'.{filename_suffixes[i]}'
                 except:
                     suffix = ''
                 file_ = self.mkstemp(
                     dir=in_folder,
                     suffix=suffix,
-                    prefix='{}{}'.format(filename_prefix, i)
+                    prefix=f'{filename_prefix}{i}'
                 )
                 folder_files.append(file_)
                 file_names.append(os.path.basename(file_))
@@ -256,8 +257,8 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
 
     @classmethod
     def _generate_install_file_expression(cls, files):
-        files_as_strings = ' '.join(['"{}"'.format(file) for file in files])
-        return 'File {}'.format(files_as_strings)
+        files_as_strings = ' '.join([f'"{file}"' for file in files])
+        return f'File {files_as_strings}'
 
     @classmethod
     def _generate_delete_expressions(cls, folder, files):

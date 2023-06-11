@@ -26,14 +26,12 @@ else is counted as special commands: run any external process, edit
 JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
-from bleachbit import _
-from bleachbit import FileUtilities
-
 import logging
 import os
 import types
-
 from sqlite3 import DatabaseError
+
+from bleachbit import FileUtilities, _
 
 if 'nt' == os.name:
     import bleachbit.Windows
@@ -65,8 +63,7 @@ class Delete:
         self.shred = False
 
     def __str__(self):
-        return 'Command to %s %s' % \
-            ('shred' if self.shred else 'delete', self.path)
+        return f"Command to {'shred' if self.shred else 'delete'} {self.path}"
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -119,13 +116,13 @@ class Function:
         try:
             assert isinstance(func, types.FunctionType)
         except AssertionError:
-            raise AssertionError('Expected MethodType but got %s' % type(func))
+            raise AssertionError(f'Expected MethodType but got {type(func)}')
 
     def __str__(self):
         if self.path:
-            return 'Function: %s: %s' % (self.label, self.path)
+            return f'Function: {self.label}: {self.path}'
         else:
-            return 'Function: %s' % (self.label)
+            return f'Function: {self.label}'
 
     def execute(self, really_delete):
 
@@ -227,8 +224,7 @@ class Json:
         self.address = address
 
     def __str__(self):
-        return 'Command to clean JSON file, path=%s, address=%s ' % \
-            (self.path, self.address)
+        return f'Command to clean JSON file, path={self.path}, address={self.address} '
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -261,7 +257,7 @@ class Shred(Delete):
         self.shred = True
 
     def __str__(self):
-        return 'Command to shred %s' % self.path
+        return f'Command to shred {self.path}'
 
 
 class Truncate(Delete):
@@ -269,7 +265,7 @@ class Truncate(Delete):
     """Truncate a single file"""
 
     def __str__(self):
-        return 'Command to truncate %s' % self.path
+        return f'Command to truncate {self.path}'
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -301,7 +297,7 @@ class Winreg:
         self.valuename = valuename
 
     def __str__(self):
-        return 'Command to clean registry, key=%s, value=%s ' % (self.keyname, self.valuename)
+        return f'Command to clean registry, key={self.keyname}, value={self.valuename} '
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
@@ -310,7 +306,7 @@ class Winreg:
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
-            _str = '%s<%s>' % (self.keyname, self.valuename)
+            _str = f'{self.keyname}<{self.valuename}>'
             ret = bleachbit.Windows.delete_registry_value(self.keyname,
                                                           self.valuename, really_delete)
         else:

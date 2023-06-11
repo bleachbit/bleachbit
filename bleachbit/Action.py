@@ -23,13 +23,14 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
-
 import glob
 import logging
 import os
 import re
+
+from bleachbit import (Command, DeepScan, FileUtilities, General, Special, _,
+                       fs_scan_re_flags)
+
 if 'posix' == os.name:
     from bleachbit import Unix
 
@@ -55,7 +56,7 @@ def expand_multi_var(s, variables):
     var_keys_used = []
     ret = []
     for var_key in variables.keys():
-        sub = '$$%s$$' % var_key
+        sub = f'$${var_key}$$'
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
     if not var_keys_used:
@@ -71,7 +72,7 @@ def expand_multi_var(s, variables):
     for var_set in vars_product:
         ms = s  # modified version of input string
         for var_key, var_value in var_set.items():
-            sub = '$$%s$$' % var_key
+            sub = f'$${var_key}$$'
             ms = ms.replace(sub, var_value)
         ret.append(ms)
     if ret:
@@ -280,7 +281,7 @@ class FileActionProvider(ActionProvider):
         elif 'walk.top' == self.search:
             func = get_top
         else:
-            raise RuntimeError("invalid search='%s'" % self.search)
+            raise RuntimeError(f"invalid search='{self.search}'")
 
         cache = self.__class__.cache
         for input_path in self.paths:
@@ -556,7 +557,7 @@ class Process(ActionProvider):
                     Popen(self.cmd)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
+                    f'Exception in external command\nCommand: {self.cmd}\nError: {str(e)}')
             else:
                 if not 0 == rc:
                     msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'

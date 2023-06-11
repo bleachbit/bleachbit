@@ -23,15 +23,15 @@
 Test case for module FileUtilities
 """
 
-from tests import common
-from bleachbit.FileUtilities import *
-from bleachbit.General import run_external, sudo_mode
-from bleachbit.Options import options
-from bleachbit import logger
-
 import json
 import sys
 import unittest
+
+from bleachbit import logger
+from bleachbit.FileUtilities import *
+from bleachbit.General import run_external, sudo_mode
+from bleachbit.Options import options
+from tests import common
 
 
 def test_ini_helper(self, execute):
@@ -346,7 +346,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             def win_symlink(src, linkname):
                 rc = kern.CreateSymbolicLinkW(linkname, src, 0)
                 if rc == 0:
-                    print('CreateSymbolicLinkW(%s, %s)' % (linkname, src))
+                    print(f'CreateSymbolicLinkW({linkname}, {src})')
                     print('CreateSymolicLinkW() failed, error = %s' %
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
@@ -459,14 +459,14 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         os.mkdir(to_dir)
         args = ['mount', '--bind', from_dir, to_dir]
         (rc, stdout, stderr) = run_external(args)
-        msg = 'error calling mount\nargs=%s\nstderr=%s' % (args, stderr)
+        msg = f'error calling mount\nargs={args}\nstderr={stderr}'
         self.assertEqual(rc, 0, msg)
 
         delete(to_dir)
 
         args = ['umount', to_dir]
         (rc, stdout, stderr) = run_external(args)
-        msg = 'error calling umount\nargs=%s\nstderr=%s' % (args, stderr)
+        msg = f'error calling umount\nargs={args}\nstderr={stderr}'
         self.assertEqual(rc, 0, msg)
 
     def test_detect_encoding(self):
@@ -554,7 +554,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         args = ['wmic',  'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
         (rc, stdout, stderr) = run_external(args)
         if rc:
-            print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
+            print(f'error calling WMIC\nargs={args}\nstderr={stderr}')
             return
         import re
         for line in stdout.split('\n'):
@@ -562,7 +562,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             if not re.match('([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split('\s+', line)
-            print('Checking free space for %s' % drive)
+            print(f'Checking free space for {drive}')
             bytes_free = int(bytes_free)
             free = free_space(drive)
             self.assertEqual(bytes_free, free)
@@ -595,7 +595,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                     ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
                 output = output.replace("\n", "")
                 du_size = output.split("\t")[0] + "B"
-                print("output = '%s', size='%s'" % (output, du_size))
+                print(f"output = '{output}', size='{du_size}'")
                 du_bytes = human_to_bytes(du_size, 'du')
                 print(output, du_size, du_bytes)
                 self.assertEqual(getsize(filename), du_bytes)
@@ -659,7 +659,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for guess_overwrite_paths()"""
         for path in guess_overwrite_paths():
             self.assertTrue(os.path.isdir(path),
-                            '%s is not a directory' % path)
+                            f'{path} is not a directory')
 
     def test_human_to_bytes(self):
         """Unit test for human_to_bytes()"""

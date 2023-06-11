@@ -23,13 +23,14 @@
 Test case for module Unix
 """
 
-from tests import common
-from bleachbit.Unix import *
-
-import mock
 import os
 import sys
 import unittest
+
+import mock
+
+from bleachbit.Unix import *
+from tests import common
 
 
 class UnixTestCase(common.BleachbitTestCase):
@@ -225,7 +226,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
             self.assertLExists(
-                path, "Rotated log path '%s' does not exist" % path)
+                path, f"Rotated log path '{path}' does not exist")
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
@@ -317,7 +318,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             if len(value) == 1:
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
             elif len(value) > 1:
-                return (0, 'Type={}\n'.format(display_protocol), '')
+                return (0, f'Type={display_protocol}\n', '')
             assert(False) # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:

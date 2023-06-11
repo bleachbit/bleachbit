@@ -23,14 +23,14 @@ Test case for module Worker
 """
 
 
-from tests import TestCleaner, common
-from bleachbit import CLI, Command
-from bleachbit.Action import ActionProvider
-from bleachbit.Worker import *
-
 import os
 import tempfile
 import unittest
+
+from bleachbit import CLI, Command
+from bleachbit.Action import ActionProvider
+from bleachbit.Worker import *
+from tests import TestCleaner, common
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -142,6 +142,7 @@ class LockedAction(ActionProvider):
         # on Windows.
         fd = os.open(self.pathname, os.O_RDWR)
         from bleachbit.FileUtilities import getsize
+
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))
@@ -201,7 +202,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         os.write(fd, b'123')
         os.close(fd)
         self.assertExists(filename)
-        astr = '<action command="%s" path="%s"/>' % (command, filename)
+        astr = f'<action command="{command}" path="{filename}"/>'
         cleaner = TestCleaner.action_to_cleaner(astr)
         backends['test'] = cleaner
         operations = {'test': ['option1']}
@@ -210,7 +211,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         while next(run):
             pass
         del backends['test']
-        self.assertNotExists(filename, "Path still exists '%s'" % filename)
+        self.assertNotExists(filename, f"Path still exists '{filename}'")
         self.assertEqual(worker.total_special, special_expected,
                          'For command %s expecting %s special operations but observed %d'
                          % (command, special_expected, worker.total_special))
@@ -323,8 +324,8 @@ class WorkerTestCase(common.BleachbitTestCase):
         filename1 = self.mkstemp(prefix='bleachbit-test-worker')
         filename2 = self.mkstemp(prefix='bleachbit-test-worker')
 
-        astr1 = '<action command="delete" search="file" path="%s"/>' % filename1
-        astr2 = '<action command="delete" search="file" path="%s"/>' % filename2
+        astr1 = f'<action command="delete" search="file" path="{filename1}"/>'
+        astr2 = f'<action command="delete" search="file" path="{filename2}"/>'
         cleaner = TestCleaner.actions_to_cleaner([astr1, astr2])
         backends['test'] = cleaner
         operations = {'test': ['option1', 'option2']}

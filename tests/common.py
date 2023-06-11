@@ -28,11 +28,12 @@ import shutil
 import sys
 import tempfile
 import unittest
+
 import mock
+
 if 'win32' == sys.platform:
     import winreg
     import win32gui
-
 
 import bleachbit
 import bleachbit.Options
@@ -114,12 +115,12 @@ class BleachbitTestCase(unittest.TestCase):
         path = os.path.expandvars(path)
         if not self.check_exists(func, getTestPath(path)):
             raise AssertionError(
-                'The file %s should exist, but it does not. %s' % (path, msg))
+                f'The file {path} should exist, but it does not. {msg}')
 
     def assertNotExists(self, path, msg='', func=os.stat):
         if self.check_exists(func, getTestPath(path)):
             raise AssertionError(
-                'The file %s should not exist, but it does. %s' % (path, msg))
+                f'The file {path} should not exist, but it does. {msg}')
 
     def assertLExists(self, path, msg=''):
         self.assertExists(path, msg, os.lstat)
@@ -212,7 +213,7 @@ def touch_file(filename):
 
 def validate_result(self, result, really_delete=False):
     """Validate the command returned valid results"""
-    self.assertIsInstance(result, dict, "result is a %s" % type(result))
+    self.assertIsInstance(result, dict, f"result is a {type(result)}")
     # label
     self.assertIsString(result['label'])
     self.assertGreater(len(result['label'].strip()), 0)
@@ -223,14 +224,14 @@ def validate_result(self, result, really_delete=False):
     self.assertEqual(result['n_special'] + result['n_deleted'], 1)
     # size
     self.assertIsInstance(result['size'], (int, type(
-        None),), "size is %s" % str(result['size']))
+        None),), f"size is {str(result['size'])}")
     # path
     filename = result['path']
     if not filename:
         # the process action, for example, does not have a filename
         return
     self.assertIsInstance(filename, (str, type(None)),
-                          "Filename is invalid: '%s' (type %s)" % (filename, type(filename)))
+                          f"Filename is invalid: '{filename}' (type {type(filename)})")
     if isinstance(filename, str) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)

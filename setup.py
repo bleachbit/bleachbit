@@ -26,6 +26,7 @@ import glob
 import os
 import sys
 import tempfile
+
 from setuptools import setup
 
 if sys.platform == 'win32':
@@ -43,8 +44,8 @@ if sys.platform == 'win32':
         print('warning: py2exe not available')
 
 import bleachbit
-import bleachbit.General
 import bleachbit.FileUtilities
+import bleachbit.General
 
 APP_NAME = "BleachBit - Free space and maintain privacy"
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."
@@ -197,7 +198,7 @@ def recompile_mo(langdir, app, langid, dst):
         print('warning: msgunfmt missing: skipping recompile')
         return
 
-    mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
+    mo_pathname = os.path.normpath(f'{langdir}/LC_MESSAGES/{app}.mo')
     if not os.path.exists(mo_pathname):
         print('info: does not exist: %s', mo_pathname)
         return
@@ -213,7 +214,7 @@ def recompile_mo(langdir, app, langid, dst):
     # shrink .po
     po2 = os.path.join(dst, langid + '.po2')
     __args = ['msgmerge', '--no-fuzzy-matching', po,
-              os.path.normpath('windows/%s.pot' % app),
+              os.path.normpath(f'windows/{app}.pot'),
               '-o', po2]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
@@ -247,11 +248,11 @@ def clean_dist_locale():
     for langid in sorted(os.listdir(basedir)):
         langdir = os.path.join(basedir, langid)
         if langid in langs:
-            print("recompiling supported GTK language = %s" % langid)
+            print(f"recompiling supported GTK language = {langid}")
             # reduce the size of the .mo file
             recompile_mo(langdir, 'gtk30', langid, tmpd)
         else:
-            print("removing unsupported GTK language = %s" % langid)
+            print(f"removing unsupported GTK language = {langid}")
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
             print(cmd)

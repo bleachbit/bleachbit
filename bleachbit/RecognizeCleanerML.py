@@ -22,16 +22,15 @@
 Check local CleanerML files as a security measure
 """
 
-from bleachbit import _, _p
-import bleachbit
-from bleachbit.CleanerML import list_cleanerml_files
-from bleachbit.Options import options
-
 import hashlib
 import logging
 import os
 import sys
 
+import bleachbit
+from bleachbit import _, _p
+from bleachbit.CleanerML import list_cleanerml_files
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +49,9 @@ def cleaner_change_dialog(changes, parent):
         model.set(__iter, 0, value)
 
     # TODO: move to GuiBasic
-    from bleachbit.GuiBasic import Gtk
     from gi.repository import GObject
+
+    from bleachbit.GuiBasic import Gtk
 
     dialog = Gtk.Dialog(title=_("Security warning"),
                         transient_for=parent,

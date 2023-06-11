@@ -22,16 +22,16 @@
 Test case for module CLI
 """
 
-from bleachbit.CLI import *
-from bleachbit.General import run_external
-from bleachbit import FileUtilities
-from tests import common
-
 import copy
 import os
 import sys
 import tempfile
 import unittest
+
+from bleachbit import FileUtilities
+from bleachbit.CLI import *
+from bleachbit.General import run_external
+from tests import common
 
 
 class CLITestCase(common.BleachbitTestCase):
@@ -52,8 +52,7 @@ class CLITestCase(common.BleachbitTestCase):
                          % (output[0], output[2]))
         pos = output[2].find('Traceback (most recent call last)')
         if pos > -1:
-            print("Saw the following error when using args '%s':\n %s" %
-                  (args, output[2]))
+            print(f"Saw the following error when using args '{args}':\n {output[2]}")
         self.assertEqual(pos, -1)
 
     def test_args_to_operations_list(self):
@@ -180,7 +179,7 @@ class CLITestCase(common.BleachbitTestCase):
             preview_or_clean(operations, True, quiet=True)
             FileUtilities.delete = save_delete
             self.assertIn(filename, deleted_paths,
-                          "%s not found deleted" % filename)
+                          f"{filename} not found deleted")
             os.remove(filename)
             self.assertNotExists(filename)
             self.assertFalse(crash[0])

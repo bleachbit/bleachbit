@@ -37,21 +37,22 @@ These are the terms:
 
 """
 
-import bleachbit
-from bleachbit import _, Command, FileUtilities, General
-
 import glob
 import logging
 import os
-import sys
 import shutil
-from threading import Thread, Event
+import sys
 import xml.dom.minidom
-
 from decimal import Decimal
+from threading import Event, Thread
+
+import bleachbit
+from bleachbit import Command, FileUtilities, General, _
 
 if 'win32' == sys.platform:
     import winreg
+    from ctypes import byref, c_buffer, c_ulong, sizeof, windll
+
     import pywintypes
     import win32api
     import win32con
@@ -59,8 +60,6 @@ if 'win32' == sys.platform:
     import win32gui
     import win32process
     import win32security
-
-    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
     from win32com.shell import shell, shellcon
 
     psapi = windll.psapi
@@ -306,7 +305,7 @@ def elevate_privileges(uac):
             logger.debug(
                 "debug: skipping UAC because '%s' is on network", pyfile)
             return False
-        parameters = '"%s" --gui --no-uac' % pyfile
+        parameters = f'"{pyfile}" --gui --no-uac'
         exe = sys.executable
 
 
@@ -339,9 +338,9 @@ def _add_command_line_parameters(parameters):
     Add any command line parameters such as --debug-log.
     """
     if '--context-menu' in sys.argv:
-        return '{} {} "{}"'.format(parameters, ' '.join(sys.argv[1:-1]), sys.argv[-1])
+        return f"{parameters} {' '.join(sys.argv[1:-1])} \"{sys.argv[-1]}\""
 
-    return '{} {}'.format(parameters, ' '.join(sys.argv[1:]))
+    return f"{parameters} {' '.join(sys.argv[1:])}"
 
 
 def empty_recycle_bin(path, really_delete):
@@ -541,14 +540,14 @@ def set_environ(varname, path):
     if varname in os.environ:
         #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
-            os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
+            os.environ[varname] = os.path.expandvars(f'%{varname}%')
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs
         return
     try:
         if not os.path.exists(path):
             raise RuntimeError(
-                'Variable %s points to a non-existent path %s' % (varname, path))
+                f'Variable {varname} points to a non-existent path {path}')
         os.environ[varname] = path
     except:
         logger.exception(
@@ -590,7 +589,7 @@ def split_registry_key(full_key):
         'HKLM': winreg.HKEY_LOCAL_MACHINE,
         'HKU': winreg.HKEY_USERS}
     if k1 not in hive_map:
-        raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
+        raise RuntimeError(f"Invalid Windows registry hive '{k1}'")
     return hive_map[k1], k2
 
 
@@ -670,7 +669,8 @@ class SplashThread(Thread):
         win32gui.PumpMessages()
 
     def join(self, *args):
-        import win32con, win32gui
+        import win32con
+        import win32gui
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
@@ -721,7 +721,7 @@ class SplashThread(Thread):
 
         is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
         logger.debug(
-            'Is splash screen on top: {}'.format(is_splash_screen_on_top)
+            f'Is splash screen on top: {is_splash_screen_on_top}'
         )
 
         return hWindow
@@ -744,7 +744,7 @@ class SplashThread(Thread):
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with keybd_event: {}'.format(exc_message)
+                f'Failed attempt to show splash screen with keybd_event: {exc_message}'
             )
 
         if win32gui.GetForegroundWindow() == hWindow:
@@ -765,7 +765,7 @@ class SplashThread(Thread):
             except Exception as e:
                 exc_message = str(e)
                 logger.debug(
-                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(exc_message)
+                    f'Failed attempt to show splash screen with AttachThreadInput: {exc_message}'
                 )
 
         else:
@@ -786,7 +786,7 @@ class SplashThread(Thread):
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(exc_message)
+                f'Failed attempt to show splash screen with SystemParametersInfo: {exc_message}'
             )
 
         if win32gui.GetForegroundWindow() == hWindow:

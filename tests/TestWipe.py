@@ -21,10 +21,6 @@
 Test FileUtilities.wipe_path
 """
 
-from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
-from bleachbit.General import run_external
-from tests import common
-
 import logging
 import os
 import sys
@@ -32,6 +28,10 @@ import tempfile
 import time
 import traceback
 import unittest
+
+from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
+from bleachbit.General import run_external
+from tests import common
 
 logger = logging.getLogger('bleachbit')
 
@@ -129,7 +129,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
     """Test FileUtilities.wipe_path"""
 
     filename = create_disk_image(n_bytes)
-    print('created disk image %s' % filename)
+    print(f'created disk image {filename}')
 
     # format filesystem
     format_filesystem(filename, mkfs_cmd)
@@ -182,7 +182,7 @@ def test_wipe_sub(n_bytes, mkfs_cmd):
             mount_filesystem(filename, mountpoint)\
 
         # really wipe
-        print('wiping %s' % mountpoint)
+        print(f'wiping {mountpoint}')
         for _w in wipe_path(mountpoint):
             pass
 

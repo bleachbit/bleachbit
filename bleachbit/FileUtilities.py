@@ -23,9 +23,6 @@
 File-related utilities
 """
 
-import bleachbit
-from bleachbit import _
-
 import atexit
 import errno
 import glob
@@ -37,16 +34,20 @@ import random
 import re
 import stat
 import string
-import sys
 import subprocess
+import sys
 import tempfile
 import time
+
+import bleachbit
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
-    from pywintypes import error as pywinerror
     import win32file
+    from pywintypes import error as pywinerror
+
     import bleachbit.Windows
     os_path_islink = os.path.islink
     os.path.islink = lambda path: os_path_islink(
@@ -60,6 +61,7 @@ try:
     from scandir import walk
     if 'nt' == os.name:
         import scandir
+
         import bleachbit.Windows
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
@@ -239,13 +241,13 @@ def clean_ini(path, section, parameter):
         removing a cast to str. This is needed to handle unicode chars.
         """
         if parser._defaults:
-            ini_file.write("[%s]\n" % "DEFAULT")
+            ini_file.write(f"[{'DEFAULT'}]\n")
             for (key, value) in parser._defaults.items():
                 ini_file.write("%s = %s\n" %
                                (key, str(value).replace('\n', '\n\t')))
             ini_file.write("\n")
         for section in parser._sections:
-            ini_file.write("[%s]\n" % section)
+            ini_file.write(f"[{section}]\n")
             for (key, value) in parser._sections[section].items():
                 if key == "__name__":
                     continue
@@ -254,7 +256,7 @@ def clean_ini(path, section, parameter):
                     # This is the original line for reference:
                     # key = " = ".join((key, str(value).replace('\n', '\n\t')))
                     key = " = ".join((key, value.replace('\n', '\n\t')))
-                ini_file.write("%s\n" % (key))
+                ini_file.write(f"{key}\n")
             ini_file.write("\n")
 
     encoding = detect_encoding(path) or 'utf_8_sig'
@@ -458,8 +460,8 @@ def exe_exists(pathname):
 
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
-    import sqlite3
     import contextlib
+    import sqlite3
     with contextlib.closing(sqlite3.connect(path)) as conn:
         cursor = conn.cursor()
 
@@ -479,10 +481,10 @@ def execute_sqlite3(path, cmds):
                     logger.exception(exc.message)
                 else:
                     raise sqlite3.OperationalError(
-                        '%s: %s' % (exc, path))
+                        f'{exc}: {path}')
             except sqlite3.DatabaseError as exc:
                 raise sqlite3.DatabaseError(
-                    '%s: %s' % (exc, path))
+                    f'{exc}: {path}')
 
         cursor.close()
         conn.commit()
@@ -616,11 +618,10 @@ def human_to_bytes(human, hformat='si'):
         base = 1024
         suffixes = 'KMGTE'
     else:
-        raise ValueError("Invalid format: '%s'" % hformat)
+        raise ValueError(f"Invalid format: '{hformat}'")
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
     if matches is None:
-        raise ValueError("Invalid input for '%s' (hformat='%s')" %
-                         (human, hformat))
+        raise ValueError(f"Invalid input for '{human}' (hformat='{hformat}')")
     (amount, suffix) = matches.groups()
 
     if '' == suffix:
@@ -805,9 +806,10 @@ def wipe_contents(path, truncate=True):
         from win32com.shell.shell import IsUserAnAdmin
 
     if 'nt' == os.name and IsUserAnAdmin():
-        from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
+
         from bleachbit import _
+        from bleachbit.WindowsWipe import UnsupportedFileSystemError, file_wipe
         try:
             file_wipe(path)
         except pywinerror as e:

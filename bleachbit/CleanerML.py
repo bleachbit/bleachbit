@@ -22,17 +22,16 @@
 Create cleaners from CleanerML (markup language)
 """
 
-import bleachbit
-from bleachbit.Action import ActionProvider
-from bleachbit import _
-from bleachbit.General import boolstr_to_bool, getText
-from bleachbit.FileUtilities import expand_glob_join, listdir
-from bleachbit import Cleaner
-
 import logging
 import os
 import sys
 import xml.dom.minidom
+
+import bleachbit
+from bleachbit import Cleaner, _
+from bleachbit.Action import ActionProvider
+from bleachbit.FileUtilities import expand_glob_join, listdir
+from bleachbit.General import boolstr_to_bool, getText
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +110,7 @@ class CleanerML:
         elif platform == 'win32':
             current_os = ('windows')
         else:
-            raise RuntimeError('Unknown operating system: %s ' % sys.platform)
+            raise RuntimeError(f'Unknown operating system: {sys.platform} ')
         # Compare current OS against required OS.
         return os_str in current_os
 
@@ -212,7 +211,7 @@ class CleanerML:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node, self.vars)
         if provider is None:
-            raise RuntimeError("Invalid command '%s'" % command)
+            raise RuntimeError(f"Invalid command '{command}'")
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):
@@ -311,14 +310,14 @@ def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
     msgid = msgid.replace('"', '\\"')  # escape quotation mark
     if translators:
-        translators = "#. %s\n" % translators
+        translators = f"#. {translators}\n"
     else:
         translators = ""
-    ret = '''%s#: %s
-msgid "%s"
+    ret = f'''{translators}#: {pathname}
+msgid "{msgid}"
 msgstr ""
 
-''' % (translators, pathname, msgid)
+'''
     return ret
 
 

@@ -29,8 +29,11 @@ import platform
 import re
 import unicodedata
 from collections import namedtuple
+
 from bleachbit import fs_scan_re_flags
+
 from . import Command
+
 
 def normalized_walk(top, **kwargs):
     """

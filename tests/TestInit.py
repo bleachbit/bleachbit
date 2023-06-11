@@ -23,9 +23,9 @@
 Test cases for __init__
 """
 
-from tests import common
-
 import os
+
+from tests import common
 
 
 class InitTestCase(common.BleachbitTestCase):

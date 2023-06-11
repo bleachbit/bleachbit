@@ -25,12 +25,12 @@ Code that is commonly shared throughout BleachBit
 import gettext
 import locale
 import os
+import platform
 import re
 import sys
-import platform
+from configparser import NoOptionError, RawConfigParser, SafeConfigParser
 
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
 APP_VERSION = "4.4.2"
 APP_NAME = "BleachBit"
@@ -291,11 +291,9 @@ _p = pgettext
 # URLs
 #
 base_url = "https://update.bleachbit.org"
-help_contents_url = "%s/help/%s" \
-    % (base_url, APP_VERSION)
-release_notes_url = "%s/release-notes/%s" \
-    % (base_url, APP_VERSION)
-update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
+help_contents_url = f"{base_url}/help/{APP_VERSION}"
+release_notes_url = f"{base_url}/release-notes/{APP_VERSION}"
+update_check_url = f"{base_url}/update/{APP_VERSION}"
 
 # set up environment variables
 if 'nt' == os.name:

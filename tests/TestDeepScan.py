@@ -23,12 +23,12 @@
 Test case for module DeepScan
 """
 
-from tests import common
-from bleachbit.DeepScan import DeepScan, Search, normalized_walk
-
 import os
 import sys
 import unittest
+
+from bleachbit.DeepScan import DeepScan, Search, normalized_walk
+from tests import common
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
@@ -58,7 +58,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
             self.assertExists(cmd.path)
             if cmd.path == fullpath:
                 found = True
-        self.assertTrue(found, "Did not find '%s'" % fullpath)
+        self.assertTrue(found, f"Did not find '{fullpath}'")
 
         os.unlink(fullpath)
         self.assertNotExists(fullpath)
@@ -106,7 +106,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
                 command, self.tempdir, regex)
             from tests import TestCleaner
             cleaner = TestCleaner.action_to_cleaner(astr)
-            from bleachbit.Worker import backends, Worker
+            from bleachbit.Worker import Worker, backends
             backends['test'] = cleaner
             operations = {'test': ['option1']}
             from bleachbit import CLI

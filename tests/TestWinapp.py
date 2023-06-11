@@ -26,10 +26,10 @@ import shutil
 import tempfile
 from unittest import mock
 
-from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import logger
+from bleachbit.Winapp import Winapp, detect_file, detectos, section2option
+from bleachbit.Windows import detect_registry_key, parse_windows_build
+from tests import common
 
 
 def create_sub_key(sub_key):
@@ -52,8 +52,8 @@ def get_winapp2():
         tmpdir = os.getenv('TMP')
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
-        import time
         import stat
+        import time
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
             logger.info('deleting stale file %s ', fname)
@@ -146,13 +146,13 @@ class WinappTestCase(common.BleachbitTestCase):
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
-                tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
+                tests.append((f'%ProgramFiles%\\{pathname}', True))
         else:
             logger.info(
                 'skipping %ProgramW6432% tests because WoW64 not detected')
         for (pathname, expected_return) in tests:
             actual_return = detect_file(pathname)
-            msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
+            msg = f'detect_file({pathname}) returned {actual_return}'
             self.assertEqual(expected_return, actual_return, msg)
 
     def setup_fake(self, f1_filename=None):
@@ -180,7 +180,7 @@ class WinappTestCase(common.BleachbitTestCase):
         create_sub_key(subkey)
 
         self.assertTrue(detect_registry_key(KEYFULL))
-        self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
+        self.assertTrue(detect_registry_key(f'HKCU\\{subkey}'))
 
         return dirname, fname1, fname2, fbak
 
@@ -305,7 +305,7 @@ class WinappTestCase(common.BleachbitTestCase):
 
         # registry key, basic
         (dirname, fname1, fname2, fbak) = self.setup_fake()
-        cleaner = self.ini2cleaner('RegKey1=%s' % KEYFULL)
+        cleaner = self.ini2cleaner(f'RegKey1={KEYFULL}')
         self.run_all(cleaner, False)
         self.assertTrue(detect_registry_key(KEYFULL))
         self.run_all(cleaner, True)
@@ -414,7 +414,7 @@ class WinappTestCase(common.BleachbitTestCase):
         )
 
         for test in tests:
-            msg = '\nTest:\n%s' % test[0]
+            msg = f'\nTest:\n{test[0]}'
             # setup
             (dirname, _fname1, _fname2, _fbak) = self.setup_fake()
             self.assertExists(r'%s\deleteme.log' % dirname, msg)
@@ -554,16 +554,16 @@ class WinappTestCase(common.BleachbitTestCase):
 
         import string
         searches = ';'.join(
-            ['*.%s' % letter for letter in string.ascii_letters[0:26]])
+            [f'*.{letter}' for letter in string.ascii_letters[0:26]])
         cleaner = self.ini2cleaner(
-            'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
+            f'FileKey1={tmp_dir}|{searches}|RECURSE')
 
         # preview
         import time
         t0 = time.time()
         self.run_all(cleaner, False)
         t1 = time.time()
-        print('Elapsed time in preview: %.4f seconds ' % (t1-t0))
+        print(f'Elapsed time in preview: {t1 - t0:.4f} seconds ')
 
         # delete
         self.run_all(cleaner, False)

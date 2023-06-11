@@ -22,14 +22,13 @@
 Perform the preview or delete operations
 """
 
-from bleachbit import DeepScan, FileUtilities
-from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
-
 import logging
 import math
-import sys
 import os
+import sys
+
+from bleachbit import DeepScan, FileUtilities, _, ngettext
+from bleachbit.Cleaner import backends
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +96,7 @@ class Worker:
         except Exception as e:
             # 2 = does not exist
             # 13 = permission denied
-            from errno import ENOENT, EACCES
+            from errno import EACCES, ENOENT
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
                 exc_message = str(e)
@@ -123,7 +122,7 @@ class Worker:
             else:
                 path = ''
 
-            line = "%s %s %s\n" % (ret['label'], size, path)
+            line = f"{ret['label']} {size} {path}\n"
             self.total_deleted += ret['n_deleted']
             self.total_special += ret['n_special']
             if ret['label']:
@@ -157,7 +156,7 @@ class Worker:
             assert(isinstance(option_id, str))
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
-                for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
+                for ret in self.execute(cmd, f'{operation}.{option_id}'):
                     if True == ret:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
@@ -201,7 +200,7 @@ class Worker:
             raise RuntimeError("Unexpected option_id in delayed ops")
         self.ui.update_progress_bar(msg)
         for cmd in backends[operation].get_commands(option_id):
-            for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
+            for ret in self.execute(cmd, f'{operation}.{option_id}'):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)
                     phase = ret[0]
@@ -287,7 +286,7 @@ class Worker:
             # TRANSLATORS: This refers to a preview (no real
             # changes were made yet)
             line = _("Disk space to be recovered: %s") % bytes_delete
-        self.ui.append_text("\n%s" % line)
+        self.ui.append_text(f"\n{line}")
         if self.really_delete:
             # TRANSLATORS: This refers to the number of files really
             # deleted (in other words, not a preview).
@@ -296,13 +295,13 @@ class Worker:
             # TRANSLATORS: This refers to the number of files that
             # would be deleted (in other words, simply a preview).
             line = _("Files to be deleted: %d") % self.total_deleted
-        self.ui.append_text("\n%s" % line)
+        self.ui.append_text(f"\n{line}")
         if self.total_special > 0:
             line = _("Special operations: %d") % self.total_special
-            self.ui.append_text("\n%s" % line)
+            self.ui.append_text(f"\n{line}")
         if self.total_errors > 0:
             line = _("Errors: %d") % self.total_errors
-            self.ui.append_text("\n%s" % line, 'error')
+            self.ui.append_text(f"\n{line}", 'error')
         self.ui.append_text('\n')
 
         if self.really_delete:
@@ -313,7 +312,7 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger.debug(' deepscans=%s' % self.deepscans)
+        logger.debug(f' deepscans={self.deepscans}')
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
         # or all the system executables.

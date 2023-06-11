@@ -25,8 +25,9 @@ import shutil
 import subprocess
 import sys
 import time
-import win_unicode_console
 import xml.dom.minidom
+
+import win_unicode_console
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -85,7 +86,7 @@ def archive(infile, outfile):
         logger.warning(
             'Deleting output archive that already exists: ' + outfile)
         os.remove(outfile)
-    cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS, outfile, infile)
+    cmd = f'{SZ_EXE} a {SZ_OPTS} {outfile} {infile}'
     run_cmd(cmd)
     assert_exist(outfile)
 
@@ -149,11 +150,11 @@ def run_cmd(cmd):
 
 def sign_code(filename):
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s' % filename)
-        cmd = 'CodeSign.bat %s' % filename
+        logger.info(f'Signing code: {filename}')
+        cmd = f'CodeSign.bat {filename}'
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filename)
+        logger.warning(f'CodeSign.bat not available for {filename}')
 
 
 def get_dir_size(start_path='.'):
@@ -168,8 +169,8 @@ def get_dir_size(start_path='.'):
 
 def copytree(src, dst):
     # Microsoft xcopy is about twice as fast as shutil.copytree
-    logger.info('copying {} to {}'.format(src, dst))
-    cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
+    logger.info(f'copying {src} to {dst}')
+    cmd = f'xcopy {src} {dst} /i /s /q'
     os.system(cmd)
 
 
@@ -329,11 +330,9 @@ def delete_unnecessary():
         if os.path.isdir(path):
             this_dir_size = get_dir_size(path)
             shutil.rmtree(path, ignore_errors=True)
-            logger.info('Deleting directory {} saved {:,} B'.format(
-                path, this_dir_size))
+            logger.info(f'Deleting directory {path} saved {this_dir_size:,} B')
         else:
-            logger.info('Deleting file {} saved {:,} B'.format(
-                path, os.path.getsize(path)))
+            logger.info(f'Deleting file {path} saved {os.path.getsize(path):,} B')
             os.remove(path)
 
 
@@ -370,7 +369,7 @@ def remove_empty_dirs(root):
         if entry.is_dir():
             remove_empty_dirs(entry.path)
             if not os.listdir(entry.path):
-                logger.info('Deleting empty directory: %s' % entry.path)
+                logger.info(f'Deleting empty directory: {entry.path}')
                 os.rmdir(entry.path)
 
 
@@ -405,7 +404,7 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = 'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp %s' % strip_file
+        cmd = f'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp {strip_file}'
         run_cmd(cmd)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
@@ -446,7 +445,7 @@ def upx():
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
+    cmd = f"{UPX_EXE} {UPX_OPTS} {' '.join(upx_files)}"
     run_cmd(cmd)
 
 
@@ -492,7 +491,7 @@ def recompress_library():
             shutil.rmtree(path)
 
     # recompress library.zip
-    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
+    cmd = SZ_EXE + f' a {SZ_OPTS} ..\\library.zip'
     logger.info(cmd)
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, cwd='dist\\library')
@@ -536,8 +535,7 @@ def shrink():
     recompress_library()
 
     # so calculate the size of the folder, as it is a goal to shrink it.
-    logger.info('Final size of the dist folder: {:,}'.format(
-        get_dir_size('dist')))
+    logger.info(f"Final size of the dist folder: {get_dir_size('dist'):,}")
 
 
 def package_portable():
@@ -547,7 +545,7 @@ def package_portable():
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
 
-    archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+    archive('BleachBit-Portable', f'BleachBit-{BB_VER}-portable.zip')
 
 # NSIS
 
@@ -558,8 +556,7 @@ def nsis(opts, exe_name, nsi_path):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
     cmd = NSIS_EXE + \
-        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
-            opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
+        f' {opts} /DVERSION={BB_VER} /DSHRED_REGEX_KEY={SHRED_REGEX_KEY} {nsi_path}'
     run_cmd(cmd)
     assert_exist(exe_name)
     sign_code(exe_name)
@@ -576,7 +573,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name = f'windows\\BleachBit-{BB_VER}-setup.exe'
     # Was:
     #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
@@ -588,15 +585,15 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
         nsis(opts + ' /DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
+             f'windows\\BleachBit-{BB_VER}-setup-English.exe',
              nsi_path)
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
         outfile = ROOT_DIR + \
-            '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-        infile = ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+            f'\\windows\\BleachBit-{BB_VER}-setup.zip'
+        infile = ROOT_DIR + f'\\windows\\BleachBit-{BB_VER}-setup.exe'
         archive(infile, outfile)
     else:
         logger.warning(SZ_EXE + ' does not exist')
@@ -608,7 +605,7 @@ if '__main__' == __name__:
     BB_VER = bleachbit.APP_VERSION
     build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
     if build_number:
-        BB_VER = '%s.%s' % (BB_VER, build_number)
+        BB_VER = f'{BB_VER}.{build_number}'
     logger.info('BleachBit version ' + BB_VER)
 
     environment_check()

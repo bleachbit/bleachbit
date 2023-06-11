@@ -39,7 +39,7 @@ def boolstr_to_bool(value):
         return True
     if 'false' == value.lower():
         return False
-    raise RuntimeError("Invalid boolean: '%s'" % value)
+    raise RuntimeError(f"Invalid boolean: '{value}'")
 
 
 def getText(nodelist):
@@ -127,8 +127,8 @@ def run_external(args, stdout=None, env=None, clean_env=True):
     encoding = bleachbit.stdout_encoding
     if sys.platform == 'win32':
         # hide the 'DOS box' window
-        import win32process
         import win32con
+        import win32process
         stui = subprocess.STARTUPINFO()
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
         stui.wShowWindow = win32con.SW_HIDE

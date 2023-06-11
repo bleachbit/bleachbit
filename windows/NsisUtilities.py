@@ -21,7 +21,6 @@
 
 import os
 
-
 _DIRECTORY_TO_WALK = 'dist'
 _DIRECTORY_TO_SEPARATE = r'dist\share\locale'
 # NSIS script needs a prefix in the paths included in order to access them.
@@ -61,14 +60,13 @@ def _generate_add_remove_nsis_expressions(directory_to_walk, parent_directory=No
     uninstall_expressions = ''
     for relative_folder_path, full_filepaths, file_names in _walk_with_parent_directory_and_filepaths(directory_to_walk, directory_to_separate, parent_directory):
 
-        install_expressions += 'SetOutPath "$INSTDIR\\{}"\n'.format(
-            relative_folder_path)
+        install_expressions += f'SetOutPath "$INSTDIR\\{relative_folder_path}\"\n'
         uninstall_expressions = 'RMDir "$INSTDIR\\{}"'.format(
             relative_folder_path) + '\n' + uninstall_expressions
         if full_filepaths:
             install_expressions += 'File '
             install_expressions += ' '.join(
-                ['"{}{}"'.format(_DIRECTORY_PREFIX_FOR_NSIS, filepath)
+                [f'"{_DIRECTORY_PREFIX_FOR_NSIS}{filepath}"'
                  for filepath in full_filepaths]
             )
             install_expressions += '\n'

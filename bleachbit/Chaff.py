@@ -19,17 +19,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import email.generator
-from email.mime.text import MIMEText
 import json
 import logging
 import os
+import queue as _unused_module_Queue
 import random
 import tempfile
 from datetime import datetime
-import queue as _unused_module_Queue
+from email.mime.text import MIMEText
 
-from bleachbit import _, bleachbit_exe_path
-from bleachbit import options_dir
+from bleachbit import _, bleachbit_exe_path, options_dir
 
 from . import markovify
 
@@ -190,15 +189,17 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
 def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5):
     """Download a URL to the given filename"""
     logger.info('Downloading %s to %s', url, fn)
-    import requests
     import sys
+
+    import requests
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
         CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
         requests.utils.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
-    from urllib3.util.retry import Retry
     from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
     # 408: request timeout
     # 429: too many requests
     # 500: internal server error
@@ -225,14 +226,14 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
             response = session.get(url, headers=headers)
             content = response.content
         except requests.exceptions.RequestException as exc:
-            msg2 = '{}: {}'.format(type(exc).__name__, exc)
+            msg2 = f'{type(exc).__name__}: {exc}'
             logger.exception(msg)
             do_error(msg2)
             return False
         else:
             if not response.status_code == 200:
                 logger.error(msg)
-                msg2 = 'Status code: %s' % response.status_code
+                msg2 = f'Status code: {response.status_code}'
                 do_error(msg2)
                 return False
 
@@ -278,7 +279,7 @@ def generate_emails(number_of_emails,
         models_dir, 'clinton_content_model.json.bz2')
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
-    logger.debug('Generating {:,} emails'.format(number_of_emails))
+    logger.debug(f'Generating {number_of_emails:,} emails')
     generated_file_names = []
     for i in range(1, number_of_emails + 1):
         with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
@@ -308,7 +309,7 @@ def generate_2600(file_count,
     logger.debug('Loading 2600 model')
     model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
-    logger.debug('Generating {:,} files'.format(file_count))
+    logger.debug(f'Generating {file_count:,} files')
     generated_file_names = []
     for i in range(1, file_count + 1):
         with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:

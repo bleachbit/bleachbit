@@ -110,7 +110,8 @@ __copyright__ = """
 
 """
 
-import os, re
+import os
+import re
 
 ### Globals & Constants
 

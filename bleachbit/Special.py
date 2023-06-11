@@ -22,12 +22,12 @@
 Cross-platform, special cleaning operations
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities
-
 import logging
 import os.path
 from urllib.parse import urlparse, urlunparse
+
+from bleachbit import FileUtilities
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ def __shred_sqlite_char_columns(table, cols=None, where=""):
         cmd += "update or ignore %s set %s %s;" % \
             (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
                               for col in cols]), where)
-    cmd += "delete from %s %s;" % (table, where)
+    cmd += f"delete from {table} {where};"
     return cmd
 
 
@@ -155,7 +155,7 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += "attach database \"%s\" as History;" % path_history
+            cmds += f"attach database \"{path_history}\" as History;"
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
 
@@ -179,7 +179,7 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += "attach database \"%s\" as History;" % path_history
+            cmds += f"attach database \"{path_history}\" as History;"
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where)
     else:
@@ -192,14 +192,14 @@ def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
     if not os.path.exists(path):
         logger.debug(
-            'aborting delete_chrome_history() because history does not exist: %s' % path)
+            f'aborting delete_chrome_history() because history does not exist: {path}')
         return
     cols = ('url', 'title')
     where = ""
     ids_int = get_chrome_bookmark_ids(path)
     if ids_int:
         ids_str = ",".join([str(id0) for id0 in ids_int])
-        where = "where id not in (%s) " % ids_str
+        where = f"where id not in ({ids_str}) "
     cmds = __shred_sqlite_char_columns('urls', cols, where)
     cmds += __shred_sqlite_char_columns('visits')
     # Google Chrome 79 no longer has lower_term in keyword_search_terms
@@ -340,13 +340,13 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += 'attach database "{}" as places;'.format(places_path)
+    cmds += f'attach database "{places_path}" as places;'
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
         "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
 
     # delete all not bookmarked pages with icons
-    urls_where = "where page_url not in ({})".format(bookmarked_urls_query.format(db='places.', filter=''))
+    urls_where = f"where page_url not in ({bookmarked_urls_query.format(db='places.', filter='')})"
     cmds += __shred_sqlite_char_columns('moz_pages_w_icons', ('page_url',), urls_where)
 
     # delete all not bookmarked icons to pages mapping
@@ -387,7 +387,7 @@ def delete_mozilla_favicons(path):
                      ]
 
     # delete all not bookmarked icons
-    icons_where = "where (id in ({}))".format(str(ids_to_delete).replace('[', '').replace(']', ''))
+    icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
     cols = ('icon_url', 'data')
     cmds += __shred_sqlite_char_columns('moz_icons', cols, where=icons_where)
 

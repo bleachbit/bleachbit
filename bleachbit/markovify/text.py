@@ -3,10 +3,12 @@
 # Origin: https://github.com/jsvine/markovify
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
-import re
 import random
+import re
+
+from .chain import BEGIN, Chain
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN
+
 # BleachBit does not use unidecode
 #from unidecode import unidecode
 
@@ -214,7 +216,7 @@ class Text(object):
 
                 random.shuffle(init_states)
         else:
-            err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
+            err_msg = f"`make_sentence_with_start` for this model requires a string containing 1 to {self.state_size} words. Yours has {word_count}: {str(split)}"
             raise ParamError(err_msg)
 
         for init_state in init_states:

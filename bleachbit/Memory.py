@@ -23,15 +23,13 @@
 Wipe memory
 """
 
-from bleachbit import FileUtilities
-from bleachbit import General
-from bleachbit import _
-
 import logging
 import os
 import re
 import subprocess
 import sys
+
+from bleachbit import FileUtilities, General, _
 
 logger = logging.getLogger(__name__)
 
@@ -157,9 +155,9 @@ def get_swap_size_linux(device, proc_swaps=None):
         proc_swaps = get_proc_swaps()
     line = proc_swaps.split('\n')[0]
     if not re.search('Filename\s+Type\s+Size', line):
-        raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
+        raise RuntimeError(f"Unexpected first line in swap summary '{line}'")
     for line in proc_swaps.split('\n')[1:]:
-        ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
+        ret = re.search(f"{device}\\s+\\w+\\s+([0-9]+)\\s", line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
@@ -173,7 +171,7 @@ def get_swap_uuid(device):
     (_rc, stdout, _stderr) = General.run_external(args)
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
-        ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
+        ret = re.search(f"^{device}: UUID=\"([a-z0-9-]+)\"", line)
         if ret is not None:
             uuid = ret.group(1)
     logger.debug(_("Found UUID for swap file {device} is {uuid}.").format(
@@ -221,7 +219,7 @@ def physical_free_windows():
     """Return physical free memory on Windows"""
 
     from ctypes import c_long, c_ulonglong
-    from ctypes.wintypes import Structure, sizeof, windll, byref
+    from ctypes.wintypes import Structure, byref, sizeof, windll
 
     class MEMORYSTATUSEX(Structure):
         _fields_ = [

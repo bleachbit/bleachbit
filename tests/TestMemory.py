@@ -22,10 +22,10 @@
 Test case for module Memory
 """
 
-from tests import common
-from bleachbit.Memory import *
-
 import unittest
+
+from bleachbit.Memory import *
+from tests import common
 
 
 class MemoryTestCase(common.BleachbitTestCase):
@@ -39,7 +39,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         self.assertGreater(len(ret), 10)
         if not re.search('Filename\s+Type\s+Size', ret):
             raise RuntimeError(
-                "Unexpected first line in swap summary '%s'" % ret)
+                f"Unexpected first line in swap summary '{ret}'")
 
     @common.skipIfWindows
     def test_make_self_oom_target_linux(self):
@@ -97,7 +97,7 @@ Swapouts:                              20258188.
         """Test for method physical_free"""
         ret = physical_free()
         self.assertIsInteger(
-            ret, 'physical_free() returns variable type %s' % type(ret))
+            ret, f'physical_free() returns variable type {type(ret)}')
         self.assertGreater(physical_free(), 0)
         report_free()
 
