@@ -75,11 +75,7 @@ def expand_multi_var(s, variables):
             sub = f'$${var_key}$$'
             ms = ms.replace(sub, var_value)
         ret.append(ms)
-    if ret:
-        return ret
-    else:
-        # The string has $$, but it did not match anything
-        return (s,)
+    return ret if ret else (s, )
 
 #
 # Plugin framework
@@ -245,18 +241,15 @@ class FileActionProvider(ActionProvider):
                 yield from FileUtilities.children_in_directory(expanded, True)
                 # This condition executes when there are zero iterations
                 # in the loop above.
-                if path is None:
-                    # This is a lint checker because this scenario may
-                    # indicate the cleaner developer made a mistake.
-                    if os.path.isfile(expanded):
-                        logger.debug(
-                            # TRANSLATORS: This is a lint-style warning that there seems to be a
-                            # mild mistake in the CleanerML file because walk.all is expected to
-                            # be used with directories instead of with files. Do not translate
-                            # search="walk.all" and path="%s"
-                            _('search="walk.all" used with regular file path="%s"'),
-                            expanded,
-                        )
+                if path is None and os.path.isfile(expanded):
+                    logger.debug(
+                        # TRANSLATORS: This is a lint-style warning that there seems to be a
+                        # mild mistake in the CleanerML file because walk.all is expected to
+                        # be used with directories instead of with files. Do not translate
+                        # search="walk.all" and path="%s"
+                        _('search="walk.all" used with regular file path="%s"'),
+                        expanded,
+                    )
 
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""

@@ -159,9 +159,8 @@ class ChaffDialog(Gtk.Dialog):
             dialog.destroy()
             return
 
-        if not have_models():
-            if not self.download_models_dialog():
-                return
+        if not have_models() and not self.download_models_dialog():
+            return
 
         def _on_progress(fraction, msg, is_done):
             """Update progress bar from GLib main loop"""

@@ -793,9 +793,8 @@ class GUI(Gtk.ApplicationWindow):
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
 
-        if really_delete:
-            if options.get("exit_done"):
-                sys.exit()
+        if really_delete and options.get("exit_done"):
+            sys.exit()
 
         # notification for long-running process
         elapsed = time.time() - self.start_time

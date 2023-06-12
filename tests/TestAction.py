@@ -132,10 +132,9 @@ class ActionTestCase(common.BleachbitTestCase):
                 self.assertLExists(filename)
             else:
                 raise RuntimeError(f"Unknown command '{command}'")
-        if 'walk.all' == search:
-            if expect_exists:
-                self.assertTrue(dir_is_empty(
-                    filename), f'directory not empty after walk.all: {filename}')
+        if 'walk.all' == search and expect_exists:
+            self.assertTrue(dir_is_empty(
+                filename), f'directory not empty after walk.all: {filename}')
 
     def test_delete(self):
         """Unit test for class Delete"""

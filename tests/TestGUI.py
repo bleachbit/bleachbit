@@ -89,9 +89,8 @@ class GUITestCase(common.BleachbitTestCase):
 
     @classmethod
     def find_widget(cls, widget, widget_class, widget_label=None):
-        if isinstance(widget, widget_class):
-            if widget_label is None or widget.get_label() == widget_label:
-                return widget
+        if isinstance(widget, widget_class) and (widget_label is None or widget.get_label() == widget_label):
+            return widget
         if isinstance(widget, Gtk.Container):
             for c in widget.get_children():
                 b = cls.find_widget(c, widget_class, widget_label)
