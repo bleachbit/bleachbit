@@ -493,9 +493,7 @@ def is_broken_xdg_desktop(pathname):
     if 'application' != file_type:
         logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
         return False
-    if __is_broken_xdg_desktop_application(config, pathname):
-        return True
-    return False
+    return bool(__is_broken_xdg_desktop_application(config, pathname))
 
 
 def is_running_darwin(exename):

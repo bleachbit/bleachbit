@@ -42,9 +42,7 @@ def is_sentence_ender(word):
         return True
     if len(re.sub(r"[^A-Z]", "", word)) > 1:
         return True
-    if word[-1] == "." and (not is_abbreviation(word)):
-        return True
-    return False
+    return word[-1] == "." and not is_abbreviation(word)
 
 
 def split_into_sentences(text):

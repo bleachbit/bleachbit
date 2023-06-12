@@ -91,9 +91,7 @@ def detectos(required_ver, mock=False):
     req_max = required_ver.split('|')[1]
     if req_min and current_os < Windows.parse_windows_build(req_min):
         return False
-    if req_max and current_os > Windows.parse_windows_build(req_max):
-        return False
-    return True
+    return not req_max or current_os <= Windows.parse_windows_build(req_max)
 
 
 def winapp_expand_vars(pathname):

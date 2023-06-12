@@ -267,10 +267,7 @@ def detect_registry_key(parent_key):
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False
-    if not hkey:
-        # key not found
-        return False
-    return True
+    return bool(hkey)
 
 
 def elevate_privileges(uac):
@@ -326,10 +323,7 @@ def elevate_privileges(uac):
 
     logger.debug('ShellExecuteEx=%s', rc)
 
-    if isinstance(rc, dict):
-        return True
-
-    return False
+    return isinstance(rc, dict)
 
 
 def _add_command_line_parameters(parameters):
@@ -788,14 +782,11 @@ class SplashThread(Thread):
                 f'Failed attempt to show splash screen with SystemParametersInfo: {exc_message}',
             )
 
-        if win32gui.GetForegroundWindow() == hWindow:
-            return True
+        return win32gui.GetForegroundWindow() == hWindow
 
         # Solution 4: If on some machines the splash screen still doesn't come on top, we can try
         # the following solution that combines attaching to a thread and timers:
         # https://www.codeproject.com/Tips/76427/How-to-Bring-Window-to-Top-with-SetForegroundWindo
-
-        return False
 
     def wndProc(self, hWnd, message, wParam, lParam):
 
