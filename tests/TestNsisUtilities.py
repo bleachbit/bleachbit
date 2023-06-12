@@ -132,7 +132,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
     def test_walk_with_parent_directory_and_filepaths(self):
         folder0, tree = self._generate_folder_tree()
         self.assertEqual(sorted(tree), sorted(
-            list(_walk_with_parent_directory_and_filepaths(folder0))))
+            _walk_with_parent_directory_and_filepaths(folder0)))
 
     def test_write_nsis_expressions_to_files(self):
         folder0, tree = self._generate_folder_tree()
