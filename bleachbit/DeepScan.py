@@ -59,8 +59,10 @@ def normalized_walk(top, **kwargs):
 Search = namedtuple('Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])
 Search.__new__.__defaults__ = (None,) * len(Search._fields)
 
+
 class CompiledSearch:
     """Compiled search condition"""
+
     def __init__(self, search):
         self.command = search.command
 
@@ -88,6 +90,7 @@ class CompiledSearch:
             return None
 
         return full_path
+
 
 class DeepScan:
 

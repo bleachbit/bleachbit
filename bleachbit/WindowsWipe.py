@@ -318,7 +318,7 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append((cluster, cluster)) # Modified by Marvin [12/05/2020] The extents should have (start, end) format
+                    allocated_extents.append((cluster, cluster))  # Modified by Marvin [12/05/2020] The extents should have (start, end) format
             else:
                 count_free += 1
 

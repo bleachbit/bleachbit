@@ -214,7 +214,7 @@ class Worker:
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
                         msg2 = ngettext("About %d minute remaining.",
-                                         "About %d minutes remaining.", eta_mins) \
+                                        "About %d minutes remaining.", eta_mins) \
                             % eta_mins
                         self.ui.update_progress_bar(msg + ' ' + msg2)
                     else:

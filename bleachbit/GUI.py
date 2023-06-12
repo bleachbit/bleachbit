@@ -560,6 +560,7 @@ class TreeDisplayModel:
 
 class GUI(Gtk.ApplicationWindow):
     """The main application GUI"""
+
     _style_provider = None
     _style_provider_regular = None
     _style_provider_dark = None
@@ -650,7 +651,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if self._auto_exit:
             GLib.idle_add(self.close,
-                              priority=GObject.PRIORITY_LOW)
+                          priority=GObject.PRIORITY_LOW)
 
         # user aborted
         return False
@@ -816,7 +817,7 @@ class GUI(Gtk.ApplicationWindow):
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
-        self.view.set_margin_right(scrollbar_width) # avoid conflict with scrollbar
+        self.view.set_margin_right(scrollbar_width)  # avoid conflict with scrollbar
         scrolled_window.add(self.view)
         return scrolled_window
 
@@ -877,7 +878,7 @@ class GUI(Gtk.ApplicationWindow):
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
             self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.')+'\n')
+                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.') + '\n')
         if os.name == 'nt' and options.get('shred'):
             from win32com.shell.shell import IsUserAnAdmin
             if not IsUserAnAdmin():

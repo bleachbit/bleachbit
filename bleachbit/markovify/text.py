@@ -16,8 +16,10 @@ DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
 
+
 class ParamError(Exception):
     pass
+
 
 class Text():
 
@@ -86,6 +88,7 @@ class Text():
         return " ".join(sentences)
 
     word_split_pattern = re.compile(r"\s+")
+
     def word_split(self, sentence):
         """
         Splits a sentence into a list of words.
@@ -126,7 +129,6 @@ class Text():
         """
         # not used in BleachBit
         pass
-
 
     def make_sentence(self, init_state=None, **kwargs):
         """
@@ -203,16 +205,16 @@ class Text():
         word_count = len(split)
 
         if word_count == self.state_size:
-            init_states = [ split ]
+            init_states = [split]
 
         elif word_count > 0 and word_count < self.state_size:
             if strict:
-                init_states = [ (BEGIN,) * (self.state_size - word_count) + split ]
+                init_states = [(BEGIN,) * (self.state_size - word_count) + split]
 
             else:
-                init_states = [ key for key in self.chain.model.keys()
-                    # check for starting with begin as well ordered lists
-                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split ]
+                init_states = [key for key in self.chain.model.keys()
+                               # check for starting with begin as well ordered lists
+                               if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split]
 
                 random.shuffle(init_states)
         else:
@@ -241,5 +243,6 @@ class NewlineText(Text):
     A (usable) example of subclassing markovify.Text. This one lets you markovify
     text where the sentences are separated by newlines instead of ". "
     """
+
     def sentence_split(self, text):
         return re.split(r"\s*\n\s*", text)

@@ -257,7 +257,7 @@ def build():
     # for pop-up notification
     shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
     for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
+        shutil.copyfile(os.path.join(GTK_LIBDIR, dll), 'dist\\' + dll)
 
     os.mkdir('dist\\data')
     shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')

@@ -47,7 +47,7 @@ def make_files_thread(file_count, inspiration, output_folder, delete_when_finish
         on_progress(0, msg=_('Deleting files'))
         for i in range(0, file_count):
             os.unlink(generated_file_names[i])
-            on_progress(1.0 * (i+1)/file_count)
+            on_progress(1.0 * (i + 1) / file_count)
     on_progress(1.0, is_done=True)
 
 
@@ -64,7 +64,7 @@ class ChaffDialog(Gtk.Dialog):
 # physical chaff airplanes use to protect themselves from radar-guided
 # missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, _("Make chaff"), parent)
-        Gtk.Dialog.set_modal(self,True)
+        Gtk.Dialog.set_modal(self, True)
         self.set_border_width(5)
         box = self.get_content_area()
 

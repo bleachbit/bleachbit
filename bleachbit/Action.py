@@ -121,6 +121,7 @@ class ActionProvider(metaclass=PluginMount):
 class FileActionProvider(ActionProvider):
 
     """Base class for providers which work on individual files"""
+
     action_key = '_file'
     CACHEABLE_SEARCHERS = ('walk.files',)
     # global cache <search_type, path, list_of_entries>
@@ -329,6 +330,7 @@ class FileActionProvider(ActionProvider):
 class AptAutoclean(ActionProvider):
 
     """Action to run 'apt-get autoclean'"""
+
     action_key = 'apt.autoclean'
 
     def __init__(self, action_element, path_vars=None):
@@ -345,6 +347,7 @@ class AptAutoclean(ActionProvider):
 class AptAutoremove(ActionProvider):
 
     """Action to run 'apt-get autoremove'"""
+
     action_key = 'apt.autoremove'
 
     def __init__(self, action_element, path_vars=None):
@@ -361,6 +364,7 @@ class AptAutoremove(ActionProvider):
 class AptClean(ActionProvider):
 
     """Action to run 'apt-get clean'"""
+
     action_key = 'apt.clean'
 
     def __init__(self, action_element, path_vars=None):
@@ -377,6 +381,7 @@ class AptClean(ActionProvider):
 class ChromeAutofill(FileActionProvider):
 
     """Action to clean 'autofill' table in Google Chrome/Chromium"""
+
     action_key = 'chrome.autofill'
 
     def get_commands(self):
@@ -390,6 +395,7 @@ class ChromeAutofill(FileActionProvider):
 class ChromeDatabases(FileActionProvider):
 
     """Action to clean Databases.db in Google Chrome/Chromium"""
+
     action_key = 'chrome.databases_db'
 
     def get_commands(self):
@@ -403,6 +409,7 @@ class ChromeDatabases(FileActionProvider):
 class ChromeFavicons(FileActionProvider):
 
     """Action to clean 'Favicons' file in Google Chrome/Chromium"""
+
     action_key = 'chrome.favicons'
 
     def get_commands(self):
@@ -416,6 +423,7 @@ class ChromeFavicons(FileActionProvider):
 class ChromeHistory(FileActionProvider):
 
     """Action to clean 'History' file in Google Chrome/Chromium"""
+
     action_key = 'chrome.history'
 
     def get_commands(self):
@@ -429,6 +437,7 @@ class ChromeHistory(FileActionProvider):
 class ChromeKeywords(FileActionProvider):
 
     """Action to clean 'keywords' table in Google Chrome/Chromium"""
+
     action_key = 'chrome.keywords'
 
     def get_commands(self):
@@ -442,6 +451,7 @@ class ChromeKeywords(FileActionProvider):
 class Delete(FileActionProvider):
 
     """Action to delete files"""
+
     action_key = 'delete'
 
     def get_commands(self):
@@ -452,6 +462,7 @@ class Delete(FileActionProvider):
 class Ini(FileActionProvider):
 
     """Action to clean .ini configuration files"""
+
     action_key = 'ini'
 
     def __init__(self, action_element, path_vars=None):
@@ -468,6 +479,7 @@ class Ini(FileActionProvider):
 
 class Journald(ActionProvider):
     """Action to run 'journalctl --vacuum-time=1'"""
+
     action_key = 'journald.clean'
 
     def __init__(self, action_element, path_vars=None):
@@ -481,6 +493,7 @@ class Journald(ActionProvider):
 class Json(FileActionProvider):
 
     """Action to clean JSON configuration files"""
+
     action_key = 'json'
 
     def __init__(self, action_element, path_vars=None):
@@ -495,6 +508,7 @@ class Json(FileActionProvider):
 class MozillaUrlHistory(FileActionProvider):
 
     """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+
     action_key = 'mozilla.url.history'
 
     def get_commands(self):
@@ -507,6 +521,7 @@ class MozillaUrlHistory(FileActionProvider):
 class MozillaFavicons(FileActionProvider):
 
     """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+
     action_key = 'mozilla.favicons'
 
     def get_commands(self):
@@ -519,6 +534,7 @@ class MozillaFavicons(FileActionProvider):
 class OfficeRegistryModifications(FileActionProvider):
 
     """Action to delete LibreOffice history"""
+
     action_key = 'office_registrymodifications'
 
     def get_commands(self):
@@ -532,6 +548,7 @@ class OfficeRegistryModifications(FileActionProvider):
 class Process(ActionProvider):
 
     """Action to run a process"""
+
     action_key = 'process'
 
     def __init__(self, action_element, path_vars=None):
@@ -569,6 +586,7 @@ class Process(ActionProvider):
 class Shred(FileActionProvider):
 
     """Action to shred files (override preference)"""
+
     action_key = 'shred'
 
     def get_commands(self):
@@ -579,6 +597,7 @@ class Shred(FileActionProvider):
 class SqliteVacuum(FileActionProvider):
 
     """Action to vacuum SQLite databases"""
+
     action_key = 'sqlite.vacuum'
 
     def get_commands(self):
@@ -596,6 +615,7 @@ class SqliteVacuum(FileActionProvider):
 class Truncate(FileActionProvider):
 
     """Action to truncate files"""
+
     action_key = 'truncate'
 
     def get_commands(self):
@@ -606,6 +626,7 @@ class Truncate(FileActionProvider):
 class WinShellChangeNotify(ActionProvider):
 
     """Action to clean the Windows Registry"""
+
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
@@ -619,6 +640,7 @@ class WinShellChangeNotify(ActionProvider):
 class Winreg(ActionProvider):
 
     """Action to clean the Windows Registry"""
+
     action_key = 'winreg'
 
     def __init__(self, action_element, path_vars=None):
@@ -633,6 +655,7 @@ class Winreg(ActionProvider):
 class YumCleanAll(ActionProvider):
 
     """Action to run 'yum clean all'"""
+
     action_key = 'yum.clean_all'
 
     def __init__(self, action_element, path_vars=None):
@@ -652,6 +675,7 @@ class YumCleanAll(ActionProvider):
 class DnfCleanAll(ActionProvider):
 
     """Action to run 'dnf clean all'"""
+
     action_key = 'dnf.clean_all'
 
     def __init__(self, action_element, path_vars=None):
@@ -671,6 +695,7 @@ class DnfCleanAll(ActionProvider):
 class DnfAutoremove(ActionProvider):
 
     """Action to run 'dnf autoremove'"""
+
     action_key = 'dnf.autoremove'
 
     def __init__(self, action_element, path_vars=None):

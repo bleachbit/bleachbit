@@ -92,7 +92,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
     def _get_shred_command_string(self, file_to_shred):
         shred_command_string = r'{} bleachbit.py --context-menu "{}"'.format(sys.executable,
-                                                                                            file_to_shred)
+                                                                             file_to_shred)
         return shred_command_string
 
     def _run_shred_command(self, shred_command_string):
@@ -129,6 +129,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         self.assertExists(file_to_shred)
 
         original = bleachbit.Windows.shell.ShellExecuteEx
+
         def shell_execute_synchronous(lpVerb='', lpFile='', lpParameters='', nShow=''):
             """
             We need a synchronous call the ShellExecuteEx so we can assert after it finishes.

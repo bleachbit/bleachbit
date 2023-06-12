@@ -119,6 +119,7 @@ import re
 # Constant used by test_platform to test linux_distribution().
 _UNIXCONFDIR = '/etc'
 
+
 def _dist_try_harder(distname, version, id):
 
     """ Tries some special tricks to get the distribution
@@ -158,7 +159,7 @@ def _dist_try_harder(distname, version, id):
     if os.path.isdir('/usr/lib/setup'):
         # Check for slackware version tag file (thanks to Greg Andruk)
         verfiles = os.listdir('/usr/lib/setup')
-        for n in range(len(verfiles)-1, -1, -1):
+        for n in range(len(verfiles) - 1, -1, -1):
             if verfiles[n][:14] != 'slack-version-':
                 del verfiles[n]
         if verfiles:
@@ -168,6 +169,7 @@ def _dist_try_harder(distname, version, id):
             return distname, version, id
 
     return distname, version, id
+
 
 _release_filename = re.compile(r'(\w+)[-_](release|version)', re.ASCII)
 _lsb_release_version = re.compile(r'(.+)'
@@ -188,6 +190,7 @@ _supported_dists = (
     'SuSE', 'debian', 'fedora', 'redhat', 'centos',
     'mandrake', 'mandriva', 'rocks', 'slackware', 'yellowdog', 'gentoo',
     'UnitedLinux', 'turbolinux', 'arch', 'mageia', 'Ubuntu')
+
 
 def _parse_release_file(firstline):
 
@@ -216,9 +219,11 @@ def _parse_release_file(firstline):
             id = l[1]
     return '', version, id
 
+
 _distributor_id_file_re = re.compile(r"(?:DISTRIB_ID\s*=)\s*(.*)", re.I)
 _release_file_re = re.compile(r"(?:DISTRIB_RELEASE\s*=)\s*(.*)", re.I)
 _codename_file_re = re.compile(r"(?:DISTRIB_CODENAME\s*=)\s*(.*)", re.I)
+
 
 def _linux_distribution(distname='', version='', id='', supported_dists=_supported_dists,
                         full_distribution_name=1):

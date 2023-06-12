@@ -343,7 +343,7 @@ def delete_mozilla_favicons(path):
     cmds += f'attach database "{places_path}" as places;'
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
-        "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
+                             "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
 
     # delete all not bookmarked pages with icons
     urls_where = f"where page_url not in ({bookmarked_urls_query.format(db='places.', filter='')})"
@@ -359,8 +359,8 @@ def delete_mozilla_favicons(path):
 
     # collect favicons that are not bookmarked with their full url which collects also domain level bookmarks
     id_and_url_pairs = _get_sqlite_values(path,
-                                         "select id, icon_url from moz_icons where "
-                                         "(id not in (select icon_id from moz_icons_to_pages))")
+                                          "select id, icon_url from moz_icons where "
+                                          "(id not in (select icon_id from moz_icons_to_pages))")
 
     # We query twice the bookmarked urls and this is a kind of duplication. This is because the first usage of
     # bookmarks is for refining further queries to favicons db and if we first extract the bookmarks as a Python list
@@ -372,17 +372,17 @@ def delete_mozilla_favicons(path):
     row_factory = lambda cursor, row: row[0]
     # with the row_factory bookmarked_urls is a list of urls, instead of list of tuples with first element a url
     bookmarked_urls = _get_sqlite_values(places_path,
-                                        bookmarked_urls_query.format(db='', filter=" and url NOT LIKE 'javascript:%'"),
-                                        row_factory)
+                                         bookmarked_urls_query.format(db='', filter=" and url NOT LIKE 'javascript:%'"),
+                                         row_factory)
 
     bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
     ids_to_delete = [id for id, url in id_and_url_pairs
                      if (
-                            # collect only favicons with not bookmarked urls with same domain or
-                            # their domain is a part of a bookmarked url but the favicons are not domain level
-                            # in other words collect all that are not bookmarked
-                            remove_path_from_url(url) not in bookmarked_urls_domains or
-                            urlparse(url).path.count('/') > 1
+                         # collect only favicons with not bookmarked urls with same domain or
+                         # their domain is a part of a bookmarked url but the favicons are not domain level
+                         # in other words collect all that are not bookmarked
+                         remove_path_from_url(url) not in bookmarked_urls_domains or
+                         urlparse(url).path.count('/') > 1
                      )
                      ]
 

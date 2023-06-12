@@ -75,7 +75,7 @@ def cleaners_list():
 def list_cleaners():
     """Display available cleaners"""
     for cleaner in cleaners_list():
-        print (cleaner)
+        print(cleaner)
 
 
 def preview_or_clean(operations, really_clean, quiet=False):

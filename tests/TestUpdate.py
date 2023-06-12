@@ -96,7 +96,7 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Check connection to the update URL"""
         from bleachbit.Update import build_opener
         opener = build_opener()
-        opener.addheaders = [('accept','text/*')]
+        opener.addheaders = [('accept', 'text/*')]
         import urllib
         try:
             handle = opener.open(bleachbit.update_check_url)

@@ -467,7 +467,6 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         expected_icon_ids = [4, 5, 6, 7, 13, 14, 42]  # not removed ids from moz_icons table
         assert sorted(expected_icon_ids) == sorted(icon_ids)
 
-
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
         # does not exist

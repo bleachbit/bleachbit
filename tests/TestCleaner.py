@@ -201,7 +201,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         list(register_cleaners())
         list(register_cleaners())
 
-    @common.skipIfWindows # FIXME later: reevaluate
+    @common.skipIfWindows  # FIXME later: reevaluate
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""

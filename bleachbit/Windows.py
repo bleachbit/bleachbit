@@ -114,7 +114,7 @@ def browse_files(_, title):
 
 def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    flags = 0x0010 #SHBrowseForFolder path input
+    flags = 0x0010  # SHBrowseForFolder path input
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
     if pidl is None:
         # user cancelled
@@ -307,7 +307,6 @@ def elevate_privileges(uac):
             return False
         parameters = f'"{pyfile}" --gui --no-uac'
         exe = sys.executable
-
 
     parameters = _add_command_line_parameters(parameters)
 
@@ -706,7 +705,7 @@ class SplashThread(Thread):
         windowPosY = (displayHeigh - self._splash_screen_height) // 2
 
         hWindow = win32gui.CreateWindow(
-            wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
+            wndClassAtom,                   # it seems message dispatching only works with the atom, not the class name
             'Bleachbit splash screen',
             win32con.WS_POPUPWINDOW |
             win32con.WS_VISIBLE,
@@ -818,7 +817,7 @@ class SplashThread(Thread):
             rect = win32gui.GetClientRect(hWnd)
             textmetrics = win32gui.GetTextMetrics(hDC)
             text_left_margin = 2 * default_icon_size
-            text_rect = (text_left_margin, (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
+            text_rect = (text_left_margin, (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
                 _("BleachBit is starting...\n"),
@@ -834,5 +833,6 @@ class SplashThread(Thread):
 
         else:
             return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+
 
 splash_thread = SplashThread()

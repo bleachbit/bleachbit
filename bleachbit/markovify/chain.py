@@ -9,13 +9,14 @@ import operator
 import random
 
 # Python3 compatibility
-try: # pragma: no cover
+try:  # pragma: no cover
     basestring
-except NameError: # pragma: no cover
+except NameError:  # pragma: no cover
     basestring = str
 
 BEGIN = "___BEGIN__"
 END = "___END__"
+
 
 def accumulate(iterable, func=operator.add):
     """
@@ -29,11 +30,13 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
+
 class Chain():
     """
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.
     """
+
     def __init__(self, corpus, state_size, model=None):
         """
         `corpus`: A list of lists, where each outer list is a "run"
@@ -63,10 +66,10 @@ class Chain():
         model = {}
 
         for run in corpus:
-            items = ([ BEGIN ] * state_size) + run + [ END ]
+            items = ([BEGIN] * state_size) + run + [END]
             for i in range(len(run) + 1):
-                state = tuple(items[i:i+state_size])
-                follow = items[i+state_size]
+                state = tuple(items[i:i + state_size])
+                follow = items[i + state_size]
                 if state not in model:
                     model[state] = {}
 
@@ -81,7 +84,7 @@ class Chain():
         Caches the summation calculation and available choices for BEGIN * state_size.
         Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
         """
-        begin_state = tuple([ BEGIN ] * self.state_size)
+        begin_state = tuple([BEGIN] * self.state_size)
         choices, weights = zip(*self.model[begin_state].items())
         cumdist = list(accumulate(weights))
         self.begin_cumdist = cumdist
@@ -91,7 +94,7 @@ class Chain():
         """
         Given a state, choose the next item at random.
         """
-        if state == tuple([ BEGIN ] * self.state_size):
+        if state == tuple([BEGIN] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         else:

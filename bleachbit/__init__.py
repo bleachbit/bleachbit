@@ -38,7 +38,7 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-if sys.version_info < (3,0,0):
+if sys.version_info < (3, 0, 0):
     print('BleachBit no longer supports Python 2.x.')
     sys.exit(1)
 
@@ -190,7 +190,6 @@ elif sys.platform[:6] == "netbsd":
     locale_dir = "/usr/pkg/share/locale/"
 elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
     locale_dir = "/usr/local/share/locale/"
-
 
 
 #

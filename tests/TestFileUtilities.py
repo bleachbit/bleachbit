@@ -671,13 +671,13 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         valid = {'1kB': 1000,
                  '1.1MB': 1100000,
                  '12B': 12,
-                 '1.0M': 1000*1000,
+                 '1.0M': 1000 * 1000,
                  '1TB': 1000**4,
                  '1000': 1000}
         for test, result in valid.items():
             self.assertEqual(human_to_bytes(test), result)
 
-        self.assertEqual(human_to_bytes('1 MB', 'du'), 1024*1024)
+        self.assertEqual(human_to_bytes('1 MB', 'du'), 1024 * 1024)
 
     def test_listdir(self):
         """Unit test for listdir()"""

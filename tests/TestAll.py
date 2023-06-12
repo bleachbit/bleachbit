@@ -29,7 +29,7 @@ import tempfile
 import unittest
 
 if __name__ == '__main__':
-    testdir = tempfile.mkdtemp(prefix='TestAll '+__name__)
+    testdir = tempfile.mkdtemp(prefix='TestAll ' + __name__)
     os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = testdir
 
     print("""You should use the unittest discovery, it's much nicer:

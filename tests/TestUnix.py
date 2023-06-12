@@ -314,12 +314,13 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     @common.skipIfWindows
     def test_is_linux_display_protocol_wayland(self):
         display_protocol = None
+
         def side_effect_func(value):
             if len(value) == 1:
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
             elif len(value) > 1:
                 return (0, f'Type={display_protocol}\n', '')
-            assert False # should never reach here
+            assert False  # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:
@@ -331,6 +332,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     @common.skipIfWindows
     def test_xhost_autorized_root(self):
         error_code = None
+
         def side_effect_func(*args, **kwargs):
             self.assertEqual(args[0][0], 'xhost')
             return (error_code,

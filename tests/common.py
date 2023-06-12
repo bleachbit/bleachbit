@@ -43,6 +43,7 @@ from bleachbit.General import sudo_mode
 
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
+
     _patchers = []
 
     @classmethod

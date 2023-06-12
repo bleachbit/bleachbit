@@ -503,7 +503,7 @@ def is_running_darwin(exename):
         ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                          universal_newlines=True)
         processes = (re.split(r"\s+", p, 10)[10]
-                      for p in ps_out.split("\n") if p != "")
+                     for p in ps_out.split("\n") if p != "")
         next(processes)  # drop the header
         return exename in processes
     except IndexError:
@@ -694,7 +694,7 @@ units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
 def parseSize(size):
     """Parse the size returned by dnf"""
     number, unit = [string.strip() for string in size.split()]
-    return int(float(number)*units[unit])
+    return int(float(number) * units[unit])
 
 
 def dnf_autoremove():
@@ -738,9 +738,9 @@ def root_is_not_allowed_to_X_session():
 
 def is_display_protocol_wayland_and_root_not_allowed():
     return (
-            bleachbit.Unix.is_linux_display_protocol_wayland() and
-            os.environ['USER'] == 'root' and
-            bleachbit.Unix.root_is_not_allowed_to_X_session()
+        bleachbit.Unix.is_linux_display_protocol_wayland() and
+        os.environ['USER'] == 'root' and
+        bleachbit.Unix.root_is_not_allowed_to_X_session()
     )
 
 

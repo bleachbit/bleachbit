@@ -104,7 +104,7 @@ def get_filesystem_type(path):
         return partitions[path]
 
     splitpath = path.split(os.sep)
-    for i in range(0, len(splitpath)-1):
+    for i in range(0, len(splitpath) - 1):
         path = os.sep.join(splitpath[:i]) + os.sep
         if path in partitions:
             return partitions[path]
@@ -114,7 +114,6 @@ def get_filesystem_type(path):
             return partitions[path]
 
     return ("unknown", "none")
-
 
 
 def open_files_lsof(run_lsof=None):
@@ -637,7 +636,7 @@ def is_dir_empty(dirname):
     """
     if hasattr(os, 'scandir'):
         if sys.version_info < (3, 6, 0):
-                    # Python 3.5 added os.scandir() without context manager.
+            # Python 3.5 added os.scandir() without context manager.
             for _ in os.scandir(dirname):
                 return False
         else:
@@ -1003,7 +1002,7 @@ def wipe_path(pathname, idle=False):
         total_bytes += f.tell()
         # If no bytes were written, then quit.
         # See https://github.com/bleachbit/bleachbit/issues/502
-        if start_free_bytes - total_bytes < 2: # Modified by Marvin to fix the issue #1051 [12/06/2020]
+        if start_free_bytes - total_bytes < 2:  # Modified by Marvin to fix the issue #1051 [12/06/2020]
             break
     # sync to disk
     sync()

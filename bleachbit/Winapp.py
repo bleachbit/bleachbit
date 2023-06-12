@@ -108,7 +108,7 @@ def winapp_expand_vars(pathname):
         if pattern.match(pathname):
             expand2 = pattern.sub(f'%{sub_repl}%', pathname)
             return expand1, os.path.expandvars(expand2)
-    return expand1,
+    return expand1
 
 
 def detect_file(pathname):
@@ -171,7 +171,7 @@ class Winapp:
                 logger.exception('parsing error in section %s', section)
             else:
                 section_done_count += 1
-                cb_progress(1.0*section_done_count/section_total_count)
+                cb_progress(1.0 * section_done_count / section_total_count)
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
