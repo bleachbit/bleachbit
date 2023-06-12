@@ -168,9 +168,7 @@ def getTestPath(path):
 
 def get_env(key):
     """Get an environment variable. If not set, returns None instead of KeyError."""
-    if not key in os.environ:
-        return None
-    return os.environ[key]
+    return None if key not in os.environ else os.environ[key]
 
 
 def have_root():

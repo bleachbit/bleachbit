@@ -45,7 +45,7 @@ def browse_folder(parent, title, multiple, stock_button):
 
     if os.name == 'nt' and not os.getenv('BB_NATIVE'):
         ret = Windows.browse_folder(parent, title)
-        return [ret] if multiple and not ret is None else ret
+        return [ret] if multiple and ret is not None else ret
 
     # fall back to GTK+
     chooser = Gtk.FileChooserDialog(transient_for=parent,
