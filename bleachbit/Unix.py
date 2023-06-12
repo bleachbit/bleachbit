@@ -63,7 +63,7 @@ class LocaleCleanerPath:
         return child
 
     def add_path_filter(self, pre, post):
-        """Adds a filter consisting of a prefix and a postfix
+        r"""Adds a filter consisting of a prefix and a postfix
         (e.g. 'foobar_' and '\.qm' to match 'foobar_en_US.utf-8.qm)"""
         try:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')

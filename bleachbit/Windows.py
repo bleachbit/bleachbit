@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""
+r"""
 Functionality specific to Microsoft Windows
 
 The Windows Registry terminology can be confusing. Take for example

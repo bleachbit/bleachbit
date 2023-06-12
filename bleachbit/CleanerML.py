@@ -226,7 +226,7 @@ class CleanerML:
         self.cleaner.add_action('localization', ActionProvider(None))
 
     def handle_cleaner_var(self, var):
-        """Handle one <var> element under <cleaner>.
+        r"""Handle one <var> element under <cleaner>.
 
         Example:
 
