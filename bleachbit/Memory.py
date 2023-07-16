@@ -62,7 +62,7 @@ def parse_swapoff(swapoff):
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
     # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
     # This matches swap devices and swap files
-    ret = re.search('^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
+    ret = re.search(r'^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
     if not ret:
         # no matches
         return None
@@ -154,10 +154,10 @@ def get_swap_size_linux(device, proc_swaps=None):
     if proc_swaps is None:
         proc_swaps = get_proc_swaps()
     line = proc_swaps.split('\n')[0]
-    if not re.search('Filename\s+Type\s+Size', line):
+    if not re.search(r'Filename\s+Type\s+Size', line):
         raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
     for line in proc_swaps.split('\n')[1:]:
-        ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
+        ret = re.search(r"%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %

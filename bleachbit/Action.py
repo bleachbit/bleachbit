@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 def has_glob(s):
     """Checks whether the string contains any glob characters"""
-    return re.search('[?*\[\]]', s) is not None
+    return re.search(r'[?*\[\]]', s) is not None
 
 
 def expand_multi_var(s, variables):
