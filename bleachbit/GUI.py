@@ -565,7 +565,7 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_dark = None
 
     def __init__(self, auto_exit, *args, **kwargs):
-        super(GUI, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self._show_splash_screen()
 
@@ -620,7 +620,7 @@ class GUI(Gtk.ApplicationWindow):
     def destroy(self):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
-        super(GUI, self).destroy()
+        super().destroy()
 
     def get_preferences_dialog(self):
         return PreferencesDialog(

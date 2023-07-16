@@ -277,7 +277,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
     def setUp(self):
         """Create test browser files."""
 
-        super(SpecialTestCase, self).setUp()
+        super().setUp()
 
         self.dir_base = self.mkdtemp(prefix='bleachbit-test-special')
 
