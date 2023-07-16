@@ -52,7 +52,7 @@ class Worker:
         """
         self.ui = ui
         self.really_delete = really_delete
-        assert(isinstance(operations, dict))
+        assert isinstance(operations, dict)
         self.operations = operations
         self.size = 0
         self.total_bytes = 0
@@ -133,7 +133,7 @@ class Worker:
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
-        assert(isinstance(operation_options, list))
+        assert isinstance(operation_options, list)
         logger.debug("clean_operation('%s'), options = '%s'",
                      operation, operation_options)
 
@@ -153,7 +153,7 @@ class Worker:
         total_size = 0
         for option_id in operation_options:
             self.size = 0
-            assert(isinstance(option_id, str))
+            assert isinstance(option_id, str)
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):

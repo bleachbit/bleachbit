@@ -91,7 +91,7 @@ def get_system_information():
     if sys.platform.startswith('darwin'):
         if hasattr(platform, 'mac_ver'):
             for key in macosx_dict:
-                if (platform.mac_ver()[0].split('.')[1] == key):
+                if platform.mac_ver()[0].split('.')[1] == key:
                     s += "\nplatform.mac_ver() = %s" % str(
                         platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
         else:

@@ -145,7 +145,7 @@ class LockedAction(ActionProvider):
 
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
-        assert(os.path.exists(self.pathname))
+        assert os.path.exists(self.pathname)
         fsize = getsize(self.pathname)
         if not fsize == 3:  # Contents is "123"
             raise RuntimeError('Locked file has size %dB (not 3B)' % fsize)
