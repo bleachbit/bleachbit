@@ -28,7 +28,7 @@ import os
 import platform
 import re
 import sys
-from configparser import NoOptionError, RawConfigParser, SafeConfigParser
+from configparser import NoOptionError, RawConfigParser
 
 from bleachbit import Log
 
