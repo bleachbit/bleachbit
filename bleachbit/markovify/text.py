@@ -19,7 +19,7 @@ DEFAULT_TRIES = 10
 class ParamError(Exception):
     pass
 
-class Text(object):
+class Text():
 
     def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
         """

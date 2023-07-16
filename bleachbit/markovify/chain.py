@@ -29,7 +29,7 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
-class Chain(object):
+class Chain():
     """
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.
