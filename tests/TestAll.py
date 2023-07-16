@@ -44,4 +44,4 @@ if __name__ == '__main__':
     if os.path.exists(testdir):
         shutil.rmtree(testdir)
 
-    sys.exit(success == False)
+    sys.exit(not success)

@@ -238,7 +238,7 @@ class PreferencesDialog:
             """Callback for removing a drive"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
-            if None == _iter:
+            if None is _iter:
                 # nothing selected
                 return
             pathname = model[_iter][0]
@@ -373,7 +373,7 @@ class PreferencesDialog:
             """Callback for removing a path"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
-            if None == _iter:
+            if None is _iter:
                 # nothing selected
                 return
             pathname = model[_iter][1]
@@ -416,7 +416,7 @@ class PreferencesDialog:
             """Callback for removing a path"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
-            if None == _iter:
+            if None is _iter:
                 # nothing selected
                 return
             pathname = model[_iter][1]

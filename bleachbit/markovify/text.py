@@ -152,7 +152,7 @@ class Text():
         test_output = kwargs.get('test_output', True)
         max_words = kwargs.get('max_words', None)
 
-        if init_state != None:
+        if init_state is not None:
             prefix = list(init_state)
             for word in prefix:
                 if word == BEGIN:
@@ -164,7 +164,7 @@ class Text():
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if max_words != None and len(words) > max_words:
+            if max_words is not None and len(words) > max_words:
                 continue
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):
