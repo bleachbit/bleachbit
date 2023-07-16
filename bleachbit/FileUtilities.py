@@ -108,7 +108,7 @@ def get_filesystem_type(path):
         path = os.sep.join(splitpath[:i]) + os.sep
         if path in partitions:
             return partitions[path]
-            
+
         path = os.sep.join(splitpath[:i])
         if path in partitions:
             return partitions[path]
@@ -959,7 +959,7 @@ def wipe_path(pathname, idle=False):
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
         writtensize = 0
-        
+
         while True:
             try:
                 if fstype != 'vfat':
@@ -970,7 +970,7 @@ def wipe_path(pathname, idle=False):
                     writtensize += f.write(blanks)
                 else:
                     break
-            
+
             except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:

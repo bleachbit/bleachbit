@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 # markovify
 # Copyright (c) 2015, Jeremy Singer-Vine
 # Origin: https://github.com/jsvine/markovify

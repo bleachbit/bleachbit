@@ -48,7 +48,7 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 ***   we will truncate the file and treat it all as missed clusters.
 ***
 ***   --Phase 2
-*** - (*) Get volume bitmap of free/allocated clusters using defrag API. 
+*** - (*) Get volume bitmap of free/allocated clusters using defrag API.
 ***   Figure out if checkpoint has made our missed clusters available
 ***   for use again (this is potentially delayed by a few seconds in NTFS).
 *** - If they have not yet been made available, wait 0.1s then repeat
@@ -317,7 +317,7 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append((cluster, cluster)) # Modified by Marvin [12/05/2020] The extents should have (start, end) format 
+                    allocated_extents.append((cluster, cluster)) # Modified by Marvin [12/05/2020] The extents should have (start, end) format
             else:
                 count_free += 1
 

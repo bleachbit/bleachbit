@@ -107,7 +107,7 @@ try:
     options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
 except KeyError:
     pass
-        
+
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree
