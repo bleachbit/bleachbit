@@ -3,10 +3,10 @@
 # Origin: https://github.com/jsvine/markovify
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
-import random
-import operator
 import bisect
 import json
+import operator
+import random
 
 # Python3 compatibility
 try: # pragma: no cover

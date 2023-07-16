@@ -25,14 +25,15 @@ Test case for application level functions
 
 
 import os
-import sys
 import subprocess
-from unittest import mock, SkipTest
+import sys
+from unittest import SkipTest, mock
 
 try:
     import gi
     gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk, GLib, GObject
+    from gi.repository import GLib, GObject, Gtk
+
     from bleachbit.GUI import Bleachbit
     HAVE_GTK = True
 except ImportError:
@@ -132,8 +133,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             """
             We need a synchronous call the ShellExecuteEx so we can assert after it finishes.
             """
-            from win32com.shell import shell, shellcon
             import win32event
+            from win32com.shell import shell, shellcon
 
             bleachbit.Windows.shell.ShellExecuteEx = original
             rc = shell.ShellExecuteEx(lpVerb=lpVerb,

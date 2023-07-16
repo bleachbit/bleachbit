@@ -22,13 +22,12 @@
 Store and retrieve user preferences
 """
 
-import bleachbit
-from bleachbit import General
-from bleachbit import _
-
 import logging
 import os
 import re
+
+import bleachbit
+from bleachbit import General, _
 
 logger = logging.getLogger(__name__)
 

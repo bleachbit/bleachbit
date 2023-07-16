@@ -23,14 +23,14 @@ Test case for module Worker
 """
 
 
-from tests import TestCleaner, common
-from bleachbit import CLI, Command
-from bleachbit.Action import ActionProvider
-from bleachbit.Worker import *
-
 import os
 import tempfile
 import unittest
+
+from bleachbit import CLI, Command
+from bleachbit.Action import ActionProvider
+from bleachbit.Worker import *
+from tests import TestCleaner, common
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -142,6 +142,7 @@ class LockedAction(ActionProvider):
         # on Windows.
         fd = os.open(self.pathname, os.O_RDWR)
         from bleachbit.FileUtilities import getsize
+
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert(os.path.exists(self.pathname))

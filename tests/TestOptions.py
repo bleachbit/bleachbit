@@ -22,11 +22,11 @@
 Test case for module Options
 """
 
-from tests import common
+import os
+
 import bleachbit.Options
 from bleachbit import NoOptionError
-
-import os
+from tests import common
 
 
 class OptionsTestCase(common.BleachbitTestCase):

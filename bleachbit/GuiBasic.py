@@ -21,9 +21,9 @@
 Basic GUI code
 """
 
-from bleachbit import _
-
 import os
+
+from bleachbit import _
 
 try:
     import gi
@@ -34,7 +34,7 @@ except ModuleNotFoundError as e:
     print('*'*60)
     raise e
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk  # keep after gi.require_version()
+from gi.repository import Gdk, Gtk  # keep after gi.require_version()
 
 if os.name == 'nt':
     from bleachbit import Windows

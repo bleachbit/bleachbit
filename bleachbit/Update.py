@@ -22,9 +22,6 @@
 Check for updates via the Internet
 """
 
-import bleachbit
-from bleachbit import _
-
 import hashlib
 import logging
 import os
@@ -33,9 +30,11 @@ import platform
 import socket
 import sys
 import xml.dom.minidom
-from urllib.request import build_opener
 from urllib.error import URLError
+from urllib.request import build_opener
 
+import bleachbit
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
@@ -116,6 +115,7 @@ def user_agent():
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
     from gi.repository import Gtk
+
     from bleachbit.GuiBasic import open_url
     dlg = Gtk.Dialog(title=_("Update BleachBit"),
                      transient_for=parent,

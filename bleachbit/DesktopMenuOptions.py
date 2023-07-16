@@ -1,7 +1,7 @@
-from bleachbit.Options import options
-
 import os
 from pathlib import Path
+
+from bleachbit.Options import options
 
 
 def install_kde_service_menu_file():

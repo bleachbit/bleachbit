@@ -24,13 +24,13 @@
 Preferences dialog
 """
 
-from bleachbit import _, _p, online_update_notification_enabled
-from bleachbit.Options import options
-from bleachbit import GuiBasic
-
-from gi.repository import Gtk
 import logging
 import os
+
+from gi.repository import Gtk
+
+from bleachbit import GuiBasic, _, _p, online_update_notification_enabled
+from bleachbit.Options import options
 
 if 'nt' == os.name:
     from bleachbit import Windows
@@ -104,7 +104,8 @@ class PreferencesDialog:
             from bleachbit.Log import set_root_log_level
             set_root_log_level(options.get('debug'))
         if 'kde_shred_menu_option' == path:
-            from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
+            from bleachbit.DesktopMenuOptions import \
+                install_kde_service_menu_file
             install_kde_service_menu_file()
 
     def __general_page(self):

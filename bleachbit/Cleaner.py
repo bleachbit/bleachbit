@@ -26,18 +26,16 @@ import logging
 import os.path
 import re
 import sys
-
-from bleachbit import _
-from bleachbit.FileUtilities import children_in_directory
-from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
-
-
 # Suppress GTK warning messages while running in CLI #34
 import warnings
+
+from bleachbit import Command, FileUtilities, Memory, Special, _
+from bleachbit.FileUtilities import children_in_directory
+from bleachbit.Options import options
+
 warnings.simplefilter("ignore", Warning)
 try:
-    from bleachbit.GuiBasic import Gtk, Gdk
+    from bleachbit.GuiBasic import Gdk, Gtk
     HAVE_GTK = Gdk.get_default_root_window() is not None
 except (ImportError, RuntimeError, ValueError) as e:
     # ImportError happens when GTK is not installed.

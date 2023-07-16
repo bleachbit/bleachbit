@@ -23,13 +23,14 @@
 Test case for module Unix
 """
 
-from tests import common
-from bleachbit.Unix import *
-
-import mock
 import os
 import sys
 import unittest
+
+import mock
+
+from bleachbit.Unix import *
+from tests import common
 
 
 class UnixTestCase(common.BleachbitTestCase):

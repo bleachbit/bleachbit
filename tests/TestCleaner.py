@@ -29,7 +29,6 @@ from xml.dom.minidom import parseString
 
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
-
 from tests import common
 
 logger = logging.getLogger('bleachbit')

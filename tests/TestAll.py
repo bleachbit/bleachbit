@@ -23,11 +23,10 @@ Run all test suites
 """
 
 import os
-import unittest
+import shutil
 import sys
 import tempfile
-import shutil
-
+import unittest
 
 if __name__ == '__main__':
     testdir = tempfile.mkdtemp(prefix='TestAll '+__name__)

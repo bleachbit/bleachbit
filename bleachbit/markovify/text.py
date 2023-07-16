@@ -3,10 +3,12 @@
 # Origin: https://github.com/jsvine/markovify
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
-import re
 import random
+import re
+
+from .chain import BEGIN, Chain
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN
+
 # BleachBit does not use unidecode
 #from unidecode import unidecode
 

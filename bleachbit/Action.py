@@ -23,13 +23,14 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
-
 import glob
 import logging
 import os
 import re
+
+from bleachbit import (Command, DeepScan, FileUtilities, General, Special, _,
+                       fs_scan_re_flags)
+
 if 'posix' == os.name:
     from bleachbit import Unix
 

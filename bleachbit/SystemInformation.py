@@ -23,12 +23,12 @@
 Show system information
 """
 
-import bleachbit
-
 import locale
 import os
 import platform
 import sys
+
+import bleachbit
 
 if 'nt' == os.name:
     from win32com.shell import shell

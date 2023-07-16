@@ -26,14 +26,12 @@ else is counted as special commands: run any external process, edit
 JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
-from bleachbit import _
-from bleachbit import FileUtilities
-
 import logging
 import os
 import types
-
 from sqlite3 import DatabaseError
+
+from bleachbit import FileUtilities, _
 
 if 'nt' == os.name:
     import bleachbit.Windows

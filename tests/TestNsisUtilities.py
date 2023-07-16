@@ -20,14 +20,15 @@
 
 
 import os
+
 import mock
 
-from windows.NsisUtilities import (_generate_add_remove_nsis_expressions,
-                                   _walk_with_parent_directory_and_filepaths,
-                                   write_nsis_expressions_to_files,
-                                   _REBOOTOK_FILE_EXTENSIONS,
-                                   _generate_delete_expressions)
 from tests import common
+from windows.NsisUtilities import (_REBOOTOK_FILE_EXTENSIONS,
+                                   _generate_add_remove_nsis_expressions,
+                                   _generate_delete_expressions,
+                                   _walk_with_parent_directory_and_filepaths,
+                                   write_nsis_expressions_to_files)
 
 
 @common.skipUnlessWindows

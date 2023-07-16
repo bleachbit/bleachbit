@@ -23,10 +23,6 @@
 Integration specific to Unix-like operating systems
 """
 
-import bleachbit
-from bleachbit import FileUtilities, General
-from bleachbit import _
-
 import glob
 import logging
 import os
@@ -34,6 +30,9 @@ import re
 import shlex
 import subprocess
 import sys
+
+import bleachbit
+from bleachbit import FileUtilities, General, _
 
 logger = logging.getLogger(__name__)
 

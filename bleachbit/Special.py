@@ -22,12 +22,12 @@
 Cross-platform, special cleaning operations
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities
-
 import logging
 import os.path
 from urllib.parse import urlparse, urlunparse
+
+from bleachbit import FileUtilities
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 

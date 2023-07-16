@@ -22,14 +22,13 @@
 Perform the preview or delete operations
 """
 
-from bleachbit import DeepScan, FileUtilities
-from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
-
 import logging
 import math
-import sys
 import os
+import sys
+
+from bleachbit import DeepScan, FileUtilities, _, ngettext
+from bleachbit.Cleaner import backends
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +96,7 @@ class Worker:
         except Exception as e:
             # 2 = does not exist
             # 13 = permission denied
-            from errno import ENOENT, EACCES
+            from errno import EACCES, ENOENT
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
                 exc_message = str(e)

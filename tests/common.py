@@ -28,11 +28,12 @@ import shutil
 import sys
 import tempfile
 import unittest
+
 import mock
+
 if 'win32' == sys.platform:
     import winreg
     import win32gui
-
 
 import bleachbit
 import bleachbit.Options

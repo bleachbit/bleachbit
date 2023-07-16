@@ -23,16 +23,18 @@
 Test case for module GUI
 """
 
-import mock
 import os
-import unittest
 import time
 import types
+import unittest
+
+import mock
 
 try:
     import gi
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk
+
     from bleachbit.GUI import Bleachbit
     HAVE_GTK = True
 except ImportError:
@@ -41,7 +43,6 @@ except ImportError:
 import bleachbit
 from bleachbit import _
 from bleachbit.Options import options
-
 from tests import common
 
 bleachbit.online_update_notification_enabled = False

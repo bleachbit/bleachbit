@@ -25,12 +25,12 @@ Code that is commonly shared throughout BleachBit
 import gettext
 import locale
 import os
+import platform
 import re
 import sys
-import platform
+from configparser import NoOptionError, RawConfigParser, SafeConfigParser
 
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
 APP_VERSION = "4.4.2"
 APP_NAME = "BleachBit"

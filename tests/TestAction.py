@@ -23,15 +23,16 @@
 Test cases for module Action
 """
 
-from bleachbit.Action import *
-from tests import common
-
 import shutil
 import sys
 import tempfile
 import unittest
-import mock
 from xml.dom.minidom import parseString
+
+import mock
+
+from bleachbit.Action import *
+from tests import common
 
 
 def _action_str_to_commands(action_str):

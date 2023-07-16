@@ -23,15 +23,13 @@
 Wipe memory
 """
 
-from bleachbit import FileUtilities
-from bleachbit import General
-from bleachbit import _
-
 import logging
 import os
 import re
 import subprocess
 import sys
+
+from bleachbit import FileUtilities, General, _
 
 logger = logging.getLogger(__name__)
 
@@ -221,7 +219,7 @@ def physical_free_windows():
     """Return physical free memory on Windows"""
 
     from ctypes import c_long, c_ulonglong
-    from ctypes.wintypes import Structure, sizeof, windll, byref
+    from ctypes.wintypes import Structure, byref, sizeof, windll
 
     class MEMORYSTATUSEX(Structure):
         _fields_ = [

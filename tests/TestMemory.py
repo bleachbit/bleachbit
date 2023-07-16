@@ -22,10 +22,10 @@
 Test case for module Memory
 """
 
-from tests import common
-from bleachbit.Memory import *
-
 import unittest
+
+from bleachbit.Memory import *
+from tests import common
 
 
 class MemoryTestCase(common.BleachbitTestCase):

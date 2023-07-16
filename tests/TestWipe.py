@@ -21,10 +21,6 @@
 Test FileUtilities.wipe_path
 """
 
-from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
-from bleachbit.General import run_external
-from tests import common
-
 import logging
 import os
 import sys
@@ -32,6 +28,10 @@ import tempfile
 import time
 import traceback
 import unittest
+
+from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
+from bleachbit.General import run_external
+from tests import common
 
 logger = logging.getLogger('bleachbit')
 

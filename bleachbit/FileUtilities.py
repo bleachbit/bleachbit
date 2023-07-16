@@ -23,9 +23,6 @@
 File-related utilities
 """
 
-import bleachbit
-from bleachbit import _
-
 import atexit
 import errno
 import glob
@@ -37,16 +34,20 @@ import random
 import re
 import stat
 import string
-import sys
 import subprocess
+import sys
 import tempfile
 import time
+
+import bleachbit
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
-    from pywintypes import error as pywinerror
     import win32file
+    from pywintypes import error as pywinerror
+
     import bleachbit.Windows
     os_path_islink = os.path.islink
     os.path.islink = lambda path: os_path_islink(
@@ -60,6 +61,7 @@ try:
     from scandir import walk
     if 'nt' == os.name:
         import scandir
+
         import bleachbit.Windows
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
@@ -458,8 +460,8 @@ def exe_exists(pathname):
 
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
-    import sqlite3
     import contextlib
+    import sqlite3
     with contextlib.closing(sqlite3.connect(path)) as conn:
         cursor = conn.cursor()
 
@@ -805,9 +807,10 @@ def wipe_contents(path, truncate=True):
         from win32com.shell.shell import IsUserAnAdmin
 
     if 'nt' == os.name and IsUserAnAdmin():
-        from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
+
         from bleachbit import _
+        from bleachbit.WindowsWipe import UnsupportedFileSystemError, file_wipe
         try:
             file_wipe(path)
         except pywinerror as e:

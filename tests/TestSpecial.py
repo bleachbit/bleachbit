@@ -23,15 +23,15 @@
 Test case for module Special
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities, Special
-from tests import common
-
+import contextlib
 import os
 import os.path
 import shutil
 import sqlite3
-import contextlib
+
+from bleachbit import FileUtilities, Special
+from bleachbit.Options import options
+from tests import common
 
 chrome_bookmarks = b"""
 {

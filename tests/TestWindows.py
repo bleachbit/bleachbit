@@ -23,23 +23,24 @@
 Test case for module Windows
 """
 
-from tests import common
-
-from bleachbit.FileUtilities import extended_path, extended_path_undo
-from bleachbit.Windows import *
-from bleachbit import logger
-
 import os
 import platform
 import shutil
 import sys
 import tempfile
 import unittest
-import mock
 from decimal import Decimal
+
+import mock
+
+from bleachbit import logger
+from bleachbit.FileUtilities import extended_path, extended_path_undo
+from bleachbit.Windows import *
+from tests import common
 
 if 'win32' == sys.platform:
     import winreg
+
     from win32com.shell import shell
 
 
@@ -373,9 +374,11 @@ class WindowsTestCase(common.BleachbitTestCase):
         There are more tests in testwipe.py
         """
 
-        from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from bleachbit.Windows import elevate_privileges
         from win32con import GENERIC_WRITE, WRITE_DAC
+
+        from bleachbit.Windows import elevate_privileges
+        from bleachbit.WindowsWipe import (close_file, file_make_sparse,
+                                           file_wipe, open_file)
 
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
@@ -393,8 +396,8 @@ class WindowsTestCase(common.BleachbitTestCase):
                 return shortname
 
             def _deny_access(fh):
-                import win32security
                 import ntsecuritycon as con
+                import win32security
 
                 user, _, _ = win32security.LookupAccountName(
                     "", win32api.GetUserName())

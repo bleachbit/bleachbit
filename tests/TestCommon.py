@@ -22,10 +22,10 @@
 Test case for Common
 """
 
-from tests import common
-import bleachbit
-
 import os
+
+import bleachbit
+from tests import common
 
 
 class CommonTestCase(common.BleachbitTestCase):
