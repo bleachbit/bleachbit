@@ -47,7 +47,15 @@
   ;Name and file
   !define prodname "BleachBit"
   !define COMPANY_NAME "BleachBit" ; # used by NsisMultiUser
+  !define PROG_AUTHOR "Andrew Ziem"
+  !define PROG_COPYRIGHT "Andrew Ziem"
+  BrandingText "${PROG_COPYRIGHT}"
   Name "${prodname}"
+  ; ----------------------------- disable warning overwrite default language strings (wrn 6030)
+  ;!pragma warning disable 6030
+  ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
+  ;!pragma warning disable 6040
+
 !ifdef NoTranslations
   OutFile "${prodname}-${VERSION}-setup-English.exe"
 !else
@@ -109,22 +117,29 @@ Unicode true
 !define File_VERSION ${VERSION}.0
 
 !ifdef NoTranslations
-  VIAddVersionKey /LANG=1033 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=1033 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=1033 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=1033 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=1033 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=1033 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=1033 "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "Comments"        ""
+  VIAddVersionKey /LANG=1033 "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=1033 "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=1033 "LegalCopyright"  "${PROG_COPYRIGHT}"
+  VIAddVersionKey /LANG=1033 "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=1033 "FileDescription" "${prodname} Setup"
 !endif
 
 !ifndef NoTranslations
-  VIAddVersionKey /LANG=0 "ProductName" "BleachBit"
-  VIAddVersionKey /LANG=0 "CompanyName" "BleachBit.org"
-  VIAddVersionKey /LANG=0 "LegalCopyright" "Andrew Ziem"
-  VIAddVersionKey /LANG=0 "FileDescription" "BleachBit Setup"
-  VIAddVersionKey /LANG=0 "ProductVersion" "${File_VERSION}"
-  VIAddVersionKey /LANG=0 "FileVersion" "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "ProductName"     "${prodname}"
+  VIAddVersionKey /LANG=0    "ProductVersion"  "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "Comments"        ""
+  VIAddVersionKey /LANG=0    "CompanyName"     "BleachBit.org"
+  VIAddVersionKey /LANG=0    "LegalTrademarks" "${PROG_AUTHOR}"
+  VIAddVersionKey /LANG=0    "LegalCopyright"  "${PROG_COPYRIGHT}"
+  VIAddVersionKey /LANG=0    "FileVersion"     "${File_VERSION}"
+  VIAddVersionKey /LANG=0    "FileDescription" "${prodname} Setup"
 !endif
+
+; VIAddVersionKey "InternalName"       ""
+; VIAddVersionKey "OriginalFilename"   ""
 
 VIProductVersion ${File_VERSION}
 VIFileVersion ${File_VERSION}
@@ -165,6 +180,7 @@ VIFileVersion ${File_VERSION}
 !include LogicLib.nsh
 !include StdUtils.nsh
 
+Caption "$(INSTALLER_CAPTION)"
 
 ;--------------------------------
 ;Interface Settings
@@ -206,9 +222,9 @@ VIFileVersion ${File_VERSION}
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
-!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
+;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
-;!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
+!define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
 !define MUI_FINISHPAGE_LINK_LOCATION "https://www.bleachbit.org"
 ;Later:
 ;!define MUI_FINISHPAGE_LINK_LOCATION "${PRODURL}"
@@ -320,7 +336,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Default section
-Section Core (Required)
+Section "$(SECTION_CORE_NAME)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
@@ -339,28 +355,30 @@ Section Core (Required)
         "URLInfoAbout" "https://www.bleachbit.org/"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+                 "DisplayName" "${prodname}"
+  
     # Build cache now while there is a GUI progress bar.
-    DetailPrint "The next step is building font cache, during which you may see a black window."
-    DetailPrint "It usually finishes in one minute, but sometimes it takes ten minutes."
+    DetailPrint "$(MULTIPRINT1)"
+    DetailPrint "$(MULTIPRINT2)"
     ExecWait '"$instdir\fc-cache.exe"'
 SectionEnd
 
 
-SectionGroup /e Shortcuts
-    Section "Start menu" SectionStart
+SectionGroup /e "$(SECTION_SHORTCUTS_NAME)" SectionShortCuts
+    Section "$(SECTION_START_MENU_NAME)" SectionStart
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortCut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\${prodname}.exe" \
             "" "$INSTDIR\${prodname}.exe"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} No UAC.lnk" \
+        CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_NO_UAC).lnk" \
             "$INSTDIR\${prodname}.exe" \
             "--no-uac --gui" "$INSTDIR\${prodname}.exe"
-        CreateShortCut "$SMPROGRAMS\${prodname}\${prodname} Debugging Terminal.lnk" \
+        CreateShortCut "$SMPROGRAMS\${prodname}\$(SHORTCUT_DEBUGGING_TERMINAL).lnk" \
             "$INSTDIR\${prodname}_console.exe" "" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
     SectionEnd
 
-    Section "Desktop" SectionDesktop
+    Section "$(SECTION_DESKTOP_NAME)" SectionDesktop
         IfSilent 0 addDesktopShortcut
         ${GetParameters} $R0
         ${StrCase} $R0 $R0 "L" # "L" means lowercase
@@ -375,7 +393,7 @@ SectionGroup /e Shortcuts
 
     SectionEnd
 
-    Section /o "Quick launch" SectionQuickLaunch
+    Section /o "$(SECTION_QUICK_LAUNCH_NAME)" SectionQuickLaunch
         SetOutPath "$INSTDIR\" # this affects CreateShortCut's 'Start in' directory
         CreateShortcut "$QUICKLAUNCH\BleachBit.lnk" "$INSTDIR\${prodname}.exe"
         Call RefreshShellIcons
@@ -385,16 +403,16 @@ SectionGroupEnd
 
 
 !ifndef NoTranslations
-Section Translations
+Section "$(SECTION_TRANSLATIONS_NAME)" SectionTranslations
   !include LocaleToInstall.nsh
 SectionEnd
 !endif
 
 ; Section for making Shred Integration optional
 !ifndef NoSectionShred
-  Section "Integrate Shred" SectionShred
+  Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" 'Shred with BleachBit'
+    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
     WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
     WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
@@ -425,8 +443,7 @@ Function .onInit
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${prodname} is already installed.  Click 'OK' to uninstall the old version before \
-    upgrading, or click 'Cancel' to abort the upgrade." \
+    "$(ALREADY_INSTALLED)" \
     /SD IDOK \
     IDOK uninstall_old
 
@@ -449,9 +466,9 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-UninstallText "BleachBit will be uninstalled from the following folder.  Click Uninstall to start the uninstallation.  WARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
+UninstallText "$(UNINSTALL_TEXT)"
 
-Section "Uninstall"
+Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
 
     !ifndef NoTranslations
@@ -480,6 +497,21 @@ Section "Uninstall"
     !insertmacro MULTIUSER_RegistryRemoveInstallInfo
 SectionEnd
 
+;-------------------------------- Set SectionDescription
+
+  ;Assign descriptions to sections
+  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}         "$(SECTION_CORE_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}    "$(SECTION_SHORTCUTS_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}        "$(SECTION_START_MENU_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}      "$(SECTION_DESKTOP_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch}  "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
+    !ifndef NoTranslations
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)" 
+    !endif
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUninstall}    "$(SECTION_UNINSTALL_DESCRIPTION)" 
+  !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Uninstaller Functions
@@ -491,4 +523,3 @@ Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
 
 FunctionEnd
-

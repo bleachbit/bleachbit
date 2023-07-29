@@ -440,9 +440,16 @@ class TreeInfoModel:
                                                               self.on_row_changed)
 
     def sort_func(self, model, iter1, iter2, _user_data):
-        """Sort the tree by the display name"""
-        value1 = model[iter1][0].lower()
-        value2 = model[iter2][0].lower()
+        """Sort the tree by the id
+
+        Index 0 is the display name
+        Index 2 is the ID (e.g., cookies, vacuum).
+
+        Sorting by ID is functionally important, so that vacuuming is done
+        last, even for other languages. See https://github.com/bleachbit/bleachbit/issues/441
+        """
+        value1 = model[iter1][2].lower()
+        value2 = model[iter2][2].lower()
         if value1 == value2:
             return 0
         if value1 > value2:

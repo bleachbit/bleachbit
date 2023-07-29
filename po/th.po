@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-11-11 08:53-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-25 09:59-0700\n"
 "PO-Revision-Date: 2022-04-14 11:11+0000\n"
 "Last-Translator: Sukhon Tanuwatparitpol <steamhrk@gmail.com>\n"
-"Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/>"
-"\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/"
+">\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,8 +45,8 @@ msgstr "เว็บเบราว์เซอร์"
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 #: ../cleaners/beagle.xml ../cleaners/xine.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
-#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:195
-#: ../bleachbit/Cleaner.py:280
+#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:277
 msgid "Cache"
 msgstr "แคช"
 
@@ -79,9 +79,7 @@ msgstr "คุกกี้"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
-"ลบคุกกี้ ซึ่งมีข้อมูล เช่น การตั้งค่าเว็บไซต์ การยืนยันตัวบุคคล "
-"และการติดตามการระบุตัวตน"
+msgstr "ลบคุกกี้ ซึ่งมีข้อมูล เช่น การตั้งค่าเว็บไซต์ การยืนยันตัวบุคคล และการติดตามการระบุตัวตน"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -187,8 +185,7 @@ msgstr "รหัสผ่าน"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr ""
-"ฐานข้อมูลชื่อผู้ใช้และรหัสผ่าน รวมถึงรายชื่อเว็บไซต์ที่ไม่ควรเก็บรหัสผ่าน"
+msgstr "ฐานข้อมูลชื่อผู้ใช้และรหัสผ่าน รวมถึงรายชื่อเว็บไซต์ที่ไม่ควรเก็บรหัสผ่าน"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -220,9 +217,7 @@ msgstr "รวมเข้าด้วยกัน"
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
-msgstr ""
-"ล้างการกระจายตัวของฐานข้อมูลเพื่อลดพื้นที่และเพิ่มความเร็วโดยไม่ต้องลบข้อมูลใ"
-"ด ๆ"
+msgstr "ล้างการกระจายตัวของฐานข้อมูลเพื่อลดพื้นที่และเพิ่มความเร็วโดยไม่ต้องลบข้อมูลใด ๆ"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -247,8 +242,8 @@ msgstr "ตัวจัดการแฟ้มจัดเก็บ"
 #: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
 #: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
 #: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:248
-#: ../bleachbit/Cleaner.py:257
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:245
+#: ../bleachbit/Cleaner.py:254
 msgid "Delete the usage history"
 msgstr "ลบประวัติการใช้งาน"
 
@@ -256,7 +251,7 @@ msgstr "ลบประวัติการใช้งาน"
 #: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
 #: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
 #: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:345
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
 msgid "Temporary files"
 msgstr "แฟ้มชั่วคราว"
 
@@ -264,7 +259,7 @@ msgstr "แฟ้มชั่วคราว"
 #: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
 #: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
 #: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:345
+#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
 msgid "Delete the temporary files"
 msgstr "ลบแฟ้มชั่วคราว"
 
@@ -283,7 +278,7 @@ msgstr "โปรแกรมถ่ายโอนไฟล์"
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
 #: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:196
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:193
 msgid "Most recently used"
 msgstr "ที่ใช้ล่าสุด"
 
@@ -321,7 +316,7 @@ msgstr "ลบแฟ้มสำรอง"
 #: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:311
+#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:308
 msgid "Logs"
 msgstr "บันทึก"
 
@@ -332,7 +327,7 @@ msgstr "บันทึก"
 #: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../bleachbit/Cleaner.py:311
+#: ../bleachbit/Cleaner.py:308
 msgid "Delete the logs"
 msgstr "ลบบันทึก"
 
@@ -348,9 +343,9 @@ msgstr "ลบบันทึก"
 #: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/dnf.xml ../cleaners/beagle.xml
 #: ../cleaners/xine.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:195
-#: ../bleachbit/Cleaner.py:280 ../bleachbit/Cleaner.py:314
-#: ../bleachbit/Cleaner.py:316
+#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../bleachbit/Cleaner.py:277 ../bleachbit/Cleaner.py:311
+#: ../bleachbit/Cleaner.py:313
 msgid "Delete the cache"
 msgstr "ลบแคช"
 
@@ -386,13 +381,13 @@ msgstr "เครื่องมือแก้ไข"
 
 #: ../cleaners/gedit.xml ../cleaners/gwenview.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/kde.xml
-#: ../bleachbit/Cleaner.py:293 ../bleachbit/Cleaner.py:488
+#: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:485
 msgid "Recent documents list"
 msgstr "รายชื่อเอกสารล่าสุด"
 
 #: ../cleaners/gedit.xml ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
 #: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:197 ../bleachbit/Cleaner.py:294
+#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:291
 msgid "Delete the list of recently used documents"
 msgstr "ลบรายชื่อเอกสารที่ใช้ล่าสุด"
 
@@ -471,7 +466,7 @@ msgstr "ลบทอร์เรนท์ (เฉพาะข้อมูลเ�
 msgid "Statistics"
 msgstr "สถิติ"
 
-#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:313
+#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
 msgid "Delete the file"
 msgstr "ลบแฟ้มนี้"
 
@@ -578,15 +573,14 @@ msgstr "สถานที่"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
-msgstr ""
-"ฐานข้อมูลของ URL รวมถึงบุ๊กมาร์ก, Favicons และประวัติการเข้าชมเว็บไซต์"
+msgstr "ฐานข้อมูลของ URL รวมถึงบุ๊กมาร์ก, Favicons และประวัติการเข้าชมเว็บไซต์"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
 msgstr "ตัวเลือกนี้จะลบบุ๊กมาร์กทั้งหมด"
 
 #: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../bleachbit/Cleaner.py:200
+#: ../bleachbit/Cleaner.py:197
 msgid "Office suite"
 msgstr "ชุดโปรแกรมสำนักงาน"
 
@@ -612,7 +606,7 @@ msgstr "วารสารระบบ"
 msgid "Clean old system journals"
 msgstr "ล้างวารสารระบบเก่า"
 
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:313
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
 msgid "Memory dump"
 msgstr "memory dump"
 
@@ -635,8 +629,7 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"ลบแคชของเว็บซึ่งช่วยลดเวลาในการแสดงหน้าที่เข้าชมซ้ำ นอกจากนี้ยังล้าง GIF "
-"ที่ชื่นชอบอีกด้วย"
+"ลบแคชของเว็บซึ่งช่วยลดเวลาในการแสดงหน้าที่เข้าชมซ้ำ นอกจากนี้ยังล้าง GIF ที่ชื่นชอบอีกด้วย"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -718,8 +711,7 @@ msgstr "ลบการบันทึกเสียงและวิดีโ
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
-"ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
+msgstr "ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
@@ -746,16 +738,14 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"ตรวจสอบรายการแพ็กเกจที่จะถูกลบอย่างระมัดระวังโดยเรียกใช้ \"dnf list "
-"autoremove\""
+"ตรวจสอบรายการแพ็กเกจที่จะถูกลบอย่างระมัดระวังโดยเรียกใช้ \"dnf list autoremove\""
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Search tool"
 msgstr "เครื่องมือค้นหา"
 
 #: ../cleaners/recoll.xml
-msgid ""
-"Delete the search index, a database of words and the files they contain"
+msgid "Delete the search index, a database of words and the files they contain"
 msgstr "ลบดัชนีการค้นหา ฐานข้อมูลของคำ และไฟล์ที่อยู่ในนั้น"
 
 #: ../cleaners/gimp.xml
@@ -809,8 +799,8 @@ msgstr ""
 #: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
 #: ../bleachbit/Action.py:412 ../bleachbit/Action.py:425
 #: ../bleachbit/Action.py:438 ../bleachbit/Action.py:503
-#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:203
-#: ../bleachbit/Command.py:237
+#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:207
+#: ../bleachbit/Command.py:241
 msgid "Clean file"
 msgstr "ลบแฟ้ม"
 
@@ -818,7 +808,7 @@ msgstr "ลบแฟ้ม"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:915 ../bleachbit/GUI.py:1022
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:932 ../bleachbit/GUI.py:1039
 msgid "Clean"
 msgstr "ล้าง"
 
@@ -828,8 +818,9 @@ msgid "Run external command: %s"
 msgstr "เรียกใช้คำสั่งภายนอก: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, python-format
-msgid "Downloading url failed: %s"
+#, fuzzy, python-format
+#| msgid "Downloading url failed: %s"
+msgid "Downloading URL failed: %s"
 msgstr "ดาวน์โหลด URL ไม่สำเร็จ: %s"
 
 #: ../bleachbit/CleanerML.py:134
@@ -858,8 +849,7 @@ msgstr "เกิดข้อผิดพลาดในการอ่านเ
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
-"เครื่องมือวทำความสะอาดไม่สามารถใช้งานได้บนระบบปฏิบัติการนี้ "
-"เนื่องจากไม่มีการดำเนินการ: %s"
+"เครื่องมือวทำความสะอาดไม่สามารถใช้งานได้บนระบบปฏิบัติการนี้ เนื่องจากไม่มีการดำเนินการ: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -868,142 +858,141 @@ msgstr ""
 #. Firefox.
 #. More information:
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:278
+#: ../bleachbit/Cleaner.py:275
 msgid "Broken desktop files"
 msgstr "แฟ้มเดส์กท็อปใช้งานไม่ได้"
 
-#: ../bleachbit/Cleaner.py:279
+#: ../bleachbit/Cleaner.py:276
 msgid "Delete broken application menu entries and file associations"
 msgstr "ลบรายการเมนูแอปพลิเคชันที่ใช้งานไม่ได้และการเชื่อมโยงแฟ้ม"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:283
+#: ../bleachbit/Cleaner.py:280
 msgid "Localizations"
 msgstr "แฟ้มภาษา"
 
-#: ../bleachbit/Cleaner.py:284
+#: ../bleachbit/Cleaner.py:281
 msgid "Delete files for unwanted languages"
 msgstr "ลบแฟ้มสำหรับภาษาที่ไม่ต้องการ"
 
-#: ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Cleaner.py:283
 msgid "Configure this option in the preferences."
 msgstr "ตั้งค่าตัวเลือกนี้ในเมนูการตั้งค่า"
 
-#: ../bleachbit/Cleaner.py:292
+#: ../bleachbit/Cleaner.py:289
 msgid "Rotated logs"
 msgstr "บันทึกการหมุนเวียน"
 
-#: ../bleachbit/Cleaner.py:292
+#: ../bleachbit/Cleaner.py:289
 msgid "Delete old system logs"
 msgstr "ลบบันทึกเก่าของระบบ"
 
-#: ../bleachbit/Cleaner.py:295
+#: ../bleachbit/Cleaner.py:292
 msgid "Trash"
 msgstr "ถังขยะ"
 
-#: ../bleachbit/Cleaner.py:295
+#: ../bleachbit/Cleaner.py:292
 msgid "Empty the trash"
 msgstr "ล้างถังขยะ"
 
-#: ../bleachbit/Cleaner.py:301 ../bleachbit/Cleaner.py:446
+#: ../bleachbit/Cleaner.py:298 ../bleachbit/Cleaner.py:443
 #: ../bleachbit/Worker.py:199
 msgid "Memory"
 msgstr "ความจำ"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:303
+#: ../bleachbit/Cleaner.py:300
 msgid "Wipe the swap and free memory"
 msgstr "ลบพื้นที่สลับและคืนหน่วยความจำ"
 
-#: ../bleachbit/Cleaner.py:305
+#: ../bleachbit/Cleaner.py:302
 msgid "This option is experimental and may cause system problems."
 msgstr "ตัวเลือกนี้เป็นการทดลองและอาจทำให้ระบบมีปัญหา"
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:316
+#: ../bleachbit/Cleaner.py:313
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:318
+#: ../bleachbit/Cleaner.py:315
 msgid "Recycle bin"
 msgstr "ถังขยะ"
 
-#: ../bleachbit/Cleaner.py:318 ../bleachbit/Cleaner.py:603
+#: ../bleachbit/Cleaner.py:315 ../bleachbit/Cleaner.py:600
 msgid "Empty the recycle bin"
 msgstr "ล้างถังรีไซเคิล"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:321
+#: ../bleachbit/Cleaner.py:318
 msgid "Update uninstallers"
 msgstr "ล้างโปรแกรมถอนการติดตั้ง"
 
-#: ../bleachbit/Cleaner.py:322
+#: ../bleachbit/Cleaner.py:319
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"ลบโปรแกรมถอนการติดตั้งสำหรับการอัปเดตของ Microsoft รวมถึง Hotfix, Service "
-"Pack และการอัปเดต Internet Explorer"
+"ลบโปรแกรมถอนการติดตั้งสำหรับการอัปเดตของ Microsoft รวมถึง Hotfix, Service Pack "
+"และการอัปเดต Internet Explorer"
 
-#: ../bleachbit/Cleaner.py:329 ../bleachbit/Cleaner.py:548
+#: ../bleachbit/Cleaner.py:326 ../bleachbit/Cleaner.py:545
 msgid "Clipboard"
 msgstr "คลิปบอร์ด"
 
-#: ../bleachbit/Cleaner.py:330
-msgid ""
-"The desktop environment's clipboard used for copy and paste operations"
+#: ../bleachbit/Cleaner.py:327
+msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr "คลิปบอร์ดของสภาพแวดล้อมเดสก์ท็อปที่ใช้สำหรับการคัดลอกและวาง"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:337 ../bleachbit/GuiPreferences.py:65
+#: ../bleachbit/Cleaner.py:334 ../bleachbit/GuiPreferences.py:65
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: ../bleachbit/Cleaner.py:338
+#: ../bleachbit/Cleaner.py:335
 msgid "Delete user-specified files and folders"
 msgstr "ลบแฟ้มและโฟลเดอร์ที่ผู้ใช้ระบุ"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:340
+#: ../bleachbit/Cleaner.py:337
 msgid "Free disk space"
 msgstr "พื้นที่ว่างในดิสก์"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:342
+#: ../bleachbit/Cleaner.py:339
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "เขียนทับพื้นที่ว่างในดิสก์เพื่อซ่อนแฟ้มที่ถูกลบ"
 
-#: ../bleachbit/Cleaner.py:343
+#: ../bleachbit/Cleaner.py:340
 msgid "This option is very slow."
 msgstr "ตัวเลือกนี้ช้ามาก"
 
-#: ../bleachbit/Cleaner.py:347
+#: ../bleachbit/Cleaner.py:344
 msgid "The system in general"
 msgstr "ระบบทั่วไป"
 
-#: ../bleachbit/Cleaner.py:349 ../bleachbit/Cleaner.py:690
+#: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:687
 msgid "System"
 msgstr "ระบบ"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:556 ../bleachbit/Cleaner.py:721
+#: ../bleachbit/Cleaner.py:553 ../bleachbit/Cleaner.py:718
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "เขียนทับบนพื้นที่ว่างของดิสก์ %s"
 
-#: ../bleachbit/Cleaner.py:672
+#: ../bleachbit/Cleaner.py:669
 msgid "Loading native cleaners."
 msgstr ""
 
-#: ../bleachbit/Cleaner.py:677
+#: ../bleachbit/Cleaner.py:674
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "การนำเข้าเครื่องมือทำความสะอาดจาก Winapp2.ini"
 
-#: ../bleachbit/CLI.py:113
+#: ../bleachbit/CLI.py:118
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "ไม่ใช่เครื่องมือทำความสะอาดที่ถูกต้อง: %s"
@@ -1013,141 +1002,137 @@ msgstr "ไม่ใช่เครื่องมือทำความสะ
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:142
+#: ../bleachbit/CLI.py:147
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr ""
-"วิธีใช้: %prog [ตัวเลือก] เครื่องมือความสะอาด.ตัวเลือก1 "
-"เครื่องมือความสะอาด.ตัวเลือก2"
+msgstr "วิธีใช้: %prog [ตัวเลือก] เครื่องมือความสะอาด.ตัวเลือก1 เครื่องมือความสะอาด.ตัวเลือก2"
 
-#: ../bleachbit/CLI.py:145
+#: ../bleachbit/CLI.py:150
 msgid "list cleaners"
 msgstr "รายชื่อเครื่องมือทำความสะอาด"
+
+#: ../bleachbit/CLI.py:152
+msgid "preview files to be deleted and other changes"
+msgstr "ตัวอย่างแฟ้มที่จะถูกลบและมีเปลี่ยนแปลง"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:150
+#: ../bleachbit/CLI.py:157
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "เรียกใช้เครื่องมือทำความสะอาดเพื่อลบแฟ้มและทำการเปลี่ยนแปลงถาวรอื่นๆ"
 
-#: ../bleachbit/CLI.py:152
-msgid "set log level to verbose"
-msgstr "ตั้งค่าระดับบันทึกเป็น verbose"
-
-#: ../bleachbit/CLI.py:153
-msgid "log debug messages to file"
-msgstr "บันทึกข้อความแก้ไขข้อบกพร่องไปยังแฟ้ม"
-
-#: ../bleachbit/CLI.py:155
+#: ../bleachbit/CLI.py:159
 msgid "shred specific files or folders"
 msgstr "ล้างแฟ้มหรือโฟลเดอร์ที่เลือก"
 
-#: ../bleachbit/CLI.py:157
-msgid "show system information"
-msgstr "แสดงข้อมูลระบบ"
-
-#: ../bleachbit/CLI.py:159
-msgid "launch the graphical interface"
-msgstr "ใช้อินเตอร์เฟซแบบกราฟิก"
-
-#: ../bleachbit/CLI.py:164
-msgid "do not prompt for administrator privileges"
-msgstr "ไม่ต้องถามเกี่ยวกับสิทธิ์ของผู้ดูแลระบบ"
-
-#: ../bleachbit/CLI.py:169
-msgid "preview files to be deleted and other changes"
-msgstr "ตัวอย่างแฟ้มที่จะถูกลบและมีเปลี่ยนแปลง"
-
-#: ../bleachbit/CLI.py:173
-msgid "use options set in the graphical interface"
-msgstr "ใช้ตัวเลือกที่กำหนดไว้ในอินเตอร์เฟซแบบกราฟิก"
-
-#: ../bleachbit/CLI.py:175
-msgid "enable all options that do not have a warning"
-msgstr "เปิดใช้งานตัวเลือกทั้งหมดที่ไม่มีคำเตือน"
-
-#: ../bleachbit/CLI.py:178
-msgid "update winapp2.ini, if a new version is available"
-msgstr "อัปเดตข้อมูลสำหรับ winapp2.ini ถ้ามีเวอร์ชั่นใหม่ที่ใช้ได้"
-
-#: ../bleachbit/CLI.py:180
+#: ../bleachbit/CLI.py:161
 msgid "wipe free space in the given paths"
 msgstr "ล้างพื้นที่ว่างในเส้นทางที่กำหนด"
 
-#: ../bleachbit/CLI.py:182
-msgid "output version information and exit"
-msgstr "แสดงข้อมูลรุ่นของโปรแกรมแล้วออก"
-
-#: ../bleachbit/CLI.py:184
+#: ../bleachbit/CLI.py:163
 msgid "overwrite files to hide contents"
 msgstr "เขียนทับแฟ้มเพื่อซ่อนข้อมูล"
 
-#: ../bleachbit/CLI.py:199
+#: ../bleachbit/CLI.py:165
+msgid "launch the graphical interface"
+msgstr "ใช้อินเตอร์เฟซแบบกราฟิก"
+
+#: ../bleachbit/CLI.py:167
+msgid "use options set in the graphical interface"
+msgstr "ใช้ตัวเลือกที่กำหนดไว้ในอินเตอร์เฟซแบบกราฟิก"
+
+#: ../bleachbit/CLI.py:169
+msgid "enable all options that do not have a warning"
+msgstr "เปิดใช้งานตัวเลือกทั้งหมดที่ไม่มีคำเตือน"
+
+#: ../bleachbit/CLI.py:171
+msgid "set log level to verbose"
+msgstr "ตั้งค่าระดับบันทึกเป็น verbose"
+
+#: ../bleachbit/CLI.py:172
+msgid "log debug messages to file"
+msgstr "บันทึกข้อความแก้ไขข้อบกพร่องไปยังแฟ้ม"
+
+#: ../bleachbit/CLI.py:174
+msgid "show system information"
+msgstr "แสดงข้อมูลระบบ"
+
+#: ../bleachbit/CLI.py:176
+msgid "output version information and exit"
+msgstr "แสดงข้อมูลรุ่นของโปรแกรมแล้วออก"
+
+#: ../bleachbit/CLI.py:179
+msgid "do not prompt for administrator privileges"
+msgstr "ไม่ต้องถามเกี่ยวกับสิทธิ์ของผู้ดูแลระบบ"
+
+#: ../bleachbit/CLI.py:187
+msgid "update winapp2.ini, if a new version is available"
+msgstr "อัปเดตข้อมูลสำหรับ winapp2.ini ถ้ามีเวอร์ชั่นใหม่ที่ใช้ได้"
+
+#: ../bleachbit/CLI.py:209
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
-"ระบุเพียงหนึ่งคำสั่งเหล่านี้: --list-cleaners, --wipe-free-space, --preview, "
-"--clean"
+"ระบุเพียงหนึ่งคำสั่งเหล่านี้: --list-cleaners, --wipe-free-space, --preview, --clean"
 
-#: ../bleachbit/CLI.py:219
+#: ../bleachbit/CLI.py:234
 msgid "Checking online for updates to winapp2.ini"
 msgstr "กำลังตรวจสอบออนไลน์สำหรับการอัปเดต winapp2.ini"
 
-#: ../bleachbit/CLI.py:234
+#: ../bleachbit/CLI.py:249
 msgid "No directories given for --wipe-free-space"
 msgstr "ไม่มีไดเร็กทอรีสำหรับ --wipe-free-space"
 
-#: ../bleachbit/CLI.py:239
+#: ../bleachbit/CLI.py:254
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "เส้นทางที่จะล้างต้องเป็นไดเร็กทอรีที่มีอยู่: %s"
 
-#: ../bleachbit/CLI.py:241
+#: ../bleachbit/CLI.py:256
 msgid "Wiping free space can take a long time."
 msgstr "การล้างพื้นที่ว่างอาจใช้เวลานาน"
 
-#: ../bleachbit/CLI.py:252
+#: ../bleachbit/CLI.py:267
 msgid "No work to do. Specify options."
 msgstr "ไม่มีการดำเนินการ โปรดระบุตัวเลือก"
 
-#: ../bleachbit/CLI.py:260
+#: ../bleachbit/CLI.py:275
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite มีไว้สำหรับใช้กับ --clean เท่านั้น"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:45
+#: ../bleachbit/Command.py:49
 msgid "Skip"
 msgstr "ข้าม"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:75
+#: ../bleachbit/Command.py:79
 msgid "Delete"
 msgstr "ลบ"
 
-#: ../bleachbit/Command.py:97
+#: ../bleachbit/Command.py:101
 msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"แฟ้มอย่างน้อยหนึ่งแฟ้มถูกล็อกโดยกระบวนการอื่น "
-"ดังนั้นจึงไม่สามารถเขียนทับเนื้อหาแฟ้มได้ "
+"แฟ้มอย่างน้อยหนึ่งแฟ้มถูกล็อกโดยกระบวนการอื่น ดังนั้นจึงไม่สามารถเขียนทับเนื้อหาแฟ้มได้ "
 "จะถูกทำเครื่องหมายเพื่อลบเมื่อรีบูตระบบ"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:100
+#: ../bleachbit/Command.py:104
 msgid "Mark for deletion"
 msgstr "ทำเครื่องหมายเพื่อลบ"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:279
+#: ../bleachbit/Command.py:283
 msgid "Truncate"
 msgstr "ตัดท้าย"
 
-#: ../bleachbit/Command.py:322
+#: ../bleachbit/Command.py:326
 msgid "Delete registry key"
 msgstr "ลบคีย์เรจิสตรี"
 
@@ -1182,8 +1167,7 @@ msgstr "ตัวแปรสภาพแวดล้อม TMP หมายถ�
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
-msgstr ""
-"นี่คือแฟ้มอย่างน้อยหนึ่งแฟ้มบนระบบแฟ้มที่ไม่สนับสนุนการเขียนทับขั้นสูง"
+msgstr "นี่คือแฟ้มอย่างน้อยหนึ่งแฟ้มบนระบบแฟ้มที่ไม่สนับสนุนการเขียนทับขั้นสูง"
 
 #: ../bleachbit/FileUtilities.py:930
 #, python-format
@@ -1204,19 +1188,15 @@ msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
-"เขียน {files:,} แฟ้มและ {bytes:,} ไบต์ใน {seconds:,} วินาทีที่ {rate:.2f} "
-"MB/s"
+"เขียน {files:,} แฟ้มและ {bytes:,} ไบต์ใน {seconds:,} วินาทีที่ {rate:.2f} MB/s"
 
 #: ../bleachbit/FileUtilities.py:1017
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
-msgstr ""
-"{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่ไม่ใช่ super "
-"user"
+msgstr "{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่ไม่ใช่ super user"
 
 #: ../bleachbit/FileUtilities.py:1019
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr ""
-"{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่เป็น super user"
+msgstr "{bytes:,} ไบต์และ {inodes:,} inode พร้อมใช้งานสำหรับผู้ใช้ที่เป็น super user"
 
 #: ../bleachbit/FileUtilities.py:1035
 msgid "Handled unknown error #0 while truncating file."
@@ -1232,7 +1212,7 @@ msgid "_Open"
 msgstr "_เปิด"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:220
+#: ../bleachbit/GUI.py:225
 msgid "_Delete"
 msgstr "_ลบ"
 
@@ -1246,9 +1226,8 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"ฟังก์ชันนี้จะลบการตั้งค่า BleachBit ทั้งหมดแล้วออกจากแอปพลิเคชัน "
-"ใช้ฟังก์ชันนี้เพื่อซ่อนการใช้ BleachBit หรือเพื่อรีเซ็ตการตั้งค่า "
-"ครั้งต่อไปที่คุณเริ่ม BleachBit การตั้งค่าจะเริ่มต้นเป็นค่าเริ่มต้น"
+"ฟังก์ชันนี้จะลบการตั้งค่า BleachBit ทั้งหมดแล้วออกจากแอปพลิเคชัน ใช้ฟังก์ชันนี้เพื่อซ่อนการใช้ "
+"BleachBit หรือเพื่อรีเซ็ตการตั้งค่า ครั้งต่อไปที่คุณเริ่ม BleachBit การตั้งค่าจะเริ่มต้นเป็นค่าเริ่มต้น"
 
 #: ../bleachbit/GuiBasic.py:139
 msgid ""
@@ -1270,8 +1249,7 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"เนื่องจากคุณกำลังเรียกใช้เป็น root "
-"โปรดเปิดลิงก์นี้ในเว็บเบราว์เซอร์ด้วยตนเอง:\n"
+"เนื่องจากคุณกำลังเรียกใช้เป็น root โปรดเปิดลิงก์นี้ในเว็บเบราว์เซอร์ด้วยตนเอง:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
@@ -1361,11 +1339,11 @@ msgstr "ภาษา"
 msgid "Whitelist"
 msgstr "บัญชีเปิด (ปลอดภัย)"
 
-#: ../bleachbit/GuiPreferences.py:114
+#: ../bleachbit/GuiPreferences.py:117
 msgid "Check periodically for software updates via the Internet"
 msgstr "ตรวจสอบการอัปเดตซอฟต์แวร์เป็นระยะๆ ผ่านทางอินเทอร์เน็ต"
 
-#: ../bleachbit/GuiPreferences.py:119
+#: ../bleachbit/GuiPreferences.py:122
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -1373,23 +1351,23 @@ msgstr ""
 "หากพบการอัปเดต คุณจะได้รับตัวเลือกในการดูข้อมูลเกี่ยวกับการอัปเดตนั้น "
 "จากนั้นคุณสามารถดาวน์โหลดและติดตั้งการอัปเดตได้ด้วยตนเอง"
 
-#: ../bleachbit/GuiPreferences.py:126
+#: ../bleachbit/GuiPreferences.py:129
 msgid "Check for new beta releases"
 msgstr "ตรวจสอบรุ่นเบต้าใหม่"
 
-#: ../bleachbit/GuiPreferences.py:135
+#: ../bleachbit/GuiPreferences.py:138
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr "ดาวน์โหลดและอัปเดตโปรแกรมทำความสะอาดจากชุมชน (winapp2.ini)"
 
-#: ../bleachbit/GuiPreferences.py:149
+#: ../bleachbit/GuiPreferences.py:152
 msgid "Hide irrelevant cleaners"
 msgstr "ซ่อนเครื่องมือทำความสะอาดที่ไม่เกี่ยวข้อง"
 
-#: ../bleachbit/GuiPreferences.py:158
+#: ../bleachbit/GuiPreferences.py:161
 msgid "Overwrite contents of files to prevent recovery"
 msgstr "เขียนทับเนื้อหาของแฟ้มเพื่อป้องกันการกู้คืน"
 
-#: ../bleachbit/GuiPreferences.py:162
+#: ../bleachbit/GuiPreferences.py:165
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -1397,140 +1375,148 @@ msgstr ""
 "การเขียนทับไม่ได้ผลกับระบบแฟ้มบางระบบและการทำงานของ BleachBit บางอย่าง "
 "การเขียนทับช้าลงอย่างมาก"
 
-#: ../bleachbit/GuiPreferences.py:167
+#: ../bleachbit/GuiPreferences.py:170
 msgid "Exit after cleaning"
 msgstr "ปิดโปรแกรมหลังจากล้างเสร็จแล้ว"
 
-#: ../bleachbit/GuiPreferences.py:173
+#: ../bleachbit/GuiPreferences.py:176
 msgid "Confirm before delete"
 msgstr "ยืนยันก่อนลบ"
 
-#: ../bleachbit/GuiPreferences.py:181
+#: ../bleachbit/GuiPreferences.py:184
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
-"ใช้ขนาดแบบ IEC (1 กิโลไบต์ = 1024 ไบต์) แทน SI (1 กิโลไบต์ = 1000 ไบต์)"
+msgstr "ใช้ขนาดแบบ IEC (1 กิโลไบต์ = 1024 ไบต์) แทน SI (1 กิโลไบต์ = 1000 ไบต์)"
 
-#: ../bleachbit/GuiPreferences.py:188
+#: ../bleachbit/GuiPreferences.py:191
 msgid "Windows 10 theme"
 msgstr "ธีม Windows 10"
 
-#: ../bleachbit/GuiPreferences.py:195
+#: ../bleachbit/GuiPreferences.py:198
 msgid "Dark mode"
 msgstr "โหมดมืด"
 
-#: ../bleachbit/GuiPreferences.py:201
+#: ../bleachbit/GuiPreferences.py:204
 msgid "Remember window geometry"
 msgstr "จำรูปทรงหน้าต่าง"
 
-#: ../bleachbit/GuiPreferences.py:207
+#: ../bleachbit/GuiPreferences.py:210
 msgid "Show debug messages"
 msgstr "แสดงข้อความแก้ไขข้อบกพร่อง"
 
-#: ../bleachbit/GuiPreferences.py:219 ../bleachbit/GuiPreferences.py:349
-#: ../bleachbit/GuiPreferences.py:392 ../bleachbit/GUI.py:280
+#: ../bleachbit/GuiPreferences.py:216
+msgid "Add shred context menu option (KDE Plasma specific)"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
+#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
 msgid "Choose a folder"
 msgstr "เลือกโฟลเดอร์"
 
-#: ../bleachbit/GuiPreferences.py:243
+#: ../bleachbit/GuiPreferences.py:252
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr "เลือกโฟลเดอร์ที่เขียนได้สำหรับแต่ละไดรฟ์เพื่อเขียนทับพื้นที่ว่าง"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
-#: ../bleachbit/GuiPreferences.py:265
+#: ../bleachbit/GuiPreferences.py:274
 msgctxt "button"
 msgid "Add"
 msgstr "เพิ่ม"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:269 ../bleachbit/GuiPreferences.py:488
+#: ../bleachbit/GuiPreferences.py:278 ../bleachbit/GuiPreferences.py:497
 msgctxt "button"
 msgid "Remove"
 msgstr "ลบ"
 
-#: ../bleachbit/GuiPreferences.py:293
+#: ../bleachbit/GuiPreferences.py:302
 msgid "All languages will be deleted except those checked."
 msgstr "ทุกภาษาจะถูกลบ ยกเว้นที่เลือกไว้"
 
-#: ../bleachbit/GuiPreferences.py:309
+#: ../bleachbit/GuiPreferences.py:318
 msgid "Preserve"
 msgstr "รักษา"
 
-#: ../bleachbit/GuiPreferences.py:313
+#: ../bleachbit/GuiPreferences.py:322
 msgid "Code"
 msgstr "โค้ด"
 
-#: ../bleachbit/GuiPreferences.py:317 ../bleachbit/GUI.py:463
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:468
 msgid "Name"
 msgstr "ชื่อ"
 
-#: ../bleachbit/GuiPreferences.py:335 ../bleachbit/GuiPreferences.py:378
+#: ../bleachbit/GuiPreferences.py:344 ../bleachbit/GuiPreferences.py:387
 msgid "Choose a file"
 msgstr "เลือกแฟ้ม"
 
-#: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
-#: ../bleachbit/GuiPreferences.py:431
+#: ../bleachbit/GuiPreferences.py:352 ../bleachbit/GuiPreferences.py:395
+#: ../bleachbit/GuiPreferences.py:440
 msgid "File"
 msgstr "แฟ้ม"
 
-#: ../bleachbit/GuiPreferences.py:358 ../bleachbit/GuiPreferences.py:401
-#: ../bleachbit/GuiPreferences.py:433
+#: ../bleachbit/GuiPreferences.py:367 ../bleachbit/GuiPreferences.py:410
+#: ../bleachbit/GuiPreferences.py:442
 msgid "Folder"
 msgstr "โฟลเดอร์"
 
-#: ../bleachbit/GuiPreferences.py:443
-msgid "Theses paths will not be deleted or modified."
+#: ../bleachbit/GuiPreferences.py:452
+#, fuzzy
+#| msgid "Theses paths will not be deleted or modified."
+msgid "These paths will not be deleted or modified."
 msgstr "จะไม่มีการลบหรือเปลี่ยนแปลงข้อมูลในเส้นทางเหล่านี้"
 
-#: ../bleachbit/GuiPreferences.py:446
+#: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
 msgstr "สามารถเลือกตำแหน่งเหล่านี้เพื่อลบได้"
 
-#: ../bleachbit/GuiPreferences.py:454
+#: ../bleachbit/GuiPreferences.py:463
 msgid "Type"
 msgstr "ประเภท"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:460
+#: ../bleachbit/GuiPreferences.py:469
 msgid "Path"
 msgstr "เส้นทาง"
 
-#: ../bleachbit/GuiPreferences.py:475
+#: ../bleachbit/GuiPreferences.py:484
 msgctxt "button"
 msgid "Add file"
 msgstr "เพิ่มไฟล์"
 
-#: ../bleachbit/GuiPreferences.py:482
+#: ../bleachbit/GuiPreferences.py:491
 msgctxt "button"
 msgid "Add folder"
 msgstr "เพิ่มโฟลเดอร์"
 
-#: ../bleachbit/GUI.py:146 ../bleachbit/GUI.py:855
+#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:868
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
-msgstr ""
-"เกิดข้อผิดพลาดในการโหลดโมดูล SQLite: อาจมีซอฟต์แวร์ป้องกันไวรัสบล็อกอยู่"
+msgstr "เกิดข้อผิดพลาดในการโหลดโมดูล SQLite: อาจมีซอฟต์แวร์ป้องกันไวรัสบล็อกอยู่"
 
-#: ../bleachbit/GUI.py:209
+#: ../bleachbit/GUI.py:214
 msgid "Choose files to shred"
 msgstr "เลือกแฟ้มที่จะทำลาย"
 
-#: ../bleachbit/GUI.py:218
+#: ../bleachbit/GUI.py:223
 msgid "Choose folder to shred"
 msgstr "เลือกโฟลเดอร์ที่จะทำลาย"
 
-#: ../bleachbit/GUI.py:245
+#: ../bleachbit/GUI.py:250
 msgid "No paths found in clipboard."
 msgstr "ไม่พบเส้นทางในคลิปบอร์ด"
 
-#: ../bleachbit/GUI.py:281
+#: ../bleachbit/GUI.py:286
 msgid "_OK"
 msgstr "_ตกลง"
 
-#: ../bleachbit/GUI.py:315
+#: ../bleachbit/GUI.py:309
+msgid "Program to clean unnecessary files"
+msgstr ""
+
+#: ../bleachbit/GUI.py:320
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1542,7 +1528,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:321
+#: ../bleachbit/GUI.py:326
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -1552,24 +1538,24 @@ msgstr ""
 "  Thiraporn U https://launchpad.net/~uthiraporn\n"
 "  shane.fox https://launchpad.net/~shanefox"
 
-#: ../bleachbit/GUI.py:345
+#: ../bleachbit/GUI.py:350
 msgid "System information"
 msgstr "ข้อมูลระบบ"
 
-#: ../bleachbit/GUI.py:471
+#: ../bleachbit/GUI.py:476
 msgid "Active"
 msgstr "เปิดใช้งาน"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:480
+#: ../bleachbit/GUI.py:485
 msgid "Size"
 msgstr "ขนาด"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:509
+#: ../bleachbit/GUI.py:514
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1579,70 +1565,75 @@ msgstr ""
 "คำเตือนเกี่ยวกับ%(cleaner)s - %(option)s:\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:585
+#: ../bleachbit/GUI.py:590
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "กำลังรีเซ็ตไฟล์การกำหนดค่าเนื่องจากเสียหาย: %s"
 
-#: ../bleachbit/GUI.py:749
+#: ../bleachbit/GUI.py:762
 msgid "You must select an operation"
 msgstr "คุณต้องเลือกการทำงาน"
 
-#: ../bleachbit/GUI.py:768 ../bleachbit/GUI.py:784
+#: ../bleachbit/GUI.py:781 ../bleachbit/GUI.py:797
 msgid "Done."
 msgstr "เสร็จแล้ว"
 
-#: ../bleachbit/GUI.py:839
+#: ../bleachbit/GUI.py:852
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "เข้าถึงเมนูแอปพลิเคชันโดยคลิกที่ไอคอนแฮมเบอร์เกอร์บนแถบชื่อ"
 
-#: ../bleachbit/GUI.py:844
+#: ../bleachbit/GUI.py:857
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "เข้าถึงเมนูแอปพลิเคชันโดยคลิกที่โลโก้บนแถบชื่อ"
 
-#: ../bleachbit/GUI.py:860
+#: ../bleachbit/GUI.py:873
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"คุณกำลังเรียกใช้ BleachBit "
-"ด้วยสิทธิ์ของผู้ดูแลระบบเพื่อล้างส่วนที่แชร์ของระบบ "
+"คุณกำลังเรียกใช้ BleachBit ด้วยสิทธิ์ของผู้ดูแลระบบเพื่อล้างส่วนที่แชร์ของระบบ "
 "และการอ้างอิงไปยังโฟลเดอร์โปรไฟล์ผู้ใช้จะล้างเฉพาะบัญชีรูทเท่านั้น"
 
-#: ../bleachbit/GUI.py:865
+#: ../bleachbit/GUI.py:878
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
-"เรียกใช้ BleachBit "
-"ด้วยสิทธิ์ของผู้ดูแลระบบเพื่อปรับปรุงความถูกต้องของการเขียนทับเนื้อหาของแฟ้ม"
+"เรียกใช้ BleachBit ด้วยสิทธิ์ของผู้ดูแลระบบเพื่อปรับปรุงความถูกต้องของการเขียนทับเนื้อหาของแฟ้ม"
+
+#: ../bleachbit/GUI.py:883
+msgid ""
+"There is no official version of BleachBit on the Microsoft Store. Get the "
+"genuine version at https://www.bleachbit.org where it is always free of "
+"charge."
+msgstr ""
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:910 ../bleachbit/GUI.py:1012
+#: ../bleachbit/GUI.py:927 ../bleachbit/GUI.py:1029
 msgid "Preview"
 msgstr "ตัวอย่าง"
 
-#: ../bleachbit/GUI.py:1009
+#: ../bleachbit/GUI.py:1026
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "ตัวอย่างแฟ้มในการทำงานที่เลือก (โดยไม่ลบแฟ้มใดๆ)"
 
-#: ../bleachbit/GUI.py:1024
+#: ../bleachbit/GUI.py:1041
 msgid "Clean files in the selected operations"
 msgstr "ล้างแฟ้มโดยทำตามคำสั่งที่เลือก"
 
-#: ../bleachbit/GUI.py:1032
+#: ../bleachbit/GUI.py:1049
 msgid "Abort"
 msgstr "ยกเลิก"
 
-#: ../bleachbit/GUI.py:1034
+#: ../bleachbit/GUI.py:1051
 msgid "Abort the preview or cleaning process"
 msgstr "ยกเลิกการแสดงตัวอย่างหรือกระบวนการทำความสะอาด"
 
-#: ../bleachbit/GUI.py:1245
+#: ../bleachbit/GUI.py:1258
 msgid "Error when checking for updates: "
 msgstr "เกิดข้อผิดพลาดขณะตรวจสอบการอัปเดต: "
 
@@ -1650,9 +1641,7 @@ msgstr "เกิดข้อผิดพลาดขณะตรวจสอบ
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
-msgstr ""
-"คำสั่ง 'swapoff -s' ล้มเหลว ดังนั้นให้กลับไปที่ /proc/swaps "
-"เพื่อดูข้อมูลการสลับ"
+msgstr "คำสั่ง 'swapoff -s' ล้มเหลว ดังนั้นให้กลับไปที่ /proc/swaps เพื่อดูข้อมูลการสลับ"
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
@@ -1719,30 +1708,28 @@ msgstr "ตรวจพบอุปกรณ์การสลับเหล่
 msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
-msgstr ""
-"ฟังก์ชัน wipe_memory() ที่มี ID กระบวนการ {pid} กำลังรอ ID กระบวนการย่อย "
-"{cid}"
+msgstr "ฟังก์ชัน wipe_memory() ที่มี ID กระบวนการ {pid} กำลังรอ ID กระบวนการย่อย {cid}"
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
 msgstr "กระบวนการล้างหน่วยความจำย่อยส่งคืนรหัส %d"
 
-#: ../bleachbit/Options.py:114
+#: ../bleachbit/Options.py:113
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr "ดิสก์เต็มเมื่อเขียนการกำหนดค่าไปยังแฟ้ม %s"
 
-#: ../bleachbit/Options.py:138
+#: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "เกิดข้อผิดพลาดในการตรวจสอบว่ามีเส้นทางอยู่หรือไม่: %s"
 
-#: ../bleachbit/Options.py:268
+#: ../bleachbit/Options.py:267
 msgid "Error when setting the default drives to shred."
 msgstr "เกิดข้อผิดพลาดเมื่อตั้งค่าไดรฟ์เริ่มต้นเป็นทำลาย"
 
-#: ../bleachbit/Options.py:294
+#: ../bleachbit/Options.py:293
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "การรักษาภาษา %s โดยอัตโนมัติ"
@@ -1758,8 +1745,8 @@ msgid ""
 "quit."
 msgstr ""
 "คำจำกัดความเครื่องมือทำความสะอาดเหล่านี้ใหม่หรือมีการเปลี่ยนแปลง "
-"คำจำกัดความที่เป็นอันตรายอาจทำให้ระบบของคุณเสียหายได้ "
-"หากคุณไม่เชื่อถือการเปลี่ยนแปลงเหล่านี้ ให้ลบไฟล์หรือออก"
+"คำจำกัดความที่เป็นอันตรายอาจทำให้ระบบของคุณเสียหายได้ หากคุณไม่เชื่อถือการเปลี่ยนแปลงเหล่านี้ "
+"ให้ลบไฟล์หรือออก"
 
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
@@ -1804,15 +1791,14 @@ msgstr "มีเวอร์ชันใหม่ที่ใช้ได้"
 msgid "Update to version %s"
 msgstr "อัปเดตเป็นเวอร์ชัน %s"
 
-#: ../bleachbit/Update.py:161
+#: ../bleachbit/Update.py:164
 msgid ""
 "Error when opening a network connection to check for updates. Please verify "
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
 "เกิดข้อผิดพลาดเมื่อเปิดการเชื่อมต่อเครือข่ายเพื่อตรวจสอบการอัปเดต "
-"โปรดตรวจสอบว่าเครือข่ายใช้งานได้และไฟร์วอลล์ไม่ได้บล็อกแอปพลิเคชันนี้ "
-"ข้อความข้อผิดพลาด: {}"
+"โปรดตรวจสอบว่าเครือข่ายใช้งานได้และไฟร์วอลล์ไม่ได้บล็อกแอปพลิเคชันนี้ ข้อความข้อผิดพลาด: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:46
@@ -1838,11 +1824,11 @@ msgstr "โปรแกรมอรรถประโยชน์"
 msgid "Games"
 msgstr "เกม"
 
-#: ../bleachbit/Winapp.py:185
+#: ../bleachbit/Winapp.py:183
 msgid "Imported from winapp2.ini"
 msgstr "นำเข้าจาก winapp2.ini"
 
-#: ../bleachbit/Windows.py:814
+#: ../bleachbit/Windows.py:824
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit กำลังเริ่มดำเนินการ...\n"
 
@@ -1869,9 +1855,7 @@ msgstr "โปรดรอสักครู่ กำลังล้างเ�
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
-msgstr ""
-"การล้างพื้นที่ว่างในดิสก์จะลบไฟล์ที่เหลือซึ่งถูกลบโดยไม่ทำลาย "
-"และไม่เพิ่มพื้นที่ว่าง"
+msgstr "การล้างพื้นที่ว่างในดิสก์จะลบไฟล์ที่เหลือซึ่งถูกลบโดยไม่ทำลาย และไม่เพิ่มพื้นที่ว่าง"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
