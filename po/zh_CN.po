@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-01-31 19:51+0000\n"
-"Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2023-08-01 04:07+0000\n"
+"Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -55,7 +55,7 @@ msgstr "缓存"
 #: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "删除那些网页缓冲文件(这些缓冲文件可以减少下次访问该网页的时间)"
+msgstr "删除为减少显示重新访问的页面的时间而产生的Web缓存"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -79,7 +79,7 @@ msgstr "Cookies"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr "删除 cookies 文件，它们保存网站首选项、认证和身份等信息"
+msgstr "删除 Cookies 文件，它们保存网站首选项、认证和身份等信息"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -96,7 +96,7 @@ msgstr "DOM(文档对象模型) 存储"
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
-msgstr "删除 HTML5 cookies"
+msgstr "删除 HTML5 Cookies"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -108,7 +108,7 @@ msgstr "表单历史"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr "网站表单输入历史"
+msgstr "在网站中输入的表单的历史记录"
 
 #: ../cleaners/chromium.xml ../cleaners/winrar.xml
 #: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
@@ -129,7 +129,7 @@ msgstr "历史记录"
 #: ../cleaners/opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "删除已浏览网站、下载及缩略图的历史记录"
+msgstr "删除历史记录，其中包括访问过的网站，下载的文件和缩略图"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -145,7 +145,7 @@ msgstr "搜索引擎"
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
-msgstr "重置搜索引擎使用历史并删除非内置搜索引擎，其中一些引擎为自动添加"
+msgstr "重置搜索引擎使用历史记录并删除非出厂搜索引擎，其中一些是自动添加的"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
@@ -155,12 +155,12 @@ msgstr "会话"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
 msgid "Delete the current and last sessions"
-msgstr "删除当前及上一次的会话"
+msgstr "删除当前及过去的会话"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
 msgid "Sync"
-msgstr "同步"
+msgstr "同步数据"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -183,7 +183,7 @@ msgstr "密码"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr "一个储存了用户名、密码和一些不再储存密码的站点的数据库"
+msgstr "包含用户名和密码的数据库以及不应存储密码的站点列表"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
