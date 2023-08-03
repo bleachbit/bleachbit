@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-08-02 08:06+0000\n"
+"PO-Revision-Date: 2023-08-04 17:06+0000\n"
 "Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hans/>\n"
@@ -951,12 +951,12 @@ msgstr "删除用户指定的文件和文件夹"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:337
 msgid "Free disk space"
-msgstr "擦除磁盘空闲区域"
+msgstr "释放磁盘空闲区域"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:339
 msgid "Overwrite free disk space to hide deleted files"
-msgstr "擦除磁盘空闲区域以粉碎已删除的文件"
+msgstr "覆盖磁盘空闲区域以粉碎已删除的文件"
 
 #: ../bleachbit/Cleaner.py:340
 msgid "This option is very slow."
@@ -975,7 +975,7 @@ msgstr "系统"
 #: ../bleachbit/Cleaner.py:553 ../bleachbit/Cleaner.py:718
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr "擦除 %s 中的空闲区域"
+msgstr "覆盖 %s 中的空闲区域"
 
 #: ../bleachbit/Cleaner.py:669
 msgid "Loading native cleaners."
@@ -1256,17 +1256,17 @@ msgstr "正在删除文件"
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:65
 msgid "Make chaff"
-msgstr "制造干扰文件"
+msgstr "生成干扰文件"
 
 #: ../bleachbit/GuiChaff.py:70
 msgid "Make randomly-generated messages inspired by documents."
-msgstr "生成受文档启发的随机消息。"
+msgstr "参考文献，在指定目录下生成随机信息。"
 
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
 #: ../bleachbit/GuiChaff.py:77
 msgid "Inspiration"
-msgstr "利用的文件"
+msgstr "参考文献"
 
 #: ../bleachbit/GuiChaff.py:80
 msgid "2600 Magazine"
@@ -1294,11 +1294,11 @@ msgstr "截断而不粉碎"
 
 #: ../bleachbit/GuiChaff.py:108
 msgid "Do not delete"
-msgstr "不删除"
+msgstr "保留干扰文件"
 
 #: ../bleachbit/GuiChaff.py:119
 msgid "Make files"
-msgstr "制造文件"
+msgstr "开始生成"
 
 #: ../bleachbit/GuiChaff.py:136
 msgid "Download data needed for chaff generator?"
@@ -1414,7 +1414,7 @@ msgstr "添加"
 #: ../bleachbit/GuiPreferences.py:278 ../bleachbit/GuiPreferences.py:497
 msgctxt "button"
 msgid "Remove"
-msgstr "移除"
+msgstr "移出"
 
 #: ../bleachbit/GuiPreferences.py:302
 msgid "All languages will be deleted except those checked."
@@ -1448,7 +1448,7 @@ msgstr "文件夹"
 
 #: ../bleachbit/GuiPreferences.py:452
 msgid "These paths will not be deleted or modified."
-msgstr "将阻止删除或修改这些路径。"
+msgstr "将阻止删除或修改这些文件与文件夹。"
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1497,7 +1497,7 @@ msgstr "确定(_O)"
 
 #: ../bleachbit/GUI.py:309
 msgid "Program to clean unnecessary files"
-msgstr "清除无用文件的程序"
+msgstr "开源免费的系统清洁工具软件"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1514,8 +1514,7 @@ msgstr ""
 #: ../bleachbit/GUI.py:326
 msgid "translator-credits"
 msgstr ""
-"翻译鸣谢\n"
-"  Christopher Meng https://launchpad.net/~cicku\n"
+"Christopher Meng https://launchpad.net/~cicku\n"
 "  Eric Xu https://launchpad.net/~qwert1234\n"
 "  Feng Chao https://launchpad.net/~chaofeng\n"
 "  Jackychan https://launchpad.net/~chenyonghui1028\n"
@@ -1659,7 +1658,7 @@ msgstr "正将进程 ID {pid} 的特权授予用户 ID {uid}。"
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr "正分配和擦除 %s 的内存。"
+msgstr "正在分配并擦除 %s 的空间。"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1927,7 +1926,7 @@ msgstr "粉碎来自剪贴板的路径"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
-msgstr "擦除空闲区域(_W)"
+msgstr "抹去磁盘上的空闲区域(_W)"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
@@ -1935,7 +1934,7 @@ msgstr "制作干扰文件(_M)"
 
 #: ../data/app-menu.ui:26
 msgid "S_hred Settings and Quit"
-msgstr "放弃设置并退出(_H)"
+msgstr "初始化 BleachBit 设置并退出程序(_H)"
 
 #: ../data/app-menu.ui:37
 msgid "S_ystem Information"
