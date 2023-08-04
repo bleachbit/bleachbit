@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2013-11-26 20:08+0000\n"
-"Last-Translator: Atanas Kovachki <Unknown>\n"
-"Language-Team: Svetoslav Stefanov <lfu.project@gmail.com>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-08-06 05:49+0000\n"
+"Last-Translator: Salif Mehmed <mail@salif.eu>\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
+"bg/>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2014-01-24 03:57+0000\n"
-"X-Generator: Launchpad (build 16914)\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -201,10 +202,8 @@ msgstr ""
 #: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
-#, fuzzy
-#| msgid "This option deletes all bookmarks."
 msgid "This option will delete your saved passwords."
-msgstr "Тази опция изтрива всички запазени връзки."
+msgstr "Тази опция ще изтрие всички запазени пароли."
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -951,8 +950,7 @@ msgstr "Изчистване на swap и свободна памет"
 
 #: ../bleachbit/Cleaner.py:302
 msgid "This option is experimental and may cause system problems."
-msgstr ""
-"Тази опция е експериментална и може да предизвика  проблеми в  системата."
+msgstr "Тази опция е експериментална и може да предизвика проблеми в системата."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:313
