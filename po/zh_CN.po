@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2023-08-04 17:06+0000\n"
+"PO-Revision-Date: 2023-08-06 05:49+0000\n"
 "Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hans/>\n"
@@ -1079,7 +1079,7 @@ msgstr "没有为 --wipe-free-space 指定目录"
 #: ../bleachbit/CLI.py:254
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "要粉碎的路径必须是一个存在的目录: %s"
+msgstr "要粉碎的路径必须是一个存在的目录：%s"
 
 #: ../bleachbit/CLI.py:256
 msgid "Wiping free space can take a long time."
@@ -1390,7 +1390,7 @@ msgstr "显示调试信息"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr "在右键菜单中添加粉碎文件选项（仅 KDE Plasma）"
+msgstr "往右键菜单中添加粉碎文件选项（仅 KDE Plasma）"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1528,7 +1528,7 @@ msgstr ""
 "  sunshan https://launchpad.net/~sunshan\n"
 "  yuane https://launchpad.net/~yuane\n"
 "  zhanshime https://launchpad.net/~zhanshime\n"
-"  Jiawei Tang https://hosted.weblate.org/user/tjw123hh"
+"  tjw123hh https://hosted.weblate.org/user/tjw123hh"
 
 #: ../bleachbit/GUI.py:350
 msgid "System information"
@@ -1599,9 +1599,8 @@ msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
-msgstr ""
-"Microsoft 商店上没有官方版本的 BleachBit 。要获取货真价实的版本，请访问 "
-"https://www.bleachbit.org 。本程序始终免费。"
+msgstr "微软商店上没有官方版本的 BleachBit 。请访问官网 https://www.bleachbit.org "
+"获取正版软件。本程序始终免费。"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1716,7 +1715,7 @@ msgstr "磁盘空间已满，无法将设置写入档案 %s"
 #: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr "检查路径 %s 是否存在时出错"
+msgstr "检查路径 %s 是否存在时发生错误"
 
 #: ../bleachbit/Options.py:267
 msgid "Error when setting the default drives to shred."
@@ -1866,7 +1865,7 @@ msgstr[0] "还剩约 %d 分钟。"
 #: ../bleachbit/Worker.py:285
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "释放的磁盘空间：%s"
+msgstr "已释放磁盘空间：%s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
@@ -1887,7 +1886,7 @@ msgstr "已删除文件：%d 个"
 #: ../bleachbit/Worker.py:298
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "要删除的文件：%d"
+msgstr "即将删除的文件数量：%d"
 
 #: ../bleachbit/Worker.py:301
 #, python-format
