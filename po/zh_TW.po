@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-25 09:59-0700\n"
-"PO-Revision-Date: 2022-04-22 08:07+0000\n"
-"Last-Translator: Pin-Hsien Lee <gxzripple@mail.fogtab.com>\n"
+"PO-Revision-Date: 2023-08-06 05:49+0000\n"
+"Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -814,8 +814,7 @@ msgid "Run external command: %s"
 msgstr "執行外部指令：%s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "下載 URL 失敗：%s"
 
@@ -1394,8 +1393,9 @@ msgid "Show debug messages"
 msgstr "顯示除錯訊息"
 
 #: ../bleachbit/GuiPreferences.py:216
+#, fuzzy
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "往右鍵菜單中添加粉碎檔案選項（僅 KDE Plasma）"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
@@ -1452,8 +1452,6 @@ msgid "Folder"
 msgstr "資料夾"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "以下路徑將不會被刪除或更改。"
 
@@ -1503,8 +1501,9 @@ msgid "_OK"
 msgstr "確定(_O)"
 
 #: ../bleachbit/GUI.py:309
+#, fuzzy
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "開源免費的系統清潔工具軟體"
 
 #: ../bleachbit/GUI.py:320
 msgid ""
@@ -1598,6 +1597,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Microsoft 商店上沒有官方版本的 BleachBit。 要獲取貨真價實的版本，請訪問 "
+"https://www.bleachbit.org 。 本程式始終免費。"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
