@@ -157,7 +157,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     return ret == Gtk.ResponseType.ACCEPT
 
 
-def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK):
+def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, title=None):
     """Convenience wrapper for Gtk.MessageDialog"""
 
     dialog = Gtk.MessageDialog(transient_for=parent,
@@ -166,6 +166,8 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
                                message_type=mtype,
                                buttons=buttons,
                                text=msg)
+    if title:
+        dialog.set_title(title)
     resp = dialog.run()
     dialog.destroy()
 
@@ -190,8 +192,11 @@ def open_url(url, parent_window=None, prompt=True):
             host = ret.group(2)
         # TRANSLATORS: %s expands to www.bleachbit.org or similar
         msg = _("Open web browser to %s?") % host
-        resp = message_dialog(parent_window, msg,
-                              Gtk.MessageType.QUESTION, Gtk.ButtonsType.OK_CANCEL)
+        resp = message_dialog(parent_window,
+                              msg,
+                              Gtk.MessageType.QUESTION,
+                              Gtk.ButtonsType.OK_CANCEL,
+                              _('Confirm'))
         if Gtk.ResponseType.OK != resp:
             return
     # open web browser

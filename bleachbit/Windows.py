@@ -147,7 +147,8 @@ def check_dll_hijacking(window=None):
             window,
             msg=msg,
             mtype=Gtk.MessageType.WARNING,
-            buttons=Gtk.ButtonsType.OK)
+            buttons=Gtk.ButtonsType.OK,
+            _('Warning'))
     sys.exit(1)
 
 

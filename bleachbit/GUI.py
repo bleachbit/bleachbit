@@ -528,7 +528,9 @@ class TreeDisplayModel:
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
-                                               Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL)
+                                               Gtk.MessageType.WARNING,
+                                               Gtk.ButtonsType.OK_CANCEL,
+                                               _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
                     return
@@ -770,7 +772,9 @@ class GUI(Gtk.ApplicationWindow):
         if not operations:  # empty
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
-                                    Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
+                                    Gtk.MessageType.ERROR,
+                                    Gtk.ButtonsType.OK,
+                                    _('Error'))
             return
         try:
             self.set_sensitive(False)
