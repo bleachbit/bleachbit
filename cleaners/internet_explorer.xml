@@ -42,6 +42,13 @@
     <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - Polish-Support: -->
     <value>%UserProfile%\Ustawienia lokalne</value>
   </var>
+  <var name="windirsystem32">
+    <!-- 32-bit applications can use sysnative, but it does not exist to 64-bit processes.
+        FIXME: provide a more general solution
+    -->
+    <value>%WinDir%\System32</value>
+    <value>%WinDir%\Sysnative</value>
+  </var>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
@@ -106,7 +113,7 @@
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Temp\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\Cache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\TempState\"/>
-    <action command="delete" search="walk.all" path="%WinDir%\System32\config\Systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
+    <action command="delete" search="walk.all" path="$$windirsystem32$$\config\systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
     <action command="winreg" path="HKCR\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\windows_ie_ac_001\Internet Explorer\DOMStorage"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\DOMStorage"/>
     <!-- Deletes Feeds Cache: -->
@@ -127,7 +134,7 @@
     <description>Delete the logs</description>
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.bak"/>
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.txt"/>
-    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
-    <action command="delete" search="file" path="%WinDir%\system32\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
+    <action command="delete" search="file" path="$$windirsystem32$$\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="$$windirsystem32$$\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
   </option>
 </cleaner>
