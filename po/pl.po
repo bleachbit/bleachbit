@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-02-04 20:35+0000\n"
+"PO-Revision-Date: 2023-08-09 14:51+0000\n"
 "Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -1301,7 +1301,7 @@ msgstr "Otworzyć adres %s w przeglądarce?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Potwierdź"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1621,10 +1621,8 @@ msgid "You must select an operation"
 msgstr "Musisz wybrać operację"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Błędy: %d"
+msgstr "Błąd"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1894,14 +1892,17 @@ msgid "Imported from winapp2.ini"
 msgstr "Zaimportowano z pliku winapp2.ini"
 
 #: ../bleachbit/Windows.py:141
+#, fuzzy
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Plik python3.dll został znaleziony w C:\\ lub C:\\dlls, co oznacza "
+"potencjalną próbę przejęcia kolejności wyszukiwania bibliotek DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Ostrzeżenie"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
