@@ -145,10 +145,10 @@ def check_dll_hijacking(window=None):
         from gi.repository import Gtk
         message_dialog(
             window,
-            msg=msg,
-            mtype=Gtk.MessageType.WARNING,
-            buttons=Gtk.ButtonsType.OK,
-            _('Warning'))
+            msg,
+            Gtk.MessageType.WARNING,
+            Gtk.ButtonsType.OK,
+            title=_('Warning'))
     sys.exit(1)
 
 
