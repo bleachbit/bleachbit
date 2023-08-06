@@ -928,6 +928,9 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     logger.debug(_("Wiping path: %s") % pathname)
+    if not os.path.isdir(pathname):
+        logger.error(_("Path to wipe must be an existing directory: %s"), pathname)
+        return
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)

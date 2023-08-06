@@ -253,11 +253,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if len(args) < 1:
             logger.error(_("No directories given for --wipe-free-space"))
             sys.exit(1)
-        for wipe_path in args:
-            if not os.path.isdir(wipe_path):
-                logger.error(
-                    _("Path to wipe must be an existing directory: %s"), wipe_path)
-                sys.exit(1)
         logger.info(_("Wiping free space can take a long time."))
         for wipe_path in args:
             logger.info('Wiping free space in path: %s', wipe_path)
