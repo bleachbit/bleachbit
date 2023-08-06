@@ -26,7 +26,8 @@ build:
 	echo Nothing to build
 
 clean:
-	@rm -vf {.,bleachbit,tests,windows}/*{pyc,pyo,~}
+	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
+	@rm -vrf {.,bleachbit,tests,windows,bleachbit/markovify}/__pycache__ # directories
 	@rm -vrf build dist # created by py2exe
 	@rm -rf BleachBit-Portable # created by windows/setup_py2exe.bat
 	@rm -rf BleachBit-*-portable.zip
