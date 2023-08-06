@@ -124,6 +124,33 @@ def browse_folder(_, title):
     return fullpath
 
 
+def check_dll_hijacking(window=None):
+    """Check for possible DLL search-order hijacking
+
+    https://bugs.python.org/issue27410
+    """
+    major = sys.version_info[0]
+    minor = sys.version_info[1]
+    # BleachBit 4.4.2 uses Python 3.4.4.
+    # The branch with Python 3.10 was tested as not vulnerable.
+    if major > 3 or (major == 3 and minor >= 10):
+        return False
+    if not (os.path.exists(r'c:\python3.dll') or os.path.exists(r'c:\dlls\python3.dll')):
+        return False
+    # This workaround will be removed when the Python 3.10 branch is ready.
+    msg = _('The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
+    logger.error(msg)
+    if window:
+        from bleachbit.GuiBasic import message_dialog
+        from gi.repository import Gtk
+        message_dialog(
+            window,
+            msg=msg,
+            mtype=Gtk.MessageType.WARNING,
+            buttons=Gtk.ButtonsType.OK)
+    sys.exit(1)
+
+
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
     for fn in glob.glob(os.path.expandvars('%TEMP%\gdbus-nonce-file-*')):

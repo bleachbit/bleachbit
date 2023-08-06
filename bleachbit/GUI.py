@@ -378,6 +378,8 @@ class Bleachbit(Gtk.Application):
         if not self._window:
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
+        if 'nt' == os.name:
+            Windows.check_dll_hijacking(self._window)
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)

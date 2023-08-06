@@ -139,6 +139,11 @@ def args_to_operations(args, preset, all_but_warning):
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
+
+    if 'nt' == os.name:
+        from bleachbit.Windows import check_dll_hijacking
+        check_dll_hijacking()
+
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
     # Don't translate and add "usage:" - it gets added by Python.
