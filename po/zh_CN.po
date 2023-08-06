@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 09:59-0700\n"
+"POT-Creation-Date: 2023-08-06 15:47-0600\n"
 "PO-Revision-Date: 2023-08-06 05:49+0000\n"
 "Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -626,8 +626,9 @@ msgstr "Windows 软件兼容层"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "删除用来减少显示重新访问的页面的时间的网页缓存。"
-"这也会清除缓存的作为网站图标的 GIF 文件。"
+msgstr ""
+"删除用来减少显示重新访问的页面的时间的网页缓存。这也会清除缓存的作为网站图标"
+"的 GIF 文件。"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -805,7 +806,7 @@ msgstr "优化文件"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:932 ../bleachbit/GUI.py:1039
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:946 ../bleachbit/GUI.py:1053
 msgid "Clean"
 msgstr "清理"
 
@@ -995,91 +996,87 @@ msgstr "无效清理规则：%s"
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:152
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "%prog [选项] 清理项.规则1 清理项.规则2"
 
-#: ../bleachbit/CLI.py:150
+#: ../bleachbit/CLI.py:155
 msgid "list cleaners"
 msgstr "列出清理规则"
 
-#: ../bleachbit/CLI.py:152
+#: ../bleachbit/CLI.py:157
 msgid "preview files to be deleted and other changes"
 msgstr "预览要删除的文件和进行的修改"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:157
+#: ../bleachbit/CLI.py:162
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "运行清理规则以删除文件并进行其他永久更改"
 
-#: ../bleachbit/CLI.py:159
+#: ../bleachbit/CLI.py:164
 msgid "shred specific files or folders"
 msgstr "粉碎指定的文件或文件夹"
 
-#: ../bleachbit/CLI.py:161
+#: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
 msgstr "擦除给定路径中的空闲区域"
 
-#: ../bleachbit/CLI.py:163
+#: ../bleachbit/CLI.py:168
 msgid "overwrite files to hide contents"
 msgstr "覆盖已删除文件以彻底删除内容"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py:170
 msgid "launch the graphical interface"
 msgstr "启动图形界面"
 
-#: ../bleachbit/CLI.py:167
+#: ../bleachbit/CLI.py:172
 msgid "use options set in the graphical interface"
 msgstr "使用图形界面中设置的选项"
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py:174
 msgid "enable all options that do not have a warning"
 msgstr "启用所有无警告的选项"
 
-#: ../bleachbit/CLI.py:171
+#: ../bleachbit/CLI.py:176
 msgid "set log level to verbose"
 msgstr "将日志级别设置为详细"
 
-#: ../bleachbit/CLI.py:172
+#: ../bleachbit/CLI.py:177
 msgid "log debug messages to file"
 msgstr "将调试消息记录到文件"
 
-#: ../bleachbit/CLI.py:174
+#: ../bleachbit/CLI.py:179
 msgid "show system information"
 msgstr "显示系统信息"
 
-#: ../bleachbit/CLI.py:176
+#: ../bleachbit/CLI.py:181
 msgid "output version information and exit"
 msgstr "显示版本信息并退出"
 
-#: ../bleachbit/CLI.py:179
+#: ../bleachbit/CLI.py:184
 msgid "do not prompt for administrator privileges"
 msgstr "不弹出请求管理员权限的对话框"
 
-#: ../bleachbit/CLI.py:187
+#: ../bleachbit/CLI.py:192
 msgid "update winapp2.ini, if a new version is available"
 msgstr "当有新版本可用时更新 Winapp2.ini"
 
-#: ../bleachbit/CLI.py:209
+#: ../bleachbit/CLI.py:214
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
-msgstr "以下命令不能同时使用：--list-cleaners, --wipe-free-space, --preview, --clean"
+msgstr ""
+"以下命令不能同时使用：--list-cleaners, --wipe-free-space, --preview, --clean"
 
-#: ../bleachbit/CLI.py:234
+#: ../bleachbit/CLI.py:239
 msgid "Checking online for updates to winapp2.ini"
 msgstr "正在联网检查 Winapp2.ini 的更新"
 
-#: ../bleachbit/CLI.py:249
+#: ../bleachbit/CLI.py:254
 msgid "No directories given for --wipe-free-space"
 msgstr "没有为 --wipe-free-space 指定目录"
-
-#: ../bleachbit/CLI.py:254
-#, python-format
-msgid "Path to wipe must be an existing directory: %s"
-msgstr "要粉碎的路径必须是一个存在的目录：%s"
 
 #: ../bleachbit/CLI.py:256
 msgid "Wiping free space can take a long time."
@@ -1109,7 +1106,8 @@ msgstr "删除"
 msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
-msgstr "至少一个文件被另一进程锁定，因此无法覆盖其内容。标记为在系统重启时删除。"
+msgstr ""
+"至少一个文件被另一进程锁定，因此无法覆盖其内容。标记为在系统重启时删除。"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1164,31 +1162,37 @@ msgstr "文件系统中至少有一个文件不支持高级覆盖。"
 msgid "Wiping path: %s"
 msgstr "正在粉碎路径：%s"
 
-#: ../bleachbit/FileUtilities.py:940
+#: ../bleachbit/FileUtilities.py:932
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr "要粉碎的路径必须是一个存在的目录：%s"
+
+#: ../bleachbit/FileUtilities.py:943
 msgid "Creating new, temporary file for wiping free space."
 msgstr "正在创建新的临时文件以清除可用空间。"
 
-#: ../bleachbit/FileUtilities.py:996
+#: ../bleachbit/FileUtilities.py:999
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "刷新文件缓冲区时出现错误 #%d 。"
 
-#: ../bleachbit/FileUtilities.py:1012
+#: ../bleachbit/FileUtilities.py:1015
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
-msgstr "以 {rate:.2f}MB/s 的速度在 {seconds:,} 秒内写入了 {bytes:,} 字节的 {files:,} "
+msgstr ""
+"以 {rate:.2f}MB/s 的速度在 {seconds:,} 秒内写入了 {bytes:,} 字节的 {files:,} "
 "个文件"
 
-#: ../bleachbit/FileUtilities.py:1017
+#: ../bleachbit/FileUtilities.py:1020
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "非超级用户可以使用 {bytes:,} 字节和 {inodes:,} 个索引节点"
 
-#: ../bleachbit/FileUtilities.py:1019
+#: ../bleachbit/FileUtilities.py:1022
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "超级用户可以使用 {bytes:,} 字节和 {inodes:,} 个索引节点"
 
-#: ../bleachbit/FileUtilities.py:1035
+#: ../bleachbit/FileUtilities.py:1038
 msgid "Handled unknown error #0 while truncating file."
 msgstr "截断文件时接受到了未知错误 #0 。"
 
@@ -1202,7 +1206,7 @@ msgid "_Open"
 msgstr "打开(_O)"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:225
+#: ../bleachbit/GUI.py:226
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -1224,14 +1228,15 @@ msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
-msgstr "您确定想要根据所选规则永久删除那些文件吗？实际被删除的文件可能会因为您使用预"
+msgstr ""
+"您确定想要根据所选规则永久删除那些文件吗？实际被删除的文件可能会因为您使用预"
 "览而改变。"
 
 #: ../bleachbit/GuiBasic.py:142
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "您确定要永久删除这些文件吗？"
 
-#: ../bleachbit/GuiBasic.py:180
+#: ../bleachbit/GuiBasic.py:182
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -1242,10 +1247,14 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:192
+#: ../bleachbit/GuiBasic.py:194
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "要在浏览器中打开 %s 吗？"
+
+#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
+msgid "Confirm"
+msgstr ""
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1258,53 +1267,53 @@ msgstr "正在删除文件"
 msgid "Make chaff"
 msgstr "生成干扰文件"
 
-#: ../bleachbit/GuiChaff.py:70
+#: ../bleachbit/GuiChaff.py:71
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "参考文献，在指定目录下生成随机信息。"
 
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:78
 msgid "Inspiration"
 msgstr "参考文献"
 
-#: ../bleachbit/GuiChaff.py:80
+#: ../bleachbit/GuiChaff.py:81
 msgid "2600 Magazine"
 msgstr "2600 Magazine"
 
-#: ../bleachbit/GuiChaff.py:80
+#: ../bleachbit/GuiChaff.py:81
 msgid "Hillary Clinton's emails"
 msgstr "Hillary Clinton's emails"
 
-#: ../bleachbit/GuiChaff.py:88
+#: ../bleachbit/GuiChaff.py:89
 msgid "Number of files"
 msgstr "文件数量"
 
-#: ../bleachbit/GuiChaff.py:95 ../bleachbit/GuiChaff.py:155
+#: ../bleachbit/GuiChaff.py:96 ../bleachbit/GuiChaff.py:156
 msgid "Select destination folder"
 msgstr "选择目标文件夹"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:106
 msgid "When finished"
 msgstr "完成后"
 
-#: ../bleachbit/GuiChaff.py:108
+#: ../bleachbit/GuiChaff.py:109
 msgid "Delete without shredding"
 msgstr "截断而不粉碎"
 
-#: ../bleachbit/GuiChaff.py:108
+#: ../bleachbit/GuiChaff.py:109
 msgid "Do not delete"
 msgstr "保留干扰文件"
 
-#: ../bleachbit/GuiChaff.py:119
+#: ../bleachbit/GuiChaff.py:120
 msgid "Make files"
 msgstr "开始生成"
 
-#: ../bleachbit/GuiChaff.py:136
+#: ../bleachbit/GuiChaff.py:137
 msgid "Download data needed for chaff generator?"
 msgstr "下载干扰文件生成器所需的数据？"
 
-#: ../bleachbit/GuiChaff.py:178
+#: ../bleachbit/GuiChaff.py:179
 msgid "Generating files"
 msgstr "正在生成文件"
 
@@ -1393,7 +1402,7 @@ msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr "往右键菜单中添加粉碎文件选项（仅 KDE Plasma）"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
-#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
+#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:286
 msgid "Choose a folder"
 msgstr "选择一个文件夹"
 
@@ -1428,7 +1437,7 @@ msgstr "保留"
 msgid "Code"
 msgstr "代码"
 
-#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:468
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:478
 msgid "Name"
 msgstr "名称"
 
@@ -1474,32 +1483,32 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "添加文件夹"
 
-#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:868
+#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:882
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "启动 SQLite 模块错误：可能被杀毒软件拦截。"
 
-#: ../bleachbit/GUI.py:214
+#: ../bleachbit/GUI.py:215
 msgid "Choose files to shred"
 msgstr "选择要粉碎的文件"
 
-#: ../bleachbit/GUI.py:223
+#: ../bleachbit/GUI.py:224
 msgid "Choose folder to shred"
 msgstr "选择要粉碎的文件夹"
 
-#: ../bleachbit/GUI.py:250
+#: ../bleachbit/GUI.py:251
 msgid "No paths found in clipboard."
 msgstr "未在剪贴板中找到路径。"
 
-#: ../bleachbit/GUI.py:286
+#: ../bleachbit/GUI.py:287
 msgid "_OK"
 msgstr "确定(_O)"
 
-#: ../bleachbit/GUI.py:309
+#: ../bleachbit/GUI.py:310
 msgid "Program to clean unnecessary files"
 msgstr "开源免费的系统清洁工具软件"
 
-#: ../bleachbit/GUI.py:320
+#: ../bleachbit/GUI.py:321
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1511,7 +1520,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:326
+#: ../bleachbit/GUI.py:327
 msgid "translator-credits"
 msgstr ""
 "Christopher Meng https://launchpad.net/~cicku\n"
@@ -1530,24 +1539,24 @@ msgstr ""
 "  zhanshime https://launchpad.net/~zhanshime\n"
 "  tjw123hh https://hosted.weblate.org/user/tjw123hh"
 
-#: ../bleachbit/GUI.py:350
+#: ../bleachbit/GUI.py:351
 msgid "System information"
 msgstr "系统信息"
 
-#: ../bleachbit/GUI.py:476
+#: ../bleachbit/GUI.py:486
 msgid "Active"
 msgstr "启用"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:485
+#: ../bleachbit/GUI.py:495
 msgid "Size"
 msgstr "清理大小"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:514
+#: ../bleachbit/GUI.py:524
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1558,74 +1567,82 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:590
+#: ../bleachbit/GUI.py:602
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "正在重置损坏的配置文件：%s"
 
-#: ../bleachbit/GUI.py:762
+#: ../bleachbit/GUI.py:774
 msgid "You must select an operation"
 msgstr "你必须选择一项操作"
 
-#: ../bleachbit/GUI.py:781 ../bleachbit/GUI.py:797
+#: ../bleachbit/GUI.py:777
+#, fuzzy
+#| msgid "Errors: %d"
+msgid "Error"
+msgstr "错误：%d"
+
+#: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
 msgstr "完成。"
 
-#: ../bleachbit/GUI.py:852
+#: ../bleachbit/GUI.py:866
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "单击标题栏上的汉堡图标打开应用程序菜单。"
 
-#: ../bleachbit/GUI.py:857
+#: ../bleachbit/GUI.py:871
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "单击标题栏上的徽标打开应用程序菜单。"
 
-#: ../bleachbit/GUI.py:873
+#: ../bleachbit/GUI.py:887
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
-msgstr "您正在以管理员权限运行 BleachBit "
-"以清理系统的共享部分，对用户配置文件文件夹的引用将仅指向根用户。"
+msgstr ""
+"您正在以管理员权限运行 BleachBit 以清理系统的共享部分，对用户配置文件文件夹的"
+"引用将仅指向根用户。"
 
-#: ../bleachbit/GUI.py:878
+#: ../bleachbit/GUI.py:892
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr "以管理员权限运行 BleachBit 来改进粉碎的文件的准确性。"
 
-#: ../bleachbit/GUI.py:883
+#: ../bleachbit/GUI.py:897
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
-msgstr "微软商店上没有官方版本的 BleachBit 。请访问官网 https://www.bleachbit.org "
-"获取正版软件。本程序始终免费。"
+msgstr ""
+"微软商店上没有官方版本的 BleachBit 。请访问官网 https://www.bleachbit.org 获"
+"取正版软件。本程序始终免费。"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:927 ../bleachbit/GUI.py:1029
+#: ../bleachbit/GUI.py:941 ../bleachbit/GUI.py:1043
 msgid "Preview"
 msgstr "预览"
 
-#: ../bleachbit/GUI.py:1026
+#: ../bleachbit/GUI.py:1040
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "预览选中规则指向的文件（不会删除任何文件）"
 
-#: ../bleachbit/GUI.py:1041
+#: ../bleachbit/GUI.py:1055
 msgid "Clean files in the selected operations"
 msgstr "清理选中规则指向的文件"
 
-#: ../bleachbit/GUI.py:1049
+#: ../bleachbit/GUI.py:1063
 msgid "Abort"
 msgstr "终止"
 
-#: ../bleachbit/GUI.py:1051
+#: ../bleachbit/GUI.py:1065
 msgid "Abort the preview or cleaning process"
 msgstr "终止清理过程预览"
 
-#: ../bleachbit/GUI.py:1258
+#: ../bleachbit/GUI.py:1272
 msgid "Error when checking for updates: "
 msgstr "检查更新时出错： "
 
@@ -1717,11 +1734,11 @@ msgstr "磁盘空间已满，无法将设置写入档案 %s"
 msgid "Error checking whether path exists: %s"
 msgstr "检查路径 %s 是否存在时发生错误"
 
-#: ../bleachbit/Options.py:267
+#: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
 msgstr "设置默认擦除空闲空间的驱动器时出错。"
 
-#: ../bleachbit/Options.py:293
+#: ../bleachbit/Options.py:294
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "自动保留语言 %s 。"
@@ -1735,7 +1752,8 @@ msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
-msgstr "这些清理规则已更新或被修改过。恶意的清理规则可能会损坏您的系统。如果您不相信"
+msgstr ""
+"这些清理规则已更新或被修改过。恶意的清理规则可能会损坏您的系统。如果您不相信"
 "这些更改，请删除这些文件或退出。"
 
 #: ../bleachbit/RecognizeCleanerML.py:85
@@ -1818,7 +1836,17 @@ msgstr "游戏"
 msgid "Imported from winapp2.ini"
 msgstr "从 Winapp2.ini 导入"
 
-#: ../bleachbit/Windows.py:824
+#: ../bleachbit/Windows.py:141
+msgid ""
+"The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
+"possible attempt at DLL search-order hijacking."
+msgstr ""
+
+#: ../bleachbit/Windows.py:151
+msgid "Warning"
+msgstr ""
+
+#: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit 正在启动……\n"
 
