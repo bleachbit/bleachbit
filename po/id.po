@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-05-11 00:52+0000\n"
+"PO-Revision-Date: 2023-08-09 14:51+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1294,7 +1294,7 @@ msgstr "Buka penjelajah web ke %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Konfirmasi"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1622,10 +1622,8 @@ msgid "You must select an operation"
 msgstr "Anda harus memilih operasi"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Kesalahan: %d"
+msgstr "Error"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1898,10 +1896,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"File python3.dll ditemukan di c:\\ atau c:\\dlls, yang menunjukkan upaya "
+"yang mungkin pada pencarian DLL pembajak."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Peringatan"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
