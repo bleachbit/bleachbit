@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-01-31 19:51+0000\n"
+"PO-Revision-Date: 2023-08-09 14:51+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1286,7 +1286,7 @@ msgstr "%s için web tarayıcısı açılsın mı?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Onayla"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1560,24 +1560,20 @@ msgstr ""
 #: ../bleachbit/GUI.py:327
 msgid "translator-credits"
 msgstr ""
-"Launchpad Contributions:\n"
-"  Amed Çeko Jiyan https://launchpad.net/~amedcj\n"
-"  Aydin Ilker Alp https://launchpad.net/~ilkeryus\n"
-"  Buckethead https://launchpad.net/~buckethead1\n"
-"  Burak Ilgıcıoğlu https://launchpad.net/~buraki\n"
-"  Ekrem Kocadere https://launchpad.net/~ekocadere-deactivatedaccount-"
-"deactivatedaccount\n"
-"  Mehmet Gülmen https://launchpad.net/~memetgulmen\n"
-"  Murad Biskin https://launchpad.net/~muradbiskin\n"
-"  Sabri Ünal https://launchpad.net/~libreajans\n"
-"  Ufuk Yıldırım https://launchpad.net/~ckurdu\n"
-"  Volkan Gezer https://launchpad.net/~volkangezer\n"
-"  Yusuf Kayan https://launchpad.net/~c08b\n"
-"  alperyilmaz https://launchpad.net/~alperyilmaz\n"
-"  alquirel https://launchpad.net/~alquirel\n"
-"  etc https://launchpad.net/~etcetin\n"
-"  zeugma https://launchpad.net/~sunder67\n"
-"  Özgür Baskin https://launchpad.net/~ozgur-baskin"
+"Amed Çeko Jiyan\n"
+"Aydin Ilker Alp\n"
+"Burak Ilgıcıoğlu\n"
+"Ekrem Kocadere\n"
+"Mehmet Gülmen\n"
+"Murad Biskin\n"
+"Sabri Ünal\n"
+"Ufuk Yıldırım\n"
+"Volkan Gezer\n"
+"Yusuf Kayan\n"
+"alperyilmaz\n"
+"etc\n"
+"Özgür Baskin\n"
+"Oğuz Ersen"
 
 #: ../bleachbit/GUI.py:351
 msgid "System information"
@@ -1617,10 +1613,8 @@ msgid "You must select an operation"
 msgstr "İşlem seçmelisiniz"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Hatalar: %d"
+msgstr "Hata"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1896,10 +1890,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"python3.dll dosyası c:\\ veya c:\\dlls içinde bulundu, bu olası bir DLL "
+"arama sırası saldırısı girişimine işaret eder."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Uyarı"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
