@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-08-04 17:06+0000\n"
-"Last-Translator: Alfonso Scarpino <alfonso.scarpino@gmail.com>\n"
+"PO-Revision-Date: 2023-08-09 14:51+0000\n"
+"Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
 "Language: it\n"
@@ -1304,7 +1304,7 @@ msgstr "Vuoi aprire il browser alla pagina %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Conferma"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1644,10 +1644,8 @@ msgid "You must select an operation"
 msgstr "Devi selezionare un'operazione"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Errori: %d"
+msgstr "Errore"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1690,9 +1688,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
-"Non esiste una versione ufficiale di BleachBit in Microsoft Store.\n"
-"Ottieni la versione originale su https://www.bleachbit.org dove è sempre "
-"gratuita."
+"Non esiste una versione ufficiale di BleachBit in Microsoft Store. Ottieni "
+"la versione originale su https://www.bleachbit.org dove è sempre gratuita."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1927,10 +1924,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"È stato trovato il file python3.dll in c:\\ o c:\\dlls, il che indica un "
+"possibile tentativo di dirottamento dell'ordine di ricerca delle DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Attenzione"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
