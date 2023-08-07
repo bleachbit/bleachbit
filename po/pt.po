@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-02-12 23:42+0000\n"
+"PO-Revision-Date: 2023-08-09 14:51+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -274,7 +274,7 @@ msgstr "Limpar ficheiros temporários"
 #: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
 #: ../cleaners/xine.xml
 msgid "Multimedia viewer"
-msgstr "Reprodutor multimédia"
+msgstr "Visualizador multimédia"
 
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
 #: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
@@ -373,7 +373,7 @@ msgstr "Limpar histórico de comandos"
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/nexuiz.xml
 msgid "Game"
-msgstr "Jogos"
+msgstr "Jogo"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
@@ -1129,7 +1129,7 @@ msgstr "Ignorar"
 #. deleted (for previews) or was actually deleted
 #: ../bleachbit/Command.py:79
 msgid "Delete"
-msgstr "Limpar"
+msgstr "Eliminar"
 
 #: ../bleachbit/Command.py:101
 msgid ""
@@ -1293,7 +1293,7 @@ msgstr "Abrir navegador web em %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1612,10 +1612,8 @@ msgid "You must select an operation"
 msgstr "Tem que selecionar uma operação"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Erros: %d"
+msgstr "Erro"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1803,7 +1801,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
 msgid "Delete"
-msgstr "Limpar"
+msgstr "Eliminar"
 
 #: ../bleachbit/RecognizeCleanerML.py:90
 msgctxt "column_label"
@@ -1887,10 +1885,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"O ficheiro python3.dll foi localizado em c:\\ ou c:\\dlls, o que indica uma "
+"possível tentativa de pirataria da ordem de pesquisa de DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
